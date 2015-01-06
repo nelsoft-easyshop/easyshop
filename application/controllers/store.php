@@ -25,6 +25,7 @@ class Store extends MY_Controller
      */
     public $feedbackPerPage = 15;
 
+
     /**
      * Number of followers per page
      *
@@ -141,8 +142,6 @@ class Store extends MY_Controller
                     $firstCategoryId = key($viewData['defaultCatProd']);
                     $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
                 }
-
-                $bannerData['snippetMarkUp'] = $this->load->view('templates/seo/person_markup', $bannerData['arrVendorDetails']);
 
                 $this->load->spark('decorator');
                 $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
@@ -589,52 +588,66 @@ class Store extends MY_Controller
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_buyer'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
-
-        $feedbackTabs['asBuyer'] = $this->load->view('/partials/feedback', array(
-                                                                            'isActive' => true,
-                                                                            'feedbacks' => $feedbacks,
-                                                                            'pagination' => $pagination,
-                                                                            'id' => 'as-buyer',
-                                                                            'ratingHeaders' => $ratingHeaders,
-                                                                            ), TRUE);                                                          
-                                          
+                                                                   'isHyperLink' => false), true);
+        $subViewData = [
+            'isActive' => true,
+            'feedbacks' => $feedbacks,
+            'pagination' => $pagination,
+            'id' => 'as-buyer',
+            'ratingHeaders' => $ratingHeaders,
+            'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER,
+        ];
+        $feedbackTabsDesktop['asBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true); 
+        $subViewData['isActive'] = false;
+        $feedbackTabsMobile['asBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);  
+        
+        
         $feedbacks  = $this->serviceContainer['user_manager']
                            ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_seller'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
-
-        $feedbackTabs['asSeller'] = $this->load->view('/partials/feedback', array('isActive' => false,
-                                                                            'feedbacks' => $feedbacks,
-                                                                            'pagination' => $pagination,
-                                                                            'id' => 'as-seller',
-                                                                            'ratingHeaders' => $ratingHeaders,
-                                                                            ), TRUE);
+                                                                   'isHyperLink' => false), true);
+        $subViewData = [
+            'isActive' => false,
+            'feedbacks' => $feedbacks,
+            'pagination' => $pagination,
+            'id' => 'as-seller',
+            'ratingHeaders' => $ratingHeaders,
+            'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER,
+        ];
+        $feedbackTabsDesktop['asSeller'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);
+        $feedbackTabsMobile['asSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);
 
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_seller'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
-
-        $feedbackTabs['forOthersAsSeller'] = $this->load->view('/partials/feedback', array(
-                                                                            'isActive' => false,
-                                                                            'feedbacks' => $feedbacks,
-                                                                            'pagination' => $pagination,
-                                                                            'id' => 'for-other-seller',
-                                                                            'ratingHeaders' => $ratingHeaders,
-                                                                            ), TRUE);                                                          
+                                                                   'isHyperLink' => false), true);
+        $subViewData = [
+            'isActive' => false,
+            'feedbacks' => $feedbacks,
+            'pagination' => $pagination,
+            'id' => 'for-other-seller',
+            'ratingHeaders' => $ratingHeaders,
+            'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER,
+        ];
+        
+        $feedbackTabsDesktop['forOthersAsSeller'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);                                                          
+        $feedbackTabsMobile['forOthersAsSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);    
                                                                 
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_buyer'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
-        $feedbackTabs['forOthersAsBuyer'] = $this->load->view('/partials/feedback', array(
-                                                                              'isActive' => false,
-                                                                              'feedbacks' => $feedbacks,
-                                                                              'pagination' => $pagination,
-                                                                              'id' => 'for-other-buyer',
-                                                                              'ratingHeaders' => $ratingHeaders,
-                                                                              ), TRUE);
+                                                                   'isHyperLink' => false), true);
+        $subViewData = [
+            'isActive' => false,
+            'feedbacks' => $feedbacks,
+            'pagination' => $pagination,
+            'id' => 'for-other-buyer',
+            'ratingHeaders' => $ratingHeaders,
+            'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER,
+        ];
+        
+        $feedbackTabsDesktop['forOthersAsBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);
+        $feedbackTabsMobile['forOthersAsBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);
 
         $viewerId = intval(!$this->session->userdata('member_id') ? 0 : $this->session->userdata('member_id'));
         
@@ -670,7 +683,8 @@ class Store extends MY_Controller
         $this->load->view('templates/vendor_banner', $bannerData);
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
                                                'ratingHeaders' => $ratingHeaders,
-                                               'feedbackTabs' => $feedbackTabs,
+                                               'feedbackTabsDesktopView' => $feedbackTabsDesktop,
+                                               'feedbackTabsMobileView' => $feedbackTabsMobile,
                                                'member' => $member,
                                                'viewer' => $viewer,
                                                'orderRelations' => $orderRelations,
@@ -763,6 +777,7 @@ class Store extends MY_Controller
         $tab = $this->input->get('tab');
         $limit = $this->feedbackPerPage;
         $ratingHeaders = $this->lang->line('rating');
+        $feedbackview = $this->input->get('isMobile') ? 'feedback-mobileview' : 'feedback-desktopview';
 
         switch($tab){
             case 'as-buyer':
@@ -789,18 +804,22 @@ class Store extends MY_Controller
                              ->getFormattedFeedbacks($memberId, $feedbackType, $limit, $page);
             $totalCount = count($this->serviceContainer['user_manager']
                              ->getFormattedFeedbacks($memberId, $feedbackType));
-            $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil($totalCount/$limit),
-                                                                         'isHyperLink' => false,
-                                                                         'currentPage' => $page,
-                                                                        ), TRUE);
+            $pagination = $this->load->view('/pagination/default', [
+                                                'lastPage' => ceil($totalCount/$limit),
+                                                'isHyperLink' => false,
+                                                'currentPage' => $page,
+                                            ] , true);
         }
         
-        $feedbackTabs = $this->load->view('/partials/feedback', array('isActive' => true,
-                                                                    'feedbacks' => $feedbacks,
-                                                                    'pagination' => $pagination,
-                                                                    'id' => $tab,
-                                                                    'ratingHeaders' => $ratingHeaders,
-                                                                    ), TRUE); 
+        
+        $feedbackTabs = $this->load->view('/partials/'.$feedbackview, [
+                                                'isActive' => true,
+                                                'feedbacks' => $feedbacks,
+                                                'pagination' => $pagination,
+                                                'id' => $tab,
+                                                'ratingHeaders' => $ratingHeaders,
+                                                'feedbackType' =>  $feedbackType,
+                                        ], true); 
         
         echo $feedbackTabs;
     }
@@ -867,10 +886,11 @@ class Store extends MY_Controller
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0
                 , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($sellerId)
                 , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($sellerId,"banner")
-                , "isEditable" => ($viewerId && intval($sellerId) === intval($viewerId)) ? TRUE : FALSE
-                , "hasNoItems" => (count($userProduct) > 0) ? FALSE : TRUE
+                , "isEditable" => ($viewerId && intval($sellerId) === intval($viewerId))
+                , "hasNoItems" => (count($userProduct) > 0) ? false : true
                 , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $arrVendorDetails['username'])
                 , "followerCount" => $followers['count']
+                , "snippetMarkUp" => $this->load->view('templates/seo/person_markup', $arrVendorDetails)
             ); 
         $bannerData = array_merge($bannerData, $EsLocationLookupRepository->getLocationLookup());
 
