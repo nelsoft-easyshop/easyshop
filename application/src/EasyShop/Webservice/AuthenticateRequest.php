@@ -3,7 +3,7 @@
 namespace EasyShop\Webservice;
 
 /**
- * Image Utility Class
+ * Webservice Authentication Service
  *
  * @author Inon Baguio
  */
