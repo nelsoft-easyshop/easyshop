@@ -130,38 +130,6 @@ class MY_Controller extends CI_Controller
         }
         $array = $temp; 
     }  
-    
-    /**
-     *  Authentication method for webservice
-     *
-     *  @param string $postedData
-     *  @param string $postedHash
-     *  @param string $evaluate
-     */
-    public function authentication($postedData, $postedHash, $evaluate = "")
-    {
-        foreach ($postedData as $data => $value) {
-            
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_" || $data == "checkuser") {
-                 continue;               
-            }
-            else{
-                $evaluate .= $value;
-            }
-        }
-
-        $em = $this->serviceContainer["entity_manager"];
-        $adminUser = $em->getRepository("EasyShop\Entities\EsAdminMember")
-                                        ->find($postedData["userid"]);
-
-        $hash = $evaluate.$adminUser->getPassword();
-
-        return $isAuthenticated = (sha1($hash) != $postedHash) ? false : true;
-    }
-
-
-
-
 }
 
 

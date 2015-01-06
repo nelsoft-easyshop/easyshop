@@ -329,12 +329,15 @@ class Kernel
             return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
         };
         
-
-        
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);
-        };    
+        };  
+
+        $container['webservice_manager'] = function ($c) use ($container){
+            $em = $container['entity_manager'];   
+            return new \EasyShop\Webservice\AuthenticateRequest($em);                     
+        };           
 
         $container['image_upload'] = function ($c) use ($container){
             $uploadLibrary = new \CI_Upload();            
