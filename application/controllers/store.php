@@ -865,8 +865,8 @@ class Store extends MY_Controller
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0
                 , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($sellerId)
                 , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($sellerId,"banner")
-                , "isEditable" => ($viewerId && intval($sellerId) === intval($viewerId)) ? TRUE : FALSE
-                , "hasNoItems" => (count($userProduct) > 0) ? FALSE : TRUE
+                , "isEditable" => ($viewerId && intval($sellerId) === intval($viewerId))
+                , "hasNoItems" => (count($userProduct) > 0) ? false : true
                 , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $arrVendorDetails['username'])
                 , "followerCount" => $followers['count']
                 , "snippetMarkUp" => $this->load->view('templates/seo/person_markup', $arrVendorDetails)
