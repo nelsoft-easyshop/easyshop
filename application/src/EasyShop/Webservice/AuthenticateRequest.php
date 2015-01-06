@@ -65,8 +65,6 @@ class AuthenticateRequest
         return $isAuthenticated = (sha1($this->hash) != $postedHash) ? false : true;
     }
 
-    
-
 }
 
 
