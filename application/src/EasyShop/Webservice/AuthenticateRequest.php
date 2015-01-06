@@ -30,13 +30,13 @@ class AuthenticateRequest
      *  @var string
      */
     private $exceptionalData = [
-                                "hash", 
-                                "_token", 
-                                "csrfname", 
-                                "callback", 
-                                "password", 
-                                "_", 
-                                "checkuser"
+        "hash", 
+        "_token", 
+        "csrfname", 
+        "callback", 
+        "password", 
+        "_", 
+        "checkuser"
     ];  
 
     /**
