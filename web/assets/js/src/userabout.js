@@ -25,8 +25,7 @@
         else{
             var tab = $tabPane.attr('id');   
         }
-        console.log(tab);
-  
+
         $.ajax({
             url: '/store/feedback',
             method: 'GET',
