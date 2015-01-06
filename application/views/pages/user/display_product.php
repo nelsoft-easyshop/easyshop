@@ -135,7 +135,7 @@
                                             </p>
                                         </div>
                                         <div class="col-xs-6">
-                                             <a class="btn btn-default-1 btn-list-buy-now-mobile" target="_blank" href="/item/<?=$productSlug; ?>" >
+                                             <a class="btn btn-default-1 btn-list-buy-now-mobile" target="_blank" href="/item/<?= html_escape($productSlug); ?>" >
                                                 <span class="fa icon-cart"></span> BUY NOW
                                             </a>
                                         </div>
