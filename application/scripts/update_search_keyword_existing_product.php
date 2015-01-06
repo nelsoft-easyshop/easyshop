@@ -1,13 +1,7 @@
 <?php
 
-require(dirname(__FILE__).'/../src/EasyShop/CLI/CLIHelper.php');
-$_SERVER['QUERY_STRING'] = '';
-ob_start();
-require(__DIR__ . '/../../web/index.php');
-ob_end_clean(); 
-require_once(dirname(__FILE__).'/../src/EasyShop/Product/ProductManager.php');
-include_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../src/EasyShop/Core/Configuration/Configuration.php';
+include_once  __DIR__.'/bootstrap.php';
+
 $CI =& get_instance();
 
 $productManager = $CI->kernel->serviceContainer['product_manager'];

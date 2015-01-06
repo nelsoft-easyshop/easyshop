@@ -78,7 +78,7 @@ class EsKeywordsTemp
     }
 
     /**
-     * set ipAddress
+     * Set ipAddress
      *
      * @param string $ipAddress
      * @return EsKeywordsTemp

@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>  
 
+<?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
 
 <section>
@@ -8,7 +9,7 @@
         <div class="vendor-main-bg">
             <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
         </div>
-        <div class="main-container vendor-main pos-ab">
+        <div class="container main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
@@ -72,7 +73,7 @@
             </div>
             <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
         </div>
-        <div class="main-container vendor-main pos-ab">
+        <div class="container main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
@@ -156,7 +157,7 @@
 </section>
 <section class="sticky-nav-bg">
     <div class="vendor-menu-nav">
-        <div class="main-container">
+        <div class="container main-container">
             <ul class="vendor-nav">
                 <?php
                     $url_id = $this->uri->segment(2, 0);
