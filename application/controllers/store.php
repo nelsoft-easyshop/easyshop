@@ -23,8 +23,7 @@ class Store extends MY_Controller
      *
      * @var integer
      */
-    //public $feedbackPerPage = 15;
-    public $feedbackPerPage = 1;
+    public $feedbackPerPage = 15;
 
 
     /**
