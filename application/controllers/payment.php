@@ -1083,7 +1083,6 @@ class Payment extends MY_Controller{
                         $this->product_model->update_soldout_status($value['id']);
                     }
                     $locked = $this->lockItem($toBeLocked, $orderId, 'delete'); 
-<<<<<<< HEAD
                 }
 
                 $orderStatus = (strtolower($status) === PaymentService::STATUS_SUCCESS) ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
