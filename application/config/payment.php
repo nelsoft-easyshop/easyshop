@@ -14,8 +14,8 @@ $config = [
                         'merchant_password' => 'UT78W5VQ'
                     ],
                     'Easydeal' => [
-                        'return_url' => 'http://staging.easydeal.ph/payment/dragonPayReturn',
-                        'postback_url' => 'http://staging.easydeal.ph/payment/dragonPayPostBack'
+                        'return_url' => 'https://staging.easydeal.ph/payment/dragonPayReturn',
+                        'postback_url' => 'https://staging.easydeal.ph/payment/dragonPayPostBack'
                     ]
                 ]
             ]
