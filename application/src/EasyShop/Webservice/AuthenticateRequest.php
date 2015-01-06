@@ -31,7 +31,11 @@ class AuthenticateRequest
      */
     private $exceptionalData = ["hash", "_token", "csrfname", "callback", "password", "_", "checkuser"];  
 
-    function __construct($em)
+    /**
+     * Constructor. Retrieves Entity Manager instance
+     * 
+     */
+    public function __construct($em)
     {
         $this->em = $em;
     }
