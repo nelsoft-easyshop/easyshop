@@ -29,14 +29,15 @@ class AuthenticateRequest
      *
      *  @var string
      */
-    private $exceptionalData = ["hash", 
+    private $exceptionalData = [
+                                "hash", 
                                 "_token", 
                                 "csrfname", 
                                 "callback", 
                                 "password", 
                                 "_", 
                                 "checkuser"
-                                ];  
+    ];  
 
     /**
      * Constructor. Retrieves Entity Manager instance
