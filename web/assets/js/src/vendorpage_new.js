@@ -289,6 +289,11 @@ function ItemListAjax(CatDiv,page)
     
 
     $(document).ready(function(){
+        $( "#category-list" ).clone(true).appendTo( ".categories-modal" );
+        $( "#filter-list1" ).clone(true).appendTo( ".filter-modal" );
+        
+        
+    
         $( "#toggle-cat" ).click(function() {
           $( "#category-list" ).slideToggle( "slow" );
         });
@@ -297,7 +302,7 @@ function ItemListAjax(CatDiv,page)
         });        
         $( ".icon-list" ).click(function() {
           $( ".panel-item" ).hide();
-          $( ".panel-list-item" ).fadeIn( "slow" );
+          $( ".panel-list-item" ).fadeIn( "fast" );
         });
         
         $( ".icon-grid" ).click(function() {
@@ -310,6 +315,19 @@ function ItemListAjax(CatDiv,page)
            $('.search-bar-input').val(string);
         });
         
+        $('.col-categories').click(function (e) {
+            $('.categories-modal').modal();
+        
+            return false;
+        });
+        
+        $('.col-filter').click(function (e) {
+            $('.filter-modal').modal();
+            $('.simplemodal-container').addClass("filter-modal-container");
+            return false;
+        });
+        
     });
-
+    
+    
 })(jQuery);

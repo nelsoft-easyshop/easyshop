@@ -1,12 +1,12 @@
 <link type="text/css" href='/assets/css/contact.css?ver=<?php echo ES_FILE_VERSION ?>' rel="stylesheet" media='screen'/>
 <div class="clear"></div>
 <section class="bg-product-section color-default">
-    <div class="container-non-responsive bg-product-section">
+    <div class="container bg-product-section">
         <div class="row row-contact">
             
             <?php echo $userDetails; ?>
 
-            <div class="col-xs-9 col-feedback-container">
+            <div class="col-md-9 col-feedback-container">
                 
                
                
@@ -41,9 +41,6 @@
                     </div>
                 
                 <?php endif; ?>
-            
-            
-            
                 <div class="panel-feedback-ratings">
                     <p class="panel-title-feedback">
                         Feedback Ratings
@@ -52,7 +49,7 @@
                         <div class="col-xs-12">
                             <?php $ratingCounter = 1; ?>
                             <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                <div class="col-xs-4">
+                                <div class=" col-sm-4 col-xs-12 col-rate-mobile">
                                     <p class="span-rate-c"  style="display: inline;"><?php echo html_escape($ratingHeader)?>: </p>
                                     <span class="span-rate" style="display: inline;">
                                         <?php for($i = 0; $i < round($feedbackSummary['rating'.$ratingCounter]); $i++): ?>
@@ -92,6 +89,230 @@
                             <?php endforeach; ?>
                         </div>
                     </div>
+                    <div class="feedback-mobile">
+                        <div class="feedback-cat-mobile feedback-from-seller">
+                            Feedback from Seller
+                        </div>
+                        <div class="feedback-mobile-cont feedback-mobile-1">
+                            <div class="feedback-mobile-item">
+                                <table class="table-feed-mobile">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="div-user-image">
+                                                    <a href="/justineduazo">
+                                                        <img src="/assets/images/img_profile_pic.jpg" class="img-user-image">
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="td-info-mobile">
+                                                <p class="p-user-name">
+                                                    <a href="/justineduazo">
+                                                        justineduazo
+                                                    </a>
+                                                </p>
+                                                <p class="p-date-feedback">
+                                                    18 th December , 2014 
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="feedback-item-mobile-content">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="td-feedback-criteria">Item quality</td>
+                                                        <td class="td-feedback-star">
+                                                            <span>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="td-feedback-criteria">Communication</td>
+                                                        <td class="td-feedback-star">
+                                                            <span>
+                                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                                    <i class="fa fa-star star-feed"></i>
+                                                                    <i class="fa fa-star star-feed"></i>
+                                                                    <i class="fa fa-star star-feed"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="td-feedback-criteria">Item shipment</td>
+                                                        <td class="td-feedback-star">
+                                                            <span>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-item-message">
+                                            "Lorem ipsum dolor sit amet, "
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="feedback-mobile-item">
+                                <table class="table-feed-mobile">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="div-user-image">
+                                                    <a href="/justineduazo">
+                                                        <img src="/assets/images/img_profile_pic.jpg" class="img-user-image">
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="td-info-mobile">
+                                                <p class="p-user-name">
+                                                    <a href="/justineduazo">
+                                                        justineduazo
+                                                    </a>
+                                                </p>
+                                                <p class="p-date-feedback">
+                                                    18 th December , 2014 
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="feedback-item-mobile-content">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="td-feedback-criteria">Item quality</td>
+                                                        <td class="td-feedback-star">
+                                                            <span>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="td-feedback-criteria">Communication</td>
+                                                        <td class="td-feedback-star">
+                                                            <span>
+                                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                                    <i class="fa fa-star star-feed"></i>
+                                                                    <i class="fa fa-star star-feed"></i>
+                                                                    <i class="fa fa-star star-feed"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <table>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="td-feedback-criteria">Item shipment</td>
+                                                        <td class="td-feedback-star">
+                                                            <span>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed star-active"></i>
+                                                                <i class="fa fa-star star-feed"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-item-message">
+                                            "Lorem ipsum dolor sit amet, "
+                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="jumbotron no-feedback-list">
+                                <center>
+                                    <span class="fa fa-clipboard fa-2x"></span>
+                                    <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
+                                </center>
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="feedback-cat-mobile feedback-from-buyer">
+                            Feedback from Buyer
+                        </div>
+                        <div class="feedback-mobile-cont feedback-mobile-2">
+                            <div class="jumbotron no-feedback-list">
+                                <center>
+                                    <span class="fa fa-clipboard fa-2x"></span>
+                                    <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="feedback-cat-mobile feedback-for-seller">
+                            Feedback for Seller
+                        </div>
+                        <div class="feedback-mobile-cont feedback-mobile-3">
+                            <div class="jumbotron no-feedback-list">
+                                <center>
+                                    <span class="fa fa-clipboard fa-2x"></span>
+                                    <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="feedback-cat-mobile feedback-for-buyer">
+                            Feedback from Seller
+                        </div>
+                        <div class="feedback-mobile-cont feedback-mobile-4">
+                            <div class="jumbotron no-feedback-list">
+                                <center>
+                                    <span class="fa fa-clipboard fa-2x"></span>
+                                    <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
+                                </center>
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
 
                 <?php if(count($orderRelations) > 0): ?>
@@ -104,7 +325,7 @@
                                 <div class="col-xs-12">
                                     <?php $count = 1; ?>
                                     <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                        <div class="col-xs-4 rating-header" style="margin-bottom: 20px;"  id='rating-header<?php echo $count?>'>
+                                        <div class="col-sm-4 col-xs-12 rating-header  col-rate-mobile" style="margin-bottom: 20px;"  id='rating-header<?php echo $count?>'>
                                             <?php echo html_escape($ratingHeader); ?>
                                             <span class="span-rate feedback-ratings">
                                                 <?php for($i = 1; $i <= 5; $i++): ?>
@@ -153,10 +374,11 @@
                                         Please rate this user in all available criteria.
                                     </div>
                                 </div>
-                                    
-                                <center>
-                                    <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
-                                </center>
+                                <div class="col-xs-12">
+                                    <center>
+                                        <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
+                                    </center>
+                                </div>
                             </div>
                             <input type='hidden' name='userId' value='<?php echo $member->getIdMember() ?>' />
                             <input type='hidden' name='rating1' value='0' id='input-rating-header1'/>
