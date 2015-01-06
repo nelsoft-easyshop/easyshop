@@ -209,9 +209,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         </div>
                                         <div class="nav-searchfield-width">
                                             <div class="search-container">
-                                                <input type="text" name="q_str" id="primary-search" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                                <input type="text" name="q_str" id="primary-search" autocomplete="off" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                             </div>
-                                            <div class="suggested-result-container">
+                                            <!-- <div class="suggested-result-container">
                                                 <p class="sr-title">Suggested search result:</p>
                                                 <ul id="suggested-search-result">
                                                     <li>
@@ -230,7 +230,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <a href="">lorem ipsum</a>
                                                     </li>
                                                 </ul>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </form><!-- End .Search Navigation -->
 
@@ -341,10 +341,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="sticky-search-cart-wrapper">
                                                 <div class="sticky-search-wrapper">
                                                     <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                        <input type="text" name="q_str" id="primary-search2" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                                        <input type="text" name="q_str" autocomplete="off" id="primary-search2" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                                         <input type="submit" value="" class="span_bg">
                                                     </form>
-                                                    <div class="suggested-result-container2">
+                                                    <!-- <div class="suggested-result-container2">
                                                         <p class="sr-title">Suggested search result:</p>
                                                         <ul id="suggested-search-result2">
                                                             <li>
@@ -363,7 +363,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                                 <a href="">lorem ipsum</a>
                                                             </li>
                                                         </ul>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 <div class="header-cart-container">
                                                     <a href="/cart" class="header-cart-wrapper">
@@ -475,3 +475,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
 <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
+<script>
+    (function ($) { 
+        $('input#primary-search').typeahead({
+            ajax: { 
+                url: '/search/suggest',
+                triggerLength: 3, // This is the minimum length of text to take action on
+                timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
+            },
+            items: 10, // The maximum number of items to show in the results. 
+            menu: '<ul class="typeahead suggested-result-container"></ul>' ,
+            item: '<li><a href="#"></a></li>'
+        });
+        $('input#primary-search2').typeahead({
+            ajax: { 
+                url: '/search/suggest',
+                triggerLength: 3, // This is the minimum length of text to take action on
+                timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
+            },
+            items: 10, // The maximum number of items to show in the results. 
+            menu: '<ul class="typeahead suggested-result-container2"></ul>' ,
+            item: '<li><a href="#"></a></li>'
+        });
+    })(jQuery);
+</script>
