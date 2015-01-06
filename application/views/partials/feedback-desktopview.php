@@ -64,8 +64,8 @@
         </div>
     <?php endif; ?>
     
-    <center>
+    <div style="text-align:center" class="pagination-container">
         <?php echo $pagination; ?>
-    </center>
+    </div>
 
 </div>

@@ -23,7 +23,9 @@ class Store extends MY_Controller
      *
      * @var integer
      */
-    public $feedbackPerPage = 15;
+    //public $feedbackPerPage = 15;
+    public $feedbackPerPage = 1;
+
 
     /**
      * Number of followers per page
@@ -570,7 +572,6 @@ class Store extends MY_Controller
     private function aboutUser($sellerslug)
     {
         $limit = $this->feedbackPerPage;
-        $limit = 1;
         $this->lang->load('resources');
 
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
@@ -599,7 +600,8 @@ class Store extends MY_Controller
             'ratingHeaders' => $ratingHeaders,
             'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER,
         ];
-        $feedbackTabsDesktop['asBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, TRUE);                                                          
+        $feedbackTabsDesktop['asBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, TRUE); 
+        $subViewData['isActive'] = false;
         $feedbackTabsMobile['asBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, TRUE);  
         
         
@@ -778,6 +780,7 @@ class Store extends MY_Controller
         $tab = $this->input->get('tab');
         $limit = $this->feedbackPerPage;
         $ratingHeaders = $this->lang->line('rating');
+        $feedbackview = $this->input->get('isMobile') ? 'feedback-mobileview' : 'feedback-desktopview';
 
         switch($tab){
             case 'as-buyer':
@@ -804,18 +807,22 @@ class Store extends MY_Controller
                              ->getFormattedFeedbacks($memberId, $feedbackType, $limit, $page);
             $totalCount = count($this->serviceContainer['user_manager']
                              ->getFormattedFeedbacks($memberId, $feedbackType));
-            $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil($totalCount/$limit),
-                                                                         'isHyperLink' => false,
-                                                                         'currentPage' => $page,
-                                                                        ), TRUE);
+            $pagination = $this->load->view('/pagination/default', [
+                                                'lastPage' => ceil($totalCount/$limit),
+                                                'isHyperLink' => false,
+                                                'currentPage' => $page,
+                                            ] , true);
         }
         
-        $feedbackTabs = $this->load->view('/partials/feedback', array('isActive' => true,
-                                                                    'feedbacks' => $feedbacks,
-                                                                    'pagination' => $pagination,
-                                                                    'id' => $tab,
-                                                                    'ratingHeaders' => $ratingHeaders,
-                                                                    ), TRUE); 
+        
+        $feedbackTabs = $this->load->view('/partials/'.$feedbackview, [
+                                                'isActive' => true,
+                                                'feedbacks' => $feedbacks,
+                                                'pagination' => $pagination,
+                                                'id' => $tab,
+                                                'ratingHeaders' => $ratingHeaders,
+                                                'feedbackType' =>  $feedbackType,
+                                        ], true); 
         
         echo $feedbackTabs;
     }
