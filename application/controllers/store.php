@@ -142,8 +142,6 @@ class Store extends MY_Controller
                     $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
                 }
 
-                $bannerData['snippetMarkUp'] = $this->load->view('templates/seo/person_markup', $bannerData['arrVendorDetails']);
-
                 $this->load->spark('decorator');
                 $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
                 $this->load->view('templates/vendor_banner',$bannerData);
@@ -871,6 +869,7 @@ class Store extends MY_Controller
                 , "hasNoItems" => (count($userProduct) > 0) ? FALSE : TRUE
                 , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $arrVendorDetails['username'])
                 , "followerCount" => $followers['count']
+                , "snippetMarkUp" => $this->load->view('templates/seo/person_markup', $arrVendorDetails)
             ); 
         $bannerData = array_merge($bannerData, $EsLocationLookupRepository->getLocationLookup());
 
