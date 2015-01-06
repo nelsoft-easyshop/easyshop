@@ -7,12 +7,12 @@
                 <div class="col-xs-2 no-padding">
                     <center>
                         <div class="div-user-image">
-                            <a href="/<?php echo $feedback['userslug']?>">
+                            <a href="/<?php echo html_escape($feedback['userslug'])?>">
                                 <img src="<?php echo $feedback['userImage'];?>" class="img-user-image">
                             <a/>
                         </div>
                         <p class="p-user-name">
-                            <a href="/<?php echo $feedback['userslug']?>">
+                            <a href="/<?php echo html_escape($feedback['userslug']);?>">
                                 <?php echo html_escape($feedback['username']); ?>
                             </a>
                         </p>
