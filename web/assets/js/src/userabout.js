@@ -160,6 +160,7 @@
     });
     
     $('.feedback-mobile').on('click', '.feedback-from-seller',  function() {
+        $( "#ab" ).trigger("click");
         $(".feedback-cat-mobile").not(".feedback-from-seller").removeClass("active-bar",0);
         $(".feedback-from-seller").addClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
@@ -181,6 +182,7 @@
      });
     
     $('.feedback-mobile').on('click', '.feedback-from-buyer',  function() {
+        $( "#as" ).trigger("click");
         $(".feedback-cat-mobile").not(".feedback-from-buyer").removeClass("active-bar",0);
         $('.feedback-from-buyer').addClass("active-bar",0);
         $('.feedback-mobile-2').slideDown();
@@ -202,6 +204,7 @@
      });
     
     $('.feedback-mobile').on('click', '.feedback-for-seller',  function() {
+        $( "#fos" ).trigger("click");
         $(".feedback-cat-mobile").not(".feedback-for-seller").removeClass("active-bar",0);
         $(".feedback-for-seller").addClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
