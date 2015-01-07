@@ -66,10 +66,10 @@ class EsMemberFeedbackRepository extends EntityRepository
         $queryBuilder = $em->createQueryBuilder();
 
         $queryBuilder = $queryBuilder->select('reviewer.idMember as reviewerId, 
-                                            reviewer.username as reviewerUsername, 
+                                            COALESCE(reviewer.storeName, reviewer.username) as reviewerUsername, 
                                             reviewer.slug as reviewerSlug, 
                                             reviewee.idMember as revieweeId, 
-                                            reviewee.username as revieweeUsername, 
+                                            COALESCE(reviewee.storeName, reviewee.username) as revieweeUsername, 
                                             reviewee.slug as revieweeSlug, 
                                             fb.feedbMsg,
                                             fb.dateadded,
