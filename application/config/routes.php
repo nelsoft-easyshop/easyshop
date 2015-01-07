@@ -163,6 +163,9 @@ else {
     $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
+    #MESSAGES
+    $route['(?i)messages'] = '/MessageController/messages';
+
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';
     $route['(?i)faq'] = 'home/faq';
