@@ -170,14 +170,14 @@ class AccountManager
             
             if($member){
                 unset($errors[0]);    
+                $member->setFailedLoginCount(0);
                 if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
                     $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
-                    $member = NULL;    
+                    $member = null;    
                 }
                 else {
                     $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
                     $member->setLastLoginIp($this->httpRequest->getClientIp());
-                    $member->setFailedLoginCount(0);
                     $member->setLoginCount($member->getLoginCount() + 1);
                     $this->em->flush(); 
                     $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -186,8 +186,10 @@ class AccountManager
             }
         }
 
-        return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
-                'member' => $member];
+        return [
+            'errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
+            'member' => $member
+        ];
     
     }
     
