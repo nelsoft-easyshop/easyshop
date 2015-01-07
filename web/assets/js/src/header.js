@@ -179,27 +179,8 @@
                     url: '/search/suggest',
                     triggerLength: 3, // This is the minimum length of text to take action on
                     timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server.
-                    preProcess: function (data) { 
-                        if ($.isEmptyObject(data)) { 
-                            $('.suggested-result-container').empty();
-                        } 
-                        return data;
-                    }
                 },
-                items: 10, // The maximum number of items to show in the results. 
-                menu: '<ul class="typeahead dropdown-menu suggested-result-container"></ul>' ,
-                item: '<li><a href="#"></a></li>'
-            }) 
-            .focus(function() { 
-                if($(this).val().length >= 3){ 
-                    if ($('.suggested-result-container').is(':empty') === false){ 
-                        $('.suggested-result-container').show();
-                    }
-                }
-            })
-            .focusout(function() { 
-                $('.suggested-result-container').hide();
-                $('.suggested-result-container2').html($('.suggested-result-container').html());
+                items: 10, // The maximum number of items to show in the results.
             });
 
         $('input#primary-search2')
@@ -208,27 +189,8 @@
                     url: '/search/suggest',
                     triggerLength: 3, // This is the minimum length of text to take action on
                     timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server.
-                    preProcess: function (data) { 
-                        if ($.isEmptyObject(data)) { 
-                            $('.suggested-result-container2').empty();
-                        } 
-                        return data;
-                    }
                 },
-                items: 10, // The maximum number of items to show in the results. 
-                menu: '<ul class="typeahead dropdown-menu suggested-result-container2"></ul>' ,
-                item: '<li><a href="#"></a></li>'
-            }) 
-            .focus(function() { 
-                if($(this).val().length >= 3){ 
-                    if ($('.suggested-result-container2').is(':empty') === false){ 
-                        $('.suggested-result-container2').show();
-                    }
-                }
-            })
-            .focusout(function() { 
-                $('.suggested-result-container2').hide();
-                $('.suggested-result-container').html($('.suggested-result-container2').html());
+                items: 10, // The maximum number of items to show in the results.
             });
 
 }(jQuery));

@@ -235,12 +235,12 @@
 	margin-left:20px;
 }
 
-.suggested-result-container {
+.nav-search1 > .typeahead {
 	display: none;
 	top: 38px;
 }
 
-.suggested-result-container2 {
+.nav-search2 > .typeahead {
 	display: none;
 	left: 0 !important;
 	text-align: left;
@@ -248,8 +248,8 @@
 	width: 100%;
 }
 
-.suggested-result-container,
-.suggested-result-container2 {
+.nav-search1 > .typeahead,
+.nav-search2 > .typeahead {
 	background-color: rgb(255, 255, 255);
 	padding: 10px 0;
 	position: absolute;
@@ -259,8 +259,8 @@
     box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
 }
 
-/*.suggested-result-container ul li,
-.suggested-result-container2 ul li {
+/*.nav-search1 > .typeahead ul li,
+.nav-search2 > .typeahead ul li {
 	padding-left: 10px;
 }*/
 
@@ -273,25 +273,25 @@
 	font-weight: 900;
 }
 
-.suggested-result-container2 li {
+.nav-search2 > .typeahead li {
 	line-height: 24px;
 }
 
-.suggested-result-container strong,
-.suggested-result-container2 strong {
+.nav-search1 > .typeahead strong,
+.nav-search2 > .typeahead strong {
 	font-weight: 900;
 }
 
-.suggested-result-container a,
-.suggested-result-container2 a {
+.nav-search1 > .typeahead a,
+.nav-search2 > .typeahead a {
 	color: #565656;
 	display: block;
 	font-size: 13px;
 	padding: 4px 10px;
 }
 
-.suggested-result-container a:hover,
-.suggested-result-container2 a:hover {
+.nav-search1 > .typeahead a:hover,
+.nav-search2 > .typeahead a:hover {
 	background-color: #868686;
 	color: #fff;
 }
@@ -300,11 +300,11 @@
 ----------------- Responsive  ------------------
 ==============================================*/
 @media (min-width: 991px) {
-	.suggested-result-container {
+	.nav-search1 > .typeahead {
 		width: 330px;
 	}
 
-	.suggested-result-container2 {
+	.nav-search2 > .typeahead {
 		left: 22%;
 		top: 47px !important;
 		width: 250px;
@@ -318,15 +318,15 @@
 		font-size:42px;
 	}
 
-	.suggested-result-container {
+	.nav-search1 > .typeahead {
 		width: 486px;
 	}
 
-	.suggested-result-container2 {
+	.nav-search2 > .typeahead {
 		width: 338px;
 	}
 
-	.suggested-result-container2 {
+	.nav-search2 > .typeahead {
 		left: 28% !important;
 	}
 }
