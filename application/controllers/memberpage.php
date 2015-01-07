@@ -497,7 +497,7 @@ class Memberpage extends MY_Controller
                 $data["productId"] = $product["idOrderProduct"];
                 $boughtTransactions["transactions"][] = $data;
             }
-
+            $data = [];
             $productSpecs = "";
         }
         $this->load->view("pages/user/printboughttransactions", $boughtTransactions);
@@ -541,7 +541,7 @@ class Memberpage extends MY_Controller
                 $data["productId"] = $product["idOrderProduct"];
                 $soldTransactions["transactions"][] = $data;
             }
-
+            $data = [];
             $productSpecs = "";
         }
 
