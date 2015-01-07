@@ -2452,7 +2452,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         font-size: 11px;
     }
 
-    .old-suggested-result-container {
+    #search-container > .typeahead {
         width: 65.5% !important;
     }
 }
@@ -2797,7 +2797,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 75%;
     }
 
-    .old-suggested-result-container {
+    #search-container > .typeahead {
         width: 74.5% !important
     }
 

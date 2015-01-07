@@ -1929,19 +1929,19 @@ td.td-view.p-view2.color-default{
     text-decoration: none;
 }
 /*** end of Vendor style ***/
-.suggested-result-container-alt {
+#search-form1 > .typeahead {
     display: none;
     top: 38px;
 }
 
-.suggested-result-container-alt2 {
+#search-form2 > .typeahead {
     display: none;
     text-align: left;
     width: 100%;
 }
 
-.suggested-result-container-alt,
-.suggested-result-container-alt2 {
+#search-form1 > .typeahead,
+#search-form2 > .typeahead {
     background-color: rgb(255, 255, 255);
     padding: 10px 0;
     position: absolute;
@@ -1951,26 +1951,26 @@ td.td-view.p-view2.color-default{
     box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
 }
 
-.suggested-result-container-alt li,
-.sticky-nav .suggested-result-container-alt2 li {
+#search-form1 > .typeahead li,
+.sticky-nav #search-form2 > .typeahead li {
     float: none;
     line-height: 24px;
     width: 100%;
 }
 
-.suggested-result-container-alt strong,
-.suggested-result-container-alt2 strong {
+#search-form1 > .typeahead strong,
+#search-form2 > .typeahead strong {
     font-weight: 900;
 }
 
-.suggested-result-container-alt a {
+#search-form1 > .typeahead a {
     color: #565656;
     display: block;
     font-size: 13px;
     padding: 4px 10px;
 }
 
-.sticky-nav .suggested-result-container-alt2 li a {
+.sticky-nav #search-form2 > .typeahead li a {
     color: #565656;
     display: block;
     font-size: 13px;
@@ -1979,8 +1979,10 @@ td.td-view.p-view2.color-default{
     width: 100%;
 }
 
-.suggested-result-container-alt a:hover,
-.sticky-nav .suggested-result-container-alt2 li a:hover {
+#search-form1 > .typeahead a:hover,
+.sticky-nav #search-form2 > .typeahead li a:hover,
+#search-form1 > .typeahead > li.active > a,
+#search-form2 > .typeahead > li.active > a {
     background-color: #868686;
     color: #fff;
     text-decoration: none;
@@ -1990,22 +1992,22 @@ td.td-view.p-view2.color-default{
 ----------------- Responsive  ------------------
 ==============================================*/
 @media (min-width: 991px) {
-    .suggested-result-container-alt {
+    #search-form1 > .typeahead {
         width: 330px;
     }
 
-    .suggested-result-container-alt2 {
+    #search-form2 > .typeahead {
         width: 250px;
     }
 }
 
 /* Large desktop */
 @media (min-width: 1200px) {
-    .suggested-result-container-alt {
+    #search-form1 > .typeahead {
         width: 327px;
     }
 
-    .suggested-result-container-alt2 {
+    #search-form2 > .typeahead {
         width: 327px;
     }
 }

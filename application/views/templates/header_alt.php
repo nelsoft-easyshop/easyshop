@@ -92,7 +92,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="vendor-header-left">
                 <div class="search-container">
                     <span class="mobile-search"><span class="span_bg"></span></span>
-                    <form class="search-form">
+                    <form id="search-form1" class="search-form">
                         <select class="ui-form-control search-type">
                             <option value="1">On Seller's Page</option>
                             <option value="2">Main Page</option> 
@@ -238,7 +238,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
             </li>
             <li> 
-                <form class="search-form">
+                <form id="search-form2" class="search-form">
                     <select class="ui-form-control search-type">
                         <option value="1">On Seller's Page</option>
                         <option value="2">Main Page</option> 

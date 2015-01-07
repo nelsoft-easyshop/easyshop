@@ -209,7 +209,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
        
         <?php if(!(isset($renderSearchbar) && ($renderSearchbar === false))): ?>
             <div class="search_box prob_search_box">
-                <div class="pos-rel">
+                <div id="search-container" class="pos-rel">
                 <span class="main_srch_img_con"></span>
                 <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?= $this->input->get('q_str') ? html_escape(trim($this->input->get('q_str'))) : "" ; ?>" autocomplete="off">
                 
@@ -244,28 +244,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
                     preProcess: function (data) { 
                         if ($.isEmptyObject(data)) { 
-                            $('.old-suggested-result-container').empty();
+                            $('#search-container > .typeahead').empty();
                         } 
                         return data;
                     }
                 },
                 items: 10, // The maximum number of items to show in the results. 
-                menu: '<ul class="typeahead dropdown-menu old-suggested-result-container"></ul>' ,
+                menu: '<ul class="typeahead dropdown-menu"></ul>' ,
                 item: '<li><a href="#"></a></li>'
-            })
-            .focus(function() { 
-                if($(this).val().length >= 3){ 
-                    if ($('.old-suggested-result-container').is(':empty') === false){ 
-                        $('.old-suggested-result-container').show();
-                    }
-                }
-            })
-            .focusout(function() { 
-                $('.old-suggested-result-container').hide(); 
             });
 
         $(document).ready(function(){
-            $(".old-suggested-result-container").hide();
+            $("#search-container > .typeahead").hide();
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
 
