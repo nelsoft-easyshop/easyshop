@@ -4,39 +4,10 @@
 ==============================================*/
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
 
-@font-face {
-    font-family: Helvetica;
-    src: url(/assets/fonts/HelveticaNeueLTCom-Th.ttf);
-    font-weight: 100;
-}
 
-@font-face {
-    font-family: Helvetica;
-    src: url(/assets/fonts/HelveticaNeueLTCom-Lt.ttf);
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: Helvetica;
-    src: url(/assets/fonts/HelveticaNeueLTCom-Roman.ttf);
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: Helvetica;
-    src: url(/assets/fonts/HelveticaNeueLTCom-It.ttf);
-    font-weight: normal;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: Helvetica;
-    src: url(/assets/fonts/HelveticaNeueLTCom-Bd.ttf);
-    font-weight: 900;
-}
 
 html, body {
-    font-family: 'Helvetica', 'Open Sans', sans-serif , Arial, Calibri;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     font-size: 12px;
     letter-spacing: 0.5px;
     color: #7c807e;
@@ -71,7 +42,6 @@ h3,
 h4,
 h5,
 h6 {
-    font-family:'Helvetica Neue',Helvetica,Arial;
     line-height:1;
     color:#444645;
     margin-top:0;
@@ -1252,6 +1222,7 @@ header {
     padding-right:30px;
     z-index:1;
     background:#fff;
+    font-weight: 600;
 }
 .title-bg:after {
     content:'';
@@ -1269,6 +1240,7 @@ header {
 #content .content-title {
     margin-bottom:20px;
     width: 100% !important;
+    font-weight: 600 !important;
 }
 
 .title-desc {
@@ -2434,12 +2406,10 @@ html[xmlns] .slides {display: block;}
 
 /*** global style ***/
 html, body{
-    font-family: 'Helvetica', 'Open Sans', Arial, Calibri !important;
     background: #ebedf0;
 }
 
 .item-featured{
-    font-family: 'Helvetica', 'Open Sans', Arial, Calibri !important;
     padding: 10px;
     border: solid red 1px !important;
 }
@@ -2625,7 +2595,6 @@ font-size: 15px;
     border-radius: 4px;
     padding: 7px 20px;
     font-weight: 500;
-    font-family: "Helvetica", Arial, Inherit;
     margin-right: 10px;
     text-transform: uppercase;
     margin-bottom: 5px;
@@ -2650,7 +2619,7 @@ font-size: 15px;
     font-size: 20px;
     margin-bottom: 5px;
     color: #444645;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .sn-container{
