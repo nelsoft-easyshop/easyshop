@@ -238,7 +238,15 @@
 /* =============================================
 ----------------- Responsive  ------------------
 ==============================================*/
-
+@media (min-width: 767px) {
+	#top-links {
+		padding-top: 4px;
+	}
+	
+	#top-links li {
+	    margin-right:5%;
+	}
+}
 
 /* Large desktop */
 @media (min-width: 1200px) {
@@ -299,10 +307,9 @@
  	}
 
 	#top-links li a {
-		padding:0 15px;
+		padding:6px 15px;
  		border-right:1px solid #dcdcdc;
-		height:22px;
-		margin-left:15px;
+		height:28px;
 	}
 
 	#top-links li:first-child a .top-icon {
@@ -322,10 +329,6 @@
 		padding-top:75px;
 	}
 	
-	#inner-header .logo-container {
-		margin-bottom: 90px;
-	}
-
 	#inner-header .header-inner-right {
 		margin-bottom:0;
 		position: relative;
@@ -371,7 +374,7 @@
 /* Landscape phones and down */
 @media (max-width: 480px) {
 	#top-links li a {
-		padding: 0 8px;
+		padding: 6px 8px;
 	}
 }
 

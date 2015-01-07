@@ -73,9 +73,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="col-md-12">
                             <div class="col-xs-6 col-sm-6 col-md-6 top-header-left">
                                 <ul id="top-links" class="clearfix">
-                                    <li><a href="/sell/step1" title="Sell an item"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">sell an item</span></a></li>
-                                    <li><a href="/guide/sell" title="Learn how to sell your items"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">how to sell</span></a></li>
-                                    <li><a href="/guide/buy" title="Learn how to make a purchase"><span class="top-icon top-icon-cart"></span><span class="hide-for-xs">how to shop</span></a></li>
+                                    <li><a href="/sell/step1" title="Sell an item"><i class="icon-item"></i><span class="hide-for-xs">sell an item</span></a></li>
+                                    <li><a href="/guide/sell" title="Learn how to sell your items"><i class="icon-how-to-sell"></i><span class="hide-for-xs">how to sell</span></a></li>
+                                    <li><a href="/guide/buy" title="Learn how to make a purchase"><i class="icon-how-to-shop"></i><span class="hide-for-xs">how to shop</span></a></li>
                                 </ul>
                             </div><!-- End .header-top-left -->
                             <div class="col-xs-6 col-sm-6 col-md-6 top-header-right">
@@ -243,9 +243,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                             <ul class="menu clearfix">
                                                 <li class="mega-menu-container drop-category">
-                                                    <span class="category-icon"></span>
+                                                    <span class="icon-category"></span>
                                                     <a href="javascript:void(0)" class="mega-menu-title">CATEGORIES</a>
-                                                    <span class="drop-icon"></span>
+                                                    <span class="icon-dropdown"></span>
+                                                    <span class="icon-dropup"></span>
                                                     <div class="mega-menu clearfix">
                                                         <div class="col-md-80p border-right">                                                    
                                                             <h2>popular categories</h2>

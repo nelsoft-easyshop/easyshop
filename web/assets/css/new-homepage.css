@@ -271,7 +271,7 @@ header {
 
 #header-top {
     background: #f5f5f5;
-    height:36px;
+    height:28px;
     font-size:14px;
 }
 
@@ -286,7 +286,6 @@ header {
 }
 
 #top-links li {
-    margin-right:5%;
     display:block;
     float:left;
 }
@@ -295,8 +294,7 @@ header {
     display:inline-block;
     color:#7f7d74;
     font-size: 14px;
-    line-height: 24px;
-    margin:7px 0;
+    line-height: 22px;
     position: relative;
 }
 
@@ -310,14 +308,15 @@ header {
 
 .header-seller-name {
     display: inline-block;
-    height: 35px;
-    line-height: 33px;
+    height: 28px;
+    line-height: 28px;
     max-width: 125px;
     overflow: hidden;
+    padding-right: 8px;
     text-align: left;
     text-overflow: ellipsis;
-    vertical-align: middle;
-    width: 69%;
+    vertical-align: top;
+    white-space: nowrap;
 }
 
 .new-user-nav-dropdown {
@@ -326,6 +325,7 @@ header {
 
 .default-nav-dropdown-arrow {
     display: inline-block;
+    float: right;
     height: 25px;
     overflow: hidden;
     position: relative;
@@ -341,7 +341,7 @@ header {
     left: 1px;
     line-height: 0;
     position: absolute;
-    top: 16px;
+    top: 11px;
     width: 0;
     border-style: solid;
     border-width: 8px 6px 0;
@@ -397,7 +397,7 @@ header {
     display: none;
     list-style: none;
 /*    left: -68px;*/
-    top: 36px;
+    top: 28px;
     padding: 10px 0;
     position: absolute;
     right: -18px;
@@ -442,6 +442,16 @@ header {
 
 .default-nav-dropdown .msg_countr {
     line-height: 19px;
+}
+
+#top-links li i {
+    font-size: 16px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+#top-links li i.icon-how-to-shop {
+    font-size: 19px;
 }
 
 .top-icon {
@@ -501,7 +511,7 @@ header {
 }
 
 #header-top .header-link {
-    line-height:36px;
+    line-height: 28px;
 }
 
 #header-top .header-link {
@@ -526,48 +536,42 @@ header {
 
 .login-profile-con {
     display: inline-block;
-    width: 14px;
     height: 16px;
-    vertical-align: middle;
+    margin: 6px;
+    position: relative;
     text-align: center;
+    vertical-align: top;
+    width: 14px;
 }
 
 .login-profile-con img {
-    max-width: 14px;
-    max-height: 16px;
-    width: auto;
+    bottom: 0;
     height: auto;
+    left: 0;
+    margin: auto;
+    max-height: 16px;
+    max-width: 14px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
 }
 
 #inner-header {
     background-color: #fff;
-    padding-top:35px;
+    padding-top:25px;
 }
 
 #inner-header.christmas-theme {
     background: #fff url(../images/img-snow.jpg) no-repeat top center;
 }
 
-/*#inner-header .logo-container,
 #inner-header .header-inner-right {
-    margin-bottom:22px;
-}*/
-
-#inner-header .logo-container,
-#inner-header .header-inner-right {
-    margin-bottom:15px;
+    margin-bottom: 11px;
 }
-
-/*.logo {
-    position:relative;
-    margin-top:-5px;
-
-}*/
 
 .logo {
     position:relative;
-    margin-top:-10px;
-
 }
 
 .logo > span {
@@ -587,7 +591,6 @@ header {
     line-height:18px;
     margin:6px 0 0;
 }
-
 
 .header-cart-wrapper .header-cart-items-con {
     font-size: 1em;
@@ -766,7 +769,7 @@ header {
 
 .sticky-nav-fixed .header-text-container .new-user-nav-dropdown .default-nav-dropdown {
     right: -18px;
-    top: 39px;
+    top: 29px;
 }
 
 #main-nav-container #main-nav .menu li {
@@ -938,35 +941,37 @@ header {
     width: 80%;
 }
 
-/*#main-nav-container #main-nav .menu .mega-menu-container.drop-category .mega-menu-title {
-    padding-left:45px;
-    padding-right:150px;
-}*/
-
-#main-nav-container #main-nav .menu .drop-category:hover .drop-icon {
-    background-position: -328px -93px;
+#main-nav .drop-category .icon-dropdown {
+    color: #fff;
+    font-size: 12px;
+    position: absolute;
+    right: 12px;
+    top: 17px;
 }
 
-#main-nav .drop-category .category-icon{
-    background-image: url("../images/sprites/sprite.png");
-    background-position: -250px -93px;
-    border-radius: 0 4px 4px 0;
-    height: 100%;
+#main-nav .drop-category .icon-dropup {
+    color: #fff;
+    display: none;
+    font-size: 12px;
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 35px;
+    right: 12px;
+    top: 17px;
 }
-#main-nav .drop-category .drop-icon {
-    background-image: url("../images/sprites/sprite.png");
-    background-position: -298px -93px;
-    border-radius: 0 4px 4px 0;
-    height: 36px;
-/*    height: 100%;*/
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 35px;
+
+#main-nav-container #main-nav .menu .drop-category:hover .icon-dropdown {
+    display: none;
+}
+
+#main-nav-container #main-nav .menu .drop-category:hover .icon-dropup {
+    display: block;
+}
+
+#main-nav .drop-category .icon-category {
+    color: #fff;
+    float: left;
+    font-size: 19px;
+    margin-top: 12px;
+    margin-left: 11px;
 }
 
 /* Mega Menu Styles */
@@ -3670,7 +3675,7 @@ h3 > b{
         display: none;
     }
 
-    #main-nav .drop-category .drop-icon {
+    #main-nav .drop-category .icon-category {
         display: none;
     }
 
@@ -3702,6 +3707,7 @@ h3 > b{
     }
 
     .logo {
+        margin-bottom: 19px;
         width: 100%;
     }
 
@@ -3988,9 +3994,7 @@ h3 > b{
     .top-icon {
         margin-right: 0;
     }
-    .header-seller-name {
-        width: 63%;
-    }
+
     .sticky-search-wrapper {
         width: 74.5%;
     }
