@@ -478,33 +478,43 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
 <script>
     (function ($) { 
-        $('input#primary-search').typeahead({
-            ajax: { 
-                url: '/search/suggest',
-                triggerLength: 3, // This is the minimum length of text to take action on
-                timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
-            },
-            items: 10, // The maximum number of items to show in the results. 
-            menu: '<ul class="typeahead suggested-result-container"></ul>' ,
-            item: '<li><a href="#"></a></li>'
-        })
-        .focusout(function() {
-            $('.suggested-result-container').hide();
-        });
+        $('input#primary-search')
+            .typeahead({
+                ajax: { 
+                    url: '/search/suggest',
+                    triggerLength: 3, // This is the minimum length of text to take action on
+                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
+                    preProcess: function (data) { 
+                        if ($.isEmptyObject(data)) { 
+                            $('.suggested-result-container').empty();
+                            return false;
+                        }
 
-        $('input#primary-search2').typeahead({
-            ajax: { 
-                url: '/search/suggest',
-                triggerLength: 3, // This is the minimum length of text to take action on
-                timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
-            },
-            items: 10, // The maximum number of items to show in the results. 
-            menu: '<ul class="typeahead suggested-result-container2"></ul>' ,
-            item: '<li><a href="#"></a></li>'
-        })
-        .focusout(function() {
-            $('.suggested-result-container').hide();
-        });
+                        return data;
+                    }
+                },
+                items: 10, // The maximum number of items to show in the results. 
+                menu: '<ul class="typeahead suggested-result-container"></ul>' ,
+                item: '<li><a href="#"></a></li>'
+            }) 
+            .focus(function() {
+                $('.suggested-result-container').show();
+            });
+
+        $('input#primary-search2')
+            .typeahead({
+                ajax: { 
+                    url: '/search/suggest',
+                    triggerLength: 3, // This is the minimum length of text to take action on
+                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
+                },
+                items: 10, // The maximum number of items to show in the results. 
+                menu: '<ul class="typeahead suggested-result-container2"></ul>' ,
+                item: '<li><a href="#"></a></li>'
+            }) 
+            .focus(function() {
+  
+            });
 
     })(jQuery);
 </script>
