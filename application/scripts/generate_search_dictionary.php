@@ -48,7 +48,7 @@
             $dictionary->insertWordIntoDictionary($word);
             $runningWord .= $word.' ';
             if($index > 0){
-                $dictionary->insertWordIntoDictionary(rtrim($runningWord));
+                $dictionary->insertWordIntoDictionary(trim($runningWord));
             }
         }
     }
@@ -128,7 +128,7 @@ class Dictionary
      *
      * @var integer
      */
-    const DEV_MIN_OCCURENCES = 3;
+    const DEV_MIN_OCCURENCES = 1;
     
     /**
      * Minimum occurences for word to enter the dictionary (PROD)
@@ -191,6 +191,7 @@ class Dictionary
             $word = htmlspecialchars($word);
             $word = strtolower($word);
             $word = preg_replace('/[^A-Za-z0-9\ ]/', '', $word);
+            $word = preg_replace('/\s+/', ' ', $word);
             if(isset($this->dictionary[$word])){
                 $occurences = $this->dictionary[$word];
                 if($sqlOccurences === null){
