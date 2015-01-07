@@ -370,20 +370,20 @@ class UserManager
             foreach($feedbacks as $feedback){
                 $feedBackKind = intval($feedback['feedbKind']);
                 $feedbackDetails = [
-                            'feedb_msg' => $feedback['feedbMsg'],
-                            'dateadded' => $feedback['dateadded']->format('jS F, Y'),
-                            'rating1' => $feedback['rating1'],
-                            'rating2' => $feedback['rating2'],
-                            'rating3' => $feedback['rating3'],
-                        ];
+                    'feedb_msg' => $feedback['feedbMsg'],
+                    'dateadded' => $feedback['dateadded']->format('jS F, Y'),
+                    'rating1' => $feedback['rating1'],
+                    'rating2' => $feedback['rating2'],
+                    'rating3' => $feedback['rating3'],
+                ];
                                                                                                 
                 if(intval($feedback['reviewerId']) === $memberId){
                     $feedbackDetails['for_memberId'] = $feedback['revieweeId'];
                     $feedbackDetails['for_membername'] = $feedback['revieweeUsername'];
-                    if($feedBackKind === 0){
+                    if($feedBackKind === EsMemberFeedback::REVIEWER_AS_BUYER){
                         $data['youpost_buyer'][$feedback['idOrder']]  = $feedbackDetails;
                     }
-                    else if($feedBackKind === 1){
+                    else if($feedBackKind === EsMemberFeedback::REVIEWER_AS_SELLER){
                         $data['youpost_seller'][$feedback['idOrder']] = $feedbackDetails;
                     }
                 }
@@ -394,10 +394,10 @@ class UserManager
                     $data['rating2Summary'] += $feedback['rating2'];
                     $data['rating3Summary'] += $feedback['rating3'];
                     $data['reviewForSellerCount']++;
-                    if($feedBackKind === 0){
+                    if($feedBackKind === EsMemberFeedback::REVIEWER_AS_BUYER){
                         $data['otherspost_seller'][$feedback['idOrder']]  = $feedbackDetails;
                     }
-                    else if($feedBackKind === 1){
+                    else if($feedBackKind === EsMemberFeedback::REVIEWER_AS_SELLER){
                         $data['otherspost_buyer'][$feedback['idOrder']] = $feedbackDetails;
                     }
                 }
