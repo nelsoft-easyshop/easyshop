@@ -126,3 +126,4 @@ class EsSearchTopic
         return $this->category;
     }
 }
+

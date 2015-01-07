@@ -28,3 +28,4 @@ class EsSearchTopicRepository extends EntityRepository
         return $result;
     }
 }
+
