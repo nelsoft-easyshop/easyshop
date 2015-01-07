@@ -905,7 +905,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $template = $this->input->get("template");
-        $string = $this->xmlCmsService->getString("sliderSection",$template, $map->sliderSection->slide[$this->defaultIndex]->image[$this->defaultIndex]->path); 
+        $string = $this->xmlCmsService->getString("sliderSection",$template, ""); 
         $index = $index == 0 ? 1 : $index + 1;  
 
         $this->config->load('image_dimensions', true);        
@@ -915,16 +915,6 @@ class NewHomeWebService extends MY_Controller
                                                         $string,'/map/sliderSection/slide[last()]', 
                                                         "\t\t",
                                                         "\n");  
-        if($defaultTemplateSliderCount > 1 && $addXml) {
-            for ($i=$defaultTemplateSliderCount - 1; $i > 0 ; $i--) { 
-                $string = $this->xmlCmsService->getString("subSliderSection", 
-                                                            $map->sliderSection->slide[$this->defaultIndex]->image[$this->defaultIndex]->path, 
-                                                            "", 
-                                                            "", 
-                                                            $map->sliderSection->slide[$this->defaultIndex]->image[$this->defaultIndex]->target);     
-                $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide[last()]/image[last()]',"\t\t\t","\n");
-            }            
-        }
 
         return $this->output
                 ->set_content_type('application/json')
@@ -1202,7 +1192,7 @@ class NewHomeWebService extends MY_Controller
             }
 
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
-            if($map->sliderSection->slide[$index]->image->path == "unavailable_product_img.jpg" && $map->sliderSection->slide[$index]->image->target == "/") {
+            if($map->sliderSection->slide[$index]->image->path == "") {
                 $map->sliderSection->slide[$index]->image->path = $value;
                 $map->sliderSection->slide[$index]->image->target = $target;
                 if($map->asXML($this->tempHomefile)) {
