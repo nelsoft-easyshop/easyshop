@@ -111,7 +111,7 @@ class productUpload extends MY_Controller
 
             $this->load->spark('decorator');    
             $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('errors/email-verification');
+            $this->load->view('errors/account-unverified');
             $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
         }
 

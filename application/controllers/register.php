@@ -299,14 +299,14 @@ class Register extends MY_Controller
         echo json_encode($serverResponse);
     }
     
-    function email_verification(){
-
+    
+    /**
+     * Checks if a user's email is succesfully verified
+     *
+     */
+    public function email_verification()
+    {
         $this->load->library('encrypt');
-
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
 
         //Decrypt and re-assign data
         $enc = html_escape($this->input->get('h'));
@@ -314,9 +314,9 @@ class Register extends MY_Controller
         $decrypted = $this->encrypt->decode($enc);
         $getdata = explode("|", $decrypted);
         
-        $email = $getdata[0];
-        $username = $getdata[1];
-        $hash = $getdata[2];
+        $email = isset($getdata[0]) ? $getdata[0] : null;
+        $username = isset($getdata[1]) ? $getdata[1] : null;
+        $hash = isset($getdata[2]) ? $getdata[2] : null;
 
         $headerData = [
             'title' => 'Easyshop.ph - Email Verification',
@@ -332,17 +332,17 @@ class Register extends MY_Controller
 
         $member_id = $this->register_model->get_memberid($username)['id_member'];
 
-        if($member_id === 0){
+        if($member_id === 0 || true){
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/user/err_email_verif', $data);
-            $this->load->view('templates/footer_full', $viewData);
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('errors/email-verification');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
             return;
         }
 
         $data_val = $this->register_model->get_verifcode($member_id);
 
-
+        
         if($email === $data_val['email'] && $hash === $data_val['emailcode'] && $username === $data_val['username'])
         {
         
@@ -350,8 +350,8 @@ class Register extends MY_Controller
                 $data['verification_msg'] = $this->lang->line('expired_email_verification');
                 $this->load->spark('decorator');    
                 $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-                $this->load->view('pages/user/register_form3_view', $data);
-                $this->load->view('templates/footer_full', $viewData);
+                $this->load->view('pages/user/email-verification-succcess', $data);
+                $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
                 return;
             }
 
@@ -364,15 +364,17 @@ class Register extends MY_Controller
             
             $data['verification_msg'] = $this->lang->line('success_email_verification');
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/user/register_form3_view', $data);
-            $this->load->view('templates/footer_full', $viewData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+
         }
         else{
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/user/err_email_verif', $data);
-            $this->load->view('templates/footer_full', $viewData);
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('errors/email-verification');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
         }
     }
  
