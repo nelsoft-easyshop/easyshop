@@ -66,9 +66,9 @@ class MessageController extends MY_Controller
      */
     public function send()
     {
-        $username = trim($this->input->post("recipient"));
+        $storeName = trim($this->input->post("recipient"));
         $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
-                                   ->findOneBy(['username' => $username]);
+                                   ->getUsedStoreName($this->userId, $storeName)[0];
         $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
 
         if (!$receiverEntity) {
