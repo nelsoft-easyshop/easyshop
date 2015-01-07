@@ -189,7 +189,7 @@ function Reload()
         type:"POST",
         dataType : "json",
         url : "/MessageController/getAllMessage",
-        data : {csrfname:csrftoken,todo:todo},
+        data : {csrfname:csrftoken,isUnread:todo},
         success : function(d)
         {
             $(".msg_countr").html(d.unread_msgs_count);

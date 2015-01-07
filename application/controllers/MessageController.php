@@ -155,7 +155,7 @@ class MessageController extends MY_Controller
      */
     public function getAllMessage()
     {
-        $getUnreadMessages = $this->input->post("todo");
+        $getUnreadMessages = $this->input->post("isUnread");
         $message = $this->messageManager->getAllMessage($this->userId, $getUnreadMessages);
 
         echo json_encode($message);
