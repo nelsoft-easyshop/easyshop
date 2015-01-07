@@ -16,7 +16,7 @@ class Version20150106132703 extends AbstractMigration
         $this->addSql("
             CREATE TABLE `es_search_topic` (
                 `id_search_topic` int(11) NOT NULL AUTO_INCREMENT,
-                `topic` varchar(45) DEFAULT NULL,
+                `topic` varchar(255) DEFAULT NULL,
                 `category` int(10) unsigned DEFAULT NULL,
                 `weight` decimal(10,4) DEFAULT '0',
                 PRIMARY KEY (`id_search_topic`),
