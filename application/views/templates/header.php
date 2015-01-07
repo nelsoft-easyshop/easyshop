@@ -250,7 +250,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     }
                 },
                 items: 10, // The maximum number of items to show in the results. 
-                menu: '<ul class="typeahead old-suggested-result-container"></ul>' ,
+                menu: '<ul class="typeahead dropdown-menu old-suggested-result-container"></ul>' ,
                 item: '<li><a href="#"></a></li>'
             })
             .focus(function() { 
