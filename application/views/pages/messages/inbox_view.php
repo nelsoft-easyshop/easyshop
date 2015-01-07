@@ -186,7 +186,6 @@ function Reload()
     var result = "";
     var todo = "Get_UnreadMsgs";
     $.ajax({
-        asycn :true,
         type:"POST",
         dataType : "json",
         url : "/MessageController/getAllMessage",
@@ -277,7 +276,6 @@ function send_msg(recipient,msg)
     $.ajax({
         type : "POST",
         dataType : "json",
-        async: false,
         url : "/MessageController/send",
         beforeSend :function(){
             $("#msg_textarea img").show();
@@ -463,7 +461,6 @@ function delete_data(ids)
     var csrfname = $("meta[name='csrf-name']").attr('content');
     var data = "";
     $.ajax({
-        async:false,
         type : "POST",
         dataType : "json",
         beforeSend: function(){
@@ -489,7 +486,6 @@ function seened(obj)
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         $.ajax({
-            async : false,
             type : "POST",
             dataType : "json",
             url : "/MessageController/updateMessageToSeen",

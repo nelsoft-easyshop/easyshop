@@ -47,53 +47,73 @@ class MessageManager {
      */
     public function getAllMessage($userId, $getUnreadMessages = false)
     {
-        $messageData = $this->em->getRepository('EasyShop\Entities\EsMessages')->getAllMessage($userId);
-        $rows = $messageData;
+        $message = $this->em->getRepository('EasyShop\Entities\EsMessages')
+                                ->getAllMessage($userId);
         $data = [];
         $result = [];
         $unreadMsg = 0;
-        for ( $ctr = 0; $ctr < sizeof($rows); $ctr++ ) {
-            $inbox = $rows[$ctr]['to_id'] . $rows[$ctr]['from_id'];
-            $sentBox = $rows[$ctr]['from_id'] . $rows[$ctr]['to_id'];
-            $status = ($rows[$ctr]['from_id'] == $userId ? EsMessages::MESSAGE_SENDER : EsMessages::MESSAGE_RECEIVER);
-            $messageId = $rows[$ctr]['id_msg'];
+        // TODO : make use of foreach
+        // TODO : make this array more readable
+        for ( $ctr = 0; $ctr < sizeof($message); $ctr++ ) {
+            $inbox = $message[$ctr]['to_id'] . $message[$ctr]['from_id'];
+            $sentBox = $message[$ctr]['from_id'] . $message[$ctr]['to_id'];
+            $status = ($message[$ctr]['from_id'] == $userId ? EsMessages::MESSAGE_SENDER : EsMessages::MESSAGE_RECEIVER);
+            $messageId = $message[$ctr]['id_msg'];
             if ( array_key_exists($sentBox, $data) ) {
-                $data[$sentBox][$messageId] = $rows[$ctr];
+                $data[$sentBox][$messageId] = $message[$ctr];
                 $data[$sentBox][$messageId]['status'] = $status;
             }
             elseif ( array_key_exists($inbox, $data) ) {
-                $data[$inbox][$messageId] = $rows[$ctr];
+                $data[$inbox][$messageId] = $message[$ctr];
                 $data[$inbox][$messageId]['status'] = $status;
             }
             else {
-                if( $status === EsMessages::MESSAGE_SENDER && ( (int) $rows[$ctr]['is_delete'] === (int) EsMessages::MESSAGE_NOT_DELETED || (int) $rows[$ctr]['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER) ) {
-                    $data[$sentBox][$messageId] = $rows[$ctr];
+                if( $status === EsMessages::MESSAGE_SENDER &&
+                    ( (int) $message[$ctr]['is_delete'] === (int) EsMessages::MESSAGE_NOT_DELETED ||
+                        (int) $message[$ctr]['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER ) ) {
+                    $data[$sentBox][$messageId] = $message[$ctr];
                     $data[$sentBox][$messageId]['status'] = EsMessages::MESSAGE_SENDER;
-                    $data[$sentBox][$messageId]['name'] = ($rows[$ctr]['from_id'] == $userId ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);
+                    $data[$sentBox][$messageId]['name'] = ( (int) $message[$ctr]['from_id'] === (int) $userId ?
+                                                            $message[$ctr]['recipient'] :
+                                                            $message[$ctr]['sender']);
                 }
-                else if ( $status === EsMessages::MESSAGE_RECEIVER && ( (int) $rows[$ctr]['is_delete'] === (int) EsMessages::MESSAGE_NOT_DELETED || $rows[$ctr]['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_SENDER) ) {
-                    $data[$sentBox][$messageId] = $rows[$ctr];
+                else if ( $status === EsMessages::MESSAGE_RECEIVER &&
+                    ( (int) $message[$ctr]['is_delete'] === (int) EsMessages::MESSAGE_NOT_DELETED ||
+                        (int) $message[$ctr]['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) ) {
+                    $data[$sentBox][$messageId] = $message[$ctr];
                     $data[$sentBox][$messageId]['status'] = EsMessages::MESSAGE_RECEIVER;
                     $data[$sentBox][$messageId]['unreadConve'] = 0;
-                    $data[$sentBox][$messageId]['name'] = ($rows[$ctr]['from_id'] == $userId ? $rows[$ctr]['recipient'] : $rows[$ctr]['sender']);
-                    if ($rows[$ctr]['opened'] == 0 ) $unreadMsg++;
+                    $data[$sentBox][$messageId]['name'] = ( (int) $message[$ctr]['from_id'] === (int) $userId ?
+                                                            $message[$ctr]['recipient'] :
+                                                            $message[$ctr]['sender']);
+                    if ( (int) $message[$ctr]['opened'] === 0 ) {
+                        $unreadMsg++;
+                    }
                 }
             }
         }
 
         $result['messages'] = array_values($data);
         $size = sizeof($result['messages']);
+        // TODO : Foreach is much cleaner
         for ($x = 0; $x < $size; $x++) {
             $unreadMsgPerConversation = 0;
             foreach($result['messages'][$x] as $key =>$row) {
                 $delete = (int) $result['messages'][$x][$key]['is_delete'];
                 $status = $result['messages'][$x][$key]['status'];
                 $isOpened = (bool) $result['messages'][$x][$key]['opened'];
-                if ( $status === EsMessages::MESSAGE_SENDER && ($delete === (int) EsMessages::MESSAGE_NOT_DELETED || $delete === (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER)) {
+                if ( $status === EsMessages::MESSAGE_SENDER &&
+                    ($delete === (int) EsMessages::MESSAGE_NOT_DELETED ||
+                        $delete === (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER )
+                ) {
                 }
-                else if ( $status === EsMessages::MESSAGE_RECEIVER && ($delete === (int) EsMessages::MESSAGE_NOT_DELETED || $delete === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) ) {
+                else if ( $status === EsMessages::MESSAGE_RECEIVER &&
+                    ( $delete === (int) EsMessages::MESSAGE_NOT_DELETED ||
+                        $delete === (int) EsMessages::MESSAGE_DELETED_BY_SENDER )
+                ) {
+                    // TODO Fix condition
                     if (!$isOpened) {
-                        ++$unreadMsgPerConversation;
+                        $unreadMsgPerConversation++;
                     }
                 }
                 else {
@@ -108,9 +128,13 @@ class MessageManager {
 
         if ($getUnreadMessages) {
             $size  = sizeof($result['messages']);
+            // TODO Foreach is cleaner
             for ($x = 0; $size > $x; $x++) {
                 foreach ($result['messages'][$x] as $data) {
-                    if ( ( ( isset($data['name']) && (int) $data['to_id'] === $userId ) && $data['opened']) || ($data['status'] === EsMessages::MESSAGE_SENDER && isset($data['name']) ) ) {
+                    if (
+                        ( ( isset($data['name']) && (int) $data['to_id'] === $userId ) && $data['opened']) ||
+                        ($data['status'] === EsMessages::MESSAGE_SENDER && isset($data['name']) )
+                    ) {
                         unset($result['messages'][$x]);
                     }
                 }

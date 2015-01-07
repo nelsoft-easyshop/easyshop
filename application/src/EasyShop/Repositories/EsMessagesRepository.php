@@ -107,13 +107,28 @@ class EsMessagesRepository extends EntityRepository
         $em = $this->_em;
         $query = "UPDATE `es_messages`
             SET `is_delete` = CASE
-                    WHEN `is_delete` = '0' THEN `is_delete` + (CASE WHEN `from_id` = ? THEN 2 ELSE 1 END)
-                    WHEN `is_delete` = '1' THEN `is_delete` + 2
-                    WHEN `is_delete` = '2' THEN `is_delete` + 1
+                    WHEN `is_delete` = ? THEN `is_delete` + (CASE WHEN `from_id` = ? THEN 2 ELSE 1 END)
+                    WHEN `is_delete` = ? THEN `is_delete` + 2
+                    WHEN `is_delete` = ? THEN `is_delete` + 1
                     ELSE 3
                    END
             WHERE `id_msg` IN(?)";
-        $count = $em->getConnection()->executeUpdate($query, [$memberId, $messageId], [\PDO::PARAM_INT, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]);
+        $count = $em->getConnection()->executeUpdate(
+                                        $query,
+                                        [
+                                            EsMessages::MESSAGE_NOT_DELETED,
+                                            $memberId,
+                                            EsMessages::MESSAGE_DELETED_BY_RECEIVER,
+                                            EsMessages::MESSAGE_DELETED_BY_SENDER,
+                                            $messageId
+                                        ],
+                                        [
+                                            \PDO::PARAM_INT,
+                                            \PDO::PARAM_INT,
+                                            \PDO::PARAM_INT,
+                                            \PDO::PARAM_INT,
+                                            \Doctrine\DBAL\Connection::PARAM_INT_ARRAY
+                                        ]);
 
         return $count;
     }
@@ -129,8 +144,8 @@ class EsMessagesRepository extends EntityRepository
         $em = $this->_em;
         $query = "
                 UPDATE `es_messages`
-			    SET `opened` = ?
-			    WHERE `to_id` = ? AND `id_msg` IN(?)";
+                SET `opened` = ?
+                WHERE `to_id` = ? AND `id_msg` IN(?)";
         $count = $em->getConnection()->executeUpdate($query,
             [
                 EsMessages::MESSAGE_READ,

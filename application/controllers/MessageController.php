@@ -66,26 +66,27 @@ class MessageController extends MY_Controller
      */
     public function send()
     {
-        $sessionData = $this->session->all_userdata();
         $username = trim($this->input->post("recipient"));
-        $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")->findOneBy(['username' => $username]);
-        $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $sessionData['member_id']);
+        $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
+                                   ->findOneBy(['username' => $username]);
+        $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
 
         if (!$receiverEntity) {
             $result['success'] = 0;
             $result['msg'] = "The user " . html_escape($username) . ' does not exist';
         }
-        else if ( (int) $sessionData['member_id'] === (int) $receiverEntity->getIdMember() ) {
+        else if ( (int) $this->userId === (int) $receiverEntity->getIdMember() ) {
             $result['success'] = 0;
             $result['msg'] = "Sorry, it seems that you are trying to send a message to yourself.";
         }
         else {
             $msg = trim($this->input->post("msg"));
-            $result = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
-            if ($result) {
-                $result = $this->messageManager->getAllMessage($this->userId);
+            $isSendingSuccesful = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
+            if ($isSendingSuccesful) {
+                $messages = $this->messageManager->getAllMessage($this->userId);
                 $recipientMessages = $this->messageManager->getAllMessage($this->userId, true);
 
+                // TODO Add this to serviceContainer
                 $dc = new \EasyShop\WebSocket\Pusher\DataContainer();
                 $dc->set('messageCount', $recipientMessages['unread_msgs']);
                 $dc->set('unreadMessages', $recipientMessages);
@@ -117,6 +118,7 @@ class MessageController extends MY_Controller
                                    ->setSubject($emailSubject)
                                    ->setMessage($emailMsg, $imageArray)
                                    ->queueMail();
+                $result = $messages;
             }
         }
 
@@ -130,20 +132,22 @@ class MessageController extends MY_Controller
     public function delete()
     {
         $messageId = $this->input->post("id_msg");
-        $messageIdArray = [$messageId];
+        $messageIdArray = [
+            $messageId
+        ];
         if ( (bool) stripos($messageId, ',')) {
-            $messageIds = explode(',', $messageId);
-            $messageIdArray = $messageIds;
+            $messageIdArray = explode(',', $messageId);
         }
 
-        $message = $this->em->getRepository("EasyShop\Entities\EsMessages")->delete($messageIdArray, $this->userId);
-        $result = '';
+        $isDeleteSuccesful = $this->em->getRepository("EasyShop\Entities\EsMessages")
+                            ->delete($messageIdArray, $this->userId);
+        $message = '';
 
-        if ( (bool) $message) {
-            $result = $this->messageManager->getAllMessage($this->userId);
+        if ( (bool) $isDeleteSuccesful) {
+            $message = $this->messageManager->getAllMessage($this->userId);
         }
 
-        echo json_encode($result);
+        echo json_encode($message);
     }
 
     /**
@@ -152,9 +156,9 @@ class MessageController extends MY_Controller
     public function getAllMessage()
     {
         $getUnreadMessages = $this->input->post("todo");
-        $result = $this->messages_model->get_all_messages($this->userId, $getUnreadMessages);
+        $message = $this->messageManager->getAllMessage($this->userId, $getUnreadMessages);
 
-        echo json_encode($result);
+        echo json_encode($message);
     }
 
     /**
@@ -163,13 +167,15 @@ class MessageController extends MY_Controller
     public function updateMessageToSeen()
     {
         $messageId = $this->input->post('checked');
-        $messageIdArray = [$messageId];
+        $messageIdArray = [
+            $messageId
+        ];
         if ( (bool) stripos($messageId, ',')) {
-            $messageIds = explode(',', $messageId);
-            $messageIdArray = $messageIds;
+            $messageIdArray = explode(',', $messageId);
         }
 
-        $result = $this->em->getRepository("EasyShop\Entities\EsMessages")->updateToSeen($this->userId, $messageIdArray);
+        $result = $this->em->getRepository("EasyShop\Entities\EsMessages")
+                           ->updateToSeen($this->userId, $messageIdArray);
 
         echo json_encode($result);
     }
