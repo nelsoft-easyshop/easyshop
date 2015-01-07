@@ -48,7 +48,7 @@
             $dictionary->insertWordIntoDictionary($word);
             $runningWord .= $word.' ';
             if($index > 0){
-                $dictionary->insertWordIntoDictionary(rtrim($runningWord));
+                $dictionary->insertWordIntoDictionary(trim($runningWord));
             }
         }
     }
@@ -191,6 +191,7 @@ class Dictionary
             $word = htmlspecialchars($word);
             $word = strtolower($word);
             $word = preg_replace('/[^A-Za-z0-9\ ]/', '', $word);
+            $word = preg_replace('/\s+/', ' ', $word);
             if(isset($this->dictionary[$word])){
                 $occurences = $this->dictionary[$word];
                 if($sqlOccurences === null){
