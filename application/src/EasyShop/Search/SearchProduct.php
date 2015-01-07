@@ -148,7 +148,7 @@ class SearchProduct
                 $stringCollection[] = '"'.trim($clearString).'"'; 
                 $isLimit = strlen($clearString) > 1;
                 $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findByKeyword($stringCollection,$productIds,$isLimit);
+                                     ->findByKeyword($stringCollection,$productIds,$isLimit);
                 $ids = [];
                 foreach ($products as $product) {
                     $ids[] = $product['idProduct']; 
@@ -199,21 +199,21 @@ class SearchProduct
     {
         // array of parameters that will disregard on filtering
         $unsetParam = [
-                        'q_str'
-                        ,'category'
-                        ,'condition'
-                        ,'startprice'
-                        ,'endprice'
-                        ,'brand'
-                        ,'seller'
-                        ,'location'
-                        ,'sort'
-                        ,'typeview'
-                        ,'page'
-                        ,'limit'
-                        ,'sortby'
-                        ,'sorttype'
-                      ];
+            'q_str'
+            ,'category'
+            ,'condition'
+            ,'startprice'
+            ,'endprice'
+            ,'brand'
+            ,'seller'
+            ,'location'
+            ,'sort'
+            ,'typeview'
+            ,'page'
+            ,'limit'
+            ,'sortby'
+            ,'sorttype'
+        ];
 
         $finalizedParamter = [];
         $addtionString = "";
@@ -240,7 +240,7 @@ class SearchProduct
             if(!empty($parameter)){
                 $addtionString = ' AND ('.substr_replace($addtionString," ",1,3).') GROUP BY product_id HAVING COUNT(*) = '. $havingCounter; 
                 $result = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getAttributesByProductIds($productIds,TRUE,$addtionString,$finalizedParamter);
+                                   ->getAttributesByProductIds($productIds,TRUE,$addtionString,$finalizedParamter);
                 $resultNeeded = array_map(function($value) { return $value['product_id']; }, $result);
 
                 return $resultNeeded;
@@ -350,7 +350,7 @@ class SearchProduct
 
         $finalizedProductIds =  ($startPrice || $endPrice) ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
-
+        $finalizedProductIds = $this->sortResultByTopic($finalizedProductIds,$queryString);
         $totalCount = count($finalizedProductIds);
 
         $offset = (int) $pageNumber * (int) $perPage;
@@ -398,15 +398,51 @@ class SearchProduct
                 return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1;
             });
             $products = new ArrayCollection(iterator_to_array($iterator));
-        }
+        } 
 
         $returnArray = [
-                    'collection' => $products,
-                    'count' => $totalCount,
-                ];
+            'collection' => $products,
+            'count' => $totalCount,
+        ];
 
         return $returnArray;
     }
+
+    /**
+     * Sort product object using search topic table
+     * @param  object $products 
+     * @param  string $queryString 
+     * @return object
+     */
+    public function sortResultByTopic($productIds, $queryString) 
+    {
+        $wordResult = $this->em->getRepository('EasyShop\Entities\EsSearchTopic')
+                               ->getTopicOrderByWord($queryString);
+        if(count($wordResult) > 0){
+            $sortedIds = [];
+            $categoryOrder = [];
+            foreach ($wordResult as $result) {
+                $categoryOrder[] = $result->getCategory()->getIdCat();
+            }
+        
+            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                 ->getProductCategoryIdByIds($productIds);
+
+            usort($products, function ($a, $b) use ($categoryOrder) {
+                $positionA = array_search($a['cat_id'], $categoryOrder);
+                $positionB = array_search($b['cat_id'], $categoryOrder);
+                return $positionA - $positionB;
+            }); 
+
+            foreach ($products as $product) {
+                $sortedIds[] = $product['id_product'];
+            }
+            return $sortedIds;
+        }
+
+        return $productIds
+    }
+ 
 
     /**
      * Get popular product of the given category
