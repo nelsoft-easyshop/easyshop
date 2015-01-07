@@ -77,37 +77,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <header class="new-header-con">
 <?php endif; ?>
 
-<<<<<<< HEAD
-    <div class="main-container">
-        <div>
-            <a href="/">
-                <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                    <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph Logo" class="vendor-christmas-theme-logo">
-                <?php else: ?>
-                    <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
-                <?php endif; ?>
-
-               
-            </a>
-        </div>
-        <div class="search-container">
-           <form class="search-form">
-                <select class="ui-form-control search-type">
-                    <option value="1">On Seller's Page</option>
-                    <option value="2">Main Page</option> 
-                </select>
-                <input type="text" id="main_search_alt" autocomplete="off" class="search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
-                <input type="submit"  value="" class="submitSearch span_bg">
-            </form>
-        </div>
-        <div class="pos-rel mrgn-rght-8">
-            <div class="header-cart-container">
-                <a href="/cart" class="header-cart-wrapper">
-                    <span class="header-cart-items-con ui-form-control">
-                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
-                    </span>
-                    <span class="header-cart-icon-con span_bg cart-icon"></span>
-=======
+ 
     <div class="main-container container vendor-mobile-wrapper">
         <div class="row">
             <div class="vendor-logo-wrapper">
@@ -117,7 +87,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?php else: ?>
                         <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
                     <?php endif; ?>
->>>>>>> dev
                 </a>
             </div>
             <div class="vendor-header-left">
