@@ -1168,7 +1168,19 @@ class NewHomeWebService extends MY_Controller
         } 
         else {
             $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
-        
+
+            $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
+            if($map->sliderSection->slide[$index]->image->path == "") {
+                $map->sliderSection->slide[$index]->image->path = $value;
+                $map->sliderSection->slide[$index]->image->target = $target;
+                $map->asXML($this->tempHomefile); 
+            }
+            else {
+                $index = $index == 0 ? 1 : $index + 1;
+                $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide['.$index.']/image[last()]',"\t\t\t","\n");
+
+            }      
+
             $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
 
             if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
@@ -1187,30 +1199,13 @@ class NewHomeWebService extends MY_Controller
                 reset($imageDimensionsConfig["mainSlider"]["$template"]);                
             }
             else {
-                $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$subSliderCount - 1];
+                $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$subSliderCount-1];
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
-            }
+            } 
 
-            $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
-            if($map->sliderSection->slide[$index]->image->path == "") {
-                $map->sliderSection->slide[$index]->image->path = $value;
-                $map->sliderSection->slide[$index]->image->target = $target;
-                if($map->asXML($this->tempHomefile)) {
-                    return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($this->json);
-                }   
-            }
-            else {
-                $index = $index == 0 ? 1 : $index + 1;
-                $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide['.$index.']/image[last()]',"\t\t\t","\n");
-
-            }
-            if($addXml === true) {
-                return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json); 
-            }   
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);             
         }
     }
 
