@@ -22,9 +22,11 @@ class EsMemberFeedbackRepository extends EntityRepository
 
         $feedbacks = $queryBuilder->select('reviewer.idMember as reviewerId, 
                                             reviewer.username as reviewerUsername, 
+                                            COALESCE(NULLIF(reviewer.storename, ''), reviewer.username) as reviewerStorename,
                                             reviewer.slug as reviewerSlug, 
                                             reviewee.idMember as revieweeId, 
                                             reviewee.username as revieweeUsername, 
+                                            COALESCE(NULLIF(reviewee.storename, ''), reviewee.username) as revieweeStorename,
                                             reviewee.slug as revieweeSlug, 
                                             fb.feedbMsg,
                                             fb.dateadded,
@@ -203,6 +205,7 @@ class EsMemberFeedbackRepository extends EntityRepository
         
         $feedbacks = $queryBuilder->select('reviewee.idMember as userId, 
                                             reviewee.username as username, 
+                                            COALESCE(NULLIF(reviewee.storename, ''), reviewee.username) as storename,
                                             reviewee.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
@@ -242,6 +245,7 @@ class EsMemberFeedbackRepository extends EntityRepository
 
         $feedbacks = $queryBuilder->select('reviewee.idMember as userId, 
                                             reviewee.username as username, 
+                                            COALESCE(NULLIF(reviewee.storename, ''), reviewee.username) as storename,
                                             reviewee.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
@@ -282,6 +286,7 @@ class EsMemberFeedbackRepository extends EntityRepository
 
         $feedbacks = $queryBuilder->select('reviewer.idMember as userId, 
                                             reviewer.username as username, 
+                                            COALESCE(NULLIF(reviewer.storename, ''), reviewer.username) as storename,
                                             reviewer.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
@@ -322,6 +327,7 @@ class EsMemberFeedbackRepository extends EntityRepository
 
         $feedbacks = $queryBuilder->select('reviewer.idMember as userId, 
                                             reviewer.username as username, 
+                                            COALESCE(NULLIF(reviewer.storename, ''), reviewer.username) as storename,
                                             reviewer.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
