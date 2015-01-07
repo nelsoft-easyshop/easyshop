@@ -128,7 +128,7 @@ class MessageManager {
                 foreach ($conversation as $message) {
                     if (
                         ( ( isset($message['name']) && (int) $message['to_id'] === $userId ) && $message['opened'] ) ||
-                        ($data['status'] === EsMessages::MESSAGE_SENDER && isset($message['name']) )
+                        ($message['status'] === EsMessages::MESSAGE_SENDER && isset($message['name']) )
                     ) {
                         unset($conversation);
                     }
