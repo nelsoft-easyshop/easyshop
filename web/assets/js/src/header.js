@@ -168,117 +168,68 @@
                 }
 
             } 
-
             else {
                 $('.sticky-header-nav').removeClass('sticky-nav-fixed').removeAttr('style');
             }
         });
 
-        $(".suggested-result-container").hide();
- 
-        var $primarySearch= $("#primary-search");
-        var $suggestedResult= $(".suggested-result-container");
+        $('input#primary-search')
+            .typeahead({
+                ajax: { 
+                    url: '/search/suggest',
+                    triggerLength: 3, // This is the minimum length of text to take action on
+                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server.
+                    preProcess: function (data) { 
+                        if ($.isEmptyObject(data)) { 
+                            $('.suggested-result-container').empty();
+                        } 
+                        return data;
+                    }
+                },
+                items: 10, // The maximum number of items to show in the results. 
+                menu: '<ul class="typeahead suggested-result-container"></ul>' ,
+                item: '<li><a href="#"></a></li>'
+            }) 
+            .focus(function() { 
+                if($(this).val().length >= 3){ 
+                    if ($('.suggested-result-container').is(':empty') === false){ 
+                        $('.suggested-result-container').show();
+                    }
+                }
+            })
+            .focusout(function() { 
+                $('.suggested-result-container').hide();
+                $('.suggested-result-container2').html($('.suggested-result-container').html());
+            });
 
-        $(document).mouseup(function (e) {
-
-            if (!$suggestedResult.is(e.target) 
-                && $suggestedResult.has(e.target).length === 0)
-            {
-               $suggestedResult.hide(1);
-            }
-        });
-
-        $("#primary-search").on('click input keypress',function() {
-
-            if($(this).val().length >= 3) {
-                $(".suggested-result-container").slideDown(300);
-            } 
-            if ($(this).val().length <= 2) {
-                 $(".suggested-result-container").slideUp(300);
-            }
-        });
-
-        var $primarySearch2= $("#primary-search2");
-        var $suggestedResult2= $(".suggested-result-container2");
-
-        $(document).mouseup(function (e) {
-
-            if (!$suggestedResult2.is(e.target) 
-                && $suggestedResult2.has(e.target).length === 0)
-            {
-               $suggestedResult2.hide(1);
-            }
-        });
-
-            $("#primary-search2").on('click input keypress',function() {
-            if($(this).val().length >= 3) {
-                 $(".suggested-result-container2").slideDown(300);
-            } 
-            if ($(this).val().length <= 2) {
-                 $(".suggested-result-container2").slideUp(300);
-            }
-        });
-
-        $(".suggested-result-container2").hide();
-
- 
-    /* initially hide product list items */
-    $("#suggested-search-result li a").hide();
- 
-    /* highlight matches text */
-    var highlight = function (string) {
-        $("#suggested-search-result li a.match").each(function () {
-            var matchStart = $(this).text().toLowerCase().indexOf("" + string.toLowerCase() + "");
-            var matchEnd = matchStart + string.length - 1;
-            var beforeMatch = $(this).text().slice(0, matchStart);
-            var matchText = $(this).text().slice(matchStart, matchEnd + 1);
-            var afterMatch = $(this).text().slice(matchEnd + 1);
-            $(this).html(beforeMatch + "<strong>" + matchText + "</strong>" + afterMatch);
-        });
-    };
- 
- 
-    /* filter products */
-    $("#primary-search").on("keyup click input", function () {
-        if (this.value.length > 0) {
-            $("#suggested-search-result li a").removeClass("match").hide().filter(function () {
-                return $(this).text().toLowerCase().indexOf($("#primary-search").val().toLowerCase()) != -1;
-            }).addClass("match").show();
-            highlight(this.value);
-            $("#suggested-search-result").show();
-        }
-        else {
-            $("#suggested-search-result, #suggested-search-result li a").removeClass("match").hide();
-        }
-    });
-
-    $("#suggested-search-result2 li a").hide();
-
-    var highlight2 = function (string) {
-        $("#suggested-search-result2 li a.match2").each(function () {
-            var matchStart = $(this).text().toLowerCase().indexOf("" + string.toLowerCase() + "");
-            var matchEnd = matchStart + string.length - 1;
-            var beforeMatch = $(this).text().slice(0, matchStart);
-            var matchText = $(this).text().slice(matchStart, matchEnd + 1);
-            var afterMatch = $(this).text().slice(matchEnd + 1);
-            $(this).html(beforeMatch + "<strong>" + matchText + "</strong>" + afterMatch);
-        });
-    };
- 
- 
-    /* filter products */
-    $("#primary-search2").on("keyup click input", function () {
-        if (this.value.length > 0) {
-            $("#suggested-search-result2 li a").removeClass("match2").hide().filter(function () {
-                return $(this).text().toLowerCase().indexOf($("#primary-search2").val().toLowerCase()) != -1;
-            }).addClass("match2").show();
-            highlight2(this.value);
-            $("#suggested-search-result2").show();
-        }
-        else {
-            $("#suggested-search-result2, #suggested-search-result2 li a").removeClass("match2").hide();
-        }
-    });
+        $('input#primary-search2')
+            .typeahead({
+                ajax: { 
+                    url: '/search/suggest',
+                    triggerLength: 3, // This is the minimum length of text to take action on
+                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server.
+                    preProcess: function (data) { 
+                        if ($.isEmptyObject(data)) { 
+                            $('.suggested-result-container2').empty();
+                        } 
+                        return data;
+                    }
+                },
+                items: 10, // The maximum number of items to show in the results. 
+                menu: '<ul class="typeahead suggested-result-container2"></ul>' ,
+                item: '<li><a href="#"></a></li>'
+            }) 
+            .focus(function() { 
+                if($(this).val().length >= 3){ 
+                    if ($('.suggested-result-container2').is(':empty') === false){ 
+                        $('.suggested-result-container2').show();
+                    }
+                }
+            })
+            .focusout(function() { 
+                $('.suggested-result-container2').hide();
+                $('.suggested-result-container').html($('.suggested-result-container2').html());
+            });
 
 }(jQuery));
 

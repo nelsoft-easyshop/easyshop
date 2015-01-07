@@ -807,9 +807,10 @@ a.msgs_link:hover {
     color: #333;
     height: 30px;
     padding:5px 35px 0px;
-    max-width: 18.75em;
-    width: 43%;
     vertical-align: middle;
+    width: 50%;
+/*    max-width: 28.75em;
+    width: 56%;*/
 }
 
 .main_srch_img_con {
@@ -821,13 +822,14 @@ a.msgs_link:hover {
 .search_box select {
     height: 41px;
     line-height: 31px;
-    max-width: 9.375em;
-    min-width: 1em;
     border: 3px solid #f48000;
     margin-left: -5px;
     vertical-align: middle;
     padding:7px 3px 3px;
-    width: 100%;
+    width: 23%;
+/*  max-width: 9.375em;
+    min-width: 1em;
+    width: 100%;*/
 }
 
 .search_box button {
@@ -838,9 +840,10 @@ a.msgs_link:hover {
     font-weight: bold;
     height: 41px;
     margin-left: -5px;
-    max-width: 100px;
-    width: 30%;
     vertical-align: middle;
+    width: 14%;
+/*    max-width: 100px;
+    width: 30%;*/
 }
 /********* SELL ITEM - Product upload step 1 **************/
 /*** steps css ***/
@@ -2437,6 +2440,23 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     text-transform: uppercase;
 }
 
+@media (min-width: 991px) {
+    .old-page-container {
+        padding: 0 !important;
+    }
+    #main_search {
+        width: 43%;
+    }
+
+    .adv_srch_lnk {
+        font-size: 11px;
+    }
+
+    .old-suggested-result-container {
+        width: 65.5%;
+    }
+}
+
 @media screen and (max-width : 895px){
         
     .inner_seller_product_content .f24{
@@ -2591,7 +2611,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     }
     .search_box {
         text-align: center;
-        width: 99%;
+        width: 100%;
     }
 
     .feed-middle-panel-fix {
@@ -2771,6 +2791,18 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
     #price_field {
         min-width: 160px;
+    }
+
+    #main_search {
+        width: 75%;
+    }
+
+    .old-suggested-result-container {
+        width: 74.5%
+    }
+
+    .search_box button {
+        width: 25%;
     }
 }
 
