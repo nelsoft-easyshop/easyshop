@@ -47,7 +47,6 @@ class MessageManager {
      */
     public function getAllMessage($userId, $getUnreadMessages = false)
     {
-        $data = [];
         $result = [];
         $unreadMsgCount = 0;
         $messages = $this->em->getRepository('EasyShop\Entities\EsMessages')
@@ -82,7 +81,7 @@ class MessageManager {
                         (int) $message['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) ) {
                     $messageContainer[$senderKey][$messageId] = $message;
                     $messageContainer[$senderKey][$messageId]['status'] = EsMessages::MESSAGE_RECEIVER;
-                    $messageContainer[$senderKey][$messageId]['unreadConve'] = 0;
+                    $messageContainer[$senderKey][$messageId]['unreadConversationCount'] = 0;
                     $messageContainer[$senderKey][$messageId]['name'] = ( (int) $message['from_id'] === (int) $userId ?
                                                                             $message['recipient'] :
                                                                             $message['sender']);
@@ -97,7 +96,7 @@ class MessageManager {
         $result['messages'] =[];
         $result['unread_msgs_count'] = $unreadMsgCount;
         foreach ($resultMessageContainer as $conversation) {
-            $unreadMsgPerConversation = 0;
+            $unreadConversationCount = 0;
             foreach($conversation as $message) {
                 $delete = (int) $message['is_delete'];
                 $status = $message['status'];
@@ -111,7 +110,7 @@ class MessageManager {
                     ( $delete === (int) EsMessages::MESSAGE_NOT_DELETED ||
                         $delete === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) ) && !$isOpened
                 ) {
-                    $unreadMsgPerConversation++;
+                    $unreadConversationCount++;
                 }
                 else {
                     unset($message);
@@ -119,7 +118,7 @@ class MessageManager {
 
                 $first_key = reset($conversation)['id_msg'];
             }
-            $conversation[$first_key]['unreadConve'] = $unreadMsgPerConversation;
+            $conversation[$first_key]['unreadConversationCount'] = $unreadConversationCount;
             $result['messages'][] = $conversation;
         }
 

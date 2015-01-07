@@ -32,7 +32,7 @@
                             <?php else: ?>
                                 <img data="<?=reset($row)['recipient_img']?>" src="/<?php echo reset($row)['sender_img']?>/60x60.png">
                             <?php endif; ?>
-                            <?php $span = (reset($row)['unreadConve'] != 0 ? '('.reset($row)['unreadConve'].')' : ""); ?>
+                            <?php $span = (reset($row)['unreadConversationCount'] != 0 ? '('.reset($row)['unreadConversationCount'].')' : ""); ?>
                             </span>
                         </div>
                         
@@ -387,7 +387,7 @@ function onFocus_Reload(msgs)
             $('#ID_'+Nav_msg.name).children('.msg_date').text(Nav_msg.time_sent);
             $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
             $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
-            $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConve+")");
+            $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
             if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
                 specific_msgs();
                 seened($('#ID_'+Nav_msg.name));
@@ -407,7 +407,7 @@ function onFocus_Reload(msgs)
             else {
                 html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'"></span></div>';
             }
-            span = (Nav_msg.unreadConve != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConve+')</span>' : "");
+            span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
             html +='</td>';
             html +='<td class=" ">';
             html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
