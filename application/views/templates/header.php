@@ -223,28 +223,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?php endforeach;?>
                 </select>
                 <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="/advsrch" class="adv_srch_lnk">Advance Search</a>
-                </div>
-                <div id="main_search_drop_content"></div> 
-                <div class="old-suggested-result-container">
-                    <p class="sr-title">Suggested search result:</p>
-                    <ul>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                    </ul>
-                </div>
+                </div> 
             </div>
         <?php endif; ?>
         </div>
@@ -253,62 +232,54 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </form>
         
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
-        
-
 <script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
-
 <script>
-
-
     (function ($) { 
 
-        $('input#main_search').typeahead({
-            ajax: { 
-                url: '/search/suggest',
-                triggerLength: 3, // This is the minimum length of text to take action on
-                timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
-            },
-            items: 10, // The maximum number of items to show in the results. 
-            menu: '<ul class="typeahead old-suggested-result-container"></ul>' ,
-            item: '<li><a href="#"></a></li>'
-        });
+        $('input#main_search')
+            .typeahead({
+                ajax: { 
+                    url: '/search/suggest',
+                    triggerLength: 3, // This is the minimum length of text to take action on
+                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
+                    preProcess: function (data) { 
+                        if ($.isEmptyObject(data)) { 
+                            $('.old-suggested-result-container').empty();
+                        } 
+                        return data;
+                    }
+                },
+                items: 10, // The maximum number of items to show in the results. 
+                menu: '<ul class="typeahead old-suggested-result-container"></ul>' ,
+                item: '<li><a href="#"></a></li>'
+            })
+            .focus(function() { 
+                if($(this).val().length >= 3){ 
+                    if ($('.old-suggested-result-container').is(':empty') === false){ 
+                        $('.old-suggested-result-container').show();
+                    }
+                }
+            })
+            .focusout(function() { 
+                $('.old-suggested-result-container').hide(); 
+            });
 
         $(document).ready(function(){
-
+            $(".old-suggested-result-container").hide();
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
 
             $(document).mouseup(function (e) {
-
                 if (!$nav_dropdown.is(e.target) // if the target of the click isn't the container...
                     && $nav_dropdown.has(e.target).length === 0) // ... nor a descendant of the container
                 {
                    $nav_dropdown.hide(1);
                 }
-
             });
 
             $user_nav_dropdown.click(function() {
                 $nav_dropdown.show();
             });
-
-            
-        
-            var navigation = responsiveNav(".nav-collapse");
-            var srchdropcontent= $('#main_search_drop_content');
-            
-            $('#main_search').focus(function() {
-                if(srchdropcontent.find("ul").length > 0){
-                    $('#main_search_drop_content').fadeIn(150);
-                }
-
-                $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
-                    if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
-                        $('#main_search_drop_content').fadeOut('fast');
-                });
-            });
-
-            $('#main_search_drop_content').hide();
 
             $(".txt_need_help_con").click(function(){
                 $('.need_help_icons_con').slideToggle();
@@ -316,36 +287,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             });
 
             $('.need_help_icons_con').hide();
-              
+            var navigation = responsiveNav(".nav-collapse"); 
             var $container = $(".nav-collapse");
             
             $(document).mouseup(function (e) {
-
                 if (!$container.is(e.target) // if the target of the click isn't the container...
                     && $container.has(e.target).length === 0) // ... nor a descendant of the container
                 {
                    navigation.close();
                 }
-
-            });
-            
-        });
-
-        $(".old-suggested-result-container").hide();
- 
-        var $primarySearch= $("#main_search");
-        var $suggestedResult= $(".old-suggested-result-container");
-
-        $(document).mouseup(function (e) {
-
-            if (!$suggestedResult.is(e.target) 
-                && $suggestedResult.has(e.target).length === 0)
-            {
-               $suggestedResult.hide(1);
-            }
-        });
-
-        
+            }); 
+        }); 
     })(jQuery);
 
 </script>

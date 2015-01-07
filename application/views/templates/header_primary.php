@@ -46,9 +46,8 @@
     <!-- End of Google Analytics -->
 
     <a href="https://plus.google.com/108994197867506780841" rel="publisher"></a>
- 
+
     <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    
     <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
     <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
@@ -116,7 +115,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <a class="prevent" href="/login/logout">Logout</a>
                                                     </li>
                                                 </ul>
-                                                <div class="clear"></div>                                            
+                                                <div class="clear"></div>
                                             </div>
                                         <?php else: ?>
                                             <div class="header-link-login">
@@ -124,7 +123,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
                                                 <a href="/register">create an account</a>
                                             </div>
-                                        <?php endif; ?>                                           
+                                        <?php endif; ?>
                                     </div>
                                 </div><!-- End .pull-right -->
                             </div><!-- End .header-top-right -->
@@ -211,26 +210,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="search-container">
                                                 <input type="text" name="q_str" id="primary-search" autocomplete="off" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                             </div>
-                                            <!-- <div class="suggested-result-container">
-                                                <p class="sr-title">Suggested search result:</p>
-                                                <ul id="suggested-search-result">
-                                                    <li>
-                                                        <a href="">lorem ipsum</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">lorem ipsum</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">lorem ipsum</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">lorem ipsum</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="">lorem ipsum</a>
-                                                    </li>
-                                                </ul>
-                                            </div> -->
                                         </div>
                                     </form><!-- End .Search Navigation -->
 
@@ -344,26 +323,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <input type="text" name="q_str" autocomplete="off" id="primary-search2" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
                                                         <input type="submit" value="" class="span_bg">
                                                     </form>
-                                                    <!-- <div class="suggested-result-container2">
-                                                        <p class="sr-title">Suggested search result:</p>
-                                                        <ul id="suggested-search-result2">
-                                                            <li>
-                                                                <a href="">lorem ipsum</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">lorem ipsum</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">lorem ipsum</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">lorem ipsum</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="">lorem ipsum</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div> -->
                                                 </div>
                                                 <div class="header-cart-container">
                                                     <a href="/cart" class="header-cart-wrapper">
@@ -474,47 +433,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
-<script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
-<script>
-    (function ($) { 
-        $('input#primary-search')
-            .typeahead({
-                ajax: { 
-                    url: '/search/suggest',
-                    triggerLength: 3, // This is the minimum length of text to take action on
-                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
-                    preProcess: function (data) { 
-                        if ($.isEmptyObject(data)) { 
-                            $('.suggested-result-container').empty();
-                            return false;
-                        }
-
-                        return data;
-                    }
-                },
-                items: 10, // The maximum number of items to show in the results. 
-                menu: '<ul class="typeahead suggested-result-container"></ul>' ,
-                item: '<li><a href="#"></a></li>'
-            }) 
-            .focus(function() {
-                $('.suggested-result-container').show();
-            });
-
-        $('input#primary-search2')
-            .typeahead({
-                ajax: { 
-                    url: '/search/suggest',
-                    triggerLength: 3, // This is the minimum length of text to take action on
-                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
-                },
-                items: 10, // The maximum number of items to show in the results. 
-                menu: '<ul class="typeahead suggested-result-container2"></ul>' ,
-                item: '<li><a href="#"></a></li>'
-            }) 
-            .focus(function() {
-  
-            });
-
-    })(jQuery);
-</script>
+<script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+ 
