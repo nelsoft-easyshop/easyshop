@@ -10,7 +10,6 @@
         "ezyang/htmlpurifier": "dev-master",
         "elnur/blowfish-password-encoder-bundle": "~0.5",
         "symfony/yaml": "2.6.*@dev",
-        "elnur/blowfish-password-encoder-bundle": "~0.5",
         "symfony/form": "2.6.*@dev",
         "symfony/http-foundation": "2.6.*@dev",
         "symfony/validator": "2.6.*@dev",
