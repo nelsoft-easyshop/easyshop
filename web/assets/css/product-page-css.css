@@ -1,3 +1,7 @@
+html, body{
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+}
+
 .product-disable-nav {
     display: none;
 }
@@ -762,7 +766,7 @@ body{
 
 .table-nav-prod > tbody > tr > td{
     border-bottom: solid #fff 3px;
-    font-weight: bold;
+    font-weight: 900;
 }
 
 .table-nav-prod > tbody > tr > td.active{
@@ -1400,7 +1404,7 @@ body{
 
 .discounted-price {
     color: #ff6036;
-    font-weight: 900;
+    font-weight: bold;
     margin-right: 5%;
 }
 
@@ -1821,7 +1825,7 @@ body{
 .footer-secondary .footer-ac a {
     color: #fff;
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .footer-secondary .footer-ac a:first-child {
