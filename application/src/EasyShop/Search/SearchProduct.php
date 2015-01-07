@@ -417,6 +417,7 @@ class SearchProduct
     {
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
+        $productManager = $this->productManager;
         $subCategoryList = [];
 
         foreach ($subCategory as $value) {
@@ -426,6 +427,7 @@ class SearchProduct
                 $popularProducts = $EsProductRepository->getPopularItemByCategory($subCategoryIds);
             }
             if(!empty($popularProducts)){ 
+                $popularProducts[0] = $productManager->getProductDetails($popularProducts[0]);
                 $productId = $popularProducts[0]->getIdProduct();
                 $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                          ->getDefaultImage($productId);
@@ -435,7 +437,7 @@ class SearchProduct
                 if($productImage != NULL){
                     $popularProducts[0]->directory = $productImage->getDirectory();
                     $popularProducts[0]->imageFileName = $productImage->getFilename();
-                }
+                } 
             }
             else{
                 $popularProducts[0] = [];
