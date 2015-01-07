@@ -131,7 +131,7 @@ class MessageController extends MY_Controller
      */
     public function delete()
     {
-        $messageId = $this->input->post("id_msg");
+        $messageId = trim($this->input->post("id_msg"));
         $messageIdArray = [
             $messageId
         ];
@@ -140,7 +140,7 @@ class MessageController extends MY_Controller
         }
 
         $isDeleteSuccesful = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                            ->delete($messageIdArray, $this->userId);
+                                      ->delete($messageIdArray, $this->userId);
         $message = '';
 
         if ( (bool) $isDeleteSuccesful) {

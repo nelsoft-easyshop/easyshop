@@ -192,15 +192,15 @@ function Reload()
         data : {csrfname:csrftoken,todo:todo},
         success : function(d)
         {
-            $(".msg_countr").html(d.unread_msgs);
-            if(parseInt(d.unread_msgs) === 0 ){
+            $(".msg_countr").html(d.unread_msgs_count);
+            if(parseInt(d.unread_msgs_count) === 0 ){
                 $('#unread-messages-count').addClass('unread-messages-count-hide');
             }else{
                 $('#unread-messages-count').removeClass('unread-messages-count-hide');
             }
-            document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
+            document.title = (d.unread_msgs_count == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs_count + ") | Easyshop.ph");
 
-            if (d.unread_msgs != 0) {
+            if (d.unread_msgs_count != 0) {
                 onFocus_Reload(d);
             }
         }
@@ -419,7 +419,7 @@ function onFocus_Reload(msgs)
             html +='</tr>';
         }
     });
-    if(msgs.Case == "UnreadMsgs"){
+    if(msgs.isUnreadMessages === "true"){
         $("#table_id tbody").prepend(html);
         arrage_by_timeSent();
     }
