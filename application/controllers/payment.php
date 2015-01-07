@@ -740,13 +740,6 @@ class Payment extends MY_Controller{
             }else if ($payment_status == 'Refunded' || $payment_status == 'Reversed') {
 
                 error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
-                $orderId = $this->payment_model->cancelTransaction($parent_txn_id,true);
-                $orderHistory = array(
-                    'order_id' => $orderId,
-                    'order_status' => 2,
-                    'comment' => 'Paypal transaction ' . $payment_status
-                    );
-                $this->payment_model->addOrderHistory($orderHistory);
             }
             else if($payment_status == 'Pending' || $payment_status == 'Processed')
             {
