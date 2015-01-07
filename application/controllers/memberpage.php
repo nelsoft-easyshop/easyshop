@@ -378,8 +378,8 @@ class Memberpage extends MY_Controller
                                 ,'Payment Method'
                                 ,'Price'
                                 ,'Product Specifications']);
-
         foreach($soldTransaction["transactions"] as $value) {
+            $productObject = $value;
             foreach ($value["product"] as $product) {
                 if(isset($product["attr"])) {
                     foreach($product["attr"] as $attr => $attrValue ) {
@@ -388,19 +388,19 @@ class Memberpage extends MY_Controller
                 }
                 else {
                     $prodSpecs = "N/A";
-                    break;
                 }
+
+                fputcsv($output, [$value["invoiceNo"]
+                                  , html_escape($product["name"])
+                                  , $value["dateadded"]->format('Y-m-d H:i:s')
+                                  , html_escape($value["buyerStoreName"])
+                                  , $value["orderQuantity"]
+                                  , ucwords(strtolower($value["paymentMethod"]))
+                                  , number_format((float)$product["price"], 2, '.', '')
+                                  , $prodSpecs
+                ]);                   
+                $prodSpecs = "";                
             }
-            fputcsv($output, [$value["invoiceNo"]
-                              , html_escape($value["productname"])
-                              , $value["dateadded"]->format('Y-m-d H:i:s')
-                              , html_escape($value["buyerStoreName"])
-                              , $value["orderQuantity"]
-                              , ucwords(strtolower($value["paymentMethod"]))
-                              , number_format((float)$value["totalOrderProduct"], 2, '.', '')
-                              , $prodSpecs
-            ]);
-            $prodSpecs = "";
         }
     }
 
@@ -443,21 +443,19 @@ class Memberpage extends MY_Controller
                 }
                 else {
                     $prodSpecs = "N/A";
-                    break;
-                }               
+                }     
+                fputcsv($output, [ $value["invoiceNo"]
+                                   , html_escape($product["name"])
+                                   , $value["dateadded"]->format('Y-m-d H:i:s')
+                                   , html_escape($buyerName)
+                                   , $value["orderQuantity"]
+                                   , ucwords(strtolower($value["paymentMethod"]))
+                                   , number_format($product["price"], 2, '.', '')
+                                   , $prodSpecs
+                ]);    
+                $prodSpecs = "";
+                $buyerName = "";                                      
             }
-
-            fputcsv($output, [ $value["invoiceNo"]
-                               , html_escape($value["productname"])
-                               , $value["dateadded"]->format('Y-m-d H:i:s')
-                               , html_escape($buyerName)
-                               , $value["orderQuantity"]
-                               , ucwords(strtolower($value["paymentMethod"]))
-                               , number_format((float)$value["total"], 2, '.', '')
-                               , $prodSpecs
-            ]);
-            $prodSpecs = "";
-            $buyerName = "";
         }
     }
 
