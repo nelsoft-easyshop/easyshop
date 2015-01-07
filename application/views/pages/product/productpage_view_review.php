@@ -62,7 +62,7 @@
                                                         <img src="<?=$value['reviewer_avatar']; ?>" class="img-user"/>
                                                     </div></a>
                                                     <div class="clear"></div>
-                                                    <a href="#"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
+                                                    <a href="/<?=$value['reviewer_slug'];?>"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
                                                     <p class="p-date-review"><?=$value['datesubmitted']; ?></p>
                                                 </div>
                                                 <div class="col-sm-10 col-xs-12">
@@ -79,7 +79,7 @@
                                                                         </a>
                                                                     </td>
                                                                     <td class="td-user-info">
-                                                                        <a href="#"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
+                                                                        <a href="/<?=$value['reviewer_slug'];?>"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
                                                                         <p class="p-date-review"><?=$value['datesubmitted']; ?></p> 
                                                                     </td>
                                                                 </tr>
@@ -143,7 +143,7 @@
                                                                     <img src="<?=$valueReply['reviewer_avatar']; ?>" class="img-user"/>
                                                                 </div></a>
                                                                 <div class="clear"></div>
-                                                                <a href="#"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
+                                                                <a href="/<?=$valueReply['reviewer_slug'];?>"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
                                                                 <p class="p-date-review-replied-item"><?=$valueReply['datesubmitted'];?></p>
                                                             </div>
                                                             <div class="col-sm-10 col-xs-12">
@@ -160,7 +160,7 @@
                                                                                         </a>
                                                                                     </td>
                                                                                     <td class="td-user-info">
-                                                                                        <a href="#"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
+                                                                                        <a href="/<?=$valueReply['reviewer_slug'];?>"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
                                                                                         <p class="p-date-review"><?=$valueReply['datesubmitted'];?></p>
                                                                                     </td>
                                                                                 </tr>
