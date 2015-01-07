@@ -418,26 +418,29 @@ class SearchProduct
     {
         $wordResult = $this->em->getRepository('EasyShop\Entities\EsSearchTopic')
                                ->getTopicOrderByWord($queryString);
+        if(count($wordResult) > 0){
+            $sortedIds = [];
+            $categoryOrder = [];
+            foreach ($wordResult as $result) {
+                $categoryOrder[] = $result->getCategory()->getIdCat();
+            }
+        
+            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                 ->getProductCategoryIdByIds($productIds);
 
-        $sortedIds = [];
-        $categoryOrder = [];
-        foreach ($wordResult as $result) {
-            $categoryOrder[] = $result->getCategory()->getIdCat();
+            usort($products, function ($a, $b) use ($categoryOrder) {
+                $positionA = array_search($a['cat_id'], $categoryOrder);
+                $positionB = array_search($b['cat_id'], $categoryOrder);
+                return $positionA - $positionB;
+            }); 
+
+            foreach ($products as $product) {
+                $sortedIds[] = $product['id_product'];
+            }
+            return $sortedIds;
         }
-    
-        $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                             ->getProductCategoryIdByIds($productIds);
 
-        usort($products, function ($a, $b) use ($categoryOrder) {
-            $positionA = array_search($a['cat_id'], $categoryOrder);
-            $positionB = array_search($b['cat_id'], $categoryOrder);
-            return $positionA - $positionB;
-        }); 
-
-        foreach ($products as $product) {
-            $sortedIds[] = $product['id_product'];
-        }
-        return $sortedIds; 
+        return $productIds
     }
  
 
