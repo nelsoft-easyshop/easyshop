@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "903621bd54552cc31fd038e842fc139f",
+    "hash": "c7c6354e65f203b426184fe2a7a9e186",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -148,16 +148,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "v1.2.1",
+            "version": "v1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "6a6bec0670bb6e71a263b08bc1b98ea242928633"
+                "reference": "eeda578cbe24a170331a1cfdf78be723412df7a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/6a6bec0670bb6e71a263b08bc1b98ea242928633",
-                "reference": "6a6bec0670bb6e71a263b08bc1b98ea242928633",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/eeda578cbe24a170331a1cfdf78be723412df7a4",
+                "reference": "eeda578cbe24a170331a1cfdf78be723412df7a4",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +212,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2014-09-25 16:45:30"
+            "time": "2014-12-20 20:49:38"
         },
         {
             "name": "doctrine/cache",
@@ -502,22 +502,30 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "v1.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "54b8333d2a5682afdc690060c1cf384ba9f47f08"
+                "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/54b8333d2a5682afdc690060c1cf384ba9f47f08",
-                "reference": "54b8333d2a5682afdc690060c1cf384ba9f47f08",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/0bcb2e79d8571787f18b7eb036ed3d004908e604",
+                "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common\\Inflector\\": "lib/"
@@ -529,17 +537,6 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/",
-                    "role": "Creator"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com",
-                    "homepage": "http://www.instaclick.com"
-                },
-                {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
                 },
@@ -548,40 +545,51 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
+                },
+                {
                     "name": "Johannes Schmitt",
-                    "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
-                    "role": "Developer of wrapped JMSSerializerBundle"
+                    "email": "schmittjoh@gmail.com"
                 }
             ],
             "description": "Common String Manipulations with regard to casing and singular/plural rules.",
             "homepage": "http://www.doctrine-project.org",
             "keywords": [
                 "inflection",
-                "pluarlize",
-                "singuarlize",
+                "pluralize",
+                "singularize",
                 "string"
             ],
-            "time": "2013-01-10 21:49:15"
+            "time": "2014-12-20 21:24:13"
         },
         {
             "name": "doctrine/lexer",
-            "version": "v1.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/lexer.git",
-                "reference": "2f708a85bb3aab5d99dab8be435abd73e0b18acb"
+                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/lexer/zipball/2f708a85bb3aab5d99dab8be435abd73e0b18acb",
-                "reference": "2f708a85bb3aab5d99dab8be435abd73e0b18acb",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Doctrine\\Common\\Lexer\\": "lib/"
@@ -593,19 +601,16 @@
             ],
             "authors": [
                 {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com",
-                    "homepage": "http://www.instaclick.com"
-                },
-                {
                     "name": "Roman Borschel",
                     "email": "roman@code-factory.org"
                 },
                 {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
                     "name": "Johannes Schmitt",
-                    "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
-                    "role": "Developer of wrapped JMSSerializerBundle"
+                    "email": "schmittjoh@gmail.com"
                 }
             ],
             "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
@@ -614,7 +619,7 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2013-01-12 18:59:04"
+            "time": "2014-09-09 13:34:57"
         },
         {
             "name": "doctrine/migrations",
@@ -622,12 +627,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "f4fe9d9cc21a711d89d91d29c4a4e7945289cdd0"
+                "reference": "96f838b4fa93693d19196c8e24ed5f1c3972ba87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/f4fe9d9cc21a711d89d91d29c4a4e7945289cdd0",
-                "reference": "f4fe9d9cc21a711d89d91d29c4a4e7945289cdd0",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/96f838b4fa93693d19196c8e24ed5f1c3972ba87",
+                "reference": "96f838b4fa93693d19196c8e24ed5f1c3972ba87",
                 "shasum": ""
             },
             "require": {
@@ -672,20 +677,20 @@
                 "database",
                 "migrations"
             ],
-            "time": "2014-10-30 14:49:25"
+            "time": "2014-12-19 17:14:47"
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.4.6",
+            "version": "v2.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "bebacf79d8d4dae9168f0f9bc6811e6c2cb6a4d9"
+                "reference": "2bc4ff3cab2ae297bcd05f2e619d42e6a7ca9e68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/bebacf79d8d4dae9168f0f9bc6811e6c2cb6a4d9",
-                "reference": "bebacf79d8d4dae9168f0f9bc6811e6c2cb6a4d9",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2bc4ff3cab2ae297bcd05f2e619d42e6a7ca9e68",
+                "reference": "2bc4ff3cab2ae297bcd05f2e619d42e6a7ca9e68",
                 "shasum": ""
             },
             "require": {
@@ -745,7 +750,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2014-10-06 13:22:50"
+            "time": "2014-12-16 13:45:01"
         },
         {
             "name": "elnur/blowfish-password-encoder-bundle",
@@ -843,12 +848,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "b307f3d9ef0960b74ea8bd8d5bbdef2049368947"
+                "reference": "0c3e68dd0357321b5a5818c3aa832b1cc24a4b1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/b307f3d9ef0960b74ea8bd8d5bbdef2049368947",
-                "reference": "b307f3d9ef0960b74ea8bd8d5bbdef2049368947",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/0c3e68dd0357321b5a5818c3aa832b1cc24a4b1f",
+                "reference": "0c3e68dd0357321b5a5818c3aa832b1cc24a4b1f",
                 "shasum": ""
             },
             "require": {
@@ -879,20 +884,20 @@
             "keywords": [
                 "html"
             ],
-            "time": "2014-10-23 22:36:02"
+            "time": "2014-12-09 02:30:54"
         },
         {
             "name": "facebook/php-sdk-v4",
-            "version": "4.0.12",
+            "version": "4.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/facebook-php-sdk-v4.git",
-                "reference": "0683838b6966446b2cbef841f01f1d447ae7a5f9"
+                "reference": "566c4ea8df82ba8bdd18abf5c0b66c23fe79b3e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/facebook-php-sdk-v4/zipball/0683838b6966446b2cbef841f01f1d447ae7a5f9",
-                "reference": "0683838b6966446b2cbef841f01f1d447ae7a5f9",
+                "url": "https://api.github.com/repos/facebook/facebook-php-sdk-v4/zipball/566c4ea8df82ba8bdd18abf5c0b66c23fe79b3e9",
+                "reference": "566c4ea8df82ba8bdd18abf5c0b66c23fe79b3e9",
                 "shasum": ""
             },
             "require": {
@@ -928,7 +933,7 @@
                 "facebook",
                 "sdk"
             ],
-            "time": "2014-10-30 23:02:36"
+            "time": "2014-12-29 22:43:17"
         },
         {
             "name": "google/apiclient",
@@ -1214,6 +1219,48 @@
                 "password"
             ],
             "time": "2014-11-20 16:49:30"
+        },
+        {
+            "name": "neutron/sphinxsearch-api",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/romainneutron/Sphinx-Search-API-PHP-Client.git",
+                "reference": "a108fda835a9f8717e8fc22f2f35106e0f49dbdc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/romainneutron/Sphinx-Search-API-PHP-Client/zipball/a108fda835a9f8717e8fc22f2f35106e0f49dbdc",
+                "reference": "a108fda835a9f8717e8fc22f2f35106e0f49dbdc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=4"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "sphinxapi.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Aksyonoff",
+                    "homepage": "http://sphinxsearch.com/"
+                }
+            ],
+            "description": "SphinxSearch PHP API",
+            "homepage": "http://sphinxsearch.com/",
+            "keywords": [
+                "Sphinx Search",
+                "api",
+                "search-engine"
+            ],
+            "time": "2013-08-07 18:06:02"
         },
         {
             "name": "noiselabs/nusoap-bundle",
@@ -1635,12 +1682,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "2b176762bbb1d0af2f6c370d0aff03caabaed018"
+                "reference": "d94f222eff99a22ce313555b78642b4873418d56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/2b176762bbb1d0af2f6c370d0aff03caabaed018",
-                "reference": "2b176762bbb1d0af2f6c370d0aff03caabaed018",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/d94f222eff99a22ce313555b78642b4873418d56",
+                "reference": "d94f222eff99a22ce313555b78642b4873418d56",
                 "shasum": ""
             },
             "require": {
@@ -1674,7 +1721,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-07 18:23:39"
+            "time": "2015-01-03 08:01:59"
         },
         {
             "name": "symfony/console",
@@ -1958,19 +2005,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "645504e1c92b6c413f08b4d7cbd42e6fbf639a58"
+                "reference": "f5a21e854a2a8b318d6917c26bc4971379c05e79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/645504e1c92b6c413f08b4d7cbd42e6fbf639a58",
-                "reference": "645504e1c92b6c413f08b4d7cbd42e6fbf639a58",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/f5a21e854a2a8b318d6917c26bc4971379c05e79",
+                "reference": "f5a21e854a2a8b318d6917c26bc4971379c05e79",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "symfony/event-dispatcher": "~2.1",
                 "symfony/intl": "~2.3",
-                "symfony/options-resolver": "~2.1",
+                "symfony/options-resolver": "~2.6",
                 "symfony/property-access": "~2.3"
             },
             "require-dev": {
@@ -1978,7 +2025,8 @@
                 "symfony/http-foundation": "~2.2",
                 "symfony/http-kernel": "~2.4",
                 "symfony/security-csrf": "~2.4",
-                "symfony/validator": "~2.5"
+                "symfony/translation": "~2.0,>=2.0.5",
+                "symfony/validator": "~2.6"
             },
             "suggest": {
                 "symfony/framework-bundle": "For templating with PHP.",
@@ -2013,7 +2061,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-05 12:00:15"
+            "time": "2015-01-05 17:57:42"
         },
         {
             "name": "symfony/framework-bundle",
@@ -2102,12 +2150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "5adea1576b1ada528202ccf411de4f1c9c60853b"
+                "reference": "3f4ba2c658be910fe6cec46ed34ee900bd18bb01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/5adea1576b1ada528202ccf411de4f1c9c60853b",
-                "reference": "5adea1576b1ada528202ccf411de4f1c9c60853b",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/3f4ba2c658be910fe6cec46ed34ee900bd18bb01",
+                "reference": "3f4ba2c658be910fe6cec46ed34ee900bd18bb01",
                 "shasum": ""
             },
             "require": {
@@ -2146,7 +2194,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-07 18:23:39"
+            "time": "2015-01-05 17:41:06"
         },
         {
             "name": "symfony/http-kernel",
@@ -2482,17 +2530,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security.git",
-                "reference": "42c01236ad91d79608e903005583d4a2d0d3cd7a"
+                "reference": "177960dbfb60771cabbafff1fa570f981b509009"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Security/zipball/42c01236ad91d79608e903005583d4a2d0d3cd7a",
-                "reference": "42c01236ad91d79608e903005583d4a2d0d3cd7a",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/177960dbfb60771cabbafff1fa570f981b509009",
+                "reference": "177960dbfb60771cabbafff1fa570f981b509009",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "symfony/event-dispatcher": "~2.1",
+                "symfony/event-dispatcher": "~2.2",
                 "symfony/http-foundation": "~2.1",
                 "symfony/http-kernel": "~2.4"
             },
@@ -2507,9 +2555,11 @@
                 "doctrine/dbal": "~2.2",
                 "ircmaxell/password-compat": "~1.0",
                 "psr/log": "~1.0",
-                "symfony/expression-language": "~2.4",
+                "symfony/expression-language": "~2.6",
+                "symfony/intl": "~2.3",
                 "symfony/routing": "~2.2",
-                "symfony/validator": "~2.5"
+                "symfony/translation": "~2.0,>=2.0.5",
+                "symfony/validator": "~2.5,>=2.5.5"
             },
             "suggest": {
                 "doctrine/dbal": "For using the built-in ACL implementation",
@@ -2547,7 +2597,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-07 18:23:39"
+            "time": "2015-01-05 20:59:13"
         },
         {
             "name": "symfony/security-bundle",
@@ -2775,32 +2825,33 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge.git",
-                "reference": "403358bb0839bbcbb1daad22c8d5bd41000b4ad9"
+                "reference": "72c911dd02f5d8e68accab7120fc0fd1a0b84ba1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/403358bb0839bbcbb1daad22c8d5bd41000b4ad9",
-                "reference": "403358bb0839bbcbb1daad22c8d5bd41000b4ad9",
+                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/72c911dd02f5d8e68accab7120fc0fd1a0b84ba1",
+                "reference": "72c911dd02f5d8e68accab7120fc0fd1a0b84ba1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "symfony/security-csrf": "~2.4",
-                "twig/twig": "~1.12"
+                "twig/twig": "~1.13,>=1.13.1"
             },
             "require-dev": {
-                "symfony/console": "~2.2",
+                "symfony/console": "~2.4",
                 "symfony/expression-language": "~2.4",
                 "symfony/finder": "~2.3",
                 "symfony/form": "~2.6",
-                "symfony/http-kernel": "~2.2",
+                "symfony/http-kernel": "~2.3",
+                "symfony/intl": "~2.3",
                 "symfony/routing": "~2.2",
                 "symfony/security": "~2.4",
                 "symfony/stopwatch": "~2.2",
                 "symfony/templating": "~2.1",
                 "symfony/translation": "~2.2",
                 "symfony/var-dumper": "~2.6",
-                "symfony/yaml": "~2.0"
+                "symfony/yaml": "~2.0,>=2.0.5"
             },
             "suggest": {
                 "symfony/expression-language": "For using the ExpressionExtension",
@@ -2842,7 +2893,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "http://symfony.com",
-            "time": "2014-12-02 20:19:20"
+            "time": "2015-01-05 14:28:40"
         },
         {
             "name": "symfony/validator",
@@ -2851,28 +2902,29 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "8f5150090d6914d9143acb598f99a5661cf1cd54"
+                "reference": "9ae15423fbf935b92f6129ac85d24c276f48c397"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/8f5150090d6914d9143acb598f99a5661cf1cd54",
-                "reference": "8f5150090d6914d9143acb598f99a5661cf1cd54",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/9ae15423fbf935b92f6129ac85d24c276f48c397",
+                "reference": "9ae15423fbf935b92f6129ac85d24c276f48c397",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "symfony/translation": "~2.0"
+                "symfony/translation": "~2.0,>=2.0.5"
             },
             "require-dev": {
                 "doctrine/annotations": "~1.0",
                 "doctrine/cache": "~1.0",
-                "egulias/email-validator": "~1.0",
+                "doctrine/common": "~2.3",
+                "egulias/email-validator": "~1.2,>=1.2.1",
                 "symfony/config": "~2.2",
                 "symfony/expression-language": "~2.4",
                 "symfony/http-foundation": "~2.1",
                 "symfony/intl": "~2.3",
-                "symfony/property-access": "~2.2",
-                "symfony/yaml": "~2.0"
+                "symfony/property-access": "~2.3",
+                "symfony/yaml": "~2.0,>=2.0.5"
             },
             "suggest": {
                 "doctrine/annotations": "For using the annotation mapping. You will also need doctrine/cache.",
@@ -2912,21 +2964,21 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-05 12:00:15"
+            "time": "2015-01-05 17:57:42"
         },
         {
             "name": "symfony/yaml",
-            "version": "dev-master",
+            "version": "2.6.x-dev",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "f2db1e9df6e325a578dabb278e1c0be34676da88"
+                "reference": "82462a90848a52c2533aa6b598b107d68076b018"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/f2db1e9df6e325a578dabb278e1c0be34676da88",
-                "reference": "f2db1e9df6e325a578dabb278e1c0be34676da88",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/82462a90848a52c2533aa6b598b107d68076b018",
+                "reference": "82462a90848a52c2533aa6b598b107d68076b018",
                 "shasum": ""
             },
             "require": {
@@ -2935,7 +2987,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
@@ -2959,20 +3011,20 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-12-02 20:20:06"
+            "time": "2015-01-03 15:33:07"
         },
         {
             "name": "twig/twig",
-            "version": "v1.16.2",
+            "version": "v1.16.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Twig.git",
-                "reference": "42f758d9fe2146d1f0470604fc05ee43580873fc"
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "6dc11a1e8ecfc30e2c68aaeb218148409d8e68af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/42f758d9fe2146d1f0470604fc05ee43580873fc",
-                "reference": "42f758d9fe2146d1f0470604fc05ee43580873fc",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/6dc11a1e8ecfc30e2c68aaeb218148409d8e68af",
+                "reference": "6dc11a1e8ecfc30e2c68aaeb218148409d8e68af",
                 "shasum": ""
             },
             "require": {
@@ -3007,7 +3059,7 @@
                 },
                 {
                     "name": "Twig Team",
-                    "homepage": "https://github.com/fabpot/Twig/graphs/contributors",
+                    "homepage": "http://twig.sensiolabs.org/contributors",
                     "role": "Contributors"
                 }
             ],
@@ -3016,7 +3068,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-10-17 12:53:44"
+            "time": "2014-12-25 19:58:19"
         }
     ],
     "packages-dev": [],
@@ -3035,7 +3087,8 @@
         "symfony/twig-bridge": 20,
         "symfony/config": 20,
         "google/apiclient": 10,
-        "noiselabs/nusoap-bundle": 20
+        "noiselabs/nusoap-bundle": 20,
+        "neutron/sphinxsearch-api": 20
     },
     "prefer-stable": false,
     "platform": [],

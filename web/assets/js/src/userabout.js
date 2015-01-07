@@ -142,10 +142,7 @@
         $(this).nextAll().removeClass("star-active");
         $('#feedback-star-error').addClass('hide');
     });
-    
 
-    
-    
     $( ".fa-edit-about" ).click(function() {
         $(".div-about-edit-area").css("display","inline");
         $(".p-about").css("display","none");
@@ -163,52 +160,87 @@
     });
     
     $('.feedback-mobile').on('click', '.feedback-from-seller',  function() {
-        $(this).toggleClass("active-bar",0);
-        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+        $(".feedback-cat-mobile").not(".feedback-from-seller").removeClass("active-bar",0);
+        $(".feedback-from-seller").addClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
         $('.feedback-mobile-3').slideUp();
         $('.feedback-mobile-4').slideUp();
-        $('.feedback-mobile-1').slideToggle();
+        $('.feedback-mobile-1').slideDown();
         $('html, body').animate({
-            scrollTop: $(this).offset().top
+            scrollTop: $(".feedback-from-seller").offset().top
         }, 500);
     });
+    
+     $( "#ab" ).click(function() {
+        $(".feedback-cat-mobile").not(".feedback-from-seller").removeClass("active-bar",0);
+        $(".feedback-from-seller").addClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-3').slideUp();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-1').slideDown();
+     });
     
     $('.feedback-mobile').on('click', '.feedback-from-buyer',  function() {
-        $(this).toggleClass("active-bar",0);
-        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
-        $('.feedback-mobile-2').slideToggle();
+        $(".feedback-cat-mobile").not(".feedback-from-buyer").removeClass("active-bar",0);
+        $('.feedback-from-buyer').addClass("active-bar",0);
+        $('.feedback-mobile-2').slideDown();
         $('.feedback-mobile-3').slideUp();
         $('.feedback-mobile-4').slideUp();
         $('.feedback-mobile-1').slideUp();
         $('html, body').animate({
-            scrollTop: $(this).offset().top
+            scrollTop: $(".feedback-from-buyer").offset().top
         }, 500);
     });
+    
+    $( "#as" ).click(function() {
+        $(".feedback-cat-mobile").not(".feedback-from-buyer").removeClass("active-bar",0);
+        $(".feedback-from-buyer").addClass("active-bar",0);
+        $('.feedback-mobile-2').slideDown();
+        $('.feedback-mobile-3').slideUp();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-1').slideUp();
+     });
     
     $('.feedback-mobile').on('click', '.feedback-for-seller',  function() {
-        $(this).toggleClass("active-bar",0);
-        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+        $(".feedback-cat-mobile").not(".feedback-for-seller").removeClass("active-bar",0);
+        $(".feedback-for-seller").addClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
-        $('.feedback-mobile-4').slideToggle();
+        $('.feedback-mobile-4').slideDown();
         $('.feedback-mobile-3').slideUp();
         $('.feedback-mobile-1').slideUp();
         $('html, body').animate({
-            scrollTop: $(this).offset().top
+            scrollTop: $(".feedback-for-seller").offset().top
         }, 500);
     });
     
+    $( "#fos" ).click(function() {
+        $(".feedback-cat-mobile").not(".feedback-for-seller").removeClass("active-bar",0);
+        $(".feedback-for-seller").addClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-3').slideUp();
+        $('.feedback-mobile-4').slideDown();
+        $('.feedback-mobile-1').slideUp();
+     });
+    
     $('.feedback-mobile').on('click', '.feedback-for-buyer',  function() {
-        $(this).toggleClass("active-bar",0);
-        $(this).siblings(".feedback-cat-mobile").removeClass("active-bar",0);
+        $( "#fob" ).trigger("click");
+        $(".feedback-cat-mobile").not(".feedback-for-buyer").removeClass("active-bar",0);
+        $('.feedback-for-buyer').addClass("active-bar",0);
         $('.feedback-mobile-2').slideUp();
         $('.feedback-mobile-4').slideUp();
-        $('.feedback-mobile-3').slideToggle();
+        $('.feedback-mobile-3').slideDown();
         $('.feedback-mobile-1').slideUp();
         $('html, body').animate({
             scrollTop: $(".feedback-for-buyer").offset().top
         }, 500);
     });
     
-    
+     $( "#fob" ).click(function() {
+        $(".feedback-cat-mobile").not(".feedback-for-buyer").removeClass("active-bar",0);
+        $(".feedback-for-buyer").addClass("active-bar",0);
+        $('.feedback-mobile-2').slideUp();
+        $('.feedback-mobile-3').slideDown();
+        $('.feedback-mobile-4').slideUp();
+        $('.feedback-mobile-1').slideUp();
+     });
 })(jQuery);
