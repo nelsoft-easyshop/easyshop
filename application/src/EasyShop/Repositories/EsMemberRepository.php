@@ -56,12 +56,11 @@ class EsMemberRepository extends EntityRepository
     /**
      *  Fetch entries in es_member with exact storeName excluding excludeMemberId
      *
-     *  @param integer $excludeMemberId
      *  @param string $storeName
-     *
+     *  @param integer $excludeMemberId
      *  @return boolean
      */
-    public function getUsedStoreName($excludeMemberId, $storeName)
+    public function getUserWithStoreName($storeName, $excludeMemberId = null)
     {
         $em = $this->_em;
 
@@ -71,16 +70,29 @@ class EsMemberRepository extends EntityRepository
         $rsm->addFieldResult('m','username','username');
         $rsm->addFieldResult('m','store_name','storeName');
 
-        $query = $em->createNativeQuery(
-            'SELECT id_member, store_name, username
-            FROM es_member
-            WHERE id_member != :memberId AND 
-            (store_name = :storeName OR  (username = :userName AND store_name IS NULL))'
-        , $rsm);
+        $sql =  '
+            SELECT 
+                id_member, 
+                store_name, 
+                username
+            FROM 
+                es_member
+            WHERE 
+                (store_name = :storeName OR  (username = :userName AND store_name IS NULL))
+        ';
+        
+        if($excludeMemberId !== null){
+            $sql .= ' AND id_member != :memberId';
+        }
+ 
+        $query = $em->createNativeQuery($sql, $rsm);
 
-        $query->setParameter('memberId',$excludeMemberId);
         $query->setParameter('storeName',$storeName);
         $query->setParameter('userName',$storeName);
+        
+        if($excludeMemberId !== null){
+            $query->setParameter('memberId',$excludeMemberId);
+        }
 
         return $query->getResult();
     }
