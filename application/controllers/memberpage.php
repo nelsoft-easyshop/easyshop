@@ -510,7 +510,7 @@ class Memberpage extends MY_Controller
     public function printSellTransactions()
     {
 
-        $soldTransaction["transactions"] = $this->transactionManager
+        $transactions["transactions"] = $this->transactionManager
                                                 ->getSoldTransactionDetails(
                                                                           $this->session->userdata('member_id'),
                                                                           (bool) $this->input->post("isOngoing"),
@@ -519,7 +519,33 @@ class Memberpage extends MY_Controller
                                                                           $this->input->post("invoiceNo"),
                                                                           $this->input->post("paymentMethod")
                                                                           );  
-        $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
+
+        $data = [];
+        $productSpecs = "";
+        foreach ($transactions["transactions"] as $key => $value) {
+            foreach ($value["product"] as $product) {
+
+                if(isset($product["attr"]) && count($product["attr"] > 0)) {
+                     foreach($product["attr"] as $attr => $attrValue ) {
+                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                     }
+                }
+                $data["invoiceNo"] = $value["invoiceNo"];
+                $data["productName"] = $product["name"];
+                $data["buyerStoreName"] = $value["buyerStoreName"];
+                $data["productSpecs"] = $productSpecs;
+                $data["dateAdded"] = $value["dateadded"]->format('Y-m-d H:i:s');
+                $data["orderQuantity"] = $product["orderQuantity"];
+                $data["paymentMethod"] = $value["paymentMethod"];                
+                $data["productPrice"] = $product["price"];
+                $data["productId"] = $product["idOrderProduct"];
+                $soldTransactions["transactions"][] = $data;
+            }
+
+            $productSpecs = "";
+        }
+
+        $this->load->view("pages/user/printselltransactionspage", $soldTransactions);
     }
     
 
