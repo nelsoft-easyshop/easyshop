@@ -38,7 +38,7 @@ class NewHomeWebService extends MY_Controller
      * Handles if the request is authenticated
      * @var bool
      */    
-    private $isAuthenticated; 
+    private $isAuthenticated = false; 
 
     public function __construct() 
     {
@@ -47,6 +47,7 @@ class NewHomeWebService extends MY_Controller
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
+        $this->authenticateRequest = $this->serviceContainer['webservice_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
         $this->tempHomefile  = APPPATH . "resources/". $this->xmlFileService->getTempHomeXMLfile().".xml"; 
         $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
@@ -54,7 +55,9 @@ class NewHomeWebService extends MY_Controller
         $this->usererror = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
 
         if($this->input->get()) {        
-            $this->isAuthenticated = $this->authentication($this->input->get(), $this->input->get('hash'));
+            $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
+                                                                              $this->input->get('hash'),
+                                                                              true);
         }    
     }
 

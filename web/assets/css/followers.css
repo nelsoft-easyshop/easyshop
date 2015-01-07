@@ -225,3 +225,79 @@
     background: #ff893b !important;
     border-color: #ff893b !important;
 }
+
+.img-mobile-follower{
+    display: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 4px;
+    background: #fff;
+    border: solid #e2e2e2 1px;
+}
+
+@media only screen and (max-width : 768px) { 
+    .col-left-wing{
+        display: none;
+    }
+    .followers-container {
+        margin-left: 0px;
+        border-left: none;
+        padding-left: 0px;
+        padding-top: 10px;
+        min-height: 500px !important;
+    }
+    
+    .col-follower{
+        padding-right: 15px !important;
+    }
+    
+    .div-img-cover{
+        display: none;
+    }
+    
+    .follower-div{
+        min-height: 116px;
+        border-radius: 4px;
+    }
+    
+    .p-follower-description {
+        font-size: 10px;
+        line-height: 14px;
+        font-weight: normal;
+        
+    }
+    
+    .p-follower-name{
+        font-size: 15px;
+        display: inline;
+        margin-left: 5px;
+    }
+    
+    .p-follower-location{
+        font-size: 10px;
+        display: inline;
+        margin-left: 5px;
+    }
+    
+    .btn-text-follow{
+        display: none;
+    }
+    
+    
+    .img-mobile-follower{
+        display: inline;
+    }
+    
+    .follow-btn{
+        width: 41px;
+    }
+    
+    .btn-default-following:hover{
+        width: 41px;
+    }
+    
+    .panel-no-followers{
+        margin-left: 0px;
+        min-height: 100px;
+    }
+}

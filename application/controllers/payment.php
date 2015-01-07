@@ -8,6 +8,7 @@ use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\PaymentService\PaymentService as PaymentService;
 
+
 class Payment extends MY_Controller{
 
     function __construct() {
@@ -1042,7 +1043,11 @@ class Payment extends MY_Controller{
         }
     }
 
-    function dragonPayPostBack()
+    /**
+     * Postback url for dragonpay
+     * @return string
+     */
+    public function dragonPayPostBack()
     {
         $this->config->load('payment', true);
         $paymentConfig = strtolower(ENVIRONMENT) === 'production'
@@ -1113,6 +1118,19 @@ class Payment extends MY_Controller{
             $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
             $curl = new Curl();
             $curl->post($curlUrl, $this->input->post());
+
+                log_message('error', 'EASYDEAL => '. json_encode($curlUrl));
+                log_message('error', 'EASYDEAL => '. json_encode($this->input->post()));
+                log_message('error', 'EASYDEAL => '. json_encode($paymentConfig));
+                
+
+            if ($curl->error) {
+                log_message('error', 'EASYDEAL CURL ERROR => '. $curl->error_code . ': ' . $curl->error_message);
+            }
+            else {
+                log_message('error', 'EASYDEAL CURL ERROR => '. $curl->response);
+            }
+            
         }
         else{
             show_404();
@@ -1121,8 +1139,10 @@ class Payment extends MY_Controller{
         echo 'result=OK';
     }
 
-
-    function dragonPayReturn()
+    /**
+     * Return url for dragon pay
+     */
+    public function dragonPayReturn()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');
@@ -1160,7 +1180,10 @@ class Payment extends MY_Controller{
                              ? $this->config->item('production', 'payment')
                              : $this->config->item('testing', 'payment');
             $redirectUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['return_url'];
-            $redirectUrl .= "?txnid=$txnId&refno=$refNo&status=$status&message=$message&digest=$digest";
+            $redirectUrl .= "?txnid=$txnId&refno=$refNo&status=$status&message=".urlencode($message)."&digest=$digest";
+        }
+        else{
+            show_404();
         }
 
         redirect($redirectUrl, 'refresh');
