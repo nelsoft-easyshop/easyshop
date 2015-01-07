@@ -15,7 +15,7 @@
                 }
             },
             items: 10, // The maximum number of items to show in the results. 
-            menu: '<ul class="typeahead suggested-result-container-alt"></ul>' ,
+            menu: '<ul class="typeahead dropdown-menu suggested-result-container-alt"></ul>' ,
             item: '<li><a href="#"></a></li>'
         }) 
         .focus(function() { 
@@ -44,7 +44,7 @@
                 }
             },
             items: 10, // The maximum number of items to show in the results. 
-            menu: '<ul class="typeahead suggested-result-container-alt2"></ul>' ,
+            menu: '<ul class="typeahead dropdown-menu suggested-result-container-alt2"></ul>' ,
             item: '<li><a href="#"></a></li>'
         }) 
         .focus(function() { 

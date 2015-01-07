@@ -440,7 +440,7 @@ class SearchProduct
             return $sortedIds;
         }
 
-        return $productIds
+        return $productIds;
     }
  
 
