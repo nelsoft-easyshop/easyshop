@@ -128,7 +128,7 @@ class Dictionary
      *
      * @var integer
      */
-    const DEV_MIN_OCCURENCES = 1;
+    const DEV_MIN_OCCURENCES = 3;
     
     /**
      * Minimum occurences for word to enter the dictionary (PROD)
