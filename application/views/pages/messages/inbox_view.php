@@ -75,7 +75,7 @@
     <div id="modal-inside-container" class="mrgn-top-10">
         <div>
             <label>To : </label>
-            <input type="text" value="" id="msg_name" name="msg_name" placeholder="username" class="ui-form-control">
+            <input type="text" value="" id="msg_name" name="msg_name" placeholder="Store name" class="ui-form-control">
         </div>
         <div>
             <label>Message : </label><br>
