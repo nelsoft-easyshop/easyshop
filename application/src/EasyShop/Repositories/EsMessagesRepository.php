@@ -69,7 +69,7 @@ class EsMessagesRepository extends EntityRepository
             SELECT
               a.id_msg,
               a.to_id,
-              c.username AS recipient,
+              COALESCE(NULLIF(c.store_name, ''), c.username) AS recipient,
               a.from_id,
               COALESCE(NULLIF(c.imgurl, ''), 'assets/user/default') AS recipient_img,
               b.username AS sender,
