@@ -89,10 +89,11 @@ class ReviewProductService
                 $recentReviews[$i]['review'] = $value->getReview();
                 $recentReviews[$i]['rating'] = $value->getRating();
                 $recentReviews[$i]['datesubmitted'] = $value->getDatesubmitted()->format('Y-m-d H:i:s');
-                $recentReviews[$i]['reviewer'] = $value->getMember()->getUsername();
+                $recentReviews[$i]['reviewer'] = $value->getMember()->getStoreName();
+                $recentReviews[$i]['reviewer_slug'] = $value->getMember()->getSlug();
                 $recentReviews[$i]['reviewer_avatar'] = $this->userManager->getUserImage($value->getMember()->getIdMember());
 
-                $recentReviews[$i]['replies'] = array();
+                $recentReviews[$i]['replies'] = [];
                 $recentReviews[$i]['reply_count'] = 0;
 
                 foreach($productReviewReplies as $reply){ 
@@ -102,7 +103,8 @@ class ReviewProductService
                                                     'review' => $reply->getReview(),
                                                     'rating' => $reply->getRating(),
                                                     'datesubmitted' => $reply->getDatesubmitted()->format('Y-m-d H:i:s'),
-                                                    'reviewer' => $reply->getMember()->getUsername(),
+                                                    'reviewer' => $reply->getMember()->getStoreName(),
+                                                    'reviewer_slug' => $reply->getMember()->getSlug(),
                                                     'reviewer_avatar' => $this->userManager->getUserImage($reply->getMember()->getIdMember()),
                                                 ];
                         $recentReviews[$i]['reply_count']++;
@@ -159,7 +161,7 @@ class ReviewProductService
 
         $returnArray = [
                     'datesubmitted' => $dateSubmitted->format('Y-m-d H:i:s'),
-                    'reviewUsername' => html_escape($member->getUsername()),
+                    'reviewUsername' => html_escape($member->getStoreName()),
                     'review' => html_escape($review),
                     'userPic' => $this->userManager->getUserImage($memberId),
                     'title' => $title,
