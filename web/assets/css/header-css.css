@@ -311,6 +311,16 @@
         top: 47px !important;
         width: 250px;
     }
+
+@media (min-width: 767px) {
+    #top-links {
+        padding-top: 4px;
+    }
+
+    #top-links li {
+        margin-right:5%;
+    }
+
 }
 
 /* Large desktop */
@@ -361,7 +371,7 @@
  
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
-    
+
     .title {
         font-size:30px;
     }
@@ -370,11 +380,11 @@
     .hide-for-xs {
         display:none;
     }
-    
+
     .hide-for-lg {
         display:inline;
     }
-    
+
     .header-top-dropdowns .btn {
         min-width:45px;
     }
@@ -384,10 +394,9 @@
     }
 
     #top-links li a {
-        padding:0 15px;
+        padding:6px 15px;
         border-right:1px solid #dcdcdc;
-        height:22px;
-        margin-left:15px;
+        height:28px;
     }
 
     #top-links li:first-child a .top-icon {
@@ -406,16 +415,12 @@
     #inner-header {
         padding-top:75px;
     }
-    
-    #inner-header .logo-container {
-        margin-bottom: 90px;
-    }
 
     #inner-header .header-inner-right {
         margin-bottom:0;
         position: relative;
     }
-    
+
     .header-inner-right-wrapper {
         position: absolute;
         right:15px;
@@ -423,20 +428,20 @@
         z-index:1000;
     }
 
-    
+
     #main-nav-container #main-nav {
         position:static;
         border:none;
     }
-    
+
     .col-2 {
         padding-left:15px;
     }
-    
+
     .item {
         text-align: center;
     }
-    
+
     .item-price-container {
         float:none;
         display:block;
@@ -446,17 +451,18 @@
         text-align:center;
 
     }
-    
+
     .logo > a {
         margin-left:0;
         display:inline-block;
     }
+
 }
  
 /* Landscape phones and down */
 @media (max-width: 480px) {
     #top-links li a {
-        padding: 0 8px;
+        padding: 6px 8px;
     }
 }
 
