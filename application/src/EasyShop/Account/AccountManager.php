@@ -186,8 +186,10 @@ class AccountManager
             }
         }
 
-        return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
-                'member' => $member];
+        return [
+            'errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
+            'member' => $member
+        ];
     
     }
     
