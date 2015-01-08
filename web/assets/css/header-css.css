@@ -247,15 +247,6 @@
 /* =============================================
 ----------------- Responsive  ------------------
 ==============================================*/
-@media (min-width: 991px) {
-
-<<<<<<< HEAD
-=======
-    .nav-search2 > .typeahead {
-        left: 22%;
-        top: 47px !important;
-        width: 250px;
-    }
 
 @media (min-width: 767px) {
     #top-links {
@@ -265,8 +256,6 @@
     #top-links li {
         margin-right:5%;
     }
-
->>>>>>> dev
 }
 
 /* Large desktop */
