@@ -488,7 +488,7 @@ class Memberpage extends MY_Controller
                     "invoiceNo" => $value["invoiceNo"],
                     "productName" => $product["name"],
                     "sellerStoreName" => $product["sellerStoreName"],
-                    "productSpecs" => $productSpecsm
+                    "productSpecs" => $productSpecs,
                     "dateAdded" => $value["dateadded"]->format('Y-m-d H:i:s'),
                     "orderQuantity" => $product["orderQuantity"],
                     "paymentMethod" => $value["paymentMethod"],                
