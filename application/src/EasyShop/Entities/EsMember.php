@@ -889,7 +889,8 @@ class EsMember
      */
     public function getStoreName()
     {   
-        if(strlen($this->storeName) <= 0){ 
+        if ( strlen(trim($this->storeName)) <= 0 
+           || !trim($this->storeName) ){ 
             return $this->getUsername();
         }
         return $this->storeName;
