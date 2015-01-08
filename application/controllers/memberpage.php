@@ -466,7 +466,7 @@ class Memberpage extends MY_Controller
     {   
 
         $transactions["transactions"] = $this->transactionManager
-                                              ->getBoughtTransactionDetails(
+                                             ->getBoughtTransactionDetails(
                                                                             $this->session->userdata('member_id'),
                                                                             (bool) $this->input->post("isOngoing"),
                                                                             0,
