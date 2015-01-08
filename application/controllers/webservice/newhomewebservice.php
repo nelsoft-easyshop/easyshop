@@ -958,7 +958,7 @@ class NewHomeWebService extends MY_Controller
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
                                 ->set_content_type('application/json')
-                                ->set_output($error);
+                                ->set_output(json_encode($error));
             } 
             else {
                 $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
@@ -1164,7 +1164,7 @@ class NewHomeWebService extends MY_Controller
             $error = ['error' => $this->upload->display_errors()];
                      return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($error);
+                            ->set_output(json_encode($error));
         } 
         else {
             $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
