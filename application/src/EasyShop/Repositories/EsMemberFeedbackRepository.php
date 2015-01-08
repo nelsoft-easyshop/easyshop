@@ -20,10 +20,6 @@ class EsMemberFeedbackRepository extends EntityRepository
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
 
-        /**
-         * You may have to create methods for COALESCE and NULLIF here
-         * for the query builder
-         */
         $feedbacks = $queryBuilder->select("reviewer.idMember as reviewerId, 
                                             reviewer.username as reviewerUsername, 
                                             COALESCE(NULLIF(reviewer.storeName, ''), reviewer.username) as reviewerStorename,
