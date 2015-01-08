@@ -1168,7 +1168,8 @@ class NewHomeWebService extends MY_Controller
         } 
         else {
             $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
-
+            $subSliderCount = count($map->sliderSection->slide[$index]->image);
+            $template = $map->sliderSection->slide[$index]->template;            
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
             if($map->sliderSection->slide[$index]->image->path == "") {
                 $map->sliderSection->slide[$index]->image->path = $value;
@@ -1178,7 +1179,7 @@ class NewHomeWebService extends MY_Controller
             else {
                 $index = $index == 0 ? 1 : $index + 1;
                 $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide['.$index.']/image[last()]',"\t\t\t","\n");
-
+                $subSliderCount += 1;
             }      
 
             $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
@@ -1186,8 +1187,6 @@ class NewHomeWebService extends MY_Controller
             if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
                 $this->cropImage($imgDirectory, $imgDimensions);
             }
-            $template = $map->sliderSection->slide[$index]->template;
-            $subSliderCount = count($map->sliderSection->slide[$index]->image);
 
             $this->config->load('image_dimensions', true);
             $imageDimensionsConfig = $this->config->config['image_dimensions'];
