@@ -28,9 +28,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     top: 0
                 }, 500);
             }
+            $('.autocomplete-suggestions').hide();
             $('.vendor-content-wrapper').addClass('fixed-vendor-content');
         }
         else{
+            $('.nav-suggestion').hide();
             $('.persistent-nav-container').removeClass('sticky-nav-fixed').removeAttr('style');
             $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
         }

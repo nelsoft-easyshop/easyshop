@@ -57,7 +57,7 @@
                         }
                 }
             }
-            $(window).on('resize.autocomplete scroll', that.updateSC);
+            $(window).on('resize.autocomplete', that.updateSC);
 
             that.sc.appendTo('body');
 

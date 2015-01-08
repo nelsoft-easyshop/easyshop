@@ -246,8 +246,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             }
         });
 
-        $(document).ready(function(){
-            $("#search-container > .typeahead").hide();
+        $(document).ready(function(){ 
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
 
