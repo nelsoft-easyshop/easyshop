@@ -1,30 +1,39 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300,600,700);
 
-@font-face
-{
-font-family: Helvetica;
-src: url(Helvetica/HelveticaNeueLTCom-Lt.ttf);
-font-weight: normal;
+@font-face {
+    font-family: Helvetica;
+    src: url(/assets/fonts/HelveticaNeueLTCom-Th.ttf);
+    font-weight: 100;
 }
 
-@font-face
-{
-font-family: Helvetica;
-src: url(Helvetica/HelveticaNeueLTCom-Bd.ttf);
-font-weight: bold;
+@font-face {
+    font-family: Helvetica;
+    src: url(/assets/fonts/HelveticaNeueLTCom-Lt.ttf);
+    font-weight: normal;
 }
 
-@font-face
-{
-font-family: Helvetica;
-src: url(Helvetica/HelveticaNeueLTCom-Roman.ttf);
-font-weight: 600;
+@font-face {
+    font-family: Helvetica;
+    src: url(/assets/fonts/HelveticaNeueLTCom-Bd.ttf);
+    font-weight: bold;
+}
 
+@font-face {
+    font-family: Helvetica;
+    src: url(/assets/fonts/HelveticaNeueLTCom-It.ttf);
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Helvetica;
+    src: url(/assets/fonts/HelveticaNeueLTCom-Roman.ttf);
+    font-weight: 600;
 }
 
 /*** global style ***/
 html, body{
-    font-family: 'Helvetica', 'Open Sans', Arial, Calibri;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     background: #ebedf0;
     letter-spacing: 0.5px;
 }
@@ -353,12 +362,12 @@ textarea {
 }
 
 .vendor-main-bg img {
-    bottom: 0;
-    left: 0;
-    margin: auto;
+    left: 50%;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
 }
 
 #banner_edit img {
@@ -1132,7 +1141,6 @@ textarea {
 .p-view{
     font-size: 13px;
     font-weight: 700;
-    font-family: 'Open Sans', sans-serif, Arial !important;
     margin-bottom: -10px;
 }
 .td-view{
