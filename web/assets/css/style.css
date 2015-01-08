@@ -7798,6 +7798,7 @@ div.sold_prod_container {
     padding: 4px 10px;
 }
 
+.autocomplete-suggestions .selected,
 .autocomplete-suggestions > div:hover {
     background-color: #868686;
     color: #fff;
