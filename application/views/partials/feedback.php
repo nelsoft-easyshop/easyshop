@@ -13,7 +13,7 @@
                         </div>
                         <p class="p-user-name">
                             <a href="/<?php echo $feedback['userslug']?>">
-                                <?php echo html_escape($feedback['username']); ?>
+                                <?php echo html_escape($feedback['storename']); ?>
                             </a>
                         </p>
                         <p class="p-date-feedback">
