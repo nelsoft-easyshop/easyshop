@@ -232,7 +232,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </form>
         
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
-<script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
 <script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script>
     (function ($) {  

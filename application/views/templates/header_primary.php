@@ -434,5 +434,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
 <script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
  
