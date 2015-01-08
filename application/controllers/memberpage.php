@@ -379,7 +379,6 @@ class Memberpage extends MY_Controller
                                 ,'Price'
                                 ,'Product Specifications']);
         foreach($soldTransaction["transactions"] as $value) {
-            $productObject = $value;
             foreach ($value["product"] as $product) {
                 if(isset($product["attr"])) {
                     foreach($product["attr"] as $attr => $attrValue ) {
@@ -467,38 +466,39 @@ class Memberpage extends MY_Controller
     {   
 
         $transactions["transactions"] = $this->transactionManager
-                                                  ->getBoughtTransactionDetails(
-                                                                                $this->session->userdata('member_id'),
-                                                                                (bool) $this->input->post("isOngoing"),
-                                                                                0,
-                                                                                PHP_INT_MAX,
-                                                                                $this->input->post("invoiceNo"),
-                                                                                $this->input->post("paymentMethod")
-                                                                              );
+                                              ->getBoughtTransactionDetails(
+                                                                            $this->session->userdata('member_id'),
+                                                                            (bool) $this->input->post("isOngoing"),
+                                                                            0,
+                                                                            PHP_INT_MAX,
+                                                                            $this->input->post("invoiceNo"),
+                                                                            $this->input->post("paymentMethod")
+                                                                          );
 
-        $data = [];
-        $productSpecs = "";
-        foreach ($transactions["transactions"] as $key => $value) {
+        foreach ($transactions["transactions"] as $value) {
+            $data = [];
+            $productSpecs = "";            
             foreach ($value["product"] as $product) {
-
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
                      foreach($product["attr"] as $attr => $attrValue ) {
                         $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                      }
                 }
-                $data["invoiceNo"] = $value["invoiceNo"];
-                $data["productName"] = $product["name"];
-                $data["sellerStoreName"] = $product["sellerStoreName"];
-                $data["productSpecs"] = $productSpecs;
-                $data["dateAdded"] = $value["dateadded"]->format('Y-m-d H:i:s');
-                $data["orderQuantity"] = $product["orderQuantity"];
-                $data["paymentMethod"] = $value["paymentMethod"];                
-                $data["productPrice"] = $product["price"];
-                $data["productId"] = $product["idOrderProduct"];
+                $data = [
+                    "invoiceNo" => $value["invoiceNo"],
+                    "productName" => $product["name"],
+                    "sellerStoreName" => $product["sellerStoreName"],
+                    "productSpecs" => $productSpecsm
+                    "dateAdded" => $value["dateadded"]->format('Y-m-d H:i:s'),
+                    "orderQuantity" => $product["orderQuantity"],
+                    "paymentMethod" => $value["paymentMethod"],                
+                    "productPrice" => $product["price"],
+                    "productId" => $product["idOrderProduct"]
+                ];
+
                 $boughtTransactions["transactions"][] = $data;
             }
-            $data = [];
-            $productSpecs = "";
+
         }
         $this->load->view("pages/user/printboughttransactions", $boughtTransactions);
     }
@@ -511,18 +511,18 @@ class Memberpage extends MY_Controller
     {
 
         $transactions["transactions"] = $this->transactionManager
-                                                ->getSoldTransactionDetails(
-                                                                          $this->session->userdata('member_id'),
-                                                                          (bool) $this->input->post("isOngoing"),
-                                                                          0,
-                                                                          PHP_INT_MAX,
-                                                                          $this->input->post("invoiceNo"),
-                                                                          $this->input->post("paymentMethod")
-                                                                          );  
+                                             ->getSoldTransactionDetails(
+                                                                      $this->session->userdata('member_id'),
+                                                                      (bool) $this->input->post("isOngoing"),
+                                                                      0,
+                                                                      PHP_INT_MAX,
+                                                                      $this->input->post("invoiceNo"),
+                                                                      $this->input->post("paymentMethod")
+                                                                      );  
 
-        $data = [];
-        $productSpecs = "";
-        foreach ($transactions["transactions"] as $key => $value) {
+        foreach ($transactions["transactions"] as $value) {
+            $data = [];   
+            $productSpecs = "";                 
             foreach ($value["product"] as $product) {
 
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
@@ -530,19 +530,23 @@ class Memberpage extends MY_Controller
                         $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                      }
                 }
-                $data["invoiceNo"] = $value["invoiceNo"];
-                $data["productName"] = $product["name"];
-                $data["buyerStoreName"] = $value["buyerStoreName"];
-                $data["productSpecs"] = $productSpecs;
-                $data["dateAdded"] = $value["dateadded"]->format('Y-m-d H:i:s');
-                $data["orderQuantity"] = $product["orderQuantity"];
-                $data["paymentMethod"] = $value["paymentMethod"];                
-                $data["productPrice"] = $product["price"];
-                $data["productId"] = $product["idOrderProduct"];
+
+                $data = [
+                    "invoiceNo" => $value["invoiceNo"],
+                    "productName" => $product["name"],
+                    "buyerStoreName" => $value["buyerStoreName"],
+                    "productSpecs" => $productSpecs,
+                    "dateAdded" => $value["dateadded"]->format('Y-m-d H:i:s'),
+                    "orderQuantity" => $product["orderQuantity"],
+                    "paymentMethod" => $value["paymentMethod"],                
+                    "productPrice" => $product["price"],
+                    "productId" => $product["idOrderProduct"]
+                ];
+
                 $soldTransactions["transactions"][] = $data;
             }
-            $data = [];
-            $productSpecs = "";
+
+
         }
 
         $this->load->view("pages/user/printselltransactionspage", $soldTransactions);
