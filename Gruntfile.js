@@ -9,8 +9,7 @@ module.exports = function (grunt) {
             scripts: {
                 files: {
                     'js/src/vendor/jquery.js': 'jquery/jquery.js',
-                    'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
-                    'js/src/vendor/bootstrap-typeahead.min.js': 'bs-typeahead/js/bootstrap-typeahead.min.js'
+                    'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js'
                 }
             },
             stylesheets: {
