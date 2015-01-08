@@ -142,6 +142,11 @@
                                     <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
                                 </div>
                             <?php endif; ?>
+                            <!-- DISPLAY WHEN SHIPPING IS FREE
+                            <div class="free-shipping-tag-container">
+                                <span class="product-free-shipping-tag btn-lg" style=""><i class="fa fa-truck fa-lg"></i> FREE SHIPPING NATIONWIDE</span>
+                            </div>
+                            -->
                         </div>
                     </div>
                     <div class="clear"></div>

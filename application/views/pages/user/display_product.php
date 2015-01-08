@@ -153,9 +153,14 @@
                             </td>
                         </tr>
                     </table>
+                    <!--SHIPPING TAG-->
+                    <span class="free-shipping-tag">
+                        <i class="fa fa-truck fa-lg"></i> FREE 
+                        SHIPPING
+                        <span class="free-shipping-tag-tail"><span>
+                    </span>
+                    <!--END OF SHIPPING TAG-->
                 </div>
-                
-                
             <?php endforeach;?>
         </div>
         <!-- <?php echo $arrCat['pagination']?> -->
