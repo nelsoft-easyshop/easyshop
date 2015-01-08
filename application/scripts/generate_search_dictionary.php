@@ -161,11 +161,11 @@ class Dictionary
     public function initialize()
     {
         $this->dictionary = [];
-        if(ENVIRONMENT === 'production'){
-            $this->occurencesMinimum = self::PROD_MIN_OCCURENCES;
+        if(ENVIRONMENT === 'development'){
+            $this->occurencesMinimum = self::DEV_MIN_OCCURENCES;
         }
         else{
-            $this->occurencesMinimum = self::DEV_MIN_OCCURENCES;
+            $this->occurencesMinimum = self::PROD_MIN_OCCURENCES;
         }
     }
     
