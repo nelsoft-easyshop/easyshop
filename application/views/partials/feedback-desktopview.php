@@ -12,7 +12,7 @@
                             <a/>
                         </div>
                         <p class="p-user-name">
-                            <a href="/<?php echo html_escape)$feedback['userslug']); ?>">
+                            <a href="/<?php echo html_escape($feedback['userslug']); ?>">
                                 <?php echo html_escape($feedback['storename']); ?>
                             </a>
                         </p>
