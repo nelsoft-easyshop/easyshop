@@ -1929,87 +1929,17 @@ td.td-view.p-view2.color-default{
     text-decoration: none;
 }
 /*** end of Vendor style ***/
-#search-form1 > .typeahead {
-    display: none;
-    top: 38px;
-}
-
-#search-form2 > .typeahead {
-    display: none;
-    text-align: left;
-    width: 100%;
-}
-
-#search-form1 > .typeahead,
-#search-form2 > .typeahead {
-    background-color: rgb(255, 255, 255);
-    padding: 10px 0;
-    position: absolute;
-    z-index: 9991;
-    -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-    -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-    box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-}
-
-#search-form1 > .typeahead li,
-.sticky-nav #search-form2 > .typeahead li {
-    float: none;
-    line-height: 24px;
-    width: 100%;
-}
-
-#search-form1 > .typeahead strong,
-#search-form2 > .typeahead strong {
-    font-weight: 900;
-}
-
-#search-form1 > .typeahead a {
-    color: #565656;
-    display: block;
-    font-size: 13px;
-    padding: 4px 10px;
-}
-
-.sticky-nav #search-form2 > .typeahead li a {
-    color: #565656;
-    display: block;
-    font-size: 13px;
-    padding: 4px 10px;
-    text-align: left;
-    width: 100%;
-}
-
-#search-form1 > .typeahead a:hover,
-.sticky-nav #search-form2 > .typeahead li a:hover,
-#search-form1 > .typeahead > li.active > a,
-#search-form2 > .typeahead > li.active > a {
-    background-color: #868686;
-    color: #fff;
-    text-decoration: none;
-}
 
 /* =============================================
 ----------------- Responsive  ------------------
 ==============================================*/
 @media (min-width: 991px) {
-    #search-form1 > .typeahead {
-        width: 330px;
-    }
-
-    #search-form2 > .typeahead {
-        width: 250px;
-    }
+ 
 }
 
 /* Large desktop */
 @media (min-width: 1200px) {
-    #search-form1 > .typeahead {
-        width: 327px;
-    }
-
-    #search-form2 > .typeahead {
-        width: 327px;
-    }
+ 
 }
 
 @media only screen and (max-width : 979px) { 
