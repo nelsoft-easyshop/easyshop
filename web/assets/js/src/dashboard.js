@@ -1504,6 +1504,14 @@
                 $("#" + $container).append($response.html);
                 $(".trans-btn-con1").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
                 $(".reject_btn").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
+                if ($searchFor === "transactionNumber") {
+                    $('#' + $container).find('.jumbotron').html('<i class="icon-category"></i>' +
+                        'Ooops! You\'ve entered an invalid transaction number. Please try again.');
+                }
+                else if ($searchFor === "paymentMethod") {
+                    $('#' + $container).find('.jumbotron').html('<i class="icon-category"></i>' +
+                        'Sorry, you don\'t have any transactions with this payment gateway.');
+                }
             }
         });
     }
