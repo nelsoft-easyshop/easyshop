@@ -1171,7 +1171,7 @@ class NewHomeWebService extends MY_Controller
             $subSliderCount = count($map->sliderSection->slide[$index]->image);
             $template = (string)$map->sliderSection->slide[$index]->template;            
             $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
-            if($map->sliderSection->slide[$index]->image->path === "") {
+            if(trim($map->sliderSection->slide[$index]->image->path) === "") {
                 $map->sliderSection->slide[$index]->image->path = $value;
                 $map->sliderSection->slide[$index]->image->target = $target;
                 $map->asXML($this->tempHomefile); 
