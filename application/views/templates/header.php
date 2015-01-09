@@ -254,6 +254,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     }
                 });
             }
+        })
+        .focus(function() {
+            if($(this).val().length <= 2){
+                $('.autocomplete-suggestions').hide();
+            }
+            else{ 
+                if( $.trim( $('.autocomplete-suggestions').html() ).length ) {
+                    $('.autocomplete-suggestions').show();
+                }
+            }
+        })
+        .change(function() {
+            if($(this).val().length <= 0){
+                $('.autocomplete-suggestions').empty();
+            }
         });
 
         $(document).ready(function(){ 
