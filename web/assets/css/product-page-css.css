@@ -1340,7 +1340,7 @@ body{
     border: 1px solid #e2e2e2;
     height: 31px;
     line-height: 30px;
-    margin: 10px auto;
+    margin: 19px auto 10px;
     width: 80px;
 }
 
@@ -1450,9 +1450,13 @@ body{
     background: transparent;
     border: none;
     cursor: pointer;
+    height: 34px;
     line-height: 30px;
     padding: 7px 12px;
     width: 110%;
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
 }
 
 .prod-select-con select::-ms-expand {
@@ -1552,7 +1556,7 @@ body{
 .prod-quantity-container .quantity-select {
     display: inline-block;
     vertical-align: middle;
-    width: 50%;
+    width: 53%;
 }
 
 .prod-quantity-container .quantity-select select {
