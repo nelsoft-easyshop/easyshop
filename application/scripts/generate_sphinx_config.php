@@ -96,14 +96,12 @@
         source = suggestions
 
         path = '.$sphinxDirectory.'/data/suggestions
-        
-        enable_star = 1
 
         morphology = metaphone
         
         min_word_len = 3
 
-        min_infix_len = 3
+        min_infix_len = 2
     }
 
     searchd {
