@@ -1243,7 +1243,9 @@ class NewHomeWebService extends MY_Controller
      */
     public function getTempContents() 
     {         
-        copy($this->file, $this->tempHomefile);  
+        if(!file_exists($this->tempHomefile)) {
+            copy($this->file, $this->tempHomefile);
+        }  
         $this->output
              ->set_content_type('text/plain') 
              ->set_output(file_get_contents($this->tempHomefile));
