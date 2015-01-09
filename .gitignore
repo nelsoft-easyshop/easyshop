@@ -47,5 +47,6 @@ application/logs/*
 !/sphinx/data/*.md
 /sphinx/etc/*
 !/sphinx/etc/*.md
+!/sphinx/etc/wordforms.txt
 
 

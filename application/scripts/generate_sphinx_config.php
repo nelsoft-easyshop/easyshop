@@ -84,6 +84,8 @@
 
         path = '.$sphinxDirectory.'/data/products
 
+        wordforms = '.$sphinxDirectory.'/etc/wordforms.txt 
+
         min_word_len = 3
 
         min_infix_len = 3
