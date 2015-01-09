@@ -52,23 +52,16 @@
                                                 <?php echo $value["invoiceNo"]; ?>
                                             </td>
                                             <td>
-                                                <?php echo html_escape($value["productname"]); ?>
+                                                <?php echo html_escape($value["productName"]); ?>
                                             </td>
-                                            <?php foreach($value["product"] as $product): ?>
-                                                <td>
-                                                    <?php echo $product["sellerStoreName"] ?>
-                                                </td>                                             
-                                                <td style='text-align:left;padding-left:2px;'>
-                                                    <?php if(isset($product["attr"]) && count($product["attr"] > 0)): ?>
-                                                            <?php foreach($product["attr"] as $attr => $attrValue ): ?>
-                                                                <?php echo ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))."<br/>" ?>
-                                                            <?php endforeach; ?>
-                                                    <?php endif; ?>
-                                                </td>  
-                                                <?php break; ?>                                          
-                                            <?php endforeach; ?>
                                             <td>
-                                                <?php print_r($value["dateadded"]->format('Y-m-d H:i:s')); ?>
+                                                <?php echo html_escape($value["sellerStoreName"]); ?>                                                
+                                            </td>
+                                            <td>
+                                                <?php echo html_escape($value["productSpecs"]); ?>                                                
+                                            </td>                                            
+                                            <td>
+                                                <?php echo $value["dateAdded"]; ?>
                                             </td>                                                                                    
                                             <td>
                                                 <?php echo $value["orderQuantity"]; ?>
@@ -77,7 +70,7 @@
                                                 <?php echo ucwords(strtolower($value["paymentMethod"])); ?>
                                             </td>                                                                                     
                                             <td >
-                                                PHP <?php echo number_format((float)$value["total"], 2, '.', '') ?>
+                                                PHP <?php echo number_format((float)$value["productPrice"], 2, '.', '') ?>
                                             </td> 
                                       
                                         </tr>
