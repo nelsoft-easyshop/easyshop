@@ -15,16 +15,6 @@
         activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
         zIndex: 2147483647, // Z-Index for the overlay
     });
-    
-
-    $(document).ready(function() {
-        
-        
-        $('.main-search-input').on('keyup', function(){
-            var searchString = $(this).val();
-            $('.main-search-input').val(searchString);
-        });
-    });
 
 /* ================================================
 ----------- Vendor ---------- */
@@ -228,6 +218,10 @@
             if($(this).val().length <= 0){
                 $('.autocomplete-suggestions').empty();
             }
+        })
+        .keyup(function() {
+            var searchString = $(this).val();
+            $('#primary-search2').val(searchString);
         });
 
         $('#primary-search2')
@@ -274,6 +268,10 @@
                 if($(this).val().length <= 0){
                     $('.autocomplete-suggestions').empty();
                 }
+            })
+            .keyup(function() {
+                var searchString = $(this).val();
+                $('#primary-search').val(searchString);
             });
 
 }(jQuery));
