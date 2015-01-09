@@ -1273,6 +1273,42 @@ class NewHomeWebService extends MY_Controller
           
     }
 
+
+    /**
+     * Retrieves template dimensions for the posted index and templateName
+     * @return JSON
+     */
+    public function getTemplateImageDimension()
+    {
+        $index = (int)$this->input->get("index");
+        $type = $this->input->get("type");
+        $currentSliderCount = (int)$this->input->get("currentSliderCount");
+        $template = trim($this->input->get("template"));
+
+
+        $this->config->load('image_dimensions', TRUE);
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];
+        $imageDimensions = $imageDimensionsConfig[$type];
+
+        if($type === "mainSlider") {
+            $defaultTemplateCount = count($imageDimensions[$template]);
+            if($index >= $defaultTemplateCount) {
+                $dimensions = end($imageDimensions[$template]);
+            }
+            else {
+                $dimensions = $imageDimensions[$template][$index];
+            }
+        }
+        else {
+            $dimensions = $imageDimensions;
+        }
+
+        $jsonString = "jsonCallback({'sites':[{'success': '".implode(",",$dimensions)."',},]});";
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($jsonString);                
+    }    
+
 }
 
 
