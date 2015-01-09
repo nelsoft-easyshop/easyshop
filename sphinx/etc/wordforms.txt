@@ -1,0 +1,3 @@
+c2d > Core 2 Duo
+e6600 > Core 2 Duo
+core 2duo > Core 2 Duo
