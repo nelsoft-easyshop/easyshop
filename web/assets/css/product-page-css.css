@@ -1506,6 +1506,19 @@ body{
     margin: 0 10px 0 0;
 }
 
+.free-shipping-tag-container{
+    padding-right: 15px;
+}
+
+.product-free-shipping-tag{
+    display: block;
+    text-align: center;
+    background: #00a386;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+}
+
 .shipment-select select {
     padding-right: 50px;
 }
