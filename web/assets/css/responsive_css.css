@@ -1121,7 +1121,8 @@ div.sell_steps4 ul li:nth-child(4) a {
     display: inline-block;
     margin-bottom: 0.75em;
     margin-left: 0.75em;
-
+    vertical-align: middle;
+    
     -webkit-transition: all 0.2s ease-in-out;
     -moz-transition:    all 0.2s ease-in-out;
     -o-transition:      all 0.2s ease-in-out;
