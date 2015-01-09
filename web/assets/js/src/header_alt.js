@@ -29,6 +29,9 @@
                             response(data); 
                         }
                     });
+                },
+                onSelect: function(term){
+                    $('#main_search_alt').addClass('selectedClass');
                 }
             })
             .focus(function() {
@@ -36,9 +39,30 @@
                     $('.autocomplete-suggestions').hide();
                 }
                 else{ 
-                    if( $.trim( $('.main-nav').html() ).length ) {
-                        hideSuggestion();
-                        $('.main-nav').show();
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.main-nav').html() ).length ) {
+                            hideSuggestion();
+                            $('.main-nav').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length <= 2){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.main-nav').html() ).length ) {
+                            hideSuggestion();
+                            $('.main-nav').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
                     }
                 }
             })
@@ -73,6 +97,9 @@
                             response(data); 
                         }
                     });
+                },
+                onSelect: function(term){
+                    $('#main_search_alt2').addClass('selectedClass');
                 }
             })
             .focusout(function() {
@@ -83,9 +110,30 @@
                     $('.autocomplete-suggestions').hide();
                 }
                 else{ 
-                    if( $.trim( $('.nav-suggestion').html() ).length ) {
-                        hideSuggestion();
-                        $('.nav-suggestion').show();
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.nav-suggestion').html() ).length ) {
+                            hideSuggestion();
+                            $('.nav-suggestion').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length <= 2){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.nav-suggestion').html() ).length ) {
+                            hideSuggestion();
+                            $('.nav-suggestion').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
                     }
                 }
             })

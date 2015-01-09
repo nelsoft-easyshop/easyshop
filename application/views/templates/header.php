@@ -236,40 +236,64 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script>
     (function ($) {  
 
-        $('#main_search').autoComplete({
-            minChars: 3,
-            cache: false,
-            menuClass: 'autocomplete-suggestions auto-complete-header',
-            source: function(term, response){ 
-                try { 
-                    xhr.abort(); 
-                } catch(e){}
-                var xhr = $.ajax({ 
-                    type: "get",
-                    url: '/search/suggest',
-                    data: "query=" + term,
-                    dataType: "json", 
-                    success: function(data){
-                        response(data); 
-                    }
-                });
-            }
-        })
-        .focus(function() {
-            if($(this).val().length <= 2){
-                $('.autocomplete-suggestions').hide();
-            }
-            else{ 
-                if( $.trim( $('.autocomplete-suggestions').html() ).length ) {
-                    $('.autocomplete-suggestions').show();
+        $('#main_search')
+            .autoComplete({
+                minChars: 3,
+                cache: false,
+                menuClass: 'autocomplete-suggestions auto-complete-header',
+                source: function(term, response){ 
+                    try { 
+                        xhr.abort(); 
+                    } catch(e){}
+                    var xhr = $.ajax({ 
+                        type: "get",
+                        url: '/search/suggest',
+                        data: "query=" + term,
+                        dataType: "json", 
+                        success: function(data){
+                            response(data); 
+                        }
+                    });
+                },
+                onSelect: function(term){
+                    $('#main_search').addClass('selectedClass');
                 }
-            }
-        })
-        .change(function() {
-            if($(this).val().length <= 0){
-                $('.autocomplete-suggestions').empty();
-            }
-        });
+            })
+            .focus(function() {
+                if($(this).val().length <= 2){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.autocomplete-suggestions').html() ).length ) {
+                            $('.autocomplete-suggestions').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length <= 2){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.autocomplete-suggestions').html() ).length ) {
+                            $('.autocomplete-suggestions').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .change(function() {
+                if($(this).val().length <= 0){
+                    $('.autocomplete-suggestions').empty();
+                }
+            });
 
         $(document).ready(function(){ 
             var $user_nav_dropdown = $(".user-nav-dropdown");
