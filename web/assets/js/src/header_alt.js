@@ -15,9 +15,19 @@
             minChars: 3,
             cache: false,
             menuClass: 'autocomplete-suggestions',
-            source: function(term, response){
-                try { xhr.abort(); } catch(e){}
-                var xhr = $.getJSON('/search/suggest', { query: term }, function(data){ response(data); });
+            source: function(term, response){ 
+                try { 
+                    xhr.abort(); 
+                } catch(e){}
+                var xhr = $.ajax({ 
+                    type: "get",
+                    url: '/search/suggest',
+                    data: "query=" + term,
+                    dataType: "json", 
+                    success: function(data){
+                        response(data); 
+                    }
+                });
             }
         });
 
@@ -25,9 +35,19 @@
             minChars: 3,
             cache: false,
             menuClass: 'autocomplete-suggestions nav-suggestion',
-            source: function(term, response){
-                try { xhr.abort(); } catch(e){}
-                var xhr = $.getJSON('/search/suggest', { query: term }, function(data){ response(data); });
+            source: function(term, response){ 
+                try { 
+                    xhr.abort(); 
+                } catch(e){}
+                var xhr = $.ajax({ 
+                    type: "get",
+                    url: '/search/suggest',
+                    data: "query=" + term,
+                    dataType: "json", 
+                    success: function(data){
+                        response(data); 
+                    }
+                });
             }
         });
 

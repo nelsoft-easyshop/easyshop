@@ -240,9 +240,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             minChars: 3,
             cache: false,
             menuClass: 'autocomplete-suggestions',
-            source: function(term, response){
-                try { xhr.abort(); } catch(e){}
-                var xhr = $.getJSON('/search/suggest', { query: term }, function(data){ response(data); });
+            source: function(term, response){ 
+                try { 
+                    xhr.abort(); 
+                } catch(e){}
+                var xhr = $.ajax({ 
+                    type: "get",
+                    url: '/search/suggest',
+                    data: "query=" + term,
+                    dataType: "json", 
+                    success: function(data){
+                        response(data); 
+                    }
+                });
             }
         });
 
