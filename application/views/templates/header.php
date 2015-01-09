@@ -232,30 +232,31 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </form>
         
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
-<script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script>
-    (function ($) { 
+    (function ($) {  
 
-        $('input#main_search')
-            .typeahead({
-                ajax: { 
+        $('#main_search').autoComplete({
+            minChars: 3,
+            cache: false,
+            menuClass: 'autocomplete-suggestions',
+            source: function(term, response){ 
+                try { 
+                    xhr.abort(); 
+                } catch(e){}
+                var xhr = $.ajax({ 
+                    type: "get",
                     url: '/search/suggest',
-                    triggerLength: 3, // This is the minimum length of text to take action on
-                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
-                    preProcess: function (data) { 
-                        if ($.isEmptyObject(data)) { 
-                            $('#search-container > .typeahead').empty();
-                        } 
-                        return data;
+                    data: "query=" + term,
+                    dataType: "json", 
+                    success: function(data){
+                        response(data); 
                     }
-                },
-                items: 10, // The maximum number of items to show in the results. 
-                menu: '<ul class="typeahead dropdown-menu"></ul>' ,
-                item: '<li><a href="#"></a></li>'
-            });
+                });
+            }
+        });
 
-        $(document).ready(function(){
-            $("#search-container > .typeahead").hide();
+        $(document).ready(function(){ 
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
 
