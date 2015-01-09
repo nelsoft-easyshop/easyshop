@@ -239,7 +239,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         $('#main_search').autoComplete({
             minChars: 3,
             cache: false,
-            menuClass: 'autocomplete-suggestions',
+            menuClass: 'autocomplete-suggestions auto-complete-header',
             source: function(term, response){ 
                 try { 
                     xhr.abort(); 
