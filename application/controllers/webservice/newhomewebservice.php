@@ -910,7 +910,7 @@ class NewHomeWebService extends MY_Controller
 
         $this->config->load('image_dimensions', true);        
         $imageDimensionsConfig = $this->config->config['image_dimensions'];        
-        $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);   
+        $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"][$template]);   
         $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
                                                         $string,'/map/sliderSection/slide[last()]', 
                                                         "\t\t",
@@ -1198,16 +1198,16 @@ class NewHomeWebService extends MY_Controller
             if($subSliderCount >= $defaultTemplateSliderCount) {
                 $tempDimensions = end($imageDimensionsConfig["mainSlider"][$template]);
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
-                reset($imageDimensionsConfig["mainSlider"]["$template"]);                
+                reset($imageDimensionsConfig["mainSlider"][$template]);                
             }
             else {
-                $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$subSliderCount - 1];
+                $tempDimensions = $imageDimensionsConfig["mainSlider"][$template][$subSliderCount - 1];
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
             } 
 
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output($this->json);             
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);             
         }
     }
 
@@ -1284,7 +1284,7 @@ class NewHomeWebService extends MY_Controller
         $template = trim($this->input->get("template"));
 
 
-        $this->config->load('image_dimensions', TRUE);
+        $this->config->load('image_dimensions', true);
         $imageDimensionsConfig = $this->config->config['image_dimensions'];
         $imageDimensions = $imageDimensionsConfig[$type];
 
