@@ -236,9 +236,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script>
     (function ($) {  
 
+        var $minChars = 3;
+
         $('#main_search')
             .autoComplete({
-                minChars: 3,
+                minChars: $minChars,
                 cache: false,
                 menuClass: 'autocomplete-suggestions auto-complete-header',
                 source: function(term, response){ 
@@ -260,7 +262,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 }
             })
             .focus(function() {
-                if($(this).val().length <= 2){
+                if($(this).val().length < $minChars){
                     $('.autocomplete-suggestions').hide();
                 }
                 else{ 
@@ -275,7 +277,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 }
             })
             .click(function() {
-                if($(this).val().length <= 2){
+                if($(this).val().length < $minChars){
                     $('.autocomplete-suggestions').hide();
                 }
                 else{ 

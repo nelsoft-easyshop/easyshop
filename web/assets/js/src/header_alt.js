@@ -11,9 +11,11 @@
 
         $(window).on('scroll', hideSuggestion);
 
-         $('#main_search_alt')
-             .autoComplete({
-                minChars: 3,
+        var $minChars = 3;
+        
+        $('#main_search_alt')
+            .autoComplete({
+                minChars: $minChars,
                 cache: false,
                 menuClass: 'autocomplete-suggestions main-nav',
                 source: function(term, response){ 
@@ -35,7 +37,7 @@
                 }
             })
             .focus(function() {
-                if($(this).val().length <= 2){
+                if($(this).val().length < $minChars){
                     $('.autocomplete-suggestions').hide();
                 }
                 else{ 
@@ -51,7 +53,7 @@
                 }
             })
             .click(function() {
-                if($(this).val().length <= 2){
+                if($(this).val().length < $minChars){
                     $('.autocomplete-suggestions').hide();
                 }
                 else{ 
@@ -106,7 +108,7 @@
                 $('.main-nav').html($('.nav-suggestion').html());
             })
             .focus(function() {
-                if($(this).val().length <= 2){
+                if($(this).val().length < $minChars){
                     $('.autocomplete-suggestions').hide();
                 }
                 else{ 
@@ -122,7 +124,7 @@
                 }
             })
             .click(function() {
-                if($(this).val().length <= 2){
+                if($(this).val().length < $minChars){
                     $('.autocomplete-suggestions').hide();
                 }
                 else{ 
