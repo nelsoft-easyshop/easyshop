@@ -1021,7 +1021,7 @@ $string = '<typeNode>
         $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
         $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
 
-        if(isset($pageContent['mainSlide'][0]) === false){
+        if(!isset($pageContent['mainSlide'][0])){
             $temp = $pageContent['mainSlide'];
             $pageContent['mainSlide'] = [];
             $pageContent['mainSlide'][] = $temp;
@@ -1033,9 +1033,9 @@ $string = '<typeNode>
             $bannerImages[] = [
                 'name' => '0',
                 'image' => isset($value['value']) ? $value['value'] : "", 
-                'target' => isset($value['imagemap']['target']) === false || empty($value['imagemap']['target'])
+                'target' => !isset($value['imagemap']['target']) || empty($value['imagemap']['target'])
                             ? "" : $value['imagemap']['target'],
-                'actionType' => isset($value['actionType']) === false || empty($value['actionType'])
+                'actionType' => !isset($value['actionType']) || empty($value['actionType'])
                                 ? "" : $value['actionType'],
             ];
         }
@@ -1089,7 +1089,7 @@ $string = '<typeNode>
                             $target = $baseUrl.'mobile/product/item/'.$productSlug;
                         }
                         else{
-                            $target = empty($valueLevel2['target']) || isset($valueLevel2['target']) === false 
+                            $target = empty($valueLevel2['target']) || !isset($valueLevel2['target']) 
                                       ? "" : $valueLevel2['target'];
                         }
                     }
@@ -1101,7 +1101,7 @@ $string = '<typeNode>
                         'base_price' => $productBasePrice,
                         'final_price' => $productFinalPrice,
                         'image' => $productImagePath, 
-                        'actionType' => isset($valueLevel2['actionType']) === false || empty($valueLevel2['actionType'])
+                        'actionType' => !isset($valueLevel2['actionType']) || empty($valueLevel2['actionType'])
                                         ? "" : $valueLevel2['actionType'],
                         'target' => $target,
                     ];
