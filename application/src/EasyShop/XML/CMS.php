@@ -208,12 +208,9 @@ class CMS
            $string ='<categorySubSlug>'.$value.'</categorySubSlug>';
         }  
         if($nodeName == "boxContent") {
-            $string ='
-
-
-            <boxContent>
+        $string ='<boxContent>
             <value>'.$value.'</value>
-        <type>'.$type.'</type>
+            <type>'.$type.'</type>
             <target>'.$coordinate.'</target>
             <actionType>'.$target.'</actionType>
         </boxContent>';

@@ -120,4 +120,12 @@
             <actionType>show product details</actionType>
         </boxContent>
     </section>
+
+    <actionLists>
+        <type>show product details</type>
+        <type>go to site</type>
+        <type>go to page</type>
+        <type>show product list </type>
+    </actionLists>
+
 </map>
