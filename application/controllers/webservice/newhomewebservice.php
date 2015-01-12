@@ -60,10 +60,10 @@ class NewHomeWebService extends MY_Controller
                                                                               true);
 
             if(!$this->isAuthenticated) {
-                return json_encode("error");
+                exit(json_encode("error"));
             }            
-
         }
+
     }
 
     /**
