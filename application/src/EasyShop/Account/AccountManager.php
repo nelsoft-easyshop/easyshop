@@ -159,25 +159,34 @@ class AccountManager
             if($member){
                 $memberUsername =  $member->getUsername();       
                 $encryptedPassword = $member->getPassword();
-                
                 if(!$this->bcryptEncoder->isPasswordValid($encryptedPassword, $validatedPassword)) {
                     if(!$this->authenticateByReverseHashing($memberUsername, $validatedPassword, $member)){
                         $member = null;   
                     }
                 }       
-
             }
             
             if($member){
-                unset($errors[0]);    
-                if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
-                    $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
-                    $member = NULL;    
+                unset($errors[0]);  
+                $member->setFailedLoginCount(0);
+                if((bool)$member->getIsBanned() && $member->getBanType()->getIdBanType() !== 0){
+                    $errors[] = [
+                        'login' => 'Account Banned',
+                        'id' => $member->getIdMember(),
+                        'message' => $member->getBanType()->getMessage(),
+                    ];
+                    $member = null;  
+                }
+                else if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
+                    $errors[] = [
+                        'login' => 'Account Deactivated',
+                        'id' => $member->getIdMember(),
+                    ];
+                    $member = null;    
                 }
                 else {
                     $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
                     $member->setLastLoginIp($this->httpRequest->getClientIp());
-                    $member->setFailedLoginCount(0);
                     $member->setLoginCount($member->getLoginCount() + 1);
                     $this->em->flush(); 
                     $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
