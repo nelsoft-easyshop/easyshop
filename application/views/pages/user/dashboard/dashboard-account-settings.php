@@ -112,7 +112,6 @@
                                 <input type="password" id="confirmPassword" name="confirmPassword" class="text-info" placeholder="Confirm your new password here">
                             </div>
                         </div>
-                        <input id="username" name="wsx" type="hidden" value="<?php echo $member->getUserName(); ?>"/>
                         <div class="form-group">
                     
                             <div class="col-sm-4" style='text-align:center;'>
