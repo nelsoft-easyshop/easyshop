@@ -273,16 +273,14 @@ class Register extends MY_Controller
     public function changepass()
     {
         $result = false;
-        $username = $this->input->post('wsx');
-        $cur_password = $this->input->post('cur_password');
+        $memberObj = $this->serviceContainer['entity_manager']
+                          ->getRepository('EasyShop\Entities\EsMember')   
+                          ->find($this->session->userdata('member_id'));
+        $currentPassword = $this->input->post('currentPassword');
         $password = $this->input->post('password');         
 
-        $dataval = [
-            'login_username' => $username, 
-            'login_password' => $cur_password
-        ];
         $this->accountManager = $this->serviceContainer['account_manager'];            
-        $row = $this->accountManager->authenticateMember($username, $cur_password);
+        $row = $this->accountManager->authenticateMember($memberObj->getUserName(), $currentPassword);
 
         if (!empty($row["member"])){
             $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);
