@@ -45,10 +45,12 @@ class MobileWebService extends MY_Controller
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getMobileXMLfile().".xml"; 
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
         $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");
-        if($this->input->get()) {
-            $this->authentication($this->input->get(), $this->input->get('hash'));
-        }      
-
+        $this->authenticateRequest = $this->serviceContainer['webservice_manager'];        
+        if($this->input->get()) {        
+            $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
+                                                                              $this->input->get('hash'),
+                                                                              true);
+        }  
     }
 
     /**
@@ -228,7 +230,7 @@ class MobileWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $map->section[$index]->name = $this->input->get("name") == "" ? $map->section[$index]->name : $this->input->get("name");
-        $map->section[$index]->bgcolor = $this->input->get("color") == ""  ? $map->section[$index]->bgcolor : $this->input->get("color");
+        $map->section[$index]->bgcolor = $this->input->get("bgcolor") == ""  ? $map->section[$index]->bgcolor : $this->input->get("bgcolor");
         $map->section[$index]->type = $this->input->get("type") == ""  ? $map->section[$index]->type : $this->input->get("type");
 
         if($map->asXML($this->file)) {
@@ -266,7 +268,11 @@ class MobileWebService extends MY_Controller
                 ->set_output( $this->slugerrorjson);
         }
         else {
-            $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/section['.$index.']/boxContent[last()]');                
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,
+                                                            $string,
+                                                            '/map/section['.$index.']/boxContent[last()]',
+                                                            "\t\t",
+                                                            "\n");                
             if($addXml === TRUE) {
                 return $this->output
                     ->set_content_type('application/json')
