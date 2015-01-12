@@ -67,8 +67,9 @@ class EsCatRepository extends EntityRepository
         ", $rsm);
         $query->setParameter('category_id', $categoryId); 
         $results = $query->getArrayResult(); 
-
-        $resultIds = array_column($results, 'original_category_id');
+        foreach ($results as $value) {
+            $resultIds[] = $value['original_category_id'];
+        }
         $resultIds[] = $categoryId;
 
         return $resultIds;
