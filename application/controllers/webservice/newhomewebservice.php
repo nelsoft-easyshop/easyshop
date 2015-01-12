@@ -60,7 +60,7 @@ class NewHomeWebService extends MY_Controller
                                                                               true);
 
             if(!$this->isAuthenticated) {
-                exit(json_encode("error"));
+                throw new Exception("Unauthorized Request.");
             }            
         }
 
