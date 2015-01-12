@@ -79,7 +79,7 @@ class EsCatRepository extends EntityRepository
      * @param  integer $categoryId
      * @return array
      */
-    public function getParentCategoryRecursive($categoryId = 1)
+    public function getParentCategoryRecursive($categoryId = \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID)
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -299,7 +299,37 @@ class EsCatRepository extends EntityRepository
                                 ->getQuery()
                                 ->getResult();
         return $parentCategories;
-   }
+    }
+
+    /**
+     * Get parent category using nested set table
+     * @param  integer $categoryId
+     * @return array
+     */
+    public function getParentWithNestedSet($categoryId = \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID)
+    {
+        $this->em =  $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('original_category_id', 'original_category_id');
+        $query = $this->em->createNativeQuery("
+            SELECT 
+                t1.original_category_id
+            FROM
+                es_category_nested_set t0
+                    LEFT JOIN
+                es_category_nested_set t1 ON t1.left < t0.left
+                    AND t1.right > t0.right
+            WHERE
+                t0.original_category_id = :category_id
+                    AND t1.original_category_id != :root_category
+        ", $rsm);
+        $query->setParameter('category_id', $categoryId); 
+        $query->setParameter('root_category', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID); 
+        $results = $query->getArrayResult(); 
+        $resultIds = array_column($results, 'original_category_id'); 
+
+        return $resultIds;
+   } 
 
 }
 
