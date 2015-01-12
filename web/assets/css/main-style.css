@@ -74,8 +74,7 @@ textarea {
     padding-left: 15px;
     padding-right: 15px;
     padding-top: 15px;
-    /* Set width to your desired site width */
-   width: 1170px;
+    width: 1170px;
 }
 
 .ui-form-control{
@@ -1316,6 +1315,7 @@ td.td-view.p-view2.color-default{
     text-transform: uppercase;
     border-radius: 4px;
     background: #565656;
+    border: solid #565656 1px;
     color: #ffffff;
     font-weight: bold;
     width: 120px;
@@ -1324,8 +1324,11 @@ td.td-view.p-view2.color-default{
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
 }
-.btn-filter:hover{
+.btn-filter:hover,
+.btn-filter:active,
+.btn-filter:focus{
     background: #272626;
+    border: solid #272626 1px;
 }
 
 .a-filter, .a-category{
