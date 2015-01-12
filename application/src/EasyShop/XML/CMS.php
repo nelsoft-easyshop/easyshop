@@ -208,12 +208,9 @@ class CMS
            $string ='<categorySubSlug>'.$value.'</categorySubSlug>';
         }  
         if($nodeName == "boxContent") {
-            $string ='
-
-
-            <boxContent>
+        $string ='<boxContent>
             <value>'.$value.'</value>
-        <type>'.$type.'</type>
+            <type>'.$type.'</type>
             <target>'.$coordinate.'</target>
             <actionType>'.$target.'</actionType>
         </boxContent>';
@@ -1021,7 +1018,7 @@ $string = '<typeNode>
         $homeXmlFile = $this->xmlResourceGetter->getMobileXMLfile();
         $pageContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile); 
 
-        if(isset($pageContent['mainSlide'][0]) === false){
+        if(!isset($pageContent['mainSlide'][0])){
             $temp = $pageContent['mainSlide'];
             $pageContent['mainSlide'] = [];
             $pageContent['mainSlide'][] = $temp;
@@ -1032,9 +1029,11 @@ $string = '<typeNode>
         foreach ($pageContent['mainSlide'] as $key => $value) {
             $bannerImages[] = [
                 'name' => '0',
-                'image' => $value['value'],
-                'target' => $value['imagemap']['target'],
-                'actionType' => $value['actionType'],
+                'image' => isset($value['value']) ? $value['value'] : "", 
+                'target' => !isset($value['imagemap']['target']) || empty($value['imagemap']['target'])
+                            ? "" : $value['imagemap']['target'],
+                'actionType' => !isset($value['actionType']) || empty($value['actionType'])
+                                ? "" : $value['actionType'],
             ];
         }
 
@@ -1087,7 +1086,8 @@ $string = '<typeNode>
                             $target = $baseUrl.'mobile/product/item/'.$productSlug;
                         }
                         else{
-                            $target = empty($valueLevel2['target']) ? "" : $valueLevel2['target'];
+                            $target = empty($valueLevel2['target']) || !isset($valueLevel2['target']) 
+                                      ? "" : $valueLevel2['target'];
                         }
                     }
 
@@ -1097,8 +1097,9 @@ $string = '<typeNode>
                         'discount_percentage' => $productDiscount,
                         'base_price' => $productBasePrice,
                         'final_price' => $productFinalPrice,
-                        'image' => $productImagePath,
-                        'actionType' => $valueLevel2['actionType'],
+                        'image' => $productImagePath, 
+                        'actionType' => !isset($valueLevel2['actionType']) || empty($valueLevel2['actionType'])
+                                        ? "" : $valueLevel2['actionType'],
                         'target' => $target,
                     ];
                 }
