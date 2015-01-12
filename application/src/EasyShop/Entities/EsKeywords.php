@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsKeywords
 {
-    const SUGGESTION_LIMIT = 10;
+    const SUGGESTION_LIMIT = 12;
 
     /**
      * @var integer
