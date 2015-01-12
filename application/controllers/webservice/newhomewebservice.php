@@ -913,7 +913,7 @@ class NewHomeWebService extends MY_Controller
         $index = $index === 0 ? 1 : $index + 1;  
 
         $this->config->load('image_dimensions', true);        
-        $imageDimensionsConfig = $this->config->config['image_dimensions'];        f
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];        
         $defaultTemplateSliderCount = count($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);   
         $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
                                                         $string,'/map/sliderSection/slide[last()]', 
