@@ -85,7 +85,8 @@ class CartManager
             $seller = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                ->getSeller($productId);
         }       
-        if((int)$seller->getIsActive() !== 1 || (int)$seller->getIsBanned() === 1){
+        if((int)$seller->getIsActive() !== \EasyShop\Entities\EsMember::DEFAULT_ACTIVE || 
+           (int)$seller->getIsBanned() !== \EasyShop\Entities\EsMember::NOT_BANNED){
             return false;
         }
         
