@@ -155,11 +155,11 @@ class product_search extends MY_Controller {
             'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
         ];
 
-       
+
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/search/product_search_by_searchbox',$response);
-        $this->load->view('templates/footer'); 
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/search/product-search-new',$response);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
     
     /**
