@@ -1073,28 +1073,30 @@ class EsProductRepository extends EntityRepository
      * @param  integer $limit
      * @return object
      */
-    public function getRecommendedProducts($productId, $categoryId, $limit = null)
+    public function getRecommendedProducts($productIds, $categoryIds, $limit = null)
     {
         $this->em =  $this->_em;
-        $queryBuilder = $this->em->createQueryBuilder()
-                                 ->select('p')
-                                 ->from('EasyShop\Entities\EsProduct','p')
-                                 ->where('p.cat = :category')
-                                 ->andWhere("p.idProduct != :productId")
+        $queryBuilder = $this->em->createQueryBuilder();
+        $qbResult = $queryBuilder->select('p')
+                                 ->from('EasyShop\Entities\EsProduct','p') 
+                                 ->where(
+                                        $queryBuilder->expr()->in('p.cat', $categoryIds)
+                                    ) 
+                                 ->andWhere(
+                                        $queryBuilder->expr()->notIn('p.idProduct', $productIds)
+                                    ) 
                                  ->andWhere("p.isDraft = :isDraft")
                                  ->andWhere("p.isDelete = :isDelete")
-                                 ->setParameter('productId',$productId)
-                                 ->setParameter('category',$categoryId)
-                                 ->setParameter('isDraft',0)
-                                 ->setParameter('isDelete',0)
+                                 ->setParameter('isDraft', EsProduct::ACTIVE)
+                                 ->setParameter('isDelete', EsProduct::ACTIVE)
                                  ->orderBy('p.clickcount', 'DESC')
                                  ->getQuery();;
 
         if($limit){
-            $queryBuilder->setMaxResults($limit);
+            $qbResult->setMaxResults($limit);
         }
  
-        $result = $queryBuilder->getResult(); 
+        $result = $qbResult->getResult(); 
 
         return $result;
     }
