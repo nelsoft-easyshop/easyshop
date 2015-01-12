@@ -1068,8 +1068,8 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get product reccomended based on category
-     * @param  integer $productId
-     * @param  integer $categoryId
+     * @param  integer $productIds
+     * @param  integer $categoryIds
      * @param  integer $limit
      * @return object
      */
