@@ -325,8 +325,11 @@ class EsCatRepository extends EntityRepository
         ", $rsm);
         $query->setParameter('category_id', $categoryId); 
         $query->setParameter('root_category', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID); 
-        $results = $query->getArrayResult(); 
-        $resultIds = array_column($results, 'original_category_id'); 
+        $results = $query->getArrayResult();
+        $resultIds = [];
+        foreach ($results as $value) {
+            $resultIds[] = $value['original_category_id'];
+        }
 
         return $resultIds;
    } 
