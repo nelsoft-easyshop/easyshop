@@ -318,9 +318,14 @@ class EsMember
 
     
     /**
-     *  @var string
+     *  @var boolean
      */
     const DEFAULT_ACTIVE = 1;
+
+    /**
+     * @var boolean
+     */
+    const NOT_BANNED = 0;    
 
     /**
      * @var \Doctrine\Common\Collections\Collection
