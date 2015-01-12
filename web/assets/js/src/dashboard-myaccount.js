@@ -339,6 +339,7 @@
     $("#formPersonalInfo").on('click','#savePersonalInfo',function (e) {
         $("#errorIndicatorMobileNumber").css("display","none");        
         $("#errorIndicatorBirthday").css("display","none");        
+        $("#errorIndicatorGender").css("display","none");        
         $("#savePersonalInfo").text("Saving...");
         e.preventDefault();
 
@@ -364,10 +365,14 @@
                         if(obj.error.dateofbirth) {
                             $("#errorIndicatorBirthday").css("display","block");
                             $("#errorTextBirthday").text(obj.error.dateofbirth );                            
-                        }              
+                        }     
+                        if(obj.error.gender) {
+                            $("#errorIndicatorGender").css("display","block");
+                            $("#errorTextGender").text(obj.error.gender );                            
+                        }                                   
                     }
                     else {
-                        $("#errorIndicatorMobileNumber").css("display","none");
+                        $("#errorIndicatorMobileNumber, #errorIndicatorBirthday, #errorIndicatorGender").css("display","none");
                         
                     }
             },
