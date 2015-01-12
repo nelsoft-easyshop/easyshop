@@ -309,11 +309,6 @@ function ItemListAjax(CatDiv,page)
           $( ".panel-list-item" ).hide();
           $( ".panel-item" ).fadeIn( "fast" );
         });
-    
-        $('.search-bar-input').keyup(function(){
-           var string = $(this).val();
-           $('.search-bar-input').val(string);
-        });
         
         $('.col-categories').click(function (e) {
             $('.categories-modal').modal();
