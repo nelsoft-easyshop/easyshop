@@ -24,30 +24,49 @@
                                 <ul class="list-unstyled list-category">
                                     <a href="#" class="color-default tab_categories">
                                         <li>
-                                            Watches (75)
+                                            Men's Clothing (75)
                                         </li>
                                     </a>
                                     <a href="#" class="color-default tab_categories">
                                         <li>
-                                            Diamonds &amp; Gems (24)
+                                            Women's Clothing &amp; Gems (24)
                                         </li>
                                     </a>
                                     <a  href="#" class="color-default tab_categories">
                                         <li>
-                                            Watch, Parts, Tools &amp; Guides (23)
+                                            Men's Shoes (23)
                                         </li>
                                     </a>
                                     <a  href="#" class="color-default tab_categories">
                                         <li>
-                                            Engagement &amp; Wedding Jewellery (54)
+                                            Women's Clothing (54)
                                         </li>
                                     </a>
-                                    <a href="#" class="color-default tab_categories">
+                                    <a  href="#" class="color-default tab_categories">
                                         <li>
-                                            Fashion Jewellery (103)
+                                            Men's Accessories (54)
                                         </li>
                                     </a>
-                                    
+                                    <a  href="#" class="color-default tab_categories">
+                                        <li>
+                                            Women's Accessories (54)
+                                        </li>
+                                    </a>
+                                    <a  href="#" class="color-default tab_categories">
+                                        <li>
+                                            Babies Clothes (54)
+                                        </li>
+                                    </a>
+                                    <a  href="#" class="color-default tab_categories">
+                                        <li>
+                                            Unisex Accessories (54)
+                                        </li>
+                                    </a>
+                                    <a  href="#" class="color-default tab_categories">
+                                        <li>
+                                            Kid's Clothing (54)
+                                        </li>
+                                    </a>
                                 </ul>
                             </div>
                         </div>
