@@ -1032,9 +1032,11 @@ $string = '<typeNode>
         foreach ($pageContent['mainSlide'] as $key => $value) {
             $bannerImages[] = [
                 'name' => '0',
-                'image' => $value['value'],
-                'target' => $value['imagemap']['target'],
-                'actionType' => $value['actionType'],
+                'image' => isset($value['value']) ? $value['value'] : "", 
+                'target' => isset($value['imagemap']['target']) === false || empty($value['imagemap']['target'])
+                            ? "" : $value['imagemap']['target'],
+                'actionType' => isset($value['actionType']) === false || empty($value['actionType'])
+                                ? "" : $value['actionType'],
             ];
         }
 
@@ -1087,7 +1089,8 @@ $string = '<typeNode>
                             $target = $baseUrl.'mobile/product/item/'.$productSlug;
                         }
                         else{
-                            $target = empty($valueLevel2['target']) ? "" : $valueLevel2['target'];
+                            $target = empty($valueLevel2['target']) || isset($valueLevel2['target']) === false 
+                                      ? "" : $valueLevel2['target'];
                         }
                     }
 
@@ -1097,8 +1100,9 @@ $string = '<typeNode>
                         'discount_percentage' => $productDiscount,
                         'base_price' => $productBasePrice,
                         'final_price' => $productFinalPrice,
-                        'image' => $productImagePath,
-                        'actionType' => $valueLevel2['actionType'],
+                        'image' => $productImagePath, 
+                        'actionType' => isset($valueLevel2['actionType']) === false || empty($valueLevel2['actionType'])
+                                        ? "" : $valueLevel2['actionType'],
                         'target' => $target,
                     ];
                 }
