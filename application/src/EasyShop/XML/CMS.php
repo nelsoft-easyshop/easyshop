@@ -5,6 +5,13 @@ use EasyShop\Entities\EsProductImage as EsProductImage;
 use EasyShop\Entities\EsBrand as EsBrand;
 class CMS
 {
+
+    const AT_SHOW_PRODUCT_DETAILS = "show product details";
+
+    const AT_SHOW_PRODUCT_LIST = "show product list";
+
+    const NODE_TYPE_PRODUCT = "product";
+
     /**
      * The xml resource getter
      *
@@ -1022,31 +1029,29 @@ $string = '<typeNode>
         // banner images
         $bannerImages = [];
         foreach ($pageContent['mainSlide'] as $key => $value) {
-            $bannerImages[] = array(
-                            'name' => '0',
-                            'image' => $value['value'],
-                            'target' => $value['imagemap']['target'],
-                            'actionType' => $value['actionType'],
-                        );
+            $bannerImages[] = [
+                'name' => '0',
+                'image' => $value['value'],
+                'target' => $value['imagemap']['target'],
+                'actionType' => $value['actionType'],
+            ];
         }
-        $sectionImages = array(
-                        'name' => '',
-                        'bgcolor' => '',
-                        'type' => 'promo',
-                        'data' => $bannerImages,
-                    ); 
 
-        $productSections[] = $sectionImages; 
-        // product sections 
-        foreach ($pageContent['section'] as $key => $value) {
-            $productArray = [];
-            // loop products
-        
-            foreach ($value['boxContent'] as $keyLevel2 => $valueLevel2) {
+        $sectionImages = [
+            'name' => '',
+            'bgcolor' => '',
+            'type' => 'promo',
+            'data' => $bannerImages,
+        ]; 
 
-                $slug = (isset($valueLevel2['value'])) ? $valueLevel2['value'] : ""; 
+        $productSections[] = $sectionImages;
+        foreach ($pageContent['section'] as $value) {
+            $productArray = []; 
+            foreach ($value['boxContent'] as $valueLevel2) {
+
+                $slug = isset($valueLevel2['value']) ? $valueLevel2['value'] : ""; 
                 $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findOneBy(['slug' => $slug]);
+                                    ->findOneBy(['slug' => $slug]);
 
                 $productName = "";
                 $productSlug = "";
@@ -1056,43 +1061,50 @@ $string = '<typeNode>
                 $productImagePath = "";
                 $target = "";
 
-                if($product){
-                    $product = $this->productManager->getProductDetails($product->getIdProduct());
+                if((string) $valueLevel2['type'] === self::NODE_TYPE_PRODUCT){
+                    if($product){
+                        $product = $this->productManager->getProductDetails($product->getIdProduct());
 
-                    $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                      ->getDefaultImage($product->getIdProduct());
-        
-                    $directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-                    $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+                        $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                          ->getDefaultImage($product->getIdProduct());
+            
+                        $directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                        $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
-                    if($productImage != NULL){
-                        $directory = $productImage->getDirectory();
-                        $imageFileName = $productImage->getFilename();
+                        if($productImage != null){
+                            $directory = $productImage->getDirectory();
+                            $imageFileName = $productImage->getFilename();
+                        }
+
+                        $productName = utf8_encode($product->getName());
+                        $productSlug = $product->getSlug();
+                        $productDiscount = floatval($product->getDiscountPercentage());
+                        $productBasePrice = floatval($product->getPrice());
+                        $productFinalPrice = floatval($product->getFinalPrice());
+                        $productImagePath = $directory.$imageFileName;
+                        if((string) $valueLevel2['actionType'] === self::AT_SHOW_PRODUCT_DETAILS){
+                            $target = $baseUrl.'mobile/product/item/'.$productSlug;
+                        }
+                        else{
+                            $target = empty($valueLevel2['target']) ? "" : $valueLevel2['target'];
+                        }
                     }
 
-                    $productName = utf8_encode($product->getName());
-                    $productSlug = $product->getSlug();
-                    $productDiscount = floatval($product->getDiscountPercentage());
-                    $productBasePrice = floatval($product->getPrice());
-                    $productFinalPrice = floatval($product->getFinalPrice());
-                    $productImagePath = $directory.$imageFileName;
-                    $target = $baseUrl.'mobile/product/item/'.$productSlug;
+                    $productArray[] = [
+                        'name' => $productName,
+                        'slug' => $productSlug,
+                        'discount_percentage' => $productDiscount,
+                        'base_price' => $productBasePrice,
+                        'final_price' => $productFinalPrice,
+                        'image' => $productImagePath,
+                        'actionType' => $valueLevel2['actionType'],
+                        'target' => $target,
+                    ];
                 }
-
-                $productArray[] = array(
-                                    'name' => $productName,
-                                    'slug' => $productSlug,
-                                    'discount_percentage' => $productDiscount,
-                                    'base_price' => $productBasePrice,
-                                    'final_price' => $productFinalPrice,
-                                    'image' => $productImagePath,
-                                    'actionType' => $valueLevel2['actionType'],
-                                    'target' => $target,
-                                );
             }
 
             $categoryObject = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                ->findOneBy(['slug' => $value['name']]);
+                                       ->findOneBy(['slug' => $value['name']]);
 
             $categoryName = "";
             $categoryIcon = $baseUrl.EsBrand::IMAGE_DIRECTORY.EsBrand::IMAGE_UNAVAILABLE_FILE;
@@ -1101,36 +1113,36 @@ $string = '<typeNode>
                 $categorySlug = $categoryObject->getSlug();
 
                 $categoryIconObject = $this->em->getRepository('EasyShop\Entities\EsCatImg')
-                                ->findOneBy(['idCat' => $categoryObject->getIdCat()]);
+                                               ->findOneBy(['idCat' => $categoryObject->getIdCat()]);
 
                 if($categoryIconObject){
                     $categoryIcon = $baseUrl.'assets/'.$categoryIconObject->getPath();
                 }
 
-                $productArray[] = array(
-                                        'name' => "",
-                                        'slug' => "",
-                                        'discount_percentage' => 0,
-                                        'base_price' => 0,
-                                        'final_price' => 0,
-                                        'image' => "",
-                                        'actionType' => 'show product list',
-                                        'target' => $baseUrl.'mobile/category/getCategoriesProduct?slug='.$categorySlug,
-                                    );
+                $productArray[] = [
+                    'name' => "",
+                    'slug' => "",
+                    'discount_percentage' => 0,
+                    'base_price' => 0,
+                    'final_price' => 0,
+                    'image' => "",
+                    'actionType' => self::AT_SHOW_PRODUCT_LIST,
+                    'target' => $baseUrl.'mobile/category/getCategoriesProduct?slug='.$categorySlug,
+                ];
             }
 
-            $productSections[] = array(
-                                'name' => $categoryName,
-                                'bgcolor' => $value['bgcolor'],
-                                'type' => $value['type'],
-                                'icon' => $categoryIcon,
-                                'data' => $productArray,
-                            );
+            $productSections[] = [
+                'name' => $categoryName,
+                'bgcolor' => $value['bgcolor'],
+                'type' => $value['type'],
+                'icon' => $categoryIcon,
+                'data' => $productArray,
+            ];
         }
 
-        $display = array( 
-                    'section' => $productSections,
-                );
+        $display = [
+            'section' => $productSections,
+        ];
 
         return $display;
     }
