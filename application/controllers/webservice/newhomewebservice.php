@@ -1292,7 +1292,7 @@ class NewHomeWebService extends MY_Controller
 
         $this->config->load('image_dimensions', true);
         $imageDimensionsConfig = $this->config->config['image_dimensions'];
-        $imageDimensions = $imageDimensionsConfig[$type];
+        $imageDimensions = $imageDimensionsConfig["cmsImagesSizes"][$type];
 
         if($type === "mainSlider") {
             $defaultTemplateCount = count($imageDimensions[$template]);
