@@ -127,7 +127,7 @@
             loadingimg.show(); 
             $.ajax({
                 type: 'post',
-                data: {wsx:username, cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
+                data: {cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
                 url: "/register/changepass",
                 success: function(data) {
                     actionGroupChangePass.show();
@@ -136,7 +136,6 @@
                     if(obj.result === "success") {      
                        errorContainer.hide();
                        succcessContainer.fadeIn();
-                       
                     }
                     else {
                         errorContainer.html(obj.error);
