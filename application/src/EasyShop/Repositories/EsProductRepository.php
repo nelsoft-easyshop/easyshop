@@ -436,7 +436,8 @@ class EsProductRepository extends EntityRepository
                                                     'WITH','b.idBrand = p.brand')
                                 ->where('p.isDraft = 0')
                                 ->andWhere('p.isDelete = 0')
-                                ->andWhere('m.isActive = 1');
+                                ->andWhere('m.isActive = 1')
+                                ->andWhere('m.isBanned = 0');
  
         if(isset($filterArray['condition']) && $filterArray['condition'][0]){ 
             $qbResult = $qbResult->andWhere(

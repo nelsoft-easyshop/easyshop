@@ -317,7 +317,7 @@ class EsMember
     const DEFAULT_IMG_BANNER = 'banner.png';
 
     /**
-     *  @var string
+     *  @var boolean
      */
     const DEFAULT_IMG_AVATAR = 'usersize.png';    
 
@@ -330,6 +330,11 @@ class EsMember
      *  @var int
      */
     const DEFAULT_AVATAR_VISIBILITY = 0;       
+
+    /**
+     * @var boolean
+     */
+    const NOT_BANNED = 0;    
 
     /**
      * @var \Doctrine\Common\Collections\Collection
