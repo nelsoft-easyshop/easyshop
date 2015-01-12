@@ -268,6 +268,15 @@ class EsMember
      */
     private $storeColor = '1';
     
+      /**
+     * @var \EasyShop\Entities\EsBanType
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsBanType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ban_type", referencedColumnName="id_ban_type")
+     * })
+     */
+    private $banType = '0';
     
     /**
      *
@@ -1155,7 +1164,7 @@ class EsMember
      *
      * @param EasyShop\Entities\EsStoreColor $storeColor
      */
-    public function setStoreColor($storeColor)
+    public function setBanType($storeColor)
     {
         $this->storeColor = $storeColor;
     }
@@ -1169,6 +1178,25 @@ class EsMember
     {
         return $this->storeColor;
     }    
+    
+    /**
+     * Set banType
+     *
+     * @param EasyShop\Entities\EsBanType $banType
+     */
+    public function setBanType($banType)
+    {
+        $this->banType = $banType;
+    }
 
+    /**
+     * Get banType
+     *
+     * @return EasyShop\Entities\EsBanType 
+     */
+    public function getBanType()
+    {
+        return $this->banType;
+    }    
 
 }
