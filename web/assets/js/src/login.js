@@ -93,9 +93,12 @@
                         }
                         else{
                             if(data.o_success <= 0){
-                                
                                 $("#login_error").empty();
-                                if(data["o_message"] == "Account Deactivated") {
+                                if(data['o_message'] === 'Account Banned'){
+                                    var alertMessage = data['errors'][0]['message'] + "Thank you for your patience.";
+                                    alert(escapeHtml(alertMessage));
+                                }
+                                else if(data["o_message"] == "Account Deactivated") {
                                     $("#deactivatedAccountPrompt").css("display","block");
                                     $("#deactivatedAccountPrompt").find("a").attr("data-id",data["errors"][0]["id"]);
                                 }
