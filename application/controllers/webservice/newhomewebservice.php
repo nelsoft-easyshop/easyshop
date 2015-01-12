@@ -59,6 +59,7 @@ class NewHomeWebService extends MY_Controller
                                                                               $this->input->get('hash'),
                                                                               true);
         }
+        
         if(!$this->isAuthenticated) {
                 redirect("/","refresh");
         }
