@@ -53,6 +53,13 @@ class Memberpage extends MY_Controller
     public $transactionRowCount = 10;
 
     /**
+     * Allowed values for gender field
+     *
+     * @var array
+     */
+    private $gender = ["M","F"];
+
+    /**
      *  Class Constructor
      */
     public function __construct()
@@ -270,7 +277,7 @@ class Memberpage extends MY_Controller
         if($form->isValid()){
             $formData = $form->getData();
             $validFullname = (string)$formData['fullname'];
-            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
+            $validGender = strlen($formData['gender']) === 0 || !in_array(strtoupper($formData['gender']), $this->gender) ? EasyShop\Entities\EsMember::DEFAULT_GENDER : strtoupper($formData['gender']);
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
             $um->setUser($memberId)
