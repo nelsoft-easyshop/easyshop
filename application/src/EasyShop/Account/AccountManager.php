@@ -167,7 +167,8 @@ class AccountManager
             }
             
             if($member){
-                unset($errors[0]);    
+                unset($errors[0]);  
+                $member->setFailedLoginCount(0);
                 if((bool)$member->getIsBanned() && $member->getBanType()->getIdBanType() !== 0){
                     $errors[] = [
                         'login' => 'Account Banned',
@@ -186,7 +187,6 @@ class AccountManager
                 else {
                     $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
                     $member->setLastLoginIp($this->httpRequest->getClientIp());
-                    $member->setFailedLoginCount(0);
                     $member->setLoginCount($member->getLoginCount() + 1);
                     $this->em->flush(); 
                     $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
