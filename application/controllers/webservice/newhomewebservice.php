@@ -58,7 +58,12 @@ class NewHomeWebService extends MY_Controller
             $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
                                                                               $this->input->get('hash'),
                                                                               true);
-        }    
+
+            if(!$this->isAuthenticated) {
+                throw new Exception("Unauthorized Request.");
+            }            
+        }
+
     }
 
     /**
@@ -1261,19 +1266,23 @@ class NewHomeWebService extends MY_Controller
      */
     public function syncTempHomeFiles()
     {
-        $map = simplexml_load_file($this->file);
+        if($this->isAuthenticated) {
+            $map = simplexml_load_file($this->file);
 
-        foreach ($map->sliderSection->slide as $slider) {
-            $sliders[] = $slider;
+            foreach ($map->sliderSection->slide as $slider) {
+                $sliders[] = $slider;
+            }
+
+            $this->xmlCmsService->removeXmlNode($this->tempHomefile, "tempHomeSlider");
+            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile, $this->file, $sliders);  
+             
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);                        
         }
-
-        $this->xmlCmsService->removeXmlNode($this->tempHomefile, "tempHomeSlider");
-        $this->xmlCmsService->syncTempSliderValues($this->tempHomefile, $this->file, $sliders);  
-         
-        return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);                        
-
+        else {
+            return json_encode("error");
+        }        
           
     }
 
