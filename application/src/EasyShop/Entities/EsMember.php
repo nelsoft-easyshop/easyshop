@@ -268,6 +268,22 @@ class EsMember
      */
     private $storeColor = '1';
     
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_banned", type="boolean", nullable=false)
+     */
+    private $isBanned = '0';   
+    
+    /**
+     * @var \EasyShop\Entities\EsBanType
+     *
+     * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsBanType")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="ban_type", referencedColumnName="id_ban_type")
+     * })
+     */
+    private $banType = '0';
     
     /**
      *
@@ -1169,6 +1185,46 @@ class EsMember
     {
         return $this->storeColor;
     }    
+    
+    
+    /**
+     * Set isBanned
+     *
+     * @param boolean
+     */
+    public function setIsBanned($isBanned)
+    {
+        $this->isBanned = $isBanned;
+    }
 
+    /**
+     * Get banType
+     *
+     * @return boolean
+     */
+    public function getIsBanned()
+    {
+        return $this->isBanned;
+    }    
+    
+    /**
+     * Set banType
+     *
+     * @param EasyShop\Entities\EsBanType $banType
+     */
+    public function setBanType($banType)
+    {
+        $this->banType = $banType;
+    }
+
+    /**
+     * Get banType
+     *
+     * @return EasyShop\Entities\EsBanType 
+     */
+    public function getBanType()
+    {
+        return $this->banType;
+    }    
 
 }
