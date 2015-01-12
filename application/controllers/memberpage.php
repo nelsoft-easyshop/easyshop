@@ -252,12 +252,12 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $rules = $formValidation->getRules('personal_info');
-        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                     ->setMethod('POST')
                     ->add('fullname', 'text')
-                    ->add('gender', 'text')
-                    ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
-                    ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                    ->add('gender', 'text', ['constraints' => $rules['gender']])
+                    ->add('dateofbirth', 'text', ['constraints' => $rules['dateofbirth']])
+                    ->add('mobile', 'text', ['constraints' => $rules['mobile']])
                     ->getForm();
 
         $form->submit([
@@ -270,7 +270,7 @@ class Memberpage extends MY_Controller
         if($form->isValid()){
             $formData = $form->getData();
             $validFullname = (string)$formData['fullname'];
-            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
+            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : strtoupper($formData['gender']);
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
             $um->setUser($memberId)
