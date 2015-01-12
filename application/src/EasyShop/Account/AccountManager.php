@@ -159,20 +159,29 @@ class AccountManager
             if($member){
                 $memberUsername =  $member->getUsername();       
                 $encryptedPassword = $member->getPassword();
-                
                 if(!$this->bcryptEncoder->isPasswordValid($encryptedPassword, $validatedPassword)) {
                     if(!$this->authenticateByReverseHashing($memberUsername, $validatedPassword, $member)){
                         $member = null;   
                     }
                 }       
-
             }
             
             if($member){
                 unset($errors[0]);    
-                if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
-                    $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
-                    $member = NULL;    
+                if((bool)$member->getIsBanned() && $member->getBanType()->getIdBanType() !== 0){
+                    $errors[] = [
+                        'login' => 'Account Banned',
+                        'id' => $member->getIdMember(),
+                        'message' => $member->getBanType()->getMessage(),
+                    ];
+                    $member = null;  
+                }
+                else if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
+                    $errors[] = [
+                        'login' => 'Account Deactivated',
+                        'id' => $member->getIdMember(),
+                    ];
+                    $member = null;    
                 }
                 else {
                     $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
