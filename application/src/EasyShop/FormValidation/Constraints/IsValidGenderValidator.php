@@ -18,7 +18,7 @@ class IsValidGenderValidator extends ConstraintValidator
         if(!in_array(strtoupper($value), $this->gender)){
             $this->context->addViolation(
                 $constraint->message,
-                array('%string%' => $value)
+                ['%string%' => $value]
             );
         }
     }
