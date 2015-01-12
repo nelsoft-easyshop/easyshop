@@ -276,11 +276,11 @@ class Register extends MY_Controller
         $memberObj = $this->serviceContainer['entity_manager']
                           ->getRepository('EasyShop\Entities\EsMember')   
                           ->find($this->session->userdata('member_id'));
-        $cur_password = $this->input->post('currentPassword');
+        $currentPassword = $this->input->post('currentPassword');
         $password = $this->input->post('password');         
-        
+
         $this->accountManager = $this->serviceContainer['account_manager'];            
-        $row = $this->accountManager->authenticateMember($memberObj->getUserName(), $cur_password);
+        $row = $this->accountManager->authenticateMember($memberObj->getUserName(), $currentPassword);
 
         if (!empty($row["member"])){
             $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);
