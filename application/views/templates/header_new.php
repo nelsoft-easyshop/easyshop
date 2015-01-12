@@ -16,6 +16,8 @@
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
+    <link type="text/css" href='/assets/css/normalize.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+
     <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
@@ -137,15 +139,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <?php if(isset($logged_in) && $logged_in): ?>
         <div class="vendor-log-in-wrapper">
             <div class="vendor-login-con user-login">
-                <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                <?php if((int)$unreadMessageCount !== 0) : ?>
                     <span id="unread-messages-count" class="msg_countr message-count-con">
-                <?=$msgs['unread_msgs'];?>
+                <?php echo $unreadMessageCount ;?>
                 </span>
                 <?php endif;?>
+
                 <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg"> 
-                <a href="/<?php echo html_escape($user['slug'])?>" class="vendor-login-name">
+                <a href="/<?php echo html_escape($user->getSlug())?>" class="vendor-login-name">
                     <span>
-                        <strong><?php echo html_escape($user['username']); ?></strong>
+                        <strong><?php echo html_escape($user->getUsername()); ?></strong>
                     </span>
                 </a>
                 <div class="new-user-nav-dropdown">
@@ -159,16 +162,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <a href="/me?tab=ongoing">On-going Transactions</a>
                     </li>
                     <li>
-                        <a href="/?view=basic">Easyshop.ph</a>
+                        <a href="/?view=basic">Go to homepage</a>
                     </li>
                     <li class="nav-dropdown-border">
                         <a href="/me?tab=settings">Settings</a>
                     </li>
                     <li class="nav-dropdown-border pos-rel">
                         <a href="/messages">Message</a>
-                        <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                        <?php if((int)$unreadMessageCount !== 0) : ?>
                         <div id="unread-messages-count" class="msg_countr message-count-con">
-                        <?=$msgs['unread_msgs'];?>
+                        <?php echo $unreadMessageCount ;?>
                         </div>
                         <?php endif;?>
                     </li>

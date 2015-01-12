@@ -90,7 +90,12 @@ class EsProductReview
      */
     private $product;
 
+    const PRODUCT_REVIEW_DEFAULT = 0;
 
+    /**
+     * best rating value for review
+     */
+    const REVIEW_BEST_RATING = 5;
 
     /**
      * Get idReview

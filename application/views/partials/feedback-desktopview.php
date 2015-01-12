@@ -7,13 +7,13 @@
                 <div class="col-xs-2 no-padding">
                     <center>
                         <div class="div-user-image">
-                            <a href="/<?php echo $feedback['userslug']?>">
+                            <a href="/<?php echo html_escape($feedback['userslug'])?>">
                                 <img src="<?php echo getAssetsDomain().'.'.$feedback['userImage'];?>" class="img-user-image">
                             <a/>
                         </div>
                         <p class="p-user-name">
-                            <a href="/<?php echo $feedback['userslug']?>">
-                                <?php echo html_escape($feedback['username']); ?>
+                            <a href="/<?php echo html_escape($feedback['userslug']); ?>">
+                                <?php echo html_escape($feedback['storename']); ?>
                             </a>
                         </p>
                         <p class="p-date-feedback">
@@ -64,8 +64,8 @@
         </div>
     <?php endif; ?>
     
-    <center>
+    <div style="text-align:center" class="pagination-container">
         <?php echo $pagination; ?>
-    </center>
+    </div>
 
 </div>

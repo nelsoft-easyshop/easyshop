@@ -6,6 +6,8 @@ if (!defined('BASEPATH'))
 use \Curl\Curl as Curl;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\PaymentService\PaymentService as PaymentService;
+
 
 class Payment extends MY_Controller{
 
@@ -25,7 +27,6 @@ class Payment extends MY_Controller{
         $this->load->model('messages_model');
         $this->load->model('memberpage_model');
         session_start();
-
     }
 
     public $PayMentPayPal = 1;
@@ -446,8 +447,11 @@ class Payment extends MY_Controller{
             $data['pesopaysucess'] = ($pesoPayCount == $itemCount ? true : false);
             $data['directbanksuccess'] = ($directBankCount == $itemCount ? true : false);
  
-            $header['title'] = 'Payment Review | Easyshop.ph';
-            $header = array_merge($header,$this->fill_header()); 
+
+            $headerData = [
+                'title' => 'Payment Review | Easyshop.ph',
+            ];
+            
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
             $data = array_merge($data,$address);
 
@@ -456,7 +460,8 @@ class Payment extends MY_Controller{
                                               ->getMaxPoint((int)$member_id);
             
             // Load view
-            $this->load->view('templates/header', $header); 
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/payment/payment_review_responsive' ,$data);  
             $this->load->view('templates/footer');  
         }
@@ -742,13 +747,6 @@ class Payment extends MY_Controller{
             }else if ($payment_status == 'Refunded' || $payment_status == 'Reversed') {
 
                 error_log(date('[Y-m-d H:i e] '). "STATUS IPN: $payment_status ". PHP_EOL, 3, LOG_FILE);
-                $orderId = $this->payment_model->cancelTransaction($parent_txn_id,true);
-                $orderHistory = array(
-                    'order_id' => $orderId,
-                    'order_status' => 2,
-                    'comment' => 'Paypal transaction ' . $payment_status
-                    );
-                $this->payment_model->addOrderHistory($orderHistory);
             }
             else if($payment_status == 'Pending' || $payment_status == 'Processed')
             {
@@ -777,7 +775,7 @@ class Payment extends MY_Controller{
             redirect('/', 'refresh');
         }
  
-        $status = 'f'; 
+        $status = PaymentService::STATUS_FAIL; 
         $member_id =  $this->session->userdata('member_id'); 
         $itemList =  $this->session->userdata('choosen_items');    
         $productCount = count($itemList);   
@@ -811,7 +809,7 @@ class Payment extends MY_Controller{
         $productCount = count($itemList);  
         $address = $this->memberpage_model->get_member_by_id($member_id);
         $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
-        $status = 'f';
+        $status = PaymentService::STATUS_FAIL;
         $message = "";
         $txnid = $token;
         $return = $this->payment_model->selectFromEsOrder($token,$paymentType);
@@ -864,7 +862,7 @@ class Payment extends MY_Controller{
                                 );
                             $this->payment_model->addOrderHistory($orderHistory); 
                             $message = 'Your payment has been completed through Paypal';   
-                            $status = 's';         
+                            $status = PaymentService::STATUS_SUCCESS;
                             $this->removeItemFromCart(); 
                             $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));
                         }
@@ -916,12 +914,12 @@ class Payment extends MY_Controller{
 
         if($return['o_success'] <= 0){
             $message = $return['o_message'];
-            $status = 'f';
+            $status = PaymentService::STATUS_FAIL;
         }
         else{
             $v_order_id = $return['v_order_id'];
             $invoice = $return['invoice_no'];
-            $status = 's';
+            $status = PaymentService::STATUS_SUCCESS;
             $message = ($paymentType == $this->PayMentDirectBankDeposit) 
                             ? 'Your payment has been completed through Direct Bank Deposit.' 
                             : 'Your payment has been completed through Cash on Delivery.';
@@ -954,7 +952,7 @@ class Payment extends MY_Controller{
 
         $lastDigit = substr($this->input->post('paymentToken'), -1);
         $qtysuccess = $this->resetPriceAndQty();
-        $status = 'f';
+        $status = PaymentService::STATUS_FAIL;
         if($lastDigit == 2) {
             $paymentType = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
             $textType = 'directbankdeposit';
@@ -1038,7 +1036,11 @@ class Payment extends MY_Controller{
         }
     }
 
-    function dragonPayPostBack()
+    /**
+     * Postback url for dragonpay
+     * @return string
+     */
+    public function dragonPayPostBack()
     {
         $this->config->load('payment', true);
         $paymentConfig = strtolower(ENVIRONMENT) === 'production'
@@ -1066,7 +1068,8 @@ class Payment extends MY_Controller{
             $itemList = $prepareData['newItemList'];
             $toBeLocked = $prepareData['toBeLocked'];
 
-            if(strtolower($status) === "p" || strtolower($status) === "s"){
+            if(strtolower($status) === PaymentService::STATUS_PENDING 
+               || strtolower($status) === PaymentService::STATUS_SUCCESS){
                 if($postBackCount === 0){
                     foreach ($itemList as $value) {
                         $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);  
@@ -1075,7 +1078,7 @@ class Payment extends MY_Controller{
                     $locked = $this->lockItem($toBeLocked, $orderId, 'delete'); 
                 }
 
-                $orderStatus = (strtolower($status) === "s") ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
+                $orderStatus = (strtolower($status) === PaymentService::STATUS_SUCCESS) ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
                 $complete = $this->payment_model->updatePaymentIfComplete($orderId, 
                                                                           json_encode($itemList), 
                                                                           $txnId, 
@@ -1088,12 +1091,12 @@ class Payment extends MY_Controller{
                     $this->sendNotification(['member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice], true,  false);
                 }
 
-                if(strtolower($status) === "s"){ 
+                if(strtolower($status) === PaymentService::STATUS_SUCCESS){ 
                     // send email to seller
                     $this->sendNotification(['member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice], false, true);
                 }
             }
-            elseif(strtolower($status) === "f" ){
+            elseif(strtolower($status) === PaymentService::STATUS_FAIL ){
                 $locked = $this->lockItem($toBeLocked, $orderId, 'delete');
                 $orderId = $this->payment_model->cancelTransaction($txnId, true);
                 $orderHistory = [
@@ -1108,6 +1111,19 @@ class Payment extends MY_Controller{
             $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
             $curl = new Curl();
             $curl->post($curlUrl, $this->input->post());
+
+                log_message('error', 'EASYDEAL => '. json_encode($curlUrl));
+                log_message('error', 'EASYDEAL => '. json_encode($this->input->post()));
+                log_message('error', 'EASYDEAL => '. json_encode($paymentConfig));
+                
+
+            if ($curl->error) {
+                log_message('error', 'EASYDEAL CURL ERROR => '. $curl->error_code . ': ' . $curl->error_message);
+            }
+            else {
+                log_message('error', 'EASYDEAL CURL ERROR => '. $curl->response);
+            }
+            
         }
         else{
             show_404();
@@ -1116,8 +1132,10 @@ class Payment extends MY_Controller{
         echo 'result=OK';
     }
 
-
-    function dragonPayReturn()
+    /**
+     * Return url for dragon pay
+     */
+    public function dragonPayReturn()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');
@@ -1133,15 +1151,16 @@ class Payment extends MY_Controller{
         $redirectUrl = "";
 
         if($client === "Easyshop"){
-            if(strtolower($status) === "p" || strtolower($status) === "s"){
+            if(strtolower($status) === PaymentService::STATUS_PENDING 
+               || strtolower($status) === PaymentService::STATUS_SUCCESS){
                 $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType); 
                 $orderId = $return['id_order'];
-                $status = 's';
+                $status = PaymentService::STATUS_SUCCESS;
                 $message = 'Your payment has been completed through Dragon Pay. '.urldecode($message);  
                 $this->removeItemFromCart(); 
             }
             else{
-                $status = 'f';
+                $status = PaymentService::STATUS_FAIL;
                 $message = 'Transaction Not Completed. '.urldecode($message);
             }
             
@@ -1154,7 +1173,10 @@ class Payment extends MY_Controller{
                              ? $this->config->item('production', 'payment')
                              : $this->config->item('testing', 'payment');
             $redirectUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['return_url'];
-            $redirectUrl .= "?txnid=$txnId&refno=$refNo&status=$status&message=$message&digest=$digest";
+            $redirectUrl .= "?txnid=$txnId&refno=$refNo&status=$status&message=".urlencode($message)."&digest=$digest";
+        }
+        else{
+            show_404();
         }
 
         redirect($redirectUrl, 'refresh');
@@ -1215,7 +1237,7 @@ class Payment extends MY_Controller{
         $txnId = $this->input->get('Ref');
         $paymentType = $this->PayMentPesoPayCC;     
  
-        if(strtolower($status) == "s"){
+        if(strtolower($status) == PaymentService::STATUS_SUCCESS){
 
             $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType); 
             $orderId = $return['id_order'];
@@ -1225,7 +1247,7 @@ class Payment extends MY_Controller{
         }else{
             $txnId = $this->input->get('Fref');
             $message = 'Transaction Not Completed.';
-            $status = 'f';
+            $status = PaymentService::STATUS_FAIL;
         }
 
         $this->generateFlash($txnId,$message,$status);
@@ -1288,6 +1310,8 @@ class Payment extends MY_Controller{
      */
     public function paymentSuccess($mode = "easyshop")
     {
+        $entityManager = $this->serviceContainer['entity_manager'];
+
         if(strtolower($mode) === 'cashondelivery'){
             $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         }
@@ -1314,10 +1338,21 @@ class Payment extends MY_Controller{
         $response['message'] = (string)$this->session->flashdata('msg');
         $status = (string)$this->session->flashdata('status');
 
-        $response['completepayment'] = $status === 's';
+        $response['completepayment'] = false;
+        if(strtolower($status) === PaymentService::STATUS_SUCCESS){
+            $response['completepayment'] = true;
+            $order = $entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                   ->findOneBy(['transactionId' => $txnId]);
+            if($order){
+                $order->setDateadded(date_create(date("Y-m-d H:i:s")));
+                $entityManager->flush();
+            }
+        }
+
         $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
         $response['itemList'] = json_decode($payDetails['data_response'],true);
-        if($paymentType === EsPaymentMethod::PAYMENT_CASHONDELIVERY && $status === 'f'){
+        if($paymentType === EsPaymentMethod::PAYMENT_CASHONDELIVERY 
+           && $status === PaymentService::STATUS_FAIL){
             $member_id =  $this->session->userdata('member_id'); 
             $address = $this->memberpage_model->get_member_by_id($member_id); 
             $prepareData = $this->processData($this->session->userdata('choosen_items'),$address);
@@ -1336,7 +1371,6 @@ class Payment extends MY_Controller{
             $analytics = $this->ganalytics($response['itemList'],$payDetails['id_order']);
 
             // add storename in item list collection
-            $entityManager = $this->serviceContainer['entity_manager'];
             foreach ($response['itemList'] as $key => $value) {
                 $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
                                         ->findOneBy([
@@ -1350,16 +1384,15 @@ class Payment extends MY_Controller{
         $response['invoice_no'] = $payDetails['invoice_no'];
         $response['total'] = $payDetails['total'];
         $response['dateadded'] = $payDetails['dateadded'];
-        $data['title'] = 'Payment | Easyshop.ph';
-        $data = array_merge($data,$this->fill_header());
 
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/header', $data);
+        $headerData = [
+            'title' => 'Payment Review | Easyshop.ph',
+        ];
+        
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/payment/payment_response_responsive' ,$response);
-        $this->load->view('templates/footer_full', $viewData); 
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
    }
 
 
@@ -1389,7 +1422,7 @@ class Payment extends MY_Controller{
      *   'order_id' => Transaction Number
      *   'invoice_no' => Invoice number)
      */
-    public function sendNotification($data, $buyerFlag = TRUE, $sellerFlag = TRUE) 
+    private function sendNotification($data, $buyerFlag = true, $sellerFlag = true) 
     {
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $xmlfile =  $xmlResourceService->getContentXMLfile();
@@ -1435,11 +1468,14 @@ class Payment extends MY_Controller{
                 break;
         }
 
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
+        
         // Send email to buyer
         if($buyerFlag){
             $buyerEmail = $transactionData['buyer_email'];
             $buyerData = $transactionData;
-            $socialMediaLinks = $this->getSocialMediaLinks();
+            
             $buyerData['facebook'] = $socialMediaLinks["facebook"];
             $buyerData['twitter'] = $socialMediaLinks["twitter"];            
             unset($buyerData['seller']);
@@ -1469,8 +1505,7 @@ class Payment extends MY_Controller{
 
         // Send email to seller of each product - once per seller
         if($sellerFlag){
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $sellerData = array(
+            $sellerData = [
                 'id_order' => $transactionData['id_order'],
                 'dateadded' => $transactionData['dateadded'],
                 'buyer_name' => $transactionData['buyer_name'],
@@ -1480,7 +1515,7 @@ class Payment extends MY_Controller{
                 'payment_method_name' => $transactionData['payment_method_name'],
                 'facebook' => $socialMediaLinks["facebook"],
                 'twitter' => $socialMediaLinks["twitter"]
-            );
+            ];
 
             foreach($transactionData['seller'] as $seller_id => $seller){
                 $sellerEmail = $seller['email'];
@@ -1662,38 +1697,40 @@ class Payment extends MY_Controller{
         }
     }
 
-    function resetPriceAndQty($condition = FALSE)
-    {   
+    /**
+     * reset price and quantity data on session
+     * @param  boolean $condition
+     * @return integer
+     */
+    private function resetPriceAndQty($condition = false)
+    {
+        $productManager = $this->serviceContainer['product_manager'];
         $carts = $this->session->all_userdata(); 
         $itemArray = $carts['choosen_items'];
-        $qtysuccess = 0;
+        $qtySuccess = 0;
 
-        foreach ($itemArray as $key => $value) {
-
+        foreach ($itemArray as $value) {
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
-            
-            $product_array =  $this->product_model->getProductById($productId);
-  
-            /** NEW QUANTITY **/
-            $newQty = $this->product_model->getProductQuantity($productId, FALSE, $condition, $product_array['start_promo']);
-            $maxqty = $newQty[$itemId]['quantity'];
-            $qty = $value['qty']; 
-            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
-            $qtysuccess = ($maxqty >= $qty ? $qtysuccess + 1: $qtysuccess + 0);
+            $product = $productManager->getProductDetails($productId);
+            $productInventory = $productManager->getProductInventory($product);
 
-            /** NEW PRICE **/
-            $promoPrice = $product_array['price']; 
-            $additionalPrice = $value['additional_fee'];
-            $finalPromoPrice = $promoPrice + $additionalPrice;
-            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+            $maxqty = $productInventory[$itemId]['quantity'];
+            $qty = $value['qty'];
+            $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
             $subtotal = $finalPromoPrice * $qty;
-            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
-        }
 
+            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
+            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
+
+            if($maxqty >= $qty){
+                $qtySuccess++;
+            }
+        }
         $this->session->set_userdata('choosen_items', $itemArray);
 
-        return $qtysuccess;
+        return $qtySuccess;
     }
 
     function generateFlash($txnId,$message,$status)

@@ -64,11 +64,56 @@ class Kernel
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         
-        $container['entity_manager'] = function ($c) use ($dbConfig, $config){
+        $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
-            $em->getEventManager()->addEventListener(
-                [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\ProductImageExistenceListener(ENVIRONMENT)
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsProductListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsMemberListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsAddressListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsProductReviewListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsMemberFeedbackListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsOrderListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsProductShippingCommentListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
+            );
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Listeners\EsOrderProductListener(
+                    $container['activity_manager'],
+                    $container['language_loader']
+                )
             );
             return $em;
         };
@@ -207,7 +252,10 @@ class Kernel
 
         //Request Service
         $container['http_request'] = function ($c) {
-            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+            $trustedProxies = require APPPATH . '/config/param/proxies.php';
+            $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+            $request->setTrustedProxies($trustedProxies);
+            return $request;
         };
 
         //Bug Reporter Service
@@ -220,10 +268,6 @@ class Kernel
             return new \EasyShop\PointTracker\PointTracker($container['entity_manager']);
         };
 
-        // Http foundation
-        $container['request'] = function ($c) use($container) {
-            return \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-        };
 
         //Cart Manager
         $container['cart_manager'] = function ($c) use ($container) {
@@ -242,6 +286,7 @@ class Kernel
             $httpRequest = $container['http_request'];
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
+            $sphinxClient = $container['sphinx_client'];
 
             return new \EasyShop\Search\SearchProduct(
                                                         $em
@@ -251,6 +296,7 @@ class Kernel
                                                         ,$httpRequest
                                                         ,$promoManager
                                                         ,$configLoader
+                                                        ,$sphinxClient
                                                     );
         };
 
@@ -286,7 +332,17 @@ class Kernel
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);
-        };            
+        };  
+
+        $container['webservice_manager'] = function ($c) use ($container){
+            $em = $container['entity_manager'];   
+            return new \EasyShop\Webservice\AuthenticateRequest($em);                     
+        };           
+
+        $container['image_upload'] = function ($c) use ($container){
+            $uploadLibrary = new \CI_Upload();            
+            return new \EasyShop\Upload\Upload($uploadLibrary);
+        };                            
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
@@ -362,7 +418,7 @@ class Kernel
         $container['payment_service'] = function ($c) use ($container) {
             return new \EasyShop\PaymentService\PaymentService(
                             $container['entity_manager'],
-                            $container['request'],
+                            $container['http_request'],
                             $container['point_tracker'],
                             $container['promo_manager'],
                             $container['product_manager']
@@ -500,6 +556,13 @@ class Kernel
                             $container['payment_service']
                         );
         };
+        
+        $container['sphinx_client'] = function ($c) use ($container) {
+            $sphinxClient = new \SphinxClient();
+            $sphinxClient->SetMaxQueryTime(5000);
+            return $sphinxClient;
+        };
+
 
         /* Register services END */
         $this->serviceContainer = $container;

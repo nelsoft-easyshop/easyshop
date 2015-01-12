@@ -15,7 +15,6 @@
     <meta name="description" content="<?php echo isset($metadescription)?$metadescription:''?>"  />    
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
-    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
     
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
@@ -112,13 +111,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?php else: ?>
                         <li>
                             <a href="/messages" class="msgs_link prevent">
-                                <span class="span_bg img_msgs_cntr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'msg_icon_zero' : '';?>"></span>
-                                <span id="unread-messages-count" class="msg_countr <?PHP echo (intval($msgs['unread_msgs']) === 0) ? 'unread-messages-count-hide' : '';?>">
-                                    <?PHP echo $msgs['unread_msgs'];?>
+                                <span class="span_bg img_msgs_cntr <?PHP echo $unreadMessageCount === 0 ? 'msg_icon_zero' : '';?>"></span>
+                                <span id="unread-messages-count" class="msg_countr <?PHP echo $unreadMessageCount === 0 ? 'unread-messages-count-hide' : '';?>">
+                                    <?PHP echo $unreadMessageCount ;?>
                                 </span>
                             </a>
-                            <a href="/<?php echo html_escape($user['slug']); ?>" class="top_link_name prevent">
-                                <?php echo html_escape($user['username']); ?>
+                            <a href="/<?php echo html_escape($user->getSlug()); ?>" class="top_link_name prevent">
+                                <?php echo html_escape($user->getUsername()); ?>
                             </a>
                         </li>
                         <li class="txt_res_hide">
@@ -143,7 +142,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <a class="prevent" href="/me?tab=ongoing">On-going Transactions</a>
                                 </li>
                                 <li>
-                                    <a class="prevent" href="/?view=basic">Easyshop.ph</a>
+                                    <a class="prevent" href="/?view=basic">Go to homepage</a>
                                 </li>
                                 <li class="nav-dropdown-border">
                                     <a class="prevent" href="/me?tab=settings">Settings</a>
@@ -194,7 +193,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <section class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'header-theme-bg' : ''?>">
 
-        <div class="res_wrapper wrapper search_wrapper">
+        <div class="container old-page-container">
         
         <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
             <div class="logo"> 
@@ -207,27 +206,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </a>
             </div>
         <?php endif; ?>
-        
-        <?php if(!(isset($render_searchbar) && ($render_searchbar === false))): ?>
+       
+        <?php if(!(isset($renderSearchbar) && ($renderSearchbar === false))): ?>
             <div class="search_box prob_search_box">
-                <div>
+                <div id="search-container" class="pos-rel">
                 <span class="main_srch_img_con"></span>
                 <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?= $this->input->get('q_str') ? html_escape(trim($this->input->get('q_str'))) : "" ; ?>" autocomplete="off">
                 
                 <select name="category" id="category">
                     <option value="1">All Categories</option>
-                    <?php
-                        foreach ($category_search as $keyrow):
-                        $selected = ($this->input->get('category') && $this->input->get('category') == $keyrow['id_cat'])?"selected":"";
-                    ?>
-                        <option <?php  echo $selected ?> value="<?php  echo $keyrow['id_cat'] ?>">
-                            <?php echo $keyrow['name']; ?>
+                    <?php foreach ($categories as $category): ?>
+                        <?php $isSelected = $this->input->get('category') && (int)$this->input->get('category') === (int)$category->getIdCat(); ?>
+                        <option <?php $isSelected ? 'selected' : '' ?> value="<?php  echo $category->getIdCat() ?>">
+                            <?php echo html_escape($category->getName()); ?>
                         </option>
                     <?php endforeach;?>
                 </select>
                 <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="/advsrch" class="adv_srch_lnk">Advance Search</a>
-                </div>
-                <div id="main_search_drop_content"></div> 
+                </div> 
             </div>
         <?php endif; ?>
         </div>
@@ -236,49 +232,45 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </form>
         
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
-        
-
+<script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script>
+    (function ($) {  
 
+        $('#main_search').autoComplete({
+            minChars: 3,
+            cache: false,
+            menuClass: 'autocomplete-suggestions',
+            source: function(term, response){ 
+                try { 
+                    xhr.abort(); 
+                } catch(e){}
+                var xhr = $.ajax({ 
+                    type: "get",
+                    url: '/search/suggest',
+                    data: "query=" + term,
+                    dataType: "json", 
+                    success: function(data){
+                        response(data); 
+                    }
+                });
+            }
+        });
 
-    (function ($) { 
-        
-        $(document).ready(function(){
-
+        $(document).ready(function(){ 
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
 
             $(document).mouseup(function (e) {
-
                 if (!$nav_dropdown.is(e.target) // if the target of the click isn't the container...
                     && $nav_dropdown.has(e.target).length === 0) // ... nor a descendant of the container
                 {
                    $nav_dropdown.hide(1);
                 }
-
             });
 
             $user_nav_dropdown.click(function() {
                 $nav_dropdown.show();
             });
-
-            
-        
-            var navigation = responsiveNav(".nav-collapse");
-            var srchdropcontent= $('#main_search_drop_content');
-            
-            $('#main_search').focus(function() {
-                if(srchdropcontent.find("ul").length > 0){
-                    $('#main_search_drop_content').fadeIn(150);
-                }
-
-                $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
-                    if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
-                        $('#main_search_drop_content').fadeOut('fast');
-                });
-            });
-
-            $('#main_search_drop_content').hide();
 
             $(".txt_need_help_con").click(function(){
                 $('.need_help_icons_con').slideToggle();
@@ -286,21 +278,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             });
 
             $('.need_help_icons_con').hide();
-              
+            var navigation = responsiveNav(".nav-collapse"); 
             var $container = $(".nav-collapse");
             
             $(document).mouseup(function (e) {
-
                 if (!$container.is(e.target) // if the target of the click isn't the container...
                     && $container.has(e.target).length === 0) // ... nor a descendant of the container
                 {
                    navigation.close();
                 }
-
-            });
-            
-        });
-        
+            }); 
+        }); 
     })(jQuery);
 
 </script>

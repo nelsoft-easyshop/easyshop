@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class IsMobileUnique extends Constraint
 {
-    public $message = 'The mobile "%string%" is already in use';
+    public $message = 'The mobile "0%string%" is already in use';
         
 }
 

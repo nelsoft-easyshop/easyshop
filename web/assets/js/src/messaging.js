@@ -3,8 +3,8 @@
         
         /* Register events */
         easyshop.eventDispatcher.register('unreadMessages', function (unreadMessages) {
-            document.title = (unreadMessages.unread_msgs === 0 ? "Message | Easyshop.ph" : "Message (" + unreadMessages.unread_msgs + ") | Easyshop.ph");
-            if (unreadMessages.unread_msgs !== 0) {
+            document.title = (unreadMessages.unread_msgs_count === 0 ? "Message | Easyshop.ph" : "Message (" + unreadMessages.unread_msgs_count + ") | Easyshop.ph");
+            if (unreadMessages.unread_msgs_count !== 0) {
                 onFocusReload(unreadMessages);
             }
         });
@@ -25,7 +25,7 @@
                 $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
                 $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
                 $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
-                $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConve+")");
+                $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
                 if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
                     specific_msgs();
                     seened($('#ID_'+Nav_msg.name));
@@ -39,7 +39,7 @@
                 } else {
                     html +='<img src="' +config.assetsDomain+Nav_msg.sender_img+'/60x60.png" data="'+Nav_msg.recipient_img+'">';
                 }
-                span = (Nav_msg.unreadConve != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConve+')</span>' : "");
+                span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
                 html +='</td>';
                 html +='<td class=" ">';
                 html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";

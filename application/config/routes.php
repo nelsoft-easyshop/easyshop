@@ -84,7 +84,7 @@ else {
     #SEARCHING
     $route['(?i)search/(:any)'] = 'product_search/searchfaster/$1'; # ryan vasquez
     $route['search/more'] = 'product_search/loadMoreProduct'; # ryan vasquez
-    $route['search/suggest'] = 'product_search/sch_onpress'; # ryan vasquez
+    $route['search/suggest'] = 'product_search/suggest';
 
     #ADVANCE SEARCH
     $route['(?i)advsrch'] = 'product_search/advance'; # new search - rain jorque
@@ -115,6 +115,7 @@ else {
     $route['(?i)me/product/restore'] = 'memberpage/restoreProduct';
     $route['(?i)me/feedback/next'] = 'memberpage/feedbackMemberPagePaginate';
     $route['(?i)me/sales/next'] = 'memberpage/salesMemberPagePaginate';
+    $route['(?i)me/sales'] = 'memberpage/requestSalesPage';
     $route['(?i)vendor/(:any)'] = 'store/oldUserProfile/$1';
 
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
@@ -160,6 +161,10 @@ else {
     $route['(?i)deals'] = 'promo/EasyDeals/category_promo';
     $route['(?i)Scratch-And-Win'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
+    $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
+
+    #MESSAGES
+    $route['(?i)messages'] = '/MessageController/messages';
 
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';
@@ -180,6 +185,8 @@ else {
     #MOBILE
     $route['mobile/payment-type'] = 'mobile/mobilepayment/getPaymentMethod';
     $route['mobile/payment/review'] = 'mobile/mobilepayment/reviewPayment';
+
+    $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
 }
 

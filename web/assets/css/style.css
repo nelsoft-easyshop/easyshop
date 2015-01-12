@@ -35,6 +35,11 @@ body{
     margin: 0 auto;
 }
 
+.old-page-container {
+    margin: 0 auto;
+    max-width: 980px;
+}
+
 .clear {
     clear: both;
 }
@@ -163,6 +168,13 @@ p {
     -moz-transition: 	all 0.3s ease-in-out;
     -o-transition:	    all 0.3s ease-in-out;
      transition: 		all 0.3s ease-in-out;	
+}
+
+.avatar-modal-loading {
+    position: absolute;
+    top: 35%;
+    left: 38%;
+    display: none;
 }
 
 .orange_btn3:hover {
@@ -982,9 +994,12 @@ a.msgs_link:hover {
 }
  
 .adv_srch_lnk {
-    font-size: 11px;
-    margin-left: 5px;
     border-bottom: 1px dotted #fff;
+    display: inline-block;
+    font-size: 10px;
+    margin-left: 5px;
+    vertical-align: middle;
+    width: 12%;
 }
 
 .adv_srch_lnk:hover {
@@ -7727,3 +7742,68 @@ div.sold_prod_container {
     display: inline !important;
     width: inherit !important;
 }
+
+#search-container > .typeahead {
+    background-color: rgb(255, 255, 255) !important;
+    left: 0 !important !important;
+    padding: 10px 0 !important;
+    position: absolute !important;
+    text-align: left !important
+    width: 73% !important;
+    z-index: 9991 !important;
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35) !important;
+    -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35) !important;
+    box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35)  !important;
+}
+
+#search-container > .typeahead .sr-title {
+    background-color: #e2e2e2 !important;
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+}
+
+#search-container > .typeahead {
+    list-style: none !important;
+}
+
+#search-container > .typeahead li{
+    line-height: 24px !important;
+}
+
+#search-container > .typeahead a {
+    color: #565656 !important;
+    display: block !important;
+    font-size: 13px !important;
+    padding: 4px 10px !important;
+}
+
+#search-container > .typeahead a:hover, #search-container > .typeahead > li.active > a {
+    background-color: #868686 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+} 
+
+.autocomplete-suggestions {
+    background-color: #fff;
+    display: none;
+    padding: 15px 0px;
+    position: absolute;
+    z-index: 99999;
+
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
+    -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
+    box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
+}
+
+.autocomplete-suggestions > div {
+    cursor: pointer;
+    padding: 4px 10px;
+}
+
+.autocomplete-suggestions .selected,
+.autocomplete-suggestions > div:hover {
+    background-color: #868686;
+    color: #fff;
+}
+
+

@@ -5,6 +5,7 @@ if (!defined('BASEPATH')){
 }
 
 use EasyShop\Entities\EsAddress as EsAddress; 
+use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Category\CategoryManager as CategoryManager;
     
 class Store extends MY_Controller
@@ -24,12 +25,13 @@ class Store extends MY_Controller
      */
     public $feedbackPerPage = 15;
 
+
     /**
      * Number of followers per page
      *
      * @var integer
      */
-    public $followerPerPage = 6;
+    public $followerPerPage = 6;    
 
     /**
      * Renders vendorpage
@@ -61,7 +63,6 @@ class Store extends MY_Controller
             }
             else{
                 $viewerId = intval(!isset($sessionData['member_id']) ? 0 : $sessionData['member_id']);
-                $headerData = $this->fill_header();
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
 
                 if ($bannerData['hasNoItems']){
@@ -109,17 +110,20 @@ class Store extends MY_Controller
                 //HEADER DATA
                 $storeColor = $memberEntity->getStoreColor();
                 $bannerData['storeColorScheme'] = $storeColor;
-                $bannerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-                $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
-                $headerData['relCanonical'] = base_url().$vendorSlug;
-                $bannerData['isLoggedIn'] = $headerData['logged_in'];
+                $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
                 $bannerData['vendorLink'] = "";
+
+                $headerData = [
+                    'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
+                    'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
+                    'relCanonical' => base_url().$vendorSlug,
+                ];
 
                 $viewData = array(
                     "customCatProd" => [],
                     "defaultCatProd" => $productView['defaultCatProd'],
                     "product_condition" => $this->lang->line('product_condition'),
-                    "isLoggedIn" => $headerData['logged_in'],
+                    "isLoggedIn" => $this->session->userdata('usersession'),
                     "prodLimit" => $this->vendorProdPerPage,
                     "storeColorScheme" => $storeColor,
                 );
@@ -139,10 +143,8 @@ class Store extends MY_Controller
                     $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
                 }
 
-                
-                // Load View
-                $headerData = array_merge($headerData, $bannerData);
-                $this->load->view('templates/header_alt', $headerData);
+                $this->load->spark('decorator');
+                $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
                 $this->load->view('templates/vendor_banner',$bannerData);
                 $this->load->view('pages/user/vendor_view', $viewData);
                 $this->load->view('templates/footer_alt', ['sellerSlug' => $vendorSlug]);
@@ -154,6 +156,162 @@ class Store extends MY_Controller
         }
 
     }
+
+    /**
+     *  Used to upload avatar image on both Member page and Vendor page
+     *  Reloads page on success.
+     *
+     *  NOTE: For browsers with minimal JS capabilities, this function reloads the page
+     *      and displays an error for 3 seconds, then reloads the page to the original URL,
+     *      member page or vendor page
+     */
+    public function upload_img()
+    {
+        $data = [
+            'x' => $this->input->post('x'),
+            'y' => $this->input->post('y'),
+            'w' => $this->input->post('w'),
+            'h' => $this->input->post('h')
+        ];
+
+        $this->upload = $this->serviceContainer['image_upload'];
+        $uid = $this->session->userdata('member_id');
+        $imageUtility = $this->serviceContainer['image_utility'];            
+        $memberObj = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsMember')
+                                    ->find($uid); 
+        $path = $memberObj->getImgurl();                           
+        if(trim($path) === '') {
+            $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
+        }   
+        if(!is_dir($path)) {
+            mkdir($path,0755,true); 
+        }          
+        $avatarFileName = $path."/".EsMember::DEFAULT_IMG_AVATAR;
+        $uploadReturn = $this->upload->uploadImage($path, EsMember::DEFAULT_IMG_AVATAR);  
+        if($data['w'] > 0 && $data['h'] > 0) {
+            $imageUtility->imageCrop($avatarFileName,
+                                     $data["x"],
+                                     $data["y"],
+                                     $data["w"],
+                                     $data["h"]
+                                     );
+        }
+        $this->config->load('image_dimensions', true);
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];              
+        if($uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["userImagesSizes"]["usersize"][0]
+           || $uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["userImagesSizes"]["usersize"][1]) {
+            $imageUtility->imageResize($avatarFileName, 
+                                       $avatarFileName, 
+                                       $imageDimensionsConfig["userImagesSizes"]["usersize"]
+                                       );
+        }
+
+        $imageUtility->imageResize($avatarFileName, 
+                                   $path."/".EsMember::DEFAULT_IMG_NORMAL_SIZE, 
+                                   $imageDimensionsConfig["userImagesSizes"]["normalsize"]
+                                   );
+
+        $imageUtility->imageResize($avatarFileName, 
+                                   $path."/".EsMember::DEFAULT_IMG_SMALL_SIZE, 
+                                   $imageDimensionsConfig["userImagesSizes"]["smallsize"]
+                                   );   
+
+        $this->serviceContainer['entity_manager']
+             ->getRepository('EasyShop\Entities\EsMember')
+             ->updateMemberImageUrl($memberObj, $path);  
+
+        $userImage = $this->serviceContainer['user_manager']
+                          ->getUserImage($uid);                                                             
+
+        if(!(bool)$this->input->post('isAjax')) {
+            redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
+        }
+        
+        $response = [
+            'isSuccessful' => true,
+            'image' => $userImage,
+        ];
+        
+        if(!$userImage){
+            $response['isSuccessful'] = false;
+        }
+
+
+        echo json_encode($response);
+    }    
+
+
+
+    /**
+     *  Used for uploading banner in vendor page. 
+     *  @return JSON
+     */
+    public function banner_upload()
+    {    
+        $data = [
+            'x' => $this->input->post('x'),
+            'y' => $this->input->post('y'),
+            'w' => $this->input->post('w'),
+            'h' => $this->input->post('h')
+        ];
+
+        $this->upload = $this->serviceContainer['image_upload'];
+        $uid = $this->session->userdata('member_id');
+        $imageUtility = $this->serviceContainer['image_utility'];            
+        $memberObj = $this->serviceContainer['entity_manager']
+                                    ->getRepository('EasyShop\Entities\EsMember')
+                                    ->find($uid); 
+        $path = $memberObj->getImgurl();                           
+        if(trim($memberObj->getImgurl()) === '') {
+            $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
+        }   
+        if(!is_dir($path)) {
+            mkdir($path,0755,true); 
+        }     
+
+        $bannerFileName = $path."/".EsMember::DEFAULT_IMG_BANNER;
+        $uploadReturn = $this->upload->uploadImage($path, EsMember::DEFAULT_IMG_BANNER);  
+        if($data['w'] > 0 && $data['h'] > 0) {
+            $imageUtility->imageCrop($bannerFileName,
+                                     $data["x"],
+                                     $data["y"],
+                                     $data["w"],
+                                     $data["h"]
+                                     );
+        }
+        $this->config->load('image_dimensions', true);
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];              
+
+        $imageUtility->imageResize($bannerFileName, 
+                                   $bannerFileName, 
+                                   $imageDimensionsConfig["userImagesSizes"]["bannersize"]
+                                   );
+  
+        $this->serviceContainer['entity_manager']
+             ->getRepository('EasyShop\Entities\EsMember')
+             ->updateMemberImageUrl($memberObj, $path, false);  
+
+        $userImage = $this->serviceContainer['user_manager']
+                          ->getUserImage($uid, 'banner');                                                             
+
+        if(!(bool)$this->input->post('isAjax')) {
+            redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
+        }
+        
+        $response = [
+            'isSuccessful' => true,
+            'banner' => $userImage,
+        ];
+        
+        if(!$userImage){
+            $response['isSuccessful'] = false;
+        }
+
+
+        echo json_encode($response);
+    }
+
     
     /**
      * Transition controller action for old vendor page
@@ -175,12 +333,8 @@ class Store extends MY_Controller
         $viewerId = $this->session->userdata('member_id');
         $bannerData = $this->generateUserBannerData($sellerslug, $viewerId);
         $memberId = $bannerData['arrVendorDetails']['id_member'];
-        $headerData = $this->fill_header();
-        $bannerData['isLoggedIn'] = $headerData['logged_in'];
+        $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
         $bannerData['vendorLink'] = "about";
-        $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
-        $headerData['relCanonical'] = base_url().$sellerslug.'/followers';
 
         // get followers
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
@@ -212,7 +366,7 @@ class Store extends MY_Controller
         $followerData['followerCount'] = $bannerData["followerCount"];
         $followerData['storeName'] = strlen($bannerData['arrVendorDetails']['store_name']) > 0 ? $bannerData['arrVendorDetails']['store_name'] : $bannerData['arrVendorDetails']['username'];
         $followerData['followers'] = $followers['followers'];
-        $followerData['isLoggedIn'] = $headerData['logged_in'] ? TRUE : FALSE;
+        $followerData['isLoggedIn'] = $this->session->userdata('usersession');
         $followerData['viewerId'] = $viewerId;
         $followerData['memberId'] = $memberId;
         $followerData['page'] = 0; 
@@ -248,8 +402,14 @@ class Store extends MY_Controller
         $followerData['follower_recommed_view'] = $this->load->view('pages/user/followers_recommend', $followerData, true);
 
         // Load View
-        $headerData = array_merge($headerData, $bannerData);
-        $this->load->view('templates/header_alt', $headerData);
+        $headerData = [
+            'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
+            'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
+            'relCanonical' => base_url().$sellerslug.'/followers',
+        ];
+        
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
         $this->load->view('templates/vendor_banner',$bannerData);
         $this->load->view('pages/user/followers' ,$followerData);
         $this->load->view('templates/footer_alt', ['sellerSlug' => $sellerslug]);
@@ -259,7 +419,6 @@ class Store extends MY_Controller
     {
         $EsVendorSubscribe = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
-        $data = $this->fill_header();
         $pageOffset = $this->input->get('page') - 1; // start count page in 1.
         $viewerId = $this->session->userdata('member_id');
         $memberId = $this->input->get('vendorId'); 
@@ -282,7 +441,7 @@ class Store extends MY_Controller
         }
 
         $followerData['followers'] = $followers['followers'];
-        $followerData['isLoggedIn'] = $data['logged_in'] ? TRUE : FALSE;
+        $followerData['isLoggedIn'] = $this->session->userdata('usersession');
         $followerData['viewerId'] = $viewerId; 
         $followerData['page'] = $pageOffset;
 
@@ -429,65 +588,80 @@ class Store extends MY_Controller
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_buyer'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
-
-        $feedbackTabs['asBuyer'] = $this->load->view('/partials/feedback', array(
-                                                                            'isActive' => true,
-                                                                            'feedbacks' => $feedbacks,
-                                                                            'pagination' => $pagination,
-                                                                            'id' => 'as-buyer',
-                                                                            'ratingHeaders' => $ratingHeaders,
-                                                                            ), TRUE);                                                          
-                                          
+                                                                   'isHyperLink' => false), true);
+        $subViewData = [
+            'isActive' => true,
+            'feedbacks' => $feedbacks,
+            'pagination' => $pagination,
+            'id' => 'as-buyer',
+            'ratingHeaders' => $ratingHeaders,
+            'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER,
+        ];
+        $feedbackTabsDesktop['asBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true); 
+        $subViewData['isActive'] = false;
+        $feedbackTabsMobile['asBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);  
+        
+        
         $feedbacks  = $this->serviceContainer['user_manager']
                            ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_seller'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
-
-        $feedbackTabs['asSeller'] = $this->load->view('/partials/feedback', array('isActive' => false,
-                                                                            'feedbacks' => $feedbacks,
-                                                                            'pagination' => $pagination,
-                                                                            'id' => 'as-seller',
-                                                                            'ratingHeaders' => $ratingHeaders,
-                                                                            ), TRUE);
+                                                                   'isHyperLink' => false), true);
+        $subViewData = [
+            'isActive' => false,
+            'feedbacks' => $feedbacks,
+            'pagination' => $pagination,
+            'id' => 'as-seller',
+            'ratingHeaders' => $ratingHeaders,
+            'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_AS_SELLER,
+        ];
+        $feedbackTabsDesktop['asSeller'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);
+        $feedbackTabsMobile['asSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);
 
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_seller'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
-
-        $feedbackTabs['forOthersAsSeller'] = $this->load->view('/partials/feedback', array(
-                                                                            'isActive' => false,
-                                                                            'feedbacks' => $feedbacks,
-                                                                            'pagination' => $pagination,
-                                                                            'id' => 'for-other-seller',
-                                                                            'ratingHeaders' => $ratingHeaders,
-                                                                            ), TRUE);                                                          
+                                                                   'isHyperLink' => false), true);
+        $subViewData = [
+            'isActive' => false,
+            'feedbacks' => $feedbacks,
+            'pagination' => $pagination,
+            'id' => 'for-other-seller',
+            'ratingHeaders' => $ratingHeaders,
+            'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER,
+        ];
+        
+        $feedbackTabsDesktop['forOthersAsSeller'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);                                                          
+        $feedbackTabsMobile['forOthersAsSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);    
                                                                 
         $feedbacks  = $this->serviceContainer['user_manager']
                          ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_buyer'])/$limit),
-                                                                   'isHyperLink' => false), TRUE);
-        $feedbackTabs['forOthersAsBuyer'] = $this->load->view('/partials/feedback', array(
-                                                                              'isActive' => false,
-                                                                              'feedbacks' => $feedbacks,
-                                                                              'pagination' => $pagination,
-                                                                              'id' => 'for-other-buyer',
-                                                                              'ratingHeaders' => $ratingHeaders,
-                                                                              ), TRUE);
+                                                                   'isHyperLink' => false), true);
+        $subViewData = [
+            'isActive' => false,
+            'feedbacks' => $feedbacks,
+            'pagination' => $pagination,
+            'id' => 'for-other-buyer',
+            'ratingHeaders' => $ratingHeaders,
+            'feedbackType' =>  EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER,
+        ];
+        
+        $feedbackTabsDesktop['forOthersAsBuyer'] = $this->load->view('/partials/feedback-desktopview', $subViewData, true);
+        $feedbackTabsMobile['forOthersAsBuyer'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);
 
         $viewerId = intval(!$this->session->userdata('member_id') ? 0 : $this->session->userdata('member_id'));
         
         $orderRelations = array();
-        
+        $viewer = null;
         if($viewerId !== 0){
             $orderRelations = $this->serviceContainer['entity_manager']
                                    ->getRepository('EasyShop\Entities\EsOrder')
                                    ->getOrderRelations($viewerId, $idMember, true);
+            $viewer = $this->serviceContainer['entity_manager']
+                           ->getRepository('EasyShop\Entities\EsMember')
+                           ->find($viewerId);
         }
         $bannerData = $this->generateUserBannerData($sellerslug, $viewerId);
-        $headerData = $this->fill_header();
-        
         $userDetails = $this->userDetails($sellerslug, 'about',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
         $bannerData['arrVendorDetails'] = $this->serviceContainer['entity_manager']
                                                 ->getRepository("EasyShop\Entities\EsMember")
@@ -495,20 +669,24 @@ class Store extends MY_Controller
         $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
         $bannerData['storeColorScheme'] = $member->getStoreColor();
-        $bannerData['isLoggedIn'] = $headerData['logged_in'];
+        $bannerData['isLoggedIn'] = $this->session->userdata('session');
         $bannerData['vendorLink'] = "about";
-        $headerData['title'] = html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph";
-        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
-        $headerData['relCanonical'] = base_url().$sellerslug.'/about';
+        
+        $headerData = [
+            'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
+            'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
+            'relCanonical' => base_url().$sellerslug.'/about'
+        ];
 
-        $headerData = array_merge($headerData, $bannerData);
-        $this->load->view('templates/header_alt', $headerData);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
         $this->load->view('templates/vendor_banner', $bannerData);
         $this->load->view('pages/user/about', ['feedbackSummary' => $feedbackSummary,
                                                'ratingHeaders' => $ratingHeaders,
-                                               'feedbackTabs' => $feedbackTabs,
+                                               'feedbackTabsDesktopView' => $feedbackTabsDesktop,
+                                               'feedbackTabsMobileView' => $feedbackTabsMobile,
                                                'member' => $member,
-                                               'viewer' => $headerData['user'],
+                                               'viewer' => $viewer,
                                                'orderRelations' => $orderRelations,
                                                'isEditable' =>  $bannerData['isEditable'],
                                                'userDetails' => $userDetails,
@@ -599,6 +777,7 @@ class Store extends MY_Controller
         $tab = $this->input->get('tab');
         $limit = $this->feedbackPerPage;
         $ratingHeaders = $this->lang->line('rating');
+        $feedbackview = $this->input->get('isMobile') ? 'feedback-mobileview' : 'feedback-desktopview';
 
         switch($tab){
             case 'as-buyer':
@@ -625,18 +804,22 @@ class Store extends MY_Controller
                              ->getFormattedFeedbacks($memberId, $feedbackType, $limit, $page);
             $totalCount = count($this->serviceContainer['user_manager']
                              ->getFormattedFeedbacks($memberId, $feedbackType));
-            $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil($totalCount/$limit),
-                                                                         'isHyperLink' => false,
-                                                                         'currentPage' => $page,
-                                                                        ), TRUE);
+            $pagination = $this->load->view('/pagination/default', [
+                                                'lastPage' => ceil($totalCount/$limit),
+                                                'isHyperLink' => false,
+                                                'currentPage' => $page,
+                                            ] , true);
         }
         
-        $feedbackTabs = $this->load->view('/partials/feedback', array('isActive' => true,
-                                                                    'feedbacks' => $feedbacks,
-                                                                    'pagination' => $pagination,
-                                                                    'id' => $tab,
-                                                                    'ratingHeaders' => $ratingHeaders,
-                                                                    ), TRUE); 
+        
+        $feedbackTabs = $this->load->view('/partials/'.$feedbackview, [
+                                                'isActive' => true,
+                                                'feedbacks' => $feedbacks,
+                                                'pagination' => $pagination,
+                                                'id' => $tab,
+                                                'ratingHeaders' => $ratingHeaders,
+                                                'feedbackType' =>  $feedbackType,
+                                        ], true); 
         
         echo $feedbackTabs;
     }
@@ -647,31 +830,36 @@ class Store extends MY_Controller
      */
     private function contactUser($sellerslug)
     {
-       
-        $headerData = $this->fill_header();
         $viewerId = $this->session->userdata('member_id');
         $bannerData = $this->generateUserBannerData($sellerslug, $viewerId);
-        $bannerData['isLoggedIn'] = $headerData['logged_in'];
+        $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
         
         // assign header_vendor data
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                    ->findOneBy(['slug' => $sellerslug]);                                  
         $bannerData['storeColorScheme'] = $member->getStoreColor();
-        $headerData['title'] = 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph';
-        $headerData['metadescription'] = html_escape($bannerData['arrVendorDetails']['store_desc']);
-        $headerData['relCanonical'] = base_url().$sellerslug.'/contact';
         $bannerData['vendorLink'] = "contact";
-        $headerData['message_recipient'] = $member;
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
         $bannerData['arrVendorDetails'] = $this->serviceContainer['entity_manager']
                                                 ->getRepository("EasyShop\Entities\EsMember")
                                                 ->getVendorDetails($sellerslug);
         $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
-        $headerData = array_merge($headerData, $bannerData);
-        $this->load->view('templates/header_alt', $headerData);
+        $headerData = [
+            'title' => 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph',
+            'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
+            'relCanonical' => base_url().$sellerslug.'/contact',
+        ];
+
+        $bodyData = [
+            'userDetails' => $userDetails,
+            'seller' => $member,
+        ];
+        
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
         $this->load->view('templates/vendor_banner',$bannerData);
-        $this->load->view('pages/user/contact', ['userDetails' => $userDetails]);
+        $this->load->view('pages/user/contact', $bodyData);
         $this->load->view('templates/footer_alt', ['sellerSlug' => $sellerslug]);
     }
 
@@ -698,10 +886,11 @@ class Store extends MY_Controller
                 , "hasAddress" => strlen($arrVendorDetails['stateregionname']) > 0 && strlen($arrVendorDetails['cityname']) > 0
                 , "avatarImage" => $this->serviceContainer['user_manager']->getUserImage($sellerId)
                 , "bannerImage" => $this->serviceContainer['user_manager']->getUserImage($sellerId,"banner")
-                , "isEditable" => ($viewerId && intval($sellerId) === intval($viewerId)) ? TRUE : FALSE
-                , "hasNoItems" => (count($userProduct) > 0) ? FALSE : TRUE
+                , "isEditable" => ($viewerId && intval($sellerId) === intval($viewerId))
+                , "hasNoItems" => (count($userProduct) > 0) ? false : true
                 , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $arrVendorDetails['username'])
                 , "followerCount" => $followers['count']
+                , "snippetMarkUp" => $this->load->view('templates/seo/person_markup', $arrVendorDetails)
             ); 
         $bannerData = array_merge($bannerData, $EsLocationLookupRepository->getLocationLookup());
 

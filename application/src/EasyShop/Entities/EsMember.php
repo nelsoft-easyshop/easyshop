@@ -303,7 +303,17 @@ class EsMember
     /**
      *  @var string
      */
-    const DEFAULT_ACTIVE = 0;    
+    const DEFAULT_IMG_AVATAR = 'usersize.png';    
+
+    /**
+     *  @var string
+     */
+    const DEFAULT_ACTIVE = 1; 
+
+    /**
+     *  @var int
+     */
+    const DEFAULT_AVATAR_VISIBILITY = 0;       
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -888,10 +898,10 @@ class EsMember
      */
     public function getStoreName()
     {   
-        if(!$this->storeName){
+        if ( strlen(trim($this->storeName)) <= 0 
+           || !trim($this->storeName) ){ 
             return $this->getUsername();
         }
-
         return $this->storeName;
     }
 

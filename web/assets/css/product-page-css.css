@@ -1,5 +1,5 @@
-a, li, input, textarea, button, .span-nav-next, .span-nav-prev{
-    transition: all 0.3s ease;
+html, body{
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 }
 
 .product-disable-nav {
@@ -56,6 +56,7 @@ body{
     padding-left: 4px;
     padding-right: 4px;
     min-width: 100px;
+    transition: all 0.3s ease;
 }
 
 .ul-detail-nav > li > a{
@@ -510,7 +511,7 @@ body{
     text-align: left;
     font-size: 16px;
     color: #565656;
-    font-weight: 900;
+    font-weight: bold;
     transition: all 0.3s ease;
     white-space: nowrap;
     overflow: hidden;
@@ -677,7 +678,7 @@ body{
     margin-top: 25px;
     margin-bottom: 5px;
     color: #747474;
-    font-weight: 600;
+    font-weight: normal;
     text-transform: uppercase;
     display: inline-block;
 }
@@ -708,11 +709,11 @@ body{
 }
 
 .span-nav-prev{
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border: solid #747474 2px;
     text-align: center;
-    font-size: 25px;
+    font-size: 20px;
     padding-top: 1px;
     border-radius: 50%;
     transition: all 0.3s ease;
@@ -727,11 +728,11 @@ body{
 }
 
 .span-nav-next{
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border: solid #747474 2px;
     text-align: center;
-    font-size: 25px;
+    font-size: 20px;
     padding-top: 1px;
     border-radius: 50%;
     color: #747474;
@@ -765,7 +766,7 @@ body{
 
 .table-nav-prod > tbody > tr > td{
     border-bottom: solid #fff 3px;
-    font-weight: bold;
+    font-weight: 900;
 }
 
 .table-nav-prod > tbody > tr > td.active{
@@ -1205,6 +1206,11 @@ body{
     font-size: 32px;
     margin-top: 30px;
     text-transform: uppercase;
+    font-weight: normal;
+}
+
+.product-name-seller a{
+    color: #868686;
 }
 
 .product-profile-photo {
@@ -1214,15 +1220,22 @@ body{
     height: 25px;
     margin: 0 4px;
     overflow: hidden;
+    position: relative;
     text-align: center;
     vertical-align: middle;
     width: 25px;
 }
 
 .product-profile-photo img {
+    bottom: 0;
     height: auto;
+    left: 0;
+    margin: auto;
     max-height: 25px;
     max-width: 25px;
+    position: absolute;
+    right: 0;
+    top: 0;
     width: auto;
 }
 
@@ -1332,7 +1345,7 @@ body{
     border: 1px solid #e2e2e2;
     height: 31px;
     line-height: 30px;
-    margin: 10px auto;
+    margin: 19px auto 10px;
     width: 80px;
 }
 
@@ -1396,7 +1409,7 @@ body{
 
 .discounted-price {
     color: #ff6036;
-    font-weight: 900;
+    font-weight: bold;
     margin-right: 5%;
 }
 
@@ -1442,9 +1455,13 @@ body{
     background: transparent;
     border: none;
     cursor: pointer;
+    height: 34px;
     line-height: 30px;
     padding: 7px 12px;
     width: 110%;
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
 }
 
 .prod-select-con select::-ms-expand {
@@ -1498,6 +1515,19 @@ body{
     margin: 0 10px 0 0;
 }
 
+.free-shipping-tag-container{
+    padding-right: 15px;
+}
+
+.product-free-shipping-tag{
+    display: block;
+    text-align: center;
+    background: #00a386;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+}
+
 .shipment-select select {
     padding-right: 50px;
 }
@@ -1531,7 +1561,7 @@ body{
 .prod-quantity-container .quantity-select {
     display: inline-block;
     vertical-align: middle;
-    width: 50%;
+    width: 53%;
 }
 
 .prod-quantity-container .quantity-select select {
@@ -1620,17 +1650,21 @@ body{
     color: #575757;
 }
 
-.btn-contact-seller{
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
+.btn-contact-seller {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#4e83ef), to(#4370cc));
+    background-image: -webkit-linear-gradient(top, #4e83ef, #4370cc);
+    background-image: -moz-linear-gradient(top, #4e83ef, #4370cc);
+    background-image: -ms-linear-gradient(top, #4e83ef, #4370cc);
+    background-image: -o-linear-gradient(top, #4e83ef, #4370cc);
+    background-image: linear-gradient(to bottom, #4e83ef, #4370cc);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#6bfbfbf, endColorstr=#4e83ef);
+    border-bottom: 2px solid #3A62B3;
+    border-radius: 4px;
     height: 58px;
     width: 100%;
-    background: #ffffff;
     font-size: 20px;
     font-weight: 900;
     padding-top: 14px;
-    color: #575757;
-    border: solid #585a59 3px;
+    color: #fff;
     transition: all 0.3s ease;
 }
 
@@ -1643,9 +1677,14 @@ body{
     margin-right: 5px;
 }
 
-.btn-contact-seller:hover{
-    color: #ff893a;
-    border: solid #ff893a 3px;
+.btn-contact-seller:hover {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#3e73df), to(#3A62B3));
+    background-image: -webkit-linear-gradient(top, #3e73df, #3A62B3);
+    background-image: -moz-linear-gradient(top, #3e73df, #3A62B3);
+    background-image: -ms-linear-gradient(top, #3e73df, #3A62B3);
+    background-image: -o-linear-gradient(top, #3e73df, #3A62B3);
+    background-image: linear-gradient(to bottom, #3e73df, #3A62B3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#6bfbfbf, endColorstr=#3A62B3);
+    border-bottom: 2px solid #21499a;
 }
 
 .btn-text > .fa {
@@ -1808,7 +1847,7 @@ body{
 .footer-secondary .footer-ac a {
     color: #fff;
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .footer-secondary .footer-ac a:first-child {

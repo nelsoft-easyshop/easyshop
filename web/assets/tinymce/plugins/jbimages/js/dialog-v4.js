@@ -143,7 +143,7 @@ var jbImagesDialog = {
             tinymce = w.tinymce;
             var mybaseurl = result.base_url;
 
-            tinymce.EditorManager.activeEditor.insertContent('<img src="' + mybaseurl + result.filename +'" data-mce-src="' + mybaseurl + result.filename +'">');
+            tinymce.EditorManager.activeEditor.insertContent('<img src="' + result.filename +'" data-mce-src="' + result.filename +'">');
 
             this.hasSuccess = true;
         }

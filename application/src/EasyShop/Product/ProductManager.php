@@ -736,6 +736,7 @@ class ProductManager
 
         if($product && $product->getMember()->getIdMember() === (int) $memberId){
             $product->setIsDelete($isDeleteStatus); 
+            $product->setLastmodifieddate(date_create());
             $this->em->flush();
             return true;
         }
@@ -775,6 +776,21 @@ class ProductManager
             'additionalInformation'=> $additionalInformation,
             'productOptions' => $productAttributes
         ];
+    }
+
+    public function increaseClickCount($product, $memberId)
+    {
+        $numberOfViewsToday = $this->em->getRepository('EasyShop\Entities\EsProductHistoryView')
+                                ->getCountProductViewsByMemberToday($product->getIdProduct(), $memberId);
+
+        if((int)$memberId !== $product->getMember()->getIdMember()
+            && $numberOfViewsToday <= 0){
+            $product->setClickcount($product->getClickcount() + 1);
+            $this->em->flush();
+            return true;
+        }
+
+        return false;
     }
 }
 

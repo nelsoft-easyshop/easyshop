@@ -1,12 +1,12 @@
 <link type="text/css" href='/assets/css/contact.css?ver=<?php echo ES_FILE_VERSION ?>' rel="stylesheet" media='screen'/>
 <div class="clear"></div>
 <section class="bg-product-section color-default">
-    <div class="container-non-responsive bg-product-section">
+    <div class="container bg-product-section">
         <div class="row row-contact">
             
             <?php echo $userDetails; ?>
 
-            <div class="col-xs-9 col-feedback-container">
+            <div class="col-md-9 col-feedback-container">
                 
                
                
@@ -41,9 +41,6 @@
                     </div>
                 
                 <?php endif; ?>
-            
-            
-            
                 <div class="panel-feedback-ratings">
                     <p class="panel-title-feedback">
                         Feedback Ratings
@@ -52,7 +49,7 @@
                         <div class="col-xs-12">
                             <?php $ratingCounter = 1; ?>
                             <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                <div class="col-xs-4">
+                                <div class=" col-sm-4 col-xs-12 col-rate-mobile">
                                     <p class="span-rate-c"  style="display: inline;"><?php echo html_escape($ratingHeader)?>: </p>
                                     <span class="span-rate" style="display: inline;">
                                         <?php for($i = 0; $i < round($feedbackSummary['rating'.$ratingCounter]); $i++): ?>
@@ -78,19 +75,24 @@
                                 <p class="tab-title-2"><a id="as" class="a-tab" href="#as-seller" role="tab" data-toggle="tab">Feedback from Buyer</a></p>
                             </td>
                             <td class="td-title-3">
-                                <p class="tab-title-3"><a id="fob" class="a-tab" href="#for-other-buyer" role="tab" data-toggle="tab">Feedback for Seller</a></p>
+                                <p class="tab-title-3"><a id="fob" class="a-tab" href="#for-other-seller" role="tab" data-toggle="tab">Feedback for Buyer</a></p>
                             </td>
                             <td class="td-title-4">
-                                <p class="tab-title-4"><a id="fos" class="a-tab" href="#for-other-seller" role="tab" data-toggle="tab">Feedback for Buyer</a></p>
+                                <p class="tab-title-4"><a id="fos" class="a-tab" href="#for-other-buyer" role="tab" data-toggle="tab">Feedback for Seller</a></p>
                             </td>
                         </tr>
                     </table>
                     <div class="div-feedback-list">
                         <div class="tab-content">
-                            <?php foreach($feedbackTabs as $feedbackTab): ?>
+                            <?php foreach($feedbackTabsDesktopView as $feedbackTab): ?>
                                 <?php echo $feedbackTab; ?>
                             <?php endforeach; ?>
                         </div>
+                    </div>
+                    <div class="feedback-mobile">
+                        <?php foreach($feedbackTabsMobileView as $feedbackTab): ?>
+                            <?php echo $feedbackTab; ?>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
@@ -104,7 +106,7 @@
                                 <div class="col-xs-12">
                                     <?php $count = 1; ?>
                                     <?php foreach($ratingHeaders as $ratingHeader): ?>
-                                        <div class="col-xs-4 rating-header" style="margin-bottom: 20px;"  id='rating-header<?php echo $count?>'>
+                                        <div class="col-sm-4 col-xs-12 rating-header  col-rate-mobile" style="margin-bottom: 20px;"  id='rating-header<?php echo $count?>'>
                                             <?php echo html_escape($ratingHeader); ?>
                                             <span class="span-rate feedback-ratings">
                                                 <?php for($i = 1; $i <= 5; $i++): ?>
@@ -120,7 +122,7 @@
                             <?php echo form_open('/store/doCreateFeedback', ['id' => 'feedback-form']); ?>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
-                                    <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer['username']); ?>" readonly/>
+                                    <input name="username" type="text" class="input-lg input-message" placeholder="<?php echo html_escape($viewer->getUsername()); ?>" readonly/>
                                 </div>
                             </div>                            
                             <div class="row">
@@ -153,10 +155,11 @@
                                         Please rate this user in all available criteria.
                                     </div>
                                 </div>
-                                    
-                                <center>
-                                    <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
-                                </center>
+                                <div class="col-xs-12">
+                                    <center>
+                                        <input type="submit" class="btn btn-send" value="SEND FEEDBACK">
+                                    </center>
+                                </div>
                             </div>
                             <input type='hidden' name='userId' value='<?php echo $member->getIdMember() ?>' />
                             <input type='hidden' name='rating1' value='0' id='input-rating-header1'/>

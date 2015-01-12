@@ -28,9 +28,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     top: 0
                 }, 500);
             }
+            $('.autocomplete-suggestions').hide();
             $('.vendor-content-wrapper').addClass('fixed-vendor-content');
         }
         else{
+            $('.nav-suggestion').hide();
             $('.persistent-nav-container').removeClass('sticky-nav-fixed').removeAttr('style');
             $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
         }
@@ -250,7 +252,8 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         }
 
         if (oldIE || isSafari){
-            document.getElementById('form_image').action = '/memberpage/'+formAction;
+            document.getElementById('form_image').action = '/store/'+formAction;
+            $('#isAjax').val('false');
             $('#form_image').submit();
         }
         else{
@@ -303,9 +306,38 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             },
             onShow: function(){
                 $('#div_user_image_prev button').on('click', function(){
-                    document.getElementById('form_image').action = '/memberpage/'+formAction;
-                    $('#form_image').submit();
-                    $.modal.close();
+                    var action = '/store/'+formAction;
+                    $('#form_image').ajaxForm({
+                        url: action,
+                        dataType: "json",
+                        beforeSubmit : function(){
+                            $('.avatar-modal-content').hide();
+                            $('.avatar-modal-loading').fadeIn();
+                        },
+                        uploadProgress : function(event, position, total, percentComplete) {
+                            console.log(percentComplete);
+                        },
+                        success :function(xhrResponse) { 
+                            if(xhrResponse.isSuccessful){
+                                if(formAction === 'banner_upload'){
+                                    var bannerImage = $('img.banner-image');
+                                    bannerImage.attr('src',xhrResponse.banner);
+                                }
+                                else if(formAction === 'upload_img'){
+                                    var avatarImage = $('img.avatar-image');
+                                    avatarImage.attr('src',xhrResponse.image);
+                                }
+                                $.modal.close();
+                                $('#banner-cancel-changes').trigger('click');
+                            }
+                            else{
+                                $.modal.close();
+                                $('#banner-cancel-changes').trigger('click');
+                                alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
+                            }
+                            
+                        },
+                    }).submit(); 
                 });
 
                 if(imageUploadType  == "avatar"){
@@ -418,6 +450,47 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             alert("You are now following " + vendorName + "'s store!");
             $.removeCookie('es_vendor_subscribe',{path: '/'});
         }
+    });
+
+    var $mobilesearchbtn= $(".mobile-search");
+    var $mobilesearchform= $(".search-form");
+    var $mobilevendorcart= $(".mobile-vendor-cart");
+    var $mobilecartitemlist= $(".header-cart-item-list");
+    var $mobileloginbtn= $(".vendor-out-con2");
+    var $mobileloginuser= $(".mobile-user-login");
+
+    $(document).mouseup(function (e) {
+
+        if (!$mobilesearchform.is(e.target) 
+            && $mobilesearchform.has(e.target).length === 0)
+        {
+           $mobilesearchform.hide(1);
+        }
+
+        if (!$mobilecartitemlist.is(e.target) 
+            && $mobilecartitemlist.has(e.target).length === 0)
+        {
+           $mobilecartitemlist.hide(1);
+        }
+
+        else (!$mobileloginuser.is(e.target) 
+            && $mobileloginuser.has(e.target).length === 0)
+        {
+           $mobileloginuser.hide(1);
+        }
+
+    });
+
+    $mobilesearchbtn.click(function() {
+        $mobilesearchform.show();
+    });
+
+    $mobilevendorcart.click(function() {
+        $mobilecartitemlist.show();
+    });
+
+    $mobileloginbtn.click(function() {
+        $mobileloginuser.show();
     });
 
 })(jQuery);

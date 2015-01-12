@@ -1,8 +1,7 @@
 {
-    "name": "easyshop",
-    "dependencies": {
-        "jquery": "1.9.*",
-        "bootstrap": "3.2.0"
-    }
+  "name": "easyshop",
+  "dependencies": {
+    "jquery": "1.9.*",
+    "bootstrap": "3.2.0"
+  }
 }
-

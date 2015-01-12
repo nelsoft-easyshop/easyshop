@@ -33,19 +33,6 @@ class productUpload extends MY_Controller
     }
 
 
-
-    function fill_view()
-    {
-        $data = array(
-                    'title' => 'Sell Product | Easyshop.ph',
-                    'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-                    'render_searchbar' => false, 
-                );
-        $data = array_merge($data, $this->fill_header());
-
-        return $data;
-    }
-
     /**
      *  Display view for selecting category for the listing
      *  of the product
@@ -104,33 +91,28 @@ class productUpload extends MY_Controller
         # getting first category level from database.
         $is_admin = (intval($userdetails['is_admin']) === 1);
         $data_item['firstlevel'] = $this->product_model->getFirstLevelNode(false, false,$is_admin);
-        
-        $data = $this->fill_view();
-        $data['$render_searchbar'] = false; 
-        
 
-        if($data['logged_in'] && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
-            $this->load->view('templates/header', $data); 
+        if($this->session->userdata('usersession') && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
+            $headerData = [
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ];
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step1_view',$data_item);
             $this->load->view('templates/footer'); 
         }
         else{
-
             $headerData = [
                 'title' => 'Verify your account to proceed | Easyshop.ph',
-                'user_details' => $this->fillUserDetails(),
-                'homeContent' =>  $this->fillCategoryNavigation(),
             ];
-            $headerData = array_merge($headerData, $this->fill_header());
 
-            $this->load->view('templates/header_primary', $headerData);
-            $this->load->view('errors/email-verification');
-            $socialMediaLinks = $this->config->load('social_media_links', TRUE);
-
-            $footerData['facebook'] = $socialMediaLinks["facebook"];
-            $footerData['twitter'] = $socialMediaLinks["twitter"];     
-        
-            $this->load->view('templates/footer_primary', $footerData);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('errors/account-unverified');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
         }
 
         
@@ -168,10 +150,14 @@ class productUpload extends MY_Controller
      */
     public function step2()
     { 
-        $data = $this->fill_view();
-        $data['$render_searchbar'] = false; 
-        $this->load->view('templates/header', $data); 
+        $headerData = [
+            'title' => 'Sell Product | Easyshop.ph',
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+            'relCanonical' => '',
+            'renderSearchbar' => false, 
+        ];  
         if($this->input->post('hidden_attribute')){ # if no item selected cant go to the link. it will redirect to step 1
+            $this->load->model("user_model");
             $id = $this->input->post('hidden_attribute'); 
             $response['memid'] = $this->session->userdata('member_id');
             $userdetails = $this->user_model->getUserById($response['memid']);
@@ -248,7 +234,9 @@ class productUpload extends MY_Controller
             if($this->input->post('step1_content')){
                 $response['step1_content'] = $this->input->post('step1_content');
             }
-    
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step2_view',$response);
             $this->load->view('templates/footer');
         }else{
@@ -398,7 +386,9 @@ class productUpload extends MY_Controller
         $response['attributeArray'] = $attributeArray;
         $response['parent_to_last'] = $breadcrumbs;
         $response['product_details'] = $product;
-        $response['cleanDescription'] = $stringUtility->purifyHTML($product['description']);
+        $response['cleanDescription'] = isset($product['description']) 
+                                        ? $stringUtility->purifyHTML($product['description'])
+                                        : "";
         $response['is_edit'] = 'is_edit';
         $response['img_max_dimension'] = $this->img_dimension['usersize'];
         $response['maxImageSize'] = $this->maxFileSizeInMb;
@@ -426,12 +416,14 @@ class productUpload extends MY_Controller
             mkdir($tempdirectory.'other/thumbnail/', 0777, true);
         }
 
-
-        $data = array('title'=>'Edit Product');
-        $data = array_merge($data,$this->fill_view());
-        $data['$render_searchbar'] = false; 
-
-        $this->load->view('templates/header', $data);   
+        $headerData = [
+                'title' => 'Edit Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+        ]; 
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
         $this->load->view('pages/product/product_upload_step2_view',$response);
         $this->load->view('templates/footer');
     }
@@ -534,22 +526,22 @@ class productUpload extends MY_Controller
 
                 $imageUtility->imageResize($pathDirectory.$filenames_ar[$i], 
                                            $pathDirectory."small/".$filenames_ar[$i],
-                                           $imageDimensions["small"]);
+                                           $imageDimensions["productImagesSizes"]["small"]);
 
                 $imageUtility->imageResize($pathDirectory."small/".$filenames_ar[$i], 
                                            $pathDirectory."categoryview/".$filenames_ar[$i],
-                                           $imageDimensions["categoryview"]);
+                                           $imageDimensions["productImagesSizes"]["categoryview"]);
 
                 $imageUtility->imageResize($pathDirectory."categoryview/".$filenames_ar[$i], 
                                            $pathDirectory."thumbnail/".$filenames_ar[$i],
-                                           $imageDimensions["thumbnail"]);
+                                           $imageDimensions["productImagesSizes"]["thumbnail"]);
 
                 //If user uploaded image is too large, resize and overwrite original image
                 if(isset($file_data[$i])){
                     if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
                         $imageUtility->imageResize($pathDirectory.$file_data[$i]['file_name'], 
                                                    $pathDirectory.$file_data[$i]['file_name'],
-                                                   $imageDimensions["usersize"]);
+                                                   $imageDimensions["productImagesSizes"]["usersize"]);
                     }
                 }
             }
@@ -621,15 +613,15 @@ class productUpload extends MY_Controller
 
             $imageUtility->imageResize($pathDirectory.$filename, 
                                        $pathDirectory."small/".$filename,
-                                       $imageDimensions["small"]);
+                                       $imageDimensions["productImagesSizes"]["small"]);
 
             $imageUtility->imageResize($pathDirectory."small/".$filename, 
                                        $pathDirectory."categoryview/".$filename,
-                                       $imageDimensions["categoryview"]);
+                                       $imageDimensions["productImagesSizes"]["categoryview"]);
 
             $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
                                        $pathDirectory."thumbnail/".$filename,
-                                       $imageDimensions["thumbnail"]);
+                                       $imageDimensions["productImagesSizes"]["thumbnail"]);
 
             die('{"result":"ok"}');
         }
@@ -688,10 +680,8 @@ class productUpload extends MY_Controller
             $otherBrand = '';
         } 
         
-        if($isNotSavingAsDraft){
-            if (!in_array($product_condition, $this->lang->line('product_condition'))){
-                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
-            }
+        if (!in_array($product_condition, $this->lang->line('product_condition'))){
+            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
         if($isNotSavingAsDraft){
@@ -909,6 +899,10 @@ class productUpload extends MY_Controller
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
+        }
+
+        if (!in_array($product_condition, $this->lang->line('product_condition'))){
+            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
         // Loading Combinations
@@ -1253,9 +1247,17 @@ class productUpload extends MY_Controller
         if($modal){ 
             $this->load->view('pages/product/product_upload_preview',$preview_data);
         }
-            else{
-            $data = $this->fill_view();
-            $this->load->view('templates/header', $data);
+        else{
+            
+            $headerData = [
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ]; 
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_preview',$preview_data);
             $this->load->view('templates/footer');
         }
@@ -1313,7 +1315,6 @@ class productUpload extends MY_Controller
                 'shipping_summary' => $this->product_model->getShippingSummary($productID),
                 'shipping_preference' => $this->product_model->getShippingPreference($memberId)
             );
-            $data = array_merge($data, $this->fill_view());
             $data['json_check_data'] = json_encode($data['shipping_summary']['shipping_locations']);
             $data['json_shippingpreference'] = json_encode($data['shipping_preference'], JSON_FORCE_OBJECT);
             
@@ -1321,7 +1322,15 @@ class productUpload extends MY_Controller
                 $data['is_edit'] = true;
             }
             
-            $this->load->view('templates/header', $data);
+            $headerData = [
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ]; 
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step3_view',$data);
             $this->load->view('templates/footer');
         }
@@ -1417,7 +1426,8 @@ class productUpload extends MY_Controller
                                 }
                             }
 
-                            if(empty(array_diff($postProductIds,$productItemIds))){
+                            $difference = array_diff($postProductIds,$productItemIds);
+                            if(empty($difference) === true){
                                 foreach( $shipPrice as $groupkey => $pricegroup ){
                                     foreach( $pricegroup as $inputkey => $price ){
                                         $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
@@ -1500,7 +1510,6 @@ class productUpload extends MY_Controller
         $productEntity = $productRepository->find($productId);
 
         if($productEntity){
-            $headerData = $this->fill_view();
             $product = $productManager->getProductDetails($productEntity);
             $productImages = $productImageRepository->getProductImages($productId);
             $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
@@ -1531,14 +1540,22 @@ class productUpload extends MY_Controller
             $shippingAttribute = $productShippingManager->getShippingAttribute($productId);
 
             $mainViewData = [
-                        'product' => $product,
-                        'productBillingInfo' => $billingInfo,
-                        'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
-                        'shipping_summary' => $shippingDetails,
-                        'attr' => $shippingAttribute,
-                    ];
+                'product' => $product,
+                'productBillingInfo' => $billingInfo,
+                'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
+                'shipping_summary' => $shippingDetails,
+                'attr' => $shippingAttribute,
+            ];
+            
+            $headerData = [
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ];
 
-            $this->load->view('templates/header', $headerData);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
             $this->load->view('templates/footer');
         }

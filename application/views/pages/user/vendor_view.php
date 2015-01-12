@@ -1,12 +1,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
-
+<link rel="stylesheet" type="text/css" href="/assets/css/vendorview.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>
-<div class="container-non-responsive bg-product-section">
+<div class="container bg-product-section">
     <div class="row row-products">
-        <div class="col-xs-3 no-padding col-left-wing">
+        <div class="col-md-3 no-padding col-left-wing">
             <div class="left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default  border-0 no-padding">
@@ -21,14 +21,14 @@
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">
                                     <?php foreach( $customCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories">
+                                        <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                                             <li>
                                                 <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
                                             </li>
                                         </a>
                                     <?php endforeach;?>
                                     <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories">
+                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                                             <li>
                                                 <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
                                             </li>
@@ -68,7 +68,7 @@
                                     </li>
                                     <li>
                                         <center>
-                                            <input id="filter-btn" type="button" class="btn-filter" value="filter"/>
+                                            <input class="btn-filter simplemodal-close" id="filter-btn" type="button" value="filter"/>
                                         </center>
                                     </li>
                                 </ul>
@@ -78,7 +78,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-9 col-products">
+        <div class="col-md-9 col-products">
             <div class="div-products">
                 <div class="div-product-view-option">
                     <table class="p-view color-default pull-left">
@@ -112,8 +112,7 @@
                     data-productcount="<?=$arrCat['non_categorized_count']?>"
                     data-catType="<?php echo $arrCat['cat_type']?>"
                 >
-                    <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif"></div>
-
+                    <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
 
                     <?php if((string)$arrCat['non_categorized_count'] === "0"): ?>
                         <span>No items available for this category.</span>
@@ -139,8 +138,7 @@
                         data-productcount="<?=$arrCat['non_categorized_count']?>"
                         data-catType="<?php echo $arrCat['cat_type']?>"
                     >
-                        <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif"></div>
-
+                        <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
                         <?php if($arrCat['non_categorized_count'] === 0): ?>
                             <span>No items available for this category.</span>
                         <?php else:?>
@@ -155,13 +153,36 @@
                 <?php endforeach;?>
 
             </div>
+            
         </div>
     </div>
 </div>
- 
-    
 </section>
+<div class="mobile-left-wing">
+    <div class="row row-left-wing">
+        <a href="#">
+            <div class="col-xs-6 col-categories">
+                Categories
+            </div>
+        </a>
+        <a href="">
+            <div class="col-xs-6 col-filter">
+                Filter
+            </div>
+        </a>
+    </div>
+</div>
+<div class="categories-modal">
+    <h1>Categories</h1>
+</div>
+<div class="filter-modal">
+    <h1>Filter Products</h1>
+</div>
 
+<!-- preload the images -->
+<div style='display:none'>
+    <img src='img/basic/x.png' alt='' />
+</div>
  
 <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
 <script src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>

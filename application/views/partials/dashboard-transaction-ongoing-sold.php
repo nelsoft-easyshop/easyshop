@@ -1,21 +1,22 @@
 <div class="transaction-item">
+<?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $soldTransactionDetails) : ?>
     <div class="item-list-panel">
         <div class="transac-title">
-                <?PHP if (intval($soldTransactionDetails['orderStatus']) != (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
-                    <div><span class="strong-label">Transaction No. : </span> <?=$soldTransactionDetails['invoiceNo'] ?></div>
-                    <div><span class="strong-label">Date : </span> <?=date_format($soldTransactionDetails['dateadded'], 'jS \of F Y')?></div>
-                    <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
-                <?PHP else : ?>
-                    <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
-                        <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
-                    <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT):?>
-                        <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
-                    <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
-                        <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=$soldTransactionDetails['buyerStoreName']?></span></div>
-                    <?php endif;?>
-                <?PHP endif; ?>
-            </div>
+            <?PHP if (intval($soldTransactionDetails['orderStatus']) != (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && !$soldTransactionDetails['isFlag'] ) : ?>
+                <div><span class="strong-label">Transaction No. : </span> <?=$soldTransactionDetails['invoiceNo'] ?></div>
+                <div><span class="strong-label">Date : </span> <?=date_format($soldTransactionDetails['dateadded'], 'jS \of F Y')?></div>
+                <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
+            <?PHP else : ?>
+                <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
+                    <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
+                <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT):?>
+                    <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
+                <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
+                    <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
+                <?php endif;?>
+            <?PHP endif; ?>
+        </div>
         <?PHP foreach($soldTransactionDetails['product'] as $productKey => $product) : ?>
         <div class="pd-top-15">
             <div class="col-xs-12 col-sm-9 padding-reset trans-left-panel pd-top-10">
@@ -41,16 +42,16 @@
                             </p>
                             <div class="div-meta-description">
                                 <div class="row">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Quantity : </span> <?=$product['orderQuantity']?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-6">
                                         <span class="strong-label">Status : </span>
                                         <?PHP if (intval($soldTransactionDetails['orderStatus']) === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && intval($soldTransactionDetails['isFlag']) === 0 ) : ?>
                                             <?PHP if (intval($product['isReject']) === 1) : ?>
@@ -101,53 +102,53 @@
             <div class="col-xs-12 col-sm-3 trans-right-panel">
                 <div class="transaction-right-content">
                     <?PHP if ( (int) $productKey === (int) array_shift(array_keys($soldTransactionDetails['product']))) : ?>
-                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] !== (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && (int) $soldTransactionDetails['isFlag'] === 0 ) : ?>
+                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] !== (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && (int) !$soldTransactionDetails['isFlag'] ) : ?>
                         <div class="transaction-profile-wrapper">
-                                <h4>Sold To:</h4>
-                                <div>
-                                    <span class="transac-item-profile-con">
-                                        <img src="<?=html_escape($soldTransactionDetails['userImage'])?>">
-                                    </span>
-                                    <span class="transac-item-consignee-name">
-                                        <?=html_escape($soldTransactionDetails['buyerStoreName'])?>
-                                    </span>
-                                </div>
-                                <div class="pos-rel">
-                                    <span class="view-delivery-lnk">view delivery details</span>
-                                    <div class="view-delivery-details">
-                                        <div class="col-md-12 pd-tb-8">
-                                            <strong>Consignee:</strong>
-                                            <span><?=html_escape($soldTransactionDetails['consignee'])?></span>
+                            <h4>Sold To:</h4>
+                            <div>
+                                <span class="transac-item-profile-con">
+                                    <img src="<?=html_escape($soldTransactionDetails['userImage'])?>">
+                                </span>
+                                <span class="transac-item-consignee-name">
+                                    <?=html_escape($soldTransactionDetails['buyerStoreName'])?>
+                                </span>
+                            </div>
+                            <div class="pos-rel">
+                                <span class="view-delivery-lnk">view delivery details</span>
+                                <div class="view-delivery-details">
+                                    <div class="col-md-12 pd-tb-8">
+                                        <strong>Consignee:</strong>
+                                        <span><?=html_escape($soldTransactionDetails['consignee'])?></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="pd-tb-8">
+                                            <strong>Mobile:</strong>
+                                            <span><?=$soldTransactionDetails['mobile']?></span>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="pd-tb-8">
-                                                <strong>Mobile:</strong>
-                                                <span><?=$soldTransactionDetails['mobile']?></span>
-                                            </div>
-                                            <div class="pd-tb-8">
-                                                <strong>State/Region:</strong>
-                                                <span><?=$soldTransactionDetails['location']?></span>
-                                            </div>
+                                        <div class="pd-tb-8">
+                                            <strong>State/Region:</strong>
+                                            <span><?=html_escape($soldTransactionDetails['location'])?></span>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="pd-tb-8">
-                                                <strong>Telephone:</strong>
-                                                <span><?=$soldTransactionDetails['telephone']?></span>
-                                            </div>
-                                            <div class="pd-tb-8">
-                                                <strong>State/Region:</strong>
-                                                <span><?=$soldTransactionDetails['city']?></span>
-                                            </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="pd-tb-8">
+                                            <strong>Telephone:</strong>
+                                            <span><?=html_escape($soldTransactionDetails['telephone'])?></span>
                                         </div>
-                                        <div class="col-md-12 pd-tb-8">
-                                            <strong>Address:</strong>
-                                            <span><?=html_escape($soldTransactionDetails['fulladd'])?></span>
+                                        <div class="pd-tb-8">
+                                            <strong>State/Region:</strong>
+                                            <span><?=html_escape($soldTransactionDetails['city'])?></span>
                                         </div>
+                                    </div>
+                                    <div class="col-md-12 pd-tb-8">
+                                        <strong>Address:</strong>
+                                        <span><?=html_escape($soldTransactionDetails['fulladd'])?></span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         <?PHP endif; ?>
-                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] != 3  && (int) $soldTransactionDetails['isFlag'] === 0) : ?>
+                        <?PHP if ( (int) $soldTransactionDetails['orderStatus'] === 0 && (int) $product['idOrderProductStatus'] === 0 && (int) $soldTransactionDetails['idPaymentMethod'] != 3  && !$soldTransactionDetails['isFlag']) : ?>
                         <div class="trans-btn-wrapper trans-btn-con1">
                                 <button class="btn btn-default-1 isform shipment-detail-button txt_buttons">Ship Item</button>
                                 <div class="shipping-details">
@@ -225,7 +226,7 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            <!-- </div> -->
+                        </div>
                         <?PHP elseif ( (int) $soldTransactionDetails['orderStatus'] === (int) \EasyShop\Entities\EsOrderStatus::STATUS_PAID && (int) $soldTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY) : ?>
                         <div class="trans-btn-wrapper trans-btn-con2">
                                 <?php
@@ -237,7 +238,7 @@
                                 <input type="hidden" name="transaction_num" value="<?=$soldTransactionDetails['idOrder']?>">
                                 <input type="hidden" name="invoice_num" value="<?=$soldTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
-                            <!-- </div> -->
+                         </div>
                         <?PHP endif; ?>
                         <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0 ) : ?>
                                 <button class="btn btn-default-1 give-feedback-button">
@@ -278,7 +279,6 @@
                                     <?php echo form_close();?>
                                 </div>
                         <?PHP endif; ?>
-                       </div>
                     <?PHP endif; ?>
                 </div>
             </div>
@@ -293,4 +293,10 @@
             <?=$pagination; ?>
         </center>
     </div>
+<?PHP else : ?>
+    <div class="jumbotron no-items">
+        <i class="icon-category"></i>
+        There are no transactions for this category.
+    </div>
+<?PHP endif; ?>
 </div>

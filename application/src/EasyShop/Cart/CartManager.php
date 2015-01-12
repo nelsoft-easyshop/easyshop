@@ -210,10 +210,10 @@ class CartManager
         foreach($cartContents as $cartItem){
         
             $validationResult = $this->validateSingleCartContent($cartItem['id'], $cartItem['options'],  $cartItem['qty']);
-
+            $productItem = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                    ->find($cartItem['product_itemID']);
             $itemData = $validationResult['itemData'];
             $product = $validationResult['product'];
-
             $serialRawOptions = serialize($cartItem['options']);
             $serialValidatedOptions = serialize($itemData['options']);
             $canBuyerDoPurchase = $product ? $this->canBuyerPurchaseProduct($product, $memberId) : false;
@@ -221,7 +221,8 @@ class CartManager
             if( !$canBuyerDoPurchase || intval($cartItem['id']) !==  intval($itemData['id']) ||
                 $serialRawOptions !== $serialValidatedOptions ||
                 intval($itemData['member_id']) === intval($memberId) || $product->getIsDraft() ||
-                $product->getIsDelete() || intval($itemData['qty']) === 0)
+                $product->getIsDelete() || intval($itemData['qty']) === 0
+                || !$productItem)
             {
                 $this->cart->removeContent($cartItem[$cartIndexName]);
             }

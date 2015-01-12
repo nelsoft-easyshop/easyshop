@@ -19,16 +19,11 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->config->set_item('base_url',"https://".$_SERVER["SERVER_NAME"]."/");
-
         $url = uri_string();
-        
         if($url !== 'login' && $url !== 'register'){
             $this->session->set_userdata('uri_string', $url);
         }
-        
         if (isset ($this->kernel)) {
-
             /* This way service container is more accessible to child classes */
             $this->serviceContainer = $this->kernel->serviceContainer;
             $this->load->helper('view_helper');
@@ -36,90 +31,8 @@ class MY_Controller extends CI_Controller
         /*  Load custom common functions */
         $this->load->helper('common_helper');
     }
-
-    /**
-     *  Return social media links
-     *  @return ARRAY
-     */
-    public function getSocialMediaLinks()
-    {
-        $this->config->load('social_media_links', TRUE);
-        return $this->config->config['social_media_links'];        
-    }
     
-    #fill_header is not run in the constructor of MY_Controller despite that fact that all pages need it
-    #because it would add unnecessary overhead for all ajax calls. Instead it is called only in the 
-    #controller functions that need it
-    function fill_header()
-    {   
-        $this->load->model("user_model");
-        $this->load->model("product_model");
-        $this->load->model("messages_model");
-        $user = array();
-        $usersession = $this->session->userdata('usersession');
-        if(!empty($usersession) || $this->check_cookie()){
-            $uid = $this->session->userdata('member_id'); 
-            $user = $this->user_model->getUserById($uid);
-            $logged_in = true;
-        }
-        else{
-            $logged_in = false;
-        }
-
-        $cart = array();
-        $cartSize = 0;
-        $cartManager = $this->serviceContainer['cart_manager'];
-        $cartImplementation = $cartManager->getCartObject();
-        if ($logged_in) {
-            $cart = array_values($cartManager->getValidatedCartContents($uid));
-            $cartSize = $cartImplementation->getSize(TRUE);
-        }
-        $cartTotalAmount = $cartSize > 0 ? $cartImplementation->getTotalPrice() : 0;
-        
-        $unread = $this->messages_model->get_all_messages($this->session->userdata('member_id'),"Get_UnreadMsgs");
-        $msgs['unread_msgs'] = (isset($unread['unread_msgs']) ?$unread['unread_msgs'] : 0);
-        $msgs['msgs'] = (isset($unread['unread_msgs']) ? ($unread['unread_msgs'] != 0 ? reset($unread['messages']) : ""):0);		
-        $data = array(
-            'logged_in' => $logged_in,
-            'user' => $user,
-            'cartSize' => $cartSize,
-            'cartItems' => $cart,
-            'cartTotal' => $cartTotalAmount,
-            'msgs'=> $msgs,
-            'category_search' => $this->product_model->getFirstLevelNode(),
-            );
-
-        return $data;
-    }
-    
-    /**
-     * Generates the category navigation
-     * 
-     * @return mixed
-     */
-    public function fillCategoryNavigation()
-    {
-        return $this->serviceContainer['xml_cms']->getHomeData(true);
-    }
-
-    /**
-     * Generates the user data for the header
-     * 
-     * @return mixed
-     */
-    public function fillUserDetails()
-    {
-            $em = $this->serviceContainer["entity_manager"];
-            $userManager = $this->serviceContainer['user_manager'];
-            $memberId = $this->session->userdata('member_id');
-            $userDetails = $em->getRepository("EasyShop\Entities\EsMember")
-                              ->find($memberId);
-            $userDetails->profileImage =  ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');  
-
-            return $userDetails;
-    }
-    
-    
+   
     /**
      * Authenticates the user based on the remember-me cookie
      *
@@ -217,38 +130,6 @@ class MY_Controller extends CI_Controller
         }
         $array = $temp; 
     }  
-    
-    /**
-     *  Authentication method for webservice
-     *
-     *  @param string $postedData
-     *  @param string $postedHash
-     *  @param string $evaluate
-     */
-    public function authentication($postedData, $postedHash, $evaluate = "")
-    {
-        foreach ($postedData as $data => $value) {
-            
-            if($data == "hash" || $data == "_token" || $data == "csrfname" || $data == "callback" || $data == "password" || $data == "_" || $data == "checkuser") {
-                 continue;               
-            }
-            else{
-                $evaluate .= $value;
-            }
-        }
-
-        $em = $this->serviceContainer["entity_manager"];
-        $adminUser = $em->getRepository("EasyShop\Entities\EsAdminMember")
-                                        ->find($postedData["userid"]);
-
-        $hash = $evaluate.$adminUser->getPassword();
-
-        return $isAuthenticated = (sha1($hash) != $postedHash) ? false : true;
-    }
-
-
-
-
 }
 
 

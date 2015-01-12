@@ -164,18 +164,66 @@
                         top: '-155px'
                     }).stop().animate({
                         top: 0
-                    }, 200);
+                    }, 200); 
+                    $('.autocomplete-suggestions').hide();
                 }
 
             } 
-
             else {
+                $('.nav-suggestion').hide();
                 $('.sticky-header-nav').removeClass('sticky-nav-fixed').removeAttr('style');
             }
         });
- 
-        
 
+        var hideSuggestion = function(){ 
+            $('.nav-suggestion').css({
+                top: $('#primary-search2').offset().top + $('#primary-search2').outerHeight(),
+                left: $('#primary-search2').offset().left,
+                width: $('#primary-search2').outerWidth()
+            });
+        }
+
+        $(window).on('scroll', hideSuggestion);
+
+         $('#primary-search').autoComplete({
+            minChars: 3,
+            cache: false,
+            menuClass: 'autocomplete-suggestions',
+            source: function(term, response){ 
+                try { 
+                    xhr.abort(); 
+                } catch(e){}
+                var xhr = $.ajax({ 
+                    type: "get",
+                    url: '/search/suggest',
+                    data: "query=" + term,
+                    dataType: "json", 
+                    success: function(data){
+                        response(data); 
+                    }
+                });
+            }
+        });
+
+        $('#primary-search2').autoComplete({
+            minChars: 3,
+            cache: false,
+            menuClass: 'autocomplete-suggestions nav-suggestion',
+            source: function(term, response){ 
+                try { 
+                    xhr.abort(); 
+                } catch(e){}
+                var xhr = $.ajax({ 
+                    type: "get",
+                    url: '/search/suggest',
+                    data: "query=" + term,
+                    dataType: "json", 
+                    success: function(data){
+                        response(data); 
+                    }
+                });
+            }
+        });
 
 }(jQuery));
 

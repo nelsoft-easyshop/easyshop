@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsCat
 {
+
+    const ROOT_CATEGORY_ID = 1;
+
     /**
      * @var integer
      *

@@ -38,7 +38,7 @@ class NewHomeWebService extends MY_Controller
      * Handles if the request is authenticated
      * @var bool
      */    
-    private $isAuthenticated; 
+    private $isAuthenticated = false; 
 
     public function __construct() 
     {
@@ -47,6 +47,7 @@ class NewHomeWebService extends MY_Controller
         $this->xmlCmsService = $this->serviceContainer['xml_cms'];
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];
+        $this->authenticateRequest = $this->serviceContainer['webservice_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
         $this->tempHomefile  = APPPATH . "resources/". $this->xmlFileService->getTempHomeXMLfile().".xml"; 
         $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
@@ -54,7 +55,9 @@ class NewHomeWebService extends MY_Controller
         $this->usererror = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
 
         if($this->input->get()) {        
-            $this->isAuthenticated = $this->authentication($this->input->get(), $this->input->get('hash'));
+            $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
+                                                                              $this->input->get('hash'),
+                                                                              true);
         }    
     }
 
@@ -443,9 +446,10 @@ class NewHomeWebService extends MY_Controller
                 $this->cropImage($imgDirectory, $imgDimensions);
             }
 
-            if( $imageData['image_width'] !== $imageDimensionsConfig["adsImage"][0] || $imageData['image_height'] !== $imageDimensionsConfig["adsImage"][1] ){    
+            if( $imageData['image_width'] !== $imageDimensionsConfig["cmsImagesSizes"]["adsImage"][0] 
+                || $imageData['image_height'] !== $imageDimensionsConfig["cmsImagesSizes"]["adsImage"][1] ){    
                 $imageUtility = $this->serviceContainer['image_utility'];     
-                $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["adsImage"], false);                           
+                $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["cmsImagesSizes"]["adsImage"], false);                           
             }
 
 
@@ -511,9 +515,9 @@ class NewHomeWebService extends MY_Controller
                     $this->cropImage($imgDirectory, $imgDimensions);
                 }
 
-                if( $imageData['image_width'] !== $imageDimensionsConfig["adsImage"][0] || $imageData['image_height'] !== $imageDimensionsConfig["adsImage"][1] ){    
+                if( $imageData['image_width'] !== $imageDimensionsConfig["cmsImagesSizes"]["adsImage"][0] || $imageData['image_height'] !== $imageDimensionsConfig["cmsImagesSizes"]["adsImage"][1] ){    
                     $imageUtility = $this->serviceContainer['image_utility'];
-                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["adsImage"], false);
+                    $imageUtility->imageResize($imgDirectory, $imgDirectory, $imageDimensionsConfig["cmsImagesSizes"]["adsImage"], false);
                 }
 
                 $map->adSection->ad[$index]->img = $value;
@@ -905,14 +909,20 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $template = $this->input->get("template");
-        $string = $this->xmlCmsService->getString("sliderSection",$template, $map->sliderSection->slide[$this->defaultIndex]->image[$this->defaultIndex]->path); 
-        $index = $index == 0 ? 1 : $index + 1;  
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide[last()]', "\t\t","\n");    
-        if($addXml === true) {
-            return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
-        }
+        $string = $this->xmlCmsService->getString("sliderSection",$template, ""); 
+        $index = $index === 0 ? 1 : $index + 1;  
+
+        $this->config->load('image_dimensions', true);        
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];        
+        $defaultTemplateSliderCount = count($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);   
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
+                                                        $string,'/map/sliderSection/slide[last()]', 
+                                                        "\t\t",
+                                                        "\n");  
+
+        return $this->output
+                ->set_content_type('application/json')
+                ->set_output($this->json);
     }    
 
     /**
@@ -951,8 +961,8 @@ class NewHomeWebService extends MY_Controller
             if ( ! $this->upload->do_upload("myfile")) {
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
-                                ->set_content_type('application/json')
-                                ->set_output($error);
+                                     ->set_content_type('application/json')
+                                     ->set_output(json_encode($error));
             } 
             else {
                 $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
@@ -963,19 +973,18 @@ class NewHomeWebService extends MY_Controller
                 }
                 $imageData = $this->upload->data(); 
                 $template = $map->sliderSection->slide[$index]->template;
-                $subSliderCount = count($map->sliderSection->slide[$index]->image) - 1;
+                $subSliderCount = count($map->sliderSection->slide[$index]->image);
 
                 $this->config->load('image_dimensions', TRUE);
                 $imageDimensionsConfig = $this->config->config['image_dimensions'];
                 $imageUtility = $this->serviceContainer['image_utility'];
                 if($subIndex >= $subSliderCount) {
-                    $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
-                    print_r($tempDimensions);
+                    $tempDimensions = end($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);
                     $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
-                    reset($imageDimensionsConfig["mainSlider"]["$template"]);                
+                    reset($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);                
                 }
                 else {
-                    $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$index];
+                    $tempDimensions = $imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"][$subIndex];
                     $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
                 }
 
@@ -1108,7 +1117,7 @@ class NewHomeWebService extends MY_Controller
     public function fetchPreviewSlider()
     {
 
-        $homeContent = $this->serviceContainer['xml_cms']->getHomeData(false, true);
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData(true);
 
         $sliderSection = $homeContent['slider']; 
         $homeContent['slider'] = [];
@@ -1158,55 +1167,51 @@ class NewHomeWebService extends MY_Controller
         if ( ! $this->upload->do_upload("myfile")) {
             $error = ['error' => $this->upload->display_errors()];
                      return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($error);
+                                 ->set_content_type('application/json')
+                                 ->set_output(json_encode($error));
         } 
         else {
             $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
-        
+            $subSliderCount = count($map->sliderSection->slide[$index]->image);
+            $template = (string)$map->sliderSection->slide[$index]->template;            
+            $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
+            if(trim($map->sliderSection->slide[$index]->image->path) === "") {
+                $map->sliderSection->slide[$index]->image->path = $value;
+                $map->sliderSection->slide[$index]->image->target = $target;
+                $map->asXML($this->tempHomefile); 
+            }
+            else {
+                $index = $index === 0 ? 1 : $index + 1;
+                $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
+                                                                $string,
+                                                                '/map/sliderSection/slide['.$index.']/image[last()]',
+                                                                "\t\t\t","\n");
+                $subSliderCount += 1;
+            }      
+
             $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
 
             if($imgDimensions['w'] > 0 && $imgDimensions['h'] > 0){       
                 $this->cropImage($imgDirectory, $imgDimensions);
             }
-            $template = $map->sliderSection->slide[$index]->template;
-            $subSliderCount = count($map->sliderSection->slide[$index]->image) - 1;
 
             $this->config->load('image_dimensions', true);
             $imageDimensionsConfig = $this->config->config['image_dimensions'];
-            $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"]["$template"]);
+            $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"][$template]);
             $imageUtility = $this->serviceContainer['image_utility'];
-            if($subSliderCount > $defaultTemplateSliderCount) {
-                $tempDimensions = end($imageDimensionsConfig["mainSlider"]["$template"]);
+            if($subSliderCount >= $defaultTemplateSliderCount) {
+                $tempDimensions = end($imageDimensionsConfig["mainSlider"][$template]);
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
-                reset($imageDimensionsConfig["mainSlider"]["$template"]);                
+                reset($imageDimensionsConfig["mainSlider"][$template]);                
             }
             else {
-
-                $tempDimensions = $imageDimensionsConfig["mainSlider"]["$template"][$index];
+                $tempDimensions = $imageDimensionsConfig["mainSlider"][$template][$subSliderCount - 1];
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
-            }
+            } 
 
-            $string = $this->xmlCmsService->getString("subSliderSection", $value, "", "", $target);      
-            if($map->sliderSection->slide[$index]->image->path == "unavailable_product_img.jpg" && $map->sliderSection->slide[$index]->image->target == "/") {
-                $map->sliderSection->slide[$index]->image->path = $value;
-                $map->sliderSection->slide[$index]->image->target = $target;
-                if($map->asXML($this->tempHomefile)) {
-                    return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($this->json);
-                }   
-            }
-            else {
-                $index = $index == 0 ? 1 : $index + 1;
-                $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide['.$index.']/image[last()]',"\t\t\t","\n");
-
-            }
-            if($addXml === true) {
-                return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json); 
-            }   
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);             
         }
     }
 
@@ -1244,7 +1249,7 @@ class NewHomeWebService extends MY_Controller
     {         
         if(!file_exists($this->tempHomefile)) {
             copy($this->file, $this->tempHomefile);
-        }    
+        }  
         $this->output
              ->set_content_type('text/plain') 
              ->set_output(file_get_contents($this->tempHomefile));
@@ -1271,6 +1276,42 @@ class NewHomeWebService extends MY_Controller
 
           
     }
+
+
+    /**
+     * Retrieves template dimensions for the posted index and templateName
+     * @return JSON
+     */
+    public function getTemplateImageDimension()
+    {
+        $index = (int)$this->input->get("index");
+        $type = $this->input->get("type");
+        $currentSliderCount = (int)$this->input->get("currentSliderCount");
+        $template = trim($this->input->get("template"));
+
+
+        $this->config->load('image_dimensions', true);
+        $imageDimensionsConfig = $this->config->config['image_dimensions'];
+        $imageDimensions = $imageDimensionsConfig[$type];
+
+        if($type === "mainSlider") {
+            $defaultTemplateCount = count($imageDimensions[$template]);
+            if($index >= $defaultTemplateCount) {
+                $dimensions = end($imageDimensions[$template]);
+            }
+            else {
+                $dimensions = $imageDimensions[$template][$index];
+            }
+        }
+        else {
+            $dimensions = $imageDimensions;
+        }
+
+        $jsonString = "jsonCallback({'sites':[{'success': '".implode(",",$dimensions)."',},]});";
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($jsonString);                
+    }    
 
 }
 

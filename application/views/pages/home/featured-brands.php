@@ -7,7 +7,7 @@
                 <div class="popular-brands carousel-wrapper">
                         <header class="content-title">
                             <div class="title-bg title-brand">
-                                <span class="category-1-icon"></span><h3><b>POPULAR BRANDS</b></h3>
+                                <span class="category-1-icon"></span><h3>POPULAR BRANDS</h3>
                             </div>
                         </header>
                     

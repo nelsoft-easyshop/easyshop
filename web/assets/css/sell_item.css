@@ -1417,3 +1417,9 @@ li.brand_result:hover{
     margin: 0 auto;
 }
 
+
+.pop-up-fixed{
+    position: fixed !important;
+    top: 13px !important;
+}
+

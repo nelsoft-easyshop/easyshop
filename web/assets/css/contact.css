@@ -34,6 +34,14 @@ section {
     margin-bottom: 10px;
 }
 
+.div-contact-container{
+    display: block;
+}
+
+.drop-user-details{
+    display: none;
+}
+
 .table-contact-details{
     margin-top: 25px;
     border-bottom: solid #e2e2e2 0px;
@@ -57,8 +65,6 @@ section {
     position: absolute;
     top: 0;
     right: 0;
-    margin-right: -22px;
-    margin-top: 10px;
     background: #4370cc;
     color: #ffffff;
     padding: 5px;
@@ -81,8 +87,6 @@ section {
     position: absolute;
     top: 0;
     right: 0;
-    margin-right: -22px;
-    margin-top: 10px;
     background: #4370cc;
     color: #ffffff;
     padding: 5px;
@@ -104,8 +108,6 @@ section {
     position: absolute;
     top: 0;
     right: 0;
-    margin-right: -15px;
-    margin-top: 10px;
     background: #4370cc;
     color: #ffffff;
     padding: 5px;
@@ -128,8 +130,6 @@ section {
     position: absolute;
     top: 0;
     right: 0;
-    margin-right: -15px;
-    margin-top: 10px;
     background: #4370cc;
     color: #ffffff;
     padding: 5px;
@@ -184,6 +184,27 @@ section {
     background: #ffffff;
     border-radius: 4px;
     padding: 25px 25px;
+    position: relative;
+}
+
+.panel-contact-details{
+    min-height: 100px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 25px 25px;
+}
+
+.panel-contact-details-mobile{
+    min-height: 40px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 4px;
+    padding: 25px 25px;
+}
+
+.clone-user-details{
+    display: none;
 }
 
 #save-edit{
@@ -239,6 +260,7 @@ section {
     margin-bottom: 20px;
     margin-left: 30px;
     padding-bottom:30px;
+    position: relative;
 }
 
 .div-about-content{
@@ -572,4 +594,144 @@ section {
 
 .alert > .close{
     margin-right: 0px;
+}
+
+.feedback-cat-mobile{
+    background-color: #f4f4f4;
+    border-bottom: 3px solid #e2e2e2;
+    border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 58px;
+    line-height: 58px;
+    padding-left: 10px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background: #f4f4f4 url(../images/sprites/dashboard-arrow.png) no-repeat right center
+}
+
+.td-info-mobile{
+    padding-left: 10px;
+}
+
+.feedback-item-mobile-content{
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.feedback-mobile{
+    display: none;
+}
+
+.feedback-mobile-item{
+    margin-bottom: 10px;
+}
+
+.feedback-mobile-1,
+.feedback-mobile-2,
+.feedback-mobile-3,
+.feedback-mobile-4
+{
+    display: none;
+}
+
+.feedback-from-seller.active-bar, 
+.feedback-from-buyer.active-bar, 
+.feedback-for-seller.active-bar, 
+.feedback-for-buyer.active-bar 
+{
+    background: #f4f4f4 url(../images/sprites/dashboard-arrow2.png) no-repeat right center;
+}
+@media only screen and (max-width : 768px) { 
+    .panel-about-seller,
+    .panel-feedback-ratings,
+    .panel-feedback-message,
+    .panel-contact-message,
+    .panel-contact-details-mobile,
+    .panel-contact-details{
+        margin-left: 0px;
+        padding: 25px 15px;
+        
+    }
+    
+    .panel-contact-details{
+        padding: 25px 15px 0px 15px;
+        min-height: 40px;
+    }
+    
+    .panel-contact-details .panel-title-contact{
+        margin-bottom: 0px !important;
+    }
+    
+    .btn-send{
+        width: 100%;
+    }
+    
+    .no-feedback-list{
+        font-size: 20px;
+    }
+    
+    .span-rate-c{
+        margin-bottom: 20px;
+    }
+    
+    .col-rate-mobile{
+        padding-left: 0px;
+        margin-bottom: 10px;
+    }
+    
+    .row-contact{
+        min-height: 100px;
+    }
+    
+    .left-wing-contact{
+        margin-left: 0px;
+        width: 100% !important;
+    }
+    
+    .col-left-wing{
+        padding: 15px !important;
+    }
+    
+    .div-contact-container{
+         display: none;
+    }
+    
+    .drop-user-details{
+        display: inline;
+    }
+    
+    #save-edit{
+        width: 100%;
+    }
+    
+    .div-feedback-list,
+    .table-tab{
+        display: none;
+    }
+    
+    .p-date-feedback{
+        line-height: 8px;
+    }
+    
+    .col-item-message{
+        min-height: 30px;
+        border-left: none;
+        margin-left: 0px;
+        font-style: italic;
+        margin-top: 10px;
+    }
+    
+    .no-feedback-list{
+        margin-bottom: 10px !important;
+    }
+    
+    .feedback-mobile{
+        display: block;
+    }
 }

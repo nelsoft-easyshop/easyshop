@@ -1,8 +1,8 @@
-<div class="col-xs-3 no-padding col-left-wing">
+<div class="col-md-3 no-padding col-left-wing">
     <div class="left-wing-contact" id="user-detail-partial">
         <div class="panel-contact-details">
             <p class="panel-title-contact">
-                Details
+                Details <i class="fa fa-caret-down drop-user-details"></i>
            </p>
            <input type="hidden" id="isEditable" value="<?php echo html_escape($isEditable)?>"/>
            <input type="hidden" id="errorCount" value="<?php echo html_escape(count($errors))?>"/>
@@ -13,7 +13,7 @@
            <i class="fa fa-ban fa-cancel-edit pull-right" id="editIconClose"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
           
            <?php endif; ?>
-
+            <div class="user-details-container">
             <table width="100%" class="table-contact-details">
                 <?php if(count($errors) > 0 || $isValid): ?>
                 <tr>
@@ -101,12 +101,12 @@
                 </tr>
                 <?php echo form_close(); ?>
             </table>
+            </div>
             <br/>
 
         </div>
     </div>
 </div>
-
 <script type="text/javascript" src="/assets/js/src/usercontact.js?ver=<?=ES_FILE_VERSION?>"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
 
