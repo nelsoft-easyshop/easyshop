@@ -34,8 +34,6 @@
                     $("#login_password").val("");
                     $("#deactivatePassword").val("");                        
                     $("#login_error").html("<span style='color:green'>Please check your email for the verification link we've just sent to complete the reactivation process of your account. We are looking forward to serving you again! Happy Shopping!</span>");
-
-
                 }
                 else{
                     $("#login_error").html(obj);
@@ -80,6 +78,7 @@
                     url: "/login/authenticate",
                     data: $(form).serializeArray(),
                     success:function(data){
+                
                         if(data.timeoutLeft >= 1){
                             $("p#lockoutDuration").html("Timeout Remaining: " + data.timeoutLeft);
                             $("#failed-login").show();
@@ -144,6 +143,15 @@
             $('#login_error').text('');
         });
     });
+    
+    $(document).ready(function(){
+        var $accountBannedElement = $('#account-banned-error');
+        var isAccountBanned = $accountBannedElement.val();
+        if(isAccountBanned){
+            alert(escapeHtml($accountBannedElement.data('message')));
+        }
+    });
+    
     
 })(jQuery);
 
