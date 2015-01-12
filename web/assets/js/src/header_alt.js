@@ -83,7 +83,7 @@
 
         $('#main_search_alt2')
             .autoComplete({
-                minChars: 3,
+                minChars: $minChars,
                 cache: false,
                 menuClass: 'autocomplete-suggestions nav-suggestion',
                 source: function(term, response){ 
