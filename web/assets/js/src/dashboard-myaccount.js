@@ -127,7 +127,7 @@
             loadingimg.show(); 
             $.ajax({
                 type: 'post',
-                data: {cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
+                data: {currentPassword:currentPassword, password:newPassword, csrfname : csrftoken},
                 url: "/register/changepass",
                 success: function(data) {
                     actionGroupChangePass.show();
