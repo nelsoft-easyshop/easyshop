@@ -506,8 +506,7 @@ class SearchProduct
         $this->sphinxClient->AddQuery($queryString, 'suggestions');
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
-        if($sphinxResult === false)
-        {
+        if($sphinxResult === false){
             $keywords = $this->em->getRepository('EasyShop\Entities\EsKeywords')
                                  ->getSimilarKeywords($queryString, $suggestionLimit);
             foreach($keywords as $word){
