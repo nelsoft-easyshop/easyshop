@@ -155,6 +155,9 @@ class ValidationRules
                     'storeDescription' => array(
                                 new Assert\Length(['max' => '1024'])
                     ),
+                    'gender' => array(
+                                new CustomAssert\IsValidGender(),
+                    ),                    
             ),
             'store_setup' => [
                     'shop_name' =>  [new Assert\NotBlank(),
