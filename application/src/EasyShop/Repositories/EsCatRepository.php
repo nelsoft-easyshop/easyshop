@@ -306,7 +306,7 @@ class EsCatRepository extends EntityRepository
      * @param  integer $categoryId
      * @return array
      */
-    public function getParentWithNestedSet($categoryId = \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID)
+    public function getAncestorsWithNestedSet($categoryId = \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID)
     {
         $this->em =  $this->_em;
         $rsm = new ResultSetMapping();

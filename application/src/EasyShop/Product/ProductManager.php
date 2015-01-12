@@ -412,7 +412,7 @@ class ProductManager
             $productIdsNotIncluded = []; 
             $productIdsNotIncluded[] = $productId;
             $categoryParent = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                       ->getParentWithNestedSet($product->getCat()->getIdCat());
+                                       ->getAncestorsWithNestedSet($product->getCat()->getIdCat());
             if(empty($categoryParent) === false){
                 foreach ($products as $product) {
                     $productIdsNotIncluded[] = $product->getIdProduct();
