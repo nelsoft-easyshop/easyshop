@@ -1090,7 +1090,7 @@ class EsProductRepository extends EntityRepository
                                  ->setParameter('isDraft', EsProduct::ACTIVE)
                                  ->setParameter('isDelete', EsProduct::ACTIVE)
                                  ->orderBy('p.clickcount', 'DESC')
-                                 ->getQuery();;
+                                 ->getQuery();
 
         if($limit){
             $qbResult->setMaxResults($limit);
