@@ -79,6 +79,11 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.partial_userdetails.js':
                             ['web/assets/js/src/usercontact.js',
                              'web/assets/js/src/vendor/jquery.numeric.js'],
+
+                    'web/assets/js/min/easyshop.cart-responsive.js':
+                            ['web/assets/js/src/vendor/numeral.min.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
+                             'web/assets/js/src/cart.js'],
                 }
             }
         }
