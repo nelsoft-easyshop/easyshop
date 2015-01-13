@@ -647,7 +647,8 @@ section {
 {
     background: #f4f4f4 url(../images/sprites/dashboard-arrow2.png) no-repeat right center;
 }
-@media only screen and (max-width : 768px) { 
+@media only screen and (max-width : 769px) { 
+
     .panel-about-seller,
     .panel-feedback-ratings,
     .panel-feedback-message,
@@ -733,5 +734,13 @@ section {
     
     .feedback-mobile{
         display: block;
+    }
+    
+    .col-rate-mobile:first-child .span-rate{
+        padding-left: 32px !important;
+    }
+    
+    .col-rate-mobile:last-child .span-rate{
+        padding-left: 16px !important;
     }
 }

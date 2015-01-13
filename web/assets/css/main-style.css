@@ -371,12 +371,19 @@ textarea {
 }
 
 #banner_edit img {
+    bottom: 0;
+    left: 0;
     position: relative;
+    right: 0;
+    top: 0;
+    transform: inherit;
+    -webkit-transform: inherit;;
+    -ms-transform: inherit;
 }
 
 .vendor-profile-content {
     background-color: rgba(255,255,255,0.9);
-    min-height: 365px;
+    height: 365px;
     max-width: 326px;
     padding: 44px 0px 32px;
     position: relative;
@@ -420,6 +427,10 @@ textarea {
     right: 0;
     top: 0;
     width: auto;
+}
+
+.avatar-image-mobile{
+    display: none;
 }
 
 .vendor-profile-content h4 {
@@ -1188,16 +1199,19 @@ td.td-view.p-view2.color-default{
 /** For Left Column**/
 
 .left-wing{
-    margin-left: -10px;
+    margin-left: 15px;
     margin-top: 10px;
-    width: 324px !important;
-    padding-right: 5px;
+    /* width: 324px !important; */
+    padding-right: 0px;
+    margin-right: -15px;
 }
 
 .left-wing-contact{
-    margin-left: -10px;
+    margin-left: 15px;
     margin-top: 10px;
-    width: 324px !important;
+    /* width: 324px !important; */
+    padding-right: 0px;
+    margin-right: -25px;
 }
 
 #the-sticky-div.sticky {
@@ -1285,7 +1299,7 @@ td.td-view.p-view2.color-default{
 }
 
 .input-filter-price{
-    width: 104px;
+    width: 90px;
     padding: 5px;
     margin-left: 5px;
     margin-right: 5px;
@@ -1961,6 +1975,11 @@ td.td-view.p-view2.color-default{
 .vendor-footer ul li a:hover {
     text-decoration: none;
 }
+
+.btn-change-photo-mobile,
+.btn-change-cover-photo-mobile{
+    display: none !important;
+}
 /*** end of Vendor style ***/
 
 /* =============================================
@@ -2064,6 +2083,7 @@ td.td-view.p-view2.color-default{
         font-size: 13px;
     }
 }
+
 @media only screen and (max-width : 769px) { 
 
     .grid > .product-paging > .product-inner-container > .thumb > .panel-item{
@@ -2264,6 +2284,115 @@ td.td-view.p-view2.color-default{
     }
 }
 
+@media only screen and (max-width : 400px) {
+    .contact-number-text,
+    .location-text{
+        display: none;
+    }
+    
+    .vendor-main-bg{
+        height: 280px;
+    }
+    
+    .vendor-profile-content{
+        height: 280px;
+        max-width: 250px;
+        padding: 12px 10px 32px 10px;
+    }
+    
+    .vendor-profile-btn{
+        margin-top: 17px;
+    }
+    
+    .edit-profile-photo{
+        height: 88px;
+        width: 91px;
+    }
+    
+    .edit-profile-container{
+        padding-left: 0px !Important;
+        padding-right: 0px !Important;
+    }
+    
+    .btn-edit-profile-info-banner{
+        font-size: 10px !important;
+    }
+    
+    .edit-banner-profile{
+        margin-top: 0px !important;
+    }
+    
+    .edit-profile-photo-menu{
+        top: 88px;
+    }
+    
+    .img-icon-edit-photo{
+        width: 40px !important;
+    }
+    
+    .subscription_btn,
+    .btn-message-profile,
+    .btn-profile-edit,
+    .btn-change-photo-mobile,
+    .btn-profile-edit-mobile
+    {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .btn-change-photo-mobile{
+        display: block !important;
+    }
+    
+    .btn-profile-edit{
+        display: none !important;
+    }
+    
+    .vendor-profile-content h4{
+        margin-top: 8px;
+        font-size: 1.3em;
+    }
+    
+    .vendor-profile-img{
+        height: 80px;
+        width: 90px;
+    }
+    
+    .vendor-profile-img-con{
+        height: 88px;
+    }
+    
+    .vendor-profile-photo-wrapper{
+        height: 88px;
+        width: 89px;
+    }
+    
+    .vendor-profile-img-con img{
+        max-width: 85px;
+        max-height: 90px;
+    }
+    
+    .edit-profile-photo div{
+        padding: 10px 0;
+    }
+    
+    .btn-change-cover-photo-mobile{
+        display: block !important;
+    }
+}
+
+@media only screen and (max-width : 320px) {
+    .vendor-nav{
+        width: 100% !important;
+    }
+}
+
+@media only screen and (max-width : 1024px) {
+    .list > .product-paging > .product-inner-container > .panel-list-item{
+        width: 95%;
+    }
+}
 
 header {
     min-width: inherit;
@@ -2418,7 +2547,7 @@ header {
         margin: auto;
         position: absolute;
         right: 0;
-        width: 385px;
+        width: 400px;
     }
 }
 
@@ -2612,7 +2741,7 @@ header {
     }
 
     .vendor-nav {
-        width: 295px;
+        width: 90%;
     }
 
     .vendor-nav li a {
