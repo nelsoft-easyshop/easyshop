@@ -58,12 +58,10 @@ class NewHomeWebService extends MY_Controller
             $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
                                                                               $this->input->get('hash'),
                                                                               true);
-
             if(!$this->isAuthenticated) {
                 throw new Exception("Unauthorized Request.");
             }            
         }
-
     }
 
     /**
