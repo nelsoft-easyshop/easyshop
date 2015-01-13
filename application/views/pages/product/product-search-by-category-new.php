@@ -1,7 +1,20 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css" media='screen'>
-
+<section class="breadcrumbs-bg">
+    <div class="container">
+        <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
+            <ul>
+                <li>
+                    <a href="/">Home</a>
+                </li> 
+                <li class="bc-arrow"> 
+                        Clothing  &amp; Accessories
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
 <section class="bg-search-section color-default">
     <div class="banner-template-1" style="background: url(/assets/images/slide3.jpg) center no-repeat; background-size: cover;">
     
