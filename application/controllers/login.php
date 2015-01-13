@@ -46,26 +46,26 @@ class Login extends MY_Controller
         $bodyData['google_login_url'] = $this->socialMediaManager
                                              ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::GOOGLE,
                                                            $googleScope['permission_to_access']);
+        $loginData = [];
 
         if($this->input->post('login_form')){
-            $row = array();
             if($this->form_validation->run('login_form')){
                 $uname = $this->input->post('login_username');
                 $pass = $this->input->post('login_password');
-                $row = $this->login($uname, $pass);
+                $loginData = $this->login($uname, $pass);
             }
-            if(isset($row['o_success']) && $row['o_success'] >= 1){
-                redirect('home');
-                exit();
+            if(isset($loginData['o_success']) && $loginData['o_success'] >= 1){
+                redirect('/');
             }
             else{
-                $bodyData['form_error'] = 'Invalid username or password';
-                if(array_key_exists('timeoutLeft', $row) && $row['timeoutLeft'] >= 1){
+                if(array_key_exists('timeoutLeft', $loginData) && $loginData['timeoutLeft'] >= 1){
                     $bodyData['loginFail'] = true;
-                    $bodyData['timeoutLeft'] = $row['timeoutLeft'];
+                    $bodyData['timeoutLeft'] = $loginData['timeoutLeft'];
                 }
             }  
         }
+        
+        $bodyData = array_merge($bodyData, $loginData);
 
         $this->load->spark('decorator');  
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));

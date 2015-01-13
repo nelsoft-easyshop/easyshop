@@ -235,9 +235,11 @@ class product extends MY_Controller
 
         $productEntity = $esProductRepo->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
         $viewerId =  $this->session->userdata('member_id');
+        $member = $productEntity->getMember();
+
         $viewer = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($viewerId);
-        if($productEntity && $productEntity->getMember()->getIsActive()){
+        if($productEntity && $member->getIsActive() && !$member->getIsBanned()){
             if($viewerId){
                 $isIncrease = $productManager->increaseClickCount($productEntity, $viewerId);
                 if($isIncrease){
@@ -257,7 +259,7 @@ class product extends MY_Controller
             $breadcrumbs = $this->em->getRepository('EasyShop\Entities\EsCat')
                                     ->getParentCategoryRecursive($categoryId);
 
-            $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
+            $avatarImage = $userManager->getUserImage($member->getIdMember());
             
             $productImages = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                       ->getProductImages($productId);

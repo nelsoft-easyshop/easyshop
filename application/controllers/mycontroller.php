@@ -139,6 +139,6 @@ class Mycontroller extends MY_Controller
 			print("Failed to queue mail.");
 		}
 	}
-
+	
 }
 

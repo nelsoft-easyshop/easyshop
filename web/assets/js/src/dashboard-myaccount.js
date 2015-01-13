@@ -127,7 +127,7 @@
             loadingimg.show(); 
             $.ajax({
                 type: 'post',
-                data: {wsx:username, cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
+                data: {currentPassword:currentPassword, password:newPassword, csrfname : csrftoken},
                 url: "/register/changepass",
                 success: function(data) {
                     actionGroupChangePass.show();
@@ -136,7 +136,6 @@
                     if(obj.result === "success") {      
                        errorContainer.hide();
                        succcessContainer.fadeIn();
-                       
                     }
                     else {
                         errorContainer.html(obj.error);
@@ -339,6 +338,7 @@
     $("#formPersonalInfo").on('click','#savePersonalInfo',function (e) {
         $("#errorIndicatorMobileNumber").css("display","none");        
         $("#errorIndicatorBirthday").css("display","none");        
+        $("#errorIndicatorGender").css("display","none");        
         $("#savePersonalInfo").text("Saving...");
         e.preventDefault();
 
@@ -364,10 +364,14 @@
                         if(obj.error.dateofbirth) {
                             $("#errorIndicatorBirthday").css("display","block");
                             $("#errorTextBirthday").text(obj.error.dateofbirth );                            
-                        }              
+                        }     
+                        if(obj.error.gender) {
+                            $("#errorIndicatorGender").css("display","block");
+                            $("#errorTextGender").text(obj.error.gender );                            
+                        }                                   
                     }
                     else {
-                        $("#errorIndicatorMobileNumber").css("display","none");
+                        $("#errorIndicatorMobileNumber, #errorIndicatorBirthday, #errorIndicatorGender").css("display","none");
                         
                     }
             },

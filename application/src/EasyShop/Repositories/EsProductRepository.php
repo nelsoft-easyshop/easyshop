@@ -436,7 +436,8 @@ class EsProductRepository extends EntityRepository
                                                     'WITH','b.idBrand = p.brand')
                                 ->where('p.isDraft = 0')
                                 ->andWhere('p.isDelete = 0')
-                                ->andWhere('m.isActive = 1');
+                                ->andWhere('m.isActive = 1')
+                                ->andWhere('m.isBanned = 0');
  
         if(isset($filterArray['condition']) && $filterArray['condition'][0]){ 
             $qbResult = $qbResult->andWhere(
@@ -1068,33 +1069,35 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get product reccomended based on category
-     * @param  integer $productId
-     * @param  integer $categoryId
+     * @param  integer $productIds
+     * @param  integer $categoryIds
      * @param  integer $limit
      * @return object
      */
-    public function getRecommendedProducts($productId, $categoryId, $limit = null)
+    public function getRecommendedProducts($productIds, $categoryIds, $limit = null)
     {
         $this->em =  $this->_em;
-        $queryBuilder = $this->em->createQueryBuilder()
-                                 ->select('p')
-                                 ->from('EasyShop\Entities\EsProduct','p')
-                                 ->where('p.cat = :category')
-                                 ->andWhere("p.idProduct != :productId")
+        $queryBuilder = $this->em->createQueryBuilder();
+        $qbResult = $queryBuilder->select('p')
+                                 ->from('EasyShop\Entities\EsProduct','p') 
+                                 ->where(
+                                        $queryBuilder->expr()->in('p.cat', $categoryIds)
+                                    ) 
+                                 ->andWhere(
+                                        $queryBuilder->expr()->notIn('p.idProduct', $productIds)
+                                    ) 
                                  ->andWhere("p.isDraft = :isDraft")
                                  ->andWhere("p.isDelete = :isDelete")
-                                 ->setParameter('productId',$productId)
-                                 ->setParameter('category',$categoryId)
-                                 ->setParameter('isDraft',0)
-                                 ->setParameter('isDelete',0)
+                                 ->setParameter('isDraft', EsProduct::ACTIVE)
+                                 ->setParameter('isDelete', EsProduct::ACTIVE)
                                  ->orderBy('p.clickcount', 'DESC')
-                                 ->getQuery();;
+                                 ->getQuery();
 
         if($limit){
-            $queryBuilder->setMaxResults($limit);
+            $qbResult->setMaxResults($limit);
         }
  
-        $result = $queryBuilder->getResult(); 
+        $result = $qbResult->getResult(); 
 
         return $result;
     }
