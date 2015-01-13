@@ -184,12 +184,17 @@
         <?PHP $timeFormat = strtotime($product->getStartPromo() ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")) ?>
         <input id="endDate" type="hidden" value='<?=date('M d,Y H:i:s', $timeFormat)?>' >
         <div id="fb-root"></div>
-        <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/jquery.countdown.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/promo/countdown-sale.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/jquery.countdown.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/promo/countdown-sale.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <?php else: ?>
+            <script src="/assets/js/min/easyshop.christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <?php endif; ?>
     </body>
 </html>

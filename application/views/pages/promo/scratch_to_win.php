@@ -258,7 +258,11 @@
         </div>
         <?PHP endif; ?>
     </div>
-    <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/jquery.simplemodal.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-    <script src="/assets/js/src/scratchwinpromo.js" type="text/javascript"></script>
+    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+        <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.simplemodal.js" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+        <script src="/assets/js/src/scratchwinpromo.js" type="text/javascript"></script>
+    <?php else: ?>
+        <script src="/assets/js/min/easyshop.scratch_to_win.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <?php endif; ?>
