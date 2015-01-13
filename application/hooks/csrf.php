@@ -133,5 +133,7 @@ class CSRF_Protection
                                 $output);
         
         $this->CI->output->_display($output);
-    }    
+    }
+    
 }
+
