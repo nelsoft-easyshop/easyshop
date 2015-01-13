@@ -110,7 +110,7 @@ class Login extends MY_Controller
             $row = $this->accountManager->authenticateMember($uname, $pass);
 
             if (!empty($row["member"])) {
-            
+                
                 $row['o_success'] = 1;
                 $row["o_memberid"] = $row["member"]->getIdMember();
                 $row["o_session"] = sha1($row["member"]->getIdMember().date("Y-m-d H:i:s"));
@@ -135,16 +135,18 @@ class Login extends MY_Controller
                     $cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
                     $this->user_model->create_cookie($cookieval);
                 }
-                
+          
                 /**
                  * Register authenticated session
                  */
+             
                 $user->setUsersession($row["o_session"] );
                 $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
                 $authenticatedSession->setMember($user)
                                      ->setSession($session);
                 $em->persist($authenticatedSession);
                 $em->flush();
+         
             }
             else{ 
                 $this->throttleService->logFailedAttempt($uname);
@@ -157,30 +159,40 @@ class Login extends MY_Controller
         return $row;
     }
     
-    
+    /**
+     * Log-outs a user by destroying the pertitnent session details
+     *
+     */
     public function logout() 
     {
-        
         $cart_items = serialize($this->session->userdata('cart_contents'));
         $id = $this->session->userdata('member_id');        
         $this->cart_model->save_cartitems($cart_items,$id);
         $this->user_model->logout();
-        $temp = array(
+        $temp = [
                 'member_id' => $this->session->userdata('member_id'),
                 'ip' => $this->session->userdata('ip_address'),
                 'useragent' => $this->session->userdata('user_agent'),
                 'token' => get_cookie('es_usr')
-        );
-
+        ];
         $this->user_model->dbdelete_cookie_keeplogin($temp);
         delete_cookie('es_usr');
         delete_cookie('es_vendor_subscribe');
-        $this->session->sess_destroy();
+
+        $sessionData = $this->session->all_userdata();
+        foreach ($sessionData as $key => $sessionField) {
+            if ($key != 'session_id' && $key != 'ip_address' && $key != 'user_agent' && $key != 'last_activity') {
+                $this->session->unset_userdata($key);
+            }
+        }
+        
         $referrer = $this->input->get('referrer');
-        if(trim($referrer))
+        if(trim($referrer)){
             redirect('/'.$referrer);
-        else
+        }
+        else{
             redirect('/login');
+        }
     }
 
     /**
