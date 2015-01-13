@@ -266,3 +266,4 @@
     <?php else: ?>
         <script src="/assets/js/min/easyshop.scratch_to_win.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <?php endif; ?>
+
