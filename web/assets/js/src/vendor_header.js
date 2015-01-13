@@ -322,6 +322,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                                 if(formAction === 'banner_upload'){
                                     var bannerImage = $('img.banner-image');
                                     bannerImage.attr('src',xhrResponse.banner);
+                                    $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});                                    
                                 }
                                 else if(formAction === 'upload_img'){
                                     var avatarImage = $('img.avatar-image');
