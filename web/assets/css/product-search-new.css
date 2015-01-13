@@ -1,7 +1,42 @@
 html, body{
     font-size: 12px;
 }
+/* =============================================
+-----------------  Breadcrumb -----------------
+==============================================*/
+.breadcrumbs-bg {
+    background-color: #e2e2e2;
+}
 
+.default-breadcrumbs-container {
+    font-size: 12px;
+    padding: 12px 0;
+}
+
+.default-breadcrumbs-container a {
+    color: #7c807e;
+}
+
+.default-breadcrumbs-container a:hover {
+    text-decoration: underline;
+}
+
+.default-breadcrumbs-container ul li {
+    float: left;
+    padding-right: 6px;
+}
+
+.default-breadcrumbs-container ul li:last-child {
+    font-weight: 900;
+}
+
+.bc-arrow {
+    background: url(../images/sprites/breadcrumbs-arrow.png) no-repeat left center;
+    padding-left: 11px;
+}
+/* =============================================
+-----------------  Search results -----------------
+==============================================*/
 .banner-template-1{
     width: 100%;
     height: 300px;
@@ -186,7 +221,9 @@ html, body{
     left: -8px;
 }
 
-/*For list items*/
+/* =============================================
+-----------------  List View -----------------
+==============================================*/
 .list-search .col-search-item{
     padding-right: 20px;
     padding-left: 5px;
@@ -286,7 +323,9 @@ html, body{
     text-transform: uppercase;
 }
 
-/*Form left wing*/
+/* =============================================
+-----------------  Left Panels -----------------
+==============================================*/
 .panel-left-wing{
     border: solid #e2e2e2 1px;
     box-shadow: none !important;
