@@ -409,45 +409,25 @@
 <input type="hidden" name="referrer" class="referrer" value="<?=$redirect_url ?>"/>
 <?php echo form_close();?>
 
-
-<script src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
-<script src="/assets/js/src/landingpage-responsive-nav.js"></script>
-<script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
-
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
-
 <script type="text/javascript">
     var config = {
          base_url: "<?php echo base_url(); ?>",
     };
-    
-
-    var navigation = responsiveNav(".nav-collapse");
-
-
-    (function( $ ) {
-
-
-        jQuery('.bxslider_slides').bxSlider({
-            infiniteLoop: true,
-            auto: true
-        });
-    })(jQuery);  
-    jQuery('#reg_btn,#reg_txt').click(function(event) {
-        event.preventDefault();
-        var n = jQuery(document).height();
-        jQuery('html, body').animate({ scrollTop: 200 }, 300);
-
-        navigation.close();
-    });
 </script>
-<!-- password meter: uses mootool, consider replacing -->
-<script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
-<!-- end mootool -->
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type='text/javascript' src='/assets/js/src/landingpage-responsive-nav.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_register.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 <script>
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 </script>

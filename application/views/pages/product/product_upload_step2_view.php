@@ -533,6 +533,7 @@
     var maxImageSize = parseInt('<?=$maxImageSize; ?>');
 </script>
 <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
+<script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
@@ -543,7 +544,6 @@
     <script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
     <script src="/assets/js/src/vendor/jquery.validate.js" type="text/javascript"></script>
 <?php else: ?>
-    <script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
     <script src="/assets/js/min/easyshop.product_upload_step2_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
 <?php if(isset($soloAttribute)): ?>

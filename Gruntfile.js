@@ -172,6 +172,94 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.easing.min.js',
                              'web/assets/js/src/vendor/jquery.scrollUp.min.js',
                              'web/assets/js/src/advsearch.js'],
+
+                    'web/assets/js/min/easyshop.dashboard-primary.js':
+                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/vendor/jquery.raty.min.js',
+                             'web/assets/js/src/vendor/image.js',
+                             'web/assets/js/src/vendor/jquery.idTabs.min.js',
+                             'web/assets/js/src/vendor/jquery.idTabs.dashboard.home.js',
+                             'web/assets/js/src/vendor/chosen.jquery.min.js',
+                             'web/assets/js/src/vendor/jquery.sortable.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
+                             'web/assets/js/src/vendor/jquery.numeric.js',
+                             'web/assets/js/src/vendor/pwstrength.js',
+                             'web/assets/js/src/dashboard.js',
+                             'web/assets/js/src/dashboard-myaccount.js'],
+
+                    'web/assets/js/min/easyshop.product_search_by_searchbox.js':
+                            ['web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.easing.min.js',
+                             'web/assets/js/src/vendor/jquery.scrollUp.min.js',
+                             'web/assets/js/src/advsearch.js'],
+
+                    'web/assets/js/min/easyshop.MemberPageAccountActivate.js':
+                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
+                             'web/assets/js/src/accountactivation.js'],
+
+                    'web/assets/js/min/easyshop.SocialMediaMerge.js':
+                            ['web/assets/js/src/SocialMediaMerge.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js'],
+
+                    'web/assets/js/min/easyshop.SocialMediaRegistration.js':
+                            ['web/assets/js/src/SocialMediaRegistration.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js'],
+
+                    'web/assets/js/min/easyshop.user_about.js':
+                            ['web/assets/js/src/vendor/jquery.easing.min.js',
+                             'web/assets/js/src/vendor/jquery.scrollUp.min.js',
+                             'web/assets/js/src/userabout.js'],
+
+                    'web/assets/js/min/easyshop.user_contact.js':
+                            ['web/assets/js/src/vendorpage_contact.js'],
+
+                    'web/assets/js/min/easyshop.user_follower.js':
+                            ['web/assets/js/src/vendor/jquery.scrollTo.js',
+                             'web/assets/js/src/vendorpage_followers.js'],
+
+                    'web/assets/js/min/easyshop.user_forgotpass.js':
+                            ['web/assets/js/src/vendor/jquery.numeric.js',
+                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/register.js'],
+
+                    'web/assets/js/min/easyshop.user_forgotpass_confirm.js':
+                            ['web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
+                             'web/assets/js/src/vendor/jquery.numeric.js',
+                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/register.js',
+                             'web/assets/js/src/forgotpassword.js'],
+
+                    'web/assets/js/min/easyshop.user_login_view.js':
+                            ['web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/login.js'],
+
+                    'web/assets/js/min/easyshop.user_register.js':
+                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/jquery.numeric.js',
+                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/vendor/jquery.bxslider.min.js',
+                             'web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
+                             'web/assets/js/src/vendor/password_meter.js',
+                             'web/assets/js/src/landingpage-responsive-nav.js',
+                             'web/assets/js/src/landingpage.js'],
+
+                    'web/assets/js/min/easyshop.user_register_subscribe_success.js':
+                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/landingpage-bootstrap.min.js'],
+
+                    'web/assets/js/min/easyshop.user_vendor_view.js':
+                            ['web/assets/js/src/vendorpage_new.js',
+                             'web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.Jcrop.min.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
+                             'web/assets/js/src/vendor/jquery.scrollTo.js',
+                             'web/assets/js/src/vendor/chosen.jquery.min.js'],
                 }
             }
         }
