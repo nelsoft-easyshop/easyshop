@@ -371,7 +371,14 @@ textarea {
 }
 
 #banner_edit img {
+    bottom: 0;
+    left: 0;
     position: relative;
+    right: 0;
+    top: 0;
+    transform: inherit;
+    -webkit-transform: inherit;;
+    -ms-transform: inherit;
 }
 
 .vendor-profile-content {
