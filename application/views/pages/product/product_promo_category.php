@@ -154,48 +154,10 @@
     </div>
 
 </div>
-
-<script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
-<script>
-    $(document).ready(function(){
-        var base_url = '/';
-        var offset = 1;
-        var request_ajax = true;
-        var ajax_is_on = false;
-        var objHeight = $(window).height() - 50;
-        var last_scroll_top = 0;
-    
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-        $(window).scroll(function(event) {
-            var st = $(this).scrollTop();
-            if(st > last_scroll_top){
-                if ($(window).scrollTop() + 100 > $(document).height() - $(window).height()) {
-                    if (request_ajax === true && ajax_is_on === false) {
-                        ajax_is_on = true; 
-                        $.ajax({
-                            url: base_url + 'deals_more',
-                            data:{page_number:offset,csrfname : csrftoken},
-                            type: 'post',
-                            dataType: 'JSON',
-                            onLoading:jQuery(".loading_products").html('<img src="/assets/images/orange_loader.gif" />').show(),
-                            success: function(d) {
-                                if(d == "0"){
-                                    ajax_is_on = true;
-                                }else{ 
-                                    $($.parseHTML(d.trim())).appendTo($('.product_list'));
-                                    ajax_is_on = false;
-                                    offset += 1;   
-                                }
-                               jQuery(".loading_products").fadeOut();    
-                            }
-                        });
-                    }
-                }
-            }
-            last_scroll_top = st;
-        });
-    })
-</script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+<?php else: ?> 
+    <script src="/assets/js/min/easyshop.product_promo_category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 

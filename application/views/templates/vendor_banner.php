@@ -187,11 +187,16 @@
 </section> 
 <input type="hidden" id="vendor-slug" name="name" value="<?php echo $arrVendorDetails['userslug']?>">
 <!-- Load Js Files -->
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
-<script type="text/javascript" src='/assets/js/src/vendor_header.js?ver=<?php echo ES_FILE_VERSION?>'></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+    <script type='text/javascript' src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
+    <script type="text/javascript" src='/assets/js/src/vendor_header.js?ver=<?php echo ES_FILE_VERSION?>'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.vendor_banner.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+

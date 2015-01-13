@@ -253,6 +253,10 @@
 </div>
 <div class="clear"></div>
 
-<script src="/assets/js/src/vendor/numeral.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script src="/assets/js/src/cart.js?ver=<?= ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/numeral.min.js" type='text/javascript' ></script>
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript' ></script>
+    <script src="/assets/js/src/cart.js?ver=<?= ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.cart-responsive.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

@@ -137,21 +137,14 @@
                         data-catType="<?php echo $arrCat['cat_type']?>"
                     >
                         <div class="loading_div" style="text-align:center;display:none;"><img src="assets/images/loading/preloader-grayBG.gif"></div>
-
                         <?php if($arrCat['non_categorized_count'] === 0): ?>
                             <span>No items available for this category.</span>
                         <?php else:?>
-
                             <?=$arrCat['product_html_data'];?>
-
-                    <?php endif;?>
-
+                        <?php endif;?>
                     </div>
-
                 <?php endforeach;?>
-
             </div>
-            
         </div>
     </div>
 </div>
@@ -177,15 +170,19 @@
     <h1>Filter Products</h1>
 </div>
 
-		<!-- preload the images -->
-		<div style='display:none'>
-			<img src='img/basic/x.png' alt='' />
-		</div>
- 
-<script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
-<script src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript'></script>
-<script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
-<script src="/assets/js/src/vendor/jquery.scrollTo.js" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+<!-- preload the images -->
+<div style='display:none'>
+    <img src='img/basic/x.png' alt='' />
+</div>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+    <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript'></script>
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
+    <script src="/assets/js/src/vendor/jquery.scrollTo.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_vendor_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 
