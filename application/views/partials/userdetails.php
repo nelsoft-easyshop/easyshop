@@ -104,6 +104,11 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="/assets/js/src/usercontact.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/usercontact.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.partial_userdetails.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 

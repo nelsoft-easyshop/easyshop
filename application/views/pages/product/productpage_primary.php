@@ -274,14 +274,17 @@
 <!-- display recommended products view -->
 <?=$recommendedView;?>
 
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
-<script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
-
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
+    <script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.productpage_primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 <?php if((int)$product->getPromoType() === (int)EasyShop\Entities\EsPromoType::BUY_AT_ZERO ):?>
     <script type='text/javascript' src='/assets/js/src/promo/BuyAtZero.js?ver=<?=ES_FILE_VERSION?>'></script>
 <?php endif; ?>

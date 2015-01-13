@@ -118,5 +118,9 @@
     <div class="clear"></div>  
     <div id="storeValue" style="display:none"></div>
 
-<script type='text/javascript' src='/assets/js/src/productUpload_step1.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src='/assets/js/src/productUpload_step1.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.product_upload_step1_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
