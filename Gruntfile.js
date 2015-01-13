@@ -84,6 +84,11 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/numeral.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/cart.js'],
+
+                    'web/assets/js/min/easyshop.home_primary.js':
+                            ['web/assets/js/src/vendor/jquery.bxslider1.min.js',
+                             'web/assets/js/src/vendor/owl.carousel.min.js',
+                             'web/assets/js/src/newhome.js'],
                 }
             }
         }
