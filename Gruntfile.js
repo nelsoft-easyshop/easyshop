@@ -160,6 +160,18 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.plugin.min.js',
                              'web/assets/js/src/scratchwinpromo.js'],
+
+                    'web/assets/js/min/easyshop.advance_search_main.js':
+                            ['web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.easing.min.js',
+                             'web/assets/js/src/vendor/jquery.scrollUp.min.js',
+                             'web/assets/js/src/advsearch.js'],
+
+                    'web/assets/js/min/easyshop.product_search_by_searchbox.js':
+                            ['web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.easing.min.js',
+                             'web/assets/js/src/vendor/jquery.scrollUp.min.js',
+                             'web/assets/js/src/advsearch.js'],
                 }
             }
         }
