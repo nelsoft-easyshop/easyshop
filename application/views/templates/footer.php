@@ -12,14 +12,18 @@
                     </div>
 
                 </div>
-                <script src="/assets/js/src/ws.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+                <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+                    <script src="/assets/js/src/ws.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+                <?php else: ?>
+                    <script src="/assets/js/min/easyshop.footer.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+                <?php endif; ?>
                 <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
         </footer>
         <div class="notification_container">
             <h2>Notification</h2>
             <p> EasyShop.ph is a platform where you can facilitate easy and safe online business transactions. We are offering you a free stage for your business, and ensuring that buyers have a scam-free and easy-shopping experience. EasyShop.ph is where shopping is made easy!
             </p>
-        </div>	
+        </div>
     </body>
 </html>
 
