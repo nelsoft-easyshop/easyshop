@@ -17,9 +17,42 @@
 </section>
 <section class="bg-search-section color-default">
     <div class="banner-template-1" style="background: url(/assets/images/slide3.jpg) center no-repeat; background-size: cover;">
-    
+        <center>
+            <div class="banner-content">
+                <span class="banner-lg-text">
+                    Lorem ipsum dolor sit amet
+                </span>
+                <div class="divider-small"></div>
+                <div class="social-media-container">
+                    <span class="social-icon social-fb">
+                        <i class="fa fa-facebook fa-lg fa-2x"></i>
+                    </span>
+                    <span class="social-icon-separator"></span>
+                    <span class="social-icon social-twitter">
+                        <i class="fa fa-twitter fa-2x"></i>
+                    </span>
+                    <span class="social-icon-separator"></span>
+                    <span class="social-icon social-google-plus">
+                        <i class="fa fa-google-plus fa-lg fa-2x"></i>
+                    </span>
+                </div>
+            </div>
+        </center>
     </div>
     <br>
+    <center>
+    <div class="slider1" width="100%">
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar1"></div>
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar2"></div>
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar3"></div>
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar4"></div>
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar5"></div>
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar6"></div>
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar7"></div>
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar8"></div>
+      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar9"></div>
+    </div>
+    </center>
     <div class="container-non-responsive">
         <div class="row">
             <div class="col-xs-3">
@@ -429,3 +462,7 @@
     </div>
 </section>
 <script src="/assets/js/src/product-search-by-category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<!-- bxSlider Javascript file -->
+<script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
+<!-- bxSlider CSS file -->
+<link href="/assets/css/jquery.bxslider.css" rel="stylesheet" />
