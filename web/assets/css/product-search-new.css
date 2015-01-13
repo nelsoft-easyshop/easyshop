@@ -35,12 +35,79 @@ html, body{
     padding-left: 11px;
 }
 /* =============================================
------------------  Search results -----------------
+-----------------  Banners -----------------
 ==============================================*/
+
 .banner-template-1{
     width: 100%;
     height: 300px;
 }
+
+.banner-template-1 .banner-content{
+    display: table-cell;
+    height: 300px;
+    vertical-align: middle;
+}
+
+.banner-template-1 .banner-lg-text{
+    font-size: 4em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #f7f7f7;
+    display: block;
+    text-shadow: 0px 2px 24px rgba(124,124,124 , 1);
+}
+
+.divider-small{
+    width: 40px;
+    height: 4px;
+    border-top: solid #fff 4px;
+    margin-top: 5px;
+}
+
+.social-media-container{
+    margin-top: 20px;
+}
+
+.social-icon{
+    border: solid #fff 2px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: table-cell;
+    vertical-align: middle;
+    color: #fff;
+    margin-left: 5px;
+    margin-right: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.social-fb:hover{
+    border-color: #3162a2;
+    background: #3162a2;
+}
+
+.social-twitter:hover{
+    border-color: #2eb1eb;
+    background: #2eb1eb;
+}
+
+.social-google-plus:hover{
+    border-color: #f25c58;
+    background: #f25c58;
+}
+
+.social-icon-separator{
+    width: 10px;
+    height: 50px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* =============================================
+-----------------  Search results -----------------
+==============================================*/
 
 .bg-search-section{
     background: #fff;
@@ -57,7 +124,7 @@ html, body{
 }
 
 .category-count-item{
-    color: #e2e2e2;
+    color: #6d6d6d;
     font-weight: 100;
 }
 
@@ -370,3 +437,7 @@ html, body{
 .checkbox input[type="checkbox"]{
     margin: 1px 0 0 -18px;
 }
+
+/* =============================================
+-----------------  Left Panels -----------------
+==============================================*/
