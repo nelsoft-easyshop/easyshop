@@ -97,7 +97,54 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/payment.js',
                              'web/assets/js/src/vendor/bootstrap.js',
-                             'web/assets/js/src/vendor/jquery.numeric.js']
+                             'web/assets/js/src/vendor/jquery.numeric.js'],
+
+                    'web/assets/js/min/easyshop.product_image_gallery.js':
+                            ['web/assets/js/src/vendor/jquery.jcarousel.min.js',
+                             'web/assets/js/src/product-page-image-gallery.js'],
+
+                    'web/assets/js/min/easyshop.product_promo_category.js':
+                            ['web/assets/js/src/vendor/jquery.plugin.min.js',
+                             'web/assets/js/src/vendor/jquery.countdown.min.js'],
+
+                    'web/assets/js/min/easyshop.product_search_by_category_final_responsive.js':
+                            ['web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.easing.min.js',
+                             'web/assets/js/src/vendor/jquery.scrollUp.min.js',
+                             'web/assets/js/src/vendor/jquery.bxslider.min.js',
+                             'web/assets/js/src/categorynavigation.js',
+                             'web/assets/js/src/advsearch.js'],
+
+                    'web/assets/js/min/easyshop.product_upload_step1_view.js':
+                            ['web/assets/js/src/productUpload_step1.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js'],
+
+                    'web/assets/js/min/easyshop.product_upload_step2_view.js':
+                            ['web/assets/js/src/vendor/ion.rangeSlider.min.js',
+                             'web/assets/js/src/vendor/chosenwithcreate.jquery.min.js',
+                             'web/assets/js/src/vendor/jquery.Jcrop.min.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
+                             'web/assets/js/src/productUpload_step2.js',
+                             'web/assets/tinymce/plugins/jbimages/js/jquery.form.js',
+                             'web/assets/js/src/vendor/jquery.validate.js'],
+
+                    'web/assets/js/min/easyshop.product_upload_step3_view.js':
+                            ['web/assets/js/src/vendor/jquery.idTabs.min.js',
+                             'web/assets/js/src/productUpload_step3.js',
+                             'web/assets/js/src/vendor/jquery.numeric.js',
+                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/jquery.jqpagination.min.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
+                             'web/assets/js/src/vendor/chosen.jquery.min.js'],
+
+                    'web/assets/js/min/easyshop.productpage_primary.js':
+                            ['web/assets/js/src/vendor/jquery.jqzoom-core.js',
+                             'web/assets/js/src/vendor/jquery.bxslider1.min.js',
+                             'web/assets/js/src/vendor/jquery.numeric.js',
+                             'web/assets/js/src/vendor/owl.carousel.min.js',
+                             'web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/product-page.js',
+                             'web/assets/js/src/social_media_share.js'],
                 }
             }
         }

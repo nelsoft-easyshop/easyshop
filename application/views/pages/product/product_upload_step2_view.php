@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/assets/css/bootstrap.css" />
 <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
-<script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
+
 <script type="text/javascript">
     var af = new Array();
 </script>
@@ -533,14 +533,19 @@
     var maxImageSize = parseInt('<?=$maxImageSize; ?>');
 </script>
 <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
-<script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-<script type='text/javascript' src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
-<script type="text/javascript" src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>"></script> 
-<script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
-<script src="/assets/js/src/vendor/jquery.validate.js" type="text/javascript"></script>
-<script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
+    <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
+    <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript' ></script>
+    <script src="/assets/js/src/vendor/jquery.simplemodal.js" type='text/javascript' ></script>
+    <script src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript" ></script> 
+    <script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
+    <script src="/assets/js/src/vendor/jquery.validate.js" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
+    <script src="/assets/js/min/easyshop.product_upload_step2_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 <?php if(isset($soloAttribute)): ?>
     <?php foreach ($soloAttribute as $key => $value): ?>
         <script type="text/javascript">

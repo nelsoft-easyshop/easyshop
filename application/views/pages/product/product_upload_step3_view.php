@@ -419,19 +419,14 @@
 
     <div class="clear"></div>  
 
-<script src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="/assets/js/src/productUpload_step3.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
-<script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.jqpagination.min.js'></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js" ></script>
-
-<script type="text/javascript">
-$(".product_combination").each(function() {
-if ($(this).find("p").length > 6) {
-  $(this).css('overflow-y','scroll');
-}
-});
-</script>
-
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/assets/js/src/productUpload_step3.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.jqpagination.min.js'></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js" ></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.product_upload_step3_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
