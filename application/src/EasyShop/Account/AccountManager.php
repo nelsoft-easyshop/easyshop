@@ -7,6 +7,7 @@ use EasyShop\Entities\EsWebserviceUser;
 use EasyShop\Entities\EsVerifcode as EsVerifcode; 
 use Easyshop\Entities\EsMember;
 use Easyshop\Entities\EsStoreColor as EsStoreColor;
+use EasyShop\Entities\EsBanType as EsBanType;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
@@ -239,6 +240,9 @@ class AccountManager
             $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
             $storeColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
                                    ->find(EsStoreColor::DEFAULT_COLOR_ID);
+            $banType = $this->em->getRepository('EasyShop\Entities\EsBanType')
+                                ->find(EsBanType::NOT_BANNED);
+            
             $member = new EsMember();
             $member->setUsername($validatedUsername);
             $member->setPassword($hashedPassword);
@@ -251,7 +255,9 @@ class AccountManager
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             $member->setIsEmailVerify($isEmailVerify); 
-            $member->setStoreColor($storeColor); 
+            $member->setStoreColor($storeColor);  
+            $member->setBanType($banType);
+            
             $this->em->persist($member);
             $this->em->flush();
         }
