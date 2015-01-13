@@ -439,5 +439,12 @@ html, body{
 }
 
 /* =============================================
------------------  Left Panels -----------------
+-----------------  Pagination -----------------
 ==============================================*/
+.pagination-search-container{
+    display: block;
+    height: 40px;
+    background: #000;
+    position: fixed;
+    bottom: 0;
+}

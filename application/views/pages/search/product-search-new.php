@@ -200,7 +200,7 @@
                 <div class="search-results-container">
                     <div class="row">
                         <?php
-                            for($i=0; $i<=20; $i++){
+                            for($i=1; $i<=8; $i++){
                         ?>
                         <div class="col-search-item col-xs-3">
                             <div class="search-item-container">
@@ -391,6 +391,13 @@
                             }
                         ?>
                     </div>
+                </div>
+                <div class="pagination-search-container">
+                    <ul class="list-inline list-unstyled pagination-search-item">
+                        <li><a href="#post1">Post 1</a></li>
+                        <li><a href="#post2">Post 2</a></li>
+                        <li><a href="#post3">Post 3</a></li>
+                    </ul>
                 </div>
             </div>
        </div>
