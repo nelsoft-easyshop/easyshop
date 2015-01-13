@@ -36,6 +36,9 @@
                         <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3 btn-profile-edit-mobile">
                             <img src="/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
+                        <span class="btn btn-default-3 btn-profile-edit-mobile" id="modal-edit-trigger">
+                            <img src="/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
+                        </span>
                         <a href="#" class="btn btn-default-2 btn-profile-edit-mobile btn-change-cover-photo-mobile">Change Cover Photo</a>
                     </div>
                     <?php else: ?>
@@ -75,7 +78,7 @@
             <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
         </div>
         <div class="container main-container vendor-main pos-ab">
-            <div class="vendor-profile-content">
+            <div class="vendor-profile-content" id="edit-profile-info-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
@@ -147,7 +150,7 @@
                     </div>
                     <?php if($isEditable): ?>
                     <div class="vendor-profile-btn edit-profile-btn edit-banner-profile">
-                        <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1 btn-edit-profile-info-banner">Cancel</a>
+                        <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1 btn-edit-profile-info-banner btn-cancel-me-wide">Cancel</a>
                         <a href="javascript:void(0)" id="banner-save-changes"class="btn btn-default-3 btn-edit-profile-info-banner">Save Changes</a>
                     </div>
                     <?php endif; ?>
@@ -185,6 +188,8 @@
         </div>
     </div>
 </section> 
+
+
 <input type="hidden" id="vendor-slug" name="name" value="<?php echo $arrVendorDetails['userslug']?>">
 <!-- Load Js Files -->
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
