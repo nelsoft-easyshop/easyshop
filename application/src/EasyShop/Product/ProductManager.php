@@ -251,7 +251,7 @@ class ProductManager
         
         $category = $products->getCat()->getIdCat();
         $brand = $products->getBrand()->getName();
-        $username = $products->getMember()->getUsername();
+        $username = $products->getMember()->getStoreName();
 
         $categoryParent = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->getParentCategoryRecursive($category);
