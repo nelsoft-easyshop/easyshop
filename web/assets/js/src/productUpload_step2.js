@@ -724,8 +724,11 @@ var previous,editSelectedValue,editSelectedId;
         if(evt.which === 13){
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
- 
     }
+
+    $(document).on('focus, click', '.chzn-single', function(){
+        $(".chzn-search > input[type=text]").attr('maxlength', 25);
+    });
 
 
     $(document).on("keypress",".chzn-search > input[type=text]", function (evt){
