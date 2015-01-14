@@ -126,13 +126,13 @@ class Login extends MY_Controller
                 $this->session->set_userdata('cart_contents', $cartData);
 
                 if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
-                    $temp = array(
+                    $browserData = [
                         'member_id' => $this->session->userdata('member_id'),
                         'ip' => $this->session->userdata('ip_address'),
                         'useragent' => $this->session->userdata('user_agent'),
                         'session' => $this->session->userdata('session_id'),
-                    );
-                    $cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
+                    ];
+                    $cookieval = $this->user_model->dbsave_cookie_keeplogin($browserData)['o_token'];
                     $this->user_model->create_cookie($cookieval);
                 }
           
