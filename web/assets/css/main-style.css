@@ -613,7 +613,6 @@ textarea {
     max-height: 296px;   
     max-width: 500px;
     right: 0;
-    width: auto !important;
 }
 
 /*.jcrop-holder div + div + input + div > div {
