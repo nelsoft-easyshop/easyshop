@@ -609,6 +609,16 @@ input[type="button"] {
     filter: Alpha(Opacity=70);
 }
 
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.error-modal.ui-dialog-buttons.ui-draggable {
+    bottom: 0;
+    left: 0 !important;
+    margin: auto;
+    max-height: 190px;
+    position: fixed !important;
+    right: 0;
+    top: 0 !important;
+}
+
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable{
     border-radius: 4px;
     background-color: #fff;
