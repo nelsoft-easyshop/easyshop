@@ -128,7 +128,7 @@ class SearchProduct
     
         $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
         $this->sphinxClient->SetFilter('productid', $productIds);
-        $this->sphinxClient->AddQuery($queryString, 'products');
+        $this->sphinxClient->AddQuery($queryString, 'products products_delta');
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
         
