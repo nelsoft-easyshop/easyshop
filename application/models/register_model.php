@@ -349,7 +349,7 @@ class Register_model extends CI_Model
 		return $result;
 	}
 	
-
+    
     public function get_verifcode($member_id)
     {
         $query = $this->xmlmap->getFilenameID('sql/users', 'get_verifcode');
