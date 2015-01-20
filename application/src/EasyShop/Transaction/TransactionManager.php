@@ -254,8 +254,8 @@ class TransactionManager
                          tbl_o.idOrder as id_order, tbl_o.invoiceNo as invoice_no, tbl_op.idOrderProduct as id_order_product, tbl_p.name as product_name, tbl_op.price as price, tbl_op.orderQuantity as order_quantity,
                          tbl_op.handlingFee as handling_fee, tbl_op.total as total, tbl_op.easyshopCharge as easyshop_charge, tbl_op.paymentMethodCharge as payment_method_charge,
                          tbl_op.net as net,tbl_opa.attrName as attr_name, tbl_opa.attrValue as attr_value,
-                         tbl_m_seller.username as seller, tbl_m_seller.email as seller_email, tbl_m_seller.contactno as seller_contactno,
-                         tbl_m_buyer.username as buyer, tbl_m_buyer.email as buyer_email, tbl_m_buyer.contactno as buyer_contactno,
+                         COALESCE(NULLIF(tbl_m_seller.storeName, ""), tbl_m_seller.username) as seller, tbl_m_seller.email as seller_email, tbl_m_seller.contactno as seller_contactno,
+                         COALESCE(NULLIF(tbl_m_buyer.storeName, ""), tbl_m_buyer.username) as buyer, tbl_m_buyer.email as buyer_email, tbl_m_buyer.contactno as buyer_contactno,
                          tbl_pm.idPaymentMethod as payment_method_id,
                          tbl_m_buyer.slug as buyer_slug, tbl_m_seller.slug as seller_slug
                      ')
