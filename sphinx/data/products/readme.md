@@ -1,2 +1,1 @@
 Products index directory
-sasa
