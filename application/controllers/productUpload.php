@@ -617,20 +617,28 @@ class productUpload extends MY_Controller
         if($brand_valid === FALSE){ 
             $brand_id = 1;
             $otherBrand = '';
-        } 
-        
-        if (!in_array($product_condition, $this->lang->line('product_condition'))){
-            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
-        if($isNotSavingAsDraft){
-            $currentCombination = [];
-            foreach ($combination as $value) {
-                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+        $currentCombination = [];
+        foreach ($combination as $value) {
+            $combinationValue = implode("", array_map('strtolower', $value['data']));
+            if(!in_array($combinationValue, $currentCombination)){
+                $uniqueCombination[] = $value;
             }
+            $currentCombination[] = $combinationValue;
+        }
+        if($isNotSavingAsDraft){
+            if (!in_array($product_condition, $this->lang->line('product_condition'))){
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');
+            }
+
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
+        }
+        else{
+            $product_condition = $this->lang->line('product_condition')[0];
+            $combination = $uniqueCombination; 
         }
 
         if((strlen(trim($product_title)) == 0 
@@ -830,18 +838,27 @@ class productUpload extends MY_Controller
         $tempDirectory = $this->session->userdata('tempDirectory');
         $isNotSavingAsDraft = $this->input->post('savedraft') ? false : true;
 
-        if($isNotSavingAsDraft){
-            $currentCombination = [];
-            foreach ($combination as $value) {
-                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+        $currentCombination = [];
+        $uniqueCombination = [];
+        foreach ($combination as $value) {
+            $combinationValue = implode("", array_map('strtolower', $value['data']));
+            if(!in_array($combinationValue, $currentCombination)){
+                $uniqueCombination[] = $value;
             }
+            $currentCombination[] = $combinationValue;
+        }
+        if($isNotSavingAsDraft){
+            if (!in_array($product_condition, $this->lang->line('product_condition'))){
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+            }
+
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
         }
-
-        if (!in_array($product_condition, $this->lang->line('product_condition'))){
-            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+        else{
+            $product_condition = $this->lang->line('product_condition')[0];
+            $combination = $uniqueCombination; 
         }
 
         // Loading Combinations
