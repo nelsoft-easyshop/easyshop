@@ -76,14 +76,14 @@
         if(isLoggedIn){ 
             if(status == "follow"){
                 var text = '<span class="follow-btn follow-right btn btn-default-following following-user subscription" data-btn="default" style="display:none" data-status="unfollow" data-slug="'+slug+'" data-username="'+name+'">\
-                                <i class="fa fa-check"></i>Following\
+                                <i class="fa fa-check"></i> <span class="btn-text-follow">Following</span>\
                             </span>\
                             <span class="follow-btn follow-right btn btn-default-following unfollow-user subscription" data-btn="default" style="display:block" data-status="unfollow" data-slug="'+slug+'" data-username="'+name+'">\
-                                <i class="fa fa-minus-circle"></i> Unfollow\
+                                <i class="fa fa-minus-circle"></i> <span class="btn-text-follow">Unfollow</span>\
                             </span>';
             }else{
                 var text = '<span class="follow-btn follow-right btn btn-default-2 subscription" data-btn="default" data-status="follow"  data-slug="'+slug+'" data-username="'+name+'">\
-                                <span class="glyphicon glyphicon-plus-sign"></span>Follow\
+                                <span class="glyphicon glyphicon-plus-sign"></span> <span class="btn-text-follow">Follow</span>\
                             </span>';
             }
             $.ajax({ 

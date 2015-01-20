@@ -84,8 +84,13 @@
     </div>
     <button id="modal_send_btn">Send</button>
 </div>
+
+
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/messaging.js"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.inbox_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
+
+
+

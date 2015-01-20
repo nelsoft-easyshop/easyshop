@@ -1137,10 +1137,6 @@ class Payment extends MY_Controller{
      */
     public function dragonPayReturn()
     {
-        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect('/', 'refresh');
-        }
-
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $txnId = $this->input->get('txnid');
         $refNo = $this->input->get('refno');
@@ -1151,6 +1147,11 @@ class Payment extends MY_Controller{
         $redirectUrl = "";
 
         if($client === "Easyshop"){
+
+            if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+                redirect('/', 'refresh');
+            }
+
             if(strtolower($status) === PaymentService::STATUS_PENDING 
                || strtolower($status) === PaymentService::STATUS_SUCCESS){
                 $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType); 
