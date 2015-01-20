@@ -96,6 +96,7 @@ class product extends MY_Controller
                                         ->getParentCategoryRecursive($categoryId);
 
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
                 'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
                 'relCanonical' => base_url().'category/'.$categorySlug ,
@@ -180,6 +181,7 @@ class product extends MY_Controller
         }
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.ph - All Categories',  
         ]; 
         
@@ -360,6 +362,7 @@ class product extends MY_Controller
             $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getBrief();
 
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' =>  html_escape($product->getName()). " | Easyshop.ph",
                 'metadescription' => es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT),
                 'relCanonical' => base_url().'item/'.$itemSlug,
@@ -452,6 +455,7 @@ class product extends MY_Controller
         $category_id = $this->config->item('promo', 'protected_category');
         $this->load->library('xmlmap');
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Deals | Easyshop.ph',
             'metadescription' => 'Get the best price offers for the day at Easyshop.ph.',
         ];
@@ -478,6 +482,7 @@ class product extends MY_Controller
     public function post_and_win_promo()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Post and Win | Easyshop.ph',
         ];
 

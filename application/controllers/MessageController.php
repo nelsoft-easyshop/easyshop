@@ -47,6 +47,7 @@ class MessageController extends MY_Controller
             ? 'Messages | Easyshop.ph'
             : 'Messages (' . $messages['unread_msgs'] . ') | Easyshop.ph';
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => $title,
             'metadescription' => '',
             'relCanonical' => '',

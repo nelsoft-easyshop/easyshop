@@ -94,6 +94,7 @@ class productUpload extends MY_Controller
 
         if($this->session->userdata('usersession') && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -106,6 +107,7 @@ class productUpload extends MY_Controller
         }
         else{
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Verify your account to proceed | Easyshop.ph',
             ];
 
@@ -151,6 +153,7 @@ class productUpload extends MY_Controller
     public function step2()
     { 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Sell Product | Easyshop.ph',
             'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
             'relCanonical' => '',
@@ -414,10 +417,11 @@ class productUpload extends MY_Controller
         }
 
         $headerData = [
-                'title' => 'Edit Product | Easyshop.ph',
-                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-                'relCanonical' => '',
-                'renderSearchbar' => false, 
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Edit Product | Easyshop.ph',
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+            'relCanonical' => '',
+            'renderSearchbar' => false, 
         ]; 
         $this->load->spark('decorator');    
         $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
@@ -1246,6 +1250,7 @@ class productUpload extends MY_Controller
         else{
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -1319,6 +1324,7 @@ class productUpload extends MY_Controller
             }
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -1544,6 +1550,7 @@ class productUpload extends MY_Controller
             ];
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',

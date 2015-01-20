@@ -76,6 +76,7 @@ class product_search extends MY_Controller {
         $response['getParameter'] = $this->input->get();
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.com - Advanced Search',
             'metadescription' => '',
             'relCanonical' => '',
@@ -152,6 +153,7 @@ class product_search extends MY_Controller {
                 ], true );
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
         ];
 
