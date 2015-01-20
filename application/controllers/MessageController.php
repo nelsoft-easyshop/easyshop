@@ -186,7 +186,7 @@ class MessageController extends MY_Controller
     public function simpleSend()
     {
         $recipient = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                           ->find(intval($this->input->post('recipient')));
+                                                              ->find((int) $this->input->post('recipient'));
         $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
                                                            ->find($this->userId);
         $this->messageManager->send($member, $recipient, trim($this->input->post('msg')));
