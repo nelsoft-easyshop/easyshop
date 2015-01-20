@@ -287,16 +287,18 @@ class Kernel
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
             $sphinxClient = $container['sphinx_client'];
+            $userManager = $container['user_manager'];
 
             return new \EasyShop\Search\SearchProduct(
-                                                        $em
-                                                        ,$collectionHelper
-                                                        ,$productManager
-                                                        ,$categoryManager
-                                                        ,$httpRequest
-                                                        ,$promoManager
-                                                        ,$configLoader
-                                                        ,$sphinxClient
+                                                        $em,
+                                                        $collectionHelper,
+                                                        $productManager,
+                                                        $categoryManager,
+                                                        $httpRequest,
+                                                        $promoManager,
+                                                        $configLoader,
+                                                        $sphinxClient,
+                                                        $userManager
                                                     );
         };
 
