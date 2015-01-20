@@ -822,7 +822,7 @@ var previous,editSelectedValue,editSelectedId;
                             }
                         } 
                     }
-                    optionString += "<option data-value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
+                    optionString += "<option data-value='"+selectList+"' value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
                     if($.inArray(selectList,attributeArray[selectedValue]) <= -1){
                         attributeArray[selectedValue].push(selectList);
                     }
@@ -969,15 +969,14 @@ var previous,editSelectedValue,editSelectedId;
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
                 var selData = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').data('value');
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).attr('selected','selected');
-                
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).prop('selected', true);
+                var selectElement = $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id'));
+                selectElement.children('option').each(function(){
+                    if ($(this).data('value') == selData) {
+                        $(this).parent().val(selData).change(); 
+                    }
+                });
 
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).prop("disabled",true);
+                selectElement.prop("disabled",true);
             });
 
             $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
