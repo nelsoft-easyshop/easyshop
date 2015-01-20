@@ -109,7 +109,7 @@ class Login extends MY_Controller
         else{         
             $authenticationResult = $this->accountManager->authenticateMember($uname, $pass);
 
-            if (!empty($authenticationResult["member"])) {
+            if (empty($authenticationResult["member"]) === false) {
             
                 $memberId =  $authenticationResult["member"]->getIdMember();
                 
