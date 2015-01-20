@@ -137,7 +137,7 @@ class mobilePayment extends MY_Controller
 
         $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
         $memberCartData = unserialize($this->member->getUserdata());
-        $isCartNotEmpty empty($memberCartData) === false;
+        $isCartNotEmpty = empty($memberCartData) === false;
         $cartData = $isCartNotEmpty ? $memberCartData : [];
         $errorMessage = "Please verify your email address.";
         if((int)$this->member->getIsEmailVerify() > 0){
