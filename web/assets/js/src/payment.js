@@ -343,6 +343,11 @@ $(document).ready(function(){
     $(document).on('click','.show-form-address',function () {
         $("#delAddressFrm")[0].reset();
         $('.stateregionselect').trigger('change');
+        validateWhiteTextBox('#consignee');
+        validateWhiteTextBox('.stateregionselect');
+        validateWhiteTextBox('.cityselect');
+        validateWhiteTextBox('.c_address');
+        validateWhiteTextBox('#c_mobile'); 
     });
 
     $(document).on('click','.link_address',function () {
