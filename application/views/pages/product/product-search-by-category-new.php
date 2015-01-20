@@ -21,7 +21,7 @@
 
 <section id="parallax-1" class="bg-search-section color-default search-parallax-container">
     <div class="search-parallax">
-    <div id="parallax-3" class="banner-template-1" style="background-image: url(/assets/images/slide3.jpg); background-size: cover;">
+    <div id="parallax-3" class="banner-template-1">
         <center>
             <div class="banner-content">
                 <span class="banner-lg-text">
@@ -53,7 +53,6 @@
         </div>
         <div class="container">
             <div class="slider1 clear" width="100%">
-            <!--  <div id="product-search-gallery" class="owl-carousel"> -->
               <div class="slide"><img src="https://placehold.it/390x150&text=FooBar1"></div>
               <div class="slide"><img src="https://placehold.it/390x150&text=FooBar2"></div>
               <div class="slide"><img src="https://placehold.it/390x150&text=FooBar3"></div>

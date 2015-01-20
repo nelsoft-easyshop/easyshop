@@ -32,7 +32,9 @@
         var scrolled = $(window).scrollTop();
         $('#parallax-1').css('top',(0-(scrolled*.25))+'px');
         $('#parallax-2').css('top',(0-(scrolled*.50))+'px');
-        $('#parallax-3').css('background-position-y',(0-(scrolled*.50))+'px');
+        var x1 = '0';
+        var y2 = (0-(scrolled*.76));
+        $('#parallax-3').css({"background-position": x1+'px '+y2+'px'});
     }
 
     $(document).ready(function(){
