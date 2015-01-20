@@ -876,7 +876,8 @@ $string = '<typeNode>
             $xmlContent['categorySection'] = array();
             array_push($xmlContent['categorySection'], $temporary);
         }
-   
+
+        $xmlContent['categorySection']  = !isset($xmlContent['categorySection']) ? [] : $xmlContent['categorySection'];
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                                     ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
