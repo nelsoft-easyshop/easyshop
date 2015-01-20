@@ -73,7 +73,7 @@ class MessageController extends MY_Controller
 
         if (!$receiverEntity) {
             $result['success'] = 0;
-            $result['msg'] = "The user " . html_escape($username) . ' does not exist';
+            $result['msg'] = "The user " . html_escape($storeName) . ' does not exist';
         }
         else if ( (int) $this->userId === (int) $receiverEntity->getIdMember() ) {
             $result['success'] = 0;
@@ -179,4 +179,25 @@ class MessageController extends MY_Controller
 
         echo json_encode($result);
     }
+
+    /**
+     * Sample implementation of chatbox.
+     * NOTE : Must be removed if added on Git
+     */
+    public function chatbox()
+    {
+        $messages = $this->messageManager->getAllMessage($this->userId);
+        $title = 'Chat | Easyshop.ph';
+        $headerData = [
+            'title' => $title,
+            'metadescription' => '',
+            'relCanonical' => '',
+            'renderSearchbar' => false,
+        ];
+        $this->load->spark('decorator');
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/messages/sampleChat');
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+    }
+
 }
