@@ -89,7 +89,8 @@ class SearchProduct
                                 $httpRequest,
                                 $promoManager,
                                 $configLoader,
-                                $sphinxClient)
+                                $sphinxClient,
+                                $userManager)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
@@ -99,6 +100,7 @@ class SearchProduct
         $this->promoManager = $promoManager;
         $this->configLoader = $configLoader;
         $this->sphinxClient = $sphinxClient;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -332,6 +334,7 @@ class SearchProduct
         $searchProductService = $this;
         $productManager = $this->productManager;
         $categoryManager = $this->categoryManager;
+        $userManager = $this->userManager;
 
         $queryString = isset($parameters['q_str']) && $parameters['q_str']?trim($parameters['q_str']):false;
         $parameterCategory = isset($parameters['category']) && $parameters['category']?trim($parameters['category']):false;
@@ -361,18 +364,24 @@ class SearchProduct
         foreach ($paginatedProductIds as $productId) {
             $product = $productManager->getProductDetails($productId);
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                      ->getDefaultImage($productId);
+                                     ->getDefaultImage($productId);
             $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                               ->getSecondaryImage($productId);
+
+            $product->ownerAvatar = $userManager->getUserImage($product->getMember()->getIdMember());
             $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
             $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
             $product->secondaryImageDirectory = null;
             $product->secondaryImageFileName = null;
+            $product->hasSecondaryImage = false;
+
             if($productImage !== null){
                 $product->directory = $productImage->getDirectory();
                 $product->imageFileName = $productImage->getFilename();
             }
+
             if($secondaryProductImage !== null){
+                $product->hasSecondaryImage = true;
                 $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
                 $product->secondaryImageFileName = $secondaryProductImage->getFilename();
             }

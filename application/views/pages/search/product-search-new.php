@@ -147,10 +147,10 @@
                     </table>
                 </div>
                 <div class="vendor-select-con">
-                    <select class="sort_select form-select-default color-default pull-right">
-                        <option value="2">Default Sorting</option>
-                        <option value="1">Popularity</option>
-                        <option value="3">Hot</option>
+                    <select name="sort" class="sort_select form-select-default color-default pull-right">
+                        <option value="new">Default Sorting</option>
+                        <option value="popular">Popularity</option>
+                        <option value="hot">Hot</option>
                     </select>
                     <div class="clear"></div>
                 </div>

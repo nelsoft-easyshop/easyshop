@@ -8,22 +8,34 @@
     $productCondition = html_escape($productEntity->getCondition());
     $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
     $percentage = $productEntity->getDiscountPercentage(); 
-    $isFreeShipping = $productEntity->getIsFreeShipping(); 
+    $isProductNew = $productEntity->getIsNew();
+    $isFreeShipping = $productEntity->getIsFreeShipping();
+    $briefDescription = html_escape($productEntity->getBrief());
     $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
-
+    $hasSecondImage = $productEntity->hasSecondaryImage;
+    $secondaryImage = $productEntity->secondaryImageDirectory .'categoryview/'. $productEntity->secondaryImageFileName;
     $memberEntity = $value->getMember();
+    $ownerAvatar = $productEntity->ownerAvatar;
     $sellerStoreName = html_escape($memberEntity->getStoreName());
     $sellerSlug = html_escape($memberEntity->getSlug());
 ?>
 <div class="col-search-item col-xs-3">
     <div class="search-item-container">
-        <a href="#" class="search-item-link-image">
-            <div class="search-item-img-container" style="background: url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
-                <div class="search-item-img-container-hover" style="background: url(/assets/images/products/apple-p-h.jpg) center no-repeat; background-size: cover;">
-                    
+        <a href="/item/<?=$productSlug;?>" class="search-item-link-image">
+            <div class="search-item-img-container" style="background: url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
+                
+                <?php if($hasSecondImage): ?>
+                <div class="search-item-img-container-hover" style="background: url(/<?=$secondaryImage;?>) center no-repeat; background-size: cover;">
                 </div>
-                <span class="discount-circle-2">76%</span>
+                <?php endif; ?>
+                
+                <?php if($percentage > 0):?>
+                <span class="discount-circle-2"><?=$percentage; ?>%</span>
+                <?php endif;?>
+                
+                <?php if($isProductNew): ?>
                 <span class="new-circle-2">NEW</span>
+                <?php endif; ?>
             </div>
         </a>
         <div class="search-item-meta">
@@ -47,7 +59,7 @@
                 Add to cart
             </button>
             <div class="search-item-seller-cont pull-right">
-                <img src="/assets/images/img_how-to-buy.png" class="search-item-seller-img" />
+                <img src="<?=$ownerAvatar;?>" class="search-item-seller-img" />
             </div>
         </div>
         <table class="search-item-list-table">
@@ -55,12 +67,19 @@
                 <tr>
                     <td>
                         <a href="#">
-                            <div class="search-item-img-container" style="background: url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
-                                <div class="search-item-img-container-hover" style="background: url(/assets/images/products/apple-p-h.jpg) center no-repeat; background-size: cover;">
-                                    
+                            <div class="search-item-img-container" style="background: #fff url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
+                                <?php if($hasSecondImage): ?>
+                                <div class="search-item-img-container-hover" style="background: #fff url(/<?=$secondaryImage;?>)) center no-repeat; background-size: cover;">
                                 </div>
-                                <span class="discount-circle-2">76%</span>
+                                <?php endif;?>
+                                
+                                <?php if($percentage > 0):?>
+                                <span class="discount-circle-2"><?=$percentage; ?>%</span>
+                                <?php endif;?>
+                                
+                                <?php if($isProductNew): ?>
                                 <span class="new-circle-2">NEW</span>
+                                <?php endif; ?>
                             </div>
                         </a>
                     </td>
@@ -69,6 +88,7 @@
                             <?=$productName; ?>
                         </a>
                         <span class="search-item-description">
+                            <?=$briefDescription; ?>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac rutrum augue, at pellentesque est. Proin ullamcorper laoreet dolor. Vestibulum quis placerat enim.
                         </span>
                         <div class="divider-gray"></div>
@@ -76,19 +96,22 @@
                             <div class="col-xs-6">
                                 <div class="search-item-seller-img-list">
                                     <div class="search-item-seller-cont">
-                                        <img src="/assets/images/img_how-to-buy.png" class="search-item-seller-img" />
+                                        <img src="<?=$ownerAvatar; ?>" class="search-item-seller-img" />
                                     </div>
                                 </div>
                                 <a href="/<?=$sellerSlug;?>" class="search-item-seller-name">
                                     <?=$sellerStoreName; ?>
                                 </a>
                             </div>
+
+                            <?php if($isFreeShipping): ?>
                             <div class="col-xs-6">
                                 <span class="search-item-shipping-text pull-right">
                                     <span class="search-item-shipping-label">Shipping : </span>
                                     <span class="search-item-shipping-data">Free</span>
                                 </span>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </td>
                     <td class="search-item-td-price">

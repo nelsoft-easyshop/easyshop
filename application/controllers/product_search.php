@@ -124,15 +124,18 @@ class product_search extends MY_Controller {
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
-        $response['string'] = ($this->input->get('q_str')) ? trim($this->input->get('q_str')) : "";
+        $response['string'] = $this->input->get('q_str') ? trim($this->input->get('q_str')) : "";
         $parameter = $response['getParameter'] = $this->input->get();
 
         $search = $searchProductService->getProductBySearch($parameter);
         $response['products'] = $search['collection']; 
         $response['productCount'] = $search['count']; 
         $response['attributes'] = $searchProductService->getProductAttributesByProductIds($search['collection']);
-        $response['availableCondition'] = $response['attributes']['Condition'];
-        unset($response['attributes']['Condition']);
+        $response['availableCondition'] = [];
+        if(isset($response['attributes']['Condition'])){
+            $response['availableCondition'] = $response['attributes']['Condition'];
+            unset($response['attributes']['Condition']);
+        }
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                    ->findBy(['parent' => EsCat::ROOT_CATEGORY_ID]);
 
