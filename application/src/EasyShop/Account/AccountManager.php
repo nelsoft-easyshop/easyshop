@@ -425,7 +425,7 @@ class AccountManager
      
         $memberId = $member->getIdMember();
         $keepLoginData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
-                                ->findOneBy(['idMember' => $member]);
+                                  ->findOneBy(['idMember' => $member]);
         if(!$keepLoginData){
             $keepLoginData = new \EasyShop\Entities\EsKeeplogin();
         }
@@ -467,11 +467,10 @@ class AccountManager
      */
     public function unpersistRememberMeCookie($memberId, $ipAddress, $useragent, $token)
     {
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                           ->findOneBy(['idMember' => $memberId]);
+        $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
         if($member){
             $rememberMeCookieData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
-                                        ->findOneBy([
+                                         ->findOneBy([
                                             'idMember' => $member,
                                             'lastIp' => $ipAddress,
                                             'useragent' => $useragent,
