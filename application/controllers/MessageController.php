@@ -179,4 +179,17 @@ class MessageController extends MY_Controller
 
         echo json_encode($result);
     }
+
+    /**
+     * Sends message from vendor page
+     */
+    public function simpleSend()
+    {
+        $recipient = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                           ->find(intval($this->input->post('recipient')));
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                           ->find($this->userId);
+        $this->messageManager->send($member, $recipient, trim($this->input->post('msg')));
+        redirect('/'.$member->getSlug().'/contact#SendMessage' ,'refresh');
+    }
 }

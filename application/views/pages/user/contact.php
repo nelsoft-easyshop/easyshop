@@ -17,7 +17,7 @@
                             Leave A Message
                         </p>
                         <div class="div-message-form">
-                            <?php echo form_open('messages/doSendMessage'); ?>
+                            <?php echo form_open('MessageController/simpleSend'); ?>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
                                     <input type="text" class="input-lg input-message" placeholder="NAME..." value="Recipient: <?php echo html_escape($seller->getUsername())?>" disabled="disabled"/>
