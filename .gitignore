@@ -44,10 +44,9 @@ application/logs/*
 
 /sphinx/logs/*
 !/sphinx/logs/*.md
-/sphinx/data/main/*
-!/sphinx/data/main/*.md
-/sphinx/data/delta/*
-!/sphinx/data/delta/*.md
+/sphinx/data/
+!/sphinx/data/products/main/*.md
+!/sphinx/data/products/delta/*.md
 /sphinx/etc/*
 !/sphinx/etc/*.md
 !/sphinx/etc/wordforms.txt
