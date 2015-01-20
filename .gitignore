@@ -45,6 +45,7 @@ application/logs/*
 /sphinx/logs/*
 !/sphinx/logs/*.md
 /sphinx/data/*
+/sphinx/data/products/*
 !/sphinx/data/products/*.md
 /sphinx/etc/*
 !/sphinx/etc/*.md
