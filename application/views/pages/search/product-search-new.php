@@ -5,6 +5,7 @@
 <section class="bg-search-section color-default">
     <br>
     <div class="container-non-responsive">
+        <?php if($productCount > 0): ?>
         <div class="row">
             <div class="col-xs-3">
                 <div class="panel-group panel-category border-0" id="category">
@@ -68,11 +69,9 @@
                                         <p class="p-filter-name">By Condition</p>
                                         <select id="filter-condition" class="select-filter">
                                             <option value="">-- Select Condition --</option>
-                                            <option value="0">New</option>
-                                            <option value="1">New other (see details)</option>
-                                            <option value="2">Manufacturer refurbished</option>
-                                            <option value="3">Used</option>
-                                            <option value="4">For parts or not working</option>
+                                            <?php foreach ($availableCondition as $condition): ?>
+                                            <option value="<?=html_escape($condition);?>"><?=html_escape($condition);?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </li>
                                     <li>
@@ -104,62 +103,21 @@
                                             </tr>
                                         </table>
                                     </li>
+                                    <?php foreach ($attributes as $attrName => $attrListValue):?>
                                     <li>
-                                        <p class="p-filter-name">By Brand</p>
+                                        <p class="p-filter-name">By <?=html_escape($attrName); ?></p>
                                         <ul class="list-unstyled">
+                                            <?php foreach ($attrListValue as $value):?>
                                             <li class="checkbox">
                                                 <label>
-                                                    <input type="checkbox"> Pandorra
+                                                    <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
+                                                    <?= html_escape(ucfirst($value));?>
                                                 </label>
                                             </li>
-                                            <li class="checkbox">
-                                                <label>
-                                                    <input type="checkbox"> Omega
-                                                </label>
-                                            </li>
-                                            <li class="checkbox">
-                                                <label>
-                                                    <input type="checkbox"> Tagheuer
-                                                </label>
-                                            </li>
-                                            <li class="checkbox">
-                                                <label>
-                                                    <input type="checkbox"> Patek Philippe
-                                                </label>
-                                            </li>
+                                            <?php endforeach; ?>
                                         </ul>
-                                    </li>
-                                    <li>
-                                        <p class="p-filter-name">By Gender</p>
-                                        <ul class="list-unstyled">
-                                            <li class="checkbox">
-                                                <label>
-                                                    <input type="checkbox"> All
-                                                </label>
-                                            </li>
-                                            <li class="checkbox">
-                                                <label>
-                                                    <input type="checkbox"> Male
-                                                </label>
-                                            </li>
-                                            <li class="checkbox">
-                                                <label>
-                                                    <input type="checkbox"> Female
-                                                </label>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                     <li>
-                                        <p class="p-filter-name">By Color</p>
-                                        <select id="filter-color" class="select-filter">
-                                            <option value="">-- Select Color --</option>
-                                            <option value="0">Red</option>
-                                            <option value="1">Blue</option>
-                                            <option value="2">Green</option>
-                                            <option value="3">Yellow</option>
-                                            <option value="4">Brown</option>
-                                        </select>
-                                    </li>
+                                    </li> 
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
                         </div>
@@ -170,9 +128,9 @@
             <div class="col-xs-9">
                 <div class="search-header">
                     <h5>
-                    <strong>300</strong>
+                    <strong><?=$productCount; ?></strong>
                     results for
-                    <strong>gadgets</strong>
+                    <strong><?=html_escape($string); ?></strong>
                     </h5>
                 </div>
                 <div class="div-product-view-option">
@@ -199,130 +157,18 @@
                 
                 <div class="search-results-container">
                     <div class="row">
-                        <?php foreach ($products as $value): ?>
-                        <?php
-                            $productEntity = $value;
-                            $productName = html_escape($productEntity->getName());
-                            $productSlug = $productEntity->getSlug();
-                            $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
-                            $productCondition = html_escape($productEntity->getCondition());
-                            $originalPrice = number_format($productEntity->getOriginalPrice(),2,'.',',');
-                            $percentage = $productEntity->getDiscountPercentage(); 
-                            $isFreeShipping = $productEntity->getIsFreeShipping(); 
-                            $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
-
-                            $memberEntity = $value->getMember();
-                            $sellerStoreName = html_escape($memberEntity->getStoreName());
-                            $sellerSlug = html_escape($memberEntity->getSlug());
-                        ?>
-                        <div class="col-search-item col-xs-3">
-                            <div class="search-item-container">
-                                <a href="#" class="search-item-link-image">
-                                    <div class="search-item-img-container" style="background: url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
-                                        <div class="search-item-img-container-hover" style="background: url(/assets/images/products/apple-p-h.jpg) center no-repeat; background-size: cover;">
-                                            
-                                        </div>
-                                        <span class="discount-circle-2">76%</span>
-                                        <span class="new-circle-2">NEW</span>
-                                    </div>
-                                </a>
-                                <div class="search-item-meta">
-                                    <a href="/item/<?=$productSlug;?>" class="search-item-name">
-                                        <?=$productName; ?>
-                                    </a>
-                                    <div class="search-item-price">
-                                        <?php if($percentage > 0):?>
-                                        <span class="original-price">
-                                            <s>P<?=$originalPrice; ?></s>
-                                        </span>
-                                        <?php endif; ?>
-                                        <span class="new-price">
-                                            P<?=$productPrice; ?>
-                                        </span>
-                                    </div>
-                                 </div>
-                                <div class="search-item-actions">
-                                    <button class="btn btn-search-add-cart">
-                                        <span class="fa icon-cart fa-lg"></span>
-                                        Add to cart
-                                    </button>
-                                    <div class="search-item-seller-cont pull-right">
-                                        <img src="/assets/images/img_how-to-buy.png" class="search-item-seller-img" />
-                                    </div>
-                                </div>
-                                <table class="search-item-list-table">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <a href="#">
-                                                    <div class="search-item-img-container" style="background: url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
-                                                        <div class="search-item-img-container-hover" style="background: url(/assets/images/products/apple-p-h.jpg) center no-repeat; background-size: cover;">
-                                                            
-                                                        </div>
-                                                        <span class="discount-circle-2">76%</span>
-                                                        <span class="new-circle-2">NEW</span>
-                                                    </div>
-                                                </a>
-                                            </td>
-                                            <td class="search-item-td-meta">
-                                                <a href="/item/<?=$productSlug;?>" class="search-item-name">
-                                                    <?=$productName; ?>
-                                                </a>
-                                                <span class="search-item-description">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac rutrum augue, at pellentesque est. Proin ullamcorper laoreet dolor. Vestibulum quis placerat enim.
-                                                </span>
-                                                <div class="divider-gray"></div>
-                                                <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <div class="search-item-seller-img-list">
-                                                            <div class="search-item-seller-cont">
-                                                                <img src="/assets/images/img_how-to-buy.png" class="search-item-seller-img" />
-                                                            </div>
-                                                        </div>
-                                                        <a href="/<?=$sellerSlug;?>" class="search-item-seller-name">
-                                                            <?=$sellerStoreName; ?>
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <span class="search-item-shipping-text pull-right">
-                                                            <span class="search-item-shipping-label">Shipping : </span>
-                                                            <span class="search-item-shipping-data">Free</span>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="search-item-td-price">
-                                                <div class="search-item-price">
-                                                    <?php if($percentage > 0):?>
-                                                    <span class="original-price">
-                                                        <s>P<?=$originalPrice; ?></s>
-                                                    </span>
-                                                    <?php endif; ?> 
-                                                    <span class="new-price">
-                                                        P<?=$productPrice; ?>
-                                                    </span>
-                                                </div>
-                                                <button class="btn btn-search-add-cart">
-                                                    <span class="fa icon-cart fa-lg"></span>
-                                                    Add to cart
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
+                        <?=$productView; ?>
                     </div>
                 </div>
             </div>
-       </div>
+        </div>
+        <?php else: ?>
         <!--DISPLAY WHEN SEARCH RESULTS IS ZERO-->
-        <!--
+        
         <div class="row">
             <div class="col-md-12">
                 <h3 class="no-search-resul-title">
-                    Your search for <strong>njksadhjkashdjkhasd</strong> did not return any results.
+                    Your search for <strong><?=html_escape($string); ?></strong> did not return any results.
                 </h3>
             </div>
         </div>
@@ -424,7 +270,7 @@
                 </ul>
             </div>
         </div>
-        -->
+        <?php endif; ?>
         <!---END-->
     </div>
 </section>

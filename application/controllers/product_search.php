@@ -130,8 +130,9 @@ class product_search extends MY_Controller {
         $search = $searchProductService->getProductBySearch($parameter);
         $response['products'] = $search['collection']; 
         $response['productCount'] = $search['count']; 
-        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
-
+        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($search['collection']);
+        $response['availableCondition'] = $response['attributes']['Condition'];
+        unset($response['attributes']['Condition']);
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                    ->findBy(['parent' => EsCat::ROOT_CATEGORY_ID]);
 
@@ -152,9 +153,15 @@ class product_search extends MY_Controller {
                 ], true );
 
         $headerData = [
-            'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
+            'title' => (($response['string']==='') ? "Search" : $response['string']).' | Easyshop.ph'
         ];
 
+        $productViewData = [
+            'products' => $search['collection'],
+        ];
+        $productView = $this->load->view('partials/search-products', $productViewData, true);
+        
+        $response['productView'] = $productView;
 
         $this->load->spark('decorator');    
         $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
