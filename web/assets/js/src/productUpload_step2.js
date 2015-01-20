@@ -1622,6 +1622,8 @@ var heightRatio = 538;
                     value: pictureCountOther
                 }).appendTo('form');
                 arr.push({name:'pictureCount', value:pictureCountOther});
+                canProceed = false;
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
@@ -1658,7 +1660,6 @@ var heightRatio = 538;
         var val = $(this).val();
         var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
         var picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
-        var size = this.files[0].size;
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':
@@ -1670,6 +1671,7 @@ var heightRatio = 538;
         }
 
         if(badIE == false){
+            var size = this.files[0].size;
             if(size > maxImageSize){
                 alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
                 return false;
