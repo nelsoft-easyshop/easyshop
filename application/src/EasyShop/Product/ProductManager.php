@@ -717,6 +717,14 @@ class ProductManager
             $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
             $productAttributes = $esProductRepo->getAttributesByProductIds([$product->getIdProduct()]);
             $product->attributes = $this->collectionHelper->organizeArray($productAttributes);
+            if ( strlen(trim($product->getCatOtherName())) <= 0 
+                 || !trim($product->getCatOtherName()) ){
+                $product->category = trim($product->getCat()->getName());
+            }
+            else{
+                $product->category = trim($product->getCatOtherName());
+            }
+            
             $products[] = $product;
         }
 
