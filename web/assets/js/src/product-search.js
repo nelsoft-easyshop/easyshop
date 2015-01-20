@@ -1,4 +1,7 @@
 (function ($) {
+    $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}});
+    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
+    
     $( ".icon-list" ).click(function() {
         $(this).addClass("active-view");
         $(".icon-grid").removeClass("active-view");

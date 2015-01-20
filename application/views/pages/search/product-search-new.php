@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 
-                <div class="panel-group panel-category border-0" id="category">
+                <div class="panel-group panel-category border-0" id="filter-panel-container">
                     <div class="panel panel-default panel-left-wing border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
@@ -200,7 +200,7 @@
                 <div class="search-results-container">
                     <div class="row">
                         <?php
-                            for($i=0; $i<=20; $i++){
+                            for($i=1; $i<=8; $i++){
                         ?>
                         <div class="col-search-item col-xs-3">
                             <div class="search-item-container">
@@ -394,6 +394,116 @@
                 </div>
             </div>
        </div>
+        <!--DISPLAY WHEN SEARCH RESULTS IS ZERO-->
+        <!--
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="no-search-resul-title">
+                    Your search for <strong>njksadhjkashdjkhasd</strong> did not return any results.
+                </h3>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row">
+            <div class="col-md-7">
+                <div id="search-tips-container">
+                    <h4>Some helpful tips</h4>
+                    <ul class="list-search-tips">
+                        <li>Check your spelling for typing errors, eg. Jakcet instead of Jacket.</li>
+                        <li>Try searching a similar search term or synonym.</li>
+                        <li>Try searching just one keyword.</li>
+                        <li>Try searching more general terms - you can then filter the search results.</li>
+                    </ul>
+                    <br/>
+                    <br/>
+                    <h4>Search again</h4>
+                    <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                        <div class="col-xs-12 col-sm-9 col-md-9 form-404-input">
+                            <div class="row">
+                                <input type="text" name="q_str" class="ui-form-control input-404" placeholder="Enter keyword here">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <input type="submit" value="search" class="btn btn-default-4 btn-no-br submit-404">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <h4>Browse our categories here:</h4>
+                <ul class="list-category-search">
+                    <li>
+                        <a href="#" class="search-category-link">
+                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);">
+                                
+                            </span>
+                            <span class="search-category-name">Clothing &amp; Accessories</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="search-category-link">
+                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);">
+                                
+                            </span>
+                            <span class="search-category-name">Electronics &amp; Gadgets</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="search-category-link">
+                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);">
+                                
+                            </span>
+                            <span class="search-category-name">Clothing &amp; Accessories</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="search-category-link">
+                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);">
+                                
+                            </span>
+                            <span class="search-category-name">Electronics &amp; Gadgets</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="search-category-link">
+                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);">
+                                
+                            </span>
+                            <span class="search-category-name">Clothing &amp; Accessories</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="search-category-link">
+                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);">
+                                
+                            </span>
+                            <span class="search-category-name">Electronics &amp; Gadgets</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="search-category-link">
+                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);">
+                                
+                            </span>
+                            <span class="search-category-name">Clothing &amp; Accessories</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="search-category-link">
+                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);">
+                                
+                            </span>
+                            <span class="search-category-name">Electronics &amp; Gadgets</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        -->
+        <!---END-->
     </div>
 </section>
+<script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
 <script src="/assets/js/src/product-search.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

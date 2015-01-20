@@ -18,6 +18,7 @@
         </div>
     </div>
 </section>
+
 <section id="parallax-1" class="bg-search-section color-default search-parallax-container">
     <div class="search-parallax">
     <div id="parallax-3" class="banner-template-1" style="background-image: url(/assets/images/slide3.jpg); background-size: cover;">
@@ -43,6 +44,7 @@
             </div>
         </center>
     </div>
+    
     <br>
     <center class="search-slider">
         <div class="left-shade">
@@ -132,7 +134,7 @@
                     </div>
                 </div>
                 
-                <div class="panel-group panel-category border-0" id="category">
+                <div class="panel-group panel-category border-0 panel-filter-product-new" id="filter-panel-container">
                     <div class="panel panel-default panel-left-wing border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
@@ -229,7 +231,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                     <li>
+                                    <li>
                                         <p class="p-filter-name">By Color</p>
                                         <select id="filter-color" class="select-filter">
                                             <option value="">-- Select Color --</option>
@@ -278,7 +280,7 @@
                 <div class="search-results-container">
                     <div class="row">
                         <?php
-                            for($i=0; $i<=20; $i++){
+                            for($i=0; $i<=50; $i++){
                         ?>
                         <div class="col-search-item col-xs-3">
                             <div class="search-item-container">
@@ -373,7 +375,6 @@
                                 </table>
                             </div>
                         </div>
-                        
                         
                         <div class="col-search-item col-xs-3">
                             <div class="search-item-container">
@@ -474,8 +475,6 @@
        </div>
     </div>
 </section>
-<script src="/assets/js/src/product-search-by-category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<!-- bxSlider Javascript file -->
+<script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
 <script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
-<script src="/assets/js/src/vendor/jquery.smoothwheel.js"></script> 
-
+<script src="/assets/js/src/product-search-by-category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
