@@ -68,18 +68,19 @@ class MessageController extends MY_Controller
     {
         $storeName = trim($this->input->post("recipient"));
         $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
-                                   ->getUserWithStoreName($storeName, $this->userId)[0];
+                                   ->getUserWithStoreName($storeName);
         $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
 
         if (!$receiverEntity) {
             $result['success'] = 0;
-            $result['msg'] = "The user " . html_escape($username) . ' does not exist';
+            $result['msg'] = "The user " . html_escape($storeName) . ' does not exist';
         }
-        else if ( (int) $this->userId === (int) $receiverEntity->getIdMember() ) {
+        else if ( (int) $this->userId === (int) $receiverEntity[0]->getIdMember() ) {
             $result['success'] = 0;
             $result['msg'] = "Sorry, it seems that you are trying to send a message to yourself.";
         }
         else {
+            $receiverEntity = $receiverEntity[0];
             $msg = trim($this->input->post("msg"));
             $isSendingSuccesful = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
             if ($isSendingSuccesful) {

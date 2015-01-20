@@ -99,6 +99,7 @@
         $("#table_id_info").hide();
         
         $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search').prop('class','ui-form-control');
+        $('#tbl_search').hide();
         $("#modal-background, #modal-close").click(function() {
             $("#modal-container, #modal-background").toggleClass("active");
             $("#modal-container").hide();
@@ -120,8 +121,7 @@
             if (msg == "") {
                 return false;
             }
-            send_msg(recipient,msg);
-            specific_msgs();
+            send_msg(recipient,msg, true);
 
             var objDiv = document.getElementById("msg_field");
             objDiv.scrollTop = objDiv.scrollHeight;
@@ -182,8 +182,6 @@
 function Reload()
 {
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
-    var result = "";
     var todo = "Get_UnreadMsgs";
     $.ajax({
         type:"POST",
@@ -221,7 +219,7 @@ $("#modal_send_btn").on("click",function(){
         return false;
     }
 
-    if(send_msg(recipient,msg)){
+    if(send_msg(recipient,msg, false)){
         $("#modal-container, #modal-background").toggleClass("active");
         $("#modal-container").hide();
         $("#msg-message").val("");
@@ -238,39 +236,18 @@ $("#modal_send_btn").on("click",function(){
 $("#chsn_delete_btn").on("click",function()
 {
     var checked = $(".d_all:checked").map(function () {return this.value;}).get().join(",");
-    var result = delete_data(checked);
-    if(result != ""){
-        $("#table_id tbody").empty();
-        onFocus_Reload(result);
-        $("#msg_field").empty();
-        $("#msg_textarea").hide();
-        $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
-    }
-    else {
-        location.reload();
-    }
+    delete_data(checked);
 });
 
 $("#delete_all_btn").on("click",function()
 {
     var checked = $(".d_all").map(function () {return this.value;}).get().join(",");
-    var result = delete_data(checked);
-    if(result != ""){
-        $("#table_id tbody").empty();
-        onFocus_Reload(result);
-        $("#msg_field").empty();
-        $("#msg_textarea").hide();
-        $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
-    }
-    else {
-        location.reload();
-    }
+    delete_data(checked);
 });
 
-function send_msg(recipient,msg)
+function send_msg(recipient,msg, isOnConversation)
 {
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
 
     var result = false;
     $.ajax({
@@ -289,6 +266,12 @@ function send_msg(recipient,msg)
             if (data.success != 0) {
                 $("#table_id tbody").empty();
                 onFocus_Reload(data)
+                if (isOnConversation) {
+                    specific_msgs();
+                }
+                else {
+                    $('#modal-close').trigger('click');
+                }
                 result = true;
             }else{
                 alert(data.msg);
@@ -469,13 +452,22 @@ function delete_data(ids)
         },
         url : "/MessageController/delete",
         data : {id_msg:ids,csrfname:csrftoken},
-        success : function(d) {
-            data = d;
+        success : function(result) {
+            if(result.messages != ""){
+                $("#table_id tbody").empty();
+                onFocus_Reload(result);
+                $("#msg_field").empty();
+                $("#msg_textarea").hide();
+                $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
+            }
+            else {
+                location.reload();
+            }
         }
     });
     $("#modal-background").hide();
     $("#modal-background img").hide();
-    return data;
+
 }
 
 function seened(obj)
