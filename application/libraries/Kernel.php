@@ -444,7 +444,7 @@ class Kernel
             $storage = new OAuth2\Storage\Pdo(array('dsn' => $dsn, 'username' => $dbConfig['user'], 'password' => $dbConfig['password']), ['user_table' => 'es_member']);
             
             $userCredentialStorage = new EasyShop\OAuth\Storage\UserCredentials($container['account_manager']);
-            $server = new OAuth2\Server($storage);
+            $server = new OAuth2\Server($storage,['access_lifetime' => 60]);
             $server->addGrantType(new OAuth2\GrantType\UserCredentials($userCredentialStorage));
             $server->addGrantType(new OAuth2\GrantType\RefreshToken($storage));
             return $server;
