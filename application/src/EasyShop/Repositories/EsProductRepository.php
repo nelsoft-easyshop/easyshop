@@ -503,17 +503,17 @@ class EsProductRepository extends EntityRepository
                 $order = "ASC";
             } 
             switch(strtoupper($filterArray['sortby'])){
-                case "POPULAR":
+                case EsProduct::SEARCH_SORT_POPULAR:
                     $qbResult = $qbResult->orderBy('p.clickcount', $order);
                     break;
-                case "NEW":
+                case EsProduct::SEARCH_SORT_NEW:
                     $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
-                case "HOT":
+                case EsProduct::SEARCH_SORT_HOT:
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
                                          ->addOrderBy(' p.clickcount',$order);
                     break;
-                case "NAME":
+                case EsProduct::SEARCH_SORT_NAME:
                     $qbResult = $qbResult->orderBy('p.name', $order);
                     break;
                 default:

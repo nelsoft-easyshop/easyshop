@@ -70,7 +70,9 @@
                                         <select id="filter-condition" class="select-filter">
                                             <option value="">-- Select Condition --</option>
                                             <?php foreach ($availableCondition as $condition): ?>
-                                            <option value="<?=html_escape($condition);?>"><?=html_escape($condition);?></option>
+                                            <option value="<?=html_escape($condition);?>" <?=(isset($getParameter['condition']) && strtolower($condition) === strtolower($getParameter['condition'])) ? 'selected="true"' : '';?> >
+                                                <?=html_escape($condition);?>
+                                            </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </li>
@@ -82,7 +84,7 @@
                                                     from
                                                 </td>
                                                 <td>
-                                                    <input id="filter-lprice" type="text" class="input-filter-price price-field" placeholder="0.00">
+                                                    <input value="<?=isset($getParameter['startprice']) ? number_format( (float)$getParameter['startprice'], 2) : ''; ?>" id="filter-from-price" type="text" class="input-filter-price price-field" placeholder="0.00">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -90,7 +92,7 @@
                                                     to
                                                 </td>
                                                 <td>
-                                                    <input id="filter-lprice" type="text" class="input-filter-price price-field" placeholder="0.00">
+                                                    <input value="<?=isset($getParameter['startprice']) ? number_format( (float)$getParameter['endprice'], 2) : ''; ?>" id="filter-to-price" type="text" class="input-filter-price price-field" placeholder="0.00">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -98,7 +100,7 @@
                                                     &nbsp;
                                                 </td>
                                                 <td>
-                                                    <input id="filter-btn" type="button" class="btn-filter" value="filter price">
+                                                    <input id="filter-btn" type="button" class="btn-filter btn-filter-price" value="filter price">
                                                 </td>
                                             </tr>
                                         </table>
@@ -110,7 +112,7 @@
                                             <?php foreach ($attrListValue as $value):?>
                                             <li class="checkbox">
                                                 <label>
-                                                    <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
+                                                    <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox cbx" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
                                                     <?= html_escape(ucfirst($value));?>
                                                 </label>
                                             </li>
@@ -147,10 +149,10 @@
                     </table>
                 </div>
                 <div class="vendor-select-con">
-                    <select name="sort" class="sort_select form-select-default color-default pull-right">
-                        <option value="new">Default Sorting</option>
-                        <option value="popular">Popularity</option>
-                        <option value="hot">Hot</option>
+                    <select id="filter-sort" name="sort" class="sort_select form-select-default color-default pull-right">
+                        <option value="">Default Sorting</option>
+                        <option value="<?=strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_POPULAR); ?>" <?=(isset($getParameter['sortby']) && strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_POPULAR) === strtolower($getParameter['sortby'])) ? 'selected="true"' : '';?> >Popularity</option>
+                        <option value="<?=strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_HOT); ?>" <?=(isset($getParameter['sortby']) && strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_HOT) === strtolower($getParameter['sortby'])) ? 'selected="true"' : '';?> >Hot</option>
                     </select>
                     <div class="clear"></div>
                 </div>
@@ -274,5 +276,13 @@
         <!---END-->
     </div>
 </section>
+
+<div id="hidden-elements">
+    <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
+    <input type="hidden" id="hidden-typeView" value="<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>" />
+    <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
+    <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
+</div> 
+
 <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
 <script src="/assets/js/src/product-search.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

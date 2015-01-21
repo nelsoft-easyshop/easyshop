@@ -136,24 +136,13 @@ class product_search extends MY_Controller {
             $response['availableCondition'] = $response['attributes']['Condition'];
             unset($response['attributes']['Condition']);
         }
-        $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                   ->findBy(['parent' => EsCat::ROOT_CATEGORY_ID]);
 
-        $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
-
-        $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
-
-        $response['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
-                [
-                    'parentCategory' =>  $response['parentCategory'],
-                    'environment' => 'desktop'
-                ], true );
-
-        $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
-                [
-                    'parentCategory' =>  $response['parentCategory'],
-                    'environment' => 'mobile'
-                ], true );
+        if($search['count'] <= 0){
+            $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                       ->findBy(['parent' => EsCat::ROOT_CATEGORY_ID]);
+            $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
+            $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
+        }
 
         $headerData = [
             'title' => (($response['string']==='') ? "Search" : $response['string']).' | Easyshop.ph'

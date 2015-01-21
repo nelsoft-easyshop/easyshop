@@ -368,6 +368,12 @@ class EsProduct
      */
     const PRODUCT_IS_PROMOTE_ON = 1;
 
+    const SEARCH_SORT_POPULAR = 'POPULAR';
+    const SEARCH_SORT_NEW = 'NEW';
+    const SEARCH_SORT_HOT = 'HOT';
+    const SEARCH_SORT_NAME = 'NAME';
+
+
     /**
      * @var integer
      *
