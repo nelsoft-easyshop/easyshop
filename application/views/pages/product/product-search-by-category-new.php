@@ -1,6 +1,9 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
+
 <section class="breadcrumbs-bg">
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
@@ -15,8 +18,10 @@
         </div>
     </div>
 </section>
-<section class="bg-search-section color-default">
-    <section class="banner-template-1 module parallax parallax-1" style="background: url(/assets/images/slide3.jpg);">
+
+<section id="parallax-1" class="bg-search-section color-default search-parallax-container">
+    <div class="search-parallax">
+    <div id="parallax-3" class="banner-template-1">
         <center>
             <div class="banner-content">
                 <span class="banner-lg-text">
@@ -38,23 +43,31 @@
                 </div>
             </div>
         </center>
-    </section>
+    </div>
     
     <br>
-    <center>
-    <div class="slider1" width="100%">
-      
-      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar2"></div>
-      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar3"></div>
-      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar4"></div>
-      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar5"></div>
-      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar6"></div>
-      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar7"></div>
-      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar8"></div>
-      <div class="slide"><img src="http://placehold.it/390x150&text=FooBar9"></div>
-    </div>
+    <center class="search-slider">
+        <div class="left-shade">
+        </div>
+        <div class="right-shade">
+        </div>
+        <div class="container">
+            <div class="slider1 clear" width="100%">
+              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar1"></div>
+              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar2"></div>
+              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar3"></div>
+              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar4"></div>
+              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar5"></div>
+              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar6"></div>
+              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar7"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
     </center>
-    <div class="container-non-responsive">
+    </div>
+</section>
+<section id="parallax-2" class="bg-search-section color-default">
+    <div class="container">
         <div class="row">
             <div class="col-xs-3">
                 <div class="panel-group panel-category border-0" id="category">
@@ -463,6 +476,4 @@
 </section>
 <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
 <script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
-<!-- bxSlider CSS file -->
-<link href="/assets/css/jquery.bxslider.css" rel="stylesheet" />
 <script src="/assets/js/src/product-search-by-category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

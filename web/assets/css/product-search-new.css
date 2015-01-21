@@ -314,6 +314,7 @@ html, body{
 .list-search .search-item-td-meta{
     vertical-align: top;
     padding: 0px 10px;
+    min-width: 471px;
 }
 
 .list-search .search-item-td-price{
@@ -496,3 +497,138 @@ ul.list-category-search li:last-child > .search-category-link{
     font-size: 12px;
     display: inline-block;
 }
+
+/* =============================================
+-----------------  slider gallery --------------
+==============================================*/
+.search-slider .left-shade,
+.search-slider .right-shade {
+    background-color: rgba(255,255,255,0.4);
+    position: absolute;
+    z-index: 99;
+}
+
+.search-slider .right-shade {
+    right: 0;
+}
+
+.search-slider {
+    overflow: hidden;
+}
+
+.search-slider .bx-wrapper {
+    position: relative;
+}
+
+.search-slider .bx-viewport {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+.search-slider .bx-wrapper .bx-pager {
+    display: none;
+}
+
+.search-slider .bx-controls {
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.search-slider .bx-controls-direction {
+    left: inherit;
+    margin: auto;
+    position: relative;
+    top: 0px;
+    width: 100%;
+}
+
+.search-slider .bx-controls-direction .bx-prev,
+.search-slider .bx-controls-direction .bx-next {
+    border: 3px solid #fff;
+    border-radius: 90px;
+    margin-top: 0;
+}
+
+.search-slider .bx-controls-direction .bx-prev:before,
+.search-slider .bx-controls-direction .bx-next:before {
+    color: #fff;
+    font-family: "FontAwesome";
+    font-size: 26px;
+    line-height: 27px;
+    position: absolute;
+    text-indent: 0;
+}
+
+.search-slider .bx-controls-direction .bx-prev {
+    right: 15px;
+}
+
+.search-slider .bx-controls-direction .bx-prev:before {
+    content: "\f104";
+    left: 0;
+    right: 4px;
+}
+
+.search-slider .bx-controls-direction .bx-next:before {
+    content: "\f105";
+    left: 4px;
+    right: 0;
+}
+
+.search-parallax-container {
+    position: relative;
+}
+
+#parallax-2 {
+    padding-top: 50px;
+    position: relative;
+    z-index: 99;
+}
+
+#parallax-3 {
+    background-image: url(../images/slide3.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.search-slider .slider1 {
+    min-width: 2000%;
+}
+
+.search-slider .slider1 .slide {
+    text-align: center;
+}
+
+.search-slider .slider1 .slide img {
+    max-width: 375px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .search-slider .slider1 .slide {
+        width: 355px !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .search-slider .slider1 .slide {
+        width: 308.3333px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .search-slider .slider1 .slide {
+        width: 375px !important;
+    }
+}
+
+@media (max-width: 395px) {
+    .search-slider .container {
+        padding: 0;
+    }
+
+    .search-slider .slider1 .slide {
+        margin-right: 0 !important;
+    }

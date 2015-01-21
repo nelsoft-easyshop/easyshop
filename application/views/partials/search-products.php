@@ -22,10 +22,9 @@
 <div class="col-search-item col-xs-3">
     <div class="search-item-container">
         <a href="/item/<?=$productSlug;?>" class="search-item-link-image">
-            <div class="search-item-img-container" style="background: url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
-                
+            <div class="search-item-img-container" style="background: #fff url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
                 <?php if($hasSecondImage): ?>
-                <div class="search-item-img-container-hover" style="background: url(/<?=$secondaryImage;?>) center no-repeat; background-size: cover;">
+                <div class="search-item-img-container-hover" style="background: #fff url(/<?=$secondaryImage;?>) center no-repeat; background-size: cover;">
                 </div>
                 <?php endif; ?>
                 
@@ -52,7 +51,7 @@
                     P<?=$productPrice; ?>
                 </span>
             </div>
-         </div>
+        </div>
         <div class="search-item-actions">
             <button class="btn btn-search-add-cart">
                 <span class="fa icon-cart fa-lg"></span>
