@@ -484,7 +484,7 @@ class Memberpage extends MY_Controller
             foreach ($value["product"] as $product) {
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
                      foreach($product["attr"] as $attr => $attrValue ) {
-                        $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                      }
                 }
                 $data = [
