@@ -52,7 +52,7 @@
                 <p>
                     or enter the following URL into your browser
                 </p>
-                <a href="">https://www.easyshop.ph/<?=html_escape($slug)?></a>
+                https://www.easyshop.ph/<?=html_escape($slug)?>
             </div>
         </div>
 
