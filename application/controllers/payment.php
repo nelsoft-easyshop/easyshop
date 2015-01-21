@@ -449,6 +449,7 @@ class Payment extends MY_Controller{
  
 
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Payment Review | Easyshop.ph',
             ];
             
@@ -1387,6 +1388,7 @@ class Payment extends MY_Controller{
         $response['dateadded'] = $payDetails['dateadded'];
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Payment Review | Easyshop.ph',
         ];
         

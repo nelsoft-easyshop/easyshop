@@ -47,6 +47,7 @@ class Cart extends MY_Controller
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
             $totalAmount = $this->cartImplementation->getTotalPrice();
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 "title" => "Cart | Easyshop.ph",
             ];
             
