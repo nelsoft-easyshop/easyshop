@@ -12,13 +12,32 @@ var HOST = 'local.easyshop';
 app = express();
 
 server = https.createServer(https_options, app).listen(PORT, HOST);
+var idContainer = {};
 console.log('HTTPS Server listening on %s:%s', HOST, PORT);
 io = require('socket.io').listen(server);
 
-io.sockets.on( 'connection', function( client ) {
-    console.log( "New client !" );
-    client.on( 'message', function( data ) {
-        console.log( 'Message received ' + data.name + ":" + data.message );
-        io.sockets.emit( 'message', { name: data.name, message: data.message } );
+io.sockets.on( 'connection', function(client) {
+
+    client.on('send message', function(data, callback) {
+        if (data.recipientId in idContainer) {
+            idContainer[data.recipientId].emit('send message', {recipientId: data.recipientId, message: data.message });
+            callback(true);
+        }
+        else {
+            callback(false);
+        }
     });
+
+    client.on('set account online', function(memberId) {
+        //TODO : add feature to see if user is online
+        if (!(memberId in idContainer)) {
+            client.memberId = memberId;
+            idContainer[client.memberId] = client;
+            console.log( "ID : " + memberId + " is now Online" );
+        }
+        else {
+            console.log( "ID : " + memberId + " is already Online somewhere" );
+        }
+    });
+
 });

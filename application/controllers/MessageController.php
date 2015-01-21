@@ -186,7 +186,6 @@ class MessageController extends MY_Controller
      */
     public function chatbox()
     {
-        $messages = $this->messageManager->getAllMessage($this->userId);
         $title = 'Chat | Easyshop.ph';
         $headerData = [
             'title' => $title,
@@ -196,7 +195,7 @@ class MessageController extends MY_Controller
         ];
         $this->load->spark('decorator');
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/messages/sampleChat');
+        $this->load->view('pages/messages/sampleChat', ['memberId' =>$this->userId]);
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
 
