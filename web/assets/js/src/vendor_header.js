@@ -261,40 +261,113 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         }
     });
 
-    var imageprev = function(input) {
-
-        if (input.files 
-            && input.files[0] 
-            && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) 
-            && input.files[0].size <= 5000000) {
-
-            var reader = new FileReader();
-
-            reader.onload = function(e){
-                var image = new Image();
-                image.src = e.target.result;
-                image.onload = function(){
-                    width = this.width;
-                    height = this.height;
-                    $('#user_image_prev').attr('src', this.src);
-                    if(width >10 && height > 10 && width <= 5000 && height <= 5000){
-                        deploy_imageprev();
-                    }
-                    else if(width > 5000 || height > 5000){
-                        alert('Failed to upload image. Max image dimensions: 5000px x 5000px');
-                    }
-                    else{
-                        $('#div_user_image_prev span:first').html('Preview');
-                    }
-                }
-            }
-            reader.readAsDataURL(input.files[0]);
+    if(window.FileReader){
+        // I intentionally add ie 10 into restriction because of error in simplemodal
+        // see reference https://github.com/ericmmartin/simplemodal/pull/34
+        if (navigator.appVersion.indexOf("MSIE 10") != -1){
+            badIE = true;
         }
         else{
-            alert('You can only upload gif|png|jpeg|jpg files at a max size of 5MB! ');
-            return false;
+            badIE = false;
         }
     }
+    else{
+        badIE = true;
+    }
+
+    var imageprev = function(input) {
+
+        if(badIE == false){
+            console.log('herere');
+            if (input.files 
+                && input.files[0] 
+                && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) 
+                && input.files[0].size <= 5000000) {
+
+                var reader = new FileReader();
+
+                reader.onload = function(e){
+                    var image = new Image();
+                    image.src = e.target.result;
+                    image.onload = function(){
+                        width = this.width;
+                        height = this.height;
+                        $('#user_image_prev').attr('src', this.src);
+                        if(width >10 && height > 10 && width <= 5000 && height <= 5000){
+                            deploy_imageprev();
+                        }
+                        else if(width > 5000 || height > 5000){
+                            alert('Failed to upload image. Max image dimensions: 5000px x 5000px');
+                        }
+                        else{
+                            $('#div_user_image_prev span:first').html('Preview');
+                        }
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+            else{
+                alert('You can only upload gif|png|jpeg|jpg files at a max size of 5MB! ');
+                return false;
+            }
+        }
+        else{
+            console.log('success');
+            submitForm();
+        }
+    }
+
+    var submitForm = function(){
+        var action = '/store/'+formAction;
+        var $editContainer = $('.edit-profile-photo > div');
+        var $defaultValue = $editContainer.html();
+        var $editBanner = $('#banner_edit');
+        var $editBannerDefault = $('#banner_edit').html();
+
+        $('#form_image').ajaxForm({
+            url: action,
+            dataType: "json",
+            beforeSubmit : function(){
+                $('.avatar-modal-content').hide();
+                $('.avatar-modal-loading').fadeIn();
+
+                if(badIE){
+                    if(formAction === 'banner_upload'){
+                        $('#banner_edit').children('img').attr('src', $('.avatar-modal-loading > img').attr('src'));
+                        $('#banner_edit').children('h4').html('Uploading please wait..');
+                    }
+                    else if(formAction === 'upload_img'){
+                        $editContainer.children('img').attr('src', $('.avatar-modal-loading > img').attr('src'));
+                        $editContainer.children('span').html('Uploading please wait..');
+                        $('.edit-profile-photo-menu').hide();
+                    }
+                }
+            },
+            uploadProgress : function(event, position, total, percentComplete) {
+                console.log(percentComplete);
+            },
+            success :function(xhrResponse) { 
+                if(xhrResponse.isSuccessful){
+                    if(formAction === 'banner_upload'){
+                        $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});
+                    }
+                    else if(formAction === 'upload_img'){
+                        var avatarImage = $('img.avatar-image');
+                        avatarImage.attr('src',xhrResponse.image);
+                    }
+                    $.modal.close();
+                    $('#banner-cancel-changes').trigger('click');
+                }
+                else{
+                    $.modal.close();
+                    $('#banner-cancel-changes').trigger('click');
+                    alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
+                }
+                $editContainer.html($defaultValue);
+                $editBanner.html($editBannerDefault);
+            },
+        }).submit(); 
+    };
 
     var deploy_imageprev = function(){
         $('#div_user_image_prev').modal({
@@ -306,39 +379,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             },
             onShow: function(){
                 $('#div_user_image_prev button').on('click', function(){
-                    var action = '/store/'+formAction;
-                    $('#form_image').ajaxForm({
-                        url: action,
-                        dataType: "json",
-                        beforeSubmit : function(){
-                            $('.avatar-modal-content').hide();
-                            $('.avatar-modal-loading').fadeIn();
-                        },
-                        uploadProgress : function(event, position, total, percentComplete) {
-                            console.log(percentComplete);
-                        },
-                        success :function(xhrResponse) { 
-                            if(xhrResponse.isSuccessful){
-                                if(formAction === 'banner_upload'){
-                                    var bannerImage = $('img.banner-image');
-                                    bannerImage.attr('src',xhrResponse.banner);
-                                    $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});                                    
-                                }
-                                else if(formAction === 'upload_img'){
-                                    var avatarImage = $('img.avatar-image');
-                                    avatarImage.attr('src',xhrResponse.image);
-                                }
-                                $.modal.close();
-                                $('#banner-cancel-changes').trigger('click');
-                            }
-                            else{
-                                $.modal.close();
-                                $('#banner-cancel-changes').trigger('click');
-                                alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
-                            }
-                            
-                        },
-                    }).submit(); 
+                    submitForm();
                 });
 
                 if(imageUploadType  == "avatar"){

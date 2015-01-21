@@ -75,7 +75,9 @@
                     <h4><strong>Change Cover Photo</strong></h4>
                 </a>
             </div>
-            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
+            <div class="vendor-main-bg" style="background: url(<?=$bannerImage?>) center no-repeat; background-size: cover;">
+                
+            </div> 
         </div>
         <div class="container main-container vendor-main pos-ab">
             <div class="vendor-profile-content" id="edit-profile-info-content">
