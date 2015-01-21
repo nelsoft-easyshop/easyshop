@@ -1577,10 +1577,6 @@ a{
     font-weight: bold;
 }
 
-#activated-modal{
-    min-height: 310px !important
-}
-
 #activated-message{
     font-size: 15px;
     margin-top: 14px;
