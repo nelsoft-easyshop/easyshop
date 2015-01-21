@@ -156,6 +156,7 @@ class Memberpage extends MY_Controller
             $dashboardData['tab'] = $this->input->get('tab');
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' =>  "Dashboard | Easyshop.ph",
             ];
     
@@ -1668,6 +1669,7 @@ class Memberpage extends MY_Controller
                     'hash' => $this->input->get('h')            
                 ];
                 $headerData = [
+                    "memberId" => $this->session->userdata('member_id'),
                     'title' =>  "Reactivate you account | Easyshop.ph",
                     'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
                 ];

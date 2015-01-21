@@ -179,6 +179,7 @@ class SocialMediaController extends MY_Controller
         }
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         ];
@@ -292,6 +293,7 @@ class SocialMediaController extends MY_Controller
         }
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         ];

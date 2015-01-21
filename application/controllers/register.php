@@ -30,6 +30,7 @@ class Register extends MY_Controller
             }
         }
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
         ];
@@ -317,6 +318,7 @@ class Register extends MY_Controller
         $hash = isset($getdata[2]) ? $getdata[2] : null;
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.ph - Email Verification',
             'metadescription' => '',
             'relCanonical' => '',
