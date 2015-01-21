@@ -9,7 +9,7 @@ class IsValidStoreNameOptionalValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
-        if((strlen($value) > 0 && strlen($value) < 4) || strlen($value) > 60){
+        if((strlen($value) > 0 && strlen($value) < 5) || strlen($value) > 60){
             $this->context->addViolation(
                 $constraint->message,
                 array('%string%' => $value)

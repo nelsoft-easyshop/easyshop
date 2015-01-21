@@ -157,7 +157,10 @@ class ValidationRules
                     ),
                     'gender' => array(
                                 new CustomAssert\IsValidGender(),
-                    ),                    
+                    ),   
+                    'shop_name' => array(
+                                new CustomAssert\IsValidStoreNameOptional(),
+                    ),                 
             ),
             'store_setup' => [
                     'shop_name' =>  [new Assert\NotBlank(),
