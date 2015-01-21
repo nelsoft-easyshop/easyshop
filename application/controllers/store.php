@@ -118,6 +118,7 @@ class Store extends MY_Controller
                 $bannerData['vendorLink'] = "";
 
                 $headerData = [
+                    "memberId" => $this->session->userdata('member_id'),
                     'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
                     'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
                     'relCanonical' => base_url().$vendorSlug,
@@ -407,6 +408,7 @@ class Store extends MY_Controller
 
         // Load View
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
             'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
             'relCanonical' => base_url().$sellerslug.'/followers',
@@ -677,6 +679,7 @@ class Store extends MY_Controller
         $bannerData['vendorLink'] = "about";
         
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
             'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
             'relCanonical' => base_url().$sellerslug.'/about'
@@ -850,6 +853,7 @@ class Store extends MY_Controller
         $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph',
             'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
             'relCanonical' => base_url().$sellerslug.'/contact',

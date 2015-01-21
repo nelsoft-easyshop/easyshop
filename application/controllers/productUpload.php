@@ -94,6 +94,7 @@ class productUpload extends MY_Controller
 
         if($this->session->userdata('usersession') && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -106,6 +107,7 @@ class productUpload extends MY_Controller
         }
         else{
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Verify your account to proceed | Easyshop.ph',
             ];
 
@@ -151,6 +153,7 @@ class productUpload extends MY_Controller
     public function step2()
     { 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Sell Product | Easyshop.ph',
             'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
             'relCanonical' => '',
@@ -414,10 +417,11 @@ class productUpload extends MY_Controller
         }
 
         $headerData = [
-                'title' => 'Edit Product | Easyshop.ph',
-                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-                'relCanonical' => '',
-                'renderSearchbar' => false, 
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Edit Product | Easyshop.ph',
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+            'relCanonical' => '',
+            'renderSearchbar' => false, 
         ]; 
         $this->load->spark('decorator');    
         $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
@@ -675,20 +679,28 @@ class productUpload extends MY_Controller
         if($brand_valid === FALSE){ 
             $brand_id = 1;
             $otherBrand = '';
-        } 
-        
-        if (!in_array($product_condition, $this->lang->line('product_condition'))){
-            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
-        if($isNotSavingAsDraft){
-            $currentCombination = [];
-            foreach ($combination as $value) {
-                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+        $currentCombination = [];
+        foreach ($combination as $value) {
+            $combinationValue = implode("", array_map('strtolower', $value['data']));
+            if(!in_array($combinationValue, $currentCombination)){
+                $uniqueCombination[] = $value;
             }
+            $currentCombination[] = $combinationValue;
+        }
+        if($isNotSavingAsDraft){
+            if (!in_array($product_condition, $this->lang->line('product_condition'))){
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');
+            }
+
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
+        }
+        else{
+            $product_condition = $this->lang->line('product_condition')[0];
+            $combination = $uniqueCombination; 
         }
 
         if((strlen(trim($product_title)) == 0 
@@ -888,18 +900,27 @@ class productUpload extends MY_Controller
         $tempDirectory = $this->session->userdata('tempDirectory');
         $isNotSavingAsDraft = $this->input->post('savedraft') ? false : true;
 
-        if($isNotSavingAsDraft){
-            $currentCombination = [];
-            foreach ($combination as $value) {
-                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+        $currentCombination = [];
+        $uniqueCombination = [];
+        foreach ($combination as $value) {
+            $combinationValue = implode("", array_map('strtolower', $value['data']));
+            if(!in_array($combinationValue, $currentCombination)){
+                $uniqueCombination[] = $value;
             }
+            $currentCombination[] = $combinationValue;
+        }
+        if($isNotSavingAsDraft){
+            if (!in_array($product_condition, $this->lang->line('product_condition'))){
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+            }
+
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
         }
-
-        if (!in_array($product_condition, $this->lang->line('product_condition'))){
-            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+        else{
+            $product_condition = $this->lang->line('product_condition')[0];
+            $combination = $uniqueCombination; 
         }
 
         // Loading Combinations
@@ -1246,6 +1267,7 @@ class productUpload extends MY_Controller
         else{
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -1319,6 +1341,7 @@ class productUpload extends MY_Controller
             }
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -1544,6 +1567,7 @@ class productUpload extends MY_Controller
             ];
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',

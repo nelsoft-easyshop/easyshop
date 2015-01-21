@@ -12,6 +12,11 @@
  */
 class Viewdecorator extends MY_Controller 
 {
+
+    public function __construct()
+    {
+        parent::__construct();        
+    }
     
     /**
      * The view data 
