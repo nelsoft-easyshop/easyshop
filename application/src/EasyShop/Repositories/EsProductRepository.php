@@ -5,6 +5,7 @@ namespace EasyShop\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsProduct as EsProduct; 
+use EasyShop\Entities\EsCat as EsCat; 
 use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
@@ -455,7 +456,7 @@ class EsProductRepository extends EntityRepository
         }
 
         if(isset($filterArray['category']) 
-                && (integer)$filterArray['category'] !== 1){ 
+                && (integer)$filterArray['category'] !== EsCat::ROOT_CATEGORY_ID){ 
             $categoryList = $this->em->getRepository('EasyShop\Entities\EsCat')
                                      ->getChildrenWithNestedSet($filterArray['category']);
             if(count($categoryList) > 0){
