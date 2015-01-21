@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <span class="strong-label">Category : </span> <?=html_escape($product->getCat()->getName());?>
+                                            <span class="strong-label">Category : </span> <?=html_escape($product->category);?>
                                         </div>
                                     </div>
                                     <div class="row">
