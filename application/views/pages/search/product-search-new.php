@@ -334,7 +334,7 @@
                                                 <a href="#">
                                                     <div class="search-item-img-container" style="background: #fff url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: cover;">
                                                         <div class="search-item-img-container-hover" style="background: #fff url(/assets/images/products/samsung-p-h.jpg) center no-repeat; background-size: cover;">
-                                                            
+
                                                         </div>
                                                         <span class="discount-circle-2">76%</span>
                                                         <span class="new-circle-2">NEW</span>
