@@ -825,6 +825,13 @@ $string = '<typeNode>
         $homePageData['menu']['topProducts']  = [];
         $homePageData['menu']['topSellers']  = [];
         
+        $xmlContent['menu']['topProducts']['product'] = isset($xmlContent['menu']['topProducts']['product'] ) ? $xmlContent['menu']['topProducts']['product']  : [];
+        if(!is_array($xmlContent['menu']['topProducts']['product'])){
+            $singleProduct = $xmlContent['menu']['topProducts']['product'] ;
+            $xmlContent['menu']['topProducts']['product'] = [];
+            $xmlContent['menu']['topProducts']['product'][] = $singleProduct;
+        }
+       
         foreach($xmlContent['menu']['topProducts']['product'] as $productSlug){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $productSlug]);
@@ -832,9 +839,9 @@ $string = '<typeNode>
         }
         
         if(!is_array($xmlContent['menu']['topSellers']['seller'])){
-            $temp = $xmlContent['menu']['topSellers']['seller'] ;
-            $xmlContent['menu']['topSellers']['seller'] = array();
-            array_push( $xmlContent['menu']['topSellers']['seller'], $temp);
+            $singleSeller = $xmlContent['menu']['topSellers']['seller'] ;
+            $xmlContent['menu']['topSellers']['seller'] = [];
+            $xmlContent['menu']['topSellers']['seller'][] = $singleSeller;
         }
         
         foreach($xmlContent['menu']['topSellers']['seller'] as $sellerSlug){
