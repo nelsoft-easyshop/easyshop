@@ -199,23 +199,4 @@ class MessageController extends MY_Controller
         redirect($redirectUrl ,'refresh');
     }
 
-    /**
-     * Sample implementation of chatbox.
-     * NOTE : Must be removed if added on Git
-     */
-    public function chatbox()
-    {
-        $title = 'Chat | Easyshop.ph';
-        $headerData = [
-            'title' => $title,
-            'metadescription' => '',
-            'relCanonical' => '',
-            'renderSearchbar' => false,
-        ];
-        $this->load->spark('decorator');
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/messages/sampleChat', ['memberId' =>$this->userId]);
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
-    }
-
 }
