@@ -240,8 +240,8 @@
                                         <tr>
                                             <td>
                                                 <a href="#">
-                                                    <div class="search-item-img-container" style="background: url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
-                                                        <div class="search-item-img-container-hover" style="background: url(/assets/images/products/apple-p-h.jpg) center no-repeat; background-size: cover;">
+                                                    <div class="search-item-img-container" style="background: #fff url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
+                                                        <div class="search-item-img-container-hover" style="background: #fff url(/assets/images/products/apple-p-h.jpg) center no-repeat; background-size: cover;">
                                                             
                                                         </div>
                                                         <span class="discount-circle-2">76%</span>
@@ -332,8 +332,8 @@
                                         <tr>
                                             <td>
                                                 <a href="#">
-                                                    <div class="search-item-img-container" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: cover;">
-                                                        <div class="search-item-img-container-hover" style="background: url(/assets/images/products/samsung-p-h.jpg) center no-repeat; background-size: cover;">
+                                                    <div class="search-item-img-container" style="background: #fff url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: cover;">
+                                                        <div class="search-item-img-container-hover" style="background: #fff url(/assets/images/products/samsung-p-h.jpg) center no-repeat; background-size: cover;">
                                                             
                                                         </div>
                                                         <span class="discount-circle-2">76%</span>
@@ -346,7 +346,7 @@
                                                     Lorem ipsum dolor sit amet, consectetur
                                                 </a>
                                                 <span class="search-item-description">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac rutrum augue, at pellentesque est. Proin ullamcorper laoreet dolor. Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, convallis magna vitae, porta leo. Phasellus suscipit pulvinar tortor, ac gravida felis sodales et.
+                                                    
                                                 </span>
                                                 <div class="divider-gray"></div>
                                                 <div class="row">
