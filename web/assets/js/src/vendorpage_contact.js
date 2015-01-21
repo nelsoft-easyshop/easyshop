@@ -42,5 +42,8 @@
         if (sector === "#SendMessage") {
             alert('Message sent.');
         }
+        else {
+            alert('Invalid Recipient, Try refreshing the page.');
+        }
     };
 })(jQuery);
