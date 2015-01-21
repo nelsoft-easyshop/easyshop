@@ -6807,7 +6807,7 @@ div.sold_prod_container {
     border-radius: 2px;
     bottom: 32px;
     height: auto;
-    left: 240px;
+    left: 245px;
     max-width: 60%;
     margin-top: 19px;
     min-height: 45px;
@@ -6836,7 +6836,8 @@ div.sold_prod_container {
 }
 
 .float_right input{
-    left: 640px;
+    left: 635px;
+    padding: 0;
     position: relative;
     top: 14px;
 }
