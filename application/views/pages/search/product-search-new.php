@@ -13,7 +13,8 @@
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
                                 <a id="toggle-cat" class="a-category" data-parent="#category">
-                                    SUB-CATEGORIES
+                                    <?=isset($getParameter['category']) ? 'SUB-CATEGORIES' : 'MAIN-CATEGORIES'; ?>
+                                    
                                 </a>
                             </h4>
                         </div>
