@@ -314,6 +314,7 @@ html, body{
 .list-search .search-item-td-meta{
     vertical-align: top;
     padding: 0px 10px;
+    min-width: 471px;
 }
 
 .list-search .search-item-td-price{
