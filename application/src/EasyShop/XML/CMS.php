@@ -843,7 +843,8 @@ $string = '<typeNode>
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
-
+            $featuredCategory['popularCategory'][$key]['subCategory'] = [];
+            $category['sub']['categorySubSlug'] = isset($category['sub']['categorySubSlug']) ? $category['sub']['categorySubSlug']  : [];
             foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
                 $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                               ->findOneBy(['slug' => $subCategory]);
