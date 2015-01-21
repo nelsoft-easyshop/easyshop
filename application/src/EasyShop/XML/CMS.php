@@ -816,6 +816,17 @@ $string = '<typeNode>
         $homePageData = [];
 
         $homePageData['menu']['newArrivals'] = isset($xmlContent['menu']['newArrivals']['arrival']) ? $xmlContent['menu']['newArrivals']['arrival'] : [];
+        
+        print('<pre>');
+        var_dump($homePageData['menu']['newArrivals'] );
+        print('</pre>');
+        
+        if(isset( $homePageData['menu']['newArrivals']['text'] )){
+            $singleNewArrivalNode = $homePageData['menu']['newArrivals'];
+            $homePageData['menu']['newArrivals']  = [];
+            $homePageData['menu']['newArrivals'][] = $singleNewArrivalNode;
+        }
+
         $homePageData['menu']['topProducts']  = [];
         $homePageData['menu']['topSellers']  = [];
         
