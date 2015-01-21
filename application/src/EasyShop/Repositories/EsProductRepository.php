@@ -501,9 +501,11 @@ class EsProductRepository extends EntityRepository
             if(isset($filterArray['sorttype']) 
                 && strtoupper($filterArray['sorttype']) == "ASC"){
                 $order = "ASC";
-            }
-
+            } 
             switch(strtoupper($filterArray['sortby'])){
+                case "POPULAR":
+                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    break;
                 case "NEW":
                     $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
@@ -515,7 +517,7 @@ class EsProductRepository extends EntityRepository
                     $qbResult = $qbResult->orderBy('p.name', $order);
                     break;
                 default:
-                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
             }
         }
