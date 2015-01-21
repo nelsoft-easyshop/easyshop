@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/assets/css/bootstrap.css" />
 <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
-<script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
+
 <script type="text/javascript">
     var af = new Array();
 </script>
@@ -434,7 +434,7 @@
                                                                 <span class="spanSelect<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                     <select disabled id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                         <?php foreach ($value as $key2 => $value2): ?>
-                                                                            <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == html_escape($value2['value_name'])) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
+                                                                            <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == html_escape($value2['value_name'])) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" value="<?=html_escape($value2['value_name'])?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
                                                                         <?php endforeach; ?>
                                                                     </select>     
                                                                     <a class="edit-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -462,7 +462,7 @@
                                                         <span class="spanSelect<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                             <select id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                 <?php foreach ($value as $key2 => $value2): ?>
-                                                                <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
+                                                                <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" value="<?=html_escape($value2['value_name'])?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
                                                             <a class="edit-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -533,14 +533,19 @@
     var maxImageSize = parseInt('<?=$maxImageSize; ?>');
 </script>
 <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
-<script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-<script type='text/javascript' src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
-<script type="text/javascript" src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>"></script> 
-<script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
-<script src="/assets/js/src/vendor/jquery.validate.js" type="text/javascript"></script>
 <script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
+    <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
+    <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript' ></script>
+    <script src="/assets/js/src/vendor/jquery.simplemodal.js" type='text/javascript' ></script>
+    <script src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript" ></script> 
+    <script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
+    <script src="/assets/js/src/vendor/jquery.validate.js" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.product_upload_step2_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 <?php if(isset($soloAttribute)): ?>
     <?php foreach ($soloAttribute as $key => $value): ?>
         <script type="text/javascript">

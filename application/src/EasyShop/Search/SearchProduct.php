@@ -128,7 +128,7 @@ class SearchProduct
     
         $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
         $this->sphinxClient->SetFilter('productid', $productIds);
-        $this->sphinxClient->AddQuery($queryString, 'products');
+        $this->sphinxClient->AddQuery($queryString, 'products products_delta');
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
         
@@ -493,20 +493,20 @@ class SearchProduct
      */
     public function getKeywordSuggestions($queryString)
     {
+        $suggestionLimit = EsKeywords::SUGGESTION_LIMIT;
+        $suggestions = [];
+
         $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
         $this->sphinxClient->SetFieldWeights([
             'keywords' => 50,
         ]);
     
         $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
-        $this->sphinxClient->AddQuery($queryString, 'suggestions');
-        $suggestionLimit = EsKeywords::SUGGESTION_LIMIT;
         $this->sphinxClient->setLimits(0, $suggestionLimit, $suggestionLimit); 
+        $this->sphinxClient->AddQuery($queryString, 'suggestions');
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
-        $suggestions = [];
-        if($sphinxResult === false)
-        {
+        if($sphinxResult === false){
             $keywords = $this->em->getRepository('EasyShop\Entities\EsKeywords')
                                  ->getSimilarKeywords($queryString, $suggestionLimit);
             foreach($keywords as $word){

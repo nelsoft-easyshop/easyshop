@@ -724,8 +724,11 @@ var previous,editSelectedValue,editSelectedId;
         if(evt.which === 13){
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
- 
     }
+
+    $(document).on('focus, click', '.chzn-single', function(){
+        $(".chzn-search > input[type=text]").attr('maxlength', 25);
+    });
 
 
     $(document).on("keypress",".chzn-search > input[type=text]", function (evt){
@@ -816,7 +819,7 @@ var previous,editSelectedValue,editSelectedId;
                             }
                         } 
                     }
-                    optionString += "<option data-value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
+                    optionString += "<option data-value='"+selectList+"' value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
                     if($.inArray(selectList,attributeArray[selectedValue]) <= -1){
                         attributeArray[selectedValue].push(selectList);
                     }
@@ -962,15 +965,14 @@ var previous,editSelectedValue,editSelectedId;
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
                 var selData = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').data('value');
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).attr('selected','selected');
-                
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).prop('selected', true);
+                var selectElement = $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id'));
+                selectElement.children('option').each(function(){
+                    if ($(this).data('value') == selData) {
+                        $(this).parent().val(selData).change(); 
+                    }
+                });
 
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).prop("disabled",true);
+                selectElement.prop("disabled",true);
             });
 
             $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
@@ -1619,6 +1621,8 @@ var heightRatio = 538;
                     value: pictureCountOther
                 }).appendTo('form');
                 arr.push({name:'pictureCount', value:pictureCountOther});
+                canProceed = false;
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
@@ -1655,7 +1659,6 @@ var heightRatio = 538;
         var val = $(this).val();
         var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
         var picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
-        var size = this.files[0].size;
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':
@@ -1667,6 +1670,7 @@ var heightRatio = 538;
         }
 
         if(badIE == false){
+            var size = this.files[0].size;
             if(size > maxImageSize){
                 alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
                 return false;

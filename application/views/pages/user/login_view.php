@@ -34,6 +34,7 @@
 
             </div>
         </div>
+        
         <div class="clear"></div>
         <div class="pd-tb-45">
             <?php if($logged_in): ?>
@@ -74,11 +75,25 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-7 col-md-7">
                                 <input type="password" id="login_password" name="login_password" class="ui-form-control"> 
+      
                                     <span id="passw_error" class="red error_cont" style="font-weight:bold;display:block;padding:4px 0;"> </span>
-                                    <span id="login_error" class="red" style="font-weight:bold;display:block"><?php echo (isset($form_error)?$form_error:'');?>  </span>
-                                    <span id="deactivatedAccountPrompt" class="red" style="font-weight:bold;display:none;">
-                                        Oooops! This account has already been deactivated. If you want to reactivate your account. Click <a id='sendReactivationLink' data-id="" style='color:blue;cursor:pointer;'>here</a> to send a reactivation link to your email.
+                                    <?php $formError = isset($errors) ? reset($errors)['login'] : ''; ?>
+                                  
+                                    <span id="login_error" class="red" style="font-weight: bold; display:block">
+                                        <?php if($formError !== 'Account Deactivated' && $formError !== 'Account Banned'):  ?>
+                                        <?php echo html_escape($formError); ?>
+                                        <?php endif; ?>
                                     </span>
+                                    
+                                    <span id="deactivatedAccountPrompt" class="red" style="font-weight:bold; display: <?php echo $formError === 'Account Deactivated' ? 'block' : 'none'  ?>">
+                                    Oooops! This account is currently deactivated. If you want to reactivate your account click <a id='sendReactivationLink' data-id="" style='color:blue;cursor:pointer;'>here</a> to send a reactivation link to your email.
+                                    </span>
+                                    
+                                    <?php if($formError === 'Account Banned'): ?>
+                                        <input type="hidden" id="account-banned-error" value="true" data-message="<?php echo reset($errors)['message']; ?>">
+                                    <?php endif; ?>
+                                  
+
                                     <img src="/assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
                                 </div>
                             </div>
@@ -166,6 +181,10 @@
 
 <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
 
-   
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>   
-<script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>   
+    <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_login_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+

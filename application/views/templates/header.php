@@ -232,30 +232,72 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </form>
         
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
-<script src="/assets/js/src/vendor/bootstrap-typeahead.min.js" type="text/javascript"></script>
+<script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script>
-    (function ($) { 
+    (function ($) {  
 
-        $('input#main_search')
-            .typeahead({
-                ajax: { 
-                    url: '/search/suggest',
-                    triggerLength: 3, // This is the minimum length of text to take action on
-                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server. Default is at 300ms. 
-                    preProcess: function (data) { 
-                        if ($.isEmptyObject(data)) { 
-                            $('#search-container > .typeahead').empty();
-                        } 
-                        return data;
-                    }
+        var $minChars = 3;
+
+        $('#main_search')
+            .autoComplete({
+                minChars: $minChars,
+                cache: false,
+                menuClass: 'autocomplete-suggestions auto-complete-header',
+                source: function(term, response){ 
+                    try { 
+                        xhr.abort(); 
+                    } catch(e){}
+                    var xhr = $.ajax({ 
+                        type: "get",
+                        url: '/search/suggest',
+                        data: "query=" + term,
+                        dataType: "json", 
+                        success: function(data){
+                            response(data); 
+                        }
+                    });
                 },
-                items: 10, // The maximum number of items to show in the results. 
-                menu: '<ul class="typeahead dropdown-menu"></ul>' ,
-                item: '<li><a href="#"></a></li>'
+                onSelect: function(term){
+                    $('#main_search').addClass('selectedClass');
+                }
+            })
+            .focus(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.autocomplete-suggestions').html() ).length ) {
+                            $('.autocomplete-suggestions').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.autocomplete-suggestions').html() ).length ) {
+                            $('.autocomplete-suggestions').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .change(function() {
+                if($(this).val().length <= 0){
+                    $('.autocomplete-suggestions').empty();
+                }
             });
 
-        $(document).ready(function(){
-            $("#search-container > .typeahead").hide();
+        $(document).ready(function(){ 
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
 

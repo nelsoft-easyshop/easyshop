@@ -1,26 +1,153 @@
 
 (function ($) { 
 
-    $('input#main_search_alt')
-        .typeahead({
-            ajax: { 
-                url: '/search/suggest',
-                triggerLength: 3, // This is the minimum length of text to take action on
-                timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server.
-            },
-            items: 10, // The maximum number of items to show in the results.  
-        });
+        var hideSuggestion = function(){ 
+            $('.nav-suggestion').css({
+                top: $('#main_search_alt2').offset().top + $('#main_search_alt2').outerHeight(),
+                left: $('#main_search_alt2').offset().left,
+                width: $('#main_search_alt2').outerWidth()
+            });
+        }
 
-    $('input#main_search_alt2')
-        .typeahead({
-            ajax: { 
-                url: '/search/suggest',
-                triggerLength: 3, // This is the minimum length of text to take action on
-                timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server.
-            },
-            items: 10, // The maximum number of items to show in the results.  
-        });
+        $(window).on('scroll', hideSuggestion);
 
+        var $minChars = 3;
+        
+        $('#main_search_alt')
+            .autoComplete({
+                minChars: $minChars,
+                cache: false,
+                menuClass: 'autocomplete-suggestions main-nav',
+                source: function(term, response){ 
+                    try { 
+                        xhr.abort(); 
+                    } catch(e){}
+                    var xhr = $.ajax({ 
+                        type: "get",
+                        url: '/search/suggest',
+                        data: "query=" + term,
+                        dataType: "json", 
+                        success: function(data){
+                            response(data); 
+                        }
+                    });
+                },
+                onSelect: function(term){
+                    $('#main_search_alt').addClass('selectedClass');
+                }
+            })
+            .focus(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.main-nav').html() ).length ) {
+                            hideSuggestion();
+                            $('.main-nav').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.main-nav').html() ).length ) {
+                            hideSuggestion();
+                            $('.main-nav').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .focusout(function() {
+                $('.nav-suggestion').html($('.main-nav').html());
+            })
+            .change(function() {
+                if($(this).val().length <= 0){
+                    $('.autocomplete-suggestions').empty();
+                }
+            }) 
+            .keyup(function() {
+                var searchString = $(this).val();
+                $('#main_search_alt2').val(searchString);
+            });
+
+        $('#main_search_alt2')
+            .autoComplete({
+                minChars: $minChars,
+                cache: false,
+                menuClass: 'autocomplete-suggestions nav-suggestion',
+                source: function(term, response){ 
+                    try { 
+                        xhr.abort(); 
+                    } catch(e){}
+                    var xhr = $.ajax({ 
+                        type: "get",
+                        url: '/search/suggest',
+                        data: "query=" + term,
+                        dataType: "json", 
+                        success: function(data){
+                            response(data); 
+                        }
+                    });
+                },
+                onSelect: function(term){
+                    $('#main_search_alt2').addClass('selectedClass');
+                }
+            })
+            .focusout(function() {
+                $('.main-nav').html($('.nav-suggestion').html());
+            })
+            .focus(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.nav-suggestion').html() ).length ) {
+                            hideSuggestion();
+                            $('.nav-suggestion').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.nav-suggestion').html() ).length ) {
+                            hideSuggestion();
+                            $('.nav-suggestion').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .change(function() {
+                if($(this).val().length <= 0){
+                    $('.autocomplete-suggestions').empty();
+                }
+            })
+            .keyup(function() {
+                var searchString = $(this).val();
+                $('#main_search_alt').val(searchString);
+            });
 
 })(jQuery);
 

@@ -107,11 +107,11 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('#filter-btn').on('click', function(){
         var activeCategoryProductsDiv = $('.category-products.active');
-        var condition = $('#filter-condition').val();
-        var lprice = $.trim($('#filter-lprice').val());
+        var condition = $(this).closest("ul").find('#filter-condition').val();
+        var lprice = $.trim($(this).closest("ul").find('#filter-lprice').val());
         lprice = lprice.replace(new RegExp(",", "g"), '');
         lprice = parseFloat(lprice).toFixed(2);
-        var uprice = $.trim($('#filter-uprice').val());
+        var uprice = $.trim($(this).closest("ul").find('#filter-uprice').val());
         uprice = uprice.replace(new RegExp(",", "g"), '');
         uprice = parseFloat(uprice).toFixed(2);
 
@@ -289,11 +289,10 @@ function ItemListAjax(CatDiv,page)
     
 
     $(document).ready(function(){
-        $( "#category-list" ).clone(true).appendTo( ".categories-modal" );
+        
+         $( "#category-list" ).clone(true).appendTo( ".categories-modal" );
         $( "#filter-list1" ).clone(true).appendTo( ".filter-modal" );
-        
-        
-    
+
         $( "#toggle-cat" ).click(function() {
           $( "#category-list" ).slideToggle( "slow" );
         });
@@ -309,15 +308,9 @@ function ItemListAjax(CatDiv,page)
           $( ".panel-list-item" ).hide();
           $( ".panel-item" ).fadeIn( "fast" );
         });
-    
-        $('.search-bar-input').keyup(function(){
-           var string = $(this).val();
-           $('.search-bar-input').val(string);
-        });
         
         $('.col-categories').click(function (e) {
             $('.categories-modal').modal();
-        
             return false;
         });
         

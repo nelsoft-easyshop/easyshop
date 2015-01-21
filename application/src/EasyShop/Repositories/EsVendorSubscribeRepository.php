@@ -101,6 +101,7 @@ class EsVendorSubscribeRepository extends EntityRepository
                 AND p.is_delete = :is_delete 
                 AND p.is_draft = :is_draft
                 AND a.is_active = :member_active
+                AND a.is_banned = :banStatus
                 $addQuery
                 GROUP BY a.id_member
                 HAVING count(p.id_product) >= 5
@@ -113,6 +114,7 @@ class EsVendorSubscribeRepository extends EntityRepository
                     ->setParameter('is_delete', EsProduct::ACTIVE)
                     ->setParameter('is_draft', EsProduct::ACTIVE)
                     ->setParameter('member_active', EsMember::DEFAULT_ACTIVE)
+                    ->setParameter('banStatus', EsMember::NOT_BANNED)
                     ->setParameter('per_page', $perPage);
 
         if(empty($ids) === false){

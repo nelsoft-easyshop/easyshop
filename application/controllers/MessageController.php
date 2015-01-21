@@ -47,6 +47,7 @@ class MessageController extends MY_Controller
             ? 'Messages | Easyshop.ph'
             : 'Messages (' . $messages['unread_msgs'] . ') | Easyshop.ph';
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => $title,
             'metadescription' => '',
             'relCanonical' => '',
@@ -68,18 +69,19 @@ class MessageController extends MY_Controller
     {
         $storeName = trim($this->input->post("recipient"));
         $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
-                                   ->getUserWithStoreName($storeName, $this->userId)[0];
+                                   ->getUserWithStoreName($storeName);
         $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
 
         if (!$receiverEntity) {
             $result['success'] = 0;
             $result['msg'] = "The user " . html_escape($storeName) . ' does not exist';
         }
-        else if ( (int) $this->userId === (int) $receiverEntity->getIdMember() ) {
+        else if ( (int) $this->userId === (int) $receiverEntity[0]->getIdMember() ) {
             $result['success'] = 0;
             $result['msg'] = "Sorry, it seems that you are trying to send a message to yourself.";
         }
         else {
+            $receiverEntity = $receiverEntity[0];
             $msg = trim($this->input->post("msg"));
             $isSendingSuccesful = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
             if ($isSendingSuccesful) {
@@ -178,6 +180,25 @@ class MessageController extends MY_Controller
                            ->updateToSeen($this->userId, $messageIdArray);
 
         echo json_encode($result);
+    }
+
+    /**
+     * Sends message from vendor page
+     */
+    public function simpleSend()
+    {
+        $recipientSlug = trim($this->input->post('recipientSlug'));
+        $recipient = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                              ->find((int) $this->input->post('recipient'));
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                           ->find($this->userId);
+        $redirectUrl = '/' . $recipientSlug . '/contact#Failed';
+        if ($recipient) {
+            $this->messageManager->send($member, $recipient, trim($this->input->post('msg')));
+            $redirectUrl = '/' . $recipientSlug . '/contact#SendMessage';
+        }
+
+        redirect($redirectUrl ,'refresh');
     }
 
     /**

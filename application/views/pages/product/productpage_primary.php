@@ -113,12 +113,13 @@
                     </div>
 
                     <div class="col-md-12 col-lg-7 shipment-wrapper">
-                        <div class="shipment-fee-container">
-                            <p class="attr-title txt-shipment">Shipment Fee:</p>
+                        <div class="shipment-fee-container"> 
                             <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
+                                <p class="attr-title txt-shipment">Shipment Fee:</p>
                                 <span class="default" selected="" value="0">NOT AVAILABLE</span>
                             <?php else: ?>
                                 <?php if(!$isFreeShippingNationwide): ?>
+                                    <p class="attr-title txt-shipment">Shipment Fee:</p>
                                     <div class="prod-select-con ui-form-control shipment-select">
                                         <select class="shiploc" id="shipment_locations">
                                             <option class="default" selected="" data-text="Select Location" value="0">Select Location</option>
@@ -134,14 +135,16 @@
                                         </select>
                                     </div>
                                 <?php else: ?>
-                                    <span class="default">FREE SHIPPING NATIONWIDE</span>
+                                   <div class="free-shipping-tag-container">
+                                        <span class="product-free-shipping-tag btn-lg" style=""><i class="fa fa-truck fa-lg"></i> FREE SHIPPING NATIONWIDE</span>
+                                    </div>
                                 <?php endif; ?>
                             <?php endif; ?>
                             <?php if(trim($product->getShipsWithinDays()) !== "" && (int)$product->getShipsWithinDays() > 0): ?>
                                 <div class="shipment-period">
                                     <p class="attr-title txt-shipment">Ships within:</p> <span class="default"><?=$product->getShipsWithinDays(); ?> day<?=(int)$product->getShipsWithinDays() > 1 ? 's' : ''; ?></span>
                                 </div>
-                            <?php endif; ?>
+                            <?php endif; ?> 
                         </div>
                     </div>
                     <div class="clear"></div>
@@ -271,14 +274,17 @@
 <!-- display recommended products view -->
 <?=$recommendedView;?>
 
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
-<script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
-
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
+    <script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.productpage_primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 <?php if((int)$product->getPromoType() === (int)EasyShop\Entities\EsPromoType::BUY_AT_ZERO ):?>
     <script type='text/javascript' src='/assets/js/src/promo/BuyAtZero.js?ver=<?=ES_FILE_VERSION?>'></script>
 <?php endif; ?>

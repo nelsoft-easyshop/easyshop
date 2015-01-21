@@ -8,7 +8,7 @@
 
 @font-face {
     font-family: Helvetica;
-    src: url(/assets/fonts/HelveticaNeueLTCom-Lt.ttf);
+    src: url(/assets/fonts/HelveticaNeueLTCom-Md.ttf);
     font-weight: normal;
 }
 
@@ -371,12 +371,19 @@ textarea {
 }
 
 #banner_edit img {
+    bottom: 0;
+    left: 0;
     position: relative;
+    right: 0;
+    top: 0;
+    transform: inherit;
+    -webkit-transform: inherit;;
+    -ms-transform: inherit;
 }
 
 .vendor-profile-content {
     background-color: rgba(255,255,255,0.9);
-    min-height: 365px;
+    height: 365px;
     max-width: 326px;
     padding: 44px 0px 32px;
     position: relative;
@@ -398,7 +405,7 @@ textarea {
 }
 
 .vendor-profile-photo-wrapper {
-    background-color: #e2e2e2;
+    background-color: #fff;
     border: 2px solid #fff;
     border-radius: 4px;
     height: 108px;
@@ -420,6 +427,10 @@ textarea {
     right: 0;
     top: 0;
     width: auto;
+}
+
+.avatar-image-mobile{
+    display: none;
 }
 
 .vendor-profile-content h4 {
@@ -602,7 +613,6 @@ textarea {
     max-height: 296px;   
     max-width: 500px;
     right: 0;
-    width: auto !important;
 }
 
 /*.jcrop-holder div + div + input + div > div {
@@ -1188,16 +1198,19 @@ td.td-view.p-view2.color-default{
 /** For Left Column**/
 
 .left-wing{
-    margin-left: -10px;
+    margin-left: 15px;
     margin-top: 10px;
-    width: 324px !important;
-    padding-right: 5px;
+    /* width: 324px !important; */
+    padding-right: 0px;
+    margin-right: -15px;
 }
 
 .left-wing-contact{
-    margin-left: -10px;
+    margin-left: 15px;
     margin-top: 10px;
-    width: 324px !important;
+    /* width: 324px !important; */
+    padding-right: 0px;
+    margin-right: -25px;
 }
 
 #the-sticky-div.sticky {
@@ -1285,7 +1298,7 @@ td.td-view.p-view2.color-default{
 }
 
 .input-filter-price{
-    width: 104px;
+    width: 90px;
     padding: 5px;
     margin-left: 5px;
     margin-right: 5px;
@@ -1523,6 +1536,7 @@ td.td-view.p-view2.color-default{
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
+    position: relative;
 }
 
 .list > .product-paging > .product-inner-container > .panel-list-item:hover{
@@ -1584,7 +1598,7 @@ td.td-view.p-view2.color-default{
 
 .td-list-price{
     vertical-align:top;
-    padding: 30px 15px 20px 20px;
+    padding: 37px 15px 20px 20px;
 }
 
 .p-list-price{
@@ -1607,6 +1621,30 @@ td.td-view.p-view2.color-default{
 }
 .color-in-stock{
     color: #25df5a;
+}
+
+.free-shipping-tag{
+    display: inline-block;
+    position: absolute;
+    top: 3px;
+    right: -8px;
+    background: #02846f;
+    font-size: 12px;
+    padding: 6px 10px;
+    color: #fff;
+    text-align:center;
+    font-weight: bold;
+}
+
+.free-shipping-tag-tail{
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 8px 8px 0 0;
+    border-color: #003E34 transparent transparent transparent;
+    position: absolute;
+    right: 0px;
+    bottom:-8px;
 }
 
 .td-list-price > .btn.btn-default-1{
@@ -1773,7 +1811,8 @@ td.td-view.p-view2.color-default{
 .actions-list,
 .mobile-left-wing,
 .categories-modal,
-.filter-modal
+.filter-modal,
+.edit-profile-modal
 {
     display: none;
 }
@@ -1936,88 +1975,28 @@ td.td-view.p-view2.color-default{
 .vendor-footer ul li a:hover {
     text-decoration: none;
 }
+
+.btn-change-photo-mobile,
+.btn-change-cover-photo-mobile{
+    display: none !important;
+}
+
+#modal-edit-trigger{
+    display: none;
+    font-weight: bold;
+}
 /*** end of Vendor style ***/
-#search-form1 > .typeahead {
-    display: none;
-    top: 38px;
-}
-
-#search-form2 > .typeahead {
-    display: none;
-    text-align: left;
-    width: 100%;
-}
-
-#search-form1 > .typeahead,
-#search-form2 > .typeahead {
-    background-color: rgb(255, 255, 255);
-    padding: 10px 0;
-    position: absolute;
-    z-index: 9991;
-    -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-    -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-    box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-}
-
-#search-form1 > .typeahead li,
-.sticky-nav #search-form2 > .typeahead li {
-    float: none;
-    line-height: 24px;
-    width: 100%;
-}
-
-#search-form1 > .typeahead strong,
-#search-form2 > .typeahead strong {
-    font-weight: 900;
-}
-
-#search-form1 > .typeahead a {
-    color: #565656;
-    display: block;
-    font-size: 13px;
-    padding: 4px 10px;
-}
-
-.sticky-nav #search-form2 > .typeahead li a {
-    color: #565656;
-    display: block;
-    font-size: 13px;
-    padding: 4px 10px;
-    text-align: left;
-    width: 100%;
-}
-
-#search-form1 > .typeahead a:hover,
-.sticky-nav #search-form2 > .typeahead li a:hover,
-#search-form1 > .typeahead > li.active > a,
-#search-form2 > .typeahead > li.active > a {
-    background-color: #868686;
-    color: #fff;
-    text-decoration: none;
-}
 
 /* =============================================
 ----------------- Responsive  ------------------
 ==============================================*/
 @media (min-width: 991px) {
-    #search-form1 > .typeahead {
-        width: 330px;
-    }
-
-    #search-form2 > .typeahead {
-        width: 250px;
-    }
+ 
 }
 
 /* Large desktop */
 @media (min-width: 1200px) {
-    #search-form1 > .typeahead {
-        width: 327px;
-    }
-
-    #search-form2 > .typeahead {
-        width: 327px;
-    }
+ 
 }
 
 @media only screen and (max-width : 979px) { 
@@ -2109,6 +2088,7 @@ td.td-view.p-view2.color-default{
         font-size: 13px;
     }
 }
+
 @media only screen and (max-width : 769px) { 
 
     .grid > .product-paging > .product-inner-container > .thumb > .panel-item{
@@ -2309,6 +2289,122 @@ td.td-view.p-view2.color-default{
     }
 }
 
+@media only screen and (max-width : 400px) {
+    .contact-number-text,
+    .location-text{
+        display: none;
+    }
+    
+    .vendor-main-bg{
+        min-height: 230px;
+        max-height: 240px;
+    }
+    
+    .vendor-profile-content{
+        min-height: 230px;
+        max-height: 240px;
+        max-width: 250px;
+        padding: 12px 10px 32px 10px;
+    }
+    
+    .vendor-profile-btn{
+        margin-top: 17px;
+    }
+    
+    .edit-profile-photo{
+        height: 88px;
+        width: 91px;
+    }
+    
+    .edit-profile-container{
+        padding-left: 0px !Important;
+        padding-right: 0px !Important;
+    }
+    
+    .btn-edit-profile-info-banner{
+        font-size: 10px !important;
+    }
+    
+    .edit-banner-profile{
+        margin-top: 0px !important;
+    }
+    
+    .edit-profile-photo-menu{
+        top: 88px;
+    }
+    
+    .img-icon-edit-photo{
+        width: 40px !important;
+    }
+    
+    .subscription_btn,
+    .btn-message-profile,
+    .btn-profile-edit,
+    .btn-change-photo-mobile,
+    .btn-profile-edit-mobile,
+    #modal-edit-trigger
+    {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 5px !important;
+    }
+    
+    .btn-change-photo-mobile,
+    #modal-edit-trigger
+    {
+        display: block !important;
+    }
+    
+    .btn-profile-edit,
+    #edit-profile-btn
+    {
+        display: none !important;
+    }
+    
+    .vendor-profile-content h4{
+        margin-top: 8px;
+        font-size: 1.3em;
+    }
+    
+    .vendor-profile-img{
+        height: 80px;
+        width: 90px;
+    }
+    
+    .vendor-profile-img-con{
+        height: 88px;
+    }
+    
+    .vendor-profile-photo-wrapper{
+        height: 88px;
+        width: 89px;
+    }
+    
+    .vendor-profile-img-con img{
+        max-width: 85px;
+        max-height: 90px;
+    }
+    
+    .edit-profile-photo div{
+        padding: 10px 0;
+    }
+    
+    .btn-change-cover-photo-mobile{
+        display: block !important;
+    }
+}
+
+@media only screen and (max-width : 320px) {
+    .vendor-nav{
+        width: 100% !important;
+    }
+}
+
+@media only screen and (max-width : 1024px) {
+    .list > .product-paging > .product-inner-container > .panel-list-item{
+        width: 95%;
+    }
+}
 
 header {
     min-width: inherit;
@@ -2463,7 +2559,7 @@ header {
         margin: auto;
         position: absolute;
         right: 0;
-        width: 385px;
+        width: 400px;
     }
 }
 
@@ -2657,7 +2753,7 @@ header {
     }
 
     .vendor-nav {
-        width: 295px;
+        width: 90%;
     }
 
     .vendor-nav li a {

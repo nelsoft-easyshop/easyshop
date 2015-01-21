@@ -20,11 +20,13 @@ class EsMemberFeedbackRepository extends EntityRepository
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
 
-        $feedbacks = $queryBuilder->select('reviewer.idMember as reviewerId, 
+        $feedbacks = $queryBuilder->select("reviewer.idMember as reviewerId, 
                                             reviewer.username as reviewerUsername, 
+                                            COALESCE(NULLIF(reviewer.storeName, ''), reviewer.username) as reviewerStorename,
                                             reviewer.slug as reviewerSlug, 
                                             reviewee.idMember as revieweeId, 
                                             reviewee.username as revieweeUsername, 
+                                            COALESCE(NULLIF(reviewee.storeName, ''), reviewee.username) as revieweeStorename,
                                             reviewee.slug as revieweeSlug, 
                                             fb.feedbMsg,
                                             fb.dateadded,
@@ -32,7 +34,7 @@ class EsMemberFeedbackRepository extends EntityRepository
                                             fb.rating2,
                                             fb.rating3,
                                             fb.feedbKind,
-                                            orderTransaction.idOrder')
+                                            orderTransaction.idOrder")
                             ->from('EasyShop\Entities\EsMemberFeedback','fb')
                             ->leftJoin('EasyShop\Entities\EsMember','reviewer',
                                                 'WITH','reviewer.idMember = fb.member')
@@ -49,6 +51,7 @@ class EsMemberFeedbackRepository extends EntityRepository
                             ->getQuery()
                             ->getResult();
 
+      
         return $feedbacks;
     }
 
@@ -201,15 +204,16 @@ class EsMemberFeedbackRepository extends EntityRepository
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
         
-        $feedbacks = $queryBuilder->select('reviewee.idMember as userId, 
+        $feedbacks = $queryBuilder->select("reviewee.idMember as userId, 
                                             reviewee.username as username, 
+                                            COALESCE(NULLIF(reviewee.storeName, ''), reviewee.username) as storename, 
                                             reviewee.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
                                             fb.rating2,
                                             fb.rating3,
-                                            orderTransaction.idOrder')
+                                            orderTransaction.idOrder")
                                   ->from('EasyShop\Entities\EsMemberFeedback','fb')
                                   ->leftJoin('EasyShop\Entities\EsMember','reviewee',
                                                       'WITH','reviewee.idMember = fb.forMemberid')
@@ -241,15 +245,16 @@ class EsMemberFeedbackRepository extends EntityRepository
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
 
-        $feedbacks = $queryBuilder->select('reviewee.idMember as userId, 
+        $feedbacks = $queryBuilder->select("reviewee.idMember as userId, 
                                             reviewee.username as username, 
+                                            COALESCE(NULLIF(reviewee.storeName, ''), reviewee.username) as storename, 
                                             reviewee.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
                                             fb.rating2,
                                             fb.rating3,
-                                            orderTransaction.idOrder')
+                                            orderTransaction.idOrder")
                                   ->from('EasyShop\Entities\EsMemberFeedback','fb')
                                   ->leftJoin('EasyShop\Entities\EsMember','reviewee',
                                                       'WITH','reviewee.idMember = fb.forMemberid')
@@ -282,15 +287,16 @@ class EsMemberFeedbackRepository extends EntityRepository
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
 
-        $feedbacks = $queryBuilder->select('reviewer.idMember as userId, 
+        $feedbacks = $queryBuilder->select("reviewer.idMember as userId, 
                                             reviewer.username as username, 
+                                            COALESCE(NULLIF(reviewer.storeName, ''), reviewer.username) as storename,
                                             reviewer.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
                                             fb.rating2,
                                             fb.rating3,
-                                            orderTransaction.idOrder')
+                                            orderTransaction.idOrder")
                                   ->from('EasyShop\Entities\EsMemberFeedback','fb')
                                   ->leftJoin('EasyShop\Entities\EsMember','reviewer',
                                                       'WITH','reviewer.idMember = fb.member')
@@ -323,15 +329,16 @@ class EsMemberFeedbackRepository extends EntityRepository
         $em =  $this->_em;
         $queryBuilder = $em->createQueryBuilder();
 
-        $feedbacks = $queryBuilder->select('reviewer.idMember as userId, 
+        $feedbacks = $queryBuilder->select("reviewer.idMember as userId, 
                                             reviewer.username as username, 
+                                            COALESCE(NULLIF(reviewer.storeName, ''), reviewer.username) as storename,
                                             reviewer.slug as userslug,
                                             fb.feedbMsg,
                                             fb.dateadded,
                                             fb.rating1,
                                             fb.rating2,
                                             fb.rating3,
-                                            orderTransaction.idOrder')
+                                            orderTransaction.idOrder")
                                   ->from('EasyShop\Entities\EsMemberFeedback','fb')
                                   ->leftJoin('EasyShop\Entities\EsMember','reviewer',
                                                       'WITH','reviewer.idMember = fb.member')

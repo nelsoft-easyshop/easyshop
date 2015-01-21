@@ -28,9 +28,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     top: 0
                 }, 500);
             }
+            $('.autocomplete-suggestions').hide();
             $('.vendor-content-wrapper').addClass('fixed-vendor-content');
         }
         else{
+            $('.nav-suggestion').hide();
             $('.persistent-nav-container').removeClass('sticky-nav-fixed').removeAttr('style');
             $('.vendor-content-wrapper').removeClass('fixed-vendor-content');
         }
@@ -320,6 +322,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                                 if(formAction === 'banner_upload'){
                                     var bannerImage = $('img.banner-image');
                                     bannerImage.attr('src',xhrResponse.banner);
+                                    $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});                                    
                                 }
                                 else if(formAction === 'upload_img'){
                                     var avatarImage = $('img.avatar-image');
@@ -490,7 +493,30 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     $mobileloginbtn.click(function() {
         $mobileloginuser.show();
     });
+    
+    $('#modal-edit-trigger').click(function (e) {
+        $('.edit-profile-modal').modal();
+        $( ".edit-profile-modal" ).closest(".simplemodal-container").css( "height", "300px" ).css("background", "#fff").css("border-radius", "4px").css("padding-top", "4px").removeAttr("id");
+        return false;
+    });
+    
+    var $windowProfile = $(window);
 
+    function checkWidthProfile() {
+        var windowsizeProfile = $windowProfile.width();
+        if (windowsizeProfile > 440) {
+            $( ".btn-cancel-me" ).trigger("click");
+        }
+        else{
+            $( ".btn-cancel-me-wide" ).trigger("click");
+        }
+    }
+
+    // Execute on load
+    checkWidthProfile();
+    // Bind event listener
+    $windowProfile.resize(checkWidthProfile);
+    
 })(jQuery);
 
 function proceedPayment(obj)

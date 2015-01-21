@@ -233,36 +233,7 @@
     padding-bottom:8px;
     position: relative;
     margin-left:20px;
-}
-
-.nav-search1 > .typeahead {
-    display: none;
-    top: 38px;
-}
-
-.nav-search2 > .typeahead {
-    display: none;
-    left: 0 !important;
-    text-align: left;
-    top: 52px !important;
-    width: 100%;
-}
-
-.nav-search1 > .typeahead,
-.nav-search2 > .typeahead {
-    background-color: rgb(255, 255, 255);
-    padding: 10px 0;
-    position: absolute;
-    z-index: 9991;
-    -webkit-box-shadow: 0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-    -moz-box-shadow:    0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-    box-shadow:         0px 2px 5px 0px rgba(50, 50, 50, 0.35);
-}
-
-/*.nav-search1 > .typeahead ul li,
-.nav-search2 > .typeahead ul li {
-    padding-left: 10px;
-}*/
+} 
 
 .sr-title {
     background-color: #e2e2e2;
@@ -273,44 +244,9 @@
     font-weight: 900;
 }
 
-.nav-search2 > .typeahead li {
-    line-height: 24px;
-}
-
-.nav-search1 > .typeahead strong,
-.nav-search2 > .typeahead strong {
-    font-weight: 900;
-}
-
-.nav-search1 > .typeahead a,
-.nav-search2 > .typeahead a {
-    color: #565656;
-    display: block;
-    font-size: 13px;
-    padding: 4px 10px;
-}
-
-.nav-search1 > .typeahead a:hover,
-.nav-search2 > .typeahead a:hover,
-.nav-search1 > .typeahead li.active > a,
-.nav-search2 > .typeahead li.active > a {
-    background-color: #868686 !important;
-    color: #fff;
-}
-
 /* =============================================
 ----------------- Responsive  ------------------
 ==============================================*/
-@media (min-width: 991px) {
-    .nav-search1 > .typeahead {
-        width: 330px;
-    }
-
-    .nav-search2 > .typeahead {
-        left: 22%;
-        top: 47px !important;
-        width: 250px;
-    }
 
 @media (min-width: 767px) {
     #top-links {
@@ -320,7 +256,6 @@
     #top-links li {
         margin-right:5%;
     }
-
 }
 
 /* Large desktop */
@@ -328,18 +263,6 @@
 
     .title {
         font-size:42px;
-    }
-
-    .nav-search1 > .typeahead {
-        width: 486px;
-    }
-
-    .nav-search2 > .typeahead {
-        width: 338px;
-    }
-
-    .nav-search2 > .typeahead {
-        left: 28% !important;
     }
 }
 

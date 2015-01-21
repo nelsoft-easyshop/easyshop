@@ -7,6 +7,9 @@
 !/web/assets/product/default
 !/web/assets/user/default
 /web/assets/product/product_description/*
+/web/assets/images/ads/
+/web/assets/images/mainslide/
+/web/assets/images/homeslider/
 !/web/assets/product/product_description/README.md
 
 
@@ -38,12 +41,13 @@ application/logs/*
 /node_modules/
 /web/assets/js/min
 
-
+/sphinx/data/products/*
+!/sphinx/data/products/readme.md
+/sphinx/data/*
 /sphinx/logs/*
 !/sphinx/logs/*.md
-/sphinx/data/*
-!/sphinx/data/*.md
 /sphinx/etc/*
 !/sphinx/etc/*.md
+!/sphinx/etc/wordforms.txt
 
 

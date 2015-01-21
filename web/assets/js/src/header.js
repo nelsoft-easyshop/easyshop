@@ -15,16 +15,6 @@
         activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
         zIndex: 2147483647, // Z-Index for the overlay
     });
-    
-
-    $(document).ready(function() {
-        
-        
-        $('.main-search-input').on('keyup', function(){
-            var searchString = $(this).val();
-            $('.main-search-input').val(searchString);
-        });
-    });
 
 /* ================================================
 ----------- Vendor ---------- */
@@ -164,33 +154,175 @@
                         top: '-155px'
                     }).stop().animate({
                         top: 0
-                    }, 200);
+                    }, 200); 
+                    $('.autocomplete-suggestions').hide();
                 }
 
             } 
             else {
+                $('.nav-suggestion').hide();
                 $('.sticky-header-nav').removeClass('sticky-nav-fixed').removeAttr('style');
             }
         });
 
-        $('input#primary-search')
-            .typeahead({
-                ajax: { 
-                    url: '/search/suggest',
-                    triggerLength: 3, // This is the minimum length of text to take action on
-                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server.
+        var hideSuggestion = function(){ 
+            $('.nav-suggestion').css({
+                top: $('#primary-search2').offset().top + $('#primary-search2').outerHeight(),
+                left: $('#primary-search2').offset().left,
+                width: $('#primary-search2').outerWidth()
+            });
+        }
+
+        $(window).on('scroll', hideSuggestion);
+
+        var $minChars = 3;
+
+        $('#primary-search')
+            .autoComplete({
+                minChars: $minChars,
+                cache: false,
+                menuClass: 'autocomplete-suggestions main-nav',
+                source: function(term, response){ 
+                    try { 
+                        xhr.abort(); 
+                    } catch(e){}
+                    var xhr = $.ajax({ 
+                        type: "get",
+                        url: '/search/suggest',
+                        data: "query=" + term,
+                        dataType: "json", 
+                        success: function(data){
+                            if(data.length <= 0){
+                                $('.autocomplete-suggestions').empty();
+                                response([]); 
+                            }
+                            else{
+                                response(data); 
+                            } 
+                        }
+                    });
                 },
-                items: 10, // The maximum number of items to show in the results.
+                onSelect: function(term){
+                    $('#primary-search').addClass('selectedClass');
+                }
+            }) 
+            .focus(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.main-nav').html() ).length ) {
+                            hideSuggestion();
+                            $('.main-nav').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.main-nav').html() ).length ) {
+                            hideSuggestion();
+                            $('.main-nav').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .focusout(function() {
+                $('.nav-suggestion').html($('.main-nav').html());
+            })
+            .change(function() {
+                if($(this).val().length <= 0){
+                    $('.autocomplete-suggestions').empty();
+                }
+            })
+            .keyup(function() {
+                var searchString = $(this).val();
+                $('#primary-search2').val(searchString);
             });
 
-        $('input#primary-search2')
-            .typeahead({
-                ajax: { 
-                    url: '/search/suggest',
-                    triggerLength: 3, // This is the minimum length of text to take action on
-                    timeout: 450, //  Specify the amount of time to wait for keyboard input to stop until you send the query to the server.
+        $('#primary-search2')
+            .autoComplete({
+                minChars: $minChars,
+                cache: false,
+                menuClass: 'autocomplete-suggestions nav-suggestion',
+                source: function(term, response){ 
+                    try { 
+                        xhr.abort(); 
+                    } catch(e){}
+                    var xhr = $.ajax({ 
+                        type: "get",
+                        url: '/search/suggest',
+                        data: "query=" + term,
+                        dataType: "json", 
+                        success: function(data){
+                            if(data.length <= 0){
+                                $('.autocomplete-suggestions').empty();
+                                response([]); 
+                            }
+                            else{
+                                response(data); 
+                            }
+                        }
+                    });
                 },
-                items: 10, // The maximum number of items to show in the results.
+                onSelect: function(term){
+                    $('#primary-search2').addClass('selectedClass');
+                }
+            })
+            .focusout(function() {
+                $('.main-nav').html($('.nav-suggestion').html());
+            })
+            .focus(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.nav-suggestion').html() ).length ) {
+                            hideSuggestion();
+                            $('.nav-suggestion').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.nav-suggestion').html() ).length ) {
+                            hideSuggestion();
+                            $('.nav-suggestion').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .change(function() {
+                if($(this).val().length <= 0){
+                    $('.autocomplete-suggestions').empty();
+                }
+            })
+            .keyup(function() {
+                var searchString = $(this).val();
+                $('#primary-search').val(searchString);
             });
 
 }(jQuery));
