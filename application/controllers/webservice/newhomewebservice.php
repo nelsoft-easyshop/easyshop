@@ -743,14 +743,15 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
         $value = $this->input->get("value");  
         $string = $this->xmlCmsService->getString("categorySectionAdd",$value); 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection[last()]',"\t","\n");    
+        $xPath = count($map->categorySection) > 0 ? '/map/categorySection[last()]' : '/map/adSection[last()]';
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,$xPath,"\t","\n");    
         if($addXml === true) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }        
               
-    }
+    }    
 
     /**
      *  Add productPanel node under categorySection parent node
