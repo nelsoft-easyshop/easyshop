@@ -6704,11 +6704,11 @@ div.sold_prod_container {
     overflow-y: scroll;
 }
 
-.float_left{
+.float_left {
     display: inline-block;
     height: auto;
     margin-bottom: 20px;
-    margin-left: 20px;
+    margin-left: 25px;
     margin-top: 15px;
     position: relative;
     width: 50%;
@@ -6743,8 +6743,8 @@ div.sold_prod_container {
     width: 0;
 }
 .float_left input{
-    /*bottom: 50px;*/
     left: -59px;
+    padding: 0;
     position: relative;
     top: 15px;
 }
