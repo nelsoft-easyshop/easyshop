@@ -172,10 +172,31 @@
 </div>
 <div class="categories-modal">
     <h1>Categories</h1>
+     <div id="category-list" class="panel-collapse collapse in">
+        <div class="panel-body border-0 no-padding">
+            <ul class="list-unstyled list-category">
+                <?php foreach( $customCatProd as $catId=>$arrCat ):?>
+                    <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories2 simplemodal-close">
+                        <li>
+                            <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
+                        </li>
+                    </a>
+                <?php endforeach;?>
+                <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                    <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories2 simplemodal-close">
+                        <li>
+                            <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
+                        </li>
+                    </a>
+                <?php endforeach;?>
+            </ul>
+        </div>
+    </div>
 </div>
 <div class="filter-modal">
     <h1>Filter Products</h1>
 </div>
+
 
 		<!-- preload the images -->
 		<div style='display:none'>

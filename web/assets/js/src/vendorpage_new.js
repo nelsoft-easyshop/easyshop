@@ -290,7 +290,7 @@ function ItemListAjax(CatDiv,page)
 
     $(document).ready(function(){
         
-         $( "#category-list" ).clone(true).appendTo( ".categories-modal" );
+        // $( "#category-list" ).clone(true).appendTo( ".categories-modal" );
         $( "#filter-list1" ).clone(true).appendTo( ".filter-modal" );
 
         $( "#toggle-cat" ).click(function() {
