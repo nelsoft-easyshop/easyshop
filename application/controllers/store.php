@@ -675,7 +675,7 @@ class Store extends MY_Controller
         $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
         $bannerData['storeColorScheme'] = $member->getStoreColor();
-        $bannerData['isLoggedIn'] = $this->session->userdata('session');
+        $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
         $bannerData['vendorLink'] = "about";
         
         $headerData = [
