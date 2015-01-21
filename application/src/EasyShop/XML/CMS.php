@@ -814,9 +814,10 @@ $string = '<typeNode>
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
         
         $homePageData = [];
-        $homePageData['menu']['newArrivals'] = $xmlContent['menu']['newArrivals'];
-        $homePageData['menu']['topProducts']  = array();
-        $homePageData['menu']['topSellers']  = array();
+
+        $homePageData['menu']['newArrivals'] = isset($xmlContent['menu']['newArrivals']['arrival']) ? $xmlContent['menu']['newArrivals']['arrival'] : [];
+        $homePageData['menu']['topProducts']  = [];
+        $homePageData['menu']['topSellers']  = [];
         
         foreach($xmlContent['menu']['topProducts']['product'] as $productSlug){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -842,7 +843,8 @@ $string = '<typeNode>
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
             $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
-
+            $featuredCategory['popularCategory'][$key]['subCategory'] = [];
+            $category['sub']['categorySubSlug'] = isset($category['sub']['categorySubSlug']) ? $category['sub']['categorySubSlug']  : [];
             foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
                 $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                               ->findOneBy(['slug' => $subCategory]);
