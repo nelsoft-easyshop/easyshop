@@ -478,6 +478,7 @@ a{
     vertical-align: top;
     padding-top: 5px;
     padding-left:10px;
+    max-width: 428px !important;
 }
 
 .item-list-name{
@@ -517,10 +518,12 @@ a{
 
 .td-label-desc{
     vertical-align: top;
+    width: 76px;
 }
 
 .td-desc-item{
     padding-left: 5px;
+    word-break: break-all;
 }
 
 .desc-item-mobile{
