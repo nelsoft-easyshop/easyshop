@@ -747,8 +747,8 @@ class NewHomeWebService extends MY_Controller
         $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,$xPath,"\t","\n");    
         if($addXml === true) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }        
               
     }    
