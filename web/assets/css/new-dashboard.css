@@ -1577,10 +1577,6 @@ a{
     font-weight: bold;
 }
 
-#activated-modal{
-    min-height: 310px !important
-}
-
 #activated-message{
     font-size: 15px;
     margin-top: 14px;
@@ -2059,7 +2055,7 @@ label.css-label {
 /** ---------------- modal css ------------------**/
 
 .feedback-container {
-    max-height: 400px;
+    max-height: 420px;
 }
 
 .shipping-details-container {
@@ -2871,7 +2867,7 @@ label.css-label {
         left: 0;
         position: absolute;
         right: 0;
-        top: 117px;
+        top: 133px;
     }
 
 }
@@ -2902,7 +2898,7 @@ label.css-label {
     }
 
     .feedback-container {
-        max-height: 460px;
+        max-height: 470px;
     }
 
     .star-rating-wrapper {

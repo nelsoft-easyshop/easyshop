@@ -928,14 +928,13 @@ $string = '<typeNode>
             array_push($sliderTemplates, $template['templateName']);
         }
 
-        $homePageData['slider'] = $xmlContent['sliderSection']['slide'];
-     
+        $homePageData['slider'] = isset($xmlContent['sliderSection']['slide']) ? $xmlContent['sliderSection']['slide'] : [];     
         if(isset($homePageData['slider']['template'])){
             $singeSlider =  $homePageData['slider'];
             $homePageData['slider'] = [];
             $homePageData['slider'][] = $singeSlider;
         }
-     
+         
         foreach($homePageData['slider'] as $idx => $slide){
             $template = in_array($slide['template'],$sliderTemplates) ? 'template'.$slide['template'] : 'templateA';
             $template = 'partials/homesliders/'.$template;
