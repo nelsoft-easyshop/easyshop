@@ -845,6 +845,12 @@ $string = '<typeNode>
                                                                                 ->findOneBy(['slug' => $category['categorySlug']]);
             $featuredCategory['popularCategory'][$key]['subCategory'] = [];
             $category['sub']['categorySubSlug'] = isset($category['sub']['categorySubSlug']) ? $category['sub']['categorySubSlug']  : [];
+            if(!is_array($category['sub']['categorySubSlug'])){
+                $singleSubcategory = $category['sub']['categorySubSlug'];
+                $category['sub']['categorySubSlug'] = [];
+                $category['sub']['categorySubSlug'][] = $singleSubcategory;
+            }
+
             foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
                 $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
                                                                                               ->findOneBy(['slug' => $subCategory]);
