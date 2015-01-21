@@ -1,4 +1,8 @@
 (function ($) {
+    //must be on the header.
+    var socket = io.connect( 'https://local.easyshop:8000' );
+    var $userInfo = $('#userInfo');
+
     $(document).ready(function () {
         
         /* Register events */
@@ -8,8 +12,17 @@
                 onFocusReload(unreadMessages);
             }
         });
+
+        socket.on('send message', function( data ) {
+            onFocusReload(data.message);
+        });
+        setAccountOnline($userInfo.data('store-name'));
     });
-    
+
+    var setAccountOnline = function(memberId) {
+        socket.emit('set account online', memberId);
+    };
+
     /**
      * @param {type} msgs
      * @returns {undefined}
@@ -59,11 +72,7 @@
             $("#table_id a").first().addClass("Active");
         }
     }
-})(window.jQuery);
 
-
-(function($)
-{
     $(document).ready(function()
     {
         $('#table_id').dataTable({
@@ -152,7 +161,6 @@
 
     });
 
-})(jQuery);
 
 function Reload()
 {
@@ -234,11 +242,13 @@ function send_msg(recipient,msg, isOnConversation)
             $("#send_btn").hide();
         },
         data : {recipient:recipient,msg:msg,csrfname:csrftoken},
-        success : function(data)
+        success : function(resultMsg)
         {
+            data = resultMsg.message;
             $("#msg_textarea img").hide();
             $("#send_btn").show();
             if (data.success != 0) {
+                socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
                 $("#table_id tbody").empty();
                 onFocus_Reload(data)
                 if (isOnConversation) {
@@ -467,3 +477,5 @@ function seened(obj)
         });
     }
 }
+
+})(jQuery);

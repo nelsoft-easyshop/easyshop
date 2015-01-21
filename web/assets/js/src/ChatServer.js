@@ -15,25 +15,26 @@ server = https.createServer(https_options, app).listen(PORT, HOST);
 console.log('HTTPS Server listening on %s:%s', HOST, PORT);
 io = require('socket.io').listen(server);
 
-var idContainer = {};
+var container = {};
 io.sockets.on( 'connection', function(client) {
 
     client.on('send message', function(data) {
-        if (data.recipientId in idContainer) {
-            idContainer[data.recipientId].emit('send message', {recipientId: data.recipientId, message: data.message });
+        if (data.recipient in container) {
+            container[data.recipient].emit('send message', {recipient: data.recipient, message: data.message });
         }
     });
 
-    client.on('set account online', function(memberId) {
+    client.on('set account online', function(storeName) {
         //TODO : add feature to see if user is online
-        if (!(memberId in idContainer)) {
-            client.memberId = memberId;
-            idContainer[client.memberId] = client;
-            console.log( "ID : " + memberId + " is now Online" );
-        }
-        else {
-            console.log( "ID : " + memberId + " is already Online somewhere" );
+        if (!(storeName in container)) {
+            client.storeName = storeName;
+            container[client.storeName] = client;
+            console.log(storeName + " is now Online" );
         }
     });
 
+    client.on('disconnect', function(data){
+        if (!client.storeName) return;
+        delete container[client.storeName];
+    });
 });
