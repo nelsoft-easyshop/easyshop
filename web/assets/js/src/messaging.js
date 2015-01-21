@@ -6,13 +6,6 @@
     $(document).ready(function () {
         
         /* Register events */
-        easyshop.eventDispatcher.register('unreadMessages', function (unreadMessages) {
-            document.title = (unreadMessages.unread_msgs_count === 0 ? "Message | Easyshop.ph" : "Message (" + unreadMessages.unread_msgs_count + ") | Easyshop.ph");
-            if (unreadMessages.unread_msgs_count !== 0) {
-                onFocusReload(unreadMessages);
-            }
-        });
-
         socket.on('send message', function( data ) {
             onFocusReload(data.message);
         });
@@ -28,6 +21,7 @@
      * @returns {undefined}
      */
     function onFocusReload(msgs) {
+        $("#table_id tbody").empty();
         html = "";
         var span = "";
         D = msgs.messages;
