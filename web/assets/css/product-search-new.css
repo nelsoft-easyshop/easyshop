@@ -156,6 +156,7 @@ html, body{
     width: 100%;
     margin-left: 10px;
     margin-right: 10px;
+    margin-bottom: 40px;
 }
 
 .search-item-container{
@@ -463,6 +464,12 @@ html, body{
     bottom: 0;
 }
 
+#sticky-pagination{
+    position: fixed;
+    bottom: 0px;
+    width: 64%;
+    z-index: 999;
+}
 
 #sticky-pagination .pagination{
     margin: 10px 0px !important;
