@@ -405,6 +405,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function addAdds()
     {
+        $awsUploader = $this->serviceContainer['aws_uploader'];         
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
@@ -436,6 +437,7 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
+            $result = $this->upload->data();  
             $imageData = $this->upload->data();            
             $value = $path_directory.$filename.'.'.$file_ext; 
         
@@ -461,7 +463,7 @@ class NewHomeWebService extends MY_Controller
             $index = $index == 0 ? 1 : $index + 1;
             $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/adSection/ad[last()]',"\t\t","\n");
 
-            if($addXml === true) {
+            if($addXml === true && $awsUploader->uploadFile($result['full_path'],  $value)) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json); 
@@ -475,6 +477,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function setAdsSection()
     {
+        $awsUploader = $this->serviceContainer['aws_uploader'];          
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
@@ -506,6 +509,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
+                $result = $this->upload->data();                  
                 $this->config->load('image_dimensions', true);
                 $imageDimensionsConfig = $this->config->config['image_dimensions'];
 
@@ -533,7 +537,7 @@ class NewHomeWebService extends MY_Controller
             $map->adSection->ad[$index]->target = $target; 
         }
 
-        if($map->asXML($this->file)) {
+        if($map->asXML($this->file) && ($awsUploader->uploadFile($result['full_path'],  $value))) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
