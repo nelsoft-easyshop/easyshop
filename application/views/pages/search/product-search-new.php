@@ -450,6 +450,7 @@
                     </center>
                 </div>
             </div>
+            
        </div>
         <!--DISPLAY WHEN SEARCH RESULTS IS ZERO-->
         <!--
