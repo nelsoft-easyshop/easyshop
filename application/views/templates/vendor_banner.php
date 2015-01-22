@@ -6,7 +6,7 @@
 
 <section>
     <div class="pos-rel" id="display-banner-view">
-        <div class="vendor-main-bg" style="background: url(<?=$bannerImage?>) center no-repeat; background-size: cover;">
+        <div class="vendor-main-bg" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">
             
         </div>
         <div class="container main-container vendor-main pos-ab">

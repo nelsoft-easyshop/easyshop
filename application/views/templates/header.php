@@ -199,7 +199,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="logo"> 
                 <a href="/" class="prevent">
                     <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                        <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
                     <?php else: ?>
                         <span class="span_bg"></span>
                     <?php endif; ?>

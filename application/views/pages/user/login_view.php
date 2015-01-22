@@ -94,7 +94,7 @@
                                     <?php endif; ?>
                                   
 
-                                    <img src="/assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
                                 </div>
                             </div>
                             <div class="row mrgn-bttm-25 mrgn-top-20">

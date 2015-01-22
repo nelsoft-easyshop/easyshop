@@ -31,10 +31,10 @@
                                 <h1>Download our App</h1>
                                
                                 <a href="https://itunes.apple.com/us/app/easyshop.ph/id935195239?mt=8" class="app-img-apple" target="_blank" >
-                                    <img src="/assets/images/img-app-apple.png" alt="apple app">
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-app-apple.png" alt="apple app">
                                 </a>
                                 <a href="https://play.google.com/store/apps/details?id=com.nelsoft.easyshop" target="_blank">
-                                    <img src="/assets/images/img-app-google.png" alt="google app">
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-app-google.png" alt="google app">
                                 </a>
                             </div>
 
