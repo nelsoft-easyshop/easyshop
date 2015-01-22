@@ -20,21 +20,22 @@ class AssetsUploader
     
     const MAX_ALLOWABLE_SIZE_KB = 5000; 
     
-    const USER_BANNER_HEIGHT = 366;
-    
-    const USER_BANNER_WIDTH = 1475;
-    
     const ALLOWABLE_IMAGE_MIME_TYPES = "gif|jpg|png|jpeg";
 
     /**
      * User image dimensions
-     * Defined as a class variable as PHP does not allow immutable arrays.
-     * Acess via the appropriate getter method.
      *
      * @var integer[]
      */
-    private static $userImageDimensions = [['width' => 157, 'height' => 150], ['width' => 60, 'height' => 60 ]];
+    private static $userImageDimensions = [];
 
+    
+    /**
+     * User banner dimensions
+     *
+     * @var integer[]
+     */
+    private static $userBannerDimensions = [];
 
     /**
      * The AWS Uploader object
@@ -96,18 +97,22 @@ class AssetsUploader
         $this->configLoader = $configLoader;
         $this->uploadLibrary = $uploadLibrary;
         $this->imageLibrary = $imageLibrary;
+        
+        $userImageDimensions = $this->configLoader->getItem('image_dimensions')['userImagesSizes'];
+        $this->userImageDimensions['normal'] = [
+            'width' => $userImageDimensions['normalsize'][0],
+            'height' =>  $userImageDimensions['normalsize'][1],
+        ];
+        $this->userImageDimensions['thumbnail'] = [
+            'width' => $userImageDimensions['smallsize'][0],
+            'height' =>  $userImageDimensions['smallsize'][1],
+        ];
+        $this->userBannerDimensions['width'] = $userImageDimensions['bannersize'][0];
+        $this->userBannerDimensions['height'] = $userImageDimensions['bannersize'][1];
+    
     }
     
-    /**
-     * Returns the user image dimensions
-     *
-     * @return integer[]
-     */
-    public function getUserImageDimensions()
-    {
-        return self::$userImageDimensions;
-    }
-     
+
     /**
      * Uploads the temporary image directory structure into the appropriate location
      *
@@ -159,10 +164,11 @@ class AssetsUploader
      * @param string[] $cropData
      * @return mixed
      */
-    public function uploadUserAvatar($memberId, $fieldName = "userfile", $cropData = array())
+    public function uploadUserAvatar($memberId, $fieldName = "userfile", $cropData = [])
     {
         $fileSuperGlobal = $_FILES;
-        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')->findOneBy(['idMember' => $memberId]);
+        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+                                      ->findOneBy(['idMember' => $memberId]);
         
         $result = [
             'error' => array(),
@@ -232,19 +238,20 @@ class AssetsUploader
                     $this->imageLibrary->resize(); 
                     $this->imageLibrary->clear();
                 }
-                $imageDimensions = self::$userImageDimensions;
+                $imageDimensions = $this->userImageDimensions;
+
                 $config['new_image'] =  $imagePath.'/'.$filenames[1].'.png';
                 $config['source_image'] = $imagePath.'/'.$filenames[0].'.png';
-                $config['width'] = $imageDimensions[0]['width'];
-                $config['height'] = $imageDimensions[0]['height'];
+                $config['width'] = $imageDimensions['normal']['width'];
+                $config['height'] = $imageDimensions['normal']['height'];
                 $this->imageLibrary->initialize($config);  
                 $this->imageLibrary->resize();   
                 $this->imageLibrary->clear();
                 
                 $config['new_image'] =  $imagePath.'/'.$filenames[2].'.png';
                 $config['source_image'] = $imagePath.'/'.$filenames[0].'.png';
-                $config['width'] = $imageDimensions[1]['width'];
-                $config['height'] = $imageDimensions[1]['height'];
+                $config['width'] = $imageDimensions['thumbnail']['width'];
+                $config['height'] = $imageDimensions['thumbnail']['height'];
                 $this->imageLibrary->initialize($config);  
                 $this->imageLibrary->resize();
                 $this->imageLibrary->clear();
@@ -259,12 +266,10 @@ class AssetsUploader
                     $result['error'][] = $e->getMessage();
                 }
             }
-            
+
             if(empty($result['error'])){
-                $member->setImgurl($imagePath);
-                $member->setIsHideAvatar(false);
-                $member->setLastmodifieddate(new DateTime('now'));
-                $this->entityManager->flush();
+                $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+                                    ->updateMemberImageUrl($member, $imagePath);  
             }   
         }
         $result['member'] = $member;
@@ -272,12 +277,27 @@ class AssetsUploader
     }
     
     
+    
+        
+    /**
+     * Uploads the user banner. This method uploads the file in the $_FILES super global method
+     *
+     * @param integer $memberId
+     * @param string $fieldName
+     * @param string[] $cropData
+     * @return mixed
+     */
     public function uploadUserBanner($memberId, $fieldName = "userfile", $cropData = array())
     {
         $fileSuperGlobal = $_FILES;
-        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')->findOneBy(['idMember' => $memberId]);
+        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+                                      ->findOneBy(['idMember' => $memberId]);
         
-        $result = ['error' => array(), 'member' => null];
+        $result = [
+            'error' => [], 
+            'member' => null
+        ];
+        
         if($member){
             $imagePath = $member->getImgurl();
             $username = $member->getUsername();
@@ -324,8 +344,8 @@ class AssetsUploader
                 }
 
                 $config['new_image'] = $imagePath.'/'.$filename;
-                $config['width'] = self::USER_BANNER_WIDTH;
-                $config['height'] = self::USER_BANNER_HEIGHT;
+                $config['width'] = $this->userBannerDimensions['width'];
+                $config['height'] = $this->userBannerDimensions['height']; 
                 $this->imageLibrary->initialize($config);
                 $this->imageLibrary->resize(); 
 
@@ -338,33 +358,15 @@ class AssetsUploader
                 }
 
                 if(empty($result['error'])){
-                    $member->setImgurl($imagePath);
-                    $member->setIsHideAvatar(false);
-                    $member->setLastmodifieddate(new DateTime('now'));
-                    $this->entityManager->flush();
+                    $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+                                        ->updateMemberImageUrl($member, $imagePath, false);  
                 }   
             }
         }
         $result['member'] = $member;
         return $result;
     }
-    
-    
-    function GetDirectorySize($path){
-        $bytestotal = 0;
-        $path = realpath($path);
-        if($path!==false){
-            foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path,\FilesystemIterator::SKIP_DOTS)) as $object){
-                try{
-                    $bytestotal += $object->getSize();
-                }
-                catch(\Exception $e){
-                    //do not increment
-                }
-            }
-        }
-        return $bytestotal;
-    }
+
     
 }
 
