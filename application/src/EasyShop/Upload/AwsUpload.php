@@ -57,13 +57,13 @@ class AwsUpload
         
         $destinationFilePath = ltrim($destinationFilePath , '.');
 
-        $result = $this->awsS3Client->putObject(array(
+        $result = $this->awsS3Client->putObject([
             'Bucket' => $this->assetsConfig['bucket'],
             'Key'    => $destinationFilePath,
             'SourceFile'  => $sourceFilePath,
             'ContentType' => $mimeType,
             'ACL'    => 'public-read',
-        ));
+        ]);
             
         return $result;
     }
