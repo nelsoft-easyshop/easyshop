@@ -115,6 +115,11 @@ class Kernel
                     $container['language_loader']
                 )
             );
+
+            $em->getEventManager()->addEventListener(
+                [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\ProductImageExistenceListener(ENVIRONMENT)
+            );
+            
             return $em;
         };
 
@@ -337,12 +342,7 @@ class Kernel
         $container['webservice_manager'] = function ($c) use ($container){
             $em = $container['entity_manager'];   
             return new \EasyShop\Webservice\AuthenticateRequest($em);                     
-        };           
-
-        $container['image_upload'] = function ($c) use ($container){
-            $uploadLibrary = new \CI_Upload();            
-            return new \EasyShop\Upload\Upload($uploadLibrary);
-        };                            
+        };                      
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
