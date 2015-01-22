@@ -162,6 +162,7 @@
             <div class="col-xs-6 col-categories">
                 Categories
             </div>
+            
         </a>
         <a href="">
             <div class="col-xs-6 col-filter">
@@ -172,23 +173,24 @@
 </div>
 <div class="categories-modal">
     <h1>Categories</h1>
-     <div id="category-list" class="panel-collapse collapse in">
+    <div id="category-list" class="panel-collapse collapse in">
         <div class="panel-body border-0 no-padding">
             <ul class="list-unstyled list-category">
-                <?php foreach( $customCatProd as $catId=>$arrCat ):?>
-                    <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories2 simplemodal-close">
-                        <li>
-                            <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
-                        </li>
-                    </a>
-                <?php endforeach;?>
-                <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                    <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories2 simplemodal-close">
-                        <li>
-                            <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
-                        </li>
-                    </a>
-                <?php endforeach;?>
+                <a href="javascript: void(0)" data-link="#def-2" class="color-default tab_categories2 simplemodal-close">
+                    <li>
+                        <span style="display: " class="fa fa-caret-right active-category selected-marker"></span>  Clothing  &amp; Accessories
+                    </li>
+                </a>
+                <a href="javascript: void(0)" data-link="#def-4" class="color-default tab_categories2 simplemodal-close">
+                    <li>
+                        <span style="display: none" class="fa fa-caret-right active-category selected-marker"></span>  Jewellery &amp; Watches
+                    </li>
+                </a>
+                <a href="javascript: void(0)" data-link="#def-9" class="color-default tab_categories2 simplemodal-close">
+                    <li>
+                        <span style="display: none" class="fa fa-caret-right active-category selected-marker"></span>  Toys, Hobbies &amp; Collectibles
+                    </li>
+                </a>
             </ul>
         </div>
     </div>
