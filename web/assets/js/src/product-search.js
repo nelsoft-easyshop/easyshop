@@ -143,9 +143,58 @@
         document.location.href = currentUrl;
     });
 
+    // START OF INFINITE SCROLLING FUNCTION 
+    var currentUrl = $('#hidden-currentUrl').val();
+    var typeView = $('#hidden-typeView').val(); 
+    var emptySearch = $('#hidden-emptySearch').val();
+    var loadUrl = $('#hidden-loadUrl').val();
+
+    var offset = 1; 
+    var canRequestAjax = true;
+    var isEmptySearch = emptySearch != "" ? false : true;
+    var objHeight=$(window).height()-50;
+    var lastScroll = 0;
+ 
+    var type = 1;
+    var csrftoken = $("meta[name='csrf-token']").attr('content');
+    var csrfname = $("meta[name='csrf-name']").attr('content');
+    $(window).scroll(function(event) {
+        var st = $(this).scrollTop();
+        if(st > lastScroll){
+            if ($(window).scrollTop() + 400 > $(document).height() - $(window).height()) {
+                if (canRequestAjax === true && isEmptySearch === false) {
+                    isEmptySearch = true;
+                    $.ajax({
+                        url: loadUrl+'&typeview='+typeView+'&page='+offset,
+                        type: 'get', 
+                        dataType: 'json',
+                        onLoading:$(".loading_products").html('<img src="/assets/images/orange_loader.gif" />').show(),
+                        success: function(response) {
+                            if(response.count > 0){
+                                $('.search-results-container').append(response.view);
+                                offset++;
+                                $('[data-spy="scroll"]').each(function () {
+                                    var $spy = $(this).scrollspy('refresh')
+                                });
+                                isEmptySearch = false;
+                            }
+                            
+                          
+                           $(".loading_products").fadeOut();
+                        }
+                    });
+                }
+            }
+        }
+        lastScroll = st;
+    });
+    // END OF INFINITE SCROLLING FUNCTION
+
+
+
     $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}});
     $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
-    $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0');
+    $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','10');
     $("body").scrollspy({target: "#myScrollspy"});
     
     $( ".icon-list" ).click(function() {

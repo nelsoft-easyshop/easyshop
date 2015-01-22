@@ -94,17 +94,16 @@ class product_search extends MY_Controller {
      */
     public function loadMoreProduct()
     {
-        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
-
-        $searchProductService = $this->serviceContainer['search_product'];
-        $categoryManager = $this->serviceContainer['category_manager']; 
-        $memberId = $this->session->userdata('member_id');
-        $search = $searchProductService->getProductBySearch($this->input->get());
-        $response['products'] = $search['collection']; 
-
-        $response['typeOfView'] = trim($this->input->get('typeview'));
-        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more', $response, true);
-        $data['count'] = count($response['products']);
+        $searchProductService = $this->serviceContainer['search_product']; 
+        $search = $searchProductService->getProductBySearch($this->input->get()); 
+        $typeOfView = trim($this->input->get('typeview'));
+        $currentPage = (int) $this->input->get('page');
+        $productViewData = [
+            'products' => $search['collection'],
+            'currentPage' => $currentPage + 1,
+        ];
+        $data['view'] = $this->load->view('partials/search-products', $productViewData, true); 
+        $data['count'] = count($search['collection']);
         echo json_encode($data);
     }
 
@@ -117,9 +116,7 @@ class product_search extends MY_Controller {
         if(trim($this->input->get('q_str')) === "" 
            && (int) trim($this->input->get('category')) === EsCat::ROOT_CATEGORY_ID){
             redirect('cat/all');
-        }
-
-        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+        } 
 
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager']; 
