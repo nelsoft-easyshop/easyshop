@@ -18,3 +18,7 @@ $config['s3']['max_size'] = 5000;
 
 
 return $config;
+
+
+/* End of file aws.php */
+/* Location: ./application/config/param/aws.php */
