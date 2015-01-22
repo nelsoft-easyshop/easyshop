@@ -1,5 +1,5 @@
 (function ($) {
-    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
+    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 100}});
     
     $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0');
     $("body").scrollspy({target: "#myScrollspy"});
@@ -105,18 +105,10 @@
         var where_scroll = $(window).scrollTop();
         var window_height = $(window).height();
 
-        if((where_scroll + window_height) > sticky_offset) {
-            $('#sticky-pagination').css('position', 'relative').css('width', '100%').css('bottom', '0px');
-            $('.search-results-container').css('margin-bottom', '0px');
-        }
-        
-        if((where_scroll + window_height) < (sticky_offset + sticky_height))  {
-            $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '0px');
-            $('.search-results-container').css('margin-bottom', '100px');
-        }
-        
         if(where_scroll == 0)  {
-            $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-200px');
+            $('#sticky-pagination').css('bottom', '-200px');
+        }else{
+            $('#sticky-pagination').css('bottom', '0px');
         }
     });
 }(jQuery));
