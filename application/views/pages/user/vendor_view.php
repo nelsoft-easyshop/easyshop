@@ -194,6 +194,7 @@
                 <?php endforeach;?>
             </ul>
         </div>
+        <a class="simplemodal-close close-hide">x</a>
     </div>
 </div>
 <div class="filter-modal">
