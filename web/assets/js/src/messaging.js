@@ -20,13 +20,14 @@
      * @param {type} msgs
      * @returns {undefined}
      */
-    function onFocusReload(msgs) {
+    function onFocusReload(msgs)
+    {
         var html = "";
         var span = "";
-        D = msgs.messages;
-        $.each(D,function(key,val){
+        var message = msgs.messages;
+        $.each(message,function(key,val){
             var cnt = parseInt(Object.keys(val).length)- 1;
-            var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
+            var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
             if ($('#ID_'+Nav_msg.name).length) { //if existing on the conve
                 $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
                 $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
