@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css" media='screen'>
+<link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
 
 <section class="bg-search-section color-default">
     <br>
@@ -161,7 +161,7 @@
                 <div class="search-results-container">
                     <?=$productView; ?> 
                 </div>
-                <div id="sticky-pagination" style=" position: relative; bottom: 0px; z-index: 999;">
+                <div id="sticky-pagination">
                     <center>
                         <div class="row">
                             <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff;">
@@ -170,9 +170,9 @@
                         </div>
                     </center>
                 </div>
-            </div>
+            </div> 
         </div>
-        <?php else: ?>
+        <?php else: ?> 
         <!--DISPLAY WHEN SEARCH RESULTS IS ZERO-->
         
         <div class="row">

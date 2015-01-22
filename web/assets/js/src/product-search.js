@@ -56,8 +56,7 @@
         return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
     
-    //determine the search results container reached the bottom 
-    var sticky_offset;
+    //determine the search results container reached the bottom  
     var currentUrl = $('#hidden-currentUrl').val();
 
     $('.btn-filter-price').click(function() { 
@@ -177,9 +176,7 @@
                                 page++;
                                 $('[data-spy="scroll"]').each(function () {
                                     var $spy = $(this).scrollspy('refresh');
-                                });
-                                resetCoordinate();
-                                resetSticky();
+                                }); 
                                 isEmptySearch = false;
                             }
                            $(".loading_products").fadeOut();
@@ -197,36 +194,6 @@
     $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0'); 
     $('body').scrollspy({target: "#myScrollspy"});
 
-    $(document).ready(function() {
-        resetCoordinate();
-    });
-
-    $(window).scroll(function () {
-        resetSticky();
-    });
-
-    var resetCoordinate = function() { 
-        sticky_offset = $('.search-results-container').height() + 300;
-        $('#sticky-pagination').css('position', 'fixed').css('width', '64%');
-    }
-
-    var resetSticky = function()
-    {  
-        var sticky_height = $('#sticky-pagination').outerHeight();
-        var where_scroll = $(window).scrollTop();
-        var window_height = $(window).height();
-        console.log((where_scroll + window_height) );
-        console.log(sticky_offset );
-        if((where_scroll + window_height) > sticky_offset) {
-            $('#sticky-pagination').css('position', 'relative').css('width', '100%');
-            $('.search-results-container').css('margin-bottom', '0px');
-        }
-
-        if((where_scroll + window_height) < (sticky_offset + sticky_height))  {
-            $('#sticky-pagination').css('position', 'fixed').css('width', '64%');
-            $('.search-results-container').css('margin-bottom', '100px');
-        }
-    }
 
     $(document).on('click',".individual",function () {
         console.log('click page');

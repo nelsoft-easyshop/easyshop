@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
 
 <section class="breadcrumbs-bg">
-    <div class="container">
+    <div class="container-non-responsive">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
             <ul>
                 <li>
@@ -18,56 +18,57 @@
         </div>
     </div>
 </section>
-
-<section id="parallax-1" class="bg-search-section color-default search-parallax-container">
+<section class="bg-search-section color-default search-parallax-container">
     <div class="search-parallax">
-    <div id="parallax-3" class="banner-template-1">
-        <center>
-            <div class="banner-content">
-                <span class="banner-lg-text">
-                    Lorem ipsum dolor sit amet
-                </span>
-                <div class="divider-small"></div>
-                <div class="social-media-container">
-                    <span class="social-icon social-fb">
-                        <i class="fa fa-facebook fa-lg fa-2x"></i>
+        <div id="parallax-3" class="banner-template-1">
+            <!--<center>
+                <div class="banner-content">
+                    <span class="banner-lg-text">
+                        Lorem ipsum dolor sit amet
                     </span>
-                    <span class="social-icon-separator"></span>
-                    <span class="social-icon social-twitter">
-                        <i class="fa fa-twitter fa-2x"></i>
-                    </span>
-                    <span class="social-icon-separator"></span>
-                    <span class="social-icon social-google-plus">
-                        <i class="fa fa-google-plus fa-lg fa-2x"></i>
-                    </span>
+                    <div class="divider-small"></div>
+                    <div class="social-media-container">
+                        <span class="social-icon social-fb">
+                            <i class="fa fa-facebook fa-lg fa-2x"></i>
+                        </span>
+                        <span class="social-icon-separator"></span>
+                        <span class="social-icon social-twitter">
+                            <i class="fa fa-twitter fa-2x"></i>
+                        </span>
+                        <span class="social-icon-separator"></span>
+                        <span class="social-icon social-google-plus">
+                            <i class="fa fa-google-plus fa-lg fa-2x"></i>
+                        </span>
+                    </div>
                 </div>
+            </center>-->
+        </div>
+        <br>
+        <center class="search-slider">
+            <div class="left-shade">
             </div>
-        </center>
-    </div>
-    
-    <br>
-    <center class="search-slider">
-        <div class="left-shade">
-        </div>
-        <div class="right-shade">
-        </div>
-        <div class="container">
-            <div class="slider1 clear" width="100%">
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar1"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar2"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar3"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar4"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar5"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar6"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar7"></div>
+            <div class="right-shade">
             </div>
-            <div class="clear"></div>
-        </div>
-    </center>
+            <div class="container">
+                <div class="slider1 clear" width="100%">
+                <!--  <div id="product-search-gallery" class="owl-carousel"> -->
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar1"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar2"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar3"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar4"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar5"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar6"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar7"></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+         </center>
     </div>
 </section>
+
 <section id="parallax-2" class="bg-search-section color-default">
-    <div class="container">
+<br/>
+    <div class="container-non-responsive">
         <div class="row">
             <div class="col-xs-3">
                 <div class="panel-group panel-category border-0" id="category">
@@ -277,9 +278,12 @@
                 </div>
                 
                 <div class="search-results-container">
-                    <div class="row">
+                    <?php
+                        for($x=1; $x<=6; $x++){
+                    ?>
+                    <div class="row" id="section-<?php echo $x?>">
                         <?php
-                            for($i=0; $i<=50; $i++){
+                            for($i=1; $i<=8; $i++){
                         ?>
                         <div class="col-search-item col-xs-3">
                             <div class="search-item-container">
@@ -469,11 +473,65 @@
                             }
                         ?>
                     </div>
+                    <?php
+                        }
+                    ?>
+                </div>
+                <div id="sticky-pagination">
+                    <center>
+                        <div class="row">
+                            <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff;">
+                                <ul class="pagination pagination-items nav" >
+                                    <li data-page="1" class="extremes previous">
+                                        <a href="#">
+                                            <span> &laquo; </span>
+                                        </a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#section-1">
+                                            <span>1</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-2">
+                                            <span>2</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-3">
+                                            <span>3</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-4">
+                                            <span>4</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-5">
+                                            <span>5</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-6">
+                                            <span>6</span>
+                                        </a>
+                                    </li>
+                                    <li data-page="1" class="extremes next">
+                                        <a href="#">
+                                            <span> &raquo; </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </center>
                 </div>
             </div>
        </div>
     </div>
 </section>
+<script src="/assets/js/src/vendor/bootstrap.js"></script>
 <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
 <script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
 <script src="/assets/js/src/product-search-by-category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

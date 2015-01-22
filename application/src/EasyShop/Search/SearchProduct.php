@@ -18,7 +18,7 @@ class SearchProduct
     /**
      * Number of product to display per request
      */
-    const PER_PAGE = 4;
+    const PER_PAGE = 12;
 
     /**
      * Entity Manager instance

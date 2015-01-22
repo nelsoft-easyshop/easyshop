@@ -1,5 +1,8 @@
 (function ($) {
-    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
+    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 100}});
+    
+    $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0');
+    $("body").scrollspy({target: "#myScrollspy"});
     
     $( ".icon-list" ).click(function() {
         $(this).addClass("active-view");
@@ -89,5 +92,24 @@
         });
     });
     
+    //determine the search results container reached the bottom 
+    var sticky_offset;
+    $(document).ready(function() {
+        var original_position_offset = $('#sticky-pagination').offset();
+        sticky_offset = original_position_offset.top;
+        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-200px');
+    });
+
+    $(window).scroll(function () {
+        var sticky_height = $('#sticky-pagination').outerHeight();
+        var where_scroll = $(window).scrollTop();
+        var window_height = $(window).height();
+
+        if(where_scroll == 0)  {
+            $('#sticky-pagination').css('bottom', '-200px');
+        }else{
+            $('#sticky-pagination').css('bottom', '0px');
+        }
+    });
 }(jQuery));
 
