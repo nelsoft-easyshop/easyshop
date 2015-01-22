@@ -159,10 +159,15 @@
                 </div>
                 
                 <div class="search-results-container">
-                    <div class="row">
-                        <?=$productView; ?>
-                    </div>
+                    <?=$productView; ?>
                 </div>
+                <center>
+                    <div class="row">
+                        <div class="col-md-12" id="myScrollspy">
+                            <?=$pagination; ?>
+                        </div>
+                    </div>
+                </center>
             </div>
         </div>
         <?php else: ?>
@@ -276,7 +281,7 @@
         <?php endif; ?>
         <!---END-->
     </div>
-</section>
+</section> 
 
 <div id="hidden-elements">
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
@@ -284,6 +289,7 @@
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
 </div> 
-
+ 
+<script src="/assets/js/src/vendor/bootstrap.js"></script> 
 <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
 <script src="/assets/js/src/product-search.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

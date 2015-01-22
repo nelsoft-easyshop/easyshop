@@ -137,6 +137,14 @@ class product_search extends MY_Controller {
             unset($response['attributes']['Condition']);
         }
 
+       $paginationData = [
+            'lastPage' => ceil($search['count'] / $searchProductService::PER_PAGE), 
+            'isHyperLink' => false, 
+            'anchorValue' => 'section'
+        ];
+        $response['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+
+
         if($search['count'] <= 0){
             $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                        ->findBy(['parent' => EsCat::ROOT_CATEGORY_ID]);
@@ -145,17 +153,18 @@ class product_search extends MY_Controller {
         }
 
         $headerData = [
-            'title' => (($response['string']==='') ? "Search" : $response['string']).' | Easyshop.ph'
+            'title' => ($response['string'] === "" ? "Search" : $response['string']).' | Easyshop.ph'
         ];
 
         $productViewData = [
             'products' => $search['collection'],
+            'currentPage' => 1,
         ];
         $productView = $this->load->view('partials/search-products', $productViewData, true);
         
         $response['productView'] = $productView;
 
-        $this->load->spark('decorator');    
+        $this->load->spark('decorator');
         $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/search/product-search-new',$response);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 

@@ -145,6 +145,8 @@
 
     $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}});
     $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
+    $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0');
+    $("body").scrollspy({target: "#myScrollspy"});
     
     $( ".icon-list" ).click(function() {
         $(this).addClass("active-view");
