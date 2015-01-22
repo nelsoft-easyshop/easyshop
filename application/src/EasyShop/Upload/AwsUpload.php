@@ -77,8 +77,7 @@ class AwsUpload
     public function doesFileExist($sourceFileFullPath)
     {
         $cleanSourceFileFullPathClean = strpos($sourceFileFullPath, '.') === 0 ? substr($sourceFileFullPath, 1) : $sourceFileFullPath;
-        $doesExist = $this->awsS3Client->doesObjectExist( $this->assetsConfig['bucket'], $cleanSourceFileFullPathClean);
-        return $doesExist;
+        return $this->awsS3Client->doesObjectExist( $this->assetsConfig['bucket'], $cleanSourceFileFullPathClean);
     }
 
     
