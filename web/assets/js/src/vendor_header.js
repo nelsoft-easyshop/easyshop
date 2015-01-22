@@ -242,24 +242,6 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         $('#imgupload').click();
     });
 
-    $(document).on('change','#imgupload',function(){ 
-        var oldIE;
-        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0; 
-        formAction = (imageUploadType == "avatar") ? "upload_img" : "banner_upload";
-
-        if ($('html').is('.ie6, .ie7, .ie8, .ie9')){
-            oldIE = true;
-        }
-
-        if (oldIE || isSafari){
-            document.getElementById('form_image').action = '/store/'+formAction;
-            $('#isAjax').val('false');
-            $('#form_image').submit();
-        }
-        else{
-            imageprev(this);
-        }
-    });
 
     if(window.FileReader){
         // I intentionally add ie 10 into restriction because of error in simplemodal
@@ -275,16 +257,23 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         badIE = true;
     }
 
+    var max_upload_size = $("#max-upload-size").val()  * 1000;
+    var max_upload_height = $("#max-upload-height").val();
+    var max_upload_width = $("#max-upload-width").val(); 
+
+    $(document).on('change','#imgupload',function(){  
+        formAction = (imageUploadType == "avatar") ? "upload_img" : "banner_upload";
+        imageprev(this);
+    });
+
     var imageprev = function(input) {
 
         if(badIE == false){
             if (input.files 
                 && input.files[0] 
                 && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) 
-                && input.files[0].size <= 5000000) {
-
+                && input.files[0].size <= max_upload_size) {
                 var reader = new FileReader();
-
                 reader.onload = function(e){
                     var image = new Image();
                     image.src = e.target.result;
@@ -292,11 +281,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         width = this.width;
                         height = this.height;
                         $('#user_image_prev').attr('src', this.src);
-                        if(width >10 && height > 10 && width <= 5000 && height <= 5000){
+                        if(width >10 && height > 10 && width <= max_upload_width && height <= max_upload_height){
                             deploy_imageprev();
                         }
-                        else if(width > 5000 || height > 5000){
-                            alert('Failed to upload image. Max image dimensions: 5000px x 5000px');
+                        else if(width > max_upload_width || height > max_upload_height){
+                            alert('Failed to upload image. Max image dimensions: '+max_upload_width+'px x '+max_upload_height+'px');
                         }
                         else{
                             $('#div_user_image_prev span:first').html('Preview');
