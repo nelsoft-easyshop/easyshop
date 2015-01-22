@@ -24,6 +24,7 @@ class MY_Exceptions extends CI_Exceptions {
             $CI->output->set_status_header('404'); 
         
              $headerData = [
+                'memberId' => $CI->session->userdata('member_id'),
                 'title' => 'Page not found | Easyshop.ph',
             ];
 
