@@ -446,7 +446,7 @@ class productUpload extends MY_Controller
         $afstart = $this->input->post('afstart');
         
         $afstartArray = json_decode($afstart); 
-        $filenames_ar = array();
+        $filenames_ar = [];
         $coordinates = json_decode($this->input->post('coordinates')); 
         $text = "";
         $isCroppable = !empty($coordinates);
