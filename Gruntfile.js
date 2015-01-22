@@ -11,8 +11,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
                     'js/src/vendor/bootstrap-typeahead.min.js': 'bs-typeahead/js/bootstrap-typeahead.min.js',
-                    'js/src/vendor/node_modules/socket.io': 'socket.io',
-                    'js/src/vendor/node_modules/express': 'express'
+                    'js/src/vendor/socket.io': 'socket.io',
+                    'js/src/vendor/express': 'express'
                 }
             },
             stylesheets: {
