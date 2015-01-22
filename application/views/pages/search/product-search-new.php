@@ -159,15 +159,17 @@
                 </div>
                 
                 <div class="search-results-container">
-                    <?=$productView; ?>
+                    <?=$productView; ?> 
                 </div>
-                <center>
-                    <div class="row">
-                        <div class="col-md-12" id="myScrollspy">
-                            <?=$pagination; ?>
+                <div id="sticky-pagination" style=" position: relative; bottom: 0px; z-index: 999;">
+                    <center>
+                        <div class="row">
+                            <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff;">
+                                <?=$pagination; ?>
+                            </div>
                         </div>
-                    </div>
-                </center>
+                    </center>
+                </div>
             </div>
         </div>
         <?php else: ?>

@@ -137,7 +137,7 @@ class product_search extends MY_Controller {
        $paginationData = [
             'lastPage' => ceil($search['count'] / $searchProductService::PER_PAGE), 
             'isHyperLink' => false, 
-            'anchorValue' => 'section'
+            'anchorValue' => 'page'
         ];
         $response['pagination'] = $this->load->view('pagination/default', $paginationData, true);
 

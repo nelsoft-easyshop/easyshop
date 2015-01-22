@@ -55,7 +55,9 @@
             results = regex.exec(location.search);
         return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
-
+    
+    //determine the search results container reached the bottom 
+    var sticky_offset;
     var currentUrl = $('#hidden-currentUrl').val();
 
     $('.btn-filter-price').click(function() { 
@@ -149,7 +151,7 @@
     var emptySearch = $('#hidden-emptySearch').val();
     var loadUrl = $('#hidden-loadUrl').val();
 
-    var offset = 1; 
+    var page = 1; 
     var canRequestAjax = true;
     var isEmptySearch = emptySearch != "" ? false : true;
     var objHeight=$(window).height()-50;
@@ -161,25 +163,25 @@
     $(window).scroll(function(event) {
         var st = $(this).scrollTop();
         if(st > lastScroll){
-            if ($(window).scrollTop() + 400 > $(document).height() - $(window).height()) {
+            if ($(window).scrollTop() + 700 > $(document).height() - $(window).height()) {
                 if (canRequestAjax === true && isEmptySearch === false) {
                     isEmptySearch = true;
                     $.ajax({
-                        url: loadUrl+'&typeview='+typeView+'&page='+offset,
+                        url: loadUrl+'&typeview='+typeView+'&page='+page,
                         type: 'get', 
                         dataType: 'json',
                         onLoading:$(".loading_products").html('<img src="/assets/images/orange_loader.gif" />').show(),
                         success: function(response) {
                             if(response.count > 0){
-                                $('.search-results-container').append(response.view);
-                                offset++;
+                                $('.search-results-container').append(response.view); 
+                                page++;
                                 $('[data-spy="scroll"]').each(function () {
-                                    var $spy = $(this).scrollspy('refresh')
+                                    var $spy = $(this).scrollspy('refresh');
                                 });
+                                resetCoordinate();
+                                resetSticky();
                                 isEmptySearch = false;
                             }
-                            
-                          
                            $(".loading_products").fadeOut();
                         }
                     });
@@ -190,13 +192,46 @@
     });
     // END OF INFINITE SCROLLING FUNCTION
 
-
-
     $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}});
     $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
-    $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','10');
-    $("body").scrollspy({target: "#myScrollspy"});
-    
+    $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0'); 
+    $('body').scrollspy({target: "#myScrollspy"});
+
+    $(document).ready(function() {
+        resetCoordinate();
+    });
+
+    $(window).scroll(function () {
+        resetSticky();
+    });
+
+    var resetCoordinate = function() { 
+        sticky_offset = $('.search-results-container').height() + 300;
+        $('#sticky-pagination').css('position', 'fixed').css('width', '64%');
+    }
+
+    var resetSticky = function()
+    {  
+        var sticky_height = $('#sticky-pagination').outerHeight();
+        var where_scroll = $(window).scrollTop();
+        var window_height = $(window).height();
+        console.log((where_scroll + window_height) );
+        console.log(sticky_offset );
+        if((where_scroll + window_height) > sticky_offset) {
+            $('#sticky-pagination').css('position', 'relative').css('width', '100%');
+            $('.search-results-container').css('margin-bottom', '0px');
+        }
+
+        if((where_scroll + window_height) < (sticky_offset + sticky_height))  {
+            $('#sticky-pagination').css('position', 'fixed').css('width', '64%');
+            $('.search-results-container').css('margin-bottom', '100px');
+        }
+    }
+
+    $(document).on('click',".individual",function () {
+        console.log('click page');
+    });
+
     $( ".icon-list" ).click(function() {
         $(this).addClass("active-view");
         $(".icon-grid").removeClass("active-view");

@@ -214,9 +214,17 @@ html, body{
     font-size: 15px;
 }
 
+.search-item-price.with-discount{
+    font-size: 13px;
+}
+
 .search-item-price .original-price{
     display: inline-block;
     margin-right: 10px;
+}
+
+.search-item-price.with-discount .original-price{
+    margin-right: 4px;
 }
 
 .search-item-price .new-price{
@@ -349,6 +357,11 @@ html, body{
     font-size:30px;
 }
 
+.list-search .new-price.with-discount-list{
+    display: block;
+    font-size:27px;
+}
+
 .list-search .btn-search-add-cart{
     font-size:15px;
     border-radius: 10px;
@@ -448,6 +461,11 @@ html, body{
     background: #000;
     position: fixed;
     bottom: 0;
+}
+
+
+#sticky-pagination .pagination{
+    margin: 10px 0px !important;
 }
 
 .no-search-resul-title{

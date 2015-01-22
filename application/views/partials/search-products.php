@@ -1,5 +1,5 @@
 
-<div class="row" id="section-<?=$currentPage?>">
+<div class="row" id="page-<?=$currentPage?>">
     <?php foreach ($products as $value): ?>
     <?php
         $productEntity = $value;
@@ -42,7 +42,7 @@
                 <a href="/item/<?=$productSlug;?>" class="search-item-name">
                     <?=$productName; ?>
                 </a>
-                <div class="search-item-price">
+                <div class="search-item-price with-discount">
                     <?php if($percentage > 0):?>
                     <span class="original-price">
                         <s>P<?=$originalPrice; ?></s>
@@ -121,7 +121,7 @@
                                     <s>P<?=$originalPrice; ?></s>
                                 </span>
                                 <?php endif; ?> 
-                                <span class="new-price">
+                                <span class="new-price with-discount-list">
                                     P<?=$productPrice; ?>
                                 </span>
                             </div>
