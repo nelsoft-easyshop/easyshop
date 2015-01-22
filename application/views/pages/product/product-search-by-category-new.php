@@ -20,52 +20,53 @@
 </section>
 <section class="bg-search-section color-default search-parallax-container">
     <div class="search-parallax">
-    <div id="parallax-3" class="banner-template-1">
-        <!--<center>
-            <div class="banner-content">
-                <span class="banner-lg-text">
-                    Lorem ipsum dolor sit amet
-                </span>
-                <div class="divider-small"></div>
-                <div class="social-media-container">
-                    <span class="social-icon social-fb">
-                        <i class="fa fa-facebook fa-lg fa-2x"></i>
+        <div id="parallax-3" class="banner-template-1">
+            <!--<center>
+                <div class="banner-content">
+                    <span class="banner-lg-text">
+                        Lorem ipsum dolor sit amet
                     </span>
-                    <span class="social-icon-separator"></span>
-                    <span class="social-icon social-twitter">
-                        <i class="fa fa-twitter fa-2x"></i>
-                    </span>
-                    <span class="social-icon-separator"></span>
-                    <span class="social-icon social-google-plus">
-                        <i class="fa fa-google-plus fa-lg fa-2x"></i>
-                    </span>
+                    <div class="divider-small"></div>
+                    <div class="social-media-container">
+                        <span class="social-icon social-fb">
+                            <i class="fa fa-facebook fa-lg fa-2x"></i>
+                        </span>
+                        <span class="social-icon-separator"></span>
+                        <span class="social-icon social-twitter">
+                            <i class="fa fa-twitter fa-2x"></i>
+                        </span>
+                        <span class="social-icon-separator"></span>
+                        <span class="social-icon social-google-plus">
+                            <i class="fa fa-google-plus fa-lg fa-2x"></i>
+                        </span>
+                    </div>
                 </div>
+            </center>-->
+        </div>
+        <br>
+        <center class="search-slider">
+            <div class="left-shade">
             </div>
-        </center>-->
-    </div>
-    <br>
-    <center class="search-slider">
-        <div class="left-shade">
-        </div>
-        <div class="right-shade">
-        </div>
-        <div class="container">
-            <div class="slider1 clear" width="100%">
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar1"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar2"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar3"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar4"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar5"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar6"></div>
-              <div class="slide"><img src="https://placehold.it/390x150&text=FooBar7"></div>
+            <div class="right-shade">
             </div>
-            <div class="clear"></div>
-        </div>
-    </center>
+            <div class="container">
+                <div class="slider1 clear" width="100%">
+                <!--  <div id="product-search-gallery" class="owl-carousel"> -->
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar1"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar2"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar3"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar4"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar5"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar6"></div>
+                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar7"></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+         </center>
     </div>
 </section>
-<section class="bg-search-section color-default">
-<br/>
+
+<section id="parallax-2" class="bg-search-section color-default">
 <br/>
     <div class="container">
         <div class="row">
