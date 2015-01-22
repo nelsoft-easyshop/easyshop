@@ -68,7 +68,7 @@ function ReplaceNumberWithCommas(thisnumber){
         
     });
 
-    $('.tab_categories').on('click', function(){
+    $(document).on('click', ".tab_categories", function(e){
         var divId = $(this).attr('data-link');
         var pagingDiv = $(divId).find('.product-paging');
         var productCount = parseInt($(divId).attr('data-productcount'));
@@ -77,7 +77,13 @@ function ReplaceNumberWithCommas(thisnumber){
         $(divId).addClass('active').show();
 
         $('.tab_categories').find('.selected-marker').hide();
-        $(this).find('.selected-marker').show();
+
+        var htmlText = $(this).find('.catText').text();
+        $( ".catText" ).each(function(index) {
+            if(htmlText === $(this).text()) {
+                $(this).closest("li").find(".selected-marker").show();
+            }
+        });
 
         if(pagingDiv.length === 0 && productCount !== 0){
             ItemListAjax($(divId), 1);
