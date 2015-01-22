@@ -11,9 +11,10 @@
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default  border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
+                            <!-- here -->
                             <h4 class="panel-title">
                                 <a id="toggle-cat" class="a-category" data-parent="#category">
-                                    CATEGORIES <b class="cat fa fa-minus-square-o pull-right"></b>
+                                    CATEGORIES<b class="cat fa fa-minus-square-o pull-right"></b>
                                 </a>
                             </h4>
                         </div>
@@ -23,14 +24,14 @@
                                     <?php foreach( $customCatProd as $catId=>$arrCat ):?>
                                         <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                                             <li>
-                                                <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
+                                                <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
                                             </li>
                                         </a>
                                     <?php endforeach;?>
                                     <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                                             <li>
-                                                <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <?php echo $arrCat['name']?>
+                                                <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
                                             </li>
                                         </a>
                                     <?php endforeach;?>
@@ -171,26 +172,26 @@
         </a>
     </div>
 </div>
+<!-- here-->
 <div class="categories-modal">
     <h1>Categories</h1>
     <div id="category-list" class="panel-collapse collapse in">
         <div class="panel-body border-0 no-padding">
             <ul class="list-unstyled list-category">
-                <a href="javascript: void(0)" data-link="#def-2" class="color-default tab_categories2 simplemodal-close">
-                    <li>
-                        <span style="display: " class="fa fa-caret-right active-category selected-marker"></span>  Clothing  &amp; Accessories
-                    </li>
-                </a>
-                <a href="javascript: void(0)" data-link="#def-4" class="color-default tab_categories2 simplemodal-close">
-                    <li>
-                        <span style="display: none" class="fa fa-caret-right active-category selected-marker"></span>  Jewellery &amp; Watches
-                    </li>
-                </a>
-                <a href="javascript: void(0)" data-link="#def-9" class="color-default tab_categories2 simplemodal-close">
-                    <li>
-                        <span style="display: none" class="fa fa-caret-right active-category selected-marker"></span>  Toys, Hobbies &amp; Collectibles
-                    </li>
-                </a>
+                <?php foreach( $customCatProd as $catId=>$arrCat ):?>
+                    <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
+                        <li>
+                            <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
+                        </li>
+                    </a>
+                <?php endforeach;?>
+                <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                    <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
+                        <li>
+                            <span style="display: <?php echo $arrCat['isActive'] ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
+                        </li>
+                    </a>
+                <?php endforeach;?>
             </ul>
         </div>
     </div>
