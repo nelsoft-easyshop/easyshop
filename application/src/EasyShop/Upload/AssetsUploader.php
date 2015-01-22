@@ -184,7 +184,7 @@ class AssetsUploader
             $imagePath = $member->getImgurl();
             $username = $member->getUsername();
             if(trim($imagePath) === "" || $imagePath === null){
-                $imagePath = $this->configLoader->getItem('image_path', 'config_loader').$memberId.'_'.$username;
+                $imagePath = $this->configLoader->getItem('image_path', 'user_img_directory').$memberId.'_'.$username;
             }
 
             if(!is_dir($imagePath)){
@@ -302,7 +302,7 @@ class AssetsUploader
             $imagePath = $member->getImgurl();
             $username = $member->getUsername();
             if(trim($imagePath) === "" || $imagePath === null){
-                $imagePath = $this->configLoader->getItem('image_path', 'config_loader').$memberId.'_'.$username;
+                $imagePath = $this->configLoader->getItem('image_path', 'user_img_directory').$memberId.'_'.$username;
             }
             if(!is_dir($imagePath)){
                 mkdir($imagePath,0755,true); 
