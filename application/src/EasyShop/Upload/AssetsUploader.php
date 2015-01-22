@@ -171,7 +171,7 @@ class AssetsUploader
                                       ->findOneBy(['idMember' => $memberId]);
         
         $result = [
-            'error' => array(),
+            'error' => [],
             'member' => null
         ];
         $filenames = [
@@ -208,7 +208,7 @@ class AssetsUploader
                 $result['error'] = $this->uploadLibrary->display_errors();
             }
             else{
-                $config = array();
+                $config = [];
                 $config['image_library'] = 'gd2';
                 $config['source_image'] = $imagePath.'/'.$filename;
                 $config['new_image'] = $imagePath.'/'.$filename;

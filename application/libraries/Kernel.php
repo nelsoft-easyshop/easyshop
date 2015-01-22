@@ -498,9 +498,10 @@ class Kernel
 
         $awsConfig = require_once(APPPATH . "config/param/aws.php");
         $container["aws_uploader"] = function($c) use ($awsConfig, $container){
-            $awsClient =  \Aws\S3\S3Client::factory(array( 'key' => $awsConfig['s3']['key'],
-                                                        'secret' => $awsConfig['s3']['secret']
-                                                ));
+            $awsClient =  \Aws\S3\S3Client::factory([ 
+                'key' => $awsConfig['s3']['key'],
+                'secret' => $awsConfig['s3']['secret']
+            ]);
             return new \EasyShop\Upload\AwsUpload($awsClient, $container["config_loader"]);
         };
 
