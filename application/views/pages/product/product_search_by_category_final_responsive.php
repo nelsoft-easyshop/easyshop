@@ -382,65 +382,13 @@
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
     <input type="hidden" id="hidden-loadUrl" value="/cat/more/<?=$categorySlug .'?'. $_SERVER['QUERY_STRING']; ?>" />
 </div>
-
-<script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
-<script src="/assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script type="text/javascript"> 
-
-    (function($) {
-        var p = $('.cc2_prod_name span');
-        var divh = $('.cc2_prod_name').height();
-        while ($(p).outerHeight()>divh) {
-            $(p).text(function (index, text) {
-                return text.replace(/\W*\s(\S)*$/, '...');
-            });
-        } 
-
-        $(function() {
-            $( ".prod_cat_drop2" ).click(function() {
-              $( "#cat_nav" ).toggleClass("category_nav_plus");
-              $( "#cat" ).toggleClass("active_prod_cat_drop_arrow");
-            });
-        });
-           
-
-        $(function() {
-            $('.jcarousel').jcarousel();
-
-            $('.jcarousel-control-prev')
-            .on('jcarouselcontrol:active', function() {
-                $(this).removeClass('inactive');
-            })
-            .on('jcarouselcontrol:inactive', function() {
-                $(this).addClass('inactive');
-            })
-            .jcarouselControl({
-                target: '-=1'
-            });
-
-            $('.jcarousel-control-next')
-            .on('jcarouselcontrol:active', function() {
-                $(this).removeClass('inactive');
-            })
-            .on('jcarouselcontrol:inactive', function() {
-                $(this).addClass('inactive');
-            })
-            .jcarouselControl({
-                target: '+=1'
-            });
-
-            $('.jcarousel-pagination')
-            .on('jcarouselpagination:active', 'a', function() {
-                $(this).addClass('active');
-            })
-            .on('jcarouselpagination:inactive', 'a', function() {
-                $(this).removeClass('active');
-            })
-            .jcarouselPagination();
-        });
-    })(jQuery);
-</script> 
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.bxslider.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/categorynavigation.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+    <script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.product_search_by_category_final_responsive.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
