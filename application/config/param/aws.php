@@ -1,6 +1,6 @@
 <?php
 
-$config = array();
+$config = [];
 
 if(ENVIRONMENT == 'production'){
     $config['s3']['key'] = 'AKIAILHPRP3MKZRSRYPA';
