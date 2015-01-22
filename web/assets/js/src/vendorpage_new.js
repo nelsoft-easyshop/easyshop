@@ -328,5 +328,19 @@ function ItemListAjax(CatDiv,page)
         
     });
     
+    var $window = $(window);
+
+    function checkWidthVendor() {
+        var windowsize = $window.width();
+        if (windowsize > 440) {
+            //if the window is greater than 440px wide then turn on jScrollPane..
+            $( ".close-hide" ).trigger("click");
+        }
+    }
+
+    // Execute on load
+    checkWidthVendor();
+    // Bind event listener
+    $window.resize(checkWidthVendor);
     
 })(jQuery);
