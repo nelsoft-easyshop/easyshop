@@ -935,6 +935,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function editSubSlider()
     {
+        $awsUploader = $this->serviceContainer['aws_uploader'];        
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
@@ -969,6 +970,7 @@ class NewHomeWebService extends MY_Controller
                                      ->set_output(json_encode($error));
             } 
             else {
+                $result = $this->upload->data();                   
                 $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
                 $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
 
@@ -1001,7 +1003,7 @@ class NewHomeWebService extends MY_Controller
             $map->sliderSection->slide[$index]->image[$subIndex]->path = $map->sliderSection->slide[$index]->image[$subIndex]->path;
             $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
         }
-        if($map->asXML($this->tempHomefile)) {
+        if($map->asXML($this->tempHomefile) && $awsUploader->uploadFile($result['full_path'],  $value)) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
@@ -1139,7 +1141,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function addSubSlider()
     {
-
+        $awsUploader = $this->serviceContainer['aws_uploader'];
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
@@ -1175,6 +1177,7 @@ class NewHomeWebService extends MY_Controller
                                  ->set_output(json_encode($error));
         } 
         else {
+            $result = $this->upload->data();            
             $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
             $subSliderCount = count($map->sliderSection->slide[$index]->image);
             $template = (string)$map->sliderSection->slide[$index]->template;            
@@ -1212,10 +1215,11 @@ class NewHomeWebService extends MY_Controller
                 $tempDimensions = $imageDimensionsConfig["mainSlider"][$template][$subSliderCount - 1];
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
             } 
-
-            return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($this->json);             
+            if($awsUploader->uploadFile($result['full_path'],  $value)) {
+                return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($this->json);             
+            }             
         }
     }
 
