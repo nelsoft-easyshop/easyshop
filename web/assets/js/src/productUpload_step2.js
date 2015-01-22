@@ -316,14 +316,6 @@ function checkOptionValue(selector,id,value,evt)
 
 function proceedStep3(url)
 {
-    /*
-    $('#upload_frame').show(); 
-    function set () { 
-        $('#upload_frame').attr('src','/productUpload/generateIframe'); 
-    } 
-    setTimeout(set); 
-    */
-
     $('#form_product').ajaxForm({
         url: url,
         dataType: "json",
