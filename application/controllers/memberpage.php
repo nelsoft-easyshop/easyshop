@@ -185,7 +185,8 @@ class Memberpage extends MY_Controller
         $this->qrManager->save($storeLink, $member->getSlug(), 'L', $this->qrManager->getImageSizeForPrinting(), 0);
         $data = [
             'qrCodeImageName' => $this->qrManager->getImagePath($member->getSlug()),
-            'slug' => $member->getSlug()
+            'slug' => $member->getSlug(),
+            'storeLink' =>$storeLink
         ];
 
         $this->load->view("pages/user/dashboard/dashboard-qr-code", $data);
