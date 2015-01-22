@@ -278,7 +278,6 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     var imageprev = function(input) {
 
         if(badIE == false){
-            console.log('herere');
             if (input.files 
                 && input.files[0] 
                 && input.files[0].type.match(/(gif|png|jpeg|jpg)/g) 
@@ -312,7 +311,6 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             }
         }
         else{
-            console.log('success');
             submitForm();
         }
     }
