@@ -21,3 +21,4 @@ else{
 
 /* End of file assets.php */
 /* Location: ./application/config/assets.php */
+
