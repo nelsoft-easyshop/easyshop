@@ -34,7 +34,9 @@ io.sockets.on( 'connection', function(client) {
     });
 
     client.on('disconnect', function(data){
-        if (!client.storeName) return;
+        if (!client.storeName) {
+            return;
+        }
         delete container[client.storeName];
     });
 
