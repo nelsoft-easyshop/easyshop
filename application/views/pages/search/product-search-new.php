@@ -220,12 +220,13 @@
                                     <a href="#" class="search-item-name">
                                         breitling-chronometer
                                     </a>
-                                    <div class="search-item-price">
+                                    <!--Add "with-discount" class id if discount is presesnt on the item-->
+                                    <div class="search-item-price with-discount">
                                         <span class="original-price">
-                                            <s>P8,000</s>
+                                            <s>P888,000.00</s>
                                         </span>
                                         <span class="new-price">
-                                            P7,500
+                                            P788,500.00
                                         </span>
                                     </div>
                                  </div>
@@ -282,10 +283,11 @@
                                             <td class="search-item-td-price">
                                                 <div class="search-item-price">
                                                     <span class="original-price">
-                                                        <s>P8,000</s>
+                                                        <s>P888,800.00</s>
                                                     </span>
-                                                    <span class="new-price">
-                                                        P7,500
+                                                    <!--Add "with-discount-list" if discount is present on the item-->
+                                                    <span class="new-price with-discount-list">
+                                                        P788,500.00
                                                     </span>
                                                 </div>
                                                 <button class="btn btn-search-add-cart">
@@ -397,54 +399,56 @@
                         }
                     ?>
                 </div>
-                <center>
-                    <div class="row">
-                        <div class="col-md-12" id="myScrollspy">
-                            <ul class="pagination pagination-items nav" >
-                                <li data-page="1" class="extremes previous">
-                                    <a href="#">
-                                        <span> &laquo; </span>
-                                    </a>
-                                </li>
-                                <li class="active">
-                                    <a href="#section-1">
-                                        <span>1</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#section-2">
-                                        <span>2</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#section-3">
-                                        <span>3</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#section-4">
-                                        <span>4</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#section-5">
-                                        <span>5</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#section-6">
-                                        <span>6</span>
-                                    </a>
-                                </li>
-                                <li data-page="1" class="extremes next">
-                                    <a href="#">
-                                        <span> &raquo; </span>
-                                    </a>
-                                </li>
-                            </ul>
+                <div id="sticky-pagination" style=" position: relative; bottom: 0px; z-index: 999;">
+                    <center>
+                        <div class="row">
+                            <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff;">
+                                <ul class="pagination pagination-items nav" >
+                                    <li data-page="1" class="extremes previous">
+                                        <a href="#">
+                                            <span> &laquo; </span>
+                                        </a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#section-1">
+                                            <span>1</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-2">
+                                            <span>2</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-3">
+                                            <span>3</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-4">
+                                            <span>4</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-5">
+                                            <span>5</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#section-6">
+                                            <span>6</span>
+                                        </a>
+                                    </li>
+                                    <li data-page="1" class="extremes next">
+                                        <a href="#">
+                                            <span> &raquo; </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </center>
+                    </center>
+                </div>
             </div>
        </div>
         <!--DISPLAY WHEN SEARCH RESULTS IS ZERO-->
