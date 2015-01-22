@@ -21,8 +21,7 @@
      * @returns {undefined}
      */
     function onFocusReload(msgs) {
-        $("#table_id tbody").empty();
-        html = "";
+        var html = "";
         var span = "";
         D = msgs.messages;
         $.each(D,function(key,val){
@@ -31,8 +30,10 @@
             if ($('#ID_'+Nav_msg.name).length) { //if existing on the conve
                 $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
                 $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
-                $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
-                $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
+                if (Nav_msg.unreadConversationCount != 0) {
+                    $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
+                    $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
+                }
                 if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
                     specific_msgs();
                     seened($('#ID_'+Nav_msg.name));
@@ -333,7 +334,7 @@ function specific_msgs()
 
 function onFocus_Reload(msgs)
 {
-    html = "";
+    var html = "";
     var span = "";
     D = msgs.messages;
     $.each(D,function(key,val){
