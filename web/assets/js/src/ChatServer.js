@@ -1,17 +1,17 @@
-var fs = require('fs');
 var express = require('express');
 var https = require('https');
-var key = fs.readFileSync('key/easyshop.key');
-var cert = fs.readFileSync('key/easyshop.crt');
-var PORT = 8000;
-var HOST = 'local.easyshop';
-var https_options = {
-    key: key,
-    cert: cert
-};
-app = express();
+var app = express();
 
-server = https.createServer(https_options, app).listen(PORT, HOST);
+require('./config').configureExpress(app);
+
+var PORT = app.get('PORT');
+var HOST = app.get('HOST');
+var https_options = {
+    key: app.get('KEY'),
+    cert: app.get('CERT')
+};
+
+var server = https.createServer(https_options, app).listen(PORT, HOST);
 console.log('HTTPS Server listening on %s:%s', HOST, PORT);
 io = require('socket.io').listen(server);
 
