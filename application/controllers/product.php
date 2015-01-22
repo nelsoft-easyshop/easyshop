@@ -104,7 +104,7 @@ class product extends MY_Controller
             $this->load->spark('decorator');  
             $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product-search-by-category-new', $response);
-            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
+            //$this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
         else{ 
             redirect('cat/all', 'refresh');

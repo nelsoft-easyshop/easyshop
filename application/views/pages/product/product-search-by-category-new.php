@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
 
 <section class="breadcrumbs-bg">
-    <div class="container">
+    <div class="container-non-responsive">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
             <ul>
                 <li>
@@ -68,7 +68,7 @@
 
 <section id="parallax-2" class="bg-search-section color-default">
 <br/>
-    <div class="container">
+    <div class="container-non-responsive">
         <div class="row">
             <div class="col-xs-3">
                 <div class="panel-group panel-category border-0" id="category">
@@ -477,7 +477,7 @@
                         }
                     ?>
                 </div>
-                <div id="sticky-pagination" style=" position: relative; bottom: 0px; z-index: 999;">
+                <div id="sticky-pagination">
                     <center>
                         <div class="row">
                             <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff;">

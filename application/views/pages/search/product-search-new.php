@@ -399,7 +399,7 @@
                         }
                     ?>
                 </div>
-                <div id="sticky-pagination" style=" position: relative; bottom: 0px; z-index: 999;">
+                <div id="sticky-pagination">
                     <center>
                         <div class="row">
                             <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff;">
