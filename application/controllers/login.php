@@ -32,6 +32,7 @@ class Login extends MY_Controller
     public function index() 
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Login | Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
             'relCanonical' => base_url().'login',
@@ -102,85 +103,98 @@ class Login extends MY_Controller
     {
         // if user still has timeout left, do not process this login attempt
         if($this->throttleService->getTimeoutLeft($uname) >= 1){
-            $row['o_success'] = 0;
-            $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
+            $authenticationResult['o_success'] = 0;
+            $authenticationResult['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
         }
-        else{
-            $dataval = array('login_username' => $uname, 'login_password' => $pass);             
-            $row = $this->accountManager->authenticateMember($uname, $pass);
+        else{         
+            $authenticationResult = $this->accountManager->authenticateMember($uname, $pass);
 
-            if (!empty($row["member"])) {
+            if (empty($authenticationResult["member"]) === false) {
             
-                $row['o_success'] = 1;
-                $row["o_memberid"] = $row["member"]->getIdMember();
-                $row["o_session"] = sha1($row["member"]->getIdMember().date("Y-m-d H:i:s"));
+                $memberId =  $authenticationResult["member"]->getIdMember();
+                
+                $authenticationResult['o_success'] = 1;
+                $authenticationResult["o_memberid"] = $memberId;
+                $authenticationResult["o_session"] = $this->accountManager->generateUsersessionId($memberId);
 
                 $em = $this->serviceContainer['entity_manager'];
                 $cartManager = $this->serviceContainer['cart_manager'];
-                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
+                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $memberId]);
                 $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
                 $cartData = $cartManager->synchCart($user->getIdMember());
 
-                $this->session->set_userdata('member_id', $row['o_memberid']);
-                $this->session->set_userdata('usersession', $row['o_session']);
+                $this->session->set_userdata('member_id', $authenticationResult['o_memberid']);
+                $this->session->set_userdata('usersession', $authenticationResult['o_session']);
                 $this->session->set_userdata('cart_contents', $cartData);
 
-                if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
-                    $temp = array(
-                        'member_id' => $this->session->userdata('member_id'),
-                        'ip' => $this->session->userdata('ip_address'),
-                        'useragent' => $this->session->userdata('user_agent'),
-                        'session' => $this->session->userdata('session_id'),
-                    );
-                    $cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
-                    $this->user_model->create_cookie($cookieval);
+                if($this->input->post('keepmeloggedin') == 'on'){
+                    $member = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $memberId]);
+                    $ipAddress = $this->session->userdata('ip_address');
+                    $userAgent = $this->session->userdata('user_agent');
+                    $cisessionId = $this->session->userdata('session_id');
+                    $newToken = $this->accountManager->persistRememberMeCookie($member, $ipAddress, $userAgent, $cisessionId);
+                    $cookiedata = [
+                        'name' => 'es_usr',
+                        'value' => $newToken,
+                        'expire' => EasyShop\Account\AccountManager::REMEMBER_ME_COOKIE_LIFESPAN_IN_SEC,
+                    ];
+                    set_cookie($cookiedata);
                 }
-                
+          
                 /**
                  * Register authenticated session
                  */
-                $user->setUsersession($row["o_session"] );
+                $user->setUsersession($authenticationResult["o_session"] );
                 $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
                 $authenticatedSession->setMember($user)
                                      ->setSession($session);
                 $em->persist($authenticatedSession);
                 $em->flush();
+         
             }
             else{ 
                 $this->throttleService->logFailedAttempt($uname);
                 $this->throttleService->updateMemberAttempt($uname);
-                $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
-                $row['o_message'] = $row["errors"][0]["login"];
-                $row['o_success'] = 0;
+                $authenticationResult['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
+                $authenticationResult['o_message'] = $authenticationResult["errors"][0]["login"];
+                $authenticationResult['o_success'] = 0;
             }
         }
-        return $row;
+        return $authenticationResult;
     }
     
-    
+    /**
+     * Log-outs a user by destroying the pertinent session details
+     *
+     */
     public function logout() 
     {
-        
         $cart_items = serialize($this->session->userdata('cart_contents'));
-        $id = $this->session->userdata('member_id');        
-        $this->cart_model->save_cartitems($cart_items,$id);
+        $memberId = $this->session->userdata('member_id');        
+        $this->cart_model->save_cartitems($cart_items,$memberId);
         $this->user_model->logout();
-        $temp = array(
-                'member_id' => $this->session->userdata('member_id'),
-                'ip' => $this->session->userdata('ip_address'),
-                'useragent' => $this->session->userdata('user_agent'),
-                'token' => get_cookie('es_usr')
-        );
 
-        $this->user_model->dbdelete_cookie_keeplogin($temp);
-        delete_cookie('es_usr');
+        $ipAddress = $this->session->userdata('ip_address');
+        $useragent = $this->session->userdata('user_agent');
+        $token = get_cookie('es_usr');
+        $this->accountManager->unpersistRememberMeCookie($memberId, $ipAddress, $useragent, $token);
+        delete_cookie('es_usr');        
         delete_cookie('es_vendor_subscribe');
-        $this->session->sess_destroy();
+
+        $sessionData = $this->session->all_userdata();
+        foreach ($sessionData as $key => $sessionField) {
+            if ($key != 'session_id' && $key != 'ip_address' && $key != 'user_agent' && $key != 'last_activity') {
+                $this->session->unset_userdata($key);
+            }
+        }
+        
         $referrer = $this->input->get('referrer');
-        if(trim($referrer))
+        if(trim($referrer)){
             redirect('/'.$referrer);
-        else
+        }
+        else{
             redirect('/login');
+        }
     }
 
     /**
@@ -191,6 +205,7 @@ class Login extends MY_Controller
     public function identify()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Forgot Password | Easyshop.ph',
             'metadescription' => '',
             'relCanonical' => '',
@@ -222,6 +237,7 @@ class Login extends MY_Controller
     public function resetconfirm()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Reset Password | Easyshop.ph',
             'metadescription' => '',
             'relCanonical' => '',

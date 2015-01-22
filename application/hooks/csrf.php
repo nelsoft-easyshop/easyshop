@@ -17,7 +17,7 @@ class CSRF_Protection
      * @var string
      */
     private static $token_name = 'csrfname';
-     
+
     /**
      * Stores the token
      *
@@ -25,6 +25,20 @@ class CSRF_Protection
      */
     private static $token;
     
+    /**
+     * list of URLs to bypass
+     *
+     * @var string[]
+     */
+    private $bypassUrls = array("/payment/dragonPayPostBack", "/payment/ipn2", "/payment/pesoPayDataFeed");
+    
+    /**
+     * List of first segment URLs to bypass
+     *
+     * @var string[]
+     */
+    private $bypassFirstSegments = array("webservice", "mobile");
+
     
     public function __construct()
     {
@@ -42,21 +56,18 @@ class CSRF_Protection
      */
     public function generate_token()
     {
-      // Load session library if not loaded
-      $this->CI->load->library('session');
-     
-      if ($this->CI->session->userdata(self::$token_name) === FALSE)
-      {
-        // Generate a token and store it on session, since old one appears to have expired.
-        self::$token = md5(uniqid() . microtime() . rand());
-     
-        $this->CI->session->set_userdata(self::$token_name, self::$token);
-      }
-      else
-      {
-        // Set it to local variable for easy access
-        self::$token = $this->CI->session->userdata(self::$token_name);
-      }
+        // Load session library if not loaded
+        $this->CI->load->library('session');
+        
+        if ($this->CI->session->userdata(self::$token_name) === false){
+            // Generate a token and store it on session, since old one appears to have expired.
+            self::$token = md5(uniqid() . microtime() . rand());
+            $this->CI->session->set_userdata(self::$token_name, self::$token);
+        }
+        else{
+            // Set it to local variable for easy access
+            self::$token = $this->CI->session->userdata(self::$token_name);
+        }
     }
     
     
@@ -109,20 +120,20 @@ class CSRF_Protection
      */
     public function inject_tokens()
     {
-      $output = $this->CI->output->get_output();
-     
-      // Inject into form
-      $output = preg_replace('/(<(form|FORM)[^>]*(method|METHOD)="(post|POST)"[^>]*>)/',
-                             '$0<input type="hidden" name="' . self::$token_name . '" value="' . self::$token . '">', 
-                             $output);
-     
-      // Inject into <head>
-      $output = preg_replace('/(<\/head>)/',
-                             '<meta name="csrf-name" content="' . self::$token_name . '">' . "\n" . '<meta name="csrf-token" content="' . self::$token . '">' . "\n" . '$0', 
-                             $output);
-     
-      $this->CI->output->_display($output);
-    }    
+        $output = $this->CI->output->get_output();
+        
+        // Inject into form
+        $output = preg_replace('/(<(form|FORM)[^>]*(method|METHOD)="(post|POST)"[^>]*>)/',
+                                '$0<input type="hidden" name="' . self::$token_name . '" value="' . self::$token . '">', 
+                                $output);
+        
+        // Inject into <head>
+        $output = preg_replace('/(<\/head>)/',
+                                '<meta name="csrf-name" content="' . self::$token_name . '">' . "\n" . '<meta name="csrf-token" content="' . self::$token . '">' . "\n" . '$0', 
+                                $output);
+        
+        $this->CI->output->_display($output);
+    }
+    
 }
-
 

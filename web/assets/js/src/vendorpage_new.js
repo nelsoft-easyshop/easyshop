@@ -289,11 +289,10 @@ function ItemListAjax(CatDiv,page)
     
 
     $(document).ready(function(){
-        $( "#category-list" ).clone(true).appendTo( ".categories-modal" );
+        
+         $( "#category-list" ).clone(true).appendTo( ".categories-modal" );
         $( "#filter-list1" ).clone(true).appendTo( ".filter-modal" );
-        
-        
-    
+
         $( "#toggle-cat" ).click(function() {
           $( "#category-list" ).slideToggle( "slow" );
         });
@@ -312,7 +311,6 @@ function ItemListAjax(CatDiv,page)
         
         $('.col-categories').click(function (e) {
             $('.categories-modal').modal();
-        
             return false;
         });
         

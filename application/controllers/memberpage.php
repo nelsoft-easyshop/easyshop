@@ -158,6 +158,7 @@ class Memberpage extends MY_Controller
             $dashboardData['tab'] = $this->input->get('tab');
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' =>  "Dashboard | Easyshop.ph",
             ];
     
@@ -186,7 +187,8 @@ class Memberpage extends MY_Controller
         $this->qrManager->save($storeLink, $member->getSlug(), 'L', $this->qrManager->getImageSizeForPrinting(), 0);
         $data = [
             'qrCodeImageName' => $this->qrManager->getImagePath($member->getSlug()),
-            'slug' => $member->getSlug()
+            'slug' => $member->getSlug(),
+            'storeLink' =>$storeLink
         ];
 
         $this->load->view("pages/user/dashboard/dashboard-qr-code", $data);
@@ -485,7 +487,7 @@ class Memberpage extends MY_Controller
             foreach ($value["product"] as $product) {
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
                      foreach($product["attr"] as $attr => $attrValue ) {
-                        $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                      }
                 }
                 $data = [
@@ -1669,6 +1671,7 @@ class Memberpage extends MY_Controller
                     'hash' => $this->input->get('h')            
                 ];
                 $headerData = [
+                    "memberId" => $this->session->userdata('member_id'),
                     'title' =>  "Reactivate you account | Easyshop.ph",
                     'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
                 ];

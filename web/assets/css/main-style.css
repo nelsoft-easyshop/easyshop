@@ -613,7 +613,6 @@ textarea {
     max-height: 296px;   
     max-width: 500px;
     right: 0;
-    width: auto !important;
 }
 
 /*.jcrop-holder div + div + input + div > div {
@@ -1812,7 +1811,8 @@ td.td-view.p-view2.color-default{
 .actions-list,
 .mobile-left-wing,
 .categories-modal,
-.filter-modal
+.filter-modal,
+.edit-profile-modal
 {
     display: none;
 }
@@ -1979,6 +1979,11 @@ td.td-view.p-view2.color-default{
 .btn-change-photo-mobile,
 .btn-change-cover-photo-mobile{
     display: none !important;
+}
+
+#modal-edit-trigger{
+    display: none;
+    font-weight: bold;
 }
 /*** end of Vendor style ***/
 
@@ -2291,11 +2296,13 @@ td.td-view.p-view2.color-default{
     }
     
     .vendor-main-bg{
-        height: 280px;
+        min-height: 230px;
+        max-height: 240px;
     }
     
     .vendor-profile-content{
-        height: 280px;
+        min-height: 230px;
+        max-height: 240px;
         max-width: 250px;
         padding: 12px 10px 32px 10px;
     }
@@ -2334,18 +2341,23 @@ td.td-view.p-view2.color-default{
     .btn-message-profile,
     .btn-profile-edit,
     .btn-change-photo-mobile,
-    .btn-profile-edit-mobile
+    .btn-profile-edit-mobile,
+    #modal-edit-trigger
     {
         width: 100% !important;
         max-width: 100% !important;
         margin-bottom: 5px !important;
     }
     
-    .btn-change-photo-mobile{
+    .btn-change-photo-mobile,
+    #modal-edit-trigger
+    {
         display: block !important;
     }
     
-    .btn-profile-edit{
+    .btn-profile-edit,
+    #edit-profile-btn
+    {
         display: none !important;
     }
     

@@ -30,23 +30,26 @@ class Home extends MY_Controller
      * @return View
      */
     public function index() 
-    {
-        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+    {  
+        $view = $this->input->get('view') ? $this->input->get('view') : null;
+        $memberId = $this->session->userdata('member_id');
         $headerData = [
+            'memberId' => $memberId,
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         ];
-
-        if( $this->session->userdata('member_id') && $view !== 'basic'){
+        
+        if( $memberId && $view !== 'basic'){
             $bodyData = $this->getFeed();   
             $bodyData['category_navigation'] = $this->load->view('templates/category_navigation', [
                                                                     'cat_items' =>  $this->getcat()
-                                                                ], true );
+                                                                ], true );                                   
             $this->load->spark('decorator');  
             $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));  
             $this->load->view("templates/home_layout/layoutF",$bodyData);
             $this->load->view('templates/footer', ['minborder' => true]);
+
         }
         else{
             $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
@@ -54,9 +57,9 @@ class Home extends MY_Controller
             $homeContent['slider'] = [];
             foreach($sliderSection as $slide){
                 $sliderView = $this->load->view($slide['template'],$slide, true);
-                array_push($homeContent['slider'], $sliderView);
+                $homeContent['slider'][] = $sliderView;
             }
-            $data['homeContent'] = $homeContent;
+            $data['homeContent'] = $homeContent; 
             $this->load->spark('decorator');  
             $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/home/home_primary', $data);
@@ -74,6 +77,7 @@ class Home extends MY_Controller
     public function under_construction()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Under Construction | Easyshop.ph'
         ];
         $this->load->spark('decorator');  
@@ -118,6 +122,7 @@ class Home extends MY_Controller
     public function policy()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Privacy Policy | Easyshop.ph',
             'metadescription' => "Read Easyshop.ph's Privacy Policy",
         ];
@@ -135,6 +140,7 @@ class Home extends MY_Controller
     public function terms()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Terms and Conditions | Easyshop.ph',
             'metadescription' => "Read Easyshop.ph's Terms and Conditions",
         ];
@@ -154,6 +160,7 @@ class Home extends MY_Controller
     public function faq()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'F.A.Q. | Easyshop.ph',
             'metadescription' => 'Get in the know, read the Frequently Asked Questions at Easyshop.ph',
         ];
@@ -174,6 +181,7 @@ class Home extends MY_Controller
     public function contact()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Contact us | Easyshop.ph',
             'metadescription' => 'Get in touch with our Customer Support',
         ];
@@ -194,6 +202,7 @@ class Home extends MY_Controller
     public function guide_buy()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'How to buy | Easyshop.ph',
             'metadescription' => 'Learn how to purchase at Easyshop.ph',
         ];
@@ -215,6 +224,7 @@ class Home extends MY_Controller
     public function guide_sell()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'How to sell | Easyshop.ph',
             'metadescription' => 'Learn how to sell your items at Easyshop.ph',
         ];
@@ -389,6 +399,7 @@ class Home extends MY_Controller
             ));
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Report a Problem | Easyshop.ph',
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
         ];

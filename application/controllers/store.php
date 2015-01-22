@@ -118,6 +118,7 @@ class Store extends MY_Controller
                 $bannerData['vendorLink'] = "";
 
                 $headerData = [
+                    "memberId" => $this->session->userdata('member_id'),
                     'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
                     'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
                     'relCanonical' => base_url().$vendorSlug,
@@ -407,6 +408,7 @@ class Store extends MY_Controller
 
         // Load View
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
             'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
             'relCanonical' => base_url().$sellerslug.'/followers',
@@ -673,10 +675,11 @@ class Store extends MY_Controller
         $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
         $bannerData['storeColorScheme'] = $member->getStoreColor();
-        $bannerData['isLoggedIn'] = $this->session->userdata('session');
+        $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
         $bannerData['vendorLink'] = "about";
         
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => html_escape($bannerData['arrVendorDetails']['store_name'])." | Easyshop.ph",
             'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
             'relCanonical' => base_url().$sellerslug.'/about'
@@ -850,6 +853,7 @@ class Store extends MY_Controller
         $bannerData['hasAddress'] = strlen($bannerData['arrVendorDetails']['stateregionname']) > 0 && strlen($bannerData['arrVendorDetails']['cityname']) > 0;
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph',
             'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
             'relCanonical' => base_url().$sellerslug.'/contact',
@@ -1220,10 +1224,10 @@ class Store extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $rules = $formValidation->getRules('personal_info');
-        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                             ->setMethod('POST')
-                            ->add('store_name', 'text')
-                            ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                            ->add('store_name', 'text', ['constraints' => $rules['shop_name']])
+                            ->add('mobile', 'text', ['constraints' => $rules['mobile']])
                             ->add('city', 'text')
                             ->add('stateregion', 'text')
                             ->getForm();

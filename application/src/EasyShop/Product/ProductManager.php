@@ -251,7 +251,7 @@ class ProductManager
         
         $category = $products->getCat()->getIdCat();
         $brand = $products->getBrand()->getName();
-        $username = $products->getMember()->getUsername();
+        $username = $products->getMember()->getStoreName();
 
         $categoryParent = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->getParentCategoryRecursive($category);
@@ -736,6 +736,14 @@ class ProductManager
             $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
             $productAttributes = $esProductRepo->getAttributesByProductIds([$product->getIdProduct()]);
             $product->attributes = $this->collectionHelper->organizeArray($productAttributes);
+
+            if ( strlen(trim($product->getCatOtherName())) <= 0 ){
+                $product->category = trim($product->getCat()->getName());
+            }
+            else{
+                $product->category = trim($product->getCatOtherName());
+            }
+            
             $products[] = $product;
         }
 

@@ -609,6 +609,16 @@ input[type="button"] {
     filter: Alpha(Opacity=70);
 }
 
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.error-modal.ui-dialog-buttons.ui-draggable {
+    bottom: 0;
+    left: 0 !important;
+    margin: auto;
+    max-height: 190px;
+    position: fixed !important;
+    right: 0;
+    top: 0 !important;
+}
+
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable{
     border-radius: 4px;
     background-color: #fff;
@@ -6694,11 +6704,11 @@ div.sold_prod_container {
     overflow-y: scroll;
 }
 
-.float_left{
+.float_left {
     display: inline-block;
     height: auto;
     margin-bottom: 20px;
-    margin-left: 20px;
+    margin-left: 25px;
     margin-top: 15px;
     position: relative;
     width: 50%;
@@ -6733,8 +6743,8 @@ div.sold_prod_container {
     width: 0;
 }
 .float_left input{
-    /*bottom: 50px;*/
     left: -59px;
+    padding: 0;
     position: relative;
     top: 15px;
 }
@@ -6797,7 +6807,7 @@ div.sold_prod_container {
     border-radius: 2px;
     bottom: 32px;
     height: auto;
-    left: 240px;
+    left: 245px;
     max-width: 60%;
     margin-top: 19px;
     min-height: 45px;
@@ -6826,7 +6836,8 @@ div.sold_prod_container {
 }
 
 .float_right input{
-    left: 640px;
+    left: 635px;
+    padding: 0;
     position: relative;
     top: 14px;
 }

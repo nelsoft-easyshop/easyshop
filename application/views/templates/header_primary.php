@@ -275,9 +275,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </li>
                                                 
                                                 <li class="mobile-menu-nav-hide">
+                                
                                                     <a href="javascript:void(0)">NEW ARRIVALS</a>
+                                             
                                                     <ul class="nav-2nd-level">
-                                                        <?php foreach( $menu['menu']['newArrivals']['arrival']  as $newArrival): ?>
+                                                        <?php foreach( $menu['menu']['newArrivals']  as $newArrival): ?>
                                                             <li><a href="<?php echo $newArrival['target'] ?>"><?php echo html_escape($newArrival['text']) ?></a></li>
                                                         <?php endforeach; ?>
                                                     </ul>

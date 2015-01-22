@@ -81,7 +81,17 @@
 </select>
 
 <select id="get_verifcode">
-    SELECT v.member_id, m.username, m.email, m.is_email_verify, v.emailcode, m.contactno, v.mobilecode, v.emailcount, v.mobilecount, TIMESTAMPDIFF(MINUTE, v.`date`,NOW()) as time
+    SELECT 
+        v.member_id, 
+        m.username, 
+        m.email, 
+        m.is_email_verify, 
+        v.emailcode, 
+        m.contactno, 
+        v.mobilecode, 
+        v.emailcount, 
+        v.mobilecount, 
+        TIMESTAMPDIFF(MINUTE, v.`date`,:date) as time
     FROM es_verifcode v
     LEFT JOIN  es_member m
     ON m.id_member = v.member_id 
