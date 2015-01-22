@@ -505,7 +505,7 @@ class productUpload extends MY_Controller
         
 
         if (!file_exists ($pathDirectory)){
-            mkdir($pathDirectory, 0777, true);;
+            mkdir($pathDirectory, 0777, true);
         }
 
         $this->upload->initialize(array( 
