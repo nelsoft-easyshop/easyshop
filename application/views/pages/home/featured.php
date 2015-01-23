@@ -2,7 +2,7 @@
 <?php if($homeContent['seller']['memberEntity'] !== null): ?>
 
 <div class="row mo">
-    <div class="row" style="background: url('<?=$homeContent['seller']['banner']?>') no-repeat center; background-size: cover; padding: 10px 0px;">
+    <div class="row" style="background: url('<?php echo getAssetsDomain().'.'.$homeContent['seller']['banner']?>') no-repeat center; background-size: cover; padding: 10px 0px;">
         <div class="col-lg-9 col-md-12 col-xs-12 col-featured-items">
             
             <?php if(count($homeContent['seller']['product']) > 0): ?>
@@ -23,7 +23,7 @@
                             
                                 <!--hover image-->
                                 <?PHP if ($secondaryImage) : ?>
-                                    <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                    <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo  getAssetsDomain().$secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
                                         
                                     </div>
                                     <div class="div-rec-product-image main-prod-image">
@@ -31,8 +31,8 @@
                                     <div class="div-rec-product-image">
                                 <?PHP endif; ?>
                                 <!--main image-->
-                                        <div class="image-handler" style="background: #fff url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
-                                        
+                                        <div class="image-handler" style="background: #fff url(<?php echo  getAssetsDomain().$defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
+                                   
                                         </div>
                                     </div>
                                 </a>
@@ -88,9 +88,9 @@
                                                 
                                                     <a href="/<?php echo $featuredSellerSlug ?>">
                                                         <?PHP if($homeContent['seller']['logo']) : ?>
-                                                            <img src="<?=$homeContent['seller']['logo']?>" class="img-store-logo"/>
+                                                            <img src="<?php echo getAssetsDomain().'.'.$homeContent['seller']['logo']?>" class="img-store-logo"/>
                                                         <?PHP else : ?>
-                                                            <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-store-logo"/>
+                                                            <img src="<?php echo getAssetsDomain().'.'.$homeContent['seller']['vendor_image']?>" class="img-store-logo"/>
                                                         <?PHP endif; ?>
                                                     </a>
 
@@ -112,9 +112,9 @@
                     <div class="span-store-big-logo">
                         <a href="/<?php echo $featuredSellerSlug ?>">
                             <?PHP if($homeContent['seller']['logo']) : ?>
-                                <img src="<?=$homeContent['seller']['logo']?>" class="img-featured-seller"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$homeContent['seller']['logo']?>" class="img-featured-seller"/>
                             <?PHP else : ?>
-                                <img src="<?=$homeContent['seller']['vendor_image']?>" class="img-featured-seller"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$homeContent['seller']['vendor_image']?>" class="img-featured-seller"/>
                             <?PHP endif; ?>
                         </a>
                     </div>

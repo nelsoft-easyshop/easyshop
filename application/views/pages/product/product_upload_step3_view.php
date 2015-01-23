@@ -56,7 +56,7 @@
             <div class="product_upload_success pd-top-30">
                 <div class='row'>
                     <div class='text-center'>
-                        <img src="/assets/images/img_success.png">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_success.png">
                         <?php if(!isset($is_edit)): ?>
                             You have <strong>successfully</strong> uploaded <span>1 new item.</span>
                         <?php else: ?>   
@@ -213,7 +213,7 @@
     <div id="dialog_preference_name" style="display:none;">
         <label for="preference_name">Name: </label>
         <input type="text" id="preference_name" name="preference_name" maxlength="30">
-        <img src="/assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
+        <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" class="loading" style="display:none;vertical-align:middle; float: right;"/>
     </div>
 
     <select id="shiploc_clone" style="display:none;" class="shiploc" name="shiploc" multiple data-placeholder="Select location(s)">

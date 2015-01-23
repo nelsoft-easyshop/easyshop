@@ -83,9 +83,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="vendor-logo-wrapper">
                 <a href="/">
                     <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                        <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph Logo" class="vendor-christmas-theme-logo">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph Logo" class="vendor-christmas-theme-logo">
                     <?php else: ?>
-                        <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo.png" alt="Easyshop.ph Logo">
                     <?php endif; ?>
                 </a>
             </div>
@@ -122,7 +122,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div class="mrgn-bttm-15">
                                     <div class="header-cart-item-img">
                                         <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                            <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
                                         </a>
                                             </div>
                                             <div class="header-cart-item-con">
@@ -159,7 +159,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <?php echo $unreadMessageCount; ?>
                         </span>
                         <?php endif;?>
-                        <img src="/assets/images/img-default-icon-user.jpg"> 
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg"> 
                         <a href="/<?php echo html_escape($user->getSlug())?>" class="vendor-login-name">
                             <span>
                                 <strong><?php echo html_escape($user->getUsername()); ?></strong>
@@ -197,12 +197,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <?php else: ?>
                         <div class="vendor-log-in-wrapper">
                             <div class="vendor-login-con vendor-out-con">
-                                <img src="/assets/images/img-default-icon-user.jpg"> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg"> 
                                 <a href="/login"><strong>login</strong></a>  or 
                                 <a href="/register"><strong>Create an account</strong></a>
                             </div>
                             <div class="vendor-out-con2">
-                                <img src="/assets/images/img-default-icon-user.jpg">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg">
                             </div>
                             <div class="mobile-user-login">
                                 <a href="/login" class="btn btn-default-3"><strong>login</strong></a>  or 
@@ -228,14 +228,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <ul class="sticky-nav">
             <li>
                 <div class="vendor-profile-img-con">
-                    <img src="<?=$avatarImage?>" alt="Profile Photo">
+                    <img src="<?php echo getAssetsDomain().'.'.$avatarImage?>" alt="Profile Photo">
                 </div>
                 <h4><?=html_escape($arrVendorDetails['store_name']);?></h4>
             </li>
             <li>
-                <a href="/<?=$arrVendorDetails['userslug']?>"><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
-                <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
-                <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
+                <a href="/<?=$arrVendorDetails['userslug']?>"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
             </li>
             <li> 
                 <form id="search-form2" class="search-form">
@@ -265,7 +265,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <div class="mrgn-bttm-15">
                                         <div class="header-cart-item-img">
                                             <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                                <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
                                             </a>
                                         </div>
                                         <div class="header-cart-item-con">

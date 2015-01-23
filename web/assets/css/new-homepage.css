@@ -1202,7 +1202,6 @@ header {
 }
 
 #content img {
-    max-width:100%;
 /*    display:block;*/
     height:auto;
 }    
@@ -2711,10 +2710,12 @@ font-size: 15px;
 
 .img-store-logo{
     max-height: 40px;
+    max-width: 40px;
 }
 
 .img-featured-seller{
     max-height: 150px;
+    max-width: 150px;
 }
 
 .store-logo-container{

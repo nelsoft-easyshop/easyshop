@@ -2,6 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+    
+use \Easyshop\Upload\AssetsUploader as AssetsUploader;
 
 /**
  *  Memberpage controller
@@ -185,7 +187,8 @@ class Memberpage extends MY_Controller
         $this->qrManager->save($storeLink, $member->getSlug(), 'L', $this->qrManager->getImageSizeForPrinting(), 0);
         $data = [
             'qrCodeImageName' => $this->qrManager->getImagePath($member->getSlug()),
-            'slug' => $member->getSlug()
+            'slug' => $member->getSlug(),
+            'storeLink' =>$storeLink
         ];
 
         $this->load->view("pages/user/dashboard/dashboard-qr-code", $data);
@@ -484,7 +487,7 @@ class Memberpage extends MY_Controller
             foreach ($value["product"] as $product) {
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
                      foreach($product["attr"] as $attr => $attrValue ) {
-                        $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                      }
                 }
                 $data = [
@@ -548,8 +551,6 @@ class Memberpage extends MY_Controller
 
                 $soldTransactions["transactions"][] = $data;
             }
-
-
         }
 
         $this->load->view("pages/user/printselltransactionspage", $soldTransactions);
@@ -1060,6 +1061,7 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
+
     /**
      *  Used to send email / SMS when verifying email or mobile
      *  NOTE: ONLY EMAIL FUNCTIONALITY IS USED AT THE MOMENT
