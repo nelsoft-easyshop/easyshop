@@ -52,33 +52,23 @@
     $end = $lastPage > $maxPages ? $currentPage+$range : $lastPage; 
     $end = $end > $lastPage ? $lastPage : $end ;
 
-    /**
-     * Anchor value for href
-     */
-    $isDefaultAnchor = isset($anchorValue) 
-                       ? (strlen(trim($anchorValue)) <= 0 ? true : false) 
-                       : true;
 ?>
 
 
-<ul class="pagination pagination-items nav" data-lastpage="<?php echo $lastPage?>">
+<ul class="pagination pagination-items" data-lastpage="<?php echo $lastPage?>">
 
     <?php if($lastPage > 0): ?>
-        <?php $previousPage = ($currentPage - 1) > 1 ? ($currentPage - 1) : 1; ?> 
-
+        <?php $previousPage = ($currentPage - 1) > 1 ? ($currentPage - 1) : 1; ?>
         <li data-page='<?php echo $previousPage ?>' class="extremes previous">
-            <a href='<?php echo $isHyperLink ? $url.'?page='.$previousPage : 'javascript:void(0)'; ?>'>
+            <a href='<?php echo $isHyperLink ? $url.'?page='.$previousPage : 'javascript:void(0)' ?>'>
                 <span> &laquo; </span>
             </a>
         </li>
     <?php endif; ?>
     
     <?php if($start > 1): ?>
-
-        <?php $anchorDisplay = $isDefaultAnchor ? 'javascript:void(0)' : '#'.$anchorValue.'-1'; ?> 
-
         <li class='individual' data-page='1'>
-            <a href='<?php echo $isHyperLink ? $url.'?page=1' : $anchorDisplay ?>'>
+            <a href='<?php echo $isHyperLink ? $url.'?page=1' : 'javascript:void(0)' ?>'>
                 <span>1</span>
             </a>
         </li>
@@ -88,11 +78,8 @@
     <?php endif; ?>
 
     <?php for($i = $start ; $i <= $end; $i++): ?>
-
-        <?php $anchorDisplay = $isDefaultAnchor ? 'javascript:void(0)' : '#'.$anchorValue.'-'.$i ?> 
-        
         <li class='<?php echo (int)$i === (int)$currentPage ? 'active' : '' ?> individual' data-page='<?php echo $i ?>'>
-            <a href='<?php echo $isHyperLink ? $url.'?page='.$i : $anchorDisplay; ?>'>
+            <a href='<?php echo $isHyperLink ? $url.'?page='.$i : 'javascript:void(0)' ?>'>
                 <span><?php echo $i ?></span>
             </a>
         </li>
@@ -102,11 +89,8 @@
         <?php if(intval($end) !== intval($lastPage)-1): ?>
             <li><span>...</span></li>
         <?php endif; ?>
-
-        <?php $anchorDisplay = $isDefaultAnchor ? 'javascript:void(0)' : '#'.$anchorValue.'-'.$lastPage ?> 
-
         <li class='individual' data-page='<?php echo $lastPage ?>'>
-            <a href='<?php echo $isHyperLink ? $url.'?page='.$lastPage : $anchorDisplay ?>'>
+            <a href='<?php echo $isHyperLink ? $url.'?page='.$lastPage : 'javascript:void(0)' ?>'>
                 <span><?php echo $lastPage?></span>
             </a>
         </li>
@@ -114,9 +98,8 @@
  
     <?php if($lastPage > 0): ?>
         <?php $nextPage = ($currentPage + 1) <= $lastPage ? ($currentPage + 1) : $lastPage; ?>
-
         <li data-page='<?php echo $nextPage ?>' class="extremes next">
-            <a href='<?php echo $isHyperLink ? $url.'?page='.$nextPage : 'javascript:void(0)'; ?>'>
+            <a href='<?php echo $isHyperLink ? $url.'?page='.$nextPage : 'javascript:void(0)' ?>'>
                 <span> &raquo; </span>
             </a>
         </li>

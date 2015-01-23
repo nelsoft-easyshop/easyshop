@@ -164,9 +164,12 @@
                 <div id="sticky-pagination">
                     <center>
                         <div class="row">
-                            <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff;">
-                                <?=$pagination; ?>
-                            </div>
+                            <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff; display: none; "> 
+                                <?=$pagination; ?> 
+                            </div> 
+                        </div>
+                        <div id="simplePagination">
+                            <?=$pagination; ?>
                         </div>
                     </center>
                 </div>
@@ -290,8 +293,10 @@
     <input type="hidden" id="hidden-typeView" value="<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>" />
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
+    <input type="hidden" id="hidden-totalPage" value="<?=$totalPage; ?>" />
 </div> 
  
 <script src="/assets/js/src/vendor/bootstrap.js"></script> 
 <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
+<script src="/assets/js/src/vendor/jquery.simplePagination.js"></script>
 <script src="/assets/js/src/product-search.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

@@ -133,14 +133,11 @@ class product_search extends MY_Controller {
             $response['availableCondition'] = $response['attributes']['Condition'];
             unset($response['attributes']['Condition']);
         }
-
-       $paginationData = [
-            'lastPage' => ceil($search['count'] / $searchProductService::PER_PAGE), 
-            'isHyperLink' => false, 
-            'anchorValue' => 'page'
+        $response['totalPage'] = ceil($search['count'] / $searchProductService::PER_PAGE);
+        $paginationData = [
+            'totalPage' => $response['totalPage'],
         ];
-        $response['pagination'] = $this->load->view('pagination/default', $paginationData, true);
-
+        $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
 
         if($search['count'] <= 0){
             $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')

@@ -20,7 +20,7 @@
         $sellerStoreName = html_escape($memberEntity->getStoreName());
         $sellerSlug = html_escape($memberEntity->getSlug());
     ?>
-    <div class="col-search-item col-xs-3">
+    <div class="col-search-item col-xs-6">
         <div class="search-item-container">
             <a href="/item/<?=$productSlug;?>" class="search-item-link-image">
                 <div class="search-item-img-container" style="background: #fff url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
