@@ -179,13 +179,15 @@ class Kernel
             $formErrorHelper = $container['form_error_helper'];
             $stringHelper = $container['string_utility'];
             $httpRequest = $container['http_request'];
+            $emailNotification  = $container['email_notification'];           
             return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
                                                         $userManager, 
                                                         $formFactory, 
                                                         $formValidation, 
                                                         $formErrorHelper,
                                                         $stringHelper,
-                                                        $httpRequest);        
+                                                        $httpRequest,
+                                                        $emailNotification);        
         };
 
         $container['message_manager'] = function ($c) use ($container) {
