@@ -1,10 +1,10 @@
 <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="div-tab">
     <div class="div-member-stats">
-             <div class="div-img-cover" style="background: url(<?=$bannerImage;?>) no-repeat center; background-size:cover;">
-               <img src="<?=$bannerImage;?>" class="img-follower-cover " />
+             <div class="div-img-cover" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage;?>) no-repeat center; background-size:cover;">
+               <img src="<?php echo getAssetsDomain().'.'.$bannerImage;?>" class="img-follower-cover " />
                 <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>">
-                    <img src="<?=$avatarImage; ?>" class="vendor-follower-img"/>
+                    <img src="<?php echo getAssetsDomain().'.'.$avatarImage; ?>" class="vendor-follower-img"/>
                 </a>
             </div>
         <div class="clear"></div>
@@ -347,7 +347,7 @@
 <div id="hidden-paginate-loader">
     <center>
         <div id="loader-div">
-            <img src="/assets/images/loading/preloader-whiteBG.gif">
+            <img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG.gif">
             <p class="loading-text">Loading data...</p>
         </div>
     </center>

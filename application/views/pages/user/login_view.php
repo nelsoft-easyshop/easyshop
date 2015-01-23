@@ -94,7 +94,7 @@
                                     <?php endif; ?>
                                   
 
-                                    <img src="/assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
                                 </div>
                             </div>
                             <div class="row mrgn-bttm-25 mrgn-top-20">
@@ -112,7 +112,7 @@
                             <div class="row">
                                 <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 text-center">
                                     <input id="login" type="submit" name="login_form" value="Log In"/>
-                                    <img src="/assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
+                                    <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +132,7 @@
                                 <div class="log-in-btn log-in-facebook">
                                     <div>
                                         <a href="<?=$facebook_login_url?>">
-                                            <span class="log-in-img"><img src="/assets/images/img-log-in-fb.png"></span>
+                                            <span class="log-in-img"><img src="<?php echo getAssetsDomain()?>assets/images/img-log-in-fb.png"></span>
                                             <span class="text-center">Log In with Facebook</span>
                                         </a>
                                     </div>
@@ -144,7 +144,7 @@
                                 <div class="log-in-btn log-in-google">
                                     <div>
                                         <a href="<?=$google_login_url?>">
-                                            <span class="log-in-img"><img src="/assets/images/img-log-in-google.png"></span>
+                                            <span class="log-in-img"><img src="<?php echo getAssetsDomain()?>assets/images/img-log-in-google.png"></span>
                                             <span class="text-center">Log In with Google</span>
                                         </a>
                                     </div>

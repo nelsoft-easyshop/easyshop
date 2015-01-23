@@ -30,7 +30,7 @@
                 <div class="container">
                     <div id="navigation">
                         <ul class="nav">
-                            <li class="logo"><a href="/"><img src="/assets/images/promo-images/logo-xmas.png"></a></li>
+                            <li class="logo"><a href="/"><img src="<?php echo getAssetsDomain(); ?>assets/images/promo-images/logo-xmas.png"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
         <section class="slideshow">
             <div class="container single-image-before"></div>
             <div class="single-image">
-                <img src="/assets/images/promo-images/header-banner.jpg?ver=<?=ES_FILE_VERSION?>" alt="">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/promo-images/header-banner.jpg?ver=<?=ES_FILE_VERSION?>" alt="">
             </div>
             <div class="container single-image-after" style="height=20;padding:10px 0;">
             </div>
@@ -51,7 +51,7 @@
                     <div class="span6 box seller-list text-center div-box-con">
                         <?PHP if (isset($featuredVendor['member'])) : ?>
                             <a href="/<?=html_escape($featuredVendor['member']->getSlug())?>" target="_blank">
-                                <img src="/assets/images/promo-images/<?=$featuredVendor['vendorImageUrl']?>?ver=1.0">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/promo-images/<?=$featuredVendor['vendorImageUrl']?>?ver=1.0">
                                 <p class="box-seller-name"><?=html_escape($featuredVendor['member']->getStoreName())?></p>
                             </a>
                         <?PHP else : ?>
