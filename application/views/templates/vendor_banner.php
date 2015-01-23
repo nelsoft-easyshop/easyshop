@@ -192,9 +192,9 @@
 
 
 <input type="hidden" id="vendor-slug" name="name" value="<?php echo $arrVendorDetails['userslug']?>">
-<input type="hidden" id="max-upload-size" name="name" value="<?=Easyshop\Upload\Upload::MAX_UPLOAD_SIZE_MB; ?>">
-<input type="hidden" id="max-upload-height" name="name" value="<?=Easyshop\Upload\Upload::MAX_IMAGE_UPLOAD_HEIGHT_PX; ?>">
-<input type="hidden" id="max-upload-width" name="name" value="<?=Easyshop\Upload\Upload::MAX_IMAGE_UPLOAD_WIDTH_PX; ?>">
+<input type="hidden" id="max-upload-size" name="name" value="<?=Easyshop\Upload\AssetsUploader::MAX_ALLOWABLE_SIZE_KB; ?>">
+<input type="hidden" id="max-upload-height" name="name" value="<?=Easyshop\Upload\AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX; ?>">
+<input type="hidden" id="max-upload-width" name="name" value="<?=Easyshop\Upload\AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX; ?>">
 <!-- Load Js Files -->
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
