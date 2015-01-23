@@ -913,7 +913,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $template = $this->input->get("template");
-        $string = $this->xmlCmsService->getString("sliderSection",$template, ""); 
+        $string = $this->xmlCmsService->getString("sliderSection",$template, " "); 
         $index = $index === 0 ? 1 : $index + 1;  
 
         $this->config->load('image_dimensions', true);        
