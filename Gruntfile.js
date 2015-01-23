@@ -10,7 +10,7 @@ module.exports = function (grunt) {
                 files: {
                     'js/src/vendor/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
-                    'js/src/socket.io.js': 'socket.io-client/socket.io.js'
+                    'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js'
                 }
             },
             stylesheets: {
@@ -93,7 +93,7 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.inbox_view.js':
                             ['web/assets/js/src/messaging.js',
-                            'web/assets/js/src/node_modules/socket.io/node_modules/socket.io-client/socket.io.js'],
+                            'web/assets/js/src/vendor/socket.io.js'],
 
                     'web/assets/js/min/easyshop.payment_review_responsive.js':
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
