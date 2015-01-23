@@ -27,6 +27,7 @@
 
 
 /config.php
+/application/bin/js/config.js
 /application/config/param/controllers.php
 .DS_Store
 
@@ -42,9 +43,12 @@ application/logs/*
 /node_modules/
 /web/assets/js/min
 
+
 /sphinx/data/products/*
-!/sphinx/data/products/readme.md
-/sphinx/data/*
+!/sphinx/data/products/*.md
+/sphinx/data/*.*
+
+
 /sphinx/logs/*
 !/sphinx/logs/*.md
 /sphinx/etc/*
