@@ -75,7 +75,9 @@
                     <h4><strong>Change Cover Photo</strong></h4>
                 </a>
             </div>
-            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
+            <div class="vendor-main-bg" style="background: url(<?=$bannerImage?>) center no-repeat; background-size: cover;">
+                
+            </div> 
         </div>
         <div class="container main-container vendor-main pos-ab">
             <div class="vendor-profile-content" id="edit-profile-info-content">
@@ -191,6 +193,9 @@
 
 
 <input type="hidden" id="vendor-slug" name="name" value="<?php echo $arrVendorDetails['userslug']?>">
+<input type="hidden" id="max-upload-size" name="name" value="<?=Easyshop\Upload\Upload::MAX_UPLOAD_SIZE_MB; ?>">
+<input type="hidden" id="max-upload-height" name="name" value="<?=Easyshop\Upload\Upload::MAX_IMAGE_UPLOAD_HEIGHT_PX; ?>">
+<input type="hidden" id="max-upload-width" name="name" value="<?=Easyshop\Upload\Upload::MAX_IMAGE_UPLOAD_WIDTH_PX; ?>">
 <!-- Load Js Files -->
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>

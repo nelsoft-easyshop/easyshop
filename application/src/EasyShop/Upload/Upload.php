@@ -9,6 +9,11 @@ namespace EasyShop\Upload;
  */
 class Upload
 {
+
+    const MAX_UPLOAD_SIZE_MB = 5000;
+    const MAX_IMAGE_UPLOAD_HEIGHT_PX = 5000;
+    const MAX_IMAGE_UPLOAD_WIDTH_PX = 5000;
+
     /**
      * CI_Upload Instance
      *
