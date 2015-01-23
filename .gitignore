@@ -44,8 +44,8 @@ application/logs/*
 /web/assets/js/min
 
 /sphinx/data/products/*
-!/sphinx/data/products/readme.md
 /sphinx/data/*
+!/sphinx/data/products/readme.md
 /sphinx/logs/*
 !/sphinx/logs/*.md
 /sphinx/etc/*
