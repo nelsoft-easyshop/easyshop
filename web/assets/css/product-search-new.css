@@ -763,6 +763,11 @@ ul.list-category-search li:last-child > .search-category-link{
     width: 100%;
 }
 
+div.loading-row {
+    height: 500px;
+    width: 100%;
+}
+
 @media (min-width: 768px) {
     .search-slider .slider1 .slide {
         width: 355px !important;

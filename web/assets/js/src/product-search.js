@@ -175,16 +175,15 @@
     var csrfname = $("meta[name='csrf-name']").attr('content');
     var existingArray = [page];
     var currentExistingPage = page; 
-    var betweenNumbers = [];
+    var betweenNumbers = []; 
 
     $(window).scroll(function(event) {
         var st = $(this).scrollTop();
         if(st > lastScroll){
-
             // upscroll code
             if ($(window).scrollTop() + 700 > $(document).height() - $(window).height()) {
                 if (canRequestAjax === true && isEmptySearch === false) {
-                    isEmptySearch = true;
+                    isEmptySearch = true;  
                     $.ajax({
                         url: loadUrl+'&typeview='+typeView+'&page='+page,
                         type: 'get', 
@@ -220,14 +219,7 @@
             }
         } 
         else {
-            // upscroll code 
-            if (typeof betweenNumbers !== 'undefined' && betweenNumbers.length > 0) {
-                $.each(betweenNumbers, function( index, value ) { 
-                    requestPage(value, false);
-                    existingArray.push(value); 
-                });
-            }
-            betweenNumbers = [];
+            // upscroll code
         }
         lastScroll = st;
     });
@@ -237,72 +229,110 @@
     $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
     $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0'); 
     $('body').scrollspy({target: "#myScrollspy"});
-    $('#myScrollspy').on('activate.bs.scrollspy', function () {
-        var currentPageNumber = parseInt($(".nav li.active > a").text().trim());
-        if(currentExistingPage > currentPageNumber 
-            && currentExistingPage - 1 != currentPageNumber){
-            for (var i = currentPageNumber + 1; i <  currentExistingPage; i++) {
-                betweenNumbers.push(i);
-            };
-        }
-        currentExistingPage = currentPageNumber;
-        $('#simplePagination').pagination('selectPage', currentPageNumber);
-    });
-
     $("#simplePagination").pagination({
         pages: $("#hidden-totalPage").val(), 
         displayedPages: 9,
     });
 
-    var requestPage = function(pageNumber, scrollAfter) {
-        if ($.inArray(pageNumber, existingArray) == -1
-            && $('.search-results-container > #page-'+ pageNumber).length <= 0){
-            var requstPage = pageNumber - 1;
-            var closestNumber = getClosestNumber(existingArray, pageNumber);
-            existingArray.push(pageNumber);  
-            $.ajax({
-                url: loadUrl+'&typeview='+typeView+'&page='+requstPage,
-                type: 'get', 
-                dataType: 'json', 
-                success: function(response) {
-                    if(response.count > 0){
-                        if(typeof closestNumber === 'undefined'){ 
-                            $('.search-results-container').append(response.view);
-                        }
-                        else{  
-                            if(closestNumber < pageNumber){
-                                $('.search-results-container > #page-'+ closestNumber).after(response.view);
-                            }
-                            else{
-                                $('.search-results-container > #page-'+ closestNumber).before(response.view);
-                            }
-
-                            if(scrollAfter){
-                                scrollToElement($('.search-results-container > #page-'+ pageNumber));
-                            }
-                        }
-                        $('[data-spy="scroll"]').each(function () {
-                            var $spy = $(this).scrollspy('refresh');
-                        }); 
-                        isEmptySearch = false;
-                    }
-                    $(".loading_products").fadeOut();
+    $('#myScrollspy').on('activate.bs.scrollspy', function () {
+        var currentPageNumber = parseInt($(".nav li.active > a").text().trim()); 
+        if(currentExistingPage > currentPageNumber 
+            && currentExistingPage - 1 != currentPageNumber 
+            && canRequestAjax) {
+            for (var i = currentPageNumber + 1; i <  currentExistingPage; i++) { 
+                if ($.inArray(existingArray, i) == -1
+                    && $('.search-results-container > #page-'+ i).length <= 0){
+                    requestPage(i, false);
                 }
-            }); 
+            } 
+        }
+        else if($('.search-results-container > #page-'+ currentPageNumber).hasClass('loading-row')
+                && canRequestAjax){
+            requestDivBefore(currentPageNumber);
+            requestPage(currentPageNumber, false);
+        }
+ 
+        currentExistingPage = currentPageNumber;
+        $('#simplePagination').pagination('selectPage', currentPageNumber);
+    });
+
+    var requestPage = function(pageNumber, scrollAfter) {
+        var requestPage = pageNumber - 1; 
+        var appendString;
+        var closestNumber;  
+
+        closestNumber = getClosestNumber(existingArray, pageNumber);
+        if($('.search-results-container > #page-'+ pageNumber).length <= 0){
+            appendString = "<div class='row loading-row' id='page-"+pageNumber+"'>\
+            <center><img src='/assets/images/loading/preloader-whiteBG.gif' /></center>\
+            </div>";
+            if(closestNumber < pageNumber){
+                $('.search-results-container > #page-'+ closestNumber).after(appendString);
+            }
+            else{
+                $('.search-results-container > #page-'+ closestNumber).before(appendString);
+            }
+        }
+        if(scrollAfter){
+            scrollToElement($('.search-results-container > #page-'+ pageNumber));
+        } 
+        existingArray.push(pageNumber); 
+
+        $.ajax({
+            url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
+            type: 'get', 
+            dataType: 'json', 
+            success: function(response) { 
+                if(response.count > 0){
+                    if($('.search-results-container > #page-'+ pageNumber).length > 0){
+                        $('.search-results-container > #page-'+ pageNumber).replaceWith(response.view);
+                    }
+                    $('[data-spy="scroll"]').each(function () {
+                        var $spy = $(this).scrollspy('refresh');
+                    }); 
+                    isEmptySearch = false;
+                }
+                page = Math.max.apply(Math,existingArray) - 1;
+                $(".loading_products").fadeOut();
+            }
+        }); 
+    }
+
+    var requestDivBefore = function(currentPageNumber) {
+        var requestPage = currentPageNumber - 1; 
+        var appendString;
+        var closestNumber; 
+        closestNumber = getClosestNumber(existingArray, requestPage);
+        if($('.search-results-container > #page-'+ requestPage).length <= 0
+             && requestPage > 1){
+            existingArray.push(requestPage); 
+            appendString = "<div class='row loading-row' id='page-"+requestPage+"'>\
+            <center><img src='/assets/images/loading/preloader-whiteBG.gif' /></center>\
+            </div>"; 
+            if(closestNumber < requestPage){
+                $('.search-results-container > #page-'+ closestNumber).after(appendString);
+            }
+            else{
+                $('.search-results-container > #page-'+ closestNumber).before(appendString);
+            }
         }
     }
 
     $(document).on('click',".page-link",function () {
-        var currentPageNumber = parseInt($(this).html().trim());
-        currentExistingPage = currentPageNumber;
-        canRequestAjax = false;
-        if($('.search-results-container > #page-'+ currentPageNumber).length <= 0){
-            requestPage(currentPageNumber, true);
+        var currentPageNumber = parseInt($(this).html().trim()); 
+        if(isNaN(currentPageNumber) === false){
+            currentExistingPage = currentPageNumber;
+            canRequestAjax = false;
+
+            requestDivBefore(currentPageNumber);
+            if($('.search-results-container > #page-'+ currentPageNumber).length <= 0){
+                requestPage(currentPageNumber, true);
+            }
+            else{
+                scrollToElement($('.search-results-container > #page-'+ currentPageNumber));
+                page = Math.max.apply(Math,existingArray) - 1;
+            }
         }
-        else{
-            scrollToElement($('.search-results-container > #page-'+ currentPageNumber));
-        }
-        page = Math.max.apply(Math,existingArray) - 1
     });
 
     $( ".icon-list" ).click(function() {
