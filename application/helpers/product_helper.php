@@ -29,9 +29,15 @@
                     }
                 }
                 else{
-                    $rev_url = strrev($row['product_image_path']);
-                    $row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
-                    $row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
+                    if(!file_exists($row['product_image_path']) && strtolower(ENVIRONMENT) === 'development'){
+                        $row['path'] = 'assets/product/unavailable/';
+                        $row['file'] = 'unavailable_product_img.jpg';
+                    }
+                    else{
+                        $rev_url = strrev($row['product_image_path']);
+                        $row['path'] = substr($row['product_image_path'],0,strlen($rev_url)-strpos($rev_url,'/'));
+                        $row['file'] = substr($row['product_image_path'],strlen($rev_url)-strpos($rev_url,'/'),strlen($rev_url));
+                    } 
                 }
                 $array[$key] = $row;
             }
