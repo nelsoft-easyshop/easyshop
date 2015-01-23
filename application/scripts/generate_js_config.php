@@ -9,8 +9,8 @@ $configString = "    var fs = require('fs');
         app.set('PORT', " . $messageManager->getChatPort() . ");
         app.set('HOST', '" . $messageManager->getChatHost() . "');
         app.set('PROTOCOL', 'https');
-        app.set('KEY', fs.readFileSync('key/easyshop.key'));
-        app.set('CERT', fs.readFileSync('key/easyshop.crt'));
+        app.set('KEY', fs.readFileSync('" . __DIR__ . "/../bin/js/key/easyshop.key'));
+        app.set('CERT', fs.readFileSync('" . __DIR__ . "/../bin/js/key/easyshop.crt'));
     };
     ";
 
