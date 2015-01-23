@@ -464,6 +464,9 @@
     
 </div>
 
-
-<script type="text/javascript" src="/assets/js/src/feed.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/feed.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script type="text/javascript" src="/assets/js/min/easyshop.layoutF.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php endif;?>
 

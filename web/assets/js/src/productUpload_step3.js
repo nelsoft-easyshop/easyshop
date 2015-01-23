@@ -20,8 +20,13 @@ $(function(){
 });
 
 $(function(){
-    
-    $('#tabs').tabs();   
+    $(".product_combination").each(function() {
+        if ($(this).find("p").length > 6) {
+          $(this).css('overflow-y','scroll');
+        }
+    });
+
+    $('#tabs').tabs();
     
     $('#delivery').on('click',function(){
         var freeShippingBtn = $('#set_free_shipping');

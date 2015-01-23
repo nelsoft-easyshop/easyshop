@@ -195,20 +195,20 @@
                     <div class="col-md-12 prod-payment-img-container">
                         <p class="attr-title">Payment:</p>
                         <?php if(isset($paymentMethod['cdb'])): ?> 
-                            <img src="/assets/images/img-mastercard-black.png" alt="Mastercard">
-                            <img src="/assets/images/img-visa-black.png" alt="Visa">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard-black.png" alt="Mastercard">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa-black.png" alt="Visa">
                         <?php endif; ?>
 
                         <?php if(isset($paymentMethod['dragonpay'])) : ?> 
-                            <img src="/assets/images/img-dragonpay-black.png" alt="Dragon Pay">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-dragonpay-black.png" alt="Dragon Pay">
                         <?php endif; ?> 
 
                         <?php if(isset($paymentMethod['paypal'])) : ?> 
-                            <img src="/assets/images/img-paypal-black.png" alt="Paypal">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-paypal-black.png" alt="Paypal">
                         <?php endif; ?>
 
                         <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?> 
-                            <img src="/assets/images/img-cod-black.png" alt="Cash on Delivery">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod-black.png" alt="Cash on Delivery">
                         <?php endif; ?>
 
 
@@ -273,14 +273,17 @@
 <!-- display recommended products view -->
 <?=$recommendedView;?>
 
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
-<script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
-
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.jqzoom-core.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.bxslider1.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script> 
+    <script type="text/javascript" src="/assets/js/src/vendor/owl.carousel.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/product-page.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/social_media_share.js?ver=<?=ES_FILE_VERSION?>'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.productpage_primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 <?php if((int)$product->getPromoType() === (int)EasyShop\Entities\EsPromoType::BUY_AT_ZERO ):?>
     <script type='text/javascript' src='/assets/js/src/promo/BuyAtZero.js?ver=<?=ES_FILE_VERSION?>'></script>
 <?php endif; ?>

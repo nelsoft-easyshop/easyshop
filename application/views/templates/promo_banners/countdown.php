@@ -58,7 +58,12 @@
         <?PHP $timeFormat = strtotime($product->getStartPromo() ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")) ?>
         <input id="endDate" type="hidden" value='<?=date('M d,Y H:i:s', $timeFormat)?>' >
     </div>
-    <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
-    <script src="/assets/js/src/promo/countdown-sale.js" type="text/javascript"></script>
+
+    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+        <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+        <script src="/assets/js/src/promo/countdown-sale.js" type="text/javascript"></script>
+    <?php else:?>
+        <script src="/assets/js/min/easyshop.countdown.js" type="text/javascript"></script>
+    <?php endif;?>
 <?php endif; ?>

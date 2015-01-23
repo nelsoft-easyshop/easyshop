@@ -94,7 +94,7 @@
                                     <?php endif; ?>
                                   
 
-                                    <img src="/assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
                                 </div>
                             </div>
                             <div class="row mrgn-bttm-25 mrgn-top-20">
@@ -181,6 +181,10 @@
 
 <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
 
-   
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>   
-<script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>   
+    <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_login_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+

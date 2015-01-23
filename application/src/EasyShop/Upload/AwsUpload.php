@@ -57,13 +57,13 @@ class AwsUpload
         
         $destinationFilePath = ltrim($destinationFilePath , '.');
 
-        $result = $this->awsS3Client->putObject(array(
+        $result = $this->awsS3Client->putObject([
             'Bucket' => $this->assetsConfig['bucket'],
             'Key'    => $destinationFilePath,
             'SourceFile'  => $sourceFilePath,
             'ContentType' => $mimeType,
             'ACL'    => 'public-read',
-        ));
+        ]);
             
         return $result;
     }
@@ -77,8 +77,7 @@ class AwsUpload
     public function doesFileExist($sourceFileFullPath)
     {
         $cleanSourceFileFullPathClean = strpos($sourceFileFullPath, '.') === 0 ? substr($sourceFileFullPath, 1) : $sourceFileFullPath;
-        $doesExist = $this->awsS3Client->doesObjectExist( $this->assetsConfig['bucket'], $cleanSourceFileFullPathClean);
-        return $doesExist;
+        return $this->awsS3Client->doesObjectExist( $this->assetsConfig['bucket'], $cleanSourceFileFullPathClean);
     }
 
     

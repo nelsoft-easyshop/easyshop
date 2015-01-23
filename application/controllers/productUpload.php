@@ -446,7 +446,7 @@ class productUpload extends MY_Controller
         $afstart = $this->input->post('afstart');
         
         $afstartArray = json_decode($afstart); 
-        $filenames_ar = array();
+        $filenames_ar = [];
         $coordinates = json_decode($this->input->post('coordinates')); 
         $text = "";
         $isCroppable = !empty($coordinates);
@@ -505,7 +505,7 @@ class productUpload extends MY_Controller
         
 
         if (!file_exists ($pathDirectory)){
-            mkdir($pathDirectory, 0777, true);;
+            mkdir($pathDirectory, 0777, true);
         }
 
         $this->upload->initialize(array( 

@@ -20,7 +20,7 @@
     <style>
         .bg_mid{
             background-color: #fff;
-            background-image: url('/assets/images/landingpage/bg_mid.png'), url('/assets/images/landingpage/bg_mid_back.png');
+            background-image: url('<?php echo getAssetsDomain(); ?>assets/images/landingpage/bg_mid.png'), url('<?php echo getAssetsDomain(); ?>assets/images/landingpage/bg_mid_back.png');
             background-repeat: no-repeat, repeat;
             background-position: top center, top left;
             min-height: 45.063em;
@@ -46,7 +46,7 @@
         }
         
         .span_bg{
-            background-image: url('/assets/images/global_sprite.png');
+            background-image: url('<?php echo getAssetsDomain(); ?>assets/images/global_sprite.png');
             background-repeat: no-repeat;
             display: inline-block;
             vertical-align: middle;

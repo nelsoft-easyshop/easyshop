@@ -3,8 +3,6 @@
 <link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 
-
-<script src="/assets/js/src/vendor/jquery.idTabs.min.js"></script>
 <div class="container font-roboto" style="max-width:980px; margin-top: 15px;">  
     <h2 class="checkout_title">Payment</h2>
     <div class="row">
@@ -834,7 +832,7 @@
                     </tr>
                     <tr>
                         <td width="30%" style="padding: 5px 0px 7px 0px;">Telephone No:</td>
-                        <td width="70%"  style="padding: 5px 0px 7px 0px;"><input type="text" name="c_telephone" id="c_telephone" class="form-control no-border" onkeypress="return isNumberKeyAndDash(event);" placeholder="eg. 354-5973" maxlength="15" value="<?php echo $c_telephone?>"></td>
+                        <td width="70%"  style="padding: 5px 0px 7px 0px;"><input type="text" name="c_telephone" id="c_telephone" class="form-control no-border" placeholder="eg. 354-5973" maxlength="15" value="<?php echo $c_telephone?>"></td>
                     </tr>
                     <tr>
                         <td width="30%" style="padding: 5px 0px 7px 0px;">Full Address:<font color="red">*</font></td>
@@ -912,16 +910,13 @@
 
 <script type='text/javascript'>
     var jsonCity = <?php echo $json_city;?>;
-    function isNumberKeyAndDash(evt)
-    {
-        var charCode = (evt.which) ? evt.which : event.keyCode
-        if (charCode != 45  && charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
-        return true;
-    }
 </script>
 
-<script type='text/javascript' src='/assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.payment_review_responsive.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
