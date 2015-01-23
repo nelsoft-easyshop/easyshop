@@ -22,3 +22,4 @@ return $config;
 
 /* End of file aws.php */
 /* Location: ./application/config/param/aws.php */
+
