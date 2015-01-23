@@ -24,6 +24,15 @@ module.exports = function (grunt) {
                 src: 'web/assets/css/bootstrap.css',
                 dest: 'web/assets/css/bootstrap.min.css'
             },
+            combine_css:{
+                files:{
+                    'web/assets/css/min-easyshop.feeds.css':
+                        ['web/assets/css/bootstrap.css', 
+                        'web/assets/css/bootstrap-mods.css',
+                        'web/assets/css/style.css',
+                        'web/assets/css/responsive_css.css'],
+                }
+            },
         },
         uglify : {
             combine_js: {
