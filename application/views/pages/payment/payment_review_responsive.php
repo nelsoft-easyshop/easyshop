@@ -191,11 +191,11 @@
                                             <br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="2"  class="paypal">
-                                                <img src="/assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
+                                                <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
                                                 <span></span>
                                                 </a>
                                             </div>
-                                            <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div>
+                                            <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div>
                                         <?php else: ?>
                                             <span><strong>NOTE: one or more of your chosen items are not available for paypal.</strong></span>
                                             <table width="100%" class="table font-12">
@@ -252,7 +252,7 @@
                                                 <span></span>
                                                 </a>
                                             </div>
-                                            <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div> 
+                                            <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
                                         <?php else: ?>
                                             <span><strong>NOTE: one or more of your chosen items are not available for paypal.</strong></span>
                                             <table width="100%" class="table font-12">
@@ -295,7 +295,7 @@
                                 <div id="dragonpay" class="payment_inner_content">
                                     <?php if($dragonpaysuccess): ?>
                                         
-                                           <img src="/assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto;">
+                                           <img src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto;">
                                            <br><br><br>
                                             <p class="chck_privacy">
                                                 <input type="checkbox" checked id="chk_dp" name='chk_dp'>
@@ -566,11 +566,11 @@
                                                         <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's<a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                                         <div class="paypal_button">
                                                             <a style="cursor:pointer" data-type="2"  class="paypal">
-                                                            <img class="img-responsive" src="/assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
+                                                            <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
                                                             <span></span>
                                                             </a>
                                                         </div>
-                                                        <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div> 
+                                                        <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
                                                     <?php else: ?>
                                                         <span style="font-size: 10px;"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
                                                         <table width="100%" class="table font-12">
@@ -629,7 +629,7 @@
                                                             <span></span>
                                                             </a>
                                                         </div>
-                                                        <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div> 
+                                                        <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
                                                     <?php else: ?>
                                                         <span style="font-size: 10px;"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
                                                         <table width="100%" class="table font-12">
@@ -673,7 +673,7 @@
                                         <?php if($key == 'dragonpay'): ?>
                                             <div id="dragonpay">
                                                 <?php if($dragonpaysuccess): ?>
-                                                    <img class="img-responsive" src="/assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
+                                                    <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
                                                     <br><br><br>
                                                     <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_dp" name='chk_dp'> I acknowledge I have read and understood Easyshop.ph's <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p>
                                                   

@@ -2,6 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+    
+use \Easyshop\Upload\AssetsUploader as AssetsUploader;
 
 /**
  *  Memberpage controller
@@ -549,8 +551,6 @@ class Memberpage extends MY_Controller
 
                 $soldTransactions["transactions"][] = $data;
             }
-
-
         }
 
         $this->load->view("pages/user/printselltransactionspage", $soldTransactions);
@@ -1061,6 +1061,7 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
+
     /**
      *  Used to send email / SMS when verifying email or mobile
      *  NOTE: ONLY EMAIL FUNCTIONALITY IS USED AT THE MOMENT

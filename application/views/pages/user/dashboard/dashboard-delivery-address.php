@@ -1,6 +1,6 @@
 <div class="div-tab ">
     <div class="div-delivery-setup delivery-setup-loading" style="text-align:center">
-        <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+        <img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG.gif"/>
         <p class="loading-text">Loading your delivery address info...</p>
     </div>
     <div id="deliverAddressDiv" style="display:none;">

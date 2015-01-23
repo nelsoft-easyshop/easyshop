@@ -2,8 +2,8 @@
     <div class="media table-bordered mrgn-bttm-8 product">
         <div class="col-md-9 col-sm-9 media-sub media-content">
             <div class="pull-left media-image">
-                <a  href="<?php echo "/item/" . $prod['slug']?>">
-                    <img class="media-object" src="/<?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
+                <a href="<?php echo "/item/" . $prod['slug']?>">
+                    <img class="media-object" src="<?php echo getAssetsDomain() ?><?php echo $prod['path'] . "categoryview/" . $prod['file']?>">
                 </a>
             </div>
             <div class="media-body">

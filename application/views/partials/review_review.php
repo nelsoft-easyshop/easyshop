@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-sm-2 col-xs-12 col-user-image" align="center">
         <a href="#"><div class="div-user-image">
-            <img src="<?=$userPic?>" class="img-user"/>
+            <img src="<?php echo getAssetsDomain().'.'.$userPic?>" class="img-user"/>
         </div></a>
         <div class="clear"></div>
         <a href="#"><p class="p-username"><?=html_escape($reviewUsername)?></p></a>
@@ -16,7 +16,7 @@
                         <td>
                             <a href="#">
                                 <div class="div-user-image">
-                                    <img src="<?=$userPic?>" class="img-user"/>
+                                    <img src="<?php echo getAssetsDomain().'.'.$userPic?>" class="img-user"/>
                                 </div>
                             </a>
                         </td>

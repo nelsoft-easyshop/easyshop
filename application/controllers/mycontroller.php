@@ -117,7 +117,7 @@ class Mycontroller extends MY_Controller
 
 		$successCount = $emailService->setRecipient('stephenjanz@yahoo.com')
 									->setSubject("Test Email")
-									->setMessage("Test image file <img src='img_logo.png'>", "/assets/images/img_logo.png")
+									->setMessage("Test image file <img src='img_logo.png'>", getAssetsDomain()."assets/images/img_logo.png")
 									->sendMail();
 
 		print('successfully sent ' . $successCount . " emails");
@@ -129,7 +129,7 @@ class Mycontroller extends MY_Controller
 
 		$boolQueueStat = $emailService->setRecipient('stephenjanz@yahoo.com')
 									->setSubject("Test Email")
-									->setMessage("Test image file <img src='img_logo.png'>", "/assets/images/img_logo.png")
+									->setMessage("Test image file <img src='img_logo.png'>", getAssetsDomain()."/assets/images/img_logo.png")
 									->queueMail();
 
 		if($boolQueueStat){
@@ -142,4 +142,3 @@ class Mycontroller extends MY_Controller
 	
 }
 
-?>

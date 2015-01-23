@@ -91,12 +91,12 @@
                             <tr>
                                 <td>
                                     <a href="https://www.facebook.com/EasyShopPhilippines">
-                                        <img src="/assets/images/landingpage/templates/facebook.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="<?php echo getAssetsDomain()?>assets/images/landingpage/templates/facebook.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
                                     <a href="https://twitter.com/EasyShopPH">
-                                        <img src="/assets/images/landingpage/templates/twitter.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="<?php echo getAssetsDomain()?>assets/images/landingpage/templates/twitter.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                             </tr>

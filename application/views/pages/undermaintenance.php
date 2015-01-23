@@ -20,7 +20,7 @@
     <style>
         .bg_mid{
             background-color: #fff;
-            background-image: url('/assets/images/landingpage/bg_mid.png'), url('/assets/images/landingpage/bg_mid_back.png');
+            background-image: url('<?php echo getAssetsDomain(); ?>assets/images/landingpage/bg_mid.png'), url('<?php echo getAssetsDomain(); ?>assets/images/landingpage/bg_mid_back.png');
             background-repeat: no-repeat, repeat;
             background-position: top center, top left;
             min-height: 45.063em;
@@ -46,7 +46,7 @@
         }
         
         .span_bg{
-            background-image: url('/assets/images/global_sprite.png');
+            background-image: url('<?php echo getAssetsDomain(); ?>assets/images/global_sprite.png');
             background-repeat: no-repeat;
             display: inline-block;
             vertical-align: middle;
@@ -110,7 +110,7 @@
 
         <section class='bg_mid'>
             <div class='content_container'>
-                <img class='temporarily_down' src = '/assets/images/under_maintenance.png'/>
+                <img class='temporarily_down' src = '<?php echo getAssetsDomain() ?>assets/images/under_maintenance.png'/>
                 <br/> <br/>
                 We are performing scheduled maintenance.<br/><br/>
                 <span class='highlight'>We'll be back very soon. </span><br/><br/>
@@ -119,10 +119,10 @@
                 For updates, please check our facebook and twitter pages. <br/><br/>
                 <p class="img_social_media">
                     <a style='margin-right:50px;' href="<?php echo $facebook; ?>" target="_blank">
-                        <img src="/assets/images/img_social_media_facebook.png" alt="facebook">
+                        <img src="<?php echo getAssetsDomain() ?>assets/images/img_social_media_facebook.png" alt="facebook">
                     </a>
                     <a class="" href='<?php echo $twitter; ?>' target="_blank">
-                        <img src="/assets/images/img_social_media_twitter.png" alt="Twitter">
+                        <img src="<?php echo getAssetsDomain() ?>assets/images/img_social_media_twitter.png" alt="Twitter">
                     </a>
                 </p>
                 <br>

@@ -19,7 +19,7 @@
             <div class="col-md-9">
                 <div class="followers-container">
                     <div class="loading_div" style="text-align:center;display:none;">
-                        <img src="/assets/images/orange_loader.gif">
+                        <img src="<?php echo getAssetsDomain() ?>assets/images/orange_loader.gif">
                     </div>
                     <div id="follower-container" class="row" style="min-height: 675px;">
                         <?php if(intval($followerCount) <= 0): ?>

@@ -7,8 +7,8 @@
             <div class="purchased-items-container carousel-wrapper">
                     <div class="category-title-container">
                         <span class="pull-left">
-                            <img src="/assets/images/categories/icon-categories/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category">
-                            <img src="/assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category-mobile">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/categories/icon-categories/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/categories/icon-flats/<?php echo $categorySection['category']->getSlug()?>.png" class="img-category-mobile">
                         </span>
                         <p>
                             <span>
@@ -58,7 +58,7 @@
 
                                             <!--hover image-->
                                             <?php if($secondaryImage): ?>
-                                                <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo $secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
+                                                <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo  getAssetsDomain().$secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
                                                     
                                                 </div>
                                                 <div class="div-rec-product-image main-prod-image">
@@ -66,7 +66,7 @@
                                                 <div class="div-rec-product-image">
                                             <?PHP endif; ?>
                                             <!--main image-->
-                                                    <div class="image-handler" style="background: #fff url(<?php echo $defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
+                                                    <div class="image-handler" style="background: #fff url(<?php echo  getAssetsDomain().$defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
                                         
                                                     </div>
                                                 </div>
@@ -121,7 +121,7 @@
                                                     <div class="store-logo-container ">
                                                         <div class="span-store-logo">
                                                             <a href="/<?php echo $product->getMember()->getSlug() ?>">
-                                                                <img src="<?php echo $sellerimage ?>" class="img-store-logo"/>
+                                                                <img src="<?php echo getAssetsDomain().'.'.$sellerimage ?>" class="img-store-logo"/>
                                                             </a>
                                                         </div>
                                                     </div>

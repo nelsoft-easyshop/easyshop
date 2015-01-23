@@ -8,7 +8,7 @@
                     <center>
                         <div class="div-user-image">
                             <a href="/<?php echo html_escape($feedback['userslug'])?>">
-                                <img src="<?php echo $feedback['userImage'];?>" class="img-user-image">
+                                <img src="<?php echo getAssetsDomain().'.'.$feedback['userImage'];?>" class="img-user-image">
                             <a/>
                         </div>
                         <p class="p-user-name">

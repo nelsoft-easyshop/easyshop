@@ -93,7 +93,7 @@
                                         <span><?php echo html_escape($subCatKey);?></span>
                                     </a>
                                     <?php if(!empty($subCatValue['item'])): ?>
-                                    <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="/<?=$popularProductImage; ?>"></span></span><br />
+                                    <span class="cat_carousel_img_con"><span class="cat_carousel_img"><img src="<?php echo getAssetsDomain(); ?><?=$popularProductImage; ?>"></span></span><br />
                                     <div class="cc2_prod_name">
                                         <a href="/item/<?=$popularProductSlug; ?>" title="<?PHP echo $popularProductName; ?>">
                                             <span class="color-gray font-12">
@@ -150,7 +150,7 @@
                                         <?php endif; ?>
                                     
                                         <span class="prod_img_container">
-                                                <img alt="<?php echo $productName; ?>" src="/<?=$productImagePath; ?>">
+                                                <img alt="<?php echo $productName; ?>" src="<?php echo getAssetsDomain(); ?><?=$productImagePath; ?>">
                                         </span>
                                     </span>
                                 </a>
@@ -243,7 +243,7 @@
                                     <td width="90px" class="v-align-top">
                                         <span class="prod_img_container">
                                              <a class="a-item-name" href="/item/<?=$productSlug; ?>"> 
-                                                <img alt="<?php echo $productName; ?>" src="/<?=$productImagePath; ?>">
+                                                <img alt="<?php echo $productName; ?>" src="<?php echo getAssetsDomain(); ?><?=$productImagePath; ?>">
                                             </a>
                                         </span>
                                     </td>
