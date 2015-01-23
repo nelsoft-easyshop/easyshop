@@ -40,6 +40,12 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.vendor-banner.css':
                         ['web/assets/css/chosen.min.css', 
                         'web/assets/css/jquery.Jcrop.min.css'],
+                    'web/assets/css/min-easyshop.header-new.css':
+                        ['web/assets/css/normalize.min.css', 
+                        'web/assets/css/bootstrap.css',
+                        'web/assets/css/main-style.css',
+                        'web/assets/css/vendorview.css',
+                        'web/assets/css/font-awesome/css/font-awesome.min.css']
                 }
             },
         },
