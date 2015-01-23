@@ -159,9 +159,10 @@ class MessageManager {
      * returns the valid host for chat messaging
      * @return string
      */
-    public function getChatHost() {
+    public function getChatHost()
+    {
         $host = trim($this->jsServerConfig['HOST']);
-        if($this->localConfig->isConfigFileExists()){
+        if($this->localConfig->isConfigFileExists()) {
             $configBaseUrl = $this->localConfig->getConfigValue('base_url');
             if(strlen($configBaseUrl) > 0) {
                 $host = $configBaseUrl;
@@ -180,8 +181,10 @@ class MessageManager {
 
     /**
      * returns the port for chat messaging
+     * @return int
      */
-    public function getChatPort() {
+    public function getChatPort()
+    {
         return trim($this->jsServerConfig['PORT']);
     }
 
