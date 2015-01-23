@@ -65,6 +65,16 @@ class NewHomeWebService extends MY_Controller
     }
 
     /**
+     * Returns Assets Link
+     * @return JSONP
+     */
+    public function getAssetsLink()
+    {
+        $this->config->load('assets', TRUE);
+        echo trim($this->config->item('assetsBaseUrl', 'assets'));             
+    }
+    
+    /**
      *  Removes mainSlides
      *  @return JSON
      */
