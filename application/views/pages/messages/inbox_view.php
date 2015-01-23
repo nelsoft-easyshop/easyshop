@@ -28,9 +28,9 @@
                         <div class="img-wrapper-div">
                             <span class="img-wrapper-span">
                             <?php if(reset($row)['status'] == "sender"): ?>
-                                <img data="<?=reset($row)['sender_img']?>" src="/<?php echo reset($row)['recipient_img']?>/60x60.png">
+                                <img data="<?php echo getAssetsDomain().'.'.reset($row)['sender_img']?>" src="/<?php echo reset($row)['recipient_img']?>/60x60.png">
                             <?php else: ?>
-                                <img data="<?=reset($row)['recipient_img']?>" src="/<?php echo reset($row)['sender_img']?>/60x60.png">
+                                <img data="<?php echo getAssetsDomain().'.'.reset($row)['recipient_img']?>" src="/<?php echo reset($row)['sender_img']?>/60x60.png">
                             <?php endif; ?>
                             <?php $span = (reset($row)['unreadConversationCount'] != 0 ? '('.reset($row)['unreadConversationCount'].')' : ""); ?>
                             </span>
@@ -57,16 +57,16 @@
     </div>
     <div id="msg_inbox_container" class = "msg_container">
         <div id="msg_field">
-            <!-- <img id="msg_loader" src="/assets/images/orange_loader.gif"> -->
+
         </div>
         <div id="msg_textarea">
             <textarea id="out_txtarea" placeholder="Write a message" class="ui-form-control"></textarea>
-            <button id="send_btn" data="">Reply</button><img src="/assets/images/horizontal_bar_loader.gif">
+            <button id="send_btn" data="">Reply</button><img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_bar_loader.gif">
         </div>
     </div>
 </div>
 <div id="modal-background">
-    <img src="/assets/images/horizontal_loading.gif">
+    <img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_loading.gif">
 </div>
 <div id="modal-container">
     <div id="modal-div-header">
@@ -91,6 +91,4 @@
 <?php else: ?>
     <script src="/assets/js/min/easyshop.inbox_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
-
-
 

@@ -17,7 +17,7 @@ class CSRF_Protection
      * @var string
      */
     private static $token_name = 'csrfname';
-    
+
     /**
      * Stores the token
      *
@@ -38,7 +38,7 @@ class CSRF_Protection
      * @var string[]
      */
     private $bypassFirstSegments = array("webservice", "mobile");
-    
+
     
     public function __construct()
     {
@@ -86,7 +86,7 @@ class CSRF_Protection
             $csrfConfig = $this->CI->config->item('csrf');
             
             $firstUrlSegment = reset($this->CI->uri->segment_array());
-
+            
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
                 show_error('Request was invalid. Selected file was too large. 1001', 400);
             }

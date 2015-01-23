@@ -99,7 +99,7 @@
                                                     <?php endif; ?>
                                                 
                                                     <span class="prod_img_container">
-                                                            <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
+                                                            <img alt="<?php echo $productName; ?>" src="<?php echo getAssetsDomain() ?><?php echo $productImagePath; ?>">
                                                     </span>
                                                 </span>
                                             </a>
@@ -185,7 +185,7 @@
                                         <td width="90px" class="v-align-top">
                                             <span class="prod_img_container">
                                                  <a class="a-item-name" href="/<?php echo "item/" . $productSlug; ?>"> 
-                                                    <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
+                                                    <img alt="<?php echo $productName; ?>" src="<?php echo getAssetsDomain() ?><?php echo $productImagePath; ?>">
                                                 </a>
                                             </span>
                                         </td>

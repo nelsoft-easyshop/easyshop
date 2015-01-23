@@ -395,6 +395,7 @@ class Home extends MY_Controller
         $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
             'form' => $form->createView(), 
             'ES_FILE_VERSION' => ES_FILE_VERSION,
+            'assetsDomain' => getAssetsDomain(),
             'isValid' => $isValid
             ));
 

@@ -110,7 +110,7 @@
         </div>
         
         <div class="div-store-setup store-setup-loading" style="text-align:center">
-            <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+            <img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG.gif"/>
             <p class="loading-text">Loading your theme and category list...</p>
         </div>
         

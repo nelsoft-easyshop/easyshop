@@ -11,6 +11,7 @@ $config = array(
                             'webservice',
                             'mobile',
                             'api',
+                            'extensions',
             ),
         );
         
