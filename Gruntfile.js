@@ -11,8 +11,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
                     'js/src/vendor/bootstrap-typeahead.min.js': 'bs-typeahead/js/bootstrap-typeahead.min.js',
-                    'js/src/vendor/socket.io': 'socket.io',
-                    'js/src/vendor/express': 'express'
+                    'js/src/socket.io': 'socket.io',
+                    'js/src/express': 'express'
                 }
             },
             stylesheets: {
@@ -94,7 +94,8 @@ module.exports = function (grunt) {
                              'web/assets/js/src/newhome.js'],
 
                     'web/assets/js/min/easyshop.inbox_view.js':
-                            ['web/assets/js/src/messaging.js'],
+                            ['web/assets/js/src/messaging.js',
+                            'web/assets/js/src/node_modules/socket.io/node_modules/socket.io-client/socket.io.js'],
 
                     'web/assets/js/min/easyshop.payment_review_responsive.js':
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
