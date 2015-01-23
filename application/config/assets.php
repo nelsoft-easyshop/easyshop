@@ -18,6 +18,11 @@ else{
     $config['assetsBaseUrl'] = "/";
 }
 
+/**
+ * Use the default assets base url for the mean time
+ *
+ */
+$config['assetsBaseUrl'] = "/";
 
 /* End of file assets.php */
 /* Location: ./application/config/assets.php */
