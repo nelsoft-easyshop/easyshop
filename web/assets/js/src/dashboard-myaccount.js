@@ -556,6 +556,7 @@
                     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
                 }
                 else {
+                    $("#verifiedEmail").css("display","none");
                     $("#errorIndicatoreVerify").css("display","block");
                     $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after 30 mins.");
                 }
