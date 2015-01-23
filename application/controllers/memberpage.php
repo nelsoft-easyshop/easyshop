@@ -1117,8 +1117,24 @@ class Memberpage extends MY_Controller
                 );
 
                 if($data['emailcount'] < 4 || $data['time'] > 30){
-                    $result = $this->register_model->send_email_msg($data['email'], $data['username'], $hash);
-                    if($result === 'success'){
+                    $parseData = [
+                        'user' => $data['username'],
+                        'hash' => $hash,
+                        'site_url' => site_url('register/email_verification')
+                    ];
+                    $imageArray = $this->config->config['images'];
+                    $imageArray[] = "/assets/images/appbar.home.png";
+                    $imageArray[] = "/assets/images/appbar.message.png";
+
+                    $this->emailNotification = $this->serviceContainer['email_notification'];
+                    $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);  
+
+                    $result = $this->accountManager->sendEmailVerification($data['email'],
+                                                                 $this->lang->line('registration_subject'),
+                                                                 $message,
+                                                                 $imageArray);
+
+                    if($result){
                         $temp['email'] = 1;
                     }
                     $this->session->set_userdata('cart_contents', array());
