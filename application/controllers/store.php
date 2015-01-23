@@ -812,7 +812,7 @@ class Store extends MY_Controller
                 , "hasNoItems" => (count($userProduct) > 0) ? false : true
                 , "subscriptionStatus" => $this->serviceContainer['user_manager']->getVendorSubscriptionStatus($viewerId, $arrVendorDetails['username'])
                 , "followerCount" => $followers['count']
-                , "snippetMarkUp" => $this->load->view('templates/seo/person_markup', $arrVendorDetails)
+                , "snippetMarkUp" => $this->load->view('templates/seo/person_markup', $arrVendorDetails, true)
             ); 
         $bannerData = array_merge($bannerData, $EsLocationLookupRepository->getLocationLookup());
 
