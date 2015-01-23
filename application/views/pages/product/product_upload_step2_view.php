@@ -498,7 +498,7 @@
             </div>
             <div id="question"></div>
             <div style="display:none" id="pop-image" class="simplemodal-container">
-                <h3>Add or remove image</h3>
+                <h1>Add or remove image</h1>
                 <div class="pop-image-remove-container">
                     <a class="remove-attr-image vrtcl-top" data-cnt='1' href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-trash"></span></a>
                 </div>
@@ -506,7 +506,7 @@
                     <a href="javascript:void(0)" class="attr-image"><img  src=""></a>
                 </div>
                 <div class="pd-tb-15 text-center">
-                    <a class="simplemodal-close" title="Close"><span class="orange_btn3 width-30p img-upload-save">Save</span></a>
+                    <a class="simplemodal-close" title="Close"><span class="img-upload-save btn btn-default-3">Save</span></a>
                 </div>
             </div>
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
