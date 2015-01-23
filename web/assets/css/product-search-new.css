@@ -156,7 +156,7 @@ html, body{
     width: 100%;
     margin-left: 10px;
     margin-right: 10px;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 }
 
 .search-item-container{
@@ -655,6 +655,43 @@ ul.list-category-search li:last-child > .search-category-link{
     color: #ffffff !important;
 }
 
+/* =============================================
+-----------------  Loading bar -----------------
+==============================================*/
+
+#loading-box {
+  padding: 4px;
+  background-color: #ff893a;
+  font-size:10px;
+  border-radius: 2px;
+  text-align: center;
+  color: #fff;
+}
+
+.loading-bar-container{
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-bottom:100px;
+}
+
+.loading-label{
+    text-align: center;
+    display: block;
+    font-weight: bold;
+    color: #565656;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.outer-progress-box{
+    display: inline-block;
+    width: 310px;
+    padding: 5px;
+    border-radius: 4px;
+    background: #4370cc;
+    position: relative;
+}
 /* =============================================
 -----------------  slider gallery --------------
 ==============================================*/
