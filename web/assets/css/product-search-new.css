@@ -634,6 +634,11 @@ ul.list-category-search li:last-child > .search-category-link{
     width: 100%;
 }
 
+/* =============================================
+-----------------  responsive view --------------
+==============================================*/
+
+
 @media (min-width: 768px) {
     .search-slider .slider1 .slide {
         width: 355px !important;
@@ -660,3 +665,24 @@ ul.list-category-search li:last-child > .search-category-link{
     .search-slider .slider1 .slide {
         margin-right: 0 !important;
     }
+}
+
+@media (max-width: 768px) {
+    .search-left-wing{
+        display: none;
+    }
+
+    #sticky-pagination{
+        width: 100%;
+    }
+
+    .col-search-item{
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    .search-results-container{
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+}

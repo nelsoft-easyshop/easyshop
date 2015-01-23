@@ -4,9 +4,9 @@
 
 <section class="bg-search-section color-default">
     <br>
-    <div class="container-non-responsive">
+    <div class="container">
         <div class="row">
-            <div class="col-xs-3">
+            <div class="col-md-3 search-left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default panel-left-wing border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
@@ -167,7 +167,7 @@
                 </div>
             </div>
             
-            <div class="col-xs-9">
+            <div class="col-md-9">
                 <div class="search-header">
                     <h5>
                     <strong>300</strong>
@@ -205,7 +205,7 @@
                         <?php
                             for($i=1; $i<=4; $i++){
                         ?>
-                        <div class="col-search-item col-xs-3">
+                        <div class="col-search-item col-sm-3 col-xs-6">
                             <div class="search-item-container">
                                 <a href="#" class="search-item-link-image">
                                     <div class="search-item-img-container" style="background: url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
@@ -301,7 +301,7 @@
                             </div>
                         </div>
                         
-                        <div class="col-search-item col-xs-3">
+                        <div class="col-search-item col-sm-3 col-xs-6">
                             <div class="search-item-container">
                                 <a href="#" class="search-item-link-image">
                                     <div class="search-item-img-container" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: cover;">
