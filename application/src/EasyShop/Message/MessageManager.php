@@ -171,6 +171,9 @@ class MessageManager {
         if (strpos($host, 'https://') !== false) {
             $host = str_replace('https:', '', preg_replace('{/}', '', $host));
         }
+        else if (strpos($host, 'http://') !== false) {
+            $host = str_replace('http:', '', preg_replace('{/}', '', $host));
+        }
 
         return $host;
     }
