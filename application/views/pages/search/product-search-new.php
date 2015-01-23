@@ -164,11 +164,11 @@
                 <div id="sticky-pagination">
                     <center>
                         <div class="row">
-                            <div class="col-md-12" id="myScrollspy" style="padding: 0px; background: #fff; display: none; "> 
+                            <div class="col-md-12" class="scrollSpyPage" id="myScrollspy" style="padding: 0px; background: #fff; display: none; "> 
                                 <?=$pagination; ?> 
                             </div> 
                         </div>
-                        <div id="simplePagination">
+                        <div id="simplePagination" class="scrollSpyPage">
                             <?=$pagination; ?>
                         </div>
                     </center>
