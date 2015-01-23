@@ -26,7 +26,7 @@
                             
                             
                                 <?php if($secondaryImagePath !== null): ?>
-                                <span class="span-img-wrapper" style="background: url(<?php echo getAssetsDomain().'.'.$secondaryImagePath;?>) center no-repeat; background-cover: cover;">
+                                <span class="span-img-wrapper" style="background: url(<?php echo getAssetsDomain().$secondaryImagePath;?>) center no-repeat; background-cover: cover;">
                                     <center>
                                         <div class="span-img-container">
                                         </div>
@@ -37,7 +37,7 @@
                                 
                 
                                 
-                                <div class="<?php echo $secondaryImagePath ? 'image-hover-none' : ''; ?> main-image" style="background: url(<?php echo getAssetsDomain().'.'.$productImagePath; ?>) no-repeat center; background-size: cover;">
+                                <div class="<?php echo $secondaryImagePath ? 'image-hover-none' : ''; ?> main-image" style="background: url(<?php echo getAssetsDomain().$productImagePath; ?>) no-repeat center; background-size: cover;">
                                     <center>
                                         <div class="span-img-container">
                                         </div>
