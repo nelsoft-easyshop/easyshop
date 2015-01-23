@@ -193,9 +193,11 @@ class Kernel
                                                         $httpRequest);        
         };
 
-        $container['message_manager'] = function ($c) use ($container) {
+        $jsServerConfig = require APPPATH . 'config/param/js_config.php';
+        $container['message_manager'] = function ($c) use ($container, $jsServerConfig) {
             $em = $container['entity_manager'];
-            return new \EasyShop\Message\MessageManager($em);
+            $localConfig = $container['local_configuration'];
+            return new \EasyShop\Message\MessageManager($em, $localConfig, $jsServerConfig);
         };
 
         // Paths

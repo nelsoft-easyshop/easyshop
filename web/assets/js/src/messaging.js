@@ -1,31 +1,40 @@
 (function ($) {
+    var $userInfo = $('#userInfo');
+    var $chatServer = $('#chatServer');
+    var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
+
     $(document).ready(function () {
         
         /* Register events */
-        easyshop.eventDispatcher.register('unreadMessages', function (unreadMessages) {
-            document.title = (unreadMessages.unread_msgs_count === 0 ? "Message | Easyshop.ph" : "Message (" + unreadMessages.unread_msgs_count + ") | Easyshop.ph");
-            if (unreadMessages.unread_msgs_count !== 0) {
-                onFocusReload(unreadMessages);
-            }
+        socket.on('send message', function( data ) {
+            onFocusReload(data.message);
         });
+        setAccountOnline($userInfo.data('store-name'));
     });
-    
+
+    var setAccountOnline = function(memberId) {
+        socket.emit('set account online', memberId);
+    };
+
     /**
      * @param {type} msgs
      * @returns {undefined}
      */
-    function onFocusReload(msgs) {
-        html = "";
+    function onFocusReload(msgs)
+    {
+        var html = "";
         var span = "";
-        D = msgs.messages;
-        $.each(D,function(key,val){
+        var message = msgs.messages;
+        $.each(message,function(key,val){
             var cnt = parseInt(Object.keys(val).length)- 1;
-            var Nav_msg = D[key][Object.keys(val)[cnt]]; //first element of object
+            var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
             if ($('#ID_'+Nav_msg.name).length) { //if existing on the conve
                 $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
                 $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
-                $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
-                $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
+                if (Nav_msg.unreadConversationCount != 0) {
+                    $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
+                    $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
+                }
                 if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
                     specific_msgs();
                     seened($('#ID_'+Nav_msg.name));
@@ -59,11 +68,7 @@
             $("#table_id a").first().addClass("Active");
         }
     }
-})(window.jQuery);
 
-
-(function($)
-{
     $(document).ready(function()
     {
         $('#table_id').dataTable({
@@ -152,7 +157,6 @@
 
     });
 
-})(jQuery);
 
 function Reload()
 {
@@ -234,11 +238,13 @@ function send_msg(recipient,msg, isOnConversation)
             $("#send_btn").hide();
         },
         data : {recipient:recipient,msg:msg,csrfname:csrftoken},
-        success : function(data)
+        success : function(resultMsg)
         {
+            data = resultMsg.message;
             $("#msg_textarea img").hide();
             $("#send_btn").show();
             if (data.success != 0) {
+                socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
                 $("#table_id tbody").empty();
                 onFocus_Reload(data)
                 if (isOnConversation) {
@@ -329,7 +335,7 @@ function specific_msgs()
 
 function onFocus_Reload(msgs)
 {
-    html = "";
+    var html = "";
     var span = "";
     D = msgs.messages;
     $.each(D,function(key,val){
@@ -467,3 +473,5 @@ function seened(obj)
         });
     }
 }
+
+})(jQuery);

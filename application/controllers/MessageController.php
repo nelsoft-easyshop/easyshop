@@ -42,7 +42,12 @@ class MessageController extends MY_Controller
             redirect('/', 'refresh');
         }
 
-        $messages = $this->messageManager->getAllMessage($this->userId);
+        $data = [
+            'result' => $this->messageManager->getAllMessage($this->userId),
+            'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId),
+            'chatServerHost' => $this->messageManager->getChatHost(),
+            'chatServerPort' => $this->messageManager->getChatPort()
+        ];
         $title = !isset($messages['unread_msgs']) || (int) $messages['unread_msgs'] === 0
             ? 'Messages | Easyshop.ph'
             : 'Messages (' . $messages['unread_msgs'] . ') | Easyshop.ph';
@@ -56,7 +61,7 @@ class MessageController extends MY_Controller
 
         $this->load->spark('decorator');
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/messages/inbox_view', ['result' => $messages ]);
+        $this->load->view('pages/messages/inbox_view', $data );
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
 
@@ -86,15 +91,7 @@ class MessageController extends MY_Controller
             $isSendingSuccesful = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
             if ($isSendingSuccesful) {
                 $messages = $this->messageManager->getAllMessage($this->userId);
-                $recipientMessages = $this->messageManager->getAllMessage($this->userId, true);
-
-                // TODO Add this to serviceContainer
-                $dc = new \EasyShop\WebSocket\Pusher\DataContainer();
-                $dc->set('messageCount', $recipientMessages['unread_msgs']);
-                $dc->set('unreadMessages', $recipientMessages);
-
-                $userPusher = $this->serviceContainer['user_pusher'];
-                $userPusher->push($receiverEntity->getIdMember(), $dc);
+                $recipientMessages = $this->messageManager->getAllMessage($receiverEntity->getIdMember(), true);
 
                 $emailRecipient = $receiverEntity->getEmail();
                 $emailSubject = $this->lang->line('new_message_notif');
@@ -120,7 +117,10 @@ class MessageController extends MY_Controller
                                    ->setSubject($emailSubject)
                                    ->setMessage($emailMsg, $imageArray)
                                    ->queueMail();
-                $result = $messages;
+                $result = [
+                    'message' => $messages,
+                    'recipientMessage' => $recipientMessages
+                ];
             }
         }
 
@@ -200,4 +200,5 @@ class MessageController extends MY_Controller
 
         redirect($redirectUrl ,'refresh');
     }
+
 }
