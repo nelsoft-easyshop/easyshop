@@ -850,6 +850,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function setSellerHead()
     {
+        $awsUploader = $this->serviceContainer['aws_uploader'];        
         $map = simplexml_load_file($this->file);        
         $action = $this->input->get("action");
         $slug = $this->input->get("slug");
@@ -897,6 +898,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
+                $result = $this->upload->data();                
                 $value = "/".$path_directory.$filename.'.'.$file_ext; 
 
                 if($action == "logo") {
@@ -906,7 +908,7 @@ class NewHomeWebService extends MY_Controller
                     $map->sellerSection->sellerBanner = $value;
                 }
 
-                if($map->asXML($this->file)) {
+                if($map->asXML($this->file) && ($awsUploader->uploadFile($result['full_path'],  ltrim($value,"/")))) {
                     return $this->output
                             ->set_content_type('application/json')
                             ->set_output($this->json);
