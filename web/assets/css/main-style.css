@@ -1985,6 +1985,10 @@ td.td-view.p-view2.color-default{
     display: none;
     font-weight: bold;
 }
+
+.close-hide{
+    display: none;
+}
 /*** end of Vendor style ***/
 
 /* =============================================

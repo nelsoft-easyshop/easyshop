@@ -68,7 +68,7 @@ function ReplaceNumberWithCommas(thisnumber){
         
     });
 
-    $('.tab_categories').on('click', function(){
+    $(document).on('click', ".tab_categories", function(e){
         var divId = $(this).attr('data-link');
         var pagingDiv = $(divId).find('.product-paging');
         var productCount = parseInt($(divId).attr('data-productcount'));
@@ -77,7 +77,13 @@ function ReplaceNumberWithCommas(thisnumber){
         $(divId).addClass('active').show();
 
         $('.tab_categories').find('.selected-marker').hide();
-        $(this).find('.selected-marker').show();
+
+        var htmlText = $(this).find('.catText').text();
+        $( ".catText" ).each(function(index) {
+            if(htmlText === $(this).text()) {
+                $(this).closest("li").find(".selected-marker").show();
+            }
+        });
 
         if(pagingDiv.length === 0 && productCount !== 0){
             ItemListAjax($(divId), 1);
@@ -290,7 +296,6 @@ function ItemListAjax(CatDiv,page)
 
     $(document).ready(function(){
         
-         $( "#category-list" ).clone(true).appendTo( ".categories-modal" );
         $( "#filter-list1" ).clone(true).appendTo( ".filter-modal" );
 
         $( "#toggle-cat" ).click(function() {
@@ -322,5 +327,19 @@ function ItemListAjax(CatDiv,page)
         
     });
     
+    var $window = $(window);
+
+    function checkWidthVendor() {
+        var windowsize = $window.width();
+        if (windowsize > 440) {
+            //if the window is greater than 440px wide then turn on jScrollPane..
+            $( ".close-hide" ).trigger("click");
+        }
+    }
+
+    // Execute on load
+    checkWidthVendor();
+    // Bind event listener
+    $window.resize(checkWidthVendor);
     
 })(jQuery);
