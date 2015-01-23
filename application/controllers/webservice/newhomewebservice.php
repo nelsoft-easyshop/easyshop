@@ -70,7 +70,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function getAssetsLink()
     {
-        $this->config->load('assets', TRUE);
+        $this->config->load('assets', true);
         echo trim($this->config->item('assetsBaseUrl', 'assets'));             
     }
     
