@@ -15,4 +15,4 @@ $configString = "    var fs = require('fs');
     ";
 
 file_put_contents($file, $configString);
-echo "config file is created in application/bin/js";
+echo "Config file is created in application/bin/js";
