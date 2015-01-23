@@ -1664,7 +1664,8 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .img-upload-save {
-    cursor: pointer;
+    max-width: 200px;
+    width: 30%;
 }
 
 .qty {
