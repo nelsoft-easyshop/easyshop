@@ -430,7 +430,7 @@
                 loadingimg.hide();
                 verifyspan.show();
                 $("#verifyEmail").css("display","none");    
-                if(obj === "success") {
+                if(obj) {
                     $("#verifiedEmail").css("display","block");                     
                     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
                 }
@@ -550,8 +550,8 @@
                 verifyspan.show();
                 $('img.changeEmailLoader').hide(); 
                 $('#changeEmailBtnAction').show();
-                $("#verifyEmail").css("display","none");    
-                if(obj === "success") {
+                $("#verifyEmail").css("display","none");   
+                if(obj) {
                     $("#verifiedEmail").css("display","block");                     
                     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
                 }
