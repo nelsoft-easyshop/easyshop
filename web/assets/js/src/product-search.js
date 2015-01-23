@@ -74,6 +74,28 @@
         });
     }
 
+    var createCookie = function(name, value, expires, path, domain)
+    {
+        var cookie = name + "=" + escape(value) + ";";
+
+        if (expires) { 
+            if(expires instanceof Date) { 
+                if (isNaN(expires.getTime()))
+                    expires = new Date();
+            }
+            else
+                expires = new Date(new Date().getTime() + parseInt(expires) * 1000 * 60 * 60 * 24);
+            cookie += "expires=" + expires.toGMTString() + ";";
+        }
+        if (path){
+            cookie += "path=" + path + ";";
+        }
+        if (domain){
+            cookie += "domain=" + domain + ";";
+        }
+        document.cookie = cookie;
+    }
+
     $('.btn-filter-price').click(function() { 
         var price1 = parseFloat($('#filter-from-price').val());
         var price2 = parseFloat($('#filter-to-price').val()); 
@@ -262,8 +284,7 @@
         var closestNumber;  
 
         closestNumber = getClosestNumber(existingArray, pageNumber);
-        if($('.search-results-container > #page-'+ pageNumber).length <= 0
-           || $('.search-results-container > #page-'+ pageNumber).hasClass('loading-row')){
+        if($('.search-results-container > #page-'+ pageNumber).length <= 0){
             appendString = '<div class="row loading-row" id="page-'+pageNumber+'">\
                 <div class="loading-bar-container">\
                     <span class="loading-label">\
@@ -274,7 +295,6 @@
                     </div>\
                 </div>\
             </div>';
-
             if(closestNumber < pageNumber){
                 $('.search-results-container > #page-'+ closestNumber).after(appendString);
             }
@@ -313,7 +333,7 @@
         var closestNumber; 
         closestNumber = getClosestNumber(existingArray, requestPage);
         if($('.search-results-container > #page-'+ requestPage).length <= 0
-             && requestPage > 1){
+            && requestPage > 1){
             existingArray.push(requestPage);
             appendString = '<div class="row loading-row" id="page-'+requestPage+'"></div>';
             if(closestNumber < requestPage){
@@ -324,6 +344,13 @@
             }
         }
     }
+
+    $(document).ready(function(){
+        if(window.location.hash) {
+            var hash = window.location.hash.substring(1);
+            $('.page-link[href="#'+hash+'"]').trigger('click'); 
+        } 
+    });
 
     $(document).on('click',".page-link",function () {
         var currentPageNumber = parseInt($(this).html().trim()); 
@@ -344,19 +371,21 @@
     });
 
     $( ".icon-list" ).click(function() { 
-        typeView = "list";
+        typeView = "list"; 
+        createCookie("view ", typeView, 30); 
         $(this).addClass("active-view");
         $(".icon-grid").removeClass("active-view");
         $('.search-results-container').animate({opacity:0},function(){
             $( ".search-results-container" ).addClass("list-search");
             $( ".col-search-item" ).removeClass("col-xs-3");
-             $( ".col-search-item" ).addClass("col-xs-12");
+            $( ".col-search-item" ).addClass("col-xs-12");
             $('.search-results-container').stop().animate({opacity:1},"fast");
         });
     });
     
     $( ".icon-grid" ).click(function() {
-        typeView = "grid";
+        typeView = "grid"; 
+        createCookie("view ", typeView, 30); 
         $(this).addClass("active-view");
         $(".icon-list").removeClass("active-view");
         $('.search-results-container').animate({opacity:0},function(){

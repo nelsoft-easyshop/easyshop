@@ -97,11 +97,11 @@ class product_search extends MY_Controller {
         $searchProductService = $this->serviceContainer['search_product']; 
         $search = $searchProductService->getProductBySearch($this->input->get()); 
         $typeOfView = trim($this->input->get('typeview'));
-        $currentPage = (int) $this->input->get('page');
+        $currentPage = (int) $this->input->get('page'); 
         $productViewData = [
             'products' => $search['collection'],
             'currentPage' => $currentPage + 1,
-            'typeOfView' => $typeOfView,
+            'isListView' => $typeOfView === 'list',
         ];
         $data['view'] = $this->load->view('partials/search-products', $productViewData, true); 
         $data['count'] = count($search['collection']);
@@ -147,6 +147,8 @@ class product_search extends MY_Controller {
             $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
         }
 
+        $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
+
         $headerData = [
             'title' => ($response['string'] === "" ? "Search" : $response['string']).' | Easyshop.ph'
         ];
@@ -154,7 +156,9 @@ class product_search extends MY_Controller {
         $productViewData = [
             'products' => $search['collection'],
             'currentPage' => 1,
+            'isListView' => $response['isListView'],
         ];
+
         $productView = $this->load->view('partials/search-products', $productViewData, true);
         
         $response['productView'] = $productView;

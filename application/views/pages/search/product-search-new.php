@@ -142,8 +142,8 @@
                             <tr>
                                 <td class="td-view p-view2 color-default">VIEW STYLE:</td>
                                 <td class="td-view" style="padding-top: 3px;">
-                                    <span class="gv fa fa-icon-view-grid fa-2x icon-view icon-grid active-view"></span>
-                                    <span class="lv fa fa-icon-view-list fa-2x icon-view icon-list"></span>
+                                    <span class="gv fa fa-icon-view-grid fa-2x icon-view icon-grid <?=$isListView ? '' : 'active-view'?>"></span>
+                                    <span class="lv fa fa-icon-view-list fa-2x icon-view icon-list <?=$isListView ? 'active-view' : ''?>"></span>
                                 </td>
                             </tr>
                         </tbody>
@@ -158,7 +158,7 @@
                     <div class="clear"></div>
                 </div>
                 
-                <div class="search-results-container">
+                <div class="search-results-container <?=$isListView ? 'list-search' : ''?>">
                     <?=$productView; ?> 
                 </div> 
 
@@ -291,7 +291,7 @@
 
 <div id="hidden-elements">
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
-    <input type="hidden" id="hidden-typeView" value="<?=(isset($_COOKIE['view']))?$_COOKIE['view']:'product'?>" />
+    <input type="hidden" id="hidden-typeView" value="<?=$isListView ? 'list' : 'grid'; ?>" />
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
     <input type="hidden" id="hidden-totalPage" value="<?=$totalPage; ?>" />
