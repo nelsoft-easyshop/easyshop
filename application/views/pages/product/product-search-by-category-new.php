@@ -19,7 +19,7 @@
     </div>
 </section>
 <section class="bg-search-section color-default search-parallax-container">
-    <div class="search-parallax">
+    <div id="parallax-1" class="search-parallax">
         <div id="parallax-3" class="banner-template-1">
             <!--<center>
                 <div class="banner-content">

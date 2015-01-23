@@ -742,6 +742,7 @@ ul.list-category-search li:last-child > .search-category-link{
     border: 3px solid #fff;
     border-radius: 90px;
     margin-top: 0;
+    top: 56px;
 }
 
 .search-slider .bx-controls-direction .bx-prev:before,
@@ -771,6 +772,8 @@ ul.list-category-search li:last-child > .search-category-link{
 }
 
 .search-parallax-container {
+    height: 436px;
+    overflow: hidden;
     position: relative;
 }
 
@@ -784,7 +787,7 @@ ul.list-category-search li:last-child > .search-category-link{
     background-image: url(../images/slide3.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: top center;
+    background-position: center top;
 }
 
 .search-slider .slider1 {

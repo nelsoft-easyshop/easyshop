@@ -33,11 +33,13 @@
     /* parallax control */
     function parallaxScroll(){
         var scrolled = $(window).scrollTop();
-        $('#parallax-1').css('top',(0-(scrolled*.25))+'px');
-        $('#parallax-2').css('top',(0-(scrolled*.50))+'px');
         var x1 = '0';
         var y2 = (0-(scrolled*.76));
-        $('#parallax-3').css({"background-position": x1+'px '+y2+'px'});
+        $('#parallax-3').css({
+            "background-position": x1+'px '+y2+'px', 
+            "top": (0-(scrolled*.25))+'px',
+            "height":(300+(scrolled*.25))+'px',
+        });
     }
 
     $(document).ready(function(){
