@@ -101,6 +101,7 @@ class product_search extends MY_Controller {
         $productViewData = [
             'products' => $search['collection'],
             'currentPage' => $currentPage + 1,
+            'typeOfView' => $typeOfView,
         ];
         $data['view'] = $this->load->view('partials/search-products', $productViewData, true); 
         $data['count'] = count($search['collection']);

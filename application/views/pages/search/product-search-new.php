@@ -160,17 +160,8 @@
                 
                 <div class="search-results-container">
                     <?=$productView; ?> 
-                </div>
-                <!--- Loading bar display
-                <div class="loading-bar-container">
-                    <span class="loading-label">
-                        Loading page 2 of 20
-                    </span> 
-                    <div class="outer-progress-box" style="">
-                        <div id="loading-box"></div>
-                    </div>
-                </div>
-                -->
+                </div> 
+
                 <div id="sticky-pagination">
                     <center>
                         <div class="row">
