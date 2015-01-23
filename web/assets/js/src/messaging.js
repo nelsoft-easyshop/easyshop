@@ -1,7 +1,7 @@
 (function ($) {
-    //must be on the header.
-    var socket = io.connect( 'https://local.easyshop:8000' );
     var $userInfo = $('#userInfo');
+    var $chatServer = $('#chatServer');
+    var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
 
     $(document).ready(function () {
         

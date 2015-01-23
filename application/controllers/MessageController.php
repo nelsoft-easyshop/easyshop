@@ -42,9 +42,11 @@ class MessageController extends MY_Controller
             redirect('/', 'refresh');
         }
 
-        $messages = [
+        $data = [
             'result' => $this->messageManager->getAllMessage($this->userId),
-            'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId)
+            'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId),
+            'chatServerHost' => $this->messageManager->getChatHost(),
+            'chatServerPort' => $this->messageManager->getChatPort()
         ];
         $title = !isset($messages['unread_msgs']) || (int) $messages['unread_msgs'] === 0
             ? 'Messages | Easyshop.ph'
@@ -59,7 +61,7 @@ class MessageController extends MY_Controller
 
         $this->load->spark('decorator');
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/messages/inbox_view', $messages );
+        $this->load->view('pages/messages/inbox_view', $data );
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
 

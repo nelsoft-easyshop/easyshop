@@ -84,6 +84,7 @@
     </div>
     <button id="modal_send_btn">Send</button>
     <input type="hidden" id="userInfo" data-store-name="<?=html_escape($userEntity->getStoreName())?>">
+    <input type="hidden" id="chatServer" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>">
 </div>
 
 
