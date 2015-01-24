@@ -1196,7 +1196,7 @@ var extensionList = [];
 var imageCollection = [];
 var widthRatio = 445;
 var heightRatio = 538;
-var totalCropImage
+var totalCropImage;
 
 (function($) {
   
@@ -1243,8 +1243,7 @@ var totalCropImage
                     var x1 = imgWidth / 2 - widthRatio / 2; 
                     var x2 = x1 + widthRatio; 
                     var y1 = 0;
-                    var y2 = imgHeight;
-                    console.log('sadsad');
+                    var y2 = imgHeight; 
                     $('#crop-image-main').dialog({
                         resizable: false,
                         height: 600,
