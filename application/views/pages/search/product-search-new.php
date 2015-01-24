@@ -13,41 +13,23 @@
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
                                 <a id="toggle-cat" class="a-category" data-parent="#category">
-                                    <?=isset($getParameter['category']) ? 'SUB-CATEGORIES' : 'MAIN-CATEGORIES'; ?>
-                                    
+                                    MAIN-CATEGORIES
                                 </a>
                             </h4>
                         </div>
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body no-padding">
                                 <ul class="list-unstyled list-category">
-                                    <a href="#" class="color-default tab_categories">
-                                        <li>
-                                            <span style="display: " class="fa fa-caret-right active-category selected-marker"></span>
-                                            Watches (75)
-                                        </li>
-                                    </a>
-                                    <a href="#" class="color-default tab_categories">
-                                        <li>
-                                            Diamonds &amp; Gems (24)
-                                        </li>
-                                    </a>
-                                    <a  href="#" class="color-default tab_categories">
-                                        <li>
-                                            Watch, Parts, Tools &amp; Guides (23)
-                                        </li>
-                                    </a>
-                                    <a  href="#" class="color-default tab_categories">
-                                        <li>
-                                            Engagement &amp; Wedding Jewellery (54)
-                                        </li>
-                                    </a>
-                                    <a href="#" class="color-default tab_categories">
-                                        <li>
-                                            Fashion Jewellery (103)
-                                        </li>
-                                    </a>
-                                    
+                                    <?php foreach ($categories as $category): ?>
+                                        <a href="javascript:void(0)" data-head='category' data-value='<?=$category->getIdCat();?>' class="color-default tab_categories cbx">
+                                            <li>
+                                                <?php if($categorySelected === $category->getIdCat()): ?>
+                                                    <span style="display: " class="fa fa-caret-right active-category selected-marker"></span>
+                                                <?php endif; ?>
+                                                <?=html_escape($category->getName());?> 
+                                            </li>
+                                        </a>
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
                         </div>
@@ -71,9 +53,9 @@
                                         <select id="filter-condition" class="select-filter">
                                             <option value="">-- Select Condition --</option>
                                             <?php foreach ($availableCondition as $condition): ?>
-                                            <option value="<?=html_escape($condition);?>" <?=(isset($getParameter['condition']) && strtolower($condition) === strtolower($getParameter['condition'])) ? 'selected="true"' : '';?> >
-                                                <?=html_escape($condition);?>
-                                            </option>
+                                                <option value="<?=html_escape($condition);?>" <?=(isset($getParameter['condition']) && strtolower($condition) === strtolower($getParameter['condition'])) ? 'selected="true"' : '';?> >
+                                                    <?=html_escape($condition);?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </li>
@@ -111,12 +93,12 @@
                                         <p class="p-filter-name">By <?=html_escape($attrName); ?></p>
                                         <ul class="list-unstyled">
                                             <?php foreach ($attrListValue as $value):?>
-                                            <li class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox cbx" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
-                                                    <?= html_escape(ucfirst($value));?>
-                                                </label>
-                                            </li>
+                                                <li class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox cbx" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
+                                                        <?= html_escape(ucfirst($value));?>
+                                                    </label>
+                                                </li>
                                             <?php endforeach; ?>
                                         </ul>
                                     </li> 
@@ -216,71 +198,16 @@
             <div class="col-md-5">
                 <h4>Browse our categories here:</h4>
                 <ul class="list-category-search">
-                    <li>
-                        <a href="#" class="search-category-link">
-                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);">
-                                
-                            </span>
-                            <span class="search-category-name">Clothing &amp; Accessories</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="search-category-link">
-                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);">
-                                
-                            </span>
-                            <span class="search-category-name">Electronics &amp; Gadgets</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="search-category-link">
-                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);">
-                                
-                            </span>
-                            <span class="search-category-name">Clothing &amp; Accessories</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="search-category-link">
-                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);">
-                                
-                            </span>
-                            <span class="search-category-name">Electronics &amp; Gadgets</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="search-category-link">
-                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);">
-                                
-                            </span>
-                            <span class="search-category-name">Clothing &amp; Accessories</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="search-category-link">
-                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);">
-                                
-                            </span>
-                            <span class="search-category-name">Electronics &amp; Gadgets</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="search-category-link">
-                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);">
-                                
-                            </span>
-                            <span class="search-category-name">Clothing &amp; Accessories</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="search-category-link">
-                            <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);">
-                                
-                            </span>
-                            <span class="search-category-name">Electronics &amp; Gadgets</span>
-                        </a>
-                    </li>
-                    
+                    <?php foreach ($categories as $category): ?>
+                        <li>
+                            <a href="/category/<?=$category->getSlug(); ?>" class="search-category-link">
+                                <span class="search-category-icon" style="background: url(/assets/<?=$category->getImage(); ?>);">
+                                    
+                                </span>
+                                <span class="search-category-name"><?=html_escape($category->getName());?></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
         </div>

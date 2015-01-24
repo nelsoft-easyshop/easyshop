@@ -114,8 +114,10 @@ class product_search extends MY_Controller {
      */
     public function searchfaster()
     {
-        if(trim($this->input->get('q_str')) === "" 
-           && (int) trim($this->input->get('category')) === EsCat::ROOT_CATEGORY_ID){
+        if(trim($this->input->get('q_str')) === ""
+           && (int) trim($this->input->get('category')) === EsCat::ROOT_CATEGORY_ID
+           || trim($this->input->get('q_str')) === ""
+              && !$this->input->get('category')){
             redirect('cat/all');
         } 
 
@@ -140,13 +142,13 @@ class product_search extends MY_Controller {
         ];
         $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
 
-        if($search['count'] <= 0){
-            $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                       ->findBy(['parent' => EsCat::ROOT_CATEGORY_ID]);
-            $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
-            $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
-        }
-
+        $category = EsCat::ROOT_CATEGORY_ID; 
+        $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                   ->findBy(['parent' => $category]);
+        $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
+        
+        $response['categorySelected'] = $this->input->get('category') ? (int) $this->input->get('category') : $category;
+        $response['categories'] = $categoryManager->setCategoryImage($protectedCategory);
         $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
 
         $headerData = [
