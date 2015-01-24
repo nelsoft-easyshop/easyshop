@@ -126,8 +126,8 @@ class product_search extends MY_Controller {
 
         $response['string'] = $this->input->get('q_str') ? trim($this->input->get('q_str')) : "";
         $parameter = $response['getParameter'] = $this->input->get();
-
         $search = $searchProductService->getProductBySearch($parameter);
+
         $response['products'] = $search['collection']; 
         $response['productCount'] = $search['count']; 
         $response['attributes'] = $searchProductService->getProductAttributesByProductIds($search['collection']);
@@ -160,15 +160,11 @@ class product_search extends MY_Controller {
             'currentPage' => 1,
             'isListView' => $response['isListView'],
         ];
-
-        $productView = $this->load->view('partials/search-products', $productViewData, true);
-        
-        $response['productView'] = $productView;
+        $response['productView']  = $this->load->view('partials/search-products', $productViewData, true);
 
         $this->load->spark('decorator');
         $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/search/product-search-new',$response);
-        //$this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
     
     /**
