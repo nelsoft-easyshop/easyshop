@@ -58,7 +58,7 @@
                                             <?php foreach ($productReview as $key => $value): ?> 
                                             <div class="row">
                                                 <div class="col-sm-2 col-xs-12 col-user-image" align="center">
-                                                    <a href="#"><div class="div-user-image">
+                                                    <a href="/<?=$value['reviewer_slug'];?>"><div class="div-user-image">
                                                         <img src="<?=$value['reviewer_avatar']; ?>" class="img-user"/>
                                                     </div></a>
                                                     <div class="clear"></div>
@@ -72,7 +72,7 @@
                                                             <table>
                                                                 <tr>
                                                                     <td>
-                                                                        <a href="#">
+                                                                        <a href="/<?=$value['reviewer_slug'];?>">
                                                                             <div class="div-user-image">
                                                                                 <img src="<?=$value['reviewer_avatar']; ?>" class="img-user"/>
                                                                             </div>
@@ -139,7 +139,7 @@
                                                         <?php foreach ($value['replies'] as $keyReply => $valueReply): ?>
                                                         <div class="row">
                                                             <div class="col-xs-2 col-user-image no-padding" align="center">
-                                                                <a href="#"><div class="div-user-image">
+                                                                <a href="/<?=$valueReply['reviewer_slug'];?>"><div class="div-user-image">
                                                                     <img src="<?=$valueReply['reviewer_avatar']; ?>" class="img-user"/>
                                                                 </div></a>
                                                                 <div class="clear"></div>
@@ -153,7 +153,7 @@
                                                                             <table>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <a href="#">
+                                                                                        <a href="/<?=$valueReply['reviewer_slug'];?>">
                                                                                             <div class="div-user-image">
                                                                                                 <img src="<?=$valueReply['reviewer_avatar']; ?>" class="img-user"/>
                                                                                             </div>
