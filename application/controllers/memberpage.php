@@ -480,14 +480,16 @@ class Memberpage extends MY_Controller
                                                                           );
 
         foreach ($transactions["transactions"] as $value) {
-            $data = [];
-            $productSpecs = "";            
             foreach ($value["product"] as $product) {
+                $data = [];
+                $productSpecs = "";
+
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
                      foreach($product["attr"] as $attr => $attrValue ) {
                         $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                      }
                 }
+
                 $data = [
                     "invoiceNo" => $value["invoiceNo"],
                     "productName" => $product["name"],
@@ -525,10 +527,9 @@ class Memberpage extends MY_Controller
                                                                       );  
 
         foreach ($transactions["transactions"] as $value) {
-            $data = [];   
-            $productSpecs = "";                 
             foreach ($value["product"] as $product) {
-
+                $data = [];   
+                $productSpecs = "";                 
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
                      foreach($product["attr"] as $attr => $attrValue ) {
                         $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
