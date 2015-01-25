@@ -90,7 +90,7 @@ class MessageController extends MY_Controller
 
                 // TODO Add this to serviceContainer
                 $dc = new \EasyShop\WebSocket\Pusher\DataContainer();
-                $dc->set('messageCount', $recipientMessages['unread_msgs']);
+                $dc->set('messageCount', $recipientMessages['unread_msgs_count']);
                 $dc->set('unreadMessages', $recipientMessages);
 
                 $userPusher = $this->serviceContainer['user_pusher'];
