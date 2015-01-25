@@ -84,7 +84,6 @@
                     url: "/login/authenticate",
                     data: $(form).serializeArray(),
                     success:function(data){
-                
                         if(data.timeoutLeft >= 1){
                             $("p#lockoutDuration").html("Timeout Remaining: " + data.timeoutLeft);
                             $("#failed-login").show();
@@ -139,7 +138,12 @@
                                 }
                             }
                         }
-                    }
+                    },
+                    error: function(xhr, error) {
+                        $('#loading_img').hide();
+                        $('#login').show();
+                        alert('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');
+                    }            
                 });
                 return false;
             }

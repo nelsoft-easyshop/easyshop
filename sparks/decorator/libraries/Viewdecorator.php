@@ -10,12 +10,19 @@
  * @author Chris Schmitz <ccschmitz@gmail.com>
  *
  */
-class Viewdecorator extends MY_Controller 
+class Viewdecorator
 {
+    /**
+     * The DI Container array
+     *
+     * @var mixed
+     */
+    protected $serviceContainer;
 
     public function __construct()
     {
-        parent::__construct();        
+        $CI =& get_instance();
+        $this->serviceContainer = $CI->kernel->serviceContainer;
     }
     
     /**
