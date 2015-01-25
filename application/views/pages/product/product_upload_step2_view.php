@@ -2,6 +2,8 @@
 <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
 <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
 <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
 <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
 <script type="text/javascript">
     var af = new Array();
@@ -63,6 +65,7 @@
                 <input type="hidden" class="arrayNameOfFiles" name="arraynameoffiles">
                 <input type="hidden" class="filescnttxt" name="filescnttxt">
                 <input type="hidden" class="afstart" id="afstart" name="afstart">
+                <input type="hidden" class="coordinates" id="coordinates" name="coordinates">
                 <div id="inputList" class="inputList"></div>
             </form> 
 
@@ -75,6 +78,7 @@
             );
             echo form_open('productUpload/uploadimageOther', $attr);
             ?>
+                <input type="hidden" class="coordinatesOther" id="coordinatesOther" name="coordinates">
                 <input type="file" class="attr-image-input" accept="image/*" style="left: -9999px;position: absolute;z-index: -1900;" name="attr-image-input" >
             </form> 
 
@@ -430,7 +434,7 @@
                                                                 <span class="spanSelect<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                     <select disabled id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                         <?php foreach ($value as $key2 => $value2): ?>
-                                                                            <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == html_escape($value2['value_name'])) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
+                                                                            <option data-image="<?=$value2['img_path']?>" <?php echo ($valueq['data'][$key] == html_escape($value2['value_name'])) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" value="<?=html_escape($value2['value_name'])?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
                                                                         <?php endforeach; ?>
                                                                     </select>     
                                                                     <a class="edit-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -458,7 +462,7 @@
                                                         <span class="spanSelect<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                             <select id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                 <?php foreach ($value as $key2 => $value2): ?>
-                                                                <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
+                                                                <option data-image="<?=$value2['img_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" value="<?=html_escape($value2['value_name'])?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
                                                             <a class="edit-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -494,7 +498,7 @@
             </div>
             <div id="question"></div>
             <div style="display:none" id="pop-image" class="simplemodal-container">
-                <h3>Add or remove image</h3>
+                <h1>Add or remove image</h1>
                 <div class="pop-image-remove-container">
                     <a class="remove-attr-image vrtcl-top" data-cnt='1' href="javascript:void(0)"><span style="color:red" class="glyphicon glyphicon-trash"></span></a>
                 </div>
@@ -502,8 +506,15 @@
                     <a href="javascript:void(0)" class="attr-image"><img  src=""></a>
                 </div>
                 <div class="pd-tb-15 text-center">
-                    <a class="simplemodal-close" title="Close"><span class="orange_btn3 width-30p img-upload-save">Save</span></a>
+                    <a class="simplemodal-close" title="Close"><span class="img-upload-save btn btn-default-3">Save</span></a>
                 </div>
+            </div>
+            <div style="display:none" id="crop-image-main" class="simplemodal-container">
+                    <img src="" id="imageTag">
+                    <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
+                    <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
+                    <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
+                    <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
             </div>
         </div>
     </div>
@@ -519,9 +530,11 @@
     var tempDirectory = '<?=(isset($tempdirectory)) ? $tempdirectory : '' ;?>';
     var combinationcnt = '<?=$cmbcounter;?>';  
     var isEdit =  '<?=(isset($is_edit)) ? "1" : "0" ?>';
+    var maxImageSize = parseInt('<?=$maxImageSize; ?>');
 </script>
 <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
 <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
+<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
 <script type='text/javascript' src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
 <script type="text/javascript" src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>"></script> 
 <script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>

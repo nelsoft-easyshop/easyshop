@@ -4,14 +4,18 @@ namespace EasyShop\Account;
 
 use \DateTime;
 use EasyShop\Entities\EsWebserviceUser;
+use EasyShop\Entities\EsVerifcode as EsVerifcode; 
 use Easyshop\Entities\EsMember;
 use Easyshop\Entities\EsStoreColor as EsStoreColor;
+use EasyShop\Entities\EsBanType as EsBanType;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
 
 class AccountManager
 {
+
+    const REMEMBER_ME_COOKIE_LIFESPAN_IN_SEC = 86500;
 
     /**
      * Entity Manager instance
@@ -88,7 +92,6 @@ class AccountManager
         $this->stringUtility = $stringUtility;
         $this->httpRequest = $httpRequest;
     }
-
 
     /**
      * Authenticate a web service client
@@ -195,8 +198,10 @@ class AccountManager
             }
         }
 
-        return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
-                'member' => $member];
+        return [
+            'errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
+            'member' => $member
+        ];
     
     }
     
@@ -225,7 +230,7 @@ class AccountManager
         $form->submit([ 'username' => $username,
                         'password' => $password,
                         'contactno' => $contactno,
-                        'email' => $email,
+                        'email' => $email
                     ]);
                     
         if ($form->isValid()) {
@@ -237,6 +242,8 @@ class AccountManager
             $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
             $storeColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
                                    ->find(EsStoreColor::DEFAULT_COLOR_ID);
+            $banType = $this->em->getRepository('EasyShop\Entities\EsBanType')
+                                ->find(EsBanType::NOT_BANNED);
             
             $member = new EsMember();
             $member->setUsername($validatedUsername);
@@ -250,15 +257,47 @@ class AccountManager
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             $member->setIsEmailVerify($isEmailVerify); 
-            $member->setStoreColor($storeColor); 
-
+            $member->setStoreColor($storeColor);  
+            $member->setBanType($banType);
+            
             $this->em->persist($member);
             $this->em->flush();
         }
-    
+
         return ['errors' => $this->formErrorHelper->getFormErrors($form),
                 'member' => $member];
     }
+
+    /**
+     * Stores member's verification code
+     *
+     * @param array $userData
+     * @return bool
+     */
+    public function storeMemberVerifCode($userData)
+    {
+
+        try{
+            $memberId = $this->em
+                              ->getRepository('EasyShop\Entities\EsMember')
+                              ->find($userData["memberId"]);
+
+            $verifCode = new EsVerifcode();     
+            $verifCode->setMember($memberId);
+            $verifCode->setEmailcode($userData["emailCode"]);
+            $verifCode->setMobilecode($userData["mobileCode"]);
+            $verifCode->setDate(new DateTime('now'));
+            $verifCode->setFpTimestamp(new DateTime('now'));
+            $verifCode->setEmailcount((int)$userData["email"]);
+            $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
+            $this->em->persist($verifCode);
+            $this->em->flush();
+            return true;
+        }
+        catch(\Doctrine\ORM\Query\QueryException $e) {
+            return false;
+        }
+    }    
     
     /**
      * Authentication implementation for accounts with old password hashing
@@ -319,6 +358,130 @@ class AccountManager
         return $result['hash'];
     }    
 
+    /**
+     * Authenticates a user via the remember me cookie
+     * 
+     * @param string $cookie
+     * @param string $ipAddress
+     * @param string $userAgent
+     * @param string $cisessionId
+     */
+    public function authenticateViaCookie($cookie, $ipAddress, $userAgent, $cisessionId)
+    {
+        $returnData = [
+            'isSuccessful' => false,
+        ];
+        if($cookie && $cookie !== ''){            
+            $rememberMeData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
+                                       ->findOneBy([
+                                            'token' => $cookie,
+                                            'lastIp' => $ipAddress,
+                                            'useragent' => $userAgent,
+                                        ]);
+            if($rememberMeData){
+                $member = $rememberMeData->getIdMember();
+                if($member){
+                    $newUserSession = $this->generateUsersessionId($member->getIdMember());
+                    $newToken = $this->createRememberMeHash($member->getIdMember(), $cisessionId);
+                    $member->setUsersession($newUserSession);
+                    $rememberMeData->setToken($newToken);
+                    $this->em->flush();
+                    $returnData['isSuccessful'] = true;
+                    $returnData['usersession'] = $newUserSession;
+                    $returnDatap['newCookie'] = $newToken;     
+                    $returnData['member'] = $member;
+                }
+            }
+        }
+        return $returnData;
+    }
 
+    /**
+     * Returns a unique usersession key
+     *
+     * @param integer $id
+     * @return string
+     */
+    public function generateUsersessionId($id)
+    {
+        return sha1($id.date("Y-m-d H:i:s"));
+    }
+
+    
+    /**
+     * Persists the remember-me cookie in to the database
+     *
+     * @param EasyShop\Entities\EsMember $member
+     * @param string $ipAddress
+     * @param string $userAgent
+     * @param string $ciSessionId
+     * @return string $newToken
+     */
+    public function persistRememberMeCookie($member, $ipAddress, $userAgent, $ciSessionId)
+    {
+        if(!$member){
+            return false;
+        }
+     
+        $memberId = $member->getIdMember();
+        $keepLoginData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
+                                  ->findOneBy(['idMember' => $member]);
+        if(!$keepLoginData){
+            $keepLoginData = new \EasyShop\Entities\EsKeeplogin();
+        }
+        $newToken = $this->createRememberMeHash($member->getIdMember(), $ciSessionId);
+        $keepLoginData->setIdMember($member);
+        $keepLoginData->setLastIp($ipAddress);
+        $keepLoginData->setUseragent($userAgent);
+        $keepLoginData->setToken($newToken);
+        $this->em->persist($keepLoginData);
+        try{
+            $this->em->flush();
+        }
+        catch(\Exception $e){
+            return false;
+        }
+        return $newToken;
+    }
+    
+    /**
+     * Creates the remember me hash
+     *
+     * @param integer $memberId
+     * @param string $cisessionId
+     * @return string
+     */
+    public function createRememberMeHash($memberId, $cisessionId)
+    {
+        return sha1($memberId.$cisessionId.date('Y-m-d H:i:s'));
+    }
+    
+    
+    /** 
+     * Destroys the remember me cookie from the database
+     *
+     * @param integer $memberId
+     * @param string $ipAddress
+     * @param string $useragent
+     * @param string $token
+     */
+    public function unpersistRememberMeCookie($memberId, $ipAddress, $useragent, $token)
+    {
+        $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+        if($member){
+            $rememberMeCookieData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
+                                         ->findOneBy([
+                                            'idMember' => $member,
+                                            'lastIp' => $ipAddress,
+                                            'useragent' => $useragent,
+                                            'token' => $token,
+                                        ]);
+            if($rememberMeCookieData){
+                $this->em->remove($rememberMeCookieData);
+                $this->em->flush();
+            }
+        }
+    }
 
 }
+

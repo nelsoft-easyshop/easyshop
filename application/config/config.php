@@ -1,5 +1,8 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+require_once __DIR__ . '/../src/EasyShop/Core/Configuration/Configuration.php';
+$configService = new EasyShop\Core\Configuration\Configuration();
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -8,17 +11,33 @@
 | URL to your CodeIgniter root. Typically this will be your base URL,
 | WITH a trailing slash:
 |
-|	http://example.com/
+|   http://example.com/
 |
 | If this is not set then CodeIgniter will guess the protocol, domain and
 | path to your installation.
 |
-| The base_url setting is ignored here. base_url is set in the constructor of the super
-| class MY_controller in ./application/core/MY_controller
-| - Sam Gavinio
-|
+| The base_url variable defined in config.php will take precedence over anything.
+| It is advised that you set this otherwise the application will attempt to
+| guess the application's base URL. This does not always work so it's better to
+| to just set in config.php in the root of the application
 */
-$config['base_url']	= 'https://localhost/';
+
+$protocol = 'http';
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+    $protocol .= 's'; 
+}
+
+$serverName = array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : htmlentities(php_uname('n'));
+$baseUrl = $protocol.'://'.$serverName.'/';
+
+if($configService->isConfigFileExists()){
+    $configBaseUrl = $configService->getConfigValue('base_url');
+    if(strlen($configBaseUrl) > 0){
+        $baseUrl = $configBaseUrl;
+    }
+}
+
+$config['base_url'] = $baseUrl;
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -249,15 +268,15 @@ $config['encryption_key'] = 'TempOraRy_KeY_12272013_bY_Sam*?!';
 | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_cookie_name']		= 'ci_session';
-$config['sess_expiration']		= 14400;
-$config['sess_expire_on_close']	= TRUE;
-$config['sess_encrypt_cookie']	= FALSE;
-$config['sess_use_database']	= TRUE;
-$config['sess_table_name']		= 'ci_sessions';
-$config['sess_match_ip']		= FALSE;
-$config['sess_match_useragent']	= FALSE;
-$config['sess_time_to_update']	= 300;
+$config['sess_cookie_name']     = 'ci_session';
+$config['sess_expiration']      = 14400;
+$config['sess_expire_on_close'] = false;
+$config['sess_encrypt_cookie']  = false;
+$config['sess_use_database']    = true;
+$config['sess_table_name']      = 'ci_sessions';
+$config['sess_match_ip']        = false;
+$config['sess_match_useragent'] = false;
+$config['sess_time_to_update']  = 300;
 
 /*
 |--------------------------------------------------------------------------

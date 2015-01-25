@@ -752,6 +752,7 @@ class payment_model extends CI_Model
         $sth->bindParam(':order_id', $temp['order_id']);
         $sth->bindParam(':order_status', $temp['order_status']);
         $sth->bindParam(':comment', $temp['comment']);
+        $sth->bindParam(':dateadded', date('Y-m-d H:i:s'),PDO::PARAM_STR); 
         $result = $sth->execute();
         
         return $result;
@@ -764,6 +765,7 @@ class payment_model extends CI_Model
         $sth->bindParam(':order_product_id', $temp['order_product_id']);
         $sth->bindParam(':order_product_status', $temp['order_product_status']);
         $sth->bindParam(':comment', $temp['comment']);
+        $sth->bindParam(':dateadded', date('Y-m-d H:i:s'),PDO::PARAM_STR); 
         $result = $sth->execute();
         
         return $result;

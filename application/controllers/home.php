@@ -7,7 +7,6 @@ if (!defined('BASEPATH')){
 class Home extends MY_Controller 
 {
  
-    
     /**
      * Number of feeds item per page
      *
@@ -20,7 +19,7 @@ class Home extends MY_Controller
      * Load class dependencies
      *
      */
-    function __construct() 
+    public function __construct() 
     {
         parent::__construct();
     }
@@ -31,54 +30,40 @@ class Home extends MY_Controller
      * @return View
      */
     public function index() 
-    {
-        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
-        $data = array(
+    {  
+        $view = $this->input->get('view') ? $this->input->get('view') : null;
+        $memberId = $this->session->userdata('member_id');
+        $headerData = [
+            'memberId' => $memberId,
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
-        );
+        ];
+        
+        if( $memberId && $view !== 'basic'){
+            $bodyData = $this->getFeed();   
+            $bodyData['category_navigation'] = $this->load->view('templates/category_navigation', [
+                                                                    'cat_items' =>  $this->getcat()
+                                                                ], true );                                   
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));  
+            $this->load->view("templates/home_layout/layoutF",$bodyData);
+            $this->load->view('templates/footer', ['minborder' => true]);
 
-        $data = array_merge($data, $this->fill_header());
-
-        if( $data['logged_in'] && $view !== 'basic'){
-            $this->load->view('templates/header', $data);
-            $data = array_merge($data, $this->getFeed());            
-            $data['category_navigation'] = $this->load->view('templates/category_navigation',array('cat_items' =>  $this->getcat(),), TRUE );
-            $this->load->view("templates/home_layout/layoutF",$data);
-            $this->load->view('templates/footer', array('minborder' => true));
         }
         else{
-            $em = $this->serviceContainer["entity_manager"];
-            $categoryManager = $this->serviceContainer['category_manager']; 
-            $userManager = $this->serviceContainer['user_manager']; 
-            $esCatRepository = $em->getRepository('EasyShop\Entities\EsCat');
             $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
             $sliderSection = $homeContent['slider']; 
-            $homeContent['slider'] = array();
+            $homeContent['slider'] = [];
             foreach($sliderSection as $slide){
-                $sliderView = $this->load->view($slide['template'],$slide, TRUE);
-                array_push($homeContent['slider'], $sliderView);
+                $sliderView = $this->load->view($slide['template'],$slide, true);
+                $homeContent['slider'][] = $sliderView;
             }
-            $data['homeContent'] = $homeContent;
-
-            if($data['logged_in']){
-                $memberId = $this->session->userdata('member_id');
-                $data['logged_in'] = true;
-                $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                           ->find($memberId);
-                $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
-            }
-            $parentCategory = $esCatRepository->findBy(['parent' => 1]);
-            $data['parentCategory'] = $categoryManager->applyProtectedCategory($parentCategory, FALSE);
-
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $viewData['facebook'] = $socialMediaLinks["facebook"];
-            $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-            $this->load->view('templates/header_primary', $data);
+            $data['homeContent'] = $homeContent; 
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/home/home_primary', $data);
-            $this->load->view('templates/footer_primary', $viewData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
         }
 
     }
@@ -91,16 +76,14 @@ class Home extends MY_Controller
      */
     public function under_construction()
     {
-      $data = array('title' => 'Under Construction | Easyshop.ph',);
-      $data = array_merge($data, $this->fill_header());
-      $this->load->view('templates/header', $data);
-      $this->load->view('pages/underconstruction_view');
-
-      $socialMediaLinks = $this->getSocialMediaLinks();
-      $viewData['facebook'] = $socialMediaLinks["facebook"];
-      $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-      $this->load->view('templates/footer_full', $viewData);
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Under Construction | Easyshop.ph'
+        ];
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/underconstruction_view');
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
 
 
@@ -112,7 +95,8 @@ class Home extends MY_Controller
      */
     public function splash()
     {
-        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         $viewData['facebook'] = $socialMediaLinks["facebook"];
         $viewData['twitter'] = $socialMediaLinks["twitter"];      
         $this->load->view('pages/undermaintenance', $viewData);
@@ -137,19 +121,15 @@ class Home extends MY_Controller
      */
     public function policy()
     {
-        $data = array(
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Privacy Policy | Easyshop.ph',
             'metadescription' => "Read Easyshop.ph's Privacy Policy",
-        );
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        ];
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/policy');
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/footer_full', $viewData);
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
   
     /**
@@ -159,19 +139,16 @@ class Home extends MY_Controller
      */
     public function terms()
     {
-        $data = array(
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Terms and Conditions | Easyshop.ph',
             'metadescription' => "Read Easyshop.ph's Terms and Conditions",
-        );
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        ];
+
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/terms');
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/footer_full', $viewData);
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
     
     
@@ -182,19 +159,17 @@ class Home extends MY_Controller
      */
     public function faq()
     {
-        $data = array(
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'F.A.Q. | Easyshop.ph',
             'metadescription' => 'Get in the know, read the Frequently Asked Questions at Easyshop.ph',
-        );
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        ];
+    
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/faq');
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/footer_full', $viewData);
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+     
     }
     
     
@@ -205,14 +180,16 @@ class Home extends MY_Controller
      */
     public function contact()
     {
-        $data = array(
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Contact us | Easyshop.ph',
             'metadescription' => 'Get in touch with our Customer Support',
-        );
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        ];
+        
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/contact');
-        $this->load->view('templates/footer_full');
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
     
     
@@ -224,17 +201,18 @@ class Home extends MY_Controller
      */
     public function guide_buy()
     {
-        $data = array(
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'How to buy | Easyshop.ph',
             'metadescription' => 'Learn how to purchase at Easyshop.ph',
-        );
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $data['facebook'] = $socialMediaLinks["facebook"];
-        $data['twitter'] = $socialMediaLinks["twitter"];
-
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/web/how-to-buy');
+        ];
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
+        $bodyData['facebook'] = $socialMediaLinks["facebook"];
+        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/web/how-to-buy', $bodyData);
     }
     
     
@@ -245,17 +223,18 @@ class Home extends MY_Controller
      */
     public function guide_sell()
     {
-        $data = array(
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'How to sell | Easyshop.ph',
             'metadescription' => 'Learn how to sell your items at Easyshop.ph',
-        );
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $data['facebook'] = $socialMediaLinks["facebook"];
-        $data['twitter'] = $socialMediaLinks["twitter"];  
-
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/web/how-to-sell');
+        ];
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
+        $bodyData['facebook'] = $socialMediaLinks["facebook"];
+        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/web/how-to-sell', $bodyData);
     }
     
     
@@ -395,13 +374,12 @@ class Home extends MY_Controller
         $rules = $formValidation->getRules('bug_report');
 
         $form = $formFactory->createBuilder()
-        //->setAction('target_route')
-        ->setMethod('POST')
-        ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
-        ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
-        ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['image']))
-        ->add('submit', 'submit', array('label' => 'SEND'))
-        ->getForm();
+                            ->setMethod('POST')
+                            ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
+                            ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
+                            ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['image']))
+                            ->add('submit', 'submit', array('label' => 'SEND'))
+                            ->getForm();
 
         $emptyForm = clone $form;
 
@@ -420,19 +398,16 @@ class Home extends MY_Controller
             'isValid' => $isValid
             ));
 
-        $data = array(
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Report a Problem | Easyshop.ph',
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
-        );
+        ];
 
-        $data = array_merge($data, $this->fill_header()); 
-        $this->load->view('templates/header', $data);
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->output->append_output($formData); 
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];        
-        $this->load->view('templates/footer_full', $viewData);
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));        
     }
 
 

@@ -1,14 +1,15 @@
 <link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
 <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>  
 
+<?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
 
 <section>
     <div class="pos-rel" id="display-banner-view">
-        <div class="vendor-main-bg">
-            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
+        <div class="vendor-main-bg" style="background: url(<?=$bannerImage?>) center no-repeat; background-size: cover;">
+            
         </div>
-        <div class="main-container vendor-main pos-ab">
+        <div class="container main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
@@ -21,8 +22,8 @@
                 </div>
                 <div> 
                     <h4 class="storeName"><?=html_escape($arrVendorDetails['store_name'])?></h4>
-                    <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A"); ?></span></p>
-                    <p>
+                    <p class="contact-number-text"><strong>Contact No. :</strong><span id="contactContainer"><?php echo html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A"); ?></span></p>
+                    <p class="location-text">
                         <img src="/assets/images/img-icon-marker.png" alt="marker">
                         <?php if($hasAddress):?>
                             <span id="placeStock" class="cl-1"><strong><?php echo $arrVendorDetails['cityname'] . ", " . $arrVendorDetails['stateregionname']?></strong></span>
@@ -31,10 +32,14 @@
                         <?php endif;?>
                     </p>
                     <?php if($isEditable): ?>
-                    <div class="vendor-profile-btn">
-                        <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
+                    <div class="vendor-profile-btn" style="margin-top: 10px;">
+                        <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3 btn-profile-edit-mobile">
                             <img src="/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
+                        <span class="btn btn-default-3 btn-profile-edit-mobile" id="modal-edit-trigger">
+                            <img src="/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
+                        </span>
+                        <a href="#" class="btn btn-default-2 btn-profile-edit-mobile btn-change-cover-photo-mobile">Change Cover Photo</a>
                     </div>
                     <?php else: ?>
                     <div class="vendor-profile-btn">
@@ -45,7 +50,7 @@
                             <span class="glyphicon glyphicon-plus-sign"></span>Follow
                         </span>                       
 
-                        <a class="btn btn-default-1" href="/<?=$arrVendorDetails['userslug']; ?>/contact">
+                        <a class="btn btn-default-1 btn-message-profile" href="/<?=$arrVendorDetails['userslug']; ?>/contact">
                             <span class="icon-message-btn"></span>
                             Message
                         </a>
@@ -70,15 +75,17 @@
                     <h4><strong>Change Cover Photo</strong></h4>
                 </a>
             </div>
-            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
+            <div class="vendor-main-bg" style="background: url(<?=$bannerImage?>) center no-repeat; background-size: cover;">
+                
+            </div> 
         </div>
-        <div class="main-container vendor-main pos-ab">
-            <div class="vendor-profile-content">
+        <div class="container main-container vendor-main pos-ab">
+            <div class="vendor-profile-content" id="edit-profile-info-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
                             <div id="hidden-form">
-                                <?php echo form_open_multipart('/memberpage/upload_img', 'id="form_image"');?>
+                                <?php echo form_open_multipart('/store/upload_img', 'id="form_image"');?>
                                     <input type="file" data-type="avatar" style="visibility:hidden; height:0px; width:0px; position:absolute;" id="imgupload" accept="image/*" name="userfile"/> 
                                     <input type='hidden' name='x' value='0' id='image_x'>
                                     <input type='hidden' name='y' value='0' id='image_y'>
@@ -106,7 +113,7 @@
 
                             <div class="edit-profile-photo">
                                 <div>
-                                    <img src="/assets/images/img-default-cover-photo.png" alt="Edit Profile Photo">
+                                    <img src="/assets/images/img-default-cover-photo.png" class="img-icon-edit-photo" alt="Edit Profile Photo">
                                     <span>Change Profile Photo</span>
                                 </div>
                             </div>
@@ -118,7 +125,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pd-lr-20">
+                <div class="pd-lr-20 edit-profile-container">
                     <input type="text" id="storeNameTxt" maxlength="50" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($arrVendorDetails['store_name']); ?>" data-origval="<?=html_escape($arrVendorDetails['store_name']); ?>" placeholder="Seller Name">
                     <input type="text" id="mobileNumberTxt" maxlength="11" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?= html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : ""); ?>" data-origval="<?= html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : ''); ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
@@ -144,9 +151,9 @@
                         </select>
                     </div>
                     <?php if($isEditable): ?>
-                    <div class="vendor-profile-btn edit-profile-btn">
-                        <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1">Cancel</a>
-                        <a href="javascript:void(0)" id="banner-save-changes"class="btn btn-default-3">Save Changes</a>
+                    <div class="vendor-profile-btn edit-profile-btn edit-banner-profile">
+                        <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1 btn-edit-profile-info-banner btn-cancel-me-wide">Cancel</a>
+                        <a href="javascript:void(0)" id="banner-save-changes"class="btn btn-default-3 btn-edit-profile-info-banner">Save Changes</a>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -156,7 +163,7 @@
 </section>
 <section class="sticky-nav-bg">
     <div class="vendor-menu-nav">
-        <div class="main-container">
+        <div class="container main-container">
             <ul class="vendor-nav">
                 <?php
                     $url_id = $this->uri->segment(2, 0);
@@ -183,7 +190,12 @@
         </div>
     </div>
 </section> 
+
+
 <input type="hidden" id="vendor-slug" name="name" value="<?php echo $arrVendorDetails['userslug']?>">
+<input type="hidden" id="max-upload-size" name="name" value="<?=EasyShop\Upload\Upload::MAX_UPLOAD_SIZE_MB; ?>">
+<input type="hidden" id="max-upload-height" name="name" value="<?=EasyShop\Upload\Upload::MAX_IMAGE_UPLOAD_HEIGHT_PX; ?>">
+<input type="hidden" id="max-upload-width" name="name" value="<?=EasyShop\Upload\Upload::MAX_IMAGE_UPLOAD_WIDTH_PX; ?>">
 <!-- Load Js Files -->
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>

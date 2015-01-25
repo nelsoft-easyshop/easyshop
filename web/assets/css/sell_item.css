@@ -38,115 +38,11 @@
     width: 100%;
 }
 
-/**** Tab style ***/
-/*.tab_list p {      
-    float: left;
-    font-size: 18px;
-    margin-right: 4px;
-    background-color: #d8d8d8;
-    width: 160px;
-    height: 45px;
-    line-height: 45px;
-    text-align: center;
-
-    -moz-border-radius-topleft: 5px;
-    -webkit-border-top-left-radius: 5px;
-     border-top-left-radius: 5px;
-    -moz-border-radius-topright: 5px;
-    -webkit-border-top-right-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-p.active {
-    background-color: #ff8400;
-}
-
-.active a {
-    color: #fff;
-}
-
-.tab_list p.active:after {
-    content:url('../images/img_tab_arrow.png');
-    left: -1px;
-    position: relative;
-    top: -3px;
-
-}*/
-
-/*** Navigations Menus ***/
-/*.seller_product_content .top_nav {
-    margin-top: 20px;
-    font-size: 14px;
-
-}
-
-.seller_product_content .top_nav {
-    padding-bottom:10px;
-}
-
-.seller_product_content .top_nav ul li {
-    padding:0;
-    margin:15px;
-}
-
-.seller_product_content .top_nav span {
-    color: #fff;
-    padding-bottom: 5px;    
-}
-
-.seller_product_content .top_nav ul li {
-    border-bottom: 1px solid #FF8400;
-}
-
-.seller_product_content .top_nav ul li:hover {
-    border-bottom: 1px dotted #fff; 
-}
-
-.top_nav ul li {
-    text-align: center;
-}
-
-.search_box.seller_search_box {
-    float: right;
-    margin-left:100px;
-    width: 316px !important;
-    padding-top: 5px !important;
-}
-
-.seller_search_box input {
-    width: 200px !important;
-}*/
-
 .required {
     color: #FF3600;
     font-size: 11px;
     padding:0 3px;
 }
-
-
-/*.sell_steps {
-    background: url(../images/global_sprite.png) 0 0 no-repeat;
-    height: 35px;
-    margin-top: 20px;
-}
-
-.sell_steps1 {
-    background-position: 0 -557px;
-}
-
-.sell_steps2 {
-    background-position: 0 -597px;
-}
-
-.sell_steps3 {
-    background-position: 0 -637px;
-}
-
-.sell_steps4 {
-    background-position: 0 -677px;
-}*/
-
-
 
 /****************** Upload product step 1 ****************/
 /*********************************************************/
@@ -1474,51 +1370,30 @@ li.brand_result:hover{
 	margin-bottom: 1em;
 }
 
-/*.step4_section > div{
-	padding: 5px;
-}*/
-
 .step4_header{
 	background-color: #E5E5E5;
 }
 
-/*.step4_content > div{
-	padding: 10px;
-}
-
-.step4_paysel > div{
-	display:inline-block;
-	margin: 0px 3em 0px 10px;
-	vertical-align:top;
-	height:150px;
-}
-
-.step4_bankdetails h4{
-	margin: 5px 3px;
-}*/
-
-/*.step4_bankdetails span{
-	display:inline-block;
-	width: 150px;
-	margin-left: 1em;
-}*/
-
-/*.step4_delivery {
-	padding-left:10px;
-}*/
-
-/*.step4_delivery_sub > div{
-	display: inline-block;
-	border: 1px solid #B6B6B6;
-	border-radius:3px;
-}
-
-.step4_attr, .step4_priceloc{
-	float:left;
-	vertical-align: middle;
-	margin: 5px 10px;
-}
-*/
 .step4-cod{
-	text-align:center;
+    text-align:center;
+}
+
+#imageTag{
+
+}
+#crop-image-main > div {
+    margin: 0 auto;
+}
+#crop-image-main > div > img {
+    max-height: 430px;
+    margin: 0 auto;
+}
+
+#imageTag {
+    margin: 0 auto;
+}
+
+.pop-up-fixed{
+    position: fixed !important;
+    top: 13px !important;
 }

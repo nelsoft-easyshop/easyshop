@@ -2,10 +2,15 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
+use EasyShop\Entities\EsProductShippingDetail as EsProductShippingDetail;
+
 class productUpload extends MY_Controller 
 {
     public $max_file_size_mb;
-    public $img_dimension = array();
+    public $img_dimension = [];
+    public $maxFileSizeInMb;
 
     function __construct()
     { 
@@ -16,6 +21,8 @@ class productUpload extends MY_Controller
         }
 
         $this->max_file_size_mb = 5;
+        $this->maxFileSizeInMb = ($this->max_file_size_mb * 1024) * 1024;
+
         /* Uploaded images dimensions: (w,h) */
         $this->img_dimension['usersize'] = array(1024,768);
         $this->img_dimension['small'] = array(400,535);
@@ -25,17 +32,6 @@ class productUpload extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager']; 
     }
 
-    function fill_view()
-    {
-        $data = array(
-            'title' => 'Sell Product | Easyshop.ph',
-                    'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-            'render_searchbar' => false, 
-                );
-        $data = array_merge($data, $this->fill_header());
-
-        return $data;
-    }
 
     /**
      *  Display view for selecting category for the listing
@@ -95,33 +91,30 @@ class productUpload extends MY_Controller
         # getting first category level from database.
         $is_admin = (intval($userdetails['is_admin']) === 1);
         $data_item['firstlevel'] = $this->product_model->getFirstLevelNode(false, false,$is_admin);
-        
-        $data = $this->fill_view();
-        $data['$render_searchbar'] = false; 
-        
 
-        if($data['logged_in'] && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
-            $this->load->view('templates/header', $data); 
+        if($this->session->userdata('usersession') && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
+            $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ];
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step1_view',$data_item);
             $this->load->view('templates/footer'); 
         }
         else{
-
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Verify your account to proceed | Easyshop.ph',
-                'user_details' => $this->fillUserDetails(),
-                'homeContent' =>  $this->fillCategoryNavigation(),
             ];
-            $headerData = array_merge($headerData, $this->fill_header());
 
-            $this->load->view('templates/header_primary', $headerData);
-            $this->load->view('errors/email-verification');
-            $socialMediaLinks = $this->config->load('social_media_links', TRUE);
-
-            $footerData['facebook'] = $socialMediaLinks["facebook"];
-            $footerData['twitter'] = $socialMediaLinks["twitter"];     
-        
-            $this->load->view('templates/footer_primary', $footerData);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('errors/account-unverified');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
         }
 
         
@@ -159,10 +152,15 @@ class productUpload extends MY_Controller
      */
     public function step2()
     { 
-        $data = $this->fill_view();
-        $data['$render_searchbar'] = false; 
-        $this->load->view('templates/header', $data); 
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Sell Product | Easyshop.ph',
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+            'relCanonical' => '',
+            'renderSearchbar' => false, 
+        ];  
         if($this->input->post('hidden_attribute')){ # if no item selected cant go to the link. it will redirect to step 1
+            $this->load->model("user_model");
             $id = $this->input->post('hidden_attribute'); 
             $response['memid'] = $this->session->userdata('member_id');
             $userdetails = $this->user_model->getUserById($response['memid']);
@@ -218,6 +216,7 @@ class productUpload extends MY_Controller
             $response['otherCategory'] = $otherCategory; # id is the selected category
             $response['sell'] = true;
             $response['img_max_dimension'] = $this->img_dimension['usersize'];
+            $response['maxImageSize'] = $this->maxFileSizeInMb;
 
             $date = date("Ymd");
             $tempDirectory = './assets/temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
@@ -229,11 +228,16 @@ class productUpload extends MY_Controller
             mkdir($tempDirectory.'small/', 0777, true);
             mkdir($tempDirectory.'thumbnail/', 0777, true);
             mkdir($tempDirectory.'other/', 0777, true);
+            mkdir($tempDirectory.'other/categoryview/', 0777, true);
+            mkdir($tempDirectory.'other/small/', 0777, true);
+            mkdir($tempDirectory.'other/thumbnail/', 0777, true);
 
             if($this->input->post('step1_content')){
                 $response['step1_content'] = $this->input->post('step1_content');
             }
-    
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step2_view',$response);
             $this->load->view('templates/footer');
         }else{
@@ -388,6 +392,7 @@ class productUpload extends MY_Controller
                                         : "";
         $response['is_edit'] = 'is_edit';
         $response['img_max_dimension'] = $this->img_dimension['usersize'];
+        $response['maxImageSize'] = $this->maxFileSizeInMb;
         $date = end(explode('_', explode('/', $path)[3]));
  
         $tempdirectory = $tempId.'_'.$member_id.'_'.$date;
@@ -399,11 +404,27 @@ class productUpload extends MY_Controller
 
         directory_copy($path, $tempdirectory,$tempId,$arrayNameOnly); 
         
-        $data = array('title'=>'Edit Product');
-        $data = array_merge($data,$this->fill_view());
-        $data['$render_searchbar'] = false; 
+        if (!file_exists ($tempdirectory.'other/categoryview')){
+            mkdir($tempdirectory.'other/categoryview/', 0777, true);
+        }
 
-        $this->load->view('templates/header', $data);   
+        if (!file_exists ($tempdirectory.'other/small')){
+            mkdir($tempdirectory.'other/small/', 0777, true);
+        }
+
+        if (!file_exists ($tempdirectory.'other/thumbnail')){
+            mkdir($tempdirectory.'other/thumbnail/', 0777, true);
+        }
+
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Edit Product | Easyshop.ph',
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+            'relCanonical' => '',
+            'renderSearchbar' => false, 
+        ]; 
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
         $this->load->view('pages/product/product_upload_step2_view',$response);
         $this->load->view('templates/footer');
     }
@@ -416,14 +437,20 @@ class productUpload extends MY_Controller
      */
     public function uploadimage()
     {  
+        $imageUtility = $this->serviceContainer['image_utility'];
         $pathDirectory = $this->session->userdata('tempDirectory');
         $filescnttxt = $this->input->post('filescnttxt');
         $afstart = $this->input->post('afstart');
         $afstartArray = json_decode($afstart); 
-        $filenames_ar = array(); 
+        $filenames_ar = array();
+        $coordinates = json_decode($this->input->post('coordinates')); 
         $text = "";
+        $isCroppable = !empty($coordinates);
         $error = 0;
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
+
+        $this->config->load('image_dimensions', true);
+        $imageDimensions = $this->config->config['image_dimensions'];
 
         foreach($_FILES['files']['name'] as $key => $value ) {
 
@@ -431,24 +458,25 @@ class productUpload extends MY_Controller
             $file_ext = strtolower(end($file_ext)); 
             $filenames_ar[$key] = $afstartArray[$key];
 
-            if(!in_array(strtolower($file_ext),$allowed))
-            {
+            if(!in_array(strtolower($file_ext),$allowed)){
                 unset($_FILES['files']['name'][$key]);
                 unset($_FILES['files']['type'][$key]);
                 unset($_FILES['files']['tmp_name'][$key]);
                 unset($_FILES['files']['error'][$key]);
                 unset($_FILES['files']['size'][$key]);
                 unset($filenames_ar[$key]); 
+                unset($coordinates[$key]); 
             }
 
             if(isset($_FILES['files']['name'][$key])){
-                if($_FILES['files']['size'][$key] >= ($this->max_file_size_mb * 1024) * 1024){ # size of image must be 5mb only
+                if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb){
                     unset($_FILES['files']['name'][$key]);
                     unset($_FILES['files']['type'][$key]);
                     unset($_FILES['files']['tmp_name'][$key]);
                     unset($_FILES['files']['error'][$key]);
                     unset($_FILES['files']['size'][$key]);
                     unset($filenames_ar[$key]); 
+                    unset($coordinates[$key]); 
                 }
             }
         }
@@ -459,17 +487,18 @@ class productUpload extends MY_Controller
         $_FILES['files']['error'] = array_values($_FILES['files']['error']);
         $_FILES['files']['size'] = array_values($_FILES['files']['size']);
         $filenames_ar = array_values($filenames_ar); 
+        $coordinates = array_values($coordinates);
 
         if (!file_exists ($pathDirectory)){
             mkdir($pathDirectory, 0777, true);;
         }
 
         if(count($filenames_ar) <= 0){
-            $return = array( 
+            $return = [
                 'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb", 
                 'fcnt' => $filescnttxt,
                 'err' => 1
-                );
+            ];
 
             die(json_encode($return));
         }
@@ -488,14 +517,30 @@ class productUpload extends MY_Controller
 
         if($this->upload->do_multi_upload('files')){
             $file_data = $this->upload->get_multi_upload_data();
-            for ($i=0; $i < sizeof($filenames_ar); $i++) { 
-                $this->es_img_resize($filenames_ar[$i],$pathDirectory, 'small/', $this->img_dimension['small']); 
-                $this->es_img_resize($filenames_ar[$i],$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-                $this->es_img_resize($filenames_ar[$i],$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+            for ($i=0; $i < sizeof($filenames_ar); $i++) {
+                if($isCroppable){
+                    $coordinate = explode(',', $coordinates[$i]);
+                    $imageUtility->imageCrop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
+                }
+
+                $imageUtility->imageResize($pathDirectory.$filenames_ar[$i], 
+                                           $pathDirectory."small/".$filenames_ar[$i],
+                                           $imageDimensions["productImagesSizes"]["small"]);
+
+                $imageUtility->imageResize($pathDirectory."small/".$filenames_ar[$i], 
+                                           $pathDirectory."categoryview/".$filenames_ar[$i],
+                                           $imageDimensions["productImagesSizes"]["categoryview"]);
+
+                $imageUtility->imageResize($pathDirectory."categoryview/".$filenames_ar[$i], 
+                                           $pathDirectory."thumbnail/".$filenames_ar[$i],
+                                           $imageDimensions["productImagesSizes"]["thumbnail"]);
+
                 //If user uploaded image is too large, resize and overwrite original image
                 if(isset($file_data[$i])){
                     if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
-                        $this->es_img_resize($file_data[$i]['file_name'],$pathDirectory,'', $this->img_dimension['usersize']);
+                        $imageUtility->imageResize($pathDirectory.$file_data[$i]['file_name'], 
+                                                   $pathDirectory.$file_data[$i]['file_name'],
+                                                   $imageDimensions["productImagesSizes"]["usersize"]);
                     }
                 }
             }
@@ -508,11 +553,11 @@ class productUpload extends MY_Controller
             $error = 1;
         }
           
-        $return = array( 
+        $return = [
             'msg' => $text, 
             'fcnt' => $filescnttxt,
             'err' => $error
-            );
+        ];
 
         die(json_encode($return));
     }
@@ -524,18 +569,22 @@ class productUpload extends MY_Controller
      */
     public function uploadimageOther()
     {
+        $imageUtility = $this->serviceContainer['image_utility'];
+        $this->config->load('image_dimensions', true);
+        $imageDimensions = $this->config->config['image_dimensions'];
+
         $temp_product_id = $this->session->userdata('tempId');
         $tempDirectory = $this->session->userdata('tempDirectory');
         $memberId =  $this->session->userdata('member_id');
         $filename =  $this->input->post('pictureName');
+        $coordinates =  $this->input->post('coordinates');
+        $isCroppable = !empty($coordinates);
         $date = date("Ymd");
-        $fulldate = date("YmdGis"); 
         $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
         $fileExtension = explode('.', $filename);
         $fileExtension = strtolower(end($fileExtension));
 
-        if(!in_array(strtolower($fileExtension),$allowed))
-        {
+        if(!in_array(strtolower($fileExtension),$allowed)){
             die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
         }
 
@@ -557,9 +606,23 @@ class productUpload extends MY_Controller
             )); 
  
         if ($this->upload->do_multi_upload('attr-image-input')){ 
-            $this->es_img_resize($filename,$pathDirectory, 'small/', $this->img_dimension['small']); 
-            $this->es_img_resize($filename,$pathDirectory.'small/', '../categoryview/', $this->img_dimension['categoryview']);
-            $this->es_img_resize($filename,$pathDirectory.'categoryview/','../thumbnail/', $this->img_dimension['thumbnail']);
+            if($isCroppable){
+                $coordinate = explode(',', $coordinates);
+                $imageUtility->imageCrop($pathDirectory.$filename, $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
+            }
+
+            $imageUtility->imageResize($pathDirectory.$filename, 
+                                       $pathDirectory."small/".$filename,
+                                       $imageDimensions["productImagesSizes"]["small"]);
+
+            $imageUtility->imageResize($pathDirectory."small/".$filename, 
+                                       $pathDirectory."categoryview/".$filename,
+                                       $imageDimensions["productImagesSizes"]["categoryview"]);
+
+            $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
+                                       $pathDirectory."thumbnail/".$filename,
+                                       $imageDimensions["productImagesSizes"]["thumbnail"]);
+
             die('{"result":"ok"}');
         }
         else{
@@ -600,7 +663,6 @@ class productUpload extends MY_Controller
         $member_id =  $this->session->userdata('member_id');
         $tempDirectory = $this->session->userdata('tempDirectory');
         $date = date("Ymd");
-        $fulldate = date("YmdGis");
         $isNotSavingAsDraft = $this->input->post('savedraft') ? false : true;
 
         if(intval($brand_id,10) == 1){
@@ -617,20 +679,28 @@ class productUpload extends MY_Controller
         if($brand_valid === FALSE){ 
             $brand_id = 1;
             $otherBrand = '';
-        } 
-        
-        if (!in_array($product_condition, $this->lang->line('product_condition'))){
-            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
-        if($isNotSavingAsDraft){
-            $currentCombination = [];
-            foreach ($combination as $value) {
-                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+        $currentCombination = [];
+        foreach ($combination as $value) {
+            $combinationValue = implode("", array_map('strtolower', $value['data']));
+            if(!in_array($combinationValue, $currentCombination)){
+                $uniqueCombination[] = $value;
             }
+            $currentCombination[] = $combinationValue;
+        }
+        if($isNotSavingAsDraft){
+            if (!in_array($product_condition, $this->lang->line('product_condition'))){
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');
+            }
+
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
+        }
+        else{
+            $product_condition = $this->lang->line('product_condition')[0];
+            $combination = $uniqueCombination; 
         }
 
         if((strlen(trim($product_title)) == 0 
@@ -830,18 +900,27 @@ class productUpload extends MY_Controller
         $tempDirectory = $this->session->userdata('tempDirectory');
         $isNotSavingAsDraft = $this->input->post('savedraft') ? false : true;
 
-        if($isNotSavingAsDraft){
-            $currentCombination = [];
-            foreach ($combination as $value) {
-                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+        $currentCombination = [];
+        $uniqueCombination = [];
+        foreach ($combination as $value) {
+            $combinationValue = implode("", array_map('strtolower', $value['data']));
+            if(!in_array($combinationValue, $currentCombination)){
+                $uniqueCombination[] = $value;
             }
+            $currentCombination[] = $combinationValue;
+        }
+        if($isNotSavingAsDraft){
+            if (!in_array($product_condition, $this->lang->line('product_condition'))){
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+            }
+
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
         }
-
-        if (!in_array($product_condition, $this->lang->line('product_condition'))){
-            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+        else{
+            $product_condition = $this->lang->line('product_condition')[0];
+            $combination = $uniqueCombination; 
         }
 
         // Loading Combinations
@@ -1185,9 +1264,18 @@ class productUpload extends MY_Controller
         if($modal){ 
             $this->load->view('pages/product/product_upload_preview',$preview_data);
         }
-            else{
-            $data = $this->fill_view();
-            $this->load->view('templates/header', $data);
+        else{
+            
+            $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ]; 
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_preview',$preview_data);
             $this->load->view('templates/footer');
         }
@@ -1209,31 +1297,6 @@ class productUpload extends MY_Controller
         echo json_encode($data);
     }
 
-    private function es_img_resize($filename,$path_directory,$added_path,$dimension){
-        $filename = strtolower($filename);
-        $path_to_result_directory = $path_directory.$added_path; 
-        $path_to_image_directory = $path_directory;
-
-        $config['image_library'] = 'GD2';
-        $config['source_image'] = $path_to_image_directory . $filename;
-        $config['maintain_ratio'] = true;
-        $config['quality'] = '85%';
-        $config['new_image'] = $path_to_result_directory . $filename;
-        $config['width'] = $dimension[0];
-        $config['height'] = $dimension[1];
-
-        if(!file_exists($path_to_result_directory)) {  
-            if(!mkdir($path_to_result_directory)) {  
-                die('{"e":"0","d":"There was a problem. \n Please try again later! - Error[0015]"}');  
-            }   
-        }
-
-        $this->image_lib->initialize($config); 
-        $this->image_lib->resize();
-        $this->image_lib->clear();
-    }
-    
-    
     /**
      * Renders upload step 3
      *
@@ -1270,7 +1333,6 @@ class productUpload extends MY_Controller
                 'shipping_summary' => $this->product_model->getShippingSummary($productID),
                 'shipping_preference' => $this->product_model->getShippingPreference($memberId)
             );
-            $data = array_merge($data, $this->fill_view());
             $data['json_check_data'] = json_encode($data['shipping_summary']['shipping_locations']);
             $data['json_shippingpreference'] = json_encode($data['shipping_preference'], JSON_FORCE_OBJECT);
             
@@ -1278,7 +1340,16 @@ class productUpload extends MY_Controller
                 $data['is_edit'] = true;
             }
             
-            $this->load->view('templates/header', $data);
+            $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ]; 
+            
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step3_view',$data);
             $this->load->view('templates/footer');
         }
@@ -1288,129 +1359,153 @@ class productUpload extends MY_Controller
     }
     
     /**
-     * Handler for additional info in product uploads
-     * Update billing info, CoD and meetup in product table
-     * Upload shipping details if for delivery
-     *
-     */
+    * Handler for additional info in product uploads
+    * Update billing info, CoD and meetup in product table
+    * Upload shipping details if for delivery
+    */
     public function step4()
-    {    
-        $this->load->model('memberpage_model');
-        $memberID =  $this->session->userdata('member_id');
-        $deliveryOption = $this->input->post('delivery_option') ? $this->input->post('delivery_option') : array();
-        $shipWithinDays = trim($this->input->post('ship_within'));
+    {
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
+        $esBillingInfoRepo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo'); 
+        $esProductItemRepo = $this->em->getRepository('EasyShop\Entities\EsProductItem'); 
+        $esLookupRepo = $this->em->getRepository('EasyShop\Entities\EsLocationLookup'); 
+        $productShippingManager = $this->serviceContainer['product_shipping_location_manager'];
 
-        $serverResponse = array(
-            'result' => 'fail',
-            'error' => 'Incomplete Details submitted. Please select at least one delivery option.'
-        );
-        
-        if( $this->input->post('prod_h_id') && (in_array("meetup", $deliveryOption) || in_array("delivery", $deliveryOption)) ){
-            $productID = $this->input->post('prod_h_id');
-            $billingID = (int)$this->input->post('billing_info_id');
-            $isMeetup = in_array("meetup", $deliveryOption) ? 1:0;
-            $isDelivery = in_array("delivery", $deliveryOption) ? true:false;
-            $isCOD = strtolower($this->input->post('allow_cod')) === 'on' ? 1:0;
-            
-            $isEdit = $this->input->post('is_edit') ? true:false;
-            
-            # Check if billing id is owned by user in database
-            if( $billingID !== 0 ){
-                $payment_accounts = $this->memberpage_model->get_billing_info($memberID);
-                if(!(array_key_exists($billingID,$payment_accounts))){
-                    $serverResponse['error'] = 'Billing ID database mismatch!';
-                    echo json_encode($serverResponse);
-                    exit();
-                }
-            }
-            
-            # Fetch for database Product Item ID to be used in processing later. (for this ProductID)
-            $dbProductItemID_temp = $this->product_model->getProductItem($productID, $memberID);
-            foreach( $dbProductItemID_temp as $arr ){
-                $dbProductItemID[] = $arr['id_product_item'];
-            }
-            
-            # DELETE EXISTING SHIPPING SUMMARY ENTRIES IN DATABASE
-            $this->product_model->deleteShippingSummaryOnEdit($dbProductItemID);
-            
-            $myProceedVar = true;
-            
-            # If delivery option "for delivery" is selected
-            if($isDelivery){
-                # DeliveryCost can be one of the ff: free, details, or off
-                $deliveryCost = $this->input->post('prod_delivery_cost');
-                if( $deliveryCost === "free" ){
-                    $locationID = 1; #FOR PHILIPPINES
-                    $priceValue = 0; #FREE
-                    foreach( $dbProductItemID as $attrCombinationID ){
-                        $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                        $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
-                    }
-                # If shipping details provided, start verification of details
-                }else if( $deliveryCost === "details"){
-                    $shipPrice = $this->input->post('shipprice');
-                    $shipLoc = $this->input->post('shiploc');
-                    $shipAttr = $this->input->post('shipattr');
-                    
-                    #Fetch client ProductItemID based on submitted(checked) attributes
-                    $clientProductItemID = array();
-                    foreach( $shipAttr  as $grouparr){
-                        foreach( $grouparr as $pid){
-                            if( !(in_array((int)$pid,$clientProductItemID)) ){
-                                $clientProductItemID[] = $pid;
-                            }
+        $memberId = $this->session->userdata('member_id');
+        $deliveryOption = $this->input->post('delivery_option') 
+                          ? $this->input->post('delivery_option') : [];
+        $shipWithinDays = trim($this->input->post('ship_within')) !== ""
+                          ? trim($this->input->post('ship_within'))
+                          : null;
+        $productId = (int) $this->input->post('prod_h_id');
+        $billingId = (int) $this->input->post('billing_info_id');
+        $isAllowCod = trim(strtolower($this->input->post('allow_cod'))) === "on";
+        $isMeetup = in_array("meetup", $deliveryOption);
+        $isDelivery = in_array("delivery", $deliveryOption);
+        $deliveryCost = trim($this->input->post('prod_delivery_cost'));
+        $shipPrice = $this->input->post('shipprice');
+        $shipLoc = $this->input->post('shiploc');
+        $shipAttr = $this->input->post('shipattr');
+        $isCanContinue = false;
+        $productItemIds = [];
+        $postProductIds = [];
+        $serverResponse = [
+            'result' => "fail",
+            'error' => "Operation Start."
+        ];
+   
+        try {
+            $product = $esProductRepo->findOneBy([
+                            'idProduct' => $productId,
+                            'member' => $memberId,
+                       ]);
+            if($product){
+                if($isMeetup || $isDelivery){
+                    if($billingId !== 0){
+                        $bankInfo = $esBillingInfoRepo->findOneBy([
+                                        'idBillingInfo' => $billingId,
+                                        'member' => $memberId,
+                                    ]);
+                        if(!$bankInfo){
+                            throw new Exception("Billing ID mismatch.");
                         }
                     }
+                    $productShippingManager->deleteProductShippingInfo($productId);
+                    $isCanContinue = true;
+                    if($isDelivery){
+                        $productItems = $esProductItemRepo->findBy(['product' => $productId]);
+                        foreach ($productItems as $item) {
+                            $productItemIds[] = $item->getIdProductItem();
+                        }
 
-                    // Reorder array values for proper checking of equality
-                    sort($clientProductItemID);
-                    sort($dbProductItemID);
-                    
-                    #If ProductItemID matches for client and server, also verifies that all attributes have been checked
-                    #or provided with a shipping location
-                    if( $clientProductItemID == $dbProductItemID ){
-                        # Cycle through each price and check if 
-                        foreach( $shipPrice as $groupkey => $pricegroup ){
-                            foreach( $pricegroup as $inputkey => $price ){
-                                $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
-                                # Check if price in submitted input field is provided (numeric and not blank)
-                                if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
-                                    #check if shipping location is provided for the price
-                                    if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
-                                        # Check if attributes are provided for that group
-                                        if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
-                                            # -- ALGO START FOR INSERTION TO DATABASE --
-                                            # Cycle through each locationID in groupkey and inputkey
-                                            foreach( $shipAttr[$groupkey] as $attrCombinationID){                                                
-                                                foreach( $shipLoc[$groupkey][$inputkey] as $locationID ){
-                                                    $shippingID = $this->product_model->storeShippingPrice($locationID,$priceValue,$productID);
-                                                    $this->product_model->storeProductShippingMap($shippingID, $attrCombinationID);
+                        if( $deliveryCost === "free" ){
+                            $location = $esLookupRepo->find(EsLocationLookup::PHILIPPINES_LOCATION_ID);
+                            foreach( $productItemIds as $itemIds ){
+                                $shippingHead = new EsProductShippingHead();
+                                $shippingHead->setLocation($location);
+                                $shippingHead->setPrice(0);
+                                $shippingHead->setProduct($product);
+                                $this->em->persist($shippingHead);
+
+                                $productItem = $esProductItemRepo->find($itemIds);
+
+                                $shippingDetails = new EsProductShippingDetail();
+                                $shippingDetails->setShipping($shippingHead);
+                                $shippingDetails->setProductItem($productItem);
+                                $this->em->persist($shippingDetails);
+                            }
+                            $this->em->flush();
+                        }
+                        elseif($deliveryCost === "details"){
+                            foreach( $shipAttr  as $attr){
+                                foreach( $attr as $itemId){
+                                    if( !(in_array((int)$itemId,$postProductIds)) ){
+                                        $postProductIds[] = $itemId;
+                                    }
+                                }
+                            }
+
+                            $difference = array_diff($postProductIds,$productItemIds);
+                            if(empty($difference) === true){
+                                foreach( $shipPrice as $groupkey => $pricegroup ){
+                                    foreach( $pricegroup as $inputkey => $price ){
+                                        $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
+                                        if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
+                                            if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
+                                                if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
+                                                    foreach( $shipAttr[$groupkey] as $attrCombinationId){
+                                                        $productItem = $esProductItemRepo->find($attrCombinationId);
+                                                        foreach( $shipLoc[$groupkey][$inputkey] as $locationId ){
+                                                            $location = $esLookupRepo->find($locationId);
+                                                            $shippingHead = new EsProductShippingHead();
+                                                            $shippingHead->setLocation($location);
+                                                            $shippingHead->setPrice($priceValue);
+                                                            $shippingHead->setProduct($product);
+                                                            $this->em->persist($shippingHead);
+
+                                                            $shippingDetails = new EsProductShippingDetail();
+                                                            $shippingDetails->setShipping($shippingHead);
+                                                            $shippingDetails->setProductItem($productItem);
+                                                            $this->em->persist($shippingDetails);
+                                                        }
+                                                    }
+                                                    $this->em->flush();
                                                 }
                                             }
                                         }
+                                        else{
+                                            throw new Exception("Price Invalid."); 
+                                        }
                                     }
-                                }else{
-                                    $serverResponse['error'] = "Invalid price provided";
-                                    echo json_encode($serverResponse);
-                                    exit();
                                 }
                             }
                         }
-                    }else{
-                        $serverResponse['error'] = "Please provide shipping details for all item properties.";
-                        $myProceedVar = false;
+                    }
+
+                    if($isCanContinue){
+                        $product->setIsCod($isAllowCod);
+                        $product->setBillingInfoId($billingId);
+                        $product->setIsMeetup($isMeetup);
+                        $product->setShipsWithinDays($shipWithinDays);
+                        $product->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
+                        $this->em->flush();
+                        $serverResponse['result'] = 'success';
+                        $serverResponse['error'] = '';
                     }
                 }
+                else{
+                    throw new Exception("Incomplete Details submitted. Please select at least one delivery option.");
+                }
             }
-            // EXECUTE ONLY IF NO ERRORS HAVE BEEN ENCOUNTERED IN STEPS ABOVE (delivery details)
-            if($myProceedVar){
-                $shipWithinDays = (trim($shipWithinDays) === "") ? null : $shipWithinDays;
-                $prodUploadBoolResult = $this->product_model->updateProductUploadAdditionalInfo($productID, $memberID, $billingID, $isCOD, $isMeetup,$shipWithinDays);
-                $serverResponse['result'] = $prodUploadBoolResult ? 'success' : 'fail';
-                $serverResponse['error'] = $prodUploadBoolResult ? '' : 'Error updating database.';
-            }
+            else{
+                throw new Exception("Invalid operation this is not your product.");
+            } 
         }
-        
+        catch (Exception $e) {
+            // you may want to react on the Exception here
+            $serverResponse['error'] = $e->getMessage();
+        }
+
         echo json_encode($serverResponse);
     }
 
@@ -1434,7 +1529,6 @@ class productUpload extends MY_Controller
         $productEntity = $productRepository->find($productId);
 
         if($productEntity){
-            $headerData = $this->fill_view();
             $product = $productManager->getProductDetails($productEntity);
             $productImages = $productImageRepository->getProductImages($productId);
             $avatarImage = $userManager->getUserImage($product->getMember()->getIdMember());
@@ -1465,14 +1559,23 @@ class productUpload extends MY_Controller
             $shippingAttribute = $productShippingManager->getShippingAttribute($productId);
 
             $mainViewData = [
-                        'product' => $product,
-                        'productBillingInfo' => $billingInfo,
-                        'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
-                        'shipping_summary' => $shippingDetails,
-                        'attr' => $shippingAttribute,
-                    ];
+                'product' => $product,
+                'productBillingInfo' => $billingInfo,
+                'productView' => $this->load->view('pages/product/product_upload_step4_product_preview',$productPreviewData, true),
+                'shipping_summary' => $shippingDetails,
+                'attr' => $shippingAttribute,
+            ];
+            
+            $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
+                'title' => 'Sell Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ];
 
-            $this->load->view('templates/header', $headerData);
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
             $this->load->view('templates/footer');
         }

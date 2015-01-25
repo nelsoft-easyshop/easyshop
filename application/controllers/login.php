@@ -29,40 +29,48 @@ class Login extends MY_Controller
      * Renders the login page
      *
      */
-    function index() 
+    public function index() 
     {
-        $facebookScope = $this->config->item('facebook', 'oauth');
-        $googleScope = $this->config->item('google', 'oauth');
-        $data = array(
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Login | Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
-        );
-        $data = array_merge($data, $this->fill_header());
-        $response['url'] = $this->session->userdata('uri_string');
-        $response['facebook_login_url'] = $this->socialMediaManager->getLoginUrl(1, $facebookScope['permission_to_access']);
-        $response['google_login_url'] = $this->socialMediaManager->getLoginUrl(2, $googleScope['permission_to_access']);
+            'relCanonical' => base_url().'login',
+            'renderSearchbar' => false,
+        ];
+        $bodyData['url'] = $this->session->userdata('uri_string');
+        $facebookScope = $this->config->item('facebook', 'oauth');
+        $googleScope = $this->config->item('google', 'oauth');
+        $bodyData['facebook_login_url'] = $this->socialMediaManager
+                                                ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::FACEBOOK, 
+                                                              $facebookScope['permission_to_access']);
+        $bodyData['google_login_url'] = $this->socialMediaManager
+                                             ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::GOOGLE,
+                                                           $googleScope['permission_to_access']);
         $loginData = [];
+
         if($this->input->post('login_form')){
             if($this->form_validation->run('login_form')){
                 $uname = $this->input->post('login_username');
                 $pass = $this->input->post('login_password');
                 $loginData = $this->login($uname, $pass);
             }
-            if(isset($row['o_success']) && $loginData['o_success'] >= 1){
+            if(isset($loginData['o_success']) && $loginData['o_success'] >= 1){
                 redirect('/');
             }
             else{
                 if(array_key_exists('timeoutLeft', $loginData) && $loginData['timeoutLeft'] >= 1){
-                    $response['loginFail'] = true;
-
+                    $bodyData['loginFail'] = true;
+                    $bodyData['timeoutLeft'] = $loginData['timeoutLeft'];
                 }
             }  
         }
-        $data['render_searchbar'] = false;
-        $response = array_merge($response, $loginData);
         
-        $this->load->view('templates/header', $data);
-        $this->load->view('pages/user/login_view',$response);
+        $bodyData = array_merge($bodyData, $loginData);
+
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/login_view',$bodyData);
         $this->load->view('templates/footer');
       }
 
@@ -95,133 +103,156 @@ class Login extends MY_Controller
     {
         // if user still has timeout left, do not process this login attempt
         if($this->throttleService->getTimeoutLeft($uname) >= 1){
-            $row['o_success'] = 0;
-            $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
+            $authenticationResult['o_success'] = 0;
+            $authenticationResult['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
         }
-        else{
-            $dataval = array('login_username' => $uname, 'login_password' => $pass);             
-            $row = $this->accountManager->authenticateMember($uname, $pass);
+        else{         
+            $authenticationResult = $this->accountManager->authenticateMember($uname, $pass);
 
-            if (!empty($row["member"])) {
+            if (empty($authenticationResult["member"]) === false) {
             
-                $row['o_success'] = 1;
-                $row["o_memberid"] = $row["member"]->getIdMember();
-                $row["o_session"] = sha1($row["member"]->getIdMember().date("Y-m-d H:i:s"));
+                $memberId =  $authenticationResult["member"]->getIdMember();
+                
+                $authenticationResult['o_success'] = 1;
+                $authenticationResult["o_memberid"] = $memberId;
+                $authenticationResult["o_session"] = $this->accountManager->generateUsersessionId($memberId);
 
                 $em = $this->serviceContainer['entity_manager'];
                 $cartManager = $this->serviceContainer['cart_manager'];
-                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $row['o_memberid']]);
+                $user = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $memberId]);
                 $session = $em->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
                 $cartData = $cartManager->synchCart($user->getIdMember());
 
-                $this->session->set_userdata('member_id', $row['o_memberid']);
-                $this->session->set_userdata('usersession', $row['o_session']);
+                $this->session->set_userdata('member_id', $authenticationResult['o_memberid']);
+                $this->session->set_userdata('usersession', $authenticationResult['o_session']);
                 $this->session->set_userdata('cart_contents', $cartData);
 
-                if($this->input->post('keepmeloggedin') == 'on'){ //create cookie bound to memberid||ip||browser 
-                    $temp = array(
-                        'member_id' => $this->session->userdata('member_id'),
-                        'ip' => $this->session->userdata('ip_address'),
-                        'useragent' => $this->session->userdata('user_agent'),
-                        'session' => $this->session->userdata('session_id'),
-                    );
-                    $cookieval = $this->user_model->dbsave_cookie_keeplogin($temp)['o_token'];
-                    $this->user_model->create_cookie($cookieval);
+                if($this->input->post('keepmeloggedin') == 'on'){
+                    $member = $em->find('\EasyShop\Entities\EsMember', ['idMember' => $memberId]);
+                    $ipAddress = $this->session->userdata('ip_address');
+                    $userAgent = $this->session->userdata('user_agent');
+                    $cisessionId = $this->session->userdata('session_id');
+                    $newToken = $this->accountManager->persistRememberMeCookie($member, $ipAddress, $userAgent, $cisessionId);
+                    $cookiedata = [
+                        'name' => 'es_usr',
+                        'value' => $newToken,
+                        'expire' => EasyShop\Account\AccountManager::REMEMBER_ME_COOKIE_LIFESPAN_IN_SEC,
+                    ];
+                    set_cookie($cookiedata);
                 }
-                
+          
                 /**
                  * Register authenticated session
                  */
-                $user->setUsersession($row["o_session"] );
+                $user->setUsersession($authenticationResult["o_session"] );
                 $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
                 $authenticatedSession->setMember($user)
                                      ->setSession($session);
                 $em->persist($authenticatedSession);
                 $em->flush();
+         
             }
             else{ 
-                // log failed attempt
                 $this->throttleService->logFailedAttempt($uname);
-
-                // set new timeout
                 $this->throttleService->updateMemberAttempt($uname);
-                $row['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
-                $row['o_message'] = $row["errors"][0]["login"];
-                $row['o_success'] = 0;
+                $authenticationResult['timeoutLeft'] = $this->throttleService->getTimeoutLeft($uname);
+                $authenticationResult['o_message'] = $authenticationResult["errors"][0]["login"];
+                $authenticationResult['o_success'] = 0;
             }
         }
-        return $row;
+        return $authenticationResult;
     }
     
-    
+    /**
+     * Log-outs a user by destroying the pertinent session details
+     *
+     */
     public function logout() 
     {
-        
         $cart_items = serialize($this->session->userdata('cart_contents'));
-        $id = $this->session->userdata('member_id');        
-        $this->cart_model->save_cartitems($cart_items,$id);
+        $memberId = $this->session->userdata('member_id');        
+        $this->cart_model->save_cartitems($cart_items,$memberId);
         $this->user_model->logout();
-        $temp = array(
-                'member_id' => $this->session->userdata('member_id'),
-                'ip' => $this->session->userdata('ip_address'),
-                'useragent' => $this->session->userdata('user_agent'),
-                'token' => get_cookie('es_usr')
-        );
 
-        $this->user_model->dbdelete_cookie_keeplogin($temp);
-        delete_cookie('es_usr');
+        $ipAddress = $this->session->userdata('ip_address');
+        $useragent = $this->session->userdata('user_agent');
+        $token = get_cookie('es_usr');
+        $this->accountManager->unpersistRememberMeCookie($memberId, $ipAddress, $useragent, $token);
+        delete_cookie('es_usr');        
         delete_cookie('es_vendor_subscribe');
-        $this->session->sess_destroy();
+
+        $sessionData = $this->session->all_userdata();
+        foreach ($sessionData as $key => $sessionField) {
+            if ($key != 'session_id' && $key != 'ip_address' && $key != 'user_agent' && $key != 'last_activity') {
+                $this->session->unset_userdata($key);
+            }
+        }
+        
         $referrer = $this->input->get('referrer');
-        if(trim($referrer))
+        if(trim($referrer)){
             redirect('/'.$referrer);
-        else
-            redirect('/login');		
+        }
+        else{
+            redirect('/login');
+        }
     }
 
-    public function identify(){
-        $data = array(
+    /**
+     * Display the reset password page
+     *
+     * @return View
+     */
+    public function identify()
+    {
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Forgot Password | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
             'render_searchbar' => false,
-        );
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);
+        ];
             
-        $temp['toggle_view'] = "";
+        $bodyData['toggle_view'] = "";
         if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
                 $email = $this->input->post('email');
                 $result = $this->register_model->check_registered_email($email);
             if (isset($result['username'])){
                 // Send email and update database 
                 if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){
-                    $temp['toggle_view'] = "1";
+                    $bodyData['toggle_view'] = "1";
                 }else{
-                    $temp['toggle_view'] = "3";		
+                    $bodyData['toggle_view'] = "3";
                 }
             }else{
-                $temp['toggle_view'] = "2";
+                $bodyData['toggle_view'] = "2";
             }
         }
-        $this->load->view('pages/user/forgotpass', $temp);
+        
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/forgotpass', $bodyData);
         $this->load->view('templates/footer');	
     }
 
     public function resetconfirm()
     {
-        $data = array(
-                'title' => 'Reset Password | Easyshop.ph',
-                'render_searchbar' => false,
-        );
-        $response['toggle_view'] = '';
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Reset Password | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
+            'render_searchbar' => false,
+        ];
+        $bodyData['toggle_view'] = '';
         if($this->input->post()){
-            $response['toggle_view'] = $this->input->post('tgv');
+            $bodyData['toggle_view'] = $this->input->post('tgv');
         }
         else{
-            $response['hash'] = $this->input->get('confirm');
+            $bodyData['hash'] = $this->input->get('confirm');
         }      
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data);		
-        $this->load->view('pages/user/forgotpass_confirm', $response);
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));	
+        $this->load->view('pages/user/forgotpass_confirm', $bodyData);
         $this->load->view('templates/footer');
     }
 

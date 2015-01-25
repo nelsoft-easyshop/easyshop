@@ -47,8 +47,8 @@ class Product extends MY_Controller {
                 $isButtonClickable = false;
                 $buttonLabel = "Item is listed as an ad only. *";
             }
-            elseif((int)$product->getPromoType() === \EasyShop\Entities\EsPromo::BUY_AT_ZERO 
-                   && (int)$product->getStartPromo() === 1){
+            elseif((int)$product->getPromoType() === \EasyShop\Entities\EsPromoType::BUY_AT_ZERO
+                   && (bool) $product->getStartPromo()){
                 $buttonLabel = "Click buy to qualify for the promo *";
             }
             elseif(!$isButtonClickable && (int)$product->getStartPromo() === 1){

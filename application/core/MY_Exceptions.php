@@ -21,22 +21,18 @@ class MY_Exceptions extends CI_Exceptions {
         if(!empty($route['404_override']) ){
             $CI =& get_instance();
 
-            $data = array('title' => 'Page Not Found | Easyshop.ph',);
-
-            if($CI->session->userdata('member_id')) {
-                $data['user_details'] = $CI->fillUserDetails();
-            }
-            $data['homeContent'] = $CI->fillCategoryNavigation();  
-            $data = array_merge($data, $CI->fill_header());
             $CI->output->set_status_header('404'); 
-            $CI->load->view('templates/header_primary', $data);
+        
+             $headerData = [
+                'memberId' => $CI->session->userdata('member_id'),
+                'title' => 'Page not found | Easyshop.ph',
+            ];
+
+            $CI->load->spark('decorator');    
+            $CI->load->view('templates/header_primary',  $CI->decorator->decorate('header', 'view', $headerData));
             $CI->load->view('pages/general_error');
+            $CI->load->view('templates/footer_primary', $CI->decorator->decorate('footer', 'view'));  
 
-            $socialMediaLinks = $CI->config->load('social_media_links', TRUE);
-
-            $viewData['facebook'] = $socialMediaLinks["facebook"];
-            $viewData['twitter'] = $socialMediaLinks["twitter"];               
-            $CI->load->view('templates/footer_primary', $viewData);
             echo $CI->output->get_output();
             exit;
         } 

@@ -34,13 +34,13 @@ class product extends MY_Controller
 
         $categoryDetails = $EsCatRepository->findOneBy(['slug' => $categorySlug]);
         $categoryId = $categoryDetails->getIdCat(); 
-        $getParameter = $this->input->get() ? $this->input->get() : array();
-        $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId,TRUE);
+        $getParameter = $this->input->get() ? $this->input->get() : [];
+        $getParameter['category'] = $categoryId;
         $search = $searchProductService->getProductBySearch($getParameter); 
         $response['products'] = $search['collection'];
 
         $response['typeOfView'] = trim($this->input->get('typeview'));
-        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,TRUE);
+        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more', $response, true);
         $data['count'] = count($response['products']);
         echo json_encode($data);
     }
@@ -65,7 +65,7 @@ class product extends MY_Controller
             $categoryDescription = $categoryDetails->getDescription();
             
             $response['getParameter'] = $getParameter = $this->input->get() ? $this->input->get() : [];
-            $getParameter['category'] = $EsCatRepository->getChildCategoryRecursive($categoryId, true);
+            $getParameter['category'] = $categoryId;
             $subCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->findBy(['parent' => $categoryId]);
 
@@ -95,14 +95,15 @@ class product extends MY_Controller
             $response['breadcrumbs'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                         ->getParentCategoryRecursive($categoryId);
 
-            $data = array( 
+            $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => es_string_limit(html_escape($categoryName), 60, '...', ' | Easyshop.ph'),
                 'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
                 'relCanonical' => base_url().'category/'.$categorySlug ,
-                ); 
-            $data = array_merge($data, $this->fill_header());
+            ];
 
-            $this->load->view('templates/header', $data); 
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_search_by_category_final_responsive', $response);
             $this->load->view('templates/footer'); 
         }
@@ -179,19 +180,20 @@ class product extends MY_Controller
             }
         }
 
-        $data = array( 
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.ph - All Categories',  
-            'categories' => $categories
-            ); 
-        $data = array_merge($data, $this->fill_header());
-        $this->load->view('templates/header', $data); 
-        $this->load->view('pages/product/all_categories_view', $data); 
+        ]; 
+        
+        $bodyData = [
+            'categories' => $categories,
+        ];
 
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/footer_full', $viewData);     
+        
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/product/all_categories_view', $bodyData); 
+        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view')); 
     }
 
     /**
@@ -221,8 +223,8 @@ class product extends MY_Controller
      */
     public function item($itemSlug = '')
     {
-        $headerData = $this->fill_header(); 
 
+        $httpRequest = $this->serviceContainer['http_request'];
         $productManager = $this->serviceContainer['product_manager'];
         $cartManager = $this->serviceContainer['cart_manager'];
         $userManager = $this->serviceContainer['user_manager'];
@@ -231,18 +233,26 @@ class product extends MY_Controller
         $stringUtility = $this->serviceContainer['string_utility'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
-        $productEntity = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                  ->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+
+        $productEntity = $esProductRepo->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
         $viewerId =  $this->session->userdata('member_id');
-        
-        
-        
+    
+        $viewer = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($viewerId);
         if($productEntity){
             $member = $productEntity->getMember();
             if($member->getIsActive() && !$member->getIsBanned()){
+
                 if($viewerId){
-                    if((int)$viewerId !== $member->getIdMember()){
-                        $productEntity->setClickcount($productEntity->getClickcount() + 1);
+                    $isIncrease = $productManager->increaseClickCount($productEntity, $viewerId);
+                    if($isIncrease){
+                        $productHistoryView = new \EasyShop\Entities\EsProductHistoryView();
+                        $productHistoryView->setMember($viewer);
+                        $productHistoryView->setProduct($productEntity);
+                        $productHistoryView->setDateViewed(date_create());
+                        $productHistoryView->setIpAddress($httpRequest->getClientIp());
+                        $this->em->persist($productHistoryView);
                         $this->em->flush();
                     }
                 }
@@ -292,76 +302,73 @@ class product extends MY_Controller
                         show_404();
                     }
                 }
-
+                
+                
                 $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
-
                 $productDescription = $stringUtility->purifyHTML($product->getDescription());
-
                 $productReviews = $reviewProductService->getProductReview($productId);
                 $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
-
                 $reviewDetailsData = [
-                            'productDetails' => $productDescription,
-                            'productAttributes' => $productAttributes,
-                            'productReview' => $productReviews,
-                            'canReview' => $canReview,
-                            'additionalInformation' => $additionalInformation
-                        ];
-
+                    'productDetails' => $productDescription,
+                    'productAttributes' => $productAttributes,
+                    'productReview' => $productReviews,
+                    'canReview' => $canReview,
+                    'additionalInformation' => $additionalInformation
+                ];
                 $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
-
                 $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
                 $recommendViewArray = [
-                                    'recommended'=> $recommendProducts,
-                                    'productCategorySlug' => $product->getCat()->getSlug(),
-                                ];
-
+                    'recommended'=> $recommendProducts,
+                    'productCategorySlug' => $product->getCat()->getSlug(),
+                ];
                 $recommendedView = $this->load->view('pages/product/productpage_view_recommend',$recommendViewArray,true);
 
-                $viewData = [
-                                'product' => $product,
-                                'breadCrumbs' => $breadcrumbs,
-                                'ownerAvatar' => $avatarImage,
-                                'imagesView' => $imagesView,
-                                'productAttributes' => $productAttributes,
-                                'productCombinationQuantity' => json_encode($productCombination),
-                                'shippingInfo' => $shippingDetails,
-                                'shiploc' => $shippingLocation,
-                                'paymentMethod' => $paymentMethod,
-                                'isBuyButtonViewable' => $isBuyButtonViewable,
-                                'isLoggedIn' => $headerData['logged_in'],
-                                'viewerId' => $viewerId,
-                                'canPurchase' => $canPurchase,
-                                'userData' => $headerData['user'],
-                                'bannerView' => $bannerView, 
-                                'reviewDetailsView' => $reviewDetailsView,
-                                'recommendedView' => $recommendedView,
-                                'noMoreSelection' => $noMoreSelection, 
-                                'needToSelect' => $needToSelect,
-                                'isFreeShippingNationwide' => $isFreeShippingNationwide, 
-                                'url' => base_url() .'item/' . $product->getSlug()
-                            ];
+                $snipperMarkUpData = [
+                    'product' => $product,
+                    'breadCrumbs' => $breadcrumbs,
+                    'reviewCount' => count($productReviews),
+                    'averageRating' => $esProductRepo->getProductAverageRating($productId),
+                ];
+                $snippetMarkUp = $this->load->view('templates/seo/product_markup', $snipperMarkUpData, true);
 
-                if($this->session->userdata('member_id')) {
-                    $headerData['user_details'] = $this->fillUserDetails();
-                }
+                $bodyData = [
+                    'product' => $product,
+                    'breadCrumbs' => $breadcrumbs,
+                    'ownerAvatar' => $avatarImage,
+                    'imagesView' => $imagesView,
+                    'productAttributes' => $productAttributes,
+                    'productCombinationQuantity' => json_encode($productCombination),
+                    'shippingInfo' => $shippingDetails,
+                    'shiploc' => $shippingLocation,
+                    'paymentMethod' => $paymentMethod,
+                    'isBuyButtonViewable' => $isBuyButtonViewable,
+                    'isLoggedIn' => $this->session->userdata('session'),
+                    'viewerId' => $viewerId,
+                    'canPurchase' => $canPurchase,
+                    'userData' => $product->getMember(),
+                    'bannerView' => $bannerView, 
+                    'reviewDetailsView' => $reviewDetailsView,
+                    'recommendedView' => $recommendedView,
+                    'noMoreSelection' => $noMoreSelection, 
+                    'needToSelect' => $needToSelect,
+                    'isFreeShippingNationwide' => $isFreeShippingNationwide, 
+                    'url' => base_url() .'item/' . $product->getSlug(),
+                    'snippetMarkUp' => $snippetMarkUp,
+                ];
 
-                $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getDescription();
-                $headerData['metadescription'] = es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT);
-                $headerData['title'] = html_escape($product->getName()). " | Easyshop.ph";
-                $headerData['relCanonical'] = base_url().'item/'.$itemSlug;
-                $headerData['homeContent'] = $this->fillCategoryNavigation();
-        
-                
-                $headerData = array_merge($headerData, $this->fill_header());
+                $briefDescription = trim($product->getBrief()) === "" ? $product->getName() :  $product->getBrief();
 
-                $socialMediaLinks = $this->getSocialMediaLinks();
-                $footerData['facebook'] = $socialMediaLinks["facebook"];
-                $footerData['twitter'] = $socialMediaLinks["twitter"];
+                $headerData = [
+                    "memberId" => $this->session->userdata('member_id'),
+                    'title' =>  html_escape($product->getName()). " | Easyshop.ph",
+                    'metadescription' => es_string_limit(html_escape($briefDescription), \EasyShop\Product\ProductManager::PRODUCT_META_DESCRIPTION_LIMIT),
+                    'relCanonical' => base_url().'item/'.$itemSlug,
+                ];
 
-                $this->load->view('templates/header_primary', $headerData);
-                $this->load->view('pages/product/productpage_primary', $viewData);
-                $this->load->view('templates/footer_primary',$footerData);
+                $this->load->spark('decorator');    
+                $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+                $this->load->view('pages/product/productpage_primary', $bodyData); 
+                $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
             }
             else{
                 show_404();
@@ -447,11 +454,13 @@ class product extends MY_Controller
         $this->load->config('protected_category', TRUE);
         $category_id = $this->config->item('promo', 'protected_category');
         $this->load->library('xmlmap');
-        $data = $this->fill_header();
-        $data['title'] = 'Deals | Easyshop.ph';
-        $data['metadescription'] = 'Get the best price offers for the day at Easyshop.ph.';
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Deals | Easyshop.ph',
+            'metadescription' => 'Get the best price offers for the day at Easyshop.ph.',
+        ];
         
-        $banner_data = array();
+        $banner_data = [];
         $view_data['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data, TRUE);
         #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
         $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
@@ -459,7 +468,8 @@ class product extends MY_Controller
         #$categoryId = $this->config->item('peak_hour_promo', 'protected_category');
         #$view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX,'createddate ASC,');
 
-        $this->load->view('templates/header', $data); 
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/product/product_promo_category', $view_data); 
         $this->load->view('templates/footer');
     }
@@ -471,14 +481,18 @@ class product extends MY_Controller
      */
     public function post_and_win_promo()
     {
-        $data = $this->fill_header();
-        $data['title'] = 'Post and Win | Easyshop.ph';
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Post and Win | Easyshop.ph',
+        ];
 
-        $socialMediaLinks = $this->getSocialMediaLinks();
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         $socialData['facebook'] = $socialMediaLinks["facebook"];
         $socialData['twitter'] = $socialMediaLinks["twitter"];
 
-        $this->load->view('templates/header', $data);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/post_and_win_view', $socialData);
         $this->load->view('templates/footer');
     }

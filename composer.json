@@ -9,8 +9,7 @@
         "doctrine/migrations": "dev-master",
         "ezyang/htmlpurifier": "dev-master",
         "elnur/blowfish-password-encoder-bundle": "~0.5",
-        "symfony/yaml": "dev-master",
-        "elnur/blowfish-password-encoder-bundle": "~0.5",
+        "symfony/yaml": "2.6.*@dev",
         "symfony/form": "2.6.*@dev",
         "symfony/http-foundation": "2.6.*@dev",
         "symfony/validator": "2.6.*@dev",
@@ -21,7 +20,8 @@
         "facebook/php-sdk-v4" : "4.0.*",
         "google/apiclient": "1.0.*@beta",
         "noiselabs/nusoap-bundle": "dev-master",
-        "php-curl-class/php-curl-class": "~2.1"
+        "php-curl-class/php-curl-class": "~2.1",
+        "neutron/sphinxsearch-api": "dev-master"
     },
     "repositories": [
         {

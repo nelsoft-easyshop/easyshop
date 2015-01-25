@@ -316,11 +316,20 @@ class EsMember
      */
     const DEFAULT_IMG_BANNER = 'banner.png';
 
-    
     /**
      *  @var boolean
      */
-    const DEFAULT_ACTIVE = 1;
+    const DEFAULT_IMG_AVATAR = 'usersize.png';    
+
+    /**
+     *  @var string
+     */
+    const DEFAULT_ACTIVE = 1; 
+
+    /**
+     *  @var int
+     */
+    const DEFAULT_AVATAR_VISIBILITY = 0;       
 
     /**
      * @var boolean
@@ -910,10 +919,10 @@ class EsMember
      */
     public function getStoreName()
     {   
-        if(!$this->storeName){
+        if ( strlen(trim($this->storeName)) <= 0 
+           || !trim($this->storeName) ){ 
             return $this->getUsername();
         }
-
         return $this->storeName;
     }
 

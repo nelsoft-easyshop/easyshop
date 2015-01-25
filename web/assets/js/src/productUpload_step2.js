@@ -90,9 +90,7 @@ function askDraft(location)
             resizable: false,
             height: 200,
             width: 530,
-            modal: true, 
-            open: function() {
-            },
+            modal: true,
             buttons: {
                 "Yes, please.": function() {
                     $(".ui-dialog-buttonset").hide();
@@ -126,7 +124,7 @@ function askDraft(location)
 
 function removeDuplicateCombination()
 {
-    var arrayCombination = new Array();
+    var arrayCombination = [];
     $(".div-combination").each(function(){
         var selector = $(this);
         var cnt = selector.children('.div3').children('.remove-combination').data('cmbcnt');
@@ -147,7 +145,7 @@ function removeDuplicateCombination()
 
 function checkCombination(currentStringId)
 {
-    var arrayCombination = new Array();
+    var arrayCombination = [];
     $(".div-combination").each(function(){
         var select = $(this).children('.div2').children('span').children('.selection');
         var stringId = "";
@@ -158,11 +156,9 @@ function checkCombination(currentStringId)
     });
     if(arrayCombination.length > 0){
         if($.inArray(currentStringId,arrayCombination) <= -1){
-            console.log('not exist');
             return true;
         }
         else{
-            console.log('exist');
             return false;
         }
     }
@@ -481,8 +477,7 @@ function processCombination()
 
         eachCombination.quantity = currentDiv.children('.div1').children('.qty').val(); 
         eachCombination.data = eachData; 
-        eachCombination.itemid = itemId; 
-        console.log(eachCombination);
+        eachCombination.itemid = itemId;
         completeCombination.push(eachCombination);
     });
 
@@ -729,8 +724,11 @@ var previous,editSelectedValue,editSelectedId;
         if(evt.which === 13){
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
- 
     }
+
+    $(document).on('focus, click', '.chzn-single', function(){
+        $(".chzn-search > input[type=text]").attr('maxlength', 25);
+    });
 
 
     $(document).on("keypress",".chzn-search > input[type=text]", function (evt){
@@ -761,7 +759,7 @@ var previous,editSelectedValue,editSelectedId;
                 });
             }
             else{
-                attributeArray[selectedValue] = new Array();
+                attributeArray[selectedValue] = [];
             }
         }
         else{
@@ -799,11 +797,10 @@ var previous,editSelectedValue,editSelectedId;
         var selectedValue = selector.chosen().val();
         var cleanString = jqSelector(selectedValue.toLowerCase().replace(/ /g,''));
         var optionString = "";
-        var eachCtrlValue = new Array();
+        var eachCtrlValue = [];
         var checked = $('.set-default:checked').length > 0; 
 
         if(selectedValue == 0){
-            console.log('no value selected');
             return false;
         }
 
@@ -822,7 +819,7 @@ var previous,editSelectedValue,editSelectedId;
                             }
                         } 
                     }
-                    optionString += "<option data-value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
+                    optionString += "<option data-value='"+selectList+"' value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
                     if($.inArray(selectList,attributeArray[selectedValue]) <= -1){
                         attributeArray[selectedValue].push(selectList);
                     }
@@ -904,7 +901,6 @@ var previous,editSelectedValue,editSelectedId;
                         $(this).children('option:selected').data('price',validSelection[selectedValue]['price']);
                         $(this).children('option:selected').data('image',validSelection[selectedValue]['image']);
                         $(this).children('option:selected').text(validSelection[selectedValue]['text']);
-                        console.log($(this).children('option:selected').data('price'));
                     }
                 });
             });
@@ -969,15 +965,14 @@ var previous,editSelectedValue,editSelectedId;
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
                 var selData = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').data('value');
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).attr('selected','selected');
-                
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).prop('selected', true);
+                var selectElement = $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id'));
+                selectElement.children('option').each(function(){
+                    if ($(this).data('value') == selData) {
+                        $(this).parent().val(selData).change(); 
+                    }
+                });
 
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).prop("disabled",true);
+                selectElement.prop("disabled",true);
             });
 
             $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
@@ -1011,9 +1006,6 @@ var previous,editSelectedValue,editSelectedId;
 
     $(document).on("click",".remove-attr",function (){
         var selector = $(this);
-        console.log('you press remove-attr class');
-        console.log('confirmation ask');
-
         var id = selector.data('id');
         validateRedTextBox(".div2 > span > #"+id);
         var confirmation = confirm('Are you sure you want to remove?');
@@ -1177,13 +1169,35 @@ var currentRequest = null;
     }
 })( jQuery );
 // BRAND SEARCH END
- 
 
-
-// ES_UPLOADER BETA     
+// ES_UPLOADER BETA
 var canProceed = true; 
-var removeThisPictures = []; var imageAttr = [];
-var pictureCountOther  = 0; var primaryPicture = 0;
+var removeThisPictures = []; 
+var imageAttr = [];
+var pictureCountOther  = 0; 
+var primaryPicture = 0;
+
+var filescnt = 1;
+var imageCustom =  []; 
+var response;
+var filescntret;
+var currentCnt;
+
+var imageObject = [];
+var cropCurrentCount;
+var arrayUpload = [];
+var afstart = [];
+var afTemp = [];
+var imageName = "";
+var errorValues = "";
+var axes = [];
+var sizeList = [];
+var extensionList = [];
+var imageCollection = [];
+var widthRatio = 445;
+var heightRatio = 538;
+var totalCropImage;
+
 (function($) {
   
     if(window.FileReader){
@@ -1199,142 +1213,156 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         $('.files.active').click(); 
     });
 
-    var filescnt = 1;
-    var imageCustom =  new Array();
-    var editRemoveThisPictures = new Array();
-    var response;
-    var filescntret;
-    var currentCnt;
+    function showCoords(c){ 
+        $('#image_x').val(c.x);
+        $('#image_y').val(c.y);
+        $('#image_w').val(c.w);
+        $('#image_h').val(c.h);
+    }
 
-    $(document).on('change',".files.active",function (e){
-        var arrayUpload = new Array();
-        var afstart = new Array();
+    var cropImage = function($input)
+    {
+        totalCropImage = imageObject.length;
+        var jcrop_api, imgHeight, imgWidth;
+        var targetImage = imageObject[cropCurrentCount];
+        var currentExtension = extensionList[cropCurrentCount];
+        var currentSize = sizeList[cropCurrentCount];
 
-        if(badIE == false){
-            var fileList = this.files;
-            var anyWindow = window.URL || window.webkitURL; 
-            var errorValues = "";
-            for(var i = 0; i < fileList.length; i++){
-                var activeText= ""; 
-                var primaryText = "Make Primary"; 
-                var size = fileList[i].size
-                var val = fileList[i].name;
-                var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-                var objectUrl = anyWindow.createObjectURL(fileList[i]); 
-                pictureInDiv = $("#list > div").length;
-
-                if(pictureInDiv == 0){
-                    primaryText = "Your Primary";
-                    activeText = "active_img";
-                    primaryPicture = pictureCount;
-                }
-
-                if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < 5242880){
-                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'">\
-                        <span class="upload_img_con loading_opacity"><img src="'+objectUrl+'"></span>\
-                        <a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br>\
-                        <span class="loading-text">0 %</span>\
-                        <a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a>\
-                        <div class="loadingfiles"></div>\
-                        </div>');
-                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
-                    $('.filescnt'+filescnt+' > .removepic').hide(); 
-
-                }else{
-                    if(size < 5*1024*1024){
-                        errorValues += val + "\n(Invalid file type).\n<br>";
-                    }
-                    else{
-                        errorValues += val + "\n(The file size exceeds 5 MB).\n<br>";
-                    }
-                    removeThisPictures.push(pictureCount);
-                }
-
-                imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-                af.push(imageName+'||'+extension); 
-                afstart.push(imageName); 
-                // window.URL.revokeObjectURL(fileList[i]);
-                arrayUpload.push(pictureCount);
-                pictureCount++; 
-            }
-
-            $(".files").hide();  
-            $(".files.active").each(function(){
-                $(this).removeClass('active');
-            });
-
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,errorValues);
-            filescnt++;
-            $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
-            $(this).remove();
+        if((currentExtension == 'gif' 
+            || currentExtension == 'jpg' 
+            || currentExtension == 'png' 
+            || currentExtension == 'jpeg') 
+            && currentSize < maxImageSize){
+           
+            $('#crop-image-main > #imageTag').attr('src',targetImage);
+            $("<img/>") // Make in memory copy of image to avoid css issues
+                .attr("src", $('#crop-image-main > #imageTag').attr("src"))
+                .load(function() {
+                    imgWidth = this.width;   // Note: $(this).width() will not 
+                    imgHeight = this.height; // work for in memory images.
+                    var x1 = imgWidth / 2 - widthRatio / 2; 
+                    var x2 = x1 + widthRatio; 
+                    var y1 = 0;
+                    var y2 = imgHeight; 
+                    $('#crop-image-main').dialog({
+                        resizable: false,
+                        height: 600,
+                        width: 600,
+                        modal: true,
+                        buttons: {
+                            "Crop": function() {
+                                var xCoord = $('#image_x').val();
+                                var yCoord = $('#image_y').val();
+                                var wCoord = $('#image_w').val();
+                                var hCoord = $('#image_h').val();
+                                var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
+                                jcrop_api.destroy();  
+                                af.push(afTemp[cropCurrentCount]);
+                                axes.push(coordinate); 
+                                cropCurrentCount++;  
+                                $(this).dialog("close"); 
+                                if(cropCurrentCount < totalCropImage){
+                                    cropImage($input);
+                                }
+                                else{
+                                    triggerUpload();
+                                    $(".files").hide();
+                                    $(".files.active").each(function(){
+                                        $(this).removeClass('active');
+                                    });
+                                    $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+                                    $input.remove();
+                                }
+                            }
+                        },
+                        open: function() {
+                            $(this).parent().addClass('pop-up-fixed');
+                            jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
+                                aspectRatio: widthRatio / heightRatio,
+                                setSelect: [ x1 / 2, y1, x2, y2 ],
+                                boxWidth: 500,
+                                boxHeight: 431,
+                                minSize: [
+                                    imgWidth * 0.1,
+                                    imgHeight * 0.1
+                                ],
+                                trueSize: [
+                                    imgWidth,
+                                    imgHeight
+                                ],
+                                onChange: showCoords,
+                                onSelect: showCoords
+                            });
+                        },
+                        close: function(){
+                            $('#crop-image-main >  #imageTag').attr('src', ''); 
+                            $('#crop-image-main').append('<img src="" id="imageTag">');
+                            jcrop_api.destroy();
+                        },
+                        "title": "Crop your image"
+                    });
+                });
         }
         else{
-            var activeText= ""; 
-            var errorValues = "";
-            var primaryText = "Make Primary"; 
-            var val = $(this).val();
-            pictureInDiv = $("#list > div").length;
-
-            if(pictureInDiv == 0){
-                primaryText = "Your Primary";
-                activeText = "active_img";
-                primaryPicture = pictureCount;
+            axes.push("0,0,0,0");
+            af.push(afTemp[cropCurrentCount]);
+            cropCurrentCount++;
+            if(cropCurrentCount < totalCropImage){
+                cropImage($input);
             }
-
-            var id = "imgid" + pictureCount;
-            imageCustom = document.getElementById('files').value;
-            var filename = imageCustom.match(/[^\/\\]+$/);
-            extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-
-            switch(extension){
-                case 'gif': case 'jpg': case 'png': case 'jpeg':
-                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+filename+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
-                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
-                    $('.filescnt'+filescnt+' > .removepic').hide(); 
-                break;
-                default:
-                    alert('Invalid file type. Please choose another image.');
-                    removeThisPictures.push(pictureCount); 
-                    return false;
-                break;
+            else{
+                triggerUpload();
+                $(".files").hide();
+                $(".files.active").each(function(){
+                    $(this).removeClass('active');
+                });
+                $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+                $input.remove();
             }
-
-            $(".files").hide();  
-            $(".files.active").each(function(){
-                $(this).removeClass('active');
-            });
-
-            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-            af.push(imageName+'||'+extension); 
-            afstart.push(imageName); 
-            arrayUpload.push(pictureCount);  
-            pictureCount++;
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,"");
-            filescnt++;
         }
+    }
+
+    $(document).on('click','.ui-dialog-titlebar-close',function(e){
+            af.push(afTemp[cropCurrentCount]); 
+            cropCurrentCount++;
+            while(cropCurrentCount < totalCropImage){
+                af.push(afTemp[cropCurrentCount]);
+                cropCurrentCount++;
+            }
+            $.each( arrayUpload, function( key, value ) {
+                removeThisPictures.push(value); 
+                $('#previewList'+value).remove();
+            }); 
+            canProceed = true;  
     });
+
+    function triggerUpload()
+    {
+        startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,errorValues);
+        filescnt++;
+    }
 
     function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
         canProceed = false;
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
-        $('#afstart').val(JSON.stringify(afstart));   
+        $('#afstart').val(JSON.stringify(afstart));
+        $("#coordinates").val(JSON.stringify(axes));
         $('#form_files').ajaxForm({
             url: '/productUpload/uploadimage',
             type: "POST", 
-            dataType: "json",             
+            dataType: "json",
             xhr: function(){
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function(evt){
                     if (evt.lengthComputable) {
                         var percentComplete = evt.loaded / evt.total * 100.0;
-                        console.log(percentComplete);
                         $('.loading-text').html(parseFloat(percentComplete).toFixed(2) + ' %');
                     }
                 }, false);
                 return xhr;
             },
-            success :function(d) {   
+            success :function(d) {
                 filescntret = d.fcnt;
                 $('.filescnt'+filescntret+' > .loadingfiles').remove();
                 $('.filescnt'+filescntret+' > span').removeClass('loading_opacity');
@@ -1343,7 +1371,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 $('.filescnt'+filescnt+' > .loading-text').hide(); 
                 canProceed = true; 
                 if(d.err == '1'){ 
-                    alert(d.msg, "The following images cannot be uploaded: <br>" + errorValues);
+                    alert(d.msg, "The following files cannot be uploaded: <br>" + errorValues);
                     $.each( arrayUpload, function( key, value ) {
                         removeThisPictures.push(value); 
                         $('#previewList'+value).remove();
@@ -1351,13 +1379,17 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 }
                 else{
                     if(errorValues != ""){
-                        alert("The following images cannot be upload: " ,errorValues);
+                        alert("The following files cannot be upload: " ,errorValues);
                     }
+                    $.each( imageCollection, function( key, value ) {
+                        $('#previewList'+value.picture_count + ' > span > img')
+                            .attr("src",'/'+tempDirectory+'/categoryview/'+value.image_name);
+                    });
                 }
                 if(badIE == true){
                     if(d.err != '1'){
                         $.each( arrayUpload, function( key, value ) {
-                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/'+imageName);
+                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/categoryview/'+imageName);
                         });
                     } 
                     $(".files").remove();
@@ -1382,6 +1414,119 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         }); 
         $('#form_files').submit();
     }
+
+    $(document).on('change',".files.active",function (e){
+        arrayUpload = [];
+        afstart = [];
+        afTemp = [];
+        imageObject = [];
+        axes = [];
+        sizeList = [];
+        extensionList = [];
+        imageCollection = [];
+        errorValues = "";
+        cropCurrentCount = 0;
+
+        if(badIE == false){
+            var fileList = this.files;
+            var anyWindow = window.URL || window.webkitURL;
+            for(var i = 0; i < fileList.length; i++){
+                var arraySet = {};
+                var activeText= ""; 
+                var primaryText = "Make Primary"; 
+                var size = fileList[i].size
+                var val = fileList[i].name;
+                var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+                var objectUrl = anyWindow.createObjectURL(fileList[i]); 
+                pictureInDiv = $("#list > div").length;
+
+                if(pictureInDiv == 0){
+                    primaryText = "Your Primary";
+                    activeText = "active_img";
+                    primaryPicture = pictureCount;
+                }
+
+                if((extension == 'gif' || extension == 'jpg' || extension == 'png' || extension == 'jpeg') && size < maxImageSize){
+                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'">\
+                        <span class="upload_img_con loading_opacity"><img src="'+objectUrl+'"></span>\
+                        <a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br>\
+                        <span class="loading-text">0 %</span>\
+                        <a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a>\
+                        <div class="loadingfiles"></div>\
+                        </div>');
+                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
+                    $('.filescnt'+filescnt+' > .removepic').hide();
+                }
+                else{
+                    if(size < maxImageSize){
+                        errorValues += val + "\n(Invalid file type).\n<br>";
+                    }
+                    else{
+                        errorValues += val + "\n(The file size exceeds 5 MB).\n<br>";
+                    }
+                    removeThisPictures.push(pictureCount);
+                }
+
+                imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+
+                arraySet['picture_count'] = pictureCount;
+                arraySet['image_name'] = imageName;
+                imageCollection.push(arraySet);
+                afTemp.push(imageName+'||'+extension);
+                afstart.push(imageName);
+                arrayUpload.push(pictureCount);
+                imageObject.push(objectUrl);
+                sizeList.push(size);
+                extensionList.push(extension);
+                pictureCount++;
+            }
+            cropImage($(this));
+        }
+        else{
+            var activeText= ""; 
+            var primaryText = "Make Primary"; 
+            var val = $(this).val();
+            pictureInDiv = $("#list > div").length;
+
+            if(pictureInDiv == 0){
+                primaryText = "Your Primary";
+                activeText = "active_img";
+                primaryPicture = pictureCount;
+            }
+
+            var id = "imgid" + pictureCount;
+            imageCustom = document.getElementById('files').value;
+            var filename = imageCustom.match(/[^\/\\]+$/);
+            extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+            af.push(imageName+'||'+extension); 
+            afstart.push(imageName); 
+            arrayUpload.push(pictureCount);  
+
+            switch(extension){
+                case 'gif': case 'jpg': case 'png': case 'jpeg':
+                    $('#list').append('<div id="previewList'+pictureCount+'" class="new_img upload_img_div '+activeText+' filescnt filescntactive filescnt'+filescnt+'"><span class="upload_img_con"><img src="'+imageCustom+'" alt="'+filename+'" style="height:100px;"></span><a href="javascript:void(0)" class="removepic" data-number="'+pictureCount+'">x</a><br><a href="javascript:void(0)" class="makeprimary photoprimary'+pictureCount+'" data-number="'+pictureCount+'">'+primaryText+'</a><div class="loadingfiles"></div></div>');   
+                    $('.filescnt'+filescnt+' > .makeprimary').hide(); 
+                    $('.filescnt'+filescnt+' > .removepic').hide(); 
+                    pictureCount++;
+                break;
+                default:
+                    alert('Invalid file type. Please choose another image.');
+                    removeThisPictures.push(pictureCount); 
+                    pictureCount++;
+                    return false;
+                break;
+            }
+
+            $(".files").hide();  
+            $(".files.active").each(function(){
+                $(this).removeClass('active');
+            });
+
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,"");
+            filescnt++;
+        }
+    });
 
     $(document).on('click','.remove-attr-image',function(e){
         var selector = $(this);
@@ -1412,36 +1557,69 @@ var pictureCountOther  = 0; var primaryPicture = 0;
         $("#pop-image").parents("#simplemodal-container").addClass("prod-upload-con");
     });
 
-    $(document).on('change',".attr-image-input",function (e){
- 
-        var val = $(this).val();
 
-        extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-        switch(extension){
-            case 'gif': case 'jpg': case 'png': case 'jpeg':
-            break;
-            default:
-                alert('Invalid file type. Please choose another image.');
-                return false;
-            break;
-        }
+    var cropImageOther = function(imageCustom, picName)
+    {
+        var jcrop_api, imgHeight, imgWidth;
+        $('#crop-image-main > #imageTag').attr('src',imageCustom);
+        $("<img/>") // Make in memory copy of image to avoid css issues
+            .attr("src", $('#crop-image-main > #imageTag').attr("src"))
+            .load(function() {
+                imgWidth = this.width;   // Note: $(this).width() will not 
+                imgHeight = this.height; // work for in memory images.
+                var x1 = imgWidth / 2 - widthRatio / 2; 
+                var x2 = x1 + widthRatio; 
+                var y1 = 0;
+                var y2 = imgHeight;
+                $('#crop-image-main').dialog({
+                    resizable: false,
+                    height: 600,
+                    width: 600,
+                    modal: true,
+                    buttons: {
+                        "Crop": function() {
+                            var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
+                            $("#coordinatesOther").val(coordinate);
+                            triggerUploadOther(picName);
+                            $(this).dialog("close");
+                        }
+                    },
+                    open: function() {
+                        $(this).parent().addClass('pop-up-fixed');
+                        jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
+                            aspectRatio: widthRatio / heightRatio,
+                            setSelect: [ x1 / 2, y1, x2, y2 ],
+                            boxWidth: 500,
+                            boxHeight: 431,
+                            minSize: [
+                                imgWidth * 0.1,
+                                imgHeight * 0.1
+                            ],
+                            trueSize: [
+                                imgWidth,
+                                imgHeight
+                            ],
+                            onChange: showCoords,
+                            onSelect: showCoords
+                        });
+                    },
+                    close: function(){ 
+                        jcrop_api.destroy(); 
+                        $('#crop-image-main >  #imageTag').attr('src', ''); 
+                        $('#crop-image-main').append('<img src="" id="imageTag">');
+                    },
+                    "title": "Crop your image"
+                });
+            });
+    }
 
-        if(badIE == false){
-            var size = this.files[0].size;
-            if(size > 5*1024*1024){
-                alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
-                return false;
-            }
-        }
- 
-        picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
-        canProceed = false;
+    function triggerUploadOther(picName)
+    {
         $('#other_files').ajaxForm({
             url: '/productUpload/uploadimageOther',
             type: "POST", 
             dataType: "json", 
             beforeSubmit : function(arr, $form, options){
-                
                 $('<input type="hidden">').attr({
                     id: 'pictureName',
                     name: 'pictureName',
@@ -1455,18 +1633,20 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                     value: pictureCountOther
                 }).appendTo('form');
                 arr.push({name:'pictureCount', value:pictureCountOther});
+                canProceed = false;
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
                 $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
             },
-            success :function(d) {   
+            success :function(d) {
                 canProceed = true;
                 if(d.result == "ok"){
                     imageAttr.push(picName);
                     $('.imageText'+currentCnt).val(picName); 
-                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/'+tempDirectory+'other/'+picName);
-                    pictureCountOther++;    
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/'+tempDirectory+'other/categoryview/'+picName);
+                    pictureCountOther++;
                 }
                 else{
                     alert(d.msg);
@@ -1484,6 +1664,42 @@ var pictureCountOther  = 0; var primaryPicture = 0;
                 $('#other_files > #pictureName').remove();
             }
         }).submit();
+    }
+
+    $(document).on('change',".attr-image-input",function (e){
+ 
+        var val = $(this).val();
+        var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
+        var picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+
+        switch(extension){
+            case 'gif': case 'jpg': case 'png': case 'jpeg':
+            break;
+            default:
+                alert('Invalid file type. Please choose another image.');
+                return false;
+            break;
+        }
+
+        if(badIE == false){
+            var size = this.files[0].size;
+            if(size > maxImageSize){
+                alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
+                return false;
+            }
+        }
+        
+        if(badIE == false){
+            var fileList = this.files;
+            var anyWindow = window.URL || window.webkitURL;
+            var objectUrl = anyWindow.createObjectURL(fileList[0]); 
+            cropImageOther(objectUrl, picName);
+        }
+        else{
+            triggerUploadOther(picName)
+            canProceed = false;
+        }
+
     });
 
 
@@ -1499,9 +1715,7 @@ var pictureCountOther  = 0; var primaryPicture = 0;
             primaryPicture = 0;
             primary_control_anchor.text('Your Primary');     
             first_img_div.addClass("active_img"); 
-        }
-        console.log('Primary Picture: ' + primaryPicture);
-        console.log('Picture to remove: ' + removeThisPictures); 
+        } 
     });
 
     $(document).on('click','.makeprimary',function(){

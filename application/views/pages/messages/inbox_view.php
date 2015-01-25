@@ -23,7 +23,7 @@
             </thead>
             <tbody>
             <?PHP foreach($result['messages'] as $key => $row) { ?>
-                <tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "reciever" ? "NS" : "")?>">
+                <tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "receiver" ? "NS" : "")?>">
                     <td>
                         <div class="img-wrapper-div">
                             <span class="img-wrapper-span">
@@ -32,7 +32,7 @@
                             <?php else: ?>
                                 <img data="<?=reset($row)['recipient_img']?>" src="/<?php echo reset($row)['sender_img']?>/60x60.png">
                             <?php endif; ?>
-                            <?php $span = (reset($row)['unreadConve'] != 0 ? '('.reset($row)['unreadConve'].')' : ""); ?>
+                            <?php $span = (reset($row)['unreadConversationCount'] != 0 ? '('.reset($row)['unreadConversationCount'].')' : ""); ?>
                             </span>
                         </div>
                         
@@ -75,7 +75,7 @@
     <div id="modal-inside-container" class="mrgn-top-10">
         <div>
             <label>To : </label>
-            <input type="text" value="" id="msg_name" name="msg_name" placeholder="username" class="ui-form-control">
+            <input type="text" value="" id="msg_name" name="msg_name" placeholder="Store name" class="ui-form-control">
         </div>
         <div>
             <label>Message : </label><br>
@@ -99,6 +99,7 @@
         $("#table_id_info").hide();
         
         $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search').prop('class','ui-form-control');
+        $('#tbl_search').hide();
         $("#modal-background, #modal-close").click(function() {
             $("#modal-container, #modal-background").toggleClass("active");
             $("#modal-container").hide();
@@ -120,8 +121,7 @@
             if (msg == "") {
                 return false;
             }
-            send_msg(recipient,msg);
-            specific_msgs();
+            send_msg(recipient,msg, true);
 
             var objDiv = document.getElementById("msg_field");
             objDiv.scrollTop = objDiv.scrollHeight;
@@ -182,26 +182,23 @@
 function Reload()
 {
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
-    var result = "";
     var todo = "Get_UnreadMsgs";
     $.ajax({
-        asycn :true,
         type:"POST",
         dataType : "json",
-        url : "/messages/retrieve_msgs",
-        data : {csrfname:csrftoken,todo:todo},
+        url : "/MessageController/getAllMessage",
+        data : {csrfname:csrftoken,isUnread:todo},
         success : function(d)
         {
-            $(".msg_countr").html(d.unread_msgs);
-            if(parseInt(d.unread_msgs) === 0 ){
+            $(".msg_countr").html(d.unread_msgs_count);
+            if(parseInt(d.unread_msgs_count) === 0 ){
                 $('#unread-messages-count').addClass('unread-messages-count-hide');
             }else{
                 $('#unread-messages-count').removeClass('unread-messages-count-hide');
             }
-            document.title = (d.unread_msgs == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs + ") | Easyshop.ph");
+            document.title = (d.unread_msgs_count == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs_count + ") | Easyshop.ph");
 
-            if (d.unread_msgs != 0) {
+            if (d.unread_msgs_count != 0) {
                 onFocus_Reload(d);
             }
         }
@@ -222,7 +219,7 @@ $("#modal_send_btn").on("click",function(){
         return false;
     }
 
-    if(send_msg(recipient,msg)){
+    if(send_msg(recipient,msg, false)){
         $("#modal-container, #modal-background").toggleClass("active");
         $("#modal-container").hide();
         $("#msg-message").val("");
@@ -239,46 +236,24 @@ $("#modal_send_btn").on("click",function(){
 $("#chsn_delete_btn").on("click",function()
 {
     var checked = $(".d_all:checked").map(function () {return this.value;}).get().join(",");
-    var result = delete_data(checked);
-    if(result != ""){
-        $("#table_id tbody").empty();
-        onFocus_Reload(result);
-        $("#msg_field").empty();
-        $("#msg_textarea").hide();
-        $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
-    }
-    else {
-        location.reload();
-    }
+    delete_data(checked);
 });
 
 $("#delete_all_btn").on("click",function()
 {
     var checked = $(".d_all").map(function () {return this.value;}).get().join(",");
-    var result = delete_data(checked);
-    if(result != ""){
-        $("#table_id tbody").empty();
-        onFocus_Reload(result);
-        $("#msg_field").empty();
-        $("#msg_textarea").hide();
-        $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
-    }
-    else {
-        location.reload();
-    }
+    delete_data(checked);
 });
 
-function send_msg(recipient,msg)
+function send_msg(recipient,msg, isOnConversation)
 {
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
 
     var result = false;
     $.ajax({
         type : "POST",
         dataType : "json",
-        async: false,
-        url : "/messages/send_msg",
+        url : "/MessageController/send",
         beforeSend :function(){
             $("#msg_textarea img").show();
             $("#send_btn").hide();
@@ -291,6 +266,12 @@ function send_msg(recipient,msg)
             if (data.success != 0) {
                 $("#table_id tbody").empty();
                 onFocus_Reload(data)
+                if (isOnConversation) {
+                    specific_msgs();
+                }
+                else {
+                    $('#modal-close').trigger('click');
+                }
                 result = true;
             }else{
                 alert(data.msg);
@@ -311,7 +292,7 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
 
     $("#msg_field").empty();
     $.each(D,function(key,val){
-        if (val.status == "reciever") {
+        if (val.status == "receiver") {
             html += '<span class="float_left">';
         }
         else {
@@ -347,7 +328,7 @@ function specific_msgs()
     var objDiv = document.getElementById("msg_field");
     $("#msg_field").empty();
     $.each(all_messages,function(key,val){
-        if (val.status == "reciever") {
+        if (val.status == "receiver") {
             html += '<span class="float_left">';
         } else {
             html += '<span class="float_right">';
@@ -389,7 +370,7 @@ function onFocus_Reload(msgs)
             $('#ID_'+Nav_msg.name).children('.msg_date').text(Nav_msg.time_sent);
             $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
             $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
-            $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConve+")");
+            $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
             if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
                 specific_msgs();
                 seened($('#ID_'+Nav_msg.name));
@@ -401,7 +382,7 @@ function onFocus_Reload(msgs)
             if($(".dataTables_empty").length){
                 $(".dataTables_empty").parent().remove();
             }
-            html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
+            html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "receiver" ? "NS" : "")+' odd">';
             html +='<td class=" sorting_1">';
             if (Nav_msg.status == "sender") {
                 html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'"></span></div>';
@@ -409,7 +390,7 @@ function onFocus_Reload(msgs)
             else {
                 html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'"></span></div>';
             }
-            span = (Nav_msg.unreadConve != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConve+')</span>' : "");
+            span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
             html +='</td>';
             html +='<td class=" ">';
             html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
@@ -421,7 +402,7 @@ function onFocus_Reload(msgs)
             html +='</tr>';
         }
     });
-    if(msgs.Case == "UnreadMsgs"){
+    if(msgs.isUnreadMessages === "true"){
         $("#table_id tbody").prepend(html);
         arrage_by_timeSent();
     }
@@ -463,22 +444,30 @@ function delete_data(ids)
     var csrfname = $("meta[name='csrf-name']").attr('content');
     var data = "";
     $.ajax({
-        async:false,
         type : "POST",
         dataType : "json",
         beforeSend: function(){
             $("#modal-background").show();
             $("#modal-background img").show();
         },
-        url : "/messages/delete_msg",
+        url : "/MessageController/delete",
         data : {id_msg:ids,csrfname:csrftoken},
-        success : function(d) {
-            data = d;
+        success : function(result) {
+            if(result.messages != ""){
+                $("#table_id tbody").empty();
+                onFocus_Reload(result);
+                $("#msg_field").empty();
+                $("#msg_textarea").hide();
+                $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
+            }
+            else {
+                location.reload();
+            }
         }
     });
     $("#modal-background").hide();
     $("#modal-background img").hide();
-    return data;
+
 }
 
 function seened(obj)
@@ -489,10 +478,9 @@ function seened(obj)
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         $.ajax({
-            async : false,
             type : "POST",
             dataType : "json",
-            url : "/messages/is_seened",
+            url : "/MessageController/updateMessageToSeen",
             data : {checked:checked,csrfname:csrftoken},
             success : function(data) {
                 if (data === true) {

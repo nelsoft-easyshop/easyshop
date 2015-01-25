@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsBanType
 {
+    const NOT_BANNED = 0;
+
+    const PAYPAL_DISPUTE = 1;
+    
     /**
      * @var integer
      *

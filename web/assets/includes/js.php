@@ -40,7 +40,8 @@
                 close: function(){$(this).remove();},
                 draggable: true,
                 modal: true,
-                resizable: false
+                resizable: false,
+                dialogClass: 'error-modal',
             });
         };
     }

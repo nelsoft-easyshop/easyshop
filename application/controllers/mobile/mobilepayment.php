@@ -116,6 +116,51 @@ class mobilePayment extends MY_Controller
         print(json_encode($outputData,JSON_PRETTY_PRINT));
     }
 
+    
+    /**
+     * Review cart before proceeding on payment.
+     * @return json
+     */
+    public function reviewPayment()
+    {   
+        $apiFormatter = $this->serviceContainer['api_formatter'];
+        $checkoutService = $this->serviceContainer['checkout_service'];
+        
+        $this->paymentController = $this->loadController('payment');
+
+        $canContinue = true;
+        $errorMessage = "";
+        $paymentType = trim($this->input->post('paymentType'));
+        $mobileCartContents = $this->input->post('cartData') 
+                      ? json_decode($this->input->post('cartData')) 
+                      : [];
+
+        $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
+        $memberCartData = unserialize($this->member->getUserdata());
+        $isCartNotEmpty = empty($memberCartData) === false;
+        $cartData = $isCartNotEmpty ? $memberCartData : [];
+        $errorMessage = "Please verify your email address.";
+        if((int)$this->member->getIsEmailVerify() > 0){
+            $errorMessage = "You have no item in you cart";
+            if($isCartNotEmpty){
+                unset($cartData['total_items'],$cartData['cart_total']);
+                $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+                $canContinue = $dataCollection['canContinue'];
+                $errorMessage = $dataCollection['errMsg'];
+                $validatedCart = $checkoutService->validateCartContent($this->member);
+                $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $paymentType);
+            }
+        }
+
+        $outputData = [
+            'cartData' => $formattedCartContents,
+            'canContinue' => $canContinue,
+            'errorMessage' => $errorMessage,
+        ];
+
+        print(json_encode($outputData,JSON_PRETTY_PRINT));
+    }
+
     /**
      * Persist Cash on delivery payment
      * @return JSON
@@ -199,7 +244,7 @@ class mobilePayment extends MY_Controller
                     $isSuccess = true;
                     $urlReturn = $requestData['u'];
                     $message = "";
-                    $returnUrl = $paymentConfig['payment_type']['dragonpay']['return_url'];
+                    $returnUrl = $paymentConfig['payment_type']['dragonpay']['Easyshop']['return_url'];
                 }
                 else{
                     $message = $requestData['m'];

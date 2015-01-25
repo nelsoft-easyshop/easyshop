@@ -208,10 +208,10 @@ class SyncCsvImage extends MY_Controller
                         $this->doCopyForOtherDir($attrImage, $date, $productId, $memberId, $productImageId, $filename, $imageDimensions);
                     }
                     $imageUtility = $this->serviceContainer['image_utility'];
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."small",$imageDimensions["small"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview",$imageDimensions["categoryview"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail",$imageDimensions["thumbnail"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory,$imageDimensions["usersize"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."small",$imageDimensions["productImagesSizes"]["small"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview",$imageDimensions["productImagesSizes"]["categoryview"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail",$imageDimensions["productImagesSizes"]["thumbnail"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory,$imageDimensions["productImagesSizes"]["usersize"]);
                     $productObject->setSlug($newSlug);
                     $productImageObject = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                                     ->findBy(array('product' => $productId, 'idProductImage' => $productImageId));
@@ -258,10 +258,10 @@ class SyncCsvImage extends MY_Controller
             $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
             if(copy($path, $imageDirectory)){
                 $imageUtility = $this->serviceContainer['image_utility'];                
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."small",$imageDimensions["small"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview",$imageDimensions["categoryview"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail",$imageDimensions["thumbnail"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory,$imageDimensions["usersize"]);
+                $imageUtility->imageResize($imageDirectory, $tempDirectory."small",$imageDimensions["productImagesSizes"]["small"]);
+                $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview",$imageDimensions["productImagesSizes"]["categoryview"]);
+                $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail",$imageDimensions["productImagesSizes"]["thumbnail"]);
+                $imageUtility->imageResize($imageDirectory, $tempDirectory,$imageDimensions["productImagesSizes"]["usersize"]);
             }
         }                    
         

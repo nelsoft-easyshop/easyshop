@@ -12,6 +12,22 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsMessages
 {
+    const MESSAGE_UNREAD = 0;
+
+    const MESSAGE_READ = 1;
+
+    const MESSAGE_NOT_DELETED = '0';
+
+    const MESSAGE_DELETED_BY_RECEIVER = '1';
+
+    const MESSAGE_DELETED_BY_SENDER = '2';
+
+    const MESSAGE_DELETED_BY_BOTH = '3';
+
+    const MESSAGE_SENDER = 'sender';
+
+    const MESSAGE_RECEIVER = 'receiver';
+
     /**
      * @var integer
      *

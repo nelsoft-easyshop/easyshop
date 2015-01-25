@@ -18,6 +18,8 @@ class EsActivityType
 
     const TRANSACTION_UPDATE = 3;
 
+    const FEEDBACK_UPDATE = 4;
+
     /**
      * @var integer
      *
@@ -33,6 +35,13 @@ class EsActivityType
      * @ORM\Column(name="activity_description", type="string", length=100, nullable=true)
      */
     private $activityDescription;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="activity_phrase", type="text", length=100, nullable=true)
+     */
+    private $activityPhrase;
 
 
 
@@ -68,4 +77,28 @@ class EsActivityType
     {
         return $this->activityDescription;
     }
+
+    /**
+     * Set activityPhrase
+     *
+     * @param string $activityPhrase
+     * @return EsActivityType
+     */
+    public function setActivityPhrase($activityPhrase)
+    {
+        $this->activityPhrase = $activityPhrase;
+
+        return $this;
+    }
+
+    /**
+     * Get activityPhrase
+     *
+     * @return string 
+     */
+    public function getActivityPhrase()
+    {
+        return $this->activityPhrase;
+    }
+
 }

@@ -21,15 +21,19 @@ class EasyDeals extends MY_Controller
         $this->load->config('protected_category', TRUE);
         $categoryId = $this->config->item('promo', 'protected_category');
         $this->load->library('xmlmap');
-        $data = $this->fill_header();
-        $data['title'] = 'Deals | Easyshop.ph';
-        $data['metadescription'] = 'Get the best price offers for the day at Easyshop.ph.';
+        
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Deals | Easyshop.ph',
+            'metadescription' => 'Get the best price offers for the day at Easyshop.ph.'
+        ];
 
         $banner_data = array();
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data, TRUE);
         $viewData['items'] = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX);
 
-        $this->load->view('templates/header', $data);
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/product/product_promo_category', $viewData);
         $this->load->view('templates/footer');
     }

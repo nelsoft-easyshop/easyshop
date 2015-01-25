@@ -30,7 +30,6 @@ class Cart extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->library('session');
         $this->cartManager = $this->serviceContainer['cart_manager'];
         $this->productManager = $this->serviceContainer['product_manager'];
         $this->cartImplementation = $this->cartManager->getCartObject();
@@ -43,31 +42,31 @@ class Cart extends MY_Controller
      */
     public function index()
     {
-        $data = $this->fill_header();
-        if ($this->session->userdata('usersession')) {
+        if ($this->session->userdata('member_id')) {
             $memberId = $this->session->userdata('member_id');
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-            $data['title'] = 'Cart | Easyshop.ph';
-            $data['cart_items'] = $cartContents;
-            $cartSize = $this->cartImplementation->getSize(TRUE);
-            $data['total'] = $cartSize ? $this->cartImplementation->getTotalPrice() : 0;
+            $totalAmount = $this->cartImplementation->getTotalPrice();
+            $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
+                "title" => "Cart | Easyshop.ph",
+            ];
             
-            $referer =  $this->serviceContainer['http_request']->headers->get('referer');
+            $referer =  $this->serviceContainer['http_request']
+                             ->headers->get('referer');
             $continueUrl = $referer;
             if(strpos($referer, '/item/') === false){
                 $continueUrl = '/product/categories_all';
             }
-            $data['continue_url'] = $continueUrl;
+            $bodyData = [
+                'continue_url' => $continueUrl,
+                'cart_items' => $cartContents,
+                'total' => $totalAmount,
+            ];
 
-            $this->load->view('templates/header', $data);
-            #$this->load->view('templates/checkout_progressbar');
-            $this->load->view('pages/cart/cart-responsive', $data);
-            
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $viewData['facebook'] = $socialMediaLinks["facebook"];
-            $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-            $this->load->view('templates/footer_full', $viewData);
+            $this->load->spark('decorator');  
+            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('pages/cart/cart-responsive', $bodyData);
+            $this->load->view('templates/footer_full',  $this->decorator->decorate('footer', 'view', $headerData));
         } 
         else {
             redirect('/login', 'refresh');

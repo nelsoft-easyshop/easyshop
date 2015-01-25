@@ -52,18 +52,18 @@ $lang['payment_bd_buyer'] = "Your order has been placed at Easyshop.ph and is cu
 the bank account listed below to complete the purchase of your items.
 <br><br>
 <table>
-	<tr>
-		<td>Bank : </td>
-		<td><strong>{bank_name}</strong></td>
-	</tr>
-	<tr>
-		<td>Bank Account Name : </td>
-		<td><strong>{bank_accname}</strong></td>
-	</tr>
-	<tr>
-		<td>Bank Account # :</td>
-		<td><strong>{bank_accnum}</strong></td>
-	</tr>
+    <tr>
+        <td>Bank : </td>
+        <td><strong>{bank_name}</strong></td>
+    </tr>
+    <tr>
+        <td>Bank Account Name : </td>
+        <td><strong>{bank_accname}</strong></td>
+    </tr>
+    <tr>
+        <td>Bank Account # :</td>
+        <td><strong>{bank_accnum}</strong></td>
+    </tr>
 </table>
 <br>
 Once complete, you will need to enter the deposit details at your transaction page by going to <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions.
@@ -114,5 +114,74 @@ $lang['deactivate_subject'] = 'Easyshop.ph - Account Activation';
 
 #Notification shipping comment provided
 $lang['notification_shipping_comment'] = "Easyshop.ph - Shipping details for your purchased item";
+
+$lang['EsMember'] = [
+        'storeName' => 'Store Name',
+        'password' => 'Password',
+        'contactno' => 'Contact Number',
+        'isEmailVerify' => 'Email Verification',
+        'gender' => 'Gender',
+        'email' => 'Email Address',
+        'birthday' => 'Birthday',
+        'fullname' => 'Full name',
+        'storeDesc' => 'Store Description',
+        'slug' => 'Store URL',
+        'website' => 'Website',
+    ];
+
+$lang['EsAddress'] = [
+        'stateregion' => 'State Region',
+        'city' => 'City',
+        'country' => 'country',
+        'address' => 'Address',
+        'telephone' => 'Telephone Number',
+        'mobile' => 'Mobile Number',
+        'consignee' => 'Consignee Full name',
+        'lat' => 'Latitude Location',
+        'lng' => 'Longitude Location',
+    ];
+
+$lang['EsProductShippingComment'] = [
+        'courier' => 'Courier',
+        'trackingNum' => 'Tracking Number',
+        'comment' => 'Comment',
+        'expectedDate' => 'Expected Date',
+        'deliveryDate' => 'Delivery Date',
+        'invoiceNo' => 'Invoice Number', 
+    ];
+
+$lang['EsProduct'] = [
+        'name' => 'Product Name',
+    ];
+
+$lang['EsOrder'] = [
+        'invoiceNo' => 'Invoice Number',
+    ];
+
+$lang['update_information'] = "You have updated your :phrase.";
+$lang['update_product'] = [
+        'update' => 'You have successfully added one product to your active listing :phrase.',
+        'trash' => 'You have deleted permanently your item :phrase.',
+        'delete' => 'You have moved your product to deleted items :phrase.',
+    ];
+
+$lang['update_feedback'] = [
+        'product' => [
+            'review' => 'You have written a review on :phrase',
+            'reply' => 'You have given a reply on review of :phrase',
+        ],
+        'user' => 'You have given a feedback on :phrase', 
+    ];
+
+$lang['update_transaction'] = [
+        'buy' => 'You have purchased an item with :phrase',
+        'add_ship_detail' => 'You have added shipment details on order :phrase ',
+        'edit_ship_detail' => 'You have modified shipment details on order :phrase',
+        'item_received' => 'You received an item with :phrase',
+        'item_reject' => 'You rejected item with :phrase',
+        'item_unreject' => 'You rejected item with :phrase',
+        'item_cancel' => 'You cancelled an item with :phrase',
+        'completed' => 'You marked a transaction as completed with :phrase',
+    ];
 ?>
 

@@ -58,11 +58,11 @@
                                             <?php foreach ($productReview as $key => $value): ?> 
                                             <div class="row">
                                                 <div class="col-sm-2 col-xs-12 col-user-image" align="center">
-                                                    <a href="#"><div class="div-user-image">
+                                                    <a href="/<?=$value['reviewer_slug'];?>"><div class="div-user-image">
                                                         <img src="<?=$value['reviewer_avatar']; ?>" class="img-user"/>
                                                     </div></a>
                                                     <div class="clear"></div>
-                                                    <a href="#"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
+                                                    <a href="/<?=$value['reviewer_slug'];?>"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
                                                     <p class="p-date-review"><?=$value['datesubmitted']; ?></p>
                                                 </div>
                                                 <div class="col-sm-10 col-xs-12">
@@ -72,14 +72,14 @@
                                                             <table>
                                                                 <tr>
                                                                     <td>
-                                                                        <a href="#">
+                                                                        <a href="/<?=$value['reviewer_slug'];?>">
                                                                             <div class="div-user-image">
                                                                                 <img src="<?=$value['reviewer_avatar']; ?>" class="img-user"/>
                                                                             </div>
                                                                         </a>
                                                                     </td>
                                                                     <td class="td-user-info">
-                                                                        <a href="#"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
+                                                                        <a href="/<?=$value['reviewer_slug'];?>"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
                                                                         <p class="p-date-review"><?=$value['datesubmitted']; ?></p> 
                                                                     </td>
                                                                 </tr>
@@ -139,11 +139,11 @@
                                                         <?php foreach ($value['replies'] as $keyReply => $valueReply): ?>
                                                         <div class="row">
                                                             <div class="col-xs-2 col-user-image no-padding" align="center">
-                                                                <a href="#"><div class="div-user-image">
+                                                                <a href="/<?=$valueReply['reviewer_slug'];?>"><div class="div-user-image">
                                                                     <img src="<?=$valueReply['reviewer_avatar']; ?>" class="img-user"/>
                                                                 </div></a>
                                                                 <div class="clear"></div>
-                                                                <a href="#"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
+                                                                <a href="/<?=$valueReply['reviewer_slug'];?>"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
                                                                 <p class="p-date-review-replied-item"><?=$valueReply['datesubmitted'];?></p>
                                                             </div>
                                                             <div class="col-sm-10 col-xs-12">
@@ -153,14 +153,14 @@
                                                                             <table>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <a href="#">
+                                                                                        <a href="/<?=$valueReply['reviewer_slug'];?>">
                                                                                             <div class="div-user-image">
                                                                                                 <img src="<?=$valueReply['reviewer_avatar']; ?>" class="img-user"/>
                                                                                             </div>
                                                                                         </a>
                                                                                     </td>
                                                                                     <td class="td-user-info">
-                                                                                        <a href="#"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
+                                                                                        <a href="/<?=$valueReply['reviewer_slug'];?>"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
                                                                                         <p class="p-date-review"><?=$valueReply['datesubmitted'];?></p>
                                                                                     </td>
                                                                                 </tr>

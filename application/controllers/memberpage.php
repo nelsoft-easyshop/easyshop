@@ -74,38 +74,102 @@ class Memberpage extends MY_Controller
         $this->esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
     }
 
+    
     /**
-     *  Class Index. Renders Memberpage
+     * display dashboard view
+     * @return view
      */
     public function index()
     {
-        $data = $this->fill_header();
-        if(!$this->session->userdata('member_id')){
-            redirect('/', 'refresh');
+       $userManager = $this->serviceContainer['user_manager'];
+        $productManager = $this->serviceContainer['product_manager'];
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
+        $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
+        $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
+        $memberId = $this->session->userdata('member_id');
+        $feedbackLimit = $this->feedbackLimit;
+        $salesPerPage = $this->salesPerPage;
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($memberId);
+        if($member){
+            $paginationData['isHyperLink'] = false;
+            $userAvatarImage = $userManager->getUserImage($memberId);
+            $userBannerImage = $userManager->getUserImage($memberId,"banner");
+            $userFollowers = $esVendorSubscribeRepo->getFollowers($memberId);
+            $userFollowing = $esVendorSubscribeRepo->getUserFollowing($memberId);
+            $userProductCount = $esProductRepo->getUserProductCount($memberId);
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::ACTIVE];
+            $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            $userActiveProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
+            $paginationData['lastPage'] = ceil($userActiveProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
+            $activeProductsData = [
+                'products' => $userActiveProducts,
+                'pagination' => $this->load->view('pagination/default', $paginationData, true),
+            ];
+            $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
+            $deleteConditions = [EsProduct::DELETE];
+            $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
+            $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::DRAFT];
+            $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
+            
+            $profilePercentage = $userManager->getProfileCompletePercent($member);  
+            $reviewTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId, false);
+            $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
+            $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
+            $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', null, true);
+            $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
+            $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
+            $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
+            $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
+            $member->validatedStoreName = $member->getStoreName();
+            $dashboardHomeData = [
+                'member' => $member,
+                'avatarImage' => $userAvatarImage,
+                'bannerImage' => $userBannerImage,
+                'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                'followerCount' => $userFollowers['count'],
+                'followingCount' => $userFollowing['count'],
+                'productCount' => $userProductCount,
+                'activeProductCount' => $userActiveProductCount,
+                'deletedProductCount' => $userDeletedProductCount,
+                'draftedProductCount' => $userDraftedProductCount,
+                'soldProductCount' => $ongoingSoldTransactionsCount["productCount"] + $completeSoldTransactionsCount["productCount"],
+                'activeProductView' => $activeProductView,
+                'memberRating' => $memberRating,
+                'feedBackTotalCount' => $feedBackTotalCount,
+                'reviewTotalCount' => $reviewTotalCount,
+                'profilePercentage' => $profilePercentage,
+                'allFeedBackView' => $allFeedBackView,
+                'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
+                'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount["transactionsCount"],
+                'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
+                'completeSoldTransactionsCount' => $completeSoldTransactionsCount["transactionsCount"]
+            ];
+
+            $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
+            $dashboardData['dashboardHomeView'] = $dashboardHomeView;
+            $dashboardData['tab'] = $this->input->get('tab');
+            
+            $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
+                'title' =>  "Dashboard | Easyshop.ph",
+            ];
+    
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('pages/user/dashboard/dashboard-primary',$dashboardData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
         }
-        $data['tab'] = $this->input->get('tab');
-        $data = array_merge($data, $this->fill_view());
-        $data['render_logo'] = false;
-        $data['render_searchbar'] = false;
-        if($this->session->userdata('member_id')) {
-            $data['user_details'] = $this->fillUserDetails();
+        else{
+            redirect('/login', 'refresh');
         }
-        $data['homeContent'] = $this->fillCategoryNavigation();
-        $data['transactionInfo'] = $this->getMemberPageDetails();
-        $data = array_merge($data, $this->fill_header());
-
-        $socialMediaLinks = $this->getSocialMediaLinks();
-        $footerData['facebook'] = $socialMediaLinks["facebook"];
-        $footerData['twitter'] = $socialMediaLinks["twitter"];
-
-        $this->load->view('templates/header_primary', $data);
-        $this->load->view('pages/user/dashboard/dashboard-primary', $data);
-        $this->load->view('templates/footer_primary', $footerData);
-
-        $formValidation = $this->serviceContainer['form_validation'];
-        $formFactory = $this->serviceContainer['form_factory'];
-        $formErrorHelper = $this->serviceContainer['form_error_helper'];
     }
+
     
     /**
      * Qr code generator view
@@ -121,7 +185,8 @@ class Memberpage extends MY_Controller
         $this->qrManager->save($storeLink, $member->getSlug(), 'L', $this->qrManager->getImageSizeForPrinting(), 0);
         $data = [
             'qrCodeImageName' => $this->qrManager->getImagePath($member->getSlug()),
-            'slug' => $member->getSlug()
+            'slug' => $member->getSlug(),
+            'storeLink' =>$storeLink
         ];
 
         $this->load->view("pages/user/dashboard/dashboard-qr-code", $data);
@@ -183,18 +248,18 @@ class Memberpage extends MY_Controller
         $um = $this->serviceContainer['user_manager'];
         $memberId = $this->session->userdata('member_id');
         $memberEntity = $em->find('EasyShop\Entities\EsMember', $memberId);
-        
+
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $rules = $formValidation->getRules('personal_info');
-        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                     ->setMethod('POST')
                     ->add('fullname', 'text')
-                    ->add('gender', 'text')
-                    ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
-                    ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                    ->add('gender', 'text', ['constraints' => $rules['gender']])
+                    ->add('dateofbirth', 'text', ['constraints' => $rules['dateofbirth']])
+                    ->add('mobile', 'text', ['constraints' => $rules['mobile']])
                     ->getForm();
 
         $form->submit([
@@ -207,7 +272,7 @@ class Memberpage extends MY_Controller
         if($form->isValid()){
             $formData = $form->getData();
             $validFullname = (string)$formData['fullname'];
-            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
+            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : strtoupper($formData['gender']);
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
             $um->setUser($memberId)
@@ -289,67 +354,6 @@ class Memberpage extends MY_Controller
         $this->output->set_output(json_encode($data));
     }
 
-    /**
-     *  Used to edit School Information under Personal Information Tab
-     *  Returns success, fail, or error, with error message
-     *
-     *  @return JSON
-     */
-    public function edit_school()
-    {
-        if(($this->input->post('personal_profile_school'))&&($this->form_validation->run('personal_profile_school')))
-        {
-            $arr = $this->input->post();
-            for($i = 1; $i<=count($arr)>>2; $i++)
-            {
-                $postdata = array(
-                    'school' => $arr['schoolname'.$i],
-                    'year' => $arr['schoolyear'.$i],
-                    'level' => $arr['schoollevel'.$i],
-                    'school_count' => $arr['schoolcount'.$i],
-                );
-                $uid = $this->session->userdata('member_id');
-                $result = $this->memberpage_model->edit_school_by_id($uid, $postdata);
-                //If database entry fails, break
-                if(!$result){
-                    break;
-                }
-            }
-            $uid = $this->session->userdata('member_id');
-            $data = $this->memberpage_model->get_school_by_id($uid);
-
-            $data['result'] = $result ? 'success' : 'fail';
-            $data['errmsg'] = $result ? '' : 'Database update error';
-        }
-        else{
-            $data['result'] = 'error';
-            $data['errmsg'] = 'Failed to validate form.';
-        }
-
-        echo json_encode($data);
-    }
-    
-    /**
-     *  Function used to delete address, school, and work
-     *      under Personal Information Tab
-     *  Returns 1 on success, 0 otherwise
-     *
-     *  @return integer
-     */
-    public function deletePersonalInfo()
-    {
-        $field = html_escape($this->input->post('field'));
-        if( $field !== '' ){
-            $member_id = $this->session->userdata('member_id');
-            $result = $this->memberpage_model->deletePersonalInformation($member_id, $field);
-            if($result){
-                echo 1;
-            }
-            else{
-                echo 0;
-            }
-        }
-    }
 
     /**
      *  Export Sold transactions to CSV file
@@ -378,7 +382,6 @@ class Memberpage extends MY_Controller
                                 ,'Payment Method'
                                 ,'Price'
                                 ,'Product Specifications']);
-
         foreach($soldTransaction["transactions"] as $value) {
             foreach ($value["product"] as $product) {
                 if(isset($product["attr"])) {
@@ -388,19 +391,19 @@ class Memberpage extends MY_Controller
                 }
                 else {
                     $prodSpecs = "N/A";
-                    break;
                 }
+
+                fputcsv($output, [$value["invoiceNo"]
+                                  , html_escape($product["name"])
+                                  , $value["dateadded"]->format('Y-m-d H:i:s')
+                                  , html_escape($value["buyerStoreName"])
+                                  , $value["orderQuantity"]
+                                  , ucwords(strtolower($value["paymentMethod"]))
+                                  , number_format((float)$product["price"], 2, '.', '')
+                                  , $prodSpecs
+                ]);                   
+                $prodSpecs = "";                
             }
-            fputcsv($output, [$value["invoiceNo"]
-                              , html_escape($value["productname"])
-                              , $value["dateadded"]->format('Y-m-d H:i:s')
-                              , html_escape($value["buyerStoreName"])
-                              , $value["orderQuantity"]
-                              , ucwords(strtolower($value["paymentMethod"]))
-                              , number_format((float)$value["totalOrderProduct"], 2, '.', '')
-                              , $prodSpecs
-            ]);
-            $prodSpecs = "";
         }
     }
 
@@ -443,21 +446,19 @@ class Memberpage extends MY_Controller
                 }
                 else {
                     $prodSpecs = "N/A";
-                    break;
-                }               
+                }     
+                fputcsv($output, [ $value["invoiceNo"]
+                                   , html_escape($product["name"])
+                                   , $value["dateadded"]->format('Y-m-d H:i:s')
+                                   , html_escape($buyerName)
+                                   , $value["orderQuantity"]
+                                   , ucwords(strtolower($value["paymentMethod"]))
+                                   , number_format($product["price"], 2, '.', '')
+                                   , $prodSpecs
+                ]);    
+                $prodSpecs = "";
+                $buyerName = "";                                      
             }
-
-            fputcsv($output, [ $value["invoiceNo"]
-                               , html_escape($value["productname"])
-                               , $value["dateadded"]->format('Y-m-d H:i:s')
-                               , html_escape($buyerName)
-                               , $value["orderQuantity"]
-                               , ucwords(strtolower($value["paymentMethod"]))
-                               , number_format((float)$value["total"], 2, '.', '')
-                               , $prodSpecs
-            ]);
-            $prodSpecs = "";
-            $buyerName = "";
         }
     }
 
@@ -467,16 +468,45 @@ class Memberpage extends MY_Controller
      */
     public function printBuyTransactions()
     {   
-        $boughTransactions["transactions"] = $this->transactionManager
-                                                  ->getBoughtTransactionDetails(
-                                                                                $this->session->userdata('member_id'),
-                                                                                (bool) $this->input->post("isOngoing"),
-                                                                                0,
-                                                                                PHP_INT_MAX,
-                                                                                $this->input->post("invoiceNo"),
-                                                                                $this->input->post("paymentMethod")
-                                                                              );
-        $this->load->view("pages/user/printboughttransactions", $boughTransactions);
+
+        $transactions["transactions"] = $this->transactionManager
+                                             ->getBoughtTransactionDetails(
+                                                                            $this->session->userdata('member_id'),
+                                                                            (bool) $this->input->post("isOngoing"),
+                                                                            0,
+                                                                            PHP_INT_MAX,
+                                                                            $this->input->post("invoiceNo"),
+                                                                            $this->input->post("paymentMethod")
+                                                                          );
+
+        foreach ($transactions["transactions"] as $value) {
+            foreach ($value["product"] as $product) {
+                $data = [];
+                $productSpecs = "";
+
+                if(isset($product["attr"]) && count($product["attr"] > 0)) {
+                     foreach($product["attr"] as $attr => $attrValue ) {
+                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                     }
+                }
+
+                $data = [
+                    "invoiceNo" => $value["invoiceNo"],
+                    "productName" => $product["name"],
+                    "sellerStoreName" => $product["sellerStoreName"],
+                    "productSpecs" => $productSpecs,
+                    "dateAdded" => $value["dateadded"]->format('Y-m-d H:i:s'),
+                    "orderQuantity" => $product["orderQuantity"],
+                    "paymentMethod" => $value["paymentMethod"],                
+                    "productPrice" => $product["price"],
+                    "productId" => $product["idOrderProduct"]
+                ];
+
+                $boughtTransactions["transactions"][] = $data;
+            }
+
+        }
+        $this->load->view("pages/user/printboughttransactions", $boughtTransactions);
     }
 
     /**
@@ -486,118 +516,45 @@ class Memberpage extends MY_Controller
     public function printSellTransactions()
     {
 
-        $soldTransaction["transactions"] = $this->transactionManager
-                                                ->getSoldTransactionDetails(
-                                                                          $this->session->userdata('member_id'),
-                                                                          (bool) $this->input->post("isOngoing"),
-                                                                          0,
-                                                                          PHP_INT_MAX,
-                                                                          $this->input->post("invoiceNo"),
-                                                                          $this->input->post("paymentMethod")
-                                                                          );  
-        $this->load->view("pages/user/printselltransactionspage", $soldTransaction);
-    }
-    
+        $transactions["transactions"] = $this->transactionManager
+                                             ->getSoldTransactionDetails(
+                                                                      $this->session->userdata('member_id'),
+                                                                      (bool) $this->input->post("isOngoing"),
+                                                                      0,
+                                                                      PHP_INT_MAX,
+                                                                      $this->input->post("invoiceNo"),
+                                                                      $this->input->post("paymentMethod")
+                                                                      );  
 
-    /**
-     *  Fetch all data needed when displaying the Member page
-     *  
-     *  @return array
-     */
-    public function fill_view()
-    {
-        $uid = $this->session->userdata('member_id');
-        $user_product_count = $this->memberpage_model->getUserItemCount($uid);
-        $um = $this->serviceContainer['user_manager'];
+        foreach ($transactions["transactions"] as $value) {
+            foreach ($value["product"] as $product) {
+                $data = [];   
+                $productSpecs = "";                 
+                if(isset($product["attr"]) && count($product["attr"] > 0)) {
+                     foreach($product["attr"] as $attr => $attrValue ) {
+                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                     }
+                }
 
-        
-        $data = array(
-            'title' => 'Easyshop.ph - Member Profile',
-            'image_profile' => $um->getUserImage($uid),
-            'active_products' => $this->memberpage_model->getUserItems($uid,0),
-            'deleted_products' => $this->memberpage_model->getUserItems($uid,1),
-            'draft_products' => $this->memberpage_model->getUserItems($uid,0,1),
-            'active_count' => intval($user_product_count['active']),
-            'deleted_count' => intval($user_product_count['deleted']),
-            'sold_count' => intval($user_product_count['sold']),
-            'draft_count' => intval($user_product_count['draft'])
-        );
-        $data = array_merge($data, $this->memberpage_model->getLocationLookup());
-        $data = array_merge($data,$this->memberpage_model->get_member_by_id($uid));
-        $data = array_merge($data,$this->memberpage_model->get_work_by_id($uid));
-        $data =  array_merge($data,$this->memberpage_model->get_school_by_id($uid));
-        $data['bill'] =  $this->memberpage_model->get_billing_info($uid);
-        $data['transaction'] = array(
-            'buy' => $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $uid, 0),
-            'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 0),
-            'complete' => array(
-                'buy' => $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $uid, 1),
-                'sell' => $this->memberpage_model->getSellTransactionDetails($uid, 1)
-            )
-        );
-        $data['transaction']['count'] = $this->memberpage_model->getTransactionCount($uid);
-        $data['allfeedbacks'] = $this->memberpage_model->getFeedback($uid);
-        $data['sales'] = array(
-            'release' => $this->memberpage_model->getNextPayout($uid),
-            'balance' => $this->memberpage_model->getUserBalance($uid)
-        );
+                $data = [
+                    "invoiceNo" => $value["invoiceNo"],
+                    "productName" => $product["name"],
+                    "buyerStoreName" => $value["buyerStoreName"],
+                    "productSpecs" => $productSpecs,
+                    "dateAdded" => $value["dateadded"]->format('Y-m-d H:i:s'),
+                    "orderQuantity" => $product["orderQuantity"],
+                    "paymentMethod" => $value["paymentMethod"],                
+                    "productPrice" => $product["price"],
+                    "productId" => $product["idOrderProduct"]
+                ];
 
-        //If delivery address is equal to personal address, hide setasdefaultaddress in delivery address tab
-        if( $data['cityID']===$data['c_cityID'] && $data['stateregionID']===$data['c_stateregionID'] && 
-            $data['address']===$data['c_address'] ){
-            $data['show_default_address'] = false;
-        }
-        else{
-            $data['show_default_address'] = true;
+                $soldTransactions["transactions"][] = $data;
+            }
+
+
         }
 
-        return $data;
-    }
-
-    /**
-     *  Used to upload avatar image on both Member page and Vendor page
-     *  Reloads page on success.
-     *
-     *  NOTE: For browsers with minimal JS capabilities, this function reloads the page
-     *      and displays an error for 3 seconds, then reloads the page to the original URL,
-     *      member page or vendor page
-     */
-    public function upload_img()
-    {
-        $data = [
-            'x' => $this->input->post('x'),
-            'y' => $this->input->post('y'),
-            'w' => $this->input->post('w'),
-            'h' => $this->input->post('h')
-        ];
-        $uid = $this->session->userdata('member_id');
-        $this->load->library('upload');
-        $this->load->library('image_lib');
-        
-        $result = $this->memberpage_model->upload_img($uid, $data);
-        $image = $this->serviceContainer['user_manager']
-                      ->getUserImage($uid);
-
-        if(!(bool)$this->input->post('isAjax')){
-            $member = $this->serviceContainer['entity_manager']
-                           ->getRepository('EasyShop\Entities\EsMember')
-                           ->find($uid);
-            $vendorLink = $this->input->post('vendorLink');
-            redirect($member->getSlug().'/'.html_escape($vendorLink));
-        }
-        
-        
-        $response = [
-            'isSuccessful' => true,
-            'image' => $image,
-        ];
-        
-        if(isset($result['error'])){
-            $response['isSuccessful'] = false;
-        }
-
-
-        echo json_encode($response);
+        $this->load->view("pages/user/printselltransactionspage", $soldTransactions);
     }
 
     /**
@@ -654,47 +611,6 @@ class Memberpage extends MY_Controller
         }
     }
 
-    /**
-     *  Used to edit work information under Personal Information Tab
-     *  Returns json encoded success, error, or fail, with error message
-     *
-     *  @return JSON
-     */
-    public function edit_work()
-    {
-        if(($this->input->post('personal_profile_work_btn'))&&($this->form_validation->run('personal_profile_work')))
-        {
-            $rowcount = count($this->input->post()) - 1;
-            $rowcount = $rowcount / 4;
-            $postdata = array();
-            for($x=1;$x<=$rowcount;$x++){
-                $postdata = array(
-                    'companyname' => $this->input->post('companyname'.$x),
-                    'designation' => $this->input->post('designation'.$x),
-                    'year' => $this->input->post('year'.$x),
-                    'count' => $this->input->post('workcount'.$x)
-                );
-                $uid = $this->session->userdata('member_id');
-                $result = $this->memberpage_model->edit_work_by_id($uid, $postdata);
-
-                if(!$result){
-                    break;
-                }
-            }
-            $uid = $this->session->userdata('member_id');
-            $data = $this->memberpage_model->get_work_by_id($uid);
-
-            $data['result'] = $result ? 'success' : 'fail';
-            $data['errmsg'] = $result ? '' : 'Database update error.';
-
-        }
-        else{
-            $data['result'] = 'error';
-            $data['errmsg'] = 'Failed to validate form.';
-        }
-
-        echo json_encode($data);
-    }
 
     /**
      *  Used to add feedback to SELLER or BUYER under Transactions Tab
@@ -823,7 +739,8 @@ class Memberpage extends MY_Controller
                         $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
                         $parseData['store_link'] = base_url() . $parseData['user_slug'];
                         $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
-                        $socialMediaLinks = $this->getSocialMediaLinks();
+                        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                                 ->getSocialMediaLinks();
                         $parseData['facebook'] = $socialMediaLinks["facebook"];
                         $parseData['twitter'] = $socialMediaLinks["twitter"];
 
@@ -997,7 +914,8 @@ class Memberpage extends MY_Controller
                         $imageArray = $this->config->config['images'];
 
                         $parseData = $postData;
-                        $socialMediaLinks = $this->getSocialMediaLinks();
+                        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                                 ->getSocialMediaLinks();
                         $parseData = array_merge($parseData, [
                             "seller" => $memberEntity->getUsername(),
                             "store_link" => base_url() . $memberEntity->getSlug(),
@@ -1144,102 +1062,6 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
-
-
-    /**
-     *  Used for uploading banner in vendor page. 
-     */
-    public function banner_upload()
-    {    
-        $data = [
-            'x' => $this->input->post('x'),
-            'y' => $this->input->post('y'),
-            'w' => $this->input->post('w'),
-            'h' => $this->input->post('h')
-        ];
-        $uid = $this->session->userdata('member_id');
-        $this->load->library('upload');
-        $this->load->library('image_lib');
-        $result = $this->memberpage_model->banner_upload($uid, $data);
-        $banner = $this->serviceContainer['user_manager']
-                       ->getUserImage($uid, 'banner');
-                       
-        if(!(bool)$this->input->post('isAjax')){
-            $member = $this->serviceContainer['entity_manager']
-                           ->getRepository('EasyShop\Entities\EsMember')
-                           ->find($uid);
-            $vendorLink = $this->input->post('vendorLink');
-            redirect($member->getSlug().'/'.html_escape($vendorLink));
-        }
-        
-        $response = [
-            'isSuccessful' => true,
-            'banner' => $banner,
-        ];
-        
-        if(isset($result['error'])){
-            $response['isSuccessful'] = false;
-        }
-
-        echo json_encode($response);
-    }
-        
-    /**
-     *  Used for changing store URL. When userslug !== username, 
-     *      user will not be able to change url again.
-     *  Returns json encoded success or fail with error message
-     *
-     *  @return JSON
-     */
-    public function editUserSlug()
-    {
-        # Require config file for list of controllers (filenames) ; returns $controllerConfig
-        require_once(APPPATH . 'config/param/controllers.php');
-
-        $serverResponse = array(
-            'result' => 'fail',
-            'error' => 'Failed to validate form.'
-        );
-        if( $this->input->post('userslug') && $this->form_validation->run('edit_userslug') ){
-            $memberID = $this->session->userdata('member_id');
-            $userslug = strtolower($this->input->post('userslug'));
-            
-            #Check database if this slug can be used, if size>0, slug already used (hence cannot be used again)
-            $resultCount = $this->memberpage_model->validateUserSlugChange($memberID,$userslug);
-            
-            #Check if slug is currently used for routing
-            $myRoutes = $this->router->routes;
-            $restrictedList = array();
-            foreach( $myRoutes as $ro=>$co ){
-                #get 1st restricted word from key
-                $thisroute = preg_replace('/\(.{2,5}\)/','',$ro);
-                $block1 = explode("/", $thisroute);
-                #get next restricted work (controller / .php file)
-                $block2 = explode("/", $co);
-                if( !in_array($block1[0], $restrictedList) ){
-                    $restrictedList[] = $block1[0];
-                }
-                if( !in_array($block2[0], $restrictedList) ){
-                    $restrictedList[] = $block2[0];
-                }
-            }
-
-            #Get union of controller list and restricted list
-            $restrictedList = array_unique(array_merge($restrictedList , $controllerConfig));
-            
-            if( count($resultCount) > 0 || in_array($userslug, $restrictedList)){
-                $serverResponse['error'] = "URL already in use.";
-            }
-            else{
-                $boolResult = $this->memberpage_model->editUserSlug($memberID, $userslug);
-                $serverResponse['result'] = $boolResult ? 'success':'fail';
-                $serverResponse['error'] = $boolResult? '':'Failed to update database. Please try again later';
-            }
-        }
-        
-        echo json_encode($serverResponse);
-    }
-    
     /**
      *  Used to send email / SMS when verifying email or mobile
      *  NOTE: ONLY EMAIL FUNCTIONALITY IS USED AT THE MOMENT
@@ -1344,7 +1166,7 @@ class Memberpage extends MY_Controller
             }
         }
     }
-
+    
     /**
      *  Fetch bank info
      *
@@ -1358,7 +1180,7 @@ class Memberpage extends MY_Controller
             echo json_encode($bank_names);
         }
     }
-
+    
     /**
      *  Fetch billing info/details of user
      *
@@ -1367,9 +1189,7 @@ class Memberpage extends MY_Controller
     public function billing_info()
     {
         # if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
-
         if($this->input->post('bi_acct_no')){
-
             $member_id = $this->session->userdata('member_id');
             $bi_payment_type = $this->input->post('bi_payment_type');
             $bi_user_account = ""; // pang paypal ito or any online account
@@ -1397,7 +1217,7 @@ class Memberpage extends MY_Controller
             echo '{"e":"0","d":"fail"}';
         }
     }
-
+    
     /**
      *  Used to update user's billing info
      *
@@ -1437,7 +1257,7 @@ class Memberpage extends MY_Controller
         }
         echo $return;
     }
-
+    
     /**
      *  Used to delete user's billing info
      */
@@ -1471,178 +1291,7 @@ class Memberpage extends MY_Controller
             $this->memberpage_model->billing_info_default($data);
         }
     }
-    
-    /**
-     *  Used by AJAX Requests in Memberpage Dashboard
-     *  Fetches product list for Active, Deleted, and Drafted Items
-     *  Includes Search, Sort, And order by functionality by parsing the query
-     *  Returns json_encoded html data
-     *
-     *  @return JSON
-     */
-    public function getMoreUserItems($who = "")
-    {
-        $itemPerPage = 10;
-        
-        if($who == "vendor"){
-            $activeView = 'vendor_activeproduct_view';
-            $member_id = $this->input->get('mid');
-        }
-        else{
-            $activeView = 'memberpage_activeproduct_view';
-            $deletedView = 'memberpage_deletedproduct_view';
-            $member_id = $this->session->userdata('member_id');
-        }
-        
-        $deleteStatus = intval($this->input->get('s'));
-        $draftStatus = intval($this->input->get('s2'));
-        $start = intval($this->input->get('p'));
-        $rawnf = trim((string)$this->input->get('nf'));
-        $nf = '%' . $rawnf . '%'; #name_filter / searched name
-        $of = (int)$this->input->get('of'); #order filter
-        $osf = (int)$this->input->get('osf'); #order sequence filter
-        
-        switch($of){
-            case 1:
-            $myof = 'p.lastmodifieddate';
-            break;
-            case 2:
-            $myof = 'p.name';
-            break;
-            case 3:
-            $myof = 'p.price';
-            break;
-            case 4:
-            $myof = 'availability';
-            break;
-            case 5:
-            $myof = 'sold';
-            break;
-            default:
-            $myof = 'p.lastmodifieddate';
-        }
-        
-        switch($osf){
-            case 1:
-            $myosf = 'DESC';
-            break;
-            case 2:
-            $myosf = 'ASC';
-            break;
-            default:
-            $myosf = 'DESC';
-        }
-        
-        if( $this->input->get('c') == 'count' ){
-            $jsonData['count'] = 0;
-            if ( $rawnf !== '' ){
-                $jsonData['count'] = $this->memberpage_model->getUserItemSearchCount($member_id,$nf,$deleteStatus, $draftStatus);
-            }
-        }
-        
-        $key = $deleteStatus === 0 ? 'active_products' : 'deleted_products';
-        $data[$key] = $this->memberpage_model->getUserItems($member_id, $deleteStatus, $draftStatus, $start, $nf,$myof,$myosf, $itemPerPage);
-        
-        $data['isBulkOptionActive'] = (int)$this->input->get('bulkoption') === 1 ? TRUE:FALSE;
 
-        if($deleteStatus === 0){ #if active items
-            $jsonData['html'] = $this->load->view('pages/user/'.$activeView, $data, true);
-        }
-        else if($deleteStatus === 1){
-            $jsonData['html'] = $this->load->view('pages/user/'.$deletedView, $data, true);
-        }
-        
-        echo json_encode($jsonData);
-    }
-    
-    /**
-     *  Used by AJAX Requests in Transactions page
-     *  Fetches on-going and completed, buy and sold, category transactions
-     *  Includes searches, filters, and order by functionality
-     *  Returns json encoded html data
-     *
-     *  @return JSON
-     */
-    public function getMoreTransactions()
-    {
-        $itemPerPage = 10;
-        
-        $completeStatus = intval($this->input->get('s'));
-        $k = (string)$this->input->get('k');
-        $start = intval($this->input->get('p'));
-        $member_id = $this->session->userdata('member_id');
-        
-        $rawnf = trim((string)$this->input->get('nf'));
-        $nf = '%' . $rawnf . '%'; #Transaction Invoice Filter
-        $of = (int)$this->input->get('of'); #Payment Filter
-        $osf = (int)$this->input->get('osf'); #order sequence filter (ASC or DESC)
-        
-        switch($of){
-            case 0:
-            $myof = '1,2,3,5';
-            break;
-            case 1:
-            $myof = '1';
-            break;
-            case 2:
-            $myof = '2';
-            break;
-            case 3:
-            $myof = '3';
-            break;
-            case 5:
-            $myof = '5';
-            break;
-            default:
-            $myof = '1,2,3,5';
-        }
-        
-        switch($osf){
-            case 1:
-            $myosf = 'DESC';
-            break;
-            case 2:
-            $myosf = 'ASC';
-            break;
-            default:
-            $myosf = 'ASC';
-        }
-        
-        switch($k){
-            case 'buy':
-            $data['transaction']['buy'] = $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $member_id,$completeStatus,$start,$nf,$myof,$myosf);;
-            $view = 'memberpage_tx_buy_view';
-            $querySelect = 'buy';
-            break;
-            case 'sell':                
-            $data['transaction']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
-            $view = 'memberpage_tx_sell_view';
-            $querySelect = 'sell';
-            break;
-            case 'cbuy':
-            $data['transaction']['complete']['buy'] = $this->memberpage_model->getBuyTransactionDetails($this->contentXmlFile, $member_id,$completeStatus,$start,$nf,$myof,$myosf);;
-            $view = 'memberpage_tx_cbuy_view';
-            $querySelect = 'buy';
-            break;
-            case 'csell':
-            $data['transaction']['complete']['sell'] = $this->memberpage_model->getSellTransactionDetails($member_id,$completeStatus,$start,$nf,$myof,$myosf);;
-            $view = 'memberpage_tx_csell_view';
-            $querySelect = 'sell';
-            break;
-        }
-        
-        if( $this->input->get('c') == 'count' ){
-            $jsonData['count'] = $this->memberpage_model->getFilteredTransactionCount($member_id, $completeStatus, $nf, $myof, $myosf, $querySelect);
-        }
-        
-        $jsonData['html'] = $this->load->view('pages/user/'.$view, $data, true);
-        
-        echo json_encode($jsonData);
-    }
-    
-
-
- 
     public function removeUserImage()
     {
         $return['error'] = TRUE;
@@ -1663,9 +1312,9 @@ class Memberpage extends MY_Controller
     }
 
 
-    // new implementation starts here
     /**
      * Request for transaction details - ajax
+     *
      */
     public function getTransactionsForPagination()
     {
@@ -1765,7 +1414,8 @@ class Memberpage extends MY_Controller
                                                           $paymentMethod,
                                                           $transactionNumber
                                                       );
-                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount['transactionsCount'] / $this->transactionRowCount);
+                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount["transactionsCount"] / $this->transactionRowCount);
+
                 $completeSoldTransactionsData = [
                     'transaction' => $this->transactionManager
                                           ->getSoldTransactionDetails(
@@ -1776,7 +1426,7 @@ class Memberpage extends MY_Controller
                                               $transactionNumber,
                                               $paymentMethod
                                           ),
-                    'count' => $completeSoldTransactionsCount,
+                    'count' => $completeSoldTransactionsCount["transactionsCount"],
                     'pagination' => $this->load->view('pagination/default', $paginationData, true),
                 ];
                 $transactionView = $this->load->view('partials/dashboard-transaction-complete-sold', $completeSoldTransactionsData, true);
@@ -1792,116 +1442,7 @@ class Memberpage extends MY_Controller
         echo json_encode($responseData);
     }
 
-    /**
-     * display dashboard view
-     * @return view
-     */
-    public function newMemberpage()
-    {
-        $userManager = $this->serviceContainer['user_manager'];
-        $productManager = $this->serviceContainer['product_manager'];
 
-        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
-        $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
-        $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
-
-        $headerData = $this->fill_header();
-        $memberId = $this->session->userdata('member_id');
-        $feedbackLimit = $this->feedbackLimit;
-        $salesPerPage = $this->salesPerPage;
-
-        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                           ->find($memberId);
-        if($member){
-
-            $paginationData['isHyperLink'] = false;
-
-            $userAvatarImage = $userManager->getUserImage($memberId);
-            $userBannerImage = $userManager->getUserImage($memberId,"banner");
-
-            $userFollowers = $esVendorSubscribeRepo->getFollowers($memberId);
-            $userFollowing = $esVendorSubscribeRepo->getUserFollowing($memberId);
-
-            $userProductCount = $esProductRepo->getUserProductCount($memberId);
-
-            $deleteConditions = [EsProduct::ACTIVE];
-            $draftConditions = [EsProduct::ACTIVE];
-            $userActiveProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
-            $userActiveProducts = $productManager->getProductsByUser($memberId, $deleteConditions, $draftConditions);
-            $paginationData['lastPage'] = ceil($userActiveProductCount / $productManager::PRODUCT_COUNT_DASHBOARD);
-            $activeProductsData = [
-                'products' => $userActiveProducts,
-                'pagination' => $this->load->view('pagination/default', $paginationData, true),
-            ];
-            $activeProductView = $this->load->view('partials/dashboard-products', $activeProductsData, true);
-
-            $deleteConditions = [EsProduct::DELETE];
-            $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
-            $userDeletedProductCount =  $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
-            
-            $deleteConditions = [EsProduct::ACTIVE];
-            $draftConditions = [EsProduct::DRAFT];
-            $userDraftedProductCount = $esProductRepo->getUserProductCount($memberId, $deleteConditions, $draftConditions);
-            
-            $profilePercentage = $userManager->getProfileCompletePercent($member);  
-
-            $reviewTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId, false);
-            $feedBackTotalCount = $esMemberFeedbackRepo->getUserTotalFeedBackCount($memberId);
-            $memberRating = $esMemberFeedbackRepo->getUserFeedbackAverageRating($memberId);
-            $allFeedBackView = $this->load->view('pages/user/dashboard/dashboard-feedbacks', null, true);
-
-            $ongoingBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId);
-            $ongoingSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId);
-            $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
-            $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
-            $member->validatedStoreName = $member->getStoreName();
-
-            $dashboardHomeData = [
-                'member' => $member,
-                'avatarImage' => $userAvatarImage,
-                'bannerImage' => $userBannerImage,
-                'countryId' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
-                'followerCount' => $userFollowers['count'],
-                'followingCount' => $userFollowing['count'],
-                'productCount' => $userProductCount,
-                'activeProductCount' => $userActiveProductCount,
-                'deletedProductCount' => $userDeletedProductCount,
-                'draftedProductCount' => $userDraftedProductCount,
-                'soldProductCount' => $ongoingSoldTransactionsCount["productCount"] + $completeSoldTransactionsCount["productCount"],
-                'activeProductView' => $activeProductView,
-                'memberRating' => $memberRating,
-                'feedBackTotalCount' => $feedBackTotalCount,
-                'reviewTotalCount' => $reviewTotalCount,
-                'profilePercentage' => $profilePercentage,
-                'allFeedBackView' => $allFeedBackView,
-                'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
-                'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount["transactionsCount"],
-                'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
-                'completeSoldTransactionsCount' => $completeSoldTransactionsCount["transactionsCount"]
-            ];
-
-            $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
-            $dashboardData['dashboardHomeView'] = $dashboardHomeView;
-            $dashboardData['tab'] = $this->input->get('tab');
-            
-            $headerData['metadescription'] = "";
-            $headerData['title'] = "Dashboard | Easyshop.ph";
-            $headerData['user_details'] = $this->fillUserDetails();
-            $headerData['homeContent'] = $this->fillCategoryNavigation();
-
-            $socialMediaLinks = $this->getSocialMediaLinks();
-            $footerData['facebook'] = $socialMediaLinks["facebook"];
-            $footerData['twitter'] = $socialMediaLinks["twitter"];
-
-            $this->load->view('templates/header_primary', $headerData);
-            $this->load->view('pages/user/dashboard/dashboard-primary',$dashboardData);
-            $this->load->view('templates/footer_primary', $footerData);
-        }
-        else{
-            redirect('/login', 'refresh');
-        }
-    }
 
     /**
      * Request first sales page
@@ -2038,11 +1579,14 @@ class Memberpage extends MY_Controller
             }             
             if($authenticatedMember) {
                 $this->load->library('encrypt');
-                $result = $this->encrypt->encode($member['member']->getIdMember());
                 $this->load->library('parser');
+                $hash = serialize([
+                    'memberId' => $member['member']->getIdMember(),
+                ]);                
+                $result = $this->encrypt->encode($hash);
                 $parseData = array(
                     'username' => $member['member']->getUsername(),
-                    'hash' => $this->encrypt->encode($member['member']->getIdMember()),
+                    'hash' => $result,
                     'site_url' => site_url('memberpage/showActivateAccount')
                 );        
                 $imageArray = $this->config->config['images'];
@@ -2081,7 +1625,7 @@ class Memberpage extends MY_Controller
                                                           false, 
                                                           true);  
         $isActivationRequestValid = $authenticationResult['member']
-                                    && $authenticationResult['member']->getIdMember() === (int)$getData[0] 
+                                    && $authenticationResult['member']->getIdMember() === (int)$getData["memberId"] 
                                     && (bool)$authenticationResult['member']->getIsActive() === false ;
         $response = false;
         if($this->input->get("activateAccountButton") && $isActivationRequestValid) {
@@ -2106,13 +1650,13 @@ class Memberpage extends MY_Controller
         $hashUtility = $this->serviceContainer['hash_utility'];
         $getData = $hashUtility->decode($this->input->get('h'));
 
-        if (intval($getData[0]) === 0 || !$this->input->get('h')) {
+        if ((int)($getData["memberId"]) === 0 || !$this->input->get('h')) {
             redirect('/login', 'refresh');
         }
         else {
              $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->findOneBy([
-                                    'idMember' => $getData[0],
+                                    'idMember' => $getData["memberId"],
                                     'isActive' => 0
                                 ]);
 
@@ -2121,31 +1665,21 @@ class Memberpage extends MY_Controller
             }
             else {
                 $view = $this->input->get('view') ? $this->input->get('view') : NULL;
-                $data = array(
-                    'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
-                    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
-                    'relCanonical' => base_url(),
+                $bodyData = [
                     'username' => $member->getUsername(),
-                    'idMember' => $getData[0],            
+                    'idMember' => $getData["memberId"],            
                     'hash' => $this->input->get('h')            
-                );
-                $data = array_merge($data, $this->fill_header());
-                $socialMediaLinks = $this->getSocialMediaLinks();
-                $em = $this->serviceContainer["entity_manager"];
-                if($data['logged_in']){
-                    $memberId = $this->session->userdata('member_id');
-                    $data['logged_in'] = true;
-                    $data['user_details'] = $em->getRepository("EasyShop\Entities\EsMember")
-                                               ->find($memberId);
-                    $data['user_details']->profileImage = ltrim($this->serviceContainer['user_manager']->getUserImage($memberId, 'small'), '/');
-                }                
-                $data["homeContent"] = $this->serviceContainer['xml_cms']->getHomeData(true);        
-                $viewData['facebook'] = $socialMediaLinks["facebook"];
-                $viewData['twitter'] = $socialMediaLinks["twitter"];
-
-                $this->load->view('templates/header_primary', $data);
-                $this->load->view('pages/user/MemberPageAccountActivate', $data);
-                $this->load->view('templates/footer_primary', $viewData);                    
+                ];
+                $headerData = [
+                    "memberId" => $this->session->userdata('member_id'),
+                    'title' =>  "Reactivate you account | Easyshop.ph",
+                    'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+                ];
+    
+                $this->load->spark('decorator');    
+                $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+                $this->load->view('pages/user/MemberPageAccountActivate', $bodyData);
+                $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));           
             }            
         }
     }

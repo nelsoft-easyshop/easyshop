@@ -1,16 +1,20 @@
 
 (function($){    
+    
     $("#login_username, #login_password").click(function(){
         $("#deactivatedAccountPrompt").css("display","none");
     });
+    
+    
     $(document).ready(function(){
-        $(".search_box").css('display','none');
         if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
             $("p#lockoutDuration").html("Timeout Remaining: " + $("#timeoutLeft").val());
             $("#failed-login").show();
             $("#login-form").hide();
         }
     });
+    
+    
     $(document).on('click','#sendReactivationLink',function (e) {
         $('#login')[0].disabled = true;        
         $('#loading_img_activate').show();
@@ -42,7 +46,9 @@
             },
         });         
     });        
+    
     $(document).ready(function(){
+        
         $("#login_form").validate({
             rules: {
                 login_username: {
@@ -78,7 +84,6 @@
                     url: "/login/authenticate",
                     data: $(form).serializeArray(),
                     success:function(data){
-                
                         if(data.timeoutLeft >= 1){
                             $("p#lockoutDuration").html("Timeout Remaining: " + data.timeoutLeft);
                             $("#failed-login").show();
@@ -133,7 +138,12 @@
                                 }
                             }
                         }
-                    }
+                    },
+                    error: function(xhr, error) {
+                        $('#loading_img').hide();
+                        $('#login').show();
+                        alert('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');
+                    }            
                 });
                 return false;
             }

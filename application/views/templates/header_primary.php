@@ -46,9 +46,9 @@
     <!-- End of Google Analytics -->
 
     <a href="https://plus.google.com/108994197867506780841" rel="publisher"></a>
- 
+
     <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    
+    <link type="text/css" href='/assets/css/normalize.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
     <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
@@ -73,9 +73,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="col-md-12">
                             <div class="col-xs-6 col-sm-6 col-md-6 top-header-left">
                                 <ul id="top-links" class="clearfix">
-                                    <li><a href="/sell/step1" title="Sell an item"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">sell an item</span></a></li>
-                                    <li><a href="/guide/sell" title="Learn how to sell your items"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">how to sell</span></a></li>
-                                    <li><a href="/guide/buy" title="Learn how to make a purchase"><span class="top-icon top-icon-cart"></span><span class="hide-for-xs">how to shop</span></a></li>
+                                    <li><a href="/sell/step1" title="Sell an item"><i class="icon-item"></i><span class="hide-for-xs">sell an item</span></a></li>
+                                    <li><a href="/guide/sell" title="Learn how to sell your items"><i class="icon-how-to-sell"></i><span class="hide-for-xs">how to sell</span></a></li>
+                                    <li><a href="/guide/buy" title="Learn how to make a purchase"><i class="icon-how-to-shop"></i><span class="hide-for-xs">how to shop</span></a></li>
                                 </ul>
                             </div><!-- End .header-top-left -->
                             <div class="col-xs-6 col-sm-6 col-md-6 top-header-right">
@@ -85,10 +85,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <div class="login-profile-con">
-                                                    <img src="/<?=$user_details->profileImage;?>">
+                                                    <img src="/<?=$user->profileImage;?>">
                                                 </div>
-                                                <a href="/<?=$user_details->getSlug();?>" class="header-seller-name">
-                                                    <?php echo html_escape($user_details->getUsername()); ?>
+                                                <a href="/<?=$user->getSlug();?>" class="header-seller-name">
+                                                    <?php echo html_escape($user->getUsername()); ?>
                                                 </a>
                                                 <span class="default-nav-dropdown-arrow">Account Settings</span>
                                                 <ul class="default-nav-dropdown">
@@ -106,17 +106,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     </li>
                                                     <li class="nav-dropdown-border pos-rel">
                                                         <a href="/messages">Messages</a>
-                                                        <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
-                                                        <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                        <?=$msgs['unread_msgs'];?>
-                                                        </div>
+                                                        <?php if((int)$unreadMessageCount !== 0) : ?>
+                                                            <div id="unread-messages-count" class="msg_countr message-count-con">
+                                                                <?php echo $unreadMessageCount; ?>
+                                                            </div>
                                                         <?php endif;?>
                                                     </li>
                                                     <li class="nav-dropdown-border">
                                                         <a class="prevent" href="/login/logout">Logout</a>
                                                     </li>
                                                 </ul>
-                                                <div class="clear"></div>                                            
+                                                <div class="clear"></div>
                                             </div>
                                         <?php else: ?>
                                             <div class="header-link-login">
@@ -124,7 +124,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
                                                 <a href="/register">create an account</a>
                                             </div>
-                                        <?php endif; ?>                                           
+                                        <?php endif; ?>
                                     </div>
                                 </div><!-- End .pull-right -->
                             </div><!-- End .header-top-right -->
@@ -208,8 +208,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <input type="submit" value="" class="span_bg">
                                         </div>
                                         <div class="nav-searchfield-width">
-                                          <div class="search-container">
-                                                <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
+                                            <div class="search-container nav-search1">
+                                                <input type="text" name="q_str" id="primary-search" autocomplete="off" placeholder="Find what you're looking for." class="ui-form-control main-search-input search-box">
                                             </div>
                                         </div>
                                     </form><!-- End .Search Navigation -->
@@ -243,14 +243,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                             <ul class="menu clearfix">
                                                 <li class="mega-menu-container drop-category">
-                                                    <span class="category-icon"></span>
+                                                    <span class="icon-category"></span>
                                                     <a href="javascript:void(0)" class="mega-menu-title">CATEGORIES</a>
-                                                    <span class="drop-icon"></span>
+                                                    <span class="icon-dropdown"></span>
+                                                    <span class="icon-dropup"></span>
                                                     <div class="mega-menu clearfix">
                                                         <div class="col-md-80p border-right">                                                    
                                                             <h2>popular categories</h2>
                                                             <div class="mrgn-left-neg-14">
-                                                                <?PHP foreach ($homeContent['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
+                                                                <?PHP foreach ($menu['categoryNavigation']['popularCategory'] as $popularCategory) : ?>
                                                                     <div class="col-md-3">
                                                                         <a href="/category/<?=$popularCategory['category']->getSlug()?>" class="cat-sub-title"><?=$popularCategory['category']->getName()?></a>
                                                                         <ul class="cat-sub-list">
@@ -265,7 +266,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                         <div class="col-md-20p">
                                                             <h2>other categories</h2>
                                                             <ul class="other-cat-con">
-                                                                <?PHP foreach ($homeContent['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
+                                                                <?PHP foreach ($menu['categoryNavigation']['otherCategory'] as $otherCategory) : ?>
                                                                 <li><a href="/category/<?=$otherCategory->getSlug()?>"><?=$otherCategory->getName()?></a></li>
                                                                 <?PHP endforeach; ?>
                                                             </ul>
@@ -274,10 +275,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 </li>
                                                 
                                                 <li class="mobile-menu-nav-hide">
+                                
                                                     <a href="javascript:void(0)">NEW ARRIVALS</a>
+                                             
                                                     <ul class="nav-2nd-level">
-                                                        <?php foreach( $homeContent['menu']['newArrivals']['arrival']  as $newArrival): ?>
-
+                                                        <?php foreach( $menu['menu']['newArrivals']  as $newArrival): ?>
                                                             <li><a href="<?php echo $newArrival['target'] ?>"><?php echo html_escape($newArrival['text']) ?></a></li>
                                                         <?php endforeach; ?>
                                                     </ul>
@@ -285,7 +287,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <li class="mobile-menu-nav-hide">
                                                     <a href="javascript:void(0)">TOP PRODUCTS</a>
                                                     <ul class="nav-2nd-level">
-                                                        <?php foreach( $homeContent['menu']['topProducts']as $topProduct): ?>
+                                                        <?php foreach( $menu['menu']['topProducts']as $topProduct): ?>
                                                             <?php if($topProduct): ?>
                                                                 <li><a href="/item/<?php echo $topProduct->getSlug() ?>"><?php echo html_escape($topProduct->getName()) ?></a></li>
                                                             <?php endif; ?>
@@ -296,7 +298,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <a href="javascript:void(0)">TOP SELLERS</a>
                                                     <ul class="nav-2nd-level top-seller-list">
                                                         <li>
-                                                            <?php foreach($homeContent['menu']['topSellers'] as $topSeller): ?>
+                                                            <?php foreach($menu['menu']['topSellers'] as $topSeller): ?>
                                                                 <?php if($topSeller['details']): ?>
                                                                     <a href="/<?php echo $topSeller['details']->getSlug() ?>">
                                                                         <div class="top-seller-profile-photo">
@@ -320,10 +322,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             
                                             <div class="sticky-search-cart-wrapper">
                                                 <div class="sticky-search-wrapper">
-                                                 <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
-                                                    <input type="text" name="q_str" placeholder="Find what you're looking for." class="ui-form-control main-search-input">
-                                                    <input type="submit" value="" class="span_bg">
-                                                </form>
+                                                    <form class="nav-searchbar-inner nav-search2" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                                                        <input type="text" name="q_str" autocomplete="off" id="primary-search2" placeholder="Find what you're looking for." class="ui-form-control main-search-input search-box">
+                                                        <input type="submit" value="" class="span_bg">
+                                                    </form>
                                                 </div>
                                                 <div class="header-cart-container">
                                                     <a href="/cart" class="header-cart-wrapper">
@@ -373,10 +375,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <?php if(isset($logged_in) && $logged_in): ?>
                                                     <div class="new-user-nav-dropdown">
                                                         <div class="login-profile-con">
-                                                            <img src="/<?=$user_details->profileImage;?>">
+                                                            <img src="/<?=$user->profileImage;?>">
                                                         </div>
-                                                        <a href="/<?=$user_details->getSlug();?>" class="header-seller-name" style="color:#4370cc">
-                                                            <?php echo html_escape($user_details->getUsername()) ;?>
+                                                        <a href="/<?=$user->getSlug();?>" class="header-seller-name" style="color:#4370cc">
+                                                            <?php echo html_escape($user->getUsername()) ;?>
                                                         </a>
                                                         <span class="default-nav-dropdown-arrow">Account Settings</span>
                                                         <ul class="default-nav-dropdown">
@@ -394,9 +396,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             </li>
                                                             <li class="nav-dropdown-border pos-rel">
                                                                 <a href="/messages">Messages</a>
-                                                                <?php if(intval($msgs['unread_msgs']) !== 0) : ?>
+                                                                <?php if((int)$unreadMessageCount !== 0) : ?>
                                                                     <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                                        <?php echo $msgs['unread_msgs'];?>
+                                                                        <?php echo $unreadMessageCount ;?>
                                                                     </div>
                                                                 <?php endif;?>
                                                             </li>
@@ -434,5 +436,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
+<script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-
+ 
