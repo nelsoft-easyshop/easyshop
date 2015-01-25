@@ -92,7 +92,6 @@ class MessageController extends MY_Controller
             if ($isSendingSuccesful) {
                 $messages = $this->messageManager->getAllMessage($this->userId);
                 $recipientMessages = $this->messageManager->getAllMessage($receiverEntity->getIdMember(), true);
-
                 $emailRecipient = $receiverEntity->getEmail();
                 $emailSubject = $this->lang->line('new_message_notif');
                 $this->config->load('email', true);
