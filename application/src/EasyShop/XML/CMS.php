@@ -1198,13 +1198,17 @@ $string = '<typeNode>
             $categoryXmlArray['bottom']['image'][] = $singleBanner;
         }
         
-        foreach($categoryXmlArray['top']['image'] as $index => $topImage){
-            $target =  $categoryXmlArray['top']['image'][$index]['target'];
-            $categoryXmlArray['top']['image'][$index]['target'] = $this->urlUtility->parseExternalUrl( $target );
+        if(isset($categoryXmlArray['top'])){
+            foreach($categoryXmlArray['top']['image'] as $index => $topImage){
+                $target =  $categoryXmlArray['top']['image'][$index]['target'];
+                $categoryXmlArray['top']['image'][$index]['target'] = $this->urlUtility->parseExternalUrl( $target );
+            }
         }
-        foreach($categoryXmlArray['bottom']['image'] as $index => $topImage){
-            $target =  $categoryXmlArray['bottom']['image'][$index]['target'];
-            $categoryXmlArray['bottom']['image'][$index]['target'] = $this->urlUtility->parseExternalUrl( $target );
+        if(isset($categoryXmlArray['bottom'])){
+            foreach($categoryXmlArray['bottom']['image'] as $index => $topImage){
+                $target =  $categoryXmlArray['bottom']['image'][$index]['target'];
+                $categoryXmlArray['bottom']['image'][$index]['target'] = $this->urlUtility->parseExternalUrl( $target );
+            }
         }
         
         return $categoryXmlArray;
