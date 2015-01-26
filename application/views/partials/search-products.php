@@ -3,6 +3,7 @@
     <?php foreach ($products as $value): ?>
     <?php
         $productEntity = $value;
+        $productId = $productEntity->getIdProduct();
         $productName = html_escape($productEntity->getName());
         $productSlug = $productEntity->getSlug();
         $productPrice = number_format($productEntity->getFinalPrice(), 2,'.',',');
@@ -54,7 +55,7 @@
                 </div>
             </div>
             <div class="search-item-actions">
-                <button class="btn btn-search-add-cart">
+                <button data-slug="<?=$productSlug;?>" data-productid="<?=$productId;?>" class="btn btn-search-add-cart btn-add-to-cart">
                     <span class="fa icon-cart fa-lg"></span>
                     Add to cart
                 </button>
@@ -125,8 +126,8 @@
                                                 P<?=$productPrice; ?>
                                             </span>
                                         </div>
-                                        <div class="col-xs-6 search-list-cart-button">
-                                            <button class="btn btn-search-add-cart">
+                                        <div class="col-xs-6 search-list-cart-button btn-add-cart">
+                                            <button data-slug="<?=$productSlug;?>" data-productid="<?=$productId;?>" class="btn btn-search-add-cart btn-add-to-cart">
                                                 <span class="fa icon-cart fa-lg"></span>
                                                 Add to cart
                                             </button>
@@ -147,7 +148,7 @@
                                     P<?=$productPrice; ?>
                                 </span>
                             </div>
-                            <button class="btn btn-search-add-cart">
+                            <button data-slug="<?=$productSlug;?>" data-productid="<?=$productId;?>" class="btn btn-search-add-cart btn-add-to-cart">
                                 <span class="fa icon-cart fa-lg"></span>
                                 Add to cart
                             </button>
