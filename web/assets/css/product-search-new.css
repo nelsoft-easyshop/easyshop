@@ -324,6 +324,7 @@ html, body{
     vertical-align: top;
     padding: 0px 10px;
     min-width: 471px;
+    max-width: 471px;
 }
 
 .list-search .search-item-td-price{
@@ -374,6 +375,7 @@ html, body{
     margin-top: 13px;
     font-size: 11px;
     min-height: 65px;
+    word-break: break-word;
 }
 
 .divider-gray{
@@ -952,10 +954,12 @@ ul.list-category-search li:last-child > .search-category-link{
         margin-top: 0px;
         font-size: 10px;
         min-height: 12px;
+        word-break: break-word;
     }
 
     .list-search .search-item-td-meta{
-        min-width: 10px !important;
+        min-width: 0px !important;
+        max-width: 320px !important;
         padding-right: 1px;
     }
 
@@ -1000,6 +1004,8 @@ ul.list-category-search li:last-child > .search-category-link{
     .list-search .new-price,
     .list-search .new-price.with-discount-list{
         font-size: 13px;
+        text-align: left;
+        margin-left: 7px;
     }
 
     .list-search .btn-search-add-cart {
@@ -1008,4 +1014,19 @@ ul.list-category-search li:last-child > .search-category-link{
         padding: 9px 2px;
     }
 } 
+@media (max-width: 400px) {
+    .list-search .search-item-td-meta{
+        min-width: 0px !important;
+        max-width: 220px !important;
+        padding-right: 1px;
+    }
+}
+
+@media (max-width: 300px) {
+    .list-search .search-item-td-meta{
+        min-width: 0px !important;
+        max-width: 120px !important;
+        padding-right: 1px;
+    }
+}
 
