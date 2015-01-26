@@ -18,38 +18,57 @@
         </div>
     </div>
 </section>
+
+<?php if($categoryHeaderData): ?>
 <section class="bg-search-section color-default search-parallax-container">
     <div id="parallax-1" class="search-parallax">
+        <?php if(isset($categoryHeaderData['top'])): ?>
         <div id="parallax-3" class="banner-template-1">
             <ul class="top-slider">
-                <li style="background: url(/assets/images/slide3.jpg) center no-repeat; background-size: cover; "></li>
-                <li style="background: url(/assets/images/Scratch_and_win_baner.jpg) center no-repeat; background-size: cover; "></li>
-                <li style="background: url(/assets/images/slide3.jpg) center no-repeat; background-size: cover; "></li>
-                <li style="background: url(/assets/images/Scratch_and_win_baner.jpg) center no-repeat; background-size: cover; "></li>
+                <?php foreach($categoryHeaderData['top']['image'] as $topBanner): ?>
+                    <?php if(trim($topBanner['target']['url']) !== ''): ?>
+                        <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
+                    <?php endif; ?>
+                            <li style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?> ) center no-repeat; background-size: cover; "></li>
+                    <?php if(trim($topBanner['target']['url']) !== ''): ?>
+                        </a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
             </ul>
         </div>
         <br>
+        <?php endif; ?>
+        <?php if(isset($categoryHeaderData['bottom'])): ?>
         <center class="search-slider">
-            <div class="left-shade">
-            </div>
-            <div class="right-shade">
-            </div>
-            <div class="container">
-                <div class="slider1 clear" width="100%">
-                <!--  <div id="product-search-gallery" class="owl-carousel"> -->
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar1"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar2"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar3"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar4"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar5"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar6"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar7"></div>
+            <center class="search-slider">
+                <div class="left-shade">
                 </div>
-                <div class="clear"></div>
-            </div>
-         </center>
-    </div>
-</section>
+                <div class="right-shade">
+                </div>
+                <div class="container">
+                    <div class="slider1 clear" width="100%">
+                        <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
+                            <div class="slide">
+                                
+                                <?php if(trim($bottomBanner['target']['url']) !== ''): ?>
+                                      <a href="<?php echo html_escape($bottomBanner['target']['url']); ?>" target="<?php echo $bottomBanner['target']['targetString']; ?>">
+                                <?php endif; ?>
+
+                                    <img src="<?php echo getAssetsDomain().'.'.html_escape($bottomBanner['path']); ?>">
+                                 
+                                <?php if(trim($bottomBanner['target']['url']) !== ''): ?>
+                                      </a>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </center>   
+        <?php endif; ?>
+        </div>
+    </section>
+<?php endif; ?>
 
 <section id="parallax-2" class="bg-search-section color-default">
 <br/>

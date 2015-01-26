@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<map>
+    
+    <category id="clothing-accessories">
+        <top>
+            <image>
+                <path>/assets/images/slide3.jpg</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/slide3.jpg</path>
+                <target>/</target>
+            </image>
+        </top>
+        <bottom>
+            <image>
+                <path>/assets/images/categories/slider-small/sample.gif</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/sample.gif</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/sample.gif</path>
+                <target>www.facebook.com</target>
+            </image>
+        </bottom>
+
+    </category>
+    
+    
+</map>
+
