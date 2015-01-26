@@ -30,7 +30,7 @@ $window.on('load', function() {
         $.stickysidebarscroll("#feed-left-panel",{offset: {top: leftpanelTop, bottom: 193}});
     }
     else {
-        $.stickysidebarscroll("#feed-left-panel",{offset: {top: 0, bottom: 180}});
+        $.stickysidebarscroll("#feed-left-panel",{offset: {top: 0, bottom: 193}});
     }
 });
 
