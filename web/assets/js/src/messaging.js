@@ -305,8 +305,8 @@
                 span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
                 html +='</td>';
                 html +='<td class=" ">';
-                html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
-                html +='<span class="msg_sender">'+Nav_msg.name+ '</span>'+span;
+                html +="<a class='btn_each_msg' id='ID_" + Nav_msg.name + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
+                html +='<span class="msg_sender">' + Nav_msg.name + '</span>'+span;
                 html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
                 html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
                 html +='</a>';
@@ -374,7 +374,7 @@
 
     function seened(obj)
     {
-        if ($(obj).parent().parent().hasClass("NS")) {
+        if ($(obj).parent().parent().hasClass("NS") && $(obj).hasClass("Active")) {
             $(obj).children(".unreadConve").html("");
             var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join(",");
             var csrftoken = $("meta[name='csrf-token']").attr('content');
