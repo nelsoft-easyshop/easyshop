@@ -376,6 +376,7 @@ html, body{
     font-size: 11px;
     min-height: 65px;
     word-break: break-word;
+    word-break: break-all;
 }
 
 .divider-gray{
