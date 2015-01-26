@@ -1,6 +1,10 @@
-<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 <div class="container container-cart-responsive">
     <h2 class="my_cart_title">My Cart</h2>
