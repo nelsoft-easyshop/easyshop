@@ -38,8 +38,9 @@
                         
                     </td>
                     <td>
-                        <a class="btn_each_msg" id="ID_<?PHP echo reset($row)['name']; ?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
-                        <span class="msg_sender"><?PHP echo reset($row)['name']."</span><span class=\"unreadConve\">".$span."</span>"; ?>
+                        <a class="btn_each_msg" id="ID_<?=html_escape(reset($row)['name'])?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
+                        <span class="msg_sender">
+                            <?=html_escape(reset($row)['name'])."</span><span class=\"unreadConve\">".$span."</span>"; ?>
                             <?php
                             $keys = array_keys($row);
                             $row[reset($keys)]['message'] = html_escape(reset($row)['message']);

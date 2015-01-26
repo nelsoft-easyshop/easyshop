@@ -275,20 +275,21 @@
             else {
                 var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
             }
-            if ($('#ID_'+Nav_msg.name).length) { //if existing on the conve
-                $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
-                $('#ID_'+Nav_msg.name).children('.msg_date').text(Nav_msg.time_sent);
-                $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
+            var name = escapeHtml(Nav_msg.name);
+            if ($('#ID_'+name).length) { //if existing on the conve
+                $('#ID_'+name).children('.msg_message').text(escapeHtml(Nav_msg.message));
+                $('#ID_'+name).children('.msg_date').text(Nav_msg.time_sent);
+                $('#ID_'+name).attr('data',JSON.stringify(val));
                 if (Nav_msg.unreadConversationCount != 0) {
-                    $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
-                    $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
+                    $('#ID_'+name).parent().parent().addClass('NS');
+                    $('#ID_'+name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
                 }
-                if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
+                if ($('#ID_'+name).hasClass("Active")) {//if focus on the conve
                     specific_msgs();
-                    seened($('#ID_'+Nav_msg.name));
-                    $('#ID_'+Nav_msg.name+" .unreadConve").html("");
+                    seened($('#ID_'+name));
+                    $('#ID_'+name+" .unreadConve").html("");
                 }
-                html = $('#ID_'+Nav_msg.name).parent().parent();
+                html = $('#ID_'+name).parent().parent();
             }
             else{
                 if($(".dataTables_empty").length){
@@ -305,8 +306,8 @@
                 span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
                 html +='</td>';
                 html +='<td class=" ">';
-                html +="<a class='btn_each_msg' id='ID_" + Nav_msg.name + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
-                html +='<span class="msg_sender">' + Nav_msg.name + '</span>'+span;
+                html +="<a class='btn_each_msg' id='ID_" + name + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
+                html +='<span class="msg_sender">' + name + '</span>'+span;
                 html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
                 html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
                 html +='</a>';
