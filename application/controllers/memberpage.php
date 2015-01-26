@@ -1074,10 +1074,8 @@ class Memberpage extends MY_Controller
         $result = 'data-error';
         if($this->input->post('reverify') === 'true'){
             $memberId = $this->session->userdata('member_id');
-            $member = $this->serviceContainer['entity_manager']
-                               ->find('EasyShop\Entities\EsMember', $memberId);
-            if($this->input->post('field') === 'email' && $this->input->post('data') == $member->getEmail())
-            {
+            $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+            if($this->input->post('field') === 'email' && $this->input->post('data') == $member->getEmail()){
                 $verificationSendingResponse = $this->accountManager
                                                      ->sendAccountVerificationLinks($member, false);
                 if($verificationSendingResponse['isSuccessful']){
