@@ -20,7 +20,7 @@
         $sellerStoreName = html_escape($memberEntity->getStoreName());
         $sellerSlug = html_escape($memberEntity->getSlug());
     ?>
-    <div class="col-search-item <?=$isListView ? 'col-xs-12' : 'col-xs-3' ; ?>">
+    <div class="col-search-item <?=$isListView ? 'col-xs-12' : 'col-sm-3 col-xs-6' ; ?>">
         <div class="search-item-container">
             <a href="/item/<?=$productSlug;?>" class="search-item-link-image">
                 <div class="search-item-img-container" style="background: #fff url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
@@ -66,7 +66,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <a href="#">
+                            <a href="/item/<?=$productSlug;?>">
                                 <div class="search-item-img-container" style="background: #fff url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
                                     <?php if($hasSecondImage): ?>
                                     <div class="search-item-img-container-hover" style="background: #fff url(/<?=$secondaryImage;?>)) center no-repeat; background-size: cover;">
@@ -93,7 +93,7 @@
                             </span>
                             <div class="divider-gray"></div>
                             <div class="row">
-                                <div class="col-xs-6">
+                                <div class="col-md-6">
                                     <div class="search-item-seller-img-list">
                                         <div class="search-item-seller-cont">
                                             <img src="<?=$ownerAvatar; ?>" class="search-item-seller-img" />
@@ -104,14 +104,37 @@
                                     </a>
                                 </div>
 
-                                <?php if($isFreeShipping): ?>
-                                <div class="col-xs-6">
+                                
+                                <div class="col-md-6">
+                                    <?php if($isFreeShipping): ?>
                                     <span class="search-item-shipping-text pull-right">
                                         <span class="search-item-shipping-label">Shipping : </span>
                                         <span class="search-item-shipping-data">Free</span>
                                     </span>
+                                    <?php endif; ?>
+                                    <div class="clear"></div>
+
+                                    <div class="search-price-list-mobile">
+                                        <div class="col-xs-6 search-item-price">
+                                            <?php if($percentage > 0):?>
+                                            <span class="original-price">
+                                                <s>P<?=$originalPrice; ?></s>
+                                            </span>
+                                            <?php endif; ?> 
+                                             
+                                            <span class="new-price with-discount-list">
+                                                P<?=$productPrice; ?>
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-6 search-list-cart-button">
+                                            <button class="btn btn-search-add-cart">
+                                                <span class="fa icon-cart fa-lg"></span>
+                                                Add to cart
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <?php endif; ?>
+                               
                             </div>
                         </td>
                         <td class="search-item-td-price">

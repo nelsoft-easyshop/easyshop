@@ -18,21 +18,27 @@
     }
 
     $(document).ready(function(){
-      $('.slider1').bxSlider({
-        slideWidth: 390,
-        minSlides: 1,
-        maxSlides: 3,
-        moveSlides: 1,
-        slideMargin: 5,
-        autoStart: true,
-        speed: 1000,
-        pause: 6000,
-        prevText: '',
-        nextText: '',
-        touchEnabled: true,
-        infiniteLoop: true,
-        pager: false
-      });
+        $('.slider1').bxSlider({
+            slideWidth: 390,
+            minSlides: 1,
+            maxSlides: 3,
+            moveSlides: 1,
+            slideMargin: 5,
+            autoStart: true,
+            speed: 1000,
+            pause: 6000,
+            prevText: '',
+            nextText: '',
+            touchEnabled: true,
+            infiniteLoop: true,
+            pager: false
+        });
+
+        $('.top-slider').bxSlider({
+            prevText: '<i class="fa fa-angle-left fa-lg"></i>',
+            nextText: '<i class="fa fa-angle-right"></i>'
+        });
+        
     });
 
     var delay = (function(){
@@ -82,8 +88,8 @@
         var where_scroll = $(window).scrollTop();
         var window_height = $(window).height();
 
-        if(where_scroll == 0)  {
-            $('#sticky-pagination').css('bottom', '-200px');
+        if(where_scroll <= 400)  {
+            $('#sticky-pagination').css('bottom', '-400px');
         }else{
             $('#sticky-pagination').css('bottom', '0px');
         }

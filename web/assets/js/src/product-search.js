@@ -393,7 +393,7 @@
         $(".icon-grid").removeClass("active-view");
         $('.search-results-container').animate({opacity:0},function(){
             $( ".search-results-container" ).addClass("list-search");
-            $( ".col-search-item" ).removeClass("col-xs-3");
+            $( ".col-search-item" ).removeClass("col-xs-6").removeClass("col-sm-3");
             $( ".col-search-item" ).addClass("col-xs-12");
             $('.search-results-container').stop().animate({opacity:1},"fast");
         });
@@ -407,7 +407,7 @@
         $('.search-results-container').animate({opacity:0},function(){
             $( ".search-results-container" ).removeClass("list-search");
             $( ".col-search-item" ).removeClass("col-xs-12");
-            $( ".col-search-item" ).addClass("col-xs-3");
+            $( ".col-search-item" ).addClass("col-sm-3").addClass("col-xs-6");
             $('.search-results-container').stop().animate({opacity:1},"fast");
         });
     });

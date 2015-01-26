@@ -3,11 +3,12 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
 
 <section class="bg-search-section color-default">
-    <br>
-    <div class="container-non-responsive">
+    <br> 
+    <div class="container">
         <?php if($productCount > 0): ?>
+ 
         <div class="row">
-            <div class="col-xs-3">
+            <div class="col-md-3 search-left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default panel-left-wing border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
@@ -110,7 +111,7 @@
                 </div>
             </div>
             
-            <div class="col-xs-9">
+            <div class="col-md-9">
                 <div class="search-header">
                     <h5>
                     <strong><?=$productCount; ?></strong>
@@ -139,11 +140,11 @@
                     </select>
                     <div class="clear"></div>
                 </div>
-                
+ 
                 <div class="search-results-container <?=$isListView ? 'list-search' : ''?>">
                     <?=$productView; ?> 
                 </div> 
-
+ 
                 <div id="sticky-pagination">
                     <center>
                         <div class="row">
