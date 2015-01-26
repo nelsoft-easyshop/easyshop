@@ -4,9 +4,9 @@
 
 <section class="bg-search-section color-default">
     <br>
-    <div class="container-non-responsive">
+    <div class="container">
         <div class="row">
-            <div class="col-xs-3">
+            <div class="col-md-3 search-left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default panel-left-wing border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
@@ -167,7 +167,7 @@
                 </div>
             </div>
             
-            <div class="col-xs-9">
+            <div class="col-md-9">
                 <div class="search-header">
                     <h5>
                     <strong>300</strong>
@@ -205,7 +205,7 @@
                         <?php
                             for($i=1; $i<=4; $i++){
                         ?>
-                        <div class="col-search-item col-xs-3">
+                        <div class="col-search-item col-sm-3 col-xs-6">
                             <div class="search-item-container">
                                 <a href="#" class="search-item-link-image">
                                     <div class="search-item-img-container" style="background: url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
@@ -242,7 +242,7 @@
                                 <table class="search-item-list-table">
                                     <tbody>
                                         <tr>
-                                            <td>
+                                            <td class="search-item-td-image">
                                                 <a href="#">
                                                     <div class="search-item-img-container" style="background: #fff url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;">
                                                         <div class="search-item-img-container-hover" style="background: #fff url(/assets/images/products/apple-p-h.jpg) center no-repeat; background-size: cover;">
@@ -262,7 +262,7 @@
                                                 </span>
                                                 <div class="divider-gray"></div>
                                                 <div class="row">
-                                                    <div class="col-xs-6">
+                                                    <div class="col-md-6">
                                                         <div class="search-item-seller-img-list">
                                                             <div class="search-item-seller-cont">
                                                                 <img src="/assets/images/img_how-to-buy.png" class="search-item-seller-img" />
@@ -272,11 +272,29 @@
                                                             Seller2DaMax
                                                         </a>
                                                     </div>
-                                                    <div class="col-xs-6">
+                                                    <div class="col-md-6">
                                                         <span class="search-item-shipping-text pull-right">
                                                             <span class="search-item-shipping-label">Shipping : </span>
                                                             <span class="search-item-shipping-data">Free</span>
                                                         </span>
+                                                        <div class="clear"></div>
+                                                        <div class="search-price-list-mobile">
+                                                            <div class="col-xs-6 search-item-price">
+                                                                <span class="original-price">
+                                                                    <s>P888,800.00</s>
+                                                                </span>
+                                                                <!--Add "with-discount-list" if discount is present on the item-->
+                                                                <span class="new-price with-discount-list">
+                                                                    P788,500.00
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-xs-6 search-list-cart-button">
+                                                                <button class="btn btn-search-add-cart">
+                                                                    <span class="fa icon-cart fa-lg"></span>
+                                                                    Add to cart
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -301,7 +319,7 @@
                             </div>
                         </div>
                         
-                        <div class="col-search-item col-xs-3">
+                        <div class="col-search-item col-sm-3 col-xs-6">
                             <div class="search-item-container">
                                 <a href="#" class="search-item-link-image">
                                     <div class="search-item-img-container" style="background: url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: cover;">
@@ -354,7 +372,7 @@
                                                 </span>
                                                 <div class="divider-gray"></div>
                                                 <div class="row">
-                                                    <div class="col-xs-6">
+                                                    <div class="col-md-6">
                                                         <div class="search-item-seller-img-list">
                                                             <div class="search-item-seller-cont">
                                                                 <img src="/assets/images/img_how-to-buy.png" class="search-item-seller-img" />
@@ -364,7 +382,7 @@
                                                             Seller2DaMax
                                                         </a>
                                                     </div>
-                                                    <div class="col-xs-6">
+                                                    <div class="col-md-6">
                                                         <span class="search-item-shipping-text pull-right">
                                                             <span class="search-item-shipping-label">Shipping : </span>
                                                             <span class="search-item-shipping-data">Free</span>
