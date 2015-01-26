@@ -86,15 +86,6 @@ class MessageController extends MY_Controller
             $isSendingSuccesful = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
             if ($isSendingSuccesful) {
                 $messages = $this->messageManager->getAllMessage($this->userId);
-                $recipientMessages = $this->messageManager->getAllMessage($this->userId, true);
-
-                // TODO Add this to serviceContainer
-                $dc = new \EasyShop\WebSocket\Pusher\DataContainer();
-                $dc->set('messageCount', $recipientMessages['unread_msgs_count']);
-                $dc->set('unreadMessages', $recipientMessages);
-
-                $userPusher = $this->serviceContainer['user_pusher'];
-                $userPusher->push($receiverEntity->getIdMember(), $dc);
 
                 $emailRecipient = $receiverEntity->getEmail();
                 $emailSubject = $this->lang->line('new_message_notif');
