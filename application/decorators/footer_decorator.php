@@ -2,12 +2,6 @@
 
 class Footer_decorator extends Viewdecorator 
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-    
     /**
      * Generate footer data
      *

@@ -1,3 +1,4 @@
+/dandelion.yml
 /web/robots.txt
 /vendor
 /web/assets/product/*
@@ -8,6 +9,7 @@
 !/web/assets/user/default
 /web/assets/product/product_description/*
 /web/assets/images/ads/
+/web/assets/images/mainslide/
 /web/assets/images/homeslider/
 !/web/assets/product/product_description/README.md
 
@@ -25,6 +27,7 @@
 
 
 /config.php
+/application/bin/js/config.js
 /application/config/param/controllers.php
 .DS_Store
 
@@ -41,10 +44,13 @@ application/logs/*
 /web/assets/js/min
 
 
+/sphinx/data/products/*
+!/sphinx/data/products/*.md
+/sphinx/data/*.*
+
+
 /sphinx/logs/*
 !/sphinx/logs/*.md
-/sphinx/data/*
-!/sphinx/data/*.md
 /sphinx/etc/*
 !/sphinx/etc/*.md
 !/sphinx/etc/wordforms.txt

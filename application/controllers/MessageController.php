@@ -42,11 +42,17 @@ class MessageController extends MY_Controller
             redirect('/', 'refresh');
         }
 
-        $messages = $this->messageManager->getAllMessage($this->userId);
+        $data = [
+            'result' => $this->messageManager->getAllMessage($this->userId),
+            'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId),
+            'chatServerHost' => $this->messageManager->getChatHost(),
+            'chatServerPort' => $this->messageManager->getChatPort()
+        ];
         $title = !isset($messages['unread_msgs']) || (int) $messages['unread_msgs'] === 0
             ? 'Messages | Easyshop.ph'
             : 'Messages (' . $messages['unread_msgs'] . ') | Easyshop.ph';
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => $title,
             'metadescription' => '',
             'relCanonical' => '',
@@ -55,7 +61,7 @@ class MessageController extends MY_Controller
 
         $this->load->spark('decorator');
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/messages/inbox_view', ['result' => $messages ]);
+        $this->load->view('pages/messages/inbox_view', $data );
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
 
@@ -68,32 +74,24 @@ class MessageController extends MY_Controller
     {
         $storeName = trim($this->input->post("recipient"));
         $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
-                                   ->getUserWithStoreName($storeName, $this->userId)[0];
+                                   ->getUserWithStoreName($storeName);
         $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
 
         if (!$receiverEntity) {
             $result['success'] = 0;
-            $result['msg'] = "The user " . html_escape($username) . ' does not exist';
+            $result['msg'] = "The user " . html_escape($storeName) . ' does not exist';
         }
-        else if ( (int) $this->userId === (int) $receiverEntity->getIdMember() ) {
+        else if ( (int) $this->userId === (int) $receiverEntity[0]->getIdMember() ) {
             $result['success'] = 0;
             $result['msg'] = "Sorry, it seems that you are trying to send a message to yourself.";
         }
         else {
+            $receiverEntity = $receiverEntity[0];
             $msg = trim($this->input->post("msg"));
             $isSendingSuccesful = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
             if ($isSendingSuccesful) {
                 $messages = $this->messageManager->getAllMessage($this->userId);
-                $recipientMessages = $this->messageManager->getAllMessage($this->userId, true);
-
-                // TODO Add this to serviceContainer
-                $dc = new \EasyShop\WebSocket\Pusher\DataContainer();
-                $dc->set('messageCount', $recipientMessages['unread_msgs']);
-                $dc->set('unreadMessages', $recipientMessages);
-
-                $userPusher = $this->serviceContainer['user_pusher'];
-                $userPusher->push($receiverEntity->getIdMember(), $dc);
-
+                $recipientMessages = $this->messageManager->getAllMessage($receiverEntity->getIdMember(), true);
                 $emailRecipient = $receiverEntity->getEmail();
                 $emailSubject = $this->lang->line('new_message_notif');
                 $this->config->load('email', true);
@@ -118,7 +116,10 @@ class MessageController extends MY_Controller
                                    ->setSubject($emailSubject)
                                    ->setMessage($emailMsg, $imageArray)
                                    ->queueMail();
-                $result = $messages;
+                $result = [
+                    'message' => $messages,
+                    'recipientMessage' => $recipientMessages
+                ];
             }
         }
 
@@ -179,4 +180,24 @@ class MessageController extends MY_Controller
 
         echo json_encode($result);
     }
+
+    /**
+     * Sends message from vendor page
+     */
+    public function simpleSend()
+    {
+        $recipientSlug = trim($this->input->post('recipientSlug'));
+        $recipient = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                              ->find((int) $this->input->post('recipient'));
+        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
+                                                           ->find($this->userId);
+        $redirectUrl = '/' . $recipientSlug . '/contact#Failed';
+        if ($recipient) {
+            $this->messageManager->send($member, $recipient, trim($this->input->post('msg')));
+            $redirectUrl = '/' . $recipientSlug . '/contact#SendMessage';
+        }
+
+        redirect($redirectUrl ,'refresh');
+    }
+
 }

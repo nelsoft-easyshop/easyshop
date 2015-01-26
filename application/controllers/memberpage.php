@@ -2,6 +2,8 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+    
+use \Easyshop\Upload\AssetsUploader as AssetsUploader;
 
 /**
  *  Memberpage controller
@@ -156,6 +158,7 @@ class Memberpage extends MY_Controller
             $dashboardData['tab'] = $this->input->get('tab');
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' =>  "Dashboard | Easyshop.ph",
             ];
     
@@ -184,7 +187,8 @@ class Memberpage extends MY_Controller
         $this->qrManager->save($storeLink, $member->getSlug(), 'L', $this->qrManager->getImageSizeForPrinting(), 0);
         $data = [
             'qrCodeImageName' => $this->qrManager->getImagePath($member->getSlug()),
-            'slug' => $member->getSlug()
+            'slug' => $member->getSlug(),
+            'storeLink' =>$storeLink
         ];
 
         $this->load->view("pages/user/dashboard/dashboard-qr-code", $data);
@@ -252,12 +256,12 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $rules = $formValidation->getRules('personal_info');
-        $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                     ->setMethod('POST')
                     ->add('fullname', 'text')
-                    ->add('gender', 'text')
-                    ->add('dateofbirth', 'text', array('constraints' => $rules['dateofbirth']))
-                    ->add('mobile', 'text', array('constraints' => $rules['mobile']))
+                    ->add('gender', 'text', ['constraints' => $rules['gender']])
+                    ->add('dateofbirth', 'text', ['constraints' => $rules['dateofbirth']])
+                    ->add('mobile', 'text', ['constraints' => $rules['mobile']])
                     ->getForm();
 
         $form->submit([
@@ -270,7 +274,7 @@ class Memberpage extends MY_Controller
         if($form->isValid()){
             $formData = $form->getData();
             $validFullname = (string)$formData['fullname'];
-            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : $formData['gender'];
+            $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : strtoupper($formData['gender']);
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
             $um->setUser($memberId)
@@ -478,14 +482,16 @@ class Memberpage extends MY_Controller
                                                                           );
 
         foreach ($transactions["transactions"] as $value) {
-            $data = [];
-            $productSpecs = "";            
             foreach ($value["product"] as $product) {
+                $data = [];
+                $productSpecs = "";
+
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
                      foreach($product["attr"] as $attr => $attrValue ) {
-                        $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
                      }
                 }
+
                 $data = [
                     "invoiceNo" => $value["invoiceNo"],
                     "productName" => $product["name"],
@@ -523,10 +529,9 @@ class Memberpage extends MY_Controller
                                                                       );  
 
         foreach ($transactions["transactions"] as $value) {
-            $data = [];   
-            $productSpecs = "";                 
             foreach ($value["product"] as $product) {
-
+                $data = [];   
+                $productSpecs = "";                 
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
                      foreach($product["attr"] as $attr => $attrValue ) {
                         $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
@@ -547,8 +552,6 @@ class Memberpage extends MY_Controller
 
                 $soldTransactions["transactions"][] = $data;
             }
-
-
         }
 
         $this->load->view("pages/user/printselltransactionspage", $soldTransactions);
@@ -1059,6 +1062,7 @@ class Memberpage extends MY_Controller
         echo json_encode($serverResponse);
     }
     
+
     /**
      *  Used to send email / SMS when verifying email or mobile
      *  NOTE: ONLY EMAIL FUNCTIONALITY IS USED AT THE MOMENT
@@ -1668,6 +1672,7 @@ class Memberpage extends MY_Controller
                     'hash' => $this->input->get('h')            
                 ];
                 $headerData = [
+                    "memberId" => $this->session->userdata('member_id'),
                     'title' =>  "Reactivate you account | Easyshop.ph",
                     'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
                 ];

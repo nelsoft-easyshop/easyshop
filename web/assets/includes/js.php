@@ -23,8 +23,9 @@
     <?php endif; ?>
 
     var config = {
-         base_url: "<?php echo base_url(); ?>",
-         badIE : badIE
+        base_url: "<?php echo base_url(); ?>",
+        badIE : badIE,
+        assetsDomain: "<?php echo getAssetsDomain(); ?>"
     };
     
     
@@ -40,7 +41,8 @@
                 close: function(){$(this).remove();},
                 draggable: true,
                 modal: true,
-                resizable: false
+                resizable: false,
+                dialogClass: 'error-modal',
             });
         };
     }

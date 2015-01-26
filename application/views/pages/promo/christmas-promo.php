@@ -30,7 +30,7 @@
                 <div class="container">
                     <div id="navigation">
                         <ul class="nav">
-                            <li class="logo"><a href="/"><img src="/assets/images/promo-images/logo-xmas.png"></a></li>
+                            <li class="logo"><a href="/"><img src="<?php echo getAssetsDomain(); ?>assets/images/promo-images/logo-xmas.png"></a></li>
                         </ul>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
         <section class="slideshow">
             <div class="container single-image-before"></div>
             <div class="single-image">
-                <img src="/assets/images/promo-images/header-banner.jpg?ver=<?=ES_FILE_VERSION?>" alt="">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/promo-images/header-banner.jpg?ver=<?=ES_FILE_VERSION?>" alt="">
             </div>
             <div class="container single-image-after" style="height=20;padding:10px 0;">
             </div>
@@ -51,7 +51,7 @@
                     <div class="span6 box seller-list text-center div-box-con">
                         <?PHP if (isset($featuredVendor['member'])) : ?>
                             <a href="/<?=html_escape($featuredVendor['member']->getSlug())?>" target="_blank">
-                                <img src="/assets/images/promo-images/<?=$featuredVendor['vendorImageUrl']?>?ver=1.0">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/promo-images/<?=$featuredVendor['vendorImageUrl']?>?ver=1.0">
                                 <p class="box-seller-name"><?=html_escape($featuredVendor['member']->getStoreName())?></p>
                             </a>
                         <?PHP else : ?>
@@ -184,12 +184,17 @@
         <?PHP $timeFormat = strtotime($product->getStartPromo() ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")) ?>
         <input id="endDate" type="hidden" value='<?=date('M d,Y H:i:s', $timeFormat)?>' >
         <div id="fb-root"></div>
-        <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/jquery.countdown.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-        <script src="/assets/js/src/promo/countdown-sale.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/jquery.countdown.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/promo/countdown-sale.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <?php else: ?>
+            <script src="/assets/js/min/easyshop.christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <?php endif; ?>
     </body>
 </html>

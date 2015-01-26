@@ -7,6 +7,16 @@ $(document).ready(function(){
     $('.paypal_button').show();  
     $('#c_mobile').numeric({negative : false});
 
+    $(document).on('keypress','#c_telephone',function (evt) {
+ 
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 45  && charCode > 31 && (charCode < 48 || charCode > 57)){
+            return false;
+        }
+
+        return true;
+    }); 
+
     var cityFilter = function(stateregionselect,cityselect){
         var stateregionID = stateregionselect.find('option:selected').attr('value'); 
         cityselect.find('option.echo').remove();
@@ -343,6 +353,11 @@ $(document).ready(function(){
     $(document).on('click','.show-form-address',function () {
         $("#delAddressFrm")[0].reset();
         $('.stateregionselect').trigger('change');
+        validateWhiteTextBox('#consignee');
+        validateWhiteTextBox('.stateregionselect');
+        validateWhiteTextBox('.cityselect');
+        validateWhiteTextBox('.c_address');
+        validateWhiteTextBox('#c_mobile'); 
     });
 
     $(document).on('click','.link_address',function () {
@@ -488,8 +503,7 @@ $(document).ready(function(){
                 }
             } 
         });
-    });
-
+    }); 
 
 // -- END OF REMOVE ITEM FROM SELECTED CART --//
 

@@ -22,6 +22,7 @@ class ScratchCard extends MY_Controller
     public function scratchCardPromo()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Scratch to Win | Easyshop.ph',
             'metadescription' => 'Scratch-to-win-promo',
         ];
@@ -75,6 +76,7 @@ class ScratchCard extends MY_Controller
         $viewData['twitter'] = $socialMediaLinks["twitter"];
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Scratch to Win | Easyshop.ph',
             'metadescription' => 'Scratch-to-win-promo'
         ];

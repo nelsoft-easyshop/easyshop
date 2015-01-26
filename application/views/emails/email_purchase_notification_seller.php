@@ -240,7 +240,7 @@
                             <tr>
                                 <td>
                                     <a href="{facebook}">
-                                        <img src="facebook.png" style="float: right, display: block; max-width: 100%; height: auto;" />
+                                        <img src="facebook.png" style="float: right; display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>

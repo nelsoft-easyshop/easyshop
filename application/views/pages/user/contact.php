@@ -17,11 +17,12 @@
                             Leave A Message
                         </p>
                         <div class="div-message-form">
-                            <?php echo form_open('messages/doSendMessage'); ?>
+                            <?php echo form_open('MessageController/simpleSend'); ?>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
-                                    <input type="text" class="input-lg input-message" placeholder="NAME..." value="Recipient: <?php echo html_escape($seller->getUsername())?>" disabled="disabled"/>
-                                    <input type="hidden" name="recipient" value="<?php echo $seller->getIdMember()?>" id="msg_recipient">
+                                    <input type="text" class="input-lg input-message" placeholder="NAME..." value="Recipient: <?php echo html_escape($seller->getStoreName())?>" disabled="disabled"/>
+                                    <input type="hidden" name="recipient" value="<?=$seller->getIdMember()?>" id="msg_recipient">
+                                    <input type="hidden" name="recipientSlug" value="<?=$seller->getSlug()?>">
                                 </div>
                             </div>
                             <div class="row">
@@ -51,4 +52,9 @@
     </div>
     </div>
 </section>
-<script src="/assets/js/src/vendorpage_contact.js?ver=<?=ES_FILE_VERSION?>"></script>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendorpage_contact.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_contact.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

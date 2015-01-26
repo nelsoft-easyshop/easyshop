@@ -17,62 +17,59 @@
 }
 
 /********** End of How am I going to be paid CSS style ************/ 
-    
-    .cod {
-        background-image: url('../images/global_sprite.png');
-        background-repeat: no-repeat;
-        display: inline-block;
-        height: 50px;
-        min-width: 60px;
-        background-position: -339px -176px;		
-        width: 95px;
-    }
+.cod {
+    background-image: url('../images/global_sprite.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 50px;
+    min-width: 60px;
+    background-position: -339px -176px;		
+    width: 95px;
+}
 
+.category_nav {
+    position: relative;
+ }
 
-     .category_nav {
-        position: relative;
-     }
-    
-      nav {
-        display: none;
-        position: absolute;
-        z-index: 9999;
-        background-color: #fff;
-      }
-      .slide_arrows {
-        max-width: none !important;
-      }
+nav {
+    display: none;
+    position: absolute;
+    z-index: 9999;
+    background-color: #fff;
+  }
 
-      .bread_crumbs {
-        margin-left: 195px;
-        margin-top: 10px;
-      }
-      
-      
+.slide_arrows {
+    max-width: none !important;
+}
 
-    /* UI-Dialog CSS*/
+.bread_crumbs {
+    margin-left: 195px;
+    margin-top: 10px;
+}
 
-    .ui-dialog {
+/* UI-Dialog CSS*/
+
+.ui-dialog {
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 3px 6px rgba( 0, 0, 0, 0.3 );
+    left: 0;
     position: fixed;
     top: 0;
-    left: 0;
     z-index: 100102;
-    background-color: #fff;
     -webkit-box-shadow: 0 3px 6px rgba( 0, 0, 0, 0.3 );
-    box-shadow: 0 3px 6px rgba( 0, 0, 0, 0.3 );
-    }
+}
 
-    .ui-dialog-titlebar {
-    background: #fcfcfc;
+.ui-dialog-titlebar {
     border-bottom: 1px solid #dfdfdf;
     height: 36px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 36px;
     padding: 0 36px 0 16px;
-    }
+}
 
-    .ui-button.ui-dialog-titlebar-close {
+.ui-button.ui-dialog-titlebar-close {
     background: none;
     border: none;
     -webkit-box-shadow: none;
@@ -87,58 +84,39 @@
     width: 36px;
     height: 36px;
     text-align: center;
-    }
+}
 
-    .ui-dialog-titlebar-close:before {
-    border: 1px solid #6D6D6D;
-    border-radius: 2px;
-    color: #6D6D6D;
-    content: "X";
-    display: inline-block;
-    height: 20px;
-    line-height: 20px;
-    vertical-align: top;
-    width: 20px;
-
-    speak: none;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    }
-
-    .ui-button.ui-dialog-titlebar-close:hover {
+.ui-button.ui-dialog-titlebar-close:hover {
     color: #2ea2cc;
-    }
+}
 
-    .ui-dialog-titlebar-close .ui-button-text {
+.ui-dialog-titlebar-close .ui-button-text {
     display: none;
-    }
+}
 
-    .ui-dialog-content {
-    padding: 16px;
-    overflow: auto;
-    }
+.ui-dialog-content {
+    padding: 12px;
+}
 
-    .ui-dialog-buttonpane {
-    background: #fcfcfc;
+.ui-dialog-buttonpane {
     border-top: 1px solid #dfdfdf;
     padding: 16px;
-    }
+}
 
-    .ui-dialog-buttonpane .ui-button {
+.ui-dialog-buttonpane .ui-button {
     margin-left: 16px;
-    }
+}
 
-    .ui-dialog-buttonpane .ui-dialog-buttonset {
+.ui-dialog-buttonpane .ui-dialog-buttonset {
 /*    float: right;*/
     margin-bottom: 20px;
     text-align: right;
-    }
+}
 
-    .ui-draggable .ui-dialog-titlebar {
+.ui-draggable .ui-dialog-titlebar {
     cursor: move;
-    }
-      
-      
+}
+
 .ui-widget-overlay {
 	position: fixed;
 	top: 0;
@@ -151,8 +129,6 @@
 	filter: alpha(opacity=70);
 	z-index: 100101;
 }
-
-
 
 /** Menu Slider **/
 .bx-wrapper {

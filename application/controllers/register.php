@@ -30,6 +30,7 @@ class Register extends MY_Controller
             }
         }
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
         ];
@@ -273,16 +274,14 @@ class Register extends MY_Controller
     public function changepass()
     {
         $result = false;
-        $username = $this->input->post('wsx');
-        $cur_password = $this->input->post('cur_password');
+        $memberObj = $this->serviceContainer['entity_manager']
+                          ->getRepository('EasyShop\Entities\EsMember')   
+                          ->find($this->session->userdata('member_id'));
+        $currentPassword = $this->input->post('currentPassword');
         $password = $this->input->post('password');         
 
-        $dataval = [
-            'login_username' => $username, 
-            'login_password' => $cur_password
-        ];
         $this->accountManager = $this->serviceContainer['account_manager'];            
-        $row = $this->accountManager->authenticateMember($username, $cur_password);
+        $row = $this->accountManager->authenticateMember($memberObj->getUserName(), $currentPassword);
 
         if (!empty($row["member"])){
             $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);
@@ -319,20 +318,21 @@ class Register extends MY_Controller
         $hash = isset($getdata[2]) ? $getdata[2] : null;
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.ph - Email Verification',
             'metadescription' => '',
             'relCanonical' => '',
             'renderSearchbar' => false,
         ];         
         
-        $data = [ 
-            'member_username' => $username,
+        $bodyData = [ 
+            'username' => $username,
             'email' => $email,
         ];
 
         $member_id = $this->register_model->get_memberid($username)['id_member'];
-
-        if($member_id === 0 || true){
+        
+        if($member_id === 0){
             $this->load->spark('decorator');    
             $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('errors/email-verification');
@@ -340,33 +340,35 @@ class Register extends MY_Controller
             return;
         }
 
-        $data_val = $this->register_model->get_verifcode($member_id);
-
+        $verificationData = $this->register_model->get_verifcode($member_id);
         
-        if($email === $data_val['email'] && $hash === $data_val['emailcode'] && $username === $data_val['username'])
+        if($email === $verificationData['email'] && 
+           $hash === $verificationData['emailcode'] && 
+           $username === $verificationData['username'])
         {
         
-            if($data_val['is_email_verify'] == 1){
-                $data['verification_msg'] = $this->lang->line('expired_email_verification');
+            if((bool)$verificationData['is_email_verify']){
+                $bodyData['verificationMessage'] = $this->lang->line('expired_email_verification');
+                $bodyData['isAlreadyVerified']  = true;
                 $this->load->spark('decorator');    
-                $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-                $this->load->view('pages/user/email-verification-succcess', $data);
+                $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+                $this->load->view('pages/user/email-verification-success', $bodyData);
                 $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
                 return;
             }
 
-            $temp = array(
+            $temp = [
                 'is_email_verify' => 1,
                 'member_id' => $member_id
-            );
+            ];
 
             $this->register_model->update_verification_status($temp);
             
-            $data['verification_msg'] = $this->lang->line('success_email_verification');
+            $bodyData['verificationMessage'] = $this->lang->line('success_email_verification');
             $this->load->spark('decorator');    
             
             $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/user/register_form3_view', $data);
+            $this->load->view('pages/user/email-verification-success', $bodyData);
             $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
 
         }

@@ -724,8 +724,11 @@ var previous,editSelectedValue,editSelectedId;
         if(evt.which === 13){
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
- 
     }
+
+    $(document).on('focus, click', '.chzn-single', function(){
+        $(".chzn-search > input[type=text]").attr('maxlength', 25);
+    });
 
 
     $(document).on("keypress",".chzn-search > input[type=text]", function (evt){
@@ -816,7 +819,7 @@ var previous,editSelectedValue,editSelectedId;
                             }
                         } 
                     }
-                    optionString += "<option data-value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
+                    optionString += "<option data-value='"+selectList+"' value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
                     if($.inArray(selectList,attributeArray[selectedValue]) <= -1){
                         attributeArray[selectedValue].push(selectList);
                     }
@@ -962,15 +965,14 @@ var previous,editSelectedValue,editSelectedId;
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
                 var selData = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').data('value');
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).attr('selected','selected');
-                
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).prop('selected', true);
+                var selectElement = $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id'));
+                selectElement.children('option').each(function(){
+                    if ($(this).data('value') == selData) {
+                        $(this).parent().val(selData).change(); 
+                    }
+                });
 
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).prop("disabled",true);
+                selectElement.prop("disabled",true);
             });
 
             $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
@@ -1194,6 +1196,7 @@ var extensionList = [];
 var imageCollection = [];
 var widthRatio = 445;
 var heightRatio = 538;
+var totalCropImage;
 
 (function($) {
   
@@ -1219,7 +1222,7 @@ var heightRatio = 538;
 
     var cropImage = function($input)
     {
-        var totalCropImage = imageObject.length;
+        totalCropImage = imageObject.length;
         var jcrop_api, imgHeight, imgWidth;
         var targetImage = imageObject[cropCurrentCount];
         var currentExtension = extensionList[cropCurrentCount];
@@ -1240,7 +1243,7 @@ var heightRatio = 538;
                     var x1 = imgWidth / 2 - widthRatio / 2; 
                     var x2 = x1 + widthRatio; 
                     var y1 = 0;
-                    var y2 = imgHeight;
+                    var y2 = imgHeight; 
                     $('#crop-image-main').dialog({
                         resizable: false,
                         height: 600,
@@ -1248,7 +1251,28 @@ var heightRatio = 538;
                         modal: true,
                         buttons: {
                             "Crop": function() {
-                                $(this).dialog("close");
+                                var xCoord = $('#image_x').val();
+                                var yCoord = $('#image_y').val();
+                                var wCoord = $('#image_w').val();
+                                var hCoord = $('#image_h').val();
+                                var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
+                                jcrop_api.destroy();  
+                                af.push(afTemp[cropCurrentCount]);
+                                axes.push(coordinate); 
+                                cropCurrentCount++;  
+                                $(this).dialog("close"); 
+                                if(cropCurrentCount < totalCropImage){
+                                    cropImage($input);
+                                }
+                                else{
+                                    triggerUpload();
+                                    $(".files").hide();
+                                    $(".files.active").each(function(){
+                                        $(this).removeClass('active');
+                                    });
+                                    $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+                                    $input.remove();
+                                }
                             }
                         },
                         open: function() {
@@ -1271,31 +1295,9 @@ var heightRatio = 538;
                             });
                         },
                         close: function(){
-                            var xCoord = $('#image_x').val();
-                            var yCoord = $('#image_y').val();
-                            var wCoord = $('#image_w').val();
-                            var hCoord = $('#image_h').val();
-                            var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
-
                             $('#crop-image-main >  #imageTag').attr('src', ''); 
                             $('#crop-image-main').append('<img src="" id="imageTag">');
-                            jcrop_api.destroy(); 
-                            $.modal.close();
-                            af.push(afTemp[cropCurrentCount]);
-                            axes.push(coordinate); 
-                            cropCurrentCount++; 
-                            if(cropCurrentCount < totalCropImage){
-                                cropImage($input);
-                            }
-                            else{
-                                triggerUpload();
-                                $(".files").hide();
-                                $(".files.active").each(function(){
-                                    $(this).removeClass('active');
-                                });
-                                $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
-                                $input.remove();
-                            }
+                            jcrop_api.destroy();
                         },
                         "title": "Crop your image"
                     });
@@ -1318,9 +1320,21 @@ var heightRatio = 538;
                 $input.remove();
             }
         }
-
-        
     }
+
+    $(document).on('click','.ui-dialog-titlebar-close',function(e){
+            af.push(afTemp[cropCurrentCount]); 
+            cropCurrentCount++;
+            while(cropCurrentCount < totalCropImage){
+                af.push(afTemp[cropCurrentCount]);
+                cropCurrentCount++;
+            }
+            $.each( arrayUpload, function( key, value ) {
+                removeThisPictures.push(value); 
+                $('#previewList'+value).remove();
+            }); 
+            canProceed = true;  
+    });
 
     function triggerUpload()
     {
@@ -1564,6 +1578,9 @@ var heightRatio = 538;
                     modal: true,
                     buttons: {
                         "Crop": function() {
+                            var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
+                            $("#coordinatesOther").val(coordinate);
+                            triggerUploadOther(picName);
                             $(this).dialog("close");
                         }
                     },
@@ -1586,13 +1603,10 @@ var heightRatio = 538;
                             onSelect: showCoords
                         });
                     },
-                    close: function(){
-                        var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
-                        $("#coordinatesOther").val(coordinate);
+                    close: function(){ 
+                        jcrop_api.destroy(); 
                         $('#crop-image-main >  #imageTag').attr('src', ''); 
                         $('#crop-image-main').append('<img src="" id="imageTag">');
-                        jcrop_api.destroy(); 
-                        triggerUploadOther(picName);
                     },
                     "title": "Crop your image"
                 });
@@ -1619,6 +1633,8 @@ var heightRatio = 538;
                     value: pictureCountOther
                 }).appendTo('form');
                 arr.push({name:'pictureCount', value:pictureCountOther});
+                canProceed = false;
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
@@ -1655,7 +1671,6 @@ var heightRatio = 538;
         var val = $(this).val();
         var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
         var picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
-        var size = this.files[0].size;
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':
@@ -1667,6 +1682,7 @@ var heightRatio = 538;
         }
 
         if(badIE == false){
+            var size = this.files[0].size;
             if(size > maxImageSize){
                 alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
                 return false;

@@ -44,7 +44,7 @@
                             <button class="btn btn-block btn-orange-lg proceed">
                                 PROCEED
                             </button>
-                            <img src="/assets/images/orange_loader.gif" style="display: none">
+                            <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif" style="display: none">
                         </div>
                     </div>
                     <div class="col-md-2 col-divider">
@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="col-md-5 col-check-2">
                                     <button class="btn btn-default-3 btn-block check-availability" id="check-availability">Check Availability</button>
-                                    <img src="/assets/images/orange_loader.gif" id="img-check-availability" style="display: none">
+                                    <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif" id="img-check-availability" style="display: none">
                                 </div>
                             </div>
                             <div class="div-validation-container">
@@ -89,7 +89,7 @@
                                                 <div class="div-rec-product-image">
                                                     <center>
                                                         <span class="span-me">
-                                                            <img src="/assets/images/img_main_product.png" id="available-image" class="img-rec-product">
+                                                            <img src="<?php echo getAssetsDomain()?>assets/images/img_main_product.png" id="available-image" class="img-rec-product">
                                                         </span>
                                                     </center>
                                                 </div>
@@ -129,7 +129,7 @@
                             <button class="btn btn-block btn-orange-lg send-request">
                                 SEND REQUEST
                             </button>
-                            <img src="/assets/images/orange_loader.gif" id="img-send-request" style="display: none">
+                            <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif" id="img-send-request" style="display: none">
                         </div>
                     </div>
                 </div>
@@ -160,5 +160,10 @@
 </section>
 <br/>
 <br/>
-<script src='/assets/js/src/SocialMediaRegistration.js?ver=<?php echo ES_FILE_VERSION ?>' type='text/javascript'></script>
-<script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src='/assets/js/src/SocialMediaRegistration.js?ver=<?php echo ES_FILE_VERSION ?>' type='text/javascript'></script>
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.SocialMediaRegistration.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+

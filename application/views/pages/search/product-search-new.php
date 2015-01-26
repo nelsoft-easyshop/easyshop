@@ -224,8 +224,10 @@
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
     <input type="hidden" id="hidden-totalPage" value="<?=$totalPage; ?>" />
 </div> 
- 
+
+
 <script src="/assets/js/src/vendor/bootstrap.js"></script> 
 <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
 <script src="/assets/js/src/vendor/jquery.simplePagination.js"></script>
 <script src="/assets/js/src/product-search.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+
