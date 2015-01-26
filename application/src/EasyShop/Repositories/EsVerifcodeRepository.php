@@ -48,7 +48,7 @@ class EsVerifcodeRepository extends EntityRepository
     {
         $verifCode->setEmailcode($emailSecretHash);
         $verifCode->setMobilecode($mobileCode);
-        $verifCode->setEmailcount(0);
+        $verifCode->setEmailcount($verifCode->getEmailcount() + 1);
         $verifCode->setDate(new \DateTime('now'));
         $verifCode->setFpTimestamp(new \DateTime('now'));
         $isSuccessful = true;
