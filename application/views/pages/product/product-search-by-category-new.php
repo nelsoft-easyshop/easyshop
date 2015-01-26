@@ -18,13 +18,28 @@
         </div>
     </div>
 </section>
+
 <?php if($categoryHeaderData !== false): ?>
-    <section class="bg-search-section color-default search-parallax-container">
-        <div id="parallax-1" class="search-parallax">
-            <div id="parallax-3" class="banner-template-1">
-                <div style="border: solid red 1px; width: 100%; height: 300px;">
-            </div>
-            <br>
+<section class="bg-search-section color-default search-parallax-container">
+    <div id="parallax-1" class="search-parallax">
+        <?php if(isset($categoryHeaderData['top'])): ?>
+        <div id="parallax-3" class="banner-template-1">
+            <ul class="top-slider">
+                <?php foreach($categoryHeaderData['top']['image'] as $topBanner): ?>
+                    <?php if(trim($topBanner['target']['url']) !== '' && trim($topBanner['target']['url']) !== '/'): ?>
+                        <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
+                    <?php endif; ?>
+                            <li style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?> ) center no-repeat; background-size: cover; "></li>
+                    <?php if(trim($topBanner['target']['url']) !== '' && trim($topBanner['target']['url']) !== '/'): ?>
+                        </a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <br>
+        <?php endif; ?>
+        <?php if(isset($categoryHeaderData['bottom'])): ?>
+        <center class="search-slider">
             <center class="search-slider">
                 <div class="left-shade">
                 </div>
@@ -34,15 +49,23 @@
                     <div class="slider1 clear" width="100%">
                         <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
                             <div class="slide">
-                                <a href="<?php echo html_escape($bottomBanner['target']['url']); ?>" target="<?php echo $bottomBanner['target']['targetString']; ?>">
+                                
+                                <?php if(trim($bottomBanner['target']['url']) !== '' && trim($bottomBanner['target']['url']) !== '/'): ?>
+                                      <a href="<?php echo html_escape($bottomBanner['target']['url']); ?>" target="<?php echo $bottomBanner['target']['targetString']; ?>">
+                                <?php endif; ?>
+
                                     <img src="<?php echo getAssetsDomain().'.'.html_escape($bottomBanner['path']); ?>">
-                                </a>
+                                 
+                                <?php if(trim($bottomBanner['target']['url']) !== '' && trim($bottomBanner['target']['url']) !== '/'): ?>
+                                      </a>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
                     <div class="clear"></div>
                 </div>
-            </center>
+            </center>   
+        <?php endif; ?>
         </div>
     </section>
 <?php endif; ?>
