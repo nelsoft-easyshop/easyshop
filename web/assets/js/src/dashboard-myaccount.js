@@ -381,11 +381,9 @@
     $("#editEmailPanel").on('click','#changeEmailBtn',function (e) {
 
         email = $("#emailAddressEdit").val().trim();
-        var loadingimg = $('img.changeEmailLoader'); 
-        var verifyspan = $('#changeEmailBtnAction');  
         var currentEmail =  $("#currentEmail").text();
-        verifyspan.hide();
-        loadingimg.show();
+        $('img.changeEmailLoader').show(); 
+        $('#changeEmailBtnAction').hide();
 
         $.ajax({
             type: 'post',
@@ -394,8 +392,6 @@
             success: function(data) {
               
                 var obj = jQuery.parseJSON(data);   
-                loadingimg.hide();
-                verifyspan.show();
                 $("#verifyEmail").css("display","none");    
                     if(obj.result !== "success") {
                         if(obj.error.email) {
@@ -404,14 +400,13 @@
                         }                    
                     }
                     else {
-                        $("#currentEmail").text(email);                       
-                        $( "#btn-edit-email" ).trigger( "click" );                          
+                        $("#currentEmail").text(email);                                              
                         if(email !== currentEmail) {
                             $("#verifyEmail").css("display","block");
                             $("#verifiedEmail, #errorIndicatoreEmailAddress").css("display","none");                            
-                        }                        
+                        }
+                        verifyEmail();
                     }
-
             },
         });             
     });   
@@ -435,7 +430,7 @@
                 loadingimg.hide();
                 verifyspan.show();
                 $("#verifyEmail").css("display","none");    
-                if(obj === "success") {
+                if(obj) {
                     $("#verifiedEmail").css("display","block");                     
                     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
                 }
@@ -446,7 +441,7 @@
  
             },
         });             
-    });    
+    });       
 
 
     /**************** END PERSONAL INFORMATION ******************/
@@ -538,7 +533,37 @@
         xmlHttp.onreadystatechange = updatePage;
         xmlHttp.send(null);
     }
-
+    function verifyEmail()
+    {
+        var loadingimg = $('img.verify_img'); 
+        var verifyspan = $('#verifyEmailAction');          
+        var data = $("#currentEmail").text();
+        var field = "email";        
+        $.ajax({
+            type: 'post',
+            data: {field:field, data:data, reverify:'true', csrfname : csrftoken},
+            url: "/memberpage/verify",
+            success: function(data) {
+                $( "#btn-edit-email" ).trigger( "click" );   
+                var obj = jQuery.parseJSON(data);   
+                loadingimg.hide();
+                verifyspan.show();
+                $('img.changeEmailLoader').hide(); 
+                $('#changeEmailBtnAction').show();
+                $("#verifyEmail").css("display","none");   
+                if(obj) {
+                    $("#verifiedEmail").css("display","block");                     
+                    $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
+                }
+                else {
+                    $("#verifiedEmail").css("display","none");
+                    $("#errorIndicatoreVerify").css("display","block");
+                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after 30 mins.");
+                }
+ 
+            },
+        });              
+    }
 
 
 }(jQuery));

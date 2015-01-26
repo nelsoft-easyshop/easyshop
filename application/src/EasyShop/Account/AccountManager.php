@@ -69,6 +69,12 @@ class AccountManager
      * @var Symfony\Component\HttpFoundation\Request
      */
     private $httpRequest;
+
+    /**
+     * Email Notification
+     *
+     */
+    private $emailNotification;    
     
     /**
      * Intialize dependencies
@@ -81,7 +87,8 @@ class AccountManager
                                 $formValidation,
                                 $formErrorHelper, 
                                 $stringUtility,
-                                $httpRequest)
+                                $httpRequest,
+                                $emailNotification)
     {
         $this->em = $em;
         $this->bcryptEncoder = $bcryptEncoder;
@@ -91,6 +98,23 @@ class AccountManager
         $this->formErrorHelper = $formErrorHelper;
         $this->stringUtility = $stringUtility;
         $this->httpRequest = $httpRequest;
+        $this->emailNotification = $emailNotification;
+    }
+
+    /**
+     * Sends an email verification
+     * @param string $recipient
+     * @param string $subject
+     * @param string $message
+     * @param array $imageArray
+     * @return bool
+     */
+    public function sendEmailVerification($recipient, $subject, $message, $imageArray)
+    {
+        $this->emailNotification->setRecipient($recipient);
+        $this->emailNotification->setSubject($subject);
+        $this->emailNotification->setMessage($message, $imageArray);
+        return (bool) $this->emailNotification->sendMail();        
     }
 
     /**
