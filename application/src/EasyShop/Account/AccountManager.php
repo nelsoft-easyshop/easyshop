@@ -206,7 +206,7 @@ class AccountManager
             ];
             
             $imageArray = $this->configLoader->getItem('email', 'images');  
-            $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);
+            $message = $this->parser->parse('templates/landingpage/lp_reg_email' , $parseData,true);
             
             $this->emailNotification->setRecipient($emailAddress);
             $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
