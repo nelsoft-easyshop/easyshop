@@ -52,6 +52,8 @@ class product extends MY_Controller
      */
     public function categoryPage($categorySlug)
     {
+    
+  
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager'];
         
@@ -63,6 +65,9 @@ class product extends MY_Controller
             $categoryName = $categoryDetails->getName(); 
             $categoryId = $categoryDetails->getIdCat(); 
             $categoryDescription = $categoryDetails->getDescription();
+            
+            $categoryHeaderData =  $this->serviceContainer['xml_cms']
+                                        ->getCategoryPageHeader($categorySlug);  
             
             $response['getParameter'] = $getParameter = $this->input->get() ? $this->input->get() : [];
             $getParameter['category'] = $categoryId;
@@ -94,6 +99,7 @@ class product extends MY_Controller
 
             $response['breadcrumbs'] = $this->em->getRepository('EasyShop\Entities\EsCat')
                                         ->getParentCategoryRecursive($categoryId);
+            $response['categoryHeaderData'] = $categoryHeaderData;
 
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
