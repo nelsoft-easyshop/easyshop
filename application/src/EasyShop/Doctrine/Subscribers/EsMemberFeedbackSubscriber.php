@@ -1,14 +1,14 @@
 <?php
 
-namespace EasyShop\Doctrine\Listeners;
+namespace EasyShop\Doctrine\Subscribers;
 
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber as EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use EasyShop\Entities\EsProductReview as EsProductReview;
+use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsProductReviewListener implements EventSubscriber
+class EsMemberFeedbackSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
 
@@ -46,7 +46,7 @@ class EsProductReviewListener implements EventSubscriber
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
 
-        if ( ! $entity instanceOf EsProductReview ) {
+        if ( ! $entity instanceOf EsMemberFeedback ) {
             return;
         }
 
@@ -61,24 +61,19 @@ class EsProductReviewListener implements EventSubscriber
     {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
-        if ( $entity instanceOf EsProductReview) { 
-            $product = $entity->getProduct();
+        if ( $entity instanceOf EsMemberFeedback) { 
             $member = $entity->getMember();
+            $forMember = $entity->getForMemberid();
             $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                ->find(EsActivityType::FEEDBACK_UPDATE);
-            $phraseArray = $this->languageLoader
-                                ->getLine($activityType->getActivityPhrase());
-            if((int)$entity->getPReviewid() !== EsProductReview::PRODUCT_REVIEW_DEFAULT){
-                $unparsedPhrase = $phraseArray['product']['reply'];
-            }
-            else{
-                $unparsedPhrase = $phraseArray['product']['review'];
-            }
+            $unparsedPhrase = $this->languageLoader
+                                   ->getLine($activityType->getActivityPhrase());
+ 
 
             $phrase = $this->activityManager
-                           ->constructActivityPhrase(['name' => $product->getName()],
-                                                     $unparsedPhrase,
-                                                     'EsProduct');
+                           ->constructActivityPhrase(['storeName' => $forMember->getStoreName()],
+                                                     $unparsedPhrase['user'],
+                                                     'EsMember');
             if($phrase !== ""){
                 $em->getRepository('EasyShop\Entities\EsActivityHistory')
                    ->createAcitivityLog($activityType, $phrase, $member);

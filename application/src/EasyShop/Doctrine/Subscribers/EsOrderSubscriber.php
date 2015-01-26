@@ -1,14 +1,14 @@
 <?php
 
-namespace EasyShop\Doctrine\Listeners;
+namespace EasyShop\Doctrine\Subscribers;
 
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber as EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Entities\EsOrder as EsOrder;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsProductListener implements EventSubscriber
+class EsOrderSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
 
@@ -45,12 +45,12 @@ class EsProductListener implements EventSubscriber
     {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
-        if ( !$entity instanceOf EsProduct) {
+        if ( !$entity instanceOf EsOrder) {
             return;
         }
 
-        if ($event->hasChangedField('lastmodifieddate')) {
-            $this->changeSet['lastmodifieddate'] = $entity->getLastmodifieddate();
+        if ($event->hasChangedField('dateadded')) {
+            $this->changeSet['dateadded'] = $entity->getDateadded();
         }
     }
 
@@ -73,31 +73,21 @@ class EsProductListener implements EventSubscriber
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
         $phrase = "";
-        if ( $entity instanceOf EsProduct) {
+        if ( $entity instanceOf EsOrder) {
             if(count($this->changeSet) > 0){
+                $member = $entity->getBuyer();
+                $invoiceNo = $entity->getInvoiceNo();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
-                                   ->find(EsActivityType::PRODUCT_UPDATE);
-                $phraseArray = $this->languageLoader
-                                    ->getLine($activityType->getActivityPhrase());
-
-                $phraseValue = "";
-                if ((int)$entity->getIsDelete() === (int)EsProduct::FULL_DELETE) {
-                    $phraseValue = $phraseArray['trash'];
-                }
-                elseif ((int)$entity->getIsDelete() === (int)EsProduct::DELETE) {
-                    $phraseValue = $phraseArray['delete'];
-                }
-                elseif ((int)$entity->getIsDelete() === (int)EsProduct::ACTIVE
-                        && (int)$entity->getIsDraft() === (int)EsProduct::ACTIVE) { 
-                    $phraseValue = $phraseArray['update'];
-                }
+                                   ->find(EsActivityType::TRANSACTION_UPDATE);
+                $unparsedPhrase = $this->languageLoader
+                                       ->getLine($activityType->getActivityPhrase());
                 $phrase = $this->activityManager
-                               ->constructActivityPhrase(['name' => $entity->getName()],
-                                                         $phraseValue,
-                                                         'EsProduct');
+                               ->constructActivityPhrase(['invoiceNo' => $invoiceNo],
+                                                         $unparsedPhrase['buy'],
+                                                         'EsOrder');
                 if($phrase !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $entity->getMember());
+                       ->createAcitivityLog($activityType, $phrase, $member);
                 }
            }
         }
