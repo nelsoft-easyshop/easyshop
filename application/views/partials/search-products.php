@@ -89,7 +89,6 @@
                             </a>
                             <span class="search-item-description">
                                 <?=$briefDescription; ?>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ac rutrum augue, at pellentesque est. Proin ullamcorper laoreet dolor. Vestibulum quis placerat enim.
                             </span>
                             <div class="divider-gray"></div>
                             <div class="row">

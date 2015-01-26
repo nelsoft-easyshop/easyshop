@@ -119,30 +119,30 @@
             else{
                 $('.search-results-container > #page-'+ closestNumber).before(appendString);
             }
+ 
+            $.ajax({
+                url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
+                type: 'get', 
+                dataType: 'json', 
+                success: function(response) { 
+                    if(response.count > 0){
+                        if($('.search-results-container > #page-'+ pageNumber).length > 0){
+                            $('.search-results-container > #page-'+ pageNumber).replaceWith(response.view);
+                        }
+                        $('[data-spy="scroll"]').each(function () {
+                            var $spy = $(this).scrollspy('refresh');
+                        }); 
+                        isEmptySearch = false;
+                    }
+
+                    existingArray.push(pageNumber); 
+                    page = Math.max.apply(Math,existingArray) - 1;
+                }
+            }); 
         }
         if(scrollAfter){
             scrollToElement($('.search-results-container > #page-'+ pageNumber));
         } 
-
-        $.ajax({
-            url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
-            type: 'get', 
-            dataType: 'json', 
-            success: function(response) { 
-                if(response.count > 0){
-                    if($('.search-results-container > #page-'+ pageNumber).length > 0){
-                        $('.search-results-container > #page-'+ pageNumber).replaceWith(response.view);
-                    }
-                    $('[data-spy="scroll"]').each(function () {
-                        var $spy = $(this).scrollspy('refresh');
-                    }); 
-                    isEmptySearch = false;
-                }
-
-                existingArray.push(pageNumber); 
-                page = Math.max.apply(Math,existingArray) - 1;
-            }
-        }); 
     }
 
     var requestDivBefore = function(currentPageNumber) {
@@ -260,7 +260,6 @@
     var isEmptySearch = emptySearch != "" ? false : true; 
     var lastScroll = 0;
 
-    var type = 1;
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');
     var existingArray = [page];
@@ -273,7 +272,7 @@
             // upscroll code
             if ($(window).scrollTop() + 700 > $(document).height() - $(window).height()) {
                 if (canRequestAjax === true && isEmptySearch === false) {
-                    isEmptySearch = true; 
+                    isEmptySearch = true;
                     page++;
                     if($('.search-results-container > #page-'+ page).length <= 0
                        && $.inArray(existingArray, page) == -1){ 
