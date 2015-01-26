@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
 
 <section class="breadcrumbs-bg">
-    <div class="container-non-responsive">
+    <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
             <ul>
                 <li>
@@ -21,27 +21,7 @@
 <section class="bg-search-section color-default search-parallax-container">
     <div id="parallax-1" class="search-parallax">
         <div id="parallax-3" class="banner-template-1">
-            <!--<center>
-                <div class="banner-content">
-                    <span class="banner-lg-text">
-                        Lorem ipsum dolor sit amet
-                    </span>
-                    <div class="divider-small"></div>
-                    <div class="social-media-container">
-                        <span class="social-icon social-fb">
-                            <i class="fa fa-facebook fa-lg fa-2x"></i>
-                        </span>
-                        <span class="social-icon-separator"></span>
-                        <span class="social-icon social-twitter">
-                            <i class="fa fa-twitter fa-2x"></i>
-                        </span>
-                        <span class="social-icon-separator"></span>
-                        <span class="social-icon social-google-plus">
-                            <i class="fa fa-google-plus fa-lg fa-2x"></i>
-                        </span>
-                    </div>
-                </div>
-            </center>-->
+            <div style="border: solid red 1px; width: 100%; height: 300px;">
         </div>
         <br>
         <center class="search-slider">
@@ -533,5 +513,6 @@
 </section>
 <script src="/assets/js/src/vendor/bootstrap.js"></script>
 <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
+<script src="/assets/js/src/vendor/owl.carousel.min.js"></script>
 <script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
 <script src="/assets/js/src/product-search-by-category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
