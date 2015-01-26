@@ -952,6 +952,7 @@ ul.list-category-search li:last-child > .search-category-link{
         margin-top: 0px;
         font-size: 10px;
         min-height: 12px;
+        word-break: break-word;
     }
 
     .list-search .search-item-td-meta{

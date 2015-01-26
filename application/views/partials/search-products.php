@@ -65,7 +65,7 @@
             <table class="search-item-list-table">
                 <tbody>
                     <tr>
-                        <td>
+                        <td class="search-item-td-image">
                             <a href="/item/<?=$productSlug;?>">
                                 <div class="search-item-img-container" style="background: #fff url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
                                     <?php if($hasSecondImage): ?>
