@@ -28,6 +28,7 @@
 
     $(window).bind('scroll',function(e){
         parallaxScroll();
+        parallaxScroll2();
     });
 
     /* parallax control */
@@ -35,10 +36,22 @@
         var scrolled = $(window).scrollTop();
         var x1 = '0';
         var y2 = (0-(scrolled*.76));
-        $('#parallax-3').css({
-            "background-position": x1+'px '+y2+'px', 
-            "top": (0-(scrolled*.25))+'px',
-            "height":(300+(scrolled*.25))+'px',
+            $('#parallax-3').css({
+                "background-position": x1+'px '+y2+'px', 
+                "top": (0-(scrolled*.25))+'px',
+                "height":(10+(scrolled*.25))+'px',
+            });
+    }
+
+    /* parallax control for top banner*/
+    function parallaxScroll2(){
+        var scrolled2 = $(window).scrollTop();
+        var x12 = '0';
+        var y22 = (0-(scrolled2*.76));
+        $('#parallax-4').css({
+            "background-position": x12+'px '+y22+'px', 
+            "top": (0-(scrolled2*.55))+'px',
+            "height":(0+(scrolled2*.55))+'px',
         });
     }
 
