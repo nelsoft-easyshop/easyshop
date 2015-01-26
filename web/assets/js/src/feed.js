@@ -2,50 +2,39 @@
 
 (function ($) {
 
-    $(document).ready(function(){
-        
-        var leftpanel = $(".feed-left-panel");
-        var midpanel = $(".feed-middle-panel");
-        var rightpanel = $(".feed-right-panel");
-        var pos = leftpanel.offset().top;  
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
 
-            
-        $(window).scroll(function() {
-            var windowpos = $(window).scrollTop();
+var $window = $(window);
+$window.on('load', function() {
+    var windowsHeight = $(window).height();
+    var rightpanelHeight = $("#feed-right-panel").height();
+    var rightpanelTop = (windowsHeight - rightpanelHeight);
 
-            if( (windowpos + $(window).height() + 255 >= $(document).height()) &&
-                ($(document).height() > ($(window).height() + 151 )  )){
-                //rightpanel.switchClass( "", "feed-pos-ab-bttm", 100, "swing" );
-                //leftpanel.switchClass( "", "feed-pos-ab-bttm", 100, "swing" );        
-                leftpanel.addClass('feed-left-panel-fix feed-pos-ab-bttm');
-                midpanel.addClass('feed-middle-panel-fix');
-                rightpanel.addClass('feed-right-panel-fix feed-pos-ab-bttm');
-            }
+    var leftpanelHeight = $("#feed-left-panel").height();
+    var leftpanelTop = (windowsHeight - leftpanelHeight);
 
-            else if(windowpos >= pos){
-                leftpanel.addClass('feed-left-panel-fix').removeClass('feed-pos-ab-bttm');
-                midpanel.addClass('feed-middle-panel-fix');
-                rightpanel.addClass('feed-right-panel-fix').removeClass('feed-pos-ab-bttm');
-            }
+    if (rightpanelHeight > windowsHeight) {
+        $.stickysidebarscroll("#feed-right-panel",{offset: {top: rightpanelTop, bottom: 193}});
+    }
+    else {
+        $.stickysidebarscroll("#feed-right-panel",{offset: {top: 0, bottom: 193}});
+    }
 
-            else{
-               leftpanel.removeClass('feed-left-panel-fix feed-pos-ab-bttm');
-               midpanel.removeClass('feed-middle-panel-fix feed-pos-ab-bttm');
-               rightpanel.removeClass('feed-right-panel-fix feed-pos-ab-bttm');
+    if (leftpanelHeight > windowsHeight) {
+        $.stickysidebarscroll("#feed-left-panel",{offset: {top: leftpanelTop, bottom: 193}});
+    }
+    else {
+        $.stickysidebarscroll("#feed-left-panel",{offset: {top: 0, bottom: 193}});
+    }
+});
 
-            }
-        });
-        
-        $(window).trigger(scroll);
-        
-    });
-    
-    
-    
-    
 })(jQuery);
-
-
 
 
 (function($){
