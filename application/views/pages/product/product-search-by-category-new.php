@@ -19,7 +19,7 @@
     </div>
 </section>
 
-<?php if($categoryHeaderData !== false): ?>
+<?php if($categoryHeaderData): ?>
 <section class="bg-search-section color-default search-parallax-container">
     <div id="parallax-1" class="search-parallax">
         <?php if(isset($categoryHeaderData['top'])): ?>
