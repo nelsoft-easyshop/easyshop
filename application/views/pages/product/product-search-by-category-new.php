@@ -36,7 +36,6 @@
                 <?php endforeach; ?>
             </ul>
         </div>
-        <br>
         <?php endif; ?>
         <?php if(isset($categoryHeaderData['bottom'])): ?>
         <center class="search-slider">

@@ -542,6 +542,7 @@ ul.list-category-search li:last-child > .search-category-link{
 
 .search-slider {
     overflow: hidden;
+    margin-top: 4px;
 }
 
 .search-slider .bx-wrapper {
