@@ -11,6 +11,7 @@
     <div class="">
         <!-- LEFT PANEL --> 
         <div class="col-md-3 col-sm-12 l-screen feed-left-panel">
+        <div id="feed-left-panel">
             <div class="row mrgn-bttm-8">
                 <div class="col-md-12">
                     <div class="col-md-10">
@@ -88,6 +89,7 @@
                     </div>
                 </div>
             <?php endif; ?>
+        </div>
         </div>
         
         <!-- MID PANEL -->
@@ -408,62 +410,65 @@
         
         <!-- RIGHT PANEL -->
         <div class="col-md-3 l-screen feed-right-panel">
-            <div class="row"><div class="col-md-12">
-                <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
-                    <div class="row">
-                        <div class="table-bordered">
-                            <div class="border-bottom pd-8-12 title">Popular Items</div>
-                            <?php foreach($popular_items as $prod):?>
-                                <div class="media pd-8-12 side-panel">
-                                    <div class="pull-left media-image">
-                                        <a href="<?php echo "/item/" . $prod['slug']?>">
-                                            <img class="media-object" src="/<?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="title"><a href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
-                                        <span class="sub-title">PHP <?php echo number_format($prod['price'],2,'.',',')?></span>
-                                    </div>
+            <div id="feed-right-panel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
+                            <div class="row">
+                                <div class="table-bordered">
+                                    <div class="border-bottom pd-8-12 title">Popular Items</div>
+                                    <?php foreach($popular_items as $prod):?>
+                                        <div class="media pd-8-12 side-panel">
+                                            <div class="pull-left media-image">
+                                                <a href="<?php echo "/item/" . $prod['slug']?>">
+                                                    <img class="media-object" src="/<?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="title"><a href="<?php echo "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
+                                                <span class="sub-title">PHP <?php echo number_format($prod['price'],2,'.',',')?></span>
+                                            </div>
+                                        </div>
+                                    <?php endforeach;?>
                                 </div>
-                            <?php endforeach;?>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
+                            <div class="row">
+                                <a href="<?php echo $banners['right']['target']?>">
+                                    <img class="img-responsive" src="/<?php echo $banners['right']['img']?>">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
+                            <div class="row">
+                                <div class="table-bordered">
+                                    <div class="border-bottom pd-8-12 title">Promo Items</div>
+                                    <?php foreach($promo_items as $prod):?>
+                                        <div class="media pd-8-12 side-panel">
+                                            <div class="pull-left media-image">
+                                                <a href="<?php echo "/item/" . $prod['slug']?>">
+                                                    <img class="media-object" src="/<?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <h5 class="title"><a href="<?php echo  "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
+                                                <span class="sub-title">PHP <?php echo number_format($prod['price'],2,'.',',') ?></span>
+                                            </div>
+                                        </div>
+                                    <?php endforeach;?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
-                    <div class="row">
-                        <a href="<?php echo $banners['right']['target']?>">
-                            <img class="img-responsive" src="/<?php echo $banners['right']['img']?>">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-10 col-md-offset-2 mrgn-bttm-8">
-                    <div class="row">
-                        <div class="table-bordered">
-                            <div class="border-bottom pd-8-12 title">Promo Items</div>
-                            <?php foreach($promo_items as $prod):?>
-                                <div class="media pd-8-12 side-panel">
-                                    <div class="pull-left media-image">
-                                        <a href="<?php echo "/item/" . $prod['slug']?>">
-                                            <img class="media-object" src="/<?php echo $prod['path'] . "thumbnail/" . $prod['file']?>">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="title"><a href="<?php echo  "/item/" . $prod['slug']?>"><?php echo html_escape($prod['product_name'])?></a></h5>
-                                        <span class="sub-title">PHP <?php echo number_format($prod['price'],2,'.',',') ?></span>
-                                    </div>
-                                </div>
-                            <?php endforeach;?>
-                        </div>
-                    </div>
-                </div>
-            </div></div>
+            </div>
+            <div class="clear"></div>
         </div>
-        <div class="clear"></div>
     </div>
-
     
 </div>
 
-
+<script type="text/javascript" src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/feed.js?ver=<?=ES_FILE_VERSION?>"></script>
 
