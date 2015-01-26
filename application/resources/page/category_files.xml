@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<map>
+    
+    <category id="babies-clothes">
+        <top>
+            <image>
+                <path>/assets/images/homeslider/mich_c.jpg</path>
+                <target>1www.facebook.com</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/mich_c.jpg</path>
+                <target>2www.facebook.com</target>
+            </image>
+        </top>
+        <bottom>
+            <image>
+                <path>/assets/images/homeslider/mich_c.jpg</path>
+                <target>3www.facebook.com</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/mich_c.jpg</path>
+                <target>4www.facebook.com</target>
+            </image>
+            <image>
+                <path>/assets/images/homeslider/mich_c.jpg</path>
+                <target>5www.facebook.com</target>
+            </image>
+        </bottom>
+
+    </category>
+    
+    
+</map>
