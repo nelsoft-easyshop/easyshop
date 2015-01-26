@@ -243,7 +243,7 @@ jQuery(document).ready(function(){
 					}
 					catch(e){
 						alert('We are currently encountering a problem. Please try again later.');
-						//window.location.reload(true);
+						window.location.reload(true);
 						return;
 					}
 					
