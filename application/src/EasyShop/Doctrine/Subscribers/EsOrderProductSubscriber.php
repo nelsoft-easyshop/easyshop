@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyShop\Doctrine\Listeners;
+namespace EasyShop\Doctrine\Subscribers;
 
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber as EventSubscriber;
@@ -9,7 +9,7 @@ use EasyShop\Entities\EsOrderProduct as EsOrderProduct;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsOrderProductListener implements EventSubscriber
+class EsOrderProductSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace EasyShop\Doctrine\Listeners;
+namespace EasyShop\Doctrine\Subscribers;
 
 use Doctrine\ORM\Events;
-use Doctrine\Common\EventSubscriber as EventSubscriber;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use EasyShop\Entities\EsOrder as EsOrder;
+use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsOrderListener implements EventSubscriber
+class EsMemberSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
 
@@ -45,12 +45,52 @@ class EsOrderListener implements EventSubscriber
     {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
-        if ( !$entity instanceOf EsOrder) {
+        if ( !$entity instanceOf EsMember) {
             return;
         }
 
-        if ($event->hasChangedField('dateadded')) {
-            $this->changeSet['dateadded'] = $entity->getDateadded();
+        if ($event->hasChangedField('storeName')) {
+            $this->changeSet['storeName'] = $entity->getStoreName();
+        }
+
+        if ($event->hasChangedField('password')) {
+            $this->changeSet['password'] = $entity->getPassword();
+        }
+
+        if ($event->hasChangedField('contactno')) {
+            $this->changeSet['contactno'] = $entity->getContactno();
+        }
+
+        if ($event->hasChangedField('isEmailVerify')) {
+            $this->changeSet['isEmailVerify'] = $entity->getIsEmailVerify() ? "Verified" : "Unverified";
+        }
+
+        if ($event->hasChangedField('gender')) {
+            $this->changeSet['gender'] = $entity->getGender() ? "Female" : "Male";
+        }
+
+        if ($event->hasChangedField('email')) {
+            $this->changeSet['email'] = $entity->getEmail();
+        }
+
+        if ($event->hasChangedField('birthday')) {
+            $this->changeSet['birthday'] = $entity->getBirthday()->format('Y-m-d');
+        }
+
+        if ($event->hasChangedField('fullname')) {
+            $this->changeSet['fullname'] = $entity->getFullname();
+        }
+
+        if ($event->hasChangedField('storeDesc')) {
+            $this->changeSet['storeDesc'] = $entity->getStoreDesc();
+        }
+
+        if ($event->hasChangedField('slug')) {
+            $this->changeSet['slug'] = $entity->getSlug();
+        }
+
+        if ($event->hasChangedField('website')) {
+            $this->changeSet['website'] = $entity->getWebsite();
         }
     }
 
@@ -73,21 +113,19 @@ class EsOrderListener implements EventSubscriber
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
         $phrase = "";
-        if ( $entity instanceOf EsOrder) {
+        if ( $entity instanceOf EsMember) {
             if(count($this->changeSet) > 0){
-                $member = $entity->getBuyer();
-                $invoiceNo = $entity->getInvoiceNo();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
-                                   ->find(EsActivityType::TRANSACTION_UPDATE);
+                                   ->find(EsActivityType::INFORMATION_UPDATE);
                 $unparsedPhrase = $this->languageLoader
                                        ->getLine($activityType->getActivityPhrase());
                 $phrase = $this->activityManager
-                               ->constructActivityPhrase(['invoiceNo' => $invoiceNo],
-                                                         $unparsedPhrase['buy'],
-                                                         'EsOrder');
+                               ->constructActivityPhrase($this->changeSet,
+                                                         $unparsedPhrase,
+                                                         'EsMember');
                 if($phrase !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $member);
+                       ->createAcitivityLog($activityType, $phrase, $entity);
                 }
            }
         }

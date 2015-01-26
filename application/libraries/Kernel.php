@@ -68,49 +68,49 @@ class Kernel
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsMemberListener(
+                new \EasyShop\Doctrine\Subscribers\EsMemberSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsAddressListener(
+                new \EasyShop\Doctrine\Subscribers\EsAddressSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductReviewListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductReviewSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsMemberFeedbackListener(
+                new \EasyShop\Doctrine\Subscribers\EsMemberFeedbackSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsOrderListener(
+                new \EasyShop\Doctrine\Subscribers\EsOrderSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductShippingCommentListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductShippingCommentSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsOrderProductListener(
+                new \EasyShop\Doctrine\Subscribers\EsOrderProductSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
