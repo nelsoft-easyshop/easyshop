@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
     <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <?php else: ?>
-    <link type="text/css" href='/assets/css/min-easyshop.payment-response.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/min-easyshop.payment.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
 
 

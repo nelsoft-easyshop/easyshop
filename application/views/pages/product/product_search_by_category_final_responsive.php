@@ -1,12 +1,18 @@
 <meta name="viewport" content="width=device-width, maximum-scale=1.0">
-<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
 
-<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
-<link type="text/css" href="/assets/css/jcarousel.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media="all"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+    <link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+    <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
+    <link rel="stylesheet" href="/assets/css/jcarousel.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="all"/> 
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.product-search-by-category-final-responsive.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+
+
 
 <section style="color-gray display-when-desktop">
     <div class="container container-responsive">

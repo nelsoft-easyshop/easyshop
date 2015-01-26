@@ -59,14 +59,28 @@ module.exports = function (grunt) {
                         ['web/assets/css/style.css',
                         'web/assets/css/responsive_css.css', 
                         'web/assets/css/basic.css.css'],
-                    'web/assets/css/min-easyshop.payment-response.css':
+                    'web/assets/css/min-easyshop.payment.css':
                         ['web/assets/css/bootstrap.css',
                         'web/assets/css/my_cart_css.css', 
                         'web/assets/css/payment_review.css',
+                        'web/assets/css/bootstrap-mods.css'],
+                    'web/assets/css/min-easyshop.product-promo-category.css':
+                        ['web/assets/css/product_search_category.css',
+                        'web/assets/css/style_new.css', 
+                        'web/assets/css/jquery.bxslider.css.css'],
+                    'web/assets/css/min-easyshop.product-search-by-category-final-responsive.css':
+                        ['web/assets/css/bootstrap.css',
+                        'web/assets/css/bootstrap-mods.css', 
+                        'web/assets/css/product_search_category.css',
+                        'web/assets/css/product_search_category_responsive.css', 
+                        'web/assets/css/product_search_category.css',   
+                        'web/assets/css/style_new.css',
+                        'web/assets/css/jquery.bxslider.css',
+                        'web/assets/css/jcarousel.css'],
+                    'web/assets/css/min-easyshop.upload-step1.css':
+                        ['web/assets/css/sell_item.css',
+                        'web/assets/css/bootstrap.css', 
                         'web/assets/css/bootstrap-mods.css']
-            
-                     
-                     
                 }
             },
         }
