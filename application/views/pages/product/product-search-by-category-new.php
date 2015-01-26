@@ -20,10 +20,13 @@
 </section>
 
 <?php if($categoryHeaderData): ?>
-<section class="bg-search-section color-default search-parallax-container">
+<section class="bg-search-section color-default search-parallax-container" style="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>height: 300px;<?php elseif(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 145px;<?php endif; ?>">
     <div id="parallax-1" class="search-parallax">
-        <?php if(isset($categoryHeaderData['top'])): ?>
-        <div id="parallax-3" class="banner-template-1">
+         <div id="parallax-4" style="margin-top: -10px;">
+           
+        </div>
+        <div class="banner-template-2">
+         <?php if(isset($categoryHeaderData['top'])): ?>
             <ul class="top-slider">
                 <?php foreach($categoryHeaderData['top']['image'] as $topBanner): ?>
                     <?php if(trim($topBanner['target']['url']) !== ''): ?>
@@ -35,10 +38,13 @@
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
+            <?php endif; ?>
         </div>
-        <?php endif; ?>
+        <div id="parallax-3" class="banner-template-1" style="height: 10px; <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: -10px;<?php endif; ?>">
+           
+        </div>
         <?php if(isset($categoryHeaderData['bottom'])): ?>
-        <center class="search-slider">
+        <center class="search-slider" style="<?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: 0px;<?php endif;?>">
             <center class="search-slider">
                 <div class="left-shade">
                 </div>
