@@ -5,6 +5,7 @@ namespace EasyShop\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsProduct as EsProduct; 
+use EasyShop\Entities\EsCat as EsCat; 
 use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
@@ -455,7 +456,7 @@ class EsProductRepository extends EntityRepository
         }
 
         if(isset($filterArray['category']) 
-                && (integer)$filterArray['category'] !== 1){ 
+                && (integer)$filterArray['category'] !== EsCat::ROOT_CATEGORY_ID){ 
             $categoryList = $this->em->getRepository('EasyShop\Entities\EsCat')
                                      ->getChildrenWithNestedSet($filterArray['category']);
             if(count($categoryList) > 0){
@@ -501,21 +502,23 @@ class EsProductRepository extends EntityRepository
             if(isset($filterArray['sorttype']) 
                 && strtoupper($filterArray['sorttype']) == "ASC"){
                 $order = "ASC";
-            }
-
+            } 
             switch(strtoupper($filterArray['sortby'])){
-                case "NEW":
+                case EsProduct::SEARCH_SORT_POPULAR:
+                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    break;
+                case EsProduct::SEARCH_SORT_NEW:
                     $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
-                case "HOT":
+                case EsProduct::SEARCH_SORT_HOT:
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
                                          ->addOrderBy(' p.clickcount',$order);
                     break;
-                case "NAME":
+                case EsProduct::SEARCH_SORT_NAME:
                     $qbResult = $qbResult->orderBy('p.name', $order);
                     break;
                 default:
-                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
             }
         }
