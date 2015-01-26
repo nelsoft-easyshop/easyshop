@@ -8,7 +8,7 @@
                     <tbody>
                         <tr>
                             <td class="td-image-cont" width="20%" >
-                                <div class="div-product-image" style="background: url(/<?=$product->directory.$product->imageFileName?>) center no-repeat; background-cover: cover; background-size: 90%;">
+                                <div class="div-product-image" style="background: url(<?php echo getAssetsDomain().$product->directory.$product->imageFileName?>) center no-repeat; background-cover: cover; background-size: 90%;">
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>
                                     <div class="pin-discount">
                                         <?php echo number_format($product->getDiscountPercentage(),0,'.',',');?>%
@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <span class="strong-label">Category : </span> <?=html_escape($product->getCat()->getName());?>
+                                            <span class="strong-label">Category : </span> <?=html_escape($product->category);?>
                                         </div>
                                     </div>
                                     <div class="row">

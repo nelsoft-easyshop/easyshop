@@ -24,14 +24,11 @@
 ?>
 
 <div class="tab-pane" data-identifier="<?php echo html_escape($id); ?>">
-
     <div class="feedback-cat-mobile <?php echo $mainContainerClass ?> <?php echo (isset($isActive) && $isActive) ? 'active-bar' : '' ?>">
         <?php echo html_escape($containerTitle); ?>
     </div>
     <div class="feedback-mobile-cont feedback-mobile-<?php echo $tabCount; ?>" <?php echo (isset($isActive) && $isActive) ? 'style="display:block"' : '' ?> >
-        
         <?php if(count($feedbacks) > 0): ?>
-        
             <?php foreach($feedbacks as $feedback): ?>
             <div class="feedback-mobile-item">
                 <table class="table-feed-mobile">
@@ -60,62 +57,55 @@
 
                 <div class="feedback-item-mobile-content">
                     <div class="row">
-                        <?php $ratingCounter = 1; ?>
-                        <?php foreach($ratingHeaders as $ratingHeader): ?>
-                            <div class="col-md-4">
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td class="td-feedback-criteria"><?php echo html_escape($ratingHeader) ?></td>
-                                            <td class="td-feedback-star">
-                                                <span>
+                        <div class="col-md-4">
+                            <table>
+                                <tbody>
+                                    <?php $ratingCounter = 1; ?>
+                                    <?php foreach($ratingHeaders as $ratingHeader): ?>
+                                    <tr>
+                                        <td class="td-feedback-criteria"><?php echo html_escape($ratingHeader) ?></td>
+                                        <td class="td-feedback-star">
+                                            <span>
+                                            
+                                                <?php for($i = 0; $i < $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                    <i class="fa fa-star star-feed star-active"></i>
+                                                <?php endfor; ?>
                                                 
-                                                    <?php for($i = 0; $i < $feedback['rating'.$ratingCounter]; $i++): ?>
-                                                        <i class="fa fa-star star-feed star-active"></i>
-                                                    <?php endfor; ?>
-                                                    
-                                                    <?php for($i = 0; $i < 5 - $feedback['rating'.$ratingCounter]; $i++): ?>
-                                                        <i class="fa fa-star star-feed"></i>
-                                                    <?php endfor; ?>
-                                                    
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <?php $ratingCounter++; ?>
-                        <?php endforeach; ?>
+                                                <?php for($i = 0; $i < 5 - $feedback['rating'.$ratingCounter]; $i++): ?>
+                                                    <i class="fa fa-star star-feed"></i>
+                                                <?php endfor; ?>
+                                                
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <?php $ratingCounter++; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    
                     <div class="row">
                         <div class="col-md-12 col-item-message">
                             "<?php echo html_escape($feedback['feedbMsg']); ?>"
                         </div>
                     </div>
-                    
                 </div>
             </div>
             
             <?php endforeach; ?>
         
         <?php else: ?>
-        
             <div class="jumbotron no-feedback-list">
                 <center>
                     <span class="fa fa-clipboard fa-2x"></span>
                     <strong>NO FEEDBACK FOR THIS CATEGORY</strong>
                 </center>
             </div>
-            
         <?php endif; ?>
-            
         <br/>
-        
         <div style="text-align:center" class="pagination-container mobile-pagination">
             <?php echo $pagination; ?>
         </div>
-        
     </div>
 </div>
 

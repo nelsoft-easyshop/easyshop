@@ -99,7 +99,7 @@
                                                     <?php endif; ?>
                                                 
                                                     <span class="prod_img_container">
-                                                            <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
+                                                            <img alt="<?php echo $productName; ?>" src="<?php echo getAssetsDomain() ?><?php echo $productImagePath; ?>">
                                                     </span>
                                                 </span>
                                             </a>
@@ -185,7 +185,7 @@
                                         <td width="90px" class="v-align-top">
                                             <span class="prod_img_container">
                                                  <a class="a-item-name" href="/<?php echo "item/" . $productSlug; ?>"> 
-                                                    <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
+                                                    <img alt="<?php echo $productName; ?>" src="<?php echo getAssetsDomain() ?><?php echo $productImagePath; ?>">
                                                 </a>
                                             </span>
                                         </td>
@@ -298,7 +298,11 @@
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
 </div> 
 
-<script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
-<script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.product_search_by_searchbox.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

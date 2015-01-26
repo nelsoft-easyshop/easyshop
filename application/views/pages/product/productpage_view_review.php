@@ -58,9 +58,11 @@
                                             <?php foreach ($productReview as $key => $value): ?> 
                                             <div class="row">
                                                 <div class="col-sm-2 col-xs-12 col-user-image" align="center">
-                                                    <a href="#"><div class="div-user-image">
-                                                        <img src="<?=$value['reviewer_avatar']; ?>" class="img-user"/>
-                                                    </div></a>
+                                                    <a href="/<?=$value['reviewer_slug'];?>">
+                                                        <div class="div-user-image">
+                                                            <img src="<?php echo getAssetsDomain().'.'.$value['reviewer_avatar']; ?>" class="img-user"/>
+                                                        </div>
+                                                    </a>
                                                     <div class="clear"></div>
                                                     <a href="/<?=$value['reviewer_slug'];?>"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
                                                     <p class="p-date-review"><?=$value['datesubmitted']; ?></p>
@@ -72,9 +74,9 @@
                                                             <table>
                                                                 <tr>
                                                                     <td>
-                                                                        <a href="#">
+                                                                        <a href="/<?=$value['reviewer_slug'];?>">
                                                                             <div class="div-user-image">
-                                                                                <img src="<?=$value['reviewer_avatar']; ?>" class="img-user"/>
+                                                                                <img src="<?php echo getAssetsDomain().'.'.$value['reviewer_avatar']; ?>" class="img-user"/>
                                                                             </div>
                                                                         </a>
                                                                     </td>
@@ -139,9 +141,11 @@
                                                         <?php foreach ($value['replies'] as $keyReply => $valueReply): ?>
                                                         <div class="row">
                                                             <div class="col-xs-2 col-user-image no-padding" align="center">
-                                                                <a href="#"><div class="div-user-image">
-                                                                    <img src="<?=$valueReply['reviewer_avatar']; ?>" class="img-user"/>
-                                                                </div></a>
+                                                                <a href="/<?=$valueReply['reviewer_slug'];?>">
+                                                                    <div class="div-user-image">
+                                                                        <img src="<?php echo getAssetsDomain().'.'.$valueReply['reviewer_avatar']; ?>" class="img-user"/>
+                                                                    </div>
+                                                                </a>
                                                                 <div class="clear"></div>
                                                                 <a href="/<?=$valueReply['reviewer_slug'];?>"><p class="p-username"><?=html_escape($valueReply['reviewer']);?></p></a>
                                                                 <p class="p-date-review-replied-item"><?=$valueReply['datesubmitted'];?></p>
@@ -153,9 +157,9 @@
                                                                             <table>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <a href="#">
+                                                                                        <a href="/<?=$valueReply['reviewer_slug'];?>">
                                                                                             <div class="div-user-image">
-                                                                                                <img src="<?=$valueReply['reviewer_avatar']; ?>" class="img-user"/>
+                                                                                                <img src="<?php echo getAssetsDomain().'.'.$valueReply['reviewer_avatar']; ?>" class="img-user"/>
                                                                                             </div>
                                                                                         </a>
                                                                                     </td>

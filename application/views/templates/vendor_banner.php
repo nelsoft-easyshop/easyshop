@@ -6,8 +6,8 @@
 
 <section>
     <div class="pos-rel" id="display-banner-view">
-        <div class="vendor-main-bg">
-            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
+        <div class="vendor-main-bg" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">
+            
         </div>
         <div class="container main-container vendor-main pos-ab">
             <div class="vendor-profile-content">
@@ -15,16 +15,16 @@
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
                             <div class="vendor-profile-photo-wrapper">
-                                <img src="<?=$avatarImage?>" class="avatar-image" alt="Profile Photo">
+                                <img src="<?php echo getAssetsDomain().'.'.$avatarImage?>" class="avatar-image" alt="Profile Photo">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div> 
                     <h4 class="storeName"><?=html_escape($arrVendorDetails['store_name'])?></h4>
-                    <p><strong>Contact No. :</strong><span id="contactContainer"><?php echo html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A"); ?></span></p>
-                    <p>
-                        <img src="/assets/images/img-icon-marker.png" alt="marker">
+                    <p class="contact-number-text"><strong>Contact No. :</strong><span id="contactContainer"><?php echo html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : "N/A"); ?></span></p>
+                    <p class="location-text">
+                        <img src="<?php echo getAssetsDomain()?>assets/images/img-icon-marker.png" alt="marker">
                         <?php if($hasAddress):?>
                             <span id="placeStock" class="cl-1"><strong><?php echo $arrVendorDetails['cityname'] . ", " . $arrVendorDetails['stateregionname']?></strong></span>
                         <?php else:?>
@@ -32,10 +32,14 @@
                         <?php endif;?>
                     </p>
                     <?php if($isEditable): ?>
-                    <div class="vendor-profile-btn">
-                        <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3">
-                            <img src="/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
+                    <div class="vendor-profile-btn" style="margin-top: 10px;">
+                        <a href="javascript:void(0)" id="edit-profile-btn" class="btn btn-default-3 btn-profile-edit-mobile">
+                            <img src="<?php echo getAssetsDomain()?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
+                        <span class="btn btn-default-3 btn-profile-edit-mobile" id="modal-edit-trigger">
+                            <img src="<?php echo getAssetsDomain()?>/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
+                        </span>
+                        <a href="#" class="btn btn-default-2 btn-profile-edit-mobile btn-change-cover-photo-mobile">Change Cover Photo</a>
                     </div>
                     <?php else: ?>
                     <div class="vendor-profile-btn">
@@ -46,7 +50,7 @@
                             <span class="glyphicon glyphicon-plus-sign"></span>Follow
                         </span>                       
 
-                        <a class="btn btn-default-1" href="/<?=$arrVendorDetails['userslug']; ?>/contact">
+                        <a class="btn btn-default-1 btn-message-profile" href="/<?=$arrVendorDetails['userslug']; ?>/contact">
                             <span class="icon-message-btn"></span>
                             Message
                         </a>
@@ -67,14 +71,15 @@
         <div class="vendor-main-bg">
             <div class="edit-cover-photo">
                 <a href="javascript:void(0)" id="banner_edit">
-                    <img src="/assets/images/img-default-cover-photo.png" alt="Change Cover Photo"><br />
+                    <img src="<?php echo getAssetsDomain()?>assets/images/img-default-cover-photo.png" alt="Change Cover Photo"><br />
                     <h4><strong>Change Cover Photo</strong></h4>
                 </a>
             </div>
-            <img src="<?=$bannerImage?>" class="banner-image" alt="Banner Image">
+            <div class="vendor-main-bg" style="background: url(<?=getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">  
+            </div> 
         </div>
         <div class="container main-container vendor-main pos-ab">
-            <div class="vendor-profile-content">
+            <div class="vendor-profile-content" id="edit-profile-info-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
                         <div class="vendor-profile-img-con">
@@ -91,7 +96,7 @@
                                 <?php echo form_close();?>
                                 <div id="div_user_image_prev">
                                     <div class="avatar-modal-loading">
-                                        <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+                                        <img src="<?php getAssetsDomain() ?>/assets/images/loading/preloader-whiteBG.gif"/>
                                     </div>
                                     
                                     <div class="avatar-modal-content">
@@ -107,7 +112,7 @@
 
                             <div class="edit-profile-photo">
                                 <div>
-                                    <img src="/assets/images/img-default-cover-photo.png" alt="Edit Profile Photo">
+                                    <img src="<?php getAssetsDomain() ?>/assets/images/img-default-cover-photo.png" class="img-icon-edit-photo" alt="Edit Profile Photo">
                                     <span>Change Profile Photo</span>
                                 </div>
                             </div>
@@ -119,7 +124,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pd-lr-20">
+                <div class="pd-lr-20 edit-profile-container">
                     <input type="text" id="storeNameTxt" maxlength="50" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($arrVendorDetails['store_name']); ?>" data-origval="<?=html_escape($arrVendorDetails['store_name']); ?>" placeholder="Seller Name">
                     <input type="text" id="mobileNumberTxt" maxlength="11" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?= html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : ""); ?>" data-origval="<?= html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : ''); ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
@@ -145,9 +150,9 @@
                         </select>
                     </div>
                     <?php if($isEditable): ?>
-                    <div class="vendor-profile-btn edit-profile-btn">
-                        <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1">Cancel</a>
-                        <a href="javascript:void(0)" id="banner-save-changes"class="btn btn-default-3">Save Changes</a>
+                    <div class="vendor-profile-btn edit-profile-btn edit-banner-profile">
+                        <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1 btn-edit-profile-info-banner btn-cancel-me-wide">Cancel</a>
+                        <a href="javascript:void(0)" id="banner-save-changes"class="btn btn-default-3 btn-edit-profile-info-banner">Save Changes</a>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -165,7 +170,7 @@
                 <?php if(!$hasNoItems): ?>
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']?>" class="<?php if($url_id=="0"){ echo "vendor-nav-active"; }else{ echo " ";}?>">
-                        <img src="/assets/images/home-icons/<?php if($url_id=="0"){ echo "active-home-".html_escape($colorHexadecimal); }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
+                        <img src="<?php getAssetsDomain() ?>/assets/images/home-icons/<?php if($url_id=="0"){ echo "active-home-".html_escape($colorHexadecimal); }else{ echo "default-home";}?>.png" alt="Store" width="40px" height="40px">
                     </a>
                 </li>
                 <?php endif; ?>
@@ -184,13 +189,24 @@
         </div>
     </div>
 </section> 
+
+
 <input type="hidden" id="vendor-slug" name="name" value="<?php echo $arrVendorDetails['userslug']?>">
+<input type="hidden" id="max-upload-size" name="name" value="<?=EasyShop\Upload\AssetsUploader::MAX_ALLOWABLE_SIZE_KB; ?>">
+<input type="hidden" id="max-upload-height" name="name" value="<?=EasyShop\Upload\AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX; ?>">
+<input type="hidden" id="max-upload-width" name="name" value="<?=EasyShop\Upload\AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX; ?>">
+
 <!-- Load Js Files -->
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
-<script type="text/javascript" src='/assets/js/src/vendor_header.js?ver=<?php echo ES_FILE_VERSION?>'></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+    <script type='text/javascript' src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
+    <script type="text/javascript" src='/assets/js/src/vendor_header.js?ver=<?php echo ES_FILE_VERSION?>'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.vendor_banner.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+

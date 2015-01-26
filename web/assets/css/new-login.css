@@ -367,3 +367,7 @@ strong > a{
     height: auto !important;
     margin-top: 1%;
 }
+
+.nav-dropdown {
+    margin-top: 0;
+}

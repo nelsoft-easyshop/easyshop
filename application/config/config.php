@@ -268,15 +268,15 @@ $config['encryption_key'] = 'TempOraRy_KeY_12272013_bY_Sam*?!';
 | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_cookie_name']		= 'ci_session';
-$config['sess_expiration']		= 14400;
-$config['sess_expire_on_close']	= TRUE;
-$config['sess_encrypt_cookie']	= FALSE;
-$config['sess_use_database']	= TRUE;
-$config['sess_table_name']		= 'ci_sessions';
-$config['sess_match_ip']		= FALSE;
-$config['sess_match_useragent']	= FALSE;
-$config['sess_time_to_update']	= 300;
+$config['sess_cookie_name']     = 'ci_session';
+$config['sess_expiration']      = 14400;
+$config['sess_expire_on_close'] = false;
+$config['sess_encrypt_cookie']  = false;
+$config['sess_use_database']    = true;
+$config['sess_table_name']      = 'ci_sessions';
+$config['sess_match_ip']        = false;
+$config['sess_match_useragent'] = false;
+$config['sess_time_to_update']  = 300;
 
 /*
 |--------------------------------------------------------------------------

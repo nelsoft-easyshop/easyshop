@@ -94,6 +94,7 @@ class productUpload extends MY_Controller
 
         if($this->session->userdata('usersession') && ($userdetails['is_contactno_verify'] || $userdetails['is_email_verify']) ){
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -106,6 +107,7 @@ class productUpload extends MY_Controller
         }
         else{
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Verify your account to proceed | Easyshop.ph',
             ];
 
@@ -151,6 +153,7 @@ class productUpload extends MY_Controller
     public function step2()
     { 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Sell Product | Easyshop.ph',
             'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
             'relCanonical' => '',
@@ -216,10 +219,12 @@ class productUpload extends MY_Controller
             $response['maxImageSize'] = $this->maxFileSizeInMb;
 
             $date = date("Ymd");
-            $tempDirectory = './assets/temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
+
+            $tempDirectory =  'assets/temp_product/'. $response['tempId'].'_'.$response['memid'].'_'.$date.'/';
             $response['tempdirectory'] = $tempDirectory;
             $this->session->set_userdata('tempId', $response['tempId']);
             $this->session->set_userdata('tempDirectory',  $tempDirectory);
+
             mkdir($tempDirectory, 0777, true);
             mkdir($tempDirectory.'categoryview/', 0777, true);
             mkdir($tempDirectory.'small/', 0777, true);
@@ -246,7 +251,7 @@ class productUpload extends MY_Controller
      *  Display item details of the selected
      *  product to be modify
      */
-    public function step2edit2()
+    public function step2edit()
     {
         $stringUtility = $this->serviceContainer['string_utility'];
         if($this->input->post('p_id')){
@@ -399,25 +404,27 @@ class productUpload extends MY_Controller
         $this->session->set_userdata('tempDirectory',  $tempdirectory);
         $this->session->set_userdata('originalPath',  $path);
 
-        directory_copy($path, $tempdirectory,$tempId,$arrayNameOnly); 
-        
+        mkdir($tempdirectory, 0777, true);
+        mkdir($tempdirectory.'categoryview/', 0777, true);
+        mkdir($tempdirectory.'small/', 0777, true);
+        mkdir($tempdirectory.'thumbnail/', 0777, true);
+        mkdir($tempdirectory.'other/', 0777, true);
         if (!file_exists ($tempdirectory.'other/categoryview')){
             mkdir($tempdirectory.'other/categoryview/', 0777, true);
         }
-
         if (!file_exists ($tempdirectory.'other/small')){
             mkdir($tempdirectory.'other/small/', 0777, true);
         }
-
         if (!file_exists ($tempdirectory.'other/thumbnail')){
             mkdir($tempdirectory.'other/thumbnail/', 0777, true);
         }
 
         $headerData = [
-                'title' => 'Edit Product | Easyshop.ph',
-                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-                'relCanonical' => '',
-                'renderSearchbar' => false, 
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Edit Product | Easyshop.ph',
+            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+            'relCanonical' => '',
+            'renderSearchbar' => false, 
         ]; 
         $this->load->spark('decorator');    
         $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
@@ -437,8 +444,9 @@ class productUpload extends MY_Controller
         $pathDirectory = $this->session->userdata('tempDirectory');
         $filescnttxt = $this->input->post('filescnttxt');
         $afstart = $this->input->post('afstart');
+        
         $afstartArray = json_decode($afstart); 
-        $filenames_ar = array();
+        $filenames_ar = [];
         $coordinates = json_decode($this->input->post('coordinates')); 
         $text = "";
         $isCroppable = !empty($coordinates);
@@ -476,7 +484,7 @@ class productUpload extends MY_Controller
                 }
             }
         }
-
+ 
         $_FILES['files']['name'] = array_values($_FILES['files']['name']);
         $_FILES['files']['type'] = array_values($_FILES['files']['type']);
         $_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
@@ -484,10 +492,6 @@ class productUpload extends MY_Controller
         $_FILES['files']['size'] = array_values($_FILES['files']['size']);
         $filenames_ar = array_values($filenames_ar); 
         $coordinates = array_values($coordinates);
-
-        if (!file_exists ($pathDirectory)){
-            mkdir($pathDirectory, 0777, true);;
-        }
 
         if(count($filenames_ar) <= 0){
             $return = [
@@ -498,7 +502,12 @@ class productUpload extends MY_Controller
 
             die(json_encode($return));
         }
-         
+        
+
+        if (!file_exists ($pathDirectory)){
+            mkdir($pathDirectory, 0777, true);
+        }
+
         $this->upload->initialize(array( 
             "upload_path" => $pathDirectory,
             "overwrite" => FALSE,
@@ -510,7 +519,7 @@ class productUpload extends MY_Controller
             "xss_clean" => FALSE
             )
         );
-
+        
         if($this->upload->do_multi_upload('files')){
             $file_data = $this->upload->get_multi_upload_data();
             for ($i=0; $i < sizeof($filenames_ar); $i++) {
@@ -548,7 +557,6 @@ class productUpload extends MY_Controller
             }
             $error = 1;
         }
-          
         $return = [
             'msg' => $text, 
             'fcnt' => $filescnttxt,
@@ -600,7 +608,7 @@ class productUpload extends MY_Controller
             "max_size" => $this->max_file_size_mb * 1024,
             "xss_clean" => FALSE
             )); 
- 
+
         if ($this->upload->do_multi_upload('attr-image-input')){ 
             if($isCroppable){
                 $coordinate = explode(',', $coordinates);
@@ -636,7 +644,6 @@ class productUpload extends MY_Controller
     public function step2_2() # function for processing the adding of new item
     {
         $stringUtility = $this->serviceContainer['string_utility'];
-
         $this->load->model("user_model");
         $combination = json_decode($this->input->post('combination'),true); 
         $attributes = json_decode($this->input->post('attributes'),true);
@@ -675,20 +682,28 @@ class productUpload extends MY_Controller
         if($brand_valid === FALSE){ 
             $brand_id = 1;
             $otherBrand = '';
-        } 
-        
-        if (!in_array($product_condition, $this->lang->line('product_condition'))){
-            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
         }
 
-        if($isNotSavingAsDraft){
-            $currentCombination = [];
-            foreach ($combination as $value) {
-                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+        $currentCombination = [];
+        foreach ($combination as $value) {
+            $combinationValue = implode("", array_map('strtolower', $value['data']));
+            if(!in_array($combinationValue, $currentCombination)){
+                $uniqueCombination[] = $value;
             }
+            $currentCombination[] = $combinationValue;
+        }
+        if($isNotSavingAsDraft){
+            if (!in_array($product_condition, $this->lang->line('product_condition'))){
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');
+            }
+
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
+        }
+        else{
+            $product_condition = $this->lang->line('product_condition')[0];
+            $combination = $uniqueCombination; 
         }
 
         if((strlen(trim($product_title)) == 0 
@@ -820,7 +835,7 @@ class productUpload extends MY_Controller
                 #end of other 
  
                 if(!count($arraynameoffiles) <= 0){ 
-                    directory_copy($tempDirectory, $path_directory,$product_id,$arrayNameOnly); 
+                    $this->serviceContainer["assets_uploader"]->uploadImageDirectory($tempDirectory, $path_directory, $product_id, $arrayNameOnly);
                 }
 
                 #saving combination
@@ -857,7 +872,7 @@ class productUpload extends MY_Controller
      *
      * @return JSON 
      */
-    public function step2edit2Submit()
+    public function step2editSubmit()
     {
         $stringUtility = $this->serviceContainer['string_utility'];
 
@@ -888,18 +903,27 @@ class productUpload extends MY_Controller
         $tempDirectory = $this->session->userdata('tempDirectory');
         $isNotSavingAsDraft = $this->input->post('savedraft') ? false : true;
 
-        if($isNotSavingAsDraft){
-            $currentCombination = [];
-            foreach ($combination as $value) {
-                $currentCombination[] = implode("", array_map('strtolower', $value['data'])); 
+        $currentCombination = [];
+        $uniqueCombination = [];
+        foreach ($combination as $value) {
+            $combinationValue = implode("", array_map('strtolower', $value['data']));
+            if(!in_array($combinationValue, $currentCombination)){
+                $uniqueCombination[] = $value;
             }
+            $currentCombination[] = $combinationValue;
+        }
+        if($isNotSavingAsDraft){
+            if (!in_array($product_condition, $this->lang->line('product_condition'))){
+                die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+            }
+
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
         }
-
-        if (!in_array($product_condition, $this->lang->line('product_condition'))){
-            die('{"e":"0","d":"Condition selected not available. Please select another."}');     
+        else{
+            $product_condition = $this->lang->line('product_condition')[0];
+            $combination = $uniqueCombination; 
         }
 
         // Loading Combinations
@@ -1073,7 +1097,8 @@ class productUpload extends MY_Controller
                     $this->product_model->addNewAttributeByProduct_others_name_value($others_id,$attributeValue,$value['price'],$imageid);
                 }
             }
-            directory_copy($tempDirectory, $originalPath,$product_id,$arrayNameOnly); 
+            
+            $this->serviceContainer["assets_uploader"]->uploadImageDirectory($tempDirectory, $originalPath, $product_id, $arrayNameOnly);
 
             #saving combination
             if(count($combination) <= 0){
@@ -1246,6 +1271,7 @@ class productUpload extends MY_Controller
         else{
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -1319,6 +1345,7 @@ class productUpload extends MY_Controller
             }
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',
@@ -1544,6 +1571,7 @@ class productUpload extends MY_Controller
             ];
             
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 'title' => 'Sell Product | Easyshop.ph',
                 'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
                 'relCanonical' => '',

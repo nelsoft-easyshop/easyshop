@@ -125,8 +125,8 @@ else {
 
     #EDIT ITEM
     $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
-    $route['(?i)sell/edit/step2'] = 'productUpload/step2edit2'; # sam gavinio
-    $route['sell/edit/processing'] = 'productUpload/step2edit2Submit';  # sam gavinio
+    $route['(?i)sell/edit/step2'] = 'productUpload/step2edit'; # sam gavinio
+    $route['sell/edit/processing'] = 'productUpload/step2editSubmit';  # sam gavinio
 
     #REMOVE DRAFT
     $route['(?i)sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio

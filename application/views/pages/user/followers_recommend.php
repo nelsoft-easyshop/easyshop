@@ -2,7 +2,7 @@
     <?php $memberEntity = $value; ?>
     <tr>
         <td class="td-vendor-img">
-           <a href="/<?=html_escape($memberEntity->getSlug());?>"><img src="<?=$value->avatarImage?>" class="vendor-img"/></a>
+           <a href="/<?=html_escape($memberEntity->getSlug());?>"><img src="<?php echo getAssetsDomain().'.'.$value->avatarImage?>" class="vendor-img"/></a>
         </td>
         <td class="td-vendor-details">
             <a href="/<?=html_escape($memberEntity->getSlug());?>">

@@ -23,6 +23,7 @@ class EasyDeals extends MY_Controller
         $this->load->library('xmlmap');
         
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Deals | Easyshop.ph',
             'metadescription' => 'Get the best price offers for the day at Easyshop.ph.'
         ];

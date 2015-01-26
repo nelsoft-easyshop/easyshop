@@ -8,15 +8,15 @@
                     <div class="follower-div">
                         <a href="/<?=html_escape($memberEntity->getSlug()); ?>">
                             <div class="div-img-cover">
-                                <img src="<?=$value->bannerImage ;?>" class="img-follower-cover"/>
-                                <img src="<?=$value->avatarImage;?>" class="vendor-follower-img"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$value->bannerImage ;?>" class="img-follower-cover"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$value->avatarImage;?>" class="vendor-follower-img"/>
                                 <div class="cover-overlay"></div>
                             </div>
                         </a>
                         <div class="div-follower-details">
                             <div class="row">
                                 <div class="col-xs-7">
-                                    <img src="<?=$value->avatarImage;?>" class="img-mobile-follower pull-left">
+                                    <img src="<?php echo getAssetsDomain().'.'.$value->avatarImage;?>" class="img-mobile-follower pull-left">
                                     <a href="/<?=html_escape($memberEntity->getSlug()); ?>">
                                         <p class="p-follower-name">
                                             <?php $displayName = strlen(trim($memberEntity->getStoreName())) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>

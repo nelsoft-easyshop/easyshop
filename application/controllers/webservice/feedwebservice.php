@@ -37,8 +37,14 @@ class FeedWebService extends MY_Controller
         $this->xmlFileService = $this->serviceContainer['xml_resource'];
         $this->em = $this->serviceContainer['entity_manager'];        
         $this->declareEnvironment();
+        $this->authenticateRequest = $this->serviceContainer['webservice_manager'];           
         if($this->input->get()) {
-            $this->authentication($this->input->get(), $this->input->get('hash'));
+            $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
+                                                                              $this->input->get('hash'),
+                                                                              true);
+            if(!$this->isAuthenticated) {
+                throw new Exception("Unauthorized Request.");
+            }  
         }  
 
     }

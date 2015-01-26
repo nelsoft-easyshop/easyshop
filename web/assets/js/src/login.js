@@ -38,8 +38,6 @@
                     $("#login_password").val("");
                     $("#deactivatePassword").val("");                        
                     $("#login_error").html("<span style='color:green'>Please check your email for the verification link we've just sent to complete the reactivation process of your account. We are looking forward to serving you again! Happy Shopping!</span>");
-
-
                 }
                 else{
                     $("#login_error").html(obj);
@@ -140,7 +138,12 @@
                                 }
                             }
                         }
-                    }
+                    },
+                    error: function(xhr, error) {
+                        $('#loading_img').hide();
+                        $('#login').show();
+                        alert('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');
+                    }            
                 });
                 return false;
             }
@@ -150,6 +153,15 @@
             $('#login_error').text('');
         });
     });
+    
+    $(document).ready(function(){
+        var $accountBannedElement = $('#account-banned-error');
+        var isAccountBanned = $accountBannedElement.val();
+        if(isAccountBanned){
+            alert(escapeHtml($accountBannedElement.data('message')));
+        }
+    });
+    
     
 })(jQuery);
 

@@ -349,26 +349,27 @@ class Register_model extends CI_Model
 		return $result;
 	}
 	
-
-	function get_verifcode($member_id)
-	{
-		$query = $this->xmlmap->getFilenameID('sql/users', 'get_verifcode');
+    
+    public function get_verifcode($member_id)
+    {
+        $query = $this->xmlmap->getFilenameID('sql/users', 'get_verifcode');
         $sth = $this->db->conn_id->prepare($query);
+        $sth->bindParam(':date', date('Y-m-d H:i:s'));
         $sth->bindParam(':member_id', $member_id);
         $sth->execute();
-		
-		$result = $sth->fetch(PDO::FETCH_ASSOC);
-		
-		if(count($result) == 0){
-			$result = array(
-				'emailcount' => 0,
-				'mobilecount' => 0,
-				'time' => 31
-			);
-		}
+        
+        $result = $sth->fetch(PDO::FETCH_ASSOC);
+        
+        if(count($result) == 0){
+            $result = array(
+                'emailcount' => 0,
+                'mobilecount' => 0,
+                'time' => 31
+            );
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
 
 	function update_verification_status($data = array())

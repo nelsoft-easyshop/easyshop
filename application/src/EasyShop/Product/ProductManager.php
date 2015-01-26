@@ -251,7 +251,7 @@ class ProductManager
         
         $category = $products->getCat()->getIdCat();
         $brand = $products->getBrand()->getName();
-        $username = $products->getMember()->getUsername();
+        $username = $products->getMember()->getStoreName();
 
         $categoryParent = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->getParentCategoryRecursive($category);
@@ -403,9 +403,28 @@ class ProductManager
         $productImageRepo =  $this->em->getRepository('EasyShop\Entities\EsProductImage');
         $productRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $product = $productRepo->find($productId);
+        $products = $productRepo->getRecommendedProducts($productId, [$product->getCat()->getIdCat()], $limit);
+        $productCount = count($products);
+        $maxRecommended = self::RECOMMENDED_PRODUCT_COUNT;
 
-        $products = $productRepo->getRecommendedProducts($productId, $product->getCat(), $limit);
-        
+        if($productCount < $maxRecommended){
+            $lackCount = $maxRecommended - $productCount;
+            $productIdsNotIncluded = []; 
+            $productIdsNotIncluded[] = $productId;
+            $categoryParent = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                       ->getAncestorsWithNestedSet($product->getCat()->getIdCat());
+            if(empty($categoryParent) === false){
+                foreach ($products as $product) {
+                    $productIdsNotIncluded[] = $product->getIdProduct();
+                }
+                $additionalProduct = $productRepo->getRecommendedProducts($productIdsNotIncluded, 
+                                                                          $categoryParent, 
+                                                                          $lackCount);
+
+                $products = array_merge($products, $additionalProduct);
+            }
+        }
+
         $detailedProducts = [];
         foreach($products as $key => $product){ 
             $eachProduct = $this->getProductDetails($product->getIdProduct());
@@ -717,6 +736,14 @@ class ProductManager
             $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
             $productAttributes = $esProductRepo->getAttributesByProductIds([$product->getIdProduct()]);
             $product->attributes = $this->collectionHelper->organizeArray($productAttributes);
+
+            if ( strlen(trim($product->getCatOtherName())) <= 0 ){
+                $product->category = trim($product->getCat()->getName());
+            }
+            else{
+                $product->category = trim($product->getCatOtherName());
+            }
+            
             $products[] = $product;
         }
 

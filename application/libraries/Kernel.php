@@ -115,6 +115,11 @@ class Kernel
                     $container['language_loader']
                 )
             );
+
+            $em->getEventManager()->addEventListener(
+                [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\ProductImageExistenceListener(ENVIRONMENT)
+            );
+            
             return $em;
         };
 
@@ -188,9 +193,11 @@ class Kernel
                                                         $httpRequest);        
         };
 
-        $container['message_manager'] = function ($c) use ($container) {
+        $jsServerConfig = require APPPATH . 'config/param/js_config.php';
+        $container['message_manager'] = function ($c) use ($container, $jsServerConfig) {
             $em = $container['entity_manager'];
-            return new \EasyShop\Message\MessageManager($em);
+            $localConfig = $container['local_configuration'];
+            return new \EasyShop\Message\MessageManager($em, $localConfig, $jsServerConfig);
         };
 
         // Paths
@@ -337,12 +344,7 @@ class Kernel
         $container['webservice_manager'] = function ($c) use ($container){
             $em = $container['entity_manager'];   
             return new \EasyShop\Webservice\AuthenticateRequest($em);                     
-        };           
-
-        $container['image_upload'] = function ($c) use ($container){
-            $uploadLibrary = new \CI_Upload();            
-            return new \EasyShop\Upload\Upload($uploadLibrary);
-        };                            
+        };                      
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
@@ -496,6 +498,31 @@ class Kernel
             return new \EasyShop\Notifications\MobileNotification($smsConfig);
         };
 
+        $awsConfig = require_once(APPPATH . "config/param/aws.php");
+        $container["aws_uploader"] = function($c) use ($awsConfig, $container){
+            $awsClient =  \Aws\S3\S3Client::factory([ 
+                'key' => $awsConfig['s3']['key'],
+                'secret' => $awsConfig['s3']['secret']
+            ]);
+            return new \EasyShop\Upload\AwsUpload($awsClient, $container["config_loader"]);
+        };
+
+        $container['assets_uploader'] = function($c) use ($container){
+            $uploadLibrary = new CI_Upload();
+            $imageLibrary = new MY_Image_lib();
+            return new \EasyShop\Upload\AssetsUploader( $container["entity_manager"], 
+                                                        $container["aws_uploader"],
+                                                        $container["config_loader"],
+                                                        $uploadLibrary,
+                                                        $imageLibrary,
+                                                        ENVIRONMENT);
+        };
+        
+        $container["image_utility"] = function($c) use ($container){
+            $imageLibrary = new CI_Image_lib();
+            return new \EasyShop\Image\ImageUtility($imageLibrary);
+        };
+        
         // Review product
         $container['review_product_service'] = function ($c) use ($container) {
             return new \EasyShop\Review\ReviewProductService(

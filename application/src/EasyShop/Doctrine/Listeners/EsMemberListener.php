@@ -74,7 +74,7 @@ class EsMemberListener implements EventSubscriber
         }
 
         if ($event->hasChangedField('birthday')) {
-            $this->changeSet['birthday'] = $entity->getBirthday();
+            $this->changeSet['birthday'] = $entity->getBirthday()->format('Y-m-d');
         }
 
         if ($event->hasChangedField('fullname')) {

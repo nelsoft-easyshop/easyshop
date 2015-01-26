@@ -10,13 +10,13 @@
         <tr>
             <td>
                 <div>
-                Hi <?php echo $username; ?>,<br /><br />
-                We received a password reset request for your Easyshop.ph account. To reset your password, use the links below:<br />
+                Hi <?php echo html_escape($username); ?>,<br /><br />
+                We received a password reset request for your Easyshop.ph account. To reset your password, kindly use the link below:<br />
                 <a href="<?php echo base_url() . "login/resetconfirm?&confirm=". $trigger; ?>"><?php echo base_url() . "login/resetconfirm?confirm=". $trigger; ?></a>
                 <br /><br />
-                If you didn't request a password reset, you can let us know here:<br />
-                <a href="https://Easyshop.ph/contact/">info@easyshop.ph</a>. <br />
-                Either way, you can ignore this message and your password will not be changed.
+                If you didn't make a request for a password reset, you can let us know at info@easyshop.ph. 
+                <br/>
+                Thank you. <br />
             </div>
             </td>
         </tr>

@@ -22,7 +22,7 @@
             <div class="col-xs-12 col-sm-9 padding-reset trans-left-panel pd-top-10">
                     <div class="pd-bottom-20">
                         <div class="col-xs-3 col-sm-4 padding-reset">
-                            <div class="div-product-image" style="background: url(<?=$product['productImagePath']?>) center center no-repeat; background-cover: cover; background-size: 150%;">
+                            <div class="div-product-image" style="background: url(<?php echo getAssetsDomain().'.'.$product['productImagePath']?>) center center no-repeat; background-cover: cover; background-size: 150%;">
                             </div>
                         </div>
                         <div class="col-xs-9 col-sm-8 padding-reset">
@@ -107,7 +107,7 @@
                             <h4>Sold To:</h4>
                             <div>
                                 <span class="transac-item-profile-con">
-                                    <img src="<?=html_escape($soldTransactionDetails['userImage'])?>">
+                                    <img src="<?php echo getAssetsDomain().'.'.$soldTransactionDetails['userImage']);?>">
                                 </span>
                                 <span class="transac-item-consignee-name">
                                     <?=html_escape($soldTransactionDetails['buyerStoreName'])?>

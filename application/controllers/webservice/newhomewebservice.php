@@ -58,7 +58,10 @@ class NewHomeWebService extends MY_Controller
             $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
                                                                               $this->input->get('hash'),
                                                                               true);
-        }    
+            if(!$this->isAuthenticated) {
+                throw new Exception("Unauthorized Request.");
+            }            
+        }
     }
 
     /**
@@ -740,14 +743,15 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
         $value = $this->input->get("value");  
         $string = $this->xmlCmsService->getString("categorySectionAdd",$value); 
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection[last()]',"\t","\n");    
+        $xPath = count($map->categorySection) > 0 ? '/map/categorySection[last()]' : '/map/adSection[last()]';
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,$xPath,"\t","\n");    
         if($addXml === true) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }        
               
-    }
+    }    
 
     /**
      *  Add productPanel node under categorySection parent node
@@ -909,7 +913,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $template = $this->input->get("template");
-        $string = $this->xmlCmsService->getString("sliderSection",$template, ""); 
+        $string = $this->xmlCmsService->getString("sliderSection",$template, " "); 
         $index = $index === 0 ? 1 : $index + 1;  
 
         $this->config->load('image_dimensions', true);        
@@ -1261,19 +1265,23 @@ class NewHomeWebService extends MY_Controller
      */
     public function syncTempHomeFiles()
     {
-        $map = simplexml_load_file($this->file);
+        if($this->isAuthenticated) {
+            $map = simplexml_load_file($this->file);
 
-        foreach ($map->sliderSection->slide as $slider) {
-            $sliders[] = $slider;
+            foreach ($map->sliderSection->slide as $slider) {
+                $sliders[] = $slider;
+            }
+
+            $this->xmlCmsService->removeXmlNode($this->tempHomefile, "tempHomeSlider");
+            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile, $this->file, $sliders);  
+             
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);                        
         }
-
-        $this->xmlCmsService->removeXmlNode($this->tempHomefile, "tempHomeSlider");
-        $this->xmlCmsService->syncTempSliderValues($this->tempHomefile, $this->file, $sliders);  
-         
-        return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);                        
-
+        else {
+            return json_encode("error");
+        }        
           
     }
 
@@ -1292,7 +1300,7 @@ class NewHomeWebService extends MY_Controller
 
         $this->config->load('image_dimensions', true);
         $imageDimensionsConfig = $this->config->config['image_dimensions'];
-        $imageDimensions = $imageDimensionsConfig[$type];
+        $imageDimensions = $imageDimensionsConfig["cmsImagesSizes"][$type];
 
         if($type === "mainSlider") {
             $defaultTemplateCount = count($imageDimensions[$template]);
