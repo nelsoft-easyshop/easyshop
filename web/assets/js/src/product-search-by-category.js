@@ -113,7 +113,7 @@
         var where_scroll = $(window).scrollTop();
         var window_height = $(window).height();
 
-        if(where_scroll <= 200)  {
+        if(where_scroll <= 400)  {
             $('#sticky-pagination').css('bottom', '-400px');
         }else{
             $('#sticky-pagination').css('bottom', '0px');
