@@ -16,6 +16,15 @@ class AccountManager
 {
 
     const REMEMBER_ME_COOKIE_LIFESPAN_IN_SEC = 86500;
+    
+    /**
+     * Users have to wait for 30 minutes before for requesting for 
+     * another email after 4 requests
+     */
+    const EMAIL_VERIFICATION_REQUEST_LIMIT = 4;
+    
+    const EMAIL_COOLDOWN_DURATION_IN_MINUTES = 30;
+    
 
     /**
      * Entity Manager instance
@@ -74,7 +83,42 @@ class AccountManager
      * Email Notification
      *
      */
-    private $emailNotification;    
+    private $emailNotification;   
+    
+    /**
+     * CI_Parser
+     *
+     * @var CI_Parser
+     */
+    private $parser;
+    
+    /**
+     * CI_Encrypt
+     *
+     * @var CI_Encrypt
+     */
+    private $encrypter;
+    
+    /**
+     * Config Loader
+     *
+     * @var EasyShop\ConfigLoader\ConfigLoader
+     */
+    private $configLoader;
+    
+    /**
+     * Language Loader
+     *
+     * @var EasyShop\LanguageLoader\LanguageLoader
+     */
+    private $languageLoader;
+    
+    /**
+     * Hash Utility
+     *
+     * @var EasyShop\Utility\HashUtility
+     */
+    private $hashUtility;
     
     /**
      * Intialize dependencies
@@ -88,7 +132,12 @@ class AccountManager
                                 $formErrorHelper, 
                                 $stringUtility,
                                 $httpRequest,
-                                $emailNotification)
+                                $emailNotification,
+                                $parser,
+                                $encrypter,
+                                $configLoader,
+                                $languageLoader,
+                                $hashUtility)
     {
         $this->em = $em;
         $this->bcryptEncoder = $bcryptEncoder;
@@ -99,22 +148,84 @@ class AccountManager
         $this->stringUtility = $stringUtility;
         $this->httpRequest = $httpRequest;
         $this->emailNotification = $emailNotification;
+        $this->parser = $parser;
+        $this->encrypter = $encrypter;
+        $this->configLoader = $configLoader;
+        $this->languageLoader = $languageLoader;
+        $this->hashUtility = $hashUtility;
     }
 
     /**
      * Sends an email verification
-     * @param string $recipient
-     * @param string $subject
-     * @param string $message
-     * @param array $imageArray
-     * @return bool
+     * @param EasyShop\Entities\EsMember $member
+     * @param bool $isNew
+     * @return mixed
      */
-    public function sendEmailVerification($recipient, $subject, $message, $imageArray)
+    public function sendAccountVerificationLinks($member, $isNew = true)
     {
-        $this->emailNotification->setRecipient($recipient);
-        $this->emailNotification->setSubject($subject);
-        $this->emailNotification->setMessage($message, $imageArray);
-        return (bool) $this->emailNotification->sendMail();        
+        $response= [
+            'isSuccessful' => false,
+            'error' => ''
+        ];
+        
+        if(!$isNew){
+            $verifCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                                  ->findOneBy(['member' => $member]);
+            if(!$verifCode){
+                $response['error'] = 'verfication-code-does-not-exist';
+            }
+            else{
+                $emailCount = $verifCode->getEmailCount();
+                $dateNow =  new \DateTime();
+                $dateOfLastRequest = $verifCode->getFpTimestamp();
+                $deltaTime = $dateNow->diff($dateOfLastRequest);
+                
+                $elapsedMinutes = $deltaTime->days * 24 * 60;
+                $elapsedMinutes += $deltaTime->h * 60;
+                $elapsedMinutes += $deltaTime->i;
+
+                if($emailCount > self::EMAIL_VERIFICATION_REQUEST_LIMIT &&
+                    $elapsedMinutes <= self::EMAIL_COOLDOWN_DURATION_IN_MINUTES
+                ){
+                    $response['error'] = 'limit-of-requests-reached';
+                }
+            }
+        }
+    
+        if($response['error'] === ''){
+            $emailAddress = $member->getEmail();
+            $username = $member->getUserName();
+            $emailSecretHash = sha1($emailAddress.time());
+
+            $parseData = [
+                'user' => $username,
+                'hash' => $this->encrypter
+                            ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
+                'site_url' => site_url('register/email_verification')
+            ];
+            
+            $imageArray = $this->configLoader->getItem('email', 'images');  
+            $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);
+            
+            $this->emailNotification->setRecipient($emailAddress);
+            $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
+            $this->emailNotification->setMessage($message, $imageArray);
+            /**
+            * Mobile verification can be added here
+            */
+            $mobileCode = $this->hashUtility->generateRandomAlphaNumeric(6);
+            if($this->emailNotification->sendMail()){
+                if($isNew){
+                    $response['isSuccessful'] = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                                                     ->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode);
+                }
+                else{
+                    $response['isSuccessful'] = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                                                     ->updateVerifCode($verifCode, $emailSecretHash, $mobileCode);
+                }
+            }
+        }
+        return $response;
     }
 
     /**
@@ -292,36 +403,7 @@ class AccountManager
                 'member' => $member];
     }
 
-    /**
-     * Stores member's verification code
-     *
-     * @param array $userData
-     * @return bool
-     */
-    public function storeMemberVerifCode($userData)
-    {
-
-        try{
-            $memberId = $this->em
-                              ->getRepository('EasyShop\Entities\EsMember')
-                              ->find($userData["memberId"]);
-
-            $verifCode = new EsVerifcode();     
-            $verifCode->setMember($memberId);
-            $verifCode->setEmailcode($userData["emailCode"]);
-            $verifCode->setMobilecode($userData["mobileCode"]);
-            $verifCode->setDate(new DateTime('now'));
-            $verifCode->setFpTimestamp(new DateTime('now'));
-            $verifCode->setEmailcount((int)$userData["email"]);
-            $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
-            $this->em->persist($verifCode);
-            $this->em->flush();
-            return true;
-        }
-        catch(\Doctrine\ORM\Query\QueryException $e) {
-            return false;
-        }
-    }    
+  
     
     /**
      * Authentication implementation for accounts with old password hashing
