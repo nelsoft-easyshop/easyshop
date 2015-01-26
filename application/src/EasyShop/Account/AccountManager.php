@@ -191,6 +191,12 @@ class AccountManager
                 ){
                     $response['error'] = 'limit-of-requests-reached';
                 }
+                else if($emailCount > self::EMAIL_VERIFICATION_REQUEST_LIMIT &&
+                    $elapsedMinutes > self::EMAIL_COOLDOWN_DURATION_IN_MINUTES
+                ){
+                    $verifCode->setEmailcount(0);
+                    $this->em->flush();
+                }
             }
         }
     

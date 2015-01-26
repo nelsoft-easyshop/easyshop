@@ -420,6 +420,7 @@
         var loadingimg = $('img.verify_img'); 
         var verifyspan = $('#verifyEmailAction');  
         $("#verifiedEmailText").text('');
+        $("#errorTextVerify").text('');
         verifyspan.hide();
         loadingimg.show();
 
@@ -543,6 +544,7 @@
         var verifyspan = $('#verifyEmailAction');          
         var data = $("#currentEmail").text();
         $("#verifiedEmailText").text('');
+        $("#errorTextVerify").text('');
         var field = "email";        
         $.ajax({
             type: 'post',
