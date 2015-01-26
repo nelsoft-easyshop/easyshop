@@ -397,6 +397,8 @@
                         if(obj.error.email) {
                             $("#errorIndicatoreEmailAddress").css("display","block");
                             $("#errorTextEmail").text(obj.error.email);
+                             $('img.changeEmailLoader').hide(); 
+                             $('#changeEmailBtnAction').show();
                         }                    
                     }
                     else {
@@ -417,6 +419,7 @@
         var field = "email";
         var loadingimg = $('img.verify_img'); 
         var verifyspan = $('#verifyEmailAction');  
+        $("#verifiedEmailText").text('');
         verifyspan.hide();
         loadingimg.show();
 
@@ -427,16 +430,17 @@
             success: function(data) {
                 $( "#btn-edit-email" ).prop("disabled", false);
                 var obj = jQuery.parseJSON(data);   
+                var emailCooldownDuration = $('#email-cooldown-mins').val();
                 loadingimg.hide();
                 verifyspan.show();
                 $("#verifyEmail").css("display","none");    
-                if(obj) {
+                if(obj === 'success') {
                     $("#verifiedEmail").css("display","block");                     
                     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
                 }
-                else {
+                  else if(obj === 'limit-of-requests-reached'){
                     $("#errorIndicatoreVerify").css("display","block");
-                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after 30 mins.");
+                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after "+emailCooldownDuration+" mins.");
                 }
  
             },
@@ -538,6 +542,7 @@
         var loadingimg = $('img.verify_img'); 
         var verifyspan = $('#verifyEmailAction');          
         var data = $("#currentEmail").text();
+        $("#verifiedEmailText").text('');
         var field = "email";        
         $.ajax({
             type: 'post',
@@ -545,20 +550,21 @@
             url: "/memberpage/verify",
             success: function(data) {
                 $( "#btn-edit-email" ).trigger( "click" );   
-                var obj = jQuery.parseJSON(data);   
+                var obj = jQuery.parseJSON(data); 
+                var emailCooldownDuration = $('#email-cooldown-mins').val();
                 loadingimg.hide();
                 verifyspan.show();
                 $('img.changeEmailLoader').hide(); 
                 $('#changeEmailBtnAction').show();
                 $("#verifyEmail").css("display","none");   
-                if(obj) {
+                if(obj === 'success') {
                     $("#verifiedEmail").css("display","block");                     
                     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
                 }
-                else {
+                else if(obj === 'limit-of-requests-reached'){
                     $("#verifiedEmail").css("display","none");
                     $("#errorIndicatoreVerify").css("display","block");
-                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after 30 mins.");
+                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after " +emailCooldownDuration+" mins.");
                 }
  
             },
