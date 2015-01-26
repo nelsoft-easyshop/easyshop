@@ -4,22 +4,22 @@
     <category id="babies-clothes">
         <top>
             <image>
-                <path>/assets/images/homeslider/mich_c.jpg</path>
-                <target>www.facebook.com</target>
+                <path>/assets/images/slide3.jpg</path>
+                <target>/</target>
             </image>
             <image>
-                <path>/assets/images/homeslider/mich_c.jpg</path>
-                <target>www.facebook.com</target>
+                <path>/assets/images/slide3.jpg</path>
+                <target>/</target>
             </image>
         </top>
         <bottom>
             <image>
                 <path>/assets/images/categories/slider-small/sample.gif</path>
-                <target>www.facebook.com</target>
+                <target>/</target>
             </image>
             <image>
                 <path>/assets/images/categories/slider-small/sample.gif</path>
-                <target>www.facebook.com</target>
+                <target>/</target>
             </image>
             <image>
                 <path>/assets/images/categories/slider-small/sample.gif</path>
