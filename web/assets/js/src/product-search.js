@@ -318,9 +318,6 @@
                     });
                 }
             }
-        } 
-        else {
-            // upscroll code
         }
         lastScroll = st;
     });
