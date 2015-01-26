@@ -169,9 +169,10 @@ class AccountManager
             'error' => ''
         ];
         
+        $verifcodeRepository = $this->em->getRepository('EasyShop\Entities\EsVerifcode');
+        
         if(!$isNew){
-            $verifCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
-                                  ->findOneBy(['member' => $member]);
+            $verifCode = $verifcodeRepository->findOneBy(['member' => $member]);
             if(!$verifCode){
                 $response['error'] = 'verfication-code-does-not-exist';
             }
@@ -217,12 +218,10 @@ class AccountManager
             $mobileCode = $this->hashUtility->generateRandomAlphaNumeric(6);
             if($this->emailNotification->sendMail()){
                 if($isNew){
-                    $response['isSuccessful'] = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
-                                                     ->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode);
+                    $response['isSuccessful'] = $verifcodeRepository->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode);
                 }
                 else{
-                    $response['isSuccessful'] = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
-                                                     ->updateVerifCode($verifCode, $emailSecretHash, $mobileCode);
+                    $response['isSuccessful'] = $verifcodeRepository->updateVerifCode($verifCode, $emailSecretHash, $mobileCode);
                 }
             }
         }
