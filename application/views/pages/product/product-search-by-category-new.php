@@ -21,7 +21,12 @@
 <section class="bg-search-section color-default search-parallax-container">
     <div id="parallax-1" class="search-parallax">
         <div id="parallax-3" class="banner-template-1">
-            <div style="border: solid red 1px; width: 100%; height: 300px;">
+            <ul class="top-slider">
+                <li style="background: url(/assets/images/slide3.jpg) center no-repeat; background-size: cover; "></li>
+                <li style="background: url(/assets/images/Scratch_and_win_baner.jpg) center no-repeat; background-size: cover; "></li>
+                <li style="background: url(/assets/images/slide3.jpg) center no-repeat; background-size: cover; "></li>
+                <li style="background: url(/assets/images/Scratch_and_win_baner.jpg) center no-repeat; background-size: cover; "></li>
+            </ul>
         </div>
         <br>
         <center class="search-slider">
