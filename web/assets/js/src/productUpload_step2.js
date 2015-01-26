@@ -1196,6 +1196,7 @@ var extensionList = [];
 var imageCollection = [];
 var widthRatio = 445;
 var heightRatio = 538;
+var totalCropImage;
 
 (function($) {
   
@@ -1221,7 +1222,7 @@ var heightRatio = 538;
 
     var cropImage = function($input)
     {
-        var totalCropImage = imageObject.length;
+        totalCropImage = imageObject.length;
         var jcrop_api, imgHeight, imgWidth;
         var targetImage = imageObject[cropCurrentCount];
         var currentExtension = extensionList[cropCurrentCount];
@@ -1242,7 +1243,7 @@ var heightRatio = 538;
                     var x1 = imgWidth / 2 - widthRatio / 2; 
                     var x2 = x1 + widthRatio; 
                     var y1 = 0;
-                    var y2 = imgHeight;
+                    var y2 = imgHeight; 
                     $('#crop-image-main').dialog({
                         resizable: false,
                         height: 600,
@@ -1250,7 +1251,28 @@ var heightRatio = 538;
                         modal: true,
                         buttons: {
                             "Crop": function() {
-                                $(this).dialog("close");
+                                var xCoord = $('#image_x').val();
+                                var yCoord = $('#image_y').val();
+                                var wCoord = $('#image_w').val();
+                                var hCoord = $('#image_h').val();
+                                var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
+                                jcrop_api.destroy();  
+                                af.push(afTemp[cropCurrentCount]);
+                                axes.push(coordinate); 
+                                cropCurrentCount++;  
+                                $(this).dialog("close"); 
+                                if(cropCurrentCount < totalCropImage){
+                                    cropImage($input);
+                                }
+                                else{
+                                    triggerUpload();
+                                    $(".files").hide();
+                                    $(".files.active").each(function(){
+                                        $(this).removeClass('active');
+                                    });
+                                    $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+                                    $input.remove();
+                                }
                             }
                         },
                         open: function() {
@@ -1273,31 +1295,9 @@ var heightRatio = 538;
                             });
                         },
                         close: function(){
-                            var xCoord = $('#image_x').val();
-                            var yCoord = $('#image_y').val();
-                            var wCoord = $('#image_w').val();
-                            var hCoord = $('#image_h').val();
-                            var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
-
                             $('#crop-image-main >  #imageTag').attr('src', ''); 
                             $('#crop-image-main').append('<img src="" id="imageTag">');
-                            jcrop_api.destroy(); 
-                            $.modal.close();
-                            af.push(afTemp[cropCurrentCount]);
-                            axes.push(coordinate); 
-                            cropCurrentCount++; 
-                            if(cropCurrentCount < totalCropImage){
-                                cropImage($input);
-                            }
-                            else{
-                                triggerUpload();
-                                $(".files").hide();
-                                $(".files.active").each(function(){
-                                    $(this).removeClass('active');
-                                });
-                                $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
-                                $input.remove();
-                            }
+                            jcrop_api.destroy();
                         },
                         "title": "Crop your image"
                     });
@@ -1320,9 +1320,21 @@ var heightRatio = 538;
                 $input.remove();
             }
         }
-
-        
     }
+
+    $(document).on('click','.ui-dialog-titlebar-close',function(e){
+            af.push(afTemp[cropCurrentCount]); 
+            cropCurrentCount++;
+            while(cropCurrentCount < totalCropImage){
+                af.push(afTemp[cropCurrentCount]);
+                cropCurrentCount++;
+            }
+            $.each( arrayUpload, function( key, value ) {
+                removeThisPictures.push(value); 
+                $('#previewList'+value).remove();
+            }); 
+            canProceed = true;  
+    });
 
     function triggerUpload()
     {
@@ -1566,6 +1578,9 @@ var heightRatio = 538;
                     modal: true,
                     buttons: {
                         "Crop": function() {
+                            var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
+                            $("#coordinatesOther").val(coordinate);
+                            triggerUploadOther(picName);
                             $(this).dialog("close");
                         }
                     },
@@ -1588,13 +1603,10 @@ var heightRatio = 538;
                             onSelect: showCoords
                         });
                     },
-                    close: function(){
-                        var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
-                        $("#coordinatesOther").val(coordinate);
+                    close: function(){ 
+                        jcrop_api.destroy(); 
                         $('#crop-image-main >  #imageTag').attr('src', ''); 
                         $('#crop-image-main').append('<img src="" id="imageTag">');
-                        jcrop_api.destroy(); 
-                        triggerUploadOther(picName);
                     },
                     "title": "Crop your image"
                 });
