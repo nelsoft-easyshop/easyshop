@@ -1169,6 +1169,37 @@ $string = '<typeNode>
 
         return $display;
     }
+    
+    /**
+     * Gets the category page header data
+     *
+     * @param string $categorySlug
+     * @return mixed
+     */
+    public function getCategoryPageHeader($categorySlug)
+    {  
+        $categoryXmlFile = $this->xmlResourceGetter->getCategoryXmlFile();
+        $categoryXmlObjects = $this->xmlResourceGetter->getXMlContent($categoryXmlFile, $categorySlug, 'category'); 
+        $categoryXmlArray = json_decode(json_encode((array) $categoryXmlObjects), 1);
+
+        if(is_array($categoryXmlArray) && $categoryXmlArray[0] === false){
+            return false;
+        }
+   
+        if(isset($categoryXmlArray['top']['image']['path']) || isset($categoryXmlArray['top']['image']['target'])  ){
+            $singleBanner = $categoryXmlArray['top']['image'];
+            $categoryXmlArray['top']['image'] = [];
+            $categoryXmlArray['top']['image'][] = $singleBanner;
+        }
+  
+        if(isset($categoryXmlArray['bottom']['image']['path']) || isset($categoryXmlArray['bottom']['image']['target'])  ){
+            $singleBanner = $categoryXmlArray['bottom']['image'];
+            $categoryXmlArray['bottom']['image'] = [];
+            $categoryXmlArray['bottom']['image'][] = $singleBanner;
+        }
+        
+        return $categoryXmlArray;
+    }
 
 }
 
