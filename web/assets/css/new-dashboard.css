@@ -1995,7 +1995,6 @@ label.css-label {
     text-overflow: ellipsis;
     vertical-align: middle;
     white-space: nowrap;
-    width: 100%;
 }
 
 .view-delivery-details:before {
