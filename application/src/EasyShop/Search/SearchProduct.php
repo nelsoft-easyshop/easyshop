@@ -132,7 +132,7 @@ class SearchProduct
             $this->sphinxClient->SetFilter('productid', $productIds);
         }
         $this->sphinxClient->setLimits(0, PHP_INT_MAX, PHP_INT_MAX); 
-        $this->sphinxClient->AddQuery($queryString, 'products'); 
+        $this->sphinxClient->AddQuery($queryString, 'products products_delta'); 
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
         
