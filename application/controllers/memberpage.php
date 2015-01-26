@@ -1069,92 +1069,27 @@ class Memberpage extends MY_Controller
      *
      *  @return JSON
      */
-    public function verify(){
-
+    public function verify()
+    {
+        $result = 'data-error';
         if($this->input->post('reverify') === 'true'){
-            $uid = $this->session->userdata('member_id');
-            $data = $this->register_model->get_verifcode($uid);
-
-
-            if($this->input->post('field') === 'mobile' && $this->input->post('data') == $data['contactno'])
-            {
-                //GENERATE NEW MOBILE CONFIRMATION CODE
-                $confirmation_code = $this->register_model->rand_alphanumeric(6);
-                $hash = $data['emailcode'];
-                $temp = array(
-                    'member_id' => $uid,
-                    'mobilecode' => $confirmation_code,
-                    'emailcode' => $hash,
-                    'mobile' => 0,
-                    'email' => 0
-                );
-
-                if($data['mobilecount'] < 4 || $data['time'] > 30){
-                    $result = $this->register_model->send_mobile_msg($data['username'], $data['contactno'], $confirmation_code);
-                    if($result === 'success'){
-                        $this->session->set_userdata('mobilecode', $confirmation_code);
-                        $temp['mobile'] = 1;
-                    }
+            $memberId = $this->session->userdata('member_id');
+            $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+            if($this->input->post('field') === 'email' && $this->input->post('data') == $member->getEmail()){
+                $verificationSendingResponse = $this->accountManager
+                                                     ->sendAccountVerificationLinks($member, false);
+                if($verificationSendingResponse['isSuccessful']){
+                    $this->serviceContainer['cart_manager']
+                         ->getCartObject()
+                         ->destroy();
+                    $result = 'success';
                 }
                 else{
-                    $result = 'exceed';
+                    $result = $verificationSendingResponse['error'];
                 }
-                
-                $this->register_model->store_verifcode($temp);
-                echo json_encode($result);
-            }
-            else if($this->input->post('field') === 'email' && $this->input->post('data') == $data['email'])
-            {
-
-                //GENERATE NEW HASH FOR EMAIL VERIFICATION
-                $hash = sha1($this->session->userdata('session_id').time());
-                $confirmation_code = $data['mobilecode'];
-                $temp = array(
-                    'member_id' => $uid,
-                    'mobilecode' => $confirmation_code,
-                    'emailcode' => $hash,
-                    'mobile' => 0,
-                    'email' => 0
-                );
-
-                if($data['emailcount'] < 4 || $data['time'] > 30){
-                    $parseData = [
-                        'user' => $data['username'],
-                        'hash' => $hash,
-                        'site_url' => site_url('register/email_verification')
-                    ];
-                    $imageArray = $this->config->config['images'];
-                    $imageArray[] = "/assets/images/appbar.home.png";
-                    $imageArray[] = "/assets/images/appbar.message.png";
-
-                    $this->emailNotification = $this->serviceContainer['email_notification'];
-                    $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);  
-
-                    $result = $this->accountManager->sendEmailVerification($data['email'],
-                                                                 $this->lang->line('registration_subject'),
-                                                                 $message,
-                                                                 $imageArray);
-
-                    if($result){
-                        $temp['email'] = 1;
-                    }
-                    $this->session->set_userdata('cart_contents', array());
-                }
-                else{
-                    $result = 'exceed';
-                }
-                
-                $this->register_model->store_verifcode($temp);
-                echo json_encode($result);
-                
-            }
-            else{
-                echo json_encode('dataerror');
             }
         }
-        else{
-            echo 0;
-        }
+        echo json_encode($result);
     }
 
     /**
