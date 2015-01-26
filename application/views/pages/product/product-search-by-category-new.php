@@ -18,33 +18,34 @@
         </div>
     </div>
 </section>
-<section class="bg-search-section color-default search-parallax-container">
-    <div id="parallax-1" class="search-parallax">
-        <div id="parallax-3" class="banner-template-1">
-            <div style="border: solid red 1px; width: 100%; height: 300px;">
-        </div>
-        <br>
-        <center class="search-slider">
-            <div class="left-shade">
+<?php if($categoryHeaderData !== false): ?>
+    <section class="bg-search-section color-default search-parallax-container">
+        <div id="parallax-1" class="search-parallax">
+            <div id="parallax-3" class="banner-template-1">
+                <div style="border: solid red 1px; width: 100%; height: 300px;">
             </div>
-            <div class="right-shade">
-            </div>
-            <div class="container">
-                <div class="slider1 clear" width="100%">
-                <!--  <div id="product-search-gallery" class="owl-carousel"> -->
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar1"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar2"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar3"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar4"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar5"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar6"></div>
-                  <div class="slide"><img src="https://placehold.it/390x150&text=FooBar7"></div>
+            <br>
+            <center class="search-slider">
+                <div class="left-shade">
                 </div>
-                <div class="clear"></div>
-            </div>
-         </center>
-    </div>
-</section>
+                <div class="right-shade">
+                </div>
+                <div class="container">
+                    <div class="slider1 clear" width="100%">
+                        <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
+                            <div class="slide">
+                                <a href="<?php echo html_escape($bottomBanner['target']['url']); ?>" target="<?php echo $bottomBanner['target']['targetString']; ?>">
+                                    <img src="<?php echo getAssetsDomain().'.'.html_escape($bottomBanner['path']); ?>">
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </center>
+        </div>
+    </section>
+<?php endif; ?>
 
 <section id="parallax-2" class="bg-search-section color-default">
 <br/>
