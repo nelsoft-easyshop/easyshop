@@ -288,32 +288,30 @@
                                 </div>\
                             </div>\
                         </div>';
-                        if(closestNumber < page){
-                            $('.search-results-container > #page-'+ closestNumber).after(appendString);
-                        }
-                        else{
-                            $('.search-results-container > #page-'+ closestNumber).before(appendString);
-                        }
 
-                        $.ajax({
-                            url: loadUrl+'&typeview='+typeView+'&page='+page,
-                            type: 'get', 
-                            dataType: 'json',
-                            success: function(response) {
-                                if(response.count > 0){
-                                    if($('.search-results-container > #page-'+ page).length <= 0
-                                       || $('.search-results-container > #page-'+ page).hasClass('loading-row')){
-                                        $('.search-results-container > #page-'+ page).replaceWith(response.view);
-                                    }
-                                    isEmptySearch = false;
-                                }
+                        if(page <= lastPage){
+                            if(closestNumber < page){
+                                $('.search-results-container > #page-'+ closestNumber).after(appendString);
                             }
-                        });
-                    }
-                    else{
-                        if(page < lastPage){
-                            isEmptySearch = false;
-                        } 
+                            else{
+                                $('.search-results-container > #page-'+ closestNumber).before(appendString);
+                            }
+
+                            $.ajax({
+                                url: loadUrl+'&typeview='+typeView+'&page='+(page - 1),
+                                type: 'get', 
+                                dataType: 'json',
+                                success: function(response) {
+                                    if(response.count > 0){
+                                        if($('.search-results-container > #page-'+ page).length <= 0
+                                           || $('.search-results-container > #page-'+ page).hasClass('loading-row')){
+                                            $('.search-results-container > #page-'+ page).replaceWith(response.view);
+                                        }
+                                        isEmptySearch = false;
+                                    }
+                                }
+                            });
+                        }
                     }
                     existingArray.push(page);
                     $('[data-spy="scroll"]').each(function () {
