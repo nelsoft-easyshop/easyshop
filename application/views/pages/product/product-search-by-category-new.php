@@ -26,11 +26,11 @@
         <div id="parallax-3" class="banner-template-1">
             <ul class="top-slider">
                 <?php foreach($categoryHeaderData['top']['image'] as $topBanner): ?>
-                    <?php if(trim($topBanner['target']['url']) !== '' && trim($topBanner['target']['url']) !== '/'): ?>
+                    <?php if(trim($topBanner['target']['url']) !== ''): ?>
                         <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
                     <?php endif; ?>
                             <li style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?> ) center no-repeat; background-size: cover; "></li>
-                    <?php if(trim($topBanner['target']['url']) !== '' && trim($topBanner['target']['url']) !== '/'): ?>
+                    <?php if(trim($topBanner['target']['url']) !== ''): ?>
                         </a>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -50,13 +50,13 @@
                         <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
                             <div class="slide">
                                 
-                                <?php if(trim($bottomBanner['target']['url']) !== '' && trim($bottomBanner['target']['url']) !== '/'): ?>
+                                <?php if(trim($bottomBanner['target']['url']) !== ''): ?>
                                       <a href="<?php echo html_escape($bottomBanner['target']['url']); ?>" target="<?php echo $bottomBanner['target']['targetString']; ?>">
                                 <?php endif; ?>
 
                                     <img src="<?php echo getAssetsDomain().'.'.html_escape($bottomBanner['path']); ?>">
                                  
-                                <?php if(trim($bottomBanner['target']['url']) !== '' && trim($bottomBanner['target']['url']) !== '/'): ?>
+                                <?php if(trim($bottomBanner['target']['url']) !== ''): ?>
                                       </a>
                                 <?php endif; ?>
                             </div>
