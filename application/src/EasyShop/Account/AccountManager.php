@@ -18,8 +18,9 @@ class AccountManager
     const REMEMBER_ME_COOKIE_LIFESPAN_IN_SEC = 86500;
     
     /**
-     * Users have to wait for 30 minutes before for requesting for 
-     * another email after 4 requests
+     * Users have to wait for EMAIL_COOLDOWN_DURATION_IN_MINUTES minutes before 
+     * requesting for another email once the limit has been reached. This is
+     * to prevent possible DOS.
      */
     const EMAIL_VERIFICATION_REQUEST_LIMIT = 4;
     
