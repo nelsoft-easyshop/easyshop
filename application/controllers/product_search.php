@@ -113,7 +113,7 @@ class product_search extends MY_Controller {
      *   Returns results of searching products through the search bar
      *   Route: search/(:any)
      */
-    public function searchfaster()
+    public function search()
     {
         if(trim($this->input->get('q_str')) === ""
            && (int) trim($this->input->get('category')) === EsCat::ROOT_CATEGORY_ID
