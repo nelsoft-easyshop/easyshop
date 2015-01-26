@@ -29,6 +29,35 @@
 
     </category>
     
-    
+    <category id="jewellery-watches">
+        <top>
+            <image>
+                <path>/assets/images/slide3.jpg</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/slide3.jpg</path>
+                <target>/</target>
+            </image>
+        </top>
+    </category>
+
+    <category id="electronics-gadgets">
+        <bottom>
+            <image>
+                <path>/assets/images/categories/slider-small/sample.gif</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/sample.gif</path>
+                <target>/</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/sample.gif</path>
+                <target>www.facebook.com</target>
+            </image>
+        </bottom>
+
+    </category>
 </map>
 
