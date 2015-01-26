@@ -96,6 +96,73 @@
         document.cookie = cookie;
     }
 
+    var requestPage = function(pageNumber, scrollAfter) {
+        var requestPage = pageNumber - 1; 
+        var appendString;
+        var closestNumber;  
+
+        closestNumber = getClosestNumber(existingArray, pageNumber);
+        if($('.search-results-container > #page-'+ pageNumber).length <= 0){
+            appendString = '<div class="row loading-row" id="page-'+pageNumber+'">\
+                <div class="loading-bar-container">\
+                    <span class="loading-label">\
+                        Loading page '+pageNumber+' of '+lastPage+'\
+                    </span> \
+                    <div class="outer-progress-box" style="">\
+                        <div id="loading-box"></div>\
+                    </div>\
+                </div>\
+            </div>';
+            if(closestNumber < pageNumber){
+                $('.search-results-container > #page-'+ closestNumber).after(appendString);
+            }
+            else{
+                $('.search-results-container > #page-'+ closestNumber).before(appendString);
+            }
+        }
+        if(scrollAfter){
+            scrollToElement($('.search-results-container > #page-'+ pageNumber));
+        } 
+
+        $.ajax({
+            url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
+            type: 'get', 
+            dataType: 'json', 
+            success: function(response) { 
+                if(response.count > 0){
+                    if($('.search-results-container > #page-'+ pageNumber).length > 0){
+                        $('.search-results-container > #page-'+ pageNumber).replaceWith(response.view);
+                    }
+                    $('[data-spy="scroll"]').each(function () {
+                        var $spy = $(this).scrollspy('refresh');
+                    }); 
+                    isEmptySearch = false;
+                }
+
+                existingArray.push(pageNumber); 
+                page = Math.max.apply(Math,existingArray) - 1;
+            }
+        }); 
+    }
+
+    var requestDivBefore = function(currentPageNumber) {
+        var requestPage = currentPageNumber - 1; 
+        var appendString;
+        var closestNumber; 
+        closestNumber = getClosestNumber(existingArray, requestPage);
+        if($('.search-results-container > #page-'+ requestPage).length <= 0
+            && requestPage > 1){
+            existingArray.push(requestPage);
+            appendString = '<div class="row loading-row" id="page-'+requestPage+'"></div>';
+            if(closestNumber < requestPage){
+                $('.search-results-container > #page-'+ closestNumber).after(appendString);
+            }
+            else{
+                $('.search-results-container > #page-'+ closestNumber).before(appendString);
+            }
+        }
+    }
+
     $('.btn-filter-price').click(function() { 
         var price1 = parseFloat($('#filter-from-price').val());
         var price2 = parseFloat($('#filter-to-price').val()); 
@@ -188,6 +255,7 @@
     var loadUrl = $('#hidden-loadUrl').val();
 
     var page = 1; 
+    var lastPage = $("#hidden-totalPage").val(); 
     var canRequestAjax = true;
     var isEmptySearch = emptySearch != "" ? false : true; 
     var lastScroll = 0;
@@ -205,36 +273,51 @@
             // upscroll code
             if ($(window).scrollTop() + 700 > $(document).height() - $(window).height()) {
                 if (canRequestAjax === true && isEmptySearch === false) {
-                    isEmptySearch = true;
-                    $.ajax({
-                        url: loadUrl+'&typeview='+typeView+'&page='+page,
-                        type: 'get', 
-                        dataType: 'json',
-                        success: function(response) {
-                            if(response.count > 0){ 
-                                page++;
-                                var closestNumber = getClosestNumber(existingArray, page);
-                                if($('.search-results-container > #page-'+ page).length <= 0
-                                   || $('.search-results-container > #page-'+ page).hasClass('loading-row')){
-                                    if(typeof closestNumber === 'undefined'){ 
-                                        $('.search-results-container').append(response.view); 
-                                    }
-                                    else{
-                                        if(closestNumber < page){
-                                            $('.search-results-container > #page-'+ closestNumber).after(response.view);
-                                        }
-                                        else{
-                                            $('.search-results-container > #page-'+ closestNumber).before(response.view);
-                                        }
-                                    } 
-                                }
-                                existingArray.push(page);  
-                                $('[data-spy="scroll"]').each(function () {
-                                    var $spy = $(this).scrollspy('refresh');
-                                }); 
-                                isEmptySearch = false;
-                            } 
+                    isEmptySearch = true; 
+                    page++;
+                    if($('.search-results-container > #page-'+ page).length <= 0
+                       && $.inArray(existingArray, page) == -1){ 
+                        var closestNumber = getClosestNumber(existingArray, page);
+                        var appendString = '<div class="row loading-row" id="page-'+page+'">\
+                            <div class="loading-bar-container">\
+                                <span class="loading-label">\
+                                    Loading page '+page+' of '+lastPage+'\
+                                </span> \
+                                <div class="outer-progress-box" style="">\
+                                    <div id="loading-box"></div>\
+                                </div>\
+                            </div>\
+                        </div>';
+                        if(closestNumber < page){
+                            $('.search-results-container > #page-'+ closestNumber).after(appendString);
                         }
+                        else{
+                            $('.search-results-container > #page-'+ closestNumber).before(appendString);
+                        }
+
+                        $.ajax({
+                            url: loadUrl+'&typeview='+typeView+'&page='+page,
+                            type: 'get', 
+                            dataType: 'json',
+                            success: function(response) {
+                                if(response.count > 0){
+                                    if($('.search-results-container > #page-'+ page).length <= 0
+                                       || $('.search-results-container > #page-'+ page).hasClass('loading-row')){
+                                        $('.search-results-container > #page-'+ page).replaceWith(response.view);
+                                    }
+                                    isEmptySearch = false;
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        if(page < lastPage){
+                            isEmptySearch = false;
+                        } 
+                    }
+                    existingArray.push(page);
+                    $('[data-spy="scroll"]').each(function () {
+                        var $spy = $(this).scrollspy('refresh');
                     });
                 }
             }
@@ -251,7 +334,7 @@
     $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0'); 
     $('body').scrollspy({target: "#myScrollspy"});
     $("#simplePagination").pagination({
-        pages: $("#hidden-totalPage").val(), 
+        pages: lastPage, 
         displayedPages: 9,
     });
 
@@ -277,73 +360,6 @@
         currentExistingPage = currentPageNumber;
         $('#simplePagination').pagination('selectPage', currentPageNumber);
     });
-
-    var requestPage = function(pageNumber, scrollAfter) {
-        var requestPage = pageNumber - 1; 
-        var appendString;
-        var closestNumber;  
-
-        closestNumber = getClosestNumber(existingArray, pageNumber);
-        if($('.search-results-container > #page-'+ pageNumber).length <= 0){
-            appendString = '<div class="row loading-row" id="page-'+pageNumber+'">\
-                <div class="loading-bar-container">\
-                    <span class="loading-label">\
-                        Loading page '+pageNumber+' of 20\
-                    </span> \
-                    <div class="outer-progress-box" style="">\
-                        <div id="loading-box"></div>\
-                    </div>\
-                </div>\
-            </div>';
-            if(closestNumber < pageNumber){
-                $('.search-results-container > #page-'+ closestNumber).after(appendString);
-            }
-            else{
-                $('.search-results-container > #page-'+ closestNumber).before(appendString);
-            }
-        }
-        if(scrollAfter){
-            scrollToElement($('.search-results-container > #page-'+ pageNumber));
-        } 
-
-        $.ajax({
-            url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
-            type: 'get', 
-            dataType: 'json', 
-            success: function(response) { 
-                if(response.count > 0){
-                    if($('.search-results-container > #page-'+ pageNumber).length > 0){
-                        $('.search-results-container > #page-'+ pageNumber).replaceWith(response.view);
-                    }
-                    $('[data-spy="scroll"]').each(function () {
-                        var $spy = $(this).scrollspy('refresh');
-                    }); 
-                    isEmptySearch = false;
-                }
-
-                existingArray.push(pageNumber); 
-                page = Math.max.apply(Math,existingArray) - 1;
-            }
-        }); 
-    }
-
-    var requestDivBefore = function(currentPageNumber) {
-        var requestPage = currentPageNumber - 1; 
-        var appendString;
-        var closestNumber; 
-        closestNumber = getClosestNumber(existingArray, requestPage);
-        if($('.search-results-container > #page-'+ requestPage).length <= 0
-            && requestPage > 1){
-            existingArray.push(requestPage);
-            appendString = '<div class="row loading-row" id="page-'+requestPage+'"></div>';
-            if(closestNumber < requestPage){
-                $('.search-results-container > #page-'+ closestNumber).after(appendString);
-            }
-            else{
-                $('.search-results-container > #page-'+ closestNumber).before(appendString);
-            }
-        }
-    }
 
     $(document).ready(function(){
         if(window.location.hash) {
