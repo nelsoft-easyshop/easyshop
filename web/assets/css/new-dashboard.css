@@ -1598,7 +1598,7 @@ a{
 
 .deactivated-container{
     height: 250px !important;
-    max-height: 310px !important;
+    max-height: 250px !important;
 }
 
 #activated-modal > .deactivate-modal-title {
