@@ -1182,7 +1182,7 @@ $string = '<typeNode>
         $categoryXmlObjects = $this->xmlResourceGetter->getXMlContent($categoryXmlFile, $categorySlug, 'category'); 
         $categoryXmlArray = json_decode(json_encode((array) $categoryXmlObjects), 1);
 
-        if(is_array($categoryXmlArray) && $categoryXmlArray[0] === false){
+        if(isset($categoryXmlArray[0])  && $categoryXmlArray[0] === false){
             return false;
         }
    
@@ -1196,6 +1196,15 @@ $string = '<typeNode>
             $singleBanner = $categoryXmlArray['bottom']['image'];
             $categoryXmlArray['bottom']['image'] = [];
             $categoryXmlArray['bottom']['image'][] = $singleBanner;
+        }
+        
+        foreach($categoryXmlArray['top']['image'] as $index => $topImage){
+            $target =  $categoryXmlArray['top']['image'][$index]['target'];
+            $categoryXmlArray['top']['image'][$index]['target'] = $this->urlUtility->parseExternalUrl( $target );
+        }
+        foreach($categoryXmlArray['bottom']['image'] as $index => $topImage){
+            $target =  $categoryXmlArray['bottom']['image'][$index]['target'];
+            $categoryXmlArray['bottom']['image'][$index]['target'] = $this->urlUtility->parseExternalUrl( $target );
         }
         
         return $categoryXmlArray;
