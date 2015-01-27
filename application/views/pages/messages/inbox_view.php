@@ -85,4 +85,5 @@
     </div>
     <button id="modal_send_btn">Send</button>
 </div>
+<textarea id="userDataContainer" style="display:none"></textarea>
 <script src="/assets/js/src/messaging.js?ver=<?= ES_FILE_VERSION ?>" type="text/javascript"></script>
