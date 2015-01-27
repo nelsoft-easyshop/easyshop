@@ -230,6 +230,7 @@
                     <?PHP endif; ?>
                 </div>
             </div>
+            <input class="order-product-ids" type="hidden" value="<?=$product['idOrderProduct']?>">
             <div class="clear"></div>
         </div>
         <?PHP endforeach; ?>
