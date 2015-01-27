@@ -26,7 +26,7 @@
         $("#msg_textarea").on("click","#send_btn",function(){
 
             var D = eval('(' + $(this).attr('data') + ')');
-            var recipient = D.name;
+            var recipient = $('#userDataContainer').html().trim();
             var img = D.img;
             var msg = $("#out_txtarea").val();
             if (msg == "") {
@@ -124,8 +124,10 @@
     $("#table_id tbody").on("click",".btn_each_msg",function() {
         var D = eval('(' + $(this).attr('data') + ')');
         var html = "";
-        $("#send_btn").attr("data","{'name':'"+$(this).children(":first").html()+"','img':'"+$(this).parent().parent().children(":first").children().attr("data")+"'}");
         $("#chsn_username").html($(this).children(":first").html()).show();
+        var name = $('#chsn_username').html();
+        $("#send_btn").attr("data","{'img':'"+$(this).parent().parent().find('img').attr('data')+"'}");
+        $("#userDataContainer").empty().html(name.trim());
 
         $("#msg_field").empty();
         $.each(D,function(key,val){
