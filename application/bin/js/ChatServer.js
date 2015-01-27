@@ -27,13 +27,13 @@ io.sockets.on( 'connection', function(client) {
     client.on('set account online', function(storeName) {
         //TODO : add feature to see if user is online
         if (!(storeName in container)) {
-            client.storeName = storeName;
-            container[client.storeName] = client;
             console.log(storeName + " is now Online" );
         }
+        client.storeName = storeName;
+        container[client.storeName] = client;
     });
 
-    client.on('disconnect', function(data){
+    client.on('logout user', function(data){
         if (!client.storeName) {
             return;
         }
