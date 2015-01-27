@@ -202,7 +202,7 @@
                     <?php foreach ($categories as $category): ?>
                         <li>
                             <a href="/category/<?=$category->getSlug(); ?>" class="search-category-link">
-                                <span class="search-category-icon" style="background: url(/assets/<?=$category->getImage(); ?>);">
+                                <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/<?=$category->getSlug(); ?>.png);">
                                     
                                 </span>
                                 <span class="search-category-name"><?=html_escape($category->getName());?></span>
