@@ -9,6 +9,16 @@
     font-weight: 900;
     color: #565656;
     }
+.simplemodal-wrap {
+    margin: 36px 0;
+}
+#activated-message {
+    padding: 0;
+}
+
+.feedback-content {
+    border: none;
+}
 
 @media only screen and (max-width: 991px){
         #simplemodal-container{

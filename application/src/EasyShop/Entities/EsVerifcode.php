@@ -43,9 +43,9 @@ class EsVerifcode
     private $date = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="emailcount", type="boolean", nullable=false)
+     * @ORM\Column(name="emailcount", type="integer", nullable=false)
      */
     private $emailcount = '0';
 

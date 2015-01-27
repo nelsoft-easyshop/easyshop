@@ -1,5 +1,3 @@
-
-
 /**
  * Please observe cleanliness
  * 

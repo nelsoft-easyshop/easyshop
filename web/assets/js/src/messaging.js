@@ -1,4 +1,5 @@
 (function ($) {
+
     var $userInfo = $('#userInfo');
     var $chatServer = $('#chatServer');
     var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
@@ -37,11 +38,16 @@
                 }
                 if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
                     specific_msgs();
-                    seened($('#ID_'+Nav_msg.name));
-                    $('#ID_'+Nav_msg.name+" .unreadConve").html("");
+                    seened($('#ID_'+name));
+                    $('#ID_'+name+" .unreadConve").html("");
                 }
-            } else {
-                html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "reciever" ? "NS" : "")+' odd">';
+                html = $('#ID_'+name).parent().parent();
+            }
+            else{
+                if($(".dataTables_empty").length){
+                    $(".dataTables_empty").parent().remove();
+                }
+                html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "receiver" ? "NS" : "")+' odd">';
                 html +='<td class=" sorting_1">';
                 if (Nav_msg.status == "sender") {
                     html +='<img src="' +config.assetsDomain+Nav_msg.recipient_img+'/60x60.png" data="'+Nav_msg.sender_img+'">';
@@ -51,8 +57,8 @@
                 span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
                 html +='</td>';
                 html +='<td class=" ">';
-                html +="<a class='btn_each_msg' id='ID_"+Nav_msg.name+"' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
-                html +='<span class="msg_sender">'+Nav_msg.name+ '</span>'+span;
+                html +="<a class='btn_each_msg' id='ID_" + name + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
+                html +='<span class="msg_sender">' + name + '</span>'+span;
                 html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
                 html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
                 html +='</a>';
@@ -60,10 +66,11 @@
                 html +='</tr>';
             }
         });
-        
-        if (msgs.Case == "UnreadMsgs"){
+        if(msgs.isUnreadMessages === "true"){
             $("#table_id tbody").prepend(html);
-        } else{
+            arrage_by_timeSent();
+        }
+        else{
             $("#table_id tbody").append(html);
             $("#table_id a").first().addClass("Active");
         }
@@ -95,7 +102,7 @@
         $("#msg_textarea").on("click","#send_btn",function(){
 
             var D = eval('(' + $(this).attr('data') + ')');
-            var recipient = D.name;
+            var recipient = $('#userDataContainer').html().trim();
             var img = D.img;
             var msg = $("#out_txtarea").val();
             if (msg == "") {
@@ -268,8 +275,10 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
 {
     var D = eval('(' + $(this).attr('data') + ')');
     var html = "";
-    $("#send_btn").attr("data","{'name':'"+$(this).children(":first").html()+"','img':'"+$(this).parent().parent().children(":first").children().attr("data")+"'}");
     $("#chsn_username").html($(this).children(":first").html()).show();
+    var name = $('#chsn_username').html();
+    $("#send_btn").attr("data","{'img':'"+$(this).parent().parent().find('img').attr('data')+"'}");
+    $("#userDataContainer").empty().html(name.trim());
 
     $("#msg_field").empty();
     $.each(D,function(key,val){
@@ -475,3 +484,4 @@ function seened(obj)
 }
 
 })(jQuery);
+

@@ -7,7 +7,7 @@ class ActivityManager
     /**
      * Language Loader Class
      *
-     * @var EasyShop\EasyShop\LanguageLoader
+     * @var EasyShop\LanguageLoader\LanguageLoader
      */
     private $languageLoader;
     

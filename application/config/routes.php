@@ -82,7 +82,7 @@ else {
     $route['(?i)cat/all'] = 'product/categories_all'; # ryan vasquez
 
     #SEARCHING
-    $route['(?i)search/(:any)'] = 'product_search/searchfaster/$1'; # ryan vasquez
+    $route['(?i)search/(:any)'] = 'product_search/search/$1'; # ryan vasquez
     $route['search/more'] = 'product_search/loadMoreProduct'; # ryan vasquez
     $route['search/suggest'] = 'product_search/suggest';
 

@@ -44,12 +44,12 @@ class Resource
      * @param string $id
      * @param string $node
      */
-    public function getXMlContent($file, $id = NULL, $node = NULL) 
+    public function getXMlContent($file, $id = null, $node = null) 
     {
         $query = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");   
         $xpath = '/map/';
-        $xpathNode = NULL;
-        $xpathId = NULL;
+        $xpathNode = null;
+        $xpathId = null;
         
         if($id){
             $xpathId = '[@id="' . $id . '"]';
@@ -60,7 +60,7 @@ class Resource
             $xpathNode = $node;
         }
 
-        if($xpathNode === NULL && $xpathId === NULL){
+        if($xpathNode === null && $xpathId === null){
             $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
             $result = json_decode(json_encode($xml), 1);
             return $result;
@@ -103,7 +103,6 @@ class Resource
         }
         
         return $xmlfile;
-    
     }   
 
     /**
@@ -114,9 +113,24 @@ class Resource
     public function getTempHomeXMLfile()
     {
         $xmlfile =  "local/new_home_page_temp";        
+     
         return $xmlfile;
+    }   
     
-    }       
+    /**
+     * Returns the category xml file
+     *
+     * @return string
+     */
+    public function getCategoryXmlFile()
+    {
+        $xmlfile = 'page/category_files';
+        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_category'))) > 0){
+            $xmlfile = $this->configurationService->getConfigValue('XML_category');
+        }
+        
+        return $xmlfile;
+    }
 
 }
 
