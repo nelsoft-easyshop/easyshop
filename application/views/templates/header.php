@@ -230,7 +230,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </section>
     <div class="clear"></div>
 </form>
-        
+<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user->getStoreName())?>">
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 <script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script>
