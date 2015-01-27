@@ -1,6 +1,5 @@
 <li class="slider-template-3">
     <div class="slider-item">
-
         <?php $sliderImage = $image; ?>
         <div class="img-holder temp3-img-1 img-holder-mrgn-right-10">
             <a href="<?php echo $sliderImage[0]['target']['url'] ?>" target=<?php echo $sliderImage[0]['target']['targetString'];?>>

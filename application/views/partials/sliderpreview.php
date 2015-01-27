@@ -1,6 +1,12 @@
 <?php require_once("assets/includes/js.php"); ?>
-<link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider2.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider2.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.sliderpreview.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+
 
     <div class="main-slider-container" style="padding: 50px !important;">    
     <div id="slider-edge">

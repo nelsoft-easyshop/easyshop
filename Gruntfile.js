@@ -26,6 +26,9 @@ module.exports = function (grunt) {
             },
             combine_css:{
                 files:{
+                    'web/assets/css/min-easyshop.sliderpreview.css':
+                        ['web/assets/css/jquery.bxslider2.css',
+                         'web/assets/css/new-homepage.css'],
                     'web/assets/css/min-easyshop.feeds.css':
                         ['web/assets/css/bootstrap.css', 
                         'web/assets/css/bootstrap-mods.css',
