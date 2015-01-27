@@ -1169,6 +1169,50 @@ $string = '<typeNode>
 
         return $display;
     }
+    
+    /**
+     * Gets the category page header data
+     *
+     * @param string $categorySlug
+     * @return mixed
+     */
+    public function getCategoryPageHeader($categorySlug)
+    {  
+        $categoryXmlFile = $this->xmlResourceGetter->getCategoryXmlFile();
+        $categoryXmlObjects = $this->xmlResourceGetter->getXMlContent($categoryXmlFile, $categorySlug, 'category'); 
+        $categoryXmlArray = json_decode(json_encode((array) $categoryXmlObjects), 1);
+
+        if(isset($categoryXmlArray[0])  && $categoryXmlArray[0] === false){
+            return false;
+        }
+   
+        if(isset($categoryXmlArray['top']['image']['path']) || isset($categoryXmlArray['top']['image']['target'])  ){
+            $singleBanner = $categoryXmlArray['top']['image'];
+            $categoryXmlArray['top']['image'] = [];
+            $categoryXmlArray['top']['image'][] = $singleBanner;
+        }
+  
+        if(isset($categoryXmlArray['bottom']['image']['path']) || isset($categoryXmlArray['bottom']['image']['target'])  ){
+            $singleBanner = $categoryXmlArray['bottom']['image'];
+            $categoryXmlArray['bottom']['image'] = [];
+            $categoryXmlArray['bottom']['image'][] = $singleBanner;
+        }
+        
+        if(isset($categoryXmlArray['top'])){
+            foreach($categoryXmlArray['top']['image'] as $index => $topImage){
+                $target =  $categoryXmlArray['top']['image'][$index]['target'];
+                $categoryXmlArray['top']['image'][$index]['target'] = $this->urlUtility->parseExternalUrl( $target );
+            }
+        }
+        if(isset($categoryXmlArray['bottom'])){
+            foreach($categoryXmlArray['bottom']['image'] as $index => $topImage){
+                $target =  $categoryXmlArray['bottom']['image'][$index]['target'];
+                $categoryXmlArray['bottom']['image'][$index]['target'] = $this->urlUtility->parseExternalUrl( $target );
+            }
+        }
+        
+        return $categoryXmlArray;
+    }
 
 }
 

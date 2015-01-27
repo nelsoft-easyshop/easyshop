@@ -95,17 +95,17 @@ class product_search extends MY_Controller {
      */
     public function loadMoreProduct()
     {
-        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
-
-        $searchProductService = $this->serviceContainer['search_product'];
-        $categoryManager = $this->serviceContainer['category_manager']; 
-        $memberId = $this->session->userdata('member_id');
-        $search = $searchProductService->getProductBySearch($this->input->get());
-        $response['products'] = $search['collection']; 
-
-        $response['typeOfView'] = trim($this->input->get('typeview'));
-        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more', $response, true);
-        $data['count'] = count($response['products']);
+        $searchProductService = $this->serviceContainer['search_product']; 
+        $search = $searchProductService->getProductBySearch($this->input->get()); 
+        $typeOfView = trim($this->input->get('typeview'));
+        $currentPage = (int) $this->input->get('page'); 
+        $productViewData = [
+            'products' => $search['collection'],
+            'currentPage' => $currentPage + 1,
+            'isListView' => $typeOfView === 'list',
+        ];
+        $data['view'] = $this->load->view('partials/search-products', $productViewData, true); 
+        $data['count'] = count($search['collection']);
         echo json_encode($data);
     }
 
@@ -113,55 +113,60 @@ class product_search extends MY_Controller {
      *   Returns results of searching products through the search bar
      *   Route: search/(:any)
      */
-    public function searchfaster()
+    public function search()
     {
-        if(trim($this->input->get('q_str')) === "" 
-           && (int) trim($this->input->get('category')) === EsCat::ROOT_CATEGORY_ID){
+        if(trim($this->input->get('q_str')) === ""
+           && (int) trim($this->input->get('category')) === EsCat::ROOT_CATEGORY_ID
+           || trim($this->input->get('q_str')) === ""
+              && !$this->input->get('category')){
             redirect('cat/all');
-        }
-
-        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+        } 
 
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
-        $response['string'] = ($this->input->get('q_str')) ? trim($this->input->get('q_str')) : "";
+        $response['string'] = $this->input->get('q_str') ? trim($this->input->get('q_str')) : "";
         $parameter = $response['getParameter'] = $this->input->get();
-
         $search = $searchProductService->getProductBySearch($parameter);
+
         $response['products'] = $search['collection']; 
         $response['productCount'] = $search['count']; 
-        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
+        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($search['collection']);
+        $response['availableCondition'] = [];
+        if(isset($response['attributes']['Condition'])){
+            $response['availableCondition'] = $response['attributes']['Condition'];
+            unset($response['attributes']['Condition']);
+        }
+        $response['totalPage'] = ceil($search['count'] / $searchProductService::PER_PAGE);
+        $paginationData = [
+            'totalPage' => $response['totalPage'],
+        ];
+        $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
 
+        $category = EsCat::ROOT_CATEGORY_ID; 
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                   ->findBy(['parent' => EsCat::ROOT_CATEGORY_ID]);
-
+                                   ->findBy(['parent' => $category]);
         $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
+        
+        $response['categorySelected'] = $this->input->get('category') ? (int) $this->input->get('category') : $category;
+        $response['categories'] = $categoryManager->setCategoryImage($protectedCategory);
+        $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
 
-        $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
-
-        $response['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
-                [
-                    'parentCategory' =>  $response['parentCategory'],
-                    'environment' => 'desktop'
-                ], true );
-
-        $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
-                [
-                    'parentCategory' =>  $response['parentCategory'],
-                    'environment' => 'mobile'
-                ], true );
-
-        $headerData = [
+        $headerData = [ 
             "memberId" => $this->session->userdata('member_id'),
-            'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
+            'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph' 
         ];
 
-       
-        $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/search/product_search_by_searchbox',$response);
-        $this->load->view('templates/footer'); 
+        $productViewData = [
+            'products' => $search['collection'],
+            'currentPage' => 1,
+            'isListView' => $response['isListView'],
+        ];
+        $response['productView']  = $this->load->view('partials/search-products', $productViewData, true);
+
+        $this->load->spark('decorator');
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/search/product-search-new',$response);
     }
     
     /**
