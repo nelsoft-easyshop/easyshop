@@ -81,9 +81,9 @@
 
 <section id="parallax-2" class="bg-search-section color-default">
 <br/>
-    <div class="container-non-responsive">
+    <div class="container">
         <div class="row">
-            <div class="col-xs-3">
+            <div class="col-md-3 search-left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default panel-left-wing border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
@@ -162,7 +162,7 @@
                                         </table>
                                     </li>
                                     <?php foreach ($attributes as $attrName => $attrListValue):?>
-                                    <li>
+                                    <li class="meo">
                                         <p class="p-filter-name">By <?=html_escape($attrName); ?></p>
                                         <ul class="list-unstyled">
                                             <?php foreach ($attrListValue as $value):?>
@@ -174,7 +174,7 @@
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
-                                    </li> 
+                                    </li>
                                     <?php endforeach; ?>
                                 </ul>
                             </div>
@@ -183,7 +183,7 @@
                 </div>
             </div>
             
-            <div class="col-xs-9">
+            <div class="col-md-9">
                 <div class="search-header">
                     <h3>
                         <?=html_escape($categoryName);?> <span class="category-count-item">(<?=$productCount; ?>)</span>
@@ -234,8 +234,36 @@
        </div>
     </div>
 </section>
-
-
+<div class="mobile-left-wing">
+    <div class="row row-left-wing">
+        <a href="#">
+            <div class="col-xs-6 col-categories">
+                Sub-Categories
+            </div>
+            
+        </a>
+        <a href="">
+            <div class="col-xs-6 col-filter">
+                Filter
+            </div>
+        </a>
+    </div>
+</div>
+<div class="filter-modal">
+    <h1>Filter Products</h1>
+</div>
+<div class="category-modal">
+    <h1>Sub-Categories</h1>
+    <ul class="list-unstyled list-category">
+        <?php foreach ($categories as $category): ?>
+            <a href="/category/<?=$category->getSlug();?>" class="color-default tab_categories">
+                <li>
+                    <?=html_escape($category->getName());?> 
+                </li>
+            </a>
+        <?php endforeach; ?>
+    </ul>
+</div>
 <!-- Display for non-item category-->
 <!--
 <section class="bg-search-section color-default">
@@ -533,6 +561,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/bootstrap.js"></script>
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
     <script src="/assets/js/src/vendor/owl.carousel.min.js"></script>
     <script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
