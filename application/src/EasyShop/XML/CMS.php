@@ -967,6 +967,7 @@ $string = '<typeNode>
             }
             
             foreach($homePageData['slider'][$idx]['image'] as $index => $sliderImage){
+                $homePageData['slider'][$idx]['image'][$index]['path'] = empty($sliderImage['path']) ? '/' : $sliderImage['path'];
                 $target = $sliderImage['target'];
                 $homePageData['slider'][$idx]['image'][$index]['target'] = $this->urlUtility->parseExternalUrl($target);
             }
