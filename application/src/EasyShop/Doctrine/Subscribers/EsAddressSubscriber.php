@@ -1,6 +1,6 @@
 <?php
 
-namespace EasyShop\Doctrine\Listeners;
+namespace EasyShop\Doctrine\Subscribers;
 
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber as EventSubscriber;
@@ -8,7 +8,7 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsAddressListener implements EventSubscriber
+class EsAddressSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
 
