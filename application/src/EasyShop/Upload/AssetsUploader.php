@@ -125,13 +125,12 @@ class AssetsUploader
     {    
         $sourceDirectory = rtrim($sourceDirectory,'/');
         $destinationDirectory = rtrim($destinationDirectory,'/');
-        if(strtolower($this->environment) === 'development'){
-            //creating the destination directory
-            if(!is_dir($destinationDirectory)){
-                mkdir($destinationDirectory, 0777, true);
-            }
-        }
 
+        //creating the destination directory in the local server
+        if(!is_dir($destinationDirectory)){
+            mkdir($destinationDirectory, 0777, true);
+        }
+ 
         $directoryMap = directory_map($sourceDirectory);
         foreach($directoryMap as $key => $file)
         {
@@ -143,10 +142,8 @@ class AssetsUploader
                     if(strtolower($this->environment) !== 'development'){
                         $this->awsUploader->uploadFile(getcwd()."/".$sourceDirectory."/".$file, $destinationDirectory."/".$newFileName);
                     }
-                    else{
-                        copy($sourceDirectory.'/'.$file,$destinationDirectory.'/'.$file);
-                        rename($destinationDirectory.'/'.$file, $destinationDirectory.'/'.$newFileName);
-                    }
+                    copy($sourceDirectory.'/'.$file,$destinationDirectory.'/'.$file);
+                    rename($destinationDirectory.'/'.$file, $destinationDirectory.'/'.$newFileName);
                 }
             }
             else{
