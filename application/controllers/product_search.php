@@ -146,10 +146,9 @@ class product_search extends MY_Controller {
         $category = EsCat::ROOT_CATEGORY_ID; 
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                    ->findBy(['parent' => $category]);
-        $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
+        $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false); 
         
         $response['categorySelected'] = $this->input->get('category') ? (int) $this->input->get('category') : $category;
-        $response['categories'] = $categoryManager->setCategoryImage($protectedCategory);
         $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
 
         $headerData = [ 

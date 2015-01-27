@@ -13,20 +13,20 @@
         $isProductNew = $productEntity->getIsNew();
         $isFreeShipping = $productEntity->getIsFreeShipping();
         $briefDescription = html_escape($productEntity->getBrief());
-        $productImagePath = $productEntity->directory .'categoryview/'. $productEntity->imageFileName;
+        $productImagePath = getAssetsDomain().$productEntity->directory .'categoryview/'. $productEntity->imageFileName;
         $hasSecondImage = $productEntity->hasSecondaryImage;
-        $secondaryImage = $productEntity->secondaryImageDirectory .'categoryview/'. $productEntity->secondaryImageFileName;
+        $secondaryImage = getAssetsDomain().$productEntity->secondaryImageDirectory .'categoryview/'. $productEntity->secondaryImageFileName;
         $memberEntity = $value->getMember();
-        $ownerAvatar = $productEntity->ownerAvatar;
+        $ownerAvatar = getAssetsDomain().'.'.$productEntity->ownerAvatar;
         $sellerStoreName = html_escape($memberEntity->getStoreName());
         $sellerSlug = html_escape($memberEntity->getSlug());
     ?>
     <div class="col-search-item <?=$isListView ? 'col-xs-12' : 'col-sm-3 col-xs-6' ; ?>">
         <div class="search-item-container">
             <a href="/item/<?=$productSlug;?>" class="search-item-link-image">
-                <div class="search-item-img-container" style="background: #fff url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
+                <div class="search-item-img-container" style="background: #fff url(<?=$productImagePath;?>) center no-repeat; background-size: cover;">
                     <?php if($hasSecondImage): ?>
-                    <div class="search-item-img-container-hover" style="background: #fff url(/<?=$secondaryImage;?>) center no-repeat; background-size: cover;">
+                    <div class="search-item-img-container-hover" style="background: #fff url(<?=$secondaryImage;?>) center no-repeat; background-size: cover;">
                     </div>
                     <?php endif; ?>
                     
@@ -68,9 +68,9 @@
                     <tr>
                         <td class="search-item-td-image">
                             <a href="/item/<?=$productSlug;?>">
-                                <div class="search-item-img-container" style="background: #fff url(/<?=$productImagePath;?>) center no-repeat; background-size: cover;">
+                                <div class="search-item-img-container" style="background: #fff url(<?=$productImagePath;?>) center no-repeat; background-size: cover;">
                                     <?php if($hasSecondImage): ?>
-                                    <div class="search-item-img-container-hover" style="background: #fff url(/<?=$secondaryImage;?>)) center no-repeat; background-size: cover;">
+                                    <div class="search-item-img-container-hover" style="background: #fff url(<?=$secondaryImage;?>)) center no-repeat; background-size: cover;">
                                     </div>
                                     <?php endif;?>
                                     

@@ -94,8 +94,7 @@ class product extends MY_Controller
             $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
             $response['categorySlug'] = $categorySlug; 
             $parentCategory = $esCatRepository->findBy(['parent' => $categoryId]);
-            $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
-            $response['categories'] = $categoryManager->setCategoryImage($protectedCategory);
+            $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false); 
             $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
             $response['categoryHeaderData'] = $categoryHeaderData;
 
