@@ -184,13 +184,25 @@ class Kernel
             $formErrorHelper = $container['form_error_helper'];
             $stringHelper = $container['string_utility'];
             $httpRequest = $container['http_request'];
+            $emailNotification  = $container['email_notification'];   
+            $parser = new \CI_Parser();
+            $encrypter = new \CI_Encrypt();
+            $configLoader = $container['config_loader'];
+            $languageLoader = $container['language_loader'];
+            $hashUtitility = $container['hash_utility'];
             return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
                                                         $userManager, 
                                                         $formFactory, 
                                                         $formValidation, 
                                                         $formErrorHelper,
                                                         $stringHelper,
-                                                        $httpRequest);        
+                                                        $httpRequest,
+                                                        $emailNotification,
+                                                        $parser,$encrypter,
+                                                        $configLoader,
+                                                        $languageLoader,
+                                                        $hashUtitility
+                                                        );        
         };
 
         $jsServerConfig = require APPPATH . 'config/param/js_config.php';

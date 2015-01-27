@@ -38,8 +38,9 @@
                         
                     </td>
                     <td>
-                        <a class="btn_each_msg" id="ID_<?PHP echo reset($row)['name']; ?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
-                        <span class="msg_sender"><?PHP echo reset($row)['name']."</span><span class=\"unreadConve\">".$span."</span>"; ?>
+                        <a class="btn_each_msg" id="ID_<?=html_escape(reset($row)['name'])?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
+                        <span class="msg_sender">
+                            <?=html_escape(reset($row)['name'])."</span><span class=\"unreadConve\">".$span."</span>"; ?>
                             <?php
                             $keys = array_keys($row);
                             $row[reset($keys)]['message'] = html_escape(reset($row)['message']);
@@ -87,10 +88,10 @@
     <input type="hidden" id="chatServer" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>">
 </div>
 
-
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/socket.io.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/src/messaging.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.inbox_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
+

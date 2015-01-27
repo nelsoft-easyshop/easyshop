@@ -14,7 +14,9 @@
                     </a>
                 </li> 
                 <?php endforeach; ?>
-                <li class="bc-arrow"><?=html_escape($product->getName());?></li>
+                <?php if ( strlen(trim($product->getCatOtherName())) > 0 ): ?>
+                <li class="bc-arrow"><?=html_escape($product->getCatOtherName());?></li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>

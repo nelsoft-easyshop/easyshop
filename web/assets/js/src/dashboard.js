@@ -1419,6 +1419,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#ongoing-sold").on('click', ".individual, .extremes", function () {
@@ -1431,6 +1435,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#complete-bought").on('click', ".individual, .extremes", function () {
@@ -1443,6 +1451,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#complete-sold").on('click', ".individual, .extremes", function () {
@@ -1455,6 +1467,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $('#transactions').on('keypress', ".search-transaction-num", function(e) {
