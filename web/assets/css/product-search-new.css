@@ -834,6 +834,92 @@ ul.list-category-search li:last-child > .search-category-link{
 .banner-template-2 .bx-controls-direction .bx-next{
     top: -88px !important;
 }
+
+
+/* =============================================
+-----------------  Overwrites for panel --------------
+==============================================*/
+.panel-cat,
+.panel-group-cat{
+    border: 0px !important;
+    border-color: #fff !important;
+    box-shadow: none !important;
+}
+
+.panel-cat-head{
+    border-width: 1px 0px 0px 0px !important;
+    border-bottom: 0px !important;
+    border-top: 1px !important;
+    border-left: 0px !important;
+    border-right: 0px !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    border-color: #e2e2e2 !important;
+    border-top: solid #e2e2e2 1px !important;
+    padding: 0px !important
+}
+
+.panel-cat-head a{
+    padding: 17px 20px;
+    display:block;
+    
+}
+
+.panel-cat-head a{
+    background: #f1f1f1 !important;
+    background-color: #f1f1f1 !important;
+    border-bottom: solid #e2e2e2 1px !important;
+    border-top: solid #e2e2e2 2px !important;
+    color: #565656;
+}
+
+.panel-cat-head a:hover{
+    color: #565656;
+}
+
+.panel-cat-head a > .panel-stat:before{
+    content: "\f068";
+}
+
+.panel-cat-head a.collapsed > .panel-stat:before{
+    content: "\f067";
+}
+
+.panel-cat-head a.collapsed{
+    background: #fff !important;
+    background-color: #fff !important;
+    border-bottom: 0px !Important;
+    border-top: 0px !important;
+    color: #999;
+}
+
+.panel-cat-sub{
+    background: #fff !important;
+    background-color: #fff !important;
+    border-bottom: 0px !important;
+    border-top: 1px !important;
+    border-left: 0px !important;
+    border-right: 0px !important;
+    font-size: 16px;
+    padding-left: 55px;
+}
+
+.panel-cat-sub a{
+    color: #565656;
+    font-size: 13px;
+    display: inline-block;
+    padding: 10px;
+}
+
+.panel-cat-sub a:hover{
+    color: #ff893a;
+
+}
+
+.panel-stat{
+    margin-top: 7px; 
+}
+
 /* =============================================
 -----------------  responsive view --------------
 ==============================================*/
