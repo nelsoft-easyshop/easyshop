@@ -1,6 +1,7 @@
 (function ($) {
-    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 100}});
 
+    
+   
     $(window).bind('scroll',function(e){
         parallaxScroll();
         parallaxScroll2();
