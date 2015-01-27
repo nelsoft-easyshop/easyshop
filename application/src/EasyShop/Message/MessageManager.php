@@ -163,12 +163,18 @@ class MessageManager {
     {
         $host = trim($this->jsServerConfig['HOST']);
         if($this->localConfig->isConfigFileExists()) {
-            $configBaseUrl = $this->localConfig->getConfigValue('base_url');
-            if(strlen($configBaseUrl) > 0) {
-                $host = $configBaseUrl;
+            $configInternalIp = $this->localConfig->getConfigValue('internal_ip');           
+            if(strlen($configInternalIp) > 0){
+                $host = $configInternalIp;
             }
+            else{
+                $configBaseUrl = $this->localConfig->getConfigValue('base_url');
+                if(strlen($configBaseUrl) > 0) {
+                    $host = $configBaseUrl;
+                }
+            }            
         }
-
+        
         if (strpos($host, 'https://') !== false) {
             $host = str_replace('https:', '', preg_replace('{/}', '', $host));
         }
