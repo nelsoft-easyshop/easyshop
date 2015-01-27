@@ -33,11 +33,15 @@ io.sockets.on( 'connection', function(client) {
         container[client.storeName] = client;
     });
 
-    client.on('logout user', function(data){
-        if (!client.storeName) {
-            return;
+    client.on('set account offline', function(storeName, callback) {
+        if (storeName in container) {
+            callback(true);
+            delete container[storeName];
+            console.log(storeName + " is now Offline" );
         }
-        delete container[client.storeName];
+        else {
+            callback(false);
+        }
     });
 
 });

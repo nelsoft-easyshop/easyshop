@@ -148,7 +148,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <a class="prevent" href="/me?tab=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a class="prevent" href="/login/logout">Logout</a>
+                                    <a class="prevent logoutClient" href="/login/logout">Logout</a>
                                 </li>
                             </ul>
                             
