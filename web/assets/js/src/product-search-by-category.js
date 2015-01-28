@@ -96,12 +96,19 @@
         $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-400px');
     });
 
+    var searchParallaxSlide_height = $(".search-parallax-container").outerHeight();
+    var offsetPagination = 1200;
+    if(searchParallaxSlide_height == 523){
+        offsetPagination = 1500;
+    }
+    
+    alert(offsetPagination);
     $(window).scroll(function () {
         var sticky_height = $('#sticky-pagination').outerHeight();
         var where_scroll = $(window).scrollTop();
         var window_height = $(window).height();
 
-        if(where_scroll <= 1500)  {
+        if(where_scroll <= offsetPagination)  {
             $('#sticky-pagination').css('bottom', '-400px');
         }else{
             $('#sticky-pagination').css('bottom', '0px');
