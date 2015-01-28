@@ -32,18 +32,18 @@
                
             </div>
             <div class="banner-template-2">
-             <?php if(isset($categoryHeaderData['top'])): ?>
-                <ul class="top-slider">
-                    <?php foreach($categoryHeaderData['top']['image'] as $topBanner): ?>
-                        <?php if(trim($topBanner['target']['url']) !== ''): ?>
-                            <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
-                        <?php endif; ?>
-                                <li style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?> ) center no-repeat; background-size: cover; "></li>
-                        <?php if(trim($topBanner['target']['url']) !== ''): ?>
-                            </a>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </ul>
+                 <?php if(isset($categoryHeaderData['top'])): ?>
+                    <ul class="top-slider">
+                        <?php foreach($categoryHeaderData['top']['image'] as $topBanner): ?>
+                            <?php if(trim($topBanner['target']['url']) !== ''): ?>
+                                <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
+                            <?php endif; ?>
+                                    <li style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?> ) center no-repeat; background-size: cover; "></li>
+                            <?php if(trim($topBanner['target']['url']) !== ''): ?>
+                                </a>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ul>
                 <?php endif; ?>
             </div>
             <div id="parallax-3" class="banner-template-1" style="height: 10px; <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: -10px;<?php endif; ?>">
@@ -278,7 +278,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="no-search-resul-title">
-                        There are no item to display for <strong>Clothing &amp; Accessories</strong> category.
+                        There are no item to display for <strong><?=html_escape($categoryName);?></strong> category.
                     </h3>
                 </div>
             </div>
