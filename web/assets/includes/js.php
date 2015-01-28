@@ -14,6 +14,8 @@
 </script>
 <script src="/assets/js/src/lib/websocket/client.js"></script>
 <script src="/assets/js/src/lib/eventdispatcher.js"></script>
+<script src="/assets/js/src/vendor/socket.io.js" type="text/javascript"></script>
+<script src="/assets/js/src/nodeClient.js" type="text/javascript"></script>
 
 <script type='text/javascript'>
     <?php if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT'])): ?>

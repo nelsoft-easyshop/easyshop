@@ -148,7 +148,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <a class="prevent" href="/me?tab=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a class="prevent" href="/login/logout">Logout</a>
+                                    <a class="prevent logoutClient" href="/login/logout">Logout</a>
                                 </li>
                             </ul>
                             
@@ -230,7 +230,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </section>
     <div class="clear"></div>
 </form>
-        
+<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user ? $user->getStoreName() : false)?>">
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 <script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script>
