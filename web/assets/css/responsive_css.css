@@ -2671,6 +2671,11 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         padding: 0px;
         position: relative;
     }
+
+    .nav-collapse ul.nav-dropdown {
+        display: block !important;
+    }
+    
     .nav-collapse ul li:hover .nav-dropdown li a {
         color: #494949;
     }
