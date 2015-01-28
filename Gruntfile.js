@@ -119,7 +119,9 @@ module.exports = function (grunt) {
                          'web/assets/css/jquery.jqzoom.css',
                          'web/assets/css/owl.carousel.css'],
                     'web/assets/css/min-easyshop.christmas-promo.css':
-                        ['web/assets/css/promo-css.css']
+                        ['web/assets/css/promo-css.css'],
+                    'web/assets/css/min-easyshop.post-and-win.css':
+                        ['web/assets/css/style.css']
                 }
             },
         }

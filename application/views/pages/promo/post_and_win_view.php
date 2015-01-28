@@ -1,4 +1,12 @@
-<link rel="stylesheet" href="/assets/css/style.css" type="text/css" media="screen"/>
+
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/style.css" type="text/css" media="screen"/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.post-and-win.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
+
 <div class="wrapper info_wrapper">
     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-triple-treat.png" alt="Triple Treats">
 </div>
