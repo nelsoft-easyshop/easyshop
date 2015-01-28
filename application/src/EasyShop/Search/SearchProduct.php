@@ -514,7 +514,7 @@ class SearchProduct
     
         $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
         $this->sphinxClient->setLimits(0, $suggestionLimit, $suggestionLimit); 
-        $this->sphinxClient->AddQuery($queryString, 'suggestions');
+        $this->sphinxClient->AddQuery($queryString.'*', 'suggestions');
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
         if($sphinxResult === false){
