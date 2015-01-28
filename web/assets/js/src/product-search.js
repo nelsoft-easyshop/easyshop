@@ -434,7 +434,7 @@
 
     //Loading bar animation
     var i = 0;
-    var max_value = 300;
+    var max_value = 310;
     var interval = 0;
 
     function render() {
