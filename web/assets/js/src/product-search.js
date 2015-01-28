@@ -1,19 +1,4 @@
 (function ($) {
-    
-    var validateRedTextBox = function(idclass)
-    {
-        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "box-shadow": "0px 0px 2px 2px #FF0000"});
-        $(idclass).focus();
-    } 
-
-    var validateWhiteTextBox = function(idclass)
-    {
-        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                    "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-    }
 
     var checkIfUrlParamExist = function(field,url)
     { 
@@ -94,16 +79,6 @@
             cookie += "domain=" + domain + ";";
         }
         document.cookie = cookie;
-    }
-
-
-    var replaceNumberWithCommas = function(thisnumber){
-        //Seperates the components of the number
-        var n= thisnumber.toString().split(".");
-        //Comma-fies the first part
-        n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        //Combines the two sections
-        return n.join(".");
     }
 
     $(".btn-add-to-cart").on("click", function(){
@@ -259,6 +234,7 @@
 
     $(window).scroll(function(event) {
         var scroll = $(this).scrollTop(); 
+        var heightLimit = 360;
         if(scroll < lastScroll){
             isScrollUp = true;
             var currentPage = parseInt($(".nav li.active > a").text().trim());
@@ -277,7 +253,7 @@
             </div>';
             var hiddenElement = $('#div-holder > #page-'+presentPage);
 
-            if (scroll <=  0.9 * 400) { 
+            if (scroll <=  heightLimit) { 
                 if(canRequestAjax && presentPage >= 1
                    && $('.search-results-container > #page-'+presentPage).length <= 0){ 
                     canRequestAjax = false; 

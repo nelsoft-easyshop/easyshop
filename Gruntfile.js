@@ -277,6 +277,17 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js', 
                              'web/assets/js/src/vendor/jquery.simplePagination.js', 
                              'web/assets/js/src/product-search.js'],
+
+                    'web/assets/js/min/easyshop.includes.js':
+                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                             'web/assets/js/src/landingpage-responsive-nav.js',
+                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/jquery.cookie.js',
+                             'web/assets/js/src/lib/websocket/client.js',
+                             'web/assets/js/src/lib/eventdispatcher.js',
+                             'web/assets/js/src/vendor/socket.io.js',
+                             'web/assets/js/src/nodeClient.js',
+                             'web/assets/js/src/universal.js'],
                 }
             }
         }
