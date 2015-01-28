@@ -56,7 +56,7 @@ class product_search extends MY_Controller {
 
         $categoryId = $this->input->get('category') && count($this->input->get()) > 0
                       ? trim($this->input->get('category'))
-                      : EsCat::MAIN_PARENT_CATEGORY;
+                      : EsCat::ROOT_CATEGORY_ID;
         $memberId = $this->session->userdata('member_id');
 
         if(count($_GET)>0){

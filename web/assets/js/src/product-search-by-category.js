@@ -1,6 +1,7 @@
 (function ($) {
-    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 100}});
 
+    
+   
     $(window).bind('scroll',function(e){
         parallaxScroll();
         parallaxScroll2();
@@ -91,17 +92,23 @@
     //determine the search results container reached the bottom 
     var sticky_offset;
     $(document).ready(function() {
-        var original_position_offset = $('#sticky-pagination').offset();
+        var original_position_offset = ($('#sticky-pagination').length <=0 ) ? 0 : $('#sticky-pagination').offset() ;
         sticky_offset = original_position_offset.top;
-        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-200px');
+        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-400px');
     });
+
+    var searchParallaxSlide_height = $(".search-parallax-container").outerHeight();
+    var offsetPagination = 1200;
+    if(searchParallaxSlide_height == 523){
+        offsetPagination = 1500;
+    }
 
     $(window).scroll(function () {
         var sticky_height = $('#sticky-pagination').outerHeight();
         var where_scroll = $(window).scrollTop();
         var window_height = $(window).height();
 
-        if(where_scroll <= 400)  {
+        if(where_scroll <= offsetPagination)  {
             $('#sticky-pagination').css('bottom', '-400px');
         }else{
             $('#sticky-pagination').css('bottom', '0px');

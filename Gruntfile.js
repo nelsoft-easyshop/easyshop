@@ -141,11 +141,6 @@ module.exports = function (grunt) {
                          'web/assets/css/product_search_category.css',
                          'web/assets/css/product_search_category_responsive.css',
                          'web/assets/css/style_new.css']
-                     
-                     
-                  
-
-
                 }
             },
         }

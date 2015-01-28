@@ -1,5 +1,5 @@
 
-<div class="row" id="page-<?=$currentPage?>">
+<div class="group-container row" data-id="<?=$currentPage?>" id="page-<?=$currentPage?>">
     <?php foreach ($products as $value): ?>
     <?php
         $productEntity = $value;
@@ -60,7 +60,9 @@
                     Add to cart
                 </button>
                 <div class="search-item-seller-cont pull-right">
-                    <img src="<?=$ownerAvatar;?>" class="search-item-seller-img" />
+                    <a href="/<?=$sellerSlug;?>" >
+                        <img src="<?=$ownerAvatar;?>" class="search-item-seller-img" />
+                    </a>
                 </div>
             </div>
             <table class="search-item-list-table">
@@ -85,56 +87,60 @@
                             </a>
                         </td>
                         <td class="search-item-td-meta">
-                            <a href="/item/<?=$productSlug;?>" class="search-item-name">
-                                <?=$productName; ?>
-                            </a>
-                            <span class="search-item-description">
-                                <?=$briefDescription; ?>
-                            </span>
-                            <div class="divider-gray"></div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="search-item-seller-img-list">
-                                        <div class="search-item-seller-cont">
-                                            <img src="<?=$ownerAvatar; ?>" class="search-item-seller-img" />
+                            <div class="search-meta-hand">
+                                <a href="/item/<?=$productSlug;?>" class="search-item-name">
+                                    <?=$productName; ?>
+                                </a>
+                                <span class="search-item-description">
+                                    <?=$briefDescription; ?>
+                                </span>
+                                <div class="divider-gray"></div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="search-item-seller-img-list">
+                                            <div class="search-item-seller-cont">
+                                                <a href="/<?=$sellerSlug;?>">
+                                                    <img src="<?=$ownerAvatar; ?>" class="search-item-seller-img" />
+                                                </a>
+                                            </div>
                                         </div>
+                                        <a href="/<?=$sellerSlug;?>" class="search-item-seller-name">
+                                            <?=$sellerStoreName; ?>
+                                        </a>
                                     </div>
-                                    <a href="/<?=$sellerSlug;?>" class="search-item-seller-name">
-                                        <?=$sellerStoreName; ?>
-                                    </a>
-                                </div>
 
-                                
-                                <div class="col-md-6">
-                                    <?php if($isFreeShipping): ?>
-                                    <span class="search-item-shipping-text pull-right">
-                                        <span class="search-item-shipping-label">Shipping : </span>
-                                        <span class="search-item-shipping-data">Free</span>
-                                    </span>
-                                    <?php endif; ?>
-                                    <div class="clear"></div>
-
-                                    <div class="search-price-list-mobile">
-                                        <div class="col-xs-6 search-item-price">
-                                            <?php if($percentage > 0):?>
-                                            <span class="original-price">
-                                                <s>P<?=$originalPrice; ?></s>
-                                            </span>
-                                            <?php endif; ?> 
-                                             
-                                            <span class="new-price with-discount-list">
-                                                P<?=$productPrice; ?>
-                                            </span>
+                                    
+                                    <div class="col-md-6">
+                                        <span class="search-item-shipping-text pull-right">
+                                            <?php if($isFreeShipping): ?>
+                                                <span class="search-item-shipping-label">Shipping : </span>
+                                                <span class="search-item-shipping-data">Free</span>
+                                            <?php endif; ?>
+                                        </span>
+                                        <div class="clear"></div>
+                                        <div class="search-price-list-mobile">
+                                            <div class="col-xs-6 search-item-price">
+                                                <?php if($percentage > 0):?>
+                                                <span class="original-price">
+                                                    <s>P<?=$originalPrice; ?></s>
+                                                </span>
+                                                <?php endif; ?> 
+                                                 
+                                                <span class="new-price with-discount-list">
+                                                    P<?=$productPrice; ?>
+                                                </span>
+                                            </div>
+                                            <div class="col-xs-6 search-list-cart-button">
+                                                <button data-slug="<?=$productSlug;?>" data-productid="<?=$productId;?>" class="btn btn-search-add-cart btn-add-to-cart">
+                                                    <span class="fa icon-cart fa-lg"></span>
+                                                    Add to cart
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="col-xs-6 search-list-cart-button btn-add-cart">
-                                            <button data-slug="<?=$productSlug;?>" data-productid="<?=$productId;?>" class="btn btn-search-add-cart btn-add-to-cart">
-                                                <span class="fa icon-cart fa-lg"></span>
-                                                Add to cart
-                                            </button>
-                                        </div>
+                                        
                                     </div>
+                                   
                                 </div>
-                               
                             </div>
                         </td>
                         <td class="search-item-td-price">
@@ -159,5 +165,6 @@
         </div>
     </div>
     <?php endforeach; ?>
+
 </div>
 
