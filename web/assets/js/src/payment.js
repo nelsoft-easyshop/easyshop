@@ -226,9 +226,9 @@ $(document).ready(function(){
 
     $(document).on('click','.payment_cod',function () {
          if($('#chk_cod').is(':checked')){
-             var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
+            var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
 
-             if(r == true){
+            if(r == true){
                 $(this).val('Please wait...'); 
                 $(this).attr('disabled','disabled');
 
@@ -273,15 +273,16 @@ $(document).ready(function(){
                 else{
                     $('#codFrm').submit();
                 }
-             }
-         }else{
+            }
+        }
+        else{
             $("#chk_cod").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-             "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-             "box-shadow": "0px 0px 2px 2px #FF0000"});
-             $('#cod > .chck_privacy > p').empty();
-             $('#cod > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
-         }
-     });
+                               "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                               "box-shadow": "0px 0px 2px 2px #FF0000"});
+            $('#cod > #codFrm > .chck_privacy > p').remove();
+            $('#cod > #codFrm > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
+        }
+    });
     
 // -- END OF CASH ON DELIVERY PROCESS PAYMENT SECTION -- // 
 

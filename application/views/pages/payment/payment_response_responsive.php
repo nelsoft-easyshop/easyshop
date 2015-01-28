@@ -150,8 +150,8 @@
                                 <td width="50%" style="padding: 5px;">
                                     <b>Subtotal:</b>
                                 </td>
-                                <td width="50%" style="padding: 5px;">
-                                    <?php echo $value['qty']; ?>
+                                <td width="50%" style="padding: 5px;"> 
+                                    <?php echo number_format($value['subtotal'], 2, '.',','); ?>
                                 </td>
                             </tr>
                             <tr>

@@ -7,14 +7,10 @@
                 <path>/assets/images/slide3.jpg</path>
                 <target>/</target>
             </image>
-            <image>
-                <path>/assets/images/slide3.jpg</path>
-                <target>/</target>
-            </image>
         </top>
         <bottom>
             <image>
-                <path>/assets/images/categories/slider-small/sample.gif</path>
+                <path>/assets/images/img_easy_treat.jpg</path>
                 <target>/</target>
             </image>
             <image>
@@ -45,7 +41,7 @@
     <category id="electronics-gadgets">
         <bottom>
             <image>
-                <path>/assets/images/categories/slider-small/sample.gif</path>
+                <path>/assets/images/img_easy_treat.jpg</path>
                 <target>/</target>
             </image>
             <image>
