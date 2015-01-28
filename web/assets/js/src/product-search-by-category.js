@@ -10,11 +10,13 @@
     function parallaxScroll(){
         var scrolled = $(window).scrollTop();
         var x1 = '0';
-        var y2 = (0-(scrolled*.76));
-            $('#parallax-3').css({
-                "background-position": x1+'px '+y2+'px', 
-                "top": (0-(scrolled*.25))+'px',
-                "height":(10+(scrolled*.25))+'px',
+        var y2 = '0';
+            $('.slider1').css({ 
+                "margin-top": (-71+(scrolled*.40))+'px',
+            });
+
+            $('.slider-bottom').css({ 
+                "margin-top": (-71+(scrolled*.2))+'px',
             });
     }
 
@@ -23,10 +25,8 @@
         var scrolled2 = $(window).scrollTop();
         var x12 = '0';
         var y22 = (0-(scrolled2*.76));
-        $('#parallax-4').css({
-            "background-position": x12+'px '+y22+'px', 
-            "top": (0-(scrolled2*.55))+'px',
-            "height":(0+(scrolled2*.55))+'px',
+        $('.top-slider-item').css({
+            "margin-top": (-200+(scrolled2*.6))+'px',
         });
     }
 
