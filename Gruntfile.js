@@ -125,7 +125,15 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.scratch-to-win.css':
                         ['web/assets/css/jquery.bxslider.css',
                          'web/assets/css/promo.css',   
-                         'web/assets/css/bootstrap.css']
+                         'web/assets/css/bootstrap.css'],
+                    'web/assets/css/min-easyshop.advance-search-main.css':
+                        ['web/assets/css/product_search_category.css', 
+                         'web/assets/css/product_search_category_responsive.css', 
+                         'web/assets/css/product_advance_search.css', 
+                         'web/assets/css/style_new.css', 
+                         'web/assets/css/bootstrap.css', 
+                         'web/assets/css/bootstrap-mods.css']
+                     
                 }
             },
         }
