@@ -15,6 +15,7 @@ use Easyshop\Entities\EsProducItemLock;
 use EasyShop\Entities\EsCat;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * Product Manager Class
@@ -99,6 +100,13 @@ class ProductManager
     private $userManager;
 
     /**
+     * String utility helper
+     *
+     */
+    private $stringUtility;    
+
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
@@ -107,7 +115,8 @@ class ProductManager
                                 $collectionHelper,
                                 $configLoader,
                                 $imageLibrary,
-                                $userManager)
+                                $userManager,
+                                $stringUtility)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
@@ -115,6 +124,7 @@ class ProductManager
         $this->configLoader = $configLoader;
         $this->imageLibrary = $imageLibrary;
         $this->userManager = $userManager;
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -458,24 +468,31 @@ class ProductManager
      */ 
     public function generateSlug($title)   
     {
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findBy(['slug' => $title]);
+        $title = $this->stringUtility->cleanString(strtolower($title));
 
-        $cnt = count($product);
-        if($cnt > 0) {
-            $slugGenerate = $title."-".$cnt++;
-        }
-        else {
-            $slugGenerate = $title;
-        }
-        $checkIfSlugExist = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findBy(['slug' => $slugGenerate]);
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+        $sql = "SELECT COUNT(*) as count FROM es_product WHERE slug LIKE :slug ";
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('slug', '%'.$title.'%'); 
+        $product = $query->getResult();
 
-        if(count($checkIfSlugExist) > 0 ){
-            foreach($checkIfSlugExist as $newSlugs){
-                $slugGenerate = $slugGenerate."-".$newSlugs->getIdProduct();
-            }
+        $slugCount = $product[0]["count"];
+
+        if($slugCount > 0) {
+            $slugGenerate = $this->stringUtility->cleanString($title."-".$slugCount++);
         }
+
+        $checkIfSlugExist = $this->em
+                                 ->getRepository('EasyShop\Entities\EsProduct')
+                                 ->findBy(['slug' => $slugGenerate]);
+
+        $slugCount = count($checkIfSlugExist);
+
+        if($slugCount > 0 ){
+            $slugGenerate .= "-".$slugCount;
+        }
+
         return $slugGenerate;
     }
     
