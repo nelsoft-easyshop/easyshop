@@ -93,7 +93,7 @@
     $(document).ready(function() {
         var original_position_offset = $('#sticky-pagination').offset();
         sticky_offset = original_position_offset.top;
-        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-200px');
+        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-400px');
     });
 
     $(window).scroll(function () {
@@ -101,7 +101,7 @@
         var where_scroll = $(window).scrollTop();
         var window_height = $(window).height();
 
-        if(where_scroll <= 400)  {
+        if(where_scroll <= 1500)  {
             $('#sticky-pagination').css('bottom', '-400px');
         }else{
             $('#sticky-pagination').css('bottom', '0px');
