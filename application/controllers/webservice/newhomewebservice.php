@@ -447,7 +447,7 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
-            $result = $this->upload->data();  
+            $uploadData = $this->upload->data();  
             $imageData = $this->upload->data();            
             $value = $path_directory.$filename.'.'.$file_ext; 
         
@@ -468,12 +468,16 @@ class NewHomeWebService extends MY_Controller
             }
 
 
-            $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);      
+            $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);
 
             $index = $index == 0 ? 1 : $index + 1;
-            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/adSection/ad[last()]',"\t\t","\n");
+            $result = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/adSection/ad[last()]',"\t\t","\n");
 
-            if($addXml === true && $awsUploader->uploadFile($result['full_path'],  $value)) {
+            if(strtolower(ENVIRONMENT) !== 'development' && $result){
+                $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+            } 
+
+            if($result === true) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json); 
@@ -519,7 +523,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $result = $this->upload->data();                  
+                $uploadData = $this->upload->data();                  
                 $this->config->load('image_dimensions', true);
                 $imageDimensionsConfig = $this->config->config['image_dimensions'];
 
@@ -546,8 +550,12 @@ class NewHomeWebService extends MY_Controller
             $map->adSection->ad[$index]->img = $map->adSection->ad[$index]->img;
             $map->adSection->ad[$index]->target = $target; 
         }
+        $result = $map->asXML($this->file);
+        if(strtolower(ENVIRONMENT) !== 'development' && $result){
+            $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+        } 
 
-        if($map->asXML($this->file) && ($awsUploader->uploadFile($result['full_path'],  $value))) {
+        if($result) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
@@ -898,7 +906,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
-                $result = $this->upload->data();                
+                $uploadData = $this->upload->data();                
                 $value = "/".$path_directory.$filename.'.'.$file_ext; 
 
                 if($action == "logo") {
@@ -907,8 +915,11 @@ class NewHomeWebService extends MY_Controller
                 else  {
                     $map->sellerSection->sellerBanner = $value;
                 }
-
-                if($map->asXML($this->file) && ($awsUploader->uploadFile($result['full_path'],  ltrim($value,"/")))) {
+                $result = $map->asXML($this->file);
+                if(strtolower(ENVIRONMENT) !== 'development' && $result){
+                    $result = $awsUploader->uploadFile($uploadData['full_path'],  ltrim($value,"/"));
+                }                 
+                if($result) {
                     return $this->output
                             ->set_content_type('application/json')
                             ->set_output($this->json);
@@ -986,7 +997,7 @@ class NewHomeWebService extends MY_Controller
                                      ->set_output(json_encode($error));
             } 
             else {
-                $result = $this->upload->data();                   
+                $uploadData = $this->upload->data();                   
                 $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
                 $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
 
@@ -1019,7 +1030,11 @@ class NewHomeWebService extends MY_Controller
             $map->sliderSection->slide[$index]->image[$subIndex]->path = $map->sliderSection->slide[$index]->image[$subIndex]->path;
             $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
         }
-        if($map->asXML($this->tempHomefile) && $awsUploader->uploadFile($result['full_path'],  $value)) {
+        $result = $map->asXML($this->tempHomefile);
+        if(strtolower(ENVIRONMENT) !== 'development' && $result){
+            $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+        }         
+        if($result) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
@@ -1193,7 +1208,7 @@ class NewHomeWebService extends MY_Controller
                                  ->set_output(json_encode($error));
         } 
         else {
-            $result = $this->upload->data();            
+            $uploadData = $this->upload->data();            
             $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
             $subSliderCount = count($map->sliderSection->slide[$index]->image);
             $template = (string)$map->sliderSection->slide[$index]->template;            
@@ -1201,11 +1216,11 @@ class NewHomeWebService extends MY_Controller
             if(trim($map->sliderSection->slide[$index]->image->path) === "") {
                 $map->sliderSection->slide[$index]->image->path = $value;
                 $map->sliderSection->slide[$index]->image->target = $target;
-                $map->asXML($this->tempHomefile); 
+                $result = $map->asXML($this->tempHomefile); 
             }
             else {
                 $index = $index === 0 ? 1 : $index + 1;
-                $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
+                $result = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
                                                                 $string,
                                                                 '/map/sliderSection/slide['.$index.']/image[last()]',
                                                                 "\t\t\t","\n");
@@ -1220,18 +1235,21 @@ class NewHomeWebService extends MY_Controller
 
             $this->config->load('image_dimensions', true);
             $imageDimensionsConfig = $this->config->config['image_dimensions'];
-            $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"][$template]);
+            $defaultTemplateSliderCount = count($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"][$template]);
             $imageUtility = $this->serviceContainer['image_utility'];
             if($subSliderCount >= $defaultTemplateSliderCount) {
-                $tempDimensions = end($imageDimensionsConfig["mainSlider"][$template]);
+                $tempDimensions = end($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"][$template]);
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
-                reset($imageDimensionsConfig["mainSlider"][$template]);                
+                reset($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"][$template]);                
             }
             else {
-                $tempDimensions = $imageDimensionsConfig["mainSlider"][$template][$subSliderCount - 1];
+                $tempDimensions = $imageDimensionsConfig["cmsImagesSizes"]["mainSlider"][$template][$subSliderCount - 1];
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
             } 
-            if($awsUploader->uploadFile($result['full_path'],  $value)) {
+            if(strtolower(ENVIRONMENT) !== 'development' && $result){
+                $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+            }          
+            if($result) {
                 return $this->output
                             ->set_content_type('application/json')
                             ->set_output($this->json);             
