@@ -1364,6 +1364,12 @@ li.brand_result:hover{
 
 
 /*****	STEP 4 DESIGN	*******/
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable.pop-up-fixed {
+    left: 0 !important;
+    margin: auto;
+    max-width: 550px;
+    right: 0;
+}
 
 .step4_section{
     border: 1px solid #CECECE;
@@ -1401,15 +1407,15 @@ li.brand_result:hover{
    line-height: 34px; 
 }
 
-
-#imageTag{
-
+#crop-image-main {
+    padding: 40px 0px;
 }
+
 #crop-image-main > div {
     margin: 0 auto;
 }
+
 #crop-image-main > div > img {
-    max-height: 430px;
     margin: 0 auto;
 }
 
@@ -1420,6 +1426,34 @@ li.brand_result:hover{
 
 .pop-up-fixed{
     position: fixed !important;
-    top: 13px !important;
+}
+
+@media (min-width: 320px) {
+    #imageTag {
+        height: auto !important;
+        max-height: 300px !important;
+        width: auto !important;
+    }
+}
+
+@media (min-width: 767px) {
+    #imageTag {
+        height: auto !important;
+        max-height: 320px !important;
+    }
+}
+
+@media (min-width: 991px) {
+    #imageTag {
+        height: auto !important;
+        max-height: 350px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    #imageTag {
+        height: auto !important;
+        max-height: 400px !important;
+    }
 }
 

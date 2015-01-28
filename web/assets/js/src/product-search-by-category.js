@@ -87,7 +87,7 @@
                 $(".search-slider .bx-viewport .slide").css("width", searchslidewidth);
             }
         });
-    });
+    }); 
 
 }(jQuery));
 

@@ -5,7 +5,6 @@
     var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
 
     $(document).ready(function () {
-        
         /* Register events */
         socket.on('send message', function( data ) {
             onFocusReload(data.message);
@@ -28,20 +27,26 @@
         var message = msgs.messages;
         $.each(message,function(key,val){
             var cnt = parseInt(Object.keys(val).length)- 1;
-            var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
-            if ($('#ID_'+Nav_msg.name).length) { //if existing on the conve
-                $('#ID_'+Nav_msg.name).children('.msg_message').text(Nav_msg.message);
-                $('#ID_'+Nav_msg.name).attr('data',JSON.stringify(val));
+            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+                for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
+                var Nav_msg = message[key][first_key]; //first element of object
+            }else{
+                var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
+            }
+            var recipientName = escapeHtml(Nav_msg.name);
+            if (parseInt($('#ID_'+recipientName).length) === 1) { //if existing on the conve
+                $('#ID_'+recipientName).children('.msg_message').text(Nav_msg.message);
+                $('#ID_'+recipientName).attr('data',JSON.stringify(val));
                 if (Nav_msg.unreadConversationCount != 0) {
-                    $('#ID_'+Nav_msg.name).parent().parent().addClass('NS');
-                    $('#ID_'+Nav_msg.name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
+                    $('#ID_'+recipientName).parent().parent().addClass('NS');
+                    $('#ID_'+recipientName+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
                 }
-                if ($('#ID_'+Nav_msg.name).hasClass("Active")) {//if focus on the conve
+                if ($('#ID_'+recipientName).hasClass("Active")) {//if focus on the conve
                     specific_msgs();
-                    seened($('#ID_'+name));
-                    $('#ID_'+name+" .unreadConve").html("");
+                    seened($('#ID_'+recipientName));
+                    $('#ID_'+recipientName+" .unreadConve").html("");
                 }
-                html = $('#ID_'+name).parent().parent();
+                html = $('#ID_'+recipientName).parent().parent();
             }
             else{
                 if($(".dataTables_empty").length){
@@ -57,8 +62,8 @@
                 span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
                 html +='</td>';
                 html +='<td class=" ">';
-                html +="<a class='btn_each_msg' id='ID_" + name + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
-                html +='<span class="msg_sender">' + name + '</span>'+span;
+                html +="<a class='btn_each_msg' id='ID_" + recipientName + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
+                html +='<span class="msg_sender">' + recipientName + '</span>'+span;
                 html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
                 html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
                 html +='</a>';
@@ -66,7 +71,7 @@
                 html +='</tr>';
             }
         });
-        if(msgs.isUnreadMessages === "true"){
+        if(msgs.unread_msgs_count === "true"){
             $("#table_id tbody").prepend(html);
             arrage_by_timeSent();
         }
@@ -74,6 +79,7 @@
             $("#table_id tbody").append(html);
             $("#table_id a").first().addClass("Active");
         }
+        return true;
     }
 
     $(document).ready(function()
@@ -247,18 +253,13 @@ function send_msg(recipient,msg, isOnConversation)
         data : {recipient:recipient,msg:msg,csrfname:csrftoken},
         success : function(resultMsg)
         {
-            data = resultMsg.message;
+            var data = resultMsg.message;
             $("#msg_textarea img").hide();
             $("#send_btn").show();
             if (data.success != 0) {
                 socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
-                $("#table_id tbody").empty();
-                onFocus_Reload(data)
-                if (isOnConversation) {
-                    specific_msgs();
-                }
-                else {
-                    $('#modal-close').trigger('click');
+               if (onFocusReload(data) && !isOnConversation) {
+                   $('#modal-close').trigger('click');
                 }
                 result = true;
             }else{
@@ -462,11 +463,11 @@ function delete_data(ids)
 
 function seened(obj)
 {
-    if ($(obj).parent().parent().hasClass("NS")) {
+    var $parentLi = $(obj).parent().parent();
+    if ($parentLi.hasClass("NS") && $(obj).hasClass('Active')) {
         $(obj).children(".unreadConve").html("");
         var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join(",");
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
         $.ajax({
             type : "POST",
             dataType : "json",
@@ -474,7 +475,7 @@ function seened(obj)
             data : {checked:checked,csrfname:csrftoken},
             success : function(data) {
                 if (data === true) {
-                    $(obj).parent().parent().removeClass('NS');
+                    $parentLi.removeClass('NS');
                 }else{
                     alert("Error loading the message.");
                 }
