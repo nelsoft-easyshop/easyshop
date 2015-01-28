@@ -213,6 +213,7 @@
                 
                 <div class="search-results-container <?=$isListView ? 'list-search' : ''?>">
                     <?=$productView; ?> 
+                    <div class="group-container row loading-row" data-id="2" id="page-2"></div>
                 </div> 
                 
                 <div id="sticky-pagination">
@@ -236,11 +237,16 @@
 </section>
 
 <div id="hidden-elements">
+    <input type="hidden" id="hidden-queryString" value="<?=$_SERVER['QUERY_STRING'];?>" />
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
     <input type="hidden" id="hidden-typeView" value="<?=$isListView ? 'list' : 'grid'; ?>" />
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
     <input type="hidden" id="hidden-loadUrl" value="/cat/more/<?=$categorySlug . '?' . $_SERVER['QUERY_STRING']; ?>" />
     <input type="hidden" id="hidden-totalPage" value="<?=$totalPage; ?>" />
+</div>
+
+<div id="div-holder" style="display:none">
+<?=$productView; ?> 
 </div>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>

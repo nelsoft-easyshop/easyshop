@@ -1,5 +1,5 @@
 
-<div class="row" id="page-<?=$currentPage?>">
+<div class="group-container row" data-id="<?=$currentPage?>" id="page-<?=$currentPage?>">
     <?php foreach ($products as $value): ?>
     <?php
         $productEntity = $value;
