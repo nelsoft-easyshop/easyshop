@@ -805,10 +805,26 @@ body{
     word-wrap: break-word !important;
 }
 
-.p-html-description img{
-    max-width: 100%;
-    height: auto;
+.p-html-description h1, .p-html-description h2, 
+.p-html-description h3, .p-html-description h4, .p-html-description h5 {
+    margin: 0 !important;
+    padding: 30px 0 !important;
+}
+
+.p-html-description div,
+.p-html-description table {
+    height: auto !important;
+    width: 100% !important;
+}
+
+.p-html-description ul {
+    padding: 0 !important;
+}
+
+.p-html-description img {
     display: block;
+    height: auto;
+    max-width: 1200px !important;
 }
 
 .div-banner-container{

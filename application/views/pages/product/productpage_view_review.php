@@ -38,6 +38,7 @@
                                 <br>
                             <?php endforeach; ?>
                         </div>
+                        <div class="clear"></div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="reviews">
