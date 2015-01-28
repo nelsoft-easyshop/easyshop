@@ -1246,7 +1246,7 @@ var totalCropImage;
                     var y2 = imgHeight; 
                     $('#crop-image-main').dialog({
                         resizable: false,
-                        height: 600,
+                        "resize": "auto",
                         width: 600,
                         modal: true,
                         buttons: {
@@ -1276,6 +1276,9 @@ var totalCropImage;
                             }
                         },
                         open: function() {
+                            var MainwindowHeight = $(window).height();
+                            var CropImageMaxWidth = $("#crop-image-main").width();
+                            $("#imageTag").css("max-width", CropImageMaxWidth);
                             $(this).parent().addClass('pop-up-fixed');
                             jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
                                 aspectRatio: widthRatio / heightRatio,
@@ -1293,6 +1296,10 @@ var totalCropImage;
                                 onChange: showCoords,
                                 onSelect: showCoords
                             });
+                            
+                            var UidialogHeight = $(".ui-dialog").outerHeight();
+                            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+                            $(this).parent().css("top", UidialogTop);
                         },
                         close: function(){
                             $('#crop-image-main >  #imageTag').attr('src', ''); 
