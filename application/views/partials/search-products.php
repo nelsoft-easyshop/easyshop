@@ -31,7 +31,7 @@
                     <?php endif; ?>
                     
                     <?php if($percentage > 0):?>
-                    <span class="discount-circle-2"><?=$percentage; ?>%</span>
+                    <span class="discount-circle-2"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                     <?php endif;?>
                     
                     <?php if($isProductNew): ?>
@@ -75,7 +75,7 @@
                                     <?php endif;?>
                                     
                                     <?php if($percentage > 0):?>
-                                    <span class="discount-circle-2"><?=$percentage; ?>%</span>
+                                    <span class="discount-circle-2"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                                     <?php endif;?>
                                     
                                     <?php if($isProductNew): ?>
