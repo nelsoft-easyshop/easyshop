@@ -2,11 +2,9 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
 
-<section class="bg-search-section color-default">
-    <br> 
+<section class="bg-search-section-main color-default ">
     <div class="container">
         <?php if($productCount > 0): ?>
- 
         <div class="row">
             <div class="col-md-3 search-left-wing">
                 <div class="panel-group panel-category border-0" id="category">
