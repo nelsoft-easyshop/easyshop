@@ -115,7 +115,11 @@ module.exports = function (grunt) {
                          'web/assets/css/owl.carousel.css',
                          'web/assets/css/jquery.bxslider.css'],
                     'web/assets/css/min-easyshop.product-image-gallery.css':
-                        ['web/assets/css/jquery.jqzoom.css']
+                        ['web/assets/css/jquery.jqzoom.css'],
+                    'web/assets/css/min-easyshop.productpage-primary.css':
+                        ['web/assets/css/product-page-css.css',
+                         'web/assets/css/jquery.jqzoom.css',
+                         'web/assets/css/owl.carousel.css'] 
                 }
             },
         }
