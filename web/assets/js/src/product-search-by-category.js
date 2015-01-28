@@ -1,6 +1,7 @@
 (function ($) {
-    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 100}});
 
+    
+   
     $(window).bind('scroll',function(e){
         parallaxScroll();
         parallaxScroll2();
@@ -91,7 +92,7 @@
     //determine the search results container reached the bottom 
     var sticky_offset;
     $(document).ready(function() {
-        var original_position_offset = $('#sticky-pagination').offset();
+        var original_position_offset = ($('#sticky-pagination').length <=0 ) ? 0 : $('#sticky-pagination').offset() ;
         sticky_offset = original_position_offset.top;
         $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-400px');
     });

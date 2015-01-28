@@ -1,20 +1,5 @@
 (function ($) {
 
-    var validateRedTextBox = function(idclass)
-    {
-        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "box-shadow": "0px 0px 2px 2px #FF0000"});
-        $(idclass).focus();
-    } 
-
-    var validateWhiteTextBox = function(idclass)
-    {
-        $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                    "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-    }
-
     var checkIfUrlParamExist = function(field,url)
     { 
         if(url.indexOf('?' + field + '=') != -1){
@@ -96,73 +81,6 @@
         document.cookie = cookie;
     }
 
-    var requestPage = function(pageNumber, scrollAfter) {
-        var requestPage = pageNumber - 1; 
-        var appendString;
-        var closestNumber;  
-
-        closestNumber = getClosestNumber(existingArray, pageNumber);
-        if($('.search-results-container > #page-'+ pageNumber).length <= 0){
-            appendString = '<div class="row loading-row" id="page-'+pageNumber+'">\
-                <div class="loading-bar-container">\
-                    <span class="loading-label">\
-                        Loading page '+pageNumber+' of '+lastPage+'\
-                    </span> \
-                    <div class="outer-progress-box" style="">\
-                        <div id="loading-box"></div>\
-                    </div>\
-                </div>\
-            </div>';
-            if(closestNumber < pageNumber){
-                $('.search-results-container > #page-'+ closestNumber).after(appendString);
-            }
-            else{
-                $('.search-results-container > #page-'+ closestNumber).before(appendString);
-            }
- 
-            $.ajax({
-                url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
-                type: 'get', 
-                dataType: 'json', 
-                success: function(response) { 
-                    if(response.count > 0){
-                        if($('.search-results-container > #page-'+ pageNumber).length > 0){
-                            $('.search-results-container > #page-'+ pageNumber).replaceWith(response.view);
-                        }
-                        $('[data-spy="scroll"]').each(function () {
-                            var $spy = $(this).scrollspy('refresh');
-                        }); 
-                        isEmptySearch = false;
-                    }
-
-                    existingArray.push(pageNumber); 
-                    page = Math.max.apply(Math,existingArray) - 1;
-                }
-            }); 
-        }
-        if(scrollAfter){
-            scrollToElement($('.search-results-container > #page-'+ pageNumber));
-        } 
-    }
-
-    var requestDivBefore = function(currentPageNumber) {
-        var requestPage = currentPageNumber - 1; 
-        var appendString;
-        var closestNumber; 
-        closestNumber = getClosestNumber(existingArray, requestPage);
-        if($('.search-results-container > #page-'+ requestPage).length <= 0
-            && requestPage > 1){
-            existingArray.push(requestPage);
-            appendString = '<div class="row loading-row" id="page-'+requestPage+'"></div>';
-            if(closestNumber < requestPage){
-                $('.search-results-container > #page-'+ closestNumber).after(appendString);
-            }
-            else{
-                $('.search-results-container > #page-'+ closestNumber).before(appendString);
-            }
-        }
-    }
-
     $(".btn-add-to-cart").on("click", function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -188,14 +106,36 @@
         });
     });
     
+    $( ".price-field" ).keypress(function(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31
+        && (charCode < 48 || charCode > 57)){
+            return false;
+        }
+        validateWhiteTextBox(this);
+
+        return true;
+    });
+
+    $(document).on('change',".price-field",function () {
+        var priceval = this.value.replace(new RegExp(",", "g"), '');
+        var v = parseFloat(priceval);
+        var tempval;
+        if (isNaN(v)) {
+            this.value = '';
+        }
+        else {
+            tempval = Math.abs(v);
+            this.value = replaceNumberWithCommas(tempval.toFixed(2));
+        }
+    });
 
     $('.btn-filter-price').click(function() { 
-        var price1 = parseFloat($('#filter-from-price').val());
-        var price2 = parseFloat($('#filter-to-price').val()); 
+        var price1 = parseFloat($('#filter-from-price').val().replace(/,/g , ""));
+        var price2 = parseFloat($('#filter-to-price').val().replace(/,/g , "")); 
 
         currentUrl = removeParam("startprice", currentUrl);
-        currentUrl = removeParam("endprice", currentUrl);
-
+        currentUrl = removeParam("endprice", currentUrl); 
         if(!isNaN(price1) && !isNaN(price2)){ 
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
@@ -206,7 +146,7 @@
         else if(!isNaN(price1) && isNaN(price2)){
             validateRedTextBox('#filter-to-price'); 
         }
-        else if(price1 > price2){
+        else if(price1 > price2){ 
             validateRedTextBox("#filter-from-price,#filter-to-price");  
         }
         else{
@@ -279,131 +219,229 @@
     var typeView = $('#hidden-typeView').val(); 
     var emptySearch = $('#hidden-emptySearch').val();
     var loadUrl = $('#hidden-loadUrl').val();
-
-    var page = 1; 
+    var allQueryString = $('#hidden-queryString').val();
+    var currentSegment = $("#hidden-segment").val();
+ 
     var lastPage = $("#hidden-totalPage").val(); 
     var canRequestAjax = true;
-    var isEmptySearch = emptySearch != "" ? false : true; 
     var lastScroll = 0;
+    var isScrollUp = false;
 
     var csrftoken = $("meta[name='csrf-token']").attr('content');
-    var csrfname = $("meta[name='csrf-name']").attr('content');
-    var existingArray = [page];
-    var currentExistingPage = page; 
-    var betweenNumbers = []; 
+    var csrfname = $("meta[name='csrf-name']").attr('content');  
+
+    var $body = $('body');
 
     $(window).scroll(function(event) {
-        var st = $(this).scrollTop();
-        if(st > lastScroll){
-            // upscroll code
-            if ($(window).scrollTop() + 700 > $(document).height() - $(window).height()) {
-                if (canRequestAjax === true && isEmptySearch === false) {
-                    isEmptySearch = true;
-                    page++;
-                    if($('.search-results-container > #page-'+ page).length <= 0
-                       && $.inArray(existingArray, page) == -1){ 
-                        var closestNumber = getClosestNumber(existingArray, page);
-                        var appendString = '<div class="row loading-row" id="page-'+page+'">\
-                            <div class="loading-bar-container">\
-                                <span class="loading-label">\
-                                    Loading page '+page+' of '+lastPage+'\
-                                </span> \
-                                <div class="outer-progress-box" style="">\
-                                    <div id="loading-box"></div>\
-                                </div>\
-                            </div>\
-                        </div>';
+        var scroll = $(this).scrollTop(); 
+        var heightLimit = 360;
+        if(scroll < lastScroll){
+            isScrollUp = true;
+            var currentPage = parseInt($(".nav li.active > a").text().trim());
+            var requestPage = currentPage - 2;
+            var presentPage = currentPage - 1;
+            var element = $('.search-results-container'); 
+            var appendString = '<div class="group-container row loading-row" data-id="'+presentPage+'" id="page-'+presentPage+'">\
+                <div class="loading-bar-container">\
+                    <span class="loading-label">\
+                        Loading page '+presentPage+' of '+lastPage+'\
+                    </span> \
+                    <div class="outer-progress-box" style="">\
+                        <div id="loading-box"></div>\
+                    </div>\
+                </div>\
+            </div>';
+            var hiddenElement = $('#div-holder > #page-'+presentPage);
 
-                        if(page <= lastPage){
-                            if(closestNumber < page){
-                                $('.search-results-container > #page-'+ closestNumber).after(appendString);
-                            }
-                            else{
-                                $('.search-results-container > #page-'+ closestNumber).before(appendString);
-                            }
-
-                            $.ajax({
-                                url: loadUrl+'&typeview='+typeView+'&page='+(page - 1),
-                                type: 'get', 
-                                dataType: 'json',
-                                success: function(response) {
-                                    if(response.count > 0){
-                                        if($('.search-results-container > #page-'+ page).length <= 0
-                                           || $('.search-results-container > #page-'+ page).hasClass('loading-row')){
-                                            $('.search-results-container > #page-'+ page).replaceWith(response.view);
-                                        }
-                                        isEmptySearch = false;
-                                    }
-                                }
-                            });
-                        }
-                    }
-                    existingArray.push(page);
+            if (scroll <=  heightLimit) { 
+                if(canRequestAjax && presentPage >= 1
+                   && $('.search-results-container > #page-'+presentPage).length <= 0){ 
+                    canRequestAjax = false; 
+                    element.prepend(appendString);
                     $('[data-spy="scroll"]').each(function () {
-                        var $spy = $(this).scrollspy('refresh');
+                        var $spy = $(this).scrollspy('refresh')
                     });
+
+                    if(hiddenElement.length <= 0){
+                        $.ajax({
+                            url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
+                            type: 'get', 
+                            dataType: 'json', 
+                            success: function(response) {
+                                if (response.count > 0){
+                                    $('.search-results-container > #page-'+presentPage).replaceWith(response.view);
+                                    $('#div-holder').append(response.view);
+                                    window.scrollTo(0, $(window).scrollTop()+$('.search-results-container > #page-'+ currentPage).height() - 100)
+                                    canRequestAjax = true;
+                                    $('[data-spy="scroll"]').each(function () {
+                                        var $spy = $(this).scrollspy('refresh')
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        $('.search-results-container > #page-'+presentPage)
+                            .removeClass('loading-row')
+                            .html(hiddenElement.html()); 
+                        window.scrollTo(0, $(window).scrollTop()+$('.search-results-container > #page-'+ currentPage).height() - 100)
+                        $('[data-spy="scroll"]').each(function () {
+                            var $spy = $(this).scrollspy('refresh')
+                        });
+                        canRequestAjax = true;
+                    }
                 }
             }
         }
-        lastScroll = st;
+        else{
+            isScrollUp = false;
+        }
+        lastScroll = scroll;
     });
     // END OF INFINITE SCROLLING FUNCTION
+    var getHeightSearch = $(window).height();
+    var getHeightFilter = $("#filter-panel-container").height();
+    var offsetTopData = 0;
 
-    $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}});
-    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
-    $('body').attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','0'); 
-    $('body').scrollspy({target: "#myScrollspy"});
+    if(getHeightSearch < getHeightFilter){
+         var offsetTopData = getHeightSearch - getHeightFilter -50;
+    }
+
+    $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}}); 
+    $.stickysidebarscroll("#filter-panel-container",{offset: {top: offsetTopData, bottom: 100}});
+    $body.attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','700'); 
+    $body.scrollspy({
+        target: "#myScrollspy", 
+        offset: 700
+    }); 
+
     $("#simplePagination").pagination({
         pages: lastPage, 
         displayedPages: 9,
     });
 
-    $('#myScrollspy').on('activate.bs.scrollspy', function () {
+    $('#myScrollspy').on('activate.bs.scrollspy', function () { 
         var currentPageNumber = parseInt($(".nav li.active > a").text().trim()); 
-        if(currentExistingPage > currentPageNumber 
-            && currentExistingPage - 1 != currentPageNumber 
-            && canRequestAjax) {
-            for (var i = currentPageNumber + 1; i <  currentExistingPage; i++) { 
-                if ($.inArray(existingArray, i) == -1
-                    && ($('.search-results-container > #page-'+ i).length <= 0 
-                        || $('.search-results-container > #page-'+ i).hasClass('loading-row'))){
-                    requestPage(i, false);
-                }
-            } 
-        }
-        else if($('.search-results-container > #page-'+ currentPageNumber).hasClass('loading-row')
-                && canRequestAjax){
-            requestDivBefore(currentPageNumber);
-            requestPage(currentPageNumber, false);
-        }
+        var afterPage = currentPageNumber + 1; 
+        var requestPage = currentPageNumber - 1; 
+        var appendString = '<div class="group-container row loading-row" data-id="'+currentPageNumber+'" id="page-'+currentPageNumber+'">\
+            <div class="loading-bar-container">\
+                <span class="loading-label">\
+                    Loading page '+currentPageNumber+' of '+lastPage+'\
+                </span> \
+                <div class="outer-progress-box" style="">\
+                    <div id="loading-box"></div>\
+                </div>\
+            </div>\
+        </div>';
+        var appendAfterString = '<div class="group-container row loading-row" data-id="'+afterPage+'" id="page-'+afterPage+'"></div>';
+        var hiddenElement = $('#div-holder > #page-'+currentPageNumber);
+
+        if(isScrollUp == false && canRequestAjax
+           && $('.search-results-container > #page-'+currentPageNumber).hasClass('loading-row')){
+            $('.search-results-container > #page-'+currentPageNumber).replaceWith(appendString);
+            $('[data-spy="scroll"]').each(function () {
+                var $spy = $(this).scrollspy('refresh')
+            });
+            canRequestAjax = false;
+            if(hiddenElement.length <= 0){
+                $.ajax({
+                    url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
+                    type: 'get', 
+                    dataType: 'json', 
+                    success: function(response) { 
+                        if(response.count > 0){  
+                            $('.search-results-container > #page-'+currentPageNumber).replaceWith(response.view);
+                            $('#div-holder').append(response.view);
+                            $('.search-results-container').append(appendAfterString);
+                            $('[data-spy="scroll"]').each(function () {
+                                var $spy = $(this).scrollspy('refresh');
+                            });
+                        }
+                        canRequestAjax = true;
+                    }
+                });
+            }
+            else{
+                $('.search-results-container > #page-'+currentPageNumber)
+                    .removeClass('loading-row')
+                    .html(hiddenElement.html());
+                $('.search-results-container').append(appendAfterString);
+                $('[data-spy="scroll"]').each(function () {
+                    var $spy = $(this).scrollspy('refresh')
+                });
+                canRequestAjax = true;
+            }
+        } 
  
-        currentExistingPage = currentPageNumber;
+        window.history.replaceState(null, null, currentSegment+'?'+allQueryString+'#page-'+currentPageNumber); 
         $('#simplePagination').pagination('selectPage', currentPageNumber);
     });
+
+    $(document).on('click',".page-link",function () {
+        var currentPageNumber = parseInt($(this).html().trim()); 
+        var afterPage = currentPageNumber + 1; 
+        var requestPage = currentPageNumber - 1; 
+        var mainElement = $('.search-results-container > #page-'+ currentPageNumber);
+        var hiddenElement = $('#div-holder > #page-'+currentPageNumber);
+        $('.individual').removeClass('active');
+        $('.individual[data-page="'+currentPageNumber+'"]').addClass('active');
+        $('#simplePagination').pagination('selectPage', currentPageNumber);
+
+        if(isNaN(currentPageNumber) === false){ 
+            appendString = '<div class="row loading-row" id="page-'+currentPageNumber+'">\
+                <div class="loading-bar-container">\
+                    <span class="loading-label">\
+                        Loading page '+currentPageNumber+' of '+lastPage+'\
+                    </span> \
+                    <div class="outer-progress-box" style="">\
+                        <div id="loading-box"></div>\
+                    </div>\
+                </div>\
+            </div>';
+            var appendAfterString = '<div class="group-container row loading-row" data-id="'+afterPage+'" id="page-'+afterPage+'"></div>';
+
+            $('.search-results-container').html(appendString);
+            $('[data-spy="scroll"]').each(function () {
+                var $spy = $(this).scrollspy('refresh')
+            });
+            canRequestAjax = false;
+            if(hiddenElement.length <= 0){
+                $.ajax({
+                    url: loadUrl+'&typeview='+typeView+'&page='+requestPage,
+                    type: 'get', 
+                    dataType: 'json', 
+                    success: function(response) { 
+                        if(response.count > 0){  
+                            $('.search-results-container > #page-'+currentPageNumber).replaceWith(response.view);
+                            $('#div-holder').append(response.view);
+                            $('.search-results-container').append(appendAfterString);
+                            $('[data-spy="scroll"]').each(function () {
+                                var $spy = $(this).scrollspy('refresh')
+                            });
+                        }
+                        canRequestAjax = true;
+                    }
+                }); 
+            }
+            else{ 
+                $('.search-results-container > #page-'+currentPageNumber)
+                    .removeClass('loading-row')
+                    .html(hiddenElement.html());
+                $('.search-results-container').append(appendAfterString);
+                $('[data-spy="scroll"]').each(function () {
+                    var $spy = $(this).scrollspy('refresh')
+                });
+                canRequestAjax = true;
+            }
+        } 
+    }); 
 
     $(document).ready(function(){
         if(window.location.hash) {
             var hash = window.location.hash.substring(1);
             $('.page-link[href="#'+hash+'"]').trigger('click'); 
         } 
-    });
-
-    $(document).on('click',".page-link",function () {
-        var currentPageNumber = parseInt($(this).html().trim()); 
-        if(isNaN(currentPageNumber) === false){
-            currentExistingPage = currentPageNumber;
-            canRequestAjax = false;
-
-            requestDivBefore(currentPageNumber);
-            if($('.search-results-container > #page-'+ currentPageNumber).length <= 0
-                || $('.search-results-container > #page-'+ currentPageNumber).hasClass('loading-row')){
-                requestPage(currentPageNumber, true); 
-            }
-            else{
-                scrollToElement($('.search-results-container > #page-'+ currentPageNumber));
-                page = Math.max.apply(Math,existingArray) - 1;
-            }
-        }
     });
 
     $( ".icon-list" ).click(function() { 
@@ -472,7 +510,47 @@
         }, index * 100);
     });
 
+    var $window = $(window);
+    $window.on('load resize', function() {
+        var table = $(".search-item-list-table");
+        var windowSearch = $(window).width();
+        if(windowSearch <= 1025){
+            var mo = windowSearch - 724;
+            $(".search-meta-hand").css("width", mo);
+        }
 
+        if(windowSearch <= 769){
+            var mo = windowSearch - 161;
+            $(".search-meta-hand").css("width", mo);
+        }
+
+        if(windowSearch <= 598){
+            var mo = windowSearch - 141;
+            $(".search-meta-hand").css("width", mo);
+        }
+
+        if(windowSearch > 1025){
+            $(".search-meta-hand").css("width", "441px");
+        }
+
+        if(windowSearch > 769){
+            $(".simplemodal-close").trigger("click");
+        }
+    });
+
+    $( ".list-filter-search" ).clone(true).appendTo( ".filter-modal");
+
+    $('.col-filter').click(function (e) {
+        $('.filter-modal').modal();
+        $('.simplemodal-container').addClass("filter-modal-container");
+        return false;
+    });
+
+    $('.col-categories').click(function (e) {
+        $('.category-modal').modal();
+        $('.simplemodal-container').addClass("filter-modal-container");
+        return false;
+    });
 }(jQuery));
 
 

@@ -102,12 +102,6 @@ class EsCat
      */
     private $image = '';
 
-
-    /**
-     *  @var integer
-     */
-    const MAIN_PARENT_CATEGORY = 1;
-
     /**
      * Get idCat
      *
