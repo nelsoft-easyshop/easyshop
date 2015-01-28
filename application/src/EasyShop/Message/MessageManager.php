@@ -157,21 +157,20 @@ class MessageManager {
 
     /**
      * returns the valid host for chat messaging
+     *
+     * @param boolean $isBaseUrlOnly
      * @return string
      */
-    public function getChatHost()
+    public function getChatHost($isBaseUrlOnly = false)
     {
         $host = trim($this->jsServerConfig['HOST']);
         if($this->localConfig->isConfigFileExists()) {
             $configInternalIp = $this->localConfig->getConfigValue('internal_ip');           
-            if(strlen($configInternalIp) > 0){
+            if(strlen($configInternalIp) > 0 && !$isBaseUrlOnly){
                 $host = $configInternalIp;
             }
             else{
-                $configBaseUrl = $this->localConfig->getConfigValue('base_url');
-                if(strlen($configBaseUrl) > 0) {
-                    $host = $configBaseUrl;
-                }
+                $host = base_url();
             }            
         }
         

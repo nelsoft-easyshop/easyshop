@@ -35,7 +35,7 @@ class Header_decorator extends Viewdecorator
                                        ->getUnreadMessageCount($memberId);
             $cart = array_values($cartManager->getValidatedCartContents($memberId));
             $cartSize = $cartImplementation->getSize(true);
-            $chatServerHost = $messageManager->getChatHost();
+            $chatServerHost = $messageManager->getChatHost(true);
             $chatServerPort = $messageManager->getChatPort();
         }
 
