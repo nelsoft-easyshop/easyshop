@@ -83,7 +83,13 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.upload-step1.css':
                         ['web/assets/css/sell_item.css',
                         'web/assets/css/bootstrap.css', 
-                        'web/assets/css/bootstrap-mods.css']
+                        'web/assets/css/bootstrap-mods.css'],
+                    'web/assets/css/min-easyshop.product-search-by-category.css':
+                        ['web/assets/css/font-awesome/css/font-awesome.css',
+                         'web/assets/css/easy-icons/easy-icons.css',
+                         'web/assets/css/product-search-new.css',
+                         'web/assets/css/owl.carousel.css',
+                         'web/assets/css/jquery.bxslider.css']       
                 }
             },
         }
