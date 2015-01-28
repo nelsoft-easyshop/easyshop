@@ -96,6 +96,16 @@
         document.cookie = cookie;
     }
 
+
+    var replaceNumberWithCommas = function(thisnumber){
+        //Seperates the components of the number
+        var n= thisnumber.toString().split(".");
+        //Comma-fies the first part
+        n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        //Combines the two sections
+        return n.join(".");
+    }
+
     $(".btn-add-to-cart").on("click", function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -121,14 +131,36 @@
         });
     });
     
+    $( ".price-field" ).keypress(function(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode != 46 && charCode > 31
+        && (charCode < 48 || charCode > 57)){
+            return false;
+        }
+        validateWhiteTextBox(this);
+
+        return true;
+    });
+
+    $(document).on('change',".price-field",function () {
+        var priceval = this.value.replace(new RegExp(",", "g"), '');
+        var v = parseFloat(priceval);
+        var tempval;
+        if (isNaN(v)) {
+            this.value = '';
+        }
+        else {
+            tempval = Math.abs(v);
+            this.value = replaceNumberWithCommas(tempval.toFixed(2));
+        }
+    });
 
     $('.btn-filter-price').click(function() { 
-        var price1 = parseFloat($('#filter-from-price').val());
-        var price2 = parseFloat($('#filter-to-price').val()); 
+        var price1 = parseFloat($('#filter-from-price').val().replace(/,/g , ""));
+        var price2 = parseFloat($('#filter-to-price').val().replace(/,/g , "")); 
 
         currentUrl = removeParam("startprice", currentUrl);
-        currentUrl = removeParam("endprice", currentUrl);
-
+        currentUrl = removeParam("endprice", currentUrl); 
         if(!isNaN(price1) && !isNaN(price2)){ 
             currentUrl = currentUrl +'&startprice='+ price1 +'&endprice='+price2;
         }
@@ -139,7 +171,7 @@
         else if(!isNaN(price1) && isNaN(price2)){
             validateRedTextBox('#filter-to-price'); 
         }
-        else if(price1 > price2){
+        else if(price1 > price2){ 
             validateRedTextBox("#filter-from-price,#filter-to-price");  
         }
         else{
