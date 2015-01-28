@@ -45,7 +45,7 @@ class MessageController extends MY_Controller
         $data = [
             'result' => $this->messageManager->getAllMessage($this->userId),
             'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId),
-            'chatServerHost' => $this->messageManager->getChatHost(),
+            'chatServerHost' => $this->messageManager->getChatHost(true),
             'chatServerPort' => $this->messageManager->getChatPort()
         ];
         $title = !isset($messages['unread_msgs']) || (int) $messages['unread_msgs'] === 0
