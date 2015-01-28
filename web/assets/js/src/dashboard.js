@@ -1313,6 +1313,12 @@
         var form = thisbtn.closest('form');
         var thismethod = thisbtn.siblings('input[name="method"]');
         var status = thisbtn.closest('.item-list-panel').find('.status-class');
+        var hiddenInputs = thisbtn.closest('.item-list-panel').find('.order-product-ids');
+        var orderProductIds = hiddenInputs.map(function() {
+            return this.value;
+        }).get().join('-');
+        thisbtn.closest('.item-list-panel').find('input[name="order_product"]').val(orderProductIds);
+
         var serializedData = $(form).serializeArray();
         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
 
