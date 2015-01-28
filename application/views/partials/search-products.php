@@ -1,7 +1,5 @@
 
-
 <div class="group-container row" data-id="<?=$currentPage?>" id="page-<?=$currentPage?>">
-
     <?php foreach ($products as $value): ?>
     <?php
         $productEntity = $value;
@@ -62,7 +60,9 @@
                     Add to cart
                 </button>
                 <div class="search-item-seller-cont pull-right">
-                    <img src="<?=$ownerAvatar;?>" class="search-item-seller-img" />
+                    <a href="/<?=$sellerSlug;?>" >
+                        <img src="<?=$ownerAvatar;?>" class="search-item-seller-img" />
+                    </a>
                 </div>
             </div>
             <table class="search-item-list-table">
@@ -99,7 +99,9 @@
                                     <div class="col-md-6">
                                         <div class="search-item-seller-img-list">
                                             <div class="search-item-seller-cont">
-                                                <img src="<?=$ownerAvatar; ?>" class="search-item-seller-img" />
+                                                <a href="/<?=$sellerSlug;?>">
+                                                    <img src="<?=$ownerAvatar; ?>" class="search-item-seller-img" />
+                                                </a>
                                             </div>
                                         </div>
                                         <a href="/<?=$sellerSlug;?>" class="search-item-seller-name">
