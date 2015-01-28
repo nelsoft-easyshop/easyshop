@@ -121,7 +121,11 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.christmas-promo.css':
                         ['web/assets/css/promo-css.css'],
                     'web/assets/css/min-easyshop.post-and-win.css':
-                        ['web/assets/css/style.css']
+                        ['web/assets/css/style.css'],
+                    'web/assets/css/min-easyshop.scratch-to-win.css':
+                        ['web/assets/css/jquery.bxslider.css',
+                         'web/assets/css/promo.css',   
+                         'web/assets/css/bootstrap.css']
                 }
             },
         }
