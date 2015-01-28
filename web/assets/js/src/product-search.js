@@ -1,5 +1,5 @@
 (function ($) {
-
+    
     var validateRedTextBox = function(idclass)
     {
         $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
@@ -290,14 +290,22 @@
         lastScroll = scroll;
     });
     // END OF INFINITE SCROLLING FUNCTION
+    var getHeightSearch = $(window).height();
+    var getHeightFilter = $("#filter-panel-container").height();
+    var offsetTopData = 0;
 
-    $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}});
-    $.stickysidebarscroll("#filter-panel-container",{offset: {top: -60, bottom: 600}});
+    if(getHeightSearch < getHeightFilter){
+         var offsetTopData = getHeightSearch - getHeightFilter -50;
+    }
+
+    $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}}); 
+    $.stickysidebarscroll("#filter-panel-container",{offset: {top: offsetTopData, bottom: 100}});
     $body.attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','700'); 
     $body.scrollspy({
         target: "#myScrollspy", 
         offset: 700
-    });
+    }); 
+
     $("#simplePagination").pagination({
         pages: lastPage, 
         displayedPages: 9,
@@ -493,7 +501,47 @@
         }, index * 100);
     });
 
+    var $window = $(window);
+    $window.on('load resize', function() {
+        var table = $(".search-item-list-table");
+        var windowSearch = $(window).width();
+        if(windowSearch <= 1025){
+            var mo = windowSearch - 724;
+            $(".search-meta-hand").css("width", mo);
+        }
 
+        if(windowSearch <= 769){
+            var mo = windowSearch - 161;
+            $(".search-meta-hand").css("width", mo);
+        }
+
+        if(windowSearch <= 598){
+            var mo = windowSearch - 141;
+            $(".search-meta-hand").css("width", mo);
+        }
+
+        if(windowSearch > 1025){
+            $(".search-meta-hand").css("width", "441px");
+        }
+
+        if(windowSearch > 769){
+            $(".simplemodal-close").trigger("click");
+        }
+    });
+
+    $( ".list-filter-search" ).clone(true).appendTo( ".filter-modal");
+
+    $('.col-filter').click(function (e) {
+        $('.filter-modal').modal();
+        $('.simplemodal-container').addClass("filter-modal-container");
+        return false;
+    });
+
+    $('.col-categories').click(function (e) {
+        $('.category-modal').modal();
+        $('.simplemodal-container').addClass("filter-modal-container");
+        return false;
+    });
 }(jQuery));
 
 

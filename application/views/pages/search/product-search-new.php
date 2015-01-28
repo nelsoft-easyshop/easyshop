@@ -217,7 +217,37 @@
         <!---END-->
     </div>
 </section> 
-
+<div class="mobile-left-wing">
+    <div class="row row-left-wing">
+        <a href="#">
+            <div class="col-xs-6 col-categories">
+                Sub-Categories
+            </div>
+            
+        </a>
+        <a href="">
+            <div class="col-xs-6 col-filter">
+                Filter
+            </div>
+        </a>
+    </div>
+</div>
+<div class="filter-modal">
+    <h1>Filter Products</h1>
+    
+</div>
+<div class="category-modal">
+    <h1>Sub-Categories</h1>
+    <ul class="list-unstyled list-category">
+        <?php foreach ($categories as $category): ?>
+            <a href="/category/<?=$category->getSlug();?>" class="color-default tab_categories">
+                <li>
+                    <?=html_escape($category->getName());?> 
+                </li>
+            </a>
+        <?php endforeach; ?>
+    </ul>
+</div>
 <div id="hidden-elements">
     <input type="hidden" id="hidden-queryString" value="<?=$_SERVER['QUERY_STRING'];?>" />
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
@@ -233,6 +263,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/bootstrap.js"></script> 
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
     <script src="/assets/js/src/vendor/jquery.simplePagination.js"></script>
     <script src="/assets/js/src/product-search.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
