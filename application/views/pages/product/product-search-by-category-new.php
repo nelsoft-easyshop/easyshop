@@ -81,9 +81,9 @@
 
 <section id="parallax-2" class="bg-search-section color-default">
 <br/>
-    <div class="container-non-responsive">
+    <div class="container">
         <div class="row">
-            <div class="col-xs-3">
+            <div class="col-md-3 search-left-wing">
                 <div class="panel-group panel-category border-0" id="category">
                     <div class="panel panel-default panel-left-wing border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
@@ -162,7 +162,7 @@
                                         </table>
                                     </li>
                                     <?php foreach ($attributes as $attrName => $attrListValue):?>
-                                    <li>
+                                    <li class="meo">
                                         <p class="p-filter-name">By <?=html_escape($attrName); ?></p>
                                         <ul class="list-unstyled">
                                             <?php foreach ($attrListValue as $value):?>
@@ -174,7 +174,7 @@
                                                 </li>
                                             <?php endforeach; ?>
                                         </ul>
-                                    </li> 
+                                    </li>
                                     <?php endforeach; ?>
                                 </ul>
                             </div>
@@ -183,7 +183,7 @@
                 </div>
             </div>
             
-            <div class="col-xs-9">
+            <div class="col-md-9">
                 <div class="search-header">
                     <h3>
                         <?=html_escape($categoryName);?> <span class="category-count-item">(<?=$productCount; ?>)</span>
@@ -234,6 +234,322 @@
        </div>
     </div>
 </section>
+<div class="mobile-left-wing">
+    <div class="row row-left-wing">
+        <a href="#">
+            <div class="col-xs-6 col-categories">
+                Sub-Categories
+            </div>
+            
+        </a>
+        <a href="">
+            <div class="col-xs-6 col-filter">
+                Filter
+            </div>
+        </a>
+    </div>
+</div>
+<div class="filter-modal">
+    <h1>Filter Products</h1>
+</div>
+<div class="category-modal">
+    <h1>Sub-Categories</h1>
+    <ul class="list-unstyled list-category">
+        <?php foreach ($categories as $category): ?>
+            <a href="/category/<?=$category->getSlug();?>" class="color-default tab_categories">
+                <li>
+                    <?=html_escape($category->getName());?> 
+                </li>
+            </a>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<!-- Display for non-item category-->
+<!--
+<section class="bg-search-section color-default">
+    <div class="container">
+        <br/><br/>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="no-search-resul-title">
+                    There are no item to display for <strong>Clothing &amp; Accessories</strong> category.
+                </h3>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Browse our categories here:</h4>
+                <div class="panel-group panel-group-cat" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default panel-cat no-radius">
+                        <div class="panel-heading no-radius panel-cat-head" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#cat-1" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);"></span>
+                                    Clothing &amp; Accessories
+                                    <span class="fa panel-stat fa-lg pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="cat-1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body no-radius panel-cat-sub">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel panel-default panel-cat">
+                        <div class="panel-heading panel-cat-head" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#cat-2" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/electronics-gadgets.png);"></span>
+                                    Electronics &amp; Gadgets
+                                    <span class="fa panel-stat fa-lg pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="cat-2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body panel-cat-sub">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="#">Men's Clothing</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel panel-default panel-cat">
+                        <div class="panel-heading panel-cat-head" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#cat-3" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/food-beverages.png);"></span>
+                                    Food &amp; Beverages
+                                    <span class="fa panel-stat fa-lg pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="cat-3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body panel-cat-sub">
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel panel-default panel-cat">
+                        <div class="panel-heading panel-cat-head" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#cat-4" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/furniture-home-garden.png);"></span>
+                                    Furniture, Home &amp; Garden
+                                    <span class="fa panel-stat fa-lg pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="cat-4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body panel-cat-sub">
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="panel panel-default panel-cat">
+                        <div class="panel-heading panel-cat-head" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#cat-5" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/jewellery-watches.png);"></span>
+                                    Jewellery &amp; Watches
+                                    <span class="fa panel-stat fa-lg pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="cat-5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body panel-cat-sub">
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <div class="panel panel-default panel-cat">
+                        <div class="panel-heading panel-cat-head" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#cat-6" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="search-category-icon" style="background: url(/assets/images/categories/icon-categories/clothing-accessories.png);"></span>
+                                    Clothing &amp; Accessories
+                                    <span class="fa panel-stat fa-lg pull-right"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="cat-6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body panel-cat-sub">
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="#">Men's Clothing</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+-->
+<!--END-->
 
 <div id="hidden-elements">
     <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
@@ -245,6 +561,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/bootstrap.js"></script>
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
     <script src="/assets/js/src/vendor/owl.carousel.min.js"></script>
     <script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
