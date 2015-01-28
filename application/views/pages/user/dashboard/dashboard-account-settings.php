@@ -189,6 +189,8 @@
     </div>
 </div>
 
+<input type="hidden" id="email-cooldown-mins" value="<?php echo \EasyShop\Account\AccountManager::EMAIL_COOLDOWN_DURATION_IN_MINUTES ?>"/>
+
 
 <div id="activated-modal" style="display:none; height: 100px;">
     <h2 class="deactivate-modal-title">Deactivated Account</h2>

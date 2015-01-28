@@ -68,49 +68,49 @@ class Kernel
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsMemberListener(
+                new \EasyShop\Doctrine\Subscribers\EsMemberSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsAddressListener(
+                new \EasyShop\Doctrine\Subscribers\EsAddressSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductReviewListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductReviewSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsMemberFeedbackListener(
+                new \EasyShop\Doctrine\Subscribers\EsMemberFeedbackSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsOrderListener(
+                new \EasyShop\Doctrine\Subscribers\EsOrderSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductShippingCommentListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductShippingCommentSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsOrderProductListener(
+                new \EasyShop\Doctrine\Subscribers\EsOrderProductSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
@@ -184,13 +184,25 @@ class Kernel
             $formErrorHelper = $container['form_error_helper'];
             $stringHelper = $container['string_utility'];
             $httpRequest = $container['http_request'];
+            $emailNotification  = $container['email_notification'];   
+            $parser = new \CI_Parser();
+            $encrypter = new \CI_Encrypt();
+            $configLoader = $container['config_loader'];
+            $languageLoader = $container['language_loader'];
+            $hashUtitility = $container['hash_utility'];
             return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
                                                         $userManager, 
                                                         $formFactory, 
                                                         $formValidation, 
                                                         $formErrorHelper,
                                                         $stringHelper,
-                                                        $httpRequest);        
+                                                        $httpRequest,
+                                                        $emailNotification,
+                                                        $parser,$encrypter,
+                                                        $configLoader,
+                                                        $languageLoader,
+                                                        $hashUtitility
+                                                        );        
         };
 
         $jsServerConfig = require APPPATH . 'config/param/js_config.php';
@@ -294,16 +306,18 @@ class Kernel
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
             $sphinxClient = $container['sphinx_client'];
+            $userManager = $container['user_manager'];
 
             return new \EasyShop\Search\SearchProduct(
-                                                        $em
-                                                        ,$collectionHelper
-                                                        ,$productManager
-                                                        ,$categoryManager
-                                                        ,$httpRequest
-                                                        ,$promoManager
-                                                        ,$configLoader
-                                                        ,$sphinxClient
+                                                        $em,
+                                                        $collectionHelper,
+                                                        $productManager,
+                                                        $categoryManager,
+                                                        $httpRequest,
+                                                        $promoManager,
+                                                        $configLoader,
+                                                        $sphinxClient,
+                                                        $userManager
                                                     );
         };
 

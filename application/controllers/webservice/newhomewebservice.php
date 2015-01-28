@@ -1253,6 +1253,7 @@ class NewHomeWebService extends MY_Controller
     {         
         if(!file_exists($this->tempHomefile)) {
             copy($this->file, $this->tempHomefile);
+            chmod($this->tempHomefile, 0766);
         }  
         $this->output
              ->set_content_type('text/plain') 

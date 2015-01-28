@@ -1219,12 +1219,19 @@
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
 
-        if( txResponseBtn.hasClass('tx_return') ) {
+        if( txResponseBtn.hasClass('tx_return') || txResponseBtn.hasClass('tx_forward')) {
+            var inputName;
             var hiddenInputs = txResponseBtn.closest('.item-list-panel').find('.order-product-ids');
             var orderProductIds = hiddenInputs.map(function() {
                 return this.value;
             }).get().join('-');
-            txResponseBtn.closest('.item-list-panel').find('input[name="seller_response"]').val(orderProductIds);
+            if (txResponseBtn.hasClass('tx_return')) {
+                inputName = 'input[name="seller_response"]';
+            }
+            else if (txResponseBtn.hasClass('tx_forward')) {
+                inputName = 'input[name="buyer_response"]';
+            }
+            txResponseBtn.closest('.item-list-panel').find(inputName).val(orderProductIds);
         }
         var serializedData = form.serializeArray();
         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
@@ -1419,6 +1426,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#ongoing-sold").on('click', ".individual, .extremes", function () {
@@ -1431,6 +1442,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#complete-bought").on('click', ".individual, .extremes", function () {
@@ -1443,6 +1458,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#complete-sold").on('click', ".individual, .extremes", function () {
@@ -1455,6 +1474,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $('#transactions').on('keypress', ".search-transaction-num", function(e) {

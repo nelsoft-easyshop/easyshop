@@ -79,7 +79,7 @@ class ProductManager
     /**
      * Codeigniter Config Loader
      *
-     * @var EasyShop\CollectionHelper\CollectionHelper
+     * @var EasyShop\ConfigLoader\ConfigLoader
      */
     private $configLoader;
 

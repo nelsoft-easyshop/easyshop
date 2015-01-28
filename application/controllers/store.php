@@ -7,6 +7,7 @@ if (!defined('BASEPATH')){
 use EasyShop\Entities\EsAddress as EsAddress; 
 use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Category\CategoryManager as CategoryManager;
+use EasyShop\Entities\EsProduct as EsProduct;
     
 class Store extends MY_Controller
 {
@@ -1051,15 +1052,15 @@ class Store extends MY_Controller
                 $orderBy = array("clickcount" => $order);
                 break;
             case 2:
-                $orderSearch = "NEW";
+                $orderSearch = EsProduct::SEARCH_SORT_NEW;
                 $orderBy = array("lastmodifieddate" => $order);
                 break;
             case 3:
-                $orderSearch = "HOT";
+                $orderSearch = EsProduct::SEARCH_SORT_HOT;
                 $orderBy = array("isHot"=>$order, "clickcount"=>$order);
                 break;
             default:
-                $orderSearch = "NULL";
+                $orderSearch = "";
                 $orderBy = array("lastmodifieddate"=>$order);
                 break;
         }
