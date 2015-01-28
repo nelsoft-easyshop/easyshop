@@ -213,6 +213,7 @@
     var emptySearch = $('#hidden-emptySearch').val();
     var loadUrl = $('#hidden-loadUrl').val();
     var allQueryString = $('#hidden-queryString').val();
+    var currentSegment = $("#hidden-segment").val();
  
     var lastPage = $("#hidden-totalPage").val(); 
     var canRequestAjax = true;
@@ -365,7 +366,7 @@
             }
         } 
  
-        window.history.replaceState(null, null, 'search.html?'+allQueryString+'#page-'+currentPageNumber); 
+        window.history.replaceState(null, null, currentSegment+'?'+allQueryString+'#page-'+currentPageNumber); 
         $('#simplePagination').pagination('selectPage', currentPageNumber);
     });
 

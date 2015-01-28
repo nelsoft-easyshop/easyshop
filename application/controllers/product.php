@@ -79,42 +79,52 @@ class product extends MY_Controller
             $getParameter['category'] = $categoryId; 
             $search = $searchProductService->getProductBySearch($getParameter);
             $response['products'] = $search['collection'];
-            $response['productCount'] = $search['count']; 
-            $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
-            $response['availableCondition'] = [];
-            if(isset($response['attributes']['Condition'])){
-                $response['availableCondition'] = $response['attributes']['Condition'];
-                unset($response['attributes']['Condition']);
-            }
-
+            $response['productCount'] = $search['count'];
             $response['totalPage'] = ceil($search['count'] / $searchProductService::PER_PAGE);
-            $paginationData = [
-                'totalPage' => $response['totalPage'],
-            ];
-            $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
-            $response['categorySlug'] = $categorySlug; 
-            $parentCategory = $esCatRepository->findBy(['parent' => $categoryId]);
-            $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false); 
             $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
-            $response['categoryHeaderData'] = $categoryHeaderData;
+            if($search['count'] > 0){
+                $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
+                $response['availableCondition'] = [];
+                if(isset($response['attributes']['Condition'])){
+                    $response['availableCondition'] = $response['attributes']['Condition'];
+                    unset($response['attributes']['Condition']);
+                }
+                $response['categoryHeaderData'] = $categoryHeaderData;
+                $productViewData = [
+                    'products' => $search['collection'],
+                    'currentPage' => 1,
+                    'isListView' => $response['isListView'],
+                ];
+                $response['productView']  = $this->load->view('partials/search-products', $productViewData, true);
+                
+                $paginationData = [
+                    'totalPage' => $response['totalPage'],
+                ];
+                $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
+                $parentCategory = $esCatRepository->findBy(['parent' => $categoryId]);
+                $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false); 
+            }
+            else{
+                $parentCategory = $esCatRepository->findBy(['parent' => EsCat::ROOT_CATEGORY_ID]);
+                $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false); 
+                
+                foreach ($response['categories'] as $key => $category) {
+                    $nextCategory = $esCatRepository->findBy(['parent' => $category->getIdCat()]);
+                    $response['categories'][$key]->nextCategory = $categoryManager->applyProtectedCategory($nextCategory, false); 
+                }
 
-            $ancestorCategories = $esCatRepository->getAncestorsWithNestedSet($categoryId); 
-            $response['breadCrumbs'] = $esCatRepository->findBy(['idCat' => $categoryId]);
-
+            }
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
                 'title' => es_string_limit(html_escape($response['categoryName']), 60, '...', ' | Easyshop.ph'), 
                 'metadescription' => es_string_limit(html_escape($categoryDescription), 60),
                 'relCanonical' => base_url().'category/'.$categorySlug ,
             ];
-
-            $productViewData = [
-                'products' => $search['collection'],
-                'currentPage' => 1,
-                'isListView' => $response['isListView'],
-            ];
-            $response['productView']  = $this->load->view('partials/search-products', $productViewData, true);
-
+            $ancestorCategories = $esCatRepository->getAncestorsWithNestedSet($categoryId);
+            $ancestorCategories[] = $categoryId;
+            $response['breadCrumbs'] = $esCatRepository->findBy(['idCat' => $ancestorCategories]);
+            $response['categorySlug'] = $categorySlug; 
+                
             $this->load->spark('decorator');  
             $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product-search-by-category-new', $response);

@@ -255,6 +255,7 @@
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
     <input type="hidden" id="hidden-totalPage" value="<?=$totalPage; ?>" />
+    <input type="hidden" id="hidden-segment" value="search.html" />
 </div> 
 
 <div id="div-holder" style="display:none">
