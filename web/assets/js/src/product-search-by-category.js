@@ -102,8 +102,7 @@
     if(searchParallaxSlide_height == 523){
         offsetPagination = 1500;
     }
-    
-    alert(offsetPagination);
+
     $(window).scroll(function () {
         var sticky_height = $('#sticky-pagination').outerHeight();
         var where_scroll = $(window).scrollTop();
