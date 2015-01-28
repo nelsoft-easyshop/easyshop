@@ -134,7 +134,18 @@ module.exports = function (grunt) {
                          'web/assets/css/bootstrap.css', 
                          'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.product-search-new.css':
-                        ['web/assets/css/product-search-new.css']             
+                        ['web/assets/css/product-search-new.css'],
+                    'web/assets/css/min-easyshop.product-search-by-searchbox.css':
+                        ['web/assets/css/bootstrap.css',
+                         'web/assets/css/bootstrap-mods.css',
+                         'web/assets/css/product_search_category.css',
+                         'web/assets/css/product_search_category_responsive.css',
+                         'web/assets/css/style_new.css']
+                     
+                     
+                  
+
+
                 }
             },
         }
