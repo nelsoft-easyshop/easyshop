@@ -166,7 +166,7 @@ html, body{
     border-radius: 4px;
     padding: 15px;
     margin-bottom: 15px;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; 
 }
 
 .search-item-container:hover{
@@ -834,6 +834,11 @@ ul.list-category-search li:last-child > .search-category-link{
 .banner-template-2 .bx-controls-direction .bx-next{
     top: -88px !important;
 }
+
+.loading-row{
+    height: 100px;
+}
+
 /* =============================================
 -----------------  responsive view --------------
 ==============================================*/
