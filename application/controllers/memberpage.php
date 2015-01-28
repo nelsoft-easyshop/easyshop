@@ -980,16 +980,8 @@ class Memberpage extends MY_Controller
                                                ]);
 
                 if ($checkOrderProductBasic) {
-                    $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['transact_num']);
-                    $seller = $this->esMemberRepo->find($data['member_id']);
-                    $esOrderProduct = $this->esOrderProductRepo
-                                           ->findOneBy([
-                                               'idOrderProduct' => $orderProductId,
-                                               'order' => $order,
-                                               'seller' => $seller
-                                           ]);
                     $isReject = $data['method'] === "reject";
-                    $rejectTransaction = $this->esOrderProductRepo->updateIsReject($isReject, $esOrderProduct);
+                    $rejectTransaction = $this->esOrderProductRepo->updateIsReject($isReject, $checkOrderProductBasic);
 
                     if ( (bool) $rejectTransaction) {
                         $historyData['order_product_id'] = $this->esOrderProductRepo->find($orderProductId);
