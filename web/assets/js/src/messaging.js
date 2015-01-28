@@ -34,7 +34,7 @@
                 var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
             }
             var recipientName = escapeHtml(Nav_msg.name);
-            if ($('#ID_'+recipientName).length == '1') { //if existing on the conve
+            if (parseInt($('#ID_'+recipientName).length) === 1) { //if existing on the conve
                 $('#ID_'+recipientName).children('.msg_message').text(Nav_msg.message);
                 $('#ID_'+recipientName).attr('data',JSON.stringify(val));
                 if (Nav_msg.unreadConversationCount != 0) {
