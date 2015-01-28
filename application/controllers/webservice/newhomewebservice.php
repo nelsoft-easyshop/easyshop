@@ -413,7 +413,7 @@ class NewHomeWebService extends MY_Controller
      *  Adds ads nodes under adSection parent node
      *  @return JSON
      */
-    public function addAdds()
+    public function addAdSection()
     {
         $awsUploader = $this->serviceContainer['aws_uploader'];         
         $imgDimensions = [
@@ -477,7 +477,7 @@ class NewHomeWebService extends MY_Controller
                 $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
             } 
 
-            if($result === true) {
+            if($result) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json); 
