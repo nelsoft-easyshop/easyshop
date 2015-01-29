@@ -22,10 +22,14 @@ class MessageController extends MY_Controller
 
     /**
      * Class Constructor
+     *
      */
     public function __construct()
     {
         parent::__construct();
+        if (!$this->session->userdata('usersession')) {
+            redirect('/', 'refresh');
+        }
         $this->em = $this->serviceContainer['entity_manager'];
         $this->messageManager = $this->serviceContainer['message_manager'];
         $this->userId = $this->session->userdata('member_id');
@@ -34,14 +38,11 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Retrieve messages
+     * Renders the inbox view
+     *
      */
     public function messages()
     {
-        if (!$this->session->userdata('usersession')) {
-            redirect('/', 'refresh');
-        }
-
         $data = [
             'result' => $this->messageManager->getAllMessage($this->userId),
             'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId),
@@ -66,9 +67,10 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Send message
-     * @Param Recipient Username
-     * @Param Message
+     * Sends a message
+     *
+     * @param string recipient
+     * @param string $msg
      */
     public function send()
     {
@@ -127,8 +129,10 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Delete Message/Conversation
-     * @Param id_msg
+     * Deletes Message/Conversation
+     *
+     * @param integer $id_msg
+     * @return json
      */
     public function delete()
     {
@@ -152,7 +156,10 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Get all message
+     * Gets all messages
+     *
+     * @param bool $isUnread
+     * @return json
      */
     public function getAllMessage()
     {
@@ -164,6 +171,8 @@ class MessageController extends MY_Controller
 
     /**
      * Update message status to seen
+     *
+     * @return json
      */
     public function updateMessageToSeen()
     {
@@ -182,7 +191,8 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Sends message from vendor page
+     * Sends a message from vendor page
+     *
      */
     public function simpleSend()
     {
@@ -198,6 +208,19 @@ class MessageController extends MY_Controller
         }
 
         redirect($redirectUrl ,'refresh');
+    }
+    
+    /**
+     * Gets the number of unread messages of the logged in user
+     *
+     * @return json
+     */
+    public function getNumberOfUnreadMessages()
+    {
+        $count = $this->serviceContainer['entity_manager']
+                       ->getRepository('EasyShop\Entities\EsMessages')
+                       ->getUnreadMessageCount($this->userId);
+        echo json_encode($count);
     }
 
 }
