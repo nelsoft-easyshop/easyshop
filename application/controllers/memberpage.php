@@ -387,8 +387,11 @@ class Memberpage extends MY_Controller
         foreach($soldTransaction["transactions"] as $value) {
             foreach ($value["product"] as $product) {
                 if(isset($product["attr"])) {
+                    $productAttrCount = 0;
+                    $attributeCount = count($product["attr"]);                    
                     foreach($product["attr"] as $attr => $attrValue ) {
-                         $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                        $productAttrCount++;
+                        $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue)).($productAttrCount === $attributeCount ? "" : " / ");
                     }
                 }
                 else {
@@ -442,8 +445,11 @@ class Memberpage extends MY_Controller
             foreach ($value["product"] as $product) {
                 $buyerName = $product["sellerStoreName"];
                 if(isset($product["attr"])) {
+                    $productAttrCount = 0;
+                    $attributeCount = count($product["attr"]);
                     foreach($product["attr"] as $attr => $attrValue ) {
-                         $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
+                         $productAttrCount++;
+                         $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue)).($productAttrCount === $attributeCount ? "" : " / ");
                     }
                 }
                 else {
@@ -485,11 +491,13 @@ class Memberpage extends MY_Controller
             foreach ($value["product"] as $product) {
                 $data = [];
                 $productSpecs = "";
-
-                if(isset($product["attr"]) && count($product["attr"] > 0)) {
-                     foreach($product["attr"] as $attr => $attrValue ) {
-                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
-                     }
+                if(isset($product["attr"]) && count($product["attr"])> 0) {
+                    $productAttrCount = 0;
+                    $attributeCount = count($product["attr"]);
+                    foreach($product["attr"] as $attr => $attrValue ) {
+                            $productAttrCount++;
+                            $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue)).($productAttrCount === $attributeCount ? "" : " / ");
+                    }
                 }
 
                 $data = [
@@ -533,9 +541,12 @@ class Memberpage extends MY_Controller
                 $data = [];   
                 $productSpecs = "";                 
                 if(isset($product["attr"]) && count($product["attr"] > 0)) {
-                     foreach($product["attr"] as $attr => $attrValue ) {
-                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))." / ";
-                     }
+                    $productAttrCount = 0;
+                    $attributeCount = count($product["attr"]);
+                    foreach($product["attr"] as $attr => $attrValue ) {
+                        $productAttrCount++;
+                        $productSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue)).($productAttrCount === $attributeCount ? "" : " / ");
+                    }
                 }
 
                 $data = [
