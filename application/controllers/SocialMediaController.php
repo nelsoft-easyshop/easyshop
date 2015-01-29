@@ -190,7 +190,7 @@ class SocialMediaController extends MY_Controller
         $data['oauthId'] = $getData['socialMediaId'];
 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/user/SocialMediaMerge', $data);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
         
@@ -308,7 +308,7 @@ class SocialMediaController extends MY_Controller
         ];
         
         $this->load->spark('decorator');    
-        $this->load->view('templates/header_new',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/user/SocialMediaRegistration', $userData);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
     }

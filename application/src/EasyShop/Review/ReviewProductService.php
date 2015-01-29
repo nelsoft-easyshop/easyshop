@@ -78,10 +78,6 @@ class ReviewProductService
 
             $productReviewReplies = $esProductReviewRepo->getReviewReplies($productId, $reviewIds);
 
-            foreach($productReviewReplies as $value) {
-                $value->setReview(html_escape($value->getReview()));
-            }
-
             $i = 0;
             foreach ($productReviews as $value) { 
                 $recentReviews[$i]['id_review'] = $value->getIdReview();
@@ -161,8 +157,8 @@ class ReviewProductService
 
         $returnArray = [
                     'datesubmitted' => $dateSubmitted->format('Y-m-d H:i:s'),
-                    'reviewUsername' => html_escape($member->getStoreName()),
-                    'review' => html_escape($review),
+                    'reviewUsername' => $member->getStoreName(),
+                    'review' => $review,
                     'userPic' => $this->userManager->getUserImage($memberId),
                     'title' => $title,
                     'rating' => $rating,
