@@ -300,9 +300,11 @@ function checkOptionValue(selector,id,value,evt)
         if(activeSelection <= 1){ 
             $(id).val(commonValue).trigger("liszt:updated");
             var attrList = attributeArray[commonValue]; 
-            $.each(attrList, function(key, value){
-                valueData.append('<option>'+value+'</option>');
-            });
+            if(typeof attrList !== 'undefined'){ 
+                $.each(attrList, function(key, value){
+                    valueData.append('<option>'+value+'</option>');
+                });
+            }
             valueData.trigger("liszt:updated");
         }
         else{ 
@@ -1196,6 +1198,7 @@ var extensionList = [];
 var imageCollection = [];
 var widthRatio = 445;
 var heightRatio = 538;
+var CropImageMaxWidth = 534;
 var totalCropImage;
 
 (function($) {
@@ -1277,7 +1280,6 @@ var totalCropImage;
                         },
                         open: function() {
                             var MainwindowHeight = $(window).height();
-                            var CropImageMaxWidth = 534;
                             $("#imageTag").css("max-width", CropImageMaxWidth);
                             $(this).parent().addClass('pop-up-fixed');
                             jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
@@ -1591,8 +1593,8 @@ var totalCropImage;
                             $(this).dialog("close");
                         }
                     },
-                    open: function() {
-                        $(this).parent().addClass('pop-up-fixed');
+                    open: function() { 
+                        $("#imageTag").css("max-width", CropImageMaxWidth);
                         jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
                             aspectRatio: widthRatio / heightRatio,
                             setSelect: [ x1 / 2, y1, x2, y2 ],
