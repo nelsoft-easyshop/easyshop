@@ -959,12 +959,10 @@ class Memberpage extends MY_Controller
             'method' => $this->input->post('method')
         ];
         $data['order_product'][0] = $this->input->post('order_product');
-
         if ( (bool) stripos($data['order_product'][0], '-')) {
             $productIds = explode('-', $data['order_product'][0]);
             $data['order_product'] = $productIds;
         }
-
         $serverResponse = [
             'result' => 'fail',
             'error' => 'Transaction does not exist.'
@@ -978,11 +976,9 @@ class Memberpage extends MY_Controller
                                                    'order' => $data['transact_num'],
                                                    'seller' => $data['member_id']
                                                ]);
-
                 if ($checkOrderProductBasic) {
                     $isReject = $data['method'] === "reject";
                     $rejectTransaction = $this->esOrderProductRepo->updateIsReject($isReject, $checkOrderProductBasic);
-
                     if ( (bool) $rejectTransaction) {
                         $historyData['order_product_id'] = $this->esOrderProductRepo->find($orderProductId);
                         if ($data['method'] === 'reject') {
@@ -997,7 +993,6 @@ class Memberpage extends MY_Controller
                     }
                     $serverResponse['result'] = $rejectTransaction ? 'success' : 'fail';
                     $serverResponse['error'] = $rejectTransaction ? '' : 'Failed to update database.';
-
                 }
             }
         }
