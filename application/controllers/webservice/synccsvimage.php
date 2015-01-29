@@ -269,26 +269,27 @@ class SyncCsvImage extends MY_Controller
             $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o".".".$values->getProductImageType();
             $imageDirectory = "./".$this->config->item('product_img_directory')."$filename/other/".$newfilename;
             $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
-            if(copy($path, $imageDirectory)){
-                $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
+                if(copy($path, $imageDirectory)){
+                    $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
 
-                $productImage = new EsProductImage();     
-                $productImage->setProductImagePath($imageDirectory);
-                $productImage->setProductImageType($values->getProductImageType());
-                $productImage->setProduct($productObject);
-                $this->em->persist($productImage);
-                $this->em->flush();
+                    $productImage = new EsProductImage();     
+                    $productImage->setProductImagePath($imageDirectory);
+                    $productImage->setProductImageType($values->getProductImageType());
+                    $productImage->setProduct($productObject);
+                    $this->em->persist($productImage);
+                    $this->em->flush();
 
-                $productAttrDetail = $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
-                                                ->findOneBy(['productImgId' => $attr["image_id"]]);
-                $productAttrDetail->setProductImgId($productImage->getIdProductImage());
-                $this->em->flush();
+                    $productAttrDetail = $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
+                                                    ->findOneBy(['productImgId' => $attr["image_id"]]);
+                    $productAttrDetail->setProductImgId($productImage->getIdProductImage());
+                    $this->em->flush();
 
-                $imageUtility = $this->serviceContainer['image_utility'];                
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."small",$imageDimensions["productImagesSizes"]["small"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview",$imageDimensions["productImagesSizes"]["categoryview"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail",$imageDimensions["productImagesSizes"]["thumbnail"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory,$imageDimensions["productImagesSizes"]["usersize"]);        }                    
+                    $imageUtility = $this->serviceContainer['image_utility'];                
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."small",$imageDimensions["productImagesSizes"]["small"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview",$imageDimensions["productImagesSizes"]["categoryview"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail",$imageDimensions["productImagesSizes"]["thumbnail"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory,$imageDimensions["productImagesSizes"]["usersize"]);        
+                }                    
             }
     }
 
