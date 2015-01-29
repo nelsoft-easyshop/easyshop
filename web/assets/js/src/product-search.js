@@ -224,7 +224,7 @@
     var lastPage = $("#hidden-totalPage").val(); 
     var canRequestAjax = true;
     var lastScroll = 0;
-    var isScrollUp = false;
+    var isScrollUp = false; 
 
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');  
@@ -345,6 +345,10 @@
         pages: lastPage, 
         displayedPages: 9,
     });
+
+    if(lastPage <= 1){
+        $('#sticky-pagination').hide();
+    }
 
     $('#myScrollspy').on('activate.bs.scrollspy', function () { 
         var currentPageNumber = parseInt($(".nav li.active > a").text().trim()); 
