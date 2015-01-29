@@ -9,12 +9,7 @@
         socket.on('send message', function( data ) {
             onFocusReload(data.message);
         });
-        setAccountOnline($userInfo.data('store-name'));
     });
-
-    var setAccountOnline = function(memberId) {
-        socket.emit('set account online', memberId);
-    };
 
     /**
      * @param {type} msgs
