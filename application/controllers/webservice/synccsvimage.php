@@ -21,12 +21,6 @@ class SyncCsvImage extends MY_Controller
      */
     private $productManager;  
 
-    /**
-     * Date used for naming product asset folder
-     *
-     */
-    private $date;   
-
     public function __construct()  
     { 
         parent::__construct(); 
@@ -35,8 +29,6 @@ class SyncCsvImage extends MY_Controller
         $this->EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
         $this->EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');            
         $this->EsAdminImagesRepository = $this->em->getRepository('EasyShop\Entities\EsAdminImages');            
-        $this->date = date("Ymd");
-
     }
 
     /**
@@ -170,6 +162,7 @@ class SyncCsvImage extends MY_Controller
         //Get images config dimensions
         $this->config->load('image_dimensions', TRUE);
         $imageDimensions = $this->config->config['image_dimensions'];
+        $date = date("Ymd");
         $gisTime = date("Gis");
         foreach($imagesId["product"] as $ids)
         {
@@ -187,8 +180,8 @@ class SyncCsvImage extends MY_Controller
                 $productObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                           ->findOneBy(['idProduct' => $productId]);
  
-                $filename = $productId.'_'.$memberId.'_'.$this->date;
-                $newfilename = $productId.'_'.$memberId.'_'.$this->date.$gisTime.$key.".".$values->getProductImageType();
+                $filename = $productId.'_'.$memberId.'_'.$date;
+                $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key.".".$values->getProductImageType();
                 $imageDirectory = "./".$this->config->item('product_img_directory')."$filename/".$newfilename;
                 $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/"; 
 
@@ -207,7 +200,7 @@ class SyncCsvImage extends MY_Controller
                         mkdir($tempDirectory.'other/thumbnail', 0777, true); 
                         $this->doCopyForOtherDir($attrImage, 
                                                  $gisTime,
-                                                 $this->date, 
+                                                 $date, 
                                                  $productId, 
                                                  $memberId, 
                                                  $productImageId, 
