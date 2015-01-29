@@ -20,18 +20,7 @@
        
             /* Register events */
             socket.on('send message', function( data ) {
-                $.ajax({
-                    type:"get",
-                    dataType : "json",
-                    url : "/MessageController/getNumberOfUnreadMessages",
-                    success : function(count)
-                    {   
-                       var numberOfUnreadMessages = $.parseJSON(count);
-                       $(document).prop('title', '(' + numberOfUnreadMessages + ') ' + $(document).prop('title'));
-                       $('#unread-messages-count').html(numberOfUnreadMessages);
-                       $('#unread-messages-count').css('display','inline');
-                    }
-                }); 
+                updateMessageCountIcons();
             });
 
             setAccountOnline($chatClient.data('store-name'));
@@ -44,4 +33,26 @@
         }
 
     });
+    
+    function updateMessageCountIcons()
+    {
+        $.ajax({
+            type:"get",
+            dataType : "json",
+            url : "/MessageController/getNumberOfUnreadMessages",
+            success : function(count)
+            {   
+                var numberOfUnreadMessages = $.parseJSON(count);
+                $(document).prop('title', '(' + numberOfUnreadMessages + ') ' + $(document).prop('title'));
+                $('#unread-messages-count').html(numberOfUnreadMessages);
+                if(parseInt(numberOfUnreadMessages) > 0){
+                    $('#unread-messages-count').css('display','inline-block');
+                }
+                else{
+                    $('#unread-messages-count').css('display','none'); 
+                }
+            }
+        }); 
+    }
+    
 })(jQuery);
