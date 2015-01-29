@@ -27,10 +27,11 @@
         var message = msgs.messages;
         $.each(message,function(key,val){
             var cnt = parseInt(Object.keys(val).length)- 1;
-            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+            if(navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf('Chrome') == -1) { //if safari
                 for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
                 var Nav_msg = message[key][first_key]; //first element of object
-            }else{
+            }
+            else{
                 var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
             }
             var recipientName = escapeHtml(Nav_msg.name);
@@ -90,7 +91,7 @@
             "sScrollY": "375px"
         });
         $("#table_id_info").hide();
-        
+
         $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search').prop('class','ui-form-control');
         $('#tbl_search').hide();
         $("#modal-background, #modal-close").click(function() {
@@ -294,7 +295,7 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
         html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
-        if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+        if(navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf('Chrome') == -1){ //if safari
             $("#msg_field").prepend(html);
         }else{
             $("#msg_field").append(html);
@@ -330,7 +331,7 @@ function specific_msgs()
         html += '<p>'+escapeHtml(val.message)+'</p>';
         html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
 
-        if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+        if(navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf('Chrome') == -1){ //if safari
             $("#msg_field").prepend(html);
         }
         else{
@@ -350,7 +351,7 @@ function onFocus_Reload(msgs)
     D = msgs.messages;
     $.each(D,function(key,val){
         var cnt = parseInt(Object.keys(val).length)- 1;
-        if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+        if(navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf('Chrome') == -1){ //if safari
             for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
             var Nav_msg = D[key][first_key]; //first element of object
         }else{
