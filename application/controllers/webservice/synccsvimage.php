@@ -272,11 +272,16 @@ class SyncCsvImage extends MY_Controller
             if(copy($path, $imageDirectory)){
                 $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
 
-                $productAttrImage = new EsProductImage();     
-                $productAttrImage->setProductImagePath($imageDirectory);
-                $productAttrImage->setProductImageType($values->getProductImageType());
-                $productAttrImage->setProduct($productObject);
-                $this->em->persist($productAttrImage);
+                $productImage = new EsProductImage();     
+                $productImage->setProductImagePath($imageDirectory);
+                $productImage->setProductImageType($values->getProductImageType());
+                $productImage->setProduct($productObject);
+                $this->em->persist($productImage);
+                $this->em->flush();
+
+                $productAttrDetail = $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
+                                                ->findOneBy(['productImgId' => $attr["image_id"]]);
+                $productAttrDetail->setProductImgId($productImage->getIdProductImage());
                 $this->em->flush();
 
                 $imageUtility = $this->serviceContainer['image_utility'];                
