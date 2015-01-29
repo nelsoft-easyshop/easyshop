@@ -470,6 +470,16 @@ function seened(obj)
             data : {checked:checked,csrfname:csrftoken},
             success : function(data) {
                 if (data === true) {
+                    
+                    var $chatClient = $('#chatClientInfo');
+                    var $isLoggedIn = $('[name="is-logged-in"]');
+                    if ($.parseJSON($isLoggedIn.val())) {
+                        var socket = io.connect( 'https://' + $chatClient.data('host') + ':' + $chatClient.data('port'));
+                        socket.emit('message opened', $chatClient.data('store-name'), function(result) {});
+                    }
+                    
+
+            
                     $parentLi.removeClass('NS');
                 }else{
                     alert("Error loading the message.");
