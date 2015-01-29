@@ -78,10 +78,6 @@ class ReviewProductService
 
             $productReviewReplies = $esProductReviewRepo->getReviewReplies($productId, $reviewIds);
 
-            foreach($productReviewReplies as $value) {
-                $value->setReview($value->getReview());
-            }
-
             $i = 0;
             foreach ($productReviews as $value) { 
                 $recentReviews[$i]['id_review'] = $value->getIdReview();
