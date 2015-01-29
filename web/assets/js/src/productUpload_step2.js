@@ -1276,9 +1276,8 @@ var totalCropImage;
                             }
                         },
                         open: function() {
-                            var MainwindowHeight = $(window).height();
-                            var CropImageMaxWidth = $("#crop-image-main").width();
-                            $("#imageTag").css("max-width", CropImageMaxWidth);
+                            var MainwindowHeight = $(window).height(); 
+                            $("#imageTag").css("max-width", 534);
                             $(this).parent().addClass('pop-up-fixed');
                             jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
                                 aspectRatio: widthRatio / heightRatio,
