@@ -106,10 +106,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     </li>
                                                     <li class="nav-dropdown-border pos-rel">
                                                         <a href="/messages">Messages</a>
-                                                            <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline' : 'none'; ?>">
-                                                                <?php echo $unreadMessageCount; ?>
-                                                            </div>
-                                                        </a>
+                                                        <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                                            <?php echo $unreadMessageCount; ?>
+                                                        </div>
                                                     </li>
                                                     <li class="nav-dropdown-border">
                                                         <a class="prevent" href="/login/logout">Logout</a>
@@ -394,11 +393,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             </li>
                                                             <li class="nav-dropdown-border pos-rel">
                                                                 <a href="/messages">Messages</a>
-                                                                <?php if((int)$unreadMessageCount !== 0) : ?>
-                                                                    <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                                        <?php echo $unreadMessageCount ;?>
-                                                                    </div>
-                                                                <?php endif;?>
+                                                                <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                                                    <?php echo $unreadMessageCount; ?>
+                                                                </div>
+                                                                
                                                             </li>
                                                             <li class="nav-dropdown-border">
                                                                 <a class="prevent" href="/login/logout">Logout</a>
