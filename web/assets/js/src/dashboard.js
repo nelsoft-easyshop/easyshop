@@ -468,7 +468,7 @@
 
         $("#editTextProductId").val($productId);
         $("#editTextCategoryId").val($categoryId);
-        $("#editTextCategoryNamehala ").val($categoryName);
+        $("#editTextCategoryName").val($categoryName);
         $("#formEdit").submit();
     });
 
