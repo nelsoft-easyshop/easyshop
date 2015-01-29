@@ -254,6 +254,7 @@ function send_msg(recipient,msg, isOnConversation)
         data : {recipient:recipient,msg:msg,csrfname:csrftoken},
         success : function(resultMsg)
         {
+            $("#out_txtarea").val("");
             $("#msg_textarea img").hide();
             $("#send_btn").show();
             if (resultMsg.success != 0) {
@@ -339,7 +340,6 @@ function specific_msgs()
         }
         html = "";
     });
-    $("#out_txtarea").val("");
     $("#msg_textarea").show();
     objDiv.scrollTop = objDiv.scrollTop + 100;
 }
