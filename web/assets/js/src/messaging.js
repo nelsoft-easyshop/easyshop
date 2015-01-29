@@ -3,6 +3,11 @@
     var $userInfo = $('#userInfo');
     var $chatServer = $('#chatServer');
     var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
+    var isSafariBrowser = false;
+
+    if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+        isSafariBrowser = true;
+    }
 
     $(document).ready(function () {
         /* Register events */
@@ -22,15 +27,17 @@
      */
     function onFocusReload(msgs)
     {
+        $("#table_id tbody").empty();
         var html = "";
         var span = "";
         var message = msgs.messages;
         $.each(message,function(key,val){
             var cnt = parseInt(Object.keys(val).length)- 1;
-            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+            if(isSafariBrowser) { //if safari
                 for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
                 var Nav_msg = message[key][first_key]; //first element of object
-            }else{
+            }
+            else{
                 var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
             }
             var recipientName = escapeHtml(Nav_msg.name);
@@ -71,14 +78,16 @@
                 html +='</tr>';
             }
         });
-        if(msgs.unread_msgs_count === "true"){
+
+        if (parseInt(msgs.unread_msgs_count) >= 1) {
             $("#table_id tbody").prepend(html);
             arrage_by_timeSent();
         }
-        else{
+        else {
             $("#table_id tbody").append(html);
             $("#table_id a").first().addClass("Active");
         }
+
         return true;
     }
 
@@ -90,7 +99,7 @@
             "sScrollY": "375px"
         });
         $("#table_id_info").hide();
-        
+
         $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search').prop('class','ui-form-control');
         $('#tbl_search').hide();
         $("#modal-background, #modal-close").click(function() {
@@ -253,6 +262,7 @@ function send_msg(recipient,msg, isOnConversation)
         data : {recipient:recipient,msg:msg,csrfname:csrftoken},
         success : function(resultMsg)
         {
+            $("#out_txtarea").val("");
             $("#msg_textarea img").hide();
             $("#send_btn").show();
             if (resultMsg.success != 0) {
@@ -294,7 +304,7 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
         html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
-        if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+        if(isSafariBrowser){ //if safari
             $("#msg_field").prepend(html);
         }else{
             $("#msg_field").append(html);
@@ -330,7 +340,7 @@ function specific_msgs()
         html += '<p>'+escapeHtml(val.message)+'</p>';
         html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
 
-        if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+        if(isSafariBrowser){ //if safari
             $("#msg_field").prepend(html);
         }
         else{
@@ -338,7 +348,6 @@ function specific_msgs()
         }
         html = "";
     });
-    $("#out_txtarea").val("");
     $("#msg_textarea").show();
     objDiv.scrollTop = objDiv.scrollTop + 100;
 }
@@ -350,7 +359,7 @@ function onFocus_Reload(msgs)
     D = msgs.messages;
     $.each(D,function(key,val){
         var cnt = parseInt(Object.keys(val).length)- 1;
-        if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
+        if(isSafariBrowser){ //if safari
             for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
             var Nav_msg = D[key][first_key]; //first element of object
         }else{
