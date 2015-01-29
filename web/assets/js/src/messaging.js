@@ -253,17 +253,18 @@ function send_msg(recipient,msg, isOnConversation)
         data : {recipient:recipient,msg:msg,csrfname:csrftoken},
         success : function(resultMsg)
         {
-            var data = resultMsg.message;
             $("#msg_textarea img").hide();
             $("#send_btn").show();
-            if (data.success != 0) {
-                socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
-               if (onFocusReload(data) && !isOnConversation) {
+            if (resultMsg.success != 0) {
+                console.log(resultMsg);
+               socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
+               if (onFocusReload(resultMsg.message) && !isOnConversation) {
                    $('#modal-close').trigger('click');
-                }
+               }
                 result = true;
-            }else{
-                alert(data.msg);
+            }
+            else {
+                alert(resultMsg.msg);
                 result = false;
             }
         }
@@ -466,7 +467,7 @@ function seened(obj)
     var $parentLi = $(obj).parent().parent();
     if ($parentLi.hasClass("NS") && $(obj).hasClass('Active')) {
         $(obj).children(".unreadConve").html("");
-        var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join(",");
+        var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join("-");
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         $.ajax({
             type : "POST",
