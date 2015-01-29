@@ -20,17 +20,22 @@ io.sockets.on( 'connection', function(client) {
 
     client.on('send message', function(data) {
         if (data.recipient in container) {
-            container[data.recipient].emit('send message', {recipient: data.recipient, message: data.message });
+            var clients = container[data.recipient];
+            for(var i = 0; i < clients.length;i++){
+                   clients[i].emit('send message', {recipient: data.recipient, message: data.message });
+            }
         }
     });
 
     client.on('set account online', function(storeName) {
         //TODO : add feature to see if user is online
+        
         if (!(storeName in container)) {
             console.log(storeName + " is now Online" );
+            container[storeName] = [];
         }
         client.storeName = storeName;
-        container[client.storeName] = client;
+        container[storeName].push(client);
     });
 
     client.on('set account offline', function(storeName, callback) {
@@ -41,6 +46,18 @@ io.sockets.on( 'connection', function(client) {
         }
         else {
             callback(false);
+        }
+    });
+    
+    client.on('message opened', function(storename) {
+        if (storename in container) {
+            var currentClientId = client.id;
+            var clients = container[storename];
+            for(var i = 0; i < clients.length;i++){
+                if(currentClientId !== clients[i].id){
+                    clients[i].emit('message opened')
+                }
+            }
         }
     });
 
