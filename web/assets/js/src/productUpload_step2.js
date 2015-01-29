@@ -1277,7 +1277,7 @@ var totalCropImage;
                         },
                         open: function() {
                             var MainwindowHeight = $(window).height();
-                            var CropImageMaxWidth = $("#crop-image-main").width();
+                            var CropImageMaxWidth = 534;
                             $("#imageTag").css("max-width", CropImageMaxWidth);
                             $(this).parent().addClass('pop-up-fixed');
                             jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{

@@ -213,8 +213,7 @@
         }  
         document.location.href = currentUrl;
     });
-
-    // START OF INFINITE SCROLLING FUNCTION 
+ 
     var currentUrl = $('#hidden-currentUrl').val();
     var typeView = $('#hidden-typeView').val(); 
     var emptySearch = $('#hidden-emptySearch').val();
@@ -225,19 +224,43 @@
     var lastPage = $("#hidden-totalPage").val(); 
     var canRequestAjax = true;
     var lastScroll = 0;
-    var isScrollUp = false;
+    var isScrollUp = false; 
 
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var csrfname = $("meta[name='csrf-name']").attr('content');  
 
     var $body = $('body');
+    var heightLimit = 360;
+    if($('.search-parallax-container').length > 0){
+        heightLimit += $('.search-parallax-container').height();
+    }
+
+    var sticky_offset;
+    var searchParallaxSlide_height = $(".search-parallax-container").outerHeight();
+    var offsetPagination = 1200;
+    if(searchParallaxSlide_height == 523){
+        offsetPagination = 1500;
+    }
+ 
+    var getHeightSearch = $(window).height();
+    var getHeightFilter = $("#filter-panel-container").height();
+    var offsetTopData = 0;
+
+    if(getHeightSearch < getHeightFilter){
+         var offsetTopData = getHeightSearch - getHeightFilter -50;
+    }
+
+    $(document).ready(function() {
+        var original_position_offset = ($('#sticky-pagination').length <=0 ) ? 0 : $('#sticky-pagination').offset() ;
+        sticky_offset = original_position_offset.top;
+        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-400px');
+    });
 
     $(window).scroll(function(event) {
         var scroll = $(this).scrollTop(); 
-        var heightLimit = 360;
+        var currentPage = parseInt($(".nav li.active > a").text().trim());
         if(scroll < lastScroll){
             isScrollUp = true;
-            var currentPage = parseInt($(".nav li.active > a").text().trim());
             var requestPage = currentPage - 2;
             var presentPage = currentPage - 1;
             var element = $('.search-results-container'); 
@@ -271,7 +294,7 @@
                                 if (response.count > 0){
                                     $('.search-results-container > #page-'+presentPage).replaceWith(response.view);
                                     $('#div-holder').append(response.view);
-                                    window.scrollTo(0, $(window).scrollTop()+$('.search-results-container > #page-'+ currentPage).height() - 100)
+                                    window.scrollTo(0, scroll + $('.search-results-container > #page-'+ currentPage).height() - 100)
                                     canRequestAjax = true;
                                     $('[data-spy="scroll"]').each(function () {
                                         var $spy = $(this).scrollspy('refresh')
@@ -284,7 +307,7 @@
                         $('.search-results-container > #page-'+presentPage)
                             .removeClass('loading-row')
                             .html(hiddenElement.html()); 
-                        window.scrollTo(0, $(window).scrollTop()+$('.search-results-container > #page-'+ currentPage).height() - 100)
+                        window.scrollTo(0, scroll + $('.search-results-container > #page-'+ currentPage).height() - 100)
                         $('[data-spy="scroll"]').each(function () {
                             var $spy = $(this).scrollspy('refresh')
                         });
@@ -297,15 +320,18 @@
             isScrollUp = false;
         }
         lastScroll = scroll;
-    });
-    // END OF INFINITE SCROLLING FUNCTION
-    var getHeightSearch = $(window).height();
-    var getHeightFilter = $("#filter-panel-container").height();
-    var offsetTopData = 0;
 
-    if(getHeightSearch < getHeightFilter){
-         var offsetTopData = getHeightSearch - getHeightFilter -50;
-    }
+        var sticky_height = $('#sticky-pagination').outerHeight(); 
+        var window_height = $(window).height();
+
+        if(scroll <= offsetPagination && currentPage === 1)  {
+            $('#sticky-pagination').css('bottom', '-400px'); 
+        }
+        else{ 
+            $('#sticky-pagination').css('bottom', '0px');
+        }
+
+    });
 
     $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}}); 
     $.stickysidebarscroll("#filter-panel-container",{offset: {top: offsetTopData, bottom: 100}});
@@ -319,6 +345,10 @@
         pages: lastPage, 
         displayedPages: 9,
     });
+
+    if(lastPage <= 1){
+        $('#sticky-pagination').hide();
+    }
 
     $('#myScrollspy').on('activate.bs.scrollspy', function () { 
         var currentPageNumber = parseInt($(".nav li.active > a").text().trim()); 
