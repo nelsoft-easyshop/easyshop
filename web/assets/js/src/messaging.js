@@ -27,13 +27,15 @@
      */
     function onFocusReload(msgs)
     {
-        $("#table_id tbody").empty();
         var html = "";
         var span = "";
         var message = msgs.messages;
+        var onfocusedConversationId = $('.Active').attr('id');
+        $("#table_id tbody").empty();
         $.each(message,function(key,val){
             var cnt = parseInt(Object.keys(val).length)- 1;
             if(isSafariBrowser) { //if safari
+                console.log(isSafariBrowser);
                 for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
                 var Nav_msg = message[key][first_key]; //first element of object
             }
@@ -47,6 +49,9 @@
                 if (Nav_msg.unreadConversationCount != 0) {
                     $('#ID_'+recipientName).parent().parent().addClass('NS');
                     $('#ID_'+recipientName+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
+                }
+                if (onfocusedConversationId === '#ID_'+recipientName) {
+                    $('#ID_'+recipientName).addClass("Active");
                 }
                 if ($('#ID_'+recipientName).hasClass("Active")) {//if focus on the conve
                     specific_msgs();
