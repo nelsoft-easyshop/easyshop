@@ -490,7 +490,7 @@ class ProductManager
         $slugCount = count($checkIfSlugExist);
 
         if($slugCount > 0 ){
-            $slugGenerate .= "-".$slugCount;
+            $slugGenerate .= "-".$slugCount++;
         }
 
         return $slugGenerate;
