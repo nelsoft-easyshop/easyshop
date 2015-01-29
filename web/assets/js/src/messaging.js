@@ -256,7 +256,6 @@ function send_msg(recipient,msg, isOnConversation)
             $("#msg_textarea img").hide();
             $("#send_btn").show();
             if (resultMsg.success != 0) {
-                console.log(resultMsg);
                socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
                if (onFocusReload(resultMsg.message) && !isOnConversation) {
                    $('#modal-close').trigger('click');
