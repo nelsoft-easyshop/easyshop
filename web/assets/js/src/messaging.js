@@ -3,11 +3,8 @@
     var $userInfo = $('#userInfo');
     var $chatServer = $('#chatServer');
     var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
-    var isSafariBrowser = false;
-
-    if (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-        isSafariBrowser = true;
-    }
+    var isSafariBrowser = navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf('Chrome') == -1;
+    var isFirefox = navigator.userAgent.indexOf('Firefox') > -1;
 
     $(document).ready(function () {
         /* Register events */
@@ -32,16 +29,14 @@
         var message = msgs.messages;
         var onfocusedConversationId = $('.Active').attr('id');
         $("#table_id tbody").empty();
-        console.log(message);
         $.each(message,function(key,val){
             var cnt = parseInt(Object.keys(val).length)- 1;
-            if(isSafariBrowser) { //if safari
+            if(isSafariBrowser || isFirefox) { //if safari
                 for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
                 var Nav_msg = message[key][first_key]; //first element of object
             }
             else{
                 var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
-                console.log(Nav_msg);
             }
             var recipientName = escapeHtml(Nav_msg.name);
             if (parseInt($('#ID_'+recipientName).length) === 1) { //if existing on the conve
@@ -309,7 +304,7 @@ $("#table_id tbody").on("click",".btn_each_msg",function()
         html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
         html += '<p>'+escapeHtml(val.message)+'</p>';
         html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
-        if(isSafariBrowser){ //if safari
+        if(isSafariBrowser || isFirefox){ //if safari
             $("#msg_field").prepend(html);
         }else{
             $("#msg_field").append(html);
@@ -345,7 +340,7 @@ function specific_msgs()
         html += '<p>'+escapeHtml(val.message)+'</p>';
         html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
 
-        if(isSafariBrowser){ //if safari
+        if(isSafariBrowser || isFirefox){ //if safari
             $("#msg_field").prepend(html);
         }
         else{
@@ -364,7 +359,7 @@ function onFocus_Reload(msgs)
     D = msgs.messages;
     $.each(D,function(key,val){
         var cnt = parseInt(Object.keys(val).length)- 1;
-        if(isSafariBrowser){ //if safari
+        if(isSafariBrowser || isFirefox){ //if safari
             for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
             var Nav_msg = D[key][first_key]; //first element of object
         }else{
