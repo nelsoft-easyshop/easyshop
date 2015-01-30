@@ -158,7 +158,6 @@
         }
     });
 
-
     var setAccountOnline = function(memberId)
     {
         socket.emit('set account online', memberId);
