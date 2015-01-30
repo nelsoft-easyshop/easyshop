@@ -73,7 +73,7 @@ class CheckoutService
             $quantity = $value['qty'];
             $product = $this->productManager->getProductDetails($productId);
 
-            $cartContent[$key]['hasNoSoloRestriction'] = $this->canPurchaseWithOtherProduct($product);
+            $cartContent[$key]['canPurchaseWithOther'] = $this->canPurchaseWithOtherProduct($product) && count($cartContent) === 1;
             $cartContent[$key]['hasNoPuchaseLimitRestriction'] = $this->isPurchaseLimitReach($product, $member->getIdMember());
             $cartContent[$key]['isAvailableInLocation'] = $this->canPurchaseInLocation($product, $itemId, $member);
             $cartContent[$key]['isQuantityAvailable'] = $this->canPurchaseDesiredQuantity($product, $itemId, $quantity);
@@ -81,7 +81,7 @@ class CheckoutService
         }
 
         return $cartContent;
-    } 
+    }
 
     /**
      * Check if product in cart can purchase with other product
@@ -202,6 +202,28 @@ class CheckoutService
                 }
             }
         }
+    }
+
+    /**
+     * Check if request payment transaction can continue to checkout
+     * @param  array  $cartData    [description]
+     * @param  string $paymentType [description]
+     * @return boolean
+     */
+    public function checkIfCanContinue($cartData, $paymentType)
+    {
+        $itemFail = 0;
+        foreach ($cartData as $item) { 
+            if( !isset($item[$paymentType]) 
+                || !$item[$paymentType]
+                || !$item['canPurchaseWithOther']
+                || !$item['hasNoPuchaseLimitRestriction']
+                || !$item['isQuantityAvailable'] ){
+                $itemFail++;
+            } 
+        }
+
+        return $itemFail === 0;
     }
 }
 
