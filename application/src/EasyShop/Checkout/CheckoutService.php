@@ -205,12 +205,12 @@ class CheckoutService
     }
 
     /**
-     * Check if request payment transaction can continue to checkout
+     * Check if checkout request can continue to checkout
      * @param  array  $cartData    [description]
      * @param  string $paymentType [description]
      * @return boolean
      */
-    public function checkIfCanContinue($cartData, $paymentType)
+    public function checkoutCanContinue($cartData, $paymentType)
     {
         $itemFail = 0;
         foreach ($cartData as $item) { 

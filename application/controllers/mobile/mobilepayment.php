@@ -125,32 +125,32 @@ class mobilePayment extends MY_Controller
     public function reviewPayment()
     {   
         $apiFormatter = $this->serviceContainer['api_formatter'];
-        $checkoutService = $this->serviceContainer['checkout_service'];
-        
-        $this->paymentController = $this->loadController('payment');
+        $checkoutService = $this->serviceContainer['checkout_service']; 
 
-        $canContinue = true;
+        $canContinue = false;
         $errorMessage = "";
         $paymentType = trim($this->input->post('paymentType'));
         $mobileCartContents = $this->input->post('cartData') 
-                      ? json_decode($this->input->post('cartData')) 
-                      : [];
+                              ? json_decode($this->input->post('cartData')) 
+                              : [];
 
         $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
         $memberCartData = unserialize($this->member->getUserdata());
         $isCartNotEmpty = empty($memberCartData) === false;
-        $cartData = $isCartNotEmpty ? $memberCartData : [];
-        $errorMessage = "Please verify your email address.";
-        if((int)$this->member->getIsEmailVerify() > 0){
-            $errorMessage = "You have no item in you cart";
+        $cartData = $isCartNotEmpty ? $memberCartData : []; 
+        if((int)$this->member->getIsEmailVerify()){ 
             if($isCartNotEmpty){
-                unset($cartData['total_items'],$cartData['cart_total']);
-                $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
-                $canContinue = $dataCollection['canContinue'];
-                $errorMessage = $dataCollection['errMsg'];
+                unset($cartData['total_items'],$cartData['cart_total']); 
                 $validatedCart = $checkoutService->validateCartContent($this->member);
+                $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
                 $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $paymentType);
             }
+            else{
+                $errorMessage = "You have no item in you cart";
+            }
+        }
+        else{
+            $errorMessage = "Please verify your email address.";
         }
 
         $outputData = [
