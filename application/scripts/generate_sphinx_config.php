@@ -36,7 +36,7 @@
 
             sql_query_range = SELECT MIN(id_product), MAX(id_product) FROM es_product
 
-            sql_range_step = 1000
+            sql_range_step = 50
 
             sql_query = SELECT \
                             es_product.id_product, \
@@ -63,7 +63,7 @@
 
         sql_query_range = SELECT MIN(id_keywords), MAX(id_keywords) FROM es_keywords
 
-        sql_range_step = 1000
+        sql_range_step = 50
 
         sql_query = SELECT \
                         es_keywords.id_keywords, \
@@ -84,7 +84,7 @@
                             WHERE createddate >= CONCAT(CURDATE() , " 00:00:00" ) \
                                       OR lastmodifieddate >= CONCAT(CURDATE() , " 00:00:00" )
 
-        sql_range_step = 1000
+        sql_range_step = 50
 
         sql_query = SELECT \
             es_product.id_product, \
