@@ -333,7 +333,7 @@
 
     });
 
-    $.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}}); 
+    //$.stickysidebarscroll("#search-tips-container",{offset: {top:50, bottom: 600}}); 
     $.stickysidebarscroll("#filter-panel-container",{offset: {top: offsetTopData, bottom: 100}});
     $body.attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','700'); 
     $body.scrollspy({
