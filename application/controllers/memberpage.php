@@ -374,8 +374,10 @@ class Memberpage extends MY_Controller
                                                                           );
 
         $exportTransactions = [];
+
         foreach($soldTransaction["transactions"] as $value) {
             foreach ($value["product"] as $product) {
+                $data = "";                
                 $prodSpecs = "";                      
                 if(isset($product["attr"])) {
                     $productAttrCount = 0;
@@ -389,16 +391,14 @@ class Memberpage extends MY_Controller
                     $prodSpecs = "N/A";
                 }
 
-                $data = [
-                    "invoiceNo" => $value["invoiceNo"],
-                    "productName" => html_escape($product["name"]),
-                    "dateAdded" => $value["dateadded"]->format('Y-m-d H:i:s'),
-                    "storeName" => html_escape($value["buyerStoreName"]),
-                    "orderQuantity" => $value["orderQuantity"],
-                    "paymentMethod" => ucwords(strtolower($value["paymentMethod"])),
-                    "orderPrice" => number_format((float)$product["price"], 2, '.', ''),
-                    "productSpecs" => $prodSpecs
-                ];
+                $data .= $value["invoiceNo"];
+                $data .= ",".html_escape($product["name"]);
+                $data .= ",".$value["dateadded"]->format('Y-m-d H:i:s');
+                $data .= ",".html_escape($value["buyerStoreName"]);
+                $data .= ",".$value["orderQuantity"];
+                $data .= ",".ucwords(strtolower($value["paymentMethod"]));
+                $data .= ",".number_format((float)$product["price"], 2, '.', '');
+                $data .= ",".$prodSpecs."\n";
                 $exportTransactions[] = $data;          
             }
         }
@@ -472,10 +472,7 @@ class Memberpage extends MY_Controller
             'Price',
             'Product Specifications'
         ]);
-
-        foreach ($data as $key => $value) {
-            fputcsv($output, $value);
-        }
+        fputcsv($output, $data, ".");
         fclose($output);
     }
 
