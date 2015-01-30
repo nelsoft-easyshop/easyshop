@@ -168,27 +168,27 @@ class mobilePayment extends MY_Controller
      */
     public function doMobilePayCod()
     {   
+        $paymentController = $this->loadController('payment'); 
+        $checkoutService = $this->serviceContainer['checkout_service']; 
+
         $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $cartData = unserialize($this->member->getUserdata()); 
 
-        $this->paymentController = $this->loadController('payment');
-        $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
-        $cartData = $dataCollection['cartData']; 
-        $check = $this->checkAvailableInPayment($cartData,$paymentType);
+        $validatedCart = $checkoutService->validateCartContent($this->member);
+        $canContinue = $checkoutService->checkoutCanContinue($validatedCart, "cash_delivery"); 
 
-        if(empty($cartData) === false){
-            unset($cartData['total_items'],$cartData['cart_total']); 
-            $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
-            $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
+        if(empty($cartData) === false && $canContinue){ 
+            $txnid = $paymentController->generateReferenceNumber($paymentType, $this->member->getIdMember());
+            $dataProcess = $paymentController->cashOnDeliveryProcessing($this->member->getIdMember(), $txnid, $cartData, $paymentType);
             $isSuccess = strtolower($dataProcess['status']) === PaymentService::STATUS_SUCCESS;
-            $returnArray = array_merge(['isSuccess' => $isSuccess,'txnid' => $txnid],$dataProcess);
+            $returnArray = array_merge(['isSuccess' => $isSuccess,'txnid' => $txnid], $dataProcess);
         }
         else{
             $returnArray = [
-                    'isSuccess' => false,
-                    'status' => PaymentService::STATUS_FAIL,
-                    'message' => 'You have no item in your cart',
-                ];
+                'isSuccess' => false,
+                'status' => PaymentService::STATUS_FAIL,
+                'message' => 'You have no item in your cart',
+            ];
         }
 
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
