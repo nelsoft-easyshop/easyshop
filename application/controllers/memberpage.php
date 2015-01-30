@@ -365,13 +365,13 @@ class Memberpage extends MY_Controller
         $this->serviceContainer['string_utility'];
         $soldTransaction["transactions"] = $this->transactionManager
                                                 ->getSoldTransactionDetails(
-                                                                          $this->session->userdata('member_id'),
-                                                                          (bool) $this->input->get("isOngoing"),
-                                                                          0,
-                                                                          PHP_INT_MAX,
-                                                                          $this->input->get("invoiceNo"),
-                                                                          $this->input->get("paymentMethod")
-                                                                          );
+                                                      $this->session->userdata('member_id'),
+                                                      (bool) $this->input->get("isOngoing"),
+                                                      0,
+                                                      PHP_INT_MAX,
+                                                      $this->input->get("invoiceNo"),
+                                                      $this->input->get("paymentMethod")
+                                                );
 
         $exportTransactions = [];
         foreach($soldTransaction["transactions"] as $value) {
