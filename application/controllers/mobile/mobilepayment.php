@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsProductImage as EsProductImage;
+use EasyShop\PaymentService\PaymentService as PaymentService;
 
 class mobilePayment extends MY_Controller 
 {
@@ -106,12 +107,12 @@ class mobilePayment extends MY_Controller
             $finalPaymentType[] = $value;
         }
 
-        $outputData = array(
+        $outputData = [
             'cartData' => $formattedCartContents,
             'canContinue' => $canContinue,
             'errorMessage' => $errorMessage,
             'paymentType' => $finalPaymentType,
-        );
+        ];
 
         print(json_encode($outputData,JSON_PRETTY_PRINT));
     }
@@ -179,15 +180,15 @@ class mobilePayment extends MY_Controller
             unset($cartData['total_items'],$cartData['cart_total']); 
             $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
             $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
-            $isSuccess = (strtolower($dataProcess['status']) == 's') ? true : false;
+            $isSuccess = strtolower($dataProcess['status']) === PaymentService::STATUS_SUCCESS;
             $returnArray = array_merge(['isSuccess' => $isSuccess,'txnid' => $txnid],$dataProcess);
         }
         else{
-            $returnArray = array(
+            $returnArray = [
                     'isSuccess' => false,
-                    'status' => 'f',
+                    'status' => PaymentService::STATUS_FAIL,
                     'message' => 'You have no item in your cart',
-                );
+                ];
         }
 
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
@@ -251,22 +252,22 @@ class mobilePayment extends MY_Controller
                 }
             }
 
-            $returnArray = array(
-                    'isSuccess' => $isSuccess, 
-                    'message' => '',
-                    'url' => $urlReturn,
-                    'returnUrl' => $returnUrl,
-                    'cancelUrl' => $cancelUrl,
-                );
+            $returnArray = [
+                'isSuccess' => $isSuccess, 
+                'message' => '',
+                'url' => $urlReturn,
+                'returnUrl' => $returnUrl,
+                'cancelUrl' => $cancelUrl,
+            ];
         }
         else{
-            $returnArray = array(
-                    'isSuccess' => $isSuccess, 
-                    'message' => 'You have no item in your cart',
-                    'url' => '',
-                    'returnUrl' => $returnUrl,
-                    'cancelUrl' => $cancelUrl,
-                );
+            $returnArray = [
+                'isSuccess' => $isSuccess, 
+                'message' => 'You have no item in your cart',
+                'url' => '',
+                'returnUrl' => $returnUrl,
+                'cancelUrl' => $cancelUrl,
+            ];
         }
 
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
@@ -278,15 +279,16 @@ class mobilePayment extends MY_Controller
      */
     public function paypalReturn()
     {
-        echo json_encode(array('isSuccess' => 1),JSON_PRETTY_PRINT);
+        echo json_encode(['isSuccess' => true], JSON_PRETTY_PRINT);
     }
+
     /**
      * Cancel url for payment in webview
      * @return json
      */
     public function paypalCancel()
     {
-        echo json_encode(array('isSuccess' => 1),JSON_PRETTY_PRINT);
+        echo json_encode(['isSuccess' => tru], JSON_PRETTY_PRINT);
     }
 
     /**
@@ -308,15 +310,15 @@ class mobilePayment extends MY_Controller
             $check = $this->checkAvailableInPayment($cartData,$paymentType);
 
             $requestData = $this->paymentController->mobilePayPersist($cartData,$this->member->getIdMember(),$paymentType,$token,$payerId);
-            $isSuccess = (strtolower($requestData['status']) == 's') ? true : false;
+            $isSuccess = strtolower($requestData['status']) === PaymentService::STATUS_SUCCESS;
             $returnArray = array_merge(['isSuccess' => $isSuccess],$requestData);
         }
         else{
-            $returnArray = array(
-                    'isSuccess' => false,
-                    'status' => 'f',
-                    'message' => 'You have no item in your cart',
-                );
+            $returnArray = [
+                'isSuccess' => false,
+                'status' => PaymentService::STATUS_FAIL,
+                'message' => 'You have no item in your cart',
+            ];
         }
 
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
@@ -332,14 +334,14 @@ class mobilePayment extends MY_Controller
         $paymentDetails = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                                 ->findOneBy(['transactionId' => $txnId]);
 
-        $displayArray = array(
-                        'transaction_details' => array(
-                            'grand_total' => $paymentDetails->getTotal(), 
-                            'transaction_id' => $txnId,
-                            'reference_number' => $paymentDetails->getInvoiceNo(),
-                            'transaction_date' => $paymentDetails->getDateadded()->format('Y-m-d H:i:s'),
-                        ),
-                    );
+        $displayArray = [
+            'transaction_details' => [
+                'grand_total' => $paymentDetails->getTotal(), 
+                'transaction_id' => $txnId,
+                'reference_number' => $paymentDetails->getInvoiceNo(),
+                'transaction_date' => $paymentDetails->getDateadded()->format('Y-m-d H:i:s'),
+            ],
+        ];
 
         $paymentProductDetails = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                           ->findBy(['order' => $paymentDetails->getIdOrder()]);
@@ -355,18 +357,17 @@ class mobilePayment extends MY_Controller
             $imageDirectory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
             $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
 
-            if($productImage != NULL){
+            if($productImage != null){
                 $imageDirectory = $productImage->getDirectory();
                 $imageFileName = $productImage->getFilename();
             }
 
-            $displayArray['products'][] = array(
-                                        'quantity' => $value->getOrderQuantity(),
-                                        'price' => $value->getTotal(),
-                                        'name' => $productDetails->getProduct()->getName(),
-                                        'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
-                                    );
-            
+            $displayArray['products'][] = [
+                'quantity' => $value->getOrderQuantity(),
+                'price' => $value->getTotal(),
+                'name' => $productDetails->getProduct()->getName(),
+                'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
+            ];
         }
 
         echo json_encode($displayArray,JSON_PRETTY_PRINT);
@@ -397,14 +398,14 @@ class mobilePayment extends MY_Controller
         }
 
         if($error > 0){
-            $returnArray = array(
-                    'isSuccess' => false, 
-                    'message' => 'One of you item is not avaialble in '.$label,
-                    'url' => '',
-                    'returnUrl' => '',
-                    'cancelUrl' => '',
-                    'cartData' => $this->serviceContainer['api_formatter']->formatCart($itemArray),
-                );
+            $returnArray = [
+                'isSuccess' => false, 
+                'message' => 'One of you item is not avaialble in '.$label,
+                'url' => '',
+                'returnUrl' => '',
+                'cancelUrl' => '',
+                'cartData' => $this->serviceContainer['api_formatter']->formatCart($itemArray),
+            ];
             echo json_encode($returnArray,JSON_PRETTY_PRINT);
             exit();
         }
