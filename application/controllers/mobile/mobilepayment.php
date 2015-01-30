@@ -289,7 +289,7 @@ class mobilePayment extends MY_Controller
      */
     public function paypalCancel()
     {
-        echo json_encode(['isSuccess' => tru], JSON_PRETTY_PRINT);
+        echo json_encode(['isSuccess' => true], JSON_PRETTY_PRINT);
     }
 
     /**
