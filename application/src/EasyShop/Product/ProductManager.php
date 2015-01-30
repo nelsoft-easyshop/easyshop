@@ -474,7 +474,7 @@ class ProductManager
         $rsm->addScalarResult('count', 'count');
         $sql = "SELECT COUNT(*) as count FROM es_product WHERE slug LIKE :slug ";
         $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('slug', '%'.$title.'%'); 
+        $query->setParameter('slug', $title.'%'); 
         $product = $query->getResult();
 
         $slugCount = $product[0]["count"];
