@@ -448,7 +448,7 @@ class Memberpage extends MY_Controller
             }
         }
 
-        $this->outputToCSVFormat($exportTransactions, "boughtransactions", false);        
+        $this->outputToCSVFormat($exportTransactions, "boughttransactions", false);        
     }
 
     /**
