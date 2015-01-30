@@ -476,6 +476,7 @@ class Memberpage extends MY_Controller
         foreach ($data as $key => $value) {
             fputcsv($output, $value);
         }
+        fclose($output);
     }
 
     /**
