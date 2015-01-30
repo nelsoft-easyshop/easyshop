@@ -68,33 +68,6 @@
             $("#modal-container").show();
         };
 
-        /*
-         * We only enable this when web socket fails
-         */
-        if (!("WebSocket" in window)) {
-
-            //this is for page reload every time the user is focused on the web page/tab
-            var myInterval;
-            var interval_delay = 5000;
-            var is_interval_running = false;
-
-            $(document).ready(function () {
-                $(window).focus(function () {
-                    clearInterval(myInterval);
-                    if  (!is_interval_running)
-                        myInterval = setInterval(Reload, interval_delay);
-                }).blur(function () {
-                    clearInterval(myInterval);
-                    is_interval_running = false;
-                });
-            });
-
-            interval_function = function ()
-            {
-                is_interval_running = true;
-            }
-        }
-
     });
 
     $("#modal_send_btn").on("click",function()
@@ -245,33 +218,6 @@
         seened($('.Active'));
 
         return true;
-    }
-
-    function Reload()
-    {
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var todo = "Get_UnreadMsgs";
-        $.ajax({
-            type:"POST",
-            dataType : "json",
-            url : "/MessageController/getAllMessage",
-            data : {csrfname:csrftoken,isUnread:todo},
-            success : function(d)
-            {
-                $(".msg_countr").html(d.unread_msgs_count);
-                if(parseInt(d.unread_msgs_count) === 0 ){
-                    $('#unread-messages-count').addClass('unread-messages-count-hide');
-                }
-                else{
-                    $('#unread-messages-count').removeClass('unread-messages-count-hide');
-                }
-                document.title = (parseInt(d.unread_msgs_count) === 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs_count + ") | Easyshop.ph");
-
-                if (d.unread_msgs_count >= 1) {
-                    onFocusReload(d);
-                }
-            }
-        });
     }
 
     function send_msg(recipient,msg, isOnConversation)
