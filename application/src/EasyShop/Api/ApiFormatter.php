@@ -318,7 +318,7 @@ class ApiFormatter
                         $formattedCartContents[$rowId]['error_message'][] = "Not Available for selected payment type";
                     }
 
-                    if(!$cartItem['hasNoSoloRestriction']){
+                    if(!$cartItem['canPurchaseWithOther'] && count($cartData) > 1){
                         $formattedCartContents[$rowId]['error_message'][] = "This item can only be purchased individually.";
                     }
 
