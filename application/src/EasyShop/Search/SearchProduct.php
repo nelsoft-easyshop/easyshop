@@ -119,6 +119,7 @@ class SearchProduct
 
         $ids = [];
   
+        /*
         $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
         $this->sphinxClient->SetFieldWeights([
             'name' => 50, 
@@ -134,6 +135,8 @@ class SearchProduct
         $this->sphinxClient->AddQuery($queryString, 'products products_delta');
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
+        */
+        $sphinxResult = false;
         
         $products = [];
         if($sphinxResult === false){
@@ -498,7 +501,8 @@ class SearchProduct
     {
         $suggestionLimit = EsKeywords::SUGGESTION_LIMIT;
         $suggestions = [];
-
+        
+        /*
         $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
         $this->sphinxClient->SetFieldWeights([
             'keywords' => 50,
@@ -509,6 +513,10 @@ class SearchProduct
         $this->sphinxClient->AddQuery($queryString.'*', 'suggestions');
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
+        */
+        
+        $sphinxResult = false;
+        
         if($sphinxResult === false){
             $keywords = $this->em->getRepository('EasyShop\Entities\EsKeywords')
                                  ->getSimilarKeywords($queryString, $suggestionLimit);
