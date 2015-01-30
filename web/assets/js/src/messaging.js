@@ -216,7 +216,7 @@ $("#modal_send_btn").on("click",function(){
     var msg = $("#msg-message").val().trim();
 
     if(recipient == ""){
-        alert("Username is required.");
+        alert("Storename is required.");
         return false;
     }
 
