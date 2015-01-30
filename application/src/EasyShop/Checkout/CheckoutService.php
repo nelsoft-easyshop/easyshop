@@ -143,7 +143,7 @@ class CheckoutService
         $quantityData = $this->productManager->getProductInventory($product, false, true);
 
         if(isset($quantityData[$itemId]['quantity'])){
-            return $quantity < $quantityData[$itemId]['quantity'];
+            return $quantityData[$itemId]['quantity'] >= $quantity;
         }
 
         return false;
