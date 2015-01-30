@@ -362,7 +362,7 @@ class Memberpage extends MY_Controller
      */
     public function exportSellTransactions()
     {       
-
+        $this->serviceContainer['string_utility'];
         $soldTransaction["transactions"] = $this->transactionManager
                                                 ->getSoldTransactionDetails(
                                                                           $this->session->userdata('member_id'),
@@ -374,34 +374,34 @@ class Memberpage extends MY_Controller
                                                                           );
 
         $exportTransactions = [];
-
         foreach($soldTransaction["transactions"] as $value) {
             foreach ($value["product"] as $product) {
-                $data = "";                
-                $prodSpecs = "";                      
+                $data = null;            
+                $prodSpecs = null;                      
                 if(isset($product["attr"])) {
                     $productAttrCount = 0;
                     $attributeCount = count($product["attr"]);                    
                     foreach($product["attr"] as $attr => $attrValue ) {
                         $productAttrCount++;
-                        $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue)).($productAttrCount === $attributeCount ? "" : " / ");
+                        $prodSpecs .= ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue)).($productAttrCount === $attributeCount ? null : " / ");
                     }
                 }
                 else {
                     $prodSpecs = "N/A";
                 }
 
-                $data .= $value["invoiceNo"];
-                $data .= ",".html_escape($product["name"]);
+                $data .= "\n".$value["invoiceNo"];
+                $data .= ",".html_escape(str_replace(","," ",$product["name"]));
                 $data .= ",".$value["dateadded"]->format('Y-m-d H:i:s');
-                $data .= ",".html_escape($value["buyerStoreName"]);
+                $data .= ",".html_escape(str_replace(","," ",$value["buyerStoreName"]));
                 $data .= ",".$value["orderQuantity"];
                 $data .= ",".ucwords(strtolower($value["paymentMethod"]));
                 $data .= ",".number_format((float)$product["price"], 2, '.', '');
-                $data .= ",".$prodSpecs."\n";
+                $data .= ",".$prodSpecs;
                 $exportTransactions[] = $data;          
             }
         }
+
         $this->outputToCSVFormat($exportTransactions, "soldtransactions", true);
     }
 
@@ -409,7 +409,7 @@ class Memberpage extends MY_Controller
      *  Export Buy transactions to CSV file
      */
     public function exportBuyTransactions()
-    {             
+    {   
         $boughTransactions["transactions"] = $this->transactionManager
                                                   ->getBoughtTransactionDetails(
                                                         $this->session->userdata('member_id'),
@@ -422,8 +422,8 @@ class Memberpage extends MY_Controller
         $exportTransactions = [];
         foreach($boughTransactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
+                $data = null;
                 $prodSpecs = "";
-                $buyerName = $product["sellerStoreName"];
                 if(isset($product["attr"])) {
                     $productAttrCount = 0;
                     $attributeCount = count($product["attr"]);
@@ -435,19 +435,19 @@ class Memberpage extends MY_Controller
                 else {
                     $prodSpecs = "N/A";
                 }     
-                $data = [
-                    "invoiceNo" => $value["invoiceNo"],
-                    "productName" => html_escape($product["name"]),
-                    "dateAdded" => $value["dateadded"]->format('Y-m-d H:i:s'),
-                    "storeName" => html_escape($buyerName),
-                    "orderQuantity" => $value["orderQuantity"],
-                    "paymentMethod" => ucwords(strtolower($value["paymentMethod"])),
-                    "orderPrice" => number_format((float)$product["price"], 2, '.', ''),
-                    "productSpecs" => $prodSpecs
-                ];
-                $exportTransactions[] = $data;                     
+                  
+                $data .= "\n".$value["invoiceNo"];
+                $data .= ",".html_escape(str_replace(","," ",$product["name"]));
+                $data .= ",".$value["dateadded"]->format('Y-m-d H:i:s');
+                $data .= ",".html_escape(str_replace(","," ",$product["sellerStoreName"]));
+                $data .= ",".$value["orderQuantity"];
+                $data .= ",".ucwords(strtolower($value["paymentMethod"]));
+                $data .= ",".number_format((float)$product["price"], 2, '.', '');
+                $data .= ",".$prodSpecs;
+                $exportTransactions[] = $data;
             }
         }
+
         $this->outputToCSVFormat($exportTransactions, "boughtransactions", false);        
     }
 
@@ -472,7 +472,7 @@ class Memberpage extends MY_Controller
             'Price',
             'Product Specifications'
         ]);
-        fputcsv($output, $data, ".");
+        fputcsv($output, $data, ' ',' ');
         fclose($output);
     }
 
