@@ -102,12 +102,12 @@
         var recipient = $("#msg_name").val().trim();
         var msg = $("#msg-message").val().trim();
 
-        if(recipient == ""){
+        if(recipient === ""){
             alert("Username is required.");
             return false;
         }
 
-        if (msg == "") {
+        if (msg === "") {
             alert("Say something.");
             return false;
         }
@@ -265,9 +265,9 @@
                 else{
                     $('#unread-messages-count').removeClass('unread-messages-count-hide');
                 }
-                document.title = (d.unread_msgs_count == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs_count + ") | Easyshop.ph");
+                document.title = (parseInt(d.unread_msgs_count) === 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs_count + ") | Easyshop.ph");
 
-                if (d.unread_msgs_count != 0) {
+                if (d.unread_msgs_count >= 1) {
                     onFocusReload(d);
                 }
             }
@@ -292,7 +292,7 @@
                 $("#out_txtarea").val("");
                 $("#msg_textarea img").hide();
                 $("#send_btn").show();
-                if (resultMsg.success != 0) {
+                if (parseInt(resultMsg.success) === 1) {
                     socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
                     if (onFocusReload(resultMsg.message) && !isOnConversation) {
                         $('#modal-close').trigger('click');
