@@ -474,16 +474,7 @@ class Memberpage extends MY_Controller
         ]);
 
         foreach ($data as $key => $value) {
-            fputcsv($output, [
-                $value["invoiceNo"],
-                $value["productName"],
-                $value["dateAdded"],
-                $value["storeName"],
-                $value["orderQuantity"],
-                $value["paymentMethod"],
-                $value["orderPrice"],
-                $value["productSpecs"]
-            ]);                
+            fputcsv($output, $value);
         }
     }
 
