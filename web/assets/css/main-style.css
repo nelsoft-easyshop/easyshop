@@ -2462,7 +2462,8 @@ header {
 @media (min-width: 991px) {
     .persistent-nav-container.sticky-nav-fixed {
         display: block;
-        list-style: none;height: 55px;
+        height: 55px;
+        list-style: none;
     }
 
     .sticky-nav-fixed {
