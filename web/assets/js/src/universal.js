@@ -70,4 +70,38 @@ function validateWhiteTextBox(idclass){
                 "box-shadow": "0px 0px 2px 2px #FFFFFF"});
 }
 
+function updateMessageCountIcons(){
+    $.ajax({
+        type:"get",
+        dataType : "json",
+        url : "/MessageController/getNumberOfUnreadMessages",
+        success : function(count)
+        {   
+            var numberOfUnreadMessages = $.parseJSON(count);
+            var title = '';
+            
+            if($('#original-title').length === 0){
+                var originalTitleTag = document.createElement('meta');
+                originalTitleTag.id = "original-title";
+                originalTitleTag.name = "original-title";
+                title = $(document).prop('title');
+                originalTitleTag.content = title;
+                document.getElementsByTagName('head')[0].appendChild(originalTitleTag);
+            }
+            else{
+                title = $('#original-title').attr('content')
+            }
 
+            $('.msg_countr').html(numberOfUnreadMessages);
+            if(parseInt(numberOfUnreadMessages) > 0){
+                $(document).prop('title', '(' + numberOfUnreadMessages + ') ' + title);
+                $('.msg_countr').css('display','inline-block');
+            }
+            else{
+                $(document).prop('title', title);
+                $('.msg_countr').css('display','none'); 
+            }
+        }
+    }); 
+    
+}
