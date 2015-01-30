@@ -87,71 +87,15 @@ class Payment extends MY_Controller{
      * @param  integer $memberId
      * @return mixed
      */
-    public function mobileReviewBridge($itemArray,$memberId)
+    public function mobileReviewBridge($itemArray, $memberId)
     {
         // set session
         $this->session->set_userdata('member_id', $memberId); 
         $this->session->set_userdata('choosen_items', $itemArray);
 
-        // update cart data details
-        $qtySuccess = $this->resetPriceAndQty(); 
+        $this->resetPriceAndQty();
 
-        // check the availability of the product
-        $productAvailability = $this->checkProductAvailability($itemArray,$memberId);
-        $itemArray = $productAvailability['item_array'];
-        $successCount = $productAvailability['success_count']; 
-        // check the purchase limit and payment type available
-        $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$memberId);
-        $itemArray = $purchaseLimitPaymentType['itemArray'];
-        $paymentType = $purchaseLimitPaymentType['payment_type'];
-        unset($paymentType['cdb']);
-        $purchaseLimit = $purchaseLimitPaymentType['purchase_limit'];
-        $soloRestriction = $purchaseLimitPaymentType['solo_restriction'];  
-
-        foreach ($itemArray as $key => $value) {
-            $productId = $value['id']; 
-            $itemId = $value['product_itemID']; 
-            $product_array =  $this->product_model->getProductById($productId);
-            $newQty = $this->product_model->getProductQuantity($productId, FALSE, FALSE, $product_array['start_promo']);
-            $maxqty = $newQty[$itemId]['quantity'];
-            $itemArray[$key]['isAvailable'] = ($maxqty <= 0 || strtolower($value['isAvailable']) == "false") ? "false" : "true";
-        }
-
-        // get all possible error message
-        $errorMessage = [];
-        $canContinue = true;
-        if($successCount != count($itemArray)){
-            $canContinue = false;
-            array_push($errorMessage, 'One or more of your item(s) is unavailable in your location.');
-        }
-
-        if($qtySuccess != count($itemArray)){
-
-            $canContinue = false;
-            array_push($errorMessage, 'The availability of one of your items is less than your desired quantity. 
-                                    Someone may have purchased the item before you can complete your payment.
-                                    Check the availability of your item and try again.');
-        }
-
-        if(!$purchaseLimit){
-            $canContinue = false;
-            array_push($errorMessage, 'You have exceeded your purchase limit for a promo of an item in your cart.');
-        }
-
-        if(!$soloRestriction){
-            $canContinue = false;
-            foreach ($itemArray as $key => $value) {
-                $itemArray[$key]['isAvailable'] = "false";
-            }
-            array_push($errorMessage, 'One of your items can only be purchased individually.');
-        }
-
-        return array(
-            'cartData' => $itemArray,
-            'errMsg' => $errorMessage,
-            'canContinue' => $canContinue,
-            'paymentType' => $paymentType,
-        );
+        return $this->session->userdata('choosen_items');
     }
 
     /**
@@ -168,17 +112,17 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('choosen_items', $itemArray);
 
         // update cart data details
-        $qtySuccess = $this->resetPriceAndQty();
+        $qtySuccess = (int) $this->resetPriceAndQty();
 
         if(intval($paymentType) === EsPaymentMethod::PAYMENT_PAYPAL){
 
             $remove = $this->payment_model->releaseAllLock($memberId);
 
-            if($qtySuccess != count($itemArray)){
-                return array(
-                    'e' => '0',
-                    'd' => 'One of the items in your cart is unavailable.'
-                );
+            if($qtySuccess !== count($itemArray)){
+                return [
+                    'e' => false,
+                    'm' => 'One of the items in your cart is unavailable.'
+                ];
             } 
 
             $paypalReturnURL    = base_url().'mobile/mobilepayment/paypalReturn'; 
@@ -191,11 +135,11 @@ class Payment extends MY_Controller{
             return $mergeArray;
         }
         else if(intval($paymentType) === EsPaymentMethod::PAYMENT_DRAGONPAY){
-            if($qtySuccess != count($itemArray)){
-                return array(
-                    'e' => '0',
+            if($qtySuccess !== count($itemArray)){
+                return [
+                    'e' => false,
                     'm' => 'One of the items in your cart is unavailable.'
-                );
+                ];
             } 
 
             return json_decode($this->createDragonPayToken($itemArray,$memberId),TRUE);
