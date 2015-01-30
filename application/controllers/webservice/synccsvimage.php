@@ -245,7 +245,14 @@ class SyncCsvImage extends MY_Controller
      * @param string $filename
      * @param array $imageDimensions
      */ 
-    private function doCopyForOtherDir($attrImage,$gisTime, $date, $productId, $memberId, $productImageId, $filename, $imageDimensions)
+    private function doCopyForOtherDir($attrImage, 
+                                       $gisTime, 
+                                       $date, 
+                                       $productId, 
+                                       $memberId, 
+                                       $productImageId, 
+                                       $filename, 
+                                       $imageDimensions)
     {
         $productAttr = $this->em
                             ->getRepository('EasyShop\Entities\EsProduct')
@@ -255,12 +262,12 @@ class SyncCsvImage extends MY_Controller
         foreach ($productAttr as $key => $attr) {
             $values = $this->em
                            ->getRepository('EasyShop\Entities\EsProductImage')
-                           ->findOneBy(['idProductImage' => $attr["image_id"]]);    
+                           ->find($attr["image_id"]);    
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
             $path = "./assets/admin/$images";
 
-            $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o".".".$values->getProductImageType();
-            $imageDirectory = "./".$this->config->item('product_img_directory')."$filename/other/".$newfilename;
+            $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o.".$values->getProductImageType();
+            $imageDirectory = "./".$this->config->item('product_img_directory').$filename."/other/".$newfilename;
             $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
                 if(copy($path, $imageDirectory)){
                     $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
@@ -272,16 +279,17 @@ class SyncCsvImage extends MY_Controller
                     $this->em->persist($productImage);
                     $this->em->flush();
 
-                    $productAttrDetail = $this->em->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
-                                                    ->findOneBy(['productImgId' => $attr["image_id"]]);
+                    $productAttrDetail = $this->em
+                                              ->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
+                                              ->findOneBy(['productImgId' => $attr["image_id"]]);
                     $productAttrDetail->setProductImgId($productImage->getIdProductImage());
                     $this->em->flush();
 
                     $imageUtility = $this->serviceContainer['image_utility'];                
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."small",$imageDimensions["productImagesSizes"]["small"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview",$imageDimensions["productImagesSizes"]["categoryview"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail",$imageDimensions["productImagesSizes"]["thumbnail"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory,$imageDimensions["productImagesSizes"]["usersize"]);        
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."small", $imageDimensions["productImagesSizes"]["small"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview", $imageDimensions["productImagesSizes"]["categoryview"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail", $imageDimensions["productImagesSizes"]["thumbnail"]);
+                    $imageUtility->imageResize($imageDirectory, $tempDirectory, $imageDimensions["productImagesSizes"]["usersize"]);        
                 }                    
             }
     }
