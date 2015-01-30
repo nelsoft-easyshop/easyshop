@@ -213,10 +213,11 @@ class mobilePayment extends MY_Controller
         if(empty($cartData) === false && $this->input->post('paymentType')){
             unset($cartData['total_items'],$cartData['cart_total']);
 
-            if($this->input->post('paymentType') == "paypal"){
+            $postPaymentType = trim(strtolower($this->input->post('paymentType')));
+            if($postPaymentType === "paypal"){
                 $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
             }
-            elseif($this->input->post('paymentType') == "dragonpay"){
+            elseif($postPaymentType === "dragonpay"){
                 $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
             }
  
@@ -228,7 +229,7 @@ class mobilePayment extends MY_Controller
             $requestData = $this->paymentController->mobilePayBridge($cartData,$this->member->getIdMember(),$paymentType);
             $urlReturn = ""; 
 
-            if($this->input->post('paymentType') == "paypal"){
+            if($postPaymentType === "paypal"){
                 if($requestData['e'] == 1){
                     $isSuccess = true;
                     $urlReturn = $requestData['d'];
@@ -240,7 +241,7 @@ class mobilePayment extends MY_Controller
                     $message = $requestData['d'];
                 }
             }
-            elseif($this->input->post('paymentType') == "dragonpay"){
+            elseif($postPaymentType === "dragonpay"){
                 if($requestData['e'] == 1){
                     $isSuccess = true;
                     $urlReturn = $requestData['u'];
