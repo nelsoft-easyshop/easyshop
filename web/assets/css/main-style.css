@@ -805,14 +805,16 @@ textarea {
     background: #fe893a;
     position: absolute;
     color: #ffffff;
-    margin-top: -16px;
-    margin-left: 37px;
     width: 30px;
     height: 30px;
     border-radius: 50%;
     font-size:12px;
     text-align: center;
     padding-top: 5px;
+    left: 0;
+    margin: auto;
+    right: 0;
+    top: -16px;
 }
 
 .fixed-vendor-content {
@@ -832,7 +834,6 @@ textarea {
 }
 
 .persistent-nav-container.sticky-nav-fixed {
-    display: block;
     list-style: none;height: 55px;
 }
 
@@ -841,7 +842,7 @@ textarea {
 }
 
 .sticky-nav li:first-child {
-    width: 25%;
+    width: 28%;
     text-align: left;
 }
 
@@ -852,7 +853,7 @@ textarea {
 .sticky-nav li:nth-child(3) {
     text-align: right;
     margin-right: 1%;
-    width: 43%;
+    width: 40%;
 }
 
 .sticky-nav li:nth-child(4) {
@@ -907,11 +908,10 @@ textarea {
 .sticky-nav li:nth-child(3) select,
 .search-container select {
     border-radius: 4px 0 0 4px;
-    font-size: 0.75em;
-    height: 34px;
-    line-height: 27px;
+    font-size: 12px;
+    line-height: 28px !important;
     margin-right: -5px;
-    padding: 7px 12px;
+    padding: 6px 7px 4px !important;
     vertical-align: middle;
     width: 26%;
 }
@@ -1994,15 +1994,6 @@ td.td-view.p-view2.color-default{
 /* =============================================
 ----------------- Responsive  ------------------
 ==============================================*/
-@media (min-width: 991px) {
- 
-}
-
-/* Large desktop */
-@media (min-width: 1200px) {
- 
-}
-
 @media only screen and (max-width : 979px) { 
 /*    header {
         width: 1200px !important;
@@ -2398,12 +2389,6 @@ td.td-view.p-view2.color-default{
     }
 }
 
-@media only screen and (max-width : 320px) {
-    .vendor-nav{
-        width: 100% !important;
-    }
-}
-
 @media only screen and (max-width : 1024px) {
     .list > .product-paging > .product-inner-container > .panel-list-item{
         width: 95%;
@@ -2451,6 +2436,10 @@ header {
     .vendor-header-left {
         width: 80%;
     }
+
+    .persistent-nav-container.sticky-nav-fixed {
+        display: none;
+    }
 }
 
 @media (min-width: 640px) {
@@ -2471,6 +2460,11 @@ header {
 }
 
 @media (min-width: 991px) {
+    .persistent-nav-container.sticky-nav-fixed {
+        display: block;
+        list-style: none;height: 55px;
+    }
+
     .sticky-nav-fixed {
         position: fixed;
         top: 0;
@@ -2557,17 +2551,16 @@ header {
     }
 }
 
-@media (max-width: 1200px) {
-    .vendor-nav {
-        left: 0;
-        margin: auto;
-        position: absolute;
-        right: 0;
-        width: 400px;
-    }
-}
-
 @media (max-width: 991px) {
+    .vendor-menu-nav .main-container {
+        text-align: center;
+    }
+    
+    .vendor-nav {
+        display: inline-block;
+        margin: 0 auto;
+    }
+
     .vendor-header-left {
         text-align: right;
     }
@@ -2756,12 +2749,8 @@ header {
         width: 45px;
     }
 
-    .vendor-nav {
-        width: 90%;
-    }
-
     .vendor-nav li a {
-        padding: 0 10px;
+        padding: 0 8px;
     }
 
     .nav-dropdown {
@@ -2782,5 +2771,12 @@ header {
 @media (max-width: 360px) {
     .search-bar-input {
         width: 55% !important;
+    }
+}
+
+@media (max-width: 320px) {
+    .vendor-logo-wrapper img {
+        padding-top: 4px;
+        width: 130px;
     }
 }
