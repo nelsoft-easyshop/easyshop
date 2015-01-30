@@ -204,9 +204,9 @@ class ProductManager
         $locks = $this->validateProductItemLock($product->getIdProduct());
         if($doLockDeduction){
             foreach($locks as $lock){
-                if(isset($data[$lock['id_product_item']])){
-                    $data[$lock['id_product_item']]['quantity'] -=  $lock['lock_qty'];
-                    $data[$lock['id_product_item']]['quantity'] = ($data[$lock['id_product_item']]['quantity'] >= 0) ? $data[$lock['id_product_item']]['quantity'] : 0;
+                if(isset($data[$lock['idProductItem']])){
+                    $data[$lock['idProductItem']]['quantity'] -=  $lock['lock_qty'];
+                    $data[$lock['idProductItem']]['quantity'] = ($data[$lock['idProductItem']]['quantity'] >= 0) ? $data[$lock['idProductItem']]['quantity'] : 0;
                 }
             }
         }
