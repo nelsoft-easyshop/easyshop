@@ -27,10 +27,12 @@
      */
     function onFocusReload(msgs)
     {
-        $("#table_id tbody").empty();
         var html = "";
         var span = "";
         var message = msgs.messages;
+        var onfocusedConversationId = $('.Active').attr('id');
+        $("#table_id tbody").empty();
+        console.log(message);
         $.each(message,function(key,val){
             var cnt = parseInt(Object.keys(val).length)- 1;
             if(isSafariBrowser) { //if safari
@@ -39,6 +41,7 @@
             }
             else{
                 var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
+                console.log(Nav_msg);
             }
             var recipientName = escapeHtml(Nav_msg.name);
             if (parseInt($('#ID_'+recipientName).length) === 1) { //if existing on the conve
@@ -48,18 +51,17 @@
                     $('#ID_'+recipientName).parent().parent().addClass('NS');
                     $('#ID_'+recipientName+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
                 }
-                if ($('#ID_'+recipientName).hasClass("Active")) {//if focus on the conve
-                    specific_msgs();
-                    seened($('#ID_'+recipientName));
-                    $('#ID_'+recipientName+" .unreadConve").html("");
-                }
                 html = $('#ID_'+recipientName).parent().parent();
             }
             else{
+                var isActive ='';
                 if($(".dataTables_empty").length){
                     $(".dataTables_empty").parent().remove();
                 }
-                html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "receiver" ? "NS" : "")+' odd">';
+                if (onfocusedConversationId === 'ID_'+recipientName) {
+                    isActive = 'Active';
+                }
+                html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "receiver" ? "NS" : "")+' odd ">';
                 html +='<td class=" sorting_1">';
                 if (Nav_msg.status == "sender") {
                     html +='<img src="' +config.assetsDomain+Nav_msg.recipient_img+'/60x60.png" data="'+Nav_msg.sender_img+'">';
@@ -69,7 +71,7 @@
                 span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
                 html +='</td>';
                 html +='<td class=" ">';
-                html +="<a class='btn_each_msg' id='ID_" + recipientName + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
+                html +="<a class='btn_each_msg " + isActive + "' id='ID_" + recipientName + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
                 html +='<span class="msg_sender">' + recipientName + '</span>'+span;
                 html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
                 html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
@@ -87,6 +89,9 @@
             $("#table_id tbody").append(html);
             $("#table_id a").first().addClass("Active");
         }
+
+        specific_msgs();
+        seened($('.Active'));
 
         return true;
     }
@@ -211,7 +216,7 @@ $("#modal_send_btn").on("click",function(){
     var msg = $("#msg-message").val().trim();
 
     if(recipient == ""){
-        alert("Username is required.");
+        alert("Storename is required.");
         return false;
     }
 
