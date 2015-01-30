@@ -258,7 +258,8 @@ class SyncCsvImage extends MY_Controller
                             ->getRepository('EasyShop\Entities\EsProduct')
                             ->getAttributesByProductIds($productId);    
   
-        $this->config->load("image_path");       
+        $this->config->load("image_path");
+        $imageUtility = $this->serviceContainer['image_utility'];            
         foreach ($productAttr as $key => $attr) {
             $values = $this->em
                            ->getRepository('EasyShop\Entities\EsProductImage')
@@ -284,8 +285,7 @@ class SyncCsvImage extends MY_Controller
                                               ->findOneBy(['productImgId' => $attr["image_id"]]);
                     $productAttrDetail->setProductImgId($productImage->getIdProductImage());
                     $this->em->flush();
-
-                    $imageUtility = $this->serviceContainer['image_utility'];                
+            
                     $imageUtility->imageResize($imageDirectory, $tempDirectory."small", $imageDimensions["productImagesSizes"]["small"]);
                     $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview", $imageDimensions["productImagesSizes"]["categoryview"]);
                     $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail", $imageDimensions["productImagesSizes"]["thumbnail"]);
