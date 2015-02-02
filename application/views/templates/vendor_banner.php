@@ -37,7 +37,7 @@
                             <img src="<?php echo getAssetsDomain()?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
                         <span class="btn btn-default-3 btn-profile-edit-mobile" id="modal-edit-trigger">
-                            <img src="<?php echo getAssetsDomain()?>/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
+                            <img src="<?php echo getAssetsDomain()?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </span>
                         <a href="#" class="btn btn-default-2 btn-profile-edit-mobile btn-change-cover-photo-mobile">Change Cover Photo</a>
                     </div>
