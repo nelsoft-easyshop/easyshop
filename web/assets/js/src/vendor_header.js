@@ -348,7 +348,13 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 else{
                     $.modal.close();
                     $('#banner-cancel-changes').trigger('click');
-                    alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
+
+                    if(xhrResponse.message == ""){
+                        alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
+                    }
+                    else{
+                        alert(xhrResponse.message);
+                    }
                 }
                 $editContainer.html($defaultValue);
                 $editBanner.html($editBannerDefault);
