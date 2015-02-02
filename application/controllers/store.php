@@ -8,6 +8,7 @@ use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Category\CategoryManager as CategoryManager;
 use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Upload\AssetsUploader as AssetsUploader;
     
 class Store extends MY_Controller
 {
@@ -179,10 +180,11 @@ class Store extends MY_Controller
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         ];
-      
+
         $memberId = $this->session->userdata('member_id');
         $assetsUploader = $this->serviceContainer['assets_uploader'];
         $uploadResult = $assetsUploader->uploadUserAvatar($memberId, "userfile", $cropData);
+
         $memberObj = $uploadResult['member'];
         $userImage = $this->serviceContainer['user_manager']
                           ->getUserImage($memberId);                                                             
@@ -190,11 +192,13 @@ class Store extends MY_Controller
         if(!(bool)$this->input->post('isAjax')) {
             redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
         }
-        
+
         $response = [
-            'isSuccessful' => $userImage ? true : false,
+            'isSuccessful' => empty($uploadResult['error']) ? true : false,
             'image' => $userImage,
+            'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: 5mb",
         ];
+
 
         echo json_encode($response);
     }    
@@ -213,6 +217,7 @@ class Store extends MY_Controller
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         ];
+
         $memberId = $this->session->userdata('member_id');
         $assetsUploader = $this->serviceContainer['assets_uploader'];
         $uploadResult = $assetsUploader->uploadUserBanner($memberId, "userfile", $cropData);
@@ -225,10 +230,12 @@ class Store extends MY_Controller
         }
         
         $response = [
-            'isSuccessful' => $userImage ? true : false,
+            'isSuccessful' => empty($uploadResult['error']) ? true : false,
             'banner' => $userImage,
+            'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: 5mb",
         ];
-
+        
+        
         echo json_encode($response);
     }
 
