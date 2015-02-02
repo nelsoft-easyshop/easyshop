@@ -582,6 +582,10 @@ class Kernel
             return $sphinxClient;
         };
 
+        $container['json_web_token'] = function ($c) {
+            return new \JWT();
+        };
+
 
         /* Register services END */
         $this->serviceContainer = $container;
