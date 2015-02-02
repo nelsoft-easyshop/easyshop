@@ -1,14 +1,14 @@
 (function ($) {
     var $userInfo = $('#userInfo');
-    var $chatServer = $('#chatServer');
-    var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
+    var $chatConfig = $('#chatServerConfig');
+    console.log($chatConfig);
+    var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
     $(document).ready(function()
     {
         /* Register events */
         socket.on('send message', function( data ) {
             onFocusReload(data.message);
         });
-        setAccountOnline($userInfo.data('store-name'));
 
         $('#table_id').dataTable({
             "bScrollInfinite": true,
@@ -147,10 +147,6 @@
         }
     });
 
-    var setAccountOnline = function(memberId)
-    {
-        socket.emit('set account online', memberId);
-    };
 
     function onFocusReload(msgs)
     {
@@ -214,7 +210,7 @@
             url : "/MessageController/send",
             beforeSend :function(){
                 $("#msg_textarea img").show();
-                $("#send_btn").hide();
+                $("#send_btn").hide();recipient
             },
             data : {recipient:recipient,msg:msg,csrfname:csrftoken},
             success : function(resultMsg)
@@ -307,6 +303,7 @@
                 success : function(data) {
                     if (data === true) {
                         $parentLi.removeClass('NS');
+                        socket.emit('message opened');
                     }
                 }
             });
