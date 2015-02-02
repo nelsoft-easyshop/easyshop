@@ -56,8 +56,7 @@ class product_search extends MY_Controller {
 
         $categoryId = $this->input->get('category') && count($this->input->get()) > 0
                       ? trim($this->input->get('category'))
-                      : EsCat::ROOT_CATEGORY_ID;
-        $memberId = $this->session->userdata('member_id');
+                      : EsCat::ROOT_CATEGORY_ID; 
 
         if(count($_GET)>0){
             $parameter = $this->input->get();
@@ -98,12 +97,7 @@ class product_search extends MY_Controller {
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        $searchProductService = $this->serviceContainer['search_product'];
-        $categoryManager = $this->serviceContainer['category_manager']; 
-
-        $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
-        $memberId = $this->session->userdata('member_id');
-
+        $searchProductService = $this->serviceContainer['search_product']; 
         $search = $searchProductService->getProductBySearch($this->input->get());
         $response['products'] = $search['collection']; 
 
