@@ -534,6 +534,10 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         return false;
     });
     
+    $(".btn-change-cover-photo-mobile").click(function() {
+        $("#banner_edit").trigger("click");
+    });
+
     var $windowProfile = $(window);
 
     function checkWidthProfile() {
@@ -550,7 +554,6 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     checkWidthProfile();
     // Bind event listener
     $windowProfile.resize(checkWidthProfile);
-    
 })(jQuery);
 
 function proceedPayment(obj)
