@@ -69,8 +69,6 @@ class MessageController extends MY_Controller
     /**
      * Sends a message
      *
-     * @param string recipient
-     * @param string $msg
      */
     public function send()
     {
@@ -132,7 +130,6 @@ class MessageController extends MY_Controller
     /**
      * Deletes Message/Conversation
      *
-     * @param integer $id_msg
      * @return json
      */
     public function delete()
@@ -159,7 +156,6 @@ class MessageController extends MY_Controller
     /**
      * Gets all messages
      *
-     * @param bool $isUnread
      * @return json
      */
     public function getAllMessage()
@@ -219,8 +215,8 @@ class MessageController extends MY_Controller
     public function getNumberOfUnreadMessages()
     {
         $count = $this->serviceContainer['entity_manager']
-                       ->getRepository('EasyShop\Entities\EsMessages')
-                       ->getUnreadMessageCount($this->userId);
+                      ->getRepository('EasyShop\Entities\EsMessages')
+                      ->getUnreadMessageCount($this->userId);
         echo json_encode($count);
     }
 
