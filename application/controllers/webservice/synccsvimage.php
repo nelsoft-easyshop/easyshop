@@ -41,8 +41,8 @@ class SyncCsvImage extends MY_Controller
             $result = $this->checkIfImagesExist($this->input->get());               
             if(!is_array($result)){
                 return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($result);    
+                            ->set_content_type('application/json')
+                            ->set_output($result);    
             }
             else {
                 return $this->syncImages($result);
