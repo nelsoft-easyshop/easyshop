@@ -254,17 +254,7 @@
                 if(result.messages != ""){
                     $("#table_id tbody").empty();
                     onFocusReload(result);
-                    $("#msg_field")                if (parseInt(resultMsg.success) === 1) {
-                    socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
-                    if (onFocusReload(resultMsg.message) && !isOnConversation) {
-                        $('#modal-close').trigger('click');
-                    }
-                    result = true;
-                }
-                else {
-                    alert(resultMsg.msg);
-                    result = false;
-                }.empty();
+                    $("#msg_field").empty();
                     $("#msg_textarea").hide();
                     $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
                 }
@@ -276,7 +266,7 @@
         $("#modal-background").hide();
         $("#modal-background img").hide();
     }
-
+    
     function specific_msgs()
     {
         var html = "";
