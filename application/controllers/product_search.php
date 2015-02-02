@@ -89,6 +89,27 @@ class product_search extends MY_Controller {
         $this->load->view('templates/footer');
     }
 
+
+    public function loadMoreProductAdvance()
+    {
+        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+
+        $searchProductService = $this->serviceContainer['search_product'];
+        $categoryManager = $this->serviceContainer['category_manager']; 
+
+        $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
+        $memberId = $this->session->userdata('member_id');
+
+        $search = $searchProductService->getProductBySearch($this->input->get());
+        $response['products'] = $search['collection']; 
+
+        $response['typeOfView'] = trim($this->input->get('typeview'));
+        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,true);
+        $data['count'] = count($response['products']);
+        echo json_encode($data);
+    }
+
     /**
      * load more product when scroll
      * @return json
