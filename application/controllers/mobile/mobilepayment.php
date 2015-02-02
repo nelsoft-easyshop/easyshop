@@ -87,13 +87,12 @@ class mobilePayment extends MY_Controller
                               ? json_decode($this->input->post('cartData')) 
                               : [];
 
-        $cartData = $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember());
+        $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember());
         $memberCartData = unserialize($this->member->getUserdata());
         $isCartNotEmpty = empty($memberCartData) === false;
-        $cartData = $isCartNotEmpty ? $memberCartData : []; 
+        $cartData = $isCartNotEmpty ? $memberCartData : [];  
         if((int)$this->member->getIsEmailVerify()){ 
-            if($isCartNotEmpty){
-                unset($cartData['total_items'],$cartData['cart_total']); 
+            if($isCartNotEmpty){ 
                 $validatedCart = $checkoutService->validateCartContent($this->member);
                 $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
                 $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $paymentType);
