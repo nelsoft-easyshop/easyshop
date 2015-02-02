@@ -26,6 +26,8 @@ class AccountManager
     
     const EMAIL_COOLDOWN_DURATION_IN_MINUTES = 30;
     
+    const PASSWORD_RESET_LINK_LIFESPAN_MINUTES = 1440;
+    
 
     /**
      * Entity Manager instance
@@ -380,7 +382,8 @@ class AccountManager
             $validatedPassword = $formData['password'];
             $validatedEmail = $formData['email'];
             $validateContactno = substr($formData['contactno'],1); 
-            $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
+            $hashedPassword = $this->bcryptEncoder->encodePassword($validatedPassword);
+            
             $storeColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
                                    ->find(EsStoreColor::DEFAULT_COLOR_ID);
             $banType = $this->em->getRepository('EasyShop\Entities\EsBanType')
@@ -422,7 +425,7 @@ class AccountManager
      */
     public function authenticateByReverseHashing($username, $password, $member)
     {
-        $hashedPassword = $this->hashMemberPassword($username, $password);
+        $hashedPassword = $this->hashUtility->generalPurposeHash($username, $password);
 
         if($member->getUsername() === $username && $member->getPassword() === $hashedPassword) {
             $this->updatePassword($member->getIdMember(), $password);
@@ -449,26 +452,6 @@ class AccountManager
         $this->em->flush();
         return true;
     }
-
-    /**
-     * Hashes the user password, previously implemented in a stored procedure
-     *
-     * @param string $username
-     * @param string $password
-     * @return string
-     */
-    public function hashMemberPassword($username, $password)
-    {
-        $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('hash', 'hash');
-        $sql = "SELECT reverse(PASSWORD(concat(md5(:username),sha1(:password)))) as hash";
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('username', $username);
-        $query->setParameter('password', $password); 
-        $result = $query->getOneOrNullResult();
-
-        return $result['hash'];
-    }    
 
     /**
      * Authenticates a user via the remember me cookie
@@ -594,6 +577,84 @@ class AccountManager
             }
         }
     }
+    
+    /**
+     * Sends the forgot password email
+     *
+     * @param EasyShop\Entities\EsMember $member
+     * @return bool
+     */
+    public function sendForgotPasswordLink($member)
+    {
+        $dateNow = date('Y-m-d H:i:s');
+        $hash = $this->hashUtility->generalPurposeHash($dateNow, $dateNow);
+        $verificationCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                                 ->findOneBy(['member' => $member]);
+        $verificationCode->setFpTimestamp(new DateTime('now'));
+        $verificationCode->setFpCode($hash);
+        try{
+            $this->em->flush();
+        }
+        catch(\Exception $e){
+            return false;
+        }
+        
+        $parseData = [
+            'username' => $member->getUsername(),
+            'trigger' => $hash,
+        ];
+        $imageArray = [ "/assets/images/img_logo.png" ];  
+
+        $message = $this->parser->parse('templates/email_forgot_pass' , $parseData,true);
+        $this->emailNotification->setRecipient($member->getEmail());
+        $this->emailNotification->setSubject('Password reset on Easyshop.ph');
+        $this->emailNotification->setMessage($message, $imageArray);    
+        return $this->emailNotification->sendMail();
+    }
+    
+    
+    /**
+     * Validates the password reset link and updates the user password
+     *
+     * @param string $newPassword
+     * @param string $hash
+     * @return bool
+     */
+    public function validatePasswordReset($newPassword, $hash)
+    {
+        $verifCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                          ->findOneBy(['fpCode' => $hash]);
+        $response = [
+            'isSuccessful' => false,
+            'member' => null,
+        ];
+
+        if($verifCode){
+            $codeGeneationTime = $verifCode->getFpTimestamp();
+            $dateNow = new DateTime('now');
+            $deltaTime = $dateNow->diff($codeGeneationTime);
+            $elapsedMinutes = $deltaTime->days * 24 * 60;
+            $elapsedMinutes += $deltaTime->h * 60;
+            $elapsedMinutes += $deltaTime->i;
+            if($elapsedMinutes <= self::PASSWORD_RESET_LINK_LIFESPAN_MINUTES){
+                $verifCode->setFpTimestamp($dateNow);
+                $verifCode->setFpCode(null);
+                $member = $verifCode->getMember();
+                $response['member'] = $member;
+                $response['isSuccessful'] = $this->updatePassword($member->getIdMember(), $newPassword);  
+            }
+        }
+       
+        return $response;
+       
+    }
+    
+    
+             
+
+             
+    
+  
 
 }
 
