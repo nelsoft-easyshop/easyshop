@@ -3,7 +3,6 @@
 
 <?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
-<div></div>
 <section>
     <div class="pos-rel" id="display-banner-view">
         <div class="vendor-main-bg" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">
