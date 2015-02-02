@@ -254,10 +254,10 @@ class ApiFormatter
      * @param  string  $paymentType
      * @return array
      */
-    public function formatCart($cartData, $forPayment = false, $paymentType = "")
+    public function formatCart($cartData, $includeValidation = false)
     { 
         $formattedCartContents = [];
-        $finalCart = [];
+        $finalCart = []; 
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['idProduct' => $cartItem['id']]);
@@ -305,36 +305,26 @@ class ApiFormatter
                     'productItemId' => $cartItem['product_itemID'], 
                     'slug' => $cartItem['slug'],
                     'name' => utf8_encode($cartItem['name']),
-                    'quantity' => $cartItem['qty'], 
-                    'originalPrice' => $cartItem['original_price'],
-                    'finalPrice' => $cartItem['price'],  
-                    'isAvailable' => isset($cartItem['isAvailable']) ? $cartItem['isAvailable'] : "true",  
-                    'mapAttributes' => $mappedAttributes
-                ];
+                    'quantity' => $cartItem['qty'],  
+                    'isAvailable' => false,  
+                    'mapAttributes' => $mappedAttributes,
+                ]; 
 
-                if($forPayment){
-                    $formattedCartContents[$rowId]['error_message'] = [];
-                    if(!isset($cartItem[$paymentType]) || !$cartItem[$paymentType]){
-                        $formattedCartContents[$rowId]['error_message'][] = "Not Available for selected payment type";
-                    }
+                if($includeValidation){
+                    $validation = [
+                        'canPurchaseWithOther' => $cartItem['canPurchaseWithOther'],
+                        'hasNoPuchaseLimitRestriction' => $cartItem['hasNoPuchaseLimitRestriction'],
+                        'isAvailableInLocation' => $cartItem['isAvailableInLocation'],
+                        'isQuantityAvailable' => $cartItem['isQuantityAvailable'],
+                        'dragonpay' => $cartItem['dragonpay'],
+                        'paypal' => $cartItem['paypal'],
+                        'cash_delivery' => $cartItem['cash_delivery'],
+                        'pesopaycdb' => $cartItem['pesopaycdb'],
+                        'directbank' => $cartItem['directbank'],
+                        'error_message' => [],
+                    ];
 
-                    if(!$cartItem['canPurchaseWithOther']){
-                        $formattedCartContents[$rowId]['error_message'][] = "This item can only be purchased individually.";
-                    }
-
-                    if(!$cartItem['hasNoPuchaseLimitRestriction']){
-                        $formattedCartContents[$rowId]['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
-                    }
-
-                    if(!$cartItem['isAvailableInLocation']){
-                        $formattedCartContents[$rowId]['error_message'][] = "This item is not available in your location.";
-                    }
-
-                    if(!$cartItem['isQuantityAvailable']){
-                        $formattedCartContents[$rowId]['error_message'][] = "The availability of this items is less than your desired quantity.";
-                    }
-
-                    $formattedCartContents[$rowId]['isAvailable'] = empty($formattedCartContents[$rowId]['error_message']);
+                    $formattedCartContents[$rowId] = array_merge($formattedCartContents[$rowId],$validation);
                 }
 
                 $format = $this->formatItem($cartItem['id']);
@@ -343,6 +333,51 @@ class ApiFormatter
         } 
 
         return $finalCart;
+    }
+
+    /**
+     * Include error on cart before checkout
+     * @param  mixed  $cartContent
+     * @param  string $paymentType
+     * @return mixed
+     */
+    public function includeCartError($cartContent, $paymentType)
+    { 
+        foreach ($cartContent as $key => $cartItem) {
+            if(!isset($cartItem[$paymentType]) || !$cartItem[$paymentType]){
+                $cartContent[$key]['error_message'][] = "Not Available for selected payment type";
+            }
+
+            if(!$cartItem['canPurchaseWithOther']){
+                $cartContent[$key]['error_message'][] = "This item can only be purchased individually.";
+            }
+
+            if(!$cartItem['hasNoPuchaseLimitRestriction']){
+                $cartContent[$key]['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
+            }
+
+            if(!$cartItem['isAvailableInLocation']){
+                $cartContent[$key]['error_message'][] = "This item is not available in your location.";
+            }
+
+            if(!$cartItem['isQuantityAvailable']){
+                $cartContent[$key]['error_message'][] = "The availability of this items is less than your desired quantity.";
+            }
+
+            unset($cartContent[$key]['canPurchaseWithOther']);
+            unset($cartContent[$key]['hasNoPuchaseLimitRestriction']);
+            unset($cartContent[$key]['isAvailableInLocation']);
+            unset($cartContent[$key]['isQuantityAvailable']);
+            unset($cartContent[$key]['dragonpay']);
+            unset($cartContent[$key]['paypal']);
+            unset($cartContent[$key]['cash_delivery']);
+            unset($cartContent[$key]['pesopaycdb']);
+            unset($cartContent[$key]['directbank']);
+
+            $cartContent[$key]['isAvailable'] = empty($cartContent[$key]['error_message']);
+        }
+
+        return $cartContent;
     }
 
     /**
@@ -384,12 +419,14 @@ class ApiFormatter
      */
     public function updateCart($mobileCartContents, $memberId)
     {
+        $unavailableItem = [];
+        $itemList = []; 
+        $slugList = []; 
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
-
             $options = [];
             foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
-                if(intval($attributeArray->isSelected) === 1 || strtolower($attributeArray->isSelected) === "true"){
+                if( (bool) $attributeArray->isSelected || strtolower($attributeArray->isSelected) === "true"){
                     $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
                 }
                
@@ -398,12 +435,33 @@ class ApiFormatter
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
             if($product){
                 $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+                $itemList[] = [
+                    'rowid' => $product->getIdProduct(),
+                    'id' =>  $product->getIdProduct(),
+                    'product_itemID' => 0, 
+                    'slug' => $product->getSlug(),
+                    'name' => utf8_encode($product->getName()),
+                    'qty' => $mobileCartContent->quantity, 
+                    'original_price' => $product->getPrice(),
+                    'price' => $product->getPrice(),
+                    'options' => [], 
+                ];
+                $slugList[] = $product->getSlug();
             }
         }
         $this->cartImplementation->persist($memberId);
         $cartData = $this->cartManager->getValidatedCartContents($memberId);
 
-        return $cartData;
+        foreach ($cartData as $data) {  
+            if(($key = array_search($data['slug'], $slugList)) !== false) {
+                unset($itemList[$key]);
+            }
+        } 
+
+        return [
+            'availableItems' => $this->formatCart($cartData),
+            'unavailableItems' => $this->formatCart($itemList),
+        ];
     }
 }
  

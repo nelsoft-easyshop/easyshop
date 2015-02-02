@@ -70,10 +70,9 @@ class cart extends MY_Controller
         $mobileCartContents = $this->input->post('cartData') 
                               ? json_decode($this->input->post('cartData')) 
                               : [];
-        $cartData = $this->apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
-        $formattedCartContents = $this->apiFormatter->formatCart($cartData);
+        $cartData = $this->apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember()); 
 
-        print(json_encode($formattedCartContents,JSON_PRETTY_PRINT));
+        print(json_encode($cartData,JSON_PRETTY_PRINT));
     }
 
     /**

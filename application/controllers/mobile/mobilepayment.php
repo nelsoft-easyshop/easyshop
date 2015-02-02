@@ -95,7 +95,8 @@ class mobilePayment extends MY_Controller
             if($isCartNotEmpty){ 
                 $validatedCart = $checkoutService->validateCartContent($this->member);
                 $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
-                $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $paymentType);
+                $formattedCartContents = $apiFormatter->formatCart($validatedCart, true);
+                $formattedCartWithError = $apiFormatter->includeCartError($formattedCartContents, $paymentType);
             }
             else{
                 $errorMessage = "You have no item in you cart";
@@ -106,7 +107,7 @@ class mobilePayment extends MY_Controller
         }
 
         $outputData = [
-            'cartData' => $formattedCartContents,
+            'cartData' => $formattedCartWithError,
             'canContinue' => $canContinue,
             'errorMessage' => $errorMessage,
         ];
