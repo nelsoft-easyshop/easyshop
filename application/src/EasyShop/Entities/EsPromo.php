@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsPromo
 {
-
     /**
      * @var integer
      *
@@ -46,6 +45,13 @@ class EsPromo
     /**
      * @var integer
      *
+     * @ORM\Column(name="student_id", type="integer", nullable=true)
+     */
+    private $studentId = '0';
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="promo_type", type="integer", nullable=true)
      */
     private $promoType = '0';
@@ -62,7 +68,7 @@ class EsPromo
     /**
      * Get idPromo
      *
-     * @return integer
+     * @return integer 
      */
     public function getIdPromo()
     {
@@ -85,7 +91,7 @@ class EsPromo
     /**
      * Get memberId
      *
-     * @return integer
+     * @return integer 
      */
     public function getMemberId()
     {
@@ -108,7 +114,7 @@ class EsPromo
     /**
      * Get productId
      *
-     * @return integer
+     * @return integer 
      */
     public function getProductId()
     {
@@ -131,11 +137,34 @@ class EsPromo
     /**
      * Get code
      *
-     * @return string
+     * @return string 
      */
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * Set studentId
+     *
+     * @param integer $studentId
+     * @return EsPromo
+     */
+    public function setStudentId($studentId)
+    {
+        $this->studentId = $studentId;
+
+        return $this;
+    }
+
+    /**
+     * Get studentId
+     *
+     * @return integer 
+     */
+    public function getStudentId()
+    {
+        return $this->studentId;
     }
 
     /**
@@ -154,7 +183,7 @@ class EsPromo
     /**
      * Get promoType
      *
-     * @return integer
+     * @return integer 
      */
     public function getPromoType()
     {
@@ -177,7 +206,7 @@ class EsPromo
     /**
      * Get createdAt
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getCreatedAt()
     {
