@@ -479,9 +479,8 @@ class ProductManager
 
         if(count($existingSlugs) > 0) {
             $counter = 0;
-            while (in_array($cleanedTitle ."-". $counter++, $existingSlugs));
+            while (in_array($cleanedTitle ."-". ++$counter, $existingSlugs));
             $cleanedTitle .= "-". $counter;
-
         }
 
         return $cleanedTitle;
