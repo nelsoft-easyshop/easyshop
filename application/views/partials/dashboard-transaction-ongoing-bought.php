@@ -3,7 +3,7 @@
     <?PHP foreach($transaction as $key => $boughtTransactionDetails) : ?>
     <div class="item-list-panel <?=$boughtTransactionDetails['invoiceNo'] ?>">
         <div class="transac-title">
-        <?php if (intval($boughtTransactionDetails['idPaymentMethod']) === 1 && intval($boughtTransactionDetails['isFlag']) === 1) : ?>
+        <?php if ( (int) $boughtTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && (int) $boughtTransactionDetails['isFlag'] === 1) : ?>
             <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW</span></div>
         <?php else:?>
             <div><span class="strong-label">Transaction No. : </span> <?=$boughtTransactionDetails['invoiceNo'] ?></div>
