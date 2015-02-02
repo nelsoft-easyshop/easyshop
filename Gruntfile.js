@@ -224,15 +224,12 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendorpage_followers.js'],
 
                     'web/assets/js/min/easyshop.user_forgotpass.js':
-                            ['web/assets/js/src/vendor/jquery.numeric.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/register.js'],
+                            ['web/assets/js/src/forgotpassword.js'],
 
-                    'web/assets/js/min/easyshop.user_forgotpass_confirm.js':
-                            ['web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
+                    'web/assets/js/min/easyshop.user_forgotpass_update_password.js':
+                            ['web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/register.js',
                              'web/assets/js/src/forgotpassword.js'],
 
                     'web/assets/js/min/easyshop.user_login_view.js':
