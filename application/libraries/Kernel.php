@@ -580,7 +580,14 @@ class Kernel
             return $sphinxClient;
         };
 
-
+        // Product Upload Manager
+        $container['product_upload_manager'] = function ($c) use ($container) {
+            return new \EasyShop\Product\ProductUploadManager(
+                            $container['entity_manager'],
+                            $container['product_manager']
+                        );
+        };
+        
         /* Register services END */
         $this->serviceContainer = $container;
     }
