@@ -78,6 +78,13 @@ class AssetsUploader
      */
     private $imageLibrary;
     
+    /**
+     * Image Utility
+     *
+     * @var EasyShop\ImageImageUtility
+     */
+    private $imageUtility;
+    
 
     
     /**
@@ -89,7 +96,8 @@ class AssetsUploader
                                 $configLoader, 
                                 $uploadLibrary, 
                                 $imageLibrary, 
-                                $environment = 'DEVELOPMENT')
+                                $environment = 'DEVELOPMENT',
+                                $imageUtility)
     {
         $this->awsUploader = $awsUploader;
         $this->environment = $environment;
@@ -97,6 +105,7 @@ class AssetsUploader
         $this->configLoader = $configLoader;
         $this->uploadLibrary = $uploadLibrary;
         $this->imageLibrary = $imageLibrary;
+        $this->imageUtility = $imageUtility;
         
         $userImageDimensions = $this->configLoader->getItem('image_dimensions')['userImagesSizes'];
         $this->userImageDimensions['normal'] = [
@@ -366,6 +375,26 @@ class AssetsUploader
         return $result;
     }
 
+    /**
+     * Uploads the product image. 
+     * This method supports multiple uploads
+     * This method uploads the file in the $_FILES super global method
+     *
+     * @param string $fileNames
+     * @param string $pathDirectory
+     * @param string $fieldName
+     * @param mixed  $cropData
+     * sample cropdata. based on $fileName count
+     *        [
+     *            0 => [
+     *                    0 => x Axis,
+     *                    1 => y Axis,
+     *                    2 => width,
+     *                    3 => height,
+     *                 ],
+     *        ]
+     * @return mixed
+     */
     public function uploadProductImage($fileNames, $pathDirectory, $fieldName = "userfile", $cropData = []){
         $fileSuperGlobal = $_FILES;
         $isSuccess = false;
@@ -377,7 +406,7 @@ class AssetsUploader
             $config = [
                 "upload_path" => $pathDirectory,
                 "overwrite" => false,
-                "file_name"=> $fileNames,
+                "file_name" => $fileNames,
                 "encrypt_name" => false,
                 "remove_spaces" => true,
                 "allowed_types" => self::ALLOWABLE_IMAGE_MIME_TYPES,
@@ -387,47 +416,50 @@ class AssetsUploader
             $this->uploadLibrary->initialize($config); 
 
             if($this->uploadLibrary->do_multi_upload($fieldName)){
-                $fileData = $this->uploadLibrary->get_multi_upload_data(); 
-                // for ($i=0; $i < sizeof($fileSuperGlobal[$fieldName]); $i++) {
-                //     if(isset($fileData[$i])){
-                //         $uploadData = $fileData[$i];
-                //         $file = $fileNames[$i];
-                //         $coordinate = $cropData[$i];
-                //         $originalImage = $pathDirectory.$file;
-                //         $smallImage = $pathDirectory."small/".$file;
-                //         $categoryImage = $pathDirectory."categoryview/".$file;
-                //         $thumbnailImage = $pathDirectory."thumbnail/".$file;
+                $fileData = $this->uploadLibrary->get_multi_upload_data();  
+                for ($i=0; $i < sizeof($fileSuperGlobal[$fieldName]); $i++) {
+                    if(isset($fileData[$i])){
+                        $uploadData = $fileData[$i];
+                        $file = $fileNames[$i];
+                        $originalImage = $pathDirectory.$file;
+                        $smallImage = $pathDirectory."small/".$file;
+                        $categoryImage = $pathDirectory."categoryview/".$file;
+                        $thumbnailImage = $pathDirectory."thumbnail/".$file;
 
-                //         $imageUtility->imageCrop($pathDirectory.$file, 
-                //                                  $coordinate[0], 
-                //                                  $coordinate[1], 
-                //                                  $coordinate[2], 
-                //                                  $coordinate[3]);
+                        if(empty($coordinate) === false && isset($cropData[$i])){
+                            $coordinate = $cropData[$i];
+                            $this->imageUtility->imageCrop($pathDirectory.$file, 
+                                                     $coordinate[0], 
+                                                     $coordinate[1], 
+                                                     $coordinate[2], 
+                                                     $coordinate[3]);
+                        }
 
-                //         $imageUtility->imageResize($originalImage, 
-                //                                    $smallImage,
-                //                                    $dimensions["small"]);
+                        $this->imageUtility->imageResize($originalImage, 
+                                                   $smallImage,
+                                                   $dimensions["small"]);
 
-                //         $imageUtility->imageResize($smallImage, 
-                //                                    $categoryImage,
-                //                                    $dimensions["categoryview"]);
+                        $this->imageUtility->imageResize($smallImage, 
+                                                   $categoryImage,
+                                                   $dimensions["categoryview"]);
 
-                //         $imageUtility->imageResize($categoryImage, 
-                //                                    $thumbnailImage,
-                //                                    $dimensions["thumbnail"]);
+                        $this->imageUtility->imageResize($categoryImage, 
+                                                   $thumbnailImage,
+                                                   $dimensions["thumbnail"]);
 
-                //         if( $uploadData['image_width'] > self::MAX_IMAGE_HEIGHT 
-                //             || $uploadData['image_height'] > self::MAX_IMAGE_WIDTH ){
-                //             $config['width'] = self::MAX_IMAGE_HEIGHT;
-                //             $config['height'] = self::MAX_IMAGE_WIDTH;
-                //             $this->imageLibrary->initialize($config);  
-                //             $this->imageLibrary->resize(); 
-                //             $this->imageLibrary->clear();
-                //         }
+                        if( $uploadData['image_width'] > self::MAX_IMAGE_HEIGHT 
+                            || $uploadData['image_height'] > self::MAX_IMAGE_WIDTH ){
+                            $config['width'] = self::MAX_IMAGE_HEIGHT;
+                            $config['height'] = self::MAX_IMAGE_WIDTH;
+                            $this->imageLibrary->initialize($config);  
+                            $this->imageLibrary->resize(); 
+                            $this->imageLibrary->clear();
+                        }
 
-                //         $finalFileNames[] = $file;
-                //     }
-                // }
+                        $finalFileNames[] = $file;
+                    }
+                }
+                $isSuccess = true;
             }
             else{ 
                 $errorMessage = $this->uploadLibrary->display_errors();
