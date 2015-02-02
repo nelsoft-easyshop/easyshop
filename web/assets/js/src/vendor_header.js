@@ -168,7 +168,9 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         $('#editIconOpen').trigger('click');
                     }
                  
-                    
+                    if(!isDesktop) {
+                        window.location = "/"+escapedStoreName;
+                    }
                 }
                 else{
                     // Display error
