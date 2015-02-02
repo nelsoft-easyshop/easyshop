@@ -89,7 +89,10 @@ class product_search extends MY_Controller {
         $this->load->view('templates/footer');
     }
 
-
+    /**
+     * load more product when scroll in advance search
+     * @return json
+     */
     public function loadMoreProductAdvance()
     {
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
