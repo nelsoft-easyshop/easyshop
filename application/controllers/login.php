@@ -224,16 +224,16 @@ class Login extends MY_Controller
             $formFactory = $this->serviceContainer['form_factory'];
             $formErrorHelper = $this->serviceContainer['form_error_helper']; 
 
-            $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
+            $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                                 ->setMethod('POST')
-                                ->add('email', 'text', array('required' => false, 'label' => false, 'constraints' => $rules))
+                                ->add('email', 'text', ['required' => false, 'label' => false, 'constraints' => $rules])
                                 ->getForm();
                                 
         
             $form->submit([ 'email' => $this->input->post('email')]);
             if ($form->isValid()) {
                 $member = $em->getRepository('EasyShop\Entities\EsMember')
-                            ->findOneBy(['email' => $this->input->post('email')]);
+                             ->findOneBy(['email' => $this->input->post('email')]);
                 if($member){
                     $isEmailSent = $this->serviceContainer['account_manager']
                                         ->sendForgotPasswordLink($member);
