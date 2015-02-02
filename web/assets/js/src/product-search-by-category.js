@@ -82,7 +82,9 @@
 
             if (windowWidth <= 720) {
                 $(".search-slider .bx-viewport .slide").css("width", searchslidewidth2);
+                $(".top-slider-img").css("display","none");
             }
+
             if (windowWidth <= 395) {
                 $(".search-slider .bx-viewport .slide").css("width", searchslidewidth);
             }

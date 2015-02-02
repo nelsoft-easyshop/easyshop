@@ -41,8 +41,8 @@
                         <?php if(trim($topBanner['target']['url']) !== ''): ?>
                             <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
                         <?php endif; ?>
-                                <li class="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>top-slider-item<?php endif;?>">
-                                    <img src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
+                                <li class="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>top-slider-item<?php endif;?>" style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>) center no-repeat; background-size: cover;">
+                                    <img class="top-slider-img" src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
                                 </li>
                         <?php if(trim($topBanner['target']['url']) !== ''): ?>
                             </a>
