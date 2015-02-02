@@ -6,10 +6,18 @@
         <meta property="og:image" content="http://easyshop.ph/assets/images/img_logo.png" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="/assets/css/landingpage/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-        <link href="/assets/css/landingpage/bootstrap-responsive.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-        <link href="/assets/css/landingpage/mystyle.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-        <link href="/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <link href="/assets/css/landingpage/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+            <link href="/assets/css/landingpage/bootstrap-responsive.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+            <link href="/assets/css/landingpage/mystyle.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+            <link href="/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+            
+        <?php else: ?>
+            <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.register-success.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+        <?php endif; ?>
+        
+        
         <title><?php echo $title;?></title>
         
         <!-- Google Analytics -->
