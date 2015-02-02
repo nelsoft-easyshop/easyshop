@@ -478,9 +478,9 @@ class ProductManager
         $existingSlugs = array_map('current', $query->getResult());
 
         if(count($existingSlugs) > 0) {
-            $max = 0;
-            while (in_array($cleanedTitle ."-". $max++, $existingSlugs));
-            $cleanedTitle .= "-". $max;
+            $counter = 0;
+            while (in_array($cleanedTitle ."-". $counter++, $existingSlugs));
+            $cleanedTitle .= "-". $counter;
 
         }
 
