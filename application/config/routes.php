@@ -185,7 +185,9 @@ else {
     #MOBILE
     $route['mobile/payment-type'] = 'mobile/mobilepayment/getPaymentMethod';
     $route['mobile/payment/review'] = 'mobile/mobilepayment/reviewPayment';
-    $route['mobile/product/upload'] = 'mobile/mobileProductUpload/uploadProduct';
+
+    $route['mobile/product/upload/process'] = 'mobile/mobileProductUpload/uploadProduct';
+    $route['mobile/product/upload/requestToken'] = 'mobile/mobileProductUpload/requestUploadToken';
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
