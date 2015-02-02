@@ -95,12 +95,6 @@
 </section>
 <br/>
 
-<script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.raty.min.js"></script>
-
-
 <div>
     <input type="hidden" id="request-url" value="/me/product/next" />
     <input type="hidden" id="request-url-soft-delete" value="/me/product/delete-soft" />
@@ -116,19 +110,24 @@
     <?=form_close();?> 
 </div>
 
-
-
-
-<script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.dashboard.home.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type='text/javascript'  src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
 
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.raty.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.dashboard.home.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript'  src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.dashboard-primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 
 

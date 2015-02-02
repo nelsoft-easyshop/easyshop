@@ -41,7 +41,7 @@
     
     #scrollUp, #scrollUp:hover{
         background: #<?php echo html_escape($colorHexadecimal); ?>
-                    url("/assets/images/img_arrow_down_white2.png") center no-repeat !important;
+                    url("<?php echo getAssetsDomain(); ?>assets/images/img_arrow_down_white2.png") center no-repeat !important;
     }
     
     .tab-active-link{

@@ -85,7 +85,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <?php if(isset($logged_in) && $logged_in): ?>
                                             <div class="new-user-nav-dropdown">
                                                 <div class="login-profile-con">
-                                                    <img src="/<?=$user->profileImage;?>">
+                                                    <img src="<?php echo getAssetsDomain(); ?><?=$user->profileImage;?>">
                                                 </div>
                                                 <a href="/<?=$user->getSlug();?>" class="header-seller-name">
                                                     <?php echo html_escape($user->getUsername()); ?>
@@ -106,11 +106,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     </li>
                                                     <li class="nav-dropdown-border pos-rel">
                                                         <a href="/messages">Messages</a>
-                                                        <?php if((int)$unreadMessageCount !== 0) : ?>
-                                                            <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                                <?php echo $unreadMessageCount; ?>
-                                                            </div>
-                                                        <?php endif;?>
+                                                        <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                                            <?php echo $unreadMessageCount; ?>
+                                                        </div>
                                                     </li>
                                                     <li class="nav-dropdown-border">
                                                         <a class="prevent" href="/login/logout">Logout</a>
@@ -120,7 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             </div>
                                         <?php else: ?>
                                             <div class="header-link-login">
-                                                <img src="/assets/images/img-login-icon.png" alt="login">
+                                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-login-icon.png" alt="login">
                                                 <a href="/login">login</a>&nbsp;or&nbsp;
                                                 <a href="/register">create an account</a>
                                             </div>
@@ -142,9 +140,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <span>EasyShop.ph</span>
                                 <a href="/" title="EasyShop.ph Website">
                                     <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                                        <img src="/assets/images/img_logo_christmas_theme.png" alt="Online Shopping">
+                                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo_christmas_theme.png" alt="Online Shopping">
                                     <?php else: ?>
-                                        <img src="/assets/images/img_logo.png" alt="Online Shopping">
+                                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo.png" alt="Online Shopping">
                                     <?php endif; ?>
                                 </a>
                             </h1>
@@ -171,7 +169,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             <div class="mrgn-bttm-15">
                                                                 <div class="header-cart-item-img">
                                                                     <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                                        <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?= html_escape($cartItemsReversed[$i]['name']); ?>"></span>
+                                                                        <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?= html_escape($cartItemsReversed[$i]['name']); ?>"></span>
                                                                     </a>
                                                                 </div>
                                                                 <div class="header-cart-item-con">
@@ -228,7 +226,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div  class="sticky-nav-logo-con">
                                     <div class="sticky-nav-logo">
                                         <a href="">
-                                            <img src="/assets/images/img-sticky-logo.png" alt="Easyshop Logo">
+                                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-sticky-logo.png" alt="Easyshop Logo">
                                         </a>
                                     </div>
                                 </div>
@@ -302,13 +300,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                                 <?php if($topSeller['details']): ?>
                                                                     <a href="/<?php echo $topSeller['details']->getSlug() ?>">
                                                                         <div class="top-seller-profile-photo">
-                                                                            <img src="<?php echo $topSeller['image'] ?>" alt="seller profile photo">
+                                                                            <img src="<?php echo getAssetsDomain().'.'.$topSeller['image'] ?>" alt="seller profile photo">
                                                                         </div>
                                                                         <div class="top-seller-name">
                                                                             <?php $storeName = $topSeller['details']->getStoreName(); ?>
                                                                             <?php echo html_escape(($storeName && strlen(trim($storeName)) > 0) ? $storeName : $topSeller['details']->getUsername()); ?>
                                                                         </div>
-
                                                                     </a>
                                                                 <?php endif; ?>
                                                             <?php endforeach; ?>
@@ -345,7 +342,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                                 <div class="mrgn-bttm-15">
                                                                     <div class="header-cart-item-img">
                                                                         <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                                                            <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
                                                                         </a>
                                                                     </div>
                                                                     <div class="header-cart-item-con">
@@ -375,7 +372,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <?php if(isset($logged_in) && $logged_in): ?>
                                                     <div class="new-user-nav-dropdown">
                                                         <div class="login-profile-con">
-                                                            <img src="/<?=$user->profileImage;?>">
+                                                            <img src="<?php echo getAssetsDomain(); ?><?=$user->profileImage;?>">
                                                         </div>
                                                         <a href="/<?=$user->getSlug();?>" class="header-seller-name" style="color:#4370cc">
                                                             <?php echo html_escape($user->getUsername()) ;?>
@@ -396,11 +393,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             </li>
                                                             <li class="nav-dropdown-border pos-rel">
                                                                 <a href="/messages">Messages</a>
-                                                                <?php if((int)$unreadMessageCount !== 0) : ?>
-                                                                    <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                                        <?php echo $unreadMessageCount ;?>
-                                                                    </div>
-                                                                <?php endif;?>
+                                                                <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                                                    <?php echo $unreadMessageCount; ?>
+                                                                </div>
+                                                                
                                                             </li>
                                                             <li class="nav-dropdown-border">
                                                                 <a class="prevent" href="/login/logout">Logout</a>
@@ -410,7 +406,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     </div>
                                                 <?php else: ?> 
                                                     <div class="header-link">
-                                                        <img src="/assets/images/img-login-icon.png" alt="login">
+                                                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-login-icon.png" alt="login">
                                                         <a href="/login">login</a>&nbsp;or&nbsp;
                                                         <a href="/register">create an account</a>
                                                     </div>
@@ -433,9 +429,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div><!-- End #header -->
 
 <div class="clear"></div>        
-<input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
-<script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
-<script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
- 
+<input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
+<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user ? $user->getStoreName() : 'false')?>">
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
+    <script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
+    <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.header_primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+

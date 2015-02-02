@@ -120,7 +120,6 @@ function ReplaceNumberWithCommas(thisnumber){
         var uprice = $.trim($(this).closest("ul").find('#filter-uprice').val());
         uprice = uprice.replace(new RegExp(",", "g"), '');
         uprice = parseFloat(uprice).toFixed(2);
-
         memconf.condition = condition;
         memconf.lprice = !isNaN(lprice) ? lprice : "";
         memconf.uprice = !isNaN(uprice) ? uprice : "";
@@ -320,7 +319,7 @@ function ItemListAjax(CatDiv,page)
         });
         
         $('.col-filter').click(function (e) {
-            $('.filter-modal').modal();
+            $('.filter-modal').modal({persist:true});
             $('.simplemodal-container').addClass("filter-modal-container");
             return false;
         });

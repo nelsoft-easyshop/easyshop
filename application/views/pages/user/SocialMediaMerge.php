@@ -15,7 +15,7 @@
                     <button class="btn  btn-orange-lg proceed">
                         PROCEED <i class="glyphicon glyphicon-play"></i>
                     </button>
-                    <img src="/assets/images/orange_loader.gif" style="display: none">
+                    <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif" style="display: none">
                     <b>
                         <div class="div-link-login">
                             <a href="/register">
@@ -46,5 +46,11 @@
 </section>
 <br/>
 <br/>
-<script src='/assets/js/src/SocialMediaMerge.js?ver=<?php echo ES_FILE_VERSION ?>' type='text/javascript'></script>
-<script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src='/assets/js/src/SocialMediaMerge.js?ver=<?php echo ES_FILE_VERSION ?>' type='text/javascript'></script>
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.SocialMediaMerge.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+

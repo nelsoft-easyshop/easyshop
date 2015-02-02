@@ -286,8 +286,8 @@
                             <input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
                             <span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
                             <div id="username_status">
-                                <img class="fieldstatus" src="/assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-                                <img class="fieldstatus" src="/assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/>
                                 <span class="username_availability"></span>
                             </div>
                         </div>
@@ -307,8 +307,8 @@
                             <h4 class="txt_cp">Confirm Password</h4>
                             <input type="password" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
                             <span class="field_pword_status">
-                                <img class="fieldstatus" src="/assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
-                                <img class="fieldstatus" src="/assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
+                                <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/check_icon.png" id="cpassword_check" style="position: relative;display:none;"/>
+                                <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/x_icon.png" id="cpassword_x" style="position: relative;display:none; "/>
                             </span>
                             <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
                             <span class="help-block spnmsg padding1" style="text-align:left"></span>
@@ -318,8 +318,8 @@
                             <input type="text" placeholder="" id="email" name="email" class="reqfield" autocomplete="off">
                             <input type="hidden" id="emailcheck" value="">
                             <div id="email_status">
-                                <img class="fieldstatus" src="/assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
-                                <img class="fieldstatus" src="/assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/check_icon.png" id="email_check" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/x_icon.png" id="email_x" style="position: relative;display:none;vertical-align:middle"/>
                             </div>
                             <br/>
                             <span class="red email_availability"></span>
@@ -331,8 +331,8 @@
                             <input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield" id="mobile" maxlength="11">
                             <input type="hidden" id="mobilecheck" value="">
                             <div id="mobile_status">
-                                <img class="fieldstatus" src="/assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
-                                <img class="fieldstatus" src="/assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/check_icon.png" id="mobile_check" style="position: relative;display:none;vertical-align:middle"/>
+                                <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/>
                                 <span class=" red  mobile_availability"></span>
                             </div>
                             <span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
@@ -348,7 +348,7 @@
                             <!--<button type="button" class="btn btn-warning btn-large">SEND</button>-->
                             <input type="submit" class="btn btn_send" value="SEND" name="register_form1" id="register_form1_btn" >
                             <div style='display:inline-block; position:absolute; width:50px; overflow:hidden;'>
-                            <img style='display:none;margin-top:5px;margin-left:5px;' src="/assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
+                            <img style='display:none;margin-top:5px;margin-left:5px;' src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
                             </div>
                         </div>
                     </fieldset>
@@ -411,45 +411,25 @@
 <input type="hidden" name="referrer" class="referrer" value="<?=$redirect_url ?>"/>
 <?php echo form_close();?>
 
-
-<script src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
-<script src="/assets/js/src/landingpage-responsive-nav.js"></script>
-<script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
-
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
-
 <script type="text/javascript">
     var config = {
          base_url: "<?php echo base_url(); ?>",
     };
-    
-
-    var navigation = responsiveNav(".nav-collapse");
-
-
-    (function( $ ) {
-
-
-        jQuery('.bxslider_slides').bxSlider({
-            infiniteLoop: true,
-            auto: true
-        });
-    })(jQuery);  
-    jQuery('#reg_btn,#reg_txt').click(function(event) {
-        event.preventDefault();
-        var n = jQuery(document).height();
-        jQuery('html, body').animate({ scrollTop: 200 }, 300);
-
-        navigation.close();
-    });
 </script>
-<!-- password meter: uses mootool, consider replacing -->
-<script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
-<!-- end mootool -->
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type='text/javascript' src='/assets/js/src/landingpage-responsive-nav.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_register.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 <script>
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 </script>

@@ -1,16 +1,26 @@
 <?php
 namespace EasyShop\Utility;
 
+use Doctrine\ORM\Query\ResultSetMapping;
+
 class HashUtility
 {
     private $encrypt;
+    
+    /**
+     * Doctrine Entity manager
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
 
     /**
      * @param $encrypt
      */
-    public function __construct($encrypt)
+    public function __construct($encrypt, $em)
     {
         $this->encrypt = $encrypt;
+        $this->em = $em;
     }
 
     /**
@@ -43,4 +53,25 @@ class HashUtility
         }
         return $string;
     }        
+    
+    /**
+     * Generate a hash from two strings, previously implemented in a stored procedure
+     *
+     * @param string $string1
+     * @param string $string2
+     * @return string
+     */
+    public function generalPurposeHash($string1, $string2)
+    {
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('hash', 'hash');
+        $sql = "SELECT reverse(PASSWORD(concat(md5(:string1),sha1(:string2)))) as hash";
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('string1', $string1);
+        $query->setParameter('string2', $string2); 
+        $result = $query->getOneOrNullResult();
+
+        return $result['hash'];
+    }    
+    
 }

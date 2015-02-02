@@ -72,7 +72,7 @@
                                 </center>
                             </div>
                             <div style='text-align:center !important;'>
-                                <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none;"/>                                
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none;"/>                                
                             </div>
                             <div class="alert alert-danger" style="display:none;" role="alert" id="password-change-error">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -104,8 +104,12 @@
         </div>
     </div>
 </div>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src="/assets/js/src/accountactivation.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.MemberPageAccountActivate.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 
-<script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/accountactivation.js?ver=<?=ES_FILE_VERSION?>"></script>

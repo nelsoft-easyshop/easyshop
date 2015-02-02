@@ -312,7 +312,7 @@ class CategoryManager
             $categoryName = $vendorCategory['p_cat_name'];
             $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
             $hasNoParent = !isset($vendorCategories[$parentId]);
-            $isCategoryMainParent = $parentId === EsCat::MAIN_PARENT_CATEGORY;
+            $isCategoryMainParent = $parentId === EsCat::ROOT_CATEGORY_ID;
             $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
             if($hasNoParent){
                 $vendorCategories[$parentId] = [];

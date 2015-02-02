@@ -7,7 +7,8 @@ if (!defined('BASEPATH')){
 use EasyShop\Entities\EsAddress as EsAddress; 
 use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Category\CategoryManager as CategoryManager;
-use Easyshop\Upload\Upload as UploadService;
+use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Upload\AssetsUploader as AssetsUploader;
     
 class Store extends MY_Controller
 {
@@ -173,90 +174,30 @@ class Store extends MY_Controller
      */
     public function upload_img()
     {
-        $data = [
+        $cropData = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         ];
 
-        $this->upload = $this->serviceContainer['image_upload'];
-        $uid = $this->session->userdata('member_id');
-        $imageUtility = $this->serviceContainer['image_utility'];            
-        $memberObj = $this->serviceContainer['entity_manager']
-                                    ->getRepository('EasyShop\Entities\EsMember')
-                                    ->find($uid); 
-        $path = $memberObj->getImgurl();
+        $memberId = $this->session->userdata('member_id');
+        $assetsUploader = $this->serviceContainer['assets_uploader'];
+        $uploadResult = $assetsUploader->uploadUserAvatar($memberId, "userfile", $cropData);
 
-        $file_ext = explode('.', $_FILES['userfile']['name']);
-        $file_ext = strtolower(end($file_ext));  
-        $allowed =  ['gif','png' ,'jpg','jpeg']; 
+        $memberObj = $uploadResult['member'];
+        $userImage = $this->serviceContainer['user_manager']
+                          ->getUserImage($memberId);                                                             
 
-        if(!in_array(strtolower($file_ext),$allowed)
-           || $_FILES['userfile']['size'] > UploadService::MAX_UPLOAD_SIZE_MB * 1024 ){
-            $response = [
-                'isSuccessful' => false,
-                'image' => "",
-                'message' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb"
-            ];
+        if(!(bool)$this->input->post('isAjax')) {
+            redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
         }
-        else{
-            if(trim($path) === '') {
-                $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
-            }   
-            if(!is_dir($path)) {
-                mkdir($path,0755,true); 
-            }          
-            $avatarFileName = $path."/".EsMember::DEFAULT_IMG_AVATAR;
-            $uploadReturn = $this->upload->uploadImage($path, EsMember::DEFAULT_IMG_AVATAR);  
-            if($data['w'] > 0 && $data['h'] > 0) {
-                $imageUtility->imageCrop($avatarFileName,
-                                         $data["x"],
-                                         $data["y"],
-                                         $data["w"],
-                                         $data["h"]
-                                         );
-            }
-            $this->config->load('image_dimensions', true);
-            $imageDimensionsConfig = $this->config->config['image_dimensions'];              
-            if($uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["userImagesSizes"]["usersize"][0]
-               || $uploadReturn["uploadData"]["image_width"] > $imageDimensionsConfig["userImagesSizes"]["usersize"][1]) {
-                $imageUtility->imageResize($avatarFileName, 
-                                           $avatarFileName, 
-                                           $imageDimensionsConfig["userImagesSizes"]["usersize"]
-                                           );
-            }
 
-            $imageUtility->imageResize($avatarFileName, 
-                                       $path."/".EsMember::DEFAULT_IMG_NORMAL_SIZE, 
-                                       $imageDimensionsConfig["userImagesSizes"]["normalsize"]
-                                       );
-
-            $imageUtility->imageResize($avatarFileName, 
-                                       $path."/".EsMember::DEFAULT_IMG_SMALL_SIZE, 
-                                       $imageDimensionsConfig["userImagesSizes"]["smallsize"]
-                                       );   
-
-            $this->serviceContainer['entity_manager']
-                 ->getRepository('EasyShop\Entities\EsMember')
-                 ->updateMemberImageUrl($memberObj, $path);  
-
-            $userImage = $this->serviceContainer['user_manager']
-                              ->getUserImage($uid);                                                             
-
-            if(!(bool)$this->input->post('isAjax')) {
-                redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
-            }
-            
-            $response = [
-                'isSuccessful' => true,
-                'image' => $userImage,
-            ];
-            
-            if(!$userImage){
-                $response['isSuccessful'] = false;
-            } 
-        }
+        $response = [
+            'isSuccessful' => empty($uploadResult['error']) ? true : false,
+            'image' => $userImage,
+            'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: ".AssetsUploader::MAX_ALLOWABLE_SIZE_KB." kb",
+        ];
 
 
         echo json_encode($response);
@@ -270,81 +211,31 @@ class Store extends MY_Controller
      */
     public function banner_upload()
     {    
-        $data = [
+        $cropData = [
             'x' => $this->input->post('x'),
             'y' => $this->input->post('y'),
             'w' => $this->input->post('w'),
             'h' => $this->input->post('h')
         ];
 
-        $this->upload = $this->serviceContainer['image_upload'];
-        $uid = $this->session->userdata('member_id');
-        $imageUtility = $this->serviceContainer['image_utility'];            
-        $memberObj = $this->serviceContainer['entity_manager']
-                                    ->getRepository('EasyShop\Entities\EsMember')
-                                    ->find($uid); 
-        $path = $memberObj->getImgurl();
+        $memberId = $this->session->userdata('member_id');
+        $assetsUploader = $this->serviceContainer['assets_uploader'];
+        $uploadResult = $assetsUploader->uploadUserBanner($memberId, "userfile", $cropData);
+        $memberObj = $uploadResult['member'];
+        $userImage = $this->serviceContainer['user_manager']
+                          ->getUserImage($memberId, 'banner');                                                             
 
-        $file_ext = explode('.', $_FILES['userfile']['name']);
-        $file_ext = strtolower(end($file_ext));  
-        $allowed =  ['gif','png' ,'jpg','jpeg']; 
-
-        if(!in_array(strtolower($file_ext),$allowed)
-           || $_FILES['userfile']['size'] > UploadService::MAX_UPLOAD_SIZE_MB * 1024 ){
-            $response = [
-                'isSuccessful' => false,
-                'image' => "",
-                'message' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb"
-            ];
+        if(!(bool)$this->input->post('isAjax')) {
+            redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
         }
-        else{
-            if(trim($memberObj->getImgurl()) === '') {
-                $path = $this->config->item('user_img_directory').$path.$memberObj->getIdMember().'_'.$memberObj->getUsername();
-            }   
-            if(!is_dir($path)) {
-                mkdir($path,0755,true); 
-            }     
-
-            $bannerFileName = $path."/".EsMember::DEFAULT_IMG_BANNER;
-            $uploadReturn = $this->upload->uploadImage($path, EsMember::DEFAULT_IMG_BANNER);  
-            if($data['w'] > 0 && $data['h'] > 0) {
-                $imageUtility->imageCrop($bannerFileName,
-                                         $data["x"],
-                                         $data["y"],
-                                         $data["w"],
-                                         $data["h"]
-                                         );
-            }
-            $this->config->load('image_dimensions', true);
-            $imageDimensionsConfig = $this->config->config['image_dimensions'];              
-
-            $imageUtility->imageResize($bannerFileName, 
-                                       $bannerFileName, 
-                                       $imageDimensionsConfig["userImagesSizes"]["bannersize"]
-                                       );
-      
-            $this->serviceContainer['entity_manager']
-                 ->getRepository('EasyShop\Entities\EsMember')
-                 ->updateMemberImageUrl($memberObj, $path, false);  
-
-            $userImage = $this->serviceContainer['user_manager']
-                              ->getUserImage($uid, 'banner');                                                             
-
-            if(!(bool)$this->input->post('isAjax')) {
-                redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
-            }
-            
-            $response = [
-                'isSuccessful' => true,
-                'banner' => $userImage,
-            ];
-            
-            if(!$userImage){
-                $response['isSuccessful'] = false;
-            }
-        }
-
-
+        
+        $response = [
+            'isSuccessful' => empty($uploadResult['error']) ? true : false,
+            'banner' => $userImage,
+            'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: ".AssetsUploader::MAX_ALLOWABLE_SIZE_KB." kb",
+        ];
+        
+        
         echo json_encode($response);
     }
 
@@ -1168,15 +1059,15 @@ class Store extends MY_Controller
                 $orderBy = array("clickcount" => $order);
                 break;
             case 2:
-                $orderSearch = "NEW";
+                $orderSearch = EsProduct::SEARCH_SORT_NEW;
                 $orderBy = array("lastmodifieddate" => $order);
                 break;
             case 3:
-                $orderSearch = "HOT";
+                $orderSearch = EsProduct::SEARCH_SORT_HOT;
                 $orderBy = array("isHot"=>$order, "clickcount"=>$order);
                 break;
             default:
-                $orderSearch = "NULL";
+                $orderSearch = "";
                 $orderBy = array("lastmodifieddate"=>$order);
                 break;
         }

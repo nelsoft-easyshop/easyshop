@@ -312,6 +312,7 @@ class EsMemberRepository extends EntityRepository
         else {
             $member->setIsHideBanner(EsMember::DEFAULT_AVATAR_VISIBILITY);
         }
+        $member->setLastmodifieddate(new \DateTime('now'));
         $em->flush();
     }            
 

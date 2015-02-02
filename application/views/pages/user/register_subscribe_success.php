@@ -38,7 +38,7 @@
         <div class = "container header_bg">
             <div class="row-fluid">
                 <div id="himg" class="text-center"> 
-                  <a href="/"><img src="/assets/images/landingpage/img_logo.png"></a>
+                  <a href="/"><img src="<?php echo getAssetsDomain()?>assets/images/landingpage/img_logo.png"></a>
                   <div class="login_btn">
                     <a href="/login" class="">Log In</a>
                   </div>
@@ -60,10 +60,10 @@
                     </p>
                     <p class="text-center img_social_media">
                         <a class="img_sc_1" href="https://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=http://easyshop.ph&amp;p[images][0]=http://easyshop.ph/assets/images/img_logo.png&amp;p[title]=EasyShop.ph" target="_blank">
-                            <img src="/assets/images/img_social_media_facebook.png" alt="facebook">
+                            <img src="<?php echo getAssetsDomain()?>assets/images/img_social_media_facebook.png" alt="facebook">
                         </a>
                         <a class="img_sc_2" href='<?php echo $twitter; ?>' target="_blank">
-                            <img src="/assets/images/img_social_media_twitter.png" alt="Twitter">
+                            <img src="<?php echo getAssetsDomain()?>assets/images/img_social_media_twitter.png" alt="Twitter">
                         </a>
                     </p>
                     <br/>
@@ -78,13 +78,13 @@
         </div>
     </body>
 
-    
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
-    <script type='text/javascript' src='/assets/js/src/landingpage-bootstrap.min.js'></script>
-    
+    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+        <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
+        <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+        <script type='text/javascript' src='/assets/js/src/landingpage-bootstrap.min.js'></script>
+    <?php else: ?>
+        <script src="/assets/js/min/easyshop.user_register_subscribe_success.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <?php endif; ?>
     <!-- Form Plugins -->
 
-    
-    
-    
+

@@ -97,13 +97,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <li><a href="/register" class="prevent">Register</a></li> 
                         <li class="txt_res_hide">
                             <a class="prevent" href="/guide/buy">
-                                <img src="/assets/images/img_icon_shop.png">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_shop.png">
                                 <span>How to Shop</span>
                             </a>
                         </li>
                         <li class="txt_res_hide">
                             <a class="prevent" href="/guide/sell">
-                                <img src="/assets/images/img_icon_sell.png">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_sell.png">
                                 <span>How to Sell</span>
                             </a>
                         </li>
@@ -122,13 +122,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </li>
                         <li class="txt_res_hide">
                             <a class="prevent" href="/guide/buy">
-                                <img src="/assets/images/img_icon_shop.png">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_shop.png">
                                 <span>How to Shop</span>
                             </a>
                         </li>
                         <li class="txt_res_hide nav-menu-border">
                             <a class="prevent" href="/guide/sell">
-                                <img src="/assets/images/img_icon_sell.png">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_sell.png">
                                 <span>How to Sell</span>
                             </a>
                         </li>
@@ -148,7 +148,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <a class="prevent" href="/me?tab=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a class="prevent" href="/login/logout">Logout</a>
+                                    <a class="prevent logoutClient" href="/login/logout">Logout</a>
                                 </li>
                             </ul>
                             
@@ -167,13 +167,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="need_help_icons_con">
                 <p>
                     <a class="prevent" href="/guide/buy">
-                        <img src="/assets/images/img_icon_shop.png"><br />
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_shop.png"><br />
                         <span>How to Shop</span>
                     </a>
                 </p>
                 <p>
                     <a class="prevent" href="/guide/sell">
-                        <img src="/assets/images/img_icon_sell.png"><br />
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_sell.png"><br />
                         <span>How to Sell</span>
                     </a>
                 </p>
@@ -199,7 +199,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="logo"> 
                 <a href="/" class="prevent">
                     <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                        <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
                     <?php else: ?>
                         <span class="span_bg"></span>
                     <?php endif; ?>
@@ -230,8 +230,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </section>
     <div class="clear"></div>
 </form>
-        
+
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
+<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user ? $user->getStoreName() : 'false')?>">
+
 <script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script>
     (function ($) {  

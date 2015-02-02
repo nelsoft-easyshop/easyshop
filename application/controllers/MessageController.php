@@ -22,10 +22,14 @@ class MessageController extends MY_Controller
 
     /**
      * Class Constructor
+     *
      */
     public function __construct()
     {
         parent::__construct();
+        if (!$this->session->userdata('usersession')) {
+            redirect('/', 'refresh');
+        }
         $this->em = $this->serviceContainer['entity_manager'];
         $this->messageManager = $this->serviceContainer['message_manager'];
         $this->userId = $this->session->userdata('member_id');
@@ -34,15 +38,17 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Retrieve messages
+     * Renders the inbox view
+     *
      */
     public function messages()
     {
-        if (!$this->session->userdata('usersession')) {
-            redirect('/', 'refresh');
-        }
-
-        $messages = $this->messageManager->getAllMessage($this->userId);
+        $data = [
+            'result' => $this->messageManager->getAllMessage($this->userId),
+            'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId),
+            'chatServerHost' => $this->messageManager->getChatHost(true),
+            'chatServerPort' => $this->messageManager->getChatPort()
+        ];
         $title = !isset($messages['unread_msgs']) || (int) $messages['unread_msgs'] === 0
             ? 'Messages | Easyshop.ph'
             : 'Messages (' . $messages['unread_msgs'] . ') | Easyshop.ph';
@@ -56,14 +62,13 @@ class MessageController extends MY_Controller
 
         $this->load->spark('decorator');
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/messages/inbox_view', ['result' => $messages ]);
+        $this->load->view('pages/messages/inbox_view', $data );
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
     }
 
     /**
-     * Send message
-     * @Param Recipient Username
-     * @Param Message
+     * Sends a message
+     *
      */
     public function send()
     {
@@ -74,11 +79,11 @@ class MessageController extends MY_Controller
 
         if (!$receiverEntity) {
             $result['success'] = 0;
-            $result['msg'] = "The user " . html_escape($storeName) . ' does not exist';
+            $result['errorMessage'] = "The user " . html_escape($storeName) . ' does not exist';
         }
         else if ( (int) $this->userId === (int) $receiverEntity[0]->getIdMember() ) {
             $result['success'] = 0;
-            $result['msg'] = "Sorry, it seems that you are trying to send a message to yourself.";
+            $result['errorMessage'] = "Sorry, it seems that you are trying to send a message to yourself.";
         }
         else {
             $receiverEntity = $receiverEntity[0];
@@ -86,7 +91,7 @@ class MessageController extends MY_Controller
             $isSendingSuccesful = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
             if ($isSendingSuccesful) {
                 $messages = $this->messageManager->getAllMessage($this->userId);
-
+                $recipientMessages = $this->messageManager->getAllMessage($receiverEntity->getIdMember(), true);
                 $emailRecipient = $receiverEntity->getEmail();
                 $emailSubject = $this->lang->line('new_message_notif');
                 $this->config->load('email', true);
@@ -111,7 +116,11 @@ class MessageController extends MY_Controller
                                    ->setSubject($emailSubject)
                                    ->setMessage($emailMsg, $imageArray)
                                    ->queueMail();
-                $result = $messages;
+                $result = [
+                    'success' => 1,
+                    'message' => $messages,
+                    'recipientMessage' => $recipientMessages
+                ];
             }
         }
 
@@ -119,8 +128,9 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Delete Message/Conversation
-     * @Param id_msg
+     * Deletes Message/Conversation
+     *
+     * @return json
      */
     public function delete()
     {
@@ -144,7 +154,9 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Get all message
+     * Gets all messages
+     *
+     * @return json
      */
     public function getAllMessage()
     {
@@ -156,6 +168,8 @@ class MessageController extends MY_Controller
 
     /**
      * Update message status to seen
+     *
+     * @return json
      */
     public function updateMessageToSeen()
     {
@@ -163,8 +177,8 @@ class MessageController extends MY_Controller
         $messageIdArray = [
             $messageId
         ];
-        if ( (bool) stripos($messageId, ',')) {
-            $messageIdArray = explode(',', $messageId);
+        if ( (bool) stripos($messageId, '-')) {
+            $messageIdArray = explode('-', $messageId);
         }
 
         $result = $this->em->getRepository("EasyShop\Entities\EsMessages")
@@ -174,7 +188,8 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Sends message from vendor page
+     * Sends a message from vendor page
+     *
      */
     public function simpleSend()
     {
@@ -191,4 +206,18 @@ class MessageController extends MY_Controller
 
         redirect($redirectUrl ,'refresh');
     }
+    
+    /**
+     * Gets the number of unread messages of the logged in user
+     *
+     * @return json
+     */
+    public function getNumberOfUnreadMessages()
+    {
+        $count = $this->serviceContainer['entity_manager']
+                      ->getRepository('EasyShop\Entities\EsMessages')
+                      ->getUnreadMessageCount($this->userId);
+        echo json_encode($count);
+    }
+
 }

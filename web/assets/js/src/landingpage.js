@@ -3,6 +3,21 @@
 /**********************************************************************/
 
 var ajaxStat = {};
+var navigation = responsiveNav(".nav-collapse");
+
+(function( $ ) {
+    $('.bxslider_slides').bxSlider({
+        infiniteLoop: true,
+        auto: true
+    });
+    $('#reg_btn,#reg_txt').click(function(event) {
+        event.preventDefault();
+        var n = $(document).height();
+        $('html, body').animate({ scrollTop: 200 }, 300);
+        navigation.close();
+    });
+})(jQuery);
+
 
 jQuery(document).ready(function(){
     jQuery('#username').on('focus', function() {

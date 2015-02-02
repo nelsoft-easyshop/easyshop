@@ -1,6 +1,14 @@
 (function ($) {
-
-    $(document).ready(function() {
+    var $userInfo = $('#userInfo');
+    var $chatServer = $('#chatServer');
+    var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
+    $(document).ready(function()
+    {
+        /* Register events */
+        socket.on('send message', function( data ) {
+            onFocusReload(data.message);
+        });
+        setAccountOnline($userInfo.data('store-name'));
 
         $('#table_id').dataTable({
             "bScrollInfinite": true,
@@ -8,7 +16,6 @@
             "sScrollY": "375px"
         });
         $("#table_id_info").hide();
-
         $('#table_id_filter label input').prop('placeholder','Search').prop('id','tbl_search').prop('class','ui-form-control');
         $('#tbl_search').hide();
         $("#modal-background, #modal-close").click(function() {
@@ -24,7 +31,6 @@
         });
 
         $("#msg_textarea").on("click","#send_btn",function(){
-
             var D = eval('(' + $(this).attr('data') + ')');
             var recipient = $('#userDataContainer').html().trim();
             var img = D.img;
@@ -33,7 +39,6 @@
                 return false;
             }
             send_msg(recipient,msg, true);
-
             var objDiv = document.getElementById("msg_field");
             objDiv.scrollTop = objDiv.scrollHeight;
         });
@@ -57,46 +62,20 @@
             $("#modal-container, #modal-background").toggleClass("active");
             $("#modal-container").show();
         };
-
-        var myInterval;
-        var interval_delay = 5000;
-        var is_interval_running = false;
-
-        $(document).ready(function () {
-            $(window).focus(function () {
-                clearInterval(myInterval);
-                if  (!is_interval_running){
-                    myInterval = setInterval(Reload, interval_delay);
-                }
-            }).blur(function () {
-                clearInterval(myInterval);
-                is_interval_running = false;
-            });
-        });
-
-        interval_function = function ()
-        {
-            is_interval_running = true;
-        }
-
-        arrage_by_timeSent();
-
     });
 
-    $("#modal_send_btn").on("click",function() {
+    $("#modal_send_btn").on("click",function()
+    {
         var recipient = $("#msg_name").val().trim();
         var msg = $("#msg-message").val().trim();
-
-        if(recipient == ""){
+        if(recipient === ""){
             alert("Username is required.");
             return false;
         }
-
-        if (msg == "") {
+        if (msg === "") {
             alert("Say something.");
             return false;
         }
-
         if(send_msg(recipient,msg, false)){
             $("#modal-container, #modal-background").toggleClass("active");
             $("#modal-container").hide();
@@ -111,24 +90,26 @@
         }
     });
 
-    $("#chsn_delete_btn").on("click",function() {
+    $("#chsn_delete_btn").on("click",function()
+    {
         var checked = $(".d_all:checked").map(function () {return this.value;}).get().join(",");
         delete_data(checked);
     });
 
-    $("#delete_all_btn").on("click",function() {
+    $("#delete_all_btn").on("click",function()
+    {
         var checked = $(".d_all").map(function () {return this.value;}).get().join(",");
         delete_data(checked);
     });
 
-    $("#table_id tbody").on("click",".btn_each_msg",function() {
+    $("#table_id tbody").on("click",".btn_each_msg",function()
+    {
         var D = eval('(' + $(this).attr('data') + ')');
         var html = "";
         $("#chsn_username").html($(this).children(":first").html()).show();
         var name = $('#chsn_username').html();
         $("#send_btn").attr("data","{'img':'"+$(this).parent().parent().find('img').attr('data')+"'}");
         $("#userDataContainer").empty().html(name.trim());
-
         $("#msg_field").empty();
         $.each(D,function(key,val){
             if (val.status == "receiver") {
@@ -137,16 +118,12 @@
             else {
                 html += '<span class="float_right">';
             }
-            html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+val.sender_img+'/60x60.png"></span></span>';
+            html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain +val.sender_img+'/60x60.png"></span></span>';
             html += '<div class="chat-container"><div></div>';
             html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
             html += '<p>'+escapeHtml(val.message)+'</p>';
             html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
-            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
-                $("#msg_field").prepend(html);
-            }else{
-                $("#msg_field").append(html);
-            }
+            $("#msg_field").append(html);
             html = "";
         });
         $("#msg_textarea").show();
@@ -160,7 +137,8 @@
         seened(this);
     });
 
-    $("#msg_field").on("click",".d_all",function() {
+    $("#msg_field").on("click",".d_all",function()
+    {
         if ($('.d_all').not(':checked').length == $('.d_all').length) {
             $("#chsn_delete_btn").hide();
         }
@@ -169,36 +147,66 @@
         }
     });
 
-    function Reload()
+    var setAccountOnline = function(memberId)
     {
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var todo = "Get_UnreadMsgs";
-        $.ajax({
-            type:"POST",
-            dataType : "json",
-            url : "/MessageController/getAllMessage",
-            data : {csrfname:csrftoken,isUnread:todo},
-            success : function(d)
-            {
-                $(".msg_countr").html(d.unread_msgs_count);
-                if(parseInt(d.unread_msgs_count) === 0 ){
-                    $('#unread-messages-count').addClass('unread-messages-count-hide');
-                }else{
-                    $('#unread-messages-count').removeClass('unread-messages-count-hide');
-                }
-                document.title = (d.unread_msgs_count == 0 ? "Message | Easyshop.ph" : "Message (" + d.unread_msgs_count + ") | Easyshop.ph");
+        socket.emit('set account online', memberId);
+    };
 
-                if (d.unread_msgs_count != 0) {
-                    onFocus_Reload(d);
+    function onFocusReload(msgs)
+    {
+        var html = "";
+        var span = "";
+        var message = msgs.messages;
+        var onfocusedConversationId = $('.Active').attr('id');
+        $("#table_id tbody").empty();
+        $.each(message,function(key,val) {
+            var cnt = parseInt(Object.keys(val).length)- 1;
+            var isActive ='';
+            var Nav_msg = message[key][Object.keys(val)[cnt]];
+            if (Nav_msg.name === undefined) {
+                for (var first_key in val) {
+                    if (val.hasOwnProperty(first_key)) {
+                        break;
+                    }
                 }
+                Nav_msg = message[key][first_key];
             }
+            var recipientName = escapeHtml(Nav_msg.name);
+            if ($(".dataTables_empty").length) {
+                $(".dataTables_empty").parent().remove();
+            }
+            if (onfocusedConversationId === 'ID_'+recipientName) {
+                isActive = 'Active';
+            }
+            html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "receiver" ? "NS" : "")+' odd ">';
+            html +='<td class=" sorting_1">';
+            if (Nav_msg.status == "sender") {
+                html +='<img src="' +config.assetsDomain+Nav_msg.recipient_img+'/60x60.png" data="'+Nav_msg.sender_img+'">';
+            }
+            else {
+                html +='<img src="' +config.assetsDomain+Nav_msg.sender_img+'/60x60.png" data="'+Nav_msg.recipient_img+'">';
+            }
+            span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
+            html +='</td>';
+            html +='<td class=" ">';
+            html +="<a class='btn_each_msg " + isActive + "' id='ID_" + recipientName + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
+            html +='<span class="msg_sender">' + recipientName + '</span>'+span;
+            html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
+            html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
+            html +='</a>';
+            html +='</td>';
+            html +='</tr>';
         });
+        $("#table_id tbody").append(html);
+        $("#table_id a").first().addClass("Active");
+        specific_msgs();
+        seened($('.Active'));
+        return true;
     }
 
     function send_msg(recipient,msg, isOnConversation)
     {
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-
         var result = false;
         $.ajax({
             type : "POST",
@@ -209,22 +217,20 @@
                 $("#send_btn").hide();
             },
             data : {recipient:recipient,msg:msg,csrfname:csrftoken},
-            success : function(data)
+            success : function(resultMsg)
             {
+                $("#out_txtarea").val("");
                 $("#msg_textarea img").hide();
                 $("#send_btn").show();
-                if (data.success != 0) {
-                    $("#table_id tbody").empty();
-                    onFocus_Reload(data)
-                    if (isOnConversation) {
-                        specific_msgs();
-                    }
-                    else {
+                if (parseInt(resultMsg.success) === 1) {
+                    socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
+                    if (onFocusReload(resultMsg.message) && !isOnConversation) {
                         $('#modal-close').trigger('click');
                     }
                     result = true;
-                }else{
-                    alert(data.msg);
+                }
+                else {
+                    alert(resultMsg.errorMessage);
                     result = false;
                 }
             }
@@ -232,122 +238,9 @@
         return result;
     }
 
-    function specific_msgs()
-    {
-        var html = "";
-        var all_messages = eval('('+ $(".Active").attr('data')+')');
-        var objDiv = document.getElementById("msg_field");
-        $("#msg_field").empty();
-        $.each(all_messages,function(key,val){
-            if (val.status == "receiver") {
-                html += '<span class="float_left">';
-            } else {
-                html += '<span class="float_right">';
-            }
-            html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+val.sender_img+'/60x60.png"></span></span>';
-            html += '<div class="chat-container"><div></div>';
-            html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
-            html += '<p>'+escapeHtml(val.message)+'</p>';
-            html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
-
-            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
-                $("#msg_field").prepend(html);
-            }
-            else{
-                $("#msg_field").append(html);
-            }
-            html = "";
-        });
-        $("#out_txtarea").val("");
-        $("#msg_textarea").show();
-        objDiv.scrollTop = objDiv.scrollTop + 100;
-    }
-
-    function onFocus_Reload(msgs)
-    {
-        var html = "";
-        var span = "";
-        var message = msgs.messages;
-        $.each(message,function(key,val){
-            var cnt = parseInt(Object.keys(val).length)- 1;
-            if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ //if safari
-                for (var first_key in val) if (val.hasOwnProperty(first_key)) break;
-                var Nav_msg = message[key][first_key]; //first element of object
-            }
-            else {
-                var Nav_msg = message[key][Object.keys(val)[cnt]]; //first element of object
-            }
-            var name = escapeHtml(Nav_msg.name);
-            if ($('#ID_'+name).length) { //if existing on the conve
-                $('#ID_'+name).children('.msg_message').text(escapeHtml(Nav_msg.message));
-                $('#ID_'+name).children('.msg_date').text(Nav_msg.time_sent);
-                $('#ID_'+name).attr('data',JSON.stringify(val));
-                if (Nav_msg.unreadConversationCount != 0) {
-                    $('#ID_'+name).parent().parent().addClass('NS');
-                    $('#ID_'+name+" .unreadConve").html("("+Nav_msg.unreadConversationCount+")");
-                }
-                if ($('#ID_'+name).hasClass("Active")) {//if focus on the conve
-                    specific_msgs();
-                    seened($('#ID_'+name));
-                    $('#ID_'+name+" .unreadConve").html("");
-                }
-                html = $('#ID_'+name).parent().parent();
-            }
-            else{
-                if($(".dataTables_empty").length){
-                    $(".dataTables_empty").parent().remove();
-                }
-                html +='<tr class="'+(Nav_msg.opened == "0" && Nav_msg.status == "receiver" ? "NS" : "")+' odd">';
-                html +='<td class=" sorting_1">';
-                if (Nav_msg.status == "sender") {
-                    html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.recipient_img+'/60x60.png data="'+Nav_msg.sender_img+'"></span></div>';
-                }
-                else {
-                    html +='<div class="img-wrapper-div"><span class="img-wrapper-span"><img src=/'+Nav_msg.sender_img+'/60x60.png data="'+Nav_msg.recipient_img+'"></span></div>';
-                }
-                span = (Nav_msg.unreadConversationCount != 0 ? '<span class="unreadConve">('+Nav_msg.unreadConversationCount+')</span>' : "");
-                html +='</td>';
-                html +='<td class=" ">';
-                html +="<a class='btn_each_msg' id='ID_" + name + "' data='"+ escapeHtml(JSON.stringify(val))+"' href='javascript:void(0)'>";
-                html +='<span class="msg_sender">' + name + '</span>'+span;
-                html +='<span class="msg_message">'+escapeHtml(Nav_msg.message)+'</span>';
-                html +='<span class="msg_date">'+Nav_msg.time_sent+'</span>';
-                html +='</a>';
-                html +='</td>';
-                html +='</tr>';
-            }
-        });
-        if(msgs.isUnreadMessages === "true"){
-            $("#table_id tbody").prepend(html);
-            arrage_by_timeSent();
-        }
-        else{
-            $("#table_id tbody").append(html);
-            $("#table_id a").first().addClass("Active");
-        }
-    }
-
-    function arrage_by_timeSent()
-    {
-        $("#table_id tbody tr").each(function(){
-            var d = new Date();
-            var msg_date_top =  new Date($("#table_id tbody").children().first().find('.msg_date').text().replace(/-/g,'/')).getTime();
-            var dt =  new Date($(this).find('.msg_date').text().replace(/-/g,'/')).getTime();
-            var tr_class = $(this).attr('class');
-            var new_tr = '<tr class ="' + tr_class + '">' + $(this).html() + '</tr>';
-            if(dt > msg_date_top){
-                $(this).remove();
-                $("#table_id tbody").prepend(new_tr);
-            }
-
-        });
-    }
-
     function delete_data(ids)
     {
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-        var data = "";
         $.ajax({
             type : "POST",
             dataType : "json",
@@ -360,7 +253,7 @@
             success : function(result) {
                 if(result.messages != ""){
                     $("#table_id tbody").empty();
-                    onFocus_Reload(result);
+                    onFocusReload(result);
                     $("#msg_field").empty();
                     $("#msg_textarea").hide();
                     $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
@@ -372,16 +265,40 @@
         });
         $("#modal-background").hide();
         $("#modal-background img").hide();
-
+    }
+    
+    function specific_msgs()
+    {
+        var html = "";
+        var all_messages = eval('('+ $(".Active").attr('data')+')');
+        var objDiv = document.getElementById("msg_field");
+        $("#msg_field").empty();
+        $.each(all_messages,function(key,val){
+            if (val.status == "receiver") {
+                html += '<span class="float_left">';
+            }
+            else {
+                html += '<span class="float_right">';
+            }
+            html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain + val.sender_img + '/60x60.png"></span></span>';
+            html += '<div class="chat-container"><div></div>';
+            html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
+            html += '<p>'+escapeHtml(val.message)+'</p>';
+            html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
+            $("#msg_field").append(html);
+            html = "";
+        });
+        $("#msg_textarea").show();
+        objDiv.scrollTop = objDiv.scrollTop + 100;
     }
 
     function seened(obj)
     {
-        if ($(obj).parent().parent().hasClass("NS") && $(obj).hasClass("Active")) {
+        var $parentLi = $(obj).parent().parent();
+        if ($parentLi.hasClass("NS") && $(obj).hasClass('Active')) {
             $(obj).children(".unreadConve").html("");
-            var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join(",");
+            var checked = $(".float_left .d_all").map(function () {return this.value;}).get().join("-");
             var csrftoken = $("meta[name='csrf-token']").attr('content');
-            var csrfname = $("meta[name='csrf-name']").attr('content');
             $.ajax({
                 type : "POST",
                 dataType : "json",
@@ -389,12 +306,10 @@
                 data : {checked:checked,csrfname:csrftoken},
                 success : function(data) {
                     if (data === true) {
-                        $(obj).parent().parent().removeClass('NS');
-                    }else{
-                        alert("Error loading the message.");
+                        $parentLi.removeClass('NS');
                     }
                 }
             });
         }
     }
-})(window.jQuery);
+})(jQuery);

@@ -52,4 +52,9 @@
     </div>
     </div>
 </section>
-<script src="/assets/js/src/vendorpage_contact.js?ver=<?=ES_FILE_VERSION?>"></script>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendorpage_contact.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_contact.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

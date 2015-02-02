@@ -1,9 +1,9 @@
 <div class="transaction-item">
 <?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $boughtTransactionDetails) : ?>
-    <div class="item-list-panel">
+    <div class="item-list-panel <?=$boughtTransactionDetails['invoiceNo'] ?>">
         <div class="transac-title">
-        <?php if (intval($boughtTransactionDetails['idPaymentMethod']) === 1 && intval($boughtTransactionDetails['isFlag']) === 1) : ?>
+        <?php if ( (int) $boughtTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && (int) $boughtTransactionDetails['isFlag'] === 1) : ?>
             <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW</span></div>
         <?php else:?>
             <div><span class="strong-label">Transaction No. : </span> <?=$boughtTransactionDetails['invoiceNo'] ?></div>
@@ -16,7 +16,7 @@
             <div class="col-xs-12 col-sm-9 padding-reset trans-left-panel pd-top-10">
                 <div class="pd-bottom-20">
                     <div class="col-xs-3 col-sm-4 padding-reset">
-                        <div class="div-product-image" style="background: url(<?=$product['productImagePath']?>) center center no-repeat; background-cover: cover; background-size: 150%;">
+                        <div class="div-product-image" style="background: url(<?php echo getAssetsDomain().'.'.$product['productImagePath']?>) center center no-repeat; background-cover: cover; background-size: 150%;">
                         </div>
                     </div>
                     <div class="col-xs-9 col-sm-8 padding-reset">
@@ -155,7 +155,7 @@
                             <h4>Bought From:</h4>
                             <div>
                                 <span class="transac-item-profile-con">
-                                    <img src="<?=$boughtTransactionDetails['userImage']?>">
+                                    <img src="<?php echo getAssetsDomain().'.'.$boughtTransactionDetails['userImage']?>">
                                 </span>
                                 <span class="transac-item-consignee-name">
                                     <?=html_escape($product['sellerStoreName'])?>
@@ -174,7 +174,9 @@
                                 <input type="hidden" name="invoice_num" value="<?=$boughtTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
 
-                                <?php echo form_open('');?>
+                                <?php
+                                $attr = ['class'=>'rejectForm'];
+                                echo form_open('', $attr);?>
                                 <?php if( (int) $product['isReject'] === 0):?>
                                     <input type="button" value="Reject Item" class="btn btn-default-1 reject_btn reject_item reject">
                                     <input type="hidden" name="method" value="reject">

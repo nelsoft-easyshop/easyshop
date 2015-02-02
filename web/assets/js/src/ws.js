@@ -1,9 +1,9 @@
-///**
-// * Please observe cleanliness
-// *
-// * @param {type} $
-// * @returns {undefined}
-// */
+/**
+ * Please observe cleanliness
+ * 
+ * @param {type} $
+ * @returns {undefined}
+ */
 //(function ($) {
 //    $(document).ready(function () {
 //        var unreadMessagesLabel = $("#unread-messages-count");

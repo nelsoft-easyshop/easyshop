@@ -21,7 +21,7 @@
             </div>
             <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
                 <a href="login" class="btn btn-primarybtn">Try again</a>
-                <a href="login/identify" class="btn btn-default">Help me locate my account</a>
+                <a href="login/identifyEmail" class="btn btn-default">Help me locate my account</a>
             </div>
             <div class="clear"></div>
         </div>
@@ -94,7 +94,7 @@
                                     <?php endif; ?>
                                   
 
-                                    <img src="/assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="loading_img_activate" class="login_loading_img" style="display:none"/>                                    
                                 </div>
                             </div>
                             <div class="row mrgn-bttm-25 mrgn-top-20">
@@ -106,13 +106,13 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-5 col-md-5">
-                                    <p class="text-right"><a href="/login/identify"><small>Forgot your password?</small></a></p>
+                                    <p class="text-right"><a href="/login/identifyEmail"><small>Forgot your password?</small></a></p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 text-center">
                                     <input id="login" type="submit" name="login_form" value="Log In"/>
-                                    <img src="/assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
+                                    <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" id="loading_img" class="login_loading_img" style="display:none"/>
                                 </div>
                             </div>
                         </div>
@@ -132,7 +132,7 @@
                                 <div class="log-in-btn log-in-facebook">
                                     <div>
                                         <a href="<?=$facebook_login_url?>">
-                                            <span class="log-in-img"><img src="/assets/images/img-log-in-fb.png"></span>
+                                            <span class="log-in-img"><img src="<?php echo getAssetsDomain()?>assets/images/img-log-in-fb.png"></span>
                                             <span class="text-center">Log In with Facebook</span>
                                         </a>
                                     </div>
@@ -144,7 +144,7 @@
                                 <div class="log-in-btn log-in-google">
                                     <div>
                                         <a href="<?=$google_login_url?>">
-                                            <span class="log-in-img"><img src="/assets/images/img-log-in-google.png"></span>
+                                            <span class="log-in-img"><img src="<?php echo getAssetsDomain()?>assets/images/img-log-in-google.png"></span>
                                             <span class="text-center">Log In with Google</span>
                                         </a>
                                     </div>
@@ -181,6 +181,10 @@
 
 <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
 
-   
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>   
-<script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>   
+    <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_login_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+

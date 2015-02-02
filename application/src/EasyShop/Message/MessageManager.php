@@ -13,9 +13,25 @@ class MessageManager {
      */
     private $em;
 
-    function __construct($em)
+    /**
+     *  Local Config file
+     *
+     *  @var \EasyShop\Core\Configuration\Configuration
+     */
+    private $localConfig;
+
+    /**
+     *  Js Server Config file
+     *
+     *  @var config/param/js_config.php
+     */
+    private $jsServerConfig;
+
+    function __construct($em, $localConfig, $jsServerConfig)
     {
         $this->em = $em;
+        $this->localConfig = $localConfig;
+        $this->jsServerConfig = $jsServerConfig;
     }
 
     /**
@@ -137,6 +153,41 @@ class MessageManager {
         }
 
         return $result;
+    }
+
+    /**
+     * returns the valid host for chat messaging
+     *
+     * @param boolean $isBaseUrlOnly
+     * @return string
+     */
+    public function getChatHost($isBaseUrlOnly = false)
+    {
+        $host = trim($this->jsServerConfig['HOST']);
+        if($this->localConfig->isConfigFileExists()) {
+            $configInternalIp = $this->localConfig->getConfigValue('internal_ip');           
+            if(strlen($configInternalIp) > 0 && !$isBaseUrlOnly){
+                $host = $configInternalIp;
+            }
+            else{
+                $host = base_url();
+            }            
+        }
+        
+        $host = rtrim($host, '/');
+        $host = str_replace('https://', '', $host);
+        $host = str_replace('http://', '', $host);
+
+        return $host;
+    }
+
+    /**
+     * returns the port for chat messaging
+     * @return int
+     */
+    public function getChatPort()
+    {
+        return trim($this->jsServerConfig['PORT']);
     }
 
 }
