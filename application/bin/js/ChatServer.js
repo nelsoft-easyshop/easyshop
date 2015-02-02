@@ -15,7 +15,6 @@ var server = https.createServer(https_options, app).listen(PORT, HOST);
 console.log('HTTPS Server listening on %s:%s', HOST, PORT);
 io = require('socket.io').listen(server);
 
-var container = {};
 io.sockets.on( 'connection', function(client) {
     
     client.on('set account online', function(storename) {
