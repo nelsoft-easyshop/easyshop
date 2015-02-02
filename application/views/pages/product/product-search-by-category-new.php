@@ -47,7 +47,9 @@
                         <?php if(trim($topBanner['target']['url']) !== ''): ?>
                             <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
                         <?php endif; ?>
-                                <li class="top-slider-item" style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?> ) center no-repeat; background-size: cover; "></li>
+                                <li class="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>top-slider-item<?php endif;?>">
+                                    <img src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
+                                </li>
                         <?php if(trim($topBanner['target']['url']) !== ''): ?>
                             </a>
                         <?php endif; ?>
@@ -56,18 +58,15 @@
                 </ul>
                 <?php endif; ?>
             </div>
-            <div id="parallax-3" class="banner-template-1" style="height: 10px; <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: -10px;<?php endif; ?>">
-               
-            </div>
             <?php if(isset($categoryHeaderData['bottom'])): ?>
-            <center class="search-slider" style="<?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: 0px;<?php endif;?> <?php if(isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: -15px;<?php endif;?>">
+            <center class="search-slider" style="<?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: 0px;<?php endif;?> <?php if(isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: 0px;<?php endif;?>">
                 <center class="search-slider">
                     <div class="left-shade">
                     </div>
                     <div class="right-shade">
                     </div>
                     <div class="container">
-                        <div class="slider1 <?php if(isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
+                        <div class="slider1 slider-bottom <?php if(isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
                             <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
                                 <div class="slide">
                                     

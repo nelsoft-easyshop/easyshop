@@ -171,8 +171,8 @@ class MessageController extends MY_Controller
         $messageIdArray = [
             $messageId
         ];
-        if ( (bool) stripos($messageId, ',')) {
-            $messageIdArray = explode(',', $messageId);
+        if ( (bool) stripos($messageId, '-')) {
+            $messageIdArray = explode('-', $messageId);
         }
 
         $result = $this->em->getRepository("EasyShop\Entities\EsMessages")

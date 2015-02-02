@@ -127,7 +127,6 @@ class SearchProduct
             'search_keyword' => 10,
         ]);
     
-        $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE); 
         if(empty($productIds) === false){
             $this->sphinxClient->SetFilter('productid', $productIds);
         }

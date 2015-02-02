@@ -468,7 +468,7 @@
 
         $("#editTextProductId").val($productId);
         $("#editTextCategoryId").val($categoryId);
-        $("#editTextCategoryNamehala ").val($categoryName);
+        $("#editTextCategoryName").val($categoryName);
         $("#formEdit").submit();
     });
 
@@ -1215,6 +1215,7 @@
         var alltxStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var buttonText = txResponseBtn.val();
         var msg = "";
+        var invoiceNum = txResponseBtn.parent().parent().find("input[name='invoice_num']");
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
@@ -1258,7 +1259,7 @@
                 }
                 else {
                     if (txResponseBtn.hasClass('tx_forward')) {
-                        txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
+                        alltxStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                         msg = "<h3>ITEM RECEIVED</h3> <br> Transaction has been moved to completed tab.";
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
@@ -1269,8 +1270,14 @@
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    txResponseBtn.closest('.item-list-panel').replaceWith('<div class="alert alert-success" id="wipeOut" role="alert">' + msg + '</div>');
-                    $('#wipeOut').fadeOut(5000);
+                    if (serverResponse.isTransactionComplete === true) {
+                        $('.'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                        $('.wipeOut').fadeOut(5000);
+                    }
+                    else {
+                        txResponseBtn.parent().parent().find('.rejectForm').remove();
+                        txResponseBtn.parent().remove();
+                    }
                 }
                 txResponseBtn.addClass('enabled');
             }
@@ -1313,6 +1320,11 @@
         var form = thisbtn.closest('form');
         var thismethod = thisbtn.siblings('input[name="method"]');
         var status = thisbtn.closest('.item-list-panel').find('.status-class');
+        var hiddenInputs = thisbtn.closest('.item-list-panel').find('.order-product-ids');
+        var orderProductIds = hiddenInputs.map(function() {
+            return this.value;
+        }).get().join('-');
+        thisbtn.closest('.item-list-panel').find('input[name="order_product"]').val(orderProductIds);
         var serializedData = $(form).serializeArray();
         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
 

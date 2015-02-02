@@ -10,15 +10,14 @@
             setAccountOnline($chatClient.data('store-name'));
 
             var setAccountOffline = function(storeName) {
-                socket.emit('set account offline', storeName, function(data) {
-                    window.location.replace('/login/logout');
-                });
+                socket.emit('set account offline', storeName, function(data) {});
             }
         }
 
         $('.logoutClient').on('click', function(e) {
             e.preventDefault();
             setAccountOffline($chatClient.data('store-name'));
+            window.location.replace('/login/logout');
         });
     });
 })(jQuery);

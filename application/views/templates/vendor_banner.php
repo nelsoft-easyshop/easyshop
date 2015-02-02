@@ -181,7 +181,7 @@
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">About</a>
                 </li>
-                <li>
+                <li class="pos-rel">
                     <span class="followers-circle"><?=$followerCount; ?></span>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/followers" class="<?php if($url_id === "followers"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Followers</a>
                 </li>

@@ -13,7 +13,7 @@
         var x1 = '0';
         var y2 = '0';
             $('.slider1').css({ 
-                "margin-top": (-71+(scrolled*.40))+'px',
+                "margin-top": (-71+(scrolled*.9))+'px',
             });
 
             $('.slider-bottom').css({ 
@@ -27,7 +27,7 @@
         var x12 = '0';
         var y22 = (0-(scrolled2*.76));
         $('.top-slider-item').css({
-            "margin-top": (-200+(scrolled2*.6))+'px',
+            "margin-top": (-100+(scrolled2*.6))+'px',
         });
     }
 
@@ -87,32 +87,7 @@
                 $(".search-slider .bx-viewport .slide").css("width", searchslidewidth);
             }
         });
-    });
-    
-    //determine the search results container reached the bottom 
-    var sticky_offset;
-    $(document).ready(function() {
-        var original_position_offset = ($('#sticky-pagination').length <=0 ) ? 0 : $('#sticky-pagination').offset() ;
-        sticky_offset = original_position_offset.top;
-        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-400px');
-    });
+    }); 
 
-    var searchParallaxSlide_height = $(".search-parallax-container").outerHeight();
-    var offsetPagination = 1200;
-    if(searchParallaxSlide_height == 523){
-        offsetPagination = 1500;
-    }
-
-    $(window).scroll(function () {
-        var sticky_height = $('#sticky-pagination').outerHeight();
-        var where_scroll = $(window).scrollTop();
-        var window_height = $(window).height();
-
-        if(where_scroll <= offsetPagination)  {
-            $('#sticky-pagination').css('bottom', '-400px');
-        }else{
-            $('#sticky-pagination').css('bottom', '0px');
-        }
-    });
 }(jQuery));
 
