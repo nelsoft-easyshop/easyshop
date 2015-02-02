@@ -1,62 +1,55 @@
 (function ($) {
+    
     $(document).ready(function(){
-         $("#forgotpass").validate({
-             rules: {               
+        $('#email, #password').on('click', function(){
+            $('.response-dialog').fadeOut();
+        });
+    });
+    
+    $(document).ready(function(){
+        
+        var minimumPasswordLength = parseInt($('#min-length-password').val());
+        
+        $('#password').on('keyup', function(){
+            var $this = $(this);
+            if($.trim($(this).val()).length >= minimumPasswordLength){
+                $('#confirmpassword').attr("disabled", false);
+            }
+            else{
+                $('#confirmpassword').attr("disabled", true);
+                $('#confirmpassword').val("");
+            }
+        });
+        
+         $("#update-password").validate({
+            rules: {               
                 password: {
                     required: true,
-                    minlength: 6,
-                    maxlength:25,
-                    alphanumeric: true,
-                    },
-                cpassword: {
+                    minlength: 6
+                },
+                confirmpassword: {
                     required: true,
                     minlength: 6,
-                    maxlength:25,
                     equalTo: '#password'
-                    }
-             },
-             messages:{
-                cpassword:{
-                    equalTo: ''
                 }
-             },
-             errorElement: "span",
-             errorPlacement: function(error, element) {
-                    error.addClass('red');
-                    if(element.attr('name') == 'password'){
-                        var added_span = $('<span/>',{'class':"red"});
-                        error.insertBefore(element.next());
-                        added_span.insertBefore(element.next());
-                    }else{
-                        error.appendTo(element.parent());
-                    }
-             }
-            
-         });
-         
-        $('.field input').on('click', function(){
-            $('.ci_form_validation_error').text('');
-         });
-    });
-
-    $(document).ready(function(){ 
-        var redurl = '/login/resetconfirm?&tgv=';
-        $( "#forgotpass_btn" ).click(function() {
-            if($("#forgotpass").valid()){       
-                currentRequest = jQuery.ajax({
-                    type: "POST",
-                    url: '/login/xresetconfirm', 
-                    data: $("#forgotpass").serialize(), 
-                    beforeSend : function(){       
-                    },
-                    success: function(response){
-                        $("#password, #cpassword").val('');
-                        $("#tgv").val(response);
-                        $('#fp_complete').submit();
-                    }
-                });
+            },
+            errorElement: "span",
+            errorPlacement: function(error, element) {
+               error.addClass('red');
+               error.appendTo(element.parent());
             }
-        }); 
+        });
+
+         
+        var options = {
+            minChar: minimumPasswordLength,
+            bootstrap3: true,
+        };
+        $('#password').pwstrength(options);
+    
     });
+    
+    
+
 })(jQuery);
 

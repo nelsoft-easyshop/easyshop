@@ -32,7 +32,7 @@
         <table style="margin: 0 auto;" cellpadding="0" cellspacing="0" width="600px">
             <tr>
                 <td style="text-align: center;">
-                    <a href="https://easyshop.ph/" style="outline: none; border: 0;">
+                    <a href="<?php echo base_url(); ?>" style="outline: none; border: 0;">
                         <img src="header-img.png" style="vertical-align:middle;" alt="Easyshop.ph">
                     </a>
                 </td>
