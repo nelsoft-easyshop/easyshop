@@ -529,15 +529,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     });
     
     $('#modal-edit-trigger').click(function (e) {
-        $('.edit-profile-modal').modal();
+        $('.edit-profile-mobile').modal();
         $( ".edit-profile-modal" ).closest(".simplemodal-container").css( "height", "300px" ).css("background", "#fff").css("border-radius", "4px").css("padding-top", "4px").removeAttr("id");
         return false;
     });
     
-    $(".btn-change-cover-photo-mobile").click(function() {
-        $("#banner_edit").trigger("click");
-    });
-
     var $windowProfile = $(window);
 
     function checkWidthProfile() {
@@ -554,6 +550,11 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     checkWidthProfile();
     // Bind event listener
     $windowProfile.resize(checkWidthProfile);
+    
+
+    $(".btn-change-cover-photo-mobile").click(function() {
+        $("#banner_edit").trigger("click");
+    });
 })(jQuery);
 
 function proceedPayment(obj)
