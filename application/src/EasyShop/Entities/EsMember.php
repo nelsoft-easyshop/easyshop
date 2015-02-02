@@ -288,7 +288,7 @@ class EsMember
     /**
      * @var string
      *
-     * @ORM\Column(name="temp_id", type="string", length=45, nullable=true)
+     * @ORM\Column(name="temp_id", type="string", length=45, nullable=false)
      */
     private $tempId = '';
     
@@ -1266,8 +1266,6 @@ class EsMember
      */
     public function setTempId($tempId)
     {
-        $this->tempId = $tempId;
-
-        return $this;
+        $this->tempId = $tempId; 
     }
 }
