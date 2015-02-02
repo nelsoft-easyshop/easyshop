@@ -522,7 +522,7 @@ class Kernel
         };
 
         $container['assets_uploader'] = function($c) use ($container){
-            $uploadLibrary = new CI_Upload();
+            $uploadLibrary = new MY_Upload();
             $imageLibrary = new MY_Image_lib();
             return new \EasyShop\Upload\AssetsUploader( $container["entity_manager"], 
                                                         $container["aws_uploader"],
