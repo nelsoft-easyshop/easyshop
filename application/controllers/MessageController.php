@@ -117,6 +117,7 @@ class MessageController extends MY_Controller
                                    ->setMessage($emailMsg, $imageArray)
                                    ->queueMail();
                 $result = [
+                    'success' => 1,
                     'message' => $messages,
                     'recipientMessage' => $recipientMessages
                 ];
