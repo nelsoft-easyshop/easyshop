@@ -156,7 +156,7 @@ class MessageManager {
     }
 
     /**
-     * returns the valid host for chat messaging
+     * Returns the valid host for chat messaging
      *
      * @param boolean $isBaseUrlOnly
      * @return string
@@ -182,7 +182,8 @@ class MessageManager {
     }
 
     /**
-     * returns the port for chat messaging
+     * Returns the port for chat messaging
+     *
      * @return int
      */
     public function getChatPort()
@@ -190,4 +191,14 @@ class MessageManager {
         return trim($this->jsServerConfig['PORT']);
     }
 
+    /**
+     * Retrieves the JWT secret
+     *
+     * @areturn string
+     */
+    public function getWebTokenSecret()
+    {
+        return $this->jsServerConfig['JWT_SECRET'];
+    }
+    
 }
