@@ -468,32 +468,23 @@ class ProductManager
      */ 
     public function generateSlug($title)   
     {
-        $title = $this->stringUtility->cleanString(strtolower($title));
+        $cleanedTitle = $this->stringUtility->cleanString(strtolower($title));
 
         $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('count', 'count');
-        $sql = "SELECT COUNT(*) as count FROM es_product WHERE slug LIKE :slug ";
+        $rsm->addScalarResult('slug', 'slug');
+        $sql = "SELECT slug FROM es_product WHERE slug LIKE :productSlug ";
         $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('slug', $title.'%'); 
-        $product = $query->getResult();
+        $query->setParameter('productSlug', $cleanedTitle.'%'); 
+        $existingSlugs = array_map('current', $query->getResult());
 
-        $slugCount = $product[0]["count"];
+        if(count($existingSlugs) > 0) {
+            $max = 0;
+            while (in_array($cleanedTitle ."-". $max++, $existingSlugs));
+            $cleanedTitle .= "-". $max;
 
-        if($slugCount > 0) {
-            $slugGenerate = $this->stringUtility->cleanString($title."-".$slugCount++);
         }
 
-        $checkIfSlugExist = $this->em
-                                 ->getRepository('EasyShop\Entities\EsProduct')
-                                 ->findBy(['slug' => $slugGenerate]);
-
-        $slugCount = count($checkIfSlugExist);
-
-        if($slugCount > 0 ){
-            $slugGenerate .= "-".$slugCount++;
-        }
-
-        return $slugGenerate;
+        return $cleanedTitle;
     }
     
     /**
