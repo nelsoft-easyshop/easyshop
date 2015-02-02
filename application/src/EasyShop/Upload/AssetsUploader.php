@@ -109,7 +109,9 @@ class AssetsUploader
         ];
         $this->userBannerDimensions['width'] = $userImageDimensions['bannersize'][0];
         $this->userBannerDimensions['height'] = $userImageDimensions['bannersize'][1];
-    
+        
+
+        $this->productImageDimensions = $this->configLoader->getItem('image_dimensions')['productImagesSizes']; 
     }
     
 
@@ -364,6 +366,82 @@ class AssetsUploader
         return $result;
     }
 
-    
+    public function uploadProductImage($fileNames, $pathDirectory, $fieldName = "userfile", $cropData = []){
+        $fileSuperGlobal = $_FILES;
+        $isSuccess = false;
+        $errorMessage = "";
+        $finalFileNames = [];
+        $dimensions = $this->productImageDimensions;
+
+        if(file_exists($pathDirectory)) {
+            $config = [
+                "upload_path" => $pathDirectory,
+                "overwrite" => false,
+                "file_name"=> $fileNames,
+                "encrypt_name" => false,
+                "remove_spaces" => true,
+                "allowed_types" => self::ALLOWABLE_IMAGE_MIME_TYPES,
+                "max_size" => self::MAX_ALLOWABLE_SIZE_KB,
+                "xss_clean" => false,
+            ];
+            $this->uploadLibrary->initialize($config); 
+
+            if($this->uploadLibrary->do_multi_upload($fieldName)){
+                $fileData = $this->uploadLibrary->get_multi_upload_data(); 
+                // for ($i=0; $i < sizeof($fileSuperGlobal[$fieldName]); $i++) {
+                //     if(isset($fileData[$i])){
+                //         $uploadData = $fileData[$i];
+                //         $file = $fileNames[$i];
+                //         $coordinate = $cropData[$i];
+                //         $originalImage = $pathDirectory.$file;
+                //         $smallImage = $pathDirectory."small/".$file;
+                //         $categoryImage = $pathDirectory."categoryview/".$file;
+                //         $thumbnailImage = $pathDirectory."thumbnail/".$file;
+
+                //         $imageUtility->imageCrop($pathDirectory.$file, 
+                //                                  $coordinate[0], 
+                //                                  $coordinate[1], 
+                //                                  $coordinate[2], 
+                //                                  $coordinate[3]);
+
+                //         $imageUtility->imageResize($originalImage, 
+                //                                    $smallImage,
+                //                                    $dimensions["small"]);
+
+                //         $imageUtility->imageResize($smallImage, 
+                //                                    $categoryImage,
+                //                                    $dimensions["categoryview"]);
+
+                //         $imageUtility->imageResize($categoryImage, 
+                //                                    $thumbnailImage,
+                //                                    $dimensions["thumbnail"]);
+
+                //         if( $uploadData['image_width'] > self::MAX_IMAGE_HEIGHT 
+                //             || $uploadData['image_height'] > self::MAX_IMAGE_WIDTH ){
+                //             $config['width'] = self::MAX_IMAGE_HEIGHT;
+                //             $config['height'] = self::MAX_IMAGE_WIDTH;
+                //             $this->imageLibrary->initialize($config);  
+                //             $this->imageLibrary->resize(); 
+                //             $this->imageLibrary->clear();
+                //         }
+
+                //         $finalFileNames[] = $file;
+                //     }
+                // }
+            }
+            else{ 
+                $errorMessage = $this->uploadLibrary->display_errors();
+            } 
+        }
+        else{
+            $errorMessage = "Path directory not exist!";
+        }
+
+        return [
+            'isSuccess' => $isSuccess,
+            'fileNames' => $finalFileNames,
+            'errorMessage' => $errorMessage,
+        ];
+    }
 }
 
