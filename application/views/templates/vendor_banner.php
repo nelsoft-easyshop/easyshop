@@ -35,13 +35,13 @@
                                 </div>
                             </div>
  
-                            <div class="edit-profile-photo">
+                            <div class="edit-profile-photo edit-profile-photo-mobile">
                                 <div>
                                     <img src="/assets/images/img-default-cover-photo.png" class="img-icon-edit-photo" alt="Edit Profile Photo">
                                     <span>Change Profile Photo</span>
                                 </div>
                             </div>
-                            <div class="edit-profile-photo-menu">
+                            <div class="edit-profile-photo-menu edit-profile-photo-menu">
                                 <div><a id="avatar_edit" href="javascript:void(0)">Upload Photo</a></div>
                                 <div><a id="avatar_remove" href="javascript:void(0)">Remove Photo</a></div>
                             </div>
