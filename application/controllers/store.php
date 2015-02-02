@@ -196,7 +196,7 @@ class Store extends MY_Controller
         $response = [
             'isSuccessful' => empty($uploadResult['error']) ? true : false,
             'image' => $userImage,
-            'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: 5mb",
+            'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: ".AssetsUploader::MAX_ALLOWABLE_SIZE_KB." kb",
         ];
 
 
@@ -232,7 +232,7 @@ class Store extends MY_Controller
         $response = [
             'isSuccessful' => empty($uploadResult['error']) ? true : false,
             'banner' => $userImage,
-            'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: 5mb",
+            'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: ".AssetsUploader::MAX_ALLOWABLE_SIZE_KB." kb",
         ];
         
         
