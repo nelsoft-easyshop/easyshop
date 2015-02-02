@@ -81,11 +81,11 @@ class MessageController extends MY_Controller
 
         if (!$receiverEntity) {
             $result['success'] = 0;
-            $result['msg'] = "The user " . html_escape($storeName) . ' does not exist';
+            $result['errorMessage'] = "The user " . html_escape($storeName) . ' does not exist';
         }
         else if ( (int) $this->userId === (int) $receiverEntity[0]->getIdMember() ) {
             $result['success'] = 0;
-            $result['msg'] = "Sorry, it seems that you are trying to send a message to yourself.";
+            $result['errorMessage'] = "Sorry, it seems that you are trying to send a message to yourself.";
         }
         else {
             $receiverEntity = $receiverEntity[0];
@@ -119,6 +119,7 @@ class MessageController extends MY_Controller
                                    ->setMessage($emailMsg, $imageArray)
                                    ->queueMail();
                 $result = [
+                    'success' => 1,
                     'message' => $messages,
                     'recipientMessage' => $recipientMessages
                 ];

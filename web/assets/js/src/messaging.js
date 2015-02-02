@@ -230,7 +230,7 @@
                     result = true;
                 }
                 else {
-                    alert(resultMsg.msg);
+                    alert(resultMsg.errorMessage);
                     result = false;
                 }
             }
