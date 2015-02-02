@@ -231,8 +231,8 @@ class SyncCsvImage extends MY_Controller
 
         $jsonp = "jsonCallback({'sites':[{'success': 'success',},]});";
         return $this->output
-            ->set_content_type('application/json')
-            ->set_output($jsonp);         
+                    ->set_content_type('application/json')
+                    ->set_output($jsonp);         
     }
 
     /**
