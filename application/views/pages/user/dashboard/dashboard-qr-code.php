@@ -40,7 +40,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12 qr-code-main">
-                <img src="<?php echo getAssetsDomain().'.'.html_escape($qrCodeImageName)?>">
+                <img src="<?php echo getAssetsDomain().'./'.html_escape($qrCodeImageName)?>">
             </div>
         </div>
 
