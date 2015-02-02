@@ -529,7 +529,8 @@ class Kernel
                                                         $container["config_loader"],
                                                         $uploadLibrary,
                                                         $imageLibrary,
-                                                        ENVIRONMENT);
+                                                        ENVIRONMENT, 
+                                                        $container['image_utility']);
         };
         
         $container["image_utility"] = function($c) use ($container){
