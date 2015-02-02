@@ -13,7 +13,7 @@
         var x1 = '0';
         var y2 = '0';
             $('.slider1').css({ 
-                "margin-top": (-71+(scrolled*.40))+'px',
+                "margin-top": (-71+(scrolled*.9))+'px',
             });
 
             $('.slider-bottom').css({ 
@@ -27,7 +27,7 @@
         var x12 = '0';
         var y22 = (0-(scrolled2*.76));
         $('.top-slider-item').css({
-            "margin-top": (-200+(scrolled2*.6))+'px',
+            "margin-top": (-100+(scrolled2*.6))+'px',
         });
     }
 
