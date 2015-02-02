@@ -185,6 +185,7 @@ else {
     #MOBILE
     $route['mobile/payment-type'] = 'mobile/mobilepayment/getPaymentMethod';
     $route['mobile/payment/review'] = 'mobile/mobilepayment/reviewPayment';
+    $route['mobile/product/upload'] = 'mobile/mobileProductUpload/uploadProduct';
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
