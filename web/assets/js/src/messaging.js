@@ -9,6 +9,7 @@
             onFocusReload(data.message);
         });
         setAccountOnline($userInfo.data('store-name'));
+
         $('#table_id').dataTable({
             "bScrollInfinite": true,
             "bScrollCollapse": false,
@@ -229,7 +230,7 @@
                     result = true;
                 }
                 else {
-                    alert(resultMsg.msg);
+                    alert(resultMsg.errorMessage);
                     result = false;
                 }
             }
@@ -265,7 +266,7 @@
         $("#modal-background").hide();
         $("#modal-background img").hide();
     }
-
+    
     function specific_msgs()
     {
         var html = "";
@@ -306,9 +307,6 @@
                 success : function(data) {
                     if (data === true) {
                         $parentLi.removeClass('NS');
-                    }
-                    else{
-                        alert("Error loading the message.");
                     }
                 }
             });

@@ -88,7 +88,7 @@ else {
 
     #ADVANCE SEARCH
     $route['(?i)advsrch'] = 'product_search/advance'; # new search - rain jorque
-    $route['(?i)advsrch/more'] = 'product_search/loadMoreProduct'; # new search - rain jorque
+    $route['(?i)advsrch/more'] = 'product_search/loadMoreProductAdvance'; # new search - rain jorque
 
     #PASSWORD
     $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 

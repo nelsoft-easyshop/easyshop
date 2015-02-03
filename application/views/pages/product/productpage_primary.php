@@ -1,6 +1,12 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" >
-<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css?ver=<?=ES_FILE_VERSION?>">
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" >
+    <link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css?ver=<?=ES_FILE_VERSION?>">
+<?php else: ?>
+    <link  rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.productpage-primary.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
+
 <?=$snippetMarkUp;?>
 <section class="breadcrumbs-bg">
     <div class="container">

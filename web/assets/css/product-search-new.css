@@ -500,6 +500,10 @@ html, body{
     margin-left: 20px;
 }
 
+.search-meta-hand{
+    width: 441px;
+}
+
 .list-search-tips > li{
     margin-bottom: 10px;
     font-size: 15px;
@@ -848,10 +852,6 @@ ul.list-category-search li:last-child > .search-category-link{
 .banner-template-2 .bx-controls-direction .bx-prev,
 .banner-template-2 .bx-controls-direction .bx-next{
     top: -88px !important;
-}
-
-.loading-row{
-    height: 100px;
 }
 
 /* =============================================

@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css" media='screen'>
-
 <section class="">
     <div class="container">
         <div class="row" style="height: 200px; margin-left: 15px; margin-top:35px; margin-bottom:15px;">

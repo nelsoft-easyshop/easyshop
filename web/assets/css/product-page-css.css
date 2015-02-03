@@ -1928,8 +1928,8 @@ body{
     }
 
     .prod-add-to-cart-btn {
-        background-position: 25% center;
-        padding: 10px 10px 10px 17%; 
+        background-position: 23% center;
+        padding: 10px 10px 10px 25%; 
     }
 
     .footer-secondary .footer-ac {
@@ -2083,6 +2083,11 @@ body{
         height: 35px;
         position: absolute;
         top: 0;
+    }
+
+    .prod-add-to-cart-btn {
+        background-position: 25% center;
+        padding: 10px 10px 10px 17%; 
     }
 
     .prod-select-con.shipment-select {

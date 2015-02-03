@@ -56,8 +56,7 @@ class product_search extends MY_Controller {
 
         $categoryId = $this->input->get('category') && count($this->input->get()) > 0
                       ? trim($this->input->get('category'))
-                      : EsCat::ROOT_CATEGORY_ID;
-        $memberId = $this->session->userdata('member_id');
+                      : EsCat::ROOT_CATEGORY_ID; 
 
         if(count($_GET)>0){
             $parameter = $this->input->get();
@@ -87,6 +86,25 @@ class product_search extends MY_Controller {
         $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/search/advance_search_main',$response);
         $this->load->view('templates/footer');
+    }
+
+    /**
+     * load more product when scroll in advance search
+     * @return json
+     */
+    public function loadMoreProductAdvance()
+    {
+        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+
+        $searchProductService = $this->serviceContainer['search_product']; 
+        $search = $searchProductService->getProductBySearch($this->input->get());
+        $response['products'] = $search['collection']; 
+
+        $response['typeOfView'] = trim($this->input->get('typeview'));
+        $data['view'] = $this->load->view('pages/search/product_search_by_searchbox_more',$response,true);
+        $data['count'] = count($response['products']);
+        echo json_encode($data);
     }
 
     /**

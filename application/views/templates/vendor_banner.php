@@ -1,5 +1,9 @@
-<link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
-<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>  
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
+    <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/> 
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.vendor-banner.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 <?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
@@ -37,7 +41,7 @@
                             <img src="<?php echo getAssetsDomain()?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
                         <span class="btn btn-default-3 btn-profile-edit-mobile" id="modal-edit-trigger">
-                            <img src="<?php echo getAssetsDomain()?>/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
+                            <img src="<?php echo getAssetsDomain()?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </span>
                         <a href="#" class="btn btn-default-2 btn-profile-edit-mobile btn-change-cover-photo-mobile">Change Cover Photo</a>
                     </div>
