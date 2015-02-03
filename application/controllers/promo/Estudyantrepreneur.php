@@ -9,6 +9,7 @@ class Estudyantrepreneur extends MY_Controller
         if (!$this->session->userdata('usersession')) {
             redirect('/', 'refresh');
         }
+        $this->em = $this->serviceContainer['entity_manager'];
     }
 
     /**
@@ -23,7 +24,7 @@ class Estudyantrepreneur extends MY_Controller
         ];
 
         $this->load->spark('decorator');
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/estudyantrepreneur');
         $this->load->view('templates/footer');
     }
