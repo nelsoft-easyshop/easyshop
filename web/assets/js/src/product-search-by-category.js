@@ -1,8 +1,8 @@
 (function ($) {
 
-      $(window).load(function(){
-         $('div.loader').fadeOut("slow");
-      });
+    $(window).load(function(){
+        $('div.loader').fadeOut("fast").css("display", "none");
+    });
    
     $(window).bind('scroll',function(e){
         parallaxScroll();
