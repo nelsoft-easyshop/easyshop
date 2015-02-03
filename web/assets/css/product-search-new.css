@@ -751,6 +751,10 @@ ul.list-category-search li:last-child > .search-category-link{
     overflow: visible !important;
 }
 
+.banner-template-2 .bx-viewport{
+    height: 308px !important;
+}
+
 .search-slider .bx-wrapper .bx-pager {
     display: none;
 }
@@ -818,6 +822,7 @@ ul.list-category-search li:last-child > .search-category-link{
     height: 523px;
     overflow: hidden;
     position: relative;
+    background: #fff;
 }
 
 #parallax-2 {
