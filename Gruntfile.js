@@ -281,7 +281,6 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.cookie.js',
                              'web/assets/js/src/lib/websocket/client.js',
                              'web/assets/js/src/lib/eventdispatcher.js',
-                             'web/assets/js/src/vendor/socket.io.js',
                              'web/assets/js/src/nodeClient.js',
                              'web/assets/js/src/universal.js'],
                 }
