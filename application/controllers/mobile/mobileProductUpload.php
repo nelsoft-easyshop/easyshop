@@ -101,10 +101,8 @@ class MobileProductUpload extends MY_Controller
                && $tempId === (string) $this->member->getTempId()){ 
                 
                 $memberId = $this->member->getIdMember();
-                $date = date("Ymd");
-                $fullDate = date("YmdGis");
-                $tempDirectory =  'assets/temp_product/'. $tempId.'_'.$memberId.'_'.$date.'/';
-                // $tempDirectory =  'assets/temp_product/sample/';
+                $date = date("Ymd"); 
+                $tempDirectory =  'assets/temp_product/'. $tempId.'_'.$memberId.'_'.$date.'/'; 
                  
                 foreach ($_FILES['userfile']['name'] as $key => $value) {
                     if($key !== 0){
@@ -142,6 +140,30 @@ class MobileProductUpload extends MY_Controller
         }
  
         echo json_encode($imageUpload, JSON_PRETTY_PRINT);
+    }
 
+    public function processUpload()
+    { 
+        $isSuccess = false;
+        $errorMessage = "";
+
+        $tempId = (string) trim($this->input->post('upload_token'));
+        
+        if($tempId === (string) $this->member->getTempId()){
+            $categoryId = trim($this->input->post('category'));
+            $productTitle = trim($this->input->post('title'));
+            $productDescription = trim($this->input->post('description'));
+            $price = trim($this->input->post('price'));
+            $discount = trim($this->input->post('discount'));
+            $isCashOnDelivery = (bool) trim($this->input->post('isCod'));
+            $quantity = trim($this->input->post('quantity'));
+            $images = json_decode(trim($this->input->post('images')));
+            $locationId = trim($this->input->post('shipping_info'));
+
+            
+        }
+        else{
+            $errorMessage = "Invalid Request. Upload token did not match. "
+        }
     }
 }
