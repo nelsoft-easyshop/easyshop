@@ -1,9 +1,15 @@
-<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
-<link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
-<link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
-<link rel="stylesheet" href="/assets/css/bootstrap.css" />
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
-<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
+    <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
+    <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+    <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.upload-step2.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+
 
 <script type="text/javascript">
     var af = new Array();

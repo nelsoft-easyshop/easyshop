@@ -1,8 +1,14 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
-<link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
+    <link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css" media='screen'>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.product-search-by-category.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+
 
 <section class="breadcrumbs-bg">
     <div class="container">

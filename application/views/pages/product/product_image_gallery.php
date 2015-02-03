@@ -1,6 +1,10 @@
 
 <!-- Load CSS -->
-<link rel="stylesheet" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/jquery.jqzoom.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
+<?php else: ?>
+    <link rel="stylesheet" href="/assets/css/min-easyshop.product-image-gallery.css?ver=<?=ES_FILE_VERSION?>" type="text/css">
+<?php endif; ?>
 
 <!-- Image File Container -->
 <div class="display-when-desktop" style="position: relative; z-index: 2;">

@@ -1,11 +1,16 @@
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link  type="text/css"  href='/assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet"  media="screen"/>
-<!--Chosen CSS-->
-<link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-mods.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
+    <link rel="stylesheet" type="text/css" href='/assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>"   media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/chosen.min.css"  media="screen"/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.upload-step3.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+
+
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 <div class="clear"></div>
