@@ -588,7 +588,8 @@ class Kernel
             return new \EasyShop\Product\ProductUploadManager(
                             $container['entity_manager'],
                             $container['product_manager'],
-                            $container['string_utility']
+                            $container['string_utility'],
+                            $container['language_loader']
                         );
         };
         
