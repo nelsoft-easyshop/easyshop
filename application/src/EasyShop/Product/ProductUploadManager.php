@@ -4,6 +4,7 @@ namespace EasyShop\Product;
 
 use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsStyle as EsStyle;
+use EasyShop\Entities\EsBrand as EsBrand;
 
 /**
  * Product Upload Manager Class
@@ -40,37 +41,39 @@ class ProductUploadManager
     /**
      * inserts new product in es_product table
      * @param  string   $productName
-     * @param  string   $sku        
-     * @param  string   $shortBrief 
      * @param  string   $descriptions  
-     * @param  string   $keywords   
-     * @param  integer  $brandId    
      * @param  integer  $categoryId 
-     * @param  integer  $styleId    
      * @param  integer  $memberId   
      * @param  float    $productPrice  
-     * @param  float    $discount   
      * @param  string   $condition  
+     * @param  boolean  $isCod     
+     * @param  boolean  $isEdit     
+     * @param  float    $discount   
      * @param  string   $customCategory
      * @param  string   $customBrand
-     * @param  boolean  $isEdit     
+     * @param  string   $keywords   
+     * @param  integer  $brandId    
+     * @param  integer  $styleId    
+     * @param  string   $sku        
+     * @param  string   $shortBrief 
      * @return EasyShop\Entities\EsProduct
      */
     public function createProduct($productName,
-                                  $sku,
-                                  $shortBrief,
                                   $descriptions,
-                                  $keywords,
-                                  $brandId,
                                   $categoryId,
-                                  $styleId,
                                   $memberId,
                                   $productPrice,
-                                  $discount,
                                   $condition,
-                                  $customCategory,
-                                  $customBrand,
-                                  $isEdit = false)
+                                  $isCod = false,
+                                  $isEdit = false,
+                                  $discount = "0",
+                                  $customCategory = "",
+                                  $customBrand = "",
+                                  $keywords = "",
+                                  $brandId = EsBrand::CUSTOM_CATEGORY_ID,
+                                  $styleId = EsStyle::DEFAULT_STYLE_ID,
+                                  $sku = "",
+                                  $shortBrief = "")
     {
         $currentDateTime = date_create(date("Y-m-d H:i:s"));
 
