@@ -195,6 +195,7 @@ class PromoManager
     }
 
     /**
+     * Promo : BuyAtZero
      * Register member for buy at zero promo
      * @param $productId
      * @param $memberId
@@ -223,6 +224,7 @@ class PromoManager
     }
 
     /**
+     * Promo : ScratchAndWin
      * validates code and returns the details needed for scratch and win promo
      * @param $code
      * @return array
@@ -259,6 +261,7 @@ class PromoManager
     }
 
     /**
+     * Promo : ScratchAndWin
      * Update member id
      * @param $memberId
      * @param $code
@@ -275,6 +278,7 @@ class PromoManager
     }
 
     /**
+     * Promo : TwelveDaysOfChristmas
      * Get active product for twelve days of Christmas promo
      * @param $date
      * @return EsProduct
@@ -294,5 +298,46 @@ class PromoManager
         $product = $query->getOneOrNullResult();
 
         return $product;
+    }
+
+    /**
+     *TODO:
+     *  Define variable Date and Time or Rounds
+     *  function getSchoolWithStudentsByRound
+     *  function vote
+     *NOTE:
+     * User can only vote one student / round
+     * In-School :
+     *  Round 1 (Feb 23 - March 6)
+     *  Round 2 (March 7 - April 7)
+     *  If number of participants is <= 3, no need for round 2.
+     *  Else, round 2.
+     * Inter-School :
+     *  Final Round (April 8 - June 8)
+     * -->This should not be pushed to Github project
+     */
+
+    /**
+     * Promo : Estudyantrepreneur
+     * Get School and its student by date / round
+     * @param $round
+     * @return array
+     */
+    public function getSchoolWithStudentsByRoundForEstudyantrepreneur($round)
+    {
+
+    }
+
+    /**
+     * Promo : Estudyantrepreneur
+     * Vote a student
+     * @param $studentEntity
+     * @param $schoolEntity
+     * @param $memberEntity
+     * @return bool
+     */
+    public function voteForEstudyantrepreneur($studentEntity, $schoolEntity, $memberEntity)
+    {
+        return true;
     }
 }
