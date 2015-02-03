@@ -268,15 +268,22 @@ class MobileProductUpload extends MY_Controller
                         $this->serviceContainer["assets_uploader"]
                              ->uploadImageDirectory($tempDirectory, $pathDirectory, $productId, $images);
                     }
+
+                    $isSuccess = true;
                 }
             }
             else{
                 $errorMessage = $validate['message'];
-            }
-            echo $errorMessage;
+            } 
         }
         else{
             $errorMessage = "Invalid Request. Upload token did not match.";
         }
+
+        $returnArray = [
+            'isSuccess' => $isSuccess,
+            'message' => $errorMessage,
+        ]
+        echo json_encode($returnArray, JSON_PRETTY_PRINT);
     }
 }
