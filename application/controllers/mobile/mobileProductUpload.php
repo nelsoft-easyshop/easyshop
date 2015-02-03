@@ -4,6 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
  
 use EasyShop\Upload\AssetsUploader as AssetsUploader;
+use EasyShop\Entities\EsProduct as EsProduct;
 
 class MobileProductUpload extends MY_Controller 
 {
@@ -40,6 +41,7 @@ class MobileProductUpload extends MY_Controller
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->em = $this->serviceContainer['entity_manager'];
         $this->productUploadManager = $this->serviceContainer['product_upload_manager'];
+        $this->stringUtility = $this->serviceContainer['string_utility'];
 
         header('Content-type: application/json');
 
@@ -90,8 +92,7 @@ class MobileProductUpload extends MY_Controller
         $currentImageCount = (int) trim($this->input->post('count')); 
         $tempId = (string) trim($this->input->post('upload_token'));
 
-        if(isset($_FILES['userfile'])){
-            $pathDirectory = 'assets/temp_product/sample/';
+        if(isset($_FILES['userfile'])){ 
             $allowedMime = explode('|', AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES);
             $fileExtension = strtolower(end(explode('.', $_FILES['userfile']['name'][0]))); 
  
@@ -102,6 +103,7 @@ class MobileProductUpload extends MY_Controller
                 
                 $memberId = $this->member->getIdMember();
                 $date = date("Ymd"); 
+                $fullDate = date("YmdGis");
                 $tempDirectory =  'assets/temp_product/'. $tempId.'_'.$memberId.'_'.$date.'/'; 
                  
                 foreach ($_FILES['userfile']['name'] as $key => $value) {
@@ -142,28 +144,139 @@ class MobileProductUpload extends MY_Controller
         echo json_encode($imageUpload, JSON_PRETTY_PRINT);
     }
 
+    /**
+     * process upload request of mobile
+     * @return json
+     */
     public function processUpload()
     { 
         $isSuccess = false;
         $errorMessage = "";
+        $date = date("Ymd");
+        $images = [];
+        $attributes = [];
+        $shippingInfo = [];
+        $memberId = $this->member->getIdMember();
 
-        $tempId = (string) trim($this->input->post('upload_token'));
-        
+        $tempId = (string) trim($this->input->post('upload_token')); 
         if($tempId === (string) $this->member->getTempId()){
-            $categoryId = trim($this->input->post('category'));
             $productTitle = trim($this->input->post('title'));
             $productDescription = trim($this->input->post('description'));
-            $price = trim($this->input->post('price'));
-            $discount = trim($this->input->post('discount'));
-            $isCashOnDelivery = (bool) trim($this->input->post('isCod'));
-            $quantity = trim($this->input->post('quantity'));
-            $images = json_decode(trim($this->input->post('images')));
-            $locationId = trim($this->input->post('shipping_info'));
+            $categoryId = trim($this->input->post('category'));
+            $price = (float) trim(str_replace(',', '', $this->input->post('price')));
+            $discount = (float) trim($this->input->post('discount'));
+            $isCod = (bool) trim($this->input->post('isCod'));
+            $quantity = (int) trim($this->input->post('quantity'));
+            $imageArray = json_decode(trim($this->input->post('images')), true);
+            $shippingArray = json_decode(trim($this->input->post('shipping_info')), true);
+            $attributeArray = json_decode(trim($this->input->post('attributes')), true);
+            $condition = $this->lang->line('product_condition')[0];
 
-            
+            if(is_null($imageArray) === false
+               && isset($imageArray[0])){
+                $images = $imageArray; 
+            }
+
+            if(is_null($attributes) === false ){
+                $attributes = $attributeArray; 
+            }
+
+            if(is_null($shippingArray) === false
+               && isset($shippingArray[0])){
+                $shippingInfo = $shippingArray;
+            }
+
+            $validData = [
+                'productName' => $productTitle,
+                'productPrice' => $price,
+                'productDescription' => $productDescription,
+                'images' => $images, 
+                'condition' => $condition, 
+            ]; 
+
+            $validate = $this->productUploadManager->validateUploadRequest($validData);
+            if($validate['isSuccess']){ 
+                $product = $this->productUploadManager->createProduct(
+                                                            $productTitle,
+                                                            $condition,
+                                                            $productDescription,
+                                                            $categoryId,
+                                                            $memberId,
+                                                            $price,
+                                                            $discount,
+                                                            $isCod,
+                                                            EsProduct::ACTIVE
+                                                        );
+                if($product){
+                    $productId = $product->getIdProduct();
+                    $tempDirectory = './assets/temp_product/'. $tempId.'_'.$memberId.'_'.$date.'/';
+                    $pathDirectory = './assets/product/'. $productId.'_'.$memberId.'_'.$date.'/';
+
+                    foreach ($images as $key => $image) {  
+                        $imageName = str_replace($tempId, $productId, $image); 
+                        $imagePath = $pathDirectory.$imageName;
+                        $fileType = strtolower(end(explode('.', $image)));
+                        $isPrimary = $key === 0;
+                        $productImage = $this->productUploadManager
+                                             ->addProductImage($imagePath, $fileType, $product, $isPrimary);
+                    }
+
+                    foreach ($attributes as $key => $attr) {
+                        $headVal = $this->stringUtility->removeNonUTF(trim($key));
+                        $attrHead = $this->productUploadManager
+                                         ->addProductAttribute($headVal, $product);
+
+                        foreach ($attr as $value) { 
+                            $attrValue = $this->stringUtility->removeNonUTF(trim($value['value'])); 
+                            $price = isset($value['price']) ? trim(str_replace(',', '', $value['price'])) : 0;
+                            $image = isset($value['image']) ? $value['image'] : "";
+                            $imageId = 0;
+                            if($image !== ""){ 
+                                $imageName = str_replace($tempId, $productId, $image);
+                                $imagePath = $pathDirectory.$imageName;
+                                $fileType = end(explode('.', $image));
+                                $attrImage = $this->productUploadManager
+                                                  ->addProductImage($imagePath, $fileType, $product, false);
+                                $imageId = $attrImage->getIdProductImage(); 
+                                $images[] = $image;
+                            }
+
+                            $this->productUploadManager
+                                 ->addProductAttributeDetail($attrValue, $price, $attrHead, $imageId); 
+                        } 
+                    }
+                    $productCombination = $this->productUploadManager->addNewCombination($product, $quantity);
+
+                    foreach( $shippingInfo as $info ){
+                        $price = trim(str_replace(',', '', $info['price']));
+                        $mustBreak = false;
+                        if($info['location_id'] === \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID){
+                            $price = 0;
+                            $mustBreak = true;
+                        }
+                        $this->productUploadManager->addShippingInfo($product, 
+                                                                     $productCombination->getIdProductItem(),
+                                                                     trim($info['location_id']),
+                                                                     $price);
+
+                        if($mustBreak){
+                            break;
+                        }
+                    }
+
+                    if(count($images) > 0){ 
+                        $this->serviceContainer["assets_uploader"]
+                             ->uploadImageDirectory($tempDirectory, $pathDirectory, $productId, $images);
+                    }
+                }
+            }
+            else{
+                $errorMessage = $validate['message'];
+            }
+            echo $errorMessage;
         }
         else{
-            $errorMessage = "Invalid Request. Upload token did not match. "
+            $errorMessage = "Invalid Request. Upload token did not match.";
         }
     }
 }
