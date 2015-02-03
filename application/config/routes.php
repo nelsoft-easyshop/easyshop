@@ -188,6 +188,7 @@ else {
 
     $route['mobile/product/upload/addImage'] = 'mobile/mobileProductUpload/uploadImage';
     $route['mobile/product/upload/requestToken'] = 'mobile/mobileProductUpload/requestUploadToken';
+    $route['mobile/product/upload/process'] = 'mobile/mobileProductUpload/processUpload';
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
