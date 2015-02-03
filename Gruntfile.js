@@ -92,8 +92,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/newhome.js'],
 
                     'web/assets/js/min/easyshop.inbox_view.js':
-                            ['web/assets/js/src/messaging.js',
-                            'web/assets/js/src/vendor/socket.io.js'],
+                            ['web/assets/js/src/messaging.js'],
 
                     'web/assets/js/min/easyshop.payment_review_responsive.js':
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
