@@ -102,7 +102,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         var stateRegion = $(".stateregionselect").val();
         var city = $('.cityselect').val();
         var stateRegionSelected = $(".stateregionselect option:selected").html();
-        var citySelected = $(".cityselect option:selected").html();
+        var citySelected = $(".cityselectx option:selected").html();
         changeSlug = jQuery.ajax({
             type: "POST",
             dataType: "JSON",
@@ -286,6 +286,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             imageprev(this);
         }
         else {
+            $(".loader-upload").css("display","block");        
             submitForm();
         }
     });
@@ -358,6 +359,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 console.log(percentComplete);
             },
             success :function(xhrResponse) { 
+                $(".loader-upload").css("display","none");
                 if(xhrResponse.isSuccessful){
                     if(formAction === 'banner_upload'){
                         $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});
