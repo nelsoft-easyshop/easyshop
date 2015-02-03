@@ -3,6 +3,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+
 class location extends MY_Controller 
 {
     /**
@@ -24,13 +26,14 @@ class location extends MY_Controller
 
     /**
      * Get all location and arrange recursive based on it's parent location
+     * format for shipping address
      * @return json
      */
-    public function getAllLocation()
+    public function getLocationForAddress()
     {
         // Load Repository 
-        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
-        $data['available_selection'] = $EsLocationLookupRepository->getLocationLookup(); 
+        $esLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+        $data['available_selection'] = $esLocationLookupRepository->getLocationLookup(); 
         $modifiedArray = [];
         $modifiedArray[0]['countryId'] = $data['available_selection']['countryId'];
         $modifiedArray[0]['coutryName'] = $data['available_selection']['countryName']; 
@@ -51,5 +54,51 @@ class location extends MY_Controller
         }
     
         echo json_encode($modifiedArray,JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Get all location and arrange recursive based on it's parent location
+     * format for product shipping location
+     * @return json
+     */
+    public function getLocationForShipping()
+    {
+        $location = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                             ->getLocation();
+
+        $formedArray = [];
+        foreach ($location['area'] as $majorIsland => $region) {
+            $regionArray = [];
+            foreach ($region as $regionKey => $province) {
+                $provinceArray = [];
+                foreach ($province as $key => $value) {
+                    $provinceArray[] = [
+                        'name' => $value,
+                        'location_id' => $key,
+                        'children' => [],
+                    ];
+                }
+                $regionArray[] = [
+                    'name' => $regionKey,
+                    'location_id' => $location['regionkey'][$regionKey],
+                    'children' => $provinceArray,
+                ];
+            }
+
+            $array = [
+                'name' => $majorIsland,
+                'location_id' => $location['islandkey'][$majorIsland],
+                'children' => $regionArray,
+            ];
+            $formedArray[] = $array;
+        }
+
+        $finalArray = [
+            'name' => 'Philippines',
+            'location_id' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
+            'children' => $formedArray,
+        ];
+
+        echo json_encode($finalArray,JSON_PRETTY_PRINT);
     }
 }
