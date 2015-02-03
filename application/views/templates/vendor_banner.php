@@ -3,6 +3,10 @@
 
 <?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
+<div class="loader-upload" style="display: none;">
+    <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+    <span>Uploading photo</span>
+</div>
 <section>
     <div class="pos-rel" id="display-banner-view">
         <div class="vendor-main-bg" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">
