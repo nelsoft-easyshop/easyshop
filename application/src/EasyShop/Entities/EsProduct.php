@@ -53,7 +53,7 @@ class EsProduct
     /**
      * @var string
      *
-     * @ORM\Column(name="condition", type="string", length=255, nullable=true)
+     * @ORM\Column(name="`condition`", type="string", length=255, nullable=true)
      */
     private $condition = '';
 
