@@ -160,11 +160,13 @@ class AccountManager
 
     /**
      * Sends an email verification
+     *
      * @param EasyShop\Entities\EsMember $member
-     * @param bool $isNew
+     * @param boolean $isNew
+     * @param boolean $excludeVerificationLink
      * @return mixed
      */
-    public function sendAccountVerificationLinks($member, $isNew = true)
+    public function sendAccountVerificationLinks($member, $isNew = true, $excludeVerificationLink = false)
     {
         $response= [
             'isSuccessful' => false,
@@ -214,6 +216,10 @@ class AccountManager
                 'site_url' => site_url('register/email_verification')
             ];
             
+            if($excludeVerificationLink){
+                $parseData['emailVerified'] = true;
+            }
+            
             $imageArray = $this->configLoader->getItem('email', 'images');  
             $message = $this->parser->parse('templates/landingpage/lp_reg_email' , $parseData,true);
             
@@ -221,12 +227,12 @@ class AccountManager
             $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
             $this->emailNotification->setMessage($message, $imageArray);
             /**
-            * Mobile verification can be added here
-            */
+             * Mobile verification can be added here (unused for the time being)
+             */
             $mobileCode = $this->hashUtility->generateRandomAlphaNumeric(6);
             if($this->emailNotification->sendMail()){
                 if($isNew){
-                    $response['isSuccessful'] = $verifcodeRepository->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode);
+                    $response['isSuccessful'] = $verifcodeRepository->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode) ? true : false;
                 }
                 else{
                     $response['isSuccessful'] = $verifcodeRepository->updateVerifCode($verifCode, $emailSecretHash, $mobileCode);
@@ -590,6 +596,10 @@ class AccountManager
         $hash = $this->hashUtility->generalPurposeHash($dateNow, $dateNow);
         $verificationCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
                                  ->findOneBy(['member' => $member]);
+        if(!$verificationCode){
+            $verificationCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                                         ->createNewMemberVerifCode($member);
+        }
         $verificationCode->setFpTimestamp(new DateTime('now'));
         $verificationCode->setFpCode($hash);
         try{
