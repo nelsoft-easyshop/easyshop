@@ -15,33 +15,26 @@ var server = https.createServer(https_options, app).listen(PORT, HOST);
 console.log('HTTPS Server listening on %s:%s', HOST, PORT);
 io = require('socket.io').listen(server);
 
-var container = {};
 io.sockets.on( 'connection', function(client) {
+    
+    client.on('set account online', function(storename) {
+        client.join(storename);
+    });
+
+    client.on('set account offline', function(storename) {
+        client.leave(storename);
+    });
 
     client.on('send message', function(data) {
-        if (data.recipient in container) {
-            container[data.recipient].emit('send message', {recipient: data.recipient, message: data.message });
-        }
+        io.to(data.recipient).emit('send message', {
+            recipient: data.recipient,
+            message: data.message
+        });
     });
-
-    client.on('set account online', function(storeName) {
-        //TODO : add feature to see if user is online
-        if (!(storeName in container)) {
-            console.log(storeName + " is now Online" );
-        }
-        client.storeName = storeName;
-        container[client.storeName] = client;
+    
+    client.on('message opened', function(storename) {
+        io.to(storename).emit('message opened');
     });
-
-    client.on('set account offline', function(storeName, callback) {
-        if (storeName in container) {
-            callback(true);
-            delete container[storeName];
-            console.log(storeName + " is now Offline" );
-        }
-        else {
-            callback(false);
-        }
-    });
+    
 
 });

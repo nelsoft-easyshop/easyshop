@@ -1,6 +1,10 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/step4-product-preview-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
 
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/step4-product-preview-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.upload-step4-preview.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 <section class="product-main-top-content">
     <div class="container">

@@ -1,4 +1,10 @@
-<link type="text/css" href='/assets/css/new-dashboard.css' rel="stylesheet" media='screen'/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href='/assets/css/new-dashboard.css' rel="stylesheet" media='screen'/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.member-account-activate.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
 <style>
 #simplemodal-container{
         height: 150px !important;

@@ -17,17 +17,15 @@
         <meta property="og:image" content="https://easyshop.ph/assets/images/img_logo.png?ver=<?=ES_FILE_VERSION?>" />
         <meta name="viewport" content="width=device-width">
 
-        <!-- CSS -->
-        <link rel="stylesheet" href="/assets/css/landingpage/style_v2.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-        <link rel="stylesheet" href="/assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
-        <link rel="stylesheet" href="/assets/css/landingpage/responsive-nav.css?ver=<?=ES_FILE_VERSION?>"><!-- responsive menu -->
-
-        <!-- Contact Form CSS files -->
-        <link type='text/css' href='/assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
-        <link type='text/css' href="/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-
-
-
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <link rel="stylesheet" href="/assets/css/landingpage/style_v2.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+            <link rel="stylesheet" href="/assets/css/landingpage/jquery.bxslider.css" type="text/css" media="screen"/> <!-- Slider CSS -->
+            <link rel="stylesheet" href="/assets/css/landingpage/responsive-nav.css?ver=<?=ES_FILE_VERSION?>"><!-- responsive menu -->
+            <link type='text/css' href='/assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
+            <link type='text/css' href="/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <?php else: ?>
+            <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.register.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+        <?php endif; ?>
 
         <!-- JS -->
         <!-- html5.js for IE less than 9 -->

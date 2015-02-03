@@ -1,8 +1,14 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
-<link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
+    <link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css" media='screen'>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.product-search-by-category.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+
 
 <section class="breadcrumbs-bg">
     <div class="container">
@@ -41,8 +47,8 @@
                         <?php if(trim($topBanner['target']['url']) !== ''): ?>
                             <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
                         <?php endif; ?>
-                                <li class="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>top-slider-item<?php endif;?>">
-                                    <img src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
+                                <li class="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>top-slider-item<?php endif;?>" style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>) center no-repeat; background-size: cover;">
+                                    <img class="top-slider-img" src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
                                 </li>
                         <?php if(trim($topBanner['target']['url']) !== ''): ?>
                             </a>

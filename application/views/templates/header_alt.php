@@ -16,12 +16,19 @@
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
-    <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href="/assets/css/easy-icons/easy-icons.css?<?=ES_FILE_VERSION?>" rel="stylesheet">
-    <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-
-    <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    
+    
+    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+        <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href="/assets/css/easy-icons/easy-icons.css?<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <?php else: ?>
+        <link type="text/css" href='/assets/css/min-easyshop.header-alt.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <?php endif; ?>
+    
+    
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
     <?php endif; ?>
@@ -182,12 +189,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <a href="/me?tab=settings">Settings</a>
                             </li>
                             <li class="nav-dropdown-border pos-rel">
-                                <a href="/messages">Message</a>
-                                <?php if((int)$unreadMessageCount !== 0) : ?>
-                                    <div id="unread-messages-count" class="msg_countr message-count-con">
-                                    <?php echo $unreadMessageCount ;?>
+                                    <a href="/messages">Messages</a>
+                                    <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                        <?php echo $unreadMessageCount; ?>
                                     </div>
-                                <?php endif;?>
                             </li>
                             <li class="nav-dropdown-border">
                                 <a class="prevent" href="/login/logout">Logout</a>
@@ -296,6 +301,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </ul>
     </div>
 </div>
+
+<input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
+<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user ? $user->getStoreName() : 'false')?>">
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type="text/javascript" src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
