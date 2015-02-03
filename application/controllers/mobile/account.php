@@ -53,23 +53,7 @@ class Account extends MY_Controller
         $registrationResult = $accountManager->registerMember($username, $password, $email, $contactno, true);
         if(empty($registrationResult['errors'])){
             $isSuccessful = true;
-
-            $emailService = $this->serviceContainer['email_notification'];
-            $this->load->library('parser');
-            $this->config->load('email', true);
-            $imageArray = $this->config->config['images'];
-            $emailSubject = $this->lang->line('registration_subject');
-            $emailContentData = [
-                'user' => $username,
-                'emailVerified' => true
-            ];
-            $emailContent = $this->parser->parse('templates/landingpage/lp_reg_email', 
-                                                  $emailContentData, 
-                                                  true);
-            $emailService->setRecipient($email)
-                         ->setSubject($emailSubject)
-                         ->setMessage($emailContent, $imageArray)
-                         ->sendMail();
+            $accountManager->sendAccountVerificationLinks($registrationResult["member"], true, true);
         }
         else{
             $errors = array_merge($errors, $registrationResult['errors']);

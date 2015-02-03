@@ -5,7 +5,7 @@
         <top>
             <image>
                 <path>/assets/images/categories/slider-large/business-industrial.jpg</path>
-                <target>/category/business-industrial</target>
+                <target></target>
             </image>
         </top>
         <bottom>
@@ -142,7 +142,7 @@
         <top>
             <image>
                 <path>/assets/images/categories/slider-large/food-beverage.jpg</path>
-                <target>/category/food-beverages</target>
+                <target></target>
             </image>
         </top>
     </category>
@@ -151,7 +151,7 @@
         <top>
             <image>
                 <path>/assets/images/categories/slider-large/health-beauty.jpg</path>
-                <target>/category/health-beauty</target>
+                <target></target>
             </image>
         </top>
     </category>
@@ -160,7 +160,7 @@
         <top>
             <image>
                 <path>/assets/images/categories/slider-large/home-furniture.jpg</path>
-                <target>/category/home-furniture</target>
+                <target></target>
             </image>
         </top>
     </category>
@@ -169,7 +169,7 @@
         <top>
             <image>
                 <path>/assets/images/categories/slider-large/jewellery-watches.jpg</path>
-                <target>/category/jewellery-watches</target>
+                <target></target>
             </image>
         </top>
     </category>
@@ -178,7 +178,7 @@
         <top>
             <image>
                 <path>/assets/images/categories/slider-large/toys.jpg</path>
-                <target>/category/toys</target>
+                <target></target>
             </image>
         </top>
     </category>
