@@ -27,15 +27,25 @@ class ProductUploadManager
      */
     private $productManager;
 
+
+    /**
+     * String Utility
+     *
+     * @var EasyShop\Utility\StringUtility
+     */
+    private $stringUtility;
+
     /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
     public function __construct($em,
-                                $productManager)
+                                $productManager,
+                                $stringUtility)
     {
         $this->em = $em;
         $this->productManager = $productManager;
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -76,6 +86,14 @@ class ProductUploadManager
                                   $shortBrief = "")
     {
         $currentDateTime = date_create(date("Y-m-d H:i:s"));
+
+        $productName = $this->stringUtility->removeNonUTF($productName);
+        $condition = $this->stringUtility->removeNonUTF($condition);
+        $customCategory = $this->stringUtility->removeNonUTF($customCategory);
+        $customBrand = $this->stringUtility->removeNonUTF($customBrand);
+        $keywords = $this->stringUtility->removeNonUTF($keywords);
+        $sku = $this->stringUtility->removeNonUTF($sku);
+        $shortBrief = $this->stringUtility->removeNonUTF($shortBrief);
 
         $newProduct = new EsProduct();
         $newProduct->setName($productName)

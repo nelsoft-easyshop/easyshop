@@ -585,7 +585,8 @@ class Kernel
         $container['product_upload_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductUploadManager(
                             $container['entity_manager'],
-                            $container['product_manager']
+                            $container['product_manager'],
+                            $container['string_utility']
                         );
         };
         
