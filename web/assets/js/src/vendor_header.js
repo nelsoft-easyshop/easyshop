@@ -561,6 +561,10 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     $(".btn-change-cover-photo-mobile").click(function() {
         $("#banner_edit").trigger("click");
     });
+
+    $(".btn-cancel-me-wide").click(function() {
+        $(".simplemodal-close").trigger("click");
+    });
 })(jQuery);
 
 function proceedPayment(obj)
