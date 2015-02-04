@@ -218,7 +218,8 @@ class CheckoutService
                 || !$item[$paymentType]
                 || !$item['canPurchaseWithOther']
                 || !$item['hasNoPuchaseLimitRestriction']
-                || !$item['isQuantityAvailable'] ){
+                || !$item['isQuantityAvailable']
+                || !$item['isAvailableInLocation'] ){
                 $itemFail++;
             } 
         }
