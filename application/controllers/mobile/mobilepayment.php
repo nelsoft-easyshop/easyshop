@@ -246,7 +246,7 @@ class mobilePayment extends MY_Controller
 
             $returnArray = array(
                     'isSuccess' => $isSuccess, 
-                    'message' => '',
+                    'message' => $message,
                     'url' => $urlReturn,
                     'returnUrl' => $returnUrl,
                     'cancelUrl' => $cancelUrl,
