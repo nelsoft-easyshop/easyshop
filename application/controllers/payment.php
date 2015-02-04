@@ -83,36 +83,6 @@ class Payment extends MY_Controller{
     }
 
     /**
-     * Review cart data from mobile 
-     * @return mixed
-     */ 
-    public function mobileReviewBridge() 
-    {
-        $this->oauthServer =  $this->serviceContainer['oauth2_server'];
-        $this->em = $this->serviceContainer['entity_manager']; 
-        $cartManager = $this->serviceContainer['cart_manager'];   
-
-        $cartManager = $this->serviceContainer['cart_manager'];
-        $paymentService = $this->serviceContainer['payment_service'];
-
-        // Handle a request for an OAuth2.0 Access Token and send the response to the client
-        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
-            header('Content-type: text/html'); 
-            show_404(); 
-            die;
-        }
-
-        $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
-        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
-        $memberId = $this->member->getIdMember();
-        $itemArray = $cartManager->getValidatedCartContents($memberId); 
- 
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
-
-        return $validated['itemArray'];
-    }
-
-    /**
      * bridge to persist cod payment
      * @return mixed
      */
