@@ -1,5 +1,6 @@
 var express = require('express');
 var https = require('https');
+var redis = require("redis");
 var app = express();
 var socketioJwt = require('socketio-jwt');
 
@@ -14,6 +15,11 @@ var https_options = {
 };
 
 var server = https.createServer(https_options, app).listen(PORT, HOST);
+
+//You can specify port and host : redis.createClient(PORT, HOST, options)
+var clientSubscribe = redis.createClient();
+clientSubscribe.subscribe("chat-channel");
+
 console.log('HTTPS Server listening on %s:%s', HOST, PORT);
 io = require('socket.io').listen(server);
 
@@ -22,11 +28,25 @@ io.set('authorization',socketioJwt.authorize({
     handshake: true
 }));
 
+
+
 io.sockets.on( 'connection', function(socket) {
-    
+ 
     socket.on('set account online', function() {
         var storename = socket.client.request.decoded_token.storename; 
+        console.log(storename + " is online.");
         socket.join(storename);
+    });
+    
+    clientSubscribe.on("message", function(channel, jsonString){
+
+        var data = JSON.parse(jsonString);
+        console.log(data.recipient);
+        console.log(data.message);
+        io.to(data.recipient).emit('send message', {
+            recipient: data.recipient,
+            message: data.message
+        });
     });
 
     /**
@@ -36,16 +56,6 @@ io.sockets.on( 'connection', function(socket) {
     socket.on('set account offline', function() {
         var storename = socket.client.request.decoded_token.storename; 
         socket.leave(storename);
-    });
-
-    socket.on('send message', function(data) {
-        /**
-         *  TODO: VALIDATE MESSAGE BEFORE EMITTING 
-         */
-        io.to(data.recipient).emit('send message', {
-            recipient: data.recipient,
-            message: data.message
-        });
     });
     
     socket.on('message opened', function() {
