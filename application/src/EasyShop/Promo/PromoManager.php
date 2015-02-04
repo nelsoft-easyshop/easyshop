@@ -320,12 +320,129 @@ class PromoManager
     /**
      * Promo : Estudyantrepreneur
      * Get School and its student by date / round
-     * @param $round
+     * @param $rounds
      * @return array
      */
-    public function getSchoolWithStudentsByRoundForEstudyantrepreneur($round)
+    public function getSchoolWithStudentsByRoundForEstudyantrepreneur($rounds)
     {
+        $date = new \DateTime;
+//        $dateToday = $date->getTimestamp();
+        $dateToday = strtotime('2015-03-23 00:00:00');
+        $round = false;
+        $previousStartDate = '';
+        $previousEndDate = '';
+        $result = [];
+        $previousRound = '';
+        $qb = $this->em->createQueryBuilder();
 
+        foreach ($rounds as $key => $data) {
+            $startDate = strtotime($data['start']);
+            $endDate = strtotime($data['end']);
+            if ($dateToday >= $startDate && $dateToday <= $endDate) {
+                $round = $key === 'first_round' ?:'second_round_and_inter_school';
+                $limit = (int) $data['limit'];
+
+                $keys = array_keys($rounds);
+                $found_index = array_search($key, $keys);
+                if ($found_index === true || $found_index !== 0) {
+                    $previousRound = $keys[$found_index-1];
+                    $previousStartDate = $rounds[$previousRound]['start'];
+                    $previousEndDate = $rounds[$previousRound]['end'];
+                }
+
+                break;
+            }
+        }
+
+        switch($round) {
+            case 'first_round' :
+                $query = $qb->select('tblStudent.idStudent, tblStudent.name AS student, tblSchool.name AS school')
+                            ->from('EasyShop\Entities\EsStudent', 'tblStudent')
+                            ->leftJoin('EasyShop\Entities\EsSchool', 'tblSchool', 'WITH', 'tblSchool.idSchool = tblStudent.school')
+                            ->groupBy('tblStudent.idStudent')
+                            ->orderBy('tblStudent.idStudent')
+                            ->getQuery();
+                $students = $query->getResult();
+
+                foreach ($students as $student) {
+                    if (!isset($result[$student['school']])) {
+                        $result[$student['school']] = [];
+                    }
+                    array_push($result[$student['school']], $student);
+                }
+
+                break;
+            case 'second_round_and_inter_school' :
+                $query = $qb->select('tblSchool.name')
+                            ->from('EasyShop\Entities\EsSchool', 'tblSchool')
+                            ->getQuery();
+                $schools = $query->getResult();
+                foreach ($schools as $school) {
+                    $schoolName = $school['name'];
+                    $students = $this->getStudentsForEstudyantrepreneur(
+                                    $previousStartDate,
+                                    $previousEndDate,
+                                    $school,
+                                    $limit
+                                );
+
+                    $result[$schoolName] = $students;
+                    if ($students) {
+                        end($result[$schoolName]);
+                        $lastKey = key($result[$schoolName]);
+                        $studentsWithSameVote = $this->getStudentsForEstudyantrepreneur(
+                                                    $previousStartDate,
+                                                    $previousEndDate,
+                                                    $school,
+                                                    PHP_INT_MAX,
+                                                    $result[$schoolName][$lastKey]['vote'],
+                                                    $result[$schoolName][$lastKey]['student']
+                                                );
+
+                        if ($studentsWithSameVote) {
+                            $result[$schoolName] = array_merge($result[$schoolName], $studentsWithSameVote);
+                        }
+                    }
+                }
+
+                break;
+        }
+
+        return $result;
+    }
+
+    private function getStudentsForEstudyantrepreneur($startDate, $endDate, $schoolName, $maxResult, $vote = 0, $studentName = false)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $query = $qb->select('tblStudent.idStudent, tblStudent.name AS student, tblSchool.name AS school, count(tblMember.idMember) as vote')
+                    ->from('EasyShop\Entities\EsPromo', 'tblPromo')
+                    ->leftJoin('EasyShop\Entities\EsMember', 'tblMember', 'WITH', 'tblMember.idMember = tblPromo.memberId')
+                    ->leftJoin('EasyShop\Entities\EsStudent', 'tblStudent', 'WITH', 'tblStudent.idStudent = tblPromo.studentId')
+                    ->leftJoin('EasyShop\Entities\EsSchool', 'tblSchool', 'WITH', 'tblSchool.idSchool = tblStudent.school')
+                    ->where('tblPromo.createdAt >= :startDate')
+                    ->andWhere('tblPromo.createdAt <= :endDate')
+                    ->andWhere('tblSchool.name = :school');
+
+        if ($vote > 0 || $studentName) {
+            $query = $qb->andWhere('tblStudent.name != :student')
+                        ->setParameter('student', $studentName);
+        }
+
+        $query = $qb->setParameter('startDate', $startDate)
+                    ->setParameter('endDate', $endDate)
+                    ->setParameter('school', $schoolName)
+                    ->groupBy('tblStudent.idStudent');
+
+        if ($vote > 0 || $studentName) {
+            $query = $qb->having('count(tblMember.idMember) = :vote')
+                        ->setParameter('vote', $vote);
+        }
+
+        $query = $qb->orderBy('vote', 'DESC')
+                    ->setMaxResults($maxResult)
+                    ->getQuery();
+
+        return $query->getResult();
     }
 
     /**

@@ -6,20 +6,23 @@ class Estudyantrepreneur extends MY_Controller
      * @var array
      */
     private $rounds = [
-        'round_one' =>
+        'first_round' =>
             [
-                '2015-02-23 00:00:00',
-                '2015-03-06 23:59:59'
+                'start' => '2015-02-23 00:00:00',
+                'end' => '2015-03-06 23:59:59',
+                'limit' => PHP_INT_MAX
             ],
-        'round_two' =>
+        'second_round' =>
             [
-                '2015-03-07 00:00:00',
-                '2015-04-07 23:59:59'
+                'start' => '2015-03-07 00:00:00',
+                'end' => '2015-04-07 23:59:59',
+                'limit' => 3
             ],
         'final_round' =>
             [
-                '2015-06-08 00:00:00',
-                '2015-07-08 23:59:59'
+                'start' => '2015-06-08 00:00:00',
+                'end' => '2015-07-08 23:59:59',
+                'limit' => 1
             ],
     ];
 
