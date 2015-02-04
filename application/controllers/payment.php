@@ -105,7 +105,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
  
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "");
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -220,12 +220,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
 
-        $methodString = "";
-        if((int) $paymentType === EsPaymentMethod::PAYMENT_DRAGONPAY){
-            $methodString = "DragonPay";
-        } 
-
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], $methodString);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -1064,7 +1059,7 @@ class Payment extends MY_Controller{
 
         $member_id =  $this->session->userdata('member_id'); 
         $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtysuccess = $this->resetPriceAndQty(true);
+        $qtysuccess = $this->resetPriceAndQty();
         $itemList =  $this->session->userdata('choosen_items');
         $productCount = count($itemList);
 
@@ -1267,7 +1262,7 @@ class Payment extends MY_Controller{
 
         $member_id =  $this->session->userdata('member_id'); 
         $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtysuccess = $this->resetPriceAndQty(true); 
+        $qtysuccess = $this->resetPriceAndQty(); 
         $itemList =  $this->session->userdata('choosen_items');
         $productCount = count($itemList); 
 
@@ -1779,7 +1774,7 @@ class Payment extends MY_Controller{
      * @param  boolean $condition
      * @return integer
      */
-    private function resetPriceAndQty($condition = false)
+    private function resetPriceAndQty($condition = true)
     {
         $productManager = $this->serviceContainer['product_manager'];
         $carts = $this->session->all_userdata(); 
@@ -1790,7 +1785,7 @@ class Payment extends MY_Controller{
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
-            $productInventory = $productManager->getProductInventory($product, false, $condition);
+            $productInventory = $productManager->getProductInventory($product, false, true);
 
             $maxqty = $productInventory[$itemId]['quantity'];
             $qty = $value['qty'];
