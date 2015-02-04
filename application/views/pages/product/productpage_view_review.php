@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>" type="text/css"/>
-<link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>" type="text/css"/>
 <div class="container">
     <div class="prod-detail-main">
         <div class="div-prod-lower">

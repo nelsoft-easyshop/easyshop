@@ -1,11 +1,6 @@
-
-<link type="text/css" href='/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href="/assets/css/chosen.min.css" rel="stylesheet"  media="screen"/>
-    <link type="text/css" href='/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php else: ?>
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-primary.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>

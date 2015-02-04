@@ -1,6 +1,3 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
-
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
 <?php else: ?>
