@@ -232,7 +232,8 @@ class Payment extends MY_Controller{
             if($qtySuccess != count($itemArray)){
                 return [
                     'e' => '0',
-                    'd' => 'One of the items in your cart is unavailable.'
+                    'd' => 'The availability of one of your items is less than your desired quantity. 
+                            Someone may have purchased the item before you can complete your payment.'
                 ];
             } 
 
@@ -249,7 +250,8 @@ class Payment extends MY_Controller{
             if($qtySuccess != count($itemArray)){
                 return [
                     'e' => '0',
-                    'm' => 'One of the items in your cart is unavailable.'
+                    'm' => 'The availability of one of your items is less than your desired quantity. 
+                            Someone may have purchased the item before you can complete your payment.'
                 ];
             } 
 
