@@ -241,14 +241,6 @@
     if(searchParallaxSlide_height == 523){
         offsetPagination = 1500;
     }
- 
-    var getHeightSearch = $(window).height();
-    var getHeightFilter = $("#filter-panel-container").height();
-    var offsetTopData = 0;
-
-    if(getHeightSearch < getHeightFilter){
-         var offsetTopData = getHeightSearch - getHeightFilter -50;
-    }
 
     $(document).ready(function() {
         var original_position_offset = ($('#sticky-pagination').length <=0 ) ? 0 : $('#sticky-pagination').offset() ;
@@ -332,8 +324,7 @@
         }
 
     });
-
-    $.stickysidebarscroll("#filter-panel-container",{offset: {top: offsetTopData, bottom: 100}});
+    
     $body.attr('data-spy', 'scroll').attr('data-target', '#myScrollspy').attr('data-offset','700'); 
     $body.scrollspy({
         target: "#myScrollspy", 
@@ -579,6 +570,37 @@
         $('.category-modal').modal();
         $('.simplemodal-container').addClass("filter-modal-container");
         return false;
+    });
+
+    var getHeightSearch = $(window).height();
+    var getHeightFilter = $(".container-filter").height();
+    var offsetTopData = 0;
+
+    if(getHeightSearch < getHeightFilter){
+         offsetTopData = getHeightSearch - getHeightFilter -50;
+    }
+         
+    $window.on('load resize', function() {
+        
+        var widthOff = $(window).width();
+        var heightHead = 200;
+        var heightBanners = $(".search-parallax-container").outerHeight();
+        var heightCategory = $("#category").outerHeight();
+
+        var totalTopMargin = heightHead + heightBanners + heightCategory + 40 -800;
+
+        if(widthOff <= 720){
+            $window.scrollTop(10);
+            $(".panel-filter-search-cont").removeClass("container-filter").removeAttr("style");
+        }
+
+        if(widthOff > 720){
+            $window.scrollTop(10);
+            $("#scrollUp").trigger("click");
+            $(".panel-filter-search-cont").addClass("container-filter").removeAttr("style");
+            $.stickysidebarscroll(".container-filter",{offset: {top: offsetTopData, bottom: 100}});
+
+        }
     });
 }(jQuery));
 

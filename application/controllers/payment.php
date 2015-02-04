@@ -106,7 +106,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
  
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "" , "0.00" , $memberId);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -221,7 +221,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
 
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "" , "0.00" , $memberId);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -232,7 +232,8 @@ class Payment extends MY_Controller{
             if($qtySuccess != count($itemArray)){
                 return [
                     'e' => '0',
-                    'd' => 'One of the items in your cart is unavailable.'
+                    'd' => 'The availability of one of your items is less than your desired quantity. 
+                            Someone may have purchased the item before you can complete your payment.'
                 ];
             } 
 
@@ -249,7 +250,8 @@ class Payment extends MY_Controller{
             if($qtySuccess != count($itemArray)){
                 return [
                     'e' => '0',
-                    'm' => 'One of the items in your cart is unavailable.'
+                    'm' => 'The availability of one of your items is less than your desired quantity. 
+                            Someone may have purchased the item before you can complete your payment.'
                 ];
             } 
 
@@ -1779,6 +1781,7 @@ class Payment extends MY_Controller{
     {
         $productManager = $this->serviceContainer['product_manager'];
         $carts = $this->session->all_userdata(); 
+        $memberId = $this->session->userdata('member_id');
         $itemArray = $carts['choosen_items'];
         $qtySuccess = 0;
 
@@ -1786,7 +1789,7 @@ class Payment extends MY_Controller{
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
-            $productInventory = $productManager->getProductInventory($product, false, true);
+            $productInventory = $productManager->getProductInventory($product, false, true, $memberId);
 
             $maxqty = $productInventory[$itemId]['quantity'];
             $qty = $value['qty'];
