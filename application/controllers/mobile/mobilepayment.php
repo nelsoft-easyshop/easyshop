@@ -97,6 +97,9 @@ class mobilePayment extends MY_Controller
                 $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
                 $formattedCartContents = $apiFormatter->formatCart($validatedCart, true);
                 $formattedCartWithError = $apiFormatter->includeCartError($formattedCartContents, $paymentType);
+                if(!$canContinue){
+                    $errorMessage = "One of your item is not available.";
+                }
             }
             else{
                 $errorMessage = "You have no item in you cart";
