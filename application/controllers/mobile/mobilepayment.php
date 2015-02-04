@@ -86,25 +86,22 @@ class mobilePayment extends MY_Controller
         $mobileCartContents = $this->input->post('cartData') 
                               ? json_decode($this->input->post('cartData')) 
                               : [];
+        $formattedCartWithError = [];
 
-        $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember());
+        $cart = $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember());
+        $formatCart = $cart['rawItems']; 
         $memberCartData = unserialize($this->member->getUserdata());
         $isCartNotEmpty = empty($memberCartData) === false;
 
         $cartData = $isCartNotEmpty ? $memberCartData : [];  
-        if((int)$this->member->getIsEmailVerify()){ 
-            if($isCartNotEmpty){  
-                $validatedCart = $checkoutService->validateCartContent($this->member);
-                $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
-                $formattedCartContents = $apiFormatter->formatCart($validatedCart, true);
-                $formattedCartWithError = $apiFormatter->includeCartError($formattedCartContents, $paymentType);
-                if(!$canContinue){
-                    $errorMessage = "One of your item is not available.";
-                }
-            }
-            else{
-                $errorMessage = "You have no item in you cart";
-            }
+        if((int)$this->member->getIsEmailVerify()){   
+            $validatedCart = $checkoutService->validateCartContent($this->member, $formatCart);
+            $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
+            $formattedCartContents = $apiFormatter->formatCart($validatedCart, true);
+            $formattedCartWithError = $apiFormatter->includeCartError($formattedCartContents, $paymentType);
+            if(!$canContinue){
+                $errorMessage = "One of your item is not available.";
+            } 
         }
         else{
             $errorMessage = "Please verify your email address.";
@@ -131,12 +128,10 @@ class mobilePayment extends MY_Controller
         $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $cartData = unserialize($this->member->getUserdata()); 
 
-
         $validatedCart = $checkoutService->validateCartContent($this->member);
         $canContinue = $checkoutService->checkoutCanContinue($validatedCart, "cash_delivery"); 
 
-        if(empty($cartData) === false && $canContinue){ 
-            $cartData = $paymentController->mobileReviewBridge();  
+        if(empty($cartData) === false && $canContinue){  
             $returnArray = $paymentController->mobilePersistCod();
             $returnArray['isSuccess'] = strtolower($returnArray['status']) === PaymentService::STATUS_SUCCESS;
  
@@ -186,13 +181,11 @@ class mobilePayment extends MY_Controller
                 $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
             }  
 
-            $requestData = $paymentController->mobilePayBridge($paymentType);
-            $urlReturn = ""; 
+            $requestData = $paymentController->mobilePayBridge($paymentType); 
 
             if($this->input->post('paymentType') == "paypal"){
                 if($requestData['e']){
-                    $isSuccess = true;
-                    $urlReturn = $requestData['d'];
+                    $isSuccess = true; 
                     $message = ""; 
                     $returnUrl = $requestData['returnUrl'];
                     $cancelUrl = $requestData['cancelUrl'];

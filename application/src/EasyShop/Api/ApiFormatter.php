@@ -300,7 +300,7 @@ class ApiFormatter
                 }
 
                 $formattedCartContents[$rowId] = [
-                    'rowid' => $cartItem['rowid'],
+                    'rowid' => isset($cartItem['rowid']) ? $cartItem['rowid'] : $rowId ,
                     'productId' =>  $cartItem['id'],
                     'productItemId' => $cartItem['product_itemID'], 
                     'slug' => $cartItem['slug'],
@@ -422,6 +422,7 @@ class ApiFormatter
         $unavailableItem = [];
         $itemList = []; 
         $slugList = []; 
+        $rawItems = [];
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
             $options = [];
@@ -435,6 +436,9 @@ class ApiFormatter
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
             if($product){
                 $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+                $rawItems[] = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
+                                                                            $options, 
+                                                                            $mobileCartContent->quantity)['itemData'];
                 $itemList[] = [
                     'rowid' => $product->getIdProduct(),
                     'id' =>  $product->getIdProduct(),
@@ -461,6 +465,7 @@ class ApiFormatter
         return [
             'availableItems' => $this->formatCart($cartData),
             'unavailableItems' => $this->formatCart($itemList),
+            'rawItems' => $rawItems,
         ];
     }
 }
