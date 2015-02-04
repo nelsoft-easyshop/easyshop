@@ -90,8 +90,8 @@ class Payment extends MY_Controller{
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->em = $this->serviceContainer['entity_manager']; 
 
-        $cartManager = $this->serviceContainer['cart_manager'];  
-        $productManager = $this->serviceContainer['product_manager'];  
+        $cartManager = $this->serviceContainer['cart_manager'];
+        $paymentService = $this->serviceContainer['payment_service'];
 
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
         if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
@@ -104,28 +104,10 @@ class Payment extends MY_Controller{
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
-
-        $qtySuccess = 0;
-
-        foreach ($itemArray as $value) {
-            $productId = $value['id']; 
-            $itemId = $value['product_itemID']; 
-            $product = $productManager->getProductDetails($productId);
-            $productInventory = $productManager->getProductInventory($product);
-
-            $maxqty = $productInventory[$itemId]['quantity'];
-            $qty = $value['qty'];
-            $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
-            $subtotal = $finalPromoPrice * $qty;
-
-            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
-            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
-            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
-
-            if($maxqty >= $qty){
-                $qtySuccess++;
-            }
-        }
+ 
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "");
+        $itemArray = $validated['itemArray'];
+        $qtySuccess = $validated['itemCount'];
 
         // check the availability of the product
         $productAvailability = $this->checkProductAvailability($itemArray,$memberId);
@@ -177,12 +159,12 @@ class Payment extends MY_Controller{
             array_push($errorMessage, 'One of your items can only be purchased individually.');
         }
 
-        return array(
+        return [
             'cartData' => $itemArray,
             'errMsg' => $errorMessage,
             'canContinue' => $canContinue,
             'paymentType' => $paymentType,
-        );
+        ];
     }
 
     /**
@@ -193,9 +175,7 @@ class Payment extends MY_Controller{
     {
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->em = $this->serviceContainer['entity_manager']; 
-
-        $cartManager = $this->serviceContainer['cart_manager'];  
-        $productManager = $this->serviceContainer['product_manager'];  
+        $cartManager = $this->serviceContainer['cart_manager'];   
 
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
         if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
@@ -225,9 +205,8 @@ class Payment extends MY_Controller{
     {
         $this->oauthServer =  $this->serviceContainer['oauth2_server'];
         $this->em = $this->serviceContainer['entity_manager']; 
-
-        $cartManager = $this->serviceContainer['cart_manager'];  
-        $productManager = $this->serviceContainer['product_manager'];  
+        $cartManager = $this->serviceContainer['cart_manager'];
+        $paymentService = $this->serviceContainer['payment_service'];
 
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
         if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
@@ -241,55 +220,41 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
 
-        $productManager = $this->serviceContainer['product_manager'];  
-        $qtySuccess = 0;
+        $methodString = "";
+        if((int) $paymentType === EsPaymentMethod::PAYMENT_DRAGONPAY){
+            $methodString = "DragonPay";
+        } 
 
-        foreach ($itemArray as $value) {
-            $productId = $value['id']; 
-            $itemId = $value['product_itemID']; 
-            $product = $productManager->getProductDetails($productId);
-            $productInventory = $productManager->getProductInventory($product);
-
-            $maxqty = $productInventory[$itemId]['quantity'];
-            $qty = $value['qty'];
-            $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
-            $subtotal = $finalPromoPrice * $qty;
-
-            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
-            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
-            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
-
-            if($maxqty >= $qty){
-                $qtySuccess++;
-            }
-        }
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], $methodString);
+        $itemArray = $validated['itemArray'];
+        $qtySuccess = $validated['itemCount'];
 
         if(intval($paymentType) === EsPaymentMethod::PAYMENT_PAYPAL){
 
             $remove = $this->payment_model->releaseAllLock($memberId);
 
             if($qtySuccess != count($itemArray)){
-                return array(
+                return [
                     'e' => '0',
                     'd' => 'One of the items in your cart is unavailable.'
-                );
+                ];
             } 
 
             $paypalReturnURL    = base_url().'mobile/mobilepayment/paypalReturn'; 
             $paypalCancelURL    = base_url().'mobile/mobilepayment/paypalCancel'; 
             $requestData = $this->createPaypalToken($itemArray,$memberId,$paypalReturnURL,$paypalCancelURL);
 
-            $urlArray = array('returnUrl' => $paypalReturnURL,'cancelUrl' => $paypalCancelURL);
+            $urlArray = ['returnUrl' => $paypalReturnURL,'cancelUrl' => $paypalCancelURL];
             $mergeArray = array_merge($requestData,$urlArray);
 
             return $mergeArray;
         }
         else if(intval($paymentType) === EsPaymentMethod::PAYMENT_DRAGONPAY){
             if($qtySuccess != count($itemArray)){
-                return array(
+                return [
                     'e' => '0',
                     'm' => 'One of the items in your cart is unavailable.'
-                );
+                ];
             } 
 
             return json_decode($this->createDragonPayToken($itemArray,$memberId),TRUE);
@@ -1099,7 +1064,7 @@ class Payment extends MY_Controller{
 
         $member_id =  $this->session->userdata('member_id'); 
         $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtysuccess = $this->resetPriceAndQty(TRUE);
+        $qtysuccess = $this->resetPriceAndQty(true);
         $itemList =  $this->session->userdata('choosen_items');
         $productCount = count($itemList);
 
@@ -1302,7 +1267,7 @@ class Payment extends MY_Controller{
 
         $member_id =  $this->session->userdata('member_id'); 
         $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtysuccess = $this->resetPriceAndQty(TRUE); 
+        $qtysuccess = $this->resetPriceAndQty(true); 
         $itemList =  $this->session->userdata('choosen_items');
         $productCount = count($itemList); 
 
@@ -1825,7 +1790,7 @@ class Payment extends MY_Controller{
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
-            $productInventory = $productManager->getProductInventory($product);
+            $productInventory = $productManager->getProductInventory($product, false, $condition);
 
             $maxqty = $productInventory[$itemId]['quantity'];
             $qty = $value['qty'];
