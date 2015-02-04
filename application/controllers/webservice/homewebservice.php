@@ -38,7 +38,7 @@ class HomeWebService extends MY_Controller
      *  2. APPPATH . "resources/json/jsonp.json"
      *  
      */
-    public function declareEnvironment()
+    private function declareEnvironment()
     {
 
         $env = strtolower(ENVIRONMENT);

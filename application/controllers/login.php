@@ -12,7 +12,8 @@ class Login extends MY_Controller
      * Inject dependencies
      *
      */
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->load->model('register_model');
         $this->load->model('user_model');

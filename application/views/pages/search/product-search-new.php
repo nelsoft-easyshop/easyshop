@@ -164,7 +164,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h3 class="no-search-resul-title">
-                    Your search for <strong><?=html_escape($string); ?></strong> did not return any results.
+                    Sorry, your search for <strong><?=html_escape($string); ?></strong> did not match any product.
                 </h3>
             </div>
         </div>
@@ -173,13 +173,14 @@
         <div class="row">
             <div class="col-md-7">
                 <div id="search-tips-container">
-                    <h4>Some helpful tips</h4>
+                    <h4>Suggestions:</h4>
                     <ul class="list-search-tips">
-                        <li>Check your spelling for typing errors, eg. Jakcet instead of Jacket.</li>
-                        <li>Try searching a similar search term or synonym.</li>
-                        <li>Try searching just one keyword.</li>
-                        <li>Try searching more general terms - you can then filter the search results.</li>
+                        <li>Make sure all keywords are spelled correctly.</li>
+                        <li>Try using different keywords or more general terms.</li>
+                        <li>Use shorter or simpler keywords.</li>
                     </ul>
+                    <br/>
+                    <h5>If you need more help, please contact our Customer Service at <b>(02) 354-5973</b></h5>
                     <br/>
                     <br/>
                     <h4>Search again</h4>

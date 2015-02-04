@@ -1,12 +1,12 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/new-login.css" media='screen'/>
-
+<link type="text/css" href="/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
 <div class="clear"></div>
 
 <section>
   
 
   
-    <div class="col-sm-12 identify-email-container container" style="text-align:center">
+    <div class="col-sm-12 identify-email-container container">
  
         <?php if(isset($isLoggedin) && $isLoggedin): ?>
             
@@ -23,19 +23,21 @@
             
             <div class="form-group ">
                 <center>
-                    <div class="col-sm-4 identify-email-top-group nofloat">
-                        <label class="col-md-6 password-update-label">New Password: </label>
+                    <div class="col-sm-4 text-left identify-email-top-group nofloat">
+                        <label class="password-update-label">New Password: </label>
                         <input type="password" class="form-control password-update-input" name="password" placeholder="" id="password"  maxlength="100">   
                     </div>
+                    <div class="clear"></div>
                 </center>
             </div>
             
             <div class="form-group ">
                 <center>
-                    <div class="col-sm-4 nofloat ">
-                        <label class="col-md-6 password-update-label ">Confirm Password: </label>
+                    <div class="col-sm-4 nofloat text-left">
+                        <label class="password-update-label ">Confirm Password: </label>
                         <input type="password" class="form-control" name="confirmpassword" placeholder="" id="confirmpassword"   maxlength="100" disabled="true"> 
                     </div>
+                    <div class="clear"></div>
                 </center>
             </div>
         

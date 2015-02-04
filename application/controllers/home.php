@@ -110,7 +110,6 @@ class Home extends MY_Controller
      */
     public function getServerTime()
     {
-        date_default_timezone_set('Asia/Manila');
         echo date('M d,Y H:i:s');
     }
     
@@ -245,7 +244,7 @@ class Home extends MY_Controller
      *
      *  @return array
      */
-    public function getFeed()
+    private function getFeed()
     {
         $this->load->library('xmlmap');
         $this->load->model('product_model');

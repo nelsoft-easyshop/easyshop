@@ -101,14 +101,6 @@ class PaymentService
             ]
     ];
 
-
-    /**
-     * Payment Methods that require locks
-     *
-     * @var mixed
-     */
-    private $lockPaymentMethods = ['DragonPay', 'PesoPay'];
-
     /**
      * Gateway path
      *
@@ -531,14 +523,9 @@ class PaymentService
      *
      * @return mixed
      */
-    function validateCartData($carts,$paymentMethod, $pointsAllocated = "0.00")
+    function validateCartData($carts,$paymentMethod = "", $pointsAllocated = "0.00")
     {
-        $condition = false;
-
-        if(in_array($paymentMethod, $this->lockPaymentMethods)){
-            $condition = true;
-        }
-
+        $condition = true;
         $itemArray = $carts['choosen_items'];
         $availableItemCount = 0;
         $totalPointsAllowable = "0.00";
