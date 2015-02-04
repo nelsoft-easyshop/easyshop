@@ -51,7 +51,7 @@ class FeedWebService extends MY_Controller
     /**
      *  Environment declarations
      */
-    public function declareEnvironment()
+    private function declareEnvironment()
     {
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getContentXMLfile().".xml"; 
         $this->map = new SimpleXMLElement(file_get_contents($this->file));
