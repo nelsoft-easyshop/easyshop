@@ -2,7 +2,7 @@
       <thead>
         <tr>
           <td style="height:60px;text-align:center;">
-            <a href="<?=base_url()?>"><img src="<?=base_url()?>assets/images/img_logo.png" alt="Easyshop.ph"></a>
+            <a href="<?php echo base_url()?>"><img src="img_logo.png" alt="Easyshop.ph"></a>
           </td>
         </tr>
       </thead>
@@ -12,7 +12,7 @@
                 <div>
                 Hi <?php echo html_escape($username); ?>,<br /><br />
                 We received a password reset request for your Easyshop.ph account. To reset your password, kindly use the link below:<br />
-                <a href="<?php echo base_url() . "login/resetconfirm?&confirm=". $trigger; ?>"><?php echo base_url() . "login/resetconfirm?confirm=". $trigger; ?></a>
+                <a href="<?php echo base_url() . "login/updatePassword?&confirm=". $trigger; ?>"><?php echo base_url() . "login/updatePassword?confirm=". $trigger; ?></a>
                 <br /><br />
                 If you didn't make a request for a password reset, you can let us know at info@easyshop.ph. 
                 <br/>

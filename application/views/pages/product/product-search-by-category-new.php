@@ -9,6 +9,9 @@
     <link type="text/css" href='/assets/css/min-easyshop.product-search-by-category.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
 
+<div class="loader">
+    <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+</div>
 
 <section class="breadcrumbs-bg">
     <div class="container">
@@ -32,7 +35,7 @@
 
 <?php if($productCount > 0): ?>
     <?php if($categoryHeaderData): ?>
-    <section class="bg-search-section color-default search-parallax-container" style="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>height: 290px;<?php elseif(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 220px;<?php endif; ?>">
+    <section class=" color-default search-parallax-container" style="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>height: 290px;<?php elseif(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 220px;<?php endif; ?>">
         <div id="parallax-1" class="search-parallax">
             <?php if(isset($categoryHeaderData['top'])): ?>
              <div id="parallax-4" style="margin-top: -10px;">
@@ -48,7 +51,7 @@
                             <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
                         <?php endif; ?>
                                 <li class="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>top-slider-item<?php endif;?>" style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>) center no-repeat; background-size: cover;">
-                                    <img class="top-slider-img" src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
+                                    <img class="top-slider-img" src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>" style="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>margin-top: -52px;<?php endif;?><?php if(isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: -43px;<?php endif;?>"/>
                                 </li>
                         <?php if(trim($topBanner['target']['url']) !== ''): ?>
                             </a>
@@ -66,7 +69,7 @@
                     <div class="right-shade">
                     </div>
                     <div class="container">
-                        <div class="slider1 slider-bottom <?php if(isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
+                        <div class="slider1 <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
                             <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
                                 <div class="slide">
                                     

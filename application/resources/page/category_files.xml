@@ -1,59 +1,187 @@
 <?xml version="1.0"?>
 <map>
     
-    <category id="clothing-accessories">
+    <category id="business-industrial">
         <top>
             <image>
-                <path>/assets/images/slide3.jpg</path>
-                <target>/</target>
+                <path>/assets/images/categories/slider-large/business-industrial.jpg</path>
+                <target></target>
             </image>
         </top>
         <bottom>
             <image>
-                <path>/assets/images/img_easy_treat.jpg</path>
-                <target>/</target>
+                <path>/assets/images/categories/slider-small/business-industrial-1.jpg</path>
+                <target>https://www.easyshop.ph/item/skull-luxury-steering-wheel-cover</target>
             </image>
             <image>
-                <path>/assets/images/categories/slider-small/sample.gif</path>
-                <target>/</target>
+                <path>/assets/images/categories/slider-small/business-industrial-2.jpg</path>
+                <target>https://www.easyshop.ph/item/security-cameras</target>
             </image>
             <image>
-                <path>/assets/images/categories/slider-small/sample.gif</path>
-                <target>www.facebook.com</target>
+                <path>/assets/images/categories/slider-small/business-industrial-3.jpg</path>
+                <target>https://www.easyshop.ph/item/front-and-rear-under-cover-audi-q5</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/business-industrial-4.jpg</path>
+                <target>https://www.easyshop.ph/item/panasonic-fax-thermal-kx-ft981cxb</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/business-industrial-5.jpg</path>
+                <target>https://www.easyshop.ph/item/merry-tools-professional-impact-drill</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/business-industrial-6.jpg</path>
+                <target>https://www.easyshop.ph/item/kymco-super-8</target>
             </image>
         </bottom>
 
     </category>
     
-    <category id="jewellery-watches">
+    <category id="electronics-gadgets">
         <top>
             <image>
-                <path>/assets/images/slide3.jpg</path>
-                <target>/</target>
-            </image>
-            <image>
-                <path>/assets/images/slide3.jpg</path>
-                <target>/</target>
+                <path>/assets/images/categories/slider-large/electronics-gadgets.jpg</path>
+                <target>/search/search.html?q_str=mobile+phone</target>
             </image>
         </top>
-    </category>
-
-    <category id="electronics-gadgets">
         <bottom>
             <image>
-                <path>/assets/images/img_easy_treat.jpg</path>
-                <target>/</target>
+                <path>/assets/images/categories/slider-small/electronics-gadgets-1.jpg</path>
+                <target>https://www.easyshop.ph/item/canon-eos-60d-kit-1</target>
             </image>
             <image>
-                <path>/assets/images/categories/slider-small/sample.gif</path>
-                <target>/</target>
+                <path>/assets/images/categories/slider-small/electronics-gadgets-2.jpg</path>
+                <target>https://www.easyshop.ph/item/lenovo-2-14-touch-screen-laptop</target>
             </image>
             <image>
-                <path>/assets/images/categories/slider-small/sample.gif</path>
-                <target>www.facebook.com</target>
+                <path>/assets/images/categories/slider-small/electronics-gadgets-3.jpg</path>
+                <target>https://www.easyshop.ph/item/samsung-note-4</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/electronics-gadgets-4.jpg</path>
+                <target>https://www.easyshop.ph/item/e-table</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/electronics-gadgets-5.jpg</path>
+                <target>https://www.easyshop.ph/item/acer-e5-471-33c1-laptop-white</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/electronics-gadgets-6.jpg</path>
+                <target>https://www.easyshop.ph/item/skk-v2</target>
             </image>
         </bottom>
 
     </category>
+    
+    
+    <category id="books-music-movies">
+
+        <bottom>
+            <image>
+                <path>/assets/images/categories/slider-small/books-1.jpg</path>
+                <target>https://www.easyshop.ph/item/memoirs-of-a-geisha-1</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/books-2.jpg</path>
+                <target>https://www.easyshop.ph/item/city-of-dragons</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/books-3.jpg</path>
+                <target>https://www.easyshop.ph/item/1q84</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/books-4.jpg</path>
+                <target>https://www.easyshop.ph/item/purpose-driven-life</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/books-5.jpg</path>
+                <target>https://www.easyshop.ph/item/prayer-does-it-make-any-difference</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/books-6.jpg</path>
+                <target>https://www.easyshop.ph/item/the-one-year-mini-for-moms-by-ellen-banks-elwell</target>
+            </image>
+        </bottom>
+
+    </category>
+    
+    
+    <category id="clothing-accessories">
+
+        <bottom>
+            <image>
+                <path>/assets/images/categories/slider-small/clothing-and-accessories-1.jpg</path>
+                <target>https://www.easyshop.ph/item/white-crochet-tiered-lace-petal-skorts</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/clothing-and-accessories-2.jpg</path>
+                <target>https://www.easyshop.ph/item/sweet-candy-stripe-two-piece-bikini-with-dress</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/clothing-and-accessories-3.jpg</path>
+                <target>https://www.easyshop.ph/item/majestic-2-way-cover-up-beach-dress</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/clothing-and-accessories-4.jpg</path>
+                <target>https://www.easyshop.ph/item/black-and-white-stripes-shirt-1</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/clothing-and-accessories-5.jpg</path>
+                <target>https://www.easyshop.ph/item/orange-jumpsuit</target>
+            </image>
+            <image>
+                <path>/assets/images/categories/slider-small/clothing-and-accessories-6.jpg</path>
+                <target>https://www.easyshop.ph/item/charline-wedge</target>
+            </image>
+        </bottom>
+
+    </category>
+    
+        
+    <category id="food-beverages">
+        <top>
+            <image>
+                <path>/assets/images/categories/slider-large/food-beverage.jpg</path>
+                <target></target>
+            </image>
+        </top>
+    </category>
+    
+    <category id="health-beauty">
+        <top>
+            <image>
+                <path>/assets/images/categories/slider-large/health-beauty.jpg</path>
+                <target></target>
+            </image>
+        </top>
+    </category>
+    
+    <category id="home-furniture">
+        <top>
+            <image>
+                <path>/assets/images/categories/slider-large/home-furniture.jpg</path>
+                <target></target>
+            </image>
+        </top>
+    </category>
+    
+    <category id="jewellery-watches">
+        <top>
+            <image>
+                <path>/assets/images/categories/slider-large/jewellery-watches.jpg</path>
+                <target></target>
+            </image>
+        </top>
+    </category>
+    
+    <category id="toys-hobbies-collectibles">
+        <top>
+            <image>
+                <path>/assets/images/categories/slider-large/toys.jpg</path>
+                <target></target>
+            </image>
+        </top>
+    </category>
+    
 </map>
 
