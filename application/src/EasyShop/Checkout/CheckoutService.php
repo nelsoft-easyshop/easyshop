@@ -119,10 +119,10 @@ class CheckoutService
         if($address){
             $city = $address->getCity();
             $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')->getParentLocation($city);
-            $majorIsland = $region->getParent();
+            $majorIsland = $region->getParent()->getParent();
             $locationDetails = $shippingDetailRepo->getShippingDetailsByLocation($product->getIdProduct(),
                                                                                  $itemId, 
-                                                                                 $city, 
+                                                                                 $city->getIdLocation(), 
                                                                                  $region->getIdLocation(), 
                                                                                  $majorIsland->getIdLocation());
             return count($locationDetails) >= 1;
