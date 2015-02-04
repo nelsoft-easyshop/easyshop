@@ -585,7 +585,15 @@ class Kernel
         $container['json_web_token'] = function ($c) {
             return new \JWT();
         };
-
+        
+        $container['redis_client'] = function ($c) {
+            return new \Predis\Client([
+                'scheme' => 'tcp',
+                'host' => '127.0.0.1',
+                'port' => 6379,
+            ]);
+        };
+       
 
         /* Register services END */
         $this->serviceContainer = $container;
