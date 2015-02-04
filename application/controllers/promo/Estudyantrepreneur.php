@@ -48,8 +48,10 @@ class Estudyantrepreneur extends MY_Controller
             'title' => 'Estudyantrepreneur | Easyshop.ph',
             'metadescription' => ''
         ];
+        $data = $this->promoManager->getSchoolWithStudentsByRoundForEstudyantrepreneur($this->rounds);
         $bodyData = [
-            'schools_and_students' => $this->promoManager->getSchoolWithStudentsByRoundForEstudyantrepreneur($this->rounds)
+            'schools_and_students' => $data['schools_and_students'],
+            'round' => $data['round'],
         ];
 
         $this->load->spark('decorator');

@@ -309,7 +309,8 @@ class PromoManager
     public function getSchoolWithStudentsByRoundForEstudyantrepreneur($rounds)
     {
         $date = new \DateTime;
-        $dateToday = $date->getTimestamp();
+//        $dateToday = $date->getTimestamp();
+        $dateToday = strtotime('2015-02-23 00:00:00');
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
@@ -321,7 +322,8 @@ class PromoManager
             $startDate = strtotime($data['start']);
             $endDate = strtotime($data['end']);
             if ($dateToday >= $startDate && $dateToday <= $endDate) {
-                $round = $key === 'first_round' ?:'second_round_and_inter_school';
+                $round = $key;
+                $case = $round === 'first_round' ?:'second_round_and_inter_school';
                 $limit = (int) $data['limit'];
 
                 $keys = array_keys($rounds);
@@ -336,7 +338,7 @@ class PromoManager
             }
         }
 
-        switch($round) {
+        switch($case) {
             case 'first_round' :
                 $query = $qb->select('tblStudent.idStudent, tblStudent.name AS student, tblSchool.name AS school')
                             ->from('EasyShop\Entities\EsStudent', 'tblStudent')
@@ -389,6 +391,11 @@ class PromoManager
 
                 break;
         }
+
+        $result = [
+            'schools_and_students' => $result,
+            'round' => $round
+        ];
 
         return $result;
     }
