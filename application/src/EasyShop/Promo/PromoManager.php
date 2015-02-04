@@ -309,8 +309,7 @@ class PromoManager
     public function getSchoolWithStudentsByRoundForEstudyantrepreneur($rounds)
     {
         $date = new \DateTime;
-//        $dateToday = $date->getTimestamp();
-        $dateToday = strtotime('2015-02-23 00:00:00');
+        $dateToday = $date->getTimestamp();
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
@@ -340,7 +339,7 @@ class PromoManager
 
         switch($case) {
             case 'first_round' :
-                $query = $qb->select('tblStudent.idStudent, tblStudent.name AS student, tblSchool.name AS school')
+                $query = $qb->select('tblStudent.idStudent, tblSchool.idSchool, tblStudent.name AS student, tblSchool.name AS school')
                             ->from('EasyShop\Entities\EsStudent', 'tblStudent')
                             ->leftJoin('EasyShop\Entities\EsSchool', 'tblSchool', 'WITH', 'tblSchool.idSchool = tblStudent.school')
                             ->groupBy('tblStudent.idStudent')
@@ -403,7 +402,7 @@ class PromoManager
     private function getStudentsForEstudyantrepreneur($startDate, $endDate, $schoolName, $maxResult, $vote = 0, $studentName = false)
     {
         $qb = $this->em->createQueryBuilder();
-        $query = $qb->select('tblStudent.idStudent, tblStudent.name AS student, tblSchool.name AS school, count(tblMember.idMember) as vote')
+        $query = $qb->select('tblStudent.idStudent, tblSchool.idSchool, tblStudent.name AS student, tblSchool.name AS school, count(tblMember.idMember) as vote')
                     ->from('EasyShop\Entities\EsPromo', 'tblPromo')
                     ->leftJoin('EasyShop\Entities\EsMember', 'tblMember', 'WITH', 'tblMember.idMember = tblPromo.memberId')
                     ->leftJoin('EasyShop\Entities\EsStudent', 'tblStudent', 'WITH', 'tblStudent.idStudent = tblPromo.studentId')
@@ -437,13 +436,42 @@ class PromoManager
     /**
      * Promo : Estudyantrepreneur
      * Vote a student
-     * @param $studentEntity
-     * @param $schoolEntity
-     * @param $memberEntity
+     * @param $studentId
+     * @param $memberId
      * @return bool
      */
-    public function voteForEstudyantrepreneur($studentEntity, $schoolEntity, $memberEntity)
+    public function voteStudentForEstudyantrepreneur($studentId, $memberId)
     {
-        return true;
+        $promo = new EsPromo();
+        $promo->setMemberId($memberId);
+        $promo->setProductId(0);
+        $promo->setCode(0);
+        $promo->setStudentId($studentId);
+        $promo->setPromoType(EsPromoType::ESTUDYANTREPRENEUR);
+        $promo->setCreatedAt(new \DateTime('now'));
+        $this->em->persist($promo);
+        $this->em->flush();
+
+        return $promo;
+    }
+
+    /**
+     * Promo : Estudyantrepreneur
+     * Check is the user already vote
+     * @param $memberId
+     * @return bool
+     */
+    public function isUserAlreadyVoteForEstudyantrepreneur($memberId)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $query = $qb->select('tblPromo')
+                    ->from('EasyShop\Entities\EsPromo', 'tblPromo')
+                    ->where('tblPromo.memberId = :memberId')
+                    ->andWhere('tblPromo.promoType = :promoType')
+                    ->setParameter('memberId', $memberId)
+                    ->setParameter('promoType', EsPromoType::ESTUDYANTREPRENEUR)
+                    ->getQuery();
+
+        return $query->getResult();
     }
 }
