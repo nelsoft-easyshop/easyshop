@@ -17,15 +17,22 @@ class EsProductItemLockRepository extends EntityRepository
      * @param int $productId
      * @return EsProductItemLock
      */
-    public function getProductItemLockByProductId($productId)
+    public function getProductItemLockByProductId($productId, $excludeMemberId = 0)
     {
-        $query =  $this->_em->createQueryBuilder()
-                            ->select(['lck.idItemLock, pi.idProductItem, lck.qty as lock_qty, pi.quantity', 'lck.timestamp'])
-                            ->from('EasyShop\Entities\EsProductItemLock','lck')
-                            ->innerJoin('EasyShop\Entities\EsProductItem', 'pi','WITH','lck.productItem = pi.idProductItem')
-                            ->where('pi.product = :product_id')
-                            ->setParameter('product_id', $productId)
-                            ->getQuery(); 
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select(['lck.idItemLock, pi.idProductItem, lck.qty as lock_qty, pi.quantity', 'lck.timestamp'])
+                    ->from('EasyShop\Entities\EsProductItemLock','lck')
+                    ->innerJoin('EasyShop\Entities\EsProductItem', 'pi','WITH','lck.productItem = pi.idProductItem')
+                    ->leftJoin('EasyShop\Entities\EsOrder', 'o', 'WITH', 'lck.order = o.idOrder')
+                    ->where('pi.product = :product_id');
+
+        if($excludeMemberId !== 0){
+            $query = $query->andWhere(
+                $qb->expr()->notIn('o.buyer', $excludeMemberId)
+            );
+        }
+        $query = $query->setParameter('product_id', $productId)
+                       ->getQuery(); 
         return $result = $query->getResult();
     }
 

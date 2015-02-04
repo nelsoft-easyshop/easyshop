@@ -106,7 +106,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
  
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "" , "0.00" , $memberId);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -221,7 +221,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
 
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "" , "0.00" , $memberId);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -1779,6 +1779,7 @@ class Payment extends MY_Controller{
     {
         $productManager = $this->serviceContainer['product_manager'];
         $carts = $this->session->all_userdata(); 
+        $memberId = $this->session->userdata('member_id');
         $itemArray = $carts['choosen_items'];
         $qtySuccess = 0;
 
@@ -1786,7 +1787,7 @@ class Payment extends MY_Controller{
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
-            $productInventory = $productManager->getProductInventory($product, false, true);
+            $productInventory = $productManager->getProductInventory($product, false, true, $memberId);
 
             $maxqty = $productInventory[$itemId]['quantity'];
             $qty = $value['qty'];
