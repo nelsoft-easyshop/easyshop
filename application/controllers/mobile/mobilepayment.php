@@ -195,10 +195,10 @@ class mobilePayment extends MY_Controller
                     $returnUrl = $paymentConfig['payment_type']['dragonpay']['Easyshop']['return_url'];
                     $requestUrl = $requestData['u'];
                 }
-            }
+            } 
             else{
                 $message = $requestData['m'];
-            }
+            } 
         }
         else{
             $message = "You can't proceed this checkout request.";

@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 
-                <div class="panel-group panel-category border-0" id="filter-panel-container">
+                <div class="panel-group panel-category panel-filter-search-cont border-0 container-filter" id="filter-panel-container">
                     <div class="panel panel-default panel-left-wing border-0 no-padding">
                         <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                             <h4 class="panel-title">
