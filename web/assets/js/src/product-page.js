@@ -335,6 +335,7 @@
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
+                $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
                 return false;
             }
         });
