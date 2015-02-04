@@ -71,6 +71,7 @@ class Payment extends MY_Controller{
     public function setPromoItemsToPayment($promoType)
     {
         $cartContent = $this->cart->contents();
+
         $item = array();
         foreach ($cartContent as $key => $value) {
             if($value['promo_type'] == $promoType){
@@ -475,7 +476,7 @@ class Payment extends MY_Controller{
     #SET UP PAYPAL FOR PARAMETERS
     #SEE REFERENCE SITE FOR THE PARAMETERS
     # https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECCustomizing/
-    function paypal_setexpresscheckout() 
+    public function paypal_setexpresscheckout() 
     {
         header('Content-type: application/json');
         if(!$this->session->userdata('member_id')){
@@ -620,7 +621,7 @@ class Payment extends MY_Controller{
     }
 
     #PAYPAL IPN (Instant payment Notification)
-    function ipn2()
+    public function ipn2()
     {
         // CONFIG: Enable debug mode. This means we'll log requests into 'ipn.log' in the same directory.
         // Especially useful if you encounter network errors or other intermittent problems with IPN (validation).
@@ -1554,7 +1555,7 @@ class Payment extends MY_Controller{
     /*
      *  Function to generate google analytics data
      */
-    function ganalytics($itemList,$v_order_id)
+    private function ganalytics($itemList,$v_order_id)
     {
         $analytics = array(); 
         foreach ($itemList as $key => $value) {
@@ -1583,7 +1584,7 @@ class Payment extends MY_Controller{
         return $analytics;
     }
 
-    function processData($itemList,$address)
+    private function processData($itemList,$address)
     {
         $city = ($address['c_stateregionID']) > 0 ? $address['c_stateregionID'] :  27;
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city); 
@@ -1641,7 +1642,7 @@ class Payment extends MY_Controller{
             );
     }
 
-    function changeAddress()
+    public function changeAddress()
     {
         header('Content-type: application/json');
         $uid = $this->session->userdata('member_id');
@@ -1677,7 +1678,7 @@ class Payment extends MY_Controller{
         }  
     }
 
-    function getLocation()
+    public function getLocation()
     {
         $id = $this->input->post('sid');
         $itemId = $this->input->post('iid');
@@ -1693,7 +1694,7 @@ class Payment extends MY_Controller{
         echo $data;
     }
 
-    function lockItem($ids = array(),$orderId,$action = 'insert')
+    private function lockItem($ids = [], $orderId, $action = 'insert')
     {
         foreach ($ids as $key => $value) {
             $lock = $this->payment_model->lockItem($key,$value,$orderId,$action);
@@ -1803,7 +1804,7 @@ class Payment extends MY_Controller{
      *  has no postback requirements
      *   
      */
-    function pay()
+    public function pay()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');
