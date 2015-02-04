@@ -315,6 +315,8 @@ class PromoManager
         $previousEndDate = '';
         $result = [];
         $previousRound = '';
+        $round = false;
+        $case = '';
         $qb = $this->em->createQueryBuilder();
 
         foreach ($rounds as $key => $data) {
@@ -362,7 +364,7 @@ class PromoManager
                 $schools = $query->getResult();
                 foreach ($schools as $school) {
                     $schoolName = $school['name'];
-                    $students = $this->getStudentsForEstudyantrepreneur(
+                    $students = $this->__getStudentsForEstudyantrepreneur(
                                     $previousStartDate,
                                     $previousEndDate,
                                     $school,
@@ -373,7 +375,7 @@ class PromoManager
                     if ($students) {
                         end($result[$schoolName]);
                         $lastKey = key($result[$schoolName]);
-                        $studentsWithSameVote = $this->getStudentsForEstudyantrepreneur(
+                        $studentsWithSameVote = $this->__getStudentsForEstudyantrepreneur(
                                                     $previousStartDate,
                                                     $previousEndDate,
                                                     $school,
@@ -389,6 +391,8 @@ class PromoManager
                 }
 
                 break;
+            default :
+                break;
         }
 
         $result = [
@@ -399,7 +403,7 @@ class PromoManager
         return $result;
     }
 
-    private function getStudentsForEstudyantrepreneur($startDate, $endDate, $schoolName, $maxResult, $vote = 0, $studentName = false)
+    private function __getStudentsForEstudyantrepreneur($startDate, $endDate, $schoolName, $maxResult, $vote = 0, $studentName = false)
     {
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('tblStudent.idStudent, tblSchool.idSchool, tblStudent.name AS student, tblSchool.name AS school, count(tblMember.idMember) as vote')
