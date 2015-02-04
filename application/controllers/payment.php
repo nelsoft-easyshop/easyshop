@@ -68,9 +68,10 @@ class Payment extends MY_Controller{
      *
      * @param $promoType
      */
-    public function setPromoItemsToPayment($promoType)
+    private function setPromoItemsToPayment($promoType)
     {
         $cartContent = $this->cart->contents();
+
         $item = array();
         foreach ($cartContent as $key => $value) {
             if($value['promo_type'] == $promoType){
@@ -82,37 +83,90 @@ class Payment extends MY_Controller{
     }
 
     /**
-     * Review cart data from mobile
-     * @param  mixed $itemArray
-     * @param  integer $memberId
+     * Review cart data from mobile 
      * @return mixed
-     */
-    public function mobileReviewBridge($itemArray, $memberId)
+     */ 
+    public function mobileReviewBridge() 
     {
-        // set session
-        $this->session->set_userdata('member_id', $memberId); 
-        $this->session->set_userdata('choosen_items', $itemArray);
+        $this->oauthServer =  $this->serviceContainer['oauth2_server'];
+        $this->em = $this->serviceContainer['entity_manager']; 
+        $cartManager = $this->serviceContainer['cart_manager'];   
 
-        $this->resetPriceAndQty();
+        $cartManager = $this->serviceContainer['cart_manager'];
+        $paymentService = $this->serviceContainer['payment_service'];
 
-        return $this->session->userdata('choosen_items');
+        // Handle a request for an OAuth2.0 Access Token and send the response to the client
+        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+            header('Content-type: text/html'); 
+            show_404(); 
+            die;
+        }
+
+        $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        $memberId = $this->member->getIdMember();
+        $itemArray = $cartManager->getValidatedCartContents($memberId); 
+ 
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
+
+        return $validated['itemArray'];
     }
 
     /**
-     * request Token for transaction
-     * @param  mixed $itemArray   [description]
-     * @param  integer $memberId    [description]
-     * @param  integer $paymentType [description]
+     * bridge to persist cod payment
+     * @return mixed
+     */
+    public function mobilePersistCod()
+    {
+        $this->oauthServer =  $this->serviceContainer['oauth2_server'];
+        $this->em = $this->serviceContainer['entity_manager']; 
+        $cartManager = $this->serviceContainer['cart_manager'];   
+
+        // Handle a request for an OAuth2.0 Access Token and send the response to the client
+        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+            header('Content-type: text/html'); 
+            show_404(); 
+            die;
+        } 
+
+        $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        $memberId = $this->member->getIdMember();
+        $itemArray = $cartManager->getValidatedCartContents($memberId); 
+        $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
+        $txnid = $this->generateReferenceNumber($paymentType, $memberId); 
+        $dataProcess = $this->cashOnDeliveryProcessing($memberId, $txnid, $itemArray, $paymentType);
+        $dataProcess['txnid'] = $txnid;
+
+        return $dataProcess; 
+    }
+
+    /**
+     * request Token for transaction 
+     * @param  integer $paymentType 
      * @return JSON
      */
-    public function mobilePayBridge($itemArray,$memberId,$paymentType)
+    public function mobilePayBridge($paymentType = "")
     {
-        // set session
-        $this->session->set_userdata('member_id', $memberId); 
-        $this->session->set_userdata('choosen_items', $itemArray);
+        $this->oauthServer =  $this->serviceContainer['oauth2_server'];
+        $this->em = $this->serviceContainer['entity_manager']; 
+        $cartManager = $this->serviceContainer['cart_manager'];
+        $paymentService = $this->serviceContainer['payment_service'];
 
-        // update cart data details
-        $qtySuccess = (int) $this->resetPriceAndQty();
+        // Handle a request for an OAuth2.0 Access Token and send the response to the client
+        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+            header('Content-type: text/html'); 
+            show_404(); 
+            die;
+        } 
+        $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        $memberId = $this->member->getIdMember();
+        $itemArray = $cartManager->getValidatedCartContents($memberId); 
+
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
+        $itemArray = $validated['itemArray'];
+        $qtySuccess = $validated['itemCount'];
 
         if(intval($paymentType) === EsPaymentMethod::PAYMENT_PAYPAL){
 
@@ -129,15 +183,15 @@ class Payment extends MY_Controller{
             $paypalCancelURL    = base_url().'mobile/mobilepayment/paypalCancel'; 
             $requestData = $this->createPaypalToken($itemArray,$memberId,$paypalReturnURL,$paypalCancelURL);
 
-            $urlArray = array('returnUrl' => $paypalReturnURL,'cancelUrl' => $paypalCancelURL);
+            $urlArray = ['returnUrl' => $paypalReturnURL,'cancelUrl' => $paypalCancelURL];
             $mergeArray = array_merge($requestData,$urlArray);
 
             return $mergeArray;
         }
-        else if(intval($paymentType) === EsPaymentMethod::PAYMENT_DRAGONPAY){
+        else if(intval($paymentType) === EsPaymentMethod::PAYMENT_DRAGONPAY){ 
             if($qtySuccess !== count($itemArray)){
                 return [
-                    'e' => false,
+                    'e' => false, 
                     'm' => 'One of the items in your cart is unavailable.'
                 ];
             } 
@@ -147,18 +201,33 @@ class Payment extends MY_Controller{
     }
 
     /**
-     * Persist payment request from mobile
-     * @param  mixed $itemArray   [description]
-     * @param  integer $memberId    [description]
-     * @param  integer $paymentType [description]
-     * @param  string $txnid       [description]
-     * @param  string $payerId     [description]
+     * Persist payment request from mobile 
+     * @param  integer $paymentType 
+     * @param  string $txnid 
+     * @param  string $payerId 
      * @return mixed
      */
-    public function mobilePayPersist($itemArray,$memberId,$paymentType,$txnid,$payerId)
+    public function mobilePayPersist($paymentType = "", $txnid = "", $payerId = "")
     {
-        // set session
-        $this->session->set_userdata('member_id', $memberId); 
+        $this->oauthServer =  $this->serviceContainer['oauth2_server'];
+        $this->em = $this->serviceContainer['entity_manager']; 
+
+        $cartManager = $this->serviceContainer['cart_manager'];  
+        $productManager = $this->serviceContainer['product_manager'];  
+
+        // Handle a request for an OAuth2.0 Access Token and send the response to the client
+        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+            header('Content-type: text/html'); 
+            show_404(); 
+            die;
+        }
+
+        $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
+        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        $memberId = $this->member->getIdMember();
+        $itemArray = $cartManager->getValidatedCartContents($memberId); 
+
+        $this->session->set_userdata('member_id', $memberId);
         $this->session->set_userdata('choosen_items', $itemArray);
 
         if(intval($paymentType) === EsPaymentMethod::PAYMENT_PAYPAL){
@@ -419,7 +488,7 @@ class Payment extends MY_Controller{
     #SET UP PAYPAL FOR PARAMETERS
     #SEE REFERENCE SITE FOR THE PARAMETERS
     # https://developer.paypal.com/webapps/developer/docs/classic/express-checkout/integration-guide/ECCustomizing/
-    function paypal_setexpresscheckout() 
+    public function paypal_setexpresscheckout() 
     {
         header('Content-type: application/json');
         if(!$this->session->userdata('member_id')){
@@ -564,7 +633,7 @@ class Payment extends MY_Controller{
     }
 
     #PAYPAL IPN (Instant payment Notification)
-    function ipn2()
+    public function ipn2()
     {
         // CONFIG: Enable debug mode. This means we'll log requests into 'ipn.log' in the same directory.
         // Especially useful if you encounter network errors or other intermittent problems with IPN (validation).
@@ -848,7 +917,7 @@ class Payment extends MY_Controller{
      * @param  integer $paymentType
      * @return mixed
      */
-    public function cashOnDeliveryProcessing($memberId,$txnid,$itemList,$paymentType)
+    private function cashOnDeliveryProcessing($memberId,$txnid,$itemList,$paymentType)
     {
         $address = $this->memberpage_model->get_member_by_id($memberId); 
         $prepareData = $this->processData($itemList,$address);
@@ -934,7 +1003,7 @@ class Payment extends MY_Controller{
 
         $member_id =  $this->session->userdata('member_id'); 
         $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtysuccess = $this->resetPriceAndQty(TRUE);
+        $qtysuccess = $this->resetPriceAndQty();
         $itemList =  $this->session->userdata('choosen_items');
         $productCount = count($itemList);
 
@@ -1137,7 +1206,7 @@ class Payment extends MY_Controller{
 
         $member_id =  $this->session->userdata('member_id'); 
         $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtysuccess = $this->resetPriceAndQty(TRUE); 
+        $qtysuccess = $this->resetPriceAndQty(); 
         $itemList =  $this->session->userdata('choosen_items');
         $productCount = count($itemList); 
 
@@ -1498,7 +1567,7 @@ class Payment extends MY_Controller{
     /*
      *  Function to generate google analytics data
      */
-    function ganalytics($itemList,$v_order_id)
+    private function ganalytics($itemList,$v_order_id)
     {
         $analytics = array(); 
         foreach ($itemList as $key => $value) {
@@ -1527,7 +1596,7 @@ class Payment extends MY_Controller{
         return $analytics;
     }
 
-    function processData($itemList,$address)
+    private function processData($itemList,$address)
     {
         $city = ($address['c_stateregionID']) > 0 ? $address['c_stateregionID'] :  27;
         $cityDetails = $this->payment_model->getCityOrRegionOrMajorIsland($city); 
@@ -1585,7 +1654,7 @@ class Payment extends MY_Controller{
             );
     }
 
-    function changeAddress()
+    public function changeAddress()
     {
         header('Content-type: application/json');
         $uid = $this->session->userdata('member_id');
@@ -1621,7 +1690,7 @@ class Payment extends MY_Controller{
         }  
     }
 
-    function getLocation()
+    public function getLocation()
     {
         $id = $this->input->post('sid');
         $itemId = $this->input->post('iid');
@@ -1637,7 +1706,7 @@ class Payment extends MY_Controller{
         echo $data;
     }
 
-    function lockItem($ids = array(),$orderId,$action = 'insert')
+    private function lockItem($ids = [], $orderId, $action = 'insert')
     {
         foreach ($ids as $key => $value) {
             $lock = $this->payment_model->lockItem($key,$value,$orderId,$action);
@@ -1649,7 +1718,7 @@ class Payment extends MY_Controller{
      * @param  boolean $condition
      * @return integer
      */
-    private function resetPriceAndQty($condition = false)
+    private function resetPriceAndQty($condition = true)
     {
         $productManager = $this->serviceContainer['product_manager'];
         $carts = $this->session->all_userdata(); 
@@ -1660,7 +1729,7 @@ class Payment extends MY_Controller{
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
-            $productInventory = $productManager->getProductInventory($product);
+            $productInventory = $productManager->getProductInventory($product, false, true);
 
             $maxqty = $productInventory[$itemId]['quantity'];
             $qty = $value['qty'];
@@ -1687,7 +1756,7 @@ class Payment extends MY_Controller{
         $this->session->set_flashdata('status',$status);
     }
 
-    function generateReferenceNumber($paymentType,$member_id){
+    private function generateReferenceNumber($paymentType,$member_id){
     
         switch($paymentType)
         {
@@ -1747,7 +1816,7 @@ class Payment extends MY_Controller{
      *  has no postback requirements
      *   
      */
-    function pay()
+    public function pay()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');

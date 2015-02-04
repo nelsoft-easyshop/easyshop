@@ -12,7 +12,7 @@ class productUpload extends MY_Controller
     public $img_dimension = [];
     public $maxFileSizeInMb;
 
-    function __construct()
+    public function __construct()
     { 
         parent::__construct(); 
         $this->load->model("product_model");
@@ -1138,7 +1138,7 @@ class productUpload extends MY_Controller
         }
     }
     
-    function step3_addPreference()
+    public function step3_addPreference()
     {
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form';
@@ -1175,7 +1175,7 @@ class productUpload extends MY_Controller
         echo json_encode($serverResponse, JSON_FORCE_OBJECT);
     }
     
-    function step3_deletePreference()
+    public function step3_deletePreference()
     {
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form.';

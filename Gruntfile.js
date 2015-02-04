@@ -170,7 +170,8 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.how-to.css':
                         ['web/assets/css/style.css',
                          'web/assets/css/bootstrap.css',
-                         'web/assets/css/responsive_css.css'],
+                         'web/assets/css/responsive_css.css',
+                         'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.dashboard-personal-info.css':
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
@@ -254,8 +255,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/newhome.js'],
 
                     'web/assets/js/min/easyshop.inbox_view.js':
-                            ['web/assets/js/src/messaging.js',
-                            'web/assets/js/src/vendor/socket.io.js'],
+                            ['web/assets/js/src/messaging.js'],
 
                     'web/assets/js/min/easyshop.payment_review_responsive.js':
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
@@ -386,15 +386,12 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendorpage_followers.js'],
 
                     'web/assets/js/min/easyshop.user_forgotpass.js':
-                            ['web/assets/js/src/vendor/jquery.numeric.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/register.js'],
+                            ['web/assets/js/src/forgotpassword.js'],
 
-                    'web/assets/js/min/easyshop.user_forgotpass_confirm.js':
-                            ['web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
+                    'web/assets/js/min/easyshop.user_forgotpass_update_password.js':
+                            ['web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/register.js',
                              'web/assets/js/src/forgotpassword.js'],
 
                     'web/assets/js/min/easyshop.user_login_view.js':

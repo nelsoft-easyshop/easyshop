@@ -25,7 +25,7 @@
             </div>
             <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
                 <a href="login" class="btn btn-primarybtn">Try again</a>
-                <a href="login/identify" class="btn btn-default">Help me locate my account</a>
+                <a href="login/identifyEmail" class="btn btn-default">Help me locate my account</a>
             </div>
             <div class="clear"></div>
         </div>
@@ -110,7 +110,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-5 col-md-5">
-                                    <p class="text-right"><a href="/login/identify"><small>Forgot your password?</small></a></p>
+                                    <p class="text-right"><a href="/login/identifyEmail"><small>Forgot your password?</small></a></p>
                                 </div>
                             </div>
                             <div class="row">

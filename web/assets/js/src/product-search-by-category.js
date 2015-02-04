@@ -1,6 +1,9 @@
 (function ($) {
 
-    
+    $(window).load(function(){
+        $('div.loader').fadeOut("fast").css("display", "none");
+        console.log("trigger load test");
+    });
    
     $(window).bind('scroll',function(e){
         parallaxScroll();
@@ -12,12 +15,8 @@
         var scrolled = $(window).scrollTop();
         var x1 = '0';
         var y2 = '0';
-            $('.slider1').css({ 
-                "margin-top": (-71+(scrolled*.9))+'px',
-            });
-
             $('.slider-bottom').css({ 
-                "margin-top": (-71+(scrolled*.2))+'px',
+                "margin-top": (-71+(scrolled*.48))+'px',
             });
     }
 

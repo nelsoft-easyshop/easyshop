@@ -1885,7 +1885,9 @@ body{
 /* =============================================
 -------------  responsive css -----------------
 ==============================================*/
-@media (min-width: 300px) {
+
+
+@media (min-width: 320px) {
     .prod-add-to-cart-btn {
         background-position: 25% center;
         padding: 10px 10px 10px 17%; 
@@ -2093,6 +2095,13 @@ body{
     .prod-select-con.shipment-select {
         padding: 0 !important;
         width: 60%;
+    }
+}
+
+@media (max-width: 320px) {
+    .prod-add-to-cart-btn {
+        background-position: 20% center;
+        padding: 10px 10px 10px 20%; 
     }
 }
 

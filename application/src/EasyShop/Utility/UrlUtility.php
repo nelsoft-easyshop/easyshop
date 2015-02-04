@@ -21,7 +21,7 @@ class UrlUtility
     public function parseExternalUrl($url, $internalClass = "", $externalClass = "")
     {
         if(!is_string($url)){
-            $url = "/";
+            $url = '';
         }
         $formattedUrl = trim($url);
         if(substr($formattedUrl, 0, 4) === 'www.'){

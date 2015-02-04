@@ -211,7 +211,7 @@ class ProductManager
 
         }
         
-        $locks = $this->validateProductItemLock($product->getIdProduct());
+        $locks = $this->validateProductItemLock($product->getIdProduct()); 
         if($doLockDeduction){
             foreach($locks as $lock){
                 if(isset($data[$lock['idProductItem']])){

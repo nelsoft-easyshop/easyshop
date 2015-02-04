@@ -68,7 +68,7 @@ class mobilePayment extends MY_Controller
         } 
 
         return $CI->$object_name = new $class_name();
-    }
+    } 
 
     /**
      * Review cart before proceeding on payment.
@@ -90,9 +90,10 @@ class mobilePayment extends MY_Controller
         $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember());
         $memberCartData = unserialize($this->member->getUserdata());
         $isCartNotEmpty = empty($memberCartData) === false;
+
         $cartData = $isCartNotEmpty ? $memberCartData : [];  
         if((int)$this->member->getIsEmailVerify()){ 
-            if($isCartNotEmpty){ 
+            if($isCartNotEmpty){  
                 $validatedCart = $checkoutService->validateCartContent($this->member);
                 $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
                 $formattedCartContents = $apiFormatter->formatCart($validatedCart, true);
@@ -130,18 +131,15 @@ class mobilePayment extends MY_Controller
         $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $cartData = unserialize($this->member->getUserdata()); 
 
+
         $validatedCart = $checkoutService->validateCartContent($this->member);
         $canContinue = $checkoutService->checkoutCanContinue($validatedCart, "cash_delivery"); 
 
-        if(empty($cartData) === false && $canContinue){
-            $updatedCart = $paymentController->mobileReviewBridge($cartData, $this->member->getIdMember());
-            $txnid = $paymentController->generateReferenceNumber($paymentType, $this->member->getIdMember());
-            $dataProcess = $paymentController->cashOnDeliveryProcessing($this->member->getIdMember(), 
-                                                                        $txnid, 
-                                                                        $updatedCart, 
-                                                                        $paymentType);
-            $isSuccess = strtolower($dataProcess['status']) === PaymentService::STATUS_SUCCESS;
-            $returnArray = array_merge(['isSuccess' => $isSuccess,'txnid' => $txnid], $dataProcess);
+        if(empty($cartData) === false && $canContinue){ 
+            $cartData = $paymentController->mobileReviewBridge();  
+            $returnArray = $paymentController->mobilePersistCod();
+            $returnArray['isSuccess'] = strtolower($returnArray['status']) === PaymentService::STATUS_SUCCESS;
+ 
         }
         else{
             $returnArray = [
@@ -165,16 +163,15 @@ class mobilePayment extends MY_Controller
         $requestUrl = "";
         $message = "";
         $isSuccess = false;
-        $cartData = unserialize($this->member->getUserdata());
-
+        $cartData = unserialize($this->member->getUserdata()); 
         $paymentController = $this->loadController('payment');
-        $checkoutService = $this->serviceContainer['checkout_service']; 
+        $checkoutService = $this->serviceContainer['checkout_service'];  
         $this->load->config('payment', true);
 
         $paymentConfig = strtolower(ENVIRONMENT) === 'production'
                          ? $this->config->item('production', 'payment')
                          : $this->config->item('testing', 'payment');
-
+ 
         $validatedCart = $checkoutService->validateCartContent($this->member);
         $postPaymentType = trim(strtolower($this->input->post('paymentType')));
         $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $postPaymentType);
@@ -182,20 +179,21 @@ class mobilePayment extends MY_Controller
            && strlen($postPaymentType) > 0
            && $canContinue){ 
 
-            if($postPaymentType === "paypal"){
+            if($postPaymentType === "paypal"){ 
                 $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
             }
             elseif($postPaymentType === "dragonpay"){
                 $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
-            }
+            }  
 
-            $requestData = $paymentController->mobilePayBridge($cartData, 
-                                                               $this->member->getIdMember(), 
-                                                               $paymentType);
+            $requestData = $paymentController->mobilePayBridge($paymentType);
+            $urlReturn = ""; 
 
-            if($requestData['e']){
-                $isSuccess = true;
-                if($postPaymentType === "paypal"){
+            if($this->input->post('paymentType') == "paypal"){
+                if($requestData['e']){
+                    $isSuccess = true;
+                    $urlReturn = $requestData['d'];
+                    $message = ""; 
                     $returnUrl = $requestData['returnUrl'];
                     $cancelUrl = $requestData['cancelUrl'];
                     $requestUrl = $requestData['d'];
@@ -262,12 +260,10 @@ class mobilePayment extends MY_Controller
            && $canContinue){ 
             $payerId = trim($this->input->post('PayerID'));
             $token = trim($this->input->post('token'));
-            $requestData = $paymentController->mobilePayPersist($cartData,
-                                                                $this->member->getIdMember(),
-                                                                $paymentType,
+            $requestData = $paymentController->mobilePayPersist($paymentType,
                                                                 $token,
                                                                 $payerId);
-            $isSuccess = strtolower($requestData['status']) === PaymentService::STATUS_SUCCESS;
+            $isSuccess = strtolower($requestData['status']) === PaymentService::STATUS_SUCCESS;  
             $returnArray = array_merge(['isSuccess' => $isSuccess],$requestData);
         }
         else{
