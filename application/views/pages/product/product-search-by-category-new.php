@@ -28,7 +28,7 @@
 
 <?php if($productCount > 0): ?>
     <?php if($categoryHeaderData): ?>
-    <section class=" color-default search-parallax-container" style="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>height: 290px;<?php elseif(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 220px;<?php endif; ?>">
+    <section class=" color-default search-parallax-container <?php if((isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom']))||(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom']))):?>search-parallax-container-mobile<?php endif; ?>" style="<?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 220px;<?php endif; ?>">
         <div id="parallax-1" class="search-parallax">
             <?php if(isset($categoryHeaderData['top'])): ?>
              <div id="parallax-4" style="margin-top: -10px;">
@@ -36,7 +36,7 @@
             </div>
             <?php endif;?>
             <div class="banner-template-2">
-             <?php if(isset($categoryHeaderData['top'])): ?>
+                <?php if(isset($categoryHeaderData['top'])): ?>
                 <ul class="top-slider">
                     <?php foreach($categoryHeaderData['top']['image'] as $topBanner): ?>
                         
@@ -52,6 +52,18 @@
                   
                     <?php endforeach; ?>
                 </ul>
+
+                <?php endif; ?>
+            </div>
+            <div class="mobile-banner">
+                <?php if(isset($categoryHeaderData['top'])): ?>
+                    <?php if(trim($topBanner['target']['url']) !== ''): ?>
+                        <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
+                    <?php endif; ?>
+                    <img class="img-responsive" src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
+                    <?php if(trim($topBanner['target']['url']) !== ''): ?>
+                        </a>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             <?php if(isset($categoryHeaderData['bottom'])): ?>
@@ -90,10 +102,10 @@
     <br/>
         <div class="container">
             <div class="row">
-                <div class="col-md-3 search-left-wing">
+                <div class="col-xs-3 search-left-wing" style="position: relative;">
 
                     <?php if(count($categories) > 0): ?>
-                    <div class="panel-group panel-category border-0" id="category">
+                    <div class="panel-group panel-category border-0" id="category" style="position: relative;">
                         <div class="panel panel-default panel-left-wing border-0 no-padding">
                             <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                                 <h4 class="panel-title">
@@ -119,7 +131,7 @@
                     </div>
                     <?php endif; ?>
                     
-                    <div class="panel-group panel-category border-0" id="filter-panel-container">
+                    <div class="panel-group panel-category panel-filter-search-cont border-0 container-filter" style="position: relative;" id="filter-panel-container">
                         <div class="panel panel-default panel-left-wing border-0 no-padding">
                             <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                                 <h4 class="panel-title">
