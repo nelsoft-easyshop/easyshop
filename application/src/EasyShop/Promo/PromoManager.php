@@ -301,23 +301,6 @@ class PromoManager
     }
 
     /**
-     *TODO:
-     *  Define variable Date and Time or Rounds
-     *  function getSchoolWithStudentsByRound
-     *  function vote
-     *NOTE:
-     * User can only vote one student / round
-     * In-School :
-     *  Round 1 (Feb 23 - March 6)
-     *  Round 2 (March 7 - April 7)
-     *  If number of participants is <= 3, no need for round 2.
-     *  Else, round 2.
-     * Inter-School :
-     *  Final Round (April 8 - June 8)
-     * -->This should not be pushed to Github project
-     */
-
-    /**
      * Promo : Estudyantrepreneur
      * Get School and its student by date / round
      * @param $rounds
@@ -326,8 +309,7 @@ class PromoManager
     public function getSchoolWithStudentsByRoundForEstudyantrepreneur($rounds)
     {
         $date = new \DateTime;
-//        $dateToday = $date->getTimestamp();
-        $dateToday = strtotime('2015-03-23 00:00:00');
+        $dateToday = $date->getTimestamp();
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';

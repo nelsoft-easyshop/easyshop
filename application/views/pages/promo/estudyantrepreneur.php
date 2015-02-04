@@ -1,5 +1,7 @@
 <select id="ddown-school">
-    <option></option>
+    <?PHP foreach($schools_and_students as $school => $students) : ?>
+    <option value="<?=html_escape(json_encode($students))?>"><?=html_escape($school)?></option>
+    <?PHP endforeach; ?>
 </select>
 <div id="student-container">
 

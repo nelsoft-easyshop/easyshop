@@ -3,6 +3,8 @@
 class Estudyantrepreneur extends MY_Controller
 {
     /**
+     * Must be transferred to a config file, or not?
+     * Declaration of Rounds, Start and End dates and Number of qualified per round
      * @var array
      */
     private $rounds = [
