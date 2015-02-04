@@ -26,10 +26,9 @@ class EsProductItemLockRepository extends EntityRepository
                     ->leftJoin('EasyShop\Entities\EsOrder', 'o', 'WITH', 'lck.order = o.idOrder')
                     ->where('pi.product = :product_id');
 
-        if($excludeMemberId !== 0){
-            $query = $query->andWhere(
-                $qb->expr()->notIn('o.buyer', $excludeMemberId)
-            );
+        if($excludeMemberId !== 0){ 
+            $query = $query->andWhere('o.buyer != :memberId')
+                           ->setParameter('memberId', $excludeMemberId);
         }
         $query = $query->setParameter('product_id', $productId)
                        ->getQuery(); 
