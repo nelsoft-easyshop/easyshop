@@ -217,9 +217,26 @@ class CheckoutService
     public function checkoutCanContinue($cartData, $paymentType)
     {
         $itemFail = 0;
+        $paymentString = "";
+        if((int)$paymentType === EsPaymentMethod::PAYMENT_PAYPAL){
+            $paymentString = 'paypal';
+        }
+        elseif ((int)$paymentType === EsPaymentMethod::PAYMENT_DRAGONPAY){
+            $paymentString = 'dragonpay';
+        }
+        elseif ((int)$paymentType === EsPaymentMethod::PAYMENT_PESOPAYCC){
+            $paymentString = 'pesopaycdb';
+        }
+        elseif ((int)$paymentType === EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT){
+            $paymentString = 'directbank';
+        }
+        elseif ((int)$paymentType === EsPaymentMethod::PAYMENT_CASHONDELIVERY){ 
+            $paymentString = 'cash_delivery';
+        }
+
         foreach ($cartData as $item) { 
-            if( !isset($item[$paymentType]) 
-                || !$item[$paymentType]
+            if( !isset($item[$paymentString]) 
+                || !$item[$paymentString]
                 || !$item['canPurchaseWithOther']
                 || !$item['hasNoPuchaseLimitRestriction']
                 || !$item['isQuantityAvailable']
@@ -229,6 +246,22 @@ class CheckoutService
         }
 
         return $itemFail === 0;
+    }
+
+    public function getPaymentTypeByString($paymentString)
+    {
+        $paymentType = 0;
+        if($paymentString === "paypal"){ 
+            $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
+        }
+        elseif($paymentString === "dragonpay"){
+            $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
+        }
+        elseif($paymentString === "cash_delivery"){
+            $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
+        }
+
+        return $paymentType;
     }
 }
 
