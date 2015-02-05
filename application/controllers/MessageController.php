@@ -121,6 +121,12 @@ class MessageController extends MY_Controller
                     'message' => $messages,
                     'recipientMessage' => $recipientMessages
                 ];
+                
+                $this->serviceContainer['redis_client']->publish('chat-channel', json_encode([
+                    'recipient' => $storeName,
+                    'message' => $recipientMessages,
+                ]));
+
             }
         }
 
