@@ -30,15 +30,7 @@ class Home extends MY_Controller
      * @return View
      */
     public function index() 
-    {  
-    
-            
-        print('sam');
-        $this->serviceContainer['redis_client']->publish('chat-channel', json_encode([
-            'recipient' => 'muhammadali',
-            'message' => 'surprise motherfucker!'
-        ]));
-    
+    {      
         $view = $this->input->get('view') ? $this->input->get('view') : null;
         $memberId = $this->session->userdata('member_id');
         $headerData = [
