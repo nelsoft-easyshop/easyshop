@@ -4,7 +4,7 @@
 <?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
 <div class="loader-upload" style="display: none;">
-    <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+    <img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-whiteBG.gif"/>
     <span>Uploading photo</span>
 </div>
 <section>
