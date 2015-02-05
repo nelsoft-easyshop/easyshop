@@ -1,5 +1,9 @@
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.login.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
 
 <div class="clear mrgn-top-35 display-ib"></div>
 
@@ -21,7 +25,7 @@
             </div>
             <div class="pd-tb-20 pd-lr-20 text-right login-btn-con">
                 <a href="login" class="btn btn-primarybtn">Try again</a>
-                <a href="login/identify" class="btn btn-default">Help me locate my account</a>
+                <a href="login/identifyEmail" class="btn btn-default">Help me locate my account</a>
             </div>
             <div class="clear"></div>
         </div>
@@ -106,7 +110,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-5 col-md-5">
-                                    <p class="text-right"><a href="/login/identify"><small>Forgot your password?</small></a></p>
+                                    <p class="text-right"><a href="/login/identifyEmail"><small>Forgot your password?</small></a></p>
                                 </div>
                             </div>
                             <div class="row">

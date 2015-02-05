@@ -334,12 +334,14 @@ class Kernel
             $collectionHelper = $container['collection_helper'];
             $userManager = $container['user_manager'];
             $imageLibrary = new \CI_Image_lib();
+            $stringHelper = $container['string_utility'];            
             return new \EasyShop\Product\ProductManager($em, 
                                                         $promoManager, 
                                                         $collectionHelper, 
                                                         $configLoader,
                                                         $imageLibrary,
-                                                        $userManager);
+                                                        $userManager,
+                                                        $stringHelper);
         };
 
         $container['transaction_manager'] = function ($c) use ($container) {
@@ -370,9 +372,9 @@ class Kernel
             return new \EasyShop\Utility\StringUtility($htmlPurifier);
         };
         
-        $container['hash_utility'] = function($c) {
+        $container['hash_utility'] = function($c) use ($container) {
             $encrypt = new CI_Encrypt();
-            return new \EasyShop\Utility\HashUtility($encrypt);
+            return new \EasyShop\Utility\HashUtility($encrypt, $container['entity_manager']);
         };
         
         $container['url_utility'] = function ($c) {

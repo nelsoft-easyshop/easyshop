@@ -1885,7 +1885,9 @@ body{
 /* =============================================
 -------------  responsive css -----------------
 ==============================================*/
-@media (min-width: 300px) {
+
+
+@media (min-width: 320px) {
     .prod-add-to-cart-btn {
         background-position: 25% center;
         padding: 10px 10px 10px 17%; 
@@ -1928,8 +1930,8 @@ body{
     }
 
     .prod-add-to-cart-btn {
-        background-position: 25% center;
-        padding: 10px 10px 10px 17%; 
+        background-position: 23% center;
+        padding: 10px 10px 10px 25%; 
     }
 
     .footer-secondary .footer-ac {
@@ -2085,9 +2087,21 @@ body{
         top: 0;
     }
 
+    .prod-add-to-cart-btn {
+        background-position: 25% center;
+        padding: 10px 10px 10px 17%; 
+    }
+
     .prod-select-con.shipment-select {
         padding: 0 !important;
         width: 60%;
+    }
+}
+
+@media (max-width: 320px) {
+    .prod-add-to-cart-btn {
+        background-position: 20% center;
+        padding: 10px 10px 10px 20%; 
     }
 }
 

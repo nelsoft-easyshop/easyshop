@@ -37,7 +37,10 @@ html, body{
 /* =============================================
 -----------------  Banners -----------------
 ==============================================*/
-
+.mobile-banner{
+    display: none;
+    margin-bottom: 10px;
+}
 .banner-template-1{
     width: 100%;
     height: 300px;
@@ -111,12 +114,17 @@ html, body{
 .bg-search-section{
     background: #fff;
     padding-bottom: 10px;
+    padding-top: 40px;
 }
 
 .bg-search-section-main{
     background: #fff;
     padding-bottom: 10px;
     padding-top: 40px;
+}
+
+.search-left-wing{
+    display: block;
 }
 
 .search-header{
@@ -174,10 +182,6 @@ html, body{
     transition: all 0.3s ease; 
 }
 
-.search-item-container:hover{
-    border: solid #565656 1px;
-}
-
 .search-results-container .col-md-3{
     padding-right: 8px !important;
     padding-left: 8px !important;
@@ -186,19 +190,34 @@ html, body{
 .search-item-img-container{
     width: 100%;
     height: 180px;
-    border: solid #f1f1f1 1px;
     position: relative;
 }
 
 .search-item-img-container-hover{
     width: 100%;
     height: 180px;
-    border: trasparent #f1f1f1 1px;
     position:absolute;
     opacity:0;
     transition: all 0.3s ease;
 }
 
+.loader {
+    position: fixed;
+    margin: 0 auto;
+    z-index: 099999999999999;
+    top: 50 px;
+    cursor: wait;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #fff;
+    top: 0;
+    text-align: center;
+}
+
+.loader img{
+    margin-top: 10%;
+}
 .search-item-img-container:hover .search-item-img-container-hover{
     opacity: 1;
 }
@@ -500,6 +519,10 @@ html, body{
     margin-left: 20px;
 }
 
+.search-meta-hand{
+    width: 441px;
+}
+
 .list-search-tips > li{
     margin-bottom: 10px;
     font-size: 15px;
@@ -731,6 +754,10 @@ ul.list-category-search li:last-child > .search-category-link{
     overflow: visible !important;
 }
 
+.banner-template-2 .bx-viewport{
+    height: 308px !important;
+}
+
 .search-slider .bx-wrapper .bx-pager {
     display: none;
 }
@@ -758,6 +785,10 @@ ul.list-category-search li:last-child > .search-category-link{
     margin-top: 0;
     top: 56px;
     text-align: center;
+}
+
+.top-slider-img{
+    display: inline-block !important;
 }
 
 .search-slider .bx-controls-direction .bx-prev:before,
@@ -794,6 +825,7 @@ ul.list-category-search li:last-child > .search-category-link{
     height: 523px;
     overflow: hidden;
     position: relative;
+    background: #fff;
 }
 
 #parallax-2 {
@@ -829,8 +861,8 @@ ul.list-category-search li:last-child > .search-category-link{
     width: 100%;
     height: 500px;
     margin: 0px;
-     height: 500px;
-    margin-top:-200px;
+    height: 408px;
+    margin-top:-100px;
     
 }
 
@@ -848,10 +880,6 @@ ul.list-category-search li:last-child > .search-category-link{
 .banner-template-2 .bx-controls-direction .bx-prev,
 .banner-template-2 .bx-controls-direction .bx-next{
     top: -88px !important;
-}
-
-.loading-row{
-    height: 100px;
 }
 
 /* =============================================
@@ -1009,6 +1037,10 @@ ul.list-category-search li:last-child > .search-category-link{
     .search-results-container{
         margin-right: 0px;
         margin-left: 0px;
+    }
+
+    .top-slider-img{
+        display: none !important;
     }
 }
 @media (max-width: 1025px) {
@@ -1171,6 +1203,22 @@ ul.list-category-search li:last-child > .search-category-link{
     .list-filter-search{
         height: 293px;
         overflow-y: scroll;
+    }
+
+    .banner-template-2{
+        display: none;
+    }
+
+    .mobile-banner{
+        display: block;
+    }
+
+    .search-parallax-container-mobile{
+        height: auto !important;
+    }
+
+    .bg-search-section{
+        padding-top: 0px;
     }
 } 
 

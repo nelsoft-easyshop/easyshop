@@ -13,11 +13,10 @@ class EsVerifcodeRepository extends EntityRepository
      * @param EasyShop\Entities\EsMember $member
      * @param string $emailCode
      * @param string $mobileCode
-     * @return bool
+     * @return EasyShop\Entities\EsVerifcode
      */
-    public function createNewMemberVerifCode($member, $emailCode, $mobileCode)
+    public function createNewMemberVerifCode($member, $emailCode = "", $mobileCode = "")
     {
-
         try{
             $verifCode = new EsVerifcode();     
             $verifCode->setMember($member);
@@ -29,7 +28,7 @@ class EsVerifcodeRepository extends EntityRepository
             $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
             $this->_em->persist($verifCode);
             $this->_em->flush();
-            return true;
+            return $verifCode;
         }
         catch(\Doctrine\ORM\Query\QueryException $e) {
             return false;

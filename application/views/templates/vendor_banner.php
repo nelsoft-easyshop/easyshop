@@ -1,9 +1,16 @@
-<link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
-<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>  
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
+    <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/> 
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.vendor-banner.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 <?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
-
+<div class="loader-upload" style="display: none;">
+    <img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-whiteBG.gif"/>
+    <span>Uploading photo</span>
+</div>
 <section>
     <div class="pos-rel" id="display-banner-view">
         <div class="vendor-main-bg" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">
@@ -37,7 +44,7 @@
                             <img src="<?php echo getAssetsDomain()?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </a>
                         <span class="btn btn-default-3 btn-profile-edit-mobile" id="modal-edit-trigger">
-                            <img src="<?php echo getAssetsDomain()?>/assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
+                            <img src="<?php echo getAssetsDomain()?>assets/images/img-vendor-icon-edit.png" alt="Edit Profile"> Edit Profile
                         </span>
                         <a href="#" class="btn btn-default-2 btn-profile-edit-mobile btn-change-cover-photo-mobile">Change Cover Photo</a>
                     </div>
@@ -78,7 +85,7 @@
             <div class="vendor-main-bg" style="background: url(<?=getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">  
             </div> 
         </div>
-        <div class="container main-container vendor-main pos-ab">
+        <div class="container main-container vendor-main pos-ab edit-profile-mobile">
             <div class="vendor-profile-content" id="edit-profile-info-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">
@@ -177,7 +184,7 @@
                 <li>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/about" class="<?php if($url_id === "about"){ echo "vendor-nav-active"; }else{ echo " ";}?>">About</a>
                 </li>
-                <li>
+                <li class="pos-rel">
                     <span class="followers-circle"><?=$followerCount; ?></span>
                     <a href="/<?=$arrVendorDetails['userslug']; ?>/followers" class="<?php if($url_id === "followers"){ echo "vendor-nav-active"; }else{ echo " ";}?>">Followers</a>
                 </li>

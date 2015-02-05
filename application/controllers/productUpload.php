@@ -12,7 +12,7 @@ class productUpload extends MY_Controller
     public $img_dimension = [];
     public $maxFileSizeInMb;
 
-    function __construct()
+    public function __construct()
     { 
         parent::__construct(); 
         $this->load->model("product_model");
@@ -349,9 +349,15 @@ class productUpload extends MY_Controller
                     $eachAttribute[$key] = $this->product_model->getProductAttributesByHead($product_id,$key);
 
                     foreach ($eachAttribute[$key] as $key2 => $value2) {
+                        $eachAttribute[$key][$key2]['file_path'] = "";
                         if(!$eachAttribute[$key][$key2]['img_path'] == ''){
-                            $file = explode('_',end(explode('/', $eachAttribute[$key][$key2]['img_path'])));
-                            unset($file[0]); 
+                            $explodePath = explode('/', $eachAttribute[$key][$key2]['img_path']);
+                            $fileName = end($explodePath);
+                            $file = explode('_', $fileName);
+                            array_shift($file); 
+                            array_pop($explodePath);
+                            $categoryPath = implode('/', $explodePath) . '/categoryview/'.$fileName; 
+                            $eachAttribute[$key][$key2]['file_path'] = getAssetsDomain().$categoryPath;
                             $eachAttribute[$key][$key2]['img_path'] = $tempId.'_'.implode('_', $file); 
                         }
                     }
@@ -1138,7 +1144,7 @@ class productUpload extends MY_Controller
         }
     }
     
-    function step3_addPreference()
+    public function step3_addPreference()
     {
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form';
@@ -1175,7 +1181,7 @@ class productUpload extends MY_Controller
         echo json_encode($serverResponse, JSON_FORCE_OBJECT);
     }
     
-    function step3_deletePreference()
+    public function step3_deletePreference()
     {
         $serverResponse['result'] = 'fail';
         $serverResponse['error'] = 'Failed to validate form.';

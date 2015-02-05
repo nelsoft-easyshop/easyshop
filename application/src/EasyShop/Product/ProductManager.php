@@ -15,6 +15,7 @@ use Easyshop\Entities\EsProducItemLock;
 use EasyShop\Entities\EsCat;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * Product Manager Class
@@ -99,6 +100,13 @@ class ProductManager
     private $userManager;
 
     /**
+     * String utility helper
+     *
+     */
+    private $stringUtility;    
+
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
@@ -107,7 +115,8 @@ class ProductManager
                                 $collectionHelper,
                                 $configLoader,
                                 $imageLibrary,
-                                $userManager)
+                                $userManager,
+                                $stringUtility)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
@@ -115,6 +124,7 @@ class ProductManager
         $this->configLoader = $configLoader;
         $this->imageLibrary = $imageLibrary;
         $this->userManager = $userManager;
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -166,7 +176,7 @@ class ProductManager
      * @param bool $doLockDeduction : If true, locked items will also be deducted from the total availability
      *
      */
-    public function getProductInventory($product, $isVerbose = false, $doLockDeduction = false)
+    public function getProductInventory($product, $isVerbose = false, $doLockDeduction = false, $excludeMemberId = 0)
     {
         $promoQuantityLimit = $this->promoManager->getPromoQuantityLimit($product);
         $inventoryDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -201,12 +211,12 @@ class ProductManager
 
         }
         
-        $locks = $this->validateProductItemLock($product->getIdProduct());
+        $locks = $this->validateProductItemLock($product->getIdProduct(), $excludeMemberId); 
         if($doLockDeduction){
             foreach($locks as $lock){
-                if(isset($data[$lock['id_product_item']])){
-                    $data[$lock['id_product_item']]['quantity'] -=  $lock['lock_qty'];
-                    $data[$lock['id_product_item']]['quantity'] = ($data[$lock['id_product_item']]['quantity'] >= 0) ? $data[$lock['id_product_item']]['quantity'] : 0;
+                if(isset($data[$lock['idProductItem']])){
+                    $data[$lock['idProductItem']]['quantity'] -=  $lock['lock_qty'];
+                    $data[$lock['idProductItem']]['quantity'] = ($data[$lock['idProductItem']]['quantity'] >= 0) ? $data[$lock['idProductItem']]['quantity'] : 0;
                 }
             }
         }
@@ -222,10 +232,10 @@ class ProductManager
      * @param integer $productId
      * @return mixed
      */
-    public function validateProductItemLock($productId)
+    public function validateProductItemLock($productId, $excludeMemberId = 0)
     {
         $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                                        ->getProductItemLockByProductId($productId);
+                                        ->getProductItemLockByProductId($productId, $excludeMemberId);
         foreach($productItemLocks as $idx => $lock){
             $elapsedMinutes = round((time() - $lock['timestamp']->getTimestamp())/60);
             if($elapsedMinutes > $this->lockLifeSpan){
@@ -458,25 +468,22 @@ class ProductManager
      */ 
     public function generateSlug($title)   
     {
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findBy(['slug' => $title]);
+        $cleanedTitle = $this->stringUtility->cleanString(strtolower($title));
 
-        $cnt = count($product);
-        if($cnt > 0) {
-            $slugGenerate = $title."-".$cnt++;
-        }
-        else {
-            $slugGenerate = $title;
-        }
-        $checkIfSlugExist = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findBy(['slug' => $slugGenerate]);
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('slug', 'slug');
+        $sql = "SELECT slug FROM es_product WHERE slug LIKE :productSlug ";
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('productSlug', $cleanedTitle.'%'); 
+        $existingSlugs = array_map('current', $query->getResult());
 
-        if(count($checkIfSlugExist) > 0 ){
-            foreach($checkIfSlugExist as $newSlugs){
-                $slugGenerate = $slugGenerate."-".$newSlugs->getIdProduct();
-            }
+        if(count($existingSlugs) > 0) {
+            $counter = 0;
+            while (in_array($cleanedTitle ."-". ++$counter, $existingSlugs));
+            $cleanedTitle .= "-". $counter;
         }
-        return $slugGenerate;
+
+        return $cleanedTitle;
     }
     
     /**

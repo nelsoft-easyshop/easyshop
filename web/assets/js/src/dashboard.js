@@ -384,6 +384,18 @@
         }
     });
 
+    $(document.body).on('change','.search-field',function (event) { 
+        var $this = $(this);
+        var $textInput = $this.val();
+        var $page = 1;
+        var $parentContainer = $this.parent().parent().parent();
+        var $filterInput = $parentContainer.find('.search-filter').val();
+        var $requestType = $parentContainer.find('.request-type').val();
+        var $container = $parentContainer.find('.container-id').val(); 
+
+        requestProduct($page, $textInput, $filterInput, $requestType, $container, true); 
+    });
+
     $(document.body).on('click','.soft-delete',function () {
         var $confirm = confirm("Are you sure you want to move this item to deleted item?");
         if($confirm){
@@ -1215,6 +1227,7 @@
         var alltxStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var buttonText = txResponseBtn.val();
         var msg = "";
+        var invoiceNum = txResponseBtn.parent().parent().find("input[name='invoice_num']");
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
@@ -1258,7 +1271,7 @@
                 }
                 else {
                     if (txResponseBtn.hasClass('tx_forward')) {
-                        txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
+                        alltxStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                         msg = "<h3>ITEM RECEIVED</h3> <br> Transaction has been moved to completed tab.";
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
@@ -1269,8 +1282,14 @@
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    txResponseBtn.closest('.item-list-panel').replaceWith('<div class="alert alert-success" id="wipeOut" role="alert">' + msg + '</div>');
-                    $('#wipeOut').fadeOut(5000);
+                    if (serverResponse.isTransactionComplete === true) {
+                        $('.'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                        $('.wipeOut').fadeOut(5000);
+                    }
+                    else {
+                        txResponseBtn.parent().parent().find('.rejectForm').remove();
+                        txResponseBtn.parent().remove();
+                    }
                 }
                 txResponseBtn.addClass('enabled');
             }

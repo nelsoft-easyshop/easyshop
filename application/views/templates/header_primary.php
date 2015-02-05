@@ -47,12 +47,20 @@
 
     <a href="https://plus.google.com/108994197867506780841" rel="publisher"></a>
 
-    <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/normalize.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
-    <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
-    <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+        <link rel="stylesheet" type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+        <link rel="stylesheet" type="text/css" href='/assets/css/normalize.min.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+        <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <?php else: ?>
+        <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.header-primary.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <?php endif; ?>
+    
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+
 </head>
 <body>
 
@@ -106,11 +114,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     </li>
                                                     <li class="nav-dropdown-border pos-rel">
                                                         <a href="/messages">Messages</a>
-                                                        <?php if((int)$unreadMessageCount !== 0) : ?>
-                                                            <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                                <?php echo $unreadMessageCount; ?>
-                                                            </div>
-                                                        <?php endif;?>
+                                                        <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                                            <?php echo $unreadMessageCount; ?>
+                                                        </div>
                                                     </li>
                                                     <li class="nav-dropdown-border">
                                                         <a class="prevent" href="/login/logout">Logout</a>
@@ -395,11 +401,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             </li>
                                                             <li class="nav-dropdown-border pos-rel">
                                                                 <a href="/messages">Messages</a>
-                                                                <?php if((int)$unreadMessageCount !== 0) : ?>
-                                                                    <div id="unread-messages-count" class="msg_countr message-count-con">
-                                                                        <?php echo $unreadMessageCount ;?>
-                                                                    </div>
-                                                                <?php endif;?>
+                                                                <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                                                    <?php echo $unreadMessageCount; ?>
+                                                                </div>
+                                                                
                                                             </li>
                                                             <li class="nav-dropdown-border">
                                                                 <a class="prevent" href="/login/logout">Logout</a>
@@ -432,7 +437,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </div><!-- End #header -->
 
 <div class="clear"></div>        
+
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
+<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user ? $user->getStoreName() : 'false')?>">
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>

@@ -12,7 +12,8 @@ class Login extends MY_Controller
      * Inject dependencies
      *
      */
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->load->model('register_model');
         $this->load->model('user_model');
@@ -197,90 +198,149 @@ class Login extends MY_Controller
         }
     }
 
+    
     /**
-     * Display the reset password page
+     * Renders the forgot password page where the user provides a valid email
      *
-     * @return View
      */
-    public function identify()
+    public function identifyEmail()
     {
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Forgot Password | Easyshop.ph',
+            'title' => 'Reset your Password | Easyshop.ph',
             'metadescription' => '',
             'relCanonical' => '',
-            'render_searchbar' => false,
         ];
-            
-        $bodyData['toggle_view'] = "";
-        if(($this->input->post('identify_btn')) && ($this->form_validation->run('identify_form'))){
-                $email = $this->input->post('email');
-                $result = $this->register_model->check_registered_email($email);
-            if (isset($result['username'])){
-                // Send email and update database 
-                if ($this->register_model->forgotpass($email, $result['username'], $result['id_member']) == 1){
-                    $bodyData['toggle_view'] = "1";
-                }else{
-                    $bodyData['toggle_view'] = "3";
+        
+        $bodyData = [
+            'isPost' => false,
+            'isSuccessful' => false,
+            'message' => '',
+        ];
+        
+        if($this->input->post()){
+            $bodyData['isPost'] = true;
+            $em = $this->serviceContainer['entity_manager'];
+            $rules = $this->serviceContainer['form_validation']->getRules('reset_password')['email'];
+            $formFactory = $this->serviceContainer['form_factory'];
+            $formErrorHelper = $this->serviceContainer['form_error_helper']; 
+
+            $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                ->setMethod('POST')
+                                ->add('email', 'text', ['required' => false, 'label' => false, 'constraints' => $rules])
+                                ->getForm();
+                                
+        
+            $form->submit([ 'email' => $this->input->post('email')]);
+            if ($form->isValid()) {
+                $member = $em->getRepository('EasyShop\Entities\EsMember')
+                             ->findOneBy(['email' => $this->input->post('email')]);
+                if($member){
+                    $isEmailSent = $this->serviceContainer['account_manager']
+                                        ->sendForgotPasswordLink($member);
+                    $bodyData['isSuccessful'] = $isEmailSent;
+                    if(!$isEmailSent){
+                        $bodyData['message'][] = "We can't send an email at this time.";
+                    }
                 }
-            }else{
-                $bodyData['toggle_view'] = "2";
+                else{
+                    $bodyData['message'][] = "The email you provided is unregistered." ;
+                }
+            }
+            else{
+                $bodyData['message'] = $formErrorHelper->getFormErrors($form)['email'];
             }
         }
+    
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/forgotpass', $bodyData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+    }
+    
+
+    /**
+     * Reset the password of a user
+     *
+     *
+     */
+    public function updatePassword()
+    {
+        $minPasswordLength = 6;
+        $passwordRules = $this->serviceContainer['form_validation']->getRules('register')['password'];
+        $hashRules = $this->serviceContainer['form_validation']->getRules('reset_password')['hash'];
+        
+        $bodyData = [
+            'isSuccessful' => false,
+            'isPost' => false,
+            'message' => '',
+            'isLoggedin' => $this->session->userdata('usersession'),
+            'hash' => $this->input->get('confirm'),
+        ];
+        
+        if($this->input->post()){
+            $bodyData['isPost'] = true;
+            $invalidLinkMessage = "The link that you have provided is either invalid or already expired.";
+            if(trim($this->input->post('password')) === trim($this->input->post('confirmpassword'))){
+            
+                $em = $this->serviceContainer['entity_manager'];
+                $formFactory = $this->serviceContainer['form_factory'];
+                $formErrorHelper = $this->serviceContainer['form_error_helper']; 
+                $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                    ->setMethod('POST')
+                                    ->add('password', 'text', ['required' => false, 'label' => false, 'constraints' => $passwordRules])
+                                    ->add('hash', 'text',['required' => false, 'label' => false, 'constraints' => $hashRules])
+                                    ->getForm();
+                $form->submit([ 
+                    'password' => $this->input->post('password'),
+                    'hash' => $this->input->post('hash'),
+                ]);
+                if ($form->isValid()) {
+                    $formData = $form->getData();
+                    $validatePassword =  $formData['password'];
+                    $validatedHash = $formData['hash'];
+                    $validationResult = $this->serviceContainer['account_manager']
+                                             ->validatePasswordReset($validatePassword, $validatedHash);                          
+                    $bodyData['user'] = $validationResult['member'];                                     
+                    $bodyData['isSuccessful'] = $validationResult['isSuccessful'];
+                    if(!$bodyData['isSuccessful']){
+                        $bodyData['message'][] = $invalidLinkMessage;
+                    }
+              
+                }
+                else{
+                    $bodyData['message'] = isset($formErrorHelper->getFormErrors($form)['password']) ? $formErrorHelper->getFormErrors($form)['password'] : [ $invalidLinkMessage ];
+                }
+            }
+            else{
+                $bodyData['message'][] = "The passwords that you entered do not match";
+            }
+            $bodyData['hash'] = $this->input->post('hash');
+        }
+    
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Reset your Password | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
+        ];
+        foreach($passwordRules as $passwordRule){
+            if($passwordRule instanceof \Symfony\Component\Validator\Constraints\Length){
+                $minPasswordLength = $passwordRule->min;
+                break;
+            }
+        }
+
+     
+        $bodyData['minPasswordLength'] = $minPasswordLength;
         
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/user/forgotpass', $bodyData);
-        $this->load->view('templates/footer');	
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/forgotpass_update_password', $bodyData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
 
-    public function resetconfirm()
-    {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Reset Password | Easyshop.ph',
-            'metadescription' => '',
-            'relCanonical' => '',
-            'render_searchbar' => false,
-        ];
-        $bodyData['toggle_view'] = '';
-        if($this->input->post()){
-            $bodyData['toggle_view'] = $this->input->post('tgv');
-        }
-        else{
-            $bodyData['hash'] = $this->input->get('confirm');
-        }      
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));	
-        $this->load->view('pages/user/forgotpass_confirm', $bodyData);
-        $this->load->view('templates/footer');
-    }
-
-    public function xresetconfirm()
-    {
-        $pass = $this->input->post('password');
-        $hash = $this->input->post('hash');
-        $result = $this->register_model->forgotpass_email($hash);
-        if(isset($pass) && !empty($pass) && $this->form_validation->run('forgotpass')){
-            if(isset($result['username'])){
-                $user = $result['username'];
-                $curpass = $result['password'];
-                $mid = $result['member_id'];			
-                $data = array(
-                        'username' => $user,
-                        'cur_password' => $curpass,
-                        'member_id' => $mid,
-                        'password' => $pass
-                );
-                $this->register_model->forgotpass_update($data); 
-                echo "1";	
-            }else{
-                echo "0";
-            }
-        }else{
-            echo "0";
-        }
-    }
+    
 
 }
 

@@ -167,8 +167,9 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
 
                         $('#editIconOpen').trigger('click');
                     }
-                 
-                    
+                    if(!isDesktop) {
+                        window.reload();
+                    }
                 }
                 else{
                     // Display error
@@ -236,7 +237,6 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         return false;
     });
 
-
     $('#banner_edit').click(function(){
         imageUploadType = "banner";
         $('#imgupload').click();
@@ -261,9 +261,34 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     var max_upload_height = $("#max-upload-height").val();
     var max_upload_width = $("#max-upload-width").val(); 
 
+    var $windowProfile = $(window);
+    var isDesktop = true;
+    function checkWidthProfile() {
+        var windowsizeProfile = $windowProfile.width();
+        if (windowsizeProfile > 440) {
+            isDesktop = true;
+            $( ".btn-cancel-me" ).trigger("click");
+        }
+        else{
+            isDesktop = false;
+            $( ".btn-cancel-me-wide" ).trigger("click");
+        }
+    }
+
+    // Execute on load
+    checkWidthProfile();
+    // Bind event listener
+    $windowProfile.resize(checkWidthProfile);
+
     $(document).on('change','#imgupload',function(){  
         formAction = (imageUploadType == "avatar") ? "upload_img" : "banner_upload";
-        imageprev(this);
+        if(isDesktop === true) {
+            imageprev(this);
+        }
+        else {
+            $(".loader-upload").css("display","block");        
+            submitForm();
+        }
     });
 
     var imageprev = function(input) {
@@ -334,6 +359,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 console.log(percentComplete);
             },
             success :function(xhrResponse) { 
+                $(".loader-upload").css("display","none");
                 if(xhrResponse.isSuccessful){
                     if(formAction === 'banner_upload'){
                         $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});
@@ -348,7 +374,13 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 else{
                     $.modal.close();
                     $('#banner-cancel-changes').trigger('click');
-                    alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
+
+                    if(xhrResponse.message == ""){
+                        alert('Sorry, we are encountering a problem right now. Please try again in a few minutes.');
+                    }
+                    else{
+                        alert(xhrResponse.message);
+                    }
                 }
                 $editContainer.html($defaultValue);
                 $editBanner.html($editBannerDefault);
@@ -523,28 +555,18 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     });
     
     $('#modal-edit-trigger').click(function (e) {
-        $('.edit-profile-modal').modal();
+        $('.edit-profile-mobile').modal();
         $( ".edit-profile-modal" ).closest(".simplemodal-container").css( "height", "300px" ).css("background", "#fff").css("border-radius", "4px").css("padding-top", "4px").removeAttr("id");
         return false;
     });
-    
-    var $windowProfile = $(window);
 
-    function checkWidthProfile() {
-        var windowsizeProfile = $windowProfile.width();
-        if (windowsizeProfile > 440) {
-            $( ".btn-cancel-me" ).trigger("click");
-        }
-        else{
-            $( ".btn-cancel-me-wide" ).trigger("click");
-        }
-    }
+    $(".btn-change-cover-photo-mobile").click(function() {
+        $("#banner_edit").trigger("click");
+    });
 
-    // Execute on load
-    checkWidthProfile();
-    // Bind event listener
-    $windowProfile.resize(checkWidthProfile);
-    
+    $(".btn-cancel-me-wide").click(function() {
+        $(".simplemodal-close").trigger("click");
+    });
 })(jQuery);
 
 function proceedPayment(obj)

@@ -1,6 +1,12 @@
-<link type='text/css' href='/assets/css/style.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type='text/css' href='/assets/css/style.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
+    <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+    <link type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+    <link type="text/css" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.how-to.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
 
 <div class="wrapper info_wrapper mrgn-top-35">
     <img src="<?php echo getAssetsDomain()?>assets/images/img_how-to-sell.png?ver=<?=ES_FILE_VERSION?>" alt="How to Sell" class="img-info-main">
