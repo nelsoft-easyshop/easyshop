@@ -121,20 +121,35 @@ class mobilePayment extends MY_Controller
      * @return JSON
      */
     public function doMobilePayCod()
-    {   
-        $paymentController = $this->loadController('payment'); 
+    { 
         $checkoutService = $this->serviceContainer['checkout_service']; 
+        $paymentService = $this->serviceContainer['payment_service'];
 
         $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
-        $cartData = unserialize($this->member->getUserdata()); 
+        $cartData = unserialize($this->member->getUserdata());
+        $memberId = $this->member->getIdMember();
+        $validCart = $checkoutService->validateCartContent($this->member);
+        $canContinue = $checkoutService->checkoutCanContinue($validCart, $paymentType); 
+        $gateWayMethod = [
+            'CODGateway' => [
+                'method' => "CashOnDelivery",
+                'lastDigit' => 1,
+            ]
+        ];
 
-        $validatedCart = $checkoutService->validateCartContent($this->member);
-        $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
-
-        if(empty($cartData) === false && $canContinue){  
-            $returnArray = $paymentController->mobilePersistCod();
-            $returnArray['isSuccess'] = strtolower($returnArray['status']) === PaymentService::STATUS_SUCCESS;
- 
+        if(empty($cartData) === false && $canContinue){
+            $validatedCart = $paymentService->validateCartData(['choosen_items' => $cartData],
+                                                               "0.00", 
+                                                               $memberId); 
+            $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId);
+            $returnArray = [
+                'isSuccess' => strtolower($response['status']) === PaymentService::STATUS_SUCCESS,
+                'status' => $response['status'],
+                'message' => $response['message'],
+                'txnid' => $response['txnid'],
+            ]; 
+            $this->__removeCartData();
+            $paymentService->sendPaymentNotification($response['orderId']);
         }
         else{
             $returnArray = [
@@ -145,6 +160,15 @@ class mobilePayment extends MY_Controller
         }
 
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
+    }
+
+    private function __removeCartData()
+    {
+        $cartManager = $this->serviceContainer['cart_manager'];
+        $cartCheckout = unserialize($this->member->getUserdata());
+        foreach($cartCheckout as $rowId => $cartItem){
+            $cartManager->removeItem($this->member->getIdMember(), $rowId);
+        }
     }
 
     /**
