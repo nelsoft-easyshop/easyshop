@@ -301,8 +301,7 @@ class SyncCsvImage extends MY_Controller
      */
     public function deleteImage()
     {
-        if(unlink("./assets/admin/".$this->input->get("imageName"))
-            && $this->EsAdminImagesRepository->deleteImage($this->input->get("imageId"))) {
+        if($this->EsAdminImagesRepository->deleteImage($this->input->get("imageId"))) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output("jsonCallback({'sites':[{'success': 'success',},]});");
