@@ -80,36 +80,7 @@ class Payment extends MY_Controller{
         }
         $cart_contentss=array('choosen_items'=> $item);
         $this->session->set_userdata($cart_contentss);
-    }
-
-    /**
-     * bridge to persist cod payment
-     * @return mixed
-     */
-    public function mobilePersistCod()
-    {
-        $this->oauthServer =  $this->serviceContainer['oauth2_server'];
-        $this->em = $this->serviceContainer['entity_manager']; 
-        $cartManager = $this->serviceContainer['cart_manager'];   
-
-        // Handle a request for an OAuth2.0 Access Token and send the response to the client
-        if (! $this->oauthServer->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
-            header('Content-type: text/html'); 
-            show_404(); 
-            die;
-        } 
-
-        $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
-        $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
-        $memberId = $this->member->getIdMember();
-        $itemArray = $cartManager->getValidatedCartContents($memberId); 
-        $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
-        $txnid = $this->generateReferenceNumber($paymentType, $memberId); 
-        $dataProcess = $this->cashOnDeliveryProcessing($memberId, $txnid, $itemArray, $paymentType);
-        $dataProcess['txnid'] = $txnid;
-
-        return $dataProcess; 
-    }
+    } 
 
     /**
      * request Token for transaction 
@@ -134,7 +105,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
 
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "" , "0.00" , $memberId);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "0.00" , $memberId);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -1388,7 +1359,7 @@ class Payment extends MY_Controller{
      * Remove the chosen items for checkout from the cart
      *
      */
-    public function removeItemFromCart()
+    private function removeItemFromCart()
     {
         $cartManager = $this->serviceContainer['cart_manager'];
         $cartCheckout = $this->session->userdata('choosen_items');
@@ -1811,7 +1782,7 @@ class Payment extends MY_Controller{
         $paymentService = $this->serviceContainer['payment_service'];
 
         // Validate Cart Data and subtract points
-        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
+        $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
@@ -1857,7 +1828,7 @@ class Payment extends MY_Controller{
         $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
 
         // Validate Cart Data
-        $validatedCart = $paymentService->validateCartData($carts, reset($paymentMethods)['method'], $pointsAllocated);
+        $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'), null);
