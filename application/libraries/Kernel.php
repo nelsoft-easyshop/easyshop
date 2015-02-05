@@ -586,11 +586,12 @@ class Kernel
             return new \JWT();
         };
         
-        $container['redis_client'] = function ($c) {
+        $nodejsConfig = require APPPATH . "config/param/js_config.php";
+        $container['redis_client'] = function ($c) use ($nodejsConfig) {
             return new \Predis\Client([
                 'scheme' => 'tcp',
-                'host' => '127.0.0.1',
-                'port' => 6379,
+                'host' =>  $nodejsConfig['HOST'],
+                'port' => $nodejsConfig['REDIS_PORT'],
             ]);
         };
        
