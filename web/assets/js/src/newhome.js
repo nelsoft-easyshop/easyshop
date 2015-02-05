@@ -25,9 +25,6 @@
             }, 
         });
     });
-    
-
-    var mainwindowsize = $(window).width();
 
     $(window).on('load',function() {
         mainwindowsize = $(window).width();
