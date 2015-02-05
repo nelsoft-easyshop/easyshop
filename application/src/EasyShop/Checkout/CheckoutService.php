@@ -248,6 +248,11 @@ class CheckoutService
         return $itemFail === 0;
     }
 
+    /**
+     * Return appropriate payment method based on string
+     * @param  string $paymentString
+     * @return integer
+     */
     public function getPaymentTypeByString($paymentString)
     {
         $paymentType = 0;
