@@ -378,7 +378,7 @@ header {
     width: 200px;
     z-index: 99;
     border-radius: 3px;
-    z-index: 9999;
+    z-index: 999999;
     -webkit-box-shadow: 0px 2px 6px rgba(50, 50, 50, 0.3);
     -moz-box-shadow:    0px 2px 6px rgba(50, 50, 50, 0.3);
     box-shadow:         0px 2px 6px rgba(50, 50, 50, 0.3);
@@ -673,40 +673,6 @@ header {
     position: absolute;
     left: -50px;
     top: 0;
-}
-
-.sticky-nav-fixed .mobile-menu-nav-hide {
-    display: none;
-}
-
-.sticky-nav-fixed #main-nav .menu {
-    float: left;
-    width: 28%;
-}
-
-.sticky-nav-fixed #main-nav-container #main-nav .menu li.drop-category {
-    width: 90%;
-}
-
-.sticky-nav-fixed .sticky-search-cart-wrapper {
-    display: inline-block;
-    vertical-align: middle;
-    float: right;
-    line-height: 34px;
-    padding-top: 5px;
-    width: 72%;
-}
-
-.sticky-nav-fixed .header-cart-container {
-    display: inline-block;
-    float: left;
-    position: relative;
-}
-
-.sticky-nav-fixed .header-cart-container:hover .sticky-header-cart-item-list {
-    display: block;
-    top: 42px;
-    width: 252px;
 }
 
 .sticky-search-wrapper {
@@ -3125,9 +3091,42 @@ h3 > b{
     .slider-template-4 {
         width: 355px !important;
     }
+}
 
+@media (min-width: 992px) {
+    .sticky-nav-fixed .mobile-menu-nav-hide {
+        display: none;
+    }
 
+    .sticky-nav-fixed #main-nav .menu {
+        float: left;
+        width: 28%;
+    }
 
+    .sticky-nav-fixed #main-nav-container #main-nav .menu li.drop-category {
+        width: 90%;
+    }
+
+    .sticky-nav-fixed .sticky-search-cart-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+        float: right;
+        line-height: 34px;
+        padding-top: 5px;
+        width: 72%;
+    }
+
+    .sticky-nav-fixed .header-cart-container {
+        display: inline-block;
+        float: left;
+        position: relative;
+    }
+
+    .sticky-nav-fixed .header-cart-container:hover .sticky-header-cart-item-list {
+        display: block;
+        top: 42px;
+        width: 252px;
+    }
 }
 
 @media only screen and (min-width: 991px) {
