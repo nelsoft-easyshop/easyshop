@@ -1,6 +1,5 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
 
-<link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <link rel="stylesheet" type="text/css" href="/assets/css/vendorview.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 <?php else: ?>

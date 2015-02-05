@@ -6,11 +6,6 @@
     <link type="text/css" href='/assets/css/min-easyshop.home-primary.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
 
-<link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>    
-   
-    
-
 <script type="application/ld+json">
 {
   "@context": "http://schema.org",

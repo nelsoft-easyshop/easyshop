@@ -1,11 +1,8 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/new-login.css" media='screen'/>
-<link type="text/css" href="/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
 <div class="clear"></div>
 
 <section>
-  
 
-  
     <div class="col-sm-12 identify-email-container container">
  
         <?php if(isset($isLoggedin) && $isLoggedin): ?>
