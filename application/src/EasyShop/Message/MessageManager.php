@@ -188,17 +188,39 @@ class MessageManager {
      */
     public function getChatPort()
     {
-        return trim($this->jsServerConfig['PORT']);
+        return trim($this->jsServerConfig['NODE_PORT']);
     }
 
     /**
      * Retrieves the JWT secret
      *
-     * @areturn string
+     * @return string
      */
     public function getWebTokenSecret()
     {
         return $this->jsServerConfig['JWT_SECRET'];
     }
+    
+    
+    /**
+     * Retrieves the REDIS PORT
+     *
+     * @return int
+     */
+    public function getRedisPort()
+    {
+        return $this->jsServerConfig['REDIS_PORT'];
+    }
+    
+    /**
+     * Retrieves the REDIS PORT
+     *
+     * @return int
+     */
+    public function getRedisChannelName()
+    {
+        return $this->jsServerConfig['REDIS_CHANNEL_NAME'];
+    }
+    
     
 }

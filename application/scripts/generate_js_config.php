@@ -6,12 +6,14 @@ $file =  __DIR__.'/../bin/js/config.js';
 $configString = "    var fs = require('fs');
 
     exports.configureExpress = function(app) {
-        app.set('PORT', " . $messageManager->getChatPort() . ");
+        app.set('NODE_PORT', " . $messageManager->getChatPort() . ");
         app.set('HOST', '" . $messageManager->getChatHost() . "');
         app.set('PROTOCOL', 'https');
         app.set('KEY', fs.readFileSync('" . __DIR__ . "/../bin/js/key/easyshop.key'));
         app.set('CERT', fs.readFileSync('" . __DIR__ . "/../bin/js/key/easyshop.crt'));
         app.set('JWT_SECRET', '".$messageManager->getWebTokenSecret()."');
+        app.set('REDIS_PORT', ".$messageManager->getRedisPort().");
+        app.set('REDIS_CHANNEL_NAME', '".$messageManager->getRedisChannelName()."');
     };
     ";
 
