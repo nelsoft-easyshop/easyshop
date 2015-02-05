@@ -565,21 +565,21 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     $(".btn-cancel-me-wide").click(function() {
         $(".simplemodal-close").trigger("click");
     });
-    
+
     $(".chosen-container-single:eq(1)").attr("data-toggle","0");
     $(".chosen-container-single:eq(2)").attr("data-toggle","1");
     $(window).on('load resize', function(){
         var windowVendor = $(window).width();
-        if(windowVendor <= 991){
+        var windowMaxDesktopWidth = 991;
+        if(windowVendor <= windowMaxDesktopWidth){
             $(".chosen-container-single").bind("click");
             $(".chosen-container-single").click(function() {
-                console.log($(this).data("toggle"));
                 if($(this).data("toggle") === 0) {
                     $(".followers-circle").toggle();
                 }
             });
         }
-        if(windowVendor > 991){
+        if(windowVendor > windowMaxDesktopWidth){
             $(".followers-circle").css("display", "inline");
             $(".chosen-container-single").unbind("click");
         }
