@@ -209,7 +209,7 @@
             url : "/MessageController/send",
             beforeSend :function(){
                 $("#msg_textarea img").show();
-                $("#send_btn").hide();recipient
+                $("#send_btn").hide();
             },
             data : {recipient:recipient,msg:msg,csrfname:csrftoken},
             success : function(resultMsg)
@@ -301,7 +301,6 @@
                 success : function(data) {
                     if (data === true) {
                         $parentLi.removeClass('NS');
-                        //socket.emit('message opened');
                     }
                 }
             });
