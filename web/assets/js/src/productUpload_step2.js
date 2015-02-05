@@ -58,7 +58,7 @@ function appendNewSelectionRow(){
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
     <input type="hidden" class="image-val imageText'+cnt+'"/>\
     <input type="hidden" class="image-file imageFileText'+cnt+'"/>\
-    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="/assets/images/img_upload_photo.jpg"></a>\
+    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="'+default_upload_image+'"></a>\
     <a class="select-image image'+cnt+' select-image-pencil" data-cnt="'+cnt+'" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     <a class="remove-control-panel" href="javascript:void(0)" data-cnt="'+cnt+'">Remove property value</a>\
@@ -187,7 +187,7 @@ function resetControlPanel(buttonReset)
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
         <input type="hidden" class="image-val imageText1"/>\
         <input type="hidden" class="image-file imageFileText1"/>\
-         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="/assets/images/img_upload_photo.jpg"></a>\
+         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="'+default_upload_image+'"></a>\
         <a class="select-image image1 select-image-pencil" data-cnt="1" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     </div><div class="clear"></div>';
@@ -1047,7 +1047,7 @@ var previous,editSelectedValue,editSelectedId;
             var price = $(this).data('price'); 
             var image = $(this).data('image'); 
             var filePath = $(this).data('file'); 
-            var displayImage = (filePath == "") ? '/assets/images/img_upload_photo.jpg' : filePath;
+            var displayImage = (filePath == "") ? default_upload_image : filePath;
             $('.control-panel-'+row +' > .value-section > .select-value-section > #value-data-'+row).val(value);
             $('.control-panel-'+row +' > .price-div > .price'+row).val(price);
             $('.control-panel-'+row +' > .image-div > .imageText'+row).val(image);
@@ -1206,6 +1206,8 @@ var widthRatio = 445;
 var heightRatio = 538;
 var CropImageMaxWidth = 534;
 var totalCropImage;
+
+var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
 
 (function($) {
   
@@ -1548,7 +1550,7 @@ var totalCropImage;
         currentCnt = selector.data('cnt');
         $('.imageText'+currentCnt).val('');
         $('.imageFileText'+currentCnt).val('');
-        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src","/assets/images/img_upload_photo.jpg");
+        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
     });
 
     $(document).on('click',".attr-image",function (e){
@@ -1668,7 +1670,7 @@ var totalCropImage;
                 }
                 else{
                     alert(d.msg);
-                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/img_upload_photo.jpg');
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
                 }
                 $('#other_files > #pictureCount').remove();
                 $('#other_files > #pictureName').remove();
@@ -1676,7 +1678,7 @@ var totalCropImage;
             },
             error: function (request, status, error) {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
-                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/img_upload_photo.jpg');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
                 canProceed = true;
                 $('#other_files > #pictureCount').remove();
                 $('#other_files > #pictureName').remove();
