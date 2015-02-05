@@ -3,7 +3,10 @@
 
 <?=$snippetMarkUp; ?>
 <?php include('vendor-custom-theme.php'); ?>
-
+<div class="loader-upload" style="display: none;">
+    <img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-whiteBG.gif"/>
+    <span>Uploading photo</span>
+</div>
 <section>
     <div class="pos-rel" id="display-banner-view">
         <div class="vendor-main-bg" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">
@@ -78,7 +81,7 @@
             <div class="vendor-main-bg" style="background: url(<?=getAssetsDomain().'.'.$bannerImage?>) center no-repeat; background-size: cover;">  
             </div> 
         </div>
-        <div class="container main-container vendor-main pos-ab">
+        <div class="container main-container vendor-main pos-ab edit-profile-mobile">
             <div class="vendor-profile-content" id="edit-profile-info-content">
                 <div class="pd-lr-20">
                     <div class="vendor-profile-img">

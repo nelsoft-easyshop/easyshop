@@ -63,6 +63,31 @@ textarea {
     outline:none;
 }
 
+.loader-upload{
+    position: fixed;
+    background: #fff;
+    opacity: .9;
+    width: 100%;
+    height: 100%;
+    z-index: 99999999999;
+    top: 0;
+    text-align: center;
+}
+
+.loader-upload img{
+    display: inline-block;
+    text-align: center;
+    margin-top: 100px;
+    opacity: 1;
+}
+
+.loader-upload span{
+    display: block;
+    text-align: center;
+    display: block;
+    font-weight: bold;
+    color: #565656;
+}
 
 .a-filter, .a-category{
     cursor: pointer;
@@ -2312,12 +2337,12 @@ td.td-view.p-view2.color-default{
     
     .edit-profile-photo{
         height: 88px;
-        width: 91px;
+        width: 90px;
     }
     
     .edit-profile-container{
-        padding-left: 0px !Important;
-        padding-right: 0px !Important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
     }
     
     .btn-edit-profile-info-banner{
@@ -2391,6 +2416,14 @@ td.td-view.p-view2.color-default{
     .btn-change-cover-photo-mobile{
         display: block !important;
     }
+
+    #banner-cancel-changes {
+        margin: 0;
+    }
+
+    .vendor-profile-btn a, .vendor-profile-btn .subscription_btn {
+        width: 48%;
+    }
 }
 
 @media only screen and (max-width : 1024px) {
@@ -2438,7 +2471,7 @@ header {
     }
 
     .vendor-header-left {
-        width: 80%;
+        width: 78%;
     }
 
     .persistent-nav-container.sticky-nav-fixed {
@@ -2600,7 +2633,7 @@ header {
         display: block;
         height: 35px;
         text-align: center;
-        width: 40px;
+        width: 35px;
     }
 
     .mobile-vendor-cart {
@@ -2747,11 +2780,16 @@ header {
 
     .vendor-login-con.user-login {
         height: 35px;
-        min-width: 45px;
-        padding-top: 6px;
+        min-width: 35px;
+        padding: 6px 0px 0px 0px;
         position: relative;
+        text-align: center;
         top: -1px;
-        width: 45px;
+        width: 35px;
+    }
+
+    .user-login img {
+        margin-right: 0;
     }
 
     .vendor-nav li a {
@@ -2763,7 +2801,7 @@ header {
     }
 
     .nav-dropdown:before {
-        right: 9px;
+        right: 2px;
         top: -5px;
     }
 
@@ -2771,6 +2809,12 @@ header {
     .mobile-user-login .btn-default-1 {
         font-size: 11px;
     }
+
+    .edit-vendor-location .chosen-container-single {
+        width: 48% !important;
+    }
+
+
 }
 
 @media (max-width: 360px) {
@@ -2779,9 +2823,27 @@ header {
     }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 360px) {
+    .search-container {
+        margin: 0 5px 0 0;
+    }
+
+    .vendor-log-in-wrapper {
+        margin-left: 5px;
+    }
+
     .vendor-logo-wrapper img {
         padding-top: 4px;
         width: 130px;
+    }
+}
+
+@media (max-width: 320px) {
+    .vendor-logo-wrapper {
+        margin-right: 5px;
+    }
+
+    .vendor-logo-wrapper img {
+        width: 125px;
     }
 }

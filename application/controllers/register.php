@@ -125,41 +125,6 @@ class Register extends MY_Controller
         }
     }
 
-    public function external_callbacks( $postdata, $param )
-    {
-            $param_values = explode( ',', $param ); 
-            $model = $param_values[0];
-            $this->load->model( $model );
-            $method = $param_values[1];
-            
-            if( count( $param_values ) > 2 )
-            {
-                array_shift( $param_values );
-                array_shift( $param_values );
-                $argument = $param_values;
-            }
-
-            if( isset( $argument ) )
-            {
-            if($method == 'checkifrequired'){
-                $thisdata = trim(html_escape($postdata));
-                $checkwith = trim(html_escape($this->input->post($argument[0])));
-                $callback_result = $this->$model->$method($thisdata, $checkwith);
-            }
-            else
-                $callback_result = $this->$model->$method( $postdata, $argument );
-            }
-            else
-            {
-                if($method == 'validate_captcha') {
-                    $callback_result = $this->$model->$method( $postdata, $this->session->userdata('captcha_word'));
-                }
-                else {
-                    $callback_result = $this->$model->$method( $postdata );
-                }
-            }
-            return $callback_result;
-    }
 
     public function success($action = '')
     {

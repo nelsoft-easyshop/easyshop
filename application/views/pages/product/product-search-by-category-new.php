@@ -3,7 +3,9 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css" media='screen' />
 <link rel="stylesheet" type="text/css" href="/assets/css/product-search-new.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
-
+<div class="loader">
+    <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+</div>
 <section class="breadcrumbs-bg">
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
@@ -26,7 +28,7 @@
 
 <?php if($productCount > 0): ?>
     <?php if($categoryHeaderData): ?>
-    <section class="bg-search-section color-default search-parallax-container" style="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>height: 290px;<?php elseif(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 220px;<?php endif; ?>">
+    <section class=" color-default search-parallax-container <?php if((isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom']))||(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom']))):?>search-parallax-container-mobile<?php endif; ?>" style="<?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 220px;<?php endif; ?>">
         <div id="parallax-1" class="search-parallax">
             <?php if(isset($categoryHeaderData['top'])): ?>
              <div id="parallax-4" style="margin-top: -10px;">
@@ -34,7 +36,7 @@
             </div>
             <?php endif;?>
             <div class="banner-template-2">
-             <?php if(isset($categoryHeaderData['top'])): ?>
+                <?php if(isset($categoryHeaderData['top'])): ?>
                 <ul class="top-slider">
                     <?php foreach($categoryHeaderData['top']['image'] as $topBanner): ?>
                         
@@ -42,7 +44,7 @@
                             <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
                         <?php endif; ?>
                                 <li class="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>top-slider-item<?php endif;?>" style="background: url(<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>) center no-repeat; background-size: cover;">
-                                    <img class="top-slider-img" src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
+                                    <img class="top-slider-img" src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>" style="<?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>margin-top: -52px;<?php endif;?><?php if(isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>margin-top: -43px;<?php endif;?>"/>
                                 </li>
                         <?php if(trim($topBanner['target']['url']) !== ''): ?>
                             </a>
@@ -50,6 +52,18 @@
                   
                     <?php endforeach; ?>
                 </ul>
+
+                <?php endif; ?>
+            </div>
+            <div class="mobile-banner">
+                <?php if(isset($categoryHeaderData['top'])): ?>
+                    <?php if(trim($topBanner['target']['url']) !== ''): ?>
+                        <a href="<?php echo html_escape($topBanner['target']['url']); ?>" target="<?php echo $topBanner['target']['targetString']; ?>">
+                    <?php endif; ?>
+                    <img class="img-responsive" src="<?php echo getAssetsDomain().'.'.$topBanner['path']; ?>"/>
+                    <?php if(trim($topBanner['target']['url']) !== ''): ?>
+                        </a>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
             <?php if(isset($categoryHeaderData['bottom'])): ?>
@@ -60,7 +74,7 @@
                     <div class="right-shade">
                     </div>
                     <div class="container">
-                        <div class="slider1 slider-bottom <?php if(isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
+                        <div class="slider1 <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
                             <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
                                 <div class="slide">
                                     
@@ -88,10 +102,10 @@
     <br/>
         <div class="container">
             <div class="row">
-                <div class="col-md-3 search-left-wing">
+                <div class="col-xs-3 search-left-wing" style="position: relative;">
 
                     <?php if(count($categories) > 0): ?>
-                    <div class="panel-group panel-category border-0" id="category">
+                    <div class="panel-group panel-category border-0" id="category" style="position: relative;">
                         <div class="panel panel-default panel-left-wing border-0 no-padding">
                             <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                                 <h4 class="panel-title">
@@ -117,7 +131,7 @@
                     </div>
                     <?php endif; ?>
                     
-                    <div class="panel-group panel-category border-0" id="filter-panel-container">
+                    <div class="panel-group panel-category panel-filter-search-cont border-0 container-filter" style="position: relative;" id="filter-panel-container">
                         <div class="panel panel-default panel-left-wing border-0 no-padding">
                             <div class="panel-heading border-0 panel-category-heading" id="cat-header">
                                 <h4 class="panel-title">

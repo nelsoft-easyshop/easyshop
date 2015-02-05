@@ -384,6 +384,18 @@
         }
     });
 
+    $(document.body).on('change','.search-field',function (event) { 
+        var $this = $(this);
+        var $textInput = $this.val();
+        var $page = 1;
+        var $parentContainer = $this.parent().parent().parent();
+        var $filterInput = $parentContainer.find('.search-filter').val();
+        var $requestType = $parentContainer.find('.request-type').val();
+        var $container = $parentContainer.find('.container-id').val(); 
+
+        requestProduct($page, $textInput, $filterInput, $requestType, $container, true); 
+    });
+
     $(document.body).on('click','.soft-delete',function () {
         var $confirm = confirm("Are you sure you want to move this item to deleted item?");
         if($confirm){

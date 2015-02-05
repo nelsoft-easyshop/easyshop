@@ -372,9 +372,9 @@ class Kernel
             return new \EasyShop\Utility\StringUtility($htmlPurifier);
         };
         
-        $container['hash_utility'] = function($c) {
+        $container['hash_utility'] = function($c) use ($container) {
             $encrypt = new CI_Encrypt();
-            return new \EasyShop\Utility\HashUtility($encrypt);
+            return new \EasyShop\Utility\HashUtility($encrypt, $container['entity_manager']);
         };
         
         $container['url_utility'] = function ($c) {

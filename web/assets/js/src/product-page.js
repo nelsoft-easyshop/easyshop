@@ -298,7 +298,8 @@
     });
 
     $(".attribute-control").bind('change',function(e){
-
+        var $this = $(this);
+        var $imageid = $this.children('option:selected').data('imageid');
         if($("#noMoreSelection").val() != ""){
             var $arraySelected = [];
 
@@ -309,14 +310,8 @@
             checkCombination($arraySelected);
         }
         else{
-            var $this = $(this);
             var $arraySelected = [];
             var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
-            var $imageid = $this.children('option:selected').data('imageid');
-
-            if($imageid > 0){
-                $("#image"+$imageid).trigger('click'); 
-            }
 
             // get selected attributes
             $(".attribute-control").each(function() {
@@ -333,10 +328,14 @@
             $arraySelected.sort(sortArrayNumber);
             checkCombination($arraySelected);
 
+        } 
+        if($imageid > 0){
+            $("#image"+$imageid).trigger('click'); 
         }
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
+                $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
                 return false;
             }
         });

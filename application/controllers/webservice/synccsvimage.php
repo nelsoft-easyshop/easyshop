@@ -189,7 +189,7 @@ class SyncCsvImage extends MY_Controller
                                   ->getRepository('EasyShop\Entities\EsOptionalAttrhead')
                                   ->findBy(['product' => $productId]); 
                 if(!file_exists($tempDirectory)){
-                    $newSlug = $this->productManager->generateSlug($productObject->getSlug());
+                    $newSlug = $this->productManager->generateSlug($productObject->getName());
                     mkdir($tempDirectory.'categoryview/', 0777, true);
                     mkdir($tempDirectory.'small/', 0777, true);
                     mkdir($tempDirectory.'thumbnail/', 0777, true);
