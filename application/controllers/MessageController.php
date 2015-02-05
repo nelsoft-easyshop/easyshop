@@ -125,6 +125,7 @@ class MessageController extends MY_Controller
                 
                 $redisChatChannel = $this->messageManager->getRedisChannelName();
                 $this->serviceContainer['redis_client']->publish($redisChatChannel, json_encode([
+                    'event' => 'message-sent',
                     'recipient' => $storeName,
                     'message' => $recipientMessages,
                 ]));
@@ -191,7 +192,16 @@ class MessageController extends MY_Controller
 
         $result = $this->em->getRepository("EasyShop\Entities\EsMessages")
                            ->updateToSeen($this->userId, $messageIdArray);
-
+        if($result){
+            $member = $this->serviceContainer['entity_manager']
+                           ->find('EasyShop\Entities\EsMember', $this->userId);
+            $redisChatChannel = $this->messageManager->getRedisChannelName();
+            $this->serviceContainer['redis_client']->publish($redisChatChannel, json_encode([
+                'event' => 'message-opened',
+                'reader' => $member->getStorename(),
+            ]));
+        }
+        
         echo json_encode($result);
     }
 

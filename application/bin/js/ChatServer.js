@@ -17,8 +17,6 @@ var https_options = {
 };
 
 var server = https.createServer(https_options, app).listen(NODE_PORT, HOST);
-var clientSubscribe = redis.createClient(REDIS_PORT, HOST, {});
-clientSubscribe.subscribe(CHAT_CHANNEL_NAME);
 
 console.log('HTTPS Server listening on %s:%s', HOST, NODE_PORT);
 io = require('socket.io').listen(server);
@@ -30,6 +28,9 @@ io.set('authorization',socketioJwt.authorize({
 
 io.sockets.on( 'connection', function(socket) {
  
+    var clientSubscribe = redis.createClient(REDIS_PORT, HOST, {});
+    clientSubscribe.subscribe(CHAT_CHANNEL_NAME);
+    
     socket.on('set account online', function() {
         var storename = socket.client.request.decoded_token.storename; 
         socket.join(storename);
@@ -37,10 +38,15 @@ io.sockets.on( 'connection', function(socket) {
     
     clientSubscribe.on("message", function(channel, jsonString){
         var data = JSON.parse(jsonString);
-        io.to(data.recipient).emit('send message', {
-            recipient: data.recipient,
-            message: data.message
-        });
+        if(data.event === 'message-opened' && data.reader){
+            io.to(data.reader).emit('message opened');
+        }
+        else if(data.event === 'message-sent' && data.recipient && data.message){
+            io.to(data.recipient).emit('send message', {
+                recipient: data.recipient,
+                message: data.message
+            });
+        }
     });
 
     /**
@@ -51,10 +57,6 @@ io.sockets.on( 'connection', function(socket) {
         var storename = socket.client.request.decoded_token.storename; 
         socket.leave(storename);
     });
-    
-    socket.on('message opened', function() {
-        var storename = socket.client.request.decoded_token.storename; 
-        io.to(storename).emit('message opened');
-    });
+
 
 });

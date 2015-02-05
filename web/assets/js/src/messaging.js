@@ -301,7 +301,7 @@
                 success : function(data) {
                     if (data === true) {
                         $parentLi.removeClass('NS');
-                        socket.emit('message opened');
+                        //socket.emit('message opened');
                     }
                 }
             });
