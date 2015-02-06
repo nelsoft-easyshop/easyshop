@@ -1771,7 +1771,8 @@ class Payment extends MY_Controller{
 
         $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
 
-        if(reset($paymentMethods)['method'] === 'CashOnDelivery'){
+        $paymentMethodString = (string)reset($paymentMethods)['method'];
+        if($paymentMethodString === 'CashOnDelivery'){
             if($this->input->post('promo_type') !== FALSE ){
                 $this->setPromoItemsToPayment($this->input->post('promo_type'));
             }
@@ -1784,13 +1785,21 @@ class Payment extends MY_Controller{
         // Validate Cart Data and subtract points
         $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
-        $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
 
-        extract($response);
-        $this->removeItemFromCart();  
-        $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
-        $this->generateFlash($txnid,$message,$status);
-        echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+        $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
+        if($paymentMethodString === "PayPal"){
+            echo $response;
+        }
+        elseif($paymentMethodString === "DragonPay"){
+            echo $response;
+        }
+        else{
+            extract($response);
+            $this->removeItemFromCart();  
+            $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            $this->generateFlash($txnid,$message,$status);
+            echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+        }
     }
 
     /**
