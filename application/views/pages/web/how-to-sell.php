@@ -3,6 +3,7 @@
     <link type='text/css' href='/assets/css/style.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
     <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
     <link type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+    <link type="text/css" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
 <?php else: ?>
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.how-to.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>

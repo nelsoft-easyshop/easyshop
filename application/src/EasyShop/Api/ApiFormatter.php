@@ -3,6 +3,7 @@
 namespace EasyShop\Api;
 
 use EasyShop\Entities\EsProductImage as EsProductImage;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
  
 class ApiFormatter
 {
@@ -236,8 +237,34 @@ class ApiFormatter
 
         $recentReview = $this->reviewProductService->getProductReview($productId);
 
+        
+        $shipmentDetails = [];
+        $isFreeShippingNationwide = $this->productManager->isFreeShippingNationwide($productId);
+
+        if(!$isFreeShippingNationwide){
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                        ->getShippingDetailsByProductId($productId);
+            foreach ($shippingDetails as $key => $value) {
+                if(!isset($shipmentDetails[$value['product_item_id']])){
+                    $shipmentDetails[$value['product_item_id']] = [
+                        [
+                            'location' => $value['location'],
+                            'price' => $value['price']
+                        ]
+                    ]; 
+                }
+                else{ 
+                    $shipmentDetails[$value['product_item_id']][] = [
+                        'location' => $value['location'],
+                        'price' => $value['price'], 
+                    ];
+                }
+            }
+        } 
+
         return [
             'productDetails' => $productDetails,
+            'productShipmentFee' => $shipmentDetails,
             'productImages' => $productImages,
             'sellerDetails' => $sellerDetails,
             'productCombinationAttributes' => $productCombinationAttributes,
@@ -254,7 +281,7 @@ class ApiFormatter
      * @param  string  $paymentType
      * @return array
      */
-    public function formatCart($cartData, $includeValidation = false)
+    public function formatCart($cartData, $includeValidation = false, $paymentTypeString = "")
     { 
         $formattedCartContents = [];
         $finalCart = []; 
@@ -300,30 +327,43 @@ class ApiFormatter
                 }
 
                 $formattedCartContents[$rowId] = [
-                    'rowid' => $cartItem['rowid'],
+                    'rowid' => isset($cartItem['rowid']) ? $cartItem['rowid'] : $rowId ,
                     'productId' =>  $cartItem['id'],
                     'productItemId' => $cartItem['product_itemID'], 
                     'slug' => $cartItem['slug'],
                     'name' => utf8_encode($cartItem['name']),
                     'quantity' => $cartItem['qty'],  
-                    'isAvailable' => false,  
+                    'isAvailable' => false,
+                    'shippingFee' => 0,
                     'mapAttributes' => $mappedAttributes,
                 ]; 
 
                 if($includeValidation){
-                    $validation = [
-                        'canPurchaseWithOther' => $cartItem['canPurchaseWithOther'],
-                        'hasNoPuchaseLimitRestriction' => $cartItem['hasNoPuchaseLimitRestriction'],
-                        'isAvailableInLocation' => $cartItem['isAvailableInLocation'],
-                        'isQuantityAvailable' => $cartItem['isQuantityAvailable'],
-                        'dragonpay' => $cartItem['dragonpay'],
-                        'paypal' => $cartItem['paypal'],
-                        'cash_delivery' => $cartItem['cash_delivery'],
-                        'pesopaycdb' => $cartItem['pesopaycdb'],
-                        'directbank' => $cartItem['directbank'],
+                    $validation = [ 
                         'error_message' => [],
+                        'shippingFee' => $cartItem['shippingFee'],
                     ];
 
+                    if(!isset($cartItem[$paymentTypeString]) || !$cartItem[$paymentTypeString]){
+                        $validation['error_message'][] = "Not Available for selected payment type";
+                    }
+
+                    if(!$cartItem['canPurchaseWithOther']){
+                        $validation['error_message'][] = "This item can only be purchased individually.";
+                    }
+
+                    if(!$cartItem['hasNoPuchaseLimitRestriction']){
+                        $validation['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
+                    }
+
+                    if(!$cartItem['isAvailableInLocation']){
+                        $validation['error_message'][] = "This item is not available in your location.";
+                    }
+
+                    if(!$cartItem['isQuantityAvailable']){
+                        $validation['error_message'][] = "The availability of this items is less than your desired quantity.";
+                    }
+                    $formattedCartContents[$rowId]['isAvailable'] = empty($validation['error_message']);
                     $formattedCartContents[$rowId] = array_merge($formattedCartContents[$rowId],$validation);
                 }
 
@@ -333,52 +373,7 @@ class ApiFormatter
         } 
 
         return $finalCart;
-    }
-
-    /**
-     * Include error on cart before checkout
-     * @param  mixed  $cartContent
-     * @param  string $paymentType
-     * @return mixed
-     */
-    public function includeCartError($cartContent, $paymentType)
-    { 
-        foreach ($cartContent as $key => $cartItem) {
-            if(!isset($cartItem[$paymentType]) || !$cartItem[$paymentType]){
-                $cartContent[$key]['error_message'][] = "Not Available for selected payment type";
-            }
-
-            if(!$cartItem['canPurchaseWithOther']){
-                $cartContent[$key]['error_message'][] = "This item can only be purchased individually.";
-            }
-
-            if(!$cartItem['hasNoPuchaseLimitRestriction']){
-                $cartContent[$key]['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
-            }
-
-            if(!$cartItem['isAvailableInLocation']){
-                $cartContent[$key]['error_message'][] = "This item is not available in your location.";
-            }
-
-            if(!$cartItem['isQuantityAvailable']){
-                $cartContent[$key]['error_message'][] = "The availability of this items is less than your desired quantity.";
-            }
-
-            unset($cartContent[$key]['canPurchaseWithOther']);
-            unset($cartContent[$key]['hasNoPuchaseLimitRestriction']);
-            unset($cartContent[$key]['isAvailableInLocation']);
-            unset($cartContent[$key]['isQuantityAvailable']);
-            unset($cartContent[$key]['dragonpay']);
-            unset($cartContent[$key]['paypal']);
-            unset($cartContent[$key]['cash_delivery']);
-            unset($cartContent[$key]['pesopaycdb']);
-            unset($cartContent[$key]['directbank']);
-
-            $cartContent[$key]['isAvailable'] = empty($cartContent[$key]['error_message']);
-        }
-
-        return $cartContent;
-    }
+    } 
 
     /**
      * Format display item array 
@@ -422,6 +417,7 @@ class ApiFormatter
         $unavailableItem = [];
         $itemList = []; 
         $slugList = []; 
+        $rawItems = [];
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
             $options = [];
@@ -435,6 +431,9 @@ class ApiFormatter
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
             if($product){
                 $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+                $rawItems[] = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
+                                                                            $options, 
+                                                                            $mobileCartContent->quantity)['itemData'];
                 $itemList[] = [
                     'rowid' => $product->getIdProduct(),
                     'id' =>  $product->getIdProduct(),
@@ -461,7 +460,81 @@ class ApiFormatter
         return [
             'availableItems' => $this->formatCart($cartData),
             'unavailableItems' => $this->formatCart($itemList),
+            'rawItems' => $rawItems,
         ];
+    }
+
+    /**
+     * Format location for shipping list
+     * @return array
+     */
+    public function formatLocationForShipping()
+    {
+        $location = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                             ->getLocation();
+
+        $formedArray = [];
+        foreach ($location['area'] as $majorIsland => $region) {
+            $regionArray = [];
+            foreach ($region as $regionKey => $province) {
+                $provinceArray = [];
+                foreach ($province as $key => $value) {
+                    $provinceArray[] = [
+                        'name' => $value,
+                        'location_id' => $key,
+                        'children' => [],
+                    ];
+                }
+                $regionArray[] = [
+                    'name' => $regionKey,
+                    'location_id' => $location['regionkey'][$regionKey],
+                    'children' => $provinceArray,
+                ];
+            }
+
+            $array = [
+                'name' => $majorIsland,
+                'location_id' => $location['islandkey'][$majorIsland],
+                'children' => $regionArray,
+            ];
+            $formedArray[] = $array;
+        }
+
+        return [
+            'name' => 'Philippines',
+            'location_id' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
+            'children' => $formedArray,
+        ];
+    }
+
+    /**
+     * Format location for address list
+     * @return array
+     */
+    public function formatLocationForAddress()
+    {
+        $esLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+        $data['available_selection'] = $esLocationLookupRepository->getLocationLookup(); 
+        $modifiedArray = [];
+        $modifiedArray[0]['countryId'] = $data['available_selection']['countryId'];
+        $modifiedArray[0]['coutryName'] = $data['available_selection']['countryName']; 
+        $counter = 0;
+        
+        foreach ($data['available_selection']['stateRegionLookup'] as $key => $value) {
+            $modifiedArray[0]['regions'][$counter]['regionId'] = $key; 
+            $modifiedArray[0]['regions'][$counter]['regionName'] = $value;
+            $arrayCity = [];
+            $cityCounter = 0;
+            foreach ($data['available_selection']['cityLookup'][$key] as $keyCity => $valueCity) {
+                $arrayCity[$cityCounter]['cityId'] = $keyCity; 
+                $arrayCity[$cityCounter]['cityName'] = $valueCity;
+                $cityCounter++;
+            }
+            $modifiedArray[0]['regions'][$counter]['cities'] = $arrayCity;
+            $counter++;
+        }
+
+        return $modifiedArray;
     }
 }
  

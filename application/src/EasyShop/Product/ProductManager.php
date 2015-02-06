@@ -176,7 +176,7 @@ class ProductManager
      * @param bool $doLockDeduction : If true, locked items will also be deducted from the total availability
      *
      */
-    public function getProductInventory($product, $isVerbose = false, $doLockDeduction = false)
+    public function getProductInventory($product, $isVerbose = false, $doLockDeduction = false, $excludeMemberId = 0)
     {
         $promoQuantityLimit = $this->promoManager->getPromoQuantityLimit($product);
         $inventoryDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -211,7 +211,7 @@ class ProductManager
 
         }
         
-        $locks = $this->validateProductItemLock($product->getIdProduct());
+        $locks = $this->validateProductItemLock($product->getIdProduct(), $excludeMemberId); 
         if($doLockDeduction){
             foreach($locks as $lock){
                 if(isset($data[$lock['idProductItem']])){
@@ -232,10 +232,10 @@ class ProductManager
      * @param integer $productId
      * @return mixed
      */
-    public function validateProductItemLock($productId)
+    public function validateProductItemLock($productId, $excludeMemberId = 0)
     {
         $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                                        ->getProductItemLockByProductId($productId);
+                                        ->getProductItemLockByProductId($productId, $excludeMemberId);
         foreach($productItemLocks as $idx => $lock){
             $elapsedMinutes = round((time() - $lock['timestamp']->getTimestamp())/60);
             if($elapsedMinutes > $this->lockLifeSpan){

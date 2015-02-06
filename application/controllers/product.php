@@ -136,53 +136,6 @@ class product extends MY_Controller
     }
 
     /**
-     * Assemble SEO Review tags
-     *
-     * @param array $data
-     * @return JSON
-     */
-    public function assembleJsonReviewSchemaData($data)
-    {
-        $productQuantity = false;
-        // Check for product availability
-        foreach($data['product_quantity'] as $pq){
-            if($pq['quantity'] > 0){
-                $productQuantity = true;
-                break;
-            }
-        }
-        $jsonReviewSchemaData = array(
-            '@context' => 'http://schema.org',
-            '@type' => 'Product',
-            'description' => html_escape($data['product']['brief']),
-            'name' => html_escape($data['product']['product_name']),
-            'offers' => array(
-                '@type' => 'Offer',
-                'availability' => 'http://schema.org/' . $productQuantity ? 'InStock':'OutOfStock',
-                'price' => 'Php' . $data['product']['price']
-                ),
-            'review' => array()
-            );
-        foreach($data['reviews'] as $review){
-            $arrReview = array(
-                '@type' => 'Review',
-                'author' => $review['reviewer'],
-                'datePublished' => $review['ISOdate'],
-                'name' => html_escape($review['title']),
-                'reviewBody' => html_escape($review['review']),
-                'reviewRating' => array(
-                    '@type' => 'Rating',
-                    'bestRating' => '5',
-                    'ratingValue' => $review['rating'],
-                    'worstRating' => '0'
-                    )
-                );
-            array_push($jsonReviewSchemaData['review'], $arrReview);
-        }
-        return json_encode( $jsonReviewSchemaData, JSON_UNESCAPED_SLASHES );
-    }
-
-    /**
      * Renders view for the list of all categories
      *
      * @return View
@@ -218,25 +171,6 @@ class product extends MY_Controller
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view')); 
     }
 
-    /**
-     * Updates the delete status of a product
-     *
-     */
-    public function changeDelete()
-    {
-        if($this->input->post('p_id') && $this->input->post('action')){
-            $memberid = $this->session->userdata('member_id');
-            $productid = $this->input->post('p_id');
-            $action = $this->input->post('action');
-            if($action === 'delete')
-                $this->product_model->updateIsDelete($productid, $memberid, 1);
-            else if($action === 'restore')
-                $this->product_model->updateIsDelete($productid, $memberid, 0);
-            else if($action === 'fulldelete')
-                $this->product_model->updateIsDelete($productid, $memberid, 2);
-        }
-        redirect('me', 'refresh');
-    }
 
     /**
      * Renders product page view
@@ -539,27 +473,6 @@ class product extends MY_Controller
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
 
-    /**
-     *  Function to handle isDelete field in es_product
-     *  Handles delete, restore, and remove (full delete) functions for products
-     *  in memberpage
-     *
-     *  @return JSON
-     */
-    public function bulkProductOptions()
-    {
-        if( $this->input->post('bulk_action') ){
-            $pm = $this->serviceContainer['product_manager'];
-
-            $arrProductId = json_decode($this->input->post('bulk_p_id'), true);
-            $memberId = $this->session->userdata('member_id');
-            $action = $this->input->post('bulk_action');
-
-            $pm->editBulkIsDelete($arrProductId, $memberId, $action);
-
-            redirect('me', 'refresh');
-        }
-    }
 
 }
 

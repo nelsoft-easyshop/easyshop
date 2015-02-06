@@ -2,7 +2,7 @@
 
 namespace EasyShop\PaymentService;
 
-use EasyShop\Entities\EsAddress;
+use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsOrderShippingAddress;
 use EasyShop\Entities\EsLocationLookup;
 use EasyShop\Entities\EsOrder;
@@ -101,14 +101,6 @@ class PaymentService
             ]
     ];
 
-
-    /**
-     * Payment Methods that require locks
-     *
-     * @var mixed
-     */
-    private $lockPaymentMethods = ['DragonPay', 'PesoPay'];
-
     /**
      * Gateway path
      *
@@ -180,16 +172,92 @@ class PaymentService
     private $postArray;
 
     /**
+     * Sms Notification Service
+     *
+     * @var  EasyShop\Notification\MobileNotification
+     */
+    private $smsService;
+
+    /**
+     * Email Notification Service
+     *
+     * @var EasyShop\Notification\EmailNotification
+     */
+    private $emailService;
+
+    /**
+     * Parser
+     *
+     * @var CI_Parser
+     */
+    private $parserLibrary;
+
+    /**
+     * Config Loader
+     *
+     * @var EasyShop\Config\ConfigLoader
+     */
+    private $configLoader;
+
+    /**
+     * XML Resource
+     *
+     * @var EasyShop\XML\Resource
+     */
+    private $xmlResourceService;
+
+    /**
+     * Social Media Manager
+     *
+     * @var EasyShop\SocialMedia\SocialMediaManager
+     */
+    private $socialMediaManager;
+
+    /**
+     * Language Loader
+     *
+     * @var EasyShop\LanguageLoader\LanguageLoader
+     */
+    private $languageLoader;
+
+    /**
+     * Message Manager
+     *
+     * @var EasyShop\Message\MessageManager
+     */
+    private $messageManager;
+
+    /**
      * Constructor
      * 
      */
-    public function __construct($em, $request, $pointTracker, $promoManager, $productManager)
+    public function __construct($em, 
+                                $request, 
+                                $pointTracker, 
+                                $promoManager, 
+                                $productManager, 
+                                $emailService,
+                                $smsService, 
+                                $parserLibrary,
+                                $configLoader,
+                                $xmlResourceService,
+                                $socialMediaManager,
+                                $languageLoader,
+                                $messageManager)
     {
         $this->em = $em;
         $this->request = $request;
         $this->pointTracker = $pointTracker;
         $this->promoManager = $promoManager;
         $this->productManager = $productManager;
+        $this->smsService = $smsService;
+        $this->emailService = $emailService;
+        $this->parserLibrary = $parserLibrary;
+        $this->configLoader = $configLoader;
+        $this->xmlResourceService = $xmlResourceService;
+        $this->socialMediaManager = $socialMediaManager;
+        $this->languageLoader = $languageLoader;
+        $this->messageManager = $messageManager;
     }
 
 
@@ -378,7 +446,9 @@ class PaymentService
                     $orderBillingInfo->setCreatedAt(date_create(date("Y-m-d H:i:s")));
                     $orderBillingInfo->setUpdatedAt(date_create(date("Y-m-d H:i:s")));
                     $this->em->persist($orderBillingInfo);
-                    $this->em->flush();                    
+                    $this->em->flush();
+
+                    $billingInfoId = $orderBillingInfo->getIdOrderBillingInfo();
                 }
 
                 $response['o_message'] = $this->error['EsMember-repo-fail']['code'];
@@ -404,7 +474,7 @@ class PaymentService
                 $orderProduct->setStatus($ordProdStatus);
                 $orderProduct->setPaymentMethodCharge((string)$productExternalCharge);
                 $orderProduct->setNet((string)$net);
-                $orderProduct->setSellerBillingId($orderBillingInfo->getIdOrderBillingInfo());
+                $orderProduct->setSellerBillingId($billingInfoId);
                 $this->em->persist($orderProduct);
                 $this->em->flush();
 
@@ -531,14 +601,9 @@ class PaymentService
      *
      * @return mixed
      */
-    function validateCartData($carts,$paymentMethod, $pointsAllocated = "0.00")
+    function validateCartData($carts, $pointsAllocated = "0.00", $excludeMemberId = 0)
     {
-        $condition = false;
-
-        if(in_array($paymentMethod, $this->lockPaymentMethods)){
-            $condition = true;
-        }
-
+        $condition = true;
         $itemArray = $carts['choosen_items'];
         $availableItemCount = 0;
         $totalPointsAllowable = "0.00";
@@ -570,7 +635,7 @@ class PaymentService
             $this->promoManager->hydratePromoData($productArray);
 
             /** NEW QUANTITY **/
-            $productInventoryDetail = $this->productManager->getProductInventory($productArray, false, $condition);
+            $productInventoryDetail = $this->productManager->getProductInventory($productArray, false, $condition, $excludeMemberId);
             $maxQty = $productInventoryDetail[$itemId]['quantity'];
             $qty = $value['qty'];
             $itemArray[$value['rowid']]['maxqty'] = $maxQty;
@@ -664,6 +729,191 @@ class PaymentService
         }
 
         return $paymentArray;
+    }
+
+    /**
+     * Send email and sms notification after payment completed
+     * @param  integer $orderId 
+     * @param  integer $memberId 
+     * @param  boolean $buyer
+     * @param  boolean $seller
+     * @return boolean
+     */
+    public function sendPaymentNotification($orderId, $sendBuyer = true, $sendSeller = true)
+    {
+        $imageArray = $this->configLoader->getItem('email', 'images'); 
+        $imageArray[] = "/assets/images/appbar.home.png";
+        $imageArray[] = "/assets/images/appbar.message.png"; 
+        $xmlfile =  $this->xmlResourceService->getContentXMLfile();
+        $sender = $this->xmlResourceService->getXMlContent($xmlfile, 'message-sender-id', "select");
+        $messageSender = $this->em->find('EasyShop\Entities\EsMember', (int)$sender);
+         
+        $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                  ->findBy(['order'=>$orderId]);
+
+        $buyer = $orderProducts[0]->getOrder()->getBuyer();
+        $order = $orderProducts[0]->getOrder();
+
+        $buyerAddress  = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                  ->findOneBy(['idMember' => $buyer->getIdMember(), 'type' => EsAddress::TYPE_DELIVERY]);
+
+
+        switch($order->getPaymentMethod()->getIdPaymentMethod()){
+            case EsPaymentMethod::PAYMENT_PAYPAL:
+                $messageBuyer = $this->languageLoader->getLine('payment_paypal_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
+                $paymentString = "PayPal";
+                break;
+            case EsPaymentMethod::PAYMENT_DRAGONPAY:
+            //case 4:
+                $messageBuyer = $this->languageLoader->getLine('payment_dp_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
+                $paymentString = "DragonPay";
+                break;
+            case EsPaymentMethod::PAYMENT_CASHONDELIVERY:
+                $messageBuyer = $this->languageLoader->getLine('payment_cod_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_cod_seller');
+                $paymentString = "Cash on Delivery";
+                break;
+        }
+
+
+        $socialMediaLinks = $this->socialMediaManager->getSocialMediaLinks(); 
+        $dataBuyer = [
+            'id_order' => $order->getIdOrder(),
+            'dateadded' => $order->getDateadded()->format('Y-m-d'),
+            'buyer_name' => $buyer->getUserName(),
+            'buyer_slug' => $buyer->getSlug(),  
+            'totalprice' => $order->getTotal(),
+            'invoice_no' => $order->getInvoiceNo(), 
+            'buyer_store' => $buyer->getStoreName(),
+            'store_link' => base_url(),
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+            'msg_link' => base_url() . "messages/#",
+            'payment_msg_buyer' => $messageBuyer,
+            'products' => [],
+        ];
+
+        $dataArraySeller = [];
+
+        foreach ($orderProducts as $key => $valueProduct) {
+            $seller = $valueProduct->getSeller();
+            $sellerId = $seller->getIdMember();
+            $orderProductId = $valueProduct->getIdOrderProduct();
+            $product = $valueProduct->getProduct();
+            $productAttr = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr')
+                                    ->findBy(['orderProduct' => $orderProductId]);
+
+            $attrArray = [];
+            foreach ($productAttr as $attr) {
+                $attrArray[] = [
+                    'attr_name' => $attr->getAttrName(),
+                    'attr_value' => $attr->getAttrValue(),
+                ];
+            }
+            if(!isset($dataBuyer['products'][$orderProductId])){ 
+
+                $arrayCollection = [
+                    'order_product_id' => $orderProductId,
+                    'seller_slug' => $seller->getSlug(),
+                    'seller_store' => $seller->getStoreName(),
+                    'buyer_store' => $buyer->getStoreName(), 
+                    'name' => $product->getName(),
+                    'baseprice' => number_format($valueProduct->getPrice(), 2, '.', ','),
+                    'order_quantity' => $valueProduct->getOrderQuantity(),
+                    'handling_fee' => number_format($valueProduct->getHandlingFee(), 2, '.', ','),
+                    'finalprice' => number_format($valueProduct->getTotal(), 2, '.', ','),
+                    'attr' => $attrArray,
+                ];
+ 
+                $dataBuyer['products'][$orderProductId] = $arrayCollection; 
+            }
+
+            if(!isset($dataArraySeller[$sellerId])){
+                $dataArraySeller[$sellerId] = [
+                    'seller' => $seller,
+                    'seller_email' => $seller->getEmail(),
+                    'seller_store' => $seller->getStoreName(),
+                    'seller_contactno' => $seller->getContactno(),
+                    'buyer_store' => $buyer->getStoreName(),
+                    'store_link' => base_url(),
+                    'payment_msg_seller' => $messageSeller,
+                    'payment_method_name' => $paymentString,
+                    'invoice_no' => $order->getInvoiceNo(),
+                    'stateregion' => $buyerAddress->getStateregion()->getLocation(),
+                    'city' => $buyerAddress->getCity()->getLocation(), 
+                    'dateadded' => $order->getDateadded()->format('Y-m-d'),
+                    'address' => $buyerAddress->getAddress(),
+                    'buyer_contactno' => strlen(trim($buyerAddress->getMobile())) > 0 ? $buyerAddress->getMobile() : "N/A",
+                    'buyer_telephone' => strlen(trim($buyerAddress->getTelephone()))  > 0 ? $buyerAddress->getTelephone() : "N/A",
+                    'facebook' => $socialMediaLinks["facebook"],
+                    'twitter' => $socialMediaLinks["twitter"],
+                ];
+            }
+
+            if(!isset($dataArraySeller[$sellerId]['products'][$orderProductId])){
+                $arrayCollection = [
+                    'order_product_id' => $orderProductId,  
+                    'name' => $product->getName(),
+                    'baseprice' => number_format($valueProduct->getPrice(), 2, '.', ','),
+                    'order_quantity' => $valueProduct->getOrderQuantity(),
+                    'handling_fee' => number_format($valueProduct->getHandlingFee(), 2, '.', ','),
+                    'finalprice' => number_format($valueProduct->getTotal(), 2, '.', ','),
+                    'easyshop_charge' => number_format($valueProduct->getEasyshopCharge(), 2, '.', ','),
+                    'payment_method_charge' => number_format($valueProduct->getPaymentMethodCharge(), 2, '.', ','),
+                    'attr' => $attrArray,
+                    'net' => number_format($valueProduct->getNet(), 2, '.', ','),
+                ];
+
+                $dataArraySeller[$sellerId]['products'][$orderProductId] = $arrayCollection;
+            } 
+        }
+
+        if($sendBuyer){ 
+            $buyerMsg = $this->parserLibrary->parse('emails/email_purchase_notification_buyer', $dataBuyer, true);
+            $buyerSubject = $this->languageLoader->getLine('notification_subject_buyer');
+            $buyerSmsMsg = $buyer->getStoreName() . $this->languageLoader->getLine('notification_txtmsg_buyer');
+
+            $this->emailService->setRecipient($buyer->getEmail())
+                               ->setSubject($buyerSubject)
+                               ->setMessage($buyerMsg, $imageArray)
+                               ->sendMail();
+
+            $this->smsService->setMobile($buyer->getContactno())
+                             ->setMessage($buyerSmsMsg)
+                             ->sendSms();
+
+            if($messageSender){
+                $this->messageManager->send($messageSender, $buyer, $this->languageLoader->getLine('message_to_buyer'));
+            }
+        }
+
+        if($sendSeller){
+            foreach ($dataArraySeller as $key => $value) {
+                $sellerEmail = $value['seller_email'];
+                $sellerContact = $value['seller_contactno'];
+                $seller = $value['seller'];
+                unset($value['seller']);
+
+                $sellerSubject = $this->languageLoader->getLine('notification_subject_seller');
+                $sellerMsg = $this->parserLibrary->parse('emails/email_purchase_notification_seller', $value, true);
+                $sellerSmsMsg = $value['seller_store'] . $this->languageLoader->getLine('notification_txtmsg_seller');
+
+                $this->emailService->setRecipient($sellerEmail)
+                                   ->setSubject($sellerSubject)
+                                   ->setMessage($sellerMsg, $imageArray)
+                                   ->sendMail();
+                
+                $this->smsService->setMobile($sellerContact)
+                                 ->setMessage($sellerSmsMsg)
+                                 ->sendSms();
+
+                if($messageSender){
+                    $this->messageManager->send($messageSender, $seller, $this->languageLoader->getLine('message_to_seller'));
+                }
+            }
+        } 
     }
 
 }
