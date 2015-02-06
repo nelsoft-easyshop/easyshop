@@ -189,7 +189,7 @@ class SyncCsvImage extends MY_Controller
                                   ->getRepository('EasyShop\Entities\EsOptionalAttrhead')
                                   ->findBy(['product' => $productId]); 
                 if(!file_exists($tempDirectory)){
-                    $newSlug = $this->productManager->generateSlug($productObject->getSlug());
+                    $newSlug = $this->productManager->generateSlug($productObject->getName());
                     mkdir($tempDirectory.'categoryview/', 0777, true);
                     mkdir($tempDirectory.'small/', 0777, true);
                     mkdir($tempDirectory.'thumbnail/', 0777, true);
@@ -264,14 +264,19 @@ class SyncCsvImage extends MY_Controller
         foreach ($productAttr as $key => $attr) {
             $values = $this->em
                            ->getRepository('EasyShop\Entities\EsProductImage')
-                           ->find($attr["image_id"]);    
+                           ->find($attr["image_id"]);
+
+            if(!$values) {
+                continue;
+            }
+
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
             $path = "./assets/admin/$images";
 
             $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o.".$values->getProductImageType();
             $imageDirectory = "./".$this->config->item('product_img_directory').$filename."/other/".$newfilename;
             $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
-            if(copy($path, $imageDirectory)){
+            if(file_exists($path) && copy($path, $imageDirectory)){
                 $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
 
                 $productImage = new EsProductImage();     
@@ -292,6 +297,19 @@ class SyncCsvImage extends MY_Controller
                 $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail", $imageDimensions["productImagesSizes"]["thumbnail"]);
                 $imageUtility->imageResize($imageDirectory, $tempDirectory, $imageDimensions["productImagesSizes"]["usersize"]);        
             }                    
+        }
+    }
+
+    /**
+     * Handles deleting of images upload by the administrator
+     * @return JSONP
+     */
+    public function deleteImage()
+    {
+        if($this->EsAdminImagesRepository->deleteImage($this->input->get("imageId"))) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output("jsonCallback({'sites':[{'success': 'success',},]});");
         }
     }
 

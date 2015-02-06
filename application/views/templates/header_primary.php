@@ -58,8 +58,8 @@
         <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.header-primary.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php endif; ?>
     
-    
-    
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 
 </head>
 <body>
