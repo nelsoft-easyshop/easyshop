@@ -580,7 +580,8 @@ class Kernel
                             $container['product_manager'],
                             $container['promo_manager'],
                             $container['cart_manager'],
-                            $container['payment_service']
+                            $container['payment_service'],
+                            $container['product_shipping_location_manager']
                         );
         };
         

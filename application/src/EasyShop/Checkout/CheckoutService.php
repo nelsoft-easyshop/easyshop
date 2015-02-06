@@ -3,7 +3,6 @@
 namespace EasyShop\Checkout;
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
-use EasyShop\Entities\EsAddress as EsAddress;
 /**
  * Checkout Service Class
  *
@@ -84,7 +83,7 @@ class CheckoutService
             $quantity = $value['qty'];
             $product = $this->productManager->getProductDetails($productId);
             $shippingDetails = $this->shippingLocationManager
-                                    ->getProductShippingLocations($itemId, $member);
+                                    ->getProductShippingLocations($productId, $itemId, $member);
             $isAvailableInLocation = false;
             $shipmentFee = 0;
             if($shippingDetails && count($shippingDetails) >= 1){ 
