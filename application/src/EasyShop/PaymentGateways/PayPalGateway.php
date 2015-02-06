@@ -25,6 +25,8 @@ class PayPalGateway extends AbstractGateway
     private $PayPalApiUsername; 
     private $PayPalApiPassword; 
     private $PayPalApiSignature;
+    private $returnUrl;
+    private $cancelUrl;
 
 
     /**
@@ -34,7 +36,7 @@ class PayPalGateway extends AbstractGateway
     public function __construct($em, $request, $pointTracker, $paymentService, $params=[])
     {
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
-        
+ 
         if(strtolower(ENVIRONMENT) === 'production'){
             // LIVE
             $this->PayPalMode             = ''; 
@@ -49,6 +51,9 @@ class PayPalGateway extends AbstractGateway
             $this->PayPalApiPassword      = '1396000698'; 
             $this->PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';
         }
+
+        $this->returnUrl = isset($params['returnUrl']) ? $params['returnUrl'] : base_url().'pay/postBackPayPal';
+        $this->cancelUrl = isset($params['cancelUrl']) ? $params['cancelUrl'] : base_url().'payment/review';
     }
 
     /**
@@ -140,8 +145,8 @@ class PayPalGateway extends AbstractGateway
         $pointGateway = $paymentService->getPointGateway();
 
         $PayPalMode = $this->getMode(); 
-        $paypalReturnURL = base_url().'pay/postBackPayPal'; 
-        $paypalCancelURL = base_url().'payment/review'; 
+        $paypalReturnURL = $this->returnUrl; 
+        $paypalCancelURL = $this->cancelUrl; 
         $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->releaseAllLock($memberId);
 
         $productCount = count($validatedCart['itemArray']);
@@ -289,7 +294,7 @@ class PayPalGateway extends AbstractGateway
             }
             else{
                 die('{"e":"0","d":"'.$return['o_message'].'"}');
-            }        
+            } 
         }
         else{
             die('{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}');
