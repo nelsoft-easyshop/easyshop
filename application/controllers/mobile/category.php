@@ -25,39 +25,12 @@ class Category extends MY_Controller {
     public function getCategories()
     { 
         $categorySlug = urldecode($this->input->get('slug'));
-        $param = urldecode($this->input->get('detail')); 
-        $need = 
-        $all = $this->product_model->selectAllCategory();  
-        $categoryId = 1;
+        $param = urldecode($this->input->get('detail'));  
 
-        if($categorySlug){
-            $categoryArray = $this->product_model->getCategoryBySlug($categorySlug);
-            if($param){
-                die(json_encode($categoryArray,JSON_PRETTY_PRINT));
-            }
-    
-            $categoryId = $categoryArray['id_cat']; 
-            $parentId = $categoryArray['parent_id']; 
-        }
- 
-        if($this->input->get('up')){
-            $categoryId = 1;
+        $categories = $this->em->getRepository('EasyShop\Entities\EsCat')
+                               ->selectAllCategory(); 
 
-            for ($i=1; $i < $this->input->get('up'); $i++) { 
-                $categoryArrayParent = $this->product_model->selectCategoryDetails($parentId);   
-                $parentId = $categoryArrayParent['parent_id'];
-                if($parentId == 1){
-                    break;
-                }
-            }
-
-            if($parentId != 1){
-                $categoryArrayParent = $this->product_model->selectCategoryDetails($parentId);   
-                $categoryId = $categoryArrayParent['id_cat'];
-            }
-        }
-
-        $jsonCategory = $this->buildTree($all,$categoryId);  
+        $jsonCategory = $this->__buildTree($categories);  
 
         print(json_encode($jsonCategory,JSON_PRETTY_PRINT));
     }
@@ -96,14 +69,13 @@ class Category extends MY_Controller {
      * @param  integer $parentId
      * @return mixed
      */
-    private function buildTree(array $elements, $parentId = 1)
+    private function __buildTree(array $elements, $parentId = 1)
     {   
-        $branch = array();
+        $branch = [];
 
         foreach ($elements as $element) {
-             
             if ($element['parent_id'] == $parentId) { 
-                $children = $this->buildTree($elements, $element['id_cat']);
+                $children = $this->__buildTree($elements, $element['id_cat']);
                 if ($children) {
                     $element['children'] = $children;
                 }

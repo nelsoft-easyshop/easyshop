@@ -3,6 +3,7 @@
 namespace EasyShop\Api;
 
 use EasyShop\Entities\EsProductImage as EsProductImage;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
  
 class ApiFormatter
 {
@@ -495,6 +496,79 @@ class ApiFormatter
             'unavailableItems' => $this->formatCart($itemList),
             'rawItems' => $rawItems,
         ];
+    }
+
+    /**
+     * Format location for shipping list
+     * @return array
+     */
+    public function formatLocationForShipping()
+    {
+        $location = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                             ->getLocation();
+
+        $formedArray = [];
+        foreach ($location['area'] as $majorIsland => $region) {
+            $regionArray = [];
+            foreach ($region as $regionKey => $province) {
+                $provinceArray = [];
+                foreach ($province as $key => $value) {
+                    $provinceArray[] = [
+                        'name' => $value,
+                        'location_id' => $key,
+                        'children' => [],
+                    ];
+                }
+                $regionArray[] = [
+                    'name' => $regionKey,
+                    'location_id' => $location['regionkey'][$regionKey],
+                    'children' => $provinceArray,
+                ];
+            }
+
+            $array = [
+                'name' => $majorIsland,
+                'location_id' => $location['islandkey'][$majorIsland],
+                'children' => $regionArray,
+            ];
+            $formedArray[] = $array;
+        }
+
+        return [
+            'name' => 'Philippines',
+            'location_id' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
+            'children' => $formedArray,
+        ];
+    }
+
+    /**
+     * Format location for address list
+     * @return array
+     */
+    public function formatLocationForAddress()
+    {
+        $esLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+        $data['available_selection'] = $esLocationLookupRepository->getLocationLookup(); 
+        $modifiedArray = [];
+        $modifiedArray[0]['countryId'] = $data['available_selection']['countryId'];
+        $modifiedArray[0]['coutryName'] = $data['available_selection']['countryName']; 
+        $counter = 0;
+        
+        foreach ($data['available_selection']['stateRegionLookup'] as $key => $value) {
+            $modifiedArray[0]['regions'][$counter]['regionId'] = $key; 
+            $modifiedArray[0]['regions'][$counter]['regionName'] = $value;
+            $arrayCity = [];
+            $cityCounter = 0;
+            foreach ($data['available_selection']['cityLookup'][$key] as $keyCity => $valueCity) {
+                $arrayCity[$cityCounter]['cityId'] = $keyCity; 
+                $arrayCity[$cityCounter]['cityName'] = $valueCity;
+                $cityCounter++;
+            }
+            $modifiedArray[0]['regions'][$counter]['cities'] = $arrayCity;
+            $counter++;
+        }
+
+        return $modifiedArray;
     }
 }
  
