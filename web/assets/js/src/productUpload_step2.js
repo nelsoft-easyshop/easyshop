@@ -1204,7 +1204,7 @@ var extensionList = [];
 var imageCollection = [];
 var widthRatio = 445;
 var heightRatio = 538;
-var CropImageMaxWidth = 534;
+// var CropImageMaxWidth = 534;
 var totalCropImage;
 
 var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
@@ -1288,28 +1288,31 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         },
                         open: function() {
                             var MainwindowHeight = $(window).height();
-                            $("#imageTag").css("max-width", CropImageMaxWidth);
                             $(this).parent().addClass('pop-up-fixed');
-                            jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
-                                aspectRatio: widthRatio / heightRatio,
-                                setSelect: [ x1 / 2, y1, x2, y2 ],
-                                boxWidth: 500,
-                                boxHeight: 431,
-                                minSize: [
-                                    imgWidth * 0.1,
-                                    imgHeight * 0.1
-                                ],
-                                trueSize: [
-                                    imgWidth,
-                                    imgHeight
-                                ],
-                                onChange: showCoords,
-                                onSelect: showCoords
-                            });
+                            setTimeout(function() {
+                                var CropImageMaxWidth = $("#crop-image-main").width();
+                                $("#imageTag").css("max-width", CropImageMaxWidth);
+                                jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
+                                    aspectRatio: widthRatio / heightRatio,
+                                    setSelect: [ x1 / 2, y1, x2, y2 ],
+                                    boxWidth: 500,
+                                    boxHeight: 431,
+                                    minSize: [
+                                        imgWidth * 0.1,
+                                        imgHeight * 0.1
+                                    ],
+                                    trueSize: [
+                                        imgWidth,
+                                        imgHeight
+                                    ],
+                                    onChange: showCoords,
+                                    onSelect: showCoords
+                                });
                             
-                            var UidialogHeight = $(".ui-dialog").outerHeight();
-                            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
-                            $(this).parent().css("top", UidialogTop);
+                                var UidialogHeight = $(".ui-dialog").outerHeight();
+                                var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+                                $(".ui-dialog").css("top", UidialogTop);
+                            }, 0);
                         },
                         close: function(){
                             $('#crop-image-main >  #imageTag').attr('src', ''); 
@@ -1591,7 +1594,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                 var y2 = imgHeight;
                 $('#crop-image-main').dialog({
                     resizable: false,
-                    height: 600,
+                    "resize": "auto",
                     width: 600,
                     modal: true,
                     buttons: {
@@ -1603,23 +1606,31 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         }
                     },
                     open: function() { 
-                        $("#imageTag").css("max-width", CropImageMaxWidth);
-                        jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
-                            aspectRatio: widthRatio / heightRatio,
-                            setSelect: [ x1 / 2, y1, x2, y2 ],
-                            boxWidth: 500,
-                            boxHeight: 431,
-                            minSize: [
-                                imgWidth * 0.1,
-                                imgHeight * 0.1
-                            ],
-                            trueSize: [
-                                imgWidth,
-                                imgHeight
-                            ],
-                            onChange: showCoords,
-                            onSelect: showCoords
-                        });
+                        var MainwindowHeight = $(window).height();
+                        $(this).parent().addClass('pop-up-fixed');
+                        setTimeout(function() {
+                            var CropImageMaxWidth = $("#crop-image-main").width();
+                            $("#imageTag").css("max-width", CropImageMaxWidth);
+                            jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
+                                aspectRatio: widthRatio / heightRatio,
+                                setSelect: [ x1 / 2, y1, x2, y2 ],
+                                boxWidth: 500,
+                                boxHeight: 431,
+                                minSize: [
+                                    imgWidth * 0.1,
+                                    imgHeight * 0.1
+                                ],
+                                trueSize: [
+                                    imgWidth,
+                                    imgHeight
+                                ],
+                                onChange: showCoords,
+                                onSelect: showCoords
+                            });
+                            var UidialogHeight = $(".ui-dialog").outerHeight();
+                            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+                            $(".ui-dialog").css("top", UidialogTop);
+                        }, 0);
                     },
                     close: function(){ 
                         jcrop_api.destroy(); 
