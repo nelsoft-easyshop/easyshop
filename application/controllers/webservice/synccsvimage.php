@@ -295,6 +295,19 @@ class SyncCsvImage extends MY_Controller
         }
     }
 
+    /**
+     * Handles deleting of images upload by the administrator
+     * @return JSONP
+     */
+    public function deleteImage()
+    {
+        if($this->EsAdminImagesRepository->deleteImage($this->input->get("imageId"))) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output("jsonCallback({'sites':[{'success': 'success',},]});");
+        }
+    }
+
 
 
 }

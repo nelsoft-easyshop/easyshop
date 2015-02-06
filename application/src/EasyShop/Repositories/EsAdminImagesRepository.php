@@ -34,7 +34,23 @@ class EsAdminImagesRepository extends EntityRepository
             $this->_em->flush();        
 
         }
+    }
 
-
+    /**
+     * Deletes an image
+     * @param  int $imageId
+     * @return bool
+     */
+    public function deleteImage($imageId)
+    {
+        try {
+            $obj = $this->_em->getRepository('EasyShop\Entities\EsAdminImages')->find($imageId);
+            $this->_em->remove($obj);
+            $this->_em->flush();
+            return true;
+        }
+        catch(Exception $e){
+            return false;
+        }
     }
 }
