@@ -281,7 +281,7 @@ class ApiFormatter
      * @param  string  $paymentType
      * @return array
      */
-    public function formatCart($cartData, $includeValidation = false)
+    public function formatCart($cartData, $includeValidation = false, $paymentTypeString = "")
     { 
         $formattedCartContents = [];
         $finalCart = []; 
@@ -339,20 +339,31 @@ class ApiFormatter
                 ]; 
 
                 if($includeValidation){
-                    $validation = [
-                        'canPurchaseWithOther' => $cartItem['canPurchaseWithOther'],
-                        'hasNoPuchaseLimitRestriction' => $cartItem['hasNoPuchaseLimitRestriction'],
-                        'isAvailableInLocation' => $cartItem['isAvailableInLocation'],
-                        'isQuantityAvailable' => $cartItem['isQuantityAvailable'],
-                        'dragonpay' => $cartItem['dragonpay'],
-                        'paypal' => $cartItem['paypal'],
-                        'cash_delivery' => $cartItem['cash_delivery'],
-                        'pesopaycdb' => $cartItem['pesopaycdb'],
-                        'directbank' => $cartItem['directbank'],
+                    $validation = [ 
                         'error_message' => [],
                         'shippingFee' => $cartItem['shippingFee'],
                     ];
 
+                    if(!isset($cartItem[$paymentTypeString]) || !$cartItem[$paymentTypeString]){
+                        $validation['error_message'][] = "Not Available for selected payment type";
+                    }
+
+                    if(!$cartItem['canPurchaseWithOther']){
+                        $validation['error_message'][] = "This item can only be purchased individually.";
+                    }
+
+                    if(!$cartItem['hasNoPuchaseLimitRestriction']){
+                        $validation['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
+                    }
+
+                    if(!$cartItem['isAvailableInLocation']){
+                        $validation['error_message'][] = "This item is not available in your location.";
+                    }
+
+                    if(!$cartItem['isQuantityAvailable']){
+                        $validation['error_message'][] = "The availability of this items is less than your desired quantity.";
+                    }
+                    $formattedCartContents[$rowId]['isAvailable'] = empty($validation['error_message']);
                     $formattedCartContents[$rowId] = array_merge($formattedCartContents[$rowId],$validation);
                 }
 
@@ -362,52 +373,7 @@ class ApiFormatter
         } 
 
         return $finalCart;
-    }
-
-    /**
-     * Include error on cart before checkout
-     * @param  mixed  $cartContent
-     * @param  string $paymentType
-     * @return mixed
-     */
-    public function includeCartError($cartContent, $paymentType)
-    { 
-        foreach ($cartContent as $key => $cartItem) {
-            if(!isset($cartItem[$paymentType]) || !$cartItem[$paymentType]){
-                $cartContent[$key]['error_message'][] = "Not Available for selected payment type";
-            }
-
-            if(!$cartItem['canPurchaseWithOther']){
-                $cartContent[$key]['error_message'][] = "This item can only be purchased individually.";
-            }
-
-            if(!$cartItem['hasNoPuchaseLimitRestriction']){
-                $cartContent[$key]['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
-            }
-
-            if(!$cartItem['isAvailableInLocation']){
-                $cartContent[$key]['error_message'][] = "This item is not available in your location.";
-            }
-
-            if(!$cartItem['isQuantityAvailable']){
-                $cartContent[$key]['error_message'][] = "The availability of this items is less than your desired quantity.";
-            }
-
-            unset($cartContent[$key]['canPurchaseWithOther']);
-            unset($cartContent[$key]['hasNoPuchaseLimitRestriction']);
-            unset($cartContent[$key]['isAvailableInLocation']);
-            unset($cartContent[$key]['isQuantityAvailable']);
-            unset($cartContent[$key]['dragonpay']);
-            unset($cartContent[$key]['paypal']);
-            unset($cartContent[$key]['cash_delivery']);
-            unset($cartContent[$key]['pesopaycdb']);
-            unset($cartContent[$key]['directbank']);
-
-            $cartContent[$key]['isAvailable'] = empty($cartContent[$key]['error_message']);
-        }
-
-        return $cartContent;
-    }
+    } 
 
     /**
      * Format display item array 
