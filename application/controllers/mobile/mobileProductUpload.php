@@ -75,7 +75,27 @@ class MobileProductUpload extends MY_Controller
         mkdir($tempDirectory.'other/small/', 0777, true);
         mkdir($tempDirectory.'other/thumbnail/', 0777, true);
 
-        echo json_encode(['upload_token' => $temporaryId]);
+        $bankAccounts = $this->em->getRepository("EasyShop\Entities\EsBillingInfo")
+                                 ->findBy([
+                                     "member"=>$this->member->getIdMember()
+                                 ]);
+
+        $bankArray = [];
+        foreach ($bankAccounts as $account) {
+            $bankArray[] = [
+                'billing_id' => $account->getIdBillingInfo(),
+                'account_name' => $account->getBankAccountName(),
+                'account_number' => $account->getBankAccountNumber(),
+                'bank_id' => $account->getBankId(),
+            ];
+        }
+
+        $returnArray = [
+            'upload_token' => $temporaryId,
+            'bankAccounts' => $bankArray,
+        ];
+
+        echo json_encode($returnArray);
     }
 
     /**
@@ -283,7 +303,8 @@ class MobileProductUpload extends MY_Controller
         $returnArray = [
             'isSuccess' => $isSuccess,
             'message' => $errorMessage,
-        ]
+        ];
+
         echo json_encode($returnArray, JSON_PRETTY_PRINT);
     }
 }
