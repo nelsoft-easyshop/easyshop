@@ -40,23 +40,31 @@ class CheckoutService
     private $cartManager;
 
     /**
-     * Cart Manager Class
+     * Payment Service Class
      *
      * @var EasyShop\PaymentService\PaymentService
      */
     private $paymentService;
 
     /**
+     * Cart Manager Class
+     *
+     * @var EasyShop\Product\ProductShippingLocationManager
+     */
+    private $shippingLocationManager;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em, $productManager, $promoManager, $cartManager, $paymentService)
+    public function __construct($em, $productManager, $promoManager, $cartManager, $paymentService, $shippingLocationManager)
     {
         $this->em = $em;
         $this->productManager = $productManager;
         $this->promoManager = $promoManager;
         $this->cartManager = $cartManager;
         $this->paymentService = $paymentService;
+        $this->shippingLocationManager = $shippingLocationManager;
     }
 
     /**
@@ -75,7 +83,8 @@ class CheckoutService
             $itemId = $value['product_itemID'];
             $quantity = $value['qty'];
             $product = $this->productManager->getProductDetails($productId);
-            $shippingDetails = $this->getProductItemShippingDetails($product, $itemId, $member);
+            $shippingDetails = $this->shippingLocationManager
+                                    ->getProductShippingLocations($itemId, $member);
             $isAvailableInLocation = false;
             $shipmentFee = 0;
             if($shippingDetails && count($shippingDetails) >= 1){ 
@@ -109,38 +118,6 @@ class CheckoutService
 
         return true;
     }
-
-    /**
-     * Get product shipping details
-     * @param  EasyShop\Entities\EsProduct  $product
-     * @param  integer $itemId
-     * @param  EasyShop\Entities\EsMember  $member
-     * @return mixed
-     */
-    public function getProductItemShippingDetails($product, $itemId, $member)
-    {
-        $shippingDetailRepo = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail');
-        $addressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
-
-        $address = $addressRepo->findOneBy([
-                                    'idMember' => $member->getIdMember(),
-                                    'type' => EsAddress::TYPE_DELIVERY,
-                                ]);
-
-        if($address){
-            $city = $address->getCity();
-            $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')->getParentLocation($city);
-            $majorIsland = $region->getParent()->getParent();
-            $locationDetails = $shippingDetailRepo->getShippingDetailsByLocation($product->getIdProduct(),
-                                                                                 $itemId, 
-                                                                                 $city->getIdLocation(), 
-                                                                                 $region->getIdLocation(), 
-                                                                                 $majorIsland->getIdLocation());
-            return $locationDetails;
-        }
-
-        return false;
-    } 
 
     /**
      * check if desired quantity is available

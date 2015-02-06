@@ -242,7 +242,7 @@ class ApiFormatter
 
         if(!$isFreeShippingNationwide){
             $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
-                                    ->getShippingDetailsByProductId($productId);
+                                        ->getShippingDetailsByProductId($productId);
             foreach ($shippingDetails as $key => $value) {
                 if(!isset($shipmentDetails[$value['product_item_id']])){
                     $shipmentDetails[$value['product_item_id']] = [

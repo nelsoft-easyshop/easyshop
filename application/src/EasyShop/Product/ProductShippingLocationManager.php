@@ -265,5 +265,36 @@ class ProductShippingLocationManager
         $this->em->flush();
     }
 
+    /**
+     * Get product shipping details 
+     * @param  integer $productItemId
+     * @param  EasyShop\Entities\EsMember  $member
+     * @return mixed
+     */
+    public function getProductShippingLocations($productItemId, $member)
+    {
+        $shippingDetailRepo = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail');
+        $addressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
+
+        $address = $addressRepo->findOneBy([
+                                    'idMember' => $member->getIdMember(),
+                                    'type' => EsAddress::TYPE_DELIVERY,
+                                ]);
+
+        if($address){
+            $city = $address->getCity();
+            $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')->getParentLocation($city);
+            $majorIsland = $region->getParent()->getParent();
+            $locationDetails = $shippingDetailRepo->getShippingDetailsByLocation($product->getIdProduct(),
+                                                                                 $productItemId, 
+                                                                                 $city->getIdLocation(), 
+                                                                                 $region->getIdLocation(), 
+                                                                                 $majorIsland->getIdLocation());
+            return $locationDetails;
+        }
+
+        return false;
+    }
+
 }
 
