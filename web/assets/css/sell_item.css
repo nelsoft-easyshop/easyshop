@@ -1432,6 +1432,7 @@ li.brand_result:hover{
     #imageTag {
         height: auto !important;
         max-height: 300px !important;
+        max-width: 240px;
         width: auto !important;
     }
 }
@@ -1440,6 +1441,7 @@ li.brand_result:hover{
     #imageTag {
         height: auto !important;
         max-height: 320px !important;
+        max-width: 359px;
     }
 }
 
@@ -1447,6 +1449,7 @@ li.brand_result:hover{
     #imageTag {
         height: auto !important;
         max-height: 350px !important;
+        max-width: 471px;
     }
 }
 
@@ -1454,6 +1457,7 @@ li.brand_result:hover{
     #imageTag {
         height: auto !important;
         max-height: 400px !important;
+        max-width: 534px;
     }
 }
 

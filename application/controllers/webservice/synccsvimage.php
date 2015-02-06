@@ -264,7 +264,12 @@ class SyncCsvImage extends MY_Controller
         foreach ($productAttr as $key => $attr) {
             $values = $this->em
                            ->getRepository('EasyShop\Entities\EsProductImage')
-                           ->find($attr["image_id"]);    
+                           ->find($attr["image_id"]);
+
+            if(!$values) {
+                continue;
+            }
+
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
             $path = "./assets/admin/$images";
 
