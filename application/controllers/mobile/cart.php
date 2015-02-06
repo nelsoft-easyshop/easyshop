@@ -86,7 +86,7 @@ class cart extends MY_Controller
                            ->find($this->member->getIdMember());
         $arrayCart = unserialize($member->getUserdata());
         $cartData = empty($arrayCart) ? [] : $arrayCart;
-        $formattedCartContents = $this->apiFormatter->formatCart($cartData);
+        $formattedCartContents = $this->apiFormatter->formatCart($cartData, false, $this->member);
 
         print(json_encode($formattedCartContents,JSON_PRETTY_PRINT));
     }

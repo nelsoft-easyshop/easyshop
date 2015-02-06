@@ -76,7 +76,7 @@ class mobilePayment extends MY_Controller
         if((int)$this->member->getIsEmailVerify()){
             $validatedCart = $checkoutService->validateCartContent($this->member, $formatCart);
             $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
-            $formattedCartContents = $apiFormatter->formatCart($validatedCart, true);
+            $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $this->member);
             $formattedCartWithError = $apiFormatter->includeCartError($formattedCartContents, $postPaymentType);
             if(!$canContinue){
                 $errorMessage = "One of your item is not available.";
