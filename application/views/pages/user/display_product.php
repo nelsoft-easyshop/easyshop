@@ -102,7 +102,7 @@
                                         </a>
                                     </div>
                                      <?php if($percentage && $percentage > 0):?>
-                                        <span class="span-discount-pin-list" style="z-index: 999"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
+                                        <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                                     <?php endif;?>
                                 </div>
                             </td>

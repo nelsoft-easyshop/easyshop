@@ -286,6 +286,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
             imageprev(this);
         }
         else {
+            $(".loader-upload").css("display","block");        
             submitForm();
         }
     });
@@ -358,6 +359,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 console.log(percentComplete);
             },
             success :function(xhrResponse) { 
+                $(".loader-upload").css("display","none");
                 if(xhrResponse.isSuccessful){
                     if(formAction === 'banner_upload'){
                         $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});
@@ -565,6 +567,26 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     $(".btn-cancel-me-wide").click(function() {
         $(".simplemodal-close").trigger("click");
     });
+
+    $(".chosen-container-single:eq(1)").attr("data-toggle","0");
+    $(".chosen-container-single:eq(2)").attr("data-toggle","1");
+    $(window).on('load resize', function(){
+        var windowVendor = $(window).width();
+        var windowMaxDesktopWidth = 991;
+        if(windowVendor <= windowMaxDesktopWidth){
+            $(".chosen-container-single").bind("click");
+            $(".chosen-container-single").click(function() {
+                if($(this).data("toggle") === 0) {
+                    $(".followers-circle").toggle();
+                }
+            });
+        }
+        if(windowVendor > windowMaxDesktopWidth){
+            $(".followers-circle").css("display", "inline");
+            $(".chosen-container-single").unbind("click");
+        }
+    });
+
 })(jQuery);
 
 function proceedPayment(obj)

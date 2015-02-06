@@ -57,7 +57,8 @@ function appendNewSelectionRow(){
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
     <input type="hidden" class="image-val imageText'+cnt+'"/>\
-    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="/assets/images/img_upload_photo.jpg"></a>\
+    <input type="hidden" class="image-file imageFileText'+cnt+'"/>\
+    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="'+default_upload_image+'"></a>\
     <a class="select-image image'+cnt+' select-image-pencil" data-cnt="'+cnt+'" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     <a class="remove-control-panel" href="javascript:void(0)" data-cnt="'+cnt+'">Remove property value</a>\
@@ -185,7 +186,8 @@ function resetControlPanel(buttonReset)
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
         <input type="hidden" class="image-val imageText1"/>\
-         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="/assets/images/img_upload_photo.jpg"></a>\
+        <input type="hidden" class="image-file imageFileText1"/>\
+         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="'+default_upload_image+'"></a>\
         <a class="select-image image1 select-image-pencil" data-cnt="1" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     </div><div class="clear"></div>';
@@ -811,6 +813,7 @@ var previous,editSelectedValue,editSelectedId;
             var priceString = $(this).find(".price-div").find('.price-val').val();
             var price = (priceString.length == 0) ? '0.00' : priceString;
             var image = $(this).find(".image-div").find('.image-val').val();
+            var fileImage = $(this).find(".image-div").find('.image-file').val();
             
             if(selectList){
                 if($.inArray(selectList,eachCtrlValue) <= -1){
@@ -821,7 +824,7 @@ var previous,editSelectedValue,editSelectedId;
                             }
                         } 
                     }
-                    optionString += "<option data-value='"+selectList+"' value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
+                    optionString += "<option data-value='"+selectList+"' value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-file='"+fileImage+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
                     if($.inArray(selectList,attributeArray[selectedValue]) <= -1){
                         attributeArray[selectedValue].push(selectList);
                     }
@@ -1036,17 +1039,20 @@ var previous,editSelectedValue,editSelectedId;
         $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" class="btn btn-default width-80p" />');
         $('#head-data').val(head).trigger("liszt:updated");
         $('.control-panel').empty();
+        validateWhiteTextBox(".selection");
         validateRedTextBox(".div2 > span > #"+id);
         $(".select-control-panel-option > .div2 > span > #"+id +" option").each(function(){
             var row = appendNewSelectionRow();
             var value = $(this).data('value'); 
             var price = $(this).data('price'); 
             var image = $(this).data('image'); 
-            var displayImage = (image == "") ? 'assets/images/img_upload_photo.jpg' : tempDirectory+'other/'+image;
+            var filePath = $(this).data('file'); 
+            var displayImage = (filePath == "") ? default_upload_image : filePath;
             $('.control-panel-'+row +' > .value-section > .select-value-section > #value-data-'+row).val(value);
             $('.control-panel-'+row +' > .price-div > .price'+row).val(price);
             $('.control-panel-'+row +' > .image-div > .imageText'+row).val(image);
-            $('.control-panel-'+row +' > .image-div > .image'+row+' img').attr("src",'/'+displayImage);
+            $('.control-panel-'+row +' > .image-div > .imageFileText'+row).val(filePath);
+            $('.control-panel-'+row +' > .image-div > .image'+row+' img').attr("src", displayImage);
             $('#value-data-'+row).trigger("liszt:updated");
         });
     });
@@ -1198,8 +1204,10 @@ var extensionList = [];
 var imageCollection = [];
 var widthRatio = 445;
 var heightRatio = 538;
-var CropImageMaxWidth = 534;
+// var CropImageMaxWidth = 534;
 var totalCropImage;
+
+var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
 
 (function($) {
   
@@ -1280,28 +1288,31 @@ var totalCropImage;
                         },
                         open: function() {
                             var MainwindowHeight = $(window).height();
-                            $("#imageTag").css("max-width", CropImageMaxWidth);
                             $(this).parent().addClass('pop-up-fixed');
-                            jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
-                                aspectRatio: widthRatio / heightRatio,
-                                setSelect: [ x1 / 2, y1, x2, y2 ],
-                                boxWidth: 500,
-                                boxHeight: 431,
-                                minSize: [
-                                    imgWidth * 0.1,
-                                    imgHeight * 0.1
-                                ],
-                                trueSize: [
-                                    imgWidth,
-                                    imgHeight
-                                ],
-                                onChange: showCoords,
-                                onSelect: showCoords
-                            });
+                            setTimeout(function() {
+                                var CropImageMaxWidth = $("#crop-image-main").width();
+                                $("#imageTag").css("max-width", CropImageMaxWidth);
+                                jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
+                                    aspectRatio: widthRatio / heightRatio,
+                                    setSelect: [ x1 / 2, y1, x2, y2 ],
+                                    boxWidth: 500,
+                                    boxHeight: 431,
+                                    minSize: [
+                                        imgWidth * 0.1,
+                                        imgHeight * 0.1
+                                    ],
+                                    trueSize: [
+                                        imgWidth,
+                                        imgHeight
+                                    ],
+                                    onChange: showCoords,
+                                    onSelect: showCoords
+                                });
                             
-                            var UidialogHeight = $(".ui-dialog").outerHeight();
-                            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
-                            $(this).parent().css("top", UidialogTop);
+                                var UidialogHeight = $(".ui-dialog").outerHeight();
+                                var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+                                $(".ui-dialog").css("top", UidialogTop);
+                            }, 0);
                         },
                         close: function(){
                             $('#crop-image-main >  #imageTag').attr('src', ''); 
@@ -1541,7 +1552,8 @@ var totalCropImage;
         var selector = $(this);
         currentCnt = selector.data('cnt');
         $('.imageText'+currentCnt).val('');
-        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src","/assets/images/img_upload_photo.jpg");
+        $('.imageFileText'+currentCnt).val('');
+        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
     });
 
     $(document).on('click',".attr-image",function (e){
@@ -1582,7 +1594,7 @@ var totalCropImage;
                 var y2 = imgHeight;
                 $('#crop-image-main').dialog({
                     resizable: false,
-                    height: 600,
+                    "resize": "auto",
                     width: 600,
                     modal: true,
                     buttons: {
@@ -1594,23 +1606,31 @@ var totalCropImage;
                         }
                     },
                     open: function() { 
-                        $("#imageTag").css("max-width", CropImageMaxWidth);
-                        jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
-                            aspectRatio: widthRatio / heightRatio,
-                            setSelect: [ x1 / 2, y1, x2, y2 ],
-                            boxWidth: 500,
-                            boxHeight: 431,
-                            minSize: [
-                                imgWidth * 0.1,
-                                imgHeight * 0.1
-                            ],
-                            trueSize: [
-                                imgWidth,
-                                imgHeight
-                            ],
-                            onChange: showCoords,
-                            onSelect: showCoords
-                        });
+                        var MainwindowHeight = $(window).height();
+                        $(this).parent().addClass('pop-up-fixed');
+                        setTimeout(function() {
+                            var CropImageMaxWidth = $("#crop-image-main").width();
+                            $("#imageTag").css("max-width", CropImageMaxWidth);
+                            jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
+                                aspectRatio: widthRatio / heightRatio,
+                                setSelect: [ x1 / 2, y1, x2, y2 ],
+                                boxWidth: 500,
+                                boxHeight: 431,
+                                minSize: [
+                                    imgWidth * 0.1,
+                                    imgHeight * 0.1
+                                ],
+                                trueSize: [
+                                    imgWidth,
+                                    imgHeight
+                                ],
+                                onChange: showCoords,
+                                onSelect: showCoords
+                            });
+                            var UidialogHeight = $(".ui-dialog").outerHeight();
+                            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+                            $(".ui-dialog").css("top", UidialogTop);
+                        }, 0);
                     },
                     close: function(){ 
                         jcrop_api.destroy(); 
@@ -1653,13 +1673,15 @@ var totalCropImage;
                 canProceed = true;
                 if(d.result == "ok"){
                     imageAttr.push(picName);
+                    var imagePath = '/'+tempDirectory+'other/categoryview/'+picName;
                     $('.imageText'+currentCnt).val(picName); 
-                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/'+tempDirectory+'other/categoryview/'+picName);
+                    $('.imageFileText'+currentCnt).val(imagePath); 
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src", imagePath);
                     pictureCountOther++;
                 }
                 else{
                     alert(d.msg);
-                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/img_upload_photo.jpg');
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
                 }
                 $('#other_files > #pictureCount').remove();
                 $('#other_files > #pictureName').remove();
@@ -1667,7 +1689,7 @@ var totalCropImage;
             },
             error: function (request, status, error) {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
-                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/img_upload_photo.jpg');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
                 canProceed = true;
                 $('#other_files > #pictureCount').remove();
                 $('#other_files > #pictureName').remove();

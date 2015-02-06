@@ -2,7 +2,6 @@
 
     $(window).load(function(){
         $('div.loader').fadeOut("fast").css("display", "none");
-        console.log("trigger load test");
     });
    
     $(window).bind('scroll',function(e){

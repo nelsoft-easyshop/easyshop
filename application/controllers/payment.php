@@ -1560,11 +1560,10 @@ class Payment extends MY_Controller{
     }
 
     /**
-     * reset price and quantity data on session
-     * @param  boolean $condition
+     * reset price and quantity data on session 
      * @return integer
      */
-    private function resetPriceAndQty($condition = true)
+    private function resetPriceAndQty()
     {
         $productManager = $this->serviceContainer['product_manager'];
         $carts = $this->session->all_userdata(); 
