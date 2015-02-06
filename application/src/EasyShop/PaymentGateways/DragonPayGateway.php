@@ -164,7 +164,7 @@ class DragonPayGateway extends AbstractGateway
         $name = "";
 
         if($validatedCart['itemCount'] !== $productCount){
-            die('{"e":"0","m":"Item quantity not available."}');
+            return '{"e":"0","m":"Item quantity not available."}';
         }
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -200,11 +200,11 @@ class DragonPayGateway extends AbstractGateway
                 );
 
         if($return['o_success'] <= 0){
-           die('{"e":"0","m":"'.$return['o_message'].'"}');  
+           return '{"e":"0","m":"'.$return['o_message'].'"}';  
         }
         else{ 
             $orderId = $return['v_order_id'];
-            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($toBeLocked,$orderId); 
+            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($orderId, $toBeLocked); 
 
             $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                             ->find($orderId);
@@ -240,7 +240,7 @@ class DragonPayGateway extends AbstractGateway
                 $this->em->flush();
             }
 
-            exit($dpReturn);
+            return $dpReturn;
         }
     }
 

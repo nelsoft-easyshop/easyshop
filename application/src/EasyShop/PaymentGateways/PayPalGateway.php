@@ -159,13 +159,11 @@ class PayPalGateway extends AbstractGateway
         $this->setParameter('paymentType', $paymentType);
 
         if($productCount <= 0){
-            echo '{"e":"0","d":"There are no items in your cart."}';
-            exit();
+            return '{"e":"0","d":"There are no items in your cart."}';
         }
 
         if($validatedCart['itemCount'] !== $productCount){
-            echo '{"e":"0","d":"One of the items in your cart is unavailable."}';
-            exit();
+            return '{"e":"0","d":"One of the items in your cart is unavailable."}';
         } 
 
         $shippingAddress = $this->em->getRepository('EasyShop\Entities\EsAddress')
@@ -208,7 +206,7 @@ class PayPalGateway extends AbstractGateway
         $this->setParameter('amount', $grandTotal);
 
         if($thereIsPromote <= 0 && $grandTotal < 50.00){
-            die('{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}');
+            return '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
         }
 
         foreach ($itemList as $key => $value) {
@@ -261,7 +259,7 @@ class PayPalGateway extends AbstractGateway
 
             if($return['o_success'] > 0){
                 $orderId = $return['v_order_id'];
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($orderId,$toBeLocked); 
+                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($orderId, $toBeLocked); 
                 $paypalurl ='https://www'.$PayPalMode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($orderId);
@@ -290,14 +288,14 @@ class PayPalGateway extends AbstractGateway
                     $this->em->persist($paymentRecord);
                 }
                 $this->em->flush();
-                die('{"e":"1","d":"'.$paypalurl.'"}');
+                return '{"e":"1","d":"'.$paypalurl.'"}';
             }
             else{
-                die('{"e":"0","d":"'.$return['o_message'].'"}');
+                return '{"e":"0","d":"'.$return['o_message'].'"}';
             } 
         }
         else{
-            die('{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}');
+            return '{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}';
         }
     }
 
