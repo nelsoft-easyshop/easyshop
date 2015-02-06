@@ -191,7 +191,15 @@ class MobileProductUpload extends MY_Controller
             $shippingArray = json_decode(trim($this->input->post('shipping_info')), true);
             $attributeArray = json_decode(trim($this->input->post('attributes')), true);
             $condition = $this->lang->line('product_condition')[0];
+            $bankDetails = "";
 
+            // {
+            //     "bank_id": 1,
+            //     "account_name": "ASDSA",
+            //     "account_number": "1232133",
+            //     "billing_info": 0
+            // }
+            
             if(is_null($imageArray) === false
                && isset($imageArray[0])){
                 $images = $imageArray; 
