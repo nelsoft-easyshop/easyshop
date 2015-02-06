@@ -271,7 +271,7 @@ class SyncCsvImage extends MY_Controller
             $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o.".$values->getProductImageType();
             $imageDirectory = "./".$this->config->item('product_img_directory').$filename."/other/".$newfilename;
             $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
-            if(copy($path, $imageDirectory)){
+            if(file_exists($path) && copy($path, $imageDirectory)){
                 $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
 
                 $productImage = new EsProductImage();     
@@ -292,6 +292,19 @@ class SyncCsvImage extends MY_Controller
                 $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail", $imageDimensions["productImagesSizes"]["thumbnail"]);
                 $imageUtility->imageResize($imageDirectory, $tempDirectory, $imageDimensions["productImagesSizes"]["usersize"]);        
             }                    
+        }
+    }
+
+    /**
+     * Handles deleting of images upload by the administrator
+     * @return JSONP
+     */
+    public function deleteImage()
+    {
+        if($this->EsAdminImagesRepository->deleteImage($this->input->get("imageId"))) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output("jsonCallback({'sites':[{'success': 'success',},]});");
         }
     }
 

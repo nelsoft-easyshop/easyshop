@@ -32,7 +32,7 @@
 
 <?php if($productCount > 0): ?>
     <?php if($categoryHeaderData): ?>
-    <section class=" color-default search-parallax-container <?php if((isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom']))||(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom']))):?>search-parallax-container-mobile<?php endif; ?>" style="<?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 220px;<?php endif; ?>">
+    <section class=" color-default search-parallax-container <?php if((isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom']))||(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom']))):?>search-parallax-container-mobile<?php endif; ?>" style="<?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>height: 220px;<?php endif; ?><?php if(isset($categoryHeaderData['top'])&&!isset($categoryHeaderData['bottom'])):?>height: auto;<?php endif; ?>">
         <div id="parallax-1" class="search-parallax">
             <?php if(isset($categoryHeaderData['top'])): ?>
              <div id="parallax-4" style="margin-top: -10px;">

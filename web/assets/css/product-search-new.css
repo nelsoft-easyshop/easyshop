@@ -226,7 +226,7 @@ html, body{
     display: inline-block;
     max-width: 100%;
     color: #565656;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
     white-space: nowrap;
     overflow: hidden;
@@ -235,7 +235,7 @@ html, body{
 }
 
 .search-item-price{
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
 }
 
@@ -400,6 +400,10 @@ html, body{
     font-size: 11px;
     min-height: 65px;
     word-break: break-word;
+    word-wrap: break-word;
+    -ms-word-wrap: break-word;
+    overflow-wrap: break-word;
+
 }
 
 .divider-gray{
