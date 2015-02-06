@@ -236,8 +236,34 @@ class ApiFormatter
 
         $recentReview = $this->reviewProductService->getProductReview($productId);
 
+        
+        $shipmentDetails = [];
+        $isFreeShippingNationwide = $this->productManager->isFreeShippingNationwide($productId);
+
+        if(!$isFreeShippingNationwide){
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                    ->getShippingDetailsByProductId($productId);
+            foreach ($shippingDetails as $key => $value) {
+                if(!isset($shipmentDetails[$value['product_item_id']])){
+                    $shipmentDetails[$value['product_item_id']] = [
+                        [
+                            'location' => $value['location'],
+                            'price' => $value['price']
+                        ]
+                    ]; 
+                }
+                else{ 
+                    $shipmentDetails[$value['product_item_id']][] = [
+                        'location' => $value['location'],
+                        'price' => $value['price'], 
+                    ];
+                }
+            }
+        } 
+
         return [
             'productDetails' => $productDetails,
+            'productShipmentFee' => $shipmentDetails,
             'productImages' => $productImages,
             'sellerDetails' => $sellerDetails,
             'productCombinationAttributes' => $productCombinationAttributes,
@@ -306,7 +332,8 @@ class ApiFormatter
                     'slug' => $cartItem['slug'],
                     'name' => utf8_encode($cartItem['name']),
                     'quantity' => $cartItem['qty'],  
-                    'isAvailable' => false,  
+                    'isAvailable' => false,
+                    'shippingFee' => 0,
                     'mapAttributes' => $mappedAttributes,
                 ]; 
 
@@ -322,6 +349,7 @@ class ApiFormatter
                         'pesopaycdb' => $cartItem['pesopaycdb'],
                         'directbank' => $cartItem['directbank'],
                         'error_message' => [],
+                        'shippingFee' => $cartItem['shippingFee'],
                     ];
 
                     $formattedCartContents[$rowId] = array_merge($formattedCartContents[$rowId],$validation);

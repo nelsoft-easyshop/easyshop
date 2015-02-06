@@ -75,11 +75,19 @@ class CheckoutService
             $itemId = $value['product_itemID'];
             $quantity = $value['qty'];
             $product = $this->productManager->getProductDetails($productId);
+            $shippingDetails = $this->getProductItemShippingDetails($product, $itemId, $member);
+            $isAvailableInLocation = false;
+            $shipmentFee = 0;
+            if($shippingDetails && count($shippingDetails) >= 1){ 
+                $isAvailableInLocation = true; 
+                $shipmentFee = $shippingDetails[0]['price'];
+            }
 
             $cartContent[$key]['canPurchaseWithOther'] = $this->canPurchaseWithOtherProduct($product) && count($cartContent) === 1;
             $cartContent[$key]['hasNoPuchaseLimitRestriction'] = $this->isPurchaseLimitReach($product, $member->getIdMember());
-            $cartContent[$key]['isAvailableInLocation'] = $this->canPurchaseInLocation($product, $itemId, $member);
             $cartContent[$key]['isQuantityAvailable'] = $this->canPurchaseDesiredQuantity($product, $itemId, $quantity);
+            $cartContent[$key]['shippingFee'] = $shipmentFee;
+            $cartContent[$key]['isAvailableInLocation'] = $isAvailableInLocation;
             $this->applyPaymentTypAvailable($cartContent[$key], $product);
         }
 
@@ -103,13 +111,13 @@ class CheckoutService
     }
 
     /**
-     * Check if product in cart is available on users location
+     * Get product shipping details
      * @param  EasyShop\Entities\EsProduct  $product
      * @param  integer $itemId
      * @param  EasyShop\Entities\EsMember  $member
-     * @return boolean
+     * @return mixed
      */
-    public function canPurchaseInLocation($product, $itemId, $member)
+    public function getProductItemShippingDetails($product, $itemId, $member)
     {
         $shippingDetailRepo = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail');
         $addressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
@@ -128,11 +136,11 @@ class CheckoutService
                                                                                  $city->getIdLocation(), 
                                                                                  $region->getIdLocation(), 
                                                                                  $majorIsland->getIdLocation());
-            return count($locationDetails) >= 1;
+            return $locationDetails;
         }
 
         return false;
-    }
+    } 
 
     /**
      * check if desired quantity is available
