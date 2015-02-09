@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
  
 use EasyShop\Upload\AssetsUploader as AssetsUploader;
 use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Entities\EsBillingInfo as EsBillingInfo;
 
 class MobileProductUpload extends MY_Controller 
 {
@@ -170,6 +171,8 @@ class MobileProductUpload extends MY_Controller
      */
     public function processUpload()
     { 
+        $esBillingInfoRepo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo'); 
+
         $isSuccess = false;
         $errorMessage = "";
         $date = date("Ymd");
@@ -177,6 +180,7 @@ class MobileProductUpload extends MY_Controller
         $attributes = [];
         $shippingInfo = [];
         $memberId = $this->member->getIdMember();
+        $billingInfoId = EsBillingInfo::DEFAULT_BILLING_ID;
 
         $tempId = (string) trim($this->input->post('upload_token')); 
         if($tempId === (string) $this->member->getTempId()){
@@ -189,17 +193,10 @@ class MobileProductUpload extends MY_Controller
             $isMeetUp = (bool) trim($this->input->post('isMeetUp'));
             $quantity = (int) trim($this->input->post('quantity'));
             $imageArray = json_decode(trim($this->input->post('images')), true);
-            $shippingArray = json_decode(trim($this->input->post('shipping_info')), true);
+            $shippingArray = json_decode(trim($this->input->post('shippingInfo')), true);
             $attributeArray = json_decode(trim($this->input->post('attributes')), true);
             $condition = $this->lang->line('product_condition')[0];
-            $bankDetails = "";
-
-            // {
-            //     "bank_id": 1,
-            //     "account_name": "ASDSA",
-            //     "account_number": "1232133",
-            //     "billing_info": 0
-            // }
+            $bankDetails = json_decode(trim($this->input->post('bankDetails')), true);
             
             if(is_null($imageArray) === false
                && isset($imageArray[0])){
@@ -224,7 +221,37 @@ class MobileProductUpload extends MY_Controller
             ]; 
 
             $validate = $this->productUploadManager->validateUploadRequest($validData);
-            if($validate['isSuccess']){ 
+            if($validate['isSuccess']){
+
+                if(is_null($bankDetails) === false && isset($bankDetails['billing_info'])){
+                    $billingInfoId = $bankDetails['billing_info'];
+                    $accountName = $bankDetails['account_name'];
+                    $accountNumber = $bankDetails['account_number'];
+                    $bankId = $bankDetails['bank_id'];
+                    $bankInfo = $esBillingInfoRepo->findOneBy([
+                                                        'idBillingInfo' => $billingInfoId,
+                                                        'member' => $memberId,
+                                                    ]);
+
+                    if($bankInfo){
+                        $bankInfo->setDatemodified(date_create(date("Y-m-d H:i:s")));
+                        $bankInfo->setBankAccountName($accountName);
+                        $bankInfo->setBankAccountNumber($accountNumber);
+                        $bankInfo->setBankId($bankId);
+                        $this->em->flush(); 
+                    }
+                    else{
+                        $newAccount = $esBillingInfoRepo->createNewPaymentAccount(
+                            $memberId, 
+                            $accountName, 
+                            $accountNumber, 
+                            $bankId
+                        );
+
+                        $billingInfoId = $newAccount->getIdBillingInfo();
+                    }
+                } 
+
                 $product = $this->productUploadManager->createProduct(
                                                             $productTitle,
                                                             $condition,
@@ -235,7 +262,8 @@ class MobileProductUpload extends MY_Controller
                                                             $discount,
                                                             $isCod,
                                                             $isMeetUp,
-                                                            EsProduct::ACTIVE
+                                                            EsProduct::ACTIVE,
+                                                            $billingInfoId
                                                         );
                 if($product){
                     $productId = $product->getIdProduct();

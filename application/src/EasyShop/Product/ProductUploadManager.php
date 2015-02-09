@@ -11,6 +11,7 @@ use EasyShop\Entities\EsOptionalAttrdetail as EsOptionalAttrdetail;
 use EasyShop\Entities\EsProductItem as EsProductItem;
 use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
 use EasyShop\Entities\EsProductShippingDetail as EsProductShippingDetail;
+use EasyShop\Entities\EsBillingInfo as EsBillingInfo;
 
 /**
  * Product Upload Manager Class
@@ -93,6 +94,7 @@ class ProductUploadManager
                                   $isCod = false,
                                   $isMeetUp = false,
                                   $isDraft = EsProduct::DRAFT,
+                                  $billingInfoId = EsBillingInfo::DEFAULT_BILLING_ID,
                                   $customCategory = "",
                                   $brandId = EsBrand::CUSTOM_CATEGORY_ID,
                                   $customBrand = "",
