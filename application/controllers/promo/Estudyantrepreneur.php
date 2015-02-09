@@ -2,31 +2,6 @@
 
 class Estudyantrepreneur extends MY_Controller
 {
-    /**
-     * Must be transferred to a config file, or not?
-     * Declaration of Rounds, Start and End dates and Number of qualified per round
-     * @var array
-     */
-    private $rounds = [
-        'first_round' =>
-            [
-                'start' => '2015-02-23 00:00:00',
-                'end' => '2015-03-06 23:59:59',
-                'limit' => PHP_INT_MAX
-            ],
-        'second_round' =>
-            [
-                'start' => '2015-03-07 00:00:00',
-                'end' => '2015-04-07 23:59:59',
-                'limit' => 3
-            ],
-        'final_round' =>
-            [
-                'start' => '2015-06-08 00:00:00',
-                'end' => '2015-07-08 23:59:59',
-                'limit' => 1
-            ],
-    ];
 
     public function __construct()
     {
