@@ -32,7 +32,7 @@ class MY_Controller extends CI_Controller
         
         /*  Load custom common functions */
         $this->load->helper('common_helper');
-     
+
         if(!$this->session->userdata('member_id')){
             $this->check_cookie();
         }
@@ -51,6 +51,7 @@ class MY_Controller extends CI_Controller
         if($cookie === '' || !$cookie){
             return false;
         }
+        
         $userIp = $this->session->userdata('ip_address');
         $userAgent = $this->session->userdata('user_agent');
         $cisessionId = $this->session->userdata('session_id');
@@ -61,6 +62,12 @@ class MY_Controller extends CI_Controller
             $member = $authenticationResult['member'];
             $this->session->set_userdata('member_id', $member->getIdMember());
             $this->session->set_userdata('usersession', $authenticationResult['usersession']);
+            $cookiedata = [
+                'name' => 'es_usr',
+                'value' => $authenticationResult['newCookie'],
+                'expire' => EasyShop\Account\AccountManager::REMEMBER_ME_COOKIE_LIFESPAN_IN_SEC,
+            ];
+            set_cookie($cookiedata);
             $cartData = $this->serviceContainer['cart_manager']
                              ->synchCart($member->getIdMember());
             $this->session->set_userdata('cart_contents', $cartData);
