@@ -35,7 +35,7 @@ class Estudyantrepreneur
 
     private function __getPreviousRounds()
     {
-        $rounds = $this->promoConfig[7]['option'];
+        $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $date = new \DateTime;
         $dateToday = $date->getTimestamp();
         $round = false;
@@ -172,7 +172,7 @@ class Estudyantrepreneur
     public function isUserAlreadyVoted($memberId)
     {
         $roundData = $this->__getPreviousRounds();
-        $rounds = $this->promoConfig[7]['option'];
+        $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('tblPromo')
                     ->from('EasyShop\Entities\EsPromo', 'tblPromo')
