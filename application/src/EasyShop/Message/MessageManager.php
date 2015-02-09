@@ -6,152 +6,233 @@ use EasyShop\Entities\EsMessages;
 
 class MessageManager {
 
+    const SENDER_DOES_NOT_EXIST_ERROR = 1;
+    
+    const RECIPIENT_DOES_NOT_EXIST_ERROR = 2;
+    
+    const SELF_SENDING_ERROR = 3;
+
+    const MESSAGE_IS_EMPTY_ERROR = 4;
+
     /**
      *  Entity Manager Instance
      *
      *  @var Doctrine\ORM\EntityManager
      */
     private $em;
-
+    
     /**
-     *  Local Config file
+     *  Config Loader
      *
-     *  @var \EasyShop\Core\Configuration\Configuration
+     *  @var EasyShop\ConfigLoader\ConfigLoader
+     */
+    private $configLoader;
+    
+    /**
+     *  Language Loader
+     *
+     *  @var EasyShop\LanguageLoader\LanguageLoader
+     */
+    private $languageLoader;
+    
+    /**
+     * Social Media Manager
+     *
+     * @var EasyShop\SocialMedia\SocialMediaManager
+     */
+    private $socialManager;
+    
+    
+    /**
+     * Email Notification Service
+     *
+     * @var EasyShop\Notifications\EmailNotification
+     */
+    private $emailService;
+    
+    /**
+     * Codeigniter Parser
+     *
+     * @var \CI_Parser
+     */
+    private $parser;
+    
+    /**
+     * Redis Client
+     *
+     * @var \Predis\Client
+     */
+    private $redisClient;
+    
+    /**
+     * Redis Client
+     *
+     * @var \EasyShop\Core\Configuration\Configuration
      */
     private $localConfig;
-
+    
     /**
-     *  Js Server Config file
+     * JS Server config
      *
-     *  @var config/param/js_config.php
+     * @var mixed
      */
     private $jsServerConfig;
+    
 
-    function __construct($em, $localConfig, $jsServerConfig)
+    function __construct($em, $configLoader, $languageLoader, $socialManager, $emailService, $parser, $redisClient, $localConfig)
     {
         $this->em = $em;
+        $this->configLoader = $configLoader;
+        $this->languageLoader = $languageLoader;
+        $this->socialManager = $socialManager;
+        $this->emailService = $emailService;
+        $this->parser = $parser;
+        $this->redisClient = $redisClient;
         $this->localConfig = $localConfig;
-        $this->jsServerConfig = $jsServerConfig;
+        $this->jsServerConfig = $this->configLoader->getItem('nodejs');
     }
 
     /**
-     * Send message
-     * @param $sender
-     * @param $recipient
-     * @param $userMessage
-     * @return esMessage
+     * Sends a message
+     * @param EasyShop\Entities\EsMember $sender
+     * @param EasyShop\Entities\EsMember $recipient
+     * @param string $userMessage
+     * @return mixed
      */
-    public function send($sender, $recipient, $userMessage)
+    public function sendMessage($sender, $recipient, $userMessage)
     {
-        $message = new EsMessages();
-        $message->setTo($recipient);
-        $message->setFrom($sender);
-        $message->setMessage($userMessage);
-        $message->setTimeSent(new DateTime('now'));
+        $response = [
+            'error' => '',
+            'isSuccessful' => false,
+        ];
+    
+        if(!$sender){
+            $response['error'] = self::SENDER_DOES_NOT_EXIST_ERROR;
+        }
+        else if(!$recipient){
+            $response['error'] = self::RECIPIENT_DOES_NOT_EXIST_ERROR;
+        }
+        else if($sender->getIdMember() === $recipient->getIdMember()){
+            $response['error'] = self::SELF_SENDING_ERROR;
+        }
+        else if(strlen(trim($userMessage)) === 0){
+            $response['error'] = self::MESSAGE_IS_EMPTY_ERROR;
+        }
+        else{
+            $message = new EsMessages();
+            $message->setTo($recipient);
+            $message->setFrom($sender);
+            $message->setMessage($userMessage);
+            $message->setTimeSent(new DateTime('now'));
 
-        $this->em->persist($message);
-        $this->em->flush();
+            $this->em->persist($message);
+            $this->em->flush();
+            
+            $emailRecipient = $recipient->getEmail();
+            $emailSubject = $this->languageLoader->getLine('new_message_notif');
+            $imageArray = $this->configLoader->getItem('email', 'images');
+            $imageArray[] = "/assets/images/appbar.home.png";
+            $imageArray[] = "/assets/images/appbar.message.png";
 
-        return $message;
+            $socialMediaLinks =  $this->socialManager->getSocialMediaLinks();
+            $parseData = [
+                'user' => $sender->getUsername(),
+                'recipient' => $recipient->getUsername(),
+                'home_link' => base_url(),
+                'store_link' => base_url() . $sender->getSlug(),
+                'msg_link' => base_url() . "messages/#" . $sender->getUsername(),
+                'msg' => $message->getMessage(),
+                'facebook' => $socialMediaLinks["facebook"],
+                'twitter' => $socialMediaLinks["twitter"],
+            ];
+
+            $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, true);
+            $this->emailService->setRecipient($emailRecipient)
+                                ->setSubject($emailSubject)
+                                ->setMessage($emailMsg, $imageArray)
+                                ->queueMail();
+                                
+            $updatedMessageListForSender = $this->getAllMessage($sender->getIdMember());
+            $updatedMessageListForReciver = $this->getAllMessage($recipient->getIdMember());
+
+            $redisChatChannel = $this->getRedisChannelName();
+            $this->redisClient->publish($redisChatChannel, json_encode([
+                'event' => 'message-sent',
+                'recipient' => $recipient->getStorename(),
+                'message' => $updatedMessageListForReciver,
+            ]));
+            $response['isSuccessful'] = true;
+            $response['allMessages'] = $updatedMessageListForSender;
+        }
+        
+        return $response;
     }
+    
 
     /**
-     * Get all message
-     * @param $userId
-     * @param bool $getUnreadMessages
-     * @return array
+     * Get all messages for a particular user.
+     * The name and no. of unread messages per discussion
+     * is placed in the first message element of the conversations array
+     *
+     * @param integer $userId
+     * @return mixed
      */
-    public function getAllMessage($userId, $getUnreadMessages = false)
+    public function getAllMessage($userId)
     {
-        $result = [];
-        $unreadMsgCount = 0;
+        $userId = (int) $userId;
         $messages = $this->em->getRepository('EasyShop\Entities\EsMessages')
                              ->getAllMessage($userId);
-        $messageContainer = [];
-        foreach ($messages as $message) {
-            $receiverKey = $message['to_id'] . '~' . $message['from_id'];
-            $senderKey = $message['from_id'] . '~' . $message['to_id'];
-            $status = (int) $message['from_id'] === (int) $userId ? EsMessages::MESSAGE_SENDER : EsMessages::MESSAGE_RECEIVER;
+        /**
+         * Form message container
+         */
+        $formattedMessageContainer = [];
+        foreach($messages as $message){
+        
+            if((int) $message['from_id'] === (int) $userId){
+                $status = EsMessages::MESSAGE_SENDER ;
+                $otherMemberId = $message['to_id'];
+                $otherMemberName = $message['recipient'];
+                $isShow = (int) $message['is_delete'] === (int) EsMessages::MESSAGE_NOT_DELETED || (int) $message['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER;
+            }
+            else{
+                $status = EsMessages::MESSAGE_RECEIVER;
+                $otherMemberId = $message['from_id'];
+                $otherMemberName = $message['sender'];
+                $isShow = (int) $message['is_delete'] === (int) EsMessages::MESSAGE_NOT_DELETED || (int) $message['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_SENDER;
+            }
+            
+            $keyPair = $userId.'~'.$otherMemberId;
             $messageId = $message['id_msg'];
-
-            if (array_key_exists($senderKey, $messageContainer)) {
-                $messageContainer[$senderKey][$messageId] = $message;
-                $messageContainer[$senderKey][$messageId]['status'] = $status;
-            }
-            else if (array_key_exists($receiverKey, $messageContainer)) {
-                $messageContainer[$receiverKey][$messageId] = $message;
-                $messageContainer[$receiverKey][$messageId]['status'] = $status;
-            }
-            else {
-                if( $status === EsMessages::MESSAGE_SENDER &&
-                    ( (int) $message['is_delete'] === (int) EsMessages::MESSAGE_NOT_DELETED ||
-                        (int) $message['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER ) ) {
-                    $messageContainer[$senderKey][$messageId] = $message;
-                    $messageContainer[$senderKey][$messageId]['status'] = EsMessages::MESSAGE_SENDER;
-                    $messageContainer[$senderKey][$messageId]['name'] = ( (int) $message['from_id'] === (int) $userId ?
-                                                                            $message['recipient'] :
-                                                                            $message['sender']);
+            if($isShow){
+                $messageData = $message;
+                $messageData['status'] = $status;
+                if(!array_key_exists($keyPair, $formattedMessageContainer)){
+                    $messageData = array_merge($messageData, ['name' => $otherMemberName]);
                 }
-                else if ( $status === EsMessages::MESSAGE_RECEIVER &&
-                    ( (int) $message['is_delete'] === (int) EsMessages::MESSAGE_NOT_DELETED ||
-                        (int) $message['is_delete'] === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) ) {
-                    $messageContainer[$senderKey][$messageId] = $message;
-                    $messageContainer[$senderKey][$messageId]['status'] = EsMessages::MESSAGE_RECEIVER;
-                    $messageContainer[$senderKey][$messageId]['unreadConversationCount'] = 0;
-                    $messageContainer[$senderKey][$messageId]['name'] = ( (int) $message['from_id'] === (int) $userId ?
-                                                                            $message['recipient'] :
-                                                                            $message['sender']);
-                    if ( (int) $message['opened'] === 0 ) {
-                        $unreadMsgCount++;
-                    }
-                }
+                $formattedMessageContainer[$keyPair][$messageId] = $messageData;
             }
         }
-
-        $resultMessageContainer = array_values($messageContainer);
-        $result['messages'] =[];
-        $result['unread_msgs_count'] = $unreadMsgCount;
-        foreach ($resultMessageContainer as $conversation) {
-            $unreadConversationCount = 0;
-            foreach($conversation as $message) {
-                $delete = (int) $message['is_delete'];
-                $status = $message['status'];
+        
+        /**
+         * Count number of unread messages per discussion
+         */
+        $result['messages'] = []; 
+        foreach($formattedMessageContainer as $discussion){
+            $unreadMessageCount = 0;
+            foreach($discussion as $singleMessage){
                 $isOpened = (bool) $message['opened'];
-                if ( $status === EsMessages::MESSAGE_SENDER &&
-                    ($delete === (int) EsMessages::MESSAGE_NOT_DELETED ||
-                        $delete === (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER )
-                ) {
-                }
-                else if ( ( $status === EsMessages::MESSAGE_RECEIVER &&
-                    ( $delete === (int) EsMessages::MESSAGE_NOT_DELETED ||
-                        $delete === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) ) && !$isOpened
-                ) {
-                    $unreadConversationCount++;
-                }
-                else {
-                    unset($message);
-                }
-
-                $first_key = reset($conversation)['id_msg'];
-            }
-            $conversation[$first_key]['unreadConversationCount'] = $unreadConversationCount;
-            $result['messages'][] = $conversation;
-        }
-
-        if ($getUnreadMessages) {
-            foreach ($result['messages'] as $conversation) {
-                foreach ($conversation as $message) {
-                    if (
-                        ( ( isset($message['name']) && (int) $message['to_id'] === $userId ) && $message['opened'] ) ||
-                        ($message['status'] === EsMessages::MESSAGE_SENDER && isset($message['name']) )
-                    ) {
-                        unset($conversation);
-                    }
+                if($status === EsMessages::MESSAGE_RECEIVER && !$isOpened){
+                    $unreadMessageCount++;
                 }
             }
-            $result['isUnreadMessages'] = true;
+            $firstMessageId = reset($discussion)['id_msg'];
+            $discussion[$firstMessageId]['unreadConversationCount'] = $unreadMessageCount;
+            $result['messages'][] = $discussion;
         }
-
+        
+        $result['unread_msgs_count'] = $this->em->getRepository('EasyShop\Entities\EsMessages')
+                                            ->getUnreadMessageCount($userId);
+        
         return $result;
     }
 
@@ -164,6 +245,8 @@ class MessageManager {
     public function getChatHost($isBaseUrlOnly = false)
     {
         $host = trim($this->jsServerConfig['HOST']);
+        $this->configLoader->getItem('social_media_links');     
+        
         if($this->localConfig->isConfigFileExists()) {
             $configInternalIp = $this->localConfig->getConfigValue('internal_ip');           
             if(strlen($configInternalIp) > 0 && !$isBaseUrlOnly){
