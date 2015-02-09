@@ -40,9 +40,7 @@ class Estudyantrepreneur extends MY_Controller
 
     /**
      * Vote for a student
-     * @Param studentId
-     * @Param schoolId
-     * @Return boolean
+     * @Return JSON
      */
     public function vote()
     {

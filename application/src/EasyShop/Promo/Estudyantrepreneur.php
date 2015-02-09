@@ -33,6 +33,10 @@ class Estudyantrepreneur
         $this->em = $em;
     }
 
+    /**
+     * Get previous rounds
+     * @return array
+     */
     private function __getPreviousRounds()
     {
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
@@ -153,8 +157,6 @@ class Estudyantrepreneur
     {
         $promo = new EsPromo();
         $promo->setMemberId($memberId);
-        $promo->setProductId(0);
-        $promo->setCode(0);
         $promo->setStudentId($studentId);
         $promo->setPromoType(EsPromoType::ESTUDYANTREPRENEUR);
         $promo->setCreatedAt(new \DateTime('now'));
