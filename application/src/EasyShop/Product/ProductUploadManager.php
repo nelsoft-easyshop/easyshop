@@ -73,6 +73,7 @@ class ProductUploadManager
      * @param  float    $productPrice  
      * @param  float    $discount   
      * @param  boolean  $isCod      
+     * @param  boolean  $isMeetUp      
      * @param  string   $customCategory
      * @param  integer  $brandId    
      * @param  string   $customBrand 
@@ -90,6 +91,7 @@ class ProductUploadManager
                                   $productPrice,
                                   $discount = 0,
                                   $isCod = false,
+                                  $isMeetUp = false,
                                   $isDraft = EsProduct::DRAFT,
                                   $customCategory = "",
                                   $brandId = EsBrand::CUSTOM_CATEGORY_ID,
@@ -129,6 +131,7 @@ class ProductUploadManager
                    ->setBrandOtherName($customBrand)
                    ->setIsDraft($isDraft)
                    ->setIsCod($isCod)
+                   ->setIsMeetup($isMeetUp)
                    ->setCreateddate($currentDateTime)
                    ->setLastmodifieddate($currentDateTime)
                    ->setStartdate($currentDateTime)

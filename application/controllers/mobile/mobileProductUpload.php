@@ -186,6 +186,7 @@ class MobileProductUpload extends MY_Controller
             $price = (float) trim(str_replace(',', '', $this->input->post('price')));
             $discount = (float) trim($this->input->post('discount'));
             $isCod = (bool) trim($this->input->post('isCod'));
+            $isMeetUp = (bool) trim($this->input->post('isMeetUp'));
             $quantity = (int) trim($this->input->post('quantity'));
             $imageArray = json_decode(trim($this->input->post('images')), true);
             $shippingArray = json_decode(trim($this->input->post('shipping_info')), true);
@@ -233,6 +234,7 @@ class MobileProductUpload extends MY_Controller
                                                             $price,
                                                             $discount,
                                                             $isCod,
+                                                            $isMeetUp,
                                                             EsProduct::ACTIVE
                                                         );
                 if($product){
