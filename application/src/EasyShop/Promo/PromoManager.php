@@ -50,7 +50,7 @@ class PromoManager
         $configArray = $configLoader->getItem('promo', 'Promo');
         $this->promoConfig = $configArray;
         $this->em = $em;
-        
+
         $container = new \Pimple\Container();
         $container[\EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR] = function ($c) use ($configArray, $configLoader, $em){
             $class = $configArray[\EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR]['implementation'];
@@ -216,7 +216,8 @@ class PromoManager
      * @param integer $promoType
      * @param string $method
      * @param mixed $parameters
-     * @return mixe
+     * @return mixed
+     * @throws \Exception
      */
     public function callSubclassMethod($promoType, $method = "", $parameters = [])
     {
