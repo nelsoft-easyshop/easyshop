@@ -395,8 +395,8 @@
             }
         } 
  
-        window.history.replaceState(null, null, currentSegment+'?'+allQueryString+'#page-'+currentPageNumber); 
         $('#simplePagination').pagination('selectPage', currentPageNumber);
+        window.history.replaceState(null, null, currentSegment+'?'+allQueryString+'#page-'+currentPageNumber); 
     });
 
     $(document).on('click',".page-link",function () {
