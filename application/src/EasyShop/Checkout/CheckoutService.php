@@ -91,7 +91,7 @@ class CheckoutService
                 $shipmentFee = $shippingDetails[0]['price'];
             }
 
-            $cartContent[$key]['canPurchaseWithOther'] = $this->canPurchaseWithOtherProduct($product) && count($cartContent) === 1;
+            $cartContent[$key]['canPurchaseWithOther'] = $this->canPurchaseWithOtherProduct($product);
             $cartContent[$key]['hasNoPuchaseLimitRestriction'] = $this->isPurchaseLimitReach($product, $member->getIdMember());
             $cartContent[$key]['isQuantityAvailable'] = $this->canPurchaseDesiredQuantity($product, $itemId, $quantity);
             $cartContent[$key]['shippingFee'] = $shipmentFee;
