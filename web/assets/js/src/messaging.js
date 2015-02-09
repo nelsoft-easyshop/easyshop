@@ -101,18 +101,6 @@
         var checked = $(".d_all").map(function () {return this.value;}).get().join(",");
         delete_data(checked);
     });
-    function sortObjectByKey (obj)
-    {
-        var arrayOfObject = [];
-
-        $.each(obj,function(key, val) {
-            arrayOfObject[key] = val;
-        });
-
-        arrayOfObject.sort();
-
-        return arrayOfObject;
-    };
 
     $("#table_id tbody").on("click",".btn_each_msg",function()
     {
@@ -126,7 +114,7 @@
         var sortedObjectByKey = sortObjectByKey(msg);
 
         $.each(sortedObjectByKey,function(key, val) {
-            if (val !== undefined) {
+            if (val !== "undefined") {
                 if (val.status == "receiver") {
                     html += '<span class="float_left">';
                 }
@@ -168,6 +156,19 @@
         socket.emit('set account online', memberId);
     };
 
+    function sortObjectByKey (obj)
+    {
+        var arrayOfObject = [];
+
+        $.each(obj,function(key, val) {
+            arrayOfObject[key] = val;
+        });
+
+        arrayOfObject.sort();
+
+        return arrayOfObject;
+    };
+
     function onFocusReload(msgs)
     {
         var html = "";
@@ -179,7 +180,7 @@
             var cnt = parseInt(Object.keys(val).length)- 1;
             var isActive ='';
             var Nav_msg = message[key][Object.keys(val)[cnt]];
-            if (Nav_msg.name === undefined) {
+            if (Nav_msg.name === "undefined") {
                 for (var first_key in val) {
                     if (val.hasOwnProperty(first_key)) {
                         break;
@@ -292,7 +293,7 @@
         $("#msg_field").empty();
         var sortedObjectByKey = sortObjectByKey(all_messages);
         $.each(sortedObjectByKey,function(key, val) {
-            if (val !== undefined) {
+            if (val !== "undefined") {
                 if (val.status == "receiver") {
                     html += '<span class="float_left">';
                 }
