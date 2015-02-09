@@ -114,7 +114,7 @@
         var sortedObjectByKey = sortObjectByKey(msg);
 
         $.each(sortedObjectByKey,function(key, val) {
-            if (val !== "undefined") {
+            if (typeof val !== "undefined") {
                 if (val.status == "receiver") {
                     html += '<span class="float_left">';
                 }
@@ -180,7 +180,7 @@
             var cnt = parseInt(Object.keys(val).length)- 1;
             var isActive ='';
             var Nav_msg = message[key][Object.keys(val)[cnt]];
-            if (Nav_msg.name === "undefined") {
+            if (typeof Nav_msg.name === "undefined") {
                 for (var first_key in val) {
                     if (val.hasOwnProperty(first_key)) {
                         break;
@@ -293,7 +293,7 @@
         $("#msg_field").empty();
         var sortedObjectByKey = sortObjectByKey(all_messages);
         $.each(sortedObjectByKey,function(key, val) {
-            if (val !== "undefined") {
+            if (typeof val !== "undefined") {
                 if (val.status == "receiver") {
                     html += '<span class="float_left">';
                 }
