@@ -20,8 +20,8 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
 class DragonPayGateway extends AbstractGateway
 {
 
-    private $merchantId  = 'EASYSHOP'; 
-    private $merchantPwd = 'UT78W5VQ';  
+    private $merchantId; 
+    private $merchantPwd;  
     private $url;
     private $ps;
     private $client;
@@ -50,16 +50,19 @@ class DragonPayGateway extends AbstractGateway
     public function __construct($em, $request, $pointTracker, $paymentService, $params=[])
     {
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
-        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
-        // LIVE
-            $this->ps = "https://gw.dragonpay.ph/Pay.aspx";
-        }
-        else{
-        // SANDBOX
-            $this->ps = "http://test.dragonpay.ph/Pay.aspx"; 
-        } 
 
-        $this->client = get_instance()->kernel->serviceContainer['nusoap_client'];
+        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
+            $configLoad = $paymentService->configLoader->getItem('payment','production'); 
+        }
+        else{ 
+            $configLoad = $paymentService->configLoader->getItem('payment','testing'); 
+        }
+        $config = $configLoad['payment_type']['dragonpay']['Easyshop'];
+
+        $this->ps = $config['redirect_url'];
+        $this->merchantId = $config['merchant_id'];
+        $this->merchantPwd = $config['merchant_password']; 
+        $this->client = $paymentService->soapClient;
     }
 
     /**
@@ -93,7 +96,6 @@ class DragonPayGateway extends AbstractGateway
             'ccy' => $ccy,
             'description' => $description,
             'email' => $email,
-            'mode'=>'1'
         ];
         
         $result = $this->client->call('GetTxnToken',$param);

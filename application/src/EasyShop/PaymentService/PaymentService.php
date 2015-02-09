@@ -197,7 +197,7 @@ class PaymentService
      *
      * @var EasyShop\Config\ConfigLoader
      */
-    private $configLoader;
+    public $configLoader;
 
     /**
      * XML Resource
@@ -228,6 +228,11 @@ class PaymentService
     private $messageManager;
 
     /**
+     * Soap client
+     */
+    public $soapClient;
+
+    /**
      * Constructor
      * 
      */
@@ -243,7 +248,8 @@ class PaymentService
                                 $xmlResourceService,
                                 $socialMediaManager,
                                 $languageLoader,
-                                $messageManager)
+                                $messageManager,
+                                $soapClient)
     {
         $this->em = $em;
         $this->request = $request;
@@ -258,6 +264,7 @@ class PaymentService
         $this->socialMediaManager = $socialMediaManager;
         $this->languageLoader = $languageLoader;
         $this->messageManager = $messageManager;
+        $this->soapClient = $soapClient;
     }
 
 

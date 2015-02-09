@@ -447,7 +447,8 @@ class Kernel
                 $container['xml_resource'],
                 $container['social_media_manager'],
                 $container['language_loader'],
-                $container['message_manager']
+                $container['message_manager'],
+                $container['nusoap_client']
             );
         };
 
@@ -477,16 +478,19 @@ class Kernel
         };
 
         // NUSoap Client
-        $container['nusoap_client'] = function ($c) {
+        $container['nusoap_client'] = function ($c) use ($container) {
             $url = '';
             if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
-            // LIVE
-                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+                // LIVE
+                $configLoad = $container['config_loader']->getItem('payment','production');  
             }
             else{
-            // SANDBOX
-                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+                // SANDBOX
+                $configLoad = $container['config_loader']->getItem('payment','testing');  
             }
+
+            $url = $configLoad['payment_type']['dragonpay']['Easyshop']['webservice_url'];
+
             return new \nusoap_client($url,true);
         };
 
