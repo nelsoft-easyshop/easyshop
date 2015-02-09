@@ -326,11 +326,6 @@ class Kernel
             return new \EasyShop\Promo\PromoManager($container['config_loader'], $container['entity_manager']);
         };
 
-        //Estudyantrepreneur Manager
-        $container['estudyantrepreneur_manager'] = function ($c) use ($container){
-            return new \EasyShop\Promo\Estudyantrepreneur($container['config_loader'], $container['entity_manager']);
-        };
-
         // Product Manager
         $container['product_manager'] = function ($c) use ($container) {
             $em = $container['entity_manager'];
