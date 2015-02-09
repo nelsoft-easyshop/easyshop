@@ -1,6 +1,6 @@
 <?php
 
-return [
+$config = [
     'NODE_PORT' => 8000,
     'HOST' => 'localhost',
     'JWT_SECRET' => 'SECRET345y5h0p',
@@ -8,3 +8,4 @@ return [
     'REDIS_PORT' => 6379,
 ];
 
+return $config;
