@@ -2,6 +2,9 @@
 
 namespace EasyShop\Promo;
 
+use EasyShop\Entities\EsPromo;
+use EasyShop\Entities\EsPromoType;
+
 class Estudyantrepreneur
 {
 
@@ -30,11 +33,7 @@ class Estudyantrepreneur
         $this->em = $em;
     }
 
-    /**
-     * Get School and its student by date / round
-     * @return array
-     */
-    public function getSchoolWithStudentsByRound()
+    private function __getPreviousRounds()
     {
         $rounds = $this->promoConfig[7]['option'];
         $date = new \DateTime;
@@ -42,11 +41,10 @@ class Estudyantrepreneur
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
-        $result = [];
+        $case = '';
+        $limit = 0;
         $previousRound = '';
         $round = false;
-        $case = '';
-        $qb = $this->em->createQueryBuilder();
 
         foreach ($rounds as $key => $data) {
             $startDate = strtotime($data['start']);
@@ -67,8 +65,27 @@ class Estudyantrepreneur
                 break;
             }
         }
+        $data = [
+            'round' => $round,
+            'previousRound' => $previousRound,
+            'case' => $case,
+            'limit' => $limit,
+            'previousStartDate' => $previousStartDate,
+            'previousEndDate' => $previousEndDate
+        ];
 
-        switch($case) {
+        return $data;
+    }
+    /**
+     * Get School and its student by date / round
+     * @return array
+     */
+    public function getSchoolWithStudentsByRound()
+    {
+        $result = [];
+        $roundData = $this->__getPreviousRounds();
+
+        switch($roundData['case']) {
             case 'first_round' :
                 $students = $this->em->getRepository('EasyShop\Entities\EsStudent')->getAllStudents();
 
@@ -86,10 +103,10 @@ class Estudyantrepreneur
                     $schoolName = $school['name'];
                     $students = $this->em->getRepository('EasyShop\Entities\EsStudent')
                                          ->getStudentsByDateAndSchool(
-                                             $previousStartDate,
-                                             $previousEndDate,
+                                             $roundData['previousStartDate'],
+                                             $roundData['previousEndDate'],
                                              $school,
-                                             $limit
+                                             $roundData['limit']
                                          );
 
                     $result[$schoolName] = $students;
@@ -99,8 +116,8 @@ class Estudyantrepreneur
                         $lastKey = key($result[$schoolName]);
                         $studentsWithSameVote = $this->em->getRepository('EasyShop\Entities\EsStudent')
                                                          ->getStudentsByDateAndSchool(
-                                                             $previousStartDate,
-                                                             $previousEndDate,
+                                                             $roundData['previousStartDate'],
+                                                             $roundData['previousEndDate'],
                                                              $school,
                                                              PHP_INT_MAX,
                                                              $result[$schoolName][$lastKey]['vote'],
@@ -120,7 +137,7 @@ class Estudyantrepreneur
 
         $result = [
             'schools_and_students' => $result,
-            'round' => $round
+            'round' => $roundData['round']
         ];
 
         return $result;
@@ -147,4 +164,28 @@ class Estudyantrepreneur
         return $promo;
     }
 
+    /**
+     * Check is the user already voted
+     * @param $memberId
+     * @return EasyShop\Entities\EsPromo
+     */
+    public function isUserAlreadyVoted($memberId)
+    {
+        $roundData = $this->__getPreviousRounds();
+        $rounds = $this->promoConfig[7]['option'];
+        $qb = $this->em->createQueryBuilder();
+        $query = $qb->select('tblPromo')
+                    ->from('EasyShop\Entities\EsPromo', 'tblPromo')
+                    ->where('tblPromo.memberId = :memberId')
+                    ->andWhere('tblPromo.promoType = :promoType')
+                    ->andWhere('tblPromo.createdAt >= :startDate')
+                    ->andWhere('tblPromo.createdAt < :endDate')
+                    ->setParameter('memberId', $memberId)
+                    ->setParameter('promoType', EsPromoType::ESTUDYANTREPRENEUR)
+                    ->setParameter('startDate', $rounds[$roundData['round']]['start'])
+                    ->setParameter('endDate', $rounds[$roundData['round']]['end'])
+                    ->getQuery();
+
+        return $query->getResult();
+    }
 }

@@ -49,11 +49,7 @@ class Estudyantrepreneur extends MY_Controller
         $studentId = (int) trim($this->input->post('studentId'));
         $studentEntity = $this->em->find('EasyShop\Entities\EsStudent', $studentId);
         $memberId = $this->session->userdata('member_id');
-        $isUserAlreadyVoted = $this->em->getRepository('EasyShop\Entities\EsPromo')
-                                       ->findBy([
-                                           'memberId' => $memberId,
-                                           'promoType' => \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR
-                                       ]);
+        $isUserAlreadyVoted = $this->estudyantrepreneurManager->isUserAlreadyVoted($memberId);
         $result = [
             'errorMsg' => 'Student does not exists',
             'isSuccessful' => false
@@ -69,7 +65,7 @@ class Estudyantrepreneur extends MY_Controller
                                             ->voteStudent($studentEntity->getidStudent(), $memberId);
             if ($isVoteStudentSuccessful) {
                 $result = [
-                    'errorMsg' => '',
+                    'errorMsg' => 'You have successfully voted',
                     'isSuccessful' => true
                 ];
             }
