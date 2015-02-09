@@ -300,19 +300,23 @@
     $(".attribute-control").bind('change',function(e){
         var $this = $(this);
         var $imageid = $this.children('option:selected').data('imageid');
-        if($("#noMoreSelection").val() != ""){
-            var $arraySelected = [];
-
+        var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
+        var $arraySelected = [];
+        if($("#noMoreSelection").val() != ""){ 
             $.each($productCombQuantity, function(i, val) {
                 $arraySelected = val.product_attribute_ids;
+            });
+
+            $(".attribute-control").each(function() {
+                $thisSelect = $(this);
+                var $selectValue = $thisSelect.val();
+                var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
+                $baseFinalPrice += $additionalPrice; 
             });
 
             checkCombination($arraySelected);
         }
         else{
-            var $arraySelected = [];
-            var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
-
             // get selected attributes
             $(".attribute-control").each(function() {
                 $thisSelect = $(this);
@@ -322,13 +326,13 @@
                 $arraySelected.push($selectValue);
             });
 
-            // update price 
-            $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
             // sort array
             $arraySelected.sort(sortArrayNumber);
             checkCombination($arraySelected);
 
-        } 
+        }
+        $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
+
         if($imageid > 0){
             $("#image"+$imageid).trigger('click'); 
         }

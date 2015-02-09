@@ -377,6 +377,7 @@
                             $('[data-spy="scroll"]').each(function () {
                                 var $spy = $(this).scrollspy('refresh');
                             });
+                            resizeWidth();
                         }
                         canRequestAjax = true;
                     }
@@ -432,7 +433,7 @@
                     type: 'get', 
                     dataType: 'json', 
                     success: function(response) { 
-                        if(response.count > 0){  
+                        if(response.count > 0){ 
                             $('.search-results-container > #page-'+currentPageNumber).replaceWith(response.view);
                             $('#div-holder').append(response.view);
                             $('.search-results-container').append(appendAfterString);
@@ -529,9 +530,13 @@
             $(elem).trigger('fade-cycle');
         }, index * 100);
     });
+    $window = $(window);
+    $(window).on('load resize scroll', function() {
+        resizeWidth();
+    }); 
 
-    var $window = $(window);
-    $window.on('load resize', function() {
+    function resizeWidth()
+    {
         var table = $(".search-item-list-table");
         var windowSearch = $(window).width();
         if(windowSearch <= 1025){
@@ -542,6 +547,7 @@
         if(windowSearch <= 769){
             var mo = windowSearch - 161;
             $(".search-meta-hand").css("width", mo);
+            $(".search-results-container").css("margin-bottom", "100px");
         }
 
         if(windowSearch <= 598){
@@ -555,8 +561,8 @@
 
         if(windowSearch > 769){
             $(".simplemodal-close").trigger("click");
-        }
-    });
+        } 
+    }
 
     $( ".list-filter-search" ).clone(true).appendTo( ".filter-modal");
 

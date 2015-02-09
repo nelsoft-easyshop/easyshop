@@ -183,7 +183,6 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery.idTabs.dashboard.home.js',
                              'web/assets/js/src/vendor/chosen.jquery.min.js',
-                             'web/assets/js/src/vendor/jquery.sortable.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/pwstrength.js',
@@ -261,6 +260,7 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.product-search-by-category-new.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js',
                              'web/assets/js/src/vendor/owl.carousel.min.js',
                              'web/assets/js/src/vendor/jquery.bxslider.min.js',
@@ -270,6 +270,7 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.product-search-new.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js', 
                              'web/assets/js/src/vendor/jquery.simplePagination.js', 
                              'web/assets/js/src/product-search.js'],

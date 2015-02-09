@@ -74,14 +74,14 @@
         var recipient = $("#msg_name").val().trim();
         var msg = $("#msg-message").val().trim();
         if(recipient === ""){
-            alert("Username is required.");
+            alert("Store name is required.");
             return false;
         }
         if (msg === "") {
             alert("Say something.");
             return false;
         }
-        if(send_msg(recipient,msg, false)){
+        if(send_msg(recipient,msg, false)) {
             $("#modal-container, #modal-background").toggleClass("active");
             $("#modal-container").hide();
             $("#msg-message").val("");
@@ -109,27 +109,31 @@
 
     $("#table_id tbody").on("click",".btn_each_msg",function()
     {
-        var D = eval('(' + $(this).attr('data') + ')');
+        var msg = eval('(' + $(this).attr('data') + ')');
         var html = "";
         $("#chsn_username").html($(this).children(":first").html()).show();
         var name = $('#chsn_username').html();
         $("#send_btn").attr("data","{'img':'"+$(this).parent().parent().find('img').attr('data')+"'}");
         $("#userDataContainer").empty().html(name.trim());
         $("#msg_field").empty();
-        $.each(D,function(key,val){
-            if (val.status == "receiver") {
-                html += '<span class="float_left">';
+        var sortedObjectByKey = sortObjectByKey(msg);
+
+        $.each(sortedObjectByKey,function(key, val) {
+            if (typeof val !== "undefined") {
+                if (val.status == "receiver") {
+                    html += '<span class="float_left">';
+                }
+                else {
+                    html += '<span class="float_right">';
+                }
+                html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain +val.sender_img+'/60x60.png"></span></span>';
+                html += '<div class="chat-container"><div></div>';
+                html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
+                html += '<p>'+escapeHtml(val.message)+'</p>';
+                html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
+                $("#msg_field").append(html);
+                html = "";
             }
-            else {
-                html += '<span class="float_right">';
-            }
-            html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain +val.sender_img+'/60x60.png"></span></span>';
-            html += '<div class="chat-container"><div></div>';
-            html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
-            html += '<p>'+escapeHtml(val.message)+'</p>';
-            html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
-            $("#msg_field").append(html);
-            html = "";
         });
         $("#msg_textarea").show();
         var objDiv = document.getElementById("msg_field");
@@ -159,6 +163,19 @@
     };
     */
 
+    function sortObjectByKey (obj)
+    {
+        var arrayOfObject = [];
+
+        $.each(obj,function(key, val) {
+            arrayOfObject[key] = val;
+        });
+
+        arrayOfObject.sort();
+
+        return arrayOfObject;
+    };
+
     function onFocusReload(msgs)
     {
         var html = "";
@@ -170,7 +187,7 @@
             var cnt = parseInt(Object.keys(val).length)- 1;
             var isActive ='';
             var Nav_msg = message[key][Object.keys(val)[cnt]];
-            if (Nav_msg.name === undefined) {
+            if (typeof Nav_msg.name === "undefined") {
                 for (var first_key in val) {
                     if (val.hasOwnProperty(first_key)) {
                         break;
@@ -278,23 +295,28 @@
     {
         var html = "";
         var all_messages = eval('('+ $(".Active").attr('data')+')');
+        $("#chsn_username").html($(".Active").children(":first").html()).show();
         var objDiv = document.getElementById("msg_field");
         $("#msg_field").empty();
-        $.each(all_messages,function(key,val){
-            if (val.status == "receiver") {
-                html += '<span class="float_left">';
+        var sortedObjectByKey = sortObjectByKey(all_messages);
+        $.each(sortedObjectByKey,function(key, val) {
+            if (typeof val !== "undefined") {
+                if (val.status == "receiver") {
+                    html += '<span class="float_left">';
+                }
+                else {
+                    html += '<span class="float_right">';
+                }
+                html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain + val.sender_img + '/60x60.png"></span></span>';
+                html += '<div class="chat-container"><div></div>';
+                html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
+                html += '<p>'+escapeHtml(val.message)+'</p>';
+                html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
+                $("#msg_field").append(html);
+                html = "";
             }
-            else {
-                html += '<span class="float_right">';
-            }
-            html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain + val.sender_img + '/60x60.png"></span></span>';
-            html += '<div class="chat-container"><div></div>';
-            html += '<input type="checkbox" class="d_all" value="'+val.id_msg+'">';
-            html += '<p>'+escapeHtml(val.message)+'</p>';
-            html += '<span class="msg-date">'+escapeHtml(val.time_sent)+'</span></span></div>';
-            $("#msg_field").append(html);
-            html = "";
         });
+
         $("#msg_textarea").show();
         objDiv.scrollTop = objDiv.scrollTop + 100;
     }
