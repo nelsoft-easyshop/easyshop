@@ -48,8 +48,10 @@ class ScratchCard extends MY_Controller
      */
     public function validateScratchCardCode()
     {
-        $result = $this->promoManager->validateCodeForScratchAndWin($this->input->post('code'));
+        $result = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                           ->validateCodeForScratchAndWin($this->input->post('code'));
         $result['logged_in'] = true;
+
         if (!$this->session->userdata('usersession') && !$this->check_cookie()) {
             $result['logged_in'] = false;
         }
@@ -81,7 +83,8 @@ class ScratchCard extends MY_Controller
             'metadescription' => 'Scratch-to-win-promo'
         ];
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
-        $viewData['product'] = $this->promoManager->validateCodeForScratchAndWin($this->input->get('code'));
+        $viewData['product'] = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                                        ->validateCodeForScratchAndWin($this->input->get('code'));
         $viewData['code'] = $this->input->get('code');
         if (!$viewData['product']) {
             redirect('/Scratch-And-Win', 'refresh');
@@ -119,10 +122,11 @@ class ScratchCard extends MY_Controller
      */
     public function tieUpMemberToCode()
     {
-        $result = $this->promoManager->tieUpCodeToMemberForScratchAndWin(
-            $this->session->userdata('member_id'),
-            $this->input->post('code')
-        );
+        $result = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                           ->tieUpCodeToMemberForScratchAndWin(
+                               $this->session->userdata('member_id'),
+                               $this->input->post('code')
+                           );
 
         echo json_encode($result);
     }
