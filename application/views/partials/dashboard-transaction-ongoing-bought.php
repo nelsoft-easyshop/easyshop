@@ -1,9 +1,9 @@
 <div class="transaction-item">
 <?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $boughtTransactionDetails) : ?>
-    <div class="item-list-panel">
+    <div class="item-list-panel <?=$boughtTransactionDetails['invoiceNo'] ?>">
         <div class="transac-title">
-        <?php if (intval($boughtTransactionDetails['idPaymentMethod']) === 1 && intval($boughtTransactionDetails['isFlag']) === 1) : ?>
+        <?php if ( (int) $boughtTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && (int) $boughtTransactionDetails['isFlag'] === 1) : ?>
             <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW</span></div>
         <?php else:?>
             <div><span class="strong-label">Transaction No. : </span> <?=$boughtTransactionDetails['invoiceNo'] ?></div>
@@ -174,7 +174,9 @@
                                 <input type="hidden" name="invoice_num" value="<?=$boughtTransactionDetails['invoiceNo']?>">
                                 <?php echo form_close();?>
 
-                                <?php echo form_open('');?>
+                                <?php
+                                $attr = ['class'=>'rejectForm'];
+                                echo form_open('', $attr);?>
                                 <?php if( (int) $product['isReject'] === 0):?>
                                     <input type="button" value="Reject Item" class="btn btn-default-1 reject_btn reject_item reject">
                                     <input type="hidden" name="method" value="reject">

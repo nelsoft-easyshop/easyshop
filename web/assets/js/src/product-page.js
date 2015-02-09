@@ -298,26 +298,25 @@
     });
 
     $(".attribute-control").bind('change',function(e){
-
-        if($("#noMoreSelection").val() != ""){
-            var $arraySelected = [];
-
+        var $this = $(this);
+        var $imageid = $this.children('option:selected').data('imageid');
+        var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
+        var $arraySelected = [];
+        if($("#noMoreSelection").val() != ""){ 
             $.each($productCombQuantity, function(i, val) {
                 $arraySelected = val.product_attribute_ids;
+            });
+
+            $(".attribute-control").each(function() {
+                $thisSelect = $(this);
+                var $selectValue = $thisSelect.val();
+                var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
+                $baseFinalPrice += $additionalPrice; 
             });
 
             checkCombination($arraySelected);
         }
         else{
-            var $this = $(this);
-            var $arraySelected = [];
-            var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
-            var $imageid = $this.children('option:selected').data('imageid');
-
-            if($imageid > 0){
-                $("#image"+$imageid).trigger('click'); 
-            }
-
             // get selected attributes
             $(".attribute-control").each(function() {
                 $thisSelect = $(this);
@@ -327,16 +326,20 @@
                 $arraySelected.push($selectValue);
             });
 
-            // update price 
-            $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
             // sort array
             $arraySelected.sort(sortArrayNumber);
             checkCombination($arraySelected);
 
         }
+        $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
+
+        if($imageid > 0){
+            $("#image"+$imageid).trigger('click'); 
+        }
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
+                $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
                 return false;
             }
         });

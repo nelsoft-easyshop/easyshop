@@ -198,6 +198,15 @@ class ValidationRules
                                                     ]),
                     ],
             ],
+            'reset_password' => [
+                    'email' => [
+                        new Assert\Email(),
+                            new Assert\NotBlank(),
+                    ],
+                    'hash' => [
+                        new Assert\NotBlank(),
+                    ],
+            ],
         );
     }
 

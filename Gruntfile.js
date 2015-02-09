@@ -92,8 +92,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/newhome.js'],
 
                     'web/assets/js/min/easyshop.inbox_view.js':
-                            ['web/assets/js/src/messaging.js',
-                            'web/assets/js/src/vendor/socket.io.js'],
+                            ['web/assets/js/src/messaging.js'],
 
                     'web/assets/js/min/easyshop.payment_review_responsive.js':
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
@@ -184,7 +183,6 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery.idTabs.dashboard.home.js',
                              'web/assets/js/src/vendor/chosen.jquery.min.js',
-                             'web/assets/js/src/vendor/jquery.sortable.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/pwstrength.js',
@@ -224,15 +222,12 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendorpage_followers.js'],
 
                     'web/assets/js/min/easyshop.user_forgotpass.js':
-                            ['web/assets/js/src/vendor/jquery.numeric.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/register.js'],
+                            ['web/assets/js/src/forgotpassword.js'],
 
-                    'web/assets/js/min/easyshop.user_forgotpass_confirm.js':
-                            ['web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
+                    'web/assets/js/min/easyshop.user_forgotpass_update_password.js':
+                            ['web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/register.js',
                              'web/assets/js/src/forgotpassword.js'],
 
                     'web/assets/js/min/easyshop.user_login_view.js':
@@ -265,6 +260,7 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.product-search-by-category-new.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js',
                              'web/assets/js/src/vendor/owl.carousel.min.js',
                              'web/assets/js/src/vendor/jquery.bxslider.min.js',
@@ -274,6 +270,7 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.product-search-new.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js', 
                              'web/assets/js/src/vendor/jquery.simplePagination.js', 
                              'web/assets/js/src/product-search.js'],

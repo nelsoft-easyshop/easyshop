@@ -11,6 +11,7 @@
 /web/assets/images/ads/
 /web/assets/images/mainslide/
 /web/assets/images/homeslider/
+/web/assets/admin/*
 !/web/assets/product/product_description/README.md
 
 
@@ -22,6 +23,8 @@
 /web/assets/temp_product
 /application/resources/local/*
 !application/resources/local/README.md
+/web/assets/qrCode/*
+!web/assets/qrCode/*.md
 /web/assets/user/*
 !/web/assets/user/default
 

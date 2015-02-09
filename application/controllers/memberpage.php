@@ -574,31 +574,7 @@ class Memberpage extends MY_Controller
         $this->load->view("pages/user/printselltransactionspage", $soldTransactions);
     }
 
-    /**
-     *  External callback function used in form_validation of CodeIgniter
-     *
-     *  @return boolean
-     */
-    public function external_callbacks( $postdata, $param )
-    {
-        $param_values = explode( ',', $param );
-        $model = $param_values[0];
-        $this->load->model( $model );
-        $method = $param_values[1];
-        if( count( $param_values ) > 2 ) {
-            array_shift( $param_values );
-            array_shift( $param_values );
-            $argument = $param_values;
-        }
-        if( isset( $argument )){
-            $callback_result = $this->$model->$method( $postdata, $argument );
-        }
-        else{
-            $callback_result = $this->$model->$method( $postdata );
-        }
-        
-        return $callback_result;
-    }
+ 
 
     /**
      *  Used to edit information under Delivery Address Tab. 
@@ -859,6 +835,16 @@ class Memberpage extends MY_Controller
                 $serverRespone['error'] = 'Transaction does not exist.';
             }
         }
+
+        $orderEntity = $this->em->find("EasyShop\Entities\EsOrder", $data['transaction_num']);
+        $orderProductStatusEntity = $this->em->find("EasyShop\Entities\EsOrderProductStatus", EsOrderProductStatus::ON_GOING);
+        $orderProductEntity = $this->esOrderProductRepo
+                                   ->findOneBy([
+                                       "order" => $orderEntity,
+                                       "status" => $orderProductStatusEntity
+                                   ]);
+        $serverResponse['isTransactionComplete'] = $orderProductEntity ? false : true;
+
         echo json_encode($serverResponse);
     }
 
