@@ -89,7 +89,8 @@ class SyncCsvImage extends MY_Controller
     private function checkIfImagesExist($checkImagesId)
     {
         $flag = 0;
-        $errorSummary = array();
+        $errorSummary = [];
+        $this->config->load("image_path");        
         foreach($checkImagesId["product"] as $ids)
         {
             $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
@@ -98,7 +99,7 @@ class SyncCsvImage extends MY_Controller
                     $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
                 }
 
-                $path = "./assets/admin/$images";
+                $path = "./".$this->config->item('admin_img_directory').$images;
 
                 if(file_exists($path)) {
                     continue;
@@ -161,6 +162,7 @@ class SyncCsvImage extends MY_Controller
     {
         //Get images config dimensions
         $this->config->load('image_dimensions', TRUE);
+        $this->config->load("image_path");
         $imageDimensions = $this->config->config['image_dimensions'];
         $date = date("Ymd");
         $gisTime = date("Gis");
@@ -169,10 +171,8 @@ class SyncCsvImage extends MY_Controller
             $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
 
             foreach($imagesValues as $key => $values) {
-
                 $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
-                $path = "./assets/admin/$images";
-                $this->config->load("image_path"); 
+                $path = "./".$this->config->item('admin_img_directory').$images;
                 $productId = $values->getProduct()->getIdProduct();
                 $memberId =  $values->getProduct()->getMember()->getIdMember();
                 $productImageId = $values->getIdProductImage();
@@ -271,11 +271,15 @@ class SyncCsvImage extends MY_Controller
             }
 
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
-            $path = "./assets/admin/$images";
-
             $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o.".$values->getProductImageType();
             $imageDirectory = "./".$this->config->item('product_img_directory').$filename."/other/".$newfilename;
             $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
+
+            $path = "./".$this->config->item('admin_img_directory').$images;
+            if(!file_exists($path)) {
+                $path = "./".$this->config->item('product_img_directory').str_replace("./", "", $images);
+            }
+
             if(file_exists($path) && copy($path, $imageDirectory)){
                 $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
 
