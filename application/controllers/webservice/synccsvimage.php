@@ -89,7 +89,7 @@ class SyncCsvImage extends MY_Controller
     private function checkIfImagesExist($checkImagesId)
     {
         $flag = 0;
-        $errorSummary = array();
+        $errorSummary = [];
         $this->config->load("image_path");        
         foreach($checkImagesId["product"] as $ids)
         {
