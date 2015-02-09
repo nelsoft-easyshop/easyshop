@@ -183,7 +183,6 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery.idTabs.dashboard.home.js',
                              'web/assets/js/src/vendor/chosen.jquery.min.js',
-                             'web/assets/js/src/vendor/jquery.sortable.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/pwstrength.js',
