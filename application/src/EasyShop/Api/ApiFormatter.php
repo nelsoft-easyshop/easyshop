@@ -239,27 +239,20 @@ class ApiFormatter
 
         
         $shipmentDetails = [];
+        $shipmentPriceArray = [];
         $isFreeShippingNationwide = $this->productManager->isFreeShippingNationwide($productId);
 
         if(!$isFreeShippingNationwide){
             $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                         ->getShippingDetailsByProductId($productId);
             foreach ($shippingDetails as $key => $value) {
-                if(!isset($shipmentDetails[$value['product_item_id']])){
-                    $shipmentDetails[$value['product_item_id']] = [
-                        [
-                            'location' => $value['location'],
-                            'price' => $value['price']
-                        ]
-                    ]; 
-                }
-                else{ 
-                    $shipmentDetails[$value['product_item_id']][] = [
-                        'location' => $value['location'],
-                        'price' => $value['price'], 
-                    ];
-                }
+                $shipmentPriceArray[] = $value['price']; 
             }
+
+            $shipmentDetails = [
+                'min' => min($shipmentPriceArray),
+                'max' => max($shipmentPriceArray)
+            ];
         } 
 
         return [
