@@ -216,7 +216,7 @@ class PromoManager
      * @param integer $promoType
      * @param string $method
      * @param mixed $parameters
-     * @return mixed
+     * @return mixe
      */
     public function callSubclassMethod($promoType, $method = "", $parameters = [])
     {
@@ -282,11 +282,7 @@ class PromoManager
         $result = $query->getResult();
 
         if ($result) {
-            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct
-    public function fooBar($a, $b)
-    {
-        return $a.' '.$b;
-    }' => $result[0]['idProduct']]);
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
             $isMemberRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')->findOneBy(['memberId' => $result[0]['c_member_id']]);
             $this->hydratePromoData($product);
             $result = [
