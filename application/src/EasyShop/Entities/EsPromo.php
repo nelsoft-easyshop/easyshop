@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsPromo
  *
  * @ORM\Table(name="es_promo")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsPromoRepository")
  */
 class EsPromo
 {

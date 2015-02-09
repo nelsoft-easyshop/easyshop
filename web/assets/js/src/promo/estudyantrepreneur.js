@@ -15,7 +15,7 @@
         var $selectedRadio = $('[name="student"]:checked');
         var schoolId = parseInt($selectedRadio.data('school'));
         var studentId = parseInt($selectedRadio.val());
-        var url = 'promo/Estudyantrepreneur/vote';
+        var url = '/promo/Estudyantrepreneur/vote';
 
         if (isNaN(schoolId) || isNaN(studentId) === 0) {
             alert("Choose School and Student to vote");

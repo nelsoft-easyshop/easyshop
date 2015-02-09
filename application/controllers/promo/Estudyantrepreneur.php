@@ -31,11 +31,14 @@ class Estudyantrepreneur extends MY_Controller
     public function __construct()
     {
         parent::__construct();
+
         if (!$this->session->userdata('usersession')) {
             redirect('/', 'refresh');
         }
+
         $this->em = $this->serviceContainer['entity_manager'];
         $this->promoManager = $this->serviceContainer['promo_manager'];
+        $this->estudyantrepreneurManager = $this->serviceContainer['estudyantrepreneur_manager'];
     }
 
     /**
@@ -48,7 +51,7 @@ class Estudyantrepreneur extends MY_Controller
             'title' => 'Estudyantrepreneur | Easyshop.ph',
             'metadescription' => ''
         ];
-        $data = $this->promoManager->getSchoolWithStudentsByRoundForEstudyantrepreneur($this->rounds);
+        $data = $this->estudyantrepreneurManager->getSchoolWithStudentsByRound();
         $bodyData = [
             'schools_and_students' => $data['schools_and_students'],
             'round' => $data['round'],
@@ -71,21 +74,24 @@ class Estudyantrepreneur extends MY_Controller
         $studentId = (int) trim($this->input->post('studentId'));
         $studentEntity = $this->em->find('EasyShop\Entities\EsStudent', $studentId);
         $memberId = $this->session->userdata('member_id');
-        $isUserAlreadyVote = $this->promoManager
-                                  ->isUserAlreadyVoteForEstudyantrepreneur($memberId);
+        $isUserAlreadyVoted = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                                       ->findBy([
+                                           'memberId' => $memberId,
+                                           'promoType' => \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR
+                                       ]);
         $result = [
             'errorMsg' => 'Student does not exists',
             'isSuccessful' => false
         ];
-        if ($isUserAlreadyVote) {
+
+        if ($isUserAlreadyVoted) {
             $result = [
-                'errorMsg' => 'You have already vote',
-                'isSuccessful' => false
+                'errorMsg' => 'You have already voted'
             ];
         }
         elseif ($studentEntity) {
-            $isVoteStudentSuccessful = $this->promoManager
-                                            ->voteStudentForEstudyantrepreneur($studentEntity->getidStudent(), $memberId);
+            $isVoteStudentSuccessful = $this->estudyantrepreneurManager
+                                            ->voteStudent($studentEntity->getidStudent(), $memberId);
             if ($isVoteStudentSuccessful) {
                 $result = [
                     'errorMsg' => '',
@@ -95,14 +101,6 @@ class Estudyantrepreneur extends MY_Controller
         }
 
         echo json_encode($result);
-    }
-
-    /**
-     * Retrieves the Current stats of students and Voting Success Page
-     */
-    public function votingSuccess()
-    {
-
     }
 
 }

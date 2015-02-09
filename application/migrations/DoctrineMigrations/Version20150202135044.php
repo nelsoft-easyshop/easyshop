@@ -14,10 +14,10 @@ class Version20150202135044 extends AbstractMigration
     {
         $this->addSql("
         CREATE TABLE `es_student` (
-        `id_student` INT NOT NULL AUTO_INCREMENT,
-        `name` VARCHAR(45) NULL,
-        `school_id` INT(11) NULL,
-        PRIMARY KEY (`id_student`));
+            `id_student` INT NOT NULL AUTO_INCREMENT,
+            `name` VARCHAR(45) NULL,
+            `school_id` INT(11) NULL,
+            PRIMARY KEY (`id_student`));
         ");
     }
 
