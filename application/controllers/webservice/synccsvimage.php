@@ -275,7 +275,7 @@ class SyncCsvImage extends MY_Controller
             $imageDirectory = "./".$this->config->item('product_img_directory').$filename."/other/".$newfilename;
             $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
 
-            $path = "./assets/admin/$images";
+            $path = "./".$this->config->item('admin_img_directory').$images;
             if(!file_exists($path)) {
                 $path = "./".$this->config->item('product_img_directory').str_replace("./", "", $images);
             }
