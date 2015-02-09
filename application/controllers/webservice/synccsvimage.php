@@ -172,7 +172,7 @@ class SyncCsvImage extends MY_Controller
 
             foreach($imagesValues as $key => $values) {
                 $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
-                $path = "./".$this->config->item('admin_img_directory')."$images";
+                $path = "./".$this->config->item('admin_img_directory').$images;
                 $productId = $values->getProduct()->getIdProduct();
                 $memberId =  $values->getProduct()->getMember()->getIdMember();
                 $productImageId = $values->getIdProductImage();
