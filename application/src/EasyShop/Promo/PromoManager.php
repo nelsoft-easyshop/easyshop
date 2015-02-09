@@ -34,6 +34,12 @@ class PromoManager
      */
     private $em;
 
+        
+    
+        
+    private $container;
+    
+
     /**
      * Constructor
      * @param ConfigLoader $configLoader
@@ -41,8 +47,18 @@ class PromoManager
      */
     public function __construct(ConfigLoader $configLoader, \Doctrine\ORM\EntityManager $em)
     {
-        $this->promoConfig = $configLoader->getItem('promo', 'Promo');
+        $configArray = $configLoader->getItem('promo', 'Promo');
+        $this->promoConfig = $configArray;
         $this->em = $em;
+        
+        $container = new \Pimple\Container();
+        $container[\EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR] = function ($c) use ($configArray, $configLoader, $em){
+            $class = $configArray[\EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR]['implementation'];
+            return new $class($configLoader, $em);
+        };
+        
+        $this->container = $container;
+        
     }
 
     /**
@@ -193,6 +209,29 @@ class PromoManager
 
         return $promoQuantityLimit;
     }
+
+    /**
+     * Access methods of local promo classes
+     *
+     * @param integer $promoType
+     * @param string $method
+     * @param mixed $parameters
+     * @return mixe
+     */
+    public function callSubclassMethod($promoType, $method = "", $parameters = [])
+    {
+        if(!$promoType || trim($promoType) === '' || !isset($this->promoConfig[$promoType]) ){
+            throw new \Exception('The promo subclass is not defined.');
+        }
+        
+        if(!$method || trim($method) === ''){
+            throw new \Exception('The promo method is not defined.');
+        }
+
+        $promoObject = $this->container[$promoType];
+        return call_user_func_array([$promoObject, $method], $parameters);
+    }
+    
 
     /**
      * Promo : BuyAtZero
