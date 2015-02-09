@@ -135,8 +135,6 @@ class Estudyantrepreneur
                 }
 
                 break;
-            default :
-                break;
         }
 
         $result = [

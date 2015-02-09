@@ -30,8 +30,8 @@ class EsStudentRepository extends EntityRepository
      * @param $endDate
      * @param $schoolName
      * @param $maxResult
-     * @param int $vote
-     * @param bool $excludeStudentName
+     * @param $vote
+     * @param $excludeStudentName
      * @return array
      */
     public function getStudentsByDateAndSchool($startDate, $endDate, $schoolName, $maxResult = 3, $vote = 0, $excludeStudentName = false)
