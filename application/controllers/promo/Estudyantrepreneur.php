@@ -49,7 +49,7 @@ class Estudyantrepreneur extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $isUserAlreadyVoted = $this->estudyantrepreneurManager->isUserAlreadyVoted($memberId);
         $result = [
-            'errorMsg' => 'Student does not exists',
+            'errorMsg' => 'Student does not exist',
             'isSuccessful' => false
         ];
 
