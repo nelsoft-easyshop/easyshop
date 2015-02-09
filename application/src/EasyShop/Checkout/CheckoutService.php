@@ -3,7 +3,6 @@
 namespace EasyShop\Checkout;
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
-use EasyShop\Entities\EsAddress as EsAddress;
 /**
  * Checkout Service Class
  *
@@ -40,23 +39,31 @@ class CheckoutService
     private $cartManager;
 
     /**
-     * Cart Manager Class
+     * Payment Service Class
      *
      * @var EasyShop\PaymentService\PaymentService
      */
     private $paymentService;
 
     /**
+     * Cart Manager Class
+     *
+     * @var EasyShop\Product\ProductShippingLocationManager
+     */
+    private $shippingLocationManager;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em, $productManager, $promoManager, $cartManager, $paymentService)
+    public function __construct($em, $productManager, $promoManager, $cartManager, $paymentService, $shippingLocationManager)
     {
         $this->em = $em;
         $this->productManager = $productManager;
         $this->promoManager = $promoManager;
         $this->cartManager = $cartManager;
         $this->paymentService = $paymentService;
+        $this->shippingLocationManager = $shippingLocationManager;
     }
 
     /**
@@ -64,24 +71,36 @@ class CheckoutService
      * @param  EasyShop\Entities\EsMember $member
      * @return array
      */
-    public function validateCartContent($member)
+    public function validateCartContent($member, $cartContent = [])
     {
-        $cartContent = $this->cartManager->getValidatedCartContents($member->getIdMember());
+        if(empty($cartContent)){
+            $cartContent = $this->cartManager->getValidatedCartContents($member->getIdMember());
+        }
+
         foreach ($cartContent as $key => $value) {
             $productId = $value['id'];
             $itemId = $value['product_itemID'];
             $quantity = $value['qty'];
             $product = $this->productManager->getProductDetails($productId);
+            $shippingDetails = $this->shippingLocationManager
+                                    ->getProductShippingLocations($productId, $itemId, $member);
+            $isAvailableInLocation = false;
+            $shipmentFee = 0;
+            if($shippingDetails && count($shippingDetails) >= 1){ 
+                $isAvailableInLocation = true; 
+                $shipmentFee = $shippingDetails[0]['price'];
+            }
 
-            $cartContent[$key]['hasNoSoloRestriction'] = $this->canPurchaseWithOtherProduct($product);
+            $cartContent[$key]['canPurchaseWithOther'] = $this->canPurchaseWithOtherProduct($product);
             $cartContent[$key]['hasNoPuchaseLimitRestriction'] = $this->isPurchaseLimitReach($product, $member->getIdMember());
-            $cartContent[$key]['isAvailableInLocation'] = $this->canPurchaseInLocation($product, $itemId, $member);
             $cartContent[$key]['isQuantityAvailable'] = $this->canPurchaseDesiredQuantity($product, $itemId, $quantity);
+            $cartContent[$key]['shippingFee'] = $shipmentFee;
+            $cartContent[$key]['isAvailableInLocation'] = $isAvailableInLocation;
             $this->applyPaymentTypAvailable($cartContent[$key], $product);
         }
 
         return $cartContent;
-    } 
+    }
 
     /**
      * Check if product in cart can purchase with other product
@@ -100,38 +119,6 @@ class CheckoutService
     }
 
     /**
-     * Check if product in cart is available on users location
-     * @param  EasyShop\Entities\EsProduct  $product
-     * @param  integer $itemId
-     * @param  EasyShop\Entities\EsMember  $member
-     * @return boolean
-     */
-    public function canPurchaseInLocation($product, $itemId, $member)
-    {
-        $shippingDetailRepo = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail');
-        $addressRepo = $this->em->getRepository('EasyShop\Entities\EsAddress');
-
-        $address = $addressRepo->findOneBy([
-                                    'idMember' => $member->getIdMember(),
-                                    'type' => EsAddress::TYPE_DELIVERY,
-                                ]);
-
-        if($address){
-            $city = $address->getCity();
-            $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')->getParentLocation($city);
-            $majorIsland = $region->getParent();
-            $locationDetails = $shippingDetailRepo->getShippingDetailsByLocation($product->getIdProduct(),
-                                                                                 $itemId, 
-                                                                                 $city, 
-                                                                                 $region->getIdLocation(), 
-                                                                                 $majorIsland->getIdLocation());
-            return count($locationDetails) >= 1;
-        }
-
-        return false;
-    }
-
-    /**
      * check if desired quantity is available
      * @param  EasyShop\Entities\EsProduct  $product
      * @param  integer $itemId
@@ -143,7 +130,8 @@ class CheckoutService
         $quantityData = $this->productManager->getProductInventory($product, false, true);
 
         if(isset($quantityData[$itemId]['quantity'])){
-            return $quantity < $quantityData[$itemId]['quantity'];
+            return $quantityData[$itemId]['quantity'] >= $quantity 
+                   && $quantityData[$itemId]['quantity'] > 0;
         }
 
         return false;
@@ -202,6 +190,67 @@ class CheckoutService
                 }
             }
         }
+    }
+
+    /**
+     * Check if checkout request can continue to checkout
+     * @param  array  $cartData    [description]
+     * @param  string $paymentType [description]
+     * @return boolean
+     */
+    public function checkoutCanContinue($cartData, $paymentType)
+    {
+        $itemFail = 0;
+        $paymentString = "";
+        if((int)$paymentType === EsPaymentMethod::PAYMENT_PAYPAL){
+            $paymentString = 'paypal';
+        }
+        elseif ((int)$paymentType === EsPaymentMethod::PAYMENT_DRAGONPAY){
+            $paymentString = 'dragonpay';
+        }
+        elseif ((int)$paymentType === EsPaymentMethod::PAYMENT_PESOPAYCC){
+            $paymentString = 'pesopaycdb';
+        }
+        elseif ((int)$paymentType === EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT){
+            $paymentString = 'directbank';
+        }
+        elseif ((int)$paymentType === EsPaymentMethod::PAYMENT_CASHONDELIVERY){ 
+            $paymentString = 'cash_delivery';
+        }
+
+        foreach ($cartData as $item) { 
+            if( !isset($item[$paymentString]) 
+                || !$item[$paymentString]
+                || !$item['canPurchaseWithOther']
+                || !$item['hasNoPuchaseLimitRestriction']
+                || !$item['isQuantityAvailable']
+                || !$item['isAvailableInLocation'] ){
+                $itemFail++;
+            } 
+        }
+
+        return $itemFail === 0;
+    }
+
+    /**
+     * Return appropriate payment method based on string
+     * @param  string $paymentString
+     * @return integer
+     */
+    public function getPaymentTypeByString($paymentString)
+    {
+        $paymentType = 0;
+        if($paymentString === "paypal"){ 
+            $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
+        }
+        elseif($paymentString === "dragonpay"){
+            $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
+        }
+        elseif($paymentString === "cash_delivery"){
+            $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
+        }
+
+        return $paymentType;
     }
 }
 

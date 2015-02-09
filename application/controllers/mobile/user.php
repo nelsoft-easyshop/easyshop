@@ -56,7 +56,10 @@ class user extends MY_Controller
     public function getAddress()
     { 
         $userShippingAddress = $this->em->getRepository("EasyShop\Entities\EsAddress")
-                        ->findOneBy(["idMember"=>$this->member->getIdMember(),"type"=> EsAddress::TYPE_DELIVERY]);
+                                        ->findOneBy([
+                                            "idMember"=>$this->member->getIdMember(),
+                                            "type"=> EsAddress::TYPE_DELIVERY
+                                        ]);
         $address = [];
         if($userShippingAddress){
             $address['delivery_address']['consignee_name'] = $userShippingAddress->getConsignee();
@@ -80,12 +83,12 @@ class user extends MY_Controller
         $userManager = $this->serviceContainer['user_manager']; 
         $parameter['memberId'] = $this->member->getIdMember();
 
-        $consignee = ($this->input->post('consignee')) ? trim($this->input->post('consignee')) : "";
-        $mobileNumber = ($this->input->post('mobilenumber')) ? trim($this->input->post('mobilenumber')) : "";
-        $telephoneNumber = ($this->input->post('telephonenumber')) ? trim($this->input->post('telephonenumber')) : "";
-        $streetAddress = ($this->input->post('streetaddress')) ? trim($this->input->post('streetaddress')) : "";
-        $region = ($this->input->post('region')) ? trim($this->input->post('region')) : "";
-        $city = ($this->input->post('city')) ? trim($this->input->post('city')) : "";
+        $consignee = $this->input->post('consignee') ? trim($this->input->post('consignee')) : "";
+        $mobileNumber = $this->input->post('mobilenumber') ? trim($this->input->post('mobilenumber')) : "";
+        $telephoneNumber = $this->input->post('telephonenumber') ? trim($this->input->post('telephonenumber')) : "";
+        $streetAddress = $this->input->post('streetaddress') ? trim($this->input->post('streetaddress')) : "";
+        $region = $this->input->post('region') ? trim($this->input->post('region')) : "";
+        $city = $this->input->post('city') ? trim($this->input->post('city')) : "";
         $memberId = $this->member->getIdMember();
         $result = $userManager->setAddress($streetAddress,
                                            $region,
