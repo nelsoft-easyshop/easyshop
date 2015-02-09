@@ -195,6 +195,7 @@ class PromoManager
     }
 
     /**
+     * Promo : BuyAtZero
      * Register member for buy at zero promo
      * @param $productId
      * @param $memberId
@@ -223,6 +224,7 @@ class PromoManager
     }
 
     /**
+     * Promo : ScratchAndWin
      * validates code and returns the details needed for scratch and win promo
      * @param $code
      * @return array
@@ -259,6 +261,7 @@ class PromoManager
     }
 
     /**
+     * Promo : ScratchAndWin
      * Update member id
      * @param $memberId
      * @param $code
@@ -275,6 +278,7 @@ class PromoManager
     }
 
     /**
+     * Promo : TwelveDaysOfChristmas
      * Get active product for twelve days of Christmas promo
      * @param $date
      * @return EsProduct
@@ -295,4 +299,5 @@ class PromoManager
 
         return $product;
     }
+
 }
