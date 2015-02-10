@@ -6,7 +6,8 @@ if (!defined('BASEPATH')){
 
 use EasyShop\Entities\EsMember as EsMember; 
 use EasyShop\Entities\EsCat as EsCat; 
-use EasyShop\Entities\EsProduct as EsProduct; 
+use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Entities\EsSocialMediaProvider as EsSocialMediaProvider;
 
 class product extends MY_Controller 
 { 
@@ -246,11 +247,18 @@ class product extends MY_Controller
                 $bannerView = "";
                 $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
                 $isBuyButtonViewable = true;
+                $externalLink = '';
 
                 if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
                     $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
-                    if($bannerfile){
-                        $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, ['product' => $product], true); 
+                    $externalLink = $this->em->getRepository('EasyShop\Entities\EsProductExternalLink')
+                                             ->getExternalLinksByProductId($productEntity->getIdProduct());
+                    if ($bannerfile) {
+                        $bannedData = [
+                            'product' => $product,
+                            'externalLink' => $externalLink
+                        ];
+                        $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, $bannedData, true);
                     }
                     $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method'];
                     $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
@@ -302,7 +310,7 @@ class product extends MY_Controller
                     'viewerId' => $viewerId,
                     'canPurchase' => $canPurchase,
                     'viewer' => $viewer,
-                    'bannerView' => $bannerView, 
+                    'bannerView' => $bannerView,
                     'reviewDetailsView' => $reviewDetailsView,
                     'recommendedView' => $recommendedView,
                     'noMoreSelection' => $noMoreSelection, 
