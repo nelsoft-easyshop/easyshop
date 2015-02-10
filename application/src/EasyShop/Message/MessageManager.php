@@ -124,9 +124,11 @@ class MessageManager {
                 }
                 else if ( ( $status === EsMessages::MESSAGE_RECEIVER &&
                     ( $delete === (int) EsMessages::MESSAGE_NOT_DELETED ||
-                        $delete === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) ) && !$isOpened
+                        $delete === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) )
                 ) {
-                    $unreadConversationCount++;
+                    if (!$isOpened) {
+                        $unreadConversationCount++;
+                    }
                 }
                 else {
                     unset($conversation[$key]);
