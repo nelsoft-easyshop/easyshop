@@ -106,7 +106,7 @@
     <?=form_open('/sell/edit/step2', ['id' => 'formEdit']); ?>
         <input type="hidden" id="editTextProductId" name="p_id" value="" />
         <input type="hidden" id="editTextCategoryId" name="hidden_attribute" value="" />
-        <input type="hidden" id="editTextCategoryName" name="othernamecategory" value="" />"
+        <input type="hidden" id="editTextCategoryName" name="othernamecategory" value="" />
     <?=form_close();?> 
 </div>
 
