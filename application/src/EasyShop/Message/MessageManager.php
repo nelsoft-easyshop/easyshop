@@ -113,7 +113,7 @@ class MessageManager {
         $result['unread_msgs_count'] = $unreadMsgCount;
         foreach ($resultMessageContainer as $conversation) {
             $unreadConversationCount = 0;
-            foreach($conversation as $message) {
+            foreach($conversation as $key => $message) {
                 $delete = (int) $message['is_delete'];
                 $status = $message['status'];
                 $isOpened = (bool) $message['opened'];
@@ -129,7 +129,7 @@ class MessageManager {
                     $unreadConversationCount++;
                 }
                 else {
-                    unset($message);
+                    unset($conversation[$key]);
                 }
 
                 $first_key = reset($conversation)['id_msg'];
