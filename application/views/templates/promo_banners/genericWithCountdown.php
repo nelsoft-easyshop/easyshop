@@ -13,7 +13,7 @@
                             </div>
                             <div class="div-inline">
                                 <div class="time-container">
-                                    <p class="p-time-left">For more information, visit our <a href="<?=$externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]?>" target="_blank">Facebook page</a></p>
+                                    <p class="p-time-left">For more information, visit our <a href="<?=isset($externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]) ? $externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]->getLink(): \EasyShop\Entities\EsProductExternalLink::DEFAULT_LINK?>" target="_blank">Facebook page</a></p>
                                     <table id="table-countdown" align="center">
                                         <tr>
                                             <td class="td-time-num">
@@ -50,6 +50,7 @@
 
     <div>
         <input id="endDate" type="hidden" value='<?php echo date('M d,Y H:i:s',strtotime(($product->getStartPromo() == "1" ? $product->getEnddate()->format("Y-m-d h:i:s"): $product->getStartdate()->format("Y-m-d h:i:s")))); ?>' >
+        <input type="hidden" id="dateOfAnnouncement" data-date="<?=isset($externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]) ? $externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]->getDateOfAnnouncement()->format("F d, Y") : ''?>">
     </div>
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
