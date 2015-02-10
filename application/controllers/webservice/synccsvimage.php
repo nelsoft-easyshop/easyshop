@@ -237,8 +237,7 @@ class SyncCsvImage extends MY_Controller
 
                 }
 
-                if(!in_array($productImageId, $attrImage)) {
-                    copy($path, $imageDirectory);
+                if(!in_array($productImageId, $attrImage) && copy($path, $imageDirectory)) {
                     $productImageObject = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                                     ->findBy([
                                                         'product' => $productId, 
