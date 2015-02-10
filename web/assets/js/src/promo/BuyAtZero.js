@@ -40,8 +40,8 @@
                     }
                     else{
                         msg = "Congratulations! You now have the chance to win this  " +
-                            escapeHtml($('#pname').html())  + " item! The lucky winner will be " +
-                            "announced on March 01, 2015. Stay tuned for more EasyShop.ph " +
+                            escapeHtml($('#pname').html())  + " item! The lucky winner will be " 
+                            "announced on "+ escapeHtml($('#dateOfAnnouncement').data('date')) +". Stay tuned for more EasyShop.ph " +
                             "promotions. ";
                     }
                     
