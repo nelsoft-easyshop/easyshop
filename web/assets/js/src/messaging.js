@@ -146,7 +146,7 @@
         if ($('.d_all').not(':checked').length == $('.d_all').length) {
             $("#chsn_delete_btn").hide();
         }
-        else{
+        else {
             $("#chsn_delete_btn").show();
         }
     });
@@ -292,6 +292,8 @@
         var all_messages = eval('('+ $(".Active").attr('data')+')');
         $("#chsn_username").html($(".Active").children(":first").html()).show();
         var objDiv = document.getElementById("msg_field");
+        var name = $('#chsn_username').html();
+        $("#send_btn").attr("data","{'img':'"+$(this).parent().parent().find('img').attr('data')+"'}");
         $("#msg_field").empty();
         var sortedObjectByKey = sortObjectByKey(all_messages);
         $.each(sortedObjectByKey,function(key, val) {
@@ -313,6 +315,9 @@
         });
 
         $("#msg_textarea").show();
+        $("#delete_all_btn").show();
+        $("#chsn_delete_btn").hide();
+        $("#userDataContainer").empty().html(name.trim());
         objDiv.scrollTop = objDiv.scrollTop + 100;
     }
 
