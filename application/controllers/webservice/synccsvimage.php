@@ -275,13 +275,17 @@ class SyncCsvImage extends MY_Controller
                            ->getRepository('EasyShop\Entities\EsProductImage')
                            ->find($attr["image_id"]);
 
+            if(!$values) {
+                continue;
+            }
+
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
             $path = "./assets/admin/$images";
 
             $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o.".$values->getProductImageType();
             $imageDirectory = "./".$this->config->item('product_img_directory').$filename."/other/".$newfilename;
             $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
-            if(copy($path, $imageDirectory)){
+            if(file_exists($path) && copy($path, $imageDirectory)){
                 $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
 
                 $values->setProductImagePath($imageDirectory);
