@@ -18,6 +18,7 @@ class Version20150209175127 extends AbstractMigration
             `id_product_external_link` INT NOT NULL AUTO_INCREMENT,
             `link` VARCHAR(45) NOT NULL DEFAULT '',
             `product_id` INT NOT NULL DEFAULT 0,
+            `social_media_provider_id` INT NOT NULL DEFAULT 0,
             PRIMARY KEY (`id_product_external_link`));
         ");
     }

@@ -5,16 +5,13 @@ namespace Easyshop\SocialMedia;
 use \DateTime;
 use EasyShop\Entities\EsMember;
 use EasyShop\Entities\EsMemberMerge;
+use EasyShop\Entities\EsSocialMediaProvider;
 use EasyShop\Entities\EsStoreColor;
 use Facebook\FacebookSession;
 
 class SocialMediaManager
 {
 
-    const FACEBOOK = 1;
-    
-    const GOOGLE = 2;
-    
     /**
      * Entity Manager instance
      *
@@ -105,10 +102,10 @@ class SocialMediaManager
     public function getLoginUrl($account, $scope = array())
     {
         switch ($account) {
-            case self::FACEBOOK :
+            case EsSocialMediaProvider::FACEBOOK :
                 $loginUrl = $this->fbRedirectLoginHelper->getLoginUrl($scope);
                 break;
-            case self::GOOGLE :
+            case EsSocialMediaProvider::GOOGLE :
                 $this->googleClient->setScopes($scope);
                 $loginUrl = $this->googleClient->createAuthUrl();
         }
@@ -133,7 +130,7 @@ class SocialMediaManager
     {
         $oauthConfig = $this->configLoader->getItem('oauth');
         switch ($account) {
-            case self::FACEBOOK :
+            case EsSocialMediaProvider::FACEBOOK :
                 session_start();
                 $facebookConfig = $oauthConfig['facebook']['key'];
                 FacebookSession::setDefaultApplication($facebookConfig['appId'], $facebookConfig['secret']);
@@ -142,7 +139,7 @@ class SocialMediaManager
                             $session, 'GET', '/me'
                         ))->execute()->getGraphObject(\Facebook\GraphUser::className());
                 break;
-            case self::GOOGLE :
+            case EsSocialMediaProvider::GOOGLE :
                 $googleData = new \Google_Service_Oauth2($this->googleClient);
                 $userProfile = $googleData->userinfo->get();
                 break;
@@ -455,7 +452,7 @@ class SocialMediaManager
      */
     public function getFacebookTypeConstant()
     {
-        return self::FACEBOOK;
+        return EsSocialMediaProvider::FACEBOOK;
     }
     
     /**
@@ -465,7 +462,7 @@ class SocialMediaManager
      */
     public function getGoogleTypeConstant()
     {
-        return self::GOOGLE;
+        return EsSocialMediaProvider::GOOGLE;
     }
 
     /**
