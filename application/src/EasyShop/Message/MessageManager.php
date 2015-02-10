@@ -140,12 +140,11 @@ class MessageManager {
 
         if ($getUnreadMessages) {
             foreach ($result['messages'] as $conversation) {
-                foreach ($conversation as $message) {
-                    if (
-                        ( ( isset($message['name']) && (int) $message['to_id'] === $userId ) && $message['opened'] ) ||
+                foreach ($conversation as $key => $message) {
+                    if (( ( isset($message['name']) && (int) $message['to_id'] === $userId ) && $message['opened'] ) ||
                         ($message['status'] === EsMessages::MESSAGE_SENDER && isset($message['name']) )
                     ) {
-                        unset($conversation);
+                        unset($result['messages'][$key]);
                     }
                 }
             }

@@ -1,14 +1,14 @@
 (function ($) {
     var $userInfo = $('#userInfo');
     var $chatServer = $('#chatServer');
-    var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
+//    var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
     $(document).ready(function()
     {
         /* Register events */
-        socket.on('send message', function( data ) {
-            onFocusReload(data.message);
-        });
-        setAccountOnline($userInfo.data('store-name'));
+//        socket.on('send message', function( data ) {
+//            onFocusReload(data.message);
+//        });
+//        setAccountOnline($userInfo.data('store-name'));
 
         $('#table_id').dataTable({
             "bScrollInfinite": true,
@@ -153,7 +153,7 @@
 
     var setAccountOnline = function(memberId)
     {
-        socket.emit('set account online', memberId);
+//        socket.emit('set account online', memberId);
     };
 
     function sortObjectByKey (obj)
@@ -240,7 +240,7 @@
                 $("#msg_textarea img").hide();
                 $("#send_btn").show();
                 if (parseInt(resultMsg.success) === 1) {
-                    socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
+//                    socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
                     if (onFocusReload(resultMsg.message) && !isOnConversation) {
                         $('#modal-close').trigger('click');
                     }
