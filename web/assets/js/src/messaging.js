@@ -164,7 +164,9 @@
             arrayOfObject[key] = val;
         });
 
-        arrayOfObject.sort();
+        arrayOfObject.sort(function(a, b) {
+            return a.id_msg > b.id_msg ? 1 : (a.id_msg < b.id_msg ? -1 : 0);
+        });
 
         return arrayOfObject;
     };
