@@ -19,7 +19,13 @@ class SyncCsvImage extends MY_Controller
      * The product manager
      *
      */
-    private $productManager;  
+    private $productManager;
+
+    /**
+     * Handles if the request is authenticated
+     * @var bool
+     */    
+    private $isAuthenticated = false;     
 
     public function __construct()  
     { 
@@ -28,7 +34,18 @@ class SyncCsvImage extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $this->EsProductImagesRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
         $this->EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');            
-        $this->EsAdminImagesRepository = $this->em->getRepository('EasyShop\Entities\EsAdminImages');            
+        $this->EsAdminImagesRepository = $this->em->getRepository('EasyShop\Entities\EsAdminImages');
+        $this->authenticateRequest = $this->serviceContainer['webservice_manager'];
+
+        if($this->input->get()) {
+            $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
+                                                                              $this->input->get('hash'),
+                                                                              true);
+        }
+
+        if(!$this->isAuthenticated) {
+            exit("Your request is not authenticated");
+        }          
     }
 
     /**
