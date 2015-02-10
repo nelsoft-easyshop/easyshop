@@ -18,6 +18,11 @@
             var $productId = $("#productId").val();
             var $csrftoken = $("meta[name='csrf-token']").attr('content'); 
             var msg = 'Kindly login to qualify for this promo.';
+            var congratsMsg = "";
+            var announceDate = $('#dateOfAnnouncement').data('date');
+            if (announceDate) {
+                congratsMsg = " The lucky winner will be announced on " + escapeHtml(announceDate) + ". ";
+            }
             $.ajax({
                 url : '/promo/BuyAtZero/buyAtZeroRegistration',
                 type : 'post',
@@ -40,8 +45,8 @@
                     }
                     else{
                         msg = "Congratulations! You now have the chance to win this  " +
-                            escapeHtml($('#pname').html())  + " item! The lucky winner will be " +
-                            "announced on "+ escapeHtml($('#dateOfAnnouncement').data('date')) +". Stay tuned for more EasyShop.ph " +
+                            escapeHtml($('#pname').html())  + " item!" +
+                            congratsMsg + " Stay tuned for more EasyShop.ph " +
                             "promotions. ";
                     }
                     
