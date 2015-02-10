@@ -149,7 +149,6 @@ class JbimagesUploader extends MY_Controller
                         unset($result['base_url']);
                     }
                     chmod($result['file_name'], 0775);
-                    unlink( $result['file_name'] );
                 }
          
             }
