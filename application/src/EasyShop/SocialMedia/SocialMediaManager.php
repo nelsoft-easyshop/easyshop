@@ -12,6 +12,10 @@ use Facebook\FacebookSession;
 class SocialMediaManager
 {
 
+    const FACEBOOK = 1;
+
+    const GOOGLE = 2;
+
     /**
      * Entity Manager instance
      *
@@ -443,26 +447,6 @@ class SocialMediaManager
                 ->getQuery();
             $query->execute();
         }
-    }
-
-    /**
-     * Returns the facebook type constant
-     *
-     * @return integer
-     */
-    public function getFacebookTypeConstant()
-    {
-        return EsSocialMediaProvider::FACEBOOK;
-    }
-    
-    /**
-     * Returns the google type constant
-     *
-     * @return integer
-     */
-    public function getGoogleTypeConstant()
-    {
-        return EsSocialMediaProvider::GOOGLE;
     }
 
     /**
