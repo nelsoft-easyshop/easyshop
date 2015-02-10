@@ -173,7 +173,8 @@ class SyncCsvImage extends MY_Controller
                                 ->getAttributesByProductIds($ids);
 
             $attrImage = [];
-            if(count($productAttr) > 0) {
+            $hasAttribute = count($productAttr) > 0;
+            if($hasAttribute) {
                 foreach ($productAttr as $value) {
                     $attrImage[] = $value["image_id"];
                 }
@@ -203,7 +204,7 @@ class SyncCsvImage extends MY_Controller
                     mkdir($tempDirectory.'small/', 0777, true);
                     mkdir($tempDirectory.'thumbnail/', 0777, true);
                     mkdir($tempDirectory.'other/', 0777, true);
-                    if(count($productAttr) > 0 ) {
+                    if($hasAttribute) {
                         mkdir($tempDirectory.'other/categoryview', 0777, true); 
                         mkdir($tempDirectory.'other/small', 0777, true); 
                         mkdir($tempDirectory.'other/thumbnail', 0777, true); 
