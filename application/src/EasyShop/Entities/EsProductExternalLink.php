@@ -24,9 +24,9 @@ class EsProductExternalLink
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
+     * @ORM\Column(name="link", type="string", length=45, nullable=false)
      */
-    private $name = '';
+    private $link = '';
 
     /**
      * @var integer
@@ -48,26 +48,26 @@ class EsProductExternalLink
     }
 
     /**
-     * Set name
+     * Set link
      *
-     * @param string $name
+     * @param string $link
      * @return EsProductExternalLink
      */
-    public function setName($name)
+    public function setLink($link)
     {
-        $this->name = $name;
+        $this->link = $link;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get link
      *
      * @return string 
      */
-    public function getName()
+    public function getLink()
     {
-        return $this->name;
+        return $this->link;
     }
 
     /**

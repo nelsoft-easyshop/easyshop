@@ -16,7 +16,7 @@ class Version20150209175127 extends AbstractMigration
         $this->addSql("
             CREATE TABLE `es_product_external_link` (
             `id_product_external_link` INT NOT NULL AUTO_INCREMENT,
-            `name` VARCHAR(45) NOT NULL DEFAULT '',
+            `link` VARCHAR(45) NOT NULL DEFAULT '',
             `product_id` INT NOT NULL DEFAULT 0,
             PRIMARY KEY (`id_product_external_link`));
         ");
