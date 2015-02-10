@@ -247,7 +247,6 @@ class product extends MY_Controller
                 $bannerView = "";
                 $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
                 $isBuyButtonViewable = true;
-                $externalLink = '';
 
                 if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
                     $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];

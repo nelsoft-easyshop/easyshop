@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsProductExternalLink
 {
+    const DEFAULT_LINK = 'https://www.facebook.com/EasyShopPhilippines/';
+
     /**
      * @var integer
      *
@@ -24,7 +26,7 @@ class EsProductExternalLink
     /**
      * @var string
      *
-     * @ORM\Column(name="link", type="string", length=45, nullable=false)
+     * @ORM\Column(name="link", type="string", length=500, nullable=false)
      */
     private $link = '';
 
@@ -41,6 +43,13 @@ class EsProductExternalLink
      * @ORM\Column(name="social_media_provider_id", type="integer", nullable=false)
      */
     private $socialMediaProviderId = '0';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_of_announcement", type="datetime", nullable=false)
+     */
+    private $dateOfAnnouncement = '0000-00-00 00:00:00';
 
 
 
@@ -121,5 +130,28 @@ class EsProductExternalLink
     public function getSocialMediaProviderId()
     {
         return $this->socialMediaProviderId;
+    }
+
+    /**
+     * Set dateOfAnnouncement
+     *
+     * @param \DateTime $dateOfAnnouncement
+     * @return EsProductExternalLink
+     */
+    public function setDateOfAnnouncement($dateOfAnnouncement)
+    {
+        $this->dateOfAnnouncement = $dateOfAnnouncement;
+
+        return $this;
+    }
+
+    /**
+     * Get dateOfAnnouncement
+     *
+     * @return \DateTime 
+     */
+    public function getDateOfAnnouncement()
+    {
+        return $this->dateOfAnnouncement;
     }
 }

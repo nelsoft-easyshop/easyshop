@@ -20,7 +20,7 @@ class EsProductExternalLinkRepository extends EntityRepository
 
         if ($productExternalLinksEntity) {
             foreach ($productExternalLinksEntity as $link) {
-                $productExternalLinks[$link->getSocialMediaProviderId()] = $link->getLink();
+                $productExternalLinks[$link->getSocialMediaProviderId()] = $link;
             }
         }
 
