@@ -181,6 +181,7 @@ class SyncCsvImage extends MY_Controller
         $imageDimensions = $this->config->config['image_dimensions'];
         $date = date("Ymd");
         $gisTime = date("Gis");
+        $this->config->load("image_path");
         foreach($imagesId["product"] as $ids)
         {
             $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
@@ -201,7 +202,6 @@ class SyncCsvImage extends MY_Controller
 
                 $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
                 $path = "./assets/admin/$images";
-                $this->config->load("image_path"); 
                 $productId = $values->getProduct()->getIdProduct();
                 $memberId =  $values->getProduct()->getMember()->getIdMember();
                 $productImageId = $values->getIdProductImage();
