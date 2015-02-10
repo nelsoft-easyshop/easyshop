@@ -132,7 +132,7 @@ class SyncCsvImage extends MY_Controller
             }
         }
         if(!empty($errorSummary)) {
-            return  "jsonCallback({'sites':[{'success': '"."Please upload ".ucfirst(implode(",",$errorSummary))." before proceeding uploading product info"."',},]});";
+            return  "jsonCallback({'sites':[{'success': '"."Kindly upload the following image/s: <br/>".ucfirst(implode("<br/>",$errorSummary)).""."',},]});";
         }
         else {
             return $checkImagesId;
