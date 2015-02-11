@@ -255,7 +255,7 @@ class MobileWebService extends MY_Controller
 
         $value = $this->input->get("value");
         $type = $this->input->get("type");
-        $target = $this->input->get("target");
+        $target = trim($this->input->get("target")) !== "" ?: "/";
         $actionType = $this->input->get("actionType");
 
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType); 
@@ -299,7 +299,7 @@ class MobileWebService extends MY_Controller
         $order = $this->input->get("order");
         $value = $this->input->get("value");
         $type = $this->input->get("type");
-        $target = $this->input->get("target");
+        $target = trim($this->input->get("target")) !== "" ?: "/";
         $actionType = $this->input->get("actionType");
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType);
 
