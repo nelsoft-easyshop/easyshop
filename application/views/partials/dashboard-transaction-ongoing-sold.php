@@ -1,7 +1,7 @@
 <div class="transaction-item">
 <?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $soldTransactionDetails) : ?>
-    <div class="item-list-panel <?=$soldTransactionDetails['invoiceNo'] ?>">
+    <div class="item-list-panel <?='invoiceno-' . $soldTransactionDetails['invoiceNo'] ?>">
         <div class="transac-title">
             <?PHP if (intval($soldTransactionDetails['orderStatus']) != (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && !$soldTransactionDetails['isFlag'] ) : ?>
                 <div><span class="strong-label">Transaction No. : </span> <?=$soldTransactionDetails['invoiceNo'] ?></div>

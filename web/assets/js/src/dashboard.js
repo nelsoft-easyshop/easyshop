@@ -1283,7 +1283,7 @@
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
                     if (serverResponse.isTransactionComplete === true) {
-                        $('.'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                        $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
                         $('.wipeOut').fadeOut(5000);
                     }
                     else {
