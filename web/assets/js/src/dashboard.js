@@ -1,4 +1,21 @@
 (function ($) {
+    $(window).on("load resize scroll", function(){
+        $(".oo").trigger("click");
+        var tabHeight = $("#activityLogTab").outerHeight();
+        var lastLogContainerHeight = $(".log-container").last().outerHeight();
+        var firstLogContainerHeight = $(".log-container").first().outerHeight();
+        var deductActivityLineHeight = lastLogContainerHeight/2;
+        
+        var totalActivityMarginTop = firstLogContainerHeight/2;
+        var totalActivityLineHeight = tabHeight - deductActivityLineHeight - totalActivityMarginTop - 10;
+         $(".log-line").css("height", totalActivityLineHeight+"px").css("margin-top", totalActivityMarginTop+"px");
+
+        $("#activityLogTab").children(".log-outer").each(function(){
+            var logContainerHeight = $(this).find(".log-container").outerHeight();
+            $(this).find(".log-icon-container").css("height", logContainerHeight+"px");
+        });
+        
+    });
 
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
