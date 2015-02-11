@@ -119,7 +119,7 @@ class MobileWebService extends MY_Controller
             $error = array('error' => $this->upload->display_errors());
                      return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($error);
+                            ->set_output(json_encode($error));
         } 
         else {
             $value = "assets/images/mainslide/".$filename.'.'.$file_ext;
@@ -172,7 +172,7 @@ class MobileWebService extends MY_Controller
                 $error = array('error' => $this->upload->display_errors());
                          return $this->output
                                 ->set_content_type('application/json')
-                                ->set_output($error);
+                                ->set_output(json_encode($error));
             }  
             else {
                 $map->mainSlide[$index]->value = $value;
