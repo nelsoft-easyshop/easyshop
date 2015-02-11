@@ -489,7 +489,7 @@ $string = '<typeNode>
                 }
             }
             else {
-                    return false;
+                return false;
             }
         }        
         else if($nodeName == "categorySection") {
