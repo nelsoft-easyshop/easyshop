@@ -105,7 +105,7 @@ class MobileWebService extends MY_Controller
         $file_ext = strtolower(end($file_ext));  
         $path_directory = $this->config->item('mobile_img_directory');
 
-        $this->upload->initialize(array( 
+        $this->upload->initialize([
             "upload_path" => $path_directory,
             "overwrite" => FALSE, 
             "encrypt_name" => FALSE,
@@ -113,10 +113,10 @@ class MobileWebService extends MY_Controller
             "remove_spaces" => TRUE,
             "allowed_types" => "jpg|jpeg|png|gif", 
             "xss_clean" => FALSE
-        )); 
+        ]); 
         
         if ( ! $this->upload->do_upload("myfile")) {
-            $error = array('error' => $this->upload->display_errors());
+            $error = ['error' => $this->upload->display_errors()];
                      return $this->output
                             ->set_content_type('application/json')
                             ->set_output(json_encode($error));
@@ -158,7 +158,7 @@ class MobileWebService extends MY_Controller
             $file_ext = strtolower(end($file_ext));  
             $path_directory = $this->config->item('mobile_img_directory');
             $value = $path_directory.$filename.".".$file_ext;
-            $this->upload->initialize(array( 
+            $this->upload->initialize([
                 "upload_path" => $path_directory,
                 "overwrite" => FALSE, 
                 "encrypt_name" => FALSE,
@@ -166,11 +166,11 @@ class MobileWebService extends MY_Controller
                 "remove_spaces" => TRUE,
                 "allowed_types" => "jpg|jpeg|png|gif", 
                 "xss_clean" => FALSE
-            ));
+            ]);
 
             $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);
             if ( ! $this->upload->do_upload("myfile")) {
-                $error = array('error' => $this->upload->display_errors());
+                $error = ['error' => $this->upload->display_errors()];
                          return $this->output
                                 ->set_content_type('application/json')
                                 ->set_output(json_encode($error));
