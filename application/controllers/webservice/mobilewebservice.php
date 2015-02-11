@@ -63,18 +63,31 @@ class MobileWebService extends MY_Controller
     public function removeContent() 
     {
         $map = simplexml_load_file($this->file);        
-        $index =  $this->input->get("index");
+        $index =  (int)$this->input->get("index");
         $nodeName =  $this->input->get("nodename");        
-        $productindex =  $this->input->get("productindex");        
+        $productindex =  (int)$this->input->get("productindex");        
         $file = $this->file;
         $jsonFile = $this->json;        
-        if($nodeName == "mainSlide") {
+        if($nodeName === "mainSlide") {
             if(count($map->mainSlide) > 1){
                 $this->xmlCmsService->removeXML($file,$nodeName,$index);
                 return $this->output
                         ->set_content_type('application/json')
                         ->set_output($jsonFile);                  
             }
+        }
+        if($nodeName === "boxContent") {
+            $subIndex = (int)$this->input->get("subIndex");
+            if(count($map->section[$index]->boxContent) > 1){
+                $index = $index === 0 ? 1 : $index + 1;
+                $subIndex = $subIndex === 0 ? 1 : $subIndex + 1;
+                $result = $this->xmlCmsService->removeXmlNode($file,$nodeName,$index, $subIndex);
+                if($result) {
+                    return $this->output
+                                ->set_content_type('application/json')
+                                ->set_output($jsonFile);                  
+                }
+            }            
         }
     }
 
