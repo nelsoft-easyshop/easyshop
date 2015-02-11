@@ -6,15 +6,6 @@ if (!defined('BASEPATH')){
  
 class Home extends MY_Controller 
 {
- 
-    /**
-     * Number of feeds item per page
-     *
-     * @var integer
-     */
-    public $feedsProdPerPage = 7;
-    
-    
     /**
      * Load class dependencies
      *
@@ -39,32 +30,25 @@ class Home extends MY_Controller
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         ];
-        
-        if( $memberId && $view !== 'basic'){
-            $bodyData = $this->getFeed();   
-            $bodyData['category_navigation'] = $this->load->view('templates/category_navigation', [
-                                                                    'cat_items' =>  $this->getcat()
-                                                                ], true );                                   
-            $this->load->spark('decorator');  
-            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));  
-            $this->load->view("templates/home_layout/layoutF",$bodyData);
-            $this->load->view('templates/footer', ['minborder' => true]);
 
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+        $sliderSection = $homeContent['slider']; 
+        $homeContent['slider'] = [];
+        foreach($sliderSection as $slide){
+            $sliderView = $this->load->view($slide['template'],$slide, true);
+            $homeContent['slider'][] = $sliderView;
         }
-        else{
-            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-            $sliderSection = $homeContent['slider']; 
-            $homeContent['slider'] = [];
-            foreach($sliderSection as $slide){
-                $sliderView = $this->load->view($slide['template'],$slide, true);
-                $homeContent['slider'][] = $sliderView;
-            }
-            $data['homeContent'] = $homeContent; 
-            $this->load->spark('decorator');  
-            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/home/home_primary', $data);
-            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+        $data['homeContent'] = $homeContent; 
+        
+   
+        if( $memberId ){
+            $data['featuredCategorySection'] = $this->serviceContainer['xml_cms']->getFeaturedProducts($memberId);
         }
+
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/home/home_primary', $data);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
 
     }
     
@@ -235,129 +219,7 @@ class Home extends MY_Controller
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/how-to-sell', $bodyData);
     }
-    
-    
-  
-
-    /**
-     *  Fetch information to be display in feeds page
-     *
-     *  @return array
-     */
-    private function getFeed()
-    {
-        $this->load->library('xmlmap');
-        $this->load->model('product_model');
-        $this->load->model('user_model');
-        $xmlResourceService = $this->serviceContainer['xml_resource'];
-        $xmlfile =  $xmlResourceService->getContentXMLfile();
-
-        $perPage = $this->feedsProdPerPage;
-        $memberId = $this->session->userdata('member_id');
-        $userdata = $this->user_model->getUserById($memberId);
-
-        $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
-        $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
         
-        array_push($partnersId, $easyshopId);
-        $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
-        $followedSellers = $this->user_model->getFollowing($memberId);
-        
-        $this->load->config('protected_category', TRUE);
-        $categoryId = $this->config->item('promo', 'protected_category');
-
-        $data = array(
-            'featured_prod' => $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage),
-            'new_prod' => $this->product_model->getNewProducts($perPage),
-            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage, " lastmodifieddate DESC , "),
-            'followed_users' =>  $followedSellers,
-            'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
-            'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
-            'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
-            'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
-            'isCollapseCategories' => count($followedSellers) > 2,
-            'userslug' => $userdata['slug'],
-            'maxDisplayableSellers' => 7
-        );
-
-        #Assemble featured product ID array for exclusion on LOAD MORE request
-        $fpID = array();
-        foreach( $data['featured_prod'] as $fp ){
-            if( !in_array($fp['id_product'],$fpID) ){
-                $fpID[] = $fp['id_product'];
-            }
-        }
-        
-        $data['fpID'] = json_encode($fpID);
-        
-        return $data;
-    }
-    
-    /**
-     *  Used by AJAX Requests to fetch for products in Feeds page
-     *
-     *  @return JSON
-     */
-    public function getMoreFeeds()
-    {
-        $this->load->library('xmlmap');
-        $this->load->model('product_model');
-        if( $this->input->post("feed_page") && $this->input->post("feed_set") ){
-            $perPage = $this->feedsProdPerPage;
-            $memberId = $this->session->userdata('member_id');
-            
-            $page = ((int)$this->input->post("feed_page") + 1) * $perPage - $perPage;
-            $productFeedSet = (int)$this->input->post("feed_set");
-
-            switch( (int)$productFeedSet ){
-                case 1: #Featured Tab
-
-                    $xmlResourceService = $this->serviceContainer['xml_resource'];
-                    $xmlfile =  $xmlResourceService->getContentXMLfile();
-
-                    $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
-                    $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
-
-                    array_push($partnersId, $easyshopId);
-                    $prodIdRaw = ($this->input->post('ids')) ? json_decode($this->input->post('ids')) : array(0); 
-                    $prodId = implode(",",$prodIdRaw);
-                    
-                    $products = $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage,$page);
-                    
-                    #Assemble featured product ID array for exclusion on LOAD MORE request
-                    $fpID = array();
-                    foreach( $products as $fp ){
-                        if( !in_array($fp['id_product'],$fpID) ){
-                            $fpID[] = $fp['id_product'];
-                        }
-                    }
-                    
-                    $prodIDArray = array_merge($prodIdRaw,$fpID);
-                    $data['fpID'] = json_encode($prodIDArray);
-                    
-                    break;
-                case 2: #New Products Tab
-                    $products = $this->product_model->getNewProducts($perPage,$page);
-                    break;
-                case 3: #EasyTreats Products Tab
-                    $this->load->config('protected_category', TRUE);
-                    $categoryId = $this->config->item('promo', 'protected_category');
-                    $products = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",$page,$perPage);
-                    break;
-                default:
-                    $data['error'] = "Unable to load prouct list.";
-                    echo json_encode($data);
-                    exit();
-                    break;
-            }
-            
-            $temp['products'] = $products;
-            $data['view'] = $this->load->view("templates/home_layout/layoutF_products",$temp,true);
-            
-            echo json_encode($data);
-        }
-    }
-    
     /**
      *  Handles bug report form
      *
