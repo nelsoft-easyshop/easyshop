@@ -205,9 +205,6 @@ class SyncCsvImage extends MY_Controller
                 $productId = $values->getProduct()->getIdProduct();
                 $memberId =  $values->getProduct()->getMember()->getIdMember();
                 $productImageId = $values->getIdProductImage();
-
-                $productObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                          ->findOneBy(['idProduct' => $productId]);
  
                 $directoryName = $productId.'_'.$memberId.'_'.$date;
                 $filename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key.".".$values->getProductImageType();
@@ -215,8 +212,8 @@ class SyncCsvImage extends MY_Controller
                 $productDirectory = "./".$this->config->item('product_img_directory').$directoryName."/"; 
 
                 if(!file_exists($productDirectory)){
-                    $newSlug = $this->productManager->generateSlug($productObject->getName());
-                    $productObject->setSlug($newSlug);
+                    $newSlug = $this->productManager->generateSlug($values->getProduct()->getName());
+                    $values->getProduct()->setSlug($newSlug);
                     mkdir($productDirectory.'categoryview/', 0777, true);
                     mkdir($productDirectory.'small/', 0777, true);
                     mkdir($productDirectory.'thumbnail/', 0777, true);
