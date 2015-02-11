@@ -9,10 +9,8 @@
         <title>Estudyantrepreneur</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href='http://fonts.googleapis.com/css_family=Montserrat:400,700|Open+Sans:400,700,700italic,400italic,300,300italic,600,600italic,800,800italic.html' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css_family=Abril+Fatface.html' rel='stylesheet' type='text/css'>
+        <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" href="/assets/css/promo-css.css">
-
         <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
         <script type="text/javascript">
 
@@ -55,40 +53,56 @@
         </section>
 
 
-        <section>
+        <section class="ty-comment-section">
             <div class="container load-animate">
-
-                <center><h3>THANK YOU COMMENT</h3></center>
-                <p class="padding-lr-15 text-align-justify">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
-                </p>
+                <div class="box">
+                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                        <h3>THANK YOU COMMENT</h3>
+                        <p class="text-align-justify">
+                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod 
+                            tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis 
+                            nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
+                            Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel 
+                            illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui 
+                            blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber 
+                            tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat 
+                            facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit 
+                            eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section class="current-stats-section">
-            <div class="container load-animate ">
-                <h3>CURRENT STATS</h3>
-                <ul>
-                    <li>
-                       <span class="school-name">
-                            Lorem ipsum dolor sit amet uis nostrud
-                        </span>
-                        <span class="school-percentage">50%</span>
-                    </li>
-                    <li>
-                        <span class="school-name">
-                            Lorem ipsum dolor  Lorem ipsum dolor sit amet uis nostrud  Lorem ipsum dolor sit amet uis nostrud 
-                             Lorem ipsum dolor sit amet uis nostrud 
-                        </span>
-                        <span class="school-percentage">50%</span>
-                    </li>
-                    <li>
-                        <span class="school-name">
-                            Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
-                        </span>
-                        <span class="school-percentage">50%</span>
-                    </li>
-                </ul>
+            <div class="container load-animate">
+                <div class="box">
+                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                        <h3>CURRENT STATS</h3>
+                        <ul>
+                            <li>
+                               <span class="school-name">
+                                    Lorem ipsum dolor sit amet uis nostrud
+                                </span>
+                                <span class="school-percentage">50%</span>
+                            </li>
+                            <li>
+                                <span class="school-name">
+                                    Lorem ipsum dolor  Lorem ipsum dolor sit amet uis nostrud  Lorem ipsum 
+                                    dolor sit amet uis nostrud 
+                                     Lorem ipsum dolor sit amet uis nostrud 
+                                </span>
+                                <span class="school-percentage">50%</span>
+                            </li>
+                            <li>
+                                <span class="school-name">
+                                    Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
+                                </span>
+                                <span class="school-percentage">50%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -96,7 +110,9 @@
             <div class="container load-animate">
                 <div class="row-fluid">
                     <div class="span12 padding-top-30">
-                        <h3>Make sure you don't miss interesting events, sale, <br>and more by joining our newsletter program.</h5>
+                        <h3>Make sure you don't miss interesting events, sale, 
+                            <br>and more by joining our newsletter program.
+                        </h5>
                         <br>
                         <form method="post" action="newsletter.php" class="newsletter-form">
                             <div class="row-fluid">
