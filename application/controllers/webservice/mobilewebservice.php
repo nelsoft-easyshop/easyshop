@@ -107,12 +107,12 @@ class MobileWebService extends MY_Controller
 
         $this->upload->initialize([
             "upload_path" => $path_directory,
-            "overwrite" => FALSE, 
-            "encrypt_name" => FALSE,
+            "overwrite" => false, 
+            "encrypt_name" => false,
             "file_name" => $filename,
-            "remove_spaces" => TRUE,
+            "remove_spaces" => true,
             "allowed_types" => "jpg|jpeg|png|gif", 
-            "xss_clean" => FALSE
+            "xss_clean" => false
         ]); 
         
         if ( ! $this->upload->do_upload("myfile")) {
@@ -125,7 +125,7 @@ class MobileWebService extends MY_Controller
             $value = $path_directory.$filename.'.'.$file_ext;
             $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);            
             $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/mainSlide[last()]');
-            if($addXml === TRUE) {
+            if($addXml === true) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json); 
@@ -160,12 +160,12 @@ class MobileWebService extends MY_Controller
             $value = $path_directory.$filename.".".$file_ext;
             $this->upload->initialize([
                 "upload_path" => $path_directory,
-                "overwrite" => FALSE, 
-                "encrypt_name" => FALSE,
+                "overwrite" => false, 
+                "encrypt_name" => false,
                 "file_name" => $filename,
-                "remove_spaces" => TRUE,
+                "remove_spaces" => true,
                 "allowed_types" => "jpg|jpeg|png|gif", 
-                "xss_clean" => FALSE
+                "xss_clean" => false
             ]);
 
             $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);
