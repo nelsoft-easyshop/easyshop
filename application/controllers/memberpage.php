@@ -900,10 +900,10 @@ class Memberpage extends MY_Controller
                 if( count($orderProductEntity) === 1 ) {
                     $esShippingComment = $productShippingCommentRepo->findOneBy(['orderProduct' => $orderProductEntity, 'member' => $memberEntity]);
                     if ($esShippingComment) {
-                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($esShippingComment, $orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
+                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($esShippingComment, $orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
                     }
                     else {
-                        $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
+                        $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
                     }
                     $isShippingCommentModified = (bool) $newEsShippingComment;
                     $serverResponse['result'] = $isShippingCommentModified ? 'success' : 'fail';
