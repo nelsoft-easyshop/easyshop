@@ -2343,6 +2343,22 @@ label.css-label {
 }
 
 /** =============== Activity Logs CSS style =============== **/
+.log-sort-filter{
+    margin-bottom: 20px;
+}
+.log-table-filter td{
+    padding: 0px 3px;
+}
+
+.log-table-filter .text-info{
+    width: 100px;
+}
+
+.log-table-filter .btn-default-3{
+    border: 0px;
+    font-weight: bold;
+}
+
 .log-outer{
     border: solid red 0px;
     display: block;
@@ -2363,6 +2379,14 @@ label.css-label {
 .log-image{
     width: 40px;
     height: 40px;
+    display: inline-block;
+    border-radius: 4px;
+    border: solid #e2e2e2 1px;
+}
+
+.log-image-cover{
+    width: 150px;
+    height: 50px;
     display: inline-block;
     border-radius: 4px;
     border: solid #e2e2e2 1px;
@@ -2447,6 +2471,87 @@ label.css-label {
     left: 37px;
 }
 
+@media only screen and (max-width: 991px){
+    #activityLogTab{
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 30px
+    }
+
+    .col-icon-container{
+        padding: 0px;
+        padding-left: 21px;
+    }
+
+    .col-log-container{
+        padding-left: 2px;
+    }
+
+    .log-feed-rate{
+        display: block;
+    }
+
+    .log-sort-filter{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 700px){
+    .col-icon-container{
+        padding: 0px;
+        padding-left: 5px;
+    }
+
+    .col-log-container{
+        padding-left: 2px;
+    }
+
+    .log-line{
+        left: 22px;
+    }
+}
+
+@media only screen and (max-width: 600px){
+    .log-icon-circle{
+        width: 25px;
+        height: 25px;
+    }
+
+    .col-icon-container{
+        padding-left: 10px;
+    }
+}
+
+@media only screen and (max-width: 400px){
+    .log-icon-circle{
+        width: 20px;
+        height: 20px;
+    }
+
+    .col-icon-container{
+        padding-left: 5px;
+    }
+
+    .col-icon-container .fa{
+        font-size: 8px;
+    }
+
+    .col-icon-container .icon-add{
+        padding-top: 5px;
+    }
+    .log-line{
+        left: 14px;
+    }
+
+    .col-log-meta-cont{
+        padding: 0px;
+    }
+
+    .col-date{
+        padding: 0px;
+        font-size: 11px;
+    }
+}
 
 @media only screen and (max-width: 991px){
     .no-items{
@@ -2462,6 +2567,7 @@ label.css-label {
         width: 100%;
         text-align: center;
         margin-top: -1px;
+        border-bottom: solid #e2e2e2 1px;
     }
     
     .col-dash-mobile{
@@ -2539,7 +2645,7 @@ label.css-label {
         border-bottom: solid #e2e2e2 1px;
     }
     
-    .m-menu-payment{
+    .m-menu-payment, .m-menu-activity{
         border-bottom: solid #e2e2e2 1px;
     }
     
@@ -2936,14 +3042,6 @@ label.css-label {
 
     .activateAccount{
         margin: 20px 0px;
-    }
-
-    #activityLogTab{
-        padding: 15px;
-    }
-
-    .col-icon-container{
-        padding: 0px;
     }
 }
 
