@@ -9,6 +9,8 @@
         <title>Estudyantrepreneur</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='http://fonts.googleapis.com/css_family=Montserrat:400,700|Open+Sans:400,700,700italic,400italic,300,300italic,600,600italic,800,800italic.html' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css_family=Abril+Fatface.html' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="/assets/css/promo-css.css">
 
         <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
@@ -51,48 +53,40 @@
             </div>
 
         </section>
+
+
         <section>
             <div class="container load-animate">
-                <div class="text-center dropdown-school-list">
-                    <select id="ddown-school">
-                        <option value=""></option>
-                        <?PHP foreach($schools_and_students as $school => $students) : ?>
-                        <option value="<?=html_escape(str_replace(' ', '-', $school))?>"><?=html_escape($school)?></option>
-                        <?PHP endforeach; ?>
-                    </select>
-                </div>
-                <div>
-                    <div id="student-container" class="select-school mrgn-top-35">
-                        <?PHP foreach ($schools_and_students as $school => $students) : ?>
-                            <div id="<?=html_escape(str_replace(' ', '-', $school))?>" style="border: 1px black solid;display: none" class="display-none">
-                            <?PHP foreach ($students as $student) : ?>
-                                <span>
-                                    <input name="student" type="radio" value="<?=html_escape($student['idStudent'])?>" data-school="<?=html_escape($student['idSchool'])?>">
-                                    <label><?=html_escape($student['student'])?></label>
-                                </span>
-                            <?PHP endforeach; ?>
-                            </div>
-                            <br>
-                        <?PHP endforeach; ?>
-                    </div>
-                </div>
-                <div class="vote-btn mrgn-top-35">
-                    <button id="btn-vote" class="btn btn-primary"> VOTE </button>
-                </div>
+
+                <center><h3>THANK YOU COMMENT</h3></center>
+                <p class="padding-lr-15 text-align-justify">
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
+                </p>
+            </div>
         </section>
 
-        <section class="mechanics-section">
+        <section class="current-stats-section">
             <div class="container load-animate ">
-                <h3>MECHANICS</h3>
+                <h3>CURRENT STATS</h3>
                 <ul>
                     <li>
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
+                       <span class="school-name">
+                            Lorem ipsum dolor sit amet uis nostrud
+                        </span>
+                        <span class="school-percentage">50%</span>
                     </li>
                     <li>
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
+                        <span class="school-name">
+                            Lorem ipsum dolor  Lorem ipsum dolor sit amet uis nostrud  Lorem ipsum dolor sit amet uis nostrud 
+                             Lorem ipsum dolor sit amet uis nostrud 
+                        </span>
+                        <span class="school-percentage">50%</span>
                     </li>
                     <li>
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
+                        <span class="school-name">
+                            Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
+                        </span>
+                        <span class="school-percentage">50%</span>
                     </li>
                 </ul>
             </div>
@@ -119,6 +113,7 @@
             </div>
         </section>
 
+
         <footer>
             <a href="#" id="top">&#59235;</a>
 
@@ -137,13 +132,9 @@
             </section>
         </footer>
 
-
-        <script type="text/javascript" src="/assets/js/src/promo/estudyantrepreneur.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="/assets/js/src/plugins.js"></script>
         <script src="/assets/js/src/christmas-promo.js"></script>
 
     </body>
 </html>
-
-
