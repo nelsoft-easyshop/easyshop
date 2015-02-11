@@ -360,6 +360,7 @@ class TransactionManager
     {
         $boughtTransactionDetails = [];
         $getUserBoughtTransactions =  $this->esOrderRepo->getAllUserBoughtTransactions($memberId, $isOngoing, $paymentMethod, $transactionNumber);
+        $productCount = 0;
 
         foreach ($getUserBoughtTransactions as $transaction) {
             if (!isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']])) {
@@ -372,6 +373,7 @@ class TransactionManager
                         !isset($boughtTransactionDetails[$transaction['idOrder'] . '-' . $transaction['sellerId']]['product'][$orderProducts[$productKey]['idOrderProduct']]) &&
                         $transaction['sellerId'] === $product['seller_id']
                     ) {
+                        $productCount++;
                         $product['has_shipping_summary'] = false;
                         if ( isset($product['courier']) &&  isset($product['datemodified']) ) {
                             $product['has_shipping_summary'] = true;
@@ -385,7 +387,7 @@ class TransactionManager
             }
         }
 
-        return count($boughtTransactionDetails);
+        return $productCount;
     }
 
     /**
@@ -401,6 +403,7 @@ class TransactionManager
         $soldTransactionDetails = [];
         $orderProductCount = 0;
         $getUserSoldTransactions =  $this->esOrderRepo->getAllUserSoldTransactions($memberId, $isOngoing, $paymentMethod, $transactionNumber);
+
         foreach ($getUserSoldTransactions as $transaction) {
             if (!isset($soldTransactionDetails[$transaction['idOrder']])) {
                 $soldTransactionDetails[$transaction['idOrder']] = $transaction;
