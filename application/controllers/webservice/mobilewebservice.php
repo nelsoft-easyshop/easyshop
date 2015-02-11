@@ -99,11 +99,11 @@ class MobileWebService extends MY_Controller
         $type = $this->input->get("type");
         $coordinate = $this->input->get("coordinate");
         $target = $this->input->get("target");
-
+        $this->config->load("image_path");
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/images/mainslide';
+        $path_directory = $this->config->item('mobile_img_directory');
 
         $this->upload->initialize(array( 
             "upload_path" => $path_directory,
@@ -122,7 +122,7 @@ class MobileWebService extends MY_Controller
                             ->set_output(json_encode($error));
         } 
         else {
-            $value = "assets/images/mainslide/".$filename.'.'.$file_ext;
+            $value = $path_directory.$filename.'.'.$file_ext;
             $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);            
             $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/mainSlide[last()]');
             if($addXml === TRUE) {
@@ -148,6 +148,7 @@ class MobileWebService extends MY_Controller
         $order = $this->input->get("order");
         $coordinate = $this->input->get("coordinate");
         $target = $this->input->get("target");
+        $this->config->load("image_path");
 
         $map = simplexml_load_file($this->file);
         $value = !empty($_FILES['myfile']['name']) ? $value : $map->mainSlide[$index]->value;
@@ -155,8 +156,8 @@ class MobileWebService extends MY_Controller
         if(!empty($_FILES['myfile']['name'])){
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/images/mainslide';
-            $value = $path_directory."/".$filename.".".$file_ext;
+            $path_directory = $this->config->item('mobile_img_directory');
+            $value = $path_directory.$filename.".".$file_ext;
             $this->upload->initialize(array( 
                 "upload_path" => $path_directory,
                 "overwrite" => FALSE, 
