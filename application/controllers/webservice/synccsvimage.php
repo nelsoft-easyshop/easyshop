@@ -171,18 +171,18 @@ class SyncCsvImage extends MY_Controller
 
     /**
      * Creates directories and resizes images inside assets/product
-     * @param int $imagesId
+     * @param int $productIds
      * @return JSONP
      */ 
-    private function syncImages($imagesId)
+    private function syncImages($productIds)
     {
         //Get images config dimensions
         $this->config->load('image_dimensions', TRUE);
+        $this->config->load("image_path");
         $imageDimensions = $this->config->config['image_dimensions'];
         $date = date("Ymd");
         $gisTime = date("Gis");
-        $this->config->load("image_path");
-        foreach($imagesId["product"] as $ids)
+        foreach($productIds["product"] as $ids)
         {
             $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
 
