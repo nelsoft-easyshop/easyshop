@@ -191,14 +191,7 @@ class SyncCsvImage extends MY_Controller
                                 ->getRepository('EasyShop\Entities\EsProduct')
                                 ->getAttributesByProductIds($ids);
 
-            $attrImage = [];
             $hasAttribute = count($productAttr) > 0;
-            if($hasAttribute) {
-                foreach ($productAttr as $value) {
-                    $attrImage[] = $value["image_id"];
-                }
-            }
-
             foreach($imagesValues as $key => $values) {
 
                 $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
@@ -235,7 +228,7 @@ class SyncCsvImage extends MY_Controller
 
                 }
 
-                if(!in_array($productImageId, $attrImage) && copy($path, $fullImagePath)) {
+                if(file_exists($path) && copy($path, $fullImagePath)) {
                     $productImageObject = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                                     ->findBy([
                                                         'product' => $productId, 
