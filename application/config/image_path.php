@@ -5,5 +5,6 @@ $config = [
     'product_img_directory' => 'assets/product/',
     'homeslider_img_directory' => 'assets/images/homeslider/',
     'ads_img_directory' => 'assets/images/ads/',
+    'mobile_img_directory' => 'assets/images/mobile/',
 ];
 

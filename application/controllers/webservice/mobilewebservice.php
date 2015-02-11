@@ -99,33 +99,33 @@ class MobileWebService extends MY_Controller
         $type = $this->input->get("type");
         $coordinate = $this->input->get("coordinate");
         $target = $this->input->get("target");
-
+        $this->config->load("image_path");
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
         $file_ext = strtolower(end($file_ext));  
-        $path_directory = 'assets/images/mainslide';
+        $path_directory = $this->config->item('mobile_img_directory');
 
-        $this->upload->initialize(array( 
+        $this->upload->initialize([
             "upload_path" => $path_directory,
-            "overwrite" => FALSE, 
-            "encrypt_name" => FALSE,
+            "overwrite" => false, 
+            "encrypt_name" => false,
             "file_name" => $filename,
-            "remove_spaces" => TRUE,
+            "remove_spaces" => true,
             "allowed_types" => "jpg|jpeg|png|gif", 
-            "xss_clean" => FALSE
-        )); 
+            "xss_clean" => false
+        ]); 
         
         if ( ! $this->upload->do_upload("myfile")) {
-            $error = array('error' => $this->upload->display_errors());
+            $error = ['error' => $this->upload->display_errors()];
                      return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($error);
+                            ->set_output(json_encode($error));
         } 
         else {
-            $value = "assets/images/mainslide/".$filename.'.'.$file_ext;
+            $value = $path_directory.$filename.'.'.$file_ext;
             $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);            
             $addXml = $this->xmlCmsService->addXml($this->file,$string,'/map/mainSlide[last()]');
-            if($addXml === TRUE) {
+            if($addXml === true) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json); 
@@ -148,6 +148,7 @@ class MobileWebService extends MY_Controller
         $order = $this->input->get("order");
         $coordinate = $this->input->get("coordinate");
         $target = $this->input->get("target");
+        $this->config->load("image_path");
 
         $map = simplexml_load_file($this->file);
         $value = !empty($_FILES['myfile']['name']) ? $value : $map->mainSlide[$index]->value;
@@ -155,24 +156,24 @@ class MobileWebService extends MY_Controller
         if(!empty($_FILES['myfile']['name'])){
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext));  
-            $path_directory = 'assets/images/mainslide';
-            $value = $path_directory."/".$filename.".".$file_ext;
-            $this->upload->initialize(array( 
+            $path_directory = $this->config->item('mobile_img_directory');
+            $value = $path_directory.$filename.".".$file_ext;
+            $this->upload->initialize([
                 "upload_path" => $path_directory,
-                "overwrite" => FALSE, 
-                "encrypt_name" => FALSE,
+                "overwrite" => false, 
+                "encrypt_name" => false,
                 "file_name" => $filename,
-                "remove_spaces" => TRUE,
+                "remove_spaces" => true,
                 "allowed_types" => "jpg|jpeg|png|gif", 
-                "xss_clean" => FALSE
-            ));
+                "xss_clean" => false
+            ]);
 
             $string = $this->xmlCmsService->getString("mainSlide", $value, $type, $coordinate, $target);
             if ( ! $this->upload->do_upload("myfile")) {
-                $error = array('error' => $this->upload->display_errors());
+                $error = ['error' => $this->upload->display_errors()];
                          return $this->output
                                 ->set_content_type('application/json')
-                                ->set_output($error);
+                                ->set_output(json_encode($error));
             }  
             else {
                 $map->mainSlide[$index]->value = $value;
@@ -254,7 +255,7 @@ class MobileWebService extends MY_Controller
 
         $value = $this->input->get("value");
         $type = $this->input->get("type");
-        $target = $this->input->get("target");
+        $target = trim($this->input->get("target")) !== "" ?: "/";
         $actionType = $this->input->get("actionType");
 
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType); 
@@ -298,7 +299,7 @@ class MobileWebService extends MY_Controller
         $order = $this->input->get("order");
         $value = $this->input->get("value");
         $type = $this->input->get("type");
-        $target = $this->input->get("target");
+        $target = trim($this->input->get("target")) !== "" ?: "/";
         $actionType = $this->input->get("actionType");
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType);
 
