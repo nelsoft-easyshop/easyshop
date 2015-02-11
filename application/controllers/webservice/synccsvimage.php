@@ -179,6 +179,7 @@ class SyncCsvImage extends MY_Controller
         //Get images config dimensions
         $this->config->load('image_dimensions', TRUE);
         $this->config->load("image_path");
+        $imageUtility = $this->serviceContainer['image_utility'];    
         $imageDimensions = $this->config->config['image_dimensions'];
         $date = date("Ymd");
         $gisTime = date("Gis");
@@ -243,7 +244,6 @@ class SyncCsvImage extends MY_Controller
                     foreach ($productImageObject as $image ) {
                         $image->setProductImagePath($fullImagePath);
                     }
-                    $imageUtility = $this->serviceContainer['image_utility'];
                     $imageUtility->imageResize($fullImagePath, $productDirectory."small",$imageDimensions["productImagesSizes"]["small"]);
                     $imageUtility->imageResize($fullImagePath, $productDirectory."categoryview",$imageDimensions["productImagesSizes"]["categoryview"]);
                     $imageUtility->imageResize($fullImagePath, $productDirectory."thumbnail",$imageDimensions["productImagesSizes"]["thumbnail"]);
