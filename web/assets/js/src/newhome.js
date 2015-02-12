@@ -221,62 +221,39 @@
     $('.featured-categories .btn-tag').on('click', function(){
         var $this = $(this);
         var headerCount = $this.data('subcounter');
-        var productSlugs = $('.featured-categories .product-slugs-' + headerCount).val();
+        var sectionId = $this.data('section-id');
+        var $container = $('#category-' + sectionId);
+        var productSlugs = $container.find('.product-slugs-' + headerCount).val();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
         if(!$this.hasClass('btn-tag-active')){
-            var productView = $('.featured-categories .product-view-' + headerCount).html();
+            var productView = $container.find('.product-view-' + headerCount).html();
 
-            if($.trim(productView) === ""){
+            if ($.trim(productView) === "") {
                 $.ajax({
                     type: "POST",
-                    url: "/home/getCategorySectionProducts", 
+                    url: "/home/getCategorySectionProducts",
                     dataType: "json",
                     data: "productSlugs="+productSlugs+"&csrfname="+csrftoken,
                     success: function(result) {
-                        $('.featured-categories .product-view-' + headerCount).html(result);
-                        $('.featured-products-carousel').html(result);
-                        $('.featured-products-carousel').data('owlCarousel').reinit({});
+                        $container.find('.product-view-' + headerCount).html(result);
+                        $container.find('.featured-products-carousel').html(result);
+                        $container.find('.featured-products-carousel').data('owlCarousel').reinit({});
                     }
                 });
             }
-            else{
-                $('.featured-products-carousel').html(productView);
-                $('.featured-products-carousel').data('owlCarousel').reinit({});
+            else {
+                $container.find('.featured-products-carousel').html(productView);
+                $container.find('.featured-products-carousel').data('owlCarousel').reinit({});
             }
 
-            var currentlyActiveTab = $('.featured-categories .btn-tag-active');
+            var currentlyActiveTab = $container.find('.featured-categories .btn-tag-active');
             var activeHeaderCounter = currentlyActiveTab.data('subcounter');
             currentlyActiveTab.removeClass('btn-tag-active');
             $this.addClass('btn-tag-active');
         }
-    });
 
-
-    $('.sub-class').on('click', function() {
-        var $thisObj = $(this);
-        var sectionId = $thisObj.data('section-count');
-        var products = $('.product-' + $thisObj.data('id')).map(function () {return $(this).data('slug');}).get().join("~");
-        var url = '/home/getSubCategoryProductBySlug';
-        var csrftoken = $("meta[name='csrf-token']").attr('content');
-
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url : url,
-            data : {csrfname : csrftoken, productSlug : products, sectionId:sectionId},
-            beforeSend: function() {
-//                slideCat2.data('owlCarousel').destroy();
-//                $('#cat-items-container-' + sectionId).find('.owl-wrapper').html('');
-            },
-            success: function(html) {
-                $('#cat-items-container-' + sectionId).find('.owl-wrapper').html(data.html);
-//                slideCat2.data('owlCarousel').addItem('<p>asdasda</p>');
-//                slideCat2.owlCarousel();
-            }
-
-        });
     });
 
 }(jQuery));

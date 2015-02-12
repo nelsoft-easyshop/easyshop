@@ -29,7 +29,7 @@
                         <div class="tag-categories featured-categories" id="tag-<?php echo $sectionCount; ?>">
                             <?php $count = 0; ?>
                             <?php foreach($featuredCategorySection['subHeaders'] as $subheader): ?>
-                                <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>" data-subcounter="<?php echo $count; ?>">
+                                <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>" data-subcounter="<?php echo $count; ?>" data-section-id="<?=$sectionCount?>">
                                     <?php echo html_escape($subheader['text']); ?>
                                 </button>
                                 <script type="text/javascript">
@@ -166,10 +166,10 @@
                             </span>
                         </p>
                     </div>
-                    <div class="tag-categories" id="tag-<?php echo $sectionCount; ?>">
+                    <div class="tag-categories featured-categories" id="tag-<?=$sectionCount?>">
                         <?php $count = 0; ?>
                         <?php foreach($categorySection['subHeaders'] as $subheader): ?>
-                            <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>" data-subcounter="<?=$count?>">
+                            <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>" data-subcounter="<?=$count?>" data-section-id="<?=$sectionCount?>">
                                 <?php echo html_escape($subheader['text']); ?>
                             </button>
                             <script type="text/javascript">
@@ -180,12 +180,13 @@
 
                             <?php if (isset($subheader['productSlugs'])) : ?>
                             <input type="hidden" value="<?php echo html_escape(json_encode($subheader['productSlugs'])); ?>" class="product-slugs-<?php echo $count; ?>" />
+                            <div class="product-view-<?=$count?>" style="display:none"></div>
                             <?php endif; ?>
                             <?php $count++; ?>
                         <?php endforeach; ?>
 
                     </div>
-                    <div id="cat-items" class="purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel">
+                    <div id="cat-items" class="featured-products-carousel purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel">
 
                         <?php foreach($categorySection['products'] as $productSection): ?>
                             <?php $product = $productSection['product']; ?>
