@@ -106,7 +106,7 @@
             <div class="container load-animate">
                 <div class="row-fluid">
                     <div class="span12 padding-top-30">
-                        <h3>Make sure you don't miss interesting events, sale, <br>and more by joining our newsletter program.</h5>
+                        <h3>Make sure you don't miss interesting events, sale, <br>and more by joining our newsletter program.</h3>
                         <br>
                         <form method="post" action="newsletter.php" class="newsletter-form">
                             <div class="row-fluid">
@@ -141,13 +141,10 @@
             </section>
         </footer>
 
-
+        <script src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
         <script type="text/javascript" src="/assets/js/src/promo/estudyantrepreneur.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="/assets/js/src/plugins.js"></script>
         <script src="/assets/js/src/christmas-promo.js"></script>
 
     </body>
 </html>
-
-

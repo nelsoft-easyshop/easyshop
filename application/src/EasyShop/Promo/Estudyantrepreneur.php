@@ -41,7 +41,8 @@ class Estudyantrepreneur
     {
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $date = new \DateTime;
-        $dateToday = $date->getTimestamp();
+//        $dateToday = $date->getTimestamp();
+        $dateToday = strtotime('2015-02-23');
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
