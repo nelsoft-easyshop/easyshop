@@ -271,6 +271,30 @@ class Home extends MY_Controller
         $this->output->append_output($formData); 
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));        
     }
+    
+    /**
+     * Renders the category product section view
+     *
+     */
+    public function getCategorySectionProducts()
+    {
+        $productSlugs = json_decode($this->input->post('productSlugs'));
+        $products = $this->serviceContainer['entity_manager']
+                         ->getRepository('EasyShop\Entities\EsProduct')
+                         ->getMultipleProductsBySlugs($productSlugs);
+        
+        $productCounter = 0;
+        foreach($products as $product){
+            $data['productSections'][$productCounter]['product'] =  $this->serviceContainer['product_manager']->getProductDetails($product);
+            $secondaryImage =  $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsProductImage')
+                                        ->getSecondaryImage($product->getIdProduct());
+            $data['productSections'][$productCounter]['productSecondaryImage'] = $secondaryImage;
+            $data['productSections'][$productCounter]['userimage'] =   $this->serviceContainer['user_manager']->getUserImage($product->getMember()->getIdMember());  
+            $productCounter++;
+        }
+     
+        echo json_encode($this->load->view('partials/productlist', $data, true));
+    }
 
 
 }
