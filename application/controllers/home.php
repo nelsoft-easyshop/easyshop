@@ -287,7 +287,7 @@ class Home extends MY_Controller
         foreach($products as $product){
             $data['productSections'][$productCounter]['product'] =  $this->serviceContainer['product_manager']->getProductDetails($product);
             $secondaryImage =  $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsProductImage')
-                                        ->getSecondaryImage($product->getIdProduct());
+                                    ->getSecondaryImage($product->getIdProduct());
             $data['productSections'][$productCounter]['productSecondaryImage'] = $secondaryImage;
             $data['productSections'][$productCounter]['userimage'] =   $this->serviceContainer['user_manager']->getUserImage($product->getMember()->getIdMember());  
             $productCounter++;
