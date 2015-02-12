@@ -162,7 +162,8 @@ else {
     $route['(?i)Scratch-And-Win'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
-
+    $route['(?i)Estudyantrepreneur'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromo';
+    $route['(?i)EstudyantrepreneurSuccess'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoSuccess';
     #MESSAGES
     $route['(?i)messages'] = '/MessageController/messages';
 

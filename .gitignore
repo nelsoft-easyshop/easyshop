@@ -8,9 +8,11 @@
 !/web/assets/product/default
 !/web/assets/user/default
 /web/assets/product/product_description/*
-/web/assets/images/ads/
-/web/assets/images/mainslide/
-/web/assets/images/homeslider/
+/web/assets/images/ads/*
+/web/assets/images/mainslide/*
+/web/assets/images/homeslider/*
+/web/assets/images/mobile/*
+/web/assets/images/feed/*
 /web/assets/admin/*
 !/web/assets/product/product_description/README.md
 

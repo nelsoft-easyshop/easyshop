@@ -49,6 +49,11 @@ class EsPromoType
 
     /**
      * @var integer
+     */
+    const ESTUDYANTREPRENEUR = 7;
+
+    /**
+     * @var integer
      *
      * @ORM\Column(name="id_promo_type", type="integer", nullable=false)
      * @ORM\Id

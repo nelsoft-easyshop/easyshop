@@ -472,24 +472,24 @@ class AccountManager
         $returnData = [
             'isSuccessful' => false,
         ];
-        if($cookie && $cookie !== ''){            
+        if($cookie && $cookie !== ''){             
             $rememberMeData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
                                        ->findOneBy([
                                             'token' => $cookie,
                                             'lastIp' => $ipAddress,
                                             'useragent' => $userAgent,
                                         ]);
+
             if($rememberMeData){
                 $member = $rememberMeData->getIdMember();
-                if($member){
+                if($member && !(bool)$member->getIsBanned() && (bool)$member->getIsActive()){
                     $newUserSession = $this->generateUsersessionId($member->getIdMember());
-                    $newToken = $this->createRememberMeHash($member->getIdMember(), $cisessionId);
+                    $newToken = $this->persistRememberMeCookie($member, $ipAddress, $userAgent, $cisessionId);
                     $member->setUsersession($newUserSession);
-                    $rememberMeData->setToken($newToken);
                     $this->em->flush();
                     $returnData['isSuccessful'] = true;
                     $returnData['usersession'] = $newUserSession;
-                    $returnDatap['newCookie'] = $newToken;     
+                    $returnData['newCookie'] = $newToken;     
                     $returnData['member'] = $member;
                 }
             }
@@ -659,12 +659,6 @@ class AccountManager
        
     }
     
-    
-             
-
-             
-    
-  
 
 }
 

@@ -26,7 +26,7 @@ class Register extends MY_Controller
         }
         else{
             if($this->session->userdata('usersession')){
-                redirect('/?view=basic');
+                redirect('/');
             }
         }
         $headerData = [

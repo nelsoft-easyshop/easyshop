@@ -21,13 +21,15 @@ class BuyAtZero extends MY_Controller
     public function buyAtZeroRegistration()
     {
         $productId = $this->input->post('id');
+
         if (!$this->session->userdata('member_id')) {
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->find($productId);
             $this->session->set_userdata('uri_string', 'item/'.$product->getSlug());
             $data = 'not-logged-in';
         }
         else {
-            $data = $this->promoManager->registerMemberForBuyAtZero($productId, $this->session->userdata('member_id'));
+            $data = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                             ->registerMemberForBuyAtZero($productId, $this->session->userdata('member_id'));
         }
 
         echo json_encode($data);

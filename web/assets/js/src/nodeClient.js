@@ -16,7 +16,7 @@
             var setAccountOffline = function(storeName) {
                 socket.emit('set account offline', storeName, function(data) {});
             };
-       
+
             /* Register events */
             socket.on('send message', function( data ) {
                 updateMessageCountIcons();
@@ -26,7 +26,7 @@
             socket.on('message opened', function( data ) {
                 updateMessageCountIcons();
             });
-            
+
             setAccountOnline($chatClient.data('store-name'));
 
             $('.logoutClient').on('click', function(e) {
