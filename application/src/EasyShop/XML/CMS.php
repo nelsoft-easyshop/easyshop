@@ -1243,17 +1243,15 @@ $string = '<typeNode>
         $followedSellerIds = array_unique($followedSellerIds);
 
         $products = $this->em->getRepository('\EasyShop\Entities\EsProduct')
-                         ->getRandomProductsFromUsers($followedSellerIds);
+                             ->getRandomProductsFromUsers($followedSellerIds);
 
         $featuredProductSlugs = [];        
-        $productCounter = 0;
-        foreach($products as $product){
-            $featuredProductSection['products'][$productCounter]['product'] =  $this->productManager->getProductDetails($product);
+        foreach($products as $index => $product){
+            $featuredProductSection['products'][$index]['product'] =  $this->productManager->getProductDetails($product);
             $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                         ->getSecondaryImage($product->getIdProduct());
-            $featuredProductSection['products'][$productCounter]['productSecondaryImage'] = $secondaryImage;
-            $featuredProductSection['products'][$productCounter]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
-            $productCounter++;
+            $featuredProductSection['products'][$index]['productSecondaryImage'] = $secondaryImage;
+            $featuredProductSection['products'][$index]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
             $featuredProductSlugs[] = $product->getSlug();
         }
 
