@@ -197,21 +197,69 @@
         <sub>
             <text>Decoration</text>
             <target>/category/'Decoration'</target>
+
+            <productSlugs>sampleforscratchandwin</productSlugs>
+
+            <productSlugs>for-cod3</productSlugs>
+
+            <productSlugs>product</productSlugs>
+
+            <productSlugs>fordp</productSlugs>
+
+            <productSlugs>for-cod</productSlugs>
+
+            <productSlugs>for-cod2</productSlugs>
         </sub>
         
         <sub>
             <text>Home Furniture</text>
             <target>/category/home-furniture</target>
+
+            <productSlugs>sampleforscratchandwin</productSlugs>
+
+            <productSlugs>for-cod3</productSlugs>
+
+            <productSlugs>product</productSlugs>
+
+            <productSlugs>fordp</productSlugs>
+
+            <productSlugs>for-cod</productSlugs>
+
+            <productSlugs>for-cod2</productSlugs>
         </sub>
         
         <sub>
             <text>Major Applicances</text>
             <target>/category/major-appliances</target>
+
+            <productSlugs>sampleforscratchandwin</productSlugs>
+
+            <productSlugs>for-cod3</productSlugs>
+
+            <productSlugs>product</productSlugs>
+
+            <productSlugs>fordp</productSlugs>
+
+            <productSlugs>for-cod</productSlugs>
+
+            <productSlugs>for-cod2</productSlugs>
         </sub>
         
         <sub>
             <text>Kitchen and Dining</text>
             <target>/category/kitchen-dining-bar</target>
+
+            <productSlugs>sampleforscratchandwin</productSlugs>
+
+            <productSlugs>for-cod3</productSlugs>
+
+            <productSlugs>product</productSlugs>
+
+            <productSlugs>fordp</productSlugs>
+
+            <productSlugs>for-cod</productSlugs>
+
+            <productSlugs>for-cod2</productSlugs>
         </sub>
         
         <productPanel>

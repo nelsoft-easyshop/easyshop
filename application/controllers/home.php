@@ -298,34 +298,6 @@ class Home extends MY_Controller
         echo json_encode($this->load->view('partials/home-productlist', $data, true));
     }
 
-    /**
-     * Get Sub Category Product by slug
-     */
-    public function getSubCategoryProductBySlug()
-    {
-        $products = trim($this->input->post('productSlug'));
-        $productsBySlug = explode('~', $products);
-        $productContainer =[];
-
-        foreach ($productsBySlug as $key => $slug) {
-            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                ->findOneBy(['slug' => $slug]);
-            if ($product) {
-                $productContainer[$key]['product'] = $this->productManager->getProductDetails($product);
-                $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                            ->getSecondaryImage($product->getIdProduct());
-                $productContainer[$key]['productSecondaryImage'] = $secondaryImage;
-                $productContainer[$key]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
-            }
-        }
-        $data = [
-            'products' => $productContainer,
-            'sectionId' => trim($this->input->post('sectionId'))
-        ];
-
-        echo json_encode($this->load->view('partials/home-category-products', $data, true));
-    }
-
 }
 
 /* End of file home.php */
