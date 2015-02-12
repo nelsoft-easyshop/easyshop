@@ -479,18 +479,10 @@ $string = '<typeNode>
             $doc = new \SimpleXMLElement(file_get_contents($file));
             if($target = current($doc->xpath($referred))) {
                 $dom = dom_import_simplexml($target);
-
                 $dom->parentNode->removeChild($dom);
-                if($doc->asXml($file)) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
+                return $doc->asXml($file);
             }
-            else {
-                return false;
-            }
+
         }        
         else if($nodeName == "categorySection") {
 
