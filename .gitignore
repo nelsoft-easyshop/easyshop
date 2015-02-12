@@ -12,6 +12,7 @@
 /web/assets/images/mainslide/*
 /web/assets/images/homeslider/*
 /web/assets/images/mobile/*
+!/web/assets/images/mobile/readme.md
 /web/assets/images/feed/*
 /web/assets/admin/*
 !/web/assets/product/product_description/README.md
