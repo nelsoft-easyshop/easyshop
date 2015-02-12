@@ -1192,6 +1192,7 @@ $string = '<typeNode>
     {  
         $categoryXmlFile = $this->xmlResourceGetter->getCategoryXmlFile();
         $categoryXmlObjects = $this->xmlResourceGetter->getXMlContent($categoryXmlFile, $categorySlug, 'category'); 
+
         $categoryXmlArray = json_decode(json_encode((array) $categoryXmlObjects), 1);
 
         if(isset($categoryXmlArray[0])  && $categoryXmlArray[0] === false){
@@ -1224,6 +1225,73 @@ $string = '<typeNode>
         }
         
         return $categoryXmlArray;
+    }
+    
+    /**
+     * Retrieves the featured products
+     *
+     * @param integer $memberId
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getFeaturedProducts($memberId)
+    {
+        $followedSellerIds = [];
+        $miscellaneousXmlFile = $this->xmlResourceGetter->getMiscellaneousXmlFile();
+        
+        $usersBeingFollowed = $this->em->getRepository('\EasyShop\Entities\EsVendorSubscribe')
+                                   ->getUserFollowing($memberId);
+        foreach($usersBeingFollowed['following'] as $userBeingFollowed){
+            $followedSellerIds[] = $userBeingFollowed->getMember()->getIdMember();
+        }
+
+        $easyshopId = trim($this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile, 'easyshop-member-id', 'select'));  
+        $easyshopId = empty($easyshopId) ? [] :  [ $easyshopId ];
+        $partnerIds = trim($this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile, 'partners-member-id', 'select'));
+        $partnerIds = empty($partnerIds) ? [] : explode(',', $partnerIds);
+        $followedSellerIds = array_merge($followedSellerIds, $easyshopId);
+        $followedSellerIds = array_merge($followedSellerIds, $partnerIds);
+        $followedSellerIds = array_map('intval', $followedSellerIds);
+        $followedSellerIds = array_unique($followedSellerIds);
+
+        $products = $this->em->getRepository('\EasyShop\Entities\EsProduct')
+                             ->getRandomProductsFromUsers($followedSellerIds);
+
+        $featuredProductSlugs = [];        
+        foreach($products as $index => $product){
+            $featuredProductSection['products'][$index]['product'] =  $this->productManager->getProductDetails($product);
+            $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                        ->getSecondaryImage($product->getIdProduct());
+            $featuredProductSection['products'][$index]['productSecondaryImage'] = $secondaryImage;
+            $featuredProductSection['products'][$index]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
+            $featuredProductSlugs[] = $product->getSlug();
+        }
+
+        $featuredProductSection['subHeaders'] = [];
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $featuredProductSlugs,
+            'text' => 'Followed Sellers',
+        ];
+        
+        $miscellaneousFileContents = $this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile); 
+        $promoProductSlugs = [];
+        foreach($miscellaneousFileContents['feedPromoItems']['product'] as $promoProduct){
+            $promoProductSlugs[] = $promoProduct['slug']; 
+        }
+
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $promoProductSlugs,
+            'text' => 'Promos',
+        ];
+        
+        $newProductSlugs = $this->em->getRepository('\EasyShop\Entities\EsProduct')
+                                ->getNewestProductSlugs();
+
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $newProductSlugs,
+            'text' => 'New Products',
+        ];
+        
+        return $featuredProductSection;
     }
 
 }
