@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsSocialMediaProvider
 {
+
+    const FACEBOOK = 1;
+
+    const GOOGLE = 2;
+
     /**
      * @var integer
      *

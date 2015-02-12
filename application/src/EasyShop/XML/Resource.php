@@ -47,30 +47,17 @@ class Resource
     public function getXMlContent($file, $id = null, $node = null) 
     {
         $query = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");   
-        $xpath = '/map/';
-        $xpathNode = null;
-        $xpathId = null;
-        
-        if($id){
-            $xpathId = '[@id="' . $id . '"]';
-            $xpathNode = 'select';
-        }
-        
-        if($node){
-            $xpathNode = $node;
-        }
-
-        if($xpathNode === null && $xpathId === null){
-            $xml = simplexml_load_file(APPPATH . "resources/" . $file . ".xml");
-            $result = json_decode(json_encode($xml), 1);
+        if($id === null && $node === null){
+            $result = json_decode(json_encode($query), 1);
             return $result;
         }
-        else{
-            $xpath = $xpath.$xpathNode .$xpathId;
-            $result = $query->xpath(' /map/'.$node.'[@id="' . $id . '"] ');
-             return reset($result);
+        else if($id === null || $node === null){
+            throw new \Exception('Both the id and the node must be set when one or the other is provided.');
         }
-
+        else{
+            $result = $query->xpath(' /map/'.$node.'[@id="' . $id . '"] ');
+            return reset($result);
+        }
     }
 
     /**
@@ -86,7 +73,6 @@ class Resource
         }
         
         return $xmlfile;
-    
     }    
 
 
@@ -131,6 +117,22 @@ class Resource
         
         return $xmlfile;
     }
+    
+    
+    /**
+     * Returns the miscellaneous content xml file used by the application
+     *
+     * @return string
+     */
+    public function getMiscellaneousXmlFile()
+    {
+        $xmlfile = 'page/content_files';
+        if($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_content'))) > 0){
+            $xmlfile = $this->configurationService->getConfigValue('XML_content');
+        }
+        
+        return $xmlfile;
+    }    
 
 }
 

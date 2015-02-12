@@ -13,7 +13,6 @@ class Estudyantrepreneur extends MY_Controller
 
         $this->em = $this->serviceContainer['entity_manager'];
         $this->promoManager = $this->serviceContainer['promo_manager'];
-        $this->estudyantrepreneurManager = $this->serviceContainer['estudyantrepreneur_manager'];
     }
 
     /**
@@ -26,16 +25,43 @@ class Estudyantrepreneur extends MY_Controller
             'title' => 'Estudyantrepreneur | Easyshop.ph',
             'metadescription' => ''
         ];
-        $data = $this->estudyantrepreneurManager->getSchoolWithStudentsByRound();
+        $data = $this->promoManager
+                     ->callSubclassMethod(
+                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                        'getSchoolWithStudentsByRound'
+                     );
         $bodyData = [
             'schools_and_students' => $data['schools_and_students'],
             'round' => $data['round'],
         ];
 
         $this->load->spark('decorator');
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        // $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/estudyantrepreneur', $bodyData);
-        $this->load->view('templates/footer');
+        // $this->load->view('templates/footer');
+    }
+
+    public function EstudyantrepreneurPromoSuccess()
+    {
+        $headerData = [
+            'memberId' => $this->session->userdata('member_id'),
+            'title' => 'Estudyantrepreneur | Easyshop.ph',
+            'metadescription' => ''
+        ];
+        $data = $this->promoManager
+                     ->callSubclassMethod(
+                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                        'getSchoolWithStudentsByRound'
+                     );
+        $bodyData = [
+            'schools_and_students' => $data['schools_and_students'],
+            'round' => $data['round'],
+        ];
+
+        $this->load->spark('decorator');
+        // $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/promo/estudyantrepreneur_success', $bodyData);
+        // $this->load->view('templates/footer');
     }
 
     /**
@@ -47,7 +73,14 @@ class Estudyantrepreneur extends MY_Controller
         $studentId = (int) trim($this->input->post('studentId'));
         $studentEntity = $this->em->find('EasyShop\Entities\EsStudent', $studentId);
         $memberId = $this->session->userdata('member_id');
-        $isUserAlreadyVoted = $this->estudyantrepreneurManager->isUserAlreadyVoted($memberId);
+        $isUserAlreadyVoted = $this->promoManager
+                                   ->callSubclassMethod(
+                                       \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                                       'isUserAlreadyVoted',
+                                       [
+                                           $memberId
+                                       ]
+                                   );
         $result = [
             'errorMsg' => 'Student does not exist',
             'isSuccessful' => false
@@ -59,8 +92,14 @@ class Estudyantrepreneur extends MY_Controller
             ];
         }
         elseif ($studentEntity) {
-            $isVoteStudentSuccessful = $this->estudyantrepreneurManager
-                                            ->voteStudent($studentEntity->getidStudent(), $memberId);
+            $isVoteStudentSuccessful = $this->promoManager
+                                            ->callSubclassMethod(
+                                                \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                                                'voteStudent',
+                                                [
+                                                    $studentEntity->getidStudent(),
+                                                    $memberId
+                                                ]);
             if ($isVoteStudentSuccessful) {
                 $result = [
                     'errorMsg' => 'You have successfully voted',

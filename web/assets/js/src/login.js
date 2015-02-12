@@ -93,7 +93,9 @@
                             if(data.o_success <= 0){
                                 $("#login_error").empty();
                                 if(data['o_message'] === 'Account Banned'){
-                                    var alertMessage = data['errors'][0]['message'] + "Thank you for your patience.";
+                                    var officeHours = $('#office_hours').val();
+                                    var officeContactno = $('#office_contactno').val();
+                                    var alertMessage = data['errors'][0]['message'] + " Contact our Customer Service Support for further details: " + officeHours + " " +  officeContactno;
                                     alert(escapeHtml(alertMessage));
                                 }
                                 else if(data["o_message"] == "Account Deactivated") {

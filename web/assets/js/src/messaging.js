@@ -31,9 +31,7 @@
         });
 
         $("#msg_textarea").on("click","#send_btn",function(){
-            var D = eval('(' + $(this).attr('data') + ')');
             var recipient = $('#userDataContainer').html().trim();
-            var img = D.img;
             var msg = $("#out_txtarea").val();
             if (msg == "") {
                 return false;
@@ -108,7 +106,6 @@
         var html = "";
         $("#chsn_username").html($(this).children(":first").html()).show();
         var name = $('#chsn_username').html();
-        $("#send_btn").attr("data","{'img':'"+$(this).parent().parent().find('img').attr('data')+"'}");
         $("#userDataContainer").empty().html(name.trim());
         $("#msg_field").empty();
         var sortedObjectByKey = sortObjectByKey(msg);
@@ -146,7 +143,7 @@
         if ($('.d_all').not(':checked').length == $('.d_all').length) {
             $("#chsn_delete_btn").hide();
         }
-        else{
+        else {
             $("#chsn_delete_btn").show();
         }
     });
@@ -164,7 +161,9 @@
             arrayOfObject[key] = val;
         });
 
-        arrayOfObject.sort();
+        arrayOfObject.sort(function(a, b) {
+            return a.id_msg > b.id_msg ? 1 : (a.id_msg < b.id_msg ? -1 : 0);
+        });
 
         return arrayOfObject;
     };
@@ -290,6 +289,7 @@
         var all_messages = eval('('+ $(".Active").attr('data')+')');
         $("#chsn_username").html($(".Active").children(":first").html()).show();
         var objDiv = document.getElementById("msg_field");
+        var name = $('#chsn_username').html();
         $("#msg_field").empty();
         var sortedObjectByKey = sortObjectByKey(all_messages);
         $.each(sortedObjectByKey,function(key, val) {
@@ -311,6 +311,9 @@
         });
 
         $("#msg_textarea").show();
+        $("#delete_all_btn").show();
+        $("#chsn_delete_btn").hide();
+        $("#userDataContainer").empty().html(name.trim());
         objDiv.scrollTop = objDiv.scrollTop + 100;
     }
 
