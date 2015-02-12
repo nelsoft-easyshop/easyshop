@@ -214,12 +214,15 @@
             type: 'POST',
             dataType: 'json',
             url : url,
-            data : {csrfname : csrftoken, productSlug : products},
+            data : {csrfname : csrftoken, productSlug : products, sectionId:sectionId},
             beforeSend: function() {
-                $('#category-' + sectionId).find('.owl-wrapper').html('');
+//                slideCat2.data('owlCarousel').destroy();
+//                $('#cat-items-container-' + sectionId).find('.owl-wrapper').html('');
             },
             success: function(data) {
-                $('#category-' + sectionId).find('.owl-wrapper').html(data.html);
+                $('#cat-items-container-' + sectionId).find('.owl-wrapper').html(data.html);
+//                slideCat2.data('owlCarousel').addItem('<p>asdasda</p>');
+//                slideCat2.owlCarousel();
             }
 
         });

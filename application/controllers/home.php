@@ -435,6 +435,7 @@ class Home extends MY_Controller
         }
         $data = [
             'products' => $productContainer,
+            'sectionId' => trim($this->input->post('sectionId'))
         ];
 
         $categoryProductsView = $this->load->view('partials/home-category-products', $data, true);

@@ -1,10 +1,11 @@
-<?php foreach($products as $productSection): ?>
+<!--<div id="cat-items" class="purchased-items-slider-cat---><?php //echo $sectionId ?><!-- owl-carousel">-->
+    <?php foreach($products as $productSection): ?>
     <?php $product = $productSection['product']; ?>
     <?php $sellerimage = $productSection['userimage']; ?>
     <?php $secondaryImage = $productSection['productSecondaryImage']; ?>
     <?php $productSlug = $product->getSlug(); ?>
-    <div class="owl-item" style="width: 285px;">
-        <div class="item">
+<!--    <div class="owl-item" style="width: 285px;">-->
+    <div class="item">
         <?php $defaultImage = $product->getDefaultImage(); ?>
         <center>
             <a href="/item/<?php echo $productSlug ?>">
@@ -85,5 +86,6 @@
             </div>
         </div>
     </div>
-    </div>
+<!--    </div>-->
 <?php endforeach; ?>
+<!--</div>-->
