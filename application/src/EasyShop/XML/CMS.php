@@ -924,33 +924,29 @@ $string = '<typeNode>
                 $categorySection['sub'] = [ $subTemporary ];
             }   
             $sectionData['subHeaders'] = $categorySection['sub'];
-
-            if(isset($categorySection['productPanel']['slug'])){
-                $productPanelTemporary = $categorySection['productPanel'];
-                $categorySection['productPanel'] = [ $productPanelTemporary ];
-            }   
-
+            
             $sectionData['products'] = [];
-            if(!isset($categorySection['productPanel'])){
-                $categorySection['productPanel'] = array();
-            }
-
             foreach ($categorySection['sub'] as $subCategory) {
 
-                if (isset($subCategory['productSlugs'])) {
-                    foreach ($subCategory['productSlugs'] as $idx => $xmlProductData) {
-                        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findOneBy(['slug' => $xmlProductData]);
-                        if ($product) {
-                            $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
-                            $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                        ->getSecondaryImage($product->getIdProduct());
-                            $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
-                            $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
-                        }
-                    }
-                    break;
+                if (!isset($subCategory['productSlugs']) || !$subCategory['productSlugs']) {
+                    $subCategory['productSlugs'] = [];
+                }  
+                if(!is_array($subCategory['productSlugs'] )){
+                    $subCategory['productSlugs'] = [ $subCategory['productSlugs'] ];
                 }
+
+                foreach ($subCategory['productSlugs'] as $idx => $xmlProductData) {
+                    $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                        ->findOneBy(['slug' => $xmlProductData]);
+                    if ($product) {
+                        $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
+                        $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                    ->getSecondaryImage($product->getIdProduct());
+                        $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
+                        $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
+                    }
+                }
+                break;
             }
 
             $homePageData['categorySection'][] = $sectionData;
