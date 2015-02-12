@@ -1436,3 +1436,10 @@ li.brand_result:hover{
     margin: auto !important; 
 }
 
+.rangeSliderHide {
+    display: none !important;
+}
+
+#irs-2 {
+    top: -23px
+}

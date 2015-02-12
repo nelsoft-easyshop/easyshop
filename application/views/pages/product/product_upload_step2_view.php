@@ -523,7 +523,8 @@
             </div>
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
                 <img src="" id="imageTag">
-                <div id="slider"></div>
+                <center>Move to zoom</center>
+                <div id="zoomSlider"></div>
                 <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
                 <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
                 <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
