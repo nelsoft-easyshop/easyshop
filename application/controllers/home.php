@@ -13,6 +13,9 @@ class Home extends MY_Controller
     public function __construct() 
     {
         parent::__construct();
+        $this->productManager = $this->serviceContainer['product_manager'];
+        $this->userManager = $this->serviceContainer['user_manager'];
+        $this->em = $this->serviceContainer['entity_manager'];
     }
 
     /**
@@ -39,8 +42,7 @@ class Home extends MY_Controller
             $homeContent['slider'][] = $sliderView;
         }
         $data['homeContent'] = $homeContent; 
-        
-   
+
         if( $memberId ){
             $data['featuredCategorySection'] = $this->serviceContainer['xml_cms']->getFeaturedProducts($memberId);
         }
@@ -279,23 +281,29 @@ class Home extends MY_Controller
     public function getCategorySectionProducts()
     {
         $productSlugs = json_decode($this->input->post('productSlugs'));
-        $products = $this->serviceContainer['entity_manager']
-                         ->getRepository('EasyShop\Entities\EsProduct')
-                         ->getMultipleProductsBySlugs($productSlugs);
+        $productSlugs = $productSlugs ? $productSlugs : [];
+        if(!is_array($productSlugs)){
+            $productSlugs = [ $productSlugs ];
+        }
         
         $productCounter = 0;
-        foreach($products as $product){
-            $data['productSections'][$productCounter]['product'] =  $this->serviceContainer['product_manager']->getProductDetails($product);
-            $secondaryImage =  $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsProductImage')
-                                    ->getSecondaryImage($product->getIdProduct());
-            $data['productSections'][$productCounter]['productSecondaryImage'] = $secondaryImage;
-            $data['productSections'][$productCounter]['userimage'] =   $this->serviceContainer['user_manager']->getUserImage($product->getMember()->getIdMember());  
-            $productCounter++;
+        $data['productSections'] = [];
+        foreach($productSlugs as $productSlug){
+            $product = $this->serviceContainer['entity_manager']
+                            ->getRepository('EasyShop\Entities\EsProduct')
+                            ->findOneBy(['slug' => $productSlug]);
+            if($product){
+                $data['productSections'][$productCounter]['product'] =  $this->serviceContainer['product_manager']->getProductDetails($product);
+                $secondaryImage =  $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsProductImage')
+                                        ->getSecondaryImage($product->getIdProduct());
+                $data['productSections'][$productCounter]['productSecondaryImage'] = $secondaryImage;
+                $data['productSections'][$productCounter]['userimage'] =   $this->serviceContainer['user_manager']->getUserImage($product->getMember()->getIdMember());
+                $productCounter++;
+            }
         }
-     
+
         echo json_encode($this->load->view('partials/home-productlist', $data, true));
     }
-
 
 }
 

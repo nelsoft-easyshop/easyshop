@@ -1236,3 +1236,9 @@ ul.list-category-search li:last-child > .search-category-link{
         float: none;
     }
 }
+
+@media (min-width: 1400px) {
+    .top-slider-img{
+        display: none !important;
+    }
+}
