@@ -28,7 +28,7 @@
             <?php if ($product->getIsNew()): ?>
                 <span class="new-circle-2">NEW</span>
             <?php endif; ?>
-            <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
+            <?php if ((float)$product->getDiscountPercentage() > 0): ?>
                 <span class="discount-circle-2"><?php echo number_format($product->getDiscountPercentage(), 0); ?>%</span>
             <?php endif; ?>
         <div class="item-meta-container" align="left">
@@ -53,7 +53,7 @@
             
             <div class="item-meta-inner-container clearfix">
                 <div class="item-price-container">
-                    <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
+                    <?php if ((float)$product->getDiscountPercentage() > 0): ?>
                         <span class="old-price">P<?php echo number_format ($product->getOriginalPrice() , 2) ?></span>
                     <?php endif; ?>
                     <span class="item-price">P<?php echo number_format ($product->getFinalPrice() , 2) ?></span>
@@ -86,3 +86,4 @@
     </div>
 
 <?php endforeach; ?>
+
