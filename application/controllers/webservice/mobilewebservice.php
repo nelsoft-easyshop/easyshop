@@ -46,9 +46,9 @@ class MobileWebService extends MY_Controller
         $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
         $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");
         $this->authenticateRequest = $this->serviceContainer['webservice_manager'];        
-        if($this->input->get()) {        
-            $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
-                                                                              $this->input->get('hash'),
+        if($this->input->post()) {        
+            $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->post(), 
+                                                                              $this->input->post('hash'),
                                                                               true);
             if(!$this->isAuthenticated) {
                 throw new Exception("Unauthorized Request.");
@@ -63,9 +63,9 @@ class MobileWebService extends MY_Controller
     public function removeContent() 
     {
         $map = simplexml_load_file($this->file);        
-        $index =  (int)$this->input->get("index");
-        $nodeName =  $this->input->get("nodename");        
-        $productindex =  (int)$this->input->get("productindex");        
+        $index =  (int)$this->input->post("index");
+        $nodeName =  $this->input->post("nodename");        
+        $productindex =  (int)$this->input->post("productindex");        
         $file = $this->file;
         $jsonFile = $this->json;        
         if($nodeName === "mainSlide") {
@@ -77,7 +77,7 @@ class MobileWebService extends MY_Controller
             }
         }
         if($nodeName === "boxContent") {
-            $subIndex = (int)$this->input->get("subIndex");
+            $subIndex = (int)$this->input->post("subIndex");
             if(count($map->section[$index]->boxContent) > 1){
                 $index = $index === 0 ? 1 : $index + 1;
                 $subIndex = $subIndex === 0 ? 1 : $subIndex + 1;
@@ -108,10 +108,10 @@ class MobileWebService extends MY_Controller
      */
     public function addMainSlide()
     {
-        $value = $this->input->get("value");
-        $type = $this->input->get("type");
-        $coordinate = $this->input->get("coordinate");
-        $target = $this->input->get("target");
+        $value = $this->input->post("value");
+        $type = $this->input->post("type");
+        $coordinate = $this->input->post("coordinate");
+        $target = $this->input->post("target");
         $this->config->load("image_path");
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
@@ -155,12 +155,12 @@ class MobileWebService extends MY_Controller
     public function setMainSlide()
     {
         $filename = date('yhmdhs');        
-        $index = (int)$this->input->get("index");
-        $value = $this->input->get("value");
-        $type = $this->input->get("type");
-        $order = $this->input->get("order");
-        $coordinate = $this->input->get("coordinate");
-        $target = $this->input->get("target");
+        $index = (int)$this->input->post("index");
+        $value = $this->input->post("value");
+        $type = $this->input->post("type");
+        $order = $this->input->post("order");
+        $coordinate = $this->input->post("coordinate");
+        $target = $this->input->post("target");
         $this->config->load("image_path");
 
         $map = simplexml_load_file($this->file);
@@ -243,12 +243,12 @@ class MobileWebService extends MY_Controller
      */
     public function setSectionHead()
     {
-        $index = (int)$this->input->get("index");
+        $index = (int)$this->input->post("index");
         $map = simplexml_load_file($this->file);
 
-        $map->section[$index]->name = $this->input->get("name") === "" ? $map->section[$index]->name : $this->input->get("name");
-        $map->section[$index]->bgcolor = $this->input->get("bgcolor") === ""  ? $map->section[$index]->bgcolor : $this->input->get("bgcolor");
-        $map->section[$index]->type = $this->input->get("type") === ""  ? $map->section[$index]->type : $this->input->get("type");
+        $map->section[$index]->name = $this->input->post("name") === "" ? $map->section[$index]->name : $this->input->post("name");
+        $map->section[$index]->bgcolor = $this->input->post("bgcolor") === ""  ? $map->section[$index]->bgcolor : $this->input->post("bgcolor");
+        $map->section[$index]->type = $this->input->post("type") === ""  ? $map->section[$index]->type : $this->input->post("type");
 
         if($map->asXML($this->file)) {
                 return $this->output
@@ -263,13 +263,13 @@ class MobileWebService extends MY_Controller
      */
     public function addBoxContent()
     {
-        $index = (int)$this->input->get("sectionIndex");
-        $boxIndex = (int)$this->input->get("boxIndex");
+        $index = (int)$this->input->post("sectionIndex");
+        $boxIndex = (int)$this->input->post("boxIndex");
 
-        $value = $this->input->get("value");
-        $type = $this->input->get("type");
-        $target = trim($this->input->get("target")) !== "" ?: "/";
-        $actionType = $this->input->get("actionType");
+        $value = $this->input->post("value");
+        $type = $this->input->post("type");
+        $target = trim($this->input->post("target")) !== "" ?: "/";
+        $actionType = $this->input->post("actionType");
 
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType); 
         $map = simplexml_load_file($this->file);
@@ -307,13 +307,13 @@ class MobileWebService extends MY_Controller
     public function setBoxContent()
     {
 
-        $index = (int)$this->input->get("sectionIndex");
-        $boxIndex = (int)$this->input->get("boxIndex");
-        $order = $this->input->get("order");
-        $value = $this->input->get("value");
-        $type = $this->input->get("type");
-        $target = trim($this->input->get("target")) !== "" ?: "/";
-        $actionType = $this->input->get("actionType");
+        $index = (int)$this->input->post("sectionIndex");
+        $boxIndex = (int)$this->input->post("boxIndex");
+        $order = $this->input->post("order");
+        $value = $this->input->post("value");
+        $type = $this->input->post("type");
+        $target = trim($this->input->post("target")) !== "" ?: "/";
+        $actionType = $this->input->post("actionType");
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType);
 
         $map = simplexml_load_file($this->file);
