@@ -92,8 +92,8 @@
     })
 
     for (var count = 1; count <= $('.row-category').length; count++) {
-        var slideCat1 = $('.purchased-items-slider-cat-' + count + '.owl-carousel');
-        slideCat1.owlCarousel({
+        var slideCat = $('.purchased-items-slider-cat-' + count + '.owl-carousel');
+        slideCat.owlCarousel({
             items: 4,
             itemsDesktop : [1199,3],
             itemsDesktopSmall: [979,2],
