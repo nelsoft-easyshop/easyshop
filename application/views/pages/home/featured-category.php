@@ -16,8 +16,8 @@
                                 </span>
                                 <span class="pull-right sn-container">
                                     <span>
-                                        <a id="purchased-items-slider-prev-cat-<?php echo $sectionCount ?>"><i class="fa fa-angle-left fa-category-item-prev"></i></a>
-                                        <a id="purchased-items-slider-next-cat-<?php echo $sectionCount ?>"><i class="fa fa-angle-right fa-category-item-next"></i></a>
+                                        <a id="featured-items-slider-prev"><i class="fa fa-angle-left fa-category-item-prev"></i></a>
+                                        <a id="featured-items-slider-next"><i class="fa fa-angle-right fa-category-item-next"></i></a>
                                     </span>
                                 </span>
                                 <span class="pull-right">
@@ -25,26 +25,29 @@
                                 </span>
                             </p>
                         </div>
-                        <div class="tag-categories" id="tag-<?php echo $sectionCount; ?>">
+                        <div class="tag-categories featured-categories" id="tag-<?php echo $sectionCount; ?>">
                             <?php $count = 0; ?>
                             <?php foreach($featuredCategorySection['subHeaders'] as $subheader): ?>
-                                <a href="<?php echo $subheader['target']; ?>">
-                                    <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>">
-                                        <?php echo html_escape($subheader['text']); ?>
-                                    </button>
-                                    <script type="text/javascript">
-                                        jQuery(function () {
-                                            $("[rel='tooltip']").tooltip();
-                                        });
-                                    </script>
-                                </a>
+                                <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>" data-subcounter="<?php echo $count; ?>">
+                                    <?php echo html_escape($subheader['text']); ?>
+                                </button>
+                                <script type="text/javascript">
+                                    jQuery(function () {
+                                        $("[rel='tooltip']").tooltip();
+                                    });
+                                </script>
+                                <input type="hidden" value="<?php echo html_escape(json_encode($subheader['productSlugs'])); ?>" class="product-slugs-<?php echo $count; ?>" />
+                                
+                                <div class="product-view-<?php echo $count; ?>" style="display:none"/>
+                                    
+                                </div>
+                                
                                 <?php $count++; ?>
                             <?php endforeach; ?>
-
                         </div>
                         
                         
-                        <div id="cat-items" class="purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel"> 
+                        <div id="cat-items" class="featured-products-carousel purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel"> 
                         
                             <?php foreach($featuredCategorySection['products'] as $productSection): ?>
                                 <?php $product = $productSection['product']; ?>
