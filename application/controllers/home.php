@@ -438,12 +438,7 @@ class Home extends MY_Controller
             'sectionId' => trim($this->input->post('sectionId'))
         ];
 
-        $categoryProductsView = $this->load->view('partials/home-category-products', $data, true);
-        $result = [
-            'html' => $categoryProductsView
-        ];
-
-        echo json_encode($result);
+        echo json_encode($this->load->view('partials/home-category-products', $data, true));
     }
 
 }

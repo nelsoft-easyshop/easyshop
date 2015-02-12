@@ -219,7 +219,7 @@
 //                slideCat2.data('owlCarousel').destroy();
 //                $('#cat-items-container-' + sectionId).find('.owl-wrapper').html('');
             },
-            success: function(data) {
+            success: function(html) {
                 $('#cat-items-container-' + sectionId).find('.owl-wrapper').html(data.html);
 //                slideCat2.data('owlCarousel').addItem('<p>asdasda</p>');
 //                slideCat2.owlCarousel();
