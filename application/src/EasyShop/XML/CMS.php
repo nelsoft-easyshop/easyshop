@@ -959,10 +959,10 @@ $string = '<typeNode>
             $homePageData['adSection'] = [ $temporaryAdSection ] ;
         }
 
-        $sliderTemplates = array();
+        $sliderTemplates = [];
         if (isset($xmlContent['sliderTemplate']['template'])) {
             foreach($xmlContent['sliderTemplate']['template'] as $template){
-                array_push($sliderTemplates, $template['templateName']);
+                $sliderTemplates[] = $template['templateName'];
             }
         }
 
