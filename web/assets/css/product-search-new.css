@@ -289,7 +289,7 @@ html, body{
     border: solid #e2e2e2 1px;
 }
 .search-item-seller-img{
-    max-width: 100%;
+    max-width: 32px;
     height: auto;
     max-height: 30px;
 }
