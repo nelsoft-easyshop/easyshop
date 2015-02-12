@@ -35,7 +35,7 @@ class Home extends MY_Controller
         $sliderSection = $homeContent['slider']; 
         $homeContent['slider'] = [];
         foreach($sliderSection as $slide){
-            $sliderView = $this->load->view($slide['template'],$slide, true);
+            $sliderView = $this->load->view($slide['template'], $slide, true);
             $homeContent['slider'][] = $sliderView;
         }
         $data['homeContent'] = $homeContent; 
