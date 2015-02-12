@@ -938,10 +938,10 @@ $string = '<typeNode>
 
             foreach ($categorySection['sub'] as $subCategory) {
 
-                if (isset($subCategory['productPanel'])) {
-                    foreach ($subCategory['productPanel'] as $idx => $xmlProductData) {
+                if (isset($subCategory['productSlugs'])) {
+                    foreach ($subCategory['productSlugs'] as $idx => $xmlProductData) {
                         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->findOneBy(['slug' => $xmlProductData['slug']]);
+                                            ->findOneBy(['slug' => $xmlProductData]);
                         if ($product) {
                             $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
                             $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')

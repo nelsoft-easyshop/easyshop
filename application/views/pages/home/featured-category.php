@@ -174,16 +174,18 @@
                         <div class="tag-categories" id="tag-<?php echo $sectionCount; ?>">
                             <?php $count = 0; ?>
                             <?php foreach($categorySection['subHeaders'] as $subheader): ?>
-                                <a href="<?php echo $subheader['target']; ?>">
-                                    <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>">
-                                        <?php echo html_escape($subheader['text']); ?>
-                                    </button>
-                                    <script type="text/javascript">
-                                        jQuery(function () {
-                                            $("[rel='tooltip']").tooltip();
-                                        });
-                                    </script>
-                                </a>
+                                <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>" data-subcounte="<?=$count?>">
+                                    <?php echo html_escape($subheader['text']); ?>
+                                </button>
+                                <script type="text/javascript">
+                                    jQuery(function () {
+                                        $("[rel='tooltip']").tooltip();
+                                    });
+                                </script>
+
+                                <?php if (isset($subheader['productSlugs'])) : ?>
+                                <input type="hidden" value="<?php echo html_escape(json_encode($subheader['productSlugs'])); ?>" class="product-slugs-<?php echo $count; ?>" />
+                                <?php endif; ?>
                                 <?php $count++; ?>
                             <?php endforeach; ?>
 
