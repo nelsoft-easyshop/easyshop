@@ -35,13 +35,11 @@
             
                 <a href="/item/<?php echo $productSlug ?>">
                     <h3 class="item-name" style="position: relative;">
+                    
                         <?php if(strlen($product->getName())>20): ?>
                             <div class="tooltip-home">
-                            <?php echo html_escape($product->getName())?>
+                                <?php echo html_escape($product->getName())?>
                             </div>
-                        <?php endif; ?>
-                        
-                        <?php if(strlen($product->getName())>20): ?>
                             <span style="width: 100%; display: inline-block; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
                         <?php else: ?>
                             <span>
