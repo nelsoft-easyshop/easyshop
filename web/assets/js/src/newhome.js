@@ -227,7 +227,7 @@
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
-        if(!$this.hasClass('btn-tag-active')){
+        if(!$this.hasClass('btn-tag-active')) {
             var productView = $container.find('.product-view-' + headerCount).html();
 
             if ($.trim(productView) === "") {
@@ -238,14 +238,14 @@
                     data: "productSlugs="+productSlugs+"&csrfname="+csrftoken,
                     success: function(result) {
                         $container.find('.product-view-' + headerCount).html(result);
-                        $container.find('.featured-products-carousel').html(result);
-                        $container.find('.featured-products-carousel').data('owlCarousel').reinit({});
+                        $container.find('.purchased-items-slider-cat-' + sectionId).html(result);
+                        $container.find('.purchased-items-slider-cat-' + sectionId).data('owlCarousel').reinit({});
                     }
                 });
             }
             else {
-                $container.find('.featured-products-carousel').html(productView);
-                $container.find('.featured-products-carousel').data('owlCarousel').reinit({});
+                $container.find('.purchased-items-slider-cat-' + sectionId).html(productView);
+                $container.find('.purchased-items-slider-cat-' + sectionId).data('owlCarousel').reinit({});
             }
 
             var currentlyActiveTab = $container.find('.featured-categories .btn-tag-active');

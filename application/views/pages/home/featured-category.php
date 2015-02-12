@@ -186,7 +186,7 @@
                         <?php endforeach; ?>
 
                     </div>
-                    <div id="cat-items" class="featured-products-carousel purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel">
+                    <div id="cat-items" class="purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel">
 
                         <?php foreach($categorySection['products'] as $productSection): ?>
                             <?php $product = $productSection['product']; ?>
