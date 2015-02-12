@@ -410,6 +410,13 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));        
     }
 
+    /**
+     * Get Sub Category Product by slug
+     */
+    public function getSubCategoryProductBySlug()
+    {
+
+    }
 
 }
 

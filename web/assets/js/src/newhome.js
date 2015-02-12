@@ -203,5 +203,22 @@
 
     });
 
+    $('.sub-class').on('click', function() {
+        var $thisObj = $(this);
+        var products = $('.product-' + $thisObj.data('id')).map(function () {return $(this).data('slug');}).get().join("~");
+        var url = '/home/getSubCategoryProductBySlug';
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url : url,
+            data : {csrfname : csrftoken, productSlug : products},
+            success: function(data) {
+
+            }
+
+        });
+    });
 
 }(jQuery));

@@ -12,6 +12,8 @@ class CMS
 
     const NODE_TYPE_PRODUCT = "product";
 
+    const FEATURED_PRODUCTS = "Featured Products";
+
     /**
      * The xml resource getter
      *
@@ -889,9 +891,9 @@ $string = '<typeNode>
     {
         $homeXmlFile = (!$isTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
-        
+
         $homePageData['categorySection'] = [];
-        
+
         if(isset($xmlContent['categorySection']['categorySlug'])){
             $temporary = $xmlContent['categorySection'];
             $xmlContent['categorySection'] = array();
@@ -912,7 +914,7 @@ $string = '<typeNode>
                 $categorySection['sub'] = [ $subTemporary ];
             }   
             $sectionData['subHeaders'] = $categorySection['sub'];
-            
+
             if(isset($categorySection['productPanel']['slug'])){
                 $productPanelTemporary = $categorySection['productPanel'];
                 $categorySection['productPanel'] = [ $productPanelTemporary ];
@@ -923,20 +925,27 @@ $string = '<typeNode>
                 $categorySection['productPanel'] = array();
             }
 
-            foreach($categorySection['productPanel'] as $idx => $xmlProductData){
-                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $xmlProductData['slug']]);
-                if($product){
-                    $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
-                    $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                ->getSecondaryImage($product->getIdProduct());
-                    $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
-                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
+            foreach ($categorySection['sub'] as $subCategory) {
+
+                if (isset($subCategory['productPanel'])) {
+                    foreach ($subCategory['productPanel'] as $idx => $xmlProductData) {
+                        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                            ->findOneBy(['slug' => $xmlProductData['slug']]);
+                        if ($product) {
+                            $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
+                            $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                        ->getSecondaryImage($product->getIdProduct());
+                            $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
+                            $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
+                        }
+                    }
+                    break;
                 }
             }
-            array_push($homePageData['categorySection'], $sectionData);
+
+            $homePageData['categorySection'][] = $sectionData;
         }
-        
+
         $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
        
         if(isset($homePageData['adSection']['img'])){
@@ -945,8 +954,10 @@ $string = '<typeNode>
         }
 
         $sliderTemplates = array();
-        foreach($xmlContent['sliderTemplate']['template'] as $template){
-            array_push($sliderTemplates, $template['templateName']);
+        if (isset($xmlContent['sliderTemplate']['template'])) {
+            foreach($xmlContent['sliderTemplate']['template'] as $template){
+                array_push($sliderTemplates, $template['templateName']);
+            }
         }
 
         $homePageData['slider'] = isset($xmlContent['sliderSection']['slide']) ? $xmlContent['sliderSection']['slide'] : [];     

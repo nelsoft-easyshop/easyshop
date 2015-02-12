@@ -28,7 +28,7 @@
                     <div class="tag-categories" id="tag-<?php echo $sectionCount; ?>">
                         <?php $count = 0; ?>
                         <?php foreach($categorySection['subHeaders'] as $subheader): ?>
-                            <a href="<?php echo $subheader['target']; ?>">
+                            <a href="javascript:void(0)" class="sub-class" data-id="<?=html_escape($subheader['target'])?>" data-section-count="<?=$sectionCount?>">
                                 <button class="btn-tag <?php echo $count === 0 ? 'btn-tag-active' : '' ; ?>">
                                     <?php echo html_escape($subheader['text']); ?>
                                 </button>
@@ -39,6 +39,11 @@
                                 </script>
                             </a>
                             <?php $count++; ?>
+                            <?php if (isset($subheader['productPanel'])) : ?>
+                                <?php foreach ($subheader['productPanel'] as $product) : ?>
+                                    <input type="hidden" class="product-<?=$subheader['target']?>" data-slug="<?=html_escape($product['slug'])?>">
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         <?php endforeach; ?>
 
                     </div>
