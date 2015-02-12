@@ -144,14 +144,7 @@
         </div>
         <?php $sectionCount++; ?>
     <?php endif; ?>
-    
-    
-    
-    
-    
-    
-    
-    
+
     <?php foreach($homeContent['categorySection'] as $categorySection): ?>
         <div class="row row-category" id="category-<?php echo $sectionCount; ?>">        
             <div class="col-md-12">
