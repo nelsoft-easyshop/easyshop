@@ -12,7 +12,6 @@ class CMS
 
     const NODE_TYPE_PRODUCT = "product";
 
-    const FEATURED_PRODUCTS = "Featured Products";
 
     /**
      * The xml resource getter
