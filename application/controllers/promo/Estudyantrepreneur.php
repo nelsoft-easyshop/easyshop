@@ -36,9 +36,32 @@ class Estudyantrepreneur extends MY_Controller
         ];
 
         $this->load->spark('decorator');
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        // $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/estudyantrepreneur', $bodyData);
-        $this->load->view('templates/footer');
+        // $this->load->view('templates/footer');
+    }
+
+    public function EstudyantrepreneurPromoSuccess()
+    {
+        $headerData = [
+            'memberId' => $this->session->userdata('member_id'),
+            'title' => 'Estudyantrepreneur | Easyshop.ph',
+            'metadescription' => ''
+        ];
+        $data = $this->promoManager
+                     ->callSubclassMethod(
+                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                        'getSchoolWithStudentsByRound'
+                     );
+        $bodyData = [
+            'schools_and_students' => $data['schools_and_students'],
+            'round' => $data['round'],
+        ];
+
+        $this->load->spark('decorator');
+        // $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/promo/estudyantrepreneur_success', $bodyData);
+        // $this->load->view('templates/footer');
     }
 
     /**
