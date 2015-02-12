@@ -15,7 +15,7 @@ class Version20150212163547 extends AbstractMigration
     public function up(Schema $schema)
     {
         $this->addSql("
-            UPDATE `es_ban_type` SET `title` = 'Inquiry Non-compliance', `message` = 'This account has been suspended due to non-compliance from our repeated inquiries. Please contact our Customer Service Support to reactivate this account: Monday - Friday 9:00 AM to 6:00 PM (02) 354-5973 Local 103. '
+            UPDATE `es_ban_type` SET `title` = 'Inquiry Non-compliance', `message` = 'This account has been suspended due to non-compliance from our repeated inquiries. '
             WHERE id_ban_type = 2
         ");
     }
