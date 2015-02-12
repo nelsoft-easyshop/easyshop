@@ -1427,37 +1427,12 @@ li.brand_result:hover{
 .pop-up-fixed{
     position: fixed !important;
 }
+#crop-image-main {
+    padding: 0 !important;
+} 
 
-@media (min-width: 320px) {
-    #imageTag {
-        height: auto !important;
-        max-height: 300px !important;
-        max-width: 240px;
-        width: auto !important;
-    }
-}
-
-@media (min-width: 767px) {
-    #imageTag {
-        height: auto !important;
-        max-height: 320px !important;
-        max-width: 359px;
-    }
-}
-
-@media (min-width: 991px) {
-    #imageTag {
-        height: auto !important;
-        max-height: 350px !important;
-        max-width: 471px;
-    }
-}
-
-@media (min-width: 1200px) {
-    #imageTag {
-        height: auto !important;
-        max-height: 400px !important;
-        max-width: 534px;
-    }
+.cropFrame {
+    display: block !important; 
+    margin: auto !important; 
 }
 
