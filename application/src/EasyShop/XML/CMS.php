@@ -1244,19 +1244,8 @@ $string = '<typeNode>
 
         $products = $this->em->getRepository('\EasyShop\Entities\EsProduct')
                          ->getRandomProductsFromUsers($followedSellerIds);
-        
-        $featuredProductSection = [];
-        $featuredProductSection['subHeaders'] = [];
-        $featuredProductSection['subHeaders'][] = [
-            'target' => false,
-            'text' => 'Followed Sellers',
-        ];
-        $featuredProductSection['subHeaders'][] = [
-            'target' => false,
-            'text' => 'Promos',
-        ];
-        
-        $featuredProductSection['products'] = [];
+
+        $featuredProductSlugs = [];        
         $productCounter = 0;
         foreach($products as $product){
             $featuredProductSection['products'][$productCounter]['product'] =  $this->productManager->getProductDetails($product);
@@ -1265,8 +1254,34 @@ $string = '<typeNode>
             $featuredProductSection['products'][$productCounter]['productSecondaryImage'] = $secondaryImage;
             $featuredProductSection['products'][$productCounter]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
             $productCounter++;
+            $featuredProductSlugs[] = $product->getSlug();
         }
 
+        $featuredProductSection['subHeaders'] = [];
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $featuredProductSlugs,
+            'text' => 'Followed Sellers',
+        ];
+        
+        $miscellaneousFileContents = $this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile); 
+        $promoProductSlugs = [];
+        foreach($miscellaneousFileContents['feedPromoItems']['product'] as $promoProduct){
+            $promoProductSlugs[] = $promoProduct['slug']; 
+        }
+
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $promoProductSlugs,
+            'text' => 'Promos',
+        ];
+        
+        $newProductSlugs = $this->em->getRepository('\EasyShop\Entities\EsProduct')
+                                ->getNewestProductSlugs();
+
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $newProductSlugs,
+            'text' => 'New Products',
+        ];
+        
         return $featuredProductSection;
     }
 
