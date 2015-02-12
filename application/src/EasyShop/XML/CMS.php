@@ -473,6 +473,17 @@ $string = '<typeNode>
                     return false;
             }        
         }        
+        else if($nodeName == "boxContent") {
+
+            $referred = "/map/section[".$index."]/boxContent[".$subIndex."]"; 
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+                $dom->parentNode->removeChild($dom);
+                return $doc->asXml($file);
+            }
+
+        }        
         else if($nodeName == "categorySection") {
 
             $referred = "/map/categorySection[".$index."]/sub[".$subIndex."]"; 
