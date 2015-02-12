@@ -22,7 +22,7 @@
                 else{
                     window.location.replace("/item/"+slug);
                 }
-            }, 
+            }
         });
     });
 
@@ -91,7 +91,8 @@
         owl.trigger('owl.prev');
     })
 
-    var slideCat1 = $('.purchased-items-slider-cat-1.owl-carousel');
+    for (var count = 1; count <= $('.row-category').length; count++) {
+        var slideCat1 = $('.purchased-items-slider-cat-' + count + '.owl-carousel');
         slideCat1.owlCarousel({
             items: 4,
             itemsDesktop : [1199,3],
@@ -106,42 +107,9 @@
             responsive: true,
             mouseDrag: true,
             autoHeight : true
-        }).data('navigationBtns', ['#purchased-items-slider-prev-cat-1', '#purchased-items-slider-next-cat-1']);
-        
-        var  slideCat2 = $('.purchased-items-slider-cat-2.owl-carousel');
-        slideCat2.owlCarousel({
-            items: 4,
-            itemsDesktop : [1199,3],
-            itemsDesktopSmall: [979,2],
-            itemsTablet: [768,2],
-            itemsMobile : [479,2],
-            slideSpeed: 400,
-            autoPlay: 8000,
-            stopOnHover: true,
-            navigation: false,
-            pagination: false,
-            responsive: true,
-            mouseDrag: true,
-            autoHeight : true
-        }).data('navigationBtns', ['#purchased-items-slider-prev-cat-2', '#purchased-items-slider-next-cat-2']);
-        
-        var  slideCat3 = $('.purchased-items-slider-cat-3.owl-carousel');
-        slideCat3.owlCarousel({
-            items: 4,
-            itemsDesktop : [1199,3],
-            itemsDesktopSmall: [979,2],
-            itemsTablet: [768,2],
-            itemsMobile : [479,2],
-            slideSpeed: 400,
-            autoPlay: 8000,
-            stopOnHover: true,
-            navigation: false,
-            pagination: false,
-            responsive: true,
-            mouseDrag: true,
-            autoHeight : true
-        }).data('navigationBtns', ['#purchased-items-slider-prev-cat-3', '#purchased-items-slider-next-cat-3']);
-        
+        }).data('navigationBtns', ['#purchased-items-slider-prev-cat-' + count, '#purchased-items-slider-next-cat-' + count]);
+    }
+
         var  featuredCarousel = $('.featured-products-carousel');
         featuredCarousel.owlCarousel({
             items: 4,

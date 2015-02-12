@@ -1,7 +1,7 @@
 <div class="row-featured-category">
-   
+
     <?php $sectionCount  = 1; ?>
-    
+
     <?php if(isset($featuredCategorySection)): ?>
         <div class="row row-category" id="category-<?php echo $sectionCount; ?>">        
             <div class="col-md-12">
@@ -143,7 +143,7 @@
     <?php endif; ?>
 
     <?php foreach($homeContent['categorySection'] as $categorySection): ?>
-        <div class="row row-category" id="category-<?php echo $sectionCount; ?>">        
+        <div class="row row-category" id="category-<?php echo $sectionCount; ?>">
             <div class="col-md-12">
                 <div class="purchased-items-container carousel-wrapper">
                     <div class="category-title-container">
