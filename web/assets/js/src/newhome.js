@@ -238,7 +238,7 @@
                         $('.featured-categories .product-view-' + headerCount).html(result);
                         $('.featured-products-carousel').html(result);
                         $('.featured-products-carousel').data('owlCarousel').reinit({});
-                    }, 
+                    }
                 });
             }
             else{
