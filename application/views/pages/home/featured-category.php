@@ -104,7 +104,7 @@
                                         
                                         <div class="item-meta-inner-container clearfix">
                                             <div class="item-price-container">
-                                                <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
+                                                <?php if ((float)$product->getDiscountPercentage() > 0): ?>
                                                     <span class="old-price">P<?php echo number_format ($product->getOriginalPrice() , 2) ?></span>
                                                 <?php endif; ?>
                                                 <span class="item-price">P<?php echo number_format ($product->getFinalPrice() , 2) ?></span>
@@ -245,7 +245,7 @@
                                         
                                         <div class="item-meta-inner-container clearfix">
                                             <div class="item-price-container">
-                                                <?php if (floatval($product->getDiscountPercentage()) > 0): ?>
+                                                <?php if ((float)$product->getDiscountPercentage() > 0): ?>
                                                     <span class="old-price">P<?php echo number_format ($product->getOriginalPrice() , 2) ?></span>
                                                 <?php endif; ?>
                                                 <span class="item-price">P<?php echo number_format ($product->getFinalPrice() , 2) ?></span>
