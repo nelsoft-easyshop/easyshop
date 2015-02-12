@@ -885,7 +885,7 @@ class PaymentService
             $this->emailService->setRecipient($buyer->getEmail())
                                ->setSubject($buyerSubject)
                                ->setMessage($buyerMsg, $imageArray)
-                               ->sendMail();
+                               ->queueMail();
 
             $this->smsService->setMobile($buyer->getContactno())
                              ->setMessage($buyerSmsMsg)
@@ -910,7 +910,7 @@ class PaymentService
                 $this->emailService->setRecipient($sellerEmail)
                                    ->setSubject($sellerSubject)
                                    ->setMessage($sellerMsg, $imageArray)
-                                   ->sendMail();
+                                   ->queueMail();
                 
                 $this->smsService->setMobile($sellerContact)
                                  ->setMessage($sellerSmsMsg)
