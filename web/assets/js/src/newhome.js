@@ -205,6 +205,7 @@
 
     $('.sub-class').on('click', function() {
         var $thisObj = $(this);
+        var sectionId = $thisObj.data('section-count');
         var products = $('.product-' + $thisObj.data('id')).map(function () {return $(this).data('slug');}).get().join("~");
         var url = '/home/getSubCategoryProductBySlug';
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -214,8 +215,11 @@
             dataType: 'json',
             url : url,
             data : {csrfname : csrftoken, productSlug : products},
+            beforeSend: function() {
+                $('#category-' + sectionId).find('.owl-wrapper').html('');
+            },
             success: function(data) {
-
+                $('#category-' + sectionId).find('.owl-wrapper').html(data.html);
             }
 
         });

@@ -22,6 +22,9 @@ class Home extends MY_Controller
     public function __construct() 
     {
         parent::__construct();
+        $this->productManager = $this->serviceContainer['product_manager'];
+        $this->userManager = $this->serviceContainer['user_manager'];
+        $this->em = $this->serviceContainer['entity_manager'];
     }
 
     /**
@@ -415,7 +418,31 @@ class Home extends MY_Controller
      */
     public function getSubCategoryProductBySlug()
     {
+        $products = trim($this->input->post('productSlug'));
+        $productsBySlug = explode('~', $products);
+        $productContainer =[];
 
+        foreach ($productsBySlug as $key => $slug) {
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->findOneBy(['slug' => $slug]);
+            if ($product) {
+                $productContainer[$key]['product'] = $this->productManager->getProductDetails($product);
+                $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                            ->getSecondaryImage($product->getIdProduct());
+                $productContainer[$key]['productSecondaryImage'] = $secondaryImage;
+                $productContainer[$key]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
+            }
+        }
+        $data = [
+            'products' => $productContainer,
+        ];
+
+        $categoryProductsView = $this->load->view('partials/home-category-products', $data, true);
+        $result = [
+            'html' => $categoryProductsView
+        ];
+
+        echo json_encode($result);
     }
 
 }

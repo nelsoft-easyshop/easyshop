@@ -48,8 +48,8 @@
 
                     </div>
                     
-                    
-                    <div id="cat-items" class="purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel"> 
+                    <div id="cat-items-container-<?php echo $sectionCount ?>">
+                        <div id="cat-items" class="purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel">
                     
                         <?php foreach($categorySection['products'] as $productSection): ?>
                             <?php $product = $productSection['product']; ?>
@@ -140,6 +140,7 @@
 
                         <?php endforeach; ?>
                     </div><!--purchased-items-slider -->
+                    </div>
                 </div><!-- End .purchased-items-container -->
             </div><!-- End .col-md-12 -->
         </div><!-- End .row -->
