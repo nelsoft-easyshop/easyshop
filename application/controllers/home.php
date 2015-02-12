@@ -293,7 +293,7 @@ class Home extends MY_Controller
             $productCounter++;
         }
      
-        echo json_encode($this->load->view('partials/productlist', $data, true));
+        echo json_encode($this->load->view('partials/home-productlist', $data, true));
     }
 
 
