@@ -1084,8 +1084,23 @@ $string = '<typeNode>
         ]; 
 
         $productSections[] = $sectionImages;
+
+
+        if(!isset($pageContent['section'][0])){
+            $temp = $pageContent['section'];
+            $pageContent['section'] = [];
+            $pageContent['section'][] = $temp;
+        }
+
         foreach ($pageContent['section'] as $value) {
             $productArray = []; 
+
+            if(!isset($value['boxContent'][0])){
+                $temp = $value['boxContent'];
+                $value['boxContent'] = [];
+                $value['boxContent'][] = $temp;
+            }
+
             foreach ($value['boxContent'] as $valueLevel2) {
 
                 $slug = isset($valueLevel2['value']) ? $valueLevel2['value'] : ""; 
@@ -1105,7 +1120,7 @@ $string = '<typeNode>
                         $product = $this->productManager->getProductDetails($product->getIdProduct());
 
                         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                          ->getDefaultImage($product->getIdProduct());
+                                                 ->getDefaultImage($product->getIdProduct());
             
                         $directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
                         $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
