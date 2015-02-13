@@ -639,6 +639,9 @@ $(function(){
             if(paymentAccountId <= 1){
                 var isProceedPaymentAccount = confirm("We can't send your money if your bank details are empty, are you sure you want to proceed without entering your bank details?");
                 if(!isProceedPaymentAccount){
+                    $('html, body').animate({
+                        scrollTop:$('#bank_details').offset().top
+                    }, 1500);
                     return false;
                 }
             }
