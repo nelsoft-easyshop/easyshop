@@ -65,7 +65,7 @@
                     <div id="student-container" class="select-school mrgn-top-35">
                         <?PHP foreach ($schools_and_students as $school => $students) : ?>
                             <div id="<?=html_escape(str_replace(' ', '-', $school))?>" style="border: 1px black solid;display: none" class="display-none">
-                            <?PHP foreach ($students as $student) : ?>
+                            <?PHP foreach ($students['students'] as $student) : ?>
                                 <span>
                                     <input name="student" type="radio" value="<?=html_escape($student['idStudent'])?>" data-school="<?=html_escape($student['idSchool'])?>">
                                     <label><?=html_escape($student['student'])?></label>

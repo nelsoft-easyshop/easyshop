@@ -42,7 +42,7 @@ class Estudyantrepreneur
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $date = new \DateTime;
 //        $dateToday = $date->getTimestamp();
-        $dateToday = strtotime('2015-02-23');
+        $dateToday = strtotime('2015-03-07 23:59:59');
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
@@ -113,25 +113,31 @@ class Estudyantrepreneur
                                              $school,
                                              $roundData['limit']
                                          );
-
-                    $result[$schoolName] = $students;
+                    $result[$schoolName]['students'] = $students;
+                    $result[$schoolName]['isQualifiedInNextRound'] = false;
 
                     if ($students) {
-                        end($result[$schoolName]);
-                        $lastKey = key($result[$schoolName]);
+                        end($result[$schoolName]['students']);
+                        $lastKey = key($result[$schoolName]['students']);
                         $studentsWithSameVote = $this->em->getRepository('EasyShop\Entities\EsStudent')
                                                          ->getStudentsByDateAndSchool(
                                                              $roundData['previousStartDate'],
                                                              $roundData['previousEndDate'],
                                                              $school,
                                                              PHP_INT_MAX,
-                                                             $result[$schoolName][$lastKey]['vote'],
-                                                             $result[$schoolName][$lastKey]['student']
+                                                             $result[$schoolName]['students'][$lastKey]['vote'],
+                                                             $result[$schoolName]['students'][$lastKey]['student']
                                                          );
 
                         if ($studentsWithSameVote) {
-                            $result[$schoolName] = array_merge($result[$schoolName], $studentsWithSameVote);
+                            $result[$schoolName]['students'] = array_merge($result[$schoolName]['students'], $studentsWithSameVote);
                         }
+                    }
+
+                    $studentCount = count($result[$schoolName]['students']);
+
+                    if ($studentCount <= 3 && $studentCount !== 0) {
+                        $result[$schoolName]['isQualifiedInNextRound'] = true;
                     }
                 }
 
