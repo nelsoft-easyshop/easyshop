@@ -35,14 +35,13 @@ class Estudyantrepreneur
 
     /**
      * Get previous rounds
+     * @param array $rounds
      * @return array
      */
-    private function __getPreviousRounds()
+    private function __getPreviousRounds($rounds)
     {
-        $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $date = new \DateTime;
-//        $dateToday = $date->getTimestamp();
-        $dateToday = strtotime('2015-03-07 23:59:59');
+        $dateToday = $date->getTimestamp();
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
@@ -56,7 +55,7 @@ class Estudyantrepreneur
             $endDate = strtotime($data['end']);
             if ($dateToday >= $startDate && $dateToday < $endDate) {
                 $round = $key;
-                $case = $round === 'first_round' ?:'second_round_and_inter_school';
+                $case = $round;
                 $limit = (int) $data['limit'];
 
                 $keys = array_keys($rounds);
@@ -81,6 +80,49 @@ class Estudyantrepreneur
 
         return $data;
     }
+
+    private function __getStudentsByDateAndSchool($schools, $previousStartDate, $previousEndDate, $limit)
+    {
+        foreach ($schools as $school) {
+            $schoolName = $school['name'];
+            $students = $this->em->getRepository('EasyShop\Entities\EsStudent')
+                                 ->getStudentsByDateAndSchool(
+                                     $previousStartDate,
+                                     $previousEndDate,
+                                     $school,
+                                     $limit
+                                 );
+            $result[$schoolName]['students'] = $students;
+            $result[$schoolName]['isQualifiedInNextRound'] = 0;
+
+            if ($students) {
+                end($result[$schoolName]['students']);
+                $lastKey = key($result[$schoolName]['students']);
+                $studentsWithSameVote = $this->em->getRepository('EasyShop\Entities\EsStudent')
+                                                 ->getStudentsByDateAndSchool(
+                                                     $previousStartDate,
+                                                     $previousEndDate,
+                                                     $school,
+                                                     PHP_INT_MAX,
+                                                     $result[$schoolName]['students'][$lastKey]['vote'],
+                                                     $result[$schoolName]['students'][$lastKey]['student']
+                                                 );
+
+                if ($studentsWithSameVote) {
+                    $result[$schoolName]['students'] = array_merge($result[$schoolName]['students'], $studentsWithSameVote);
+                }
+            }
+
+            $studentCount = count($result[$schoolName]['students']);
+
+            if ($studentCount <= 3 && $studentCount !== 0) {
+                $result[$schoolName]['isQualifiedInNextRound'] = 1;
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * Get School and its student by date / round
      * @return array
@@ -88,58 +130,58 @@ class Estudyantrepreneur
     public function getSchoolWithStudentsByRound()
     {
         $result = [];
-        $roundData = $this->__getPreviousRounds();
+        $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
+        $roundData = $this->__getPreviousRounds($rounds);
 
         switch($roundData['case']) {
             case 'first_round' :
                 $students = $this->em->getRepository('EasyShop\Entities\EsStudent')->getAllStudents();
 
                 foreach ($students as $student) {
+
                     if (!isset($result[$student['school']])) {
                         $result[$student['school']] = [];
                     }
+
                     $result[$student['school']][] = $student;
                 }
 
                 break;
-            case 'second_round_and_inter_school' :
+            case 'second_round' :
                 $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
-                foreach ($schools as $school) {
-                    $schoolName = $school['name'];
-                    $students = $this->em->getRepository('EasyShop\Entities\EsStudent')
-                                         ->getStudentsByDateAndSchool(
-                                             $roundData['previousStartDate'],
-                                             $roundData['previousEndDate'],
-                                             $school,
-                                             $roundData['limit']
-                                         );
-                    $result[$schoolName]['students'] = $students;
-                    $result[$schoolName]['isQualifiedInNextRound'] = false;
+                $result = $this->__getStudentsByDateAndSchool(
+                                     $schools,
+                                     $roundData['previousStartDate'],
+                                     $roundData['previousEndDate'],
+                                     $roundData['limit']
+                                 );
 
-                    if ($students) {
-                        end($result[$schoolName]['students']);
-                        $lastKey = key($result[$schoolName]['students']);
-                        $studentsWithSameVote = $this->em->getRepository('EasyShop\Entities\EsStudent')
-                                                         ->getStudentsByDateAndSchool(
-                                                             $roundData['previousStartDate'],
-                                                             $roundData['previousEndDate'],
-                                                             $school,
-                                                             PHP_INT_MAX,
-                                                             $result[$schoolName]['students'][$lastKey]['vote'],
-                                                             $result[$schoolName]['students'][$lastKey]['student']
-                                                         );
+                break;
+            case 'inter_school_round':
+                $firstRound = $rounds['first_round'];
+                $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
+                $secondRound = $this->__getStudentsByDateAndSchool(
+                                         $schools,
+                                         $firstRound['start'],
+                                         $firstRound['end'],
+                                         $firstRound['limit']
+                                     );
+                $secondRoundWinners = $this->__getStudentsByDateAndSchool(
+                                                         $schools,
+                                                         $roundData['previousStartDate'],
+                                                         $roundData['previousEndDate'],
+                                                         $roundData['limit']
+                                                     );
 
-                        if ($studentsWithSameVote) {
-                            $result[$schoolName]['students'] = array_merge($result[$schoolName]['students'], $studentsWithSameVote);
-                        }
+                foreach ($secondRound as $key => $schools) {
+
+                    if ($schools['isQualifiedInNextRound']) {
+                        $secondRoundWinners[$key]['students'] = $schools['students'];
                     }
 
-                    $studentCount = count($result[$schoolName]['students']);
-
-                    if ($studentCount <= 3 && $studentCount !== 0) {
-                        $result[$schoolName]['isQualifiedInNextRound'] = true;
-                    }
                 }
+
+                $result = $secondRoundWinners;
 
                 break;
         }
