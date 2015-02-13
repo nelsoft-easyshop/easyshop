@@ -81,6 +81,14 @@ class Estudyantrepreneur
         return $data;
     }
 
+    /**
+     * Retrieves Students depending on date and school
+     * @param $schools
+     * @param $previousStartDate
+     * @param $previousEndDate
+     * @param $limit
+     * @return mixed
+     */
     private function __getStudentsByDateAndSchool($schools, $previousStartDate, $previousEndDate, $limit)
     {
         foreach ($schools as $school) {
