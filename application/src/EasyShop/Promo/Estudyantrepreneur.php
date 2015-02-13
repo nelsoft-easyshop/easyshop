@@ -168,7 +168,7 @@ class Estudyantrepreneur
             case 'inter_school_round':
                 $firstRound = $rounds['first_round'];
                 $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
-                $secondRound = $this->__getStudentsByDateAndSchool(
+                $qualifiedToSecondRound = $this->__getStudentsByDateAndSchool(
                                          $schools,
                                          $firstRound['start'],
                                          $firstRound['end'],
@@ -181,7 +181,7 @@ class Estudyantrepreneur
                                                          $roundData['limit']
                                                      );
 
-                foreach ($secondRound as $key => $schools) {
+                foreach ($qualifiedToSecondRound as $key => $schools) {
 
                     if ($schools['isQualifiedInNextRound']) {
                         $secondRoundWinners[$key]['students'] = $schools['students'];
