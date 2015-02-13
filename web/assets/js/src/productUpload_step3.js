@@ -633,6 +633,17 @@ $(function(){
         var shippingGroup = $('#shipping_div div.shipping_group');
         var inputGroup = $('#shipping_div div.shipping_input');
         
+        var paymentAccountSelectBox = $('#deposit_info');
+        if(paymentAccountSelectBox.length > 0){
+            var paymentAccountId = paymentAccountSelectBox.find('option').length;
+            if(paymentAccountId <= 1){
+                var isProceedPaymentAccount = confirm("We can't send your money if your bank details are empty, are you sure you want to proceed without entering your bank details?");
+                if(!isProceedPaymentAccount){
+                    return false;
+                }
+            }
+        }
+
         // Check for "Meetup" or "Delivery"
         var checkedDeliveryOption = form.find('input.delivery_option:checked');
         if( checkedDeliveryOption.length <= 0){
