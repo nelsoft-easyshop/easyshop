@@ -241,7 +241,10 @@ class ApiFormatter
         $shipmentDetails = [];
         $shipmentPriceArray = [];
         $isFreeShippingNationwide = $this->productManager->isFreeShippingNationwide($productId);
-
+        $shipmentDetails = [
+            'min' => 0,
+            'max' => 0
+        ];
         if(!$isFreeShippingNationwide){
             $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                         ->getShippingDetailsByProductId($productId);
@@ -253,13 +256,7 @@ class ApiFormatter
                 'min' => empty($shipmentPriceArray) ? 0 : min($shipmentPriceArray),
                 'max' => empty($shipmentPriceArray) ? 0 : max($shipmentPriceArray)
             ];
-        }
-        else{
-            $shipmentDetails = [
-                'min' => 0,
-                'max' => 0
-            ];
-        }
+        } 
 
         return [
             'productDetails' => $productDetails,
