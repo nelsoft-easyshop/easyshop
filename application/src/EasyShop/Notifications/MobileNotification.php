@@ -2,6 +2,9 @@
 
 namespace EasyShop\Notifications;
 
+use EasyShop\Entities\EsQueueStatus as EsQueueStatus;
+use EasyShop\Entities\EsQueue as EsQueue;
+
 /**
  *  SMS Notification throught Semaphore service
  *  Chainable Methods except for sendSMS
@@ -10,6 +13,11 @@ namespace EasyShop\Notifications;
  */
 class MobileNotification
 {
+    /**
+     *  Entity Manager Instance
+     */
+    private $em;
+
     /**
      *  Configuration file from config/sms.php
      */
@@ -24,8 +32,9 @@ class MobileNotification
     /**
      *  Constructor
      */
-    public function __construct($smsConfig)
+    public function __construct($em, $smsConfig)
     {
+        $this->em = $em;
         $this->smsConfig = $smsConfig;
 
         return $this;
@@ -97,6 +106,36 @@ class MobileNotification
             
             return $output;
         }
+    }
+
+    public function queueSMS()
+    {
+        if(empty($this->mobileNum) || empty($this->msg)){
+            return false;
+        }
+
+        $em = $this->em;
+        $smsData = [
+            'api' => $this->smsConfig['api'],
+            'number' => $this->mobileNum,
+            'message' => $this->msg,
+            'from' => $this->smsConfig['from'],
+        ];
+
+        $queueType = $em->getRepository('EasyShop\Entities\EsQueueType')
+                        ->find($this->smsConfig['queue_type']);
+        $queueStatus = $em->getRepository('EasyShop\Entities\EsQueueStatus')
+                          ->find(EsQueueStatus::QUEUED);
+
+        $smsQueue = new EsQueue();
+        $smsQueue->setData(json_encode($smsData))
+                   ->setType($queueType)
+                   ->setDateCreated(date_create(date("Y-m-d H:i:s")))
+                   ->setStatus($queueStatus);
+        $em->persist($smsQueue);
+        $em->flush();
+
+        return true;
     }
 
 }
