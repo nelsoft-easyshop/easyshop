@@ -131,7 +131,7 @@
     });
 
     $('.btn-filter-price').click(function() { 
-        var tableParent = $(this).parent().parent().parent();
+        var tableParent = $(this).closest('table');
         var price1 = parseFloat(tableParent.find('#filter-from-price').val().replace(/,/g , ""));
         var price2 = parseFloat(tableParent.find('#filter-to-price').val().replace(/,/g , "")); 
 
