@@ -3,22 +3,7 @@ function updateCountdown() {
     // 150 is the max message length
     var remaining = 150 - $('#prod_keyword').val().length;
     $('.countdown').text(remaining + ' characters remaining.');
-}
-
-// ERROR HANDLER
-function validateRedTextBox(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"});
 } 
-
-function validateWhiteTextBox(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-}
 
 // NUMBER ONLY IN SPECIFIC FIELDS
 function isNumberKey(evt)
