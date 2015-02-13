@@ -204,16 +204,7 @@ function resetControlPanel(buttonReset)
         });
     }
     valueData.trigger("liszt:updated");
-}
-
-function ReplaceNumberWithCommas(thisnumber){
-    //Seperates the components of the number
-    var n= thisnumber.toString().split(".");
-    //Comma-fies the first part
-    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //Combines the two sections
-    return n.join(".");
-}
+} 
 
 function get_discPrice() {
     var prcnt = $("#slider_val").val().replace("%",'');
@@ -231,7 +222,7 @@ function get_discPrice() {
     discounted = act_price * (prcnt/100);
     var v = parseFloat(act_price - discounted);
     tempval = Math.abs(v);
-    disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
+    disc_price = replaceNumberWithCommas(tempval.toFixed(2));
     $("#discountedP").val(disc_price);
     $( "span#discounted_price_con" ).text( disc_price );
 }
@@ -676,7 +667,7 @@ function newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight){
 
         $("#slider_val").val(sum+"%");
         tempval = Math.abs(discountPrice);
-        discountPrice = ReplaceNumberWithCommas(tempval.toFixed(2));
+        discountPrice = replaceNumberWithCommas(tempval.toFixed(2));
         $this.val(discountPrice);
         $("span#discounted_price_con").text(discountPrice);
     });
