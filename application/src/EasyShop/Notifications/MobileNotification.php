@@ -4,6 +4,7 @@ namespace EasyShop\Notifications;
 
 use EasyShop\Entities\EsQueueStatus as EsQueueStatus;
 use EasyShop\Entities\EsQueue as EsQueue;
+use EasyShop\Entities\EsQueueType as EsQueueType;
 
 /**
  *  SMS Notification throught Semaphore service
@@ -123,7 +124,7 @@ class MobileNotification
         ];
 
         $queueType = $em->getRepository('EasyShop\Entities\EsQueueType')
-                        ->find($this->smsConfig['queue_type']);
+                        ->find(EsQueueType::TYPE_MOBILE);
         $queueStatus = $em->getRepository('EasyShop\Entities\EsQueueStatus')
                           ->find(EsQueueStatus::QUEUED);
 
