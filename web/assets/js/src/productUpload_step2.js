@@ -513,9 +513,9 @@ function newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight){
     zoomSlider.ionRangeSlider("update", {
         from: minValue 
     });
-    $("#crop-image-main").find(".irs-min").addClass('rangeSliderHide');
-    $("#crop-image-main").find(".irs-max").addClass('rangeSliderHide');
-    $("#crop-image-main").find(".irs-single").addClass('rangeSliderHide');
+    cropImageMain.find(".irs-min").addClass('rangeSliderHide');
+    cropImageMain.find(".irs-max").addClass('rangeSliderHide');
+    cropImageMain.find(".irs-single").addClass('rangeSliderHide');
 }
 
 (function($) {
@@ -1206,6 +1206,8 @@ var imageCollection = [];
 var ratioDifference = 25;
 var totalCropImage;
 var cropElement; 
+var cropImageMain;
+var imageTag;
 var widthRatio = 445;
 var heightRatio = 538;
 var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
@@ -1276,24 +1278,27 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             var MainwindowHeight = $(window).height();
                             $(this).parent().addClass('pop-up-fixed'); 
                             setTimeout(function() {
-                                var deductPercentage = $("#crop-image-main").width() * 0.10;
-                                var modalHeight = $("#crop-image-main").width() - deductPercentage
+                                cropImageMain = $("#crop-image-main");
+                                imageTag = $("#imageTag");
+                                var deductPercentage = cropImageMain.width() * 0.10;
+                                var modalHeight = cropImageMain.width() - deductPercentage
                                 var CropHeight = widthRatio / heightRatio * modalHeight;
                                 var CropWidth =  widthRatio / heightRatio * CropHeight; 
-                                var ImageHeight = $("#imageTag").height(); 
-                                var ImageWidth = $("#imageTag").width();
+                                var ImageHeight = imageTag.height(); 
+                                var ImageWidth = imageTag.width();
 
-                                $("#imageTag").cropbox({
+                                imageTag.cropbox({
                                     width: CropWidth,
                                     height: CropHeight,
-                                    zoom: 100, 
+                                    zoom: 100,
+                                    showControls: "never"
                                 }).on('cropbox', function(e, data) { 
                                     $('#image_x').val(data.cropX);
                                     $('#image_y').val(data.cropY);
                                     $('#image_w').val(data.cropW);
                                     $('#image_h').val(data.cropH);
                                 }); 
-                                cropElement = $('#imageTag').data('cropbox');
+                                cropElement = imageTag.data('cropbox');
                                 newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight);
                                 var UidialogHeight = $(".ui-dialog").outerHeight();
                                 var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
@@ -1305,6 +1310,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             $('#crop-image-main > .cropFrame').remove();
                             $('#crop-image-main').prepend('<img src="" id="imageTag">');
                             cropElement = null;
+                            cropImageMain = null;
+                            imageTag = null;
                         },
                         "title": "Crop your image"
                     });
@@ -1588,24 +1595,27 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         var MainwindowHeight = $(window).height();
                         $(this).parent().addClass('pop-up-fixed');
                         setTimeout(function() {
-                            var deductPercentage = $("#crop-image-main").width() * 0.10;
-                            var modalHeight = $("#crop-image-main").width() - deductPercentage;
+                            cropImageMain = $("#crop-image-main");
+                            imageTag = $("#imageTag");
+                            var deductPercentage = cropImageMain.width() * 0.10;
+                            var modalHeight = cropImageMain.width() - deductPercentage;
                             var CropHeight = widthRatio / heightRatio * modalHeight;
                             var CropWidth =  widthRatio / heightRatio * CropHeight;
-                            var ImageHeight = $("#imageTag").height(); 
-                            var ImageWidth = $("#imageTag").width();
+                            var ImageHeight = imageTag.height(); 
+                            var ImageWidth = imageTag.width();
 
-                            $("#imageTag").cropbox({
+                            imageTag.cropbox({
                                 width: CropWidth,
                                 height: CropHeight,
-                                zoom: 100, 
+                                zoom: 100,
+                                showControls: "never"
                             }).on('cropbox', function(e, data) { 
                                 $('#image_x').val(data.cropX);
                                 $('#image_y').val(data.cropY);
                                 $('#image_w').val(data.cropW);
                                 $('#image_h').val(data.cropH);
                             });
-                            cropElement = $('#imageTag').data('cropbox');
+                            cropElement = imageTag.data('cropbox');
                             newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight);
                             var UidialogHeight = $(".ui-dialog").outerHeight();
                             var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
@@ -1617,6 +1627,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         $('#crop-image-main > .cropFrame').remove();
                         $('#crop-image-main').prepend('<img src="" id="imageTag">');
                         cropElement = null;
+                        cropImageMain = null;
+                        imageTag = null;
                     },
                     "title": "Crop your image"
                 });
