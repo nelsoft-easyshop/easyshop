@@ -1388,8 +1388,8 @@ class productUpload extends MY_Controller
                           ? trim($this->input->post('ship_within'))
                           : null;
         $productId = (int) $this->input->post('prod_h_id');
-        $billingId = (int) $this->input->post('billing_info_id');
-        $isAllowCod = trim(strtolower($this->input->post('allow_cod'))) === "on";
+        $isAllowCod = $this->input->post('allow_cod') ? true : false;
+        
         $isMeetup = in_array("meetup", $deliveryOption);
         $isDelivery = in_array("delivery", $deliveryOption);
         $deliveryCost = trim($this->input->post('prod_delivery_cost'));
@@ -1411,15 +1411,9 @@ class productUpload extends MY_Controller
                        ]);
             if($product){
                 if($isMeetup || $isDelivery){
-                    if($billingId !== 0){
-                        $bankInfo = $esBillingInfoRepo->findOneBy([
-                                        'idBillingInfo' => $billingId,
-                                        'member' => $memberId,
-                                    ]);
-                        if(!$bankInfo){
-                            throw new Exception("Billing ID mismatch.");
-                        }
-                    }
+
+                    $defaultPaymentAccount = $esBillingInfoRepo->getDefaultAccount($memberId);
+                    $billingId = $defaultPaymentAccount ? $defaultPaymentAccount->getIdBillingInfo() : 0;                    
                     $productShippingManager->deleteProductShippingInfo($productId);
                     $isCanContinue = true;
                     if($isDelivery){
