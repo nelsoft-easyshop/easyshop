@@ -228,8 +228,8 @@ class Estudyantrepreneur
      */
     public function isUserAlreadyVoted($memberId)
     {
-        $roundData = $this->__getPreviousRounds();
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
+        $roundData = $this->__getPreviousRounds($rounds);
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('tblPromo')
                     ->from('EasyShop\Entities\EsPromo', 'tblPromo')
