@@ -1613,9 +1613,9 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         $(this).parent().addClass('pop-up-fixed');
                         setTimeout(function() {
                             var deductPercentage = $("#crop-image-main").width() * 0.10;
-                            var modalHeight = $("#crop-image-main").width() - deductPercentage
+                            var modalHeight = $("#crop-image-main").width() - deductPercentage;
                             var CropHeight = widthRatio / heightRatio * modalHeight;
-                            var CropWidth =  widthRatio / heightRatio * CropHeight;  
+                            var CropWidth =  widthRatio / heightRatio * CropHeight;
                             var ImageHeight = $("#imageTag").height(); 
                             var ImageWidth = $("#imageTag").width();
 
