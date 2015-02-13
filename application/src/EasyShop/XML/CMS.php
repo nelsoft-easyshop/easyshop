@@ -245,9 +245,7 @@ class CMS
         }        
         if($nodeName == "productPanelNew" ) {
             $string = '
-        <productPanel>
-            <slug>'.$value.'</slug>
-        </productPanel>'; 
+        <productSlugs>'.$value.'</productSlugs>'; 
         }
         if($nodeName == "mainSlide") {
 
