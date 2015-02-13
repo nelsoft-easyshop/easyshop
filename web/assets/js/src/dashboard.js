@@ -23,6 +23,14 @@
         $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
         $( ".ms-setup" ).addClass( "selectedM" );
     });
+
+    $( "#product-management-tab" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ms-prod" ).addClass( "selectedM" );
+    });
     
     $( ".personal-info-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
@@ -915,6 +923,15 @@
     
     $('.ms-setup').click(function() {
         $('#store-setup-tab').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $(this).addClass("selectedM");
+    });
+
+    $('.ms-prod').click(function() {
+        $('#product-management-tab').trigger("click");
         $('.dash-mobile-trigger').removeClass("selectedM");
         $('.dashboard-home-mobile').removeClass("selectedM");
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
@@ -2085,7 +2102,32 @@
         }, 700);
     }
     
+    $( "#activate-products" ).click(function() {
+        $( ".current-activate-prod" ).slideToggle( "fast" );
+        $( ".edit-activate-prod" ).slideToggle( "fast" );
+    });
     
+    $( "#cancel-activate-products" ).click(function() {
+        $( "#activate-products" ).trigger( "click" );
+    });
+
+    $( "#deactivate-products" ).click(function() {
+        $( ".current-deactivate-prod" ).slideToggle( "fast" );
+        $( ".edit-deactivate-prod" ).slideToggle( "fast" );
+    });
+    
+    $( "#cancel-deactivate-products" ).click(function() {
+        $( "#deactivate-products" ).trigger( "click" );
+    });
+
+    $( "#delete-products" ).click(function() {
+        $( ".current-delete-prod" ).slideToggle( "fast" );
+        $( ".edit-delete-prod" ).slideToggle( "fast" );
+    });
+    
+    $( "#cancel-delete-products" ).click(function() {
+        $( "#delete-products" ).trigger( "click" );
+    });
 }(jQuery));
 
 
