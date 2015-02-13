@@ -109,6 +109,10 @@ class MobileNotification
         }
     }
 
+    /**
+     * Store sms data to queue table.
+     * @return boolean
+     */
     public function queueSMS()
     {
         if(empty($this->mobileNum) || empty($this->msg)){
