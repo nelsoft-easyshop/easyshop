@@ -250,10 +250,16 @@ class ApiFormatter
             }
 
             $shipmentDetails = [
-                'min' => min($shipmentPriceArray),
-                'max' => max($shipmentPriceArray)
+                'min' => empty($shipmentPriceArray) ? 0 : min($shipmentPriceArray),
+                'max' => empty($shipmentPriceArray) ? 0 : max($shipmentPriceArray)
             ];
-        } 
+        }
+        else{
+            $shipmentDetails = [
+                'min' => 0,
+                'max' => 0
+            ];
+        }
 
         return [
             'productDetails' => $productDetails,
