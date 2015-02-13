@@ -2,7 +2,8 @@
 $config = Array(
             'api' => "dgsMQ8q77hewW766aqxK",
             'from' => 'Easyshop.ph',
-            'outbound_endpoint' => "http://api.semaphore.co/api/sms"
+            'outbound_endpoint' => "http://api.semaphore.co/api/sms",
+            'queue_type' => 2
         );
 
 return $config;
