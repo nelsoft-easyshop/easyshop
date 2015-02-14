@@ -32,6 +32,8 @@ class Login extends MY_Controller
      */
     public function index() 
     {
+        $this->load->config('officeoperation', true);
+        
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
             'title' => 'Login | Easyshop.ph',
@@ -49,7 +51,14 @@ class Login extends MY_Controller
                                              ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::GOOGLE,
                                                            $googleScope['permission_to_access']);
         $loginData = [];
-
+        $bodyData['officeContactNo'] = $this->config->item('contactno', 'officeoperation');
+        $daysInWeek = $this->config->item('dayRange', 'officeoperation');
+        $firstDayOfWeek = date('D', strtotime("Sunday + ".$daysInWeek[0]." days"));
+        $lastDayOfWeek = date('D', strtotime("Sunday + ".$daysInWeek[1]." days"));
+        $bodyData['dayRange'] = $firstDayOfWeek.' to '.$lastDayOfWeek;
+        $hoursInDay = $this->config->item('hourRange', 'officeoperation');
+        $bodyData['hourRange'] = date('h:i A', strtotime($hoursInDay[0])).' to '.date('h:i A', strtotime($hoursInDay[1]));
+  
         if($this->input->post('login_form')){
             if($this->form_validation->run('login_form')){
                 $uname = $this->input->post('login_username');

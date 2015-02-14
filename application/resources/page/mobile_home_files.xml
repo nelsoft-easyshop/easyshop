@@ -128,4 +128,12 @@
         <type>show product list </type>
     </actionLists>
 
+    <themeLists>
+        <value>theme 1</value>
+        <value>theme 2</value>
+        <value>theme 3</value>
+    </themeLists>    
+
+
+
 </map>

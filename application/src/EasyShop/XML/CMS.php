@@ -12,6 +12,7 @@ class CMS
 
     const NODE_TYPE_PRODUCT = "product";
 
+
     /**
      * The xml resource getter
      *
@@ -473,6 +474,17 @@ $string = '<typeNode>
                     return false;
             }        
         }        
+        else if($nodeName == "boxContent") {
+
+            $referred = "/map/section[".$index."]/boxContent[".$subIndex."]"; 
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+                $dom->parentNode->removeChild($dom);
+                return $doc->asXml($file);
+            }
+
+        }        
         else if($nodeName == "categorySection") {
 
             $referred = "/map/categorySection[".$index."]/sub[".$subIndex."]"; 
@@ -889,9 +901,9 @@ $string = '<typeNode>
     {
         $homeXmlFile = (!$isTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
-        
+
         $homePageData['categorySection'] = [];
-        
+
         if(isset($xmlContent['categorySection']['categorySlug'])){
             $temporary = $xmlContent['categorySection'];
             $xmlContent['categorySection'] = array();
@@ -913,30 +925,33 @@ $string = '<typeNode>
             }   
             $sectionData['subHeaders'] = $categorySection['sub'];
             
-            if(isset($categorySection['productPanel']['slug'])){
-                $productPanelTemporary = $categorySection['productPanel'];
-                $categorySection['productPanel'] = [ $productPanelTemporary ];
-            }   
-
             $sectionData['products'] = [];
-            if(!isset($categorySection['productPanel'])){
-                $categorySection['productPanel'] = array();
+            foreach ($categorySection['sub'] as $subCategory) {
+
+                if (!isset($subCategory['productSlugs']) || !$subCategory['productSlugs']) {
+                    $subCategory['productSlugs'] = [];
+                }  
+                if(!is_array($subCategory['productSlugs'] )){
+                    $subCategory['productSlugs'] = [ $subCategory['productSlugs'] ];
+                }
+
+                foreach ($subCategory['productSlugs'] as $idx => $xmlProductData) {
+                    $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                        ->findOneBy(['slug' => $xmlProductData]);
+                    if ($product) {
+                        $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
+                        $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                    ->getSecondaryImage($product->getIdProduct());
+                        $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
+                        $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
+                    }
+                }
+                break;
             }
 
-            foreach($categorySection['productPanel'] as $idx => $xmlProductData){
-                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $xmlProductData['slug']]);
-                if($product){
-                    $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
-                    $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                ->getSecondaryImage($product->getIdProduct());
-                    $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
-                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
-                }
-            }
-            array_push($homePageData['categorySection'], $sectionData);
+            $homePageData['categorySection'][] = $sectionData;
         }
-        
+
         $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
        
         if(isset($homePageData['adSection']['img'])){
@@ -944,9 +959,11 @@ $string = '<typeNode>
             $homePageData['adSection'] = [ $temporaryAdSection ] ;
         }
 
-        $sliderTemplates = array();
-        foreach($xmlContent['sliderTemplate']['template'] as $template){
-            array_push($sliderTemplates, $template['templateName']);
+        $sliderTemplates = [];
+        if (isset($xmlContent['sliderTemplate']['template'])) {
+            foreach($xmlContent['sliderTemplate']['template'] as $template){
+                $sliderTemplates[] = $template['templateName'];
+            }
         }
 
         $homePageData['slider'] = isset($xmlContent['sliderSection']['slide']) ? $xmlContent['sliderSection']['slide'] : [];     
@@ -1067,8 +1084,23 @@ $string = '<typeNode>
         ]; 
 
         $productSections[] = $sectionImages;
+
+
+        if(!isset($pageContent['section'][0])){
+            $temp = $pageContent['section'];
+            $pageContent['section'] = [];
+            $pageContent['section'][] = $temp;
+        }
+
         foreach ($pageContent['section'] as $value) {
             $productArray = []; 
+
+            if(!isset($value['boxContent'][0])){
+                $temp = $value['boxContent'];
+                $value['boxContent'] = [];
+                $value['boxContent'][] = $temp;
+            }
+
             foreach ($value['boxContent'] as $valueLevel2) {
 
                 $slug = isset($valueLevel2['value']) ? $valueLevel2['value'] : ""; 
@@ -1088,7 +1120,7 @@ $string = '<typeNode>
                         $product = $this->productManager->getProductDetails($product->getIdProduct());
 
                         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                          ->getDefaultImage($product->getIdProduct());
+                                                 ->getDefaultImage($product->getIdProduct());
             
                         $directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
                         $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
@@ -1181,6 +1213,7 @@ $string = '<typeNode>
     {  
         $categoryXmlFile = $this->xmlResourceGetter->getCategoryXmlFile();
         $categoryXmlObjects = $this->xmlResourceGetter->getXMlContent($categoryXmlFile, $categorySlug, 'category'); 
+
         $categoryXmlArray = json_decode(json_encode((array) $categoryXmlObjects), 1);
 
         if(isset($categoryXmlArray[0])  && $categoryXmlArray[0] === false){
@@ -1213,6 +1246,73 @@ $string = '<typeNode>
         }
         
         return $categoryXmlArray;
+    }
+    
+    /**
+     * Retrieves the featured products
+     *
+     * @param integer $memberId
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getFeaturedProducts($memberId)
+    {
+        $followedSellerIds = [];
+        $miscellaneousXmlFile = $this->xmlResourceGetter->getMiscellaneousXmlFile();
+        
+        $usersBeingFollowed = $this->em->getRepository('\EasyShop\Entities\EsVendorSubscribe')
+                                       ->getUserFollowing($memberId);
+        foreach($usersBeingFollowed['following'] as $userBeingFollowed){
+            $followedSellerIds[] = $userBeingFollowed->getMember()->getIdMember();
+        }
+
+        $easyshopId = trim($this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile, 'easyshop-member-id', 'select'));
+        $easyshopId = empty($easyshopId) ? [] :  [ $easyshopId ];
+        $partnerIds = trim($this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile, 'partners-member-id', 'select'));
+        $partnerIds = empty($partnerIds) ? [] : explode(',', $partnerIds);
+        $followedSellerIds = array_merge($followedSellerIds, $easyshopId);
+        $followedSellerIds = array_merge($followedSellerIds, $partnerIds);
+        $followedSellerIds = array_map('intval', $followedSellerIds);
+        $followedSellerIds = array_unique($followedSellerIds);
+
+        $products = $this->em->getRepository('\EasyShop\Entities\EsProduct')
+                             ->getRandomProductsFromUsers($followedSellerIds);
+
+        $featuredProductSlugs = [];        
+        foreach($products as $index => $product){
+            $featuredProductSection['products'][$index]['product'] =  $this->productManager->getProductDetails($product);
+            $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                        ->getSecondaryImage($product->getIdProduct());
+            $featuredProductSection['products'][$index]['productSecondaryImage'] = $secondaryImage;
+            $featuredProductSection['products'][$index]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
+            $featuredProductSlugs[] = $product->getSlug();
+        }
+
+        $featuredProductSection['subHeaders'] = [];
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $featuredProductSlugs,
+            'text' => 'Followed Sellers',
+        ];
+
+        $miscellaneousFileContents = $this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile); 
+        $promoProductSlugs = [];
+        foreach($miscellaneousFileContents['feedPromoItems']['product'] as $promoProduct){
+            $promoProductSlugs[] = $promoProduct['slug']; 
+        }
+
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $promoProductSlugs,
+            'text' => 'Promos',
+        ];
+
+        $newProductSlugs = $this->em->getRepository('\EasyShop\Entities\EsProduct')
+                                    ->getNewestProductSlugs();
+
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $newProductSlugs,
+            'text' => 'New Products',
+        ];
+
+        return $featuredProductSection;
     }
 
 }

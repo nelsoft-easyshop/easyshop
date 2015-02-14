@@ -79,7 +79,7 @@ class MessageController extends MY_Controller
 
         if (!$receiverEntity) {
             $result['success'] = 0;
-            $result['errorMessage'] = "The user " . html_escape($storeName) . ' does not exist';
+            $result['errorMessage'] = "The store name " . html_escape($storeName) . ' does not exist';
         }
         else if ( (int) $this->userId === (int) $receiverEntity[0]->getIdMember() ) {
             $result['success'] = 0;

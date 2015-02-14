@@ -1058,23 +1058,6 @@ function ReplaceNumberWithCommas(thisnumber){
     return n.join(".");
 }
 
-function validateRedTextBox(idclass)
-{
-  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-    "box-shadow": "0px 0px 2px 2px #FF0000"}).addClass('my_err');
-} 
-
-function validateWhiteTextBox(idclass)
-{/*
-  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-    "box-shadow": "0px 0px 2px 2px #FFFFFF"}).removeClass('my_err');*/
-    $(idclass).css({"-webkit-box-shadow": "none",
-        "-moz-box-shadow": "none",
-        "box-shadow": "none"}).removeClass('my_err');
-};
-
 /**
  * Check if the event keycode is number key
  * @param  {mixed}  evt

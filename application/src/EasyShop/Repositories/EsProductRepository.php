@@ -1104,6 +1104,134 @@ class EsProductRepository extends EntityRepository
 
         return $result;
     }
+    
+    /**
+     * Get random products from different users
+     *
+     * @param integer[] $memberIdArray
+     * @param integer $limit
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getRandomProductsFromUsers($memberIdArray, $limit = 10)
+    {
+        if(is_int($memberIdArray)){
+            $memberIdArray = [ $memberIdArray ];
+        }
+        
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('id_product', 'id_product');
+        $query = $em->createNativeQuery("
+            
+            SELECT * FROM (
+                SELECT 
+                    es_product.id_product 
+                FROM 
+                    es_product 
+                INNER JOIN
+                    es_member ON es_member.is_banned = :notBanned AND 
+                                es_member.is_active = :active AND  
+                                es_member.id_member = es_product.member_id
+                WHERE 
+                    es_product.member_id IN (:member_ids) AND 
+                    es_product.is_draft != :draft AND 
+                    es_product.is_delete = :activeProduct
+                ORDER BY 
+                    es_product.lastmodifieddate DESC
+                ) as allProducts
+            ORDER BY RAND() LIMIT :limit
+        ", $rsm);
+        $query->setParameter('member_ids', $memberIdArray);
+        $query->setParameter('limit', $limit);
+        $query->setParameter('notBanned', \EasyShop\Entities\EsMember::NOT_BANNED);
+        $query->setParameter('active', \EasyShop\Entities\EsMember::DEFAULT_ACTIVE);
+        $query->setParameter('draft', \EasyShop\Entities\EsProduct::DRAFT);
+        $query->setParameter('activeProduct', \EasyShop\Entities\EsProduct::ACTIVE);
+        $results = $query->execute();
+        $productIds = [];
+        
+        foreach($results as $result){
+            $productIds[] = $result['id_product'];
+        }
+        
+        $qb = $this->_em->createQueryBuilder();
+        $product = $qb->select('p')
+                      ->from('EasyShop\Entities\EsProduct','p') 
+                      ->where($qb->expr()->in('p.idProduct', $productIds) ) 
+                      ->getQuery()
+                      ->getResult();
+
+        return $product;
+    }
+    
+    /**
+     * Get newest product slugs
+     *
+     * @param integer $limit
+     * @return string[]
+     */
+    public function getNewestProductSlugs($limit = 10)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('slug', 'slug');
+        $query = $em->createNativeQuery("
+            SELECT 
+                es_product.slug as slug
+            FROM 
+                es_product 
+            INNER JOIN
+                es_member on es_member.id_member = es_product.member_id AND 
+                es_member.is_active = :activeMember AND 
+                es_member.is_banned = :notBanned
+            WHERE
+                es_product.is_delete = :activeProduct AND
+                es_product.is_draft != :draft
+            ORDER BY
+                es_product.createddate DESC
+            LIMIT :limit
+        ", $rsm);
+        $query->setParameter('limit', $limit);
+        $query->setParameter('notBanned', \EasyShop\Entities\EsMember::NOT_BANNED);
+        $query->setParameter('activeMember', \EasyShop\Entities\EsMember::DEFAULT_ACTIVE);
+        $query->setParameter('draft', \EasyShop\Entities\EsProduct::DRAFT);
+        $query->setParameter('activeProduct', \EasyShop\Entities\EsProduct::ACTIVE);
+        $results = $query->execute();
+        
+        $flattenedResults = [];
+        foreach($results as $result){
+            $flattenedResults[] = $result['slug'];
+        }
+        
+        return $flattenedResults;
+    }
+    
+    /**
+     * Get multiple products by slug
+     *
+     * @param string[] $slugs
+     * @retrun EasyShop\Entities\EsProduct[]
+     */
+    public function getMultipleProductsBySlugs($slugs)
+    {
+        if(!is_array($slugs)){
+            return false;
+        }
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $products = $queryBuilder->select('p')
+                                 ->from('EasyShop\Entities\EsProduct','p') 
+                                 ->where(
+                                        $queryBuilder->expr()->in('p.slug', $slugs)
+                                    ) 
+                                 ->getQuery()
+                                 ->getResult();
+
+        return $products;    
+    }
+    
 }
 
 
