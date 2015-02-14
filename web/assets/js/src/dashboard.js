@@ -295,12 +295,16 @@
             var $filterInput;
             var $requestType;
             var $container;
-            if(id == "#deleted-items" || id == "#draft-items"){ 
-                if(id == "#deleted-items"){
+            
+            if(id === "#deleted-items" || id === "#draft-items" || id === "#active-items"){ 
+                if(id === "#deleted-items"){
                     $button = $("#button-deleted-item");
                 }
-                else if(id == "#draft-items"){
+                else if(id === "#draft-items"){
                     $button = $("#button-draft-item");
+                }                
+                else if(id === "#active-items"){
+                    $button = $("#button-active-item");
                 }
                 if($button.hasClass('can-request')){
                     $parentContainer = $(id);
@@ -309,7 +313,6 @@
                     $requestType = $parentContainer.find('.request-type').val();
                     $container = $parentContainer.find('.container-id').val();
                     $button.removeClass('can-request');
-
                     isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
                 }
             }
@@ -430,6 +433,15 @@
                         });   
                         var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
                         $("#hidden-active-container-" + $filterInput).append($appendString);
+                        
+                        $button = $("#button-deleted-item");
+                        if(!$button.hasClass('can-request')){
+                            $button.addClass('can-request');
+                        }
+                        $('#hidden-deleted-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        
                     }
                     else{
                         alert($response.message);
@@ -523,6 +535,16 @@
                         });   
                         var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
                         $("#hidden-deleted-container-" + $filterInput).append($appendString);
+                                          
+                        $button = $("#button-active-item");
+                        if(!$button.hasClass('can-request')){
+                            $button.addClass('can-request');
+                        }
+                        $('#hidden-active-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        
+                        
                     }
                     else{
                         alert($response.message);
