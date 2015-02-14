@@ -1262,9 +1262,10 @@ $string = '<typeNode>
         $usersBeingFollowed = $this->em->getRepository('\EasyShop\Entities\EsVendorSubscribe')
                                        ->getUserFollowing($memberId);
         foreach($usersBeingFollowed['following'] as $userBeingFollowed){
-            $followedSellerIds[] = $userBeingFollowed->getMember()->getIdMember();
+            $followedSellerIds[] = $userBeingFollowed->getVendor()->getIdMember();
+          
         }
-
+        
         $easyshopId = trim($this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile, 'easyshop-member-id', 'select'));
         $easyshopId = empty($easyshopId) ? [] :  [ $easyshopId ];
         $partnerIds = trim($this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile, 'partners-member-id', 'select'));
