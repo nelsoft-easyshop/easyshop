@@ -192,8 +192,9 @@
             </ul>
         </div>
         </div>
+        
         <div class="product-items">
-            <div id="active-items"> 
+            <div id="active-items" class="dashboard-product-container"> 
                 <?php if($activeProductCount > 0): ?>
                     <div class="row">
                         <div class="col-xs-6">
@@ -229,7 +230,7 @@
             </div>
             
 
-            <div id="deleted-items"> 
+            <div id="deleted-items" class="dashboard-product-container" > 
                 <?php if($deletedProductCount > 0): ?>
                     <div class="row">
                         <div class="col-xs-6">
@@ -262,7 +263,7 @@
                 <?php endif;?>
             </div>
             
-            <div id="draft-items"> 
+            <div id="draft-items" class="dashboard-product-container"> 
                 <?php if($draftedProductCount > 0): ?>
                     <div class="row">
                         <div class="col-xs-6">
