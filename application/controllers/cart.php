@@ -75,6 +75,7 @@ class Cart extends MY_Controller
 
     /**
      * Action for adding an item into the cart
+     * Promo cannot be added via the express add button
      *
      * @return mixed
      */
@@ -82,7 +83,17 @@ class Cart extends MY_Controller
     {
         $productId = $this->input->post('productId');
         $memberId = $this->session->userdata('member_id');
+        
+        $isLoggedIn = $this->session->userdata('usersession') ? true : false;
+        
+        $product = $this->serviceContainer['entity_manager']
+                        ->find('EasyShop\Entities\EsProduct', $productId);
+        
         if($this->input->post('express')){
+            if($product->getIsPromote()){
+                print json_encode(['isSuccessful' => false, 'isLoggedIn' => $isLoggedIn]);
+                exit();
+            }
             $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
             $options = array();
             foreach($defaultAttributes as $attribute){
@@ -94,15 +105,11 @@ class Cart extends MY_Controller
             $options = $this->input->post('options') ? $this->input->post('options') : array();
             $quantity = $this->input->post('quantity');
         }
-        
-        $product = $this->serviceContainer['entity_manager']
-                        ->find('EasyShop\Entities\EsProduct', $productId);
+
         $isSuccesful = false;
         if($product && (int)$product->getMember()->getIdMember() !== (int)$memberId){
             $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
         }
-
-        $isLoggedIn = $this->session->userdata('usersession') ? true : false;
 
         print json_encode(['isSuccessful' => $isSuccesful, 'isLoggedIn' => $isLoggedIn]);
     }
