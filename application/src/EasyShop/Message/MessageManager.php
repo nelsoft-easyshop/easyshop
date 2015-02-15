@@ -113,7 +113,7 @@ class MessageManager {
         $result['unread_msgs_count'] = $unreadMsgCount;
         foreach ($resultMessageContainer as $conversation) {
             $unreadConversationCount = 0;
-            foreach($conversation as $message) {
+            foreach($conversation as $key => $message) {
                 $delete = (int) $message['is_delete'];
                 $status = $message['status'];
                 $isOpened = (bool) $message['opened'];
@@ -124,12 +124,14 @@ class MessageManager {
                 }
                 else if ( ( $status === EsMessages::MESSAGE_RECEIVER &&
                     ( $delete === (int) EsMessages::MESSAGE_NOT_DELETED ||
-                        $delete === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) ) && !$isOpened
+                        $delete === (int) EsMessages::MESSAGE_DELETED_BY_SENDER ) )
                 ) {
-                    $unreadConversationCount++;
+                    if (!$isOpened) {
+                        $unreadConversationCount++;
+                    }
                 }
                 else {
-                    unset($message);
+                    unset($conversation[$key]);
                 }
 
                 $first_key = reset($conversation)['id_msg'];
@@ -140,12 +142,11 @@ class MessageManager {
 
         if ($getUnreadMessages) {
             foreach ($result['messages'] as $conversation) {
-                foreach ($conversation as $message) {
-                    if (
-                        ( ( isset($message['name']) && (int) $message['to_id'] === $userId ) && $message['opened'] ) ||
+                foreach ($conversation as $key => $message) {
+                    if (( ( isset($message['name']) && (int) $message['to_id'] === $userId ) && $message['opened'] ) ||
                         ($message['status'] === EsMessages::MESSAGE_SENDER && isset($message['name']) )
                     ) {
-                        unset($conversation);
+                        unset($result['messages'][$key]);
                     }
                 }
             }

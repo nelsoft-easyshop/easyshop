@@ -295,12 +295,16 @@
             var $filterInput;
             var $requestType;
             var $container;
-            if(id == "#deleted-items" || id == "#draft-items"){ 
-                if(id == "#deleted-items"){
+            
+            if(id === "#deleted-items" || id === "#draft-items" || id === "#active-items"){ 
+                if(id === "#deleted-items"){
                     $button = $("#button-deleted-item");
                 }
-                else if(id == "#draft-items"){
+                else if(id === "#draft-items"){
                     $button = $("#button-draft-item");
+                }                
+                else if(id === "#active-items"){
+                    $button = $("#button-active-item");
                 }
                 if($button.hasClass('can-request')){
                     $parentContainer = $(id);
@@ -309,7 +313,6 @@
                     $requestType = $parentContainer.find('.request-type').val();
                     $container = $parentContainer.find('.container-id').val();
                     $button.removeClass('can-request');
-
                     isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
                 }
             }
@@ -403,16 +406,42 @@
             var $productId = $this.data('id');
             var $urlRequest = $("#request-url-soft-delete").val();
             var $deletedCount = parseInt($(".deleted-span-circle").html());
+
+            var $parentContainer = $this.closest('.dashboard-product-container');
+            var $currentPage = $parentContainer.find('.pagination-section li.active').data('page');
+            var $textInput = $parentContainer.find('.search-field').val();
+            var $filterInput = $parentContainer.find('.search-filter').val();
+            var $requestType = $parentContainer.find('.request-type').val();
+            var $container = $parentContainer.find('.container-id').val();
+
             var $ajaxRequest = $.ajax({
                 type: "get",
                 url: $urlRequest,
                 data: {
-                        product_id:$productId
-                    },
-                success: function(d){ 
-                    var $response = $.parseJSON(d); 
+                    product_id: $productId,
+                    page: $currentPage,
+                    search_string: $textInput,
+                    sort: $filterInput,
+                    request: $requestType
+                },
+                success: function(requestResponse){ 
+                    var $response = $.parseJSON(requestResponse); 
                     if($response.isSuccess){
-                        window.location = "/me";
+                        $('#'+$container).html($response.html);
+                        $('#hidden-active-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
+                        $("#hidden-active-container-" + $filterInput).append($appendString);
+                        
+                        $button = $("#button-deleted-item");
+                        if(!$button.hasClass('can-request')){
+                            $button.addClass('can-request');
+                        }
+                        $('#hidden-deleted-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        
                     }
                     else{
                         alert($response.message);
@@ -428,16 +457,42 @@
             var $this = $(this);
             var $productId = $this.data('id');
             var $urlRequest = $("#request-url-hard-delete").val();
+            
+            var $parentContainer = $this.closest('.dashboard-product-container');
+            var $currentPage = $parentContainer.find('.pagination-section li.active').data('page');
+            var $textInput = $parentContainer.find('.search-field').val();
+            var $filterInput = $parentContainer.find('.search-filter').val();
+            var $requestType = $parentContainer.find('.request-type').val();
+            var $container = $parentContainer.find('.container-id').val();
+
+            
             var $ajaxRequest = $.ajax({
                 type: "get",
                 url: $urlRequest,
                 data: {
-                        product_id:$productId,
+                        product_id: $productId,
+                        page: $currentPage,
+                        search_string: $textInput,
+                        sort: $filterInput,
+                        request: $requestType
                     },
                 success: function(d){ 
                     var $response = $.parseJSON(d); 
                     if($response.isSuccess){
-                        window.location = "/me";
+                        $('#'+$container).html($response.html);
+                        var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
+                        if($container == "deleted-product-container"){
+                            $('#hidden-deleted-container > div').each(function(){
+                                $(this).html('');
+                            });   
+                            $("#hidden-deleted-container-" + $filterInput).append($appendString);
+                        }
+                        else if($container == "drafted-product-container"){
+                            $('#hidden-drafted-container > div').each(function(){
+                                $(this).html('');
+                            });   
+                            $("#hidden-drafted-container-" + $filterInput).append($appendString);
+                        }
                     }
                     else{
                         alert($response.message);
@@ -453,16 +508,43 @@
             var $this = $(this);
             var $productId = $this.data('id');
             var $urlRequest = $("#request-url-resotre").val();
+        
+            var $parentContainer = $this.closest('.dashboard-product-container');
+            var $currentPage = $parentContainer.find('.pagination-section li.active').data('page');
+            var $textInput = $parentContainer.find('.search-field').val();
+            var $filterInput = $parentContainer.find('.search-filter').val();
+            var $requestType = $parentContainer.find('.request-type').val();
+            var $container = $parentContainer.find('.container-id').val();
+            
             var $ajaxRequest = $.ajax({
                 type: "get",
                 url: $urlRequest,
                 data: {
-                        product_id:$productId,
+                        product_id: $productId,
+                        page: $currentPage,
+                        search_string: $textInput,
+                        sort: $filterInput,
+                        request: $requestType
                     },
                 success: function(d){ 
                     var $response = $.parseJSON(d); 
                     if($response.isSuccess){
-                        window.location = "/me";
+                        $('#'+$container).html($response.html);
+                        $('#hidden-deleted-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
+                        $("#hidden-deleted-container-" + $filterInput).append($appendString);
+                                          
+                        $button = $("#button-active-item");
+                        if(!$button.hasClass('can-request')){
+                            $button.addClass('can-request');
+                        }
+                        $('#hidden-active-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        
+                        
                     }
                     else{
                         alert($response.message);
@@ -1283,7 +1365,7 @@
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
                     if (serverResponse.isTransactionComplete === true) {
-                        $('.'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                        $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
                         $('.wipeOut').fadeOut(5000);
                     }
                     else {

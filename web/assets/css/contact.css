@@ -743,4 +743,12 @@ section {
     .col-rate-mobile:last-child .span-rate{
         padding-left: 16px !important;
     }
+
+    .span-rate-c{
+        font-size: 11px;
+    }
+
+    .star-feed{
+        font-size: 16px;
+    }
 }

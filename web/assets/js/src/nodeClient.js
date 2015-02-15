@@ -24,7 +24,7 @@
             socket.on('message opened', function( data ) {
                 updateMessageCountIcons();
             });
-            
+
             setAccountOnline($chatClient.data('store-name'));
 
             $('.logoutClient').on('click', function(e) {
