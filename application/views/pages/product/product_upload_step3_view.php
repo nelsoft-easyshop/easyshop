@@ -157,7 +157,7 @@
                                                 <option value="0">Please select a bank</option>
                                                 <?php foreach($bank_list as $x): ?>
                                                     <?php if(isset($first_accnt['bank_id'])): ?>
-                                                        <option value="<?php echo $x['id_bank'];?>" <?php echo (intval($x['id_bank'],10) === intval($first_accnt['bank_id'],10))?'selected':'';?>><?php echo  html_escape($x['bank_name']); ?>
+                                                        <option value="<?php echo $x['id_bank'];?>" <?php echo ((int)$x['id_bank'] === (int)$first_accnt['bank_id'] )?'selected':'';?>><?php echo  html_escape($x['bank_name']); ?>
                                                         </option>
                                                     <?php else: ?>
                                                         <option value="<?php echo $x['id_bank'];?>" ><?php echo  html_escape($x['bank_name']); ?>
@@ -242,7 +242,7 @@
                         <input class="delivery_option" type="checkbox" id="delivery" name="delivery_option[]" value="delivery" <?php echo $shipping_summary['is_delivery'] ? 'checked' : ''?>> <label for="delivery">For Delivery</label>
                     </span>
                     <span>
-                        <input class="delivery_option" type="checkbox" id="allow_cod" name="allow_cod" <?php echo (int)$product['is_cod'] === 1 ? 'checked' : ''; ?>><label for="allow_cod">Cash-on-Delivery</label>
+                        <input class="delivery_option" type="checkbox" id="allow_cod" name="allow_cod" <?php echo (bool)$product['is_cod'] ? 'checked' : ''; ?>><label for="allow_cod">Cash-on-Delivery</label>
                     </span>
                     
                     
