@@ -1388,8 +1388,7 @@ class productUpload extends MY_Controller
                           ? trim($this->input->post('ship_within'))
                           : null;
         $productId = (int) $this->input->post('prod_h_id');
-        $isAllowCod = $this->input->post('allow_cod') ? true : false;
-        
+        $isAllowCod = $this->input->post('allow_cod');
         $isMeetup = in_array("meetup", $deliveryOption);
         $isDelivery = in_array("delivery", $deliveryOption);
         $deliveryCost = trim($this->input->post('prod_delivery_cost'));
