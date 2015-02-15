@@ -81,6 +81,7 @@ class Cart extends MY_Controller
     public function doAddItem()
     {
         $productId = $this->input->post('productId');
+        $memberId = $this->session->userdata('member_id');
         if($this->input->post('express')){
             $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
             $options = array();
@@ -93,7 +94,14 @@ class Cart extends MY_Controller
             $options = $this->input->post('options') ? $this->input->post('options') : array();
             $quantity = $this->input->post('quantity');
         }
-        $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
+        
+        $product = $this->serviceContainer['entity_manager']
+                        ->find('EasyShop\Entities\EsProduct', $productId);
+        $isSuccesful = false;
+        if($product && (int)$product->getMember()->getIdMember() !== (int)$memberId){
+            $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
+        }
+
         $isLoggedIn = $this->session->userdata('usersession') ? true : false;
 
         print json_encode(['isSuccessful' => $isSuccesful, 'isLoggedIn' => $isLoggedIn]);
