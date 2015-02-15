@@ -30,7 +30,7 @@ class Home extends MY_Controller
      * @return View
      */
     public function index() 
-    {  
+    {      
         $view = $this->input->get('view') ? $this->input->get('view') : null;
         $memberId = $this->session->userdata('member_id');
         $headerData = [
