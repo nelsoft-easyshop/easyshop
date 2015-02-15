@@ -107,8 +107,11 @@ class Cart extends MY_Controller
         }
 
         $isSuccesful = false;
-        if($product && (int)$product->getMember()->getIdMember() !== (int)$memberId){
-            $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
+        if($product){
+            $seller = $product->getMember();
+            if($seller->getIdMember() !== (int)$memberId && $seller->getIsEmailVerify()){
+                $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
+            }
         }
 
         print json_encode(['isSuccessful' => $isSuccesful, 'isLoggedIn' => $isLoggedIn]);
