@@ -7,8 +7,8 @@ $config = [
             'calculation_id' => '0',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => [
-                'cdb'=>'Credit or Debit Card',
-                'paypal'=>'Paypal',
+                #'cdb'=>'Credit or Debit Card',
+                #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
             ],
@@ -24,8 +24,8 @@ $config = [
             'calculation_id' => '1',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => [
-                'cdb'=>'Credit or Debit Card',
-                'paypal'=>'Paypal',
+                #'cdb'=>'Credit or Debit Card',
+                #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
             ],
@@ -84,8 +84,8 @@ $config = [
             'calculation_id' => '2',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => [
-                'cdb'=>'Credit or Debit Card',
-                'paypal'=>'Paypal',
+                #'cdb'=>'Credit or Debit Card',
+                #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery'
             ],
@@ -101,8 +101,8 @@ $config = [
             'calculation_id' => '3',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => [
-                'cdb'=>'Credit or Debit Card',
-                'paypal'=>'Paypal',
+                #'cdb'=>'Credit or Debit Card',
+                #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery'
             ],
@@ -129,8 +129,8 @@ $config = [
             'calculation_id' => '4',
             'purchase_limit' => PHP_INT_MAX,
             'payment_method' => [
-                'cdb'=>'Credit or Debit Card',
-                'paypal'=>'Paypal',
+                #'cdb'=>'Credit or Debit Card',
+                #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery'
             ],
