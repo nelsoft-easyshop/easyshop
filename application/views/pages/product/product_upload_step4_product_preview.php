@@ -15,7 +15,7 @@
                 </h1>
                 <div>
                     By:
-                        <span class="product-profile-photo"><img src="<?php echo getAssetsDomain().'.'.$avatarImage?>"></span>
+                       <span class="product-profile-photo"><img src="<?php echo getAssetsDomain().'.'.$avatarImage?>"></span>
                        <?=html_escape($product->getMember()->getStoreName());?>
                 </div>
             </div>
