@@ -1,5 +1,5 @@
 (function ($) {
-    
+    /*
     $(document).ready(function () {
         
         var $chatClient = $('#chatClientInfo');
@@ -17,12 +17,10 @@
                 socket.emit('set account offline', storeName, function(data) {});
             };
 
-            /* Register events */
             socket.on('send message', function( data ) {
                 updateMessageCountIcons();
             });
 
-            /* Register events */
             socket.on('message opened', function( data ) {
                 updateMessageCountIcons();
             });
@@ -37,5 +35,6 @@
         }
 
     });
+    */
   
 })(jQuery);
