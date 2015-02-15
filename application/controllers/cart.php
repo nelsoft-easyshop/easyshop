@@ -109,7 +109,9 @@ class Cart extends MY_Controller
         $isSuccesful = false;
         if($product){
             $seller = $product->getMember();
-            if($seller->getIdMember() !== (int)$memberId && $seller->getIsEmailVerify()){
+            $member = $this->serviceContainer['entity_manager']
+                           ->find('EasyShop\Entities\EsMember', $memberId);
+            if($member && $seller->getIdMember() !== (int)$memberId && $member->getIsEmailVerify()){
                 $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
             }
         }
