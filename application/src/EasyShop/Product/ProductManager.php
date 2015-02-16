@@ -826,5 +826,84 @@ class ProductManager
 
         return false;
     }
+
+    /**
+     * Determines if a product is active or not
+     *
+     * @param EasyShop\Entities\EsProduct
+     * @return boolean
+     */
+    public function isProductActive($product)
+    {
+        if(!$product){
+            return false;
+        }
+
+        $member = $product->getMember();
+
+        $isNotDeleted = (int)$product->getIsDelete() === \EasyShop\Entities\EsProduct::ACTIVE;
+        $isNotDrafted = !$product->getIsDraft();
+        $isMemberNotBanned = !$member->getIsBanned();
+        $isMemberActive = $member->getIsActive();
+        
+        return $isNotDeleted && $isNotDrafted && $isMemberNotBanned && $isMemberActive;
+    }
+    
+
+    /**
+     * Get random products from different users
+     *
+     * @param integer[] $memberIdArray
+     * @param integer $limit
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getRandomProductsFromUsers($memberIdArray, $limit = 10)
+    {
+        if(is_int($memberIdArray)){
+            $memberIdArray = [ $memberIdArray ];
+        }
+
+        $productFromEachSeller = (int)($limit/count($memberIdArray));
+        $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
+
+        $productResults = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                               ->getRandomProductsFromUsers($memberIdArray, $productFromEachSeller);
+        
+        $productIds = [];
+        $memberIdsWithProducts = [];
+        
+        foreach($productResults as $result){
+            $productIds[] = $result['id_product'];
+            if(!in_array($result['member_id'], $memberIdsWithProducts)){
+                $memberIdsWithProducts[] = $result['member_id'];
+            }
+        }
+        
+        $numberOfFoundProducts = count($productResults);
+        if($numberOfFoundProducts < $limit){
+            $numberOfProductsToFill =  $limit - $numberOfFoundProducts;
+            $productFromEachSeller = (int) $numberOfProductsToFill/count($memberIdsWithProducts);
+            $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
+            $fillerProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                   ->getRandomProductsFromUsers($memberIdsWithProducts, $productFromEachSeller, $productIds);
+            foreach($fillerProducts as $fillerProduct){
+                $productIds[] = $fillerProduct['id_product'];
+            }
+        }
+        
+        if(count($productIds) > $limit){
+            $productIds = array_rand($productIds, $limit);
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $product = $qb->select('p')
+                      ->from('EasyShop\Entities\EsProduct','p') 
+                      ->where($qb->expr()->in('p.idProduct', $productIds) ) 
+                      ->getQuery()
+                      ->getResult();
+
+        return $product;
+    }
+
 }
 

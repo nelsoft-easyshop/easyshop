@@ -1,6 +1,6 @@
 (function ($) {
 
-    $(".btn-add-cart").on("click", function(){
+    $('#content').on("click", ".btn-add-cart" , function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var $button = $(this);
