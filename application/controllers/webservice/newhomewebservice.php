@@ -823,12 +823,13 @@ class NewHomeWebService extends MY_Controller
         $order = (int) $this->input->get("order");  
         $index = (int)  $this->input->get("index");  
         $subIndex = (int) $this->input->get("subIndex"); 
+        $subPanelIndex = (int) $this->input->get("subpanelindex"); 
 
-        $tempSlug = (string)  $map->categorySection[$index]->productPanel[$order]->slug;
+        $tempSlug = (string) $map->categorySection[$index]->sub[$subIndex]->productSlugs[$order];
 
-        $map->categorySection[$index]->productPanel[$order]->slug =  $map->categorySection[$index]->productPanel[$subIndex]->slug;
+        $map->categorySection[$index]->sub[$subIndex]->productSlugs[$order] = $map->categorySection[$index]->sub[$subIndex]->productSlugs[$subPanelIndex];
 
-        $map->categorySection[$index]->productPanel[$subIndex]->slug =  $tempSlug;
+        $map->categorySection[$index]->sub[$subIndex]->productSlugs[$subPanelIndex] =  $tempSlug;
     
         if($map->asXML($this->file)) {
             return $this->output
