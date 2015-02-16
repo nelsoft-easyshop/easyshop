@@ -70,6 +70,9 @@ $(document).ready(function(){
             url : url,
             data : {schoolId: schoolId, studentId: studentId, csrfname: csrftoken},
             success : function (data) {
+                if (data.isSuccessful === true) {
+                    window.location.replace('/EstudyantrepreneurSuccess');
+                }
                 alert(data.errorMsg);
             }
         });
