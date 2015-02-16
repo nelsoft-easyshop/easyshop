@@ -525,6 +525,8 @@
                 <img src="" id="imageTag">
                 <center>Move to zoom</center>
                 <div id="zoomSlider"></div>
+                <button class="rotateLeft">Rotate Left</button>
+                <button class="rotateRight">Rotate Right</button>
                 <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
                 <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
                 <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
