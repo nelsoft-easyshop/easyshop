@@ -717,7 +717,6 @@
      */    
     var requestProduct = function($page, $textInput, $filterInput, $requestType, $container, $searchByString)
     {   
-        console.log($container);
         var $urlRequest = $('#request-url').val();
         var $ajaxRequest = $.ajax({
             type: "get",
