@@ -862,8 +862,9 @@ class ProductManager
         if(is_int($memberIdArray)){
             $memberIdArray = [ $memberIdArray ];
         }
-        
+
         $productFromEachSeller = (int)($limit/count($memberIdArray));
+        $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
 
         $productResults = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                ->getRandomProductsFromUsers($memberIdArray, $productFromEachSeller);
@@ -882,11 +883,16 @@ class ProductManager
         if($numberOfFoundProducts < $limit){
             $numberOfProductsToFill =  $limit - $numberOfFoundProducts;
             $productFromEachSeller = $numberOfProductsToFill/count($memberIdsWithProducts);
+            $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
             $fillerProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                    ->getRandomProductsFromUsers($memberIdsWithProducts, $productFromEachSeller, $productIds);
             foreach($fillerProducts as $fillerProduct){
                 $productIds[] = $fillerProduct['id_product'];
             }
+        }
+        
+        if(count($productIds) > $limit){
+            $productIds = array_rand($productIds, $limit);
         }
 
         $qb = $this->em->createQueryBuilder();
