@@ -177,6 +177,7 @@ class CMS
         <sub>
             <text>'.$value.'</text>
             <target>'.$target.'</target>
+            <productSlugs> </productSlugs>
         </sub>'; 
         }           
 
