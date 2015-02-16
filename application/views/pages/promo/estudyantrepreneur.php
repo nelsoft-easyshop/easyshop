@@ -85,16 +85,78 @@
             <div class="container load-animate">
                 <div class="box">
                     <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
-                        <h3>MECHANICS</h3>
+                        <h3><b>MECHANICS</b></h3>
                         <ul>
                             <li>
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
+                                Nominations will be done per school. The Entrepreneurship Department or the department in charge of the Entrepreneurship program will provide at least three (3) student-owned business nominees together with their advisers. To be eligible to receive the EStudyantrepreneur Award, the nominee must be the owner of a small business. There are no category limitations for each business.
                             </li>
                             <li>
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
+                                All students with existing businesses are encouraged to join as long as their advisers endorse their respective businesses.
                             </li>
                             <li>
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
+                                Businesses must be registered from 2013 onwards and must be a requirement to complete their undergraduate program.
+                            </li>
+                            <li>
+                                Winners will be chosen via an online poll on the EasyShop.ph website.
+                            </li>
+                            <li>
+                                Nomination period for school level starts on <b>February 23, 2015</b>.
+                            </li>
+                            <li>
+                                There will be three winners for the nomination period.
+                            </li>
+                            <li>
+                                In case of a tie, both nominees will qualify in the in-school poll.
+                            </li>
+                            <li>
+                                Voting period for the in-school level starts on <b>March 7, 2015</b>.
+                            </li>
+                            <li>
+                                There will be one winner for the in-school voting round.
+                            </li>
+                            <li>
+                                In case of a tie, both winners will qualify for the 2015 EStudyantrepreneur poll.
+                            </li>
+                            <li>
+                                Voting period for the 2015 EStudyantrepreneur poll will start on <b>April 8, 2015</b>.
+                            </li>
+                            <li>
+                                Awarding will be on <b>June 15, 2015</b>.
+                            </li>
+                        </ul>
+                        <br>
+                        <h3><b>What’s in it for participating businesses?</b></h3>
+                        <p>
+                            EasyShop Online, Inc. will be giving this award as recognition to their businesses that will give them the advantage of having a free advertisement on the company’s website and will potentially increase their market’s awareness and eventually generate additional profit.
+                        </p>
+                        <br>
+                        <h3><b>Prizes:</b></h3>
+                        <p>
+                            School Poll Winner: Php 20,000 for the Student, Php 10,000 for the school, & Php 5,000 for the Adviser
+                        </p>
+                        <p>
+                            Overall Winner: Php 50,000 for the Student, Php 25,000 for the school, & Php 10,000 for the Adviser
+                        </p>
+                        <br>
+                        <h3><b>Terms and Conditions:</b></h3>
+                        <ul>
+                            <li>
+                                The contest is open to all Students who are endorsed by their business advisers with an existing business established on the year 2013 up to the present which is a requirement to complete their course.
+                            </li>
+                            <li>
+                                By registering to EasyShop.ph, individuals agree, warrant, and represent that all personal information provided is true, correct, and complete.
+                            </li>
+                            <li>
+                                By participating in this promo, the participant voluntarily provides information that may be used for market research.
+                            </li>
+                            <li>
+                                A participant can win in the school online poll and inter-school poll.
+                            </li>
+                            <li>
+                                Employees of EasyShop Online Inc. including their relatives up to second degree of consanguinity or affinity is disqualified from joining the promotion.
+                            </li>
+                            <li>
+                                Only residents of the Republic of the Philippines are eligible to participate in this promotion.
                             </li>
                         </ul>
                     </div>
