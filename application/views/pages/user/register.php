@@ -165,8 +165,6 @@
                                     <input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
                                     <span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
                                     <div id="username_status">
-                                        <!-- <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/check_icon.png" id="username_check" style="position: relative;display:none;vertical-align:middle"/>
-                                        <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/x_icon.png" id="username_x" style="position: relative;display:none;vertical-align:middle"/> -->
                                         <span class="username_availability"></span>
                                     </div>
                                 </span>
@@ -214,7 +212,6 @@
                                     <input type="hidden" id="emailcheck" value="">
                                     <div id="email_status">
                                         <span class="fieldstatus input-success"  id="email_check" style="display:none;"/>Email is valid</span>
-                                        <!-- <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/x_icon.png" id="email_x" style="display:none;"/> -->
                                     </div>
                                     <span class="red email_availability"></span>
                                     <span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
@@ -229,7 +226,6 @@
                                 <input type="hidden" id="mobilecheck" value="">
                                 <div id="mobile_status">
                                     <span class="fieldstatus input-success" id="mobile_check" style="display:none;"/>Mobile is valid</span>
-                                    <!-- <img class="fieldstatus" src="<?php echo getAssetsDomain()?>assets/images/x_icon.png" id="mobile_x" style="position: relative;display:none;vertical-align:middle"/> -->
                                     <span class=" red  mobile_availability"></span>
                                 </div>
                                 <span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
@@ -239,9 +235,6 @@
                         <div class="row">
                             <span class="col-xs-12">
                                 <input type="submit" class="btn btn-default-3 create-account-btn" value="SEND" name="register_form1" id="register_form1_btn" >
-                                <!-- <div style='display:inline-block; position:absolute; width:50px; overflow:hidden;'>
-                                    <img style='display:none;margin-top:5px;margin-left:5px;' src="<?php echo getAssetsDomain()?>assets/images/orange_loader_small.gif" class="img_loader_small2" id="register_form1_loadingimg"/>
-                                </div> -->
                             </span>
                         </div>
                         <div class="reg2_tc">

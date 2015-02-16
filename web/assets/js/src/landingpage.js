@@ -30,16 +30,6 @@ var ajaxStat = {};
         $('html, body').animate({ scrollTop: 200 }, 300);
         navigation.close();
     });
-
-    //$(".idTabs2").idTabs({click: tabChanged});
-    // $('#idtabs').idtabs();
-    // function select_tab(tabeName){
-    //    $('#idtabs').tabs('select', '#'+tabname);
-    // }
-    //$(".idTabs2").idTabs(true, location.hash);
-   //  if($(location.hash).length) {
-   // $(".idTabs").idTabs(true, location.hash);
-// }
 })(jQuery);
 
 
