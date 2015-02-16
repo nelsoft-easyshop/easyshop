@@ -84,7 +84,7 @@
         <section class="mechanics-section">
             <div class="container load-animate">
                 <div class="box">
-                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30 ss">
                         <p>
                             The 2014 EStudyantrepreneur Awards will give recognition to the most preferred student-owned business establishment around the Metro through online voting hosted by EasyShop.ph.
                         </p>

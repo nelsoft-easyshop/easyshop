@@ -66,9 +66,9 @@
                             <h3>See below for the current standings:</h3>
                         </div>
                     </div>
-                    <div id="failed" class="header-msg">
+                    <div id="failed" class="header-msgs">
                         <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
-                            <h3><b>Sorry, but you can only vote once per round. Please check back on the mechanics for the next round of voting.</b></h3>
+                            <h3><b>Sorry, but you can only vote once per round. Please check back on the <a href="/Estudyantrepreneur#mechanics">mechanics</a> for the next round of voting.</b></h3>
                             <h3>See below for the current standings:</h3>
                         </div>
                     </div>

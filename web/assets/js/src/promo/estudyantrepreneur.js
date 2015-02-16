@@ -1,4 +1,13 @@
 (function($) {
+$(document).ready(function(){
+
+    if (window.location.hash.substring(1) === "mechanics") {
+        $('html, body').animate({
+            scrollTop: $(".ss").offset().top
+        }, 300);
+    }
+
+});
 
     $('#ddown-school').on('change', function() {
         var $this = $(this);
