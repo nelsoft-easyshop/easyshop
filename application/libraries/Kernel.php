@@ -510,8 +510,10 @@ class Kernel
         $container['email_notification'] = function($c) use ($emailConfig){
             return new \EasyShop\Notifications\EmailNotification($emailConfig);
         };
-        $container['mobile_notification'] = function($c) use ($smsConfig){
-            return new \EasyShop\Notifications\MobileNotification($smsConfig);
+        $container['mobile_notification'] = function($c) use ($smsConfig, $container){
+            $em = $container['entity_manager']; 
+
+            return new \EasyShop\Notifications\MobileNotification($em,$smsConfig);
         };
 
         $awsConfig = require_once(APPPATH . "config/param/aws.php");
