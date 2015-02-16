@@ -349,7 +349,7 @@ $string = '<typeNode>
      *  @param int $productindex  
      *  @return boolean
      */
-    public function removeXmlNode($file,$nodeName,$index = null, $subIndex = null) 
+    public function removeXmlNode($file,$nodeName,$index = null, $subIndex = null, $subPanelIndex = null) 
     {
 
         if($nodeName == "tempHomeSlider"){
@@ -453,24 +453,17 @@ $string = '<typeNode>
             }
         }
         else if($nodeName == "categoryProductPanel") {
+            $subPanelIndex = (int) $subPanelIndex === 0 ? 1 : $subPanelIndex + 1;
+            $referred = "//categorySection[$index]/sub[$subIndex]/productSlugs[$subPanelIndex]";
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath($referred));
 
-            $referred = "/map/categorySection[".$index."]/productPanel[".$subIndex."]"; 
+            $dom = dom_import_simplexml($result[0]);
 
-            $doc = new \SimpleXMLElement(file_get_contents($file));
-            if($target = current($doc->xpath($referred))) {
-                $dom = dom_import_simplexml($target);
+            $dom->parentNode->removeChild($dom);
 
-                $dom->parentNode->removeChild($dom);
-                if($doc->asXml($file)) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
-            else {
-                    return false;
-            }        
+            return $xml->asXml($file);
+    
         }        
         else if($nodeName == "boxContent") {
 
