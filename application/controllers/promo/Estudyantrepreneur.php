@@ -36,14 +36,15 @@ class Estudyantrepreneur extends MY_Controller
 
     public function EstudyantrepreneurPromoSuccess()
     {
-        $data = $this->promoManager
-                     ->callSubclassMethod(
-                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
-                        'getSchoolWithStudentsByRound'
-                     );
+        if (!$this->input->post('studentId')) {
+            redirect('/Estudyantrepreneur', 'refresh');
+        }
+
+        $studentId = (int) trim($this->input->post('studentId'));
+        $data = $this->__vote($studentId);
         $bodyData = [
-            'schools_and_students' => $data['schools_and_students'],
-            'round' => $data['round'],
+            'currentStandings' => 1,
+            'result' => $data,
         ];
 
         $this->load->spark('decorator');
@@ -52,11 +53,12 @@ class Estudyantrepreneur extends MY_Controller
 
     /**
      * Vote for a student
-     * @Return JSON
+     * @Param $studentId
+     * @Return array
      */
-    public function vote()
+    private function __vote($studentId)
     {
-        $studentId = (int) trim($this->input->post('studentId'));
+        $studentId = (int) $studentId;
         $studentEntity = $this->em->find('EasyShop\Entities\EsStudent', $studentId);
         $memberId = $this->session->userdata('member_id');
         $isUserAlreadyVoted = $this->promoManager
@@ -74,7 +76,7 @@ class Estudyantrepreneur extends MY_Controller
 
         if ($isUserAlreadyVoted) {
             $result = [
-                'errorMsg' => 'You have already voted'
+                'errorMsg' => 'Sorry, but you can only vote once per round. Please check back on the <a href="/Estudyantrepreneur#mechanics">mechanics</a> for the next round of voting.'
             ];
         }
         elseif ($studentEntity) {
@@ -88,13 +90,13 @@ class Estudyantrepreneur extends MY_Controller
                                                 ]);
             if ($isVoteStudentSuccessful) {
                 $result = [
-                    'errorMsg' => 'You have successfully voted',
+                    'errorMsg' => '',
                     'isSuccessful' => true
                 ];
             }
         }
 
-        echo json_encode($result);
+        return $result;
     }
 
 }

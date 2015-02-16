@@ -52,6 +52,7 @@
 
         </section>
         <section>
+            <?php echo form_open('/EstudyantrepreneurSuccess', ['id' => 'frm-vote']); ?>
             <div class="container load-animate">
                 <div class="text-center dropdown-school-list">
                     <select id="ddown-school">
@@ -77,8 +78,12 @@
                     </div>
                 </div>
                 <div class="vote-btn mrgn-top-35">
+                    <input type="hidden" name="studentId" id="stud-id" value="">
+                    <input type="hidden" name="schoolId" id="school-id" value="">
                     <button id="btn-vote" class="btn btn-primary"> VOTE </button>
                 </div>
+            </div>
+            <?php echo form_close();?>
         </section>
 
         <section class="mechanics-section">
