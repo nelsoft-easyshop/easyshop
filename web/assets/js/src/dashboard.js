@@ -353,7 +353,7 @@
     $("#active-items, #deleted-items, #draft-items").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page');
-        var $parentContainer = $this.parent().parent().parent().parent().parent();
+        var $parentContainer = $this.closest('.dashboard-product-container');
         var $textInput = $parentContainer.find('.search-field').val();
         var $filterInput = $parentContainer.find('.search-filter').val();
         var $requestType = $parentContainer.find('.request-type').val();
@@ -364,7 +364,7 @@
     $(document.body).on('change','.search-filter',function () {
         var $this = $(this);
         var $page = 1;
-        var $parentContainer = $this.parent().parent().parent();
+        var $parentContainer = $this.closest('.dashboard-product-container');
         var $textInput = $parentContainer.find('.search-field').val();
         var $filterInput = $this.val();
         var $requestType = $parentContainer.find('.request-type').val();
@@ -377,7 +377,7 @@
         if(event.keyCode == 13){
             var $this = $(this);
             var $page = 1;
-            var $parentContainer = $this.parent().parent().parent();
+            var $parentContainer = $this.closest('.dashboard-product-container');
             var $textInput = $this.val();
             var $filterInput = $parentContainer.find('.search-filter').val();
             var $requestType = $parentContainer.find('.request-type').val();
@@ -391,7 +391,7 @@
         var $this = $(this);
         var $textInput = $this.val();
         var $page = 1;
-        var $parentContainer = $this.parent().parent().parent();
+        var $parentContainer = $this.closest('.dashboard-product-container');
         var $filterInput = $parentContainer.find('.search-filter').val();
         var $requestType = $parentContainer.find('.request-type').val();
         var $container = $parentContainer.find('.container-id').val(); 
@@ -437,6 +437,7 @@
                         activeCounterCircle.html(numberOfActive);
 
                         $('#'+$container).html($response.html);
+
                         $('#hidden-active-container > div').each(function(){
                             $(this).html('');
                         });   
@@ -451,6 +452,11 @@
                             $(this).html('');
                         });   
                         
+                        $('#deleted-items .no-items').hide();
+                        if(numberOfActive === 0){
+                            $parentContainer.find('.no-items').show();
+                            $parentContainer.find('.with-items').hide();
+                        }
                     }
                     else{
                         alert($response.message);
@@ -489,19 +495,6 @@
                     var $response = $.parseJSON(d); 
                     if($response.isSuccess){
 
-                        if($requestType === 'deleted'){
-                            var deletedCounterCircle = $('#button-deleted-item .circle-total');
-                            var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10) - 1;
-                            numberOfDeleted = numberOfDeleted < 0 ? 0 : numberOfDeleted;
-                            deletedCounterCircle.html(numberOfDeleted);
-                        }
-                        else if($requestType === 'drafted'){
-                            var draftCounterCircle = $('#button-draft-item .circle-total');
-                            var numberOfDrafts = parseInt( draftCounterCircle.html(), 10) - 1;
-                            numberOfDrafts = numberOfDrafts < 0 ? 0 : numberOfDrafts;
-                            draftCounterCircle.html(numberOfDrafts);
-                        }
-                        
                         $('#'+$container).html($response.html);
                         var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
                         if($container == "deleted-product-container"){
@@ -509,12 +502,28 @@
                                 $(this).html('');
                             });   
                             $("#hidden-deleted-container-" + $filterInput).append($appendString);
+                            var deletedCounterCircle = $('#button-deleted-item .circle-total');
+                            var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10) - 1;
+                            numberOfDeleted = numberOfDeleted < 0 ? 0 : numberOfDeleted;
+                            deletedCounterCircle.html(numberOfDeleted);
+                            if(numberOfDeleted === 0){
+                                $parentContainer.find('.no-items').show();
+                                $parentContainer.find('.with-items').hide();
+                            }
                         }
                         else if($container == "drafted-product-container"){
                             $('#hidden-drafted-container > div').each(function(){
                                 $(this).html('');
                             });   
                             $("#hidden-drafted-container-" + $filterInput).append($appendString);
+                            var draftCounterCircle = $('#button-draft-item .circle-total');
+                            var numberOfDrafts = parseInt( draftCounterCircle.html(), 10) - 1;
+                            numberOfDrafts = numberOfDrafts < 0 ? 0 : numberOfDrafts;
+                            draftCounterCircle.html(numberOfDrafts);
+                            if(numberOfDrafts === 0){
+                                $parentContainer.find('.no-items').show();
+                                $parentContainer.find('.with-items').hide();
+                            }
                         }
                     }
                     else{
@@ -576,7 +585,11 @@
                             $(this).html('');
                         });   
                         
-                        
+                        $('active-items .no-items').hide();
+                        if(numberOfDeleted === 0){
+                            $parentContainer.find('.no-items').show();
+                            $parentContainer.find('.with-items').hide();
+                        }
                     }
                     else{
                         alert($response.message);
@@ -704,6 +717,7 @@
      */    
     var requestProduct = function($page, $textInput, $filterInput, $requestType, $container, $searchByString)
     {   
+        console.log($container);
         var $urlRequest = $('#request-url').val();
         var $ajaxRequest = $.ajax({
             type: "get",
@@ -720,7 +734,11 @@
             success: function(requestResponse){ 
                 var $response = $.parseJSON(requestResponse);
                 var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
+
                 $('#'+$container).html($response.html);
+                var $parentContainer =  $('#'+$container).closest('.dashboard-product-container');
+                $parentContainer.find('.no-items').hide();
+                $parentContainer.find('.with-items').show();
 
                 if( !$searchByString ){
                     if($container == "deleted-product-container"){
