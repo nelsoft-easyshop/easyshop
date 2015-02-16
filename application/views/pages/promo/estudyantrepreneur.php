@@ -58,49 +58,12 @@
                     <select id="ddown-school">
                         <option value=""></option>
                         <?PHP foreach($schools_and_students as $school => $students) : ?>
-                        <option value="<?=html_escape(str_replace(' ', '-', $school))?>"><?=html_escape($school)?></option>
+                        <option value="<?=html_escape(str_replace(' ', '-', $school))?>" data-students='<?=json_encode(html_escape($students['students']))?>'><?=html_escape($school)?></option>
                         <?PHP endforeach; ?>
                     </select>
                 </div>
                 <div>
                     <div id="student-container" class="select-school mrgn-top-35">
-                        <?PHP foreach ($schools_and_students as $school => $students) : ?>
-                            <div id="<?=html_escape(str_replace(' ', '-', $school))?>" style="border: 1px black solid;display: none" class="display-none">
-                            <?PHP foreach ($students['students'] as $student) : ?>
-                                <span>
-                                    <input name="student" type="radio" value="<?=html_escape($student['idStudent'])?>" data-school="<?=html_escape($student['idSchool'])?>">
-                                    <label><?=html_escape($student['student'])?></label>
-                                </span>
-                            <?PHP endforeach; ?>
-                            </div>
-                            <br>
-                        <?PHP endforeach; ?>
-
-                        <span>
-                            <input type="radio" name="school" value="School 1" id="school1">
-                            <label for="school1">lorem ipsum dolor sit amit con todos lorem ipsum dolor sit amit con todos</label>
-                        </span>
-                        <span>
-                            <input type="radio" name="school" value="School 2" id="school2">
-                            <label for="school2">School 2</label>
-                        </span>
-                        <span>
-                            <input type="radio" name="school" value="School 3" id="school3">
-                            <label for="school3">School 3</label>
-                        </span>
-                        <span>
-                            <input type="radio" name="school" value="School 4" id="school4">
-                            <label for="school4">School 4</label>
-                        </span>
-                        
-                        <span>
-                            <input type="radio" name="school" value="School 5" id="school5">
-                            <label for="school5">School 5</label>
-                        </span>
-                        <span>
-                            <input type="radio" name="school" value="School 6" id="school6">
-                            <label for="school6">School 6</label>
-                        </span>
                     </div>
                 </div>
                 <div class="vote-btn mrgn-top-35">
@@ -111,64 +74,7 @@
             </div>
             <?php echo form_close();?>
         </section>
-        
-        <section class="mechanics-section">
-            <div class="container load-animate">
-                <div class="box">
-                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
-                        <ol class="school-rank-bg">
-                            <li >
-                               <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor  Lorem ipsum dolor sit amet uis nostrud  Lorem ipsum 
-                                    dolor sit amet uis nostrud 
-                                     Lorem ipsum dolor sit amet uis nostrud 
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor  Lorem ipsum dolor sit amet uis nostrud  Lorem ipsum 
-                                    dolor sit amet uis nostrud 
-                                     Lorem ipsum dolor sit amet uis nostrud 
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
+
         <section class="mechanics-section">
             <div class="container load-animate">
                 <div class="box">

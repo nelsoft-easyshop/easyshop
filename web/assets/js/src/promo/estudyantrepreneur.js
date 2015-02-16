@@ -45,14 +45,26 @@ $(document).ready(function(){
     $('#ddown-school').on('change', function() {
         var $this = $(this);
         var $selectedOpt = $this.find(':selected');
+        var students = $selectedOpt.data('students');
+        var html = '';
 
-        $('[name="student"]').prop('checked', false);
-        $('.display-none').hide();
-        $('#'+$selectedOpt.val()).show();
+        if ($this.val() !== '') {
+
+            for (var index = 0; students.length > index; index++) {
+                html += '<span>' +
+                    '<input type="radio" name="school" value="'+ students[index].idStudent +'" data-school="'+ students[index].idSchool +'">' +
+                    '<label > '+ students[index].student +'</label>' +
+                    '</span>';
+            }
+
+        }
+
+        $('#student-container').html(html);
+
     });
 
     $('#btn-vote').on('click', function() {
-        var $selectedRadio = $('[name="student"]:checked');
+        var $selectedRadio = $('[name="school"]:checked');
         var schoolId = parseInt($selectedRadio.data('school'));
         var studentId = parseInt($selectedRadio.val());
 
