@@ -531,13 +531,7 @@ class productUpload extends MY_Controller
             for ($i=0; $i < sizeof($filenames_ar); $i++) {
                 if($isCroppable){
                     $coordinate = explode(',', $coordinates[$i]);
-                    $rotateAngle = (int)$coordinate[4];
-                    if($rotateAngle === 270){
-                        $rotateAngle = 90;
-                    }
-                    elseif($rotateAngle === 90){
-                        $rotateAngle = 270;
-                    }
+                    $rotateAngle = (int)$coordinate[4]; 
                     $imageUtility->imageRotate($pathDirectory.$filenames_ar[$i], $rotateAngle);
                     $imageUtility->imageCrop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
                 }
@@ -626,13 +620,7 @@ class productUpload extends MY_Controller
         if ($this->upload->do_multi_upload('attr-image-input')){ 
             if($isCroppable){
                 $coordinate = explode(',', $coordinates);
-                $rotateAngle = (int)$coordinate[4];
-                if($rotateAngle === 270){
-                    $rotateAngle = 90;
-                }
-                elseif($rotateAngle === 90){
-                    $rotateAngle = 270;
-                }
+                $rotateAngle = (int)$coordinate[4]; 
                 $imageUtility->imageRotate($pathDirectory.$filename, $rotateAngle);
                 $imageUtility->imageCrop($pathDirectory.$filename, $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
             }

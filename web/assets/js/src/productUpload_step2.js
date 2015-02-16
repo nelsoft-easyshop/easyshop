@@ -1281,6 +1281,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             $('.imageContainer > #imageTag').attr('src', '');
                             imageTag.cropper("destroy");
                             imageTag = null;
+                            rotateValue = 0;
                         },
                         "title": "Crop your image"
                     });
@@ -1305,16 +1306,16 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         }
     }
 
-     $(document).on('click','.rotateRight',function(e){
+     $(document).on('click','.rotateLeft',function(e){
         rotateValue += 90;
-        rotateValue = rotateValue >= 360 ? 0 : rotateValue;
-        imageTag.cropper("rotate", 90);
+        rotateValue = rotateValue >= 360 ? 0 : rotateValue; 
+        imageTag.cropper("rotate", -90);
     });
 
-    $(document).on('click','.rotateLeft',function(e){
-        rotateValue -= 90;
+    $(document).on('click','.rotateRight',function(e){
+        rotateValue -= 90; 
         rotateValue = rotateValue < 0 ? 270 : rotateValue;
-        imageTag.cropper("rotate", -90);
+        imageTag.cropper("rotate", 90);
     });
 
     $(document).on('click','.zoomIn',function(e){ 
@@ -1598,7 +1599,9 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         }, 0);
                     },
                     close: function(){  
-                        $('.imageContainer >  #imageTag').attr('src', '');   
+                        $('.imageContainer >  #imageTag').attr('src', '');
+                        imageTag.cropper("destroy");
+                        rotateValue = 0;
                         imageTag = null;
                     },
                     "title": "Crop your image"
