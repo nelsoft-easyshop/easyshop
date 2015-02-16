@@ -34,6 +34,9 @@ class Estudyantrepreneur extends MY_Controller
         $this->load->view('pages/promo/estudyantrepreneur', $bodyData);
     }
 
+    /**
+     * Retrieves success page
+     */
     public function EstudyantrepreneurPromoSuccess()
     {
         if (!$this->input->post('studentId')) {
@@ -42,8 +45,14 @@ class Estudyantrepreneur extends MY_Controller
 
         $studentId = (int) trim($this->input->post('studentId'));
         $data = $this->__vote($studentId);
+        $getCurrentStandings = $this->promoManager
+                                   ->callSubclassMethod(
+                                       \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                                       'getCurrentStandings'
+                                   );
+
         $bodyData = [
-            'currentStandings' => 1,
+            'currentStandings' => $getCurrentStandings,
             'result' => $data,
         ];
 

@@ -79,4 +79,7 @@ $(document).ready(function(){
 
     });
 
+    //TODO : Check if the user can vote for a specific school, validate school if student <= 3 ? qualified student for nextround : retrieve
+    // Waiting for design.
+
 })(jQuery);

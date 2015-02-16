@@ -41,7 +41,8 @@ class Estudyantrepreneur
     private function __getPreviousRounds($rounds)
     {
         $date = new \DateTime;
-        $dateToday = $date->getTimestamp();
+//        $dateToday = $date->getTimestamp();
+        $dateToday = strtotime('2015-03-25');
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
@@ -245,4 +246,55 @@ class Estudyantrepreneur
 
         return $query->getResult();
     }
+
+    /**
+     * Returns the current standing
+     * @return array
+     */
+    public function getCurrentStandings()
+    {
+        $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
+        $roundData = $this->__getPreviousRounds($rounds);
+        $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
+        $schoolsAndStudents = $this->__getStudentsByDateAndSchool(
+                                         $schools,
+                                         $roundData['previousStartDate'],
+                                         $roundData['previousEndDate'],
+                                         $roundData['limit']
+                                     );
+        $totalVotesPerSchool = $this->__getTotalVotesByDate($roundData['previousStartDate'],$roundData['previousEndDate']);
+
+        foreach ($schoolsAndStudents as $school => $students) {
+
+            foreach ($students['students'] as $key => $student) {
+                $currentPercentage = ($student['vote'] / $totalVotesPerSchool[$school]) * 100;
+                $schoolsAndStudents[$school]['students'][$key]['currentPercentage'] = number_format($currentPercentage);
+            }
+
+        }
+
+        return $schoolsAndStudents;
+    }
+
+    /**
+     * Get Total votes per school
+     * @param $startDate
+     * @param $endDate
+     * @return array
+     */
+    private function __getTotalVotesByDate($startDate, $endDate)
+    {
+        $result = [];
+        $totalVotesPerSchool = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                                        ->getTotalVotesByDate(
+                                            $startDate,
+                                            $endDate
+                                        );
+        foreach ($totalVotesPerSchool as $school) {
+            $result[$school['name']] = $school['vote'];
+        }
+
+        return $result;
+    }
+
 }
