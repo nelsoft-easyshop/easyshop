@@ -73,13 +73,14 @@ class NewHomeWebService extends MY_Controller
         $index =  $this->input->get("index");
         $subIndex =  $this->input->get("subIndex");        
         $nodename =  $this->input->get("nodename");        
+        $subPanelIndex = ($this->input->get("subpanelindex")) ? $this->input->get("subpanelindex") : null;        
 
         $index = $index == 0 ? 1 : $index + 1;
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
         if($nodename == "subSliderSection" || $nodename == "mainSliderSection") {
             $this->file = $this->tempHomefile;
         }
-        $remove = $this->xmlCmsService->removeXmlNode($this->file,$nodename,$index, $subIndex);
+        $remove = $this->xmlCmsService->removeXmlNode($this->file, $nodename,$index, $subIndex, $subPanelIndex);
         if($remove == true) {
             return $this->output
                 ->set_content_type('application/json')
