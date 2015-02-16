@@ -132,7 +132,7 @@ class SyncCsvImage extends MY_Controller
             }
         }
         if(!empty($errorSummary)) {
-            return  "jsonCallback({'sites':[{'success': '"."Please upload ".ucfirst(implode(",",$errorSummary))." before proceeding uploading product info"."',},]});";
+            return  "jsonCallback({'sites':[{'success': '"."Kindly upload the following image/s: <br/>".ucfirst(implode("<br/>",$errorSummary)).""."',},]});";
         }
         else {
             return $checkImagesId;
@@ -171,78 +171,80 @@ class SyncCsvImage extends MY_Controller
 
     /**
      * Creates directories and resizes images inside assets/product
-     * @param int $imagesId
+     * @param int $productIds
      * @return JSONP
      */ 
-    private function syncImages($imagesId)
+    private function syncImages($productIds)
     {
         //Get images config dimensions
         $this->config->load('image_dimensions', TRUE);
+        $this->config->load("image_path");
+        $imageUtility = $this->serviceContainer['image_utility'];    
         $imageDimensions = $this->config->config['image_dimensions'];
         $date = date("Ymd");
         $gisTime = date("Gis");
-        foreach($imagesId["product"] as $ids)
+        foreach($productIds["product"] as $ids)
         {
             $imagesValues = $this->EsProductImagesRepository->getProductImages($ids);            
 
+            $productAttr = $this->em
+                                ->getRepository('EasyShop\Entities\EsProduct')
+                                ->getAttributesByProductIds($ids);
+
+            $hasAttribute = count($productAttr) > 0;
             foreach($imagesValues as $key => $values) {
 
                 $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
                 $path = "./assets/admin/$images";
-                $this->config->load("image_path"); 
                 $productId = $values->getProduct()->getIdProduct();
                 $memberId =  $values->getProduct()->getMember()->getIdMember();
                 $productImageId = $values->getIdProductImage();
-
-                $productObject = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                          ->findOneBy(['idProduct' => $productId]);
  
-                $filename = $productId.'_'.$memberId.'_'.$date;
-                $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key.".".$values->getProductImageType();
-                $imageDirectory = "./".$this->config->item('product_img_directory')."$filename/".$newfilename;
-                $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/"; 
+                $directoryName = $productId.'_'.$memberId.'_'.$date;
+                $filename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key.".".$values->getProductImageType();
+                $fullImagePath = "./".$this->config->item('product_img_directory').$directoryName."/".$filename;
+                $productDirectory = "./".$this->config->item('product_img_directory').$directoryName."/"; 
 
-                $attrImage = $this->em
-                                  ->getRepository('EasyShop\Entities\EsOptionalAttrhead')
-                                  ->findBy(['product' => $productId]); 
-                if(!file_exists($tempDirectory)){
-                    $newSlug = $this->productManager->generateSlug($productObject->getName());
-                    mkdir($tempDirectory.'categoryview/', 0777, true);
-                    mkdir($tempDirectory.'small/', 0777, true);
-                    mkdir($tempDirectory.'thumbnail/', 0777, true);
-                    mkdir($tempDirectory.'other/', 0777, true);
-                    if(count($attrImage) > 0 ) {
-                        mkdir($tempDirectory.'other/categoryview', 0777, true); 
-                        mkdir($tempDirectory.'other/small', 0777, true); 
-                        mkdir($tempDirectory.'other/thumbnail', 0777, true); 
-                        $this->doCopyForOtherDir($attrImage, 
+                if(!file_exists($productDirectory)){
+                    $newSlug = $this->productManager->generateSlug($values->getProduct()->getName());
+                    $values->getProduct()->setSlug($newSlug);
+                    mkdir($productDirectory.'categoryview/', 0777, true);
+                    mkdir($productDirectory.'small/', 0777, true);
+                    mkdir($productDirectory.'thumbnail/', 0777, true);
+                    mkdir($productDirectory.'other/', 0777, true);
+                    if($hasAttribute) {
+                        mkdir($productDirectory.'other/categoryview', 0777, true); 
+                        mkdir($productDirectory.'other/small', 0777, true); 
+                        mkdir($productDirectory.'other/thumbnail', 0777, true); 
+                        $this->doCopyForOtherDir($productAttr, 
                                                  $gisTime,
                                                  $date, 
                                                  $productId, 
                                                  $memberId, 
                                                  $productImageId, 
-                                                 $filename, 
-                                                 $imageDimensions);                        
+                                                 $directoryName, 
+                                                 $imageDimensions);
                     }
 
                 }
-                if(copy($path, $imageDirectory)){
-                    $imageUtility = $this->serviceContainer['image_utility'];
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."small",$imageDimensions["productImagesSizes"]["small"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview",$imageDimensions["productImagesSizes"]["categoryview"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail",$imageDimensions["productImagesSizes"]["thumbnail"]);
-                    $imageUtility->imageResize($imageDirectory, $tempDirectory,$imageDimensions["productImagesSizes"]["usersize"]);
-                    $productObject->setSlug($newSlug);
+
+                if(file_exists($path) && copy($path, $fullImagePath)) {
                     $productImageObject = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                                     ->findBy([
                                                         'product' => $productId, 
                                                         'idProductImage' => $productImageId
                                                     ]);
                     foreach ($productImageObject as $image ) {
-                        $image->setProductImagePath($imageDirectory);
+                        $image->setProductImagePath($fullImagePath);
                     }
-                    $this->em->flush();
+                    $imageUtility->imageResize($fullImagePath, $productDirectory."small",$imageDimensions["productImagesSizes"]["small"]);
+                    $imageUtility->imageResize($fullImagePath, $productDirectory."categoryview",$imageDimensions["productImagesSizes"]["categoryview"]);
+                    $imageUtility->imageResize($fullImagePath, $productDirectory."thumbnail",$imageDimensions["productImagesSizes"]["thumbnail"]);
+                    $imageUtility->imageResize($fullImagePath, $productDirectory,$imageDimensions["productImagesSizes"]["usersize"]);
                 }
+
+                $this->em->flush();
+
             } 
         }
 
@@ -254,7 +256,7 @@ class SyncCsvImage extends MY_Controller
 
     /**
      * Creates directories for product attributes if exists
-     * @param array $attrImage
+     * @param array $productAttr
      * @param date $gisTime
      * @param date $date
      * @param int $productId
@@ -263,7 +265,7 @@ class SyncCsvImage extends MY_Controller
      * @param string $filename
      * @param array $imageDimensions
      */ 
-    private function doCopyForOtherDir($attrImage, 
+    private function doCopyForOtherDir($productAttr, 
                                        $gisTime, 
                                        $date, 
                                        $productId, 
@@ -271,10 +273,7 @@ class SyncCsvImage extends MY_Controller
                                        $productImageId, 
                                        $filename, 
                                        $imageDimensions)
-    {
-        $productAttr = $this->em
-                            ->getRepository('EasyShop\Entities\EsProduct')
-                            ->getAttributesByProductIds($productId);    
+    {  
   
         $this->config->load("image_path");
         $imageUtility = $this->serviceContainer['image_utility'];            
@@ -290,31 +289,27 @@ class SyncCsvImage extends MY_Controller
             $images =  strtolower(str_replace("assets/product/", "", $values->getProductImagePath()));
             $path = "./assets/admin/$images";
 
-            $newfilename = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o.".$values->getProductImageType();
-            $imageDirectory = "./".$this->config->item('product_img_directory').$filename."/other/".$newfilename;
-            $tempDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
-            if(file_exists($path) && copy($path, $imageDirectory)){
+            $attributeFileName = $productId.'_'.$memberId.'_'.$date.$gisTime.$key."o.".$values->getProductImageType();
+            $fullImagePath = "./".$this->config->item('product_img_directory').$filename."/other/".$attributeFileName;
+            $productDirectory = "./".$this->config->item('product_img_directory').$filename."/other/"; 
+            if(file_exists($path) && copy($path, $fullImagePath)){
                 $productObject = $this->em->find('EasyShop\Entities\EsProduct', $productId);
 
-                $productImage = new EsProductImage();     
-                $productImage->setProductImagePath($imageDirectory);
-                $productImage->setProductImageType($values->getProductImageType());
-                $productImage->setProduct($productObject);
-                $this->em->persist($productImage);
-                $this->em->flush();
+                $values->setProductImagePath($fullImagePath);
+                $values->setProductImageType($values->getProductImageType());
+                $values->setProduct($productObject);
 
                 $productAttrDetail = $this->em
                                           ->getRepository('EasyShop\Entities\EsOptionalAttrdetail')
                                           ->findOneBy(['productImgId' => $attr["image_id"]]);
-                $productAttrDetail->setProductImgId($productImage->getIdProductImage());
-                $this->em->flush();
-        
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."small", $imageDimensions["productImagesSizes"]["small"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."categoryview", $imageDimensions["productImagesSizes"]["categoryview"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory."thumbnail", $imageDimensions["productImagesSizes"]["thumbnail"]);
-                $imageUtility->imageResize($imageDirectory, $tempDirectory, $imageDimensions["productImagesSizes"]["usersize"]);        
-            }                    
+                $productAttrDetail->setProductImgId($values->getIdProductImage());
+                $imageUtility->imageResize($fullImagePath, $productDirectory."small", $imageDimensions["productImagesSizes"]["small"]);
+                $imageUtility->imageResize($fullImagePath, $productDirectory."categoryview", $imageDimensions["productImagesSizes"]["categoryview"]);
+                $imageUtility->imageResize($fullImagePath, $productDirectory."thumbnail", $imageDimensions["productImagesSizes"]["thumbnail"]);
+                $imageUtility->imageResize($fullImagePath, $productDirectory, $imageDimensions["productImagesSizes"]["usersize"]);        
+            }
         }
+        $this->em->flush();
     }
 
     /**

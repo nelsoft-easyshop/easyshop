@@ -142,7 +142,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <a class="prevent" href="/me?tab=ongoing">On-going Transactions</a>
                                 </li>
                                 <li>
-                                    <a class="prevent" href="/?view=basic">Go to homepage</a>
+                                    <a class="prevent" href="/">Go to homepage</a>
                                 </li>
                                 <li class="nav-dropdown-border">
                                     <a class="prevent" href="/me?tab=settings">Settings</a>
