@@ -1283,8 +1283,7 @@ $string = '<typeNode>
         $followedSellerIds = array_map('intval', $followedSellerIds);
         $followedSellerIds = array_unique($followedSellerIds);
 
-        $products = $this->em->getRepository('\EasyShop\Entities\EsProduct')
-                             ->getRandomProductsFromUsers($followedSellerIds);
+        $products = $this->productManager->getRandomProductsFromUsers($followedSellerIds, 10);
 
         $featuredProductSlugs = [];        
         foreach($products as $index => $product){
