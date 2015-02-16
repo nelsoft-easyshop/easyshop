@@ -1,5 +1,11 @@
-<link type="text/css" href='/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/jquery-ui.theme.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href='/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/jquery-ui.theme.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-personal-info.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
 <div class="div-tab">
     <div class="dashboard-breadcrumb">
         <ul>
@@ -22,9 +28,13 @@
                 
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Gender : </label>
-                    <div class="col-sm-5 col-with-radio">
+                    <div class="col-sm-8 col-with-radio">
                         <input type="radio" id="male" name="gender" value="M" <?php echo ($member->getGender()=='M'?'checked="true"':'') ?>/> <label class="lbl-radio" for="male">Male</label>
                         <input type="radio" id="female" name="gender" value="F" <?php echo ($member->getGender()=='F'?'checked="true"':'') ?>/> <label class="lbl-radio" for="female">Female</label>
+                        <div id="errorIndicatorGender" style="display:none;">
+                            <span class="val-error-icon" id="errorIndicator"><i class="fa fa-times"></i></span>
+                            <span class="val-error" id="errorTextGender"></span>
+                        </div>                          
                     </div>
                 </div>
 

@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
  */
 class IsValidStoreNameOptional extends Constraint
 {
-    public $message = 'must have a minimum of 5 and maximum of 60 characters';
+    public $message = 'Store name must have a minimum of 5 and maximum of 60 characters';
 }

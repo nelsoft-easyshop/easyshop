@@ -1,6 +1,10 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/step4-product-preview-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
 
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/product-page-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/step4-product-preview-css.css?ver=<?php echo ES_FILE_VERSION ?>" media='screen'>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.upload-step4-preview.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 <section class="product-main-top-content">
     <div class="container">
@@ -11,7 +15,7 @@
                 </h1>
                 <div>
                     By:
-                        <span class="product-profile-photo"><img src="<?=$avatarImage?>"></span>
+                       <span class="product-profile-photo"><img src="<?php echo getAssetsDomain().'.'.$avatarImage?>"></span>
                        <?=html_escape($product->getMember()->getStoreName());?>
                 </div>
             </div>
@@ -31,7 +35,7 @@
                                 <?php foreach($productImages as $image): ?>
                                     <li>
                                         <a href="javascript:void(0);">
-                                            <img src='/<?=$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
+                                            <img src='<?php echo getAssetsDomain().$image->getDirectory(); ?>categoryview/<?=$image->getFilename(); ?>'> 
                                         </a>
                                     </li>
                                 <?php endforeach;?>
@@ -47,7 +51,7 @@
                 <div class="col-md-9">
                     <div class="prod-gallery-container">
                         <div class="prod_con_gal text-center">
-                            <img src="/<?=$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
+                            <img src="<?php echo getAssetsDomain().$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
                         </div>
                     </div>
                 </div>
@@ -56,7 +60,7 @@
             <div class="mobile-product-gallery">
                 <div id="mobile-product-gallery" class="owl-carousel">
                         <div> 
-                            <img src="/<?=$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
+                            <img src="<?php echo getAssetsDomain().$productImages[0]->getDirectory(); ?>small/<?=$productImages[0]->getFilename(); ?>"  title="product"> 
                         </div>
                         <div class="owl-controls">
                             <div class="owl-prev">prev</div>
@@ -155,20 +159,20 @@
                 <div class="col-md-12 prod-payment-img-container">
                     <p class="attr-title">Payment:</p>
                     <?php if(isset($paymentMethod['cdb'])): ?> 
-                        <img src="/assets/images/img-mastercard-black.png" alt="Mastercard">
-                        <img src="/assets/images/img-visa-black.png" alt="Visa">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard-black.png" alt="Mastercard">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa-black.png" alt="Visa">
                     <?php endif; ?>
 
                     <?php if(isset($paymentMethod['dragonpay'])) : ?> 
-                        <img src="/assets/images/img-dragonpay-black.png" alt="Dragon Pay">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-dragonpay-black.png" alt="Dragon Pay">
                     <?php endif; ?> 
 
                     <?php if(isset($paymentMethod['paypal'])) : ?> 
-                        <img src="/assets/images/img-paypal-black.png" alt="Paypal">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-paypal-black.png" alt="Paypal">
                     <?php endif; ?>
 
                     <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?> 
-                        <img src="/assets/images/img-cod-black.png" alt="Cash on Delivery">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod-black.png" alt="Cash on Delivery">
                     <?php endif; ?>
                 </div>
             </div>

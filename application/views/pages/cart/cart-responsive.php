@@ -1,6 +1,10 @@
-<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 <div class="container container-cart-responsive">
     <h2 class="my_cart_title">My Cart</h2>
@@ -24,7 +28,7 @@
                     <a href="<?= '/item/' . $row['slug']; ?>" class="has-tooltip"
                        data-image="/<?php echo $row['imagePath'] ?>categoryview/<?php echo $row['imageFile']; ?>">
                         <span class="cart-item-image-con">
-                            <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
+                            <img  src="<?php echo getAssetsDomain(); ?><?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
                         </span>
                     </a>
                 </td>
@@ -119,7 +123,7 @@
                                             <a href="<?= '/item/' . $row['slug']; ?>" class="has-tooltip"
                                                data-image="/<?php echo $row['imagePath']; ?>categoryview/<?php echo $row['imageFile']; ?>">
                                                 <span class="cart-item-image-con">
-                                                    <img  src="/<?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
+                                                    <img  src="<?php echo getAssetsDomain(); ?><?php echo $row['imagePath']; ?>thumbnail/<?php echo $row['imageFile']; ?>" class="cart-item-image" />
                                                 </span>
                                             </a>
                                         </td>
@@ -253,6 +257,10 @@
 </div>
 <div class="clear"></div>
 
-<script src="/assets/js/src/vendor/numeral.min.js"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
-<script src="/assets/js/src/cart.js?ver=<?= ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/numeral.min.js" type='text/javascript' ></script>
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript' ></script>
+    <script src="/assets/js/src/cart.js?ver=<?= ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.cart-responsive.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

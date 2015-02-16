@@ -1,6 +1,11 @@
-<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+    <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+    <link type="text/css" href="/assets/css/bootstrap-mods.css"  rel="stylesheet"  media="screen"/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.upload-step1.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+
 <style type="text/css">
   /* Overlay */
   #simplemodal-overlay {
@@ -118,5 +123,9 @@
     <div class="clear"></div>  
     <div id="storeValue" style="display:none"></div>
 
-<script type='text/javascript' src='/assets/js/src/productUpload_step1.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src='/assets/js/src/productUpload_step1.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.product_upload_step1_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

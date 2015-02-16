@@ -1,8 +1,8 @@
-<div class="col-xs-3 no-padding col-left-wing">
+<div class="col-md-3 no-padding col-left-wing">
     <div class="left-wing-contact" id="user-detail-partial">
         <div class="panel-contact-details">
             <p class="panel-title-contact">
-                Details
+                Details <i class="fa fa-caret-down drop-user-details"></i>
            </p>
            <input type="hidden" id="isEditable" value="<?php echo html_escape($isEditable)?>"/>
            <input type="hidden" id="errorCount" value="<?php echo html_escape(count($errors))?>"/>
@@ -13,7 +13,7 @@
            <i class="fa fa-ban fa-cancel-edit pull-right" id="editIconClose"  rel="tooltip" data-toggle="tooltip" data-placement="left"  title="Cancel"></i>
           
            <?php endif; ?>
-
+            <div class="user-details-container">
             <table width="100%" class="table-contact-details">
                 <?php if(count($errors) > 0 || $isValid): ?>
                 <tr>
@@ -42,7 +42,7 @@
 
                 <?php echo form_open('/' . html_escape($member->getSlug()) . '/' . $targetPage); ?>
                 <tr id="storeNameRow">
-                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Seller Name:"/></i</td>
+                    <td class="td-contact-icon"><i><img src="<?php echo getAssetsDomain() ?>assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Seller Name:"/></i</td>
                     <td class="td-contact-detail">
                         <p id="validatedStoreName" class="text-contact"><?php echo html_escape($validatedStoreName); ?></p>
                         <input type="hidden" id="postStoreName" value="<?php echo html_escape($storeName)?>"/>
@@ -50,15 +50,16 @@
                     </td>
                 </tr>
                 <tr id="contactNoRow">
-                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/phone.png" width="32px" height="32px" alt="Contact Number:"/></i></td>
+                    <td class="td-contact-icon"><i><img src="<?php echo getAssetsDomain() ?>assets/images/vendor-icons/phone.png" width="32px" height="32px" alt="Contact Number:"/></i></td>
                     <td class="td-contact-detail">
                         <p id="validatedContactNo" class="text-contact"><?php echo html_escape($validatedContactNo); ?></p>
                         <input type="text" class="input-detail" maxlength="11" placeholder="Contact Number..." name="contactNumber" id="contactNo" value="<?php echo html_escape($contactNo); ?>">
                         <input type="hidden" id="postContactNo" value="<?php echo html_escape($contactNo)?>"/>
                     </td>
                 </tr>
+                
                 <tr id="addressRow">
-                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/location.png" width="32px" height="32px" alt="Address:"/></i></td>
+                    <td class="td-contact-icon"><i><img src="<?php echo getAssetsDomain() ?>assets/images/vendor-icons/location.png" width="32px" height="32px" alt="Address:"/></i></td>
                     <td class="td-contact-detail">
                         <input type="hidden" id="cityList" value="<?php echo html_escape(json_encode($cityList));?>"/>
 
@@ -82,8 +83,9 @@
                         </select>
                     </td>
                 </tr>
+
                 <tr id="websiteRow">
-                    <td class="td-contact-icon"><i><img src="/assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
+                    <td class="td-contact-icon"><i><img src="<?php echo getAssetsDomain() ?>assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
                     <td class="td-contact-detail">
                         <p class="text-contact"><a href=" <?php echo preg_match("~^(?:f|ht)tps?://~i", $validatedWebsite) ? html_escape($validatedWebsite) : 'http://' . html_escape($validatedWebsite)?>/" id="validatedWebsite"><?php echo html_escape($validatedWebsite); ?></a></p>
                         <input type="hidden" id="postWebsite" value="<?php echo html_escape($website)?>"/>
@@ -99,11 +101,17 @@
                 </tr>
                 <?php echo form_close(); ?>
             </table>
+            </div>
             <br/>
+
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src="/assets/js/src/usercontact.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/usercontact.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.partial_userdetails.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 

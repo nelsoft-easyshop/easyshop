@@ -82,13 +82,13 @@ else {
     $route['(?i)cat/all'] = 'product/categories_all'; # ryan vasquez
 
     #SEARCHING
-    $route['(?i)search/(:any)'] = 'product_search/searchfaster/$1'; # ryan vasquez
+    $route['(?i)search/(:any)'] = 'product_search/search/$1'; # ryan vasquez
     $route['search/more'] = 'product_search/loadMoreProduct'; # ryan vasquez
-    $route['search/suggest'] = 'product_search/sch_onpress'; # ryan vasquez
+    $route['search/suggest'] = 'product_search/suggest';
 
     #ADVANCE SEARCH
     $route['(?i)advsrch'] = 'product_search/advance'; # new search - rain jorque
-    $route['(?i)advsrch/more'] = 'product_search/loadMoreProduct'; # new search - rain jorque
+    $route['(?i)advsrch/more'] = 'product_search/loadMoreProductAdvance'; # new search - rain jorque
 
     #PASSWORD
     $route['(?i)chngepaswd'] = 'register/changepass'; # rain jorque 
@@ -125,8 +125,8 @@ else {
 
     #EDIT ITEM
     $route['(?i)sell/edit/step1'] = 'productUpload/editStep1'; # sam gavinio
-    $route['(?i)sell/edit/step2'] = 'productUpload/step2edit2'; # sam gavinio
-    $route['sell/edit/processing'] = 'productUpload/step2edit2Submit';  # sam gavinio
+    $route['(?i)sell/edit/step2'] = 'productUpload/step2edit'; # sam gavinio
+    $route['sell/edit/processing'] = 'productUpload/step2editSubmit';  # sam gavinio
 
     #REMOVE DRAFT
     $route['(?i)sell/draft/remove'] = 'productUpload/deleteDraft';  # sam gavinio
@@ -162,6 +162,10 @@ else {
     $route['(?i)Scratch-And-Win'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
+    $route['(?i)Estudyantrepreneur'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromo';
+    $route['(?i)EstudyantrepreneurSuccess'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoSuccess';
+    #MESSAGES
+    $route['(?i)messages'] = '/MessageController/messages';
 
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';

@@ -6,22 +6,16 @@ if (!defined('BASEPATH')){
  
 class Home extends MY_Controller 
 {
- 
-    /**
-     * Number of feeds item per page
-     *
-     * @var integer
-     */
-    public $feedsProdPerPage = 7;
-    
-    
     /**
      * Load class dependencies
      *
      */
-    function __construct() 
+    public function __construct() 
     {
         parent::__construct();
+        $this->productManager = $this->serviceContainer['product_manager'];
+        $this->userManager = $this->serviceContainer['user_manager'];
+        $this->em = $this->serviceContainer['entity_manager'];
     }
 
     /**
@@ -30,38 +24,33 @@ class Home extends MY_Controller
      * @return View
      */
     public function index() 
-    {
-        $view = $this->input->get('view') ? $this->input->get('view') : NULL;
+    {  
+        $view = $this->input->get('view') ? $this->input->get('view') : null;
+        $memberId = $this->session->userdata('member_id');
         $headerData = [
+            'memberId' => $memberId,
             'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         ];
 
-        if( $this->session->userdata('member_id') && $view !== 'basic'){
-            $bodyData = $this->getFeed();   
-            $bodyData['category_navigation'] = $this->load->view('templates/category_navigation', [
-                                                                    'cat_items' =>  $this->getcat()
-                                                                ], true );
-            $this->load->spark('decorator');  
-            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));  
-            $this->load->view("templates/home_layout/layoutF",$bodyData);
-            $this->load->view('templates/footer', ['minborder' => true]);
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+        $sliderSection = $homeContent['slider']; 
+        $homeContent['slider'] = [];
+        foreach($sliderSection as $slide){
+            $sliderView = $this->load->view($slide['template'], $slide, true);
+            $homeContent['slider'][] = $sliderView;
         }
-        else{
-            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-            $sliderSection = $homeContent['slider']; 
-            $homeContent['slider'] = [];
-            foreach($sliderSection as $slide){
-                $sliderView = $this->load->view($slide['template'],$slide, true);
-                array_push($homeContent['slider'], $sliderView);
-            }
-            $data['homeContent'] = $homeContent;
-            $this->load->spark('decorator');  
-            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/home/home_primary', $data);
-            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+        $data['homeContent'] = $homeContent; 
+
+        if( $memberId ){
+            $data['featuredCategorySection'] = $this->serviceContainer['xml_cms']->getFeaturedProducts($memberId);
         }
+
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/home/home_primary', $data);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
 
     }
     
@@ -74,6 +63,7 @@ class Home extends MY_Controller
     public function under_construction()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Under Construction | Easyshop.ph'
         ];
         $this->load->spark('decorator');  
@@ -106,7 +96,6 @@ class Home extends MY_Controller
      */
     public function getServerTime()
     {
-        date_default_timezone_set('Asia/Manila');
         echo date('M d,Y H:i:s');
     }
     
@@ -118,6 +107,7 @@ class Home extends MY_Controller
     public function policy()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Privacy Policy | Easyshop.ph',
             'metadescription' => "Read Easyshop.ph's Privacy Policy",
         ];
@@ -135,6 +125,7 @@ class Home extends MY_Controller
     public function terms()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Terms and Conditions | Easyshop.ph',
             'metadescription' => "Read Easyshop.ph's Terms and Conditions",
         ];
@@ -154,6 +145,7 @@ class Home extends MY_Controller
     public function faq()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'F.A.Q. | Easyshop.ph',
             'metadescription' => 'Get in the know, read the Frequently Asked Questions at Easyshop.ph',
         ];
@@ -174,6 +166,7 @@ class Home extends MY_Controller
     public function contact()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Contact us | Easyshop.ph',
             'metadescription' => 'Get in touch with our Customer Support',
         ];
@@ -194,6 +187,7 @@ class Home extends MY_Controller
     public function guide_buy()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'How to buy | Easyshop.ph',
             'metadescription' => 'Learn how to purchase at Easyshop.ph',
         ];
@@ -215,6 +209,7 @@ class Home extends MY_Controller
     public function guide_sell()
     {
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'How to sell | Easyshop.ph',
             'metadescription' => 'Learn how to sell your items at Easyshop.ph',
         ];
@@ -226,129 +221,7 @@ class Home extends MY_Controller
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/how-to-sell', $bodyData);
     }
-    
-    
-  
-
-    /**
-     *  Fetch information to be display in feeds page
-     *
-     *  @return array
-     */
-    public function getFeed()
-    {
-        $this->load->library('xmlmap');
-        $this->load->model('product_model');
-        $this->load->model('user_model');
-        $xmlResourceService = $this->serviceContainer['xml_resource'];
-        $xmlfile =  $xmlResourceService->getContentXMLfile();
-
-        $perPage = $this->feedsProdPerPage;
-        $memberId = $this->session->userdata('member_id');
-        $userdata = $this->user_model->getUserById($memberId);
-
-        $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
-        $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
         
-        array_push($partnersId, $easyshopId);
-        $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
-        $followedSellers = $this->user_model->getFollowing($memberId);
-        
-        $this->load->config('protected_category', TRUE);
-        $categoryId = $this->config->item('promo', 'protected_category');
-
-        $data = array(
-            'featured_prod' => $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage),
-            'new_prod' => $this->product_model->getNewProducts($perPage),
-            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage, " lastmodifieddate DESC , "),
-            'followed_users' =>  $followedSellers,
-            'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
-            'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
-            'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
-            'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
-            'isCollapseCategories' => count($followedSellers) > 2,
-            'userslug' => $userdata['slug'],
-            'maxDisplayableSellers' => 7
-        );
-
-        #Assemble featured product ID array for exclusion on LOAD MORE request
-        $fpID = array();
-        foreach( $data['featured_prod'] as $fp ){
-            if( !in_array($fp['id_product'],$fpID) ){
-                $fpID[] = $fp['id_product'];
-            }
-        }
-        
-        $data['fpID'] = json_encode($fpID);
-        
-        return $data;
-    }
-    
-    /**
-     *  Used by AJAX Requests to fetch for products in Feeds page
-     *
-     *  @return JSON
-     */
-    public function getMoreFeeds()
-    {
-        $this->load->library('xmlmap');
-        $this->load->model('product_model');
-        if( $this->input->post("feed_page") && $this->input->post("feed_set") ){
-            $perPage = $this->feedsProdPerPage;
-            $memberId = $this->session->userdata('member_id');
-            
-            $page = ((int)$this->input->post("feed_page") + 1) * $perPage - $perPage;
-            $productFeedSet = (int)$this->input->post("feed_set");
-
-            switch( (int)$productFeedSet ){
-                case 1: #Featured Tab
-
-                    $xmlResourceService = $this->serviceContainer['xml_resource'];
-                    $xmlfile =  $xmlResourceService->getContentXMLfile();
-
-                    $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
-                    $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
-
-                    array_push($partnersId, $easyshopId);
-                    $prodIdRaw = ($this->input->post('ids')) ? json_decode($this->input->post('ids')) : array(0); 
-                    $prodId = implode(",",$prodIdRaw);
-                    
-                    $products = $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage,$page);
-                    
-                    #Assemble featured product ID array for exclusion on LOAD MORE request
-                    $fpID = array();
-                    foreach( $products as $fp ){
-                        if( !in_array($fp['id_product'],$fpID) ){
-                            $fpID[] = $fp['id_product'];
-                        }
-                    }
-                    
-                    $prodIDArray = array_merge($prodIdRaw,$fpID);
-                    $data['fpID'] = json_encode($prodIDArray);
-                    
-                    break;
-                case 2: #New Products Tab
-                    $products = $this->product_model->getNewProducts($perPage,$page);
-                    break;
-                case 3: #EasyTreats Products Tab
-                    $this->load->config('protected_category', TRUE);
-                    $categoryId = $this->config->item('promo', 'protected_category');
-                    $products = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",$page,$perPage);
-                    break;
-                default:
-                    $data['error'] = "Unable to load prouct list.";
-                    echo json_encode($data);
-                    exit();
-                    break;
-            }
-            
-            $temp['products'] = $products;
-            $data['view'] = $this->load->view("templates/home_layout/layoutF_products",$temp,true);
-            
-            echo json_encode($data);
-        }
-    }
-    
     /**
      *  Handles bug report form
      *
@@ -385,10 +258,12 @@ class Home extends MY_Controller
         $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
             'form' => $form->createView(), 
             'ES_FILE_VERSION' => ES_FILE_VERSION,
+            'assetsDomain' => getAssetsDomain(),
             'isValid' => $isValid
             ));
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Report a Problem | Easyshop.ph',
             'metadescription' => 'Found a bug? Let us know so we can work on it.',
         ];
@@ -398,7 +273,39 @@ class Home extends MY_Controller
         $this->output->append_output($formData); 
         $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));        
     }
+    
+    /**
+     * Renders the category product section view
+     *
+     */
+    public function getCategorySectionProducts()
+    {
+        $productSlugs = json_decode($this->input->post('productSlugs'));
+        $productSlugs = $productSlugs ? $productSlugs : [];
+        if(!is_array($productSlugs)){
+            $productSlugs = [ $productSlugs ];
+        }
+        
+        $productCounter = 0;
+        $data['productSections'] = [];
+        foreach($productSlugs as $productSlug){
+            $product = $this->serviceContainer['entity_manager']
+                            ->getRepository('EasyShop\Entities\EsProduct')
+                            ->findOneBy(['slug' => $productSlug]);
+            if($product){
+                if($this->productManager->isProductActive($product)){
+                    $data['productSections'][$productCounter]['product'] =  $this->serviceContainer['product_manager']->getProductDetails($product);
+                    $secondaryImage =  $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsProductImage')
+                                            ->getSecondaryImage($product->getIdProduct());
+                    $data['productSections'][$productCounter]['productSecondaryImage'] = $secondaryImage;
+                    $data['productSections'][$productCounter]['userimage'] =   $this->serviceContainer['user_manager']->getUserImage($product->getMember()->getIdMember());
+                    $productCounter++;
+                }
+            }
+        }
 
+        echo json_encode($this->load->view('partials/home-productlist', $data, true));
+    }
 
 }
 

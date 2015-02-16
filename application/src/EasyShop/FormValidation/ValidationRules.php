@@ -155,6 +155,12 @@ class ValidationRules
                     'storeDescription' => array(
                                 new Assert\Length(['max' => '1024'])
                     ),
+                    'gender' => array(
+                                new CustomAssert\IsValidGender(),
+                    ),   
+                    'shop_name' => array(
+                                new CustomAssert\IsValidStoreNameOptional(),
+                    ),                 
             ),
             'store_setup' => [
                     'shop_name' =>  [new Assert\NotBlank(),
@@ -190,6 +196,15 @@ class ValidationRules
                                 new Assert\NotEqualTo(['value' => '0',
                                                        "message" => "This account is invalid.",
                                                     ]),
+                    ],
+            ],
+            'reset_password' => [
+                    'email' => [
+                        new Assert\Email(),
+                            new Assert\NotBlank(),
+                    ],
+                    'hash' => [
+                        new Assert\NotBlank(),
                     ],
             ],
         );

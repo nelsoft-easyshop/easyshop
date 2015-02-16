@@ -1364,28 +1364,58 @@ li.brand_result:hover{
 
 
 /*****	STEP 4 DESIGN	*******/
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable.pop-up-fixed {
+    left: 0 !important;
+    margin: auto;
+    max-width: 550px;
+    right: 0;
+}
 
 .step4_section{
-	border: 1px solid #CECECE;
-	margin-bottom: 1em;
+    border: 1px solid #CECECE;
+    margin-bottom: 1em;
 }
 
+
 .step4_header{
-	background-color: #E5E5E5;
+    background-color: #E5E5E5;
 }
+
 
 .step4-cod{
     text-align:center;
 }
 
-#imageTag{
+/**** Iframe for progress upload ****/
 
+.loader-iframe{
+    display: none;
+    width: 100%;
 }
+
+#progress_completed{
+    position: relative;
+    background: url('/assets/images/orange_loader.gif');
+    width: 150px;
+    min-height: 34px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#progress_completed span{
+   line-height: 34px; 
+}
+
+#crop-image-main {
+    padding: 40px 0px;
+}
+
 #crop-image-main > div {
     margin: 0 auto;
 }
+
 #crop-image-main > div > img {
-    max-height: 430px;
     margin: 0 auto;
 }
 
@@ -1393,7 +1423,23 @@ li.brand_result:hover{
     margin: 0 auto;
 }
 
+
 .pop-up-fixed{
     position: fixed !important;
-    top: 13px !important;
+}
+#crop-image-main {
+    padding: 0 !important;
+} 
+
+.cropFrame {
+    display: block !important; 
+    margin: auto !important; 
+}
+
+.rangeSliderHide {
+    display: none !important;
+}
+
+#irs-2 {
+    top: -23px
 }

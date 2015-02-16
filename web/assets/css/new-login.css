@@ -306,6 +306,39 @@ strong > a{
     padding-right: 0px;
 }
 
+.submit-email-form, .submit-password-form {
+    background-color: #ff893b;
+    border-radius: 4px !important; 
+    color: white;
+}
+
+.identify-email-container{
+    min-height: 330px;
+    text-align: center
+}
+
+.identify-email-top-group {
+    margin-top: 45px;
+}
+
+.identify-email-bottom-group {
+    margin-top: 20px;
+}
+
+.password-update-label{
+    text-align: left;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.password-update-input{
+    margin-bottom: 5px;
+}
+
+.nofloat{
+    float: none !important; 
+}
+
 @media only screen and (max-width: 992px) {
     .form-merge, .form-merge-2{
         margin-top: 0px;
@@ -358,7 +391,7 @@ strong > a{
 .username-restrictions{
     display: none;
 }
-.username-restrictions h5, ul{
+.username-restrictions h5,.username-restrictions ul{
     color: #e3604b;
     font-weight: 900;
     margin-top: 4px;
@@ -366,4 +399,8 @@ strong > a{
 .auto-height{
     height: auto !important;
     margin-top: 1%;
+}
+
+.nav-dropdown {
+    margin-top: 0;
 }

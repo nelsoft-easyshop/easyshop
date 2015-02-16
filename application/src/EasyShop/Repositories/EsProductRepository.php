@@ -5,6 +5,7 @@ namespace EasyShop\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsProduct as EsProduct; 
+use EasyShop\Entities\EsCat as EsCat; 
 use EasyShop\Entities\EsProductImage;
 use EasyShop\Entities\EsBrand;
 use EasyShop\Entities\EsProductItem;
@@ -79,38 +80,33 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     * Get all product details with given product id
-     * @param  array   $productIds
-     * @param  integer $offset
-     * @param  integer $perPage
-     * @param  boolean $applyLimit
+     * Get all product categoryid with given product id
+     * @param  array   $productIds 
      * @return mixed
      */
-    public function getProductDetailsByIds($productIds = array(),$offset = 0,$perPage = 1,$applyLimit = TRUE)
+    public function getProductCategoryIdByIds($productIds = [])
     {   
         if(!empty($productIds)){
-                $this->em =  $this->_em;
+            $this->em = $this->_em;
+            $rsm = new ResultSetMapping(); 
+            $rsm->addScalarResult('id_product', 'id_product');
+            $rsm->addScalarResult('cat_id', 'cat_id');
 
-                $sql = "
-                    SELECT 
-                        p
-                    FROM 
-                        EasyShop\Entities\EsProduct p 
-                    WHERE p.idProduct IN (:ids)
-                ";
-                $query = $this->em->createQuery($sql)
-                                    ->setParameter('ids', $productIds);
-                if($applyLimit){
-                    $query->setFirstResult($offset*$perPage)
-                        ->setMaxResults($perPage);
-                }
-                
-                $results = $query->getResult();
-
-                return $results;
-            }
+            $sql = "
+                SELECT cat_id, id_product
+                FROM 
+                    es_product
+                WHERE id_product IN (:ids)
+            ";
             
-        return array();
+            $query = $this->em->createNativeQuery($sql, $rsm);
+            $query->setParameter('ids', $productIds); 
+            $result = $query->getResult();
+
+            return $result;
+        }
+
+        return [];
     }
 
     /**
@@ -441,7 +437,8 @@ class EsProductRepository extends EntityRepository
                                                     'WITH','b.idBrand = p.brand')
                                 ->where('p.isDraft = 0')
                                 ->andWhere('p.isDelete = 0')
-                                ->andWhere('m.isActive = 1');
+                                ->andWhere('m.isActive = 1')
+                                ->andWhere('m.isBanned = 0');
  
         if(isset($filterArray['condition']) && $filterArray['condition'][0]){ 
             $qbResult = $qbResult->andWhere(
@@ -459,7 +456,7 @@ class EsProductRepository extends EntityRepository
         }
 
         if(isset($filterArray['category']) 
-                && (integer)$filterArray['category'] !== 1){ 
+                && (integer)$filterArray['category'] !== EsCat::ROOT_CATEGORY_ID){ 
             $categoryList = $this->em->getRepository('EasyShop\Entities\EsCat')
                                      ->getChildrenWithNestedSet($filterArray['category']);
             if(count($categoryList) > 0){
@@ -505,21 +502,23 @@ class EsProductRepository extends EntityRepository
             if(isset($filterArray['sorttype']) 
                 && strtoupper($filterArray['sorttype']) == "ASC"){
                 $order = "ASC";
-            }
-
+            } 
             switch(strtoupper($filterArray['sortby'])){
-                case "NEW":
+                case EsProduct::SEARCH_SORT_POPULAR:
+                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    break;
+                case EsProduct::SEARCH_SORT_NEW:
                     $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
-                case "HOT":
+                case EsProduct::SEARCH_SORT_HOT:
                     $qbResult = $qbResult->orderBy('p.isHot', $order)
                                          ->addOrderBy(' p.clickcount',$order);
                     break;
-                case "NAME":
+                case EsProduct::SEARCH_SORT_NAME:
                     $qbResult = $qbResult->orderBy('p.name', $order);
                     break;
                 default:
-                    $qbResult = $qbResult->orderBy('p.clickcount', $order);
+                    $qbResult = $qbResult->orderBy('p.lastmodifieddate', $order);
                     break;
             }
         }
@@ -1073,36 +1072,166 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get product reccomended based on category
-     * @param  integer $productId
-     * @param  integer $categoryId
+     * @param  integer $productIds
+     * @param  integer $categoryIds
      * @param  integer $limit
      * @return object
      */
-    public function getRecommendedProducts($productId, $categoryId, $limit = null)
+    public function getRecommendedProducts($productIds, $categoryIds, $limit = null)
     {
         $this->em =  $this->_em;
-        $queryBuilder = $this->em->createQueryBuilder()
-                                 ->select('p')
-                                 ->from('EasyShop\Entities\EsProduct','p')
-                                 ->where('p.cat = :category')
-                                 ->andWhere("p.idProduct != :productId")
+        $queryBuilder = $this->em->createQueryBuilder();
+        $qbResult = $queryBuilder->select('p')
+                                 ->from('EasyShop\Entities\EsProduct','p') 
+                                 ->where(
+                                        $queryBuilder->expr()->in('p.cat', $categoryIds)
+                                    ) 
+                                 ->andWhere(
+                                        $queryBuilder->expr()->notIn('p.idProduct', $productIds)
+                                    ) 
                                  ->andWhere("p.isDraft = :isDraft")
                                  ->andWhere("p.isDelete = :isDelete")
-                                 ->setParameter('productId',$productId)
-                                 ->setParameter('category',$categoryId)
-                                 ->setParameter('isDraft',0)
-                                 ->setParameter('isDelete',0)
+                                 ->setParameter('isDraft', EsProduct::ACTIVE)
+                                 ->setParameter('isDelete', EsProduct::ACTIVE)
                                  ->orderBy('p.clickcount', 'DESC')
-                                 ->getQuery();;
+                                 ->getQuery();
 
         if($limit){
-            $queryBuilder->setMaxResults($limit);
+            $qbResult->setMaxResults($limit);
         }
  
-        $result = $queryBuilder->getResult(); 
+        $result = $qbResult->getResult(); 
 
         return $result;
     }
+    
+    /**
+     * Get random products from different users
+     *
+     * @param integer[] $memberIdArray
+     * @param integer $limit
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getRandomProductsFromUsers($memberIdArray, $limit = 10)
+    {
+        if(is_int($memberIdArray)){
+            $memberIdArray = [ $memberIdArray ];
+        }
+        
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('id_product', 'id_product');
+        $query = $em->createNativeQuery("
+            
+            SELECT * FROM (
+                SELECT 
+                    es_product.id_product 
+                FROM 
+                    es_product 
+                INNER JOIN
+                    es_member ON es_member.is_banned = :notBanned AND 
+                                es_member.is_active = :active AND  
+                                es_member.id_member = es_product.member_id
+                WHERE 
+                    es_product.member_id IN (:member_ids) AND 
+                    es_product.is_draft != :draft AND 
+                    es_product.is_delete = :activeProduct
+                ORDER BY 
+                    es_product.lastmodifieddate DESC
+                ) as allProducts
+            ORDER BY RAND() LIMIT :limit
+        ", $rsm);
+        $query->setParameter('member_ids', $memberIdArray);
+        $query->setParameter('limit', $limit);
+        $query->setParameter('notBanned', \EasyShop\Entities\EsMember::NOT_BANNED);
+        $query->setParameter('active', \EasyShop\Entities\EsMember::DEFAULT_ACTIVE);
+        $query->setParameter('draft', \EasyShop\Entities\EsProduct::DRAFT);
+        $query->setParameter('activeProduct', \EasyShop\Entities\EsProduct::ACTIVE);
+        $results = $query->execute();
+        $productIds = [];
+        
+        foreach($results as $result){
+            $productIds[] = $result['id_product'];
+        }
+        
+        $qb = $this->_em->createQueryBuilder();
+        $product = $qb->select('p')
+                      ->from('EasyShop\Entities\EsProduct','p') 
+                      ->where($qb->expr()->in('p.idProduct', $productIds) ) 
+                      ->getQuery()
+                      ->getResult();
+
+        return $product;
+    }
+    
+    /**
+     * Get newest product slugs
+     *
+     * @param integer $limit
+     * @return string[]
+     */
+    public function getNewestProductSlugs($limit = 10)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('slug', 'slug');
+        $query = $em->createNativeQuery("
+            SELECT 
+                es_product.slug as slug
+            FROM 
+                es_product 
+            INNER JOIN
+                es_member on es_member.id_member = es_product.member_id AND 
+                es_member.is_active = :activeMember AND 
+                es_member.is_banned = :notBanned
+            WHERE
+                es_product.is_delete = :activeProduct AND
+                es_product.is_draft != :draft
+            ORDER BY
+                es_product.createddate DESC
+            LIMIT :limit
+        ", $rsm);
+        $query->setParameter('limit', $limit);
+        $query->setParameter('notBanned', \EasyShop\Entities\EsMember::NOT_BANNED);
+        $query->setParameter('activeMember', \EasyShop\Entities\EsMember::DEFAULT_ACTIVE);
+        $query->setParameter('draft', \EasyShop\Entities\EsProduct::DRAFT);
+        $query->setParameter('activeProduct', \EasyShop\Entities\EsProduct::ACTIVE);
+        $results = $query->execute();
+        
+        $flattenedResults = [];
+        foreach($results as $result){
+            $flattenedResults[] = $result['slug'];
+        }
+        
+        return $flattenedResults;
+    }
+    
+    /**
+     * Get multiple products by slug
+     *
+     * @param string[] $slugs
+     * @retrun EasyShop\Entities\EsProduct[]
+     */
+    public function getMultipleProductsBySlugs($slugs)
+    {
+        if(!is_array($slugs)){
+            return false;
+        }
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $products = $queryBuilder->select('p')
+                                 ->from('EasyShop\Entities\EsProduct','p') 
+                                 ->where(
+                                        $queryBuilder->expr()->in('p.slug', $slugs)
+                                    ) 
+                                 ->getQuery()
+                                 ->getResult();
+
+        return $products;    
+    }
+    
 }
 
 

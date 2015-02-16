@@ -48,37 +48,31 @@
                                     <tr>
                                       <?php foreach($transactions as $value): ?>
                                         <tr style="text-align:center;border: black 1px solid;">
-
                                             <td>
-                                                <?php echo $value["invoiceNo"] ?>
+                                                <?php echo $value["invoiceNo"]; ?>
                                             </td>
                                             <td>
-                                               <?php echo html_escape($value["productname"]) ?>
+                                                <?php echo html_escape($value["productName"]); ?>
                                             </td>
                                             <td>
-                                               <?php echo ucwords(strtolower(html_escape($value["buyerStoreName"]))) ?>
-                                            </td>  
-                                            <td style='text-align:left;padding-left:2px;'>
-                                                <?php foreach($value["product"] as $product): ?>
-                                                    <?php if(isset($product["attr"]) && count($product["attr"] > 0)): ?>
-                                                            <?php foreach($product["attr"] as $attr => $attrValue ): ?>
-                                                                <?php echo ucwords(html_escape($attr)).":".ucwords(html_escape($attrValue))."<br/>" ?>
-                                                            <?php endforeach; ?>
-                                                    <?php endif; ?>
-                                                 <?php endforeach; ?>
-                                            </td>                                                                                          
-                                            <td>
-                                                <?php print_r($value["dateadded"]->format('Y-m-d H:i:s')); ?>
-                                            </td>                                        
-                                            <td >
-                                                <?php echo $value["orderQuantity"] ?>
-                                            </td>                                                                             
-                                            <td >
-                                               <?php echo ucwords(strtolower($value["paymentMethod"])) ?>
-                                            </td>   
-                                            <td >
-                                               PHP <?php echo number_format((float)$value["totalOrderProduct"], 2, '.', '')  ?>
+                                                <?php echo html_escape($value["buyerStoreName"]); ?>                                                
                                             </td>
+                                            <td>
+                                                <?php echo html_escape($value["productSpecs"]); ?>                                                
+                                            </td>                                            
+                                            <td>
+                                                <?php echo $value["dateAdded"]; ?>
+                                            </td>                                                                                    
+                                            <td>
+                                                <?php echo $value["orderQuantity"]; ?>
+                                            </td>     
+                                            <td >
+                                                <?php echo ucwords(strtolower($value["paymentMethod"])); ?>
+                                            </td>                                                                                     
+                                            <td >
+                                                PHP <?php echo number_format((float)$value["productPrice"], 2, '.', '') ?>
+                                            </td> 
+                                      
                                         </tr>
                                         <?php endforeach; ?>
                                     </tr>
@@ -97,12 +91,12 @@
                             <tr>
                                 <td>
                                     <a href="https://www.facebook.com/EasyShopPhilippines">
-                                        <img src="/assets/images/landingpage/templates/facebook.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="<?php echo getAssetsDomain()?>assets/images/landingpage/templates/facebook.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                                 <td>
                                     <a href="https://twitter.com/EasyShopPH">
-                                        <img src="/assets/images/landingpage/templates/twitter.png" style="display: block; max-width: 100%; height: auto;" />
+                                        <img src="<?php echo getAssetsDomain()?>assets/images/landingpage/templates/twitter.png" style="display: block; max-width: 100%; height: auto;" />
                                     </a>
                                 </td>
                             </tr>

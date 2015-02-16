@@ -20,8 +20,13 @@ $(function(){
 });
 
 $(function(){
-    
-    $('#tabs').tabs();   
+    $(".product_combination").each(function() {
+        if ($(this).find("p").length > 6) {
+          $(this).css('overflow-y','scroll');
+        }
+    });
+
+    $('#tabs').tabs();
     
     $('#delivery').on('click',function(){
         var freeShippingBtn = $('#set_free_shipping');
@@ -359,21 +364,7 @@ $(document).ready(function(){
 |
 */
 $(function(){
-    $('#cod_btn').on('click',function(){
-        var codinput = $('#allow_cod');
-        var buttonLabel = $(this).find('span.button-label');
-        
-        if($(this).hasClass('active')){
-            $(this).removeClass('active');
-            buttonLabel.text('Allow Cash on Delivery');
-            codinput.val("off");
-        }else{
-            $(this).addClass('active');
-            buttonLabel.text('Cash on Delivery');
-            codinput.val("on");
-        }
-    });
-
+    
     // Add new price and location fields
     $('#shipping_div').on('click', '.new_shipping_input', function(){
         var datagroup = $(this).parent().siblings('div.data_group');
@@ -642,6 +633,20 @@ $(function(){
         var shippingGroup = $('#shipping_div div.shipping_group');
         var inputGroup = $('#shipping_div div.shipping_input');
         
+        var paymentAccountSelectBox = $('#deposit_info');
+        if(paymentAccountSelectBox.length > 0){
+            var paymentAccountId = paymentAccountSelectBox.find('option').length;
+            if(paymentAccountId <= 1){
+                var isProceedPaymentAccount = confirm("We can't send your money if your bank details are empty, are you sure you want to proceed without entering your bank details?");
+                if(!isProceedPaymentAccount){
+                    $('html, body').animate({
+                        scrollTop:$('#bank_details').offset().top
+                    }, 1500);
+                    return false;
+                }
+            }
+        }
+
         // Check for "Meetup" or "Delivery"
         var checkedDeliveryOption = form.find('input.delivery_option:checked');
         if( checkedDeliveryOption.length <= 0){
@@ -1052,23 +1057,6 @@ function ReplaceNumberWithCommas(thisnumber){
     //Combines the two sections
     return n.join(".");
 }
-
-function validateRedTextBox(idclass)
-{
-  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-    "box-shadow": "0px 0px 2px 2px #FF0000"}).addClass('my_err');
-} 
-
-function validateWhiteTextBox(idclass)
-{/*
-  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-    "box-shadow": "0px 0px 2px 2px #FFFFFF"}).removeClass('my_err');*/
-    $(idclass).css({"-webkit-box-shadow": "none",
-        "-moz-box-shadow": "none",
-        "box-shadow": "none"}).removeClass('my_err');
-};
 
 /**
  * Check if the event keycode is number key

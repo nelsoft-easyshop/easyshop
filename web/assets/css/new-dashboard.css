@@ -13,6 +13,12 @@ a{
     margin-top: 20px;
 }
 
+.btn-restore{
+    font-size: 10px !important;
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+}
+
 .col-sidebar{
     padding-right: 0px;
     padding-left: 0px;
@@ -429,7 +435,7 @@ a{
     text-align: right;
 }
 
-.select-filter-item{
+.select-filter-item {
     height: 34px;
     padding: 6px 12px;
     font-size: 12px;
@@ -472,6 +478,7 @@ a{
     vertical-align: top;
     padding-top: 5px;
     padding-left:10px;
+    max-width: 428px !important;
 }
 
 .item-list-name{
@@ -511,10 +518,12 @@ a{
 
 .td-label-desc{
     vertical-align: top;
+    width: 76px;
 }
 
 .td-desc-item{
     padding-left: 5px;
+    word-break: break-all;
 }
 
 .desc-item-mobile{
@@ -607,7 +616,7 @@ a{
     color: #fff;
     border-radius: 4px 4px 0px 0px;
     display: inline-block;
-    width: 83px;
+    width: 96px;
     cursor: pointer;
 }
 
@@ -1571,10 +1580,6 @@ a{
     font-weight: bold;
 }
 
-#activated-modal{
-    min-height: 310px !important
-}
-
 #activated-message{
     font-size: 15px;
     margin-top: 14px;
@@ -1593,7 +1598,7 @@ a{
 
 .deactivated-container{
     height: 250px !important;
-    max-height: 310px !important;
+    max-height: 250px !important;
 }
 
 #activated-modal > .deactivate-modal-title {
@@ -1809,6 +1814,11 @@ a{
     vertical-align: middle;
 }
 
+#transactions .select-filter-item {
+    max-width: 120px;
+    width: 54%;
+}
+
 .on-going-transaction-list-bought,
 .on-going-transaction-list-sold,
 .on-going-transaction-list-bought-completed,
@@ -1985,7 +1995,6 @@ label.css-label {
     text-overflow: ellipsis;
     vertical-align: middle;
     white-space: nowrap;
-    width: 100%;
 }
 
 .view-delivery-details:before {
@@ -2048,7 +2057,7 @@ label.css-label {
 /** ---------------- modal css ------------------**/
 
 .feedback-container {
-    max-height: 400px;
+    max-height: 420px;
 }
 
 .shipping-details-container {
@@ -2282,9 +2291,6 @@ label.css-label {
 }
 
 /** =============== Responsive CSS style =============== **/
-
-
-=======
 .chosen-container{
     width: 100% !important;
 }
@@ -2859,6 +2865,13 @@ label.css-label {
         max-width: 555px;
     }
 
+    .feedback-content .raty-error {
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 123px;
+    }
+
 }
 
 @media (min-width: 991px) and (max-width: 1200px) {
@@ -2881,17 +2894,13 @@ label.css-label {
 }
 
 @media screen and (max-width: 991px) {
-    .transaction-top-btns {
-        margin-bottom: 12px;
-    }
-
     .view-delivery-details .col-md-6 span,
     .view-delivery-details .col-md-12 span {
         width: 76%;
     }
 
     .feedback-container {
-        max-height: 460px;
+        max-height: 470px;
     }
 
     .star-rating-wrapper {
@@ -2928,6 +2937,10 @@ label.css-label {
 }
 
 @media screen and (max-width: 767px) {
+    .transaction-top-btns {
+        margin-bottom: 12px;
+    }
+
     .trans-left-panel.trans-btn-con1-1 {
         margin-top: 150px !important;
     }

@@ -1,10 +1,16 @@
-<link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href='/assets/css/contact.css?ver=<?php echo ES_FILE_VERSION ?>' rel="stylesheet" media='screen'/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.user-about.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
+
 <div class="clear"></div>
 <section class="bg-product-section color-default">
-    <div class="container-non-responsive bg-product-section">
+    <div class="container bg-product-section">
         <div class="row row-contact">
             <?php echo $userDetails; ?>
-            <div class="col-xs-9">
+            <div class="col-md-9">
                 <div class="panel-contact-message">
                     <?PHP if (!( isset($isLoggedIn) && $isLoggedIn  )) : ?>
                         <div class="jumbotron no-feedback-list">
@@ -17,11 +23,12 @@
                             Leave A Message
                         </p>
                         <div class="div-message-form">
-                            <?php echo form_open('messages/doSendMessage'); ?>
+                            <?php echo form_open('MessageController/simpleSend'); ?>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
-                                    <input type="text" class="input-lg input-message" placeholder="NAME..." value="Recipient: <?php echo html_escape($seller->getUsername())?>" disabled="disabled"/>
-                                    <input type="hidden" name="recipient" value="<?php echo $seller->getIdMember()?>" id="msg_recipient">
+                                    <input type="text" class="input-lg input-message" placeholder="NAME..." value="Recipient: <?php echo html_escape($seller->getStoreName())?>" disabled="disabled"/>
+                                    <input type="hidden" name="recipient" value="<?=$seller->getIdMember()?>" id="msg_recipient">
+                                    <input type="hidden" name="recipientSlug" value="<?=$seller->getSlug()?>">
                                 </div>
                             </div>
                             <div class="row">
@@ -30,9 +37,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <center>
-                                    <input type="submit" class="btn btn-send" id="btn-send-msg" value="SEND MESSAGE">
-                                </center>
+                                <div class="col-xs-12">
+                                    <center>
+                                        <input type="submit" class="btn btn-send" id="btn-send-msg" value="SEND MESSAGE">
+                                    </center>
+                                </div>
                             </div>
                         </div>
                         <?php echo form_close();?>
@@ -49,4 +58,9 @@
     </div>
     </div>
 </section>
-<script src="/assets/js/src/vendorpage_contact.js?ver=<?=ES_FILE_VERSION?>"></script>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendorpage_contact.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.user_contact.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

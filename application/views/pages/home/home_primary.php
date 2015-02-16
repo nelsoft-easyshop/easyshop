@@ -1,8 +1,11 @@
-<link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider2.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.css" media='screen'>
-<link rel="stylesheet" type="text/css" href="/assets/css/easy-icons/easy-icons.css" media='screen'>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider2.css" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+    <link rel="stylesheet" type="text/css" href="/assets/css/owl.carousel.css" media='screen'>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.home-primary.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+
 <script type="application/ld+json">
 {
   "@context": "http://schema.org",
@@ -46,11 +49,13 @@
         include("featured-brands.php");
     ?>
 </section>
-
-<script src="/assets/js/src/vendor/jquery.bxslider1.min.js" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/owl.carousel.min.js" type="text/javascript"></script>
-<script src="/assets/js/src/newhome.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/jquery.bxslider1.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/owl.carousel.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/newhome.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.home_primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 <!--Script for snow storm-->
 
 

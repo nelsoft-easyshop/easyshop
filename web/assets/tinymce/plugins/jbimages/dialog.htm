@@ -10,7 +10,7 @@
 </head>
 <body>
 
-	<form class="form-inline" id="upl" name="upl" action="ci/index.php/upload/{#jbimages_dlg.lang_id}" method="post" enctype="multipart/form-data" target="upload_target" onsubmit="jbImagesDialog.inProgress();">
+	<form class="form-inline" id="upl" name="upl" action="/extensions/jbimages/uploader/upload/{#jbimages_dlg.lang_id}" method="post" enctype="multipart/form-data" target="upload_target" onsubmit="jbImagesDialog.inProgress();">
 		
 		<h2>{#jbimages_dlg.select_an_image}</h2>
 		
@@ -27,7 +27,7 @@
 	
 	</form>
 
-	<iframe id="upload_target" name="upload_target" src="ci/index.php/blank"></iframe>
+	<iframe id="upload_target" name="upload_target" src="/extensions/jbimages/uploader/blank"></iframe>
 
 </body>
 </html>

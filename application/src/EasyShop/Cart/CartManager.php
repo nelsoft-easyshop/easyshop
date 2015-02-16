@@ -6,6 +6,12 @@ use Easyshop\Product\ProductManager as ProductManager;
 use Easyshop\Promo\PromoManager as PromoManager;
 use Easyshop\Cart\CartInterface as CartInterface;
 
+
+/**
+ * Cart Manager Class
+ *
+ * @author Sam Gavinio <samgavinio@easyshop.ph>
+ */
 class CartManager
 {
 
@@ -85,7 +91,8 @@ class CartManager
             $seller = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                ->getSeller($productId);
         }       
-        if((int)$seller->getIsActive() !== 1){
+        if((int)$seller->getIsActive() !== \EasyShop\Entities\EsMember::DEFAULT_ACTIVE || 
+           (int)$seller->getIsBanned() !== \EasyShop\Entities\EsMember::NOT_BANNED){
             return false;
         }
         

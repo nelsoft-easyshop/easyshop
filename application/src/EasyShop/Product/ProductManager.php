@@ -15,6 +15,7 @@ use Easyshop\Entities\EsProducItemLock;
 use EasyShop\Entities\EsCat;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * Product Manager Class
@@ -79,7 +80,7 @@ class ProductManager
     /**
      * Codeigniter Config Loader
      *
-     * @var EasyShop\CollectionHelper\CollectionHelper
+     * @var EasyShop\ConfigLoader\ConfigLoader
      */
     private $configLoader;
 
@@ -99,6 +100,13 @@ class ProductManager
     private $userManager;
 
     /**
+     * String utility helper
+     *
+     */
+    private $stringUtility;    
+
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
@@ -107,7 +115,8 @@ class ProductManager
                                 $collectionHelper,
                                 $configLoader,
                                 $imageLibrary,
-                                $userManager)
+                                $userManager,
+                                $stringUtility)
     {
         $this->em = $em; 
         $this->promoManager = $promoManager;
@@ -115,6 +124,7 @@ class ProductManager
         $this->configLoader = $configLoader;
         $this->imageLibrary = $imageLibrary;
         $this->userManager = $userManager;
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -166,7 +176,7 @@ class ProductManager
      * @param bool $doLockDeduction : If true, locked items will also be deducted from the total availability
      *
      */
-    public function getProductInventory($product, $isVerbose = false, $doLockDeduction = false)
+    public function getProductInventory($product, $isVerbose = false, $doLockDeduction = false, $excludeMemberId = 0)
     {
         $promoQuantityLimit = $this->promoManager->getPromoQuantityLimit($product);
         $inventoryDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -201,12 +211,12 @@ class ProductManager
 
         }
         
-        $locks = $this->validateProductItemLock($product->getIdProduct());
+        $locks = $this->validateProductItemLock($product->getIdProduct(), $excludeMemberId); 
         if($doLockDeduction){
             foreach($locks as $lock){
-                if(isset($data[$lock['id_product_item']])){
-                    $data[$lock['id_product_item']]['quantity'] -=  $lock['lock_qty'];
-                    $data[$lock['id_product_item']]['quantity'] = ($data[$lock['id_product_item']]['quantity'] >= 0) ? $data[$lock['id_product_item']]['quantity'] : 0;
+                if(isset($data[$lock['idProductItem']])){
+                    $data[$lock['idProductItem']]['quantity'] -=  $lock['lock_qty'];
+                    $data[$lock['idProductItem']]['quantity'] = ($data[$lock['idProductItem']]['quantity'] >= 0) ? $data[$lock['idProductItem']]['quantity'] : 0;
                 }
             }
         }
@@ -222,10 +232,10 @@ class ProductManager
      * @param integer $productId
      * @return mixed
      */
-    public function validateProductItemLock($productId)
+    public function validateProductItemLock($productId, $excludeMemberId = 0)
     {
         $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                                        ->getProductItemLockByProductId($productId);
+                                        ->getProductItemLockByProductId($productId, $excludeMemberId);
         foreach($productItemLocks as $idx => $lock){
             $elapsedMinutes = round((time() - $lock['timestamp']->getTimestamp())/60);
             if($elapsedMinutes > $this->lockLifeSpan){
@@ -251,7 +261,7 @@ class ProductManager
         
         $category = $products->getCat()->getIdCat();
         $brand = $products->getBrand()->getName();
-        $username = $products->getMember()->getUsername();
+        $username = $products->getMember()->getStoreName();
 
         $categoryParent = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->getParentCategoryRecursive($category);
@@ -403,9 +413,28 @@ class ProductManager
         $productImageRepo =  $this->em->getRepository('EasyShop\Entities\EsProductImage');
         $productRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $product = $productRepo->find($productId);
+        $products = $productRepo->getRecommendedProducts($productId, [$product->getCat()->getIdCat()], $limit);
+        $productCount = count($products);
+        $maxRecommended = self::RECOMMENDED_PRODUCT_COUNT;
 
-        $products = $productRepo->getRecommendedProducts($productId, $product->getCat(), $limit);
-        
+        if($productCount < $maxRecommended){
+            $lackCount = $maxRecommended - $productCount;
+            $productIdsNotIncluded = []; 
+            $productIdsNotIncluded[] = $productId;
+            $categoryParent = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                       ->getAncestorsWithNestedSet($product->getCat()->getIdCat());
+            if(empty($categoryParent) === false){
+                foreach ($products as $product) {
+                    $productIdsNotIncluded[] = $product->getIdProduct();
+                }
+                $additionalProduct = $productRepo->getRecommendedProducts($productIdsNotIncluded, 
+                                                                          $categoryParent, 
+                                                                          $lackCount);
+
+                $products = array_merge($products, $additionalProduct);
+            }
+        }
+
         $detailedProducts = [];
         foreach($products as $key => $product){ 
             $eachProduct = $this->getProductDetails($product->getIdProduct());
@@ -439,25 +468,22 @@ class ProductManager
      */ 
     public function generateSlug($title)   
     {
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findBy(['slug' => $title]);
+        $cleanedTitle = $this->stringUtility->cleanString(strtolower($title));
 
-        $cnt = count($product);
-        if($cnt > 0) {
-            $slugGenerate = $title."-".$cnt++;
-        }
-        else {
-            $slugGenerate = $title;
-        }
-        $checkIfSlugExist = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                ->findBy(['slug' => $slugGenerate]);
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('slug', 'slug');
+        $sql = "SELECT slug FROM es_product WHERE slug LIKE :productSlug ";
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('productSlug', $cleanedTitle.'%'); 
+        $existingSlugs = array_map('current', $query->getResult());
 
-        if(count($checkIfSlugExist) > 0 ){
-            foreach($checkIfSlugExist as $newSlugs){
-                $slugGenerate = $slugGenerate."-".$newSlugs->getIdProduct();
-            }
+        if(count($existingSlugs) > 0) {
+            $counter = 0;
+            while (in_array($cleanedTitle ."-". ++$counter, $existingSlugs));
+            $cleanedTitle .= "-". $counter;
         }
-        return $slugGenerate;
+
+        return $cleanedTitle;
     }
     
     /**
@@ -717,6 +743,14 @@ class ProductManager
             $product->soldCount = $esProductRepo->getSoldProductCount($product->getIdProduct());
             $productAttributes = $esProductRepo->getAttributesByProductIds([$product->getIdProduct()]);
             $product->attributes = $this->collectionHelper->organizeArray($productAttributes);
+
+            if ( strlen(trim($product->getCatOtherName())) <= 0 ){
+                $product->category = trim($product->getCat()->getName());
+            }
+            else{
+                $product->category = trim($product->getCatOtherName());
+            }
+            
             $products[] = $product;
         }
 
@@ -792,5 +826,24 @@ class ProductManager
 
         return false;
     }
+
+    /**
+     * Determines if a product is active or not
+     *
+     * @param EasyShop\Entities\EsProduct
+     * @return boolean
+     */
+    public function isProductActive($product)
+    {
+        $member = $product->getMember();
+
+        $isNotDeleted = (int)$product->getIsDelete() === \EasyShop\Entities\EsProduct::ACTIVE;
+        $isNotDrafted = !$product->getIsDraft();
+        $isMemberNotBanned = !$member->getIsBanned();
+        $isMemberActive = $member->getIsActive();
+        
+        return $isNotDeleted && $isNotDrafted && $isMemberNotBanned && $isMemberActive;
+    }
+    
 }
 

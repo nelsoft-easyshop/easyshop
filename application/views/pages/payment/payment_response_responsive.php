@@ -1,7 +1,11 @@
-<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.payment.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 
 <div class="container font-roboto" style="max-width:980px; margin-top: 15px;">  
@@ -146,8 +150,8 @@
                                 <td width="50%" style="padding: 5px;">
                                     <b>Subtotal:</b>
                                 </td>
-                                <td width="50%" style="padding: 5px;">
-                                    <?php echo $value['qty']; ?>
+                                <td width="50%" style="padding: 5px;"> 
+                                    <?php echo number_format($value['subtotal'], 2, '.',','); ?>
                                 </td>
                             </tr>
                             <tr>

@@ -2,12 +2,6 @@
 
 class Header_decorator extends Viewdecorator 
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-    
     /**
      * Generate header data
      *
@@ -16,19 +10,19 @@ class Header_decorator extends Viewdecorator
      * @param string $relCanonical
      * @param boolean $renderSearchbar
      */
-    public function view($title = "", $metadescription = "" , $relCanonical = "", $renderSearchbar = true)
+    public function view($memberId, $title = "", $metadescription = "" , $relCanonical = "", $renderSearchbar = true)
     {
         $cartManager = $this->serviceContainer['cart_manager'];
         $cartImplementation = $cartManager->getCartObject();
-        
+        $messageManager = $this->serviceContainer['message_manager'];
         $isLoggedIn = false;
         $member = null;
-        $memberId = $this->session->userdata('member_id');
         $unreadMessageCount = 0;
         $cart = [];
         $cartSize = 0;
-        
-        if(!empty($memberId) || $this->check_cookie()){
+        $chatServerHost = 0;
+        $chatServerPort = 0;
+        if($memberId){
             $isLoggedIn = true;
             $member = $this->serviceContainer['entity_manager']
                            ->getRepository('EasyShop\Entities\EsMember')
@@ -41,6 +35,8 @@ class Header_decorator extends Viewdecorator
                                        ->getUnreadMessageCount($memberId);
             $cart = array_values($cartManager->getValidatedCartContents($memberId));
             $cartSize = $cartImplementation->getSize(true);
+            $chatServerHost = $messageManager->getChatHost(true);
+            $chatServerPort = $messageManager->getChatPort();
         }
 
         $cartTotalAmount = $cartSize > 0 ? $cartImplementation->getTotalPrice() : 0;
@@ -65,6 +61,8 @@ class Header_decorator extends Viewdecorator
         $this->view_data['relCanonical'] = $relCanonical;
         $this->view_data['menu'] = $menu;
         $this->view_data['renderSearchbar'] = $renderSearchbar;
+        $this->view_data['chatServerHost'] = $chatServerHost;
+        $this->view_data['chatServerPort'] = $chatServerPort;
     }
 }
 

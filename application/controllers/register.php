@@ -26,10 +26,11 @@ class Register extends MY_Controller
         }
         else{
             if($this->session->userdata('usersession')){
-                redirect('/?view=basic');
+                redirect('/');
             }
         }
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
         ];
@@ -69,45 +70,16 @@ class Register extends MY_Controller
                 $signUpResponse["errors"] = $registrationResult["errors"];
             }
             else {
-                $emailCode = sha1($registrationResult["member"]->getEmail().time());
-                $this->load->library('parser');
-                $parseData = [
-                    'user' => $registrationResult["member"]->getUserName(),
-                    'hash' => $this->encrypt
-                                   ->encode($registrationResult["member"]->getEmail().'|'.$registrationResult["member"]->getUserName().'|'.$emailCode),
-                    'site_url' => site_url('register/email_verification')
-                ];
-                $imageArray = $this->config->config['images'];                
-                $this->emailNotification = $this->serviceContainer['email_notification'];
-                $message = $this->parser->parse('templates/landingpage/lp_reg_email',$parseData,true);                                                              
-                $this->emailNotification->setRecipient($registrationResult["member"]->getEmail());
-                $this->emailNotification->setSubject($this->lang->line('registration_subject'));
-                $this->emailNotification->setMessage($message, $imageArray);
-                $emailResult = (bool) $this->emailNotification->sendMail();
-                $hashUtility = $this->serviceContainer['hash_utility'];
-                $data = [
-                    "memberId" => $registrationResult["member"]->getIdMember(),
-                    "emailCode" => $emailCode,
-                    "mobileCode" => $hashUtility->generateRandomAlphaNumeric(6),
-                    "email" => ($emailResult) ? $emailResult : false,
-                ];
-                $isVerifCodeSuccess = $this->accountManager->storeMemberVerifCode($data);
-                $isRegistrationSuccess = true;
+                $isVerificationSendingSuccessful =  $this->accountManager
+                                                         ->sendAccountVerificationLinks($registrationResult["member"])['isSuccessful'];
+                $signUpResponse["result"] = true;
                 if(is_null($registrationResult["member"]) || !$registrationResult["member"]) {
                     $signUpResponse["dbError"] = "Database registration failure <br>";
-                    $isRegistrationSuccess = false;
+                    $signUpResponse["result"] = false;
                 }
-                if(!$emailResult) {
-                    $signUpResponse["dbError"] = "Failed to send verification email. Please verify in user page upon logging in.";
-                }
-                if(!$isVerifCodeSuccess) {
-                    $signUpResponse["dbError"] = "Database verifcode error <br>";
-                }            
-                if($isRegistrationSuccess && $isVerifCodeSuccess) {
-                    $signUpResponse["result"] = 1;
-                }
-                else {
-                    $signUpResponse["result"] = 0;
+                if(!$isVerificationSendingSuccessful) {
+                    $signUpResponse["dbError"] = "Sorry, we cannot send out a verification email at this time. Please verify through your dashboard upon logging in.";
+                    $signUpResponse["result"] = false;
                 }
             }
         }
@@ -153,41 +125,6 @@ class Register extends MY_Controller
         }
     }
 
-    public function external_callbacks( $postdata, $param )
-    {
-            $param_values = explode( ',', $param ); 
-            $model = $param_values[0];
-            $this->load->model( $model );
-            $method = $param_values[1];
-            
-            if( count( $param_values ) > 2 )
-            {
-                array_shift( $param_values );
-                array_shift( $param_values );
-                $argument = $param_values;
-            }
-
-            if( isset( $argument ) )
-            {
-            if($method == 'checkifrequired'){
-                $thisdata = trim(html_escape($postdata));
-                $checkwith = trim(html_escape($this->input->post($argument[0])));
-                $callback_result = $this->$model->$method($thisdata, $checkwith);
-            }
-            else
-                $callback_result = $this->$model->$method( $postdata, $argument );
-            }
-            else
-            {
-                if($method == 'validate_captcha') {
-                    $callback_result = $this->$model->$method( $postdata, $this->session->userdata('captcha_word'));
-                }
-                else {
-                    $callback_result = $this->$model->$method( $postdata );
-                }
-            }
-            return $callback_result;
-    }
 
     public function success($action = '')
     {
@@ -273,16 +210,14 @@ class Register extends MY_Controller
     public function changepass()
     {
         $result = false;
-        $username = $this->input->post('wsx');
-        $cur_password = $this->input->post('cur_password');
+        $memberObj = $this->serviceContainer['entity_manager']
+                          ->getRepository('EasyShop\Entities\EsMember')   
+                          ->find($this->session->userdata('member_id'));
+        $currentPassword = $this->input->post('currentPassword');
         $password = $this->input->post('password');         
 
-        $dataval = [
-            'login_username' => $username, 
-            'login_password' => $cur_password
-        ];
         $this->accountManager = $this->serviceContainer['account_manager'];            
-        $row = $this->accountManager->authenticateMember($username, $cur_password);
+        $row = $this->accountManager->authenticateMember($memberObj->getUserName(), $currentPassword);
 
         if (!empty($row["member"])){
             $result = $this->accountManager->updatePassword($row["member"]->getIdMember(), $password);
@@ -299,14 +234,14 @@ class Register extends MY_Controller
         echo json_encode($serverResponse);
     }
     
-    function email_verification(){
-
+    
+    /**
+     * Checks if a user's email is succesfully verified
+     *
+     */
+    public function email_verification()
+    {
         $this->load->library('encrypt');
-
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $viewData['facebook'] = $socialMediaLinks["facebook"];
-        $viewData['twitter'] = $socialMediaLinks["twitter"];
 
         //Decrypt and re-assign data
         $enc = html_escape($this->input->get('h'));
@@ -314,65 +249,70 @@ class Register extends MY_Controller
         $decrypted = $this->encrypt->decode($enc);
         $getdata = explode("|", $decrypted);
         
-        $email = $getdata[0];
-        $username = $getdata[1];
-        $hash = $getdata[2];
+        $email = isset($getdata[0]) ? $getdata[0] : null;
+        $username = isset($getdata[1]) ? $getdata[1] : null;
+        $hash = isset($getdata[2]) ? $getdata[2] : null;
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.ph - Email Verification',
             'metadescription' => '',
             'relCanonical' => '',
             'renderSearchbar' => false,
         ];         
         
-        $data = [ 
-            'member_username' => $username,
+        $bodyData = [ 
+            'username' => $username,
             'email' => $email,
         ];
 
         $member_id = $this->register_model->get_memberid($username)['id_member'];
-
+ 
         if($member_id === 0){
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/user/err_email_verif', $data);
-            $this->load->view('templates/footer_full', $viewData);
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('errors/email-verification');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
             return;
         }
 
-        $data_val = $this->register_model->get_verifcode($member_id);
-
-
-        if($email === $data_val['email'] && $hash === $data_val['emailcode'] && $username === $data_val['username'])
+        $verificationData = $this->register_model->get_verifcode($member_id);
+        
+        if($email === $verificationData['email'] && 
+           $hash === $verificationData['emailcode'] && 
+           $username === $verificationData['username'])
         {
         
-            if($data_val['is_email_verify'] == 1){
-                $data['verification_msg'] = $this->lang->line('expired_email_verification');
+            if((bool)$verificationData['is_email_verify']){
+                $bodyData['verificationMessage'] = $this->lang->line('expired_email_verification');
+                $bodyData['isAlreadyVerified']  = true;
                 $this->load->spark('decorator');    
-                $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-                $this->load->view('pages/user/register_form3_view', $data);
-                $this->load->view('templates/footer_full', $viewData);
+                $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+                $this->load->view('pages/user/email-verification-success', $bodyData);
+                $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
                 return;
             }
 
-            $temp = array(
+            $temp = [
                 'is_email_verify' => 1,
                 'member_id' => $member_id
-            );
+            ];
 
             $this->register_model->update_verification_status($temp);
             
-            $data['verification_msg'] = $this->lang->line('success_email_verification');
+            $bodyData['verificationMessage'] = $this->lang->line('success_email_verification');
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/user/register_form3_view', $data);
-            $this->load->view('templates/footer_full', $viewData);
+            
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('pages/user/email-verification-success', $bodyData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+
         }
         else{
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/user/err_email_verif', $data);
-            $this->load->view('templates/footer_full', $viewData);
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('errors/email-verification');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
         }
     }
  

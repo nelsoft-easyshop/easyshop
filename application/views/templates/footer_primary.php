@@ -26,18 +26,18 @@
                                     <li><a href="/terms">Terms of Use</a></li>
                                 </ul>
                             </div>
-                             <!--
+
                             <div class="col-md-12 col-xs-12 app-img-con">
                                 <h1>Download our App</h1>
                                
-                                <a href="" class="app-img-apple" target="_blank" style="display:none;">
-                                    <img src="/assets/images/img-app-apple.png" alt="apple app">
+                                <a href="https://itunes.apple.com/us/app/easyshop.ph/id935195239?mt=8" class="app-img-apple" target="_blank" >
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-app-apple.png" alt="apple app">
                                 </a>
                                 <a href="https://play.google.com/store/apps/details?id=com.nelsoft.easyshop" target="_blank">
-                                    <img src="/assets/images/img-app-google.png" alt="google app">
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-app-google.png" alt="google app">
                                 </a>
                             </div>
-                                                           -->
+
                         </div>
                     </div>
                     <div class="col-md-6 footer-newsletter">
@@ -56,10 +56,10 @@
                         <h1>Follow Us</h1>
                         <div class="social-media-wrapper">
                             <a href="<?php echo $facebook; ?>">
-                                <img src="/assets/images/img-facebook-new.png" alt="easyshop facebook">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-facebook-new.png" alt="easyshop facebook">
                             </a>
                             <a href="<?php echo $twitter; ?>">
-                                <img src="/assets/images/img-twitter-new.png" alt="easyshop twitter">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-twitter-new.png" alt="easyshop twitter">
                             </a>
                             <div class="clear"></div>
                         </div>
@@ -72,11 +72,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 text-left footer-payment-opt">
-                        <img src="/assets/images/img-visa.png" alt="Visa">
-                        <img src="/assets/images/img-paypal.png" alt="Paypal">
-                        <img src="/assets/images/img-mastercard.png" alt="Mastercard">
-                        <img src="/assets/images/img-dragonpay.png" alt="Dragon Pay">
-                        <img src="/assets/images/img-cod.png" alt="COD">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa.png" alt="Visa">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-paypal.png" alt="Paypal">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard.png" alt="Mastercard">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-dragonpay.png" alt="Dragon Pay">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod.png" alt="COD">
                     </div>
                     <div class="col-md-6 text-right footer-hide">
                         <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>

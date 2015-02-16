@@ -26,33 +26,20 @@ class product_search extends MY_Controller {
     public $per_page = 15; 
 
      /**
-     *   Returns recommended keywords for search bar
-     */
-    function sch_onpress()
-    {  
-        header('Content-Type: text/plain'); 
-        if($this->input->get('q')){
-
-            $html = "";
-            $stringData =  $this->input->get('q'); 
-            $string = ltrim($stringData);  
-            $words = explode(" ",trim($string)); 
-            $keywords = $this->search_model->itemKeySearch($words);
-           
-            if(count($keywords) <= 0){
-                $html = 0;
-            }else{
-                $html .= "<ul>";
-                foreach ($keywords as $value) {
-                    $showValue = $this->highlights($value,$stringData);
-                    $html .= "<li><a href='/search/search.html?q_str=".urlencode($value)."&q_cat=1'>".$showValue."</a></li>";
-
-                }
-                $html .= "</ul>";
-            }
-
-            echo $html;
+      * Returns recommended keywords for search bar
+      * @return JSON
+      */
+    public function suggest()
+    {
+        $response = [];
+        if($this->input->get('query')){
+            $queryString = trim($this->input->get('query'));
+            $searchSuggestions = $this->serviceContainer['search_product']
+                                      ->getKeywordSuggestions($queryString);
+            $response = $searchSuggestions; 
         }
+
+        echo json_encode($response);
     }
 
     /**
@@ -69,8 +56,7 @@ class product_search extends MY_Controller {
 
         $categoryId = $this->input->get('category') && count($this->input->get()) > 0
                       ? trim($this->input->get('category'))
-                      : EsCat::MAIN_PARENT_CATEGORY;
-        $memberId = $this->session->userdata('member_id');
+                      : EsCat::ROOT_CATEGORY_ID; 
 
         if(count($_GET)>0){
             $parameter = $this->input->get();
@@ -89,6 +75,7 @@ class product_search extends MY_Controller {
         $response['getParameter'] = $this->input->get();
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => 'Easyshop.com - Advanced Search',
             'metadescription' => '',
             'relCanonical' => '',
@@ -101,17 +88,16 @@ class product_search extends MY_Controller {
         $this->load->view('templates/footer');
     }
 
-    public function loadMoreProduct()
+    /**
+     * load more product when scroll in advance search
+     * @return json
+     */
+    public function loadMoreProductAdvance()
     {
         $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
 
-        $searchProductService = $this->serviceContainer['search_product'];
-        $categoryManager = $this->serviceContainer['category_manager']; 
-
-        $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
-        $memberId = $this->session->userdata('member_id');
-
+        $searchProductService = $this->serviceContainer['search_product']; 
         $search = $searchProductService->getProductBySearch($this->input->get());
         $response['products'] = $search['collection']; 
 
@@ -121,59 +107,83 @@ class product_search extends MY_Controller {
         echo json_encode($data);
     }
 
+    /**
+     * load more product when scroll
+     * @return json
+     */
+    public function loadMoreProduct()
+    {
+        $searchProductService = $this->serviceContainer['search_product']; 
+        $search = $searchProductService->getProductBySearch($this->input->get()); 
+        $typeOfView = trim($this->input->get('typeview'));
+        $currentPage = (int) $this->input->get('page'); 
+        $productViewData = [
+            'products' => $search['collection'],
+            'currentPage' => $currentPage + 1,
+            'isListView' => $typeOfView === 'list',
+        ];
+        $data['view'] = $this->load->view('partials/search-products', $productViewData, true); 
+        $data['count'] = count($search['collection']);
+        echo json_encode($data);
+    }
+
     /*   
      *   Returns results of searching products through the search bar
      *   Route: search/(:any)
      */
-    public function searchfaster()
+    public function search()
     {
-        if(trim($this->input->get('q_str')) === "" && intval(trim($this->input->get('category'))) <= 1){
+        if(trim($this->input->get('q_str')) === ""
+           && (int) trim($this->input->get('category')) === EsCat::ROOT_CATEGORY_ID
+           || trim($this->input->get('q_str')) === ""
+              && !$this->input->get('category')){
             redirect('cat/all');
-        }
-
-        $EsLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
-        $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat');
+        } 
 
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
-        $response['string'] = ($this->input->get('q_str')) ? trim($this->input->get('q_str')) : "";
-        $categoryId = ($this->input->get('category') && count($this->input->get())>0)?trim($this->input->get('category')):1;
+        $response['string'] = $this->input->get('q_str') ? trim($this->input->get('q_str')) : "";
         $parameter = $response['getParameter'] = $this->input->get();
-
         $search = $searchProductService->getProductBySearch($parameter);
+
         $response['products'] = $search['collection']; 
         $response['productCount'] = $search['count']; 
-        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
+        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($search['collection']);
+        $response['availableCondition'] = [];
+        if(isset($response['attributes']['Condition'])){
+            $response['availableCondition'] = $response['attributes']['Condition'];
+            unset($response['attributes']['Condition']);
+        }
+        $response['totalPage'] = ceil($search['count'] / $searchProductService::PER_PAGE);
+        $paginationData = [
+            'totalPage' => $response['totalPage'],
+        ];
+        $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
 
+        $category = EsCat::ROOT_CATEGORY_ID; 
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
-                            ->findBy(['parent' => 1]);
+                                   ->findBy(['parent' => $category]);
+        $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false); 
+        
+        $response['categorySelected'] = $this->input->get('category') ? (int) $this->input->get('category') : $category;
+        $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
 
-        $protectedCategory = $categoryManager->applyProtectedCategory($parentCategory, false); 
-
-        $response['parentCategory'] = $categoryManager->setCategoryImage($protectedCategory);
-
-        $response['category_navigation_desktop'] = $this->load->view('templates/category_navigation_responsive',
-                [
-                    'parentCategory' =>  $response['parentCategory'],
-                    'environment' => 'desktop'
-                ], true );
-
-        $response['category_navigation_mobile'] = $this->load->view('templates/category_navigation_responsive',
-                [
-                    'parentCategory' =>  $response['parentCategory'],
-                    'environment' => 'mobile'
-                ], true );
-
-        $headerData = [
-            'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph'
+        $headerData = [ 
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph' 
         ];
 
-       
-        $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/search/product_search_by_searchbox',$response);
-        $this->load->view('templates/footer'); 
+        $productViewData = [
+            'products' => $search['collection'],
+            'currentPage' => 1,
+            'isListView' => $response['isListView'],
+        ];
+        $response['productView']  = $this->load->view('partials/search-products', $productViewData, true);
+
+        $this->load->spark('decorator');
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/search/product-search-new',$response);
     }
     
     /**
@@ -223,46 +233,6 @@ class product_search extends MY_Controller {
         $rows = $this->search_model->searchBrand($newString);
         echo json_encode($rows);
     }
-
-    /**
-     *  Hightlight string search to the available words
-     *  @param string $text
-     *  @param string $words
-     *  @return string $text
-     */
-    private function highlights($text, $words)
-    {
-        $words = preg_replace('/\s+/', ' ',$words);
-        $splitWords = explode(" ", $words);
-        foreach($splitWords as $word){
-            $color = "#e5e5e5";
-            $text = preg_replace("|($word)|Ui","<mark>$1</mark>" , $text );
-        } 
-
-        return $text;
-    }
-
-    private function toUL($array = array(), $string = '')
-    {
-        $html = '<ul>' . PHP_EOL;
-        foreach ($array as $value)
-        {
-            if($value['count'] <= 0){
-                continue;
-            }
-            $html .= '<li><a href="search.html?q_str=' . $string .'&q_cat='.$value['item_id'].'">' . $value['name'].'('.$value['count'].')</a>';
-            if (!empty($value['children'])){
-                $html .= $this->toUL($value['children'], $string);
-            }
-            $html .= '</li>' . PHP_EOL;
-        }
-
-        $html .= '</ul>' . PHP_EOL;
-
-        return $html;
-    }
-
-
 }
 
 /* End of file product_search.php */

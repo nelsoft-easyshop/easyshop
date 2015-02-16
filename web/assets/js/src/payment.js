@@ -7,6 +7,16 @@ $(document).ready(function(){
     $('.paypal_button').show();  
     $('#c_mobile').numeric({negative : false});
 
+    $(document).on('keypress','#c_telephone',function (evt) {
+ 
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode != 45  && charCode > 31 && (charCode < 48 || charCode > 57)){
+            return false;
+        }
+
+        return true;
+    }); 
+
     var cityFilter = function(stateregionselect,cityselect){
         var stateregionID = stateregionselect.find('option:selected').attr('value'); 
         cityselect.find('option.echo').remove();
@@ -216,9 +226,9 @@ $(document).ready(function(){
 
     $(document).on('click','.payment_cod',function () {
          if($('#chk_cod').is(':checked')){
-             var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
+            var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
 
-             if(r == true){
+            if(r == true){
                 $(this).val('Please wait...'); 
                 $(this).attr('disabled','disabled');
 
@@ -263,15 +273,16 @@ $(document).ready(function(){
                 else{
                     $('#codFrm').submit();
                 }
-             }
-         }else{
+            }
+        }
+        else{
             $("#chk_cod").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-             "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-             "box-shadow": "0px 0px 2px 2px #FF0000"});
-             $('#cod > .chck_privacy > p').empty();
-             $('#cod > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
-         }
-     });
+                               "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+                               "box-shadow": "0px 0px 2px 2px #FF0000"});
+            $('#cod > #codFrm > .chck_privacy > p').remove();
+            $('#cod > #codFrm > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
+        }
+    });
     
 // -- END OF CASH ON DELIVERY PROCESS PAYMENT SECTION -- // 
 
@@ -343,6 +354,11 @@ $(document).ready(function(){
     $(document).on('click','.show-form-address',function () {
         $("#delAddressFrm")[0].reset();
         $('.stateregionselect').trigger('change');
+        validateWhiteTextBox('#consignee');
+        validateWhiteTextBox('.stateregionselect');
+        validateWhiteTextBox('.cityselect');
+        validateWhiteTextBox('.c_address');
+        validateWhiteTextBox('#c_mobile'); 
     });
 
     $(document).on('click','.link_address',function () {
@@ -488,8 +504,7 @@ $(document).ready(function(){
                 }
             } 
         });
-    });
-
+    }); 
 
 // -- END OF REMOVE ITEM FROM SELECTED CART --//
 

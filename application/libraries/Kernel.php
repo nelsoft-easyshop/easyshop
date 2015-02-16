@@ -68,53 +68,58 @@ class Kernel
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsMemberListener(
+                new \EasyShop\Doctrine\Subscribers\EsMemberSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsAddressListener(
+                new \EasyShop\Doctrine\Subscribers\EsAddressSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductReviewListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductReviewSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsMemberFeedbackListener(
+                new \EasyShop\Doctrine\Subscribers\EsMemberFeedbackSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsOrderListener(
+                new \EasyShop\Doctrine\Subscribers\EsOrderSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsProductShippingCommentListener(
+                new \EasyShop\Doctrine\Subscribers\EsProductShippingCommentSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Listeners\EsOrderProductListener(
+                new \EasyShop\Doctrine\Subscribers\EsOrderProductSubscriber(
                     $container['activity_manager'],
                     $container['language_loader']
                 )
             );
+
+            $em->getEventManager()->addEventListener(
+                [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\ProductImageExistenceListener(ENVIRONMENT)
+            );
+            
             return $em;
         };
 
@@ -179,18 +184,32 @@ class Kernel
             $formErrorHelper = $container['form_error_helper'];
             $stringHelper = $container['string_utility'];
             $httpRequest = $container['http_request'];
+            $emailNotification  = $container['email_notification'];   
+            $parser = new \CI_Parser();
+            $encrypter = new \CI_Encrypt();
+            $configLoader = $container['config_loader'];
+            $languageLoader = $container['language_loader'];
+            $hashUtitility = $container['hash_utility'];
             return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
                                                         $userManager, 
                                                         $formFactory, 
                                                         $formValidation, 
                                                         $formErrorHelper,
                                                         $stringHelper,
-                                                        $httpRequest);        
+                                                        $httpRequest,
+                                                        $emailNotification,
+                                                        $parser,$encrypter,
+                                                        $configLoader,
+                                                        $languageLoader,
+                                                        $hashUtitility
+                                                        );        
         };
 
-        $container['message_manager'] = function ($c) use ($container) {
+        $jsServerConfig = require APPPATH . 'config/param/js_config.php';
+        $container['message_manager'] = function ($c) use ($container, $jsServerConfig) {
             $em = $container['entity_manager'];
-            return new \EasyShop\Message\MessageManager($em);
+            $localConfig = $container['local_configuration'];
+            return new \EasyShop\Message\MessageManager($em, $localConfig, $jsServerConfig);
         };
 
         // Paths
@@ -286,15 +305,19 @@ class Kernel
             $httpRequest = $container['http_request'];
             $promoManager = $container['promo_manager'];
             $configLoader = $container['config_loader'];
+            $sphinxClient = $container['sphinx_client'];
+            $userManager = $container['user_manager'];
 
             return new \EasyShop\Search\SearchProduct(
-                                                        $em
-                                                        ,$collectionHelper
-                                                        ,$productManager
-                                                        ,$categoryManager
-                                                        ,$httpRequest
-                                                        ,$promoManager
-                                                        ,$configLoader
+                                                        $em,
+                                                        $collectionHelper,
+                                                        $productManager,
+                                                        $categoryManager,
+                                                        $httpRequest,
+                                                        $promoManager,
+                                                        $configLoader,
+                                                        $sphinxClient,
+                                                        $userManager
                                                     );
         };
 
@@ -311,12 +334,14 @@ class Kernel
             $collectionHelper = $container['collection_helper'];
             $userManager = $container['user_manager'];
             $imageLibrary = new \CI_Image_lib();
+            $stringHelper = $container['string_utility'];            
             return new \EasyShop\Product\ProductManager($em, 
                                                         $promoManager, 
                                                         $collectionHelper, 
                                                         $configLoader,
                                                         $imageLibrary,
-                                                        $userManager);
+                                                        $userManager,
+                                                        $stringHelper);
         };
 
         $container['transaction_manager'] = function ($c) use ($container) {
@@ -327,17 +352,15 @@ class Kernel
             return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
         };
         
-
-        
         $container['image_utility'] = function ($c) use ($container){
             $imageLibrary = new \CI_Image_lib();            
             return new \EasyShop\Image\ImageUtility($imageLibrary);
-        };    
+        };  
 
-        $container['image_upload'] = function ($c) use ($container){
-            $uploadLibrary = new \CI_Upload();            
-            return new \EasyShop\Upload\Upload($uploadLibrary);
-        };                            
+        $container['webservice_manager'] = function ($c) use ($container){
+            $em = $container['entity_manager'];   
+            return new \EasyShop\Webservice\AuthenticateRequest($em);                     
+        };                      
 
         // Collection Helper
         $container['collection_helper'] = function ($c) {
@@ -349,9 +372,9 @@ class Kernel
             return new \EasyShop\Utility\StringUtility($htmlPurifier);
         };
         
-        $container['hash_utility'] = function($c) {
+        $container['hash_utility'] = function($c) use ($container) {
             $encrypt = new CI_Encrypt();
-            return new \EasyShop\Utility\HashUtility($encrypt);
+            return new \EasyShop\Utility\HashUtility($encrypt, $container['entity_manager']);
         };
         
         $container['url_utility'] = function ($c) {
@@ -491,6 +514,31 @@ class Kernel
             return new \EasyShop\Notifications\MobileNotification($smsConfig);
         };
 
+        $awsConfig = require_once(APPPATH . "config/param/aws.php");
+        $container["aws_uploader"] = function($c) use ($awsConfig, $container){
+            $awsClient =  \Aws\S3\S3Client::factory([ 
+                'key' => $awsConfig['s3']['key'],
+                'secret' => $awsConfig['s3']['secret']
+            ]);
+            return new \EasyShop\Upload\AwsUpload($awsClient, $container["config_loader"]);
+        };
+
+        $container['assets_uploader'] = function($c) use ($container){
+            $uploadLibrary = new CI_Upload();
+            $imageLibrary = new MY_Image_lib();
+            return new \EasyShop\Upload\AssetsUploader( $container["entity_manager"], 
+                                                        $container["aws_uploader"],
+                                                        $container["config_loader"],
+                                                        $uploadLibrary,
+                                                        $imageLibrary,
+                                                        ENVIRONMENT);
+        };
+        
+        $container["image_utility"] = function($c) use ($container){
+            $imageLibrary = new CI_Image_lib();
+            return new \EasyShop\Image\ImageUtility($imageLibrary);
+        };
+        
         // Review product
         $container['review_product_service'] = function ($c) use ($container) {
             return new \EasyShop\Review\ReviewProductService(
@@ -527,6 +575,13 @@ class Kernel
                             $container['payment_service']
                         );
         };
+        
+        $container['sphinx_client'] = function ($c) use ($container) {
+            $sphinxClient = new \SphinxClient();
+            $sphinxClient->SetMaxQueryTime(5000);
+            return $sphinxClient;
+        };
+
 
         /* Register services END */
         $this->serviceContainer = $container;

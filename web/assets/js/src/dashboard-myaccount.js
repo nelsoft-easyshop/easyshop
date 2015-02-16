@@ -127,7 +127,7 @@
             loadingimg.show(); 
             $.ajax({
                 type: 'post',
-                data: {wsx:username, cur_password:currentPassword, password:newPassword, csrfname : csrftoken},
+                data: {currentPassword:currentPassword, password:newPassword, csrfname : csrftoken},
                 url: "/register/changepass",
                 success: function(data) {
                     actionGroupChangePass.show();
@@ -136,7 +136,6 @@
                     if(obj.result === "success") {      
                        errorContainer.hide();
                        succcessContainer.fadeIn();
-                       
                     }
                     else {
                         errorContainer.html(obj.error);
@@ -339,6 +338,7 @@
     $("#formPersonalInfo").on('click','#savePersonalInfo',function (e) {
         $("#errorIndicatorMobileNumber").css("display","none");        
         $("#errorIndicatorBirthday").css("display","none");        
+        $("#errorIndicatorGender").css("display","none");        
         $("#savePersonalInfo").text("Saving...");
         e.preventDefault();
 
@@ -364,10 +364,14 @@
                         if(obj.error.dateofbirth) {
                             $("#errorIndicatorBirthday").css("display","block");
                             $("#errorTextBirthday").text(obj.error.dateofbirth );                            
-                        }              
+                        }     
+                        if(obj.error.gender) {
+                            $("#errorIndicatorGender").css("display","block");
+                            $("#errorTextGender").text(obj.error.gender );                            
+                        }                                   
                     }
                     else {
-                        $("#errorIndicatorMobileNumber").css("display","none");
+                        $("#errorIndicatorMobileNumber, #errorIndicatorBirthday, #errorIndicatorGender").css("display","none");
                         
                     }
             },
@@ -377,11 +381,9 @@
     $("#editEmailPanel").on('click','#changeEmailBtn',function (e) {
 
         email = $("#emailAddressEdit").val().trim();
-        var loadingimg = $('img.changeEmailLoader'); 
-        var verifyspan = $('#changeEmailBtnAction');  
         var currentEmail =  $("#currentEmail").text();
-        verifyspan.hide();
-        loadingimg.show();
+        $('img.changeEmailLoader').show(); 
+        $('#changeEmailBtnAction').hide();
 
         $.ajax({
             type: 'post',
@@ -390,24 +392,23 @@
             success: function(data) {
               
                 var obj = jQuery.parseJSON(data);   
-                loadingimg.hide();
-                verifyspan.show();
                 $("#verifyEmail").css("display","none");    
                     if(obj.result !== "success") {
                         if(obj.error.email) {
                             $("#errorIndicatoreEmailAddress").css("display","block");
                             $("#errorTextEmail").text(obj.error.email);
+                             $('img.changeEmailLoader').hide(); 
+                             $('#changeEmailBtnAction').show();
                         }                    
                     }
                     else {
-                        $("#currentEmail").text(email);                       
-                        $( "#btn-edit-email" ).trigger( "click" );                          
+                        $("#currentEmail").text(email);                                              
                         if(email !== currentEmail) {
                             $("#verifyEmail").css("display","block");
                             $("#verifiedEmail, #errorIndicatoreEmailAddress").css("display","none");                            
-                        }                        
+                        }
+                        verifyEmail();
                     }
-
             },
         });             
     });   
@@ -418,6 +419,8 @@
         var field = "email";
         var loadingimg = $('img.verify_img'); 
         var verifyspan = $('#verifyEmailAction');  
+        $("#verifiedEmailText").text('');
+        $("#errorTextVerify").text('');
         verifyspan.hide();
         loadingimg.show();
 
@@ -428,21 +431,22 @@
             success: function(data) {
                 $( "#btn-edit-email" ).prop("disabled", false);
                 var obj = jQuery.parseJSON(data);   
+                var emailCooldownDuration = $('#email-cooldown-mins').val();
                 loadingimg.hide();
                 verifyspan.show();
                 $("#verifyEmail").css("display","none");    
-                if(obj === "success") {
+                if(obj === 'success') {
                     $("#verifiedEmail").css("display","block");                     
                     $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
                 }
-                else {
+                  else if(obj === 'limit-of-requests-reached'){
                     $("#errorIndicatoreVerify").css("display","block");
-                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after 30 mins.");
+                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after "+emailCooldownDuration+" mins.");
                 }
  
             },
         });             
-    });    
+    });       
 
 
     /**************** END PERSONAL INFORMATION ******************/
@@ -534,7 +538,40 @@
         xmlHttp.onreadystatechange = updatePage;
         xmlHttp.send(null);
     }
-
+    function verifyEmail()
+    {
+        var loadingimg = $('img.verify_img'); 
+        var verifyspan = $('#verifyEmailAction');          
+        var data = $("#currentEmail").text();
+        $("#verifiedEmailText").text('');
+        $("#errorTextVerify").text('');
+        var field = "email";        
+        $.ajax({
+            type: 'post',
+            data: {field:field, data:data, reverify:'true', csrfname : csrftoken},
+            url: "/memberpage/verify",
+            success: function(data) {
+                $( "#btn-edit-email" ).trigger( "click" );   
+                var obj = jQuery.parseJSON(data); 
+                var emailCooldownDuration = $('#email-cooldown-mins').val();
+                loadingimg.hide();
+                verifyspan.show();
+                $('img.changeEmailLoader').hide(); 
+                $('#changeEmailBtnAction').show();
+                $("#verifyEmail").css("display","none");   
+                if(obj === 'success') {
+                    $("#verifiedEmail").css("display","block");                     
+                    $("#verifiedEmailText").text("An email has been sent. Please check your e-mail.");
+                }
+                else if(obj === 'limit-of-requests-reached'){
+                    $("#verifiedEmail").css("display","none");
+                    $("#errorIndicatoreVerify").css("display","block");
+                    $("#errorTextVerify").text("You have exceeded the number of times to verify your email. Try again after " +emailCooldownDuration+" mins.");
+                }
+ 
+            },
+        });              
+    }
 
 
 }(jQuery));

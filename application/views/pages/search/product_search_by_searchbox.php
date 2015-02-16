@@ -1,10 +1,17 @@
 
 <meta name="viewport" content="width=device-width, maximum-scale=1.0">
-<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/>
-<link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
-<link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/>
+    <link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
+    <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.product-search-by-searchbox.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
+
 <div class="clear"></div>
     <section style="color-gray display-when-desktop">
         <div class="container container-responsive">
@@ -99,7 +106,7 @@
                                                     <?php endif; ?>
                                                 
                                                     <span class="prod_img_container">
-                                                            <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
+                                                            <img alt="<?php echo $productName; ?>" src="<?php echo getAssetsDomain() ?><?php echo $productImagePath; ?>">
                                                     </span>
                                                 </span>
                                             </a>
@@ -185,7 +192,7 @@
                                         <td width="90px" class="v-align-top">
                                             <span class="prod_img_container">
                                                  <a class="a-item-name" href="/<?php echo "item/" . $productSlug; ?>"> 
-                                                    <img alt="<?php echo $productName; ?>" src="/<?php echo $productImagePath; ?>">
+                                                    <img alt="<?php echo $productName; ?>" src="<?php echo getAssetsDomain() ?><?php echo $productImagePath; ?>">
                                                 </a>
                                             </span>
                                         </td>
@@ -298,7 +305,11 @@
     <input type="hidden" id="hidden-loadUrl" value="/search/more?<?=$_SERVER['QUERY_STRING']; ?>" />
 </div> 
 
-<script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
-<script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
-<script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.easing.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/jquery.scrollUp.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/advsearch.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.product_search_by_searchbox.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

@@ -1,10 +1,12 @@
-<link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/my_cart_css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/payment_review.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.payment.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
-
-<script src="/assets/js/src/vendor/jquery.idTabs.min.js"></script>
 <div class="container font-roboto" style="max-width:980px; margin-top: 15px;">  
     <h2 class="checkout_title">Payment</h2>
     <div class="row">
@@ -193,11 +195,11 @@
                                             <br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="2"  class="paypal">
-                                                <img src="/assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
+                                                <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
                                                 <span></span>
                                                 </a>
                                             </div>
-                                            <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div>
+                                            <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div>
                                         <?php else: ?>
                                             <span><strong>NOTE: one or more of your chosen items are not available for paypal.</strong></span>
                                             <table width="100%" class="table font-12">
@@ -254,7 +256,7 @@
                                                 <span></span>
                                                 </a>
                                             </div>
-                                            <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div> 
+                                            <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
                                         <?php else: ?>
                                             <span><strong>NOTE: one or more of your chosen items are not available for paypal.</strong></span>
                                             <table width="100%" class="table font-12">
@@ -297,7 +299,7 @@
                                 <div id="dragonpay" class="payment_inner_content">
                                     <?php if($dragonpaysuccess): ?>
                                         
-                                           <img src="/assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto;">
+                                           <img src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto;">
                                            <br><br><br>
                                             <p class="chck_privacy">
                                                 <input type="checkbox" checked id="chk_dp" name='chk_dp'>
@@ -568,11 +570,11 @@
                                                         <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's<a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
                                                         <div class="paypal_button">
                                                             <a style="cursor:pointer" data-type="2"  class="paypal">
-                                                            <img class="img-responsive" src="/assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
+                                                            <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
                                                             <span></span>
                                                             </a>
                                                         </div>
-                                                        <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div> 
+                                                        <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
                                                     <?php else: ?>
                                                         <span style="font-size: 10px;"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
                                                         <table width="100%" class="table font-12">
@@ -631,7 +633,7 @@
                                                             <span></span>
                                                             </a>
                                                         </div>
-                                                        <div class="paypal_loader"><img src="/assets/images/paypal_load.gif"></div> 
+                                                        <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
                                                     <?php else: ?>
                                                         <span style="font-size: 10px;"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
                                                         <table width="100%" class="table font-12">
@@ -675,7 +677,7 @@
                                         <?php if($key == 'dragonpay'): ?>
                                             <div id="dragonpay">
                                                 <?php if($dragonpaysuccess): ?>
-                                                    <img class="img-responsive" src="/assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
+                                                    <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
                                                     <br><br><br>
                                                     <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_dp" name='chk_dp'> I acknowledge I have read and understood Easyshop.ph's <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p>
                                                   
@@ -834,7 +836,7 @@
                     </tr>
                     <tr>
                         <td width="30%" style="padding: 5px 0px 7px 0px;">Telephone No:</td>
-                        <td width="70%"  style="padding: 5px 0px 7px 0px;"><input type="text" name="c_telephone" id="c_telephone" class="form-control no-border" onkeypress="return isNumberKeyAndDash(event);" placeholder="eg. 354-5973" maxlength="15" value="<?php echo $c_telephone?>"></td>
+                        <td width="70%"  style="padding: 5px 0px 7px 0px;"><input type="text" name="c_telephone" id="c_telephone" class="form-control no-border" placeholder="eg. 354-5973" maxlength="15" value="<?php echo $c_telephone?>"></td>
                     </tr>
                     <tr>
                         <td width="30%" style="padding: 5px 0px 7px 0px;">Full Address:<font color="red">*</font></td>
@@ -912,16 +914,13 @@
 
 <script type='text/javascript'>
     var jsonCity = <?php echo $json_city;?>;
-    function isNumberKeyAndDash(evt)
-    {
-        var charCode = (evt.which) ? evt.which : event.keyCode
-        if (charCode != 45  && charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
-        return true;
-    }
 </script>
 
-<script type='text/javascript' src='/assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js"></script>
+    <script type='text/javascript' src='/assets/js/src/payment.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.payment_review_responsive.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>

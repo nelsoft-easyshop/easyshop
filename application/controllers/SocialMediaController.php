@@ -31,7 +31,7 @@ class SocialMediaController extends MY_Controller
             redirect('/login', 'refresh');
         }
 
-        $facebookType = $this->socialMediaManager->getFacebookTypeConstant();
+        $facebookType = \EasyShop\Entities\EsSocialMediaProvider::FACEBOOK;
         $facebookData = $this->socialMediaManager->getAccount($facebookType);
         if ($facebookData->getProperty('email')) {
             $data = $this->socialMediaManager
@@ -83,7 +83,7 @@ class SocialMediaController extends MY_Controller
         }
 
         $google = $this->socialMediaManager->getGoogleClient();
-        $googleType = $this->socialMediaManager->getGoogleTypeConstant();
+        $googleType = \EasyShop\Entities\EsSocialMediaProvider::GOOGLE;
         $httpRequest = $this->serviceContainer['http_request'];
         if ($this->input->get('code')) {
             $code = $this->input->get('code');
@@ -179,6 +179,7 @@ class SocialMediaController extends MY_Controller
         }
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         ];
@@ -189,7 +190,7 @@ class SocialMediaController extends MY_Controller
         $data['oauthId'] = $getData['socialMediaId'];
 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/user/SocialMediaMerge', $data);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
         
@@ -292,6 +293,7 @@ class SocialMediaController extends MY_Controller
         }
 
         $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
             'title' => ' Shopping made easy | Easyshop.ph',
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
         ];
@@ -306,7 +308,7 @@ class SocialMediaController extends MY_Controller
         ];
         
         $this->load->spark('decorator');    
-        $this->load->view('templates/header_new',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/user/SocialMediaRegistration', $userData);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));  
     }

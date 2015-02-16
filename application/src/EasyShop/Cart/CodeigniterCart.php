@@ -5,6 +5,11 @@ namespace EasyShop\Cart;
 use EasyShop\Entities\EsMember;
 use EasyShop\Entities\EsProduct;
 
+/**
+ * Codeigniter implementation of CartInterface
+ *
+ * @author Sam Gavinio <samgavinio@easyshop.ph>
+ */
 class CodeigniterCart implements CartInterface
 {
 

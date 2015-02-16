@@ -1,0 +1,28 @@
+#feedback-modal-container{
+    min-height: 100px !important;
+    padding: 10px;
+}
+
+.filter-modal-container{
+    max-height: 381px !important;
+}
+
+@media only screen and (max-width : 768px) {
+    .col-left-wing{
+        display: none;
+    }
+
+    .vendor-footer-con{
+        margin-bottom: 36px;
+    }
+
+    .search-bar-input{
+        width: 70% !important;
+    }
+}
+#simplemodal-container.feedback-modal-container {
+    border-radius: 4px;
+    max-height: 300px;
+    width:600px; 
+    background-color:#fff;
+}

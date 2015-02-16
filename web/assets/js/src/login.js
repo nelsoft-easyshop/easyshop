@@ -38,8 +38,6 @@
                     $("#login_password").val("");
                     $("#deactivatePassword").val("");                        
                     $("#login_error").html("<span style='color:green'>Please check your email for the verification link we've just sent to complete the reactivation process of your account. We are looking forward to serving you again! Happy Shopping!</span>");
-
-
                 }
                 else{
                     $("#login_error").html(obj);
@@ -93,9 +91,14 @@
                         }
                         else{
                             if(data.o_success <= 0){
-                                
                                 $("#login_error").empty();
-                                if(data["o_message"] == "Account Deactivated") {
+                                if(data['o_message'] === 'Account Banned'){
+                                    var officeHours = $('#office_hours').val();
+                                    var officeContactno = $('#office_contactno').val();
+                                    var alertMessage = data['errors'][0]['message'] + " Contact our Customer Service Support for further details: " + officeHours + " " +  officeContactno;
+                                    alert(escapeHtml(alertMessage));
+                                }
+                                else if(data["o_message"] == "Account Deactivated") {
                                     $("#deactivatedAccountPrompt").css("display","block");
                                     $("#deactivatedAccountPrompt").find("a").attr("data-id",data["errors"][0]["id"]);
                                 }
@@ -137,7 +140,12 @@
                                 }
                             }
                         }
-                    }
+                    },
+                    error: function(xhr, error) {
+                        $('#loading_img').hide();
+                        $('#login').show();
+                        alert('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');
+                    }            
                 });
                 return false;
             }
@@ -147,6 +155,15 @@
             $('#login_error').text('');
         });
     });
+    
+    $(document).ready(function(){
+        var $accountBannedElement = $('#account-banned-error');
+        var isAccountBanned = $accountBannedElement.val();
+        if(isAccountBanned){
+            alert(escapeHtml($accountBannedElement.data('message')));
+        }
+    });
+    
     
 })(jQuery);
 

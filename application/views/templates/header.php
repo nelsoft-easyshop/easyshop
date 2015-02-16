@@ -97,13 +97,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <li><a href="/register" class="prevent">Register</a></li> 
                         <li class="txt_res_hide">
                             <a class="prevent" href="/guide/buy">
-                                <img src="/assets/images/img_icon_shop.png">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_shop.png">
                                 <span>How to Shop</span>
                             </a>
                         </li>
                         <li class="txt_res_hide">
                             <a class="prevent" href="/guide/sell">
-                                <img src="/assets/images/img_icon_sell.png">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_sell.png">
                                 <span>How to Sell</span>
                             </a>
                         </li>
@@ -122,13 +122,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </li>
                         <li class="txt_res_hide">
                             <a class="prevent" href="/guide/buy">
-                                <img src="/assets/images/img_icon_shop.png">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_shop.png">
                                 <span>How to Shop</span>
                             </a>
                         </li>
                         <li class="txt_res_hide nav-menu-border">
                             <a class="prevent" href="/guide/sell">
-                                <img src="/assets/images/img_icon_sell.png">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_sell.png">
                                 <span>How to Sell</span>
                             </a>
                         </li>
@@ -142,13 +142,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <a class="prevent" href="/me?tab=ongoing">On-going Transactions</a>
                                 </li>
                                 <li>
-                                    <a class="prevent" href="/?view=basic">Go to homepage</a>
+                                    <a class="prevent" href="/">Go to homepage</a>
                                 </li>
                                 <li class="nav-dropdown-border">
                                     <a class="prevent" href="/me?tab=settings">Settings</a>
                                 </li>
                                 <li class="nav-dropdown-border">
-                                    <a class="prevent" href="/login/logout">Logout</a>
+                                    <a class="prevent logoutClient" href="/login/logout">Logout</a>
                                 </li>
                             </ul>
                             
@@ -167,13 +167,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <div class="need_help_icons_con">
                 <p>
                     <a class="prevent" href="/guide/buy">
-                        <img src="/assets/images/img_icon_shop.png"><br />
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_shop.png"><br />
                         <span>How to Shop</span>
                     </a>
                 </p>
                 <p>
                     <a class="prevent" href="/guide/sell">
-                        <img src="/assets/images/img_icon_sell.png"><br />
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_icon_sell.png"><br />
                         <span>How to Sell</span>
                     </a>
                 </p>
@@ -193,13 +193,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <section class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'header-theme-bg' : ''?>">
 
-        <div class="res_wrapper wrapper search_wrapper">
+        <div class="container old-page-container">
         
         <?php if(!(isset($render_logo) && ($render_logo === false))): ?>
             <div class="logo"> 
                 <a href="/" class="prevent">
                     <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                        <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph" class="header-old-christmas-logo">
                     <?php else: ?>
                         <span class="span_bg"></span>
                     <?php endif; ?>
@@ -209,7 +209,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
        
         <?php if(!(isset($renderSearchbar) && ($renderSearchbar === false))): ?>
             <div class="search_box prob_search_box">
-                <div>
+                <div id="search-container" class="pos-rel">
                 <span class="main_srch_img_con"></span>
                 <input name="q_str" type="text" id="main_search" placeholder="Search..." value="<?= $this->input->get('q_str') ? html_escape(trim($this->input->get('q_str'))) : "" ; ?>" autocomplete="off">
                 
@@ -223,79 +223,97 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?php endforeach;?>
                 </select>
                 <button onclick="search_form.submit();" class="search_btn">SEARCH</button><a href="/advsrch" class="adv_srch_lnk">Advance Search</a>
-                </div>
-                <div id="main_search_drop_content"></div> 
-                <div class="old-suggested-result-container">
-                    <p class="sr-title">Suggested search result:</p>
-                    <ul>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                        <li>
-                            <a href="">lorem ipsum</a>
-                        </li>
-                    </ul>
-                </div>
+                </div> 
             </div>
         <?php endif; ?>
         </div>
     </section>
     <div class="clear"></div>
 </form>
-        
+
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
-        
+<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user ? $user->getStoreName() : 'false')?>">
 
+<script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
 <script>
+    (function ($) {  
 
+        var $minChars = 3;
 
-    (function ($) { 
-        
-        $(document).ready(function(){
+        $('#main_search')
+            .autoComplete({
+                minChars: $minChars,
+                cache: false,
+                menuClass: 'autocomplete-suggestions auto-complete-header',
+                source: function(term, response){ 
+                    try { 
+                        xhr.abort(); 
+                    } catch(e){}
+                    var xhr = $.ajax({ 
+                        type: "get",
+                        url: '/search/suggest',
+                        data: "query=" + term,
+                        dataType: "json", 
+                        success: function(data){
+                            response(data); 
+                        }
+                    });
+                },
+                onSelect: function(term){
+                    $('#main_search').addClass('selectedClass');
+                }
+            })
+            .focus(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.autocomplete-suggestions').html() ).length ) {
+                            $('.autocomplete-suggestions').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .click(function() {
+                if($(this).val().length < $minChars){
+                    $('.autocomplete-suggestions').hide();
+                }
+                else{ 
+                    if(!$(this).hasClass('selectedClass')){
+                        if( $.trim( $('.autocomplete-suggestions').html() ).length ) {
+                            $('.autocomplete-suggestions').show();
+                        }
+                    }
+                    else{ 
+                        $(this).removeClass('selectedClass');
+                    }
+                }
+            })
+            .change(function() {
+                if($(this).val().length <= 0){
+                    $('.autocomplete-suggestions').empty();
+                }
+            });
 
+        $(document).ready(function(){ 
             var $user_nav_dropdown = $(".user-nav-dropdown");
             var $nav_dropdown = $("ul.nav-dropdown");
 
             $(document).mouseup(function (e) {
-
                 if (!$nav_dropdown.is(e.target) // if the target of the click isn't the container...
                     && $nav_dropdown.has(e.target).length === 0) // ... nor a descendant of the container
                 {
                    $nav_dropdown.hide(1);
                 }
-
             });
 
             $user_nav_dropdown.click(function() {
                 $nav_dropdown.show();
             });
-
-            
-        
-            var navigation = responsiveNav(".nav-collapse");
-            var srchdropcontent= $('#main_search_drop_content');
-            
-            $('#main_search').focus(function() {
-                if(srchdropcontent.find("ul").length > 0){
-                    $('#main_search_drop_content').fadeIn(150);
-                }
-
-                $(document).bind('focusin.main_search_drop_content click.main_search_drop_content',function(e) {
-                    if ($(e.target).closest('#main_search_drop_content, #main_search').length) return;
-                        $('#main_search_drop_content').fadeOut('fast');
-                });
-            });
-
-            $('#main_search_drop_content').hide();
 
             $(".txt_need_help_con").click(function(){
                 $('.need_help_icons_con').slideToggle();
@@ -303,45 +321,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             });
 
             $('.need_help_icons_con').hide();
-              
+            var navigation = responsiveNav(".nav-collapse"); 
             var $container = $(".nav-collapse");
             
             $(document).mouseup(function (e) {
-
                 if (!$container.is(e.target) // if the target of the click isn't the container...
                     && $container.has(e.target).length === 0) // ... nor a descendant of the container
                 {
                    navigation.close();
                 }
-
-            });
-            
-        });
-
-        $(".old-suggested-result-container").hide();
- 
-        var $primarySearch= $("#main_search");
-        var $suggestedResult= $(".old-suggested-result-container");
-
-        $(document).mouseup(function (e) {
-
-            if (!$suggestedResult.is(e.target) 
-                && $suggestedResult.has(e.target).length === 0)
-            {
-               $suggestedResult.hide(1);
-            }
-        });
-
-        $("#main_search").on('click input keypress',function() {
-
-            if($(this).val().length >= 3) {
-                $(".old-suggested-result-container").slideDown(300);
-            } 
-            if ($(this).val().length <= 2) {
-                 $(".old-suggested-result-container").slideUp(300);
-            }
-        });
-        
+            }); 
+        }); 
     })(jQuery);
 
 </script>

@@ -12,9 +12,15 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
-    <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='all'/>
-    <link rel="stylesheet" href="/assets/css/qr-code-css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="all">
-    <link rel="stylesheet" href="/assets/css/qr-code-print.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="print">
+
+    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+        <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='all'/>
+        <link rel="stylesheet" href="/assets/css/qr-code-css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="all">
+        <link rel="stylesheet" href="/assets/css/qr-code-print.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="print">
+    <?php else: ?>
+        <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-qr-code.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+    <?php endif; ?>
+    
 </head>
 
 <body onload="window.print();window.location.replace('/me')">
@@ -22,15 +28,15 @@
     <div class="container text-center">
         <div class="row">
             <div class="col-xs-12 qr-code-img-con">
-                <img src="/assets/images/qrcode-images/qr-code_03.jpg">
-                <img src="/assets/images/qrcode-images/qr-code_04.jpg">
-                <img src="/assets/images/qrcode-images/qr-code_05.jpg">
-                <img src="/assets/images/qrcode-images/qr-code_06.jpg">
-                <img src="/assets/images/qrcode-images/qr-code_07.jpg">
-                <img src="/assets/images/qrcode-images/qr-code_08.jpg">
-                <img src="/assets/images/qrcode-images/qr-code_09.jpg">
-                <img src="/assets/images/qrcode-images/qr-code_10.jpg">
-                <img src="/assets/images/qrcode-images/qr-code_11.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_03.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_04.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_05.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_06.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_07.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_08.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_09.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_10.jpg">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/qr-code_11.jpg">
             </div>
         </div>
         <div class="row">
@@ -40,7 +46,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12 qr-code-main">
-                <img src="/<?=html_escape($qrCodeImageName)?>">
+                <img src="<?php echo getAssetsDomain().html_escape($qrCodeImageName)?>">
             </div>
         </div>
 
@@ -52,13 +58,13 @@
                 <p>
                     or enter the following URL into your browser
                 </p>
-                <a href="">https://www.easyshop.ph/<?=html_escape($slug)?></a>
+                <?=html_escape($storeLink)?>
             </div>
         </div>
 
         <div class="row">
             <div class="col-xs-12 mrgn-tb-100 qr-es-logo">
-                <img src="/assets/images/qrcode-images/easyshop-logo.jpg" alt="Easyshop.ph">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/qrcode-images/easyshop-logo.jpg" alt="Easyshop.ph">
             </div>
         </div>
     </div>

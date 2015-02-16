@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsProductImage as EsProductImage;
+use EasyShop\PaymentService\PaymentService as PaymentService;
 
 class mobilePayment extends MY_Controller 
 {
@@ -90,9 +91,8 @@ class mobilePayment extends MY_Controller
         $errorMessage = "Please verify your email address.";
         if((int)$this->member->getIsEmailVerify() > 0){
             $errorMessage = "You have no item in you cart";
-            if(empty($cartData) === false){
-                unset($cartData['total_items'],$cartData['cart_total']);
-                $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+            if(empty($cartData) === false){ 
+                $dataCollection = $this->paymentController->mobileReviewBridge();
                 $cartData = $dataCollection['cartData']; 
                 $canContinue = $dataCollection['canContinue'];
                 $errorMessage = $dataCollection['errMsg'];
@@ -137,14 +137,13 @@ class mobilePayment extends MY_Controller
 
         $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
         $memberCartData = unserialize($this->member->getUserdata());
-        $isCartNotEmpty empty($memberCartData) === false;
+        $isCartNotEmpty = empty($memberCartData) === false;
         $cartData = $isCartNotEmpty ? $memberCartData : [];
         $errorMessage = "Please verify your email address.";
         if((int)$this->member->getIsEmailVerify() > 0){
             $errorMessage = "You have no item in you cart";
-            if($isCartNotEmpty){
-                unset($cartData['total_items'],$cartData['cart_total']);
-                $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+            if($isCartNotEmpty){ 
+                $dataCollection = $this->paymentController->mobileReviewBridge();
                 $canContinue = $dataCollection['canContinue'];
                 $errorMessage = $dataCollection['errMsg'];
                 $validatedCart = $checkoutService->validateCartContent($this->member);
@@ -171,16 +170,13 @@ class mobilePayment extends MY_Controller
         $cartData = unserialize($this->member->getUserdata()); 
 
         $this->paymentController = $this->loadController('payment');
-        $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+        $dataCollection = $this->paymentController->mobileReviewBridge();
         $cartData = $dataCollection['cartData']; 
         $check = $this->checkAvailableInPayment($cartData,$paymentType);
 
-        if(empty($cartData) === false){
-            unset($cartData['total_items'],$cartData['cart_total']); 
-            $txnid = $this->paymentController->generateReferenceNumber($paymentType,$this->member->getIdMember());
-            $dataProcess = $this->paymentController->cashOnDeliveryProcessing($this->member->getIdMember(),$txnid,$cartData,$paymentType);
-            $isSuccess = (strtolower($dataProcess['status']) == 's') ? true : false;
-            $returnArray = array_merge(['isSuccess' => $isSuccess,'txnid' => $txnid],$dataProcess);
+        if(empty($cartData) === false){ 
+            $returnArray = $this->paymentController->mobilePersistCod();
+            $returnArray['isSuccess'] = strtolower($returnArray['status']) === PaymentService::STATUS_SUCCESS;
         }
         else{
             $returnArray = array(
@@ -203,15 +199,12 @@ class mobilePayment extends MY_Controller
         $cancelUrl = "";
         $isSuccess = false;
         $cartData = unserialize($this->member->getUserdata());
-
         $this->load->config('payment', true);
         $paymentConfig = strtolower(ENVIRONMENT) === 'production'
                          ? $this->config->item('production', 'payment')
                          : $this->config->item('testing', 'payment');
 
-        if(empty($cartData) === false && $this->input->post('paymentType')){
-            unset($cartData['total_items'],$cartData['cart_total']);
-
+        if(empty($cartData) === false && $this->input->post('paymentType')){ 
             if($this->input->post('paymentType') == "paypal"){
                 $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
             }
@@ -220,11 +213,11 @@ class mobilePayment extends MY_Controller
             }
  
             $this->paymentController = $this->loadController('payment');
-            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+            $dataCollection = $this->paymentController->mobileReviewBridge();
             $cartData = $dataCollection['cartData']; 
             $check = $this->checkAvailableInPayment($cartData,$paymentType);
 
-            $requestData = $this->paymentController->mobilePayBridge($cartData,$this->member->getIdMember(),$paymentType);
+            $requestData = $this->paymentController->mobilePayBridge($paymentType);
             $urlReturn = ""; 
 
             if($this->input->post('paymentType') == "paypal"){
@@ -253,7 +246,7 @@ class mobilePayment extends MY_Controller
 
             $returnArray = array(
                     'isSuccess' => $isSuccess, 
-                    'message' => '',
+                    'message' => $message,
                     'url' => $urlReturn,
                     'returnUrl' => $returnUrl,
                     'cancelUrl' => $cancelUrl,
@@ -299,15 +292,14 @@ class mobilePayment extends MY_Controller
         $payerId = $this->input->post('PayerID');
         $token = $this->input->post('token');
         $cartData = unserialize($this->member->getUserdata()); 
-        if(empty($cartData) === false){
-            unset($cartData['total_items'],$cartData['cart_total']);
+        if(empty($cartData) === false){ 
             $this->paymentController = $this->loadController('payment');
 
-            $dataCollection = $this->paymentController->mobileReviewBridge($cartData,$this->member->getIdMember(),"review");
+            $dataCollection = $this->paymentController->mobileReviewBridge();
             $cartData = $dataCollection['cartData']; 
             $check = $this->checkAvailableInPayment($cartData,$paymentType);
 
-            $requestData = $this->paymentController->mobilePayPersist($cartData,$this->member->getIdMember(),$paymentType,$token,$payerId);
+            $requestData = $this->paymentController->mobilePayPersist($paymentType, $token, $payerId);
             $isSuccess = (strtolower($requestData['status']) == 's') ? true : false;
             $returnArray = array_merge(['isSuccess' => $isSuccess],$requestData);
         }
@@ -408,7 +400,6 @@ class mobilePayment extends MY_Controller
             echo json_encode($returnArray,JSON_PRETTY_PRINT);
             exit();
         }
-
 
         return $itemArray;
     }

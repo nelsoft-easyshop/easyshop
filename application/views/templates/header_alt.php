@@ -16,10 +16,19 @@
     <meta name="keywords" content=""/>
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE; Safari; Mozilla" />
-    <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    
+    
+    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+        <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href="/assets/css/easy-icons/easy-icons.css?<?=ES_FILE_VERSION?>" rel="stylesheet">
+        <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <?php else: ?>
+        <link type="text/css" href='/assets/css/min-easyshop.header-alt.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <?php endif; ?>
+    
+    
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
     <?php endif; ?>
@@ -75,36 +84,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <header class="new-header-con">
 <?php endif; ?>
 
-    <div class="main-container">
-        <div>
-            <a href="/">
-                <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
-                    <img src="/assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph Logo" class="vendor-christmas-theme-logo">
-                <?php else: ?>
-                    <img src="/assets/images/img_logo.png" alt="Easyshop.ph Logo">
-                <?php endif; ?>
-
-               
-            </a>
-        </div>
-        <div class="search-container">
-           <form class="search-form">
-                <select class="ui-form-control search-type">
-                    <option value="1">On Seller's Page</option>
-                    <option value="2">Main Page</option> 
-                </select>
-                <input type="text" class="search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
-                <input type="submit"  value="" class="submitSearch span_bg">
-            </form>
-        </div>
-        <div class="pos-rel mrgn-rght-8">
-            <div class="header-cart-container">
-                <a href="/cart" class="header-cart-wrapper">
-                    <span class="header-cart-items-con ui-form-control">
-                        <span class="header-cart-item"><?=$cartSize?> item(s)</span> in your cart
-                    </span>
-                    <span class="header-cart-icon-con span_bg cart-icon"></span>
+ 
+    <div class="main-container container vendor-mobile-wrapper">
+        <div class="row">
+            <div class="vendor-logo-wrapper">
+                <a href="/">
+                    <?php if(ES_ENABLE_CHRISTMAS_MODS): ?>
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo_christmas_theme.png" alt="Easyshop.ph Logo" class="vendor-christmas-theme-logo">
+                    <?php else: ?>
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo.png" alt="Easyshop.ph Logo">
+                    <?php endif; ?>
                 </a>
+            </div>
+            <div class="vendor-header-left">
+                <div class="search-container">
+                    <span class="mobile-search"><span class="span_bg"></span></span>
+                    <form id="search-form1" class="search-form">
+                        <select class="ui-form-control search-type">
+                            <option value="1">On Seller's Page</option>
+                            <option value="2">Main Page</option> 
+                        </select>
+                        <input type="text" id="main_search_alt" autocomplete="off" class="search-bar-input ui-form-control" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
+                        <input type="submit"  value="" class="submitSearch span_bg">
+                    </form>
+                </div>
+                <div class="mobile-vendor-cart-con">
+                    <div class="header-cart-container">
+                        <div class="mobile-vendor-cart">
+                            <span class="vendor-cart-counter"><?=$cartSize?></span>
+                            <span class="cart-icon span_bg"></span>
+                        </div>
+                        <a href="/cart" class="header-cart-wrapper">
+                            <span class="header-cart-items-con ui-form-control">
+                                <span class="header-cart-item"><?=$cartSize?> item(s) </span>in your cart
+                            </span>
+                            <span class="header-cart-icon-con span_bg cart-icon"></span>
+                        </a>
                 <?PHP if ((int)sizeof($cartItems) !== 0 ) : ?>
                 <div class="header-cart-item-list">
                         <p>Recently added item(s)</p>
@@ -114,91 +129,97 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div class="mrgn-bttm-15">
                                     <div class="header-cart-item-img">
                                         <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                            <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                            <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
                                         </a>
+                                            </div>
+                                            <div class="header-cart-item-con">
+                                                <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
+                                                <span>x <?=$cartItemsReversed[$i]['qty']?></span>
+                                                <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                <?php endfor; ?>
+                 
+                                <div class="header-cart-lower-content">
+                                    <div class="header-cart-shipping-total">
+                                        <p>Item(s) in cart: <span><?=$cartSize?></span></p>
+                                        <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
                                     </div>
-                                    <div class="header-cart-item-con">
-                                        <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
-                                        <span>x <?=$cartItemsReversed[$i]['qty']?></span>
-                                        <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
+                                    <div class="header-cart-buttons">
+                                        <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
+                                        <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
-                        <?php endfor; ?>
-         
-                        <div class="header-cart-lower-content">
-                            <div class="header-cart-shipping-total">
-                                <p>Item(s) in cart: <span><?=$cartSize?></span></p>
-                                <p>Total: <span>&#8369; <?=$cartTotal?></span></p>
-                            </div>
-                            <div class="header-cart-buttons">
-                                <a href="/cart" class="header-cart-lnk-cart">go to cart</a>
-                                <a href="javascript:void(0)" onclick="proceedPayment(this)" class="header-cart-lnk-checkout">checkout</a>
-                            </div>
-                            <div class="clear"></div>
                         </div>
+                        <?PHP endif;?>
+                    </div>
                 </div>
-                <?PHP endif;?>
-            </div>
-        </div>
+
         
-        <?php if(isset($logged_in) && $logged_in): ?>
-        <div class="vendor-log-in-wrapper">
-            <div class="vendor-login-con user-login">
-                <?php if((int)$unreadMessageCount !== 0) : ?>
-                    <span id="unread-messages-count" class="msg_countr message-count-con">
-                <?php echo $unreadMessageCount; ?>
-                </span>
-                <?php endif;?>
-                <img src="/assets/images/img-default-icon-user.jpg"> 
-                <a href="/<?php echo html_escape($user->getSlug())?>" class="vendor-login-name">
-                    <span>
-                        <strong><?php echo html_escape($user->getUsername()); ?></strong>
-                    </span>
-                </a>
-                <div class="new-user-nav-dropdown">
-                    <span class="user-nav-dropdown">Account Settings</span>
-                </div>
-                <ul class="nav-dropdown">
-                    <li>
-                        <a href="/me">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="/me?tab=ongoing">On-going Transactions</a>
-                    </li>
-                    <li>
-                        <a href="/?view=basic">Go to homepage</a>
-                    </li>
-                    <li class="nav-dropdown-border">
-                        <a href="/me?tab=settings">Settings</a>
-                    </li>
-                    <li class="nav-dropdown-border pos-rel">
-                        <a href="/messages">Message</a>
+                <?php if(isset($logged_in) && $logged_in): ?>
+                <div class="vendor-log-in-wrapper">
+                    <div class="vendor-login-con user-login">
                         <?php if((int)$unreadMessageCount !== 0) : ?>
-                        <div id="unread-messages-count" class="msg_countr message-count-con">
-                        <?php echo $unreadMessageCount ;?>
-                        </div>
+                            <span id="unread-messages-count" class="msg_countr message-count-con">
+                        <?php echo $unreadMessageCount; ?>
+                        </span>
                         <?php endif;?>
-                    </li>
-                    <li class="nav-dropdown-border">
-                        <a class="prevent" href="/login/logout">Logout</a>
-                    </li>
-                </ul>
-                <div class="clear"></div>
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg"> 
+                        <a href="/<?php echo html_escape($user->getSlug())?>" class="vendor-login-name">
+                            <span>
+                                <strong><?php echo html_escape($user->getUsername()); ?></strong>
+                            </span>
+                        </a>
+                        <div class="new-user-nav-dropdown">
+                            <span class="user-nav-dropdown">Account Settings</span>
+                        </div>
+                        <ul class="nav-dropdown">
+                            <li>
+                                <a href="/me">Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="/me?tab=ongoing">On-going Transactions</a>
+                            </li>
+                            <li>
+                                <a href="/">Go to homepage</a>
+                            </li>
+                            <li class="nav-dropdown-border">
+                                <a href="/me?tab=settings">Settings</a>
+                            </li>
+                            <li class="nav-dropdown-border pos-rel">
+                                    <a href="/messages">Messages</a>
+                                    <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                        <?php echo $unreadMessageCount; ?>
+                                    </div>
+                            </li>
+                            <li class="nav-dropdown-border">
+                                <a class="prevent" href="/login/logout">Logout</a>
+                            </li>
+                        </ul>
+                        <div class="clear"></div>
+                        <?php else: ?>
+                        <div class="vendor-log-in-wrapper">
+                            <div class="vendor-login-con vendor-out-con">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg"> 
+                                <a href="/login"><strong>login</strong></a>  or 
+                                <a href="/register"><strong>Create an account</strong></a>
+                            </div>
+                            <div class="vendor-out-con2">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg">
+                            </div>
+                            <div class="mobile-user-login">
+                                <a href="/login" class="btn btn-default-3"><strong>login</strong></a>  or 
+                                <a href="/register" class="btn btn-default-1"><strong>Create an account</strong></a>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
         </div>
-        <?php else: ?>
-        <div>
-            <div class="vendor-login-con vendor-out-con">
-                <img src="/assets/images/img-default-icon-user.jpg"> 
-                <a href="/login"><strong>login</strong></a>  or 
-                <a href="/register"><strong>Create and account</strong></a>
-            </div>
-        </div>
-        <?php endif; ?>
-        
-        
-        <div class="clear"></div>
     </div>
 </header>
 
@@ -208,26 +229,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <div class="persistent-nav-container">
 <?php endif; ?>
 
-    <div class="main-container">
+    <div class="main-container container">
         <ul class="sticky-nav">
             <li>
                 <div class="vendor-profile-img-con">
-                    <img src="<?=$avatarImage?>" alt="Profile Photo">
+                    <img src="<?php echo getAssetsDomain().'.'.$avatarImage?>" alt="Profile Photo">
                 </div>
                 <h4><?=html_escape($arrVendorDetails['store_name']);?></h4>
             </li>
             <li>
-                <a href="/<?=$arrVendorDetails['userslug']?>"><img src="/assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
-                <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="/assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
-                <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="/assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
+                <a href="/<?=$arrVendorDetails['userslug']?>"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
+                <a href="/<?=$arrVendorDetails['userslug']; ?>/about"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-info.png" alt="Seller Information"></a>
+                <a href="/<?=$arrVendorDetails['userslug']; ?>/contact"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-contact.png" alt="Contact"></a>
             </li>
             <li> 
-                <form class="search-form">
+                <form id="search-form2" class="search-form">
                     <select class="ui-form-control search-type">
                         <option value="1">On Seller's Page</option>
                         <option value="2">Main Page</option> 
                     </select>
-                    <input type="text" class="ui-form-control search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>">
+                    <input type="text" id="main_search_alt2" autocomplete="off" class="ui-form-control search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>">
                     <input type="submit"  value="" class="submitSearch span_bg">
                 </form>
             </li>
@@ -249,7 +270,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <div class="mrgn-bttm-15">
                                         <div class="header-cart-item-img">
                                             <a href="/item/<?=$cartItemsReversed[$i]['slug']?>">
-                                                <span><img src="/<?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
+                                                <span><img src="<?php echo getAssetsDomain(); ?><?=$cartItemsReversed[$i]['imagePath']; ?>thumbnail/<?=$cartItemsReversed[$i]['imageFile']; ?>" alt="<?=html_escape($cartItemsReversed[$i]['name'])?>"></span>
                                             </a>
                                         </div>
                                         <div class="header-cart-item-con">
@@ -281,5 +302,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </div>
 
-<script type="text/javascript" src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
+<input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
+<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user ? $user->getStoreName() : 'false')?>">
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type="text/javascript" src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
+    <script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
+    <script src="/assets/js/src/header_alt.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.header_alt.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 

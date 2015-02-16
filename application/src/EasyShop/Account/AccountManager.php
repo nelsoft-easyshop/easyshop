@@ -7,12 +7,27 @@ use EasyShop\Entities\EsWebserviceUser;
 use EasyShop\Entities\EsVerifcode as EsVerifcode; 
 use Easyshop\Entities\EsMember;
 use Easyshop\Entities\EsStoreColor as EsStoreColor;
+use EasyShop\Entities\EsBanType as EsBanType;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
 
 class AccountManager
 {
+
+    const REMEMBER_ME_COOKIE_LIFESPAN_IN_SEC = 86500;
+    
+    /**
+     * Users have to wait for EMAIL_COOLDOWN_DURATION_IN_MINUTES minutes before 
+     * requesting for another email once the limit has been reached. This is
+     * to prevent possible DOS.
+     */
+    const EMAIL_VERIFICATION_REQUEST_LIMIT = 4;
+    
+    const EMAIL_COOLDOWN_DURATION_IN_MINUTES = 30;
+    
+    const PASSWORD_RESET_LINK_LIFESPAN_MINUTES = 1440;
+    
 
     /**
      * Entity Manager instance
@@ -66,6 +81,47 @@ class AccountManager
      * @var Symfony\Component\HttpFoundation\Request
      */
     private $httpRequest;
+
+    /**
+     * Email Notification
+     *
+     */
+    private $emailNotification;   
+    
+    /**
+     * CI_Parser
+     *
+     * @var CI_Parser
+     */
+    private $parser;
+    
+    /**
+     * CI_Encrypt
+     *
+     * @var CI_Encrypt
+     */
+    private $encrypter;
+    
+    /**
+     * Config Loader
+     *
+     * @var EasyShop\ConfigLoader\ConfigLoader
+     */
+    private $configLoader;
+    
+    /**
+     * Language Loader
+     *
+     * @var EasyShop\LanguageLoader\LanguageLoader
+     */
+    private $languageLoader;
+    
+    /**
+     * Hash Utility
+     *
+     * @var EasyShop\Utility\HashUtility
+     */
+    private $hashUtility;
     
     /**
      * Intialize dependencies
@@ -78,7 +134,13 @@ class AccountManager
                                 $formValidation,
                                 $formErrorHelper, 
                                 $stringUtility,
-                                $httpRequest)
+                                $httpRequest,
+                                $emailNotification,
+                                $parser,
+                                $encrypter,
+                                $configLoader,
+                                $languageLoader,
+                                $hashUtility)
     {
         $this->em = $em;
         $this->bcryptEncoder = $bcryptEncoder;
@@ -88,6 +150,96 @@ class AccountManager
         $this->formErrorHelper = $formErrorHelper;
         $this->stringUtility = $stringUtility;
         $this->httpRequest = $httpRequest;
+        $this->emailNotification = $emailNotification;
+        $this->parser = $parser;
+        $this->encrypter = $encrypter;
+        $this->configLoader = $configLoader;
+        $this->languageLoader = $languageLoader;
+        $this->hashUtility = $hashUtility;
+    }
+
+    /**
+     * Sends an email verification
+     *
+     * @param EasyShop\Entities\EsMember $member
+     * @param boolean $isNew
+     * @param boolean $excludeVerificationLink
+     * @return mixed
+     */
+    public function sendAccountVerificationLinks($member, $isNew = true, $excludeVerificationLink = false)
+    {
+        $response= [
+            'isSuccessful' => false,
+            'error' => ''
+        ];
+        
+        $verifcodeRepository = $this->em->getRepository('EasyShop\Entities\EsVerifcode');
+        
+        if(!$isNew){
+            $verifCode = $verifcodeRepository->findOneBy(['member' => $member]);
+            if(!$verifCode){
+                $response['error'] = 'verfication-code-does-not-exist';
+            }
+            else{
+                $emailCount = $verifCode->getEmailCount();
+                $dateNow =  new \DateTime();
+                $dateOfLastRequest = $verifCode->getFpTimestamp();
+                $deltaTime = $dateNow->diff($dateOfLastRequest);
+                
+                $elapsedMinutes = $deltaTime->days * 24 * 60;
+                $elapsedMinutes += $deltaTime->h * 60;
+                $elapsedMinutes += $deltaTime->i;
+
+                if($emailCount > self::EMAIL_VERIFICATION_REQUEST_LIMIT &&
+                    $elapsedMinutes <= self::EMAIL_COOLDOWN_DURATION_IN_MINUTES
+                ){
+                    $response['error'] = 'limit-of-requests-reached';
+                }
+                else if($emailCount > self::EMAIL_VERIFICATION_REQUEST_LIMIT &&
+                    $elapsedMinutes > self::EMAIL_COOLDOWN_DURATION_IN_MINUTES
+                ){
+                    $verifCode->setEmailcount(0);
+                    $this->em->flush();
+                }
+            }
+        }
+    
+        if($response['error'] === ''){
+            $emailAddress = $member->getEmail();
+            $username = $member->getUserName();
+            $emailSecretHash = sha1($emailAddress.time());
+
+            $parseData = [
+                'user' => $username,
+                'hash' => $this->encrypter
+                            ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
+                'site_url' => site_url('register/email_verification')
+            ];
+            
+            if($excludeVerificationLink){
+                $parseData['emailVerified'] = true;
+            }
+            
+            $imageArray = $this->configLoader->getItem('email', 'images');  
+            $message = $this->parser->parse('templates/landingpage/lp_reg_email' , $parseData,true);
+            
+            $this->emailNotification->setRecipient($emailAddress);
+            $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
+            $this->emailNotification->setMessage($message, $imageArray);
+            /**
+             * Mobile verification can be added here (unused for the time being)
+             */
+            $mobileCode = $this->hashUtility->generateRandomAlphaNumeric(6);
+            if($this->emailNotification->sendMail()){
+                if($isNew){
+                    $response['isSuccessful'] = $verifcodeRepository->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode) ? true : false;
+                }
+                else{
+                    $response['isSuccessful'] = $verifcodeRepository->updateVerifCode($verifCode, $emailSecretHash, $mobileCode);
+                }
+            }
+        }
+        return $response;
     }
 
     /**
@@ -159,25 +311,34 @@ class AccountManager
             if($member){
                 $memberUsername =  $member->getUsername();       
                 $encryptedPassword = $member->getPassword();
-                
                 if(!$this->bcryptEncoder->isPasswordValid($encryptedPassword, $validatedPassword)) {
                     if(!$this->authenticateByReverseHashing($memberUsername, $validatedPassword, $member)){
                         $member = null;   
                     }
                 }       
-
             }
             
             if($member){
-                unset($errors[0]);    
-                if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
-                    $errors[] = ['login' => 'Account Deactivated','id' => $member->getIdMember()];
-                    $member = NULL;    
+                unset($errors[0]);  
+                $member->setFailedLoginCount(0);
+                if((bool)$member->getIsBanned() && $member->getBanType()->getIdBanType() !== 0){
+                    $errors[] = [
+                        'login' => 'Account Banned',
+                        'id' => $member->getIdMember(),
+                        'message' => $member->getBanType()->getMessage(),
+                    ];
+                    $member = null;  
+                }
+                else if(!(bool)$member->getIsActive() && !$doIgnoreActiveStatus) {
+                    $errors[] = [
+                        'login' => 'Account Deactivated',
+                        'id' => $member->getIdMember(),
+                    ];
+                    $member = null;    
                 }
                 else {
                     $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
                     $member->setLastLoginIp($this->httpRequest->getClientIp());
-                    $member->setFailedLoginCount(0);
                     $member->setLoginCount($member->getLoginCount() + 1);
                     $this->em->flush(); 
                     $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -186,8 +347,10 @@ class AccountManager
             }
         }
 
-        return ['errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
-                'member' => $member];
+        return [
+            'errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
+            'member' => $member
+        ];
     
     }
     
@@ -225,9 +388,13 @@ class AccountManager
             $validatedPassword = $formData['password'];
             $validatedEmail = $formData['email'];
             $validateContactno = substr($formData['contactno'],1); 
-            $hashedPassword = $this->hashMemberPassword($validatedUsername,$validatedPassword);
+            $hashedPassword = $this->bcryptEncoder->encodePassword($validatedPassword);
+            
             $storeColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
                                    ->find(EsStoreColor::DEFAULT_COLOR_ID);
+            $banType = $this->em->getRepository('EasyShop\Entities\EsBanType')
+                                ->find(EsBanType::NOT_BANNED);
+            
             $member = new EsMember();
             $member->setUsername($validatedUsername);
             $member->setPassword($hashedPassword);
@@ -240,7 +407,9 @@ class AccountManager
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
             $member->setSlug($this->stringUtility->cleanString($username));   
             $member->setIsEmailVerify($isEmailVerify); 
-            $member->setStoreColor($storeColor); 
+            $member->setStoreColor($storeColor);  
+            $member->setBanType($banType);
+            
             $this->em->persist($member);
             $this->em->flush();
         }
@@ -249,36 +418,7 @@ class AccountManager
                 'member' => $member];
     }
 
-    /**
-     * Stores member's verification code
-     *
-     * @param array $userData
-     * @return bool
-     */
-    public function storeMemberVerifCode($userData)
-    {
-
-        try{
-            $memberId = $this->em
-                              ->getRepository('EasyShop\Entities\EsMember')
-                              ->find($userData["memberId"]);
-
-            $verifCode = new EsVerifcode();     
-            $verifCode->setMember($memberId);
-            $verifCode->setEmailcode($userData["emailCode"]);
-            $verifCode->setMobilecode($userData["mobileCode"]);
-            $verifCode->setDate(new DateTime('now'));
-            $verifCode->setFpTimestamp(new DateTime('now'));
-            $verifCode->setEmailcount((int)$userData["email"]);
-            $verifCode->setMobilecount(\EasyShop\Entities\EsVerifcode::DEFAULT_MOBILE_COUNT);
-            $this->em->persist($verifCode);
-            $this->em->flush();
-            return true;
-        }
-        catch(\Doctrine\ORM\Query\QueryException $e) {
-            return false;
-        }
-    }    
+  
     
     /**
      * Authentication implementation for accounts with old password hashing
@@ -291,7 +431,7 @@ class AccountManager
      */
     public function authenticateByReverseHashing($username, $password, $member)
     {
-        $hashedPassword = $this->hashMemberPassword($username, $password);
+        $hashedPassword = $this->hashUtility->generalPurposeHash($username, $password);
 
         if($member->getUsername() === $username && $member->getPassword() === $hashedPassword) {
             $this->updatePassword($member->getIdMember(), $password);
@@ -320,30 +460,205 @@ class AccountManager
     }
 
     /**
-     * Hashes the user password, previously implemented in a stored procedure
+     * Authenticates a user via the remember me cookie
+     * 
+     * @param string $cookie
+     * @param string $ipAddress
+     * @param string $userAgent
+     * @param string $cisessionId
+     */
+    public function authenticateViaCookie($cookie, $ipAddress, $userAgent, $cisessionId)
+    {
+        $returnData = [
+            'isSuccessful' => false,
+        ];
+        if($cookie && $cookie !== ''){             
+            $rememberMeData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
+                                       ->findOneBy([
+                                            'token' => $cookie,
+                                            'lastIp' => $ipAddress,
+                                            'useragent' => $userAgent,
+                                        ]);
+
+            if($rememberMeData){
+                $member = $rememberMeData->getIdMember();
+                if($member && !(bool)$member->getIsBanned() && (bool)$member->getIsActive()){
+                    $newUserSession = $this->generateUsersessionId($member->getIdMember());
+                    $newToken = $this->persistRememberMeCookie($member, $ipAddress, $userAgent, $cisessionId);
+                    $member->setUsersession($newUserSession);
+                    $this->em->flush();
+                    $returnData['isSuccessful'] = true;
+                    $returnData['usersession'] = $newUserSession;
+                    $returnData['newCookie'] = $newToken;     
+                    $returnData['member'] = $member;
+                }
+            }
+        }
+        return $returnData;
+    }
+
+    /**
+     * Returns a unique usersession key
      *
-     * @param string $username
-     * @param string $password
+     * @param integer $id
      * @return string
      */
-    public function hashMemberPassword($username, $password)
+    public function generateUsersessionId($id)
     {
-        $rsm = new ResultSetMapping(); 
-        $rsm->addScalarResult('hash', 'hash');
-        $sql = "SELECT reverse(PASSWORD(concat(md5(:username),sha1(:password)))) as hash";
-        $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('username', $username);
-        $query->setParameter('password', $password); 
-        $result = $query->getOneOrNullResult();
+        return sha1($id.date("Y-m-d H:i:s"));
+    }
 
-        return $result['hash'];
-    }    
+    
+    /**
+     * Persists the remember-me cookie in to the database
+     *
+     * @param EasyShop\Entities\EsMember $member
+     * @param string $ipAddress
+     * @param string $userAgent
+     * @param string $ciSessionId
+     * @return string $newToken
+     */
+    public function persistRememberMeCookie($member, $ipAddress, $userAgent, $ciSessionId)
+    {
+        if(!$member){
+            return false;
+        }
+     
+        $memberId = $member->getIdMember();
+        $keepLoginData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
+                                  ->findOneBy(['idMember' => $member]);
+        if(!$keepLoginData){
+            $keepLoginData = new \EasyShop\Entities\EsKeeplogin();
+        }
+        $newToken = $this->createRememberMeHash($member->getIdMember(), $ciSessionId);
+        $keepLoginData->setIdMember($member);
+        $keepLoginData->setLastIp($ipAddress);
+        $keepLoginData->setUseragent($userAgent);
+        $keepLoginData->setToken($newToken);
+        $this->em->persist($keepLoginData);
+        try{
+            $this->em->flush();
+        }
+        catch(\Exception $e){
+            return false;
+        }
+        return $newToken;
+    }
+    
+    /**
+     * Creates the remember me hash
+     *
+     * @param integer $memberId
+     * @param string $cisessionId
+     * @return string
+     */
+    public function createRememberMeHash($memberId, $cisessionId)
+    {
+        return sha1($memberId.$cisessionId.date('Y-m-d H:i:s'));
+    }
+    
+    
+    /** 
+     * Destroys the remember me cookie from the database
+     *
+     * @param integer $memberId
+     * @param string $ipAddress
+     * @param string $useragent
+     * @param string $token
+     */
+    public function unpersistRememberMeCookie($memberId, $ipAddress, $useragent, $token)
+    {
+        $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+        if($member){
+            $rememberMeCookieData = $this->em->getRepository('EasyShop\Entities\EsKeeplogin')
+                                         ->findOneBy([
+                                            'idMember' => $member,
+                                            'lastIp' => $ipAddress,
+                                            'useragent' => $useragent,
+                                            'token' => $token,
+                                        ]);
+            if($rememberMeCookieData){
+                $this->em->remove($rememberMeCookieData);
+                $this->em->flush();
+            }
+        }
+    }
+    
+    /**
+     * Sends the forgot password email
+     *
+     * @param EasyShop\Entities\EsMember $member
+     * @return bool
+     */
+    public function sendForgotPasswordLink($member)
+    {
+        $dateNow = date('Y-m-d H:i:s');
+        $hash = $this->hashUtility->generalPurposeHash($dateNow, $dateNow);
+        $verificationCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                                 ->findOneBy(['member' => $member]);
+        if(!$verificationCode){
+            $verificationCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                                         ->createNewMemberVerifCode($member);
+        }
+        $verificationCode->setFpTimestamp(new DateTime('now'));
+        $verificationCode->setFpCode($hash);
+        try{
+            $this->em->flush();
+        }
+        catch(\Exception $e){
+            return false;
+        }
+        
+        $parseData = [
+            'username' => $member->getUsername(),
+            'trigger' => $hash,
+        ];
+        $imageArray = [ "/assets/images/img_logo.png" ];  
 
+        $message = $this->parser->parse('templates/email_forgot_pass' , $parseData,true);
+        $this->emailNotification->setRecipient($member->getEmail());
+        $this->emailNotification->setSubject('Password reset on Easyshop.ph');
+        $this->emailNotification->setMessage($message, $imageArray);    
+        return $this->emailNotification->sendMail();
+    }
+    
+    
+    /**
+     * Validates the password reset link and updates the user password
+     *
+     * @param string $newPassword
+     * @param string $hash
+     * @return bool
+     */
+    public function validatePasswordReset($newPassword, $hash)
+    {
+        $verifCode = $this->em->getRepository('EasyShop\Entities\EsVerifcode')
+                          ->findOneBy(['fpCode' => $hash]);
+        $response = [
+            'isSuccessful' => false,
+            'member' => null,
+        ];
 
-
-
-
-
+        if($verifCode){
+            $codeGeneationTime = $verifCode->getFpTimestamp();
+            $dateNow = new DateTime('now');
+            $deltaTime = $dateNow->diff($codeGeneationTime);
+            $elapsedMinutes = $deltaTime->days * 24 * 60;
+            $elapsedMinutes += $deltaTime->h * 60;
+            $elapsedMinutes += $deltaTime->i;
+            if($elapsedMinutes <= self::PASSWORD_RESET_LINK_LIFESPAN_MINUTES){
+                $verifCode->setFpTimestamp($dateNow);
+                $verifCode->setFpCode(null);
+                $member = $verifCode->getMember();
+                $response['member'] = $member;
+                $response['isSuccessful'] = $this->updatePassword($member->getIdMember(), $newPassword);  
+            }
+        }
+       
+        return $response;
+       
+    }
+    
 
 }
 

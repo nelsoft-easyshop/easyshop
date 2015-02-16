@@ -6,7 +6,7 @@
                     <center class="center-image">
                         <div class="div-user-image">
                             <a href="/<?=html_escape($feedback['revieweeSlug']); ?>">
-                                <img src="<?=$feedback['revieweeAvatarImage'];?>" class="img-user-image"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$feedback['revieweeAvatarImage'];?>" class="img-user-image"/>
                             <a/>
                         </div>
                     </center>
@@ -26,7 +26,7 @@
                         <td>
                             <div class="div-user-image">
                                 <a href="/<?=html_escape($feedback['revieweeSlug']); ?>">
-                                    <img src="<?=$feedback['revieweeAvatarImage'];?>" class="img-user-image"/>
+                                    <img src="<?php echo getAssetsDomain().'.'.$feedback['revieweeAvatarImage'];?>" class="img-user-image"/>
                                 <a/>
                             </div>
                         </td>

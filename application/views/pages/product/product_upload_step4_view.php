@@ -1,7 +1,12 @@
-<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-mods.css"  media="screen"/>
+<?php else: ?>
+    <link  rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.upload-step4.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
 <div class="container">
     <div class="seller_product_content row">
         <div class="inner_seller_product_content">
@@ -55,48 +60,6 @@
             <input type="hidden" name="is_edit" value="true">
         <?php echo form_close();?>
 
-<div class="container step4_section mrgn-top-35">
-    <div class="seller_product_content">
-        <div class="row">
-            <div class="step4_header col-xs-12">
-                <h5>How you will be paid</h5>
-            </div>
-            <div class="clear"></div>
-            <div class="step4_content step4_paysel pd-tb-15">
-                <?php if( !empty($productBillingInfo) ):?>
-                <div class="step4_bankdetails col-sx-12 col-sm-7 col-md-7 pd-bttm-15">
-                    <div class="row pd-top-15">
-                        <div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank account name:</strong></div>
-                        <div class="col-xs-9 col-sm-8 col-md-8"><?=html_escape($productBillingInfo['bankAccountName']);?></div>
-                    </div>
-                    <div class="row pd-top-15">
-                        <div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank account number:</strong></div>
-                        <div class="col-xs-9 col-sm-8 col-md-8"><?=html_escape($productBillingInfo['bankAccountNumber']);?></div>
-                    </div>
-                    <div class="row pd-top-15">
-                        <div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank name:</strong></div>
-                        <div class="col-xs-9 col-sm-8 col-md-8"><?=html_escape($productBillingInfo['bankName']);?></div>
-                    </div>
-                </div>
-                <?php else:?>
-                <div class="col-xs-12">
-                    <h4><p>No Bank Details.</p></h4> 
-                </div>
-                <?php endif;?>
-                <?php if( (int)$product->getIsCod() === 1 ):?>
-                <div class="step4-cod col-sx-12 col-sm-5 col-md-5">
-                    <span class="cod-images"></span>
-                    <div class="cod-button">
-                        <span>Cash on Delivery</span>
-                    </div>
-                </div>
-                <?php endif;?>
-                <div class="clear"></div>
-            </div>
-            <div class="clear"></div>
-        </div>
-    </div>
-</div>
 
 <div class="container step4_section mrgn-top-35">
     <div class="seller_product_content">
@@ -122,6 +85,17 @@
                                     <span class="pd-lr-10">For delivery</span>
                                 </div>
                             <?php endif; ?>
+                            
+                            <?php if( (int)$product->getIsCod() === 1 ):?>
+                            
+                                <div class="col-sx-12 col-sm-12 col-md-3">
+                                    <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                                    <span class="pd-lr-10">Cash-on-Delivery</span>
+                                </div>
+                            
+                            <?php endif;?>
+                                
+                            
                         </div>
                     </div>
                 </div>

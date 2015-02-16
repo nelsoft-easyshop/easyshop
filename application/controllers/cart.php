@@ -47,6 +47,7 @@ class Cart extends MY_Controller
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
             $totalAmount = $this->cartImplementation->getTotalPrice();
             $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
                 "title" => "Cart | Easyshop.ph",
             ];
             
@@ -74,13 +75,25 @@ class Cart extends MY_Controller
 
     /**
      * Action for adding an item into the cart
+     * Promo cannot be added via the express add button
      *
      * @return mixed
      */
     public function doAddItem()
     {
         $productId = $this->input->post('productId');
+        $memberId = $this->session->userdata('member_id');
+        
+        $isLoggedIn = $this->session->userdata('usersession') ? true : false;
+        
+        $product = $this->serviceContainer['entity_manager']
+                        ->find('EasyShop\Entities\EsProduct', $productId);
+        
         if($this->input->post('express')){
+            if($product->getIsPromote()){
+                print json_encode(['isSuccessful' => false, 'isLoggedIn' => $isLoggedIn]);
+                exit();
+            }
             $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
             $options = array();
             foreach($defaultAttributes as $attribute){
@@ -92,8 +105,16 @@ class Cart extends MY_Controller
             $options = $this->input->post('options') ? $this->input->post('options') : array();
             $quantity = $this->input->post('quantity');
         }
-        $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
-        $isLoggedIn = $this->session->userdata('usersession') ? true : false;
+
+        $isSuccesful = false;
+        if($product){
+            $seller = $product->getMember();
+            $member = $this->serviceContainer['entity_manager']
+                           ->find('EasyShop\Entities\EsMember', $memberId);
+            if($member && $seller->getIdMember() !== (int)$memberId && $member->getIsEmailVerify()){
+                $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
+            }
+        }
 
         print json_encode(['isSuccessful' => $isSuccesful, 'isLoggedIn' => $isLoggedIn]);
     }
@@ -103,14 +124,13 @@ class Cart extends MY_Controller
      *
      * @return mixed
      */
-    function doRemoveItem()
+    public function doRemoveItem()
     {
         $memberId =  $this->session->userdata('member_id');
         $rowId = $this->input->post('id');
         $isRemoveSuccesful = $this->cartManager->removeItem($memberId, $rowId);
         
-        $response = 
-        [
+        $response = [
             'isSuccess' => $isRemoveSuccesful,
             'totalPrice' => $this->cartImplementation->getTotalPrice(),
             'numberOfItems' => $this->cartImplementation->getSize(true),
@@ -146,19 +166,21 @@ class Cart extends MY_Controller
      *
      * @return array
      */
-    function doRemoveSelected()
+    public function doRemoveSelected()
     {
-        $itemList = $this->session->userdata['choosen_items'];
-        $removeRowId = $this->input->post('rowid');
+        if( $this->session->userdata('member_id') ) {
+            $itemList = $this->session->userdata['choosen_items'];
+            $removeRowId = $this->input->post('rowid');
 
-        foreach ($itemList as $rowId => $cartRow) {
-            if ($rowId === $removeRowId) {
-                unset($itemList[$rowId]);
-                break;
+            foreach ($itemList as $rowId => $cartRow) {
+                if ($rowId === $removeRowId) {
+                    unset($itemList[$rowId]);
+                    break;
+                }
             }
-        }
-        $this->session->set_userdata('choosen_items', $itemList);
+            $this->session->set_userdata('choosen_items', $itemList);
 
-        print json_encode(['isSuccessful' => true]);
+            print json_encode(['isSuccessful' => true]);
+        }
     }
 }

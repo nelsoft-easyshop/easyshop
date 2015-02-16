@@ -68,7 +68,7 @@ function ReplaceNumberWithCommas(thisnumber){
         
     });
 
-    $('.tab_categories').on('click', function(){
+    $(document).on('click', ".tab_categories", function(e){
         var divId = $(this).attr('data-link');
         var pagingDiv = $(divId).find('.product-paging');
         var productCount = parseInt($(divId).attr('data-productcount'));
@@ -77,7 +77,13 @@ function ReplaceNumberWithCommas(thisnumber){
         $(divId).addClass('active').show();
 
         $('.tab_categories').find('.selected-marker').hide();
-        $(this).find('.selected-marker').show();
+
+        var htmlText = $(this).find('.catText').text();
+        $( ".catText" ).each(function(index) {
+            if(htmlText === $(this).text()) {
+                $(this).closest("li").find(".selected-marker").show();
+            }
+        });
 
         if(pagingDiv.length === 0 && productCount !== 0){
             ItemListAjax($(divId), 1);
@@ -107,14 +113,13 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('#filter-btn').on('click', function(){
         var activeCategoryProductsDiv = $('.category-products.active');
-        var condition = $('#filter-condition').val();
-        var lprice = $.trim($('#filter-lprice').val());
+        var condition = $(this).closest("ul").find('#filter-condition').val();
+        var lprice = $.trim($(this).closest("ul").find('#filter-lprice').val());
         lprice = lprice.replace(new RegExp(",", "g"), '');
         lprice = parseFloat(lprice).toFixed(2);
-        var uprice = $.trim($('#filter-uprice').val());
+        var uprice = $.trim($(this).closest("ul").find('#filter-uprice').val());
         uprice = uprice.replace(new RegExp(",", "g"), '');
         uprice = parseFloat(uprice).toFixed(2);
-
         memconf.condition = condition;
         memconf.lprice = !isNaN(lprice) ? lprice : "";
         memconf.uprice = !isNaN(uprice) ? uprice : "";
@@ -289,6 +294,9 @@ function ItemListAjax(CatDiv,page)
     
 
     $(document).ready(function(){
+        
+        $( "#filter-list1" ).clone(true).appendTo( ".filter-modal" );
+
         $( "#toggle-cat" ).click(function() {
           $( "#category-list" ).slideToggle( "slow" );
         });
@@ -297,19 +305,40 @@ function ItemListAjax(CatDiv,page)
         });        
         $( ".icon-list" ).click(function() {
           $( ".panel-item" ).hide();
-          $( ".panel-list-item" ).fadeIn( "slow" );
+          $( ".panel-list-item" ).fadeIn( "fast" );
         });
         
         $( ".icon-grid" ).click(function() {
           $( ".panel-list-item" ).hide();
           $( ".panel-item" ).fadeIn( "fast" );
         });
-    
-        $('.search-bar-input').keyup(function(){
-           var string = $(this).val();
-           $('.search-bar-input').val(string);
+        
+        $('.col-categories').click(function (e) {
+            $('.categories-modal').modal();
+            return false;
+        });
+        
+        $('.col-filter').click(function (e) {
+            $('.filter-modal').modal({persist:true});
+            $('.simplemodal-container').addClass("filter-modal-container");
+            return false;
         });
         
     });
+    
+    var $window = $(window);
 
+    function checkWidthVendor() {
+        var windowsize = $window.width();
+        if (windowsize > 440) {
+            //if the window is greater than 440px wide then turn on jScrollPane..
+            $( ".close-hide" ).trigger("click");
+        }
+    }
+
+    // Execute on load
+    checkWidthVendor();
+    // Bind event listener
+    $window.resize(checkWidthVendor);
+    
 })(jQuery);

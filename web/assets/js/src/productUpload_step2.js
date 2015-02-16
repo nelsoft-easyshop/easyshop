@@ -3,22 +3,7 @@ function updateCountdown() {
     // 150 is the max message length
     var remaining = 150 - $('#prod_keyword').val().length;
     $('.countdown').text(remaining + ' characters remaining.');
-}
-
-// ERROR HANDLER
-function validateRedTextBox(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"});
 } 
-
-function validateWhiteTextBox(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-}
 
 // NUMBER ONLY IN SPECIFIC FIELDS
 function isNumberKey(evt)
@@ -57,7 +42,8 @@ function appendNewSelectionRow(){
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
     <input type="hidden" class="image-val imageText'+cnt+'"/>\
-    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="/assets/images/img_upload_photo.jpg"></a>\
+    <input type="hidden" class="image-file imageFileText'+cnt+'"/>\
+    <a class="select-image qty-image-con image'+cnt+'" data-cnt="'+cnt+'" href="javascript:void(0)"><img src="'+default_upload_image+'"></a>\
     <a class="select-image image'+cnt+' select-image-pencil" data-cnt="'+cnt+'" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     <a class="remove-control-panel" href="javascript:void(0)" data-cnt="'+cnt+'">Remove property value</a>\
@@ -185,7 +171,8 @@ function resetControlPanel(buttonReset)
     </div>\
     <div class="image-div col-xs-2 col-sm-2 col-md-2 pd-bttm-10">\
         <input type="hidden" class="image-val imageText1"/>\
-         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="/assets/images/img_upload_photo.jpg"></a>\
+        <input type="hidden" class="image-file imageFileText1"/>\
+         <a class="select-image qty-image-con image1" data-cnt="1" href="javascript:void(0)"><img src="'+default_upload_image+'"></a>\
         <a class="select-image image1 select-image-pencil" data-cnt="1" href="javascript:void(0)"><span class="glyphicon glyphicon-pencil"></span></a>\
     </div>\
     </div><div class="clear"></div>';
@@ -217,16 +204,7 @@ function resetControlPanel(buttonReset)
         });
     }
     valueData.trigger("liszt:updated");
-}
-
-function ReplaceNumberWithCommas(thisnumber){
-    //Seperates the components of the number
-    var n= thisnumber.toString().split(".");
-    //Comma-fies the first part
-    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //Combines the two sections
-    return n.join(".");
-}
+} 
 
 function get_discPrice() {
     var prcnt = $("#slider_val").val().replace("%",'');
@@ -244,7 +222,7 @@ function get_discPrice() {
     discounted = act_price * (prcnt/100);
     var v = parseFloat(act_price - discounted);
     tempval = Math.abs(v);
-    disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
+    disc_price = replaceNumberWithCommas(tempval.toFixed(2));
     $("#discountedP").val(disc_price);
     $( "span#discounted_price_con" ).text( disc_price );
 }
@@ -300,9 +278,11 @@ function checkOptionValue(selector,id,value,evt)
         if(activeSelection <= 1){ 
             $(id).val(commonValue).trigger("liszt:updated");
             var attrList = attributeArray[commonValue]; 
-            $.each(attrList, function(key, value){
-                valueData.append('<option>'+value+'</option>');
-            });
+            if(typeof attrList !== 'undefined'){ 
+                $.each(attrList, function(key, value){
+                    valueData.append('<option>'+value+'</option>');
+                });
+            }
             valueData.trigger("liszt:updated");
         }
         else{ 
@@ -512,6 +492,31 @@ function processAttributes()
     return JSON.stringify(completeAttributes);
 }
 
+function newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight){ 
+    var widthRatio = CropWidth / ImageWidth;
+    var heightRatio = CropHeight / ImageHeight;
+    var minPercent = (widthRatio >= heightRatio) ? widthRatio : heightRatio;
+    var minValue = Math.round(minPercent * 100);
+    var zoomSlider = $("#zoomSlider");
+    zoomSlider.ionRangeSlider({
+        min: minValue,
+        max: 100,
+        type: 'single', 
+        postfix: "%",
+        from: minValue,
+        onChange: function (obj) { 
+            var value = parseInt(obj.fromNumber) / 100;
+            cropElement.zoom(value);  
+        }
+    });
+
+    zoomSlider.ionRangeSlider("update", {
+        from: minValue 
+    });
+    cropImageMain.find(".irs-min").addClass('rangeSliderHide');
+    cropImageMain.find(".irs-max").addClass('rangeSliderHide');
+    cropImageMain.find(".irs-single").addClass('rangeSliderHide');
+}
 
 (function($) {
 
@@ -662,7 +667,7 @@ function processAttributes()
 
         $("#slider_val").val(sum+"%");
         tempval = Math.abs(discountPrice);
-        discountPrice = ReplaceNumberWithCommas(tempval.toFixed(2));
+        discountPrice = replaceNumberWithCommas(tempval.toFixed(2));
         $this.val(discountPrice);
         $("span#discounted_price_con").text(discountPrice);
     });
@@ -724,8 +729,11 @@ var previous,editSelectedValue,editSelectedId;
         if(evt.which === 13){
             checkOptionValue(this,this.form_field,$(evt.target).val(),evt);
         }
- 
     }
+
+    $(document).on('focus, click', '.chzn-single', function(){
+        $(".chzn-search > input[type=text]").attr('maxlength', 25);
+    });
 
 
     $(document).on("keypress",".chzn-search > input[type=text]", function (evt){
@@ -806,6 +814,7 @@ var previous,editSelectedValue,editSelectedId;
             var priceString = $(this).find(".price-div").find('.price-val').val();
             var price = (priceString.length == 0) ? '0.00' : priceString;
             var image = $(this).find(".image-div").find('.image-val').val();
+            var fileImage = $(this).find(".image-div").find('.image-file').val();
             
             if(selectList){
                 if($.inArray(selectList,eachCtrlValue) <= -1){
@@ -816,7 +825,7 @@ var previous,editSelectedValue,editSelectedId;
                             }
                         } 
                     }
-                    optionString += "<option data-value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
+                    optionString += "<option data-value='"+selectList+"' value='"+selectList+"' data-head='"+selectedValue+"' data-price='"+price+"' data-file='"+fileImage+"' data-image='"+image+"'>"+selectList+" - &#8369; "+price+"</option>";       
                     if($.inArray(selectList,attributeArray[selectedValue]) <= -1){
                         attributeArray[selectedValue].push(selectList);
                     }
@@ -962,15 +971,14 @@ var previous,editSelectedValue,editSelectedId;
             $('.list-choosen-combination-div > .div-combination > .div2 > span > .remove-attr').remove();
             $(".select-control-panel-option > .div2 > span > .selection").each(function() {
                 var selData = $('.select-control-panel-option > .div2 > span > #'+$(this).data('id') +' option:selected').data('value');
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).attr('selected','selected');
-                
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id') + " option").filter(function(){
-                    return $(this).data('value') == selData;
-                }).prop('selected', true);
+                var selectElement = $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id'));
+                selectElement.children('option').each(function(){
+                    if ($(this).data('value') == selData) {
+                        $(this).parent().val(selData).change(); 
+                    }
+                });
 
-                $(".combination"+combinationcnt+" > .div2 > span > #" + $(this).data('id')).prop("disabled",true);
+                selectElement.prop("disabled",true);
             });
 
             $('.combination'+combinationcnt +' > .div3').empty().append('<input class="remove-combination btn btn-danger width-70p" data-cmbcnt="'+combinationcnt+'" type="button" value="Remove">')
@@ -1032,17 +1040,20 @@ var previous,editSelectedValue,editSelectedId;
         $('.add-property').after('<input type="button" id="cancel-changes" value="Cancel" class="btn btn-default width-80p" />');
         $('#head-data').val(head).trigger("liszt:updated");
         $('.control-panel').empty();
+        validateWhiteTextBox(".selection");
         validateRedTextBox(".div2 > span > #"+id);
         $(".select-control-panel-option > .div2 > span > #"+id +" option").each(function(){
             var row = appendNewSelectionRow();
             var value = $(this).data('value'); 
             var price = $(this).data('price'); 
             var image = $(this).data('image'); 
-            var displayImage = (image == "") ? 'assets/images/img_upload_photo.jpg' : tempDirectory+'other/'+image;
+            var filePath = $(this).data('file'); 
+            var displayImage = (filePath == "") ? default_upload_image : filePath;
             $('.control-panel-'+row +' > .value-section > .select-value-section > #value-data-'+row).val(value);
             $('.control-panel-'+row +' > .price-div > .price'+row).val(price);
             $('.control-panel-'+row +' > .image-div > .imageText'+row).val(image);
-            $('.control-panel-'+row +' > .image-div > .image'+row+' img').attr("src",'/'+displayImage);
+            $('.control-panel-'+row +' > .image-div > .imageFileText'+row).val(filePath);
+            $('.control-panel-'+row +' > .image-div > .image'+row+' img').attr("src", displayImage);
             $('#value-data-'+row).trigger("liszt:updated");
         });
     });
@@ -1191,9 +1202,15 @@ var errorValues = "";
 var axes = [];
 var sizeList = [];
 var extensionList = [];
-var imageCollection = [];
+var imageCollection = []; 
+var ratioDifference = 25;
+var totalCropImage;
+var cropElement; 
+var cropImageMain;
+var imageTag;
 var widthRatio = 445;
 var heightRatio = 538;
+var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
 
 (function($) {
   
@@ -1210,17 +1227,9 @@ var heightRatio = 538;
         $('.files.active').click(); 
     });
 
-    function showCoords(c){ 
-        $('#image_x').val(c.x);
-        $('#image_y').val(c.y);
-        $('#image_w').val(c.w);
-        $('#image_h').val(c.h);
-    }
-
     var cropImage = function($input)
     {
-        var totalCropImage = imageObject.length;
-        var jcrop_api, imgHeight, imgWidth;
+        totalCropImage = imageObject.length; 
         var targetImage = imageObject[cropCurrentCount];
         var currentExtension = extensionList[cropCurrentCount];
         var currentSize = sizeList[cropCurrentCount];
@@ -1234,68 +1243,75 @@ var heightRatio = 538;
             $('#crop-image-main > #imageTag').attr('src',targetImage);
             $("<img/>") // Make in memory copy of image to avoid css issues
                 .attr("src", $('#crop-image-main > #imageTag').attr("src"))
-                .load(function() {
-                    imgWidth = this.width;   // Note: $(this).width() will not 
-                    imgHeight = this.height; // work for in memory images.
-                    var x1 = imgWidth / 2 - widthRatio / 2; 
-                    var x2 = x1 + widthRatio; 
-                    var y1 = 0;
-                    var y2 = imgHeight;
+                .load(function() { 
                     $('#crop-image-main').dialog({
                         resizable: false,
-                        height: 600,
+                        "resize": "auto",
                         width: 600,
                         modal: true,
                         buttons: {
                             "Crop": function() {
-                                $(this).dialog("close");
+                                var xCoord = $('#image_x').val();
+                                var yCoord = $('#image_y').val();
+                                var wCoord = $('#image_w').val();
+                                var hCoord = $('#image_h').val();
+                                var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
+                                af.push(afTemp[cropCurrentCount]);
+                                axes.push(coordinate); 
+                                cropCurrentCount++;  
+                                $(this).dialog("close"); 
+                                if(cropCurrentCount < totalCropImage){
+                                    cropImage($input);
+                                }
+                                else{
+                                    triggerUpload();
+                                    $(".files").hide();
+                                    $(".files.active").each(function(){
+                                        $(this).removeClass('active');
+                                    });
+                                    $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
+                                    $input.remove();
+                                }
                             }
                         },
                         open: function() {
-                            $(this).parent().addClass('pop-up-fixed');
-                            jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
-                                aspectRatio: widthRatio / heightRatio,
-                                setSelect: [ x1 / 2, y1, x2, y2 ],
-                                boxWidth: 500,
-                                boxHeight: 431,
-                                minSize: [
-                                    imgWidth * 0.1,
-                                    imgHeight * 0.1
-                                ],
-                                trueSize: [
-                                    imgWidth,
-                                    imgHeight
-                                ],
-                                onChange: showCoords,
-                                onSelect: showCoords
-                            });
+                            var MainwindowHeight = $(window).height();
+                            $(this).parent().addClass('pop-up-fixed'); 
+                            setTimeout(function() {
+                                cropImageMain = $("#crop-image-main");
+                                imageTag = $("#imageTag");
+                                var deductPercentage = cropImageMain.width() * 0.10;
+                                var modalHeight = cropImageMain.width() - deductPercentage
+                                var CropHeight = widthRatio / heightRatio * modalHeight;
+                                var CropWidth =  widthRatio / heightRatio * CropHeight; 
+                                var ImageHeight = imageTag.height(); 
+                                var ImageWidth = imageTag.width();
+
+                                imageTag.cropbox({
+                                    width: CropWidth,
+                                    height: CropHeight,
+                                    zoom: 100,
+                                    showControls: "never"
+                                }).on('cropbox', function(e, data) { 
+                                    $('#image_x').val(data.cropX);
+                                    $('#image_y').val(data.cropY);
+                                    $('#image_w').val(data.cropW);
+                                    $('#image_h').val(data.cropH);
+                                }); 
+                                cropElement = imageTag.data('cropbox');
+                                newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight);
+                                var UidialogHeight = $(".ui-dialog").outerHeight();
+                                var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+                                $(".ui-dialog").css("top", UidialogTop);
+                            }, 0);
                         },
                         close: function(){
-                            var xCoord = $('#image_x').val();
-                            var yCoord = $('#image_y').val();
-                            var wCoord = $('#image_w').val();
-                            var hCoord = $('#image_h').val();
-                            var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
-
                             $('#crop-image-main >  #imageTag').attr('src', ''); 
-                            $('#crop-image-main').append('<img src="" id="imageTag">');
-                            jcrop_api.destroy(); 
-                            $.modal.close();
-                            af.push(afTemp[cropCurrentCount]);
-                            axes.push(coordinate); 
-                            cropCurrentCount++; 
-                            if(cropCurrentCount < totalCropImage){
-                                cropImage($input);
-                            }
-                            else{
-                                triggerUpload();
-                                $(".files").hide();
-                                $(".files.active").each(function(){
-                                    $(this).removeClass('active');
-                                });
-                                $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" multiple accept="image/*" required = "required"  /> ');
-                                $input.remove();
-                            }
+                            $('#crop-image-main > .cropFrame').remove();
+                            $('#crop-image-main').prepend('<img src="" id="imageTag">');
+                            cropElement = null;
+                            cropImageMain = null;
+                            imageTag = null;
                         },
                         "title": "Crop your image"
                     });
@@ -1318,9 +1334,21 @@ var heightRatio = 538;
                 $input.remove();
             }
         }
-
-        
     }
+
+    $(document).on('click','.ui-dialog-titlebar-close',function(e){
+            af.push(afTemp[cropCurrentCount]); 
+            cropCurrentCount++;
+            while(cropCurrentCount < totalCropImage){
+                af.push(afTemp[cropCurrentCount]);
+                cropCurrentCount++;
+            }
+            $.each( arrayUpload, function( key, value ) {
+                removeThisPictures.push(value); 
+                $('#previewList'+value).remove();
+            }); 
+            canProceed = true;  
+    });
 
     function triggerUpload()
     {
@@ -1518,7 +1546,8 @@ var heightRatio = 538;
         var selector = $(this);
         currentCnt = selector.data('cnt');
         $('.imageText'+currentCnt).val('');
-        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src","/assets/images/img_upload_photo.jpg");
+        $('.imageFileText'+currentCnt).val('');
+        $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
     });
 
     $(document).on('click',".attr-image",function (e){
@@ -1543,56 +1572,63 @@ var heightRatio = 538;
         $("#pop-image").parents("#simplemodal-container").addClass("prod-upload-con");
     });
 
-
     var cropImageOther = function(imageCustom, picName)
-    {
-        var jcrop_api, imgHeight, imgWidth;
+    { 
         $('#crop-image-main > #imageTag').attr('src',imageCustom);
         $("<img/>") // Make in memory copy of image to avoid css issues
             .attr("src", $('#crop-image-main > #imageTag').attr("src"))
-            .load(function() {
-                imgWidth = this.width;   // Note: $(this).width() will not 
-                imgHeight = this.height; // work for in memory images.
-                var x1 = imgWidth / 2 - widthRatio / 2; 
-                var x2 = x1 + widthRatio; 
-                var y1 = 0;
-                var y2 = imgHeight;
+            .load(function() { 
                 $('#crop-image-main').dialog({
                     resizable: false,
-                    height: 600,
+                    "resize": "auto",
                     width: 600,
                     modal: true,
                     buttons: {
                         "Crop": function() {
+                            var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
+                            $("#coordinatesOther").val(coordinate);
+                            triggerUploadOther(picName);
                             $(this).dialog("close");
                         }
                     },
-                    open: function() {
+                    open: function() { 
+                        var MainwindowHeight = $(window).height();
                         $(this).parent().addClass('pop-up-fixed');
-                        jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
-                            aspectRatio: widthRatio / heightRatio,
-                            setSelect: [ x1 / 2, y1, x2, y2 ],
-                            boxWidth: 500,
-                            boxHeight: 431,
-                            minSize: [
-                                imgWidth * 0.1,
-                                imgHeight * 0.1
-                            ],
-                            trueSize: [
-                                imgWidth,
-                                imgHeight
-                            ],
-                            onChange: showCoords,
-                            onSelect: showCoords
-                        });
+                        setTimeout(function() {
+                            cropImageMain = $("#crop-image-main");
+                            imageTag = $("#imageTag");
+                            var deductPercentage = cropImageMain.width() * 0.10;
+                            var modalHeight = cropImageMain.width() - deductPercentage;
+                            var CropHeight = widthRatio / heightRatio * modalHeight;
+                            var CropWidth =  widthRatio / heightRatio * CropHeight;
+                            var ImageHeight = imageTag.height(); 
+                            var ImageWidth = imageTag.width();
+
+                            imageTag.cropbox({
+                                width: CropWidth,
+                                height: CropHeight,
+                                zoom: 100,
+                                showControls: "never"
+                            }).on('cropbox', function(e, data) { 
+                                $('#image_x').val(data.cropX);
+                                $('#image_y').val(data.cropY);
+                                $('#image_w').val(data.cropW);
+                                $('#image_h').val(data.cropH);
+                            });
+                            cropElement = imageTag.data('cropbox');
+                            newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight);
+                            var UidialogHeight = $(".ui-dialog").outerHeight();
+                            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+                            $(".ui-dialog").css("top", UidialogTop);
+                        }, 0);
                     },
-                    close: function(){
-                        var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
-                        $("#coordinatesOther").val(coordinate);
+                    close: function(){  
                         $('#crop-image-main >  #imageTag').attr('src', ''); 
-                        $('#crop-image-main').append('<img src="" id="imageTag">');
-                        jcrop_api.destroy(); 
-                        triggerUploadOther(picName);
+                        $('#crop-image-main > .cropFrame').remove();
+                        $('#crop-image-main').prepend('<img src="" id="imageTag">');
+                        cropElement = null;
+                        cropImageMain = null;
+                        imageTag = null;
                     },
                     "title": "Crop your image"
                 });
@@ -1619,6 +1655,8 @@ var heightRatio = 538;
                     value: pictureCountOther
                 }).appendTo('form');
                 arr.push({name:'pictureCount', value:pictureCountOther});
+                canProceed = false;
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
             },
             uploadProgress : function(event, position, total, percentComplete) {
                 canProceed = false;
@@ -1628,13 +1666,15 @@ var heightRatio = 538;
                 canProceed = true;
                 if(d.result == "ok"){
                     imageAttr.push(picName);
+                    var imagePath = '/'+tempDirectory+'other/categoryview/'+picName;
                     $('.imageText'+currentCnt).val(picName); 
-                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/'+tempDirectory+'other/categoryview/'+picName);
+                    $('.imageFileText'+currentCnt).val(imagePath); 
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src", imagePath);
                     pictureCountOther++;
                 }
                 else{
                     alert(d.msg);
-                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/img_upload_photo.jpg');
+                    $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
                 }
                 $('#other_files > #pictureCount').remove();
                 $('#other_files > #pictureName').remove();
@@ -1642,7 +1682,7 @@ var heightRatio = 538;
             },
             error: function (request, status, error) {
                 alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
-                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/img_upload_photo.jpg');
+                $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
                 canProceed = true;
                 $('#other_files > #pictureCount').remove();
                 $('#other_files > #pictureName').remove();
@@ -1655,7 +1695,6 @@ var heightRatio = 538;
         var val = $(this).val();
         var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
         var picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
-        var size = this.files[0].size;
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':
@@ -1667,6 +1706,7 @@ var heightRatio = 538;
         }
 
         if(badIE == false){
+            var size = this.files[0].size;
             if(size > maxImageSize){
                 alert('Invalid file size. Please select an image that is not larger than 5 mB in size.');
                 return false;

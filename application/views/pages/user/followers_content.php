@@ -4,18 +4,19 @@
         <div class="div-follower-container-inner">   
             <?php foreach ($followers as $key => $value): ?>
                 <?php $memberEntity = $value->getMember(); ?>
-                <div class="col-xs-6 col-follower">
+                <div class="col-sm-6 col-xs-12 col-follower">
                     <div class="follower-div">
                         <a href="/<?=html_escape($memberEntity->getSlug()); ?>">
                             <div class="div-img-cover">
-                                <img src="<?=$value->bannerImage ;?>" class="img-follower-cover"/>
-                                <img src="<?=$value->avatarImage;?>" class="vendor-follower-img"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$value->bannerImage ;?>" class="img-follower-cover"/>
+                                <img src="<?php echo getAssetsDomain().'.'.$value->avatarImage;?>" class="vendor-follower-img"/>
                                 <div class="cover-overlay"></div>
                             </div>
                         </a>
                         <div class="div-follower-details">
                             <div class="row">
                                 <div class="col-xs-7">
+                                    <img src="<?php echo getAssetsDomain().'.'.$value->avatarImage;?>" class="img-mobile-follower pull-left">
                                     <a href="/<?=html_escape($memberEntity->getSlug()); ?>">
                                         <p class="p-follower-name">
                                             <?php $displayName = strlen(trim($memberEntity->getStoreName())) > 0 ? html_escape($memberEntity->getStoreName()) : html_escape($memberEntity->getUsername()); ?>
@@ -38,14 +39,14 @@
                                     <?php if($isLoggedIn && $memberEntity->getIdMember() == $viewerId): ?>
                                     <?php elseif(strtolower($value->subscriptionStatus) === "unfollowed" || !$isLoggedIn): ?>
                                         <span class="follow-btn follow-right btn btn-default-2 subscription" data-btn="default" data-status="follow" data-slug="<?=html_escape($memberEntity->getSlug()); ?>" data-username="<?=html_escape($memberEntity->getUsername());?>">
-                                            <span class="glyphicon glyphicon-plus-sign"></span>Follow
+                                            <span class="glyphicon glyphicon-plus-sign"></span> <span class="btn-text-follow">Follow</span>
                                         </span>
                                     <?php else: ?> 
                                         <span class="follow-btn follow-right btn btn-default-following following-user subscription" data-btn="default" data-status="unfollow" data-slug="<?=html_escape($memberEntity->getSlug()); ?>" data-username="<?=html_escape($memberEntity->getUsername());?>">
-                                            <i class="fa fa-check"></i>Following
+                                            <i class="fa fa-check"></i> <span class="btn-text-follow">Following</span>
                                         </span>
                                         <span class="follow-btn follow-right btn btn-default-following unfollow-user subscription" data-btn="default" data-status="unfollow" data-slug="<?=html_escape($memberEntity->getSlug()); ?>" data-username="<?=html_escape($memberEntity->getUsername());?>">
-                                            <i class="fa fa-minus-circle"></i> Unfollow
+                                            <i class="fa fa-minus-circle"></i> <span class="btn-text-follow">Unfollow</span>
                                         </span>
                                     <?php endif; ?>
                                 </div>

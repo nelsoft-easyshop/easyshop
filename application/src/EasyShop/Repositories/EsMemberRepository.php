@@ -56,12 +56,11 @@ class EsMemberRepository extends EntityRepository
     /**
      *  Fetch entries in es_member with exact storeName excluding excludeMemberId
      *
-     *  @param integer $excludeMemberId
      *  @param string $storeName
-     *
+     *  @param integer $excludeMemberId
      *  @return boolean
      */
-    public function getUsedStoreName($excludeMemberId, $storeName)
+    public function getUserWithStoreName($storeName, $excludeMemberId = null)
     {
         $em = $this->_em;
 
@@ -71,16 +70,29 @@ class EsMemberRepository extends EntityRepository
         $rsm->addFieldResult('m','username','username');
         $rsm->addFieldResult('m','store_name','storeName');
 
-        $query = $em->createNativeQuery(
-            'SELECT id_member, store_name, username
-            FROM es_member
-            WHERE id_member != :memberId AND 
-            (store_name = :storeName OR  (username = :userName AND store_name IS NULL))'
-        , $rsm);
+        $sql =  '
+            SELECT 
+                id_member, 
+                store_name, 
+                username
+            FROM 
+                es_member
+            WHERE 
+                (store_name = :storeName OR username = :userName)
+        ';
+        
+        if($excludeMemberId !== null){
+            $sql .= ' AND id_member != :memberId';
+        }
+ 
+        $query = $em->createNativeQuery($sql, $rsm);
 
-        $query->setParameter('memberId',$excludeMemberId);
         $query->setParameter('storeName',$storeName);
         $query->setParameter('userName',$storeName);
+        
+        if($excludeMemberId !== null){
+            $query->setParameter('memberId',$excludeMemberId);
+        }
 
         return $query->getResult();
     }
@@ -156,8 +168,10 @@ class EsMemberRepository extends EntityRepository
         $rsm->addScalarResult('username', 'username');
         $rsm->addScalarResult('contactno', 'contactno');
         $rsm->addScalarResult('email', 'email');
+        $rsm->addScalarResult('address', 'address');
         $rsm->addScalarResult('stateregion', 'stateregion');
         $rsm->addScalarResult('city', 'city');
+        $rsm->addScalarResult('country', 'country');
         $rsm->addScalarResult('id_member', 'id_member');
         $rsm->addScalarResult('stateregionname', 'stateregionname');
         $rsm->addScalarResult('cityname', 'cityname');
@@ -172,10 +186,12 @@ class EsMemberRepository extends EntityRepository
                 , m.username
                 , IF(m.contactno != '', CONCAT('0',m.contactno), '') as contactno
                 , m.email
+                , a.address
                 , a.stateregion
-                , a.city
+                , a.city 
                 , l1.location as stateregionname
                 , l2.location as cityname
+                , l3.location as country
                 , DATE_FORMAT(datecreated, '%M %Y') as datecreated
                 , imgurl
                 , store_desc
@@ -185,6 +201,7 @@ class EsMemberRepository extends EntityRepository
             LEFT JOIN es_address a on m.id_member = a.id_member AND a.type=0
             LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
             LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
+            LEFT JOIN es_location_lookup l3 ON a.country = l3.id_location
             WHERE m.slug=:vendorslug
             LIMIT 1
         ";
@@ -295,6 +312,7 @@ class EsMemberRepository extends EntityRepository
         else {
             $member->setIsHideBanner(EsMember::DEFAULT_AVATAR_VISIBILITY);
         }
+        $member->setLastmodifieddate(new \DateTime('now'));
         $em->flush();
     }            
 

@@ -295,12 +295,16 @@
             var $filterInput;
             var $requestType;
             var $container;
-            if(id == "#deleted-items" || id == "#draft-items"){ 
-                if(id == "#deleted-items"){
+            
+            if(id === "#deleted-items" || id === "#draft-items" || id === "#active-items"){ 
+                if(id === "#deleted-items"){
                     $button = $("#button-deleted-item");
                 }
-                else if(id == "#draft-items"){
+                else if(id === "#draft-items"){
                     $button = $("#button-draft-item");
+                }                
+                else if(id === "#active-items"){
+                    $button = $("#button-active-item");
                 }
                 if($button.hasClass('can-request')){
                     $parentContainer = $(id);
@@ -309,7 +313,6 @@
                     $requestType = $parentContainer.find('.request-type').val();
                     $container = $parentContainer.find('.container-id').val();
                     $button.removeClass('can-request');
-
                     isAjaxRequestForProduct($page, $textInput, $filterInput, $requestType, $container);
                 }
             }
@@ -350,7 +353,7 @@
     $("#active-items, #deleted-items, #draft-items").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page');
-        var $parentContainer = $this.parent().parent().parent().parent().parent();
+        var $parentContainer = $this.closest('.dashboard-product-container');
         var $textInput = $parentContainer.find('.search-field').val();
         var $filterInput = $parentContainer.find('.search-filter').val();
         var $requestType = $parentContainer.find('.request-type').val();
@@ -361,7 +364,7 @@
     $(document.body).on('change','.search-filter',function () {
         var $this = $(this);
         var $page = 1;
-        var $parentContainer = $this.parent().parent().parent();
+        var $parentContainer = $this.closest('.dashboard-product-container');
         var $textInput = $parentContainer.find('.search-field').val();
         var $filterInput = $this.val();
         var $requestType = $parentContainer.find('.request-type').val();
@@ -374,7 +377,7 @@
         if(event.keyCode == 13){
             var $this = $(this);
             var $page = 1;
-            var $parentContainer = $this.parent().parent().parent();
+            var $parentContainer = $this.closest('.dashboard-product-container');
             var $textInput = $this.val();
             var $filterInput = $parentContainer.find('.search-filter').val();
             var $requestType = $parentContainer.find('.request-type').val();
@@ -384,6 +387,18 @@
         }
     });
 
+    $(document.body).on('change','.search-field',function (event) { 
+        var $this = $(this);
+        var $textInput = $this.val();
+        var $page = 1;
+        var $parentContainer = $this.closest('.dashboard-product-container');
+        var $filterInput = $parentContainer.find('.search-filter').val();
+        var $requestType = $parentContainer.find('.request-type').val();
+        var $container = $parentContainer.find('.container-id').val(); 
+
+        requestProduct($page, $textInput, $filterInput, $requestType, $container, true); 
+    });
+
     $(document.body).on('click','.soft-delete',function () {
         var $confirm = confirm("Are you sure you want to move this item to deleted item?");
         if($confirm){
@@ -391,16 +406,57 @@
             var $productId = $this.data('id');
             var $urlRequest = $("#request-url-soft-delete").val();
             var $deletedCount = parseInt($(".deleted-span-circle").html());
+
+            var $parentContainer = $this.closest('.dashboard-product-container');
+            var $currentPage = $parentContainer.find('.pagination-section li.active').data('page');
+            var $textInput = $parentContainer.find('.search-field').val();
+            var $filterInput = $parentContainer.find('.search-filter').val();
+            var $requestType = $parentContainer.find('.request-type').val();
+            var $container = $parentContainer.find('.container-id').val();
+
             var $ajaxRequest = $.ajax({
                 type: "get",
                 url: $urlRequest,
                 data: {
-                        product_id:$productId
-                    },
-                success: function(d){ 
-                    var $response = $.parseJSON(d); 
+                    product_id: $productId,
+                    page: $currentPage,
+                    search_string: $textInput,
+                    sort: $filterInput,
+                    request: $requestType
+                },
+                success: function(requestResponse){ 
+                    var $response = $.parseJSON(requestResponse); 
                     if($response.isSuccess){
-                        window.location = "/me";
+                        
+                        var deletedCounterCircle = $('#button-deleted-item .circle-total');
+                        var activeCounterCircle = $('#button-active-item .circle-total');
+                        var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10) + 1;
+                        var numberOfActive = parseInt( activeCounterCircle.html(), 10) - 1;
+                        numberOfActive = numberOfActive < 0 ? 0 : numberOfActive;
+                        deletedCounterCircle.html(numberOfDeleted);
+                        activeCounterCircle.html(numberOfActive);
+
+                        $('#'+$container).html($response.html);
+
+                        $('#hidden-active-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
+                        $("#hidden-active-container-" + $filterInput).append($appendString);
+                        
+                        $button = $("#button-deleted-item");
+                        if(!$button.hasClass('can-request')){
+                            $button.addClass('can-request');
+                        }
+                        $('#hidden-deleted-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        
+                        $('#deleted-items .no-items').hide();
+                        if(numberOfActive === 0){
+                            $parentContainer.find('.no-items').show();
+                            $parentContainer.find('.with-items').hide();
+                        }
                     }
                     else{
                         alert($response.message);
@@ -416,16 +472,59 @@
             var $this = $(this);
             var $productId = $this.data('id');
             var $urlRequest = $("#request-url-hard-delete").val();
+            
+            var $parentContainer = $this.closest('.dashboard-product-container');
+            var $currentPage = $parentContainer.find('.pagination-section li.active').data('page');
+            var $textInput = $parentContainer.find('.search-field').val();
+            var $filterInput = $parentContainer.find('.search-filter').val();
+            var $requestType = $parentContainer.find('.request-type').val();
+            var $container = $parentContainer.find('.container-id').val();
+
+            
             var $ajaxRequest = $.ajax({
                 type: "get",
                 url: $urlRequest,
                 data: {
-                        product_id:$productId,
+                        product_id: $productId,
+                        page: $currentPage,
+                        search_string: $textInput,
+                        sort: $filterInput,
+                        request: $requestType
                     },
                 success: function(d){ 
                     var $response = $.parseJSON(d); 
                     if($response.isSuccess){
-                        window.location = "/me";
+
+                        $('#'+$container).html($response.html);
+                        var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
+                        if($container == "deleted-product-container"){
+                            $('#hidden-deleted-container > div').each(function(){
+                                $(this).html('');
+                            });   
+                            $("#hidden-deleted-container-" + $filterInput).append($appendString);
+                            var deletedCounterCircle = $('#button-deleted-item .circle-total');
+                            var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10) - 1;
+                            numberOfDeleted = numberOfDeleted < 0 ? 0 : numberOfDeleted;
+                            deletedCounterCircle.html(numberOfDeleted);
+                            if(numberOfDeleted === 0){
+                                $parentContainer.find('.no-items').show();
+                                $parentContainer.find('.with-items').hide();
+                            }
+                        }
+                        else if($container == "drafted-product-container"){
+                            $('#hidden-drafted-container > div').each(function(){
+                                $(this).html('');
+                            });   
+                            $("#hidden-drafted-container-" + $filterInput).append($appendString);
+                            var draftCounterCircle = $('#button-draft-item .circle-total');
+                            var numberOfDrafts = parseInt( draftCounterCircle.html(), 10) - 1;
+                            numberOfDrafts = numberOfDrafts < 0 ? 0 : numberOfDrafts;
+                            draftCounterCircle.html(numberOfDrafts);
+                            if(numberOfDrafts === 0){
+                                $parentContainer.find('.no-items').show();
+                                $parentContainer.find('.with-items').hide();
+                            }
+                        }
                     }
                     else{
                         alert($response.message);
@@ -441,16 +540,56 @@
             var $this = $(this);
             var $productId = $this.data('id');
             var $urlRequest = $("#request-url-resotre").val();
+        
+            var $parentContainer = $this.closest('.dashboard-product-container');
+            var $currentPage = $parentContainer.find('.pagination-section li.active').data('page');
+            var $textInput = $parentContainer.find('.search-field').val();
+            var $filterInput = $parentContainer.find('.search-filter').val();
+            var $requestType = $parentContainer.find('.request-type').val();
+            var $container = $parentContainer.find('.container-id').val();
+            
             var $ajaxRequest = $.ajax({
                 type: "get",
                 url: $urlRequest,
                 data: {
-                        product_id:$productId,
+                        product_id: $productId,
+                        page: $currentPage,
+                        search_string: $textInput,
+                        sort: $filterInput,
+                        request: $requestType
                     },
                 success: function(d){ 
                     var $response = $.parseJSON(d); 
                     if($response.isSuccess){
-                        window.location = "/me";
+      
+                        var deletedCounterCircle = $('#button-deleted-item .circle-total');
+                        var activeCounterCircle = $('#button-active-item .circle-total');
+                        var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10) - 1;
+                        var numberOfActive = parseInt( activeCounterCircle.html(), 10) + 1;
+                        numberOfDeleted = numberOfDeleted < 0 ? 0 : numberOfDeleted;
+                        deletedCounterCircle.html(numberOfDeleted);
+                        activeCounterCircle.html(numberOfActive);
+                        
+                        $('#'+$container).html($response.html);
+                        $('#hidden-deleted-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
+                        $("#hidden-deleted-container-" + $filterInput).append($appendString);
+                                          
+                        $button = $("#button-active-item");
+                        if(!$button.hasClass('can-request')){
+                            $button.addClass('can-request');
+                        }
+                        $('#hidden-active-container > div').each(function(){
+                            $(this).html('');
+                        });   
+                        
+                        $('active-items .no-items').hide();
+                        if(numberOfDeleted === 0){
+                            $parentContainer.find('.no-items').show();
+                            $parentContainer.find('.with-items').hide();
+                        }
                     }
                     else{
                         alert($response.message);
@@ -468,7 +607,7 @@
 
         $("#editTextProductId").val($productId);
         $("#editTextCategoryId").val($categoryId);
-        $("#editTextCategoryNamehala ").val($categoryName);
+        $("#editTextCategoryName").val($categoryName);
         $("#formEdit").submit();
     });
 
@@ -594,7 +733,11 @@
             success: function(requestResponse){ 
                 var $response = $.parseJSON(requestResponse);
                 var $appendString = "<div id='page-"+$page+"'>"+$response.html+"</div>";
+
                 $('#'+$container).html($response.html);
+                var $parentContainer =  $('#'+$container).closest('.dashboard-product-container');
+                $parentContainer.find('.no-items').hide();
+                $parentContainer.find('.with-items').show();
 
                 if( !$searchByString ){
                     if($container == "deleted-product-container"){
@@ -1215,16 +1358,24 @@
         var alltxStatus = $(this).closest('.item-list-panel').find('span.status-class');
         var buttonText = txResponseBtn.val();
         var msg = "";
+        var invoiceNum = txResponseBtn.parent().parent().find("input[name='invoice_num']");
         txResponseBtn.addClass('loading');
         txResponseBtn.removeClass('enabled');
         txResponseBtn.val('Please wait..');
 
-        if( txResponseBtn.hasClass('tx_return') ) {
+        if( txResponseBtn.hasClass('tx_return') || txResponseBtn.hasClass('tx_forward')) {
+            var inputName;
             var hiddenInputs = txResponseBtn.closest('.item-list-panel').find('.order-product-ids');
             var orderProductIds = hiddenInputs.map(function() {
                 return this.value;
             }).get().join('-');
-            txResponseBtn.closest('.item-list-panel').find('input[name="seller_response"]').val(orderProductIds);
+            if (txResponseBtn.hasClass('tx_return')) {
+                inputName = 'input[name="seller_response"]';
+            }
+            else if (txResponseBtn.hasClass('tx_forward')) {
+                inputName = 'input[name="buyer_response"]';
+            }
+            txResponseBtn.closest('.item-list-panel').find(inputName).val(orderProductIds);
         }
         var serializedData = form.serializeArray();
         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
@@ -1251,7 +1402,7 @@
                 }
                 else {
                     if (txResponseBtn.hasClass('tx_forward')) {
-                        txStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
+                        alltxStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                         msg = "<h3>ITEM RECEIVED</h3> <br> Transaction has been moved to completed tab.";
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
@@ -1262,8 +1413,14 @@
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    txResponseBtn.closest('.item-list-panel').replaceWith('<div class="alert alert-success" id="wipeOut" role="alert">' + msg + '</div>');
-                    $('#wipeOut').fadeOut(5000);
+                    if (serverResponse.isTransactionComplete === true) {
+                        $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                        $('.wipeOut').fadeOut(5000);
+                    }
+                    else {
+                        txResponseBtn.parent().parent().find('.rejectForm').remove();
+                        txResponseBtn.parent().remove();
+                    }
                 }
                 txResponseBtn.addClass('enabled');
             }
@@ -1306,6 +1463,11 @@
         var form = thisbtn.closest('form');
         var thismethod = thisbtn.siblings('input[name="method"]');
         var status = thisbtn.closest('.item-list-panel').find('.status-class');
+        var hiddenInputs = thisbtn.closest('.item-list-panel').find('.order-product-ids');
+        var orderProductIds = hiddenInputs.map(function() {
+            return this.value;
+        }).get().join('-');
+        thisbtn.closest('.item-list-panel').find('input[name="order_product"]').val(orderProductIds);
         var serializedData = $(form).serializeArray();
         serializedData.push({name :'csrfname', value: $("meta[name='csrf-token']").attr('content')});
 
@@ -1419,6 +1581,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#ongoing-sold").on('click', ".individual, .extremes", function () {
@@ -1431,6 +1597,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#complete-bought").on('click', ".individual, .extremes", function () {
@@ -1443,6 +1613,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $("#complete-sold").on('click', ".individual, .extremes", function () {
@@ -1455,6 +1629,10 @@
         var $paymentFilter = $mainContainer.closest('.list-container').find('.select-filter-item');
 
         getTransactionDetails($page, $requestType, $container, $searchFor, $paymentFilter.val());
+
+        $('html, body').animate({
+            scrollTop:$('#transactions').offset().top
+        }, 1000);
     });
 
     $('#transactions').on('keypress', ".search-transaction-num", function(e) {
@@ -1504,6 +1682,14 @@
                 $("#" + $container).append($response.html);
                 $(".trans-btn-con1").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
                 $(".reject_btn").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
+                if ($searchFor === "transactionNumber") {
+                    $('#' + $container).find('.jumbotron').html('<i class="icon-category"></i>' +
+                        'Ooops! You\'ve entered an invalid transaction number. Please try again.');
+                }
+                else if ($searchFor === "paymentMethod") {
+                    $('#' + $container).find('.jumbotron').html('<i class="icon-category"></i>' +
+                        'Sorry, you don\'t have any transactions with this payment gateway.');
+                }
             }
         });
     }

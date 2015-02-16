@@ -1,4 +1,10 @@
-<link type="text/css" href='/assets/css/new-dashboard.css' rel="stylesheet" media='screen'/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href='/assets/css/new-dashboard.css' rel="stylesheet" media='screen'/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.member-account-activate.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
 <style>
 #simplemodal-container{
         height: 150px !important;
@@ -9,6 +15,16 @@
     font-weight: 900;
     color: #565656;
     }
+.simplemodal-wrap {
+    margin: 36px 0;
+}
+#activated-message {
+    padding: 0;
+}
+
+.feedback-content {
+    border: none;
+}
 
 @media only screen and (max-width: 991px){
         #simplemodal-container{
@@ -62,7 +78,7 @@
                                 </center>
                             </div>
                             <div style='text-align:center !important;'>
-                                <img src="/assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none;"/>                                
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none;"/>                                
                             </div>
                             <div class="alert alert-danger" style="display:none;" role="alert" id="password-change-error">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -94,8 +110,12 @@
         </div>
     </div>
 </div>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src="/assets/js/src/accountactivation.js?ver=<?=ES_FILE_VERSION?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.MemberPageAccountActivate.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
 
-<script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/accountactivation.js?ver=<?=ES_FILE_VERSION?>"></script>

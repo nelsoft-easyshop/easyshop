@@ -5,6 +5,7 @@ namespace EasyShop\Search;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsProductShippingHead;
 use EasyShop\Entities\EsKeywordsTemp;
+use EasyShop\Entities\EsKeywords as EsKeywords;
 use EasyShop\Entities\EsProductImage as EsProductImage;
 use Doctrine\Common\Collections\ArrayCollection;
 /**
@@ -17,7 +18,7 @@ class SearchProduct
     /**
      * Number of product to display per request
      */
-    const PER_PAGE = 15;
+    const PER_PAGE = 12;
 
     /**
      * Entity Manager instance
@@ -67,6 +68,14 @@ class SearchProduct
      * @var EasyShop\ConfigLoader\ConfigLoader
      */
     private $configLoader;
+    
+    
+    /**
+     * Sphinx Search Client
+     *
+     * @var sphinxapi
+     */
+    private $sphinxClient;
 
 
     /**
@@ -79,7 +88,9 @@ class SearchProduct
                                 $categoryManager,
                                 $httpRequest,
                                 $promoManager,
-                                $configLoader)
+                                $configLoader,
+                                $sphinxClient,
+                                $userManager)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
@@ -88,6 +99,8 @@ class SearchProduct
         $this->httpRequest = $httpRequest;
         $this->promoManager = $promoManager;
         $this->configLoader = $configLoader;
+        $this->sphinxClient = $sphinxClient;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -106,31 +119,51 @@ class SearchProduct
             $this->em->flush();
         }
 
-        $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
-        $stringCollection = [];
-        $ids = $productIds;
-
-        if(trim($clearString)){
-            $explodedString = explode(' ', trim($clearString));
-            $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
-
-            $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
-            $wildCardString = !implode('* +', $explodedStringWithRegEx)
-                              ? "" 
-                              : '+'.implode('* +', $explodedStringWithRegEx) .'*';
-            $stringCollection[] = str_replace("+*", "", $wildCardString);
-            $stringCollection[] = '"'.trim($clearString).'"'; 
-
-            $isLimit = strlen($clearString) > 1;
-            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                 ->findByKeyword($stringCollection,$productIds,$isLimit);
-
-            $ids = [];
-            foreach ($products as $product) {
-                $ids[] = $product['idProduct']; 
+        $ids = [];
+        $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
+        $this->sphinxClient->SetFieldWeights([
+            'name' => 50, 
+            'store_name' => 30,
+            'search_keyword' => 10,
+        ]);
+    
+        if(empty($productIds) === false){
+            $this->sphinxClient->SetFilter('productid', $productIds);
+        }
+        $this->sphinxClient->setLimits(0, PHP_INT_MAX, PHP_INT_MAX); 
+        $this->sphinxClient->AddQuery($queryString, 'products products_delta'); 
+        
+        $sphinxResult =  $this->sphinxClient->RunQueries();
+        
+        $products = [];
+        if($sphinxResult === false){
+            $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
+            $stringCollection = [];
+            $ids = $productIds;
+            if(trim($clearString)){
+                $explodedString = explode(' ', trim($clearString));
+                $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+                $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
+                $wildCardString = !implode('* +', $explodedStringWithRegEx)
+                                ? "" 
+                                : '+'.implode('* +', $explodedStringWithRegEx) .'*';
+                $stringCollection[] = str_replace("+*", "", $wildCardString);
+                $stringCollection[] = '"'.trim($clearString).'"'; 
+                $isLimit = strlen($clearString) > 1;
+                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                     ->findByKeyword($stringCollection,$productIds,$isLimit);
+                $ids = [];
+                foreach ($products as $product) {
+                    $ids[] = $product['idProduct']; 
+                }
             }
         }
-        
+        else if(isset($sphinxResult[0]['matches'])){
+            foreach ($sphinxResult[0]['matches'] as $productId => $product) {
+                $ids[] = $productId; 
+            }
+        }
+
         return $ids;
     }
 
@@ -169,21 +202,21 @@ class SearchProduct
     {
         // array of parameters that will disregard on filtering
         $unsetParam = [
-                        'q_str'
-                        ,'category'
-                        ,'condition'
-                        ,'startprice'
-                        ,'endprice'
-                        ,'brand'
-                        ,'seller'
-                        ,'location'
-                        ,'sort'
-                        ,'typeview'
-                        ,'page'
-                        ,'limit'
-                        ,'sortby'
-                        ,'sorttype'
-                      ];
+            'q_str'
+            ,'category'
+            ,'condition'
+            ,'startprice'
+            ,'endprice'
+            ,'brand'
+            ,'seller'
+            ,'location'
+            ,'sort'
+            ,'typeview'
+            ,'page'
+            ,'limit'
+            ,'sortby'
+            ,'sorttype'
+        ];
 
         $finalizedParamter = [];
         $addtionString = "";
@@ -210,7 +243,7 @@ class SearchProduct
             if(!empty($parameter)){
                 $addtionString = ' AND ('.substr_replace($addtionString," ",1,3).') GROUP BY product_id HAVING COUNT(*) = '. $havingCounter; 
                 $result = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->getAttributesByProductIds($productIds,TRUE,$addtionString,$finalizedParamter);
+                                   ->getAttributesByProductIds($productIds,TRUE,$addtionString,$finalizedParamter);
                 $resultNeeded = array_map(function($value) { return $value['product_id']; }, $result);
 
                 return $resultNeeded;
@@ -302,6 +335,7 @@ class SearchProduct
         $searchProductService = $this;
         $productManager = $this->productManager;
         $categoryManager = $this->categoryManager;
+        $userManager = $this->userManager;
 
         $queryString = isset($parameters['q_str']) && $parameters['q_str']?trim($parameters['q_str']):false;
         $parameterCategory = isset($parameters['category']) && $parameters['category']?trim($parameters['category']):false;
@@ -320,7 +354,7 @@ class SearchProduct
 
         $finalizedProductIds =  ($startPrice || $endPrice) ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
-
+        $finalizedProductIds = $this->sortResultByTopic($finalizedProductIds,$queryString);
         $totalCount = count($finalizedProductIds);
 
         $offset = (int) $pageNumber * (int) $perPage;
@@ -331,18 +365,24 @@ class SearchProduct
         foreach ($paginatedProductIds as $productId) {
             $product = $productManager->getProductDetails($productId);
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                      ->getDefaultImage($productId);
+                                     ->getDefaultImage($productId);
             $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                               ->getSecondaryImage($productId);
+
+            $product->ownerAvatar = $userManager->getUserImage($product->getMember()->getIdMember());
             $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
             $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
             $product->secondaryImageDirectory = null;
             $product->secondaryImageFileName = null;
+            $product->hasSecondaryImage = false;
+
             if($productImage !== null){
                 $product->directory = $productImage->getDirectory();
                 $product->imageFileName = $productImage->getFilename();
             }
+
             if($secondaryProductImage !== null){
+                $product->hasSecondaryImage = true;
                 $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
                 $product->secondaryImageFileName = $secondaryProductImage->getFilename();
             }
@@ -368,15 +408,51 @@ class SearchProduct
                 return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1;
             });
             $products = new ArrayCollection(iterator_to_array($iterator));
-        }
+        } 
 
         $returnArray = [
-                    'collection' => $products,
-                    'count' => $totalCount,
-                ];
+            'collection' => $products,
+            'count' => $totalCount,
+        ];
 
         return $returnArray;
     }
+
+    /**
+     * Sort product object using search topic table
+     * @param  object $products 
+     * @param  string $queryString 
+     * @return object
+     */
+    public function sortResultByTopic($productIds, $queryString) 
+    {
+        $wordResult = $this->em->getRepository('EasyShop\Entities\EsSearchTopic')
+                               ->getTopicOrderByWord($queryString);
+        if(count($wordResult) > 0){
+            $sortedIds = [];
+            $categoryOrder = [];
+            foreach ($wordResult as $result) {
+                $categoryOrder[] = $result->getCategory()->getIdCat();
+            }
+        
+            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                 ->getProductCategoryIdByIds($productIds);
+
+            usort($products, function ($a, $b) use ($categoryOrder) {
+                $positionA = array_search($a['cat_id'], $categoryOrder);
+                $positionB = array_search($b['cat_id'], $categoryOrder);
+                return $positionA - $positionB;
+            }); 
+
+            foreach ($products as $product) {
+                $sortedIds[] = $product['id_product'];
+            }
+            return $sortedIds;
+        }
+
+        return $productIds;
+    }
+ 
 
     /**
      * Get popular product of the given category
@@ -387,6 +463,7 @@ class SearchProduct
     {
         $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $EsCatRepository = $this->em->getRepository('EasyShop\Entities\EsCat'); 
+        $productManager = $this->productManager;
         $subCategoryList = [];
 
         foreach ($subCategory as $value) {
@@ -396,6 +473,7 @@ class SearchProduct
                 $popularProducts = $EsProductRepository->getPopularItemByCategory($subCategoryIds);
             }
             if(!empty($popularProducts)){ 
+                $popularProducts[0] = $productManager->getProductDetails($popularProducts[0]);
                 $productId = $popularProducts[0]->getIdProduct();
                 $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                          ->getDefaultImage($productId);
@@ -405,7 +483,7 @@ class SearchProduct
                 if($productImage != NULL){
                     $popularProducts[0]->directory = $productImage->getDirectory();
                     $popularProducts[0]->imageFileName = $productImage->getFilename();
-                }
+                } 
             }
             else{
                 $popularProducts[0] = [];
@@ -415,6 +493,43 @@ class SearchProduct
         }
 
         return $subCategoryList;
+    }
+    
+    /**
+     * Retrieves suggested words for search string
+     *
+     * @param string $queryString
+     * @return string[]
+     */
+    public function getKeywordSuggestions($queryString)
+    {
+        $suggestionLimit = EsKeywords::SUGGESTION_LIMIT;
+        $suggestions = [];
+
+        $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
+        $this->sphinxClient->SetFieldWeights([
+            'keywords' => 50,
+        ]);
+    
+        $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
+        $this->sphinxClient->setLimits(0, $suggestionLimit, $suggestionLimit); 
+        $this->sphinxClient->AddQuery($queryString.'*', 'suggestions');
+        
+        $sphinxResult =  $this->sphinxClient->RunQueries();
+        if($sphinxResult === false){
+            $keywords = $this->em->getRepository('EasyShop\Entities\EsKeywords')
+                                 ->getSimilarKeywords($queryString, $suggestionLimit);
+            foreach($keywords as $word){
+                 $suggestions[] = $word['keyword'];
+            }
+        }
+        else if(isset($sphinxResult[0]['matches'])){
+            foreach($sphinxResult[0]['matches'] as $match){
+                $suggestions[] = $match['attrs']['keywordattr'];
+            }
+        }
+
+        return $suggestions;
     }
 
 }

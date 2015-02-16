@@ -55,6 +55,7 @@ var jbImagesDialog = {
         } 
         else{
             var origForm = document.getElementById('upl' + this.uploadCounter);
+            
             var filenames = origForm.children[0].children[0].files;
             
             var filesAllowed = true;
@@ -140,7 +141,7 @@ var jbImagesDialog = {
         {
             var w = this.getWin();
             tinymce = w.tinymce;
-            var mybaseurl = tinymce.activeEditor.baseURI.source.replace('/assets/tinymce', '');
+            var mybaseurl = result.base_url;
 
             tinymce.EditorManager.activeEditor.insertContent('<img src="' + result.filename +'" data-mce-src="' + result.filename +'">');
 
@@ -197,5 +198,6 @@ var jbImagesDialog = {
         else
             close();
     }
-
 };
+
+

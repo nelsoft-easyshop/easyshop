@@ -1,6 +1,13 @@
-<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
-<link rel="stylesheet" href="/assets/css/promo.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media="all"/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="/assets/css/promo.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
+    <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media="all"/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.scratch-to-win.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
+
 <div class="clear"></div>
 <?PHP if (isset($product)) : ?>
 <div class="promo-wrapper margin-top-10" id="main_search_container">
@@ -12,7 +19,7 @@
             </p>
             <div class="claim-bg ">
                 <div id="prod_image">
-                    <img src="/<?=$product['product_image_path']?>">
+                    <img src="<?php echo getAssetsDomain(); ?><?=$product['product_image_path']?>">
                 </div>
                 <div class="claim-details">
                     <p>To claim your prize,
@@ -50,7 +57,7 @@
         </span>
         <div class="claim-bg">
             <div id="prod_image">
-                <img src="/<?=$product['product_image_path']?>">
+                <img src="<?php echo getAssetsDomain(); ?><?=$product['product_image_path']?>">
             </div>
             <div class="claim-details">
                 <p>To claim your prize,  <?=$user['fullname'] ?'': '<span id="complete">complete the <a href="javascript:void(0)" id="register">registration</a> form and </span>'?>visit
@@ -71,7 +78,7 @@
                 <br/>
                 <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
                 <button class="btn btn-default-3" id="apply-fullname">Apply</button>
-                <img class="promoimgloader" src="/./assets/images/loading/preloader-whiteBG-small.gif">
+                <img class="promoimgloader" src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG-small.gif">
             </div>
         </div>
         <input type="text" id="paymentToken" value="<?php echo md5(uniqid(mt_rand(), true)).'3';?>" style="display: none">
@@ -84,7 +91,7 @@
             <?PHP foreach($gadgets_galore as $product) : ?>
             <div class="promo-gallery-data">
                 <div class="img-container">
-                    <img class="promo-img" src="/<?=html_escape($product['product_image_path'])?>">
+                    <img class="promo-img" src="<?php echo getAssetsDomain().$product['product_image_path']?>">
                 </div>
                 <p><?=html_escape($product['product_name'])?></p>
                 <span>Php <?= number_format($product['price'], 2, '.', ',')?></span>
@@ -208,7 +215,7 @@
                 </p>
                 <div class="claim-bg error-claim">
                     <div id="prod_image">
-                        <img src="/">
+                        <img src="<?php echo getAssetsDomain() ?>">
                     </div>
                     <div class="claim-details">
                         <p>To claim your prize, complete the <a href="/">registration</a> form and visit<br>
@@ -245,7 +252,7 @@
                 <h2>Congratulations!</h2>
                 <div class="claim-bg">
                     <div id="prod_image">
-                        <img src="">
+                        <img src="<?php echo getAssetsDomain() ?>">
                     </div>
                     <div class="claim-details">
                         <h3></h3>
@@ -258,7 +265,12 @@
         </div>
         <?PHP endif; ?>
     </div>
-    <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/jquery.simplemodal.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-    <script src="/assets/js/src/scratchwinpromo.js" type="text/javascript"></script>
+    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+        <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.simplemodal.js" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
+        <script src="/assets/js/src/scratchwinpromo.js" type="text/javascript"></script>
+    <?php else: ?>
+        <script src="/assets/js/min/easyshop.scratch_to_win.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <?php endif; ?>
+
