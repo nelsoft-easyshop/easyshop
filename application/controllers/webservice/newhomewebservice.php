@@ -780,11 +780,18 @@ class NewHomeWebService extends MY_Controller
                         ->set_output( $this->slugerrorjson);
         }
         else {
+            if(count($map->categorySection[$index-1]->sub[$subindex-1]->productSlugs) <= 1 &&
+                trim($map->categorySection[$index-1]->sub[$subindex-1]->productSlugs[0]) === "") {
+                $map->categorySection[$index-1]->sub[$subindex-1]->productSlugs[0]= $value;
+                $addXml = $map->asXML($this->file); 
+            }
+            else {
             $addXml = $this->xmlCmsService->addXmlFormatted($this->file,
                                                             $string,
                                                             '/map/categorySection['.$index.']/sub['.$subindex.']/productSlugs[last()]',
                                                             "\t\t\t",
                                                             "\n");
+            }
             if($addXml) {
                 return $this->output
                             ->set_content_type('application/json')
