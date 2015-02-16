@@ -4,9 +4,10 @@
     <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
     <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap.css" />
-    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/> 
-    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.cropbox.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>  
     <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/jquery.cropper.css">
+    <link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
 <?php else: ?>
     <link type="text/css" href='/assets/css/min-easyshop.upload-step2.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
@@ -522,14 +523,21 @@
                 </div>
             </div>
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
-                <img src="" id="imageTag">
-                <center>Move to zoom</center>
-                <div id="zoomSlider"></div>
+                <div class="imageContainer"> 
+                    <img src="" id="imageTag">
+                </div>
                 <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
                 <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
                 <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
                 <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
+                <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
+                <a class="zoomIn" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
+                <a class="zoomOut" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-search-minus fa-2x"></i></a>
+                
+                <a class="rotateRight" title="Rotate Right" href="javascript:void(0)"><i class="fa fa-repeat fa-2x"></i></a>
+            
             </div>
+            
         </div>
     </div>
 </div>
@@ -551,7 +559,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/hammer.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/jquery.cropbox.js"></script>
+    <script src="/assets/js/src/vendor/jquery.cropper.js"></script> 
     <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
     <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script> 
     <script src="/assets/js/src/vendor/jquery.simplemodal.js" type='text/javascript' ></script>
