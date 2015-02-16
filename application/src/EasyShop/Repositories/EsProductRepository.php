@@ -1116,6 +1116,8 @@ class EsProductRepository extends EntityRepository
      */
     public function getRandomProductsFromUsers($memberIdArray, $productFromEachSeller, $excludeProductIds = [])
     {
+        $productFromEachSeller = (int) $productFromEachSeller;
+        
         $em = $this->_em;
         $rsm = new ResultSetMapping();
 
