@@ -56,19 +56,21 @@
         <section class="ty-comment-section">
             <div class="container load-animate">
                 <div class="box">
-                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
-                        <h3>THANK YOU COMMENT</h3>
-                        <p class="text-align-justify">
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod 
-                            tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis 
-                            nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
-                            Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel 
-                            illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui 
-                            blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber 
-                            tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat 
-                            facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit 
-                            eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
-                        </p>
+                    <div id="success" class="header-msg">
+                        <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                            <h3><b>THANK YOU FOR VOTING!</b></h3>
+                            <p class="text-align-justify">
+                                We have already counted your vote.
+                            </p>
+                            <br>
+                            <h3>See below for the current standings:</h3>
+                        </div>
+                    </div>
+                    <div id="failed" class="header-msg">
+                        <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                            <h3><b>Sorry, but you can only vote once per round. Please check back on the mechanics for the next round of voting.</b></h3>
+                            <h3>See below for the current standings:</h3>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -112,7 +114,7 @@
                     <div class="span12 padding-top-30">
                         <h3>Make sure you don't miss interesting events, sale, 
                             <br>and more by joining our newsletter program.
-                        </h5>
+                        </h3>
                         <br>
                         <form method="post" action="newsletter.php" class="newsletter-form">
                             <div class="row-fluid">

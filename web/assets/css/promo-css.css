@@ -1844,3 +1844,7 @@ section.slideshow { margin-bottom: 30px;}
 
 .lt-ie9 .navbar .nav li.logo { display: inline-block;}
 .lt-ie9 section.pricing .pricing-left, .lt-ie9 section.pricing .pricing-right { padding: 30px 9px; }
+
+.header-msg {
+    display: none;
+}
