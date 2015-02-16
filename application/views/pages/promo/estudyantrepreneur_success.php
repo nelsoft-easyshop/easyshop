@@ -116,15 +116,18 @@
                             <br>and more by joining our newsletter program.
                         </h3>
                         <br>
-                        <form method="post" action="newsletter.php" class="newsletter-form">
+                        <form method="post" id="register" action="/subscribe" class="newsletter-form">
                             <div class="row-fluid">
                                 <fieldset>
-                                    <input class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
-                                    <button class="btn btn-primary" type="submit">SUBSRIBE</button>
+                                    <?php echo form_open('/subscribe');?>
+                                    <input type="text" id="useremail" class="span6" name="email" placeholder="Your e-mail here">
+                                    <input type="submit" value="subscribe" class="btn btn-primary" name="subscribe_btn">
+                                    <?php echo form_close();?>
                                 </fieldset>
-                            </div>           
-                            <div class="newsletter-info">Thanks for subscribing</div>
-                            <div class="newsletter-validate">Please enter a valid e-mail'</div>
+                            </div>
+                            <div class="newsletter-info-blank">Please enter your email address.</div>
+                            <div class="newsletter-info">Thank you for subscribing.</div>
+                            <div class="newsletter-validate">Please enter a valid e-mail address</div>
                         </form>
                     </div>
                 </div>

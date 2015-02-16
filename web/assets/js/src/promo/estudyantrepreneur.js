@@ -9,6 +9,39 @@ $(document).ready(function(){
 
 });
 
+    $('.btn-primary').click(function() {
+
+        $(".error").hide();
+        var hasError = false;
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        var emailaddressVal = $("#useremail").val();
+
+        if(emailaddressVal == '') {
+            $(".newsletter-info-blank").show();
+            $(".newsletter-validate, .newsletter-info").hide();
+            hasError = true;
+        }
+
+        else if(!emailReg.test(emailaddressVal)) {
+            $(".newsletter-validate").show();
+            $(".newsletter-info-blank, .newsletter-info").hide();
+            hasError = true;
+        }
+
+        if(hasError == true) {
+            return false;
+        }
+
+        else {
+
+            $('#register').submit();
+            $(".newsletter-info").show();
+            $(".newsletter-validate, .newsletter-info-blank").hide();
+
+            return false;
+        }
+    });
+
     $('#ddown-school').on('change', function() {
         var $this = $(this);
         var $selectedOpt = $this.find(':selected');
