@@ -1441,5 +1441,26 @@ li.brand_result:hover{
 }
 
 #irs-2 {
-    top: -23px
+    top: -23px;
+    width: 80%;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.rotateRight{
+    float: right;
+    position: relative;
+    z-index: 999;
+    top: -5px;
+}
+
+.rotateLeft{ 
+    float: left;
+    position: relative;
+    z-index: 999;
+    top: -5px;
+}
+
+.control-container{
+    width: 78%;
 }
