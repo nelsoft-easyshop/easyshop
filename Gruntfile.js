@@ -90,7 +90,8 @@ module.exports = function (grunt) {
                         'web/assets/css/ion.rangeSlider.skinFlat.css',
                         'web/assets/css/bootstrap.css',
                         'web/assets/css/bootstrap-mods.css', 
-                        'web/assets/css/jquery.cropbox.css',
+                        'web/assets/css/font-awesome/css/font-awesome.min.css',
+                        'web/assets/css/jquery.cropper.css',
                         'web/assets/css/chosenwtihcreate.min.css'], 
                      
                     'web/assets/css/min-easyshop.upload-step3.css':
