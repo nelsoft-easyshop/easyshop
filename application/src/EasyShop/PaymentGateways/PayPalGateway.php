@@ -6,6 +6,7 @@ use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\PaymentService\PaymentService as PaymentService;
 
 
 /**
@@ -310,7 +311,7 @@ class PayPalGateway extends AbstractGateway
 
         $getItems = $this->getParameter("getArray");
 
-        $response['status'] = 'f';
+        $response['status'] = PaymentService::STATUS_FAIL;
         $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
         $apiResponse = $productstring = ''; 
 
@@ -318,7 +319,7 @@ class PayPalGateway extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                    ->getShippingAddress(intval($memberId));
+                            ->getShippingAddress((int)$memberId);
 
         if(array_key_exists('token',$getItems) && array_key_exists('PayerID',$getItems)){
             $payerid = $getItems['PayerID'];
@@ -362,20 +363,20 @@ class PayPalGateway extends AbstractGateway
                                 $this->paymentService->productManager->updateSoldoutStatus($value['id']);
                             }
 
-                            $flag = ($httpParsedResponseAr['PAYMENTSTATUS'] == 'Pending' ? 1 : 0);
+                            $flag = (string) $httpParsedResponseAr['PAYMENTSTATUS'] === 'Pending';
                             $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                                    ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,0,$flag);
+                                                 ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,EsOrderStatus::STATUS_PAID,$flag);
 
                             if($complete){
-                                $orderHistory = array(
+                                $orderHistory = [
                                     'order_id' => $orderId,
-                                    'order_status' => 0,
+                                    'order_status' => EsOrderStatus::STATUS_PAID,
                                     'comment' => 'Paypal transaction confirmed'
-                                    );
+                                ];
                                 $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
-                                                ->addOrderHistory($orderHistory);
+                                         ->addOrderHistory($orderHistory);
                                 $response['message'] = 'Your payment has been completed through Paypal';
-                                $response['status'] = 's';
+                                $response['status'] = PaymentService::STATUS_SUCCESS;
                             }
                             else{
                                 $response['message'] = 'Someting went wrong. Please contact us immediately. Your EASYSHOP INVOICE NUMBER: '.$invoice.'</div>'; 

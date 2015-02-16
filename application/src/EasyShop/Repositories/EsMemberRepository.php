@@ -78,7 +78,7 @@ class EsMemberRepository extends EntityRepository
             FROM 
                 es_member
             WHERE 
-                (store_name = :storeName OR  (username = :userName AND store_name IS NULL))
+                (store_name = :storeName OR username = :userName)
         ';
         
         if($excludeMemberId !== null){

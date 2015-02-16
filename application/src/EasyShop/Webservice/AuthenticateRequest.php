@@ -36,7 +36,9 @@ class AuthenticateRequest
         "callback", 
         "password", 
         "_", 
-        "checkuser"
+        "checkuser",
+        "product",
+        "image"
     ];  
 
     /**
@@ -70,7 +72,7 @@ class AuthenticateRequest
 
             $this->hash .= $adminUser->getPassword();            
         }
-
+        
         return (sha1($this->hash) === $postedHash);
     }
 

@@ -2,15 +2,13 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-    
-use \Easyshop\Upload\AssetsUploader as AssetsUploader;
 
 /**
  *  Memberpage controller
  *
  *  @author Sam Gavinio
  *  @author Stephen Janz Serafico
- *  @author Rain Jorque
+ *  @author Ryan Vazquez
  *
  */
 
@@ -22,6 +20,8 @@ use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsOrderStatus;
+use Easyshop\Upload\AssetsUploader as AssetsUploader;
+use EasyShop\Product\ProductManager as ProductManager;
 
 class Memberpage extends MY_Controller
 {
@@ -900,10 +900,10 @@ class Memberpage extends MY_Controller
                 if( count($orderProductEntity) === 1 ) {
                     $esShippingComment = $productShippingCommentRepo->findOneBy(['orderProduct' => $orderProductEntity, 'member' => $memberEntity]);
                     if ($esShippingComment) {
-                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($esShippingComment, $orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
+                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($esShippingComment, $orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
                     }
                     else {
-                        $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['tracking_num'], $postData['courier'], $postData['expected_date'], $postData['delivery_date']);
+                        $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
                     }
                     $isShippingCommentModified = (bool) $newEsShippingComment;
                     $serverResponse['result'] = $isShippingCommentModified ? 'success' : 'fail';
@@ -1318,7 +1318,7 @@ class Memberpage extends MY_Controller
                                                          $paymentMethod,
                                                          $transactionNumber
                                                      );
-                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount["transactionsCount"] / $this->transactionRowCount);
+                $paginationData['lastPage'] = ceil($ongoingSoldTransactionsCount["productCount"] / $this->transactionRowCount);
                 $ongoingSoldTransactionData = [
                     'transaction' => $this->transactionManager
                                           ->getSoldTransactionDetails(
@@ -1366,7 +1366,7 @@ class Memberpage extends MY_Controller
                                                           $paymentMethod,
                                                           $transactionNumber
                                                       );
-                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount["transactionsCount"] / $this->transactionRowCount);
+                $paginationData['lastPage'] = ceil($completeSoldTransactionsCount["productCount"] / $this->transactionRowCount);
 
                 $completeSoldTransactionsData = [
                     'transaction' => $this->transactionManager
@@ -1467,9 +1467,16 @@ class Memberpage extends MY_Controller
         $productManager = $this->serviceContainer['product_manager'];
         $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::DELETE);
 
+        $page = $this->input->get('page') ? trim($this->input->get('page')) : 1;
+        $requestType = trim($this->input->get('request'));
+        $sortType = trim($this->input->get('sort'));
+        $searchString = trim($this->input->get('search_string'));
+        $viewData = $this->__generateProductListView($memberId, $page, $requestType, $sortType, $searchString);
+
         $responseArray = [
             'isSuccess' => $deleteResponse,
             'message' => $deleteResponse ? "" : "You can't delete this item.",
+            'html' =>  $this->load->view('partials/dashboard-products', $viewData, true),
         ];
 
         echo json_encode($responseArray);
@@ -1486,9 +1493,16 @@ class Memberpage extends MY_Controller
         $productManager = $this->serviceContainer['product_manager'];
         $deleteResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::FULL_DELETE);
 
+        $page = $this->input->get('page') ? trim($this->input->get('page')) : 1;
+        $requestType = trim($this->input->get('request'));
+        $sortType = trim($this->input->get('sort'));
+        $searchString = trim($this->input->get('search_string'));
+        $viewData = $this->__generateProductListView($memberId, $page, $requestType, $sortType, $searchString);
+        
         $responseArray = [
             'isSuccess' => $deleteResponse,
             'message' => $deleteResponse ? "" : "You can't delete this item.",
+            'html' =>  $this->load->view('partials/dashboard-products', $viewData, true),
         ];
 
         echo json_encode($responseArray);
@@ -1504,15 +1518,73 @@ class Memberpage extends MY_Controller
         $productId = $this->input->get('product_id'); 
         $productManager = $this->serviceContainer['product_manager'];
         $restoreResponse = $productManager->updateIsDeleteStatus($productId, $memberId, EsProduct::ACTIVE);
+        
+        $page = $this->input->get('page') ? trim($this->input->get('page')) : 1;
+        $requestType = trim($this->input->get('request'));
+        $sortType = trim($this->input->get('sort'));
+        $searchString = trim($this->input->get('search_string'));
+        $viewData = $this->__generateProductListView($memberId, $page, $requestType, $sortType, $searchString);
 
         $responseArray = [
             'isSuccess' => $restoreResponse,
             'message' => $restoreResponse ? "" : "You can't restore this item.",
+            'html' =>  $this->load->view('partials/dashboard-products', $viewData, true),
         ];
 
         echo json_encode($responseArray);
     }
 
+    
+    /**
+     * Generate the product page and pagination
+     *
+     * @param integer $page
+     * @param $requestType string
+     * @param $sortType string
+     * @param $searchString string
+     * @return mixed
+     */
+    private function __generateProductListView($memberId, $page, $requestType, $sortType, $searchString)
+    {
+        $deleteConditions = [EsProduct::ACTIVE];
+        $draftConditions = [EsProduct::ACTIVE];
+        if(strtolower($requestType) === "deleted"){ 
+            $deleteConditions = [EsProduct::DELETE];
+            $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
+        }
+        elseif (strtolower($requestType) === "drafted"){ 
+            $deleteConditions = [EsProduct::ACTIVE];
+            $draftConditions = [EsProduct::DRAFT];
+        }
+
+        $productCount = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                 ->getUserProductCount($memberId,
+                                                       $deleteConditions, 
+                                                       $draftConditions, 
+                                                       $searchString);
+        $userProducts = $this->serviceContainer['product_manager']
+                             ->getProductsByUser($memberId,
+                                                 $deleteConditions,
+                                                 $draftConditions,
+                                                 ProductManager::PRODUCT_COUNT_DASHBOARD*($page-1),
+                                                 $searchString,
+                                                 $sortType);                                 
+        $paginationData = [
+            'lastPage' => ceil($productCount/ProductManager::PRODUCT_COUNT_DASHBOARD)
+            ,'isHyperLink' => false
+            , 'currentPage' => $page
+        ];
+
+        
+        $viewData = [
+            'products' => $userProducts,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+
+        return $viewData;
+    }
+    
+    
     /**
      * send notification to user and deactivate account
      * @param id
@@ -1642,49 +1714,12 @@ class Memberpage extends MY_Controller
      */
     public function productMemberPagePaginate()
     {
-        $productManager = $this->serviceContainer['product_manager'];
-        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-
         $memberId = $this->session->userdata('member_id');
         $page = $this->input->get('page') ? trim($this->input->get('page')) : 1;
         $requestType = trim($this->input->get('request'));
         $sortType = trim($this->input->get('sort'));
         $searchString = trim($this->input->get('search_string'));
- 
-        $deleteConditions = [EsProduct::ACTIVE];
-        $draftConditions = [EsProduct::ACTIVE];
-
-        if(strtolower($requestType) === "deleted"){ 
-            $deleteConditions = [EsProduct::DELETE];
-            $draftConditions = [EsProduct::ACTIVE,EsProduct::DRAFT];
-        }
-        elseif (strtolower($requestType) === "drafted"){ 
-            $deleteConditions = [EsProduct::ACTIVE];
-            $draftConditions = [EsProduct::DRAFT];
-        }
-
-        $userProductCount = $esProductRepo->getUserProductCount($memberId,
-                                                                $deleteConditions, 
-                                                                $draftConditions, 
-                                                                $searchString);
-        $userProducts = $productManager->getProductsByUser($memberId,
-                                                           $deleteConditions,
-                                                           $draftConditions,
-                                                           $productManager::PRODUCT_COUNT_DASHBOARD*($page-1),
-                                                           $searchString,
-                                                           $sortType); 
-
-        $paginationData = [
-            'lastPage' => ceil($userProductCount/$productManager::PRODUCT_COUNT_DASHBOARD)
-            ,'isHyperLink' => false
-            , 'currentPage' => $page
-        ];
-
-        $viewData = [
-            'products' => $userProducts,
-            'pagination' => $this->load->view('pagination/default', $paginationData, true),
-        ];
-
+        $viewData = $this->__generateProductListView($memberId, $page, $requestType, $sortType, $searchString);
         $responseArray = [
             'html' => $this->load->view('partials/dashboard-products', $viewData, true),
         ];

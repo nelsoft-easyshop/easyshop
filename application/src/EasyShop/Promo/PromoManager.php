@@ -34,6 +34,12 @@ class PromoManager
      */
     private $em;
 
+        
+    
+        
+    private $container;
+    
+
     /**
      * Constructor
      * @param ConfigLoader $configLoader
@@ -41,8 +47,18 @@ class PromoManager
      */
     public function __construct(ConfigLoader $configLoader, \Doctrine\ORM\EntityManager $em)
     {
-        $this->promoConfig = $configLoader->getItem('promo', 'Promo');
+        $configArray = $configLoader->getItem('promo', 'Promo');
+        $this->promoConfig = $configArray;
         $this->em = $em;
+
+        $container = new \Pimple\Container();
+        $container[\EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR] = function ($c) use ($configArray, $configLoader, $em){
+            $class = $configArray[\EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR]['implementation'];
+            return new $class($configLoader, $em);
+        };
+        
+        $this->container = $container;
+        
     }
 
     /**
@@ -195,104 +211,26 @@ class PromoManager
     }
 
     /**
-     * Register member for buy at zero promo
-     * @param $productId
-     * @param $memberId
-     * @return bool
+     * Access methods of local promo classes
+     *
+     * @param integer $promoType
+     * @param string $method
+     * @param mixed $parameters
+     * @return mixed
+     * @throws \Exception
      */
-    public function registerMemberForBuyAtZero($productId, $memberId)
+    public function callSubclassMethod($promoType, $method = "", $parameters = [])
     {
-        $isAccountRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')
-                                        ->findOneBy([
-                                            'productId' => $productId,
-                                            'memberId' => $memberId,
-                                            'promoType' => EsPromoType::BUY_AT_ZERO
-                                        ]);
-        if (!$isAccountRegistered) {
-            $promo = new EsPromo();
-            $promo->setMemberId($memberId);
-            $promo->setProductId($productId);
-            $promo->setPromoType(EsPromoType::BUY_AT_ZERO);
-            $promo->setCreatedAt(new \DateTime('now'));
-
-            $this->em->persist($promo);
-            $this->em->flush();
+        if(!$promoType || trim($promoType) === '' || !isset($this->promoConfig[$promoType]) ){
+            throw new \Exception('The promo subclass is not defined.');
+        }
+        
+        if(!$method || trim($method) === ''){
+            throw new \Exception('The promo method is not defined.');
         }
 
-        return (bool) $isAccountRegistered;
+        $promoObject = $this->container[$promoType];
+        return call_user_func_array([$promoObject, $method], $parameters);
     }
 
-    /**
-     * validates code and returns the details needed for scratch and win promo
-     * @param $code
-     * @return array
-     */
-    public function validateCodeForScratchAndWin($code)
-    {
-        $qb = $this->em->createQueryBuilder();
-        $query = $qb->select('tblProduct.idProduct, tblPromo.memberId AS c_member_id, tblProductImage.productImagePath as path')
-                    ->from('EasyShop\Entities\EsPromo', 'tblPromo')
-                    ->leftJoin('EasyShop\Entities\EsProduct', 'tblProduct', 'WITH', 'tblProduct.idProduct = tblPromo.productId')
-                    ->leftJoin('EasyShop\Entities\EsProductImage', 'tblProductImage', 'WITH', 'tblProductImage.product = tblProduct.idProduct')
-                    ->where('tblPromo.code = :code AND tblPromo.promoType = :promoType')
-                    ->setParameter('code', $code)
-                    ->setParameter('promoType', EsPromoType::SCRATCH_AND_WIN)
-                    ->getQuery();
-        $result = $query->getResult();
-
-        if ($result) {
-            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
-            $isMemberRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')->findOneBy(['memberId' => $result[0]['c_member_id']]);
-            $this->hydratePromoData($product);
-            $result = [
-                'id_product'=> $product->getIdProduct(),
-                'price'=> $product->getPrice(),
-                'product' => $product->getName(),
-                'brief' => $product->getBrief(),
-                'c_id_code' => $result[0]['c_member_id'],
-                'can_purchase' => (bool) $isMemberRegistered ? false : true,
-                'product_image_path' => $result[0]['path']
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Update member id
-     * @param $memberId
-     * @param $code
-     * @return bool
-     */
-    public function tieUpCodeToMemberForScratchAndWin($memberId, $code)
-    {
-        $promo = $this->em->getRepository('EasyShop\Entities\EsPromo')->findOneBy(['code' => $code]);
-        $promo->setMemberId($memberId);
-        $this->em->persist($promo);
-        $this->em->flush();
-
-        return (int) $memberId === (int) $promo->getMemberId();
-    }
-
-    /**
-     * Get active product for twelve days of Christmas promo
-     * @param $date
-     * @return EsProduct
-     */
-    public function getActiveDataForTwelveDaysOfChristmasByDate($date)
-    {
-        $qb = $this->em->createQueryBuilder();
-        $query = $qb->select('tbl_product')
-                    ->from('EasyShop\Entities\EsProduct', 'tbl_product')
-                    ->where(':dateTime >= tbl_product.startdate')
-                    ->andWhere(':dateTime <= tbl_product.enddate')
-                    ->andWhere('tbl_product.isPromote = :isPromote')
-                    ->andWhere('tbl_product.promoType = 1')
-                    ->setParameter('dateTime', $date)
-                    ->setParameter('isPromote', EsProduct::PRODUCT_IS_PROMOTE_ON)
-                    ->getQuery();
-        $product = $query->getOneOrNullResult();
-
-        return $product;
-    }
 }

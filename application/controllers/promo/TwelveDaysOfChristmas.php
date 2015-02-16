@@ -17,7 +17,8 @@ class TwelveDaysOfChristmas extends MY_Controller
     public function twelveDaysOfChristmasPromo()
     {
         $dateTimeToday = new DateTime('now');
-        $product = $this->promoManager->getActiveDataForTwelveDaysOfChristmasByDate($dateTimeToday);
+        $product = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                            ->getActiveDataForTwelveDaysOfChristmasByDate($dateTimeToday);
         if ($product) {
             $this->promoManager->hydratePromoData($product);
         }

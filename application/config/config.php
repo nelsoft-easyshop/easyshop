@@ -270,7 +270,7 @@ $config['encryption_key'] = 'TempOraRy_KeY_12272013_bY_Sam*?!';
 */
 $config['sess_cookie_name']     = 'ci_session';
 $config['sess_expiration']      = 14400;
-$config['sess_expire_on_close'] = false;
+$config['sess_expire_on_close'] = true;
 $config['sess_encrypt_cookie']  = false;
 $config['sess_use_database']    = true;
 $config['sess_table_name']      = 'ci_sessions';
