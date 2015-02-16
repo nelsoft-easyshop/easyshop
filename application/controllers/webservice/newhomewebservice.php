@@ -711,13 +711,13 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
         $index = (int) $this->input->get("index");
         $subIndex = (int) $this->input->get("subindex");
-        $panelindex = (int) $this->input->get("panelindex");
+        $panelindex = (int) $this->input->get("subPanelIndex");
         $value = $this->input->get("value");
 
         $product = $this->em
                         ->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
-                        
+
         if(!$product){
             return $this->output
                 ->set_content_type('application/json')
