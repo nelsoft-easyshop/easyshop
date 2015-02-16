@@ -1423,23 +1423,43 @@ li.brand_result:hover{
     margin: 0 auto;
 }
 
-
 .pop-up-fixed{
     position: fixed !important;
 }
-#crop-image-main {
-    padding: 0 !important;
+
+@media (min-width: 320px) {
+    .imageContainer {
+        height: auto !important; 
+        width: auto !important;
+        max-width: 200px !important;
+    }
+    .cropper-container{
+        left: 0 !important;
+    }
 } 
 
-.cropFrame {
-    display: block !important; 
-    margin: auto !important; 
+@media (min-width: 767px) {
+    .imageContainer {
+        height: auto !important; 
+        width: auto !important;
+        max-width: 300px !important;
+    }
 }
 
-.rangeSliderHide {
-    display: none !important;
+@media (min-width: 991px) {
+    .imageContainer {
+        height: auto !important; 
+        width: auto !important;
+        max-width: 370px !important;
+    }
 }
 
-#irs-2 {
-    top: -23px
+@media (min-width: 1200px) {
+    .imageContainer {
+        height: auto !important; 
+        width: auto !important;
+        max-width: 400px !important;
+    }
 }
+ 
+
