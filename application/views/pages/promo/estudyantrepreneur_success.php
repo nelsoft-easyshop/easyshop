@@ -85,26 +85,18 @@
                     <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
                         <h3>CURRENT STATS</h3>
                         <ul>
-                            <li>
-                               <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor  Lorem ipsum dolor sit amet uis nostrud  Lorem ipsum 
-                                    dolor sit amet uis nostrud 
-                                     Lorem ipsum dolor sit amet uis nostrud 
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
+                            <?PHP if (isset($currentStandings['students'])) : ?>
+                                <?PHP foreach ($currentStandings['students'] as $student) : ?>
+                                    <li>
+                                       <span class="school-name">
+                                            <?=html_escape($student['student'])?>
+                                        </span>
+                                        <span class="school-percentage"><?=number_format($student['currentPercentage'])?>%</span>
+                                    </li>
+                                <?PHP endforeach; ?>
+                            <?PHP else : ?>
+                                <p>School not available</p>
+                            <?PHP endif; ?>
                         </ul>
                     </div>
                 </div>

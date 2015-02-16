@@ -68,7 +68,7 @@
                 </div>
                 <div class="vote-btn mrgn-top-35">
                     <input type="hidden" name="studentId" id="stud-id" value="">
-                    <input type="hidden" name="schoolId" id="school-id" value="">
+                    <input type="hidden" name="schoolName" id="school-name" value="">
                     <button id="btn-vote" class="btn btn-primary"> VOTE </button>
                 </div>
             </div>

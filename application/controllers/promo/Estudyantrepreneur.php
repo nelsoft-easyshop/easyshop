@@ -39,7 +39,7 @@ class Estudyantrepreneur extends MY_Controller
      */
     public function EstudyantrepreneurPromoSuccess()
     {
-        if (!$this->input->post('studentId')) {
+        if (!$this->input->post('studentId') || !$this->input->post('schoolName')) {
             redirect('/Estudyantrepreneur', 'refresh');
         }
 
@@ -52,7 +52,7 @@ class Estudyantrepreneur extends MY_Controller
                                    );
 
         $bodyData = [
-            'currentStandings' => $getCurrentStandings,
+            'currentStandings' => $getCurrentStandings[$this->input->post('schoolName')],
             'result' => $data,
         ];
 

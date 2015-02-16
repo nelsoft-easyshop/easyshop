@@ -52,7 +52,7 @@ $(document).ready(function(){
 
             for (var index = 0; students.length > index; index++) {
                 html += '<span>' +
-                    '<input type="radio" name="school" value="'+ students[index].idStudent +'" data-school="'+ students[index].idSchool +'">' +
+                    '<input type="radio" name="school" value="'+ students[index].idStudent +'" data-school="'+ students[index].school +'">' +
                     '<label > '+ students[index].student +'</label>' +
                     '</span>';
             }
@@ -65,16 +65,16 @@ $(document).ready(function(){
 
     $('#btn-vote').on('click', function() {
         var $selectedRadio = $('[name="school"]:checked');
-        var schoolId = parseInt($selectedRadio.data('school'));
+        var schoolName = $selectedRadio.data('school').trim();
         var studentId = parseInt($selectedRadio.val());
 
-        if (isNaN(schoolId) || isNaN(studentId) === 0) {
+        if (schoolName === '' || isNaN(studentId) === 0) {
             alert("Choose School and Student to vote");
             return false;
         }
 
         $('#stud-id').val(studentId);
-        $('#school-id').val(schoolId);
+        $('#school-name').val(schoolName);
         $('#frm-vote').submit();
 
     });

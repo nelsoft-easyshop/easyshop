@@ -268,7 +268,7 @@ class Estudyantrepreneur
 
             foreach ($students['students'] as $key => $student) {
                 $currentPercentage = ($student['vote'] / $totalVotesPerSchool[$school]) * 100;
-                $schoolsAndStudents[$school]['students'][$key]['currentPercentage'] = number_format($currentPercentage);
+                $schoolsAndStudents[$school]['students'][$key]['currentPercentage'] = $currentPercentage;
             }
 
         }
