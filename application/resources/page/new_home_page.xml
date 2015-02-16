@@ -197,84 +197,74 @@
         <sub>
             <text>Decoration</text>
             <target>/category/'Decoration'</target>
+
+            <productSlugs>sampleforscratchandwin</productSlugs>
+
+            <productSlugs>for-cod3</productSlugs>
+
+            <productSlugs>product</productSlugs>
+
+            <productSlugs>fordp</productSlugs>
+
+            <productSlugs>for-cod</productSlugs>
+
+            <productSlugs>for-cod2</productSlugs>
         </sub>
         
         <sub>
             <text>Home Furniture</text>
             <target>/category/home-furniture</target>
+
+            <productSlugs>sampleforscratchandwin</productSlugs>
+
+            <productSlugs>for-cod3</productSlugs>
+
+            <productSlugs>product</productSlugs>
+
+            <productSlugs>fordp</productSlugs>
+
+            <productSlugs>for-cod</productSlugs>
+
+            <productSlugs>for-cod2</productSlugs>
         </sub>
         
         <sub>
             <text>Major Applicances</text>
             <target>/category/major-appliances</target>
+
+            <productSlugs>sampleforscratchandwin</productSlugs>
+
+            <productSlugs>for-cod3</productSlugs>
+
+            <productSlugs>product</productSlugs>
+
+            <productSlugs>fordp</productSlugs>
+
+            <productSlugs>for-cod</productSlugs>
+
+            <productSlugs>for-cod2</productSlugs>
         </sub>
         
         <sub>
             <text>Kitchen and Dining</text>
             <target>/category/kitchen-dining-bar</target>
+
+            <productSlugs>sampleforscratchandwin</productSlugs>
+
+            <productSlugs>for-cod3</productSlugs>
+
+            <productSlugs>product</productSlugs>
+
+            <productSlugs>fordp</productSlugs>
+
+            <productSlugs>for-cod</productSlugs>
+
+            <productSlugs>for-cod2</productSlugs>
         </sub>
         
-        <productPanel>
-            <slug>zodiac-sign-cup</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>charm-stripe-tumbler</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>stripes-feelings-mug-with-cover</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>fashionable-piano-inspired-clothing-hanger</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>portable-water-bottle-wringtoss-game</slug>
-        </productPanel>
         
     </categorySection>
-    
-    <categorySection>
-        <categorySlug>health-beauty</categorySlug>
-        
-        <sub>
-            <text>Makeup</text>
-            <target>/category/makeup</target>
-        </sub>
-        
-        <sub>
-            <text>Fragrances</text>
-            <target>/category/fragrances</target>
-        </sub>
-        
-        <sub>
-            <text>Skin Care</text>
-            <target>/category/skin-care</target>
-        </sub>
-        
-        <productPanel>
-            <slug>glitz-and-bling-parfum-extreme</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>one-earth-organics-cellular-regeneration-underarm-therapy</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>aqua-de-gio</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>ck-be-jumbo-edt-perfume-unisex</slug>
-        </productPanel>
-        
-        <productPanel>
-            <slug>nova-2-in-1-hair-beauty-set</slug>
-        </productPanel>
-        
-    </categorySection>
+ 
     
 
     <brandSection>

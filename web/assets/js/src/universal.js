@@ -60,14 +60,16 @@ function replaceNumberWithCommas(thisnumber){
 function validateRedTextBox(idclass){
     $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
                 "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"});
+                "box-shadow": "0px 0px 2px 2px #FF0000",
+                "-webkit-appearance":"none"}).addClass('my_err');
     $(idclass).focus();
 } 
 
 function validateWhiteTextBox(idclass){
     $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
                 "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
+                "box-shadow": "0px 0px 2px 2px #FFFFFF",
+                "-webkit-appearance":"none"}).removeClass('my_err');
 }
 
 function updateMessageCountIcons(){

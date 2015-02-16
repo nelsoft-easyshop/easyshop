@@ -1,6 +1,6 @@
 (function ($) {
 
-    $(".btn-add-cart").on("click", function(){
+    $('#content').on("click", ".btn-add-cart" , function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var $button = $(this);
@@ -22,7 +22,7 @@
                 else{
                     window.location.replace("/item/"+slug);
                 }
-            }, 
+            }
         });
     });
 
@@ -91,8 +91,9 @@
         owl.trigger('owl.prev');
     })
 
-    var slideCat1 = $('.purchased-items-slider-cat-1.owl-carousel');
-        slideCat1.owlCarousel({
+    for (var count = 1; count <= $('.row-category').length; count++) {
+        var slideCat = $('.purchased-items-slider-cat-' + count + '.owl-carousel');
+        slideCat.owlCarousel({
             items: 4,
             itemsDesktop : [1199,3],
             itemsDesktopSmall: [979,2],
@@ -106,42 +107,9 @@
             responsive: true,
             mouseDrag: true,
             autoHeight : true
-        }).data('navigationBtns', ['#purchased-items-slider-prev-cat-1', '#purchased-items-slider-next-cat-1']);
-        
-        var  slideCat2 = $('.purchased-items-slider-cat-2.owl-carousel');
-        slideCat2.owlCarousel({
-            items: 4,
-            itemsDesktop : [1199,3],
-            itemsDesktopSmall: [979,2],
-            itemsTablet: [768,2],
-            itemsMobile : [479,2],
-            slideSpeed: 400,
-            autoPlay: 8000,
-            stopOnHover: true,
-            navigation: false,
-            pagination: false,
-            responsive: true,
-            mouseDrag: true,
-            autoHeight : true
-        }).data('navigationBtns', ['#purchased-items-slider-prev-cat-2', '#purchased-items-slider-next-cat-2']);
-        
-        var  slideCat3 = $('.purchased-items-slider-cat-3.owl-carousel');
-        slideCat3.owlCarousel({
-            items: 4,
-            itemsDesktop : [1199,3],
-            itemsDesktopSmall: [979,2],
-            itemsTablet: [768,2],
-            itemsMobile : [479,2],
-            slideSpeed: 400,
-            autoPlay: 8000,
-            stopOnHover: true,
-            navigation: false,
-            pagination: false,
-            responsive: true,
-            mouseDrag: true,
-            autoHeight : true
-        }).data('navigationBtns', ['#purchased-items-slider-prev-cat-3', '#purchased-items-slider-next-cat-3']);
-        
+        }).data('navigationBtns', ['#purchased-items-slider-prev-cat-' + count, '#purchased-items-slider-next-cat-' + count]);
+    }
+
         var  featuredCarousel = $('.featured-products-carousel');
         featuredCarousel.owlCarousel({
             items: 4,
@@ -221,38 +189,39 @@
     $('.featured-categories .btn-tag').on('click', function(){
         var $this = $(this);
         var headerCount = $this.data('subcounter');
-        var productSlugs = $('.featured-categories .product-slugs-' + headerCount).val();
+        var sectionId = $this.data('section-id');
+        var $container = $('#category-' + sectionId);
+        var productSlugs = $container.find('.product-slugs-' + headerCount).val();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
-        if(!$this.hasClass('btn-tag-active')){
-            var productView = $('.featured-categories .product-view-' + headerCount).html();
+        if(!$this.hasClass('btn-tag-active')) {
+            var productView = $container.find('.product-view-' + headerCount).html();
 
-            if($.trim(productView) === ""){
+            if ($.trim(productView) === "") {
                 $.ajax({
                     type: "POST",
-                    url: "/home/getCategorySectionProducts", 
+                    url: "/home/getCategorySectionProducts",
                     dataType: "json",
                     data: "productSlugs="+productSlugs+"&csrfname="+csrftoken,
                     success: function(result) {
-                        $('.featured-categories .product-view-' + headerCount).html(result);
-                        $('.featured-products-carousel').html(result);
-                        $('.featured-products-carousel').data('owlCarousel').reinit({});
-                    }, 
+                        $container.find('.product-view-' + headerCount).html(result);
+                        $container.find('.purchased-items-slider-cat-' + sectionId).html(result);
+                        $container.find('.purchased-items-slider-cat-' + sectionId).data('owlCarousel').reinit({});
+                    }
                 });
             }
-            else{
-                $('.featured-products-carousel').html(productView);
-                $('.featured-products-carousel').data('owlCarousel').reinit({});
+            else {
+                $container.find('.purchased-items-slider-cat-' + sectionId).html(productView);
+                $container.find('.purchased-items-slider-cat-' + sectionId).data('owlCarousel').reinit({});
             }
 
-            var currentlyActiveTab = $('.featured-categories .btn-tag-active');
+            var currentlyActiveTab = $container.find('.featured-categories .btn-tag-active');
             var activeHeaderCounter = currentlyActiveTab.data('subcounter');
             currentlyActiveTab.removeClass('btn-tag-active');
             $this.addClass('btn-tag-active');
         }
+
     });
 
-
 }(jQuery));
-

@@ -826,5 +826,24 @@ class ProductManager
 
         return false;
     }
+
+    /**
+     * Determines if a product is active or not
+     *
+     * @param EasyShop\Entities\EsProduct
+     * @return boolean
+     */
+    public function isProductActive($product)
+    {
+        $member = $product->getMember();
+
+        $isNotDeleted = (int)$product->getIsDelete() === \EasyShop\Entities\EsProduct::ACTIVE;
+        $isNotDrafted = !$product->getIsDraft();
+        $isMemberNotBanned = !$member->getIsBanned();
+        $isMemberActive = $member->getIsActive();
+        
+        return $isNotDeleted && $isNotDrafted && $isMemberNotBanned && $isMemberActive;
+    }
+    
 }
 
