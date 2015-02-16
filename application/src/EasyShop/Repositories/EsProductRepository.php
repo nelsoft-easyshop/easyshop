@@ -1148,7 +1148,7 @@ class EsProductRepository extends EntityRepository
                 UNION ALL";
         }
         
-        $sql = trim($sql, 'UNION ALL');
+        $sql = rtrim($sql, 'UNION ALL');
         $query = $em->createNativeQuery($sql, $rsm);
         foreach($memberIdArray as $key => $memberId){
             $query->setParameter('member_id_'.$key, $memberId);
