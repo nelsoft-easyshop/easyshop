@@ -427,6 +427,15 @@
                 success: function(requestResponse){ 
                     var $response = $.parseJSON(requestResponse); 
                     if($response.isSuccess){
+                        
+                        var deletedCounterCircle = $('#button-deleted-item .circle-total');
+                        var activeCounterCircle = $('#button-active-item .circle-total');
+                        var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10) + 1;
+                        var numberOfActive = parseInt( activeCounterCircle.html(), 10) - 1;
+                        numberOfActive = numberOfActive < 0 ? 0 : numberOfActive;
+                        deletedCounterCircle.html(numberOfDeleted);
+                        activeCounterCircle.html(numberOfActive);
+
                         $('#'+$container).html($response.html);
                         $('#hidden-active-container > div').each(function(){
                             $(this).html('');
@@ -479,6 +488,20 @@
                 success: function(d){ 
                     var $response = $.parseJSON(d); 
                     if($response.isSuccess){
+
+                        if($requestType === 'deleted'){
+                            var deletedCounterCircle = $('#button-deleted-item .circle-total');
+                            var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10) - 1;
+                            numberOfDeleted = numberOfDeleted < 0 ? 0 : numberOfDeleted;
+                            deletedCounterCircle.html(numberOfDeleted);
+                        }
+                        else if($requestType === 'drafted'){
+                            var draftCounterCircle = $('#button-draft-item .circle-total');
+                            var numberOfDrafts = parseInt( draftCounterCircle.html(), 10) - 1;
+                            numberOfDrafts = numberOfDrafts < 0 ? 0 : numberOfDrafts;
+                            draftCounterCircle.html(numberOfDrafts);
+                        }
+                        
                         $('#'+$container).html($response.html);
                         var $appendString = "<div id='page-"+$currentPage+"'>"+$response.html+"</div>";
                         if($container == "deleted-product-container"){
@@ -529,6 +552,15 @@
                 success: function(d){ 
                     var $response = $.parseJSON(d); 
                     if($response.isSuccess){
+      
+                        var deletedCounterCircle = $('#button-deleted-item .circle-total');
+                        var activeCounterCircle = $('#button-active-item .circle-total');
+                        var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10) - 1;
+                        var numberOfActive = parseInt( activeCounterCircle.html(), 10) + 1;
+                        numberOfDeleted = numberOfDeleted < 0 ? 0 : numberOfDeleted;
+                        deletedCounterCircle.html(numberOfDeleted);
+                        activeCounterCircle.html(numberOfActive);
+                        
                         $('#'+$container).html($response.html);
                         $('#hidden-deleted-container > div').each(function(){
                             $(this).html('');
