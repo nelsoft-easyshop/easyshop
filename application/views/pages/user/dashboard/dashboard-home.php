@@ -192,107 +192,109 @@
             </ul>
         </div>
         </div>
+        
         <div class="product-items">
-            <div id="active-items"> 
-                <?php if($activeProductCount > 0): ?>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-search-item">
-                                <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
-                                <span class="icon-search"></span>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="form-filter">
-                                <label>Sort by:</label>
-                                <select class="select-filter-item search-filter">
-                                    <option value="default">default sorting</option>
-                                    <option value="lastmodified">last modified</option>
-                                    <option value="new">new</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <input type="hidden" class="container-id" value="active-product-container" />
-                            <input type="hidden" class="request-type" value="active" />
-                        </div>
-                    </div>
-                    <div id="active-product-container">
-                    <?=$activeProductView;?>
-                    </div>
-                <?php else:?> 
-                    <div class="jumbotron no-items">
-                        <i class="icon-category"></i>No items for this category
-                    </div>
-                <?php endif;?>
+            <div id="active-items" class="dashboard-product-container"> 
 
-            </div>
-            
-
-            <div id="deleted-items"> 
-                <?php if($deletedProductCount > 0): ?>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-search-item">
-                                <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
-                                <span class="icon-search"></span>
+                    <div class="with-items" style="<?php echo $activeProductCount > 0 ? '' : 'display:none' ?>">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="form-search-item">
+                                    <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
+                                    <span class="icon-search"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-filter">
+                                    <label>Sort by:</label>
+                                    <select class="select-filter-item search-filter">
+                                        <option value="default">default sorting</option>
+                                        <option value="lastmodified">last modified</option>
+                                        <option value="new">new</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="hidden" class="container-id" value="active-product-container" />
+                                <input type="hidden" class="request-type" value="active" />
                             </div>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="form-filter">
-                                <label>Sort by:</label>
-                                <select class="select-filter-item search-filter">
-                                    <option value="default">default sorting</option>
-                                    <option value="lastmodified">last modified</option>
-                                    <option value="new">new</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <input type="hidden" class="container-id" value="deleted-product-container" />
-                            <input type="hidden" class="request-type" value="deleted" />
+                        <div id="active-product-container">
+                        <?=$activeProductView;?>
                         </div>
                     </div>
                     
-                    <div id="deleted-product-container"></div>
-               <?php else:?> 
-                    <div class="jumbotron no-items">
+                    <div class="jumbotron no-items" style="<?php echo $activeProductCount > 0 ? 'display:none' : '' ?>">
                         <i class="icon-category"></i>No items for this category
                     </div>
-                <?php endif;?>
+
             </div>
             
-            <div id="draft-items"> 
-                <?php if($draftedProductCount > 0): ?>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-search-item">
-                                <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
-                                <span class="icon-search"></span>
+
+            <div id="deleted-items" class="dashboard-product-container" > 
+            
+                    <div class="with-items" style="<?php echo $deletedProductCount > 0 ? '' : 'display:none' ?>">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="form-search-item">
+                                    <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
+                                    <span class="icon-search"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-filter">
+                                    <label>Sort by:</label>
+                                    <select class="select-filter-item search-filter">
+                                        <option value="default">default sorting</option>
+                                        <option value="lastmodified">last modified</option>
+                                        <option value="new">new</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="hidden" class="container-id" value="deleted-product-container" />
+                                <input type="hidden" class="request-type" value="deleted" />
                             </div>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="form-filter">
-                                <label>Sort by:</label>
-                                <select class="select-filter-item search-filter">
-                                    <option value="default">default sorting</option>
-                                    <option value="lastmodified">last modified</option>
-                                    <option value="new">new</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <input type="hidden" class="container-id" value="drafted-product-container" />
-                            <input type="hidden" class="request-type" value="drafted" />
-                        </div>
+                        <div id="deleted-product-container"></div>
                     </div>
-                
-                    <div id="drafted-product-container"></div>
-                <?php else:?> 
-                    <div class="jumbotron no-items">
+
+                    <div class="jumbotron no-items" style="<?php echo $deletedProductCount > 0 ? 'display:none' : '' ?>" >
                         <i class="icon-category"></i>No items for this category
                     </div>
-                <?php endif;?>
+            </div>
+            
+            <div id="draft-items" class="dashboard-product-container"> 
+
+                    <div class="with-items" style="<?php echo $draftedProductCount > 0 ? '' : 'display:none' ?>">
+                        <div class="row" style="<?php echo $draftedProductCount > 0 ? '' : 'display:none' ?>">
+                            <div class="col-xs-6">
+                                <div class="form-search-item">
+                                    <input type="text" class="input-search-item search-field" placeholder="Search product from list..."/>
+                                    <span class="icon-search"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-filter">
+                                    <label>Sort by:</label>
+                                    <select class="select-filter-item search-filter">
+                                        <option value="default">default sorting</option>
+                                        <option value="lastmodified">last modified</option>
+                                        <option value="new">new</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <input type="hidden" class="container-id" value="drafted-product-container" />
+                                <input type="hidden" class="request-type" value="drafted" />
+                            </div>
+                        </div>
+                        <div id="drafted-product-container"></div>
+                    </div>
+                    
+                    <div class="jumbotron no-items" style="<?php echo $draftedProductCount > 0 ? 'display:none' : '' ?>">
+                        <i class="icon-category"></i>No items for this category
+                    </div>
             </div>
             
             <div id="feedbacks"> 

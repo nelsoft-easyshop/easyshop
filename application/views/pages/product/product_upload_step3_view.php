@@ -84,7 +84,7 @@
 
     <div class="clear"></div>  
 
-        
+    <?php if(empty($billing_info)): ?>
     <div id="bank_details">
         <?php foreach($billing_info as $idx=>$x): ?>
             <?php if(count($x['products'])): ?>
@@ -114,100 +114,94 @@
                 </div>
                 <div class="clear"></div>
                 <div class="step3_content_con pd-tb-15">
-                    <div class="col-md-8">
-                        <div class="">
-                            <div class="row pd-bttm-15">
-                                <div class="col-xs-12 col-sm-3">
-                                    <label for="deposit_info">Deposit to: </label>
-                                </div>
-                                <div class="col-xs-12 col-sm-9">
-                                    <select id="deposit_info" class="form-control">
-                                        <?php foreach($billing_info as $x): ?>
-                                            <option data-bankname="<?php echo html_escape($x['bank_name']);?>" data-bankid="<?php echo $x['bank_id'];?>" data-acctname="<?php echo  html_escape($x['bank_account_name']); ?>" data-acctno="<?php echo  html_escape($x['bank_account_number']); ?>"    value="<?php echo $x['id_billing_info'];?>"><?php echo html_escape($x['bank_name']).' - '. html_escape($x['bank_account_name']);?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                        <option value="0">ADD NEW PAYMENT ACCOUNT</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <?php $first_accnt = reset($billing_info);?>
-                            <div class="row pd-bttm-15">
-                                <div class="col-xs-8 col-sm-3">
-                                    <label for="deposit_acct_name">Account name: </label>
-                                </div>
-                                <div class="col-xs-12 col-sm-9">
-                                    <input class="form-control" name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_name'])?$first_accnt['bank_account_name']:''); ?>"  <?php echo isset($first_accnt['bank_account_name'])?'readonly':''; ?>/>
-                                </div>
-                            </div>
-                            <div class="row pd-bttm-15">
-                                <div class="col-xs-8 col-sm-3">
-                                    <label for="deposit_acct_no">Account number:</label>
-                                </div>
-                                <div class="col-xs-12 col-sm-9">						
-                                    <input class="form-control" name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_number'])?$first_accnt['bank_account_number']:''); ?>" <?php echo isset($first_accnt['bank_account_number'])?'readonly':''; ?>/>
-                                </div>
-                            </div>
-                            <div class="row pd-bttm-15">
-                                <div class="col-xs-8 col-sm-3">
-                                    <label for="bank_list">Bank:</label>
-                                </div>
-                                <div class="col-xs-12 col-sm-9">
-                                        <select class="form-control" id="bank_list" <?php echo (isset($first_accnt['bank_id']))?'disabled':'';?>>
-                                            <option value="0">Please select a bank</option>
-                                            <?php foreach($bank_list as $x): ?>
-                                                <?php if(isset($first_accnt['bank_id'])): ?>
-                                                    <option value="<?php echo $x['id_bank'];?>" <?php echo (intval($x['id_bank'],10) === intval($first_accnt['bank_id'],10))?'selected':'';?>><?php echo  html_escape($x['bank_name']); ?>
-                                                    </option>
-                                                <?php else: ?>
-                                                    <option value="<?php echo $x['id_bank'];?>" ><?php echo  html_escape($x['bank_name']); ?>
-                                                    </option>
-                                                <?php endif; ?>
-                                            <?php endforeach; ?>
-                                        </select>
-                                </div>
-                            </div>
-                            <div class="row pd-bttm-15">
-                                <div class="col-xs-12 col-sm-12 text-right">
-                                        <input type="hidden" id="bank_name" value="<?php echo  html_escape(isset($first_accnt['bank_name'])?$first_accnt['bank_name']:''); ?>"/>
-                                            
-                                        <?php if(count($billing_info) > 0): ?>
-                                            <span class="deposit_edit btn btn-default"><span class="span_bg"></span>Edit</span>
-                                            <span class="deposit_save btn btn-default" style="display:none">Save</span>
-                                        <?php else: ?>
-                                            <span class="deposit_edit btn btn-default" style="display:none">Edit</span>
-                                            <span class="deposit_save btn btn-default btn-primary">Save</span>
-                                        <?php endif; ?>
-                                            
-                                        <span class="deposit_update btn btn-default btn-primary" style="display:none">Update</span>
-                                        <span class="deposit_cancel btn btn-default" style="display:none">Cancel</span>
-                                            
-                                        <input type="hidden" id="temp_deposit_acct_name" value=""/>
-                                        <input type="hidden" id="temp_deposit_acct_no" value=""/>
-                                        <input type="hidden" id="temp_bank_list" value=""/>
-                                        <input type="hidden" id="temp_bank_name" value=""/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clear"></div>	
-                    </div>
 
-                    <div id="cod_btn" class="col-md-4 cod-container <?php echo (int)$product['is_cod']===1 ? 'active':''?> ">
-                        <div class="pd-bttm-10">
-                            <span class="cod-images"></span>
-                            <div class="pos-rel width-185 mrgin-deflt">
-                                <!-- <span class="cod-checkmark check_bgs3"></span> -->
-                                <div class="cod-button button btn-block-2">
-                                    <span class="button-label"><?php echo (int)$product['is_cod'] === 1 ? "":"Allow "?>Cash on Delivery</span>
+                        <div class="col-md-8">
+                            <div class="">
+                                <div class="row pd-bttm-15">
+                                    <div class="col-xs-12 col-sm-3">
+                                        <label for="deposit_info">Deposit to: </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9">
+                                        <select id="deposit_info" class="form-control">
+                                            <?php foreach($billing_info as $x): ?>
+                                                <option data-bankname="<?php echo html_escape($x['bank_name']);?>" data-bankid="<?php echo $x['bank_id'];?>" data-acctname="<?php echo  html_escape($x['bank_account_name']); ?>" data-acctno="<?php echo  html_escape($x['bank_account_number']); ?>"    value="<?php echo $x['id_billing_info'];?>"><?php echo html_escape($x['bank_name']).' - '. html_escape($x['bank_account_name']);?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                            <option value="0">ADD NEW PAYMENT ACCOUNT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <?php $first_accnt = reset($billing_info);?>
+                                <div class="row pd-bttm-15">
+                                    <div class="col-xs-8 col-sm-3">
+                                        <label for="deposit_acct_name">Account name: </label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9">
+                                        <input class="form-control" name="deposit_acct_name" id="deposit_acct_name" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_name'])?$first_accnt['bank_account_name']:''); ?>"  <?php echo isset($first_accnt['bank_account_name'])?'readonly':''; ?>/>
+                                    </div>
+                                </div>
+                                <div class="row pd-bttm-15">
+                                    <div class="col-xs-8 col-sm-3">
+                                        <label for="deposit_acct_no">Account number:</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9">						
+                                        <input class="form-control" name="deposit_acct_no" id="deposit_acct_no" type ="text" value="<?php echo  html_escape(isset($first_accnt['bank_account_number'])?$first_accnt['bank_account_number']:''); ?>" <?php echo isset($first_accnt['bank_account_number'])?'readonly':''; ?>/>
+                                    </div>
+                                </div>
+                                <div class="row pd-bttm-15">
+                                    <div class="col-xs-8 col-sm-3">
+                                        <label for="bank_list">Bank:</label>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-9">
+                                            <select class="form-control" id="bank_list" <?php echo (isset($first_accnt['bank_id']))?'disabled':'';?>>
+                                                <option value="0">Please select a bank</option>
+                                                <?php foreach($bank_list as $x): ?>
+                                                    <?php if(isset($first_accnt['bank_id'])): ?>
+                                                        <option value="<?php echo $x['id_bank'];?>" <?php echo ((int)$x['id_bank'] === (int)$first_accnt['bank_id'] )?'selected':'';?>><?php echo  html_escape($x['bank_name']); ?>
+                                                        </option>
+                                                    <?php else: ?>
+                                                        <option value="<?php echo $x['id_bank'];?>" ><?php echo  html_escape($x['bank_name']); ?>
+                                                        </option>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="row pd-bttm-15">
+                                    <div class="col-xs-12 col-sm-12 text-right">
+                                            <input type="hidden" id="bank_name" value="<?php echo  html_escape(isset($first_accnt['bank_name'])?$first_accnt['bank_name']:''); ?>"/>
+                                                
+                                            <?php if(count($billing_info) > 0): ?>
+                                                <span class="deposit_edit btn btn-default"><span class="span_bg"></span>Edit</span>
+                                                <span class="deposit_save btn btn-default" style="display:none">Save</span>
+                                            <?php else: ?>
+                                                <span class="deposit_edit btn btn-default" style="display:none">Edit</span>
+                                                <span class="deposit_save btn btn-default btn-primary">Save</span>
+                                            <?php endif; ?>
+                                                
+                                            <span class="deposit_update btn btn-default btn-primary" style="display:none">Update</span>
+                                            <span class="deposit_cancel btn btn-default" style="display:none">Cancel</span>
+                                                
+                                            <input type="hidden" id="temp_deposit_acct_name" value=""/>
+                                            <input type="hidden" id="temp_deposit_acct_no" value=""/>
+                                            <input type="hidden" id="temp_bank_list" value=""/>
+                                            <input type="hidden" id="temp_bank_name" value=""/>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="clear"></div>
                         </div>
-                    </div>			
+                   
+                    
                 </div>
                 <div class="clear"></div>
             </div>
             <div class="clear"></div>
         </div>
     </div>
+    
+    <?php endif; ?>
+
 
     <!-- Input box for preference name -->
     <div id="dialog_preference_name" style="display:none;">
@@ -241,12 +235,17 @@
         <div class="clear"></div>
             <div class="col-xs-12 pd-bttm-15">
                 <div class="step3_shipping_option_meetup sh1">
-                    <span class="">
+                    <span>
                         <input class="delivery_option" type="checkbox" id="meetup" name="delivery_option[]" value="meetup" <?php echo (int)$product['is_meetup']===1 ? 'checked':''?> > <label for="meetup">Meet Up</label>
                     </span>
                     <span>
                         <input class="delivery_option" type="checkbox" id="delivery" name="delivery_option[]" value="delivery" <?php echo $shipping_summary['is_delivery'] ? 'checked' : ''?>> <label for="delivery">For Delivery</label>
                     </span>
+                    <span>
+                        <input class="delivery_option" type="checkbox" id="allow_cod" name="allow_cod" <?php echo (bool)$product['is_cod'] ? 'checked' : ''; ?>><label for="allow_cod">Cash-on-Delivery</label>
+                    </span>
+                    
+                    
                 </div>
                 <div id="delivery_options" class="sh2" style="display: <?php echo $shipping_summary['is_delivery'] ? '' : 'none'?> ">
                         
@@ -401,7 +400,6 @@
         <input id="finish_step3" type="button" value="Finish" class="orange_btn3 width-20p">
         <input type="hidden" id="prod_h_id" name="prod_h_id" value="<?php echo $product['id_product']?>">
         <input type="hidden" id="billing_info_id" name="billing_info_id" value="<?php echo isset($first_accnt['id_billing_info'])?$first_accnt['id_billing_info']:'0'; ?>"/>
-        <input type="hidden" id="allow_cod" name="allow_cod" value="<?php echo (int)$product['is_cod'] === 1 ? 'on':'off'?>">
         <input type="hidden" id="prod_delivery_cost" name="prod_delivery_cost" value="<?php echo $shipping_summary['str_deliverycost']?>">
         
         <?php if( isset($is_edit) ):?>

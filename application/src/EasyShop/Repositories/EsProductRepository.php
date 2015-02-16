@@ -1105,28 +1105,35 @@ class EsProductRepository extends EntityRepository
         return $result;
     }
     
+  
     /**
      * Get random products from different users
      *
      * @param integer[] $memberIdArray
-     * @param integer $limit
-     * @return EasyShop\Entities\EsProduct[]
+     * @param integer $productFromEachSeller
+     * @param inetegr[] $excludeProductIds
+     * @return mixed
      */
-    public function getRandomProductsFromUsers($memberIdArray, $limit = 10)
+    public function getRandomProductsFromUsers($memberIdArray, $productFromEachSeller, $excludeProductIds = [])
     {
-        if(is_int($memberIdArray)){
-            $memberIdArray = [ $memberIdArray ];
-        }
+        $productFromEachSeller = (int) $productFromEachSeller;
         
         $em = $this->_em;
         $rsm = new ResultSetMapping();
 
         $rsm->addScalarResult('id_product', 'id_product');
-        $query = $em->createNativeQuery("
-            
-            SELECT * FROM (
-                SELECT 
-                    es_product.id_product 
+        $rsm->addScalarResult('member_id', 'member_id');
+        
+        $sql = "";
+        $excludeCondition = "";
+        if(!empty($excludeProductIds)){
+            $excludeCondition = " AND es_product.id_product NOT IN (:excludeProductIds) ";
+        }
+        
+        foreach($memberIdArray as $key => $memberId){
+            $sql .= "
+                (SELECT 
+                    es_product.id_product, es_product.member_id
                 FROM 
                     es_product 
                 INNER JOIN
@@ -1134,36 +1141,36 @@ class EsProductRepository extends EntityRepository
                                 es_member.is_active = :active AND  
                                 es_member.id_member = es_product.member_id
                 WHERE 
-                    es_product.member_id IN (:member_ids) AND 
+                    es_product.member_id = :member_id_".$key." AND 
                     es_product.is_draft != :draft AND 
-                    es_product.is_delete = :activeProduct
+                    es_product.is_delete = :activeProduct ".$excludeCondition."
                 ORDER BY 
-                    es_product.lastmodifieddate DESC
-                ) as allProducts
-            ORDER BY RAND() LIMIT :limit
-        ", $rsm);
-        $query->setParameter('member_ids', $memberIdArray);
-        $query->setParameter('limit', $limit);
+                    RAND() LIMIT :limit  
+                ) 
+                UNION ALL";
+        }
+        
+        $sql = rtrim($sql, 'UNION ALL');
+        $query = $em->createNativeQuery($sql, $rsm);
+        foreach($memberIdArray as $key => $memberId){
+            $query->setParameter('member_id_'.$key, $memberId);
+        }
+
+        $query->setParameter('limit', $productFromEachSeller);
         $query->setParameter('notBanned', \EasyShop\Entities\EsMember::NOT_BANNED);
         $query->setParameter('active', \EasyShop\Entities\EsMember::DEFAULT_ACTIVE);
         $query->setParameter('draft', \EasyShop\Entities\EsProduct::DRAFT);
         $query->setParameter('activeProduct', \EasyShop\Entities\EsProduct::ACTIVE);
-        $results = $query->execute();
-        $productIds = [];
         
-        foreach($results as $result){
-            $productIds[] = $result['id_product'];
+        if(!empty($excludeProductIds)){
+            $query->setParameter('excludeProductIds', $excludeProductIds);
         }
-        
-        $qb = $this->_em->createQueryBuilder();
-        $product = $qb->select('p')
-                      ->from('EasyShop\Entities\EsProduct','p') 
-                      ->where($qb->expr()->in('p.idProduct', $productIds) ) 
-                      ->getQuery()
-                      ->getResult();
 
-        return $product;
+        $results = $query->execute();
+
+        return $results;
     }
+    
     
     /**
      * Get newest product slugs
