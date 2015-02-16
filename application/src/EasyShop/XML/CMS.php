@@ -534,6 +534,21 @@ $string = '<typeNode>
             }
         }
 
+        else if($nodeName == "subCategorySection") {
+            $referred = "/map/categorySection[".$index."]"."/sub[".$subIndex."]"; 
+
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+
+                $dom->parentNode->removeChild($dom);
+                return $doc->asXml($file);
+            }
+            else {
+                    return false;
+            }
+        }        
+
         else if($nodeName == "brands") {
             $xml = new \SimpleXMLElement(file_get_contents($file) );            
             $result = current($xml->xpath( "//brandSection/brandId[$index]" ));
