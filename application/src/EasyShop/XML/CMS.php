@@ -163,10 +163,8 @@ class CMS
         <sub>
             <text>Default</text>
             <target>/</target>
-        </sub>
-        <productPanel>
-            <slug>kj-star-wireless-mobile-phone-monopod</slug>
-        </productPanel>            
+            <productSlugs> </productSlugs>
+        </sub>           
     </categorySection>'; 
         }   
         if($nodeName == "otherCategories") {
