@@ -232,6 +232,7 @@ html, body{
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 10px;
+    min-height: 23px;
 }
 
 .search-item-price{
