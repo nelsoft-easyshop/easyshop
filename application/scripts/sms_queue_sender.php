@@ -6,21 +6,14 @@ include_once  __DIR__.'/bootstrap.php';
 
 $CI =& get_instance();
 
-
-
 use EasyShop\Entities\EsQueueStatus as EsQueueStatus;
 use EasyShop\Entities\EsQueueType as EsQueueType;
 
-
-$configDatabase = require dirname(__FILE__). '/../config/param/database.php';
 $CI->load->config('sms', true);
 $configSms = $CI->config->item('sms');
 
 echo "\t\033[0;32m[OK]\033[0m\n";
-
-$dbh = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'],
-                $configDatabase['user'],
-                $configDatabase['password']);
+$dbh = new PDO($CI->db->hostname, $CI->db->username , $CI->db->password); 
 
 $queueType = EsQueueType::TYPE_MOBILE;
 $queueStatus = EsQueueStatus::QUEUED;
@@ -78,9 +71,7 @@ else{
 
             $exec_date = date("Y-m-d H:i:s");
             $updateSql = "UPDATE es_queue SET `status` = :status, `date_executed` = :exec_date WHERE `id_queue` = :queue_id";
-            $dbhUpdate = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'],
-                                 $configDatabase['user'], 
-                                 $configDatabase['password']);
+            $dbhUpdate = new PDO($CI->db->hostname, $CI->db->username , $CI->db->password); 
             $queueUpdate = $dbhUpdate->prepare($updateSql);
             $queueUpdate->bindParam("status", $status, PDO::PARAM_INT);
             $queueUpdate->bindParam("exec_date", $exec_date);
