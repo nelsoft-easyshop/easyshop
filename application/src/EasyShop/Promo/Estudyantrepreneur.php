@@ -41,8 +41,7 @@ class Estudyantrepreneur
     private function __getPreviousRounds($rounds)
     {
         $date = new \DateTime;
-//        $dateToday = $date->getTimestamp();
-        $dateToday = strtotime('2015-03-25');
+        $dateToday = $date->getTimestamp();
         $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
