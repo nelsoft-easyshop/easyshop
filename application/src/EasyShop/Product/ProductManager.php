@@ -898,13 +898,13 @@ class ProductManager
                 foreach($fillerProducts as $fillerProduct){
                     $productIds[] = $fillerProduct['id_product'];
                 }
-            }
-            
-            
+            } 
         }
         
         if(count($productIds) > $limit){
-            $productIds = array_rand($productIds, $limit);
+            shuffle($productIds);
+            $productIds = array_splice($productIds, 0, $limit);
+           
         }
 
         $products = []; 
