@@ -57,6 +57,13 @@
                     <img src="/assets/images/es-logo-login.png" alt="Easyshop">
                 </a>
             </div>
+
+            <div class="login-user">
+                <h3>You are currently signed in as <strong>dummy account</strong> </h3>
+                <p>If you wish to sign in with a different account or create new account</p>
+                <a href='/login/logout' class="btn btn-default-3">click here</a>
+            </div>
+
             <div class="login-tabs">
                 <div id="alter-tab" class="idTabs">
                     <div class="idtabs-tab"><a href="#login">login</a></div>
