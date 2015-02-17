@@ -59,8 +59,8 @@
             </div>
             <div class="login-tabs">
                 <div id="alter-tab" class="idTabs">
-                    <div class="idtabs-tab"><a href="#login">login</a></div>
-                    <div id="anchor-create" class="idtabs-tab"><a href="#create-account">create an account</a></div>
+                    <div class="idtabs-tab" ><a href="#login" id="tab-login" >login</a></div>
+                    <div class="idtabs-tab" id="anchor-create" ><a href="#create-account" id="tab-create" >create an account</a></div>
                     <span class="clear"></span>
                 </div>
 

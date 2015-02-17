@@ -7,6 +7,14 @@
     
     
     $(document).ready(function(){
+
+        if (window.location.pathname.substring(1) === "login") {
+            $('#tab-login').trigger('click');
+        }
+        else if (window.location.pathname.substring(1) === "register") {
+            $('#tab-create').trigger('click');
+        }
+
         if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
             $("p#lockoutDuration").html("Timeout Remaining: " + $("#timeoutLeft").val());
             $("#failed-login").show();
