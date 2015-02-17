@@ -133,6 +133,27 @@ class Estudyantrepreneur
     }
 
     /**
+     * Get Total votes per school
+     * @param $startDate
+     * @param $endDate
+     * @return array
+     */
+    private function __getTotalVotesByDate($startDate, $endDate)
+    {
+        $result = [];
+        $totalVotesPerSchool = $this->em->getRepository('EasyShop\Entities\EsPromo')
+            ->getTotalVotesByDate(
+                $startDate,
+                $endDate
+            );
+        foreach ($totalVotesPerSchool as $school) {
+            $result[$school['name']] = $school['vote'];
+        }
+
+        return $result;
+    }
+
+    /**
      * Get School and its student by date / round
      * @return array
      */
@@ -275,27 +296,6 @@ class Estudyantrepreneur
         }
 
         return $schoolsAndStudents;
-    }
-
-    /**
-     * Get Total votes per school
-     * @param $startDate
-     * @param $endDate
-     * @return array
-     */
-    private function __getTotalVotesByDate($startDate, $endDate)
-    {
-        $result = [];
-        $totalVotesPerSchool = $this->em->getRepository('EasyShop\Entities\EsPromo')
-                                        ->getTotalVotesByDate(
-                                            $startDate,
-                                            $endDate
-                                        );
-        foreach ($totalVotesPerSchool as $school) {
-            $result[$school['name']] = $school['vote'];
-        }
-
-        return $result;
     }
 
 }
