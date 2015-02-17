@@ -241,7 +241,14 @@ class CMS
             <value>'.$value.'</value> 
             <type>'.$type.'</type>
         </product_panel>'; 
-        }        
+        }
+        if($nodeName=="productPanel") {
+            $string = '
+                    <productPanel>
+            <slug>'.$value.'</slug>
+        </productPanel>
+            ';
+        }             
         if($nodeName == "productPanelNew" ) {
             $string = '
         <productSlugs>'.$value.'</productSlugs>'; 
