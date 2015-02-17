@@ -22,7 +22,9 @@
         "noiselabs/nusoap-bundle": "dev-master",
         "aws/aws-sdk-php": "2.6.*",
         "php-curl-class/php-curl-class": "~2.1",
-        "neutron/sphinxsearch-api": "dev-master"
+        "neutron/sphinxsearch-api": "dev-master",
+        "firebase/php-jwt": "dev-master",
+        "predis/predis": "1.1.*@dev"
     },
     "repositories": [
         {

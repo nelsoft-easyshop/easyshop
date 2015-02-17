@@ -160,7 +160,19 @@ class Login extends MY_Controller
                                      ->setSession($session);
                 $em->persist($authenticatedSession);
                 $em->flush();
-         
+                
+                $jwtData = [
+                    "iss" => base_url(),
+                    "aud" => base_url(),
+                    "iat" => time(),
+                    'sub' => $user->getIdMember(),
+                    'storename' => $user->getStorename(),
+                ];
+                $jwtSecret = $this->serviceContainer['message_manager']
+                                  ->getWebTokenSecret();
+                $jwtToken = $this->serviceContainer['json_web_token']
+                                 ->encode($jwtData, $jwtSecret);
+                $this->session->set_userdata('jwtToken', $jwtToken);
             }
             else{ 
                 $this->throttleService->logFailedAttempt($uname);
