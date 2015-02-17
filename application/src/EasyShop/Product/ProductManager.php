@@ -884,8 +884,8 @@ class ProductManager
         if($numberOfFoundProducts < $limit){
             $numberOfProductsToFill =  $limit - $numberOfFoundProducts;
             $numberOfMembersWithProducts =  count($memberIdsWithProducts) ;
-            $numberOfMembersWithProducts = $numberOfMembersWithProducts < 1 ? 1: count($numberOfMembersWithProducts);
-            $productFromEachSeller = (int) $numberOfProductsToFill/count($memberIdsWithProducts);
+            $numberOfMembersWithProducts = $numberOfMembersWithProducts < 1 ? 1: $numberOfMembersWithProducts;
+            $productFromEachSeller = (int) $numberOfProductsToFill/$numberOfMembersWithProducts;
             $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
             $fillerProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                    ->getRandomProductsFromUsers($memberIdsWithProducts, $productFromEachSeller, $productIds);
