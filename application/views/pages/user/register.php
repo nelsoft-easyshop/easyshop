@@ -67,6 +67,8 @@
             </div>
 
             <div id="login">
+                <input type='hidden' value='<?php echo isset($loginFail)? $loginFail : ""; ?>' id='loginFail'/>
+                <input type='hidden' value='<?php echo isset($timeoutLeft)? $timeoutLeft : ""; ?>' id='timeoutLeft'/>
                 <div class="login-left-content">
                     <div class="login-left-border">
                         <h1>login to your account</h1>
@@ -93,15 +95,15 @@
                                         </span>
                                     </span>
                                 </div>
-<!--                                <div class="row">-->
-<!--                                    <span class="col-xs-12  padding-right-reset">-->
-<!--                                        <span class="input-error error-deactivated">-->
-<!--                                            Oooops! This account is currently deactivated. -->
-<!--                                            If you want to reactivate your account click <a href="">here</a> to send -->
-<!--                                            a reactivation link to your email.-->
-<!--                                        </span>-->
-<!--                                    </span>-->
-<!--                                </div>-->
+                                <div class="row" style="display: <?=$formError === 'Account Deactivated' ? 'block' : 'none'  ?>">
+                                    <span class="col-xs-12  padding-right-reset">
+                                        <span id="deactivatedAccountPrompt" class="input-error error-deactivated">
+                                            Oooops! This account is currently deactivated.
+                                            If you want to reactivate your account click <a href="">here</a> to send
+                                            a reactivation link to your email.
+                                        </span>
+                                    </span>
+                                </div>
                                 <div class="row keepmeloggedin-cotent">
                                     <span class="col-xs-12 col-sm-6">
                                         <label for="keepmeloggedin">
@@ -117,6 +119,9 @@
                                         <input type="submit" class="btn btn-default-3" value='Login' name='login_form'/>
                                     </span>
                                 </div>
+                                <?php if($formError === 'Account Banned'): ?>
+                                    <input type="hidden" id="account-banned-error" value="true" data-message="<?php echo reset($errors)['message']; ?>">
+                                <?php endif; ?>
                             <?php echo form_close();?>
                         </div>
                     </div>
@@ -142,6 +147,9 @@
                         </span>
                     </div>
                 </div>
+                <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
+                <input type='hidden' value='<?php echo $dayRange.' '.$hourRange; ?>' id='office_hours'/>
+                <input type='hidden' value='<?php echo $officeContactNo ?>' id='office_contactno'/>
                 <div class="clear"></div>
             </div>
             <!-- create account section -->
