@@ -389,7 +389,7 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $value = $this->input->get("value");
-        $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
+        $string = $this->xmlCmsService->getString("productPanel",$value, "", "", ""); 
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
@@ -841,7 +841,42 @@ class NewHomeWebService extends MY_Controller
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }
-    }        
+    }      
+
+    /**
+     * Sets sub category section
+     */
+    public function setSubCategorySection()
+    {
+        $map = simplexml_load_file($this->file); 
+        $index = (int) $this->input->get("index");  
+        $subIndex = (int) $this->input->get("subIndex");  
+        $value = $this->input->get("value");  
+        $target = $this->input->get("target");  
+        $map->categorySection[$index]->sub[$subIndex]->text = $value;
+        $map->categorySection[$index]->sub[$subIndex]->target = $target;
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }        
+    }      
+
+    /**
+     * Sets main category section slug
+     */
+    public function setCategorySection()
+    {
+        $map = simplexml_load_file($this->file); 
+        $index = (int) $this->input->get("index");  
+        $value = $this->input->get("value");  
+        $map->categorySection[$index]->categorySlug = $value;
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }        
+    }
 
     /**
      *  Sets position of productPanel nodes under categorySection parent node
