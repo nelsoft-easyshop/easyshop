@@ -939,9 +939,6 @@ $string = '<typeNode>
                 $subTemporary = $categorySection['sub'];
                 $categorySection['sub'] = [ $subTemporary ];
             }   
-     
-
-     
             
             $sectionData['products'] = [];
             $isFirstRun = true;
