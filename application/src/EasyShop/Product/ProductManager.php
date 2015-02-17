@@ -862,8 +862,12 @@ class ProductManager
         if(is_int($memberIdArray)){
             $memberIdArray = [ $memberIdArray ];
         }
+        
         $numberOfMembers = count($memberIdArray);
-        $numberOfMembers =  $numberOfMembers < 1 ? 1: $numberOfMembers;
+        if($numberOfMembers === 0){
+            return [];
+        }
+        
         $productFromEachSeller = (int)($limit/$numberOfMembers);
         $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
 
@@ -884,14 +888,17 @@ class ProductManager
         if($numberOfFoundProducts < $limit){
             $numberOfProductsToFill =  $limit - $numberOfFoundProducts;
             $numberOfMembersWithProducts =  count($memberIdsWithProducts) ;
-            $numberOfMembersWithProducts = $numberOfMembersWithProducts < 1 ? 1: $numberOfMembersWithProducts;
-            $productFromEachSeller = (int) $numberOfProductsToFill/$numberOfMembersWithProducts;
-            $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
-            $fillerProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                   ->getRandomProductsFromUsers($memberIdsWithProducts, $productFromEachSeller, $productIds);
-            foreach($fillerProducts as $fillerProduct){
-                $productIds[] = $fillerProduct['id_product'];
+            if($numberOfMembersWithProducts > 0){
+                $productFromEachSeller = (int) $numberOfProductsToFill/$numberOfMembersWithProducts;
+                $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
+                $fillerProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                    ->getRandomProductsFromUsers($memberIdsWithProducts, $productFromEachSeller, $productIds);
+                foreach($fillerProducts as $fillerProduct){
+                    $productIds[] = $fillerProduct['id_product'];
+                }
             }
+            
+            
         }
         
         if(count($productIds) > $limit){
