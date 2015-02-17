@@ -62,7 +62,7 @@ class ImageUtility
      * @param float $width
      * @param float $height
      */
-    public function  imageCrop($souceImage, $axisX, $axisY, $width, $height)
+    public function imageCrop($souceImage, $axisX, $axisY, $width, $height)
     {
         $config = [
             'image_library' => 'gd2',
@@ -78,7 +78,26 @@ class ImageUtility
         $this->imageLibrary->initialize($config);
         $this->imageLibrary->image_process_gd('crop');
         $this->imageLibrary->clear();
+    }    
+
+    /**
+     * Rotate Image
+     * @param  string  $souceImage
+     * @param  integer $angle
+     */
+    public function imageRotate($souceImage, $angle)
+    { 
+        $config = [
+            'image_library' => 'gd2', 
+            'source_image' => $souceImage,
+            'rotation_angle' => $angle
+        ]; 
+
+        $this->imageLibrary->initialize($config);
+        $this->imageLibrary->rotate();
+        $this->imageLibrary->clear();
     }
+
 
 }
 

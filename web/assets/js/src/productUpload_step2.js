@@ -490,19 +490,63 @@ function processAttributes()
     });
 
     return JSON.stringify(completeAttributes);
-}
+} 
 
-function newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight){ 
-    var widthRatio = CropWidth / ImageWidth;
-    var heightRatio = CropHeight / ImageHeight;
-    var minPercent = (widthRatio >= heightRatio) ? widthRatio : heightRatio;
+function updateCropper(isNew)
+{
+    cropImageMain = $("#crop-image-main");
+    imageTag = $("#imageTag");
+    var deductPercentage = cropImageMain.width() * 0.10;
+    var modalHeight = cropImageMain.width() - deductPercentage
+    var CropHeight = widthRatio / heightRatio * modalHeight;
+    var CropWidth =  widthRatio / heightRatio * CropHeight;
+    var ImageHeight = imageTag.height(); 
+    var ImageWidth = imageTag.width();
+
+    var newWidthRatio = CropWidth / ImageWidth;
+    var newHeightRatio = CropHeight / ImageHeight;
+    var minPercent = newHeightRatio >= newHeightRatio ? newHeightRatio : newHeightRatio;
     var minValue = Math.round(minPercent * 100);
-    var zoomSlider = $("#zoomSlider");
-    zoomSlider.ionRangeSlider({
+    var sliderData;
+
+    if(rotateValue === 270 || rotateValue === 90){
+        cWidth = CropHeight;
+        cHeight = CropWidth;
+    }
+    else{
+        cWidth = CropWidth;
+        cHeight = CropHeight;
+    }
+
+    imageTag.cropbox({
+        width: cWidth,
+        height: cHeight,
+        zoom: 100,
+        showControls: "never"
+    }).on('cropbox', function(e, data) { 
+        $('#image_x').val(data.cropX);
+        $('#image_y').val(data.cropY);
+        $('#image_w').val(data.cropW);
+        $('#image_h').val(data.cropH);
+    }); 
+
+    cropElement = imageTag.data('cropbox'); 
+
+    if(isNew){
+        zoomSlider = $("#zoomSlider");
+        zoomSlider.ionRangeSlider({
+            min: minValue,
+            max: 100,
+            from: minValue,
+            onChange: function (obj) { 
+                var value = parseInt(obj.fromNumber) / 100;
+                cropElement.zoom(value);  
+            }
+        });
+    }
+
+    zoomSlider.ionRangeSlider("update", {
         min: minValue,
-        max: 100,
-        type: 'single', 
-        postfix: "%",
         from: minValue,
         onChange: function (obj) { 
             var value = parseInt(obj.fromNumber) / 100;
@@ -510,9 +554,6 @@ function newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight){
         }
     });
 
-    zoomSlider.ionRangeSlider("update", {
-        from: minValue 
-    });
     cropImageMain.find(".irs-min").addClass('rangeSliderHide');
     cropImageMain.find(".irs-max").addClass('rangeSliderHide');
     cropImageMain.find(".irs-single").addClass('rangeSliderHide');
@@ -1211,6 +1252,8 @@ var imageTag;
 var widthRatio = 445;
 var heightRatio = 538;
 var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
+var rotateValue = 0;
+var zoomSlider;
 
 (function($) {
   
@@ -1255,10 +1298,10 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                                 var yCoord = $('#image_y').val();
                                 var wCoord = $('#image_w').val();
                                 var hCoord = $('#image_h').val();
-                                var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
+                                var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord + "," + rotateValue;
                                 af.push(afTemp[cropCurrentCount]);
                                 axes.push(coordinate); 
-                                cropCurrentCount++;  
+                                cropCurrentCount++;
                                 $(this).dialog("close"); 
                                 if(cropCurrentCount < totalCropImage){
                                     cropImage($input);
@@ -1278,28 +1321,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             var MainwindowHeight = $(window).height();
                             $(this).parent().addClass('pop-up-fixed'); 
                             setTimeout(function() {
-                                cropImageMain = $("#crop-image-main");
-                                imageTag = $("#imageTag");
-                                var deductPercentage = cropImageMain.width() * 0.10;
-                                var modalHeight = cropImageMain.width() - deductPercentage
-                                var CropHeight = widthRatio / heightRatio * modalHeight;
-                                var CropWidth =  widthRatio / heightRatio * CropHeight; 
-                                var ImageHeight = imageTag.height(); 
-                                var ImageWidth = imageTag.width();
-
-                                imageTag.cropbox({
-                                    width: CropWidth,
-                                    height: CropHeight,
-                                    zoom: 100,
-                                    showControls: "never"
-                                }).on('cropbox', function(e, data) { 
-                                    $('#image_x').val(data.cropX);
-                                    $('#image_y').val(data.cropY);
-                                    $('#image_w').val(data.cropW);
-                                    $('#image_h').val(data.cropH);
-                                }); 
-                                cropElement = imageTag.data('cropbox');
-                                newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight);
+                                updateCropper(true);
                                 var UidialogHeight = $(".ui-dialog").outerHeight();
                                 var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
                                 $(".ui-dialog").css("top", UidialogTop);
@@ -1312,6 +1334,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             cropElement = null;
                             cropImageMain = null;
                             imageTag = null;
+                            rotateValue = 0;
                         },
                         "title": "Crop your image"
                     });
@@ -1335,6 +1358,36 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             }
         }
     }
+
+    $(document).on('click','.rotateRight',function(e){ 
+        rotateValue += 90;
+        rotateValue = rotateValue >= 360 ? 0 : rotateValue;
+        cropElement.remove(); 
+        cropElement = null;
+        cropImageMain = null;
+        imageTag = null; 
+        $("#imageTag").css({
+            "-webkit-transform": "rotate("+ rotateValue +"deg)",
+            "-moz-transform": "rotate("+ rotateValue +"deg)",
+            "transform": "rotate("+ rotateValue +"deg)"
+        }); 
+        updateCropper(false);
+    });
+
+    $(document).on('click','.rotateLeft',function(e){ 
+        rotateValue -= 90;
+        rotateValue = rotateValue < 0 ? 270 : rotateValue;
+        cropElement.remove(); 
+        cropElement = null;
+        cropImageMain = null;
+        imageTag = null;
+        $("#imageTag").css({
+            "-webkit-transform": "rotate("+ rotateValue +"deg)",
+            "-moz-transform": "rotate("+ rotateValue +"deg)",
+            "transform": "rotate("+ rotateValue +"deg)"
+        }); 
+        updateCropper(false);
+    });
 
     $(document).on('click','.ui-dialog-titlebar-close',function(e){
             af.push(afTemp[cropCurrentCount]); 
@@ -1585,7 +1638,11 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     modal: true,
                     buttons: {
                         "Crop": function() {
-                            var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
+                            var coordinate = $('#image_x').val() + "," 
+                                             + $('#image_y').val()  + "," 
+                                             + $('#image_w').val() + "," 
+                                             + $('#image_h').val() + "," 
+                                             + rotateValue;
                             $("#coordinatesOther").val(coordinate);
                             triggerUploadOther(picName);
                             $(this).dialog("close");
@@ -1595,28 +1652,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         var MainwindowHeight = $(window).height();
                         $(this).parent().addClass('pop-up-fixed');
                         setTimeout(function() {
-                            cropImageMain = $("#crop-image-main");
-                            imageTag = $("#imageTag");
-                            var deductPercentage = cropImageMain.width() * 0.10;
-                            var modalHeight = cropImageMain.width() - deductPercentage;
-                            var CropHeight = widthRatio / heightRatio * modalHeight;
-                            var CropWidth =  widthRatio / heightRatio * CropHeight;
-                            var ImageHeight = imageTag.height(); 
-                            var ImageWidth = imageTag.width();
-
-                            imageTag.cropbox({
-                                width: CropWidth,
-                                height: CropHeight,
-                                zoom: 100,
-                                showControls: "never"
-                            }).on('cropbox', function(e, data) { 
-                                $('#image_x').val(data.cropX);
-                                $('#image_y').val(data.cropY);
-                                $('#image_w').val(data.cropW);
-                                $('#image_h').val(data.cropH);
-                            });
-                            cropElement = imageTag.data('cropbox');
-                            newZoomSlider(ImageHeight, ImageWidth, CropWidth, CropHeight);
+                            updateCropper(true);
                             var UidialogHeight = $(".ui-dialog").outerHeight();
                             var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
                             $(".ui-dialog").css("top", UidialogTop);
@@ -1629,6 +1665,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         cropElement = null;
                         cropImageMain = null;
                         imageTag = null;
+                        rotateValue = 0;
                     },
                     "title": "Crop your image"
                 });

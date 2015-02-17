@@ -1,12 +1,13 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
+    <link rel="stylesheet" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" type="text/css" /> 
     <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
     <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/> 
-    <link rel="stylesheet" type="text/css" href="/assets/css/jquery.cropbox.css">
-    <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/jquery.cropbox.css" type="text/css" />
+    <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
 <?php else: ?>
     <link type="text/css" href='/assets/css/min-easyshop.upload-step2.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
@@ -524,7 +525,11 @@
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
                 <img src="" id="imageTag">
                 <center>Move to zoom</center>
-                <div id="zoomSlider"></div>
+                <div class="control-container">
+                <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
+                <a class="rotateRight" title="Rotate Right" href="javascript:void(0)"><i class="fa fa-repeat fa-2x"></i></a> 
+                <center><div id="zoomSlider"></div></center>
+                </div>
                 <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
                 <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
                 <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
