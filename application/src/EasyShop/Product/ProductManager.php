@@ -905,14 +905,17 @@ class ProductManager
             $productIds = array_rand($productIds, $limit);
         }
 
+        $products = []; 
+        if(!empty($productIds)){
         $qb = $this->em->createQueryBuilder();
-        $product = $qb->select('p')
+        $products = $qb->select('p')
                       ->from('EasyShop\Entities\EsProduct','p') 
                       ->where($qb->expr()->in('p.idProduct', $productIds) ) 
                       ->getQuery()
                       ->getResult();
+        }
 
-        return $product;
+        return $products;
     }
 
 }
