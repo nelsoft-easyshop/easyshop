@@ -1586,13 +1586,33 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         }
                     },
                     open: function() { 
-                        var MainwindowHeight = $(window).height();
                         $(this).parent().addClass('pop-up-fixed');
-                        setTimeout(function() { 
-                            imageTag = $(".imageContainer > #imageTag"); 
-                            var ImageHeight = imageTag.height(); 
-                            var ImageWidth = imageTag.width();
+                        imageTag = $(".imageContainer > #imageTag"); 
+                        var ImageHeight = imageTag.height(); 
+                        var ImageWidth = imageTag.width(); 
+                        imageTag.cropper({ 
+                            data: { 
+                                width: ImageWidth,
+                                height: ImageHeight
+                            }, 
+                            rotatable: true,
+                            multiple: false,
+                            dragCrop: false,
+                            dashed: false,
+                            movable: false, 
+                            resizable: false,
+                            dashed: true, 
+                            done: function(data) { 
+                                $('#image_x').val(data.x);
+                                $('#image_y').val(data.y);
+                                $('#image_w').val(data.width);
+                                $('#image_h').val(data.height);
+                            }
+                        });
 
+
+                        setTimeout(function() { 
+                            var MainwindowHeight = $(window).height();
                             var UidialogHeight = $(".ui-dialog").outerHeight();
                             var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
                             $(".ui-dialog").css("top", UidialogTop);
