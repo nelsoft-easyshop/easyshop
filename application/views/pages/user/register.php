@@ -53,7 +53,7 @@
      <section class="new-login-register">
         <div class="new-login-register-content">
             <div class="login-logo">
-                <a href="">
+                <a href="/">
                     <img src="/assets/images/es-logo-login.png" alt="Easyshop">
                 </a>
             </div>
