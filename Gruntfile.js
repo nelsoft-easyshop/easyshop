@@ -450,6 +450,12 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/socket.io.js',
                              'web/assets/js/src/nodeClient.js',
                              'web/assets/js/src/universal.js'],
+
+                    'web/assets/js/min/easyshop.estudyantrepreneur-promo.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                            'web/assets/js/src/estudyantrepreneur.js',
+                            'web/assets/js/src/plugins.js',
+                            'web/assets/js/src/vendor/christmas-promo.js']
                 }
             }
         }

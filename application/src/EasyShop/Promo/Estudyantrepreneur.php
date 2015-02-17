@@ -142,10 +142,11 @@ class Estudyantrepreneur
     {
         $result = [];
         $totalVotesPerSchool = $this->em->getRepository('EasyShop\Entities\EsPromo')
-            ->getTotalVotesByDate(
-                $startDate,
-                $endDate
-            );
+                                        ->getTotalVotesByDate(
+                                            $startDate,
+                                            $endDate
+                                        );
+
         foreach ($totalVotesPerSchool as $school) {
             $result[$school['name']] = $school['vote'];
         }
@@ -284,7 +285,7 @@ class Estudyantrepreneur
                                          $roundData['previousEndDate'],
                                          $roundData['limit']
                                      );
-        $totalVotesPerSchool = $this->__getTotalVotesByDate($roundData['previousStartDate'],$roundData['previousEndDate']);
+        $totalVotesPerSchool = $this->__getTotalVotesByDate($roundData['previousStartDate'], $roundData['previousEndDate']);
 
         foreach ($schoolsAndStudents as $school => $students) {
 
