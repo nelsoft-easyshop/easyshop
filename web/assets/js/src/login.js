@@ -51,7 +51,7 @@
                     $("#login_error").html(obj);
                 }                
 
-            },
+            }
         });         
     });        
     
