@@ -78,14 +78,14 @@
                                 <div class="row">
                                     <label class="col-xs-12 col-sm-4">Username:</label>
                                     <span class="col-xs-12 col-sm-8 padding-reset">
-                                        <input class="ui-form-control" type="text" name='login_username'>
+                                        <input class="ui-form-control" type="text" id="login_username" name='login_username'>
                                         <span id="username_error" style="color:#f42800">
                                     </span>
                                 </div>
                                 <div class="row">
                                     <label class="col-xs-12 col-sm-4">Password:</label>
                                     <span class="col-xs-12 col-sm-8 padding-reset">
-                                        <input class="ui-form-control" type="password" name='login_password'>
+                                        <input class="ui-form-control" type="password" id='login_password' name='login_password'>
                                         <span id="passw_error" style="color:#f42800">
                                         <span id="login_error" style="color:#f42800">
                                         <?php $formError = isset($errors) ? reset($errors)['login'] : ''; ?>
@@ -95,11 +95,11 @@
                                         </span>
                                     </span>
                                 </div>
-                                <div class="row" style="display: <?=$formError === 'Account Deactivated' ? 'block' : 'none'  ?>">
+                                <div class="row" >
                                     <span class="col-xs-12  padding-right-reset">
-                                        <span id="deactivatedAccountPrompt" class="input-error error-deactivated">
+                                        <span id="deactivatedAccountPrompt" class="input-error error-deactivated" style="display: <?=$formError === 'Account Deactivated' ? 'block' : 'none'  ?>">
                                             Oooops! This account is currently deactivated.
-                                            If you want to reactivate your account click <a href="">here</a> to send
+                                            If you want to reactivate your account click <a id='sendReactivationLink' data-id="" >here</a> to send
                                             a reactivation link to your email.
                                         </span>
                                     </span>
