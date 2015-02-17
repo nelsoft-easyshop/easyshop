@@ -12,8 +12,8 @@ var ajaxStat = {};
     $(".open-create-account").click( function(){
         $("#alter-tab div:first-child").children().removeClass("selected");
         $("#alter-tab div:first-child").next().children().addClass("selected");
-        $("#login").css("display","none");
-        $("#create-account").css("display","block");
+        $("#login").fadeOut(0);
+        $("#create-account").fadeIn(300);
     });
 
     $(".terms_and_conditions").click( function(){
@@ -30,6 +30,19 @@ var ajaxStat = {};
         $('html, body').animate({ scrollTop: 200 }, 300);
         navigation.close();
     });
+
+ 
+  $("#adv2").idTabs(function(id,list,set){ 
+    $("a",set).removeClass("selected") 
+    .filter("[href='"+id+"']",set).addClass("selected"); 
+    for(i in list) 
+      $(list[i]).hide(); 
+    $(id).fadeIn(); 
+    return false; 
+  }); 
+
+
+
 })(jQuery);
 
 
