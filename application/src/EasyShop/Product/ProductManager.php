@@ -862,8 +862,9 @@ class ProductManager
         if(is_int($memberIdArray)){
             $memberIdArray = [ $memberIdArray ];
         }
-
-        $productFromEachSeller = (int)($limit/count($memberIdArray));
+        $numberOfMembers = count($memberIdArray);
+        $numberOfMembers =  $numberOfMembers < 1 ? 1: $numberOfMembers;
+        $productFromEachSeller = (int)($limit/$numberOfMembers);
         $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
 
         $productResults = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -882,6 +883,8 @@ class ProductManager
         $numberOfFoundProducts = count($productResults);
         if($numberOfFoundProducts < $limit){
             $numberOfProductsToFill =  $limit - $numberOfFoundProducts;
+            $numberOfMembersWithProducts =  count($memberIdsWithProducts) ;
+            $numberOfMembersWithProducts = $numberOfMembersWithProducts < 1 ? 1: count($numberOfMembersWithProducts);
             $productFromEachSeller = (int) $numberOfProductsToFill/count($memberIdsWithProducts);
             $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
             $fillerProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
