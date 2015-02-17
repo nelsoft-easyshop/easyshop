@@ -606,9 +606,20 @@
             $("#scrollUp").trigger("click");
             $(".panel-filter-search-cont").addClass("container-filter").removeAttr("style");
             $.stickysidebarscroll(".container-filter",{offset: {top: offsetTopData, bottom: 100}});
-
         }
+
+
+        var searchItemWidth = $(".search-item-container").width();
+
+        $(".tooltip").css("width", searchItemWidth);
+        alert(searchItemWidth);
     });
+
+    $(document).find('[rel=tooltiplist]').tooltip({
+        placement : 'top'
+    });
+
+
 }(jQuery));
 
 
