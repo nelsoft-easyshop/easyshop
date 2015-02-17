@@ -163,10 +163,8 @@ class CMS
         <sub>
             <text>Default</text>
             <target>/</target>
+            <productSlugs> </productSlugs>
         </sub>
-        <productPanel>
-            <slug>kj-star-wireless-mobile-phone-monopod</slug>
-        </productPanel>            
     </categorySection>'; 
         }   
         if($nodeName == "otherCategories") {
@@ -179,8 +177,16 @@ class CMS
         <sub>
             <text>'.$value.'</text>
             <target>'.$target.'</target>
+            <productSlugs> </productSlugs>            
         </sub>'; 
         }           
+
+        if($nodeName=="productPanel") {
+             $string = '
+                <productPanel>
+             <slug>'.$value.'</slug>
+        </productPanel>'; 
+        }
 
         if($nodeName == "adsSection") {
              $string = '
@@ -245,9 +251,7 @@ class CMS
         }        
         if($nodeName == "productPanelNew" ) {
             $string = '
-        <productPanel>
-            <slug>'.$value.'</slug>
-        </productPanel>'; 
+            <productSlugs>'.$value.'</productSlugs>'; 
         }
         if($nodeName == "mainSlide") {
 
@@ -348,10 +352,11 @@ $string = '<typeNode>
      *  @param string $file
      *  @param string $nodeName
      *  @param int $index
-     *  @param int $productindex  
+     *  @param int $subIndex  
+     *  @param int $subPanelIndex  
      *  @return boolean
      */
-    public function removeXmlNode($file,$nodeName,$index = null, $subIndex = null) 
+    public function removeXmlNode($file,$nodeName,$index = null, $subIndex = null, $subPanelIndex = null) 
     {
 
         if($nodeName == "tempHomeSlider"){
@@ -395,7 +400,7 @@ $string = '<typeNode>
             else {
                     return false;
             }
-        }    
+        }
         else if($nodeName == "newArrival"){
             $referred = "/map/menu/newArrivals/arrival[".$index."]"; 
 
@@ -455,25 +460,32 @@ $string = '<typeNode>
             }
         }
         else if($nodeName == "categoryProductPanel") {
+            $subPanelIndex = (int) $subPanelIndex === 0 ? 1 : $subPanelIndex + 1;
+            $referred = "//categorySection[$index]/sub[$subIndex]/productSlugs[$subPanelIndex]";
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath($referred));
 
-            $referred = "/map/categorySection[".$index."]/productPanel[".$subIndex."]"; 
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+
+            return $xml->asXml($file);
+    
+        }        
+        else if($nodeName == "subCategorySection") {
+            $referred = "/map/categorySection[".$index."]"."/sub[".$subIndex."]"; 
 
             $doc = new \SimpleXMLElement(file_get_contents($file));
             if($target = current($doc->xpath($referred))) {
                 $dom = dom_import_simplexml($target);
 
                 $dom->parentNode->removeChild($dom);
-                if($doc->asXml($file)) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
+                return $doc->asXml($file);
             }
             else {
                     return false;
-            }        
-        }        
+            }
+        }           
         else if($nodeName == "boxContent") {
 
             $referred = "/map/section[".$index."]/boxContent[".$subIndex."]"; 
