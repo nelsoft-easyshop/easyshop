@@ -588,7 +588,6 @@
     }
          
     $window.on('load resize', function() {
-        
         var widthOff = $(window).width();
         var heightHead = 200;
         var heightBanners = $(".search-parallax-container").outerHeight();
@@ -609,16 +608,12 @@
         }
 
 
-        var searchItemWidth = $(".search-item-container").width();
-
-        $(".tooltip").css("width", searchItemWidth);
-        alert(searchItemWidth);
+        
     });
 
     $(document).find('[rel=tooltiplist]').tooltip({
         placement : 'top'
     });
-
 
 }(jQuery));
 
