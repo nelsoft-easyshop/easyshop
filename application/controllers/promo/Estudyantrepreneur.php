@@ -25,13 +25,8 @@ class Estudyantrepreneur extends MY_Controller
                         \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
                         'getSchoolWithStudentsByRound'
                      );
-        $bodyData = [
-            'schools_and_students' => $data['schools_and_students'],
-            'round' => $data['round'],
-        ];
 
-        $this->load->spark('decorator');
-        $this->load->view('pages/promo/estudyantrepreneur', $bodyData);
+        $this->load->view('pages/promo/estudyantrepreneur', $data);
     }
 
     /**
@@ -56,7 +51,6 @@ class Estudyantrepreneur extends MY_Controller
             'result' => $data,
         ];
 
-        $this->load->spark('decorator');
         $this->load->view('pages/promo/estudyantrepreneur_success', $bodyData);
     }
 
