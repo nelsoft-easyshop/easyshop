@@ -381,6 +381,29 @@ html, body {
     top: 0;
 }
 
+.login-user {
+    padding: 0 40px 30px;
+    text-align: center;
+}
+
+.login-user h3 {
+    font-size: 16px;
+    padding: 12px 0;
+}
+
+.login-user .btn.btn-default-3 {
+    border: none;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 12px 0;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.login-user .btn.btn-default-3:hover {
+    border: none;
+}
+
 @media (min-width: 280px) {
     .new-login-register-content,
     .terms-and-condition {
@@ -442,6 +465,10 @@ html, body {
 
     .why-create-content > span {
         width: 72%;
+    }
+
+    .login-user a {
+        max-width: 300px;
     }
 }
 
