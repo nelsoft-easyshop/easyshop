@@ -7,6 +7,7 @@ use EasyShop\Entities\EsPromoType;
 
 class Estudyantrepreneur
 {
+    const MAX_NUM_OF_STUDENT = 3;
 
     /**
      * Promo config
@@ -101,7 +102,7 @@ class Estudyantrepreneur
                                      $limit
                                  );
             $result[$schoolName]['students'] = $students;
-            $result[$schoolName]['isQualifiedInNextRound'] = 0;
+            $result[$schoolName]['isQualifiedInNextRound'] = false;
 
             if ($students) {
                 end($result[$schoolName]['students']);
@@ -123,8 +124,8 @@ class Estudyantrepreneur
 
             $studentCount = count($result[$schoolName]['students']);
 
-            if ($studentCount <= 3 && $studentCount !== 0) {
-                $result[$schoolName]['isQualifiedInNextRound'] = 1;
+            if ($studentCount <= self::MAX_NUM_OF_STUDENT && $studentCount !== 0) {
+                $result[$schoolName]['isQualifiedInNextRound'] = true;
             }
         }
 
