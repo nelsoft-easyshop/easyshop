@@ -968,7 +968,6 @@ class Store extends MY_Controller
                 }
             }
             else{
-                $um->setStoreName($storeName);
                 $data['errors'] =  $this->serviceContainer['form_error_helper']->getFormErrors($form);
                 if(!$isAddressValid){
                     $data['errors']['location'] = ["address must be complete"];
