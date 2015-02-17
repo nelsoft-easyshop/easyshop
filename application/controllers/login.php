@@ -32,11 +32,32 @@ class Login extends MY_Controller
      */
     public function index() 
     {
+        $url = 'landingpage';
+        $is_promo = false;
+        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
+            $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
+            $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
+            $is_promo = true;
+        }
+        else{
+            if($this->session->userdata('usersession')){
+                redirect('/');
+            }
+        }
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+            ->getSocialMediaLinks();
+        $bodyData = [
+            'redirect_url' => $url,
+            'is_promo' => $is_promo,
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+        ];
+
         $this->load->config('officeoperation', true);
         
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Login | Easyshop.ph',
+            'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
             'relCanonical' => base_url().'login',
             'renderSearchbar' => false,
@@ -78,13 +99,10 @@ class Login extends MY_Controller
         
         $bodyData = array_merge($bodyData, $loginData);
 
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/user/login_view',$bodyData);
-        $this->load->view('templates/footer');
+        $this->load->spark('decorator');
+        $this->load->view('pages/user/register', array_merge($this->decorator->decorate('header', 'view', $headerData), $bodyData));
       }
 
-      
     /**
      * Authenticates if the user is able to login succesfully or not
      *

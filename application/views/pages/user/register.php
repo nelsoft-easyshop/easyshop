@@ -71,28 +71,37 @@
                     <div class="login-left-border">
                         <h1>login to your account</h1>
                         <div>
-                            <?php echo form_open('login');?>
+                            <?php $attr = array('id'=>'login_form'); ?>
+                            <?php echo form_open('', $attr); ?>
                                 <div class="row">
                                     <label class="col-xs-12 col-sm-4">Username:</label>
                                     <span class="col-xs-12 col-sm-8 padding-reset">
                                         <input class="ui-form-control" type="text" name='login_username'>
+                                        <span id="username_error" style="color:#f42800">
                                     </span>
                                 </div>
                                 <div class="row">
                                     <label class="col-xs-12 col-sm-4">Password:</label>
                                     <span class="col-xs-12 col-sm-8 padding-reset">
                                         <input class="ui-form-control" type="password" name='login_password'>
-                                    </span>
-                                </div>
-                                <div class="row">
-                                    <span class="col-xs-12  padding-right-reset">
-                                        <span class="input-error error-deactivated">
-                                            Oooops! This account is currently deactivated. 
-                                            If you want to reactivate your account click <a href="">here</a> to send 
-                                            a reactivation link to your email.
+                                        <span id="passw_error" style="color:#f42800">
+                                        <span id="login_error" style="color:#f42800">
+                                        <?php $formError = isset($errors) ? reset($errors)['login'] : ''; ?>
+                                        <?php if($formError !== 'Account Deactivated' && $formError !== 'Account Banned'):  ?>
+                                            <?php echo html_escape($formError); ?>
+                                        <?php endif; ?>
                                         </span>
                                     </span>
                                 </div>
+<!--                                <div class="row">-->
+<!--                                    <span class="col-xs-12  padding-right-reset">-->
+<!--                                        <span class="input-error error-deactivated">-->
+<!--                                            Oooops! This account is currently deactivated. -->
+<!--                                            If you want to reactivate your account click <a href="">here</a> to send -->
+<!--                                            a reactivation link to your email.-->
+<!--                                        </span>-->
+<!--                                    </span>-->
+<!--                                </div>-->
                                 <div class="row keepmeloggedin-cotent">
                                     <span class="col-xs-12 col-sm-6">
                                         <label for="keepmeloggedin">
@@ -115,13 +124,13 @@
                 <div class="login-right-content">
                     <h1>use your social network account</h1>
                     <div>
-                         <a href="" class="btn facebook-btn">
+                         <a href="<?=$facebook_login_url?>" class="btn facebook-btn">
                             <span class="log-in-img"><img src="/assets/images/img-log-in-fb.png"></span>
                             <span class="text-center">Log In with Facebook</span>
                         </a>
                     </div>
                     <div>
-                        <a href="" class="btn google-btn">
+                        <a href="<?=$google_login_url?>" class="btn google-btn">
                             <span class="log-in-img"><img src="/assets/images/img-log-in-google.png"></span>
                             <span class="text-center">Log In with Google</span>
                         </a>
@@ -453,6 +462,7 @@
     <script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
+    <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_register.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
