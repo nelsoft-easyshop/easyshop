@@ -939,10 +939,21 @@ $string = '<typeNode>
                 $subTemporary = $categorySection['sub'];
                 $categorySection['sub'] = [ $subTemporary ];
             }   
-            $sectionData['subHeaders'] = $categorySection['sub'];
+     
+
+     
             
             $sectionData['products'] = [];
-            foreach ($categorySection['sub'] as $subCategory) {
+            $isFirstRun = true;
+            foreach ($categorySection['sub'] as $index => $subCategory) {
+            
+                $subHeaderSection = $categorySection['sub'][$index];
+                $subHeaderSection['text'] = (is_array($subHeaderSection['text']) && empty($subHeaderSection['text'])) ? '' : $subHeaderSection['text'];
+                $sectionData['subHeaders'][$index] = $subHeaderSection;
+
+                if(!$isFirstRun){
+                    continue;
+                }
 
                 if (!isset($subCategory['productSlugs']) || !$subCategory['productSlugs']) {
                     $subCategory['productSlugs'] = [];
@@ -964,7 +975,8 @@ $string = '<typeNode>
                         }
                     }
                 }
-                break;
+                
+                $isFirstRun = false;
             }
 
             $homePageData['categorySection'][] = $sectionData;
