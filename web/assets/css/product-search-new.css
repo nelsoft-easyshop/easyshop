@@ -180,6 +180,7 @@ html, body{
     padding: 15px;
     margin-bottom: 15px;
     transition: all 0.3s ease; 
+    position: relative;
 }
 
 .search-results-container .col-md-3{
@@ -971,6 +972,19 @@ ul.list-category-search li:last-child > .search-category-link{
     margin-top: 7px; 
 }
 
+/* =============================================
+-----------------  Tooltip --------------
+==============================================*/
+.tooltip,
+.tooltip-inner{
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.tooltip-inner{
+    padding: 10px !important;
+    word-break: break-all;
+}
 
 /* =============================================
 -----------------  Sticky Mobile Filter --------------
