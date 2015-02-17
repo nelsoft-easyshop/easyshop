@@ -3,13 +3,27 @@
 /**********************************************************************/
 
 var ajaxStat = {};
-var navigation = responsiveNav(".nav-collapse");
 
 (function( $ ) {
-    $('.bxslider_slides').bxSlider({
-        infiniteLoop: true,
-        auto: true
+    $(".show-why-create-mobileview").click( function(){
+        $(".why-create-mobileview").slideToggle();
     });
+
+    $(".open-create-account").click( function(){
+        $("#alter-tab div:first-child").children().removeClass("selected");
+        $("#alter-tab div:first-child").next().children().addClass("selected");
+        $("#login").css("display","none");
+        $("#create-account").css("display","block");
+    });
+
+    $(".terms_and_conditions").click( function(){
+        $("#terms-section").fadeIn();
+    });
+
+    $(".close-term").click( function(){
+        $("#terms-section").fadeOut();
+    });
+
     $('#reg_btn,#reg_txt').click(function(event) {
         event.preventDefault();
         var n = $(document).height();
@@ -364,13 +378,13 @@ function username_check(trigger){
     jQuery.post('/register/username_check', {username: username, csrfname : csrftoken}, function(result){
         if(result == 1){
             showcheck(jQuery('#username'));
-            jQuery('.username_availability').html('');
+            jQuery('.username_availability').html('<span class="input-success">Username is available</span>');
             jQuery('#usernamecheck').attr('value', jQuery('#username').val());
             field.addClass('pass');
         }
         else{
             showx(jQuery('#username'));
-            jQuery('.username_availability').html('Username already exists.');
+            jQuery('.username_availability').html('<span class="input-error">Username already exists.</span>');
             field.removeClass('pass');
         }
         field.removeClass('forSearch');
@@ -401,7 +415,7 @@ function email_check(trigger){
         }
         else{
             showx(jQuery('#email'));
-            jQuery('.email_availability').html('Email is already in use.');
+            jQuery('.email_availability').html('<span class="input-error">Email is already in use.</span>');
             field.removeClass('pass');
         }
         field.removeClass('forSearch');
@@ -439,7 +453,7 @@ function mobile_check(trigger){
         }
         else{
             showx(jQuery('#mobile'));
-            jQuery('.mobile_availability').html('Mobile is already in use.');
+            jQuery('.mobile_availability').html('<span class="input-error">Mobile is already in use.</span>');
             field.removeClass('pass');
             field.addClass('fail');
         }
