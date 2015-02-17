@@ -65,6 +65,16 @@ class NewHomeWebService extends MY_Controller
     }
 
     /**
+     * Returns Assets Link
+     * @return JSONP
+     */
+    public function getAssetsLink()
+    {
+        $this->config->load('assets', true);
+        echo trim($this->config->item('assetsBaseUrl', 'assets'));             
+    }
+    
+    /**
      *  Removes mainSlides
      *  @return JSON
      */
@@ -73,13 +83,14 @@ class NewHomeWebService extends MY_Controller
         $index =  $this->input->get("index");
         $subIndex =  $this->input->get("subIndex");        
         $nodename =  $this->input->get("nodename");        
+        $subPanelIndex = ($this->input->get("subpanelindex")) ? $this->input->get("subpanelindex") : null;        
 
         $index = $index == 0 ? 1 : $index + 1;
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
         if($nodename == "subSliderSection" || $nodename == "mainSliderSection") {
             $this->file = $this->tempHomefile;
         }
-        $remove = $this->xmlCmsService->removeXmlNode($this->file,$nodename,$index, $subIndex);
+        $remove = $this->xmlCmsService->removeXmlNode($this->file, $nodename,$index, $subIndex, $subPanelIndex);
         if($remove == true) {
             return $this->output
                 ->set_content_type('application/json')
@@ -378,7 +389,7 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $value = $this->input->get("value");
-        $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
+        $string = $this->xmlCmsService->getString("productPanel",$value, "", "", ""); 
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
@@ -403,8 +414,9 @@ class NewHomeWebService extends MY_Controller
      *  Adds ads nodes under adSection parent node
      *  @return JSON
      */
-    public function addAdds()
+    public function addAdSection()
     {
+        $awsUploader = $this->serviceContainer['aws_uploader'];         
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
@@ -436,6 +448,7 @@ class NewHomeWebService extends MY_Controller
                             ->set_output($error);
         } 
         else {
+            $uploadData = $this->upload->data();  
             $imageData = $this->upload->data();            
             $value = $path_directory.$filename.'.'.$file_ext; 
         
@@ -456,12 +469,16 @@ class NewHomeWebService extends MY_Controller
             }
 
 
-            $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);      
+            $string = $this->xmlCmsService->getString("adsSection", $value, "", "", $target);
 
             $index = $index == 0 ? 1 : $index + 1;
-            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/adSection/ad[last()]',"\t\t","\n");
+            $result = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/adSection/ad[last()]',"\t\t","\n");
 
-            if($addXml === true) {
+            if(strtolower(ENVIRONMENT) !== 'development' && $result){
+                $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+            } 
+
+            if($result) {
                 return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json); 
@@ -475,6 +492,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function setAdsSection()
     {
+        $awsUploader = $this->serviceContainer['aws_uploader'];          
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
@@ -506,6 +524,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
+                $uploadData = $this->upload->data();                  
                 $this->config->load('image_dimensions', true);
                 $imageDimensionsConfig = $this->config->config['image_dimensions'];
 
@@ -532,8 +551,12 @@ class NewHomeWebService extends MY_Controller
             $map->adSection->ad[$index]->img = $map->adSection->ad[$index]->img;
             $map->adSection->ad[$index]->target = $target; 
         }
+        $result = $map->asXML($this->file);
+        if(strtolower(ENVIRONMENT) !== 'development' && $result){
+            $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+        } 
 
-        if($map->asXML($this->file)) {
+        if($result) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
@@ -709,21 +732,22 @@ class NewHomeWebService extends MY_Controller
     public function setCategoryProductPanel()
     {
         $map = simplexml_load_file($this->file);
-
-        $index = (int)$this->input->get("index");
-        $subIndex = (int)$this->input->get("subindex");
+        $index = (int) $this->input->get("index");
+        $subIndex = (int) $this->input->get("subindex");
+        $panelindex = (int) $this->input->get("subPanelIndex");
         $value = $this->input->get("value");
 
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+        $product = $this->em
+                        ->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
-                        
+
         if(!$product){
             return $this->output
                 ->set_content_type('application/json')
                 ->set_output( $this->slugerrorjson);            
         }
         else {
-            $map->categorySection[$index]->productPanel[$subIndex]->slug = $value;
+            $map->categorySection[$index]->sub[$subIndex]->productSlugs[$panelindex] = $value;
             if($map->asXML($this->file)) {
                 return $this->output
                         ->set_content_type('application/json')
@@ -762,28 +786,41 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $index = (int)$this->input->get("index");
+        $subindex = (int)$this->input->get("subindex");
         $value = $this->input->get("value");
+
         $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
         $index = $index == 0 ? 1 : $index + 1;  
-        $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+        $subindex = $subindex == 0 ? 1 : $subindex + 1;  
+        $product = $this->em
+                        ->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
         if(!$product){
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);
+                        ->set_content_type('application/json')
+                        ->set_output( $this->slugerrorjson);
         }
         else {
-            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection['.$index.']/productPanel[last()]',"\t\t","\n");    
-            if($addXml === true) {
+            if(count($map->categorySection[$index-1]->sub[$subindex-1]->productSlugs) <= 1 &&
+                trim($map->categorySection[$index-1]->sub[$subindex-1]->productSlugs[0]) === "") {
+                $map->categorySection[$index-1]->sub[$subindex-1]->productSlugs[0]= $value;
+                $addXml = $map->asXML($this->file); 
+            }
+            else {
+            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,
+                                                            $string,
+                                                            '/map/categorySection['.$index.']/sub['.$subindex.']/productSlugs[last()]',
+                                                            "\t\t\t",
+                                                            "\n");
+            }
+            if($addXml) {
                 return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($this->json);
+                            ->set_content_type('application/json')
+                            ->set_output($this->json);
             }
         }
-
-
-    }      
+    }
 
     /**
      *  Adds sub node under categorySection parent node
@@ -804,7 +841,42 @@ class NewHomeWebService extends MY_Controller
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }
-    }        
+    }      
+
+    /**
+     * Sets sub category section
+     */
+    public function setSubCategorySection()
+    {
+        $map = simplexml_load_file($this->file); 
+        $index = (int) $this->input->get("index");  
+        $subIndex = (int) $this->input->get("subIndex");  
+        $value = $this->input->get("value");  
+        $target = $this->input->get("target");  
+        $map->categorySection[$index]->sub[$subIndex]->text = $value;
+        $map->categorySection[$index]->sub[$subIndex]->target = $target;
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }        
+    }      
+
+    /**
+     * Sets main category section slug
+     */
+    public function setCategorySection()
+    {
+        $map = simplexml_load_file($this->file); 
+        $index = (int) $this->input->get("index");  
+        $value = $this->input->get("value");  
+        $map->categorySection[$index]->categorySlug = $value;
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }        
+    }
 
     /**
      *  Sets position of productPanel nodes under categorySection parent node
@@ -816,12 +888,13 @@ class NewHomeWebService extends MY_Controller
         $order = (int) $this->input->get("order");  
         $index = (int)  $this->input->get("index");  
         $subIndex = (int) $this->input->get("subIndex"); 
+        $subPanelIndex = (int) $this->input->get("subpanelindex"); 
 
-        $tempSlug = (string)  $map->categorySection[$index]->productPanel[$order]->slug;
+        $tempSlug = (string) $map->categorySection[$index]->sub[$subIndex]->productSlugs[$order];
 
-        $map->categorySection[$index]->productPanel[$order]->slug =  $map->categorySection[$index]->productPanel[$subIndex]->slug;
+        $map->categorySection[$index]->sub[$subIndex]->productSlugs[$order] = $map->categorySection[$index]->sub[$subIndex]->productSlugs[$subPanelIndex];
 
-        $map->categorySection[$index]->productPanel[$subIndex]->slug =  $tempSlug;
+        $map->categorySection[$index]->sub[$subIndex]->productSlugs[$subPanelIndex] =  $tempSlug;
     
         if($map->asXML($this->file)) {
             return $this->output
@@ -836,6 +909,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function setSellerHead()
     {
+        $awsUploader = $this->serviceContainer['aws_uploader'];        
         $map = simplexml_load_file($this->file);        
         $action = $this->input->get("action");
         $slug = $this->input->get("slug");
@@ -883,6 +957,7 @@ class NewHomeWebService extends MY_Controller
                                 ->set_output($error);
             } 
             else {
+                $uploadData = $this->upload->data();                
                 $value = "/".$path_directory.$filename.'.'.$file_ext; 
 
                 if($action == "logo") {
@@ -891,8 +966,11 @@ class NewHomeWebService extends MY_Controller
                 else  {
                     $map->sellerSection->sellerBanner = $value;
                 }
-
-                if($map->asXML($this->file)) {
+                $result = $map->asXML($this->file);
+                if(strtolower(ENVIRONMENT) !== 'development' && $result){
+                    $result = $awsUploader->uploadFile($uploadData['full_path'],  ltrim($value,"/"));
+                }                 
+                if($result) {
                     return $this->output
                             ->set_content_type('application/json')
                             ->set_output($this->json);
@@ -935,6 +1013,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function editSubSlider()
     {
+        $awsUploader = $this->serviceContainer['aws_uploader'];        
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
@@ -969,6 +1048,7 @@ class NewHomeWebService extends MY_Controller
                                      ->set_output(json_encode($error));
             } 
             else {
+                $uploadData = $this->upload->data();                   
                 $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
                 $imgDirectory = $this->config->item('homeslider_img_directory').$filename.'.'.$file_ext;
 
@@ -1001,7 +1081,11 @@ class NewHomeWebService extends MY_Controller
             $map->sliderSection->slide[$index]->image[$subIndex]->path = $map->sliderSection->slide[$index]->image[$subIndex]->path;
             $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
         }
-        if($map->asXML($this->tempHomefile)) {
+        $result = $map->asXML($this->tempHomefile);
+        if(strtolower(ENVIRONMENT) !== 'development' && $result){
+            $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+        }         
+        if($result) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
@@ -1139,7 +1223,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function addSubSlider()
     {
-
+        $awsUploader = $this->serviceContainer['aws_uploader'];
         $imgDimensions = [
             'x' => $this->input->get('x'),
             'y' => $this->input->get('y'),
@@ -1175,6 +1259,7 @@ class NewHomeWebService extends MY_Controller
                                  ->set_output(json_encode($error));
         } 
         else {
+            $uploadData = $this->upload->data();            
             $value = "/".$this->config->item('homeslider_img_directory').$filename.'.'.$file_ext; 
             $subSliderCount = count($map->sliderSection->slide[$index]->image);
             $template = (string)$map->sliderSection->slide[$index]->template;            
@@ -1182,11 +1267,11 @@ class NewHomeWebService extends MY_Controller
             if(trim($map->sliderSection->slide[$index]->image->path) === "") {
                 $map->sliderSection->slide[$index]->image->path = $value;
                 $map->sliderSection->slide[$index]->image->target = $target;
-                $map->asXML($this->tempHomefile); 
+                $result = $map->asXML($this->tempHomefile); 
             }
             else {
                 $index = $index === 0 ? 1 : $index + 1;
-                $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
+                $result = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
                                                                 $string,
                                                                 '/map/sliderSection/slide['.$index.']/image[last()]',
                                                                 "\t\t\t","\n");
@@ -1201,21 +1286,25 @@ class NewHomeWebService extends MY_Controller
 
             $this->config->load('image_dimensions', true);
             $imageDimensionsConfig = $this->config->config['image_dimensions'];
-            $defaultTemplateSliderCount = count($imageDimensionsConfig["mainSlider"][$template]);
+            $defaultTemplateSliderCount = count($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"][$template]);
             $imageUtility = $this->serviceContainer['image_utility'];
             if($subSliderCount >= $defaultTemplateSliderCount) {
-                $tempDimensions = end($imageDimensionsConfig["mainSlider"][$template]);
+                $tempDimensions = end($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"][$template]);
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);                
-                reset($imageDimensionsConfig["mainSlider"][$template]);                
+                reset($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"][$template]);                
             }
             else {
-                $tempDimensions = $imageDimensionsConfig["mainSlider"][$template][$subSliderCount - 1];
+                $tempDimensions = $imageDimensionsConfig["cmsImagesSizes"]["mainSlider"][$template][$subSliderCount - 1];
                 $imageUtility->imageResize($imgDirectory, $imgDirectory, $tempDimensions, false);
             } 
-
-            return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($this->json);             
+            if(strtolower(ENVIRONMENT) !== 'development' && $result){
+                $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+            }          
+            if($result) {
+                return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output($this->json);             
+            }             
         }
     }
 
