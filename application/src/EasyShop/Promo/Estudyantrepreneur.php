@@ -36,11 +36,11 @@ class Estudyantrepreneur
 
     /**
      * Get previous rounds
-     * @param array $rounds
      * @return array
      */
-    private function __getPreviousRounds($rounds)
+    private function __getPreviousRounds()
     {
+        $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $date = new \DateTime;
         $dateToday = $date->getTimestamp();
         $round = false;
@@ -140,7 +140,7 @@ class Estudyantrepreneur
     {
         $result = [];
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
-        $roundData = $this->__getPreviousRounds($rounds);
+        $roundData = $this->__getPreviousRounds();
 
         switch($roundData['case']) {
             case 'first_round' :
@@ -157,30 +157,32 @@ class Estudyantrepreneur
 
                 break;
             case 'second_round' :
+                $firstRound = $rounds['first_round'];
                 $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
                 $result = $this->__getStudentsByDateAndSchool(
                                      $schools,
-                                     $roundData['previousStartDate'],
-                                     $roundData['previousEndDate'],
-                                     $roundData['limit']
+                                     $firstRound['start'],
+                                     $firstRound['end'],
+                                     $firstRound['limit']
                                  );
 
                 break;
             case 'inter_school_round':
                 $firstRound = $rounds['first_round'];
+                $secondRound = $rounds['second_round'];
                 $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
                 $qualifiedToSecondRound = $this->__getStudentsByDateAndSchool(
-                                         $schools,
-                                         $firstRound['start'],
-                                         $firstRound['end'],
-                                         $firstRound['limit']
-                                     );
+                                                     $schools,
+                                                     $firstRound['start'],
+                                                     $firstRound['end'],
+                                                     $firstRound['limit']
+                                                 );
                 $secondRoundWinners = $this->__getStudentsByDateAndSchool(
-                                                         $schools,
-                                                         $roundData['previousStartDate'],
-                                                         $roundData['previousEndDate'],
-                                                         $roundData['limit']
-                                                     );
+                                                 $schools,
+                                                 $secondRound['start'],
+                                                 $secondRound['end'],
+                                                 $secondRound['limit']
+                                             );
 
                 foreach ($qualifiedToSecondRound as $key => $schools) {
 
@@ -230,7 +232,7 @@ class Estudyantrepreneur
     public function isUserAlreadyVoted($memberId)
     {
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
-        $roundData = $this->__getPreviousRounds($rounds);
+        $roundData = $this->__getPreviousRounds();
         $qb = $this->em->createQueryBuilder();
         $query = $qb->select('tblPromo')
                     ->from('EasyShop\Entities\EsPromo', 'tblPromo')
@@ -253,8 +255,7 @@ class Estudyantrepreneur
      */
     public function getCurrentStandings()
     {
-        $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
-        $roundData = $this->__getPreviousRounds($rounds);
+        $roundData = $this->__getPreviousRounds();
         $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
         $schoolsAndStudents = $this->__getStudentsByDateAndSchool(
                                          $schools,
