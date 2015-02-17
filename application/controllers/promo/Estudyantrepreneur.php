@@ -46,10 +46,10 @@ class Estudyantrepreneur extends MY_Controller
         $studentId = (int) trim($this->input->post('studentId'));
         $data = $this->__vote($studentId);
         $getCurrentStandings = $this->promoManager
-                                   ->callSubclassMethod(
-                                       \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
-                                       'getCurrentStandings'
-                                   );
+                                    ->callSubclassMethod(
+                                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                                        'getCurrentStandings'
+                                    );
 
         $bodyData = [
             'currentStandings' => $getCurrentStandings[$this->input->post('schoolName')],
