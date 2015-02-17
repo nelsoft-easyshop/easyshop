@@ -932,6 +932,7 @@ a{
     border-radius: 6px;
     padding-top: 8px;
     padding-bottom: 8px;
+    margin-right: 5px;
 }
 
 .btn-setting-save-btn:hover{
@@ -982,7 +983,7 @@ a{
 .div-store-setup{
     width: 100%;
     border: solid #e2e2e2 1px;
-    min-height: 200px;
+    min-height: 150px;
     padding: 30px 40px;
     border-radius: 4px;
     margin-bottom: 15px;
