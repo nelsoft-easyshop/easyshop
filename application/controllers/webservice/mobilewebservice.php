@@ -200,7 +200,7 @@ class MobileWebService extends MY_Controller
             }  
             else {
                 $map->mainSlide[$index]->value = $value;
-                $map->mainSlide[$index]->type = "image";
+                $map->mainSlide[$index]->type = self::DEFAULT_MAINSLIDE_TYPE;
                 $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
                 $map->mainSlide[$index]->imagemap->target = $target;
                 $map->mainSlide[$index]->actionType = $actionType;
@@ -216,7 +216,7 @@ class MobileWebService extends MY_Controller
 
             if(!isset($order) || $order == NULL){
                 $map->mainSlide[$index]->value = $value;
-                $map->mainSlide[$index]->type = "image";
+                $map->mainSlide[$index]->type = self::DEFAULT_MAINSLIDE_TYPE;
                 $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
                 $map->mainSlide[$index]->imagemap->target = $target;
                 $map->mainSlide[$index]->actionType = $actionType; 
