@@ -12,7 +12,6 @@
         <value>assets/images/homeslider/mobile/mobile3.jpg</value>
         <type>image</type>
         <imagemap>
-            <coordinate>0,0,589,352.00000000000006</coordinate>
             <target>/mobile/product/deals</target>
         </imagemap>
         <actionType>show product list</actionType>
