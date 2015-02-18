@@ -175,7 +175,6 @@ class CMS
              $string = '
         <sub>
             <text>'.$value.'</text>
-            <target>/</target>
             <productSlugs> </productSlugs>            
         </sub>'; 
         }           
