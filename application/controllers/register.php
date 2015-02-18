@@ -18,56 +18,6 @@ class Register extends MY_Controller
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
     }
 
-    public function index()
-    {    
-        $url = 'landingpage';
-        $is_promo = false;
-        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
-            $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
-            $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
-            $is_promo = true;
-        }
-        else{
-            if($this->session->userdata('usersession')){
-                redirect('/');
-            }
-        }
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
-            'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
-        ];
-        $facebookScope = $this->config->item('facebook', 'oauth');
-        $googleScope = $this->config->item('google', 'oauth');
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $daysInWeek = $this->config->item('dayRange', 'officeoperation');
-        $firstDayOfWeek = date('D', strtotime("Sunday + ".$daysInWeek[0]." days"));
-        $lastDayOfWeek = date('D', strtotime("Sunday + ".$daysInWeek[1]." days"));
-        $hoursInDay = $this->config->item('hourRange', 'officeoperation');
-        $bodyData = [
-            'url' => $this->session->userdata('uri_string'),
-            'redirect_url' => $url,
-            'is_promo' => $is_promo,
-            'facebook' => $socialMediaLinks["facebook"],
-            'twitter' => $socialMediaLinks["twitter"],
-            'facebook_login_url' =>$this->socialMediaManager
-                                        ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK,
-                                            $facebookScope['permission_to_access']),
-            'google_login_url' => $this->socialMediaManager
-                                        ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::GOOGLE,
-                                            $googleScope['permission_to_access']),
-            'officeContactNo' => $this->config->item('contactno', 'officeoperation'),
-            'dayRange' => $firstDayOfWeek.' to '.$lastDayOfWeek,
-            'hourRange' => date('h:i A', strtotime($hoursInDay[0])).' to '.date('h:i A', strtotime($hoursInDay[1])),
-            'loginData' => []
-        ];
-
-        $this->load->spark('decorator');    
-        $this->load->view('pages/user/register',  array_merge($this->decorator->decorate('header', 'view', $headerData), $bodyData));
-    }
-
-
     /**
      *   Registration Handler
      */
