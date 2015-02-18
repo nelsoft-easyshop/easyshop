@@ -1,5 +1,60 @@
 (function ($) {
 
+    $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
+        var btn = $(this);
+        var submitBtn = btn.closest("form");
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');          
+        var username = submitBtn.find("#usernameField");
+        var password = submitBtn.find("#passwordField");
+        var action = btn.data("action");
+
+        var errorPrompt = submitBtn.find("#errorPrompt");
+        var successPrompt = submitBtn.find("#successPrompt");
+        var loader = submitBtn.find("#actionLoader");
+        var activateButtons = btn.parent();
+
+        if(username !== "" || password !== "") {
+            $.ajax({
+                type: "post",
+                data: {username:username.val().trim(), 
+                       password:password.val().trim(), 
+                       action:action, 
+                       csrfname : csrftoken},
+                url: '/memberpage/manageUserProduct',
+                beforeSend: function() {
+                    activateButtons.hide()
+                    errorPrompt.hide();
+                    successPrompt.hide();
+                    loader.show();
+                },
+                success: function(data){ 
+                    activateButtons.show();
+                    loader.hide();
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.result) {
+                        successPrompt.fadeIn().delay(1000).fadeOut("slow");
+                    }
+                    else {
+                        errorPrompt.fadeIn().delay(1000).fadeOut("slow");
+                        errorPrompt.find(".message").html(obj.message);
+                    }
+                    username.val("");
+                    password.val("");
+                },
+                error: function(data) {
+                    activateButtons.show();
+                    loader.hide();
+                }
+            });
+        }
+        else {
+            errorPrompt.fadeIn().delay(1000).fadeOut("slow");
+            errorPrompt.find(".message").html("Please supply values to the required fields");
+        }
+
+    });
+
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
@@ -22,6 +77,14 @@
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
         $( ".ms-setup" ).addClass( "selectedM" );
+    });
+
+    $( "#product-management-tab" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ms-prod" ).addClass( "selectedM" );
     });
     
     $( ".personal-info-trigger" ).click(function() {
@@ -1046,6 +1109,15 @@
     
     $('.ms-setup').click(function() {
         $('#store-setup-tab').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $(this).addClass("selectedM");
+    });
+
+    $('.ms-prod').click(function() {
+        $('#product-management-tab').trigger("click");
         $('.dash-mobile-trigger').removeClass("selectedM");
         $('.dashboard-home-mobile').removeClass("selectedM");
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
@@ -2216,7 +2288,32 @@
         }, 700);
     }
     
+    $( "#activate-products" ).click(function() {
+        $( ".current-activate-prod" ).slideToggle( "fast" );
+        $( ".edit-activate-prod" ).slideToggle( "fast" );
+    });
     
+    $( "#cancel-activate-products" ).click(function() {
+        $( "#activate-products" ).trigger( "click" );
+    });
+
+    $( "#deactivate-products" ).click(function() {
+        $( ".current-deactivate-prod" ).slideToggle( "fast" );
+        $( ".edit-deactivate-prod" ).slideToggle( "fast" );
+    });
+    
+    $( "#cancel-deactivate-products" ).click(function() {
+        $( "#deactivate-products" ).trigger( "click" );
+    });
+
+    $( "#delete-products" ).click(function() {
+        $( ".current-delete-prod" ).slideToggle( "fast" );
+        $( ".edit-delete-prod" ).slideToggle( "fast" );
+    });
+    
+    $( "#cancel-delete-products" ).click(function() {
+        $( "#delete-products" ).trigger( "click" );
+    });
 }(jQuery));
 
 
