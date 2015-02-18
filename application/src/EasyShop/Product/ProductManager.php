@@ -935,7 +935,8 @@ class ProductManager
                          ->getRepository('EasyShop\Entities\EsProduct')
                          ->findBy([
                                 "member" => $memberId,
-                                "isDelete" => $productStatus
+                                "isDelete" => $productStatus,
+                                "isDraft" => !EsProduct::DRAFT
                             ]);
         try{
             foreach ($products as $value) {
