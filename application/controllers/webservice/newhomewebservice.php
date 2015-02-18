@@ -691,15 +691,13 @@ class NewHomeWebService extends MY_Controller
         $index = (int)$this->input->get("index");
         $subIndex = (int) $this->input->get("subIndex");
         $text = $this->input->get("value");
-        $target = $this->input->get("target");
 
         $map->categorySection[$index]->sub[$subIndex]->text = $text;
-        $map->categorySection[$index]->sub[$subIndex]->target = $target;
 
         if($map->asXML($this->file)) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }  
     } 
 
@@ -750,7 +748,7 @@ class NewHomeWebService extends MY_Controller
         }
 
 
-    }  
+    } 
 
     /**
      *  Adds categorySection parent node
@@ -826,21 +824,13 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $value = $this->input->get("subCategoryText");
-        $target = $this->input->get("subCategorySectionTarget");
-        $string = $this->xmlCmsService->getString("subCategorySection",$value, "", "", $target); 
-        if(count($map->categorySection[$index]->sub) > 0 ) {
-            $index = $index == 0 ? 1 : $index + 1;  
-            $xmlTarget = '/map/categorySection['.$index.']/sub[last()]';            
-        }
-        else {
-            $index = $index == 0 ? 1 : $index + 1;              
-            $xmlTarget = '/map/categorySection['.$index.']/categorySlug[last()]';
-        }
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,$xmlTarget,"\t\t","\n");    
+        $string = $this->xmlCmsService->getString("subCategorySection",$value, "", "", ""); 
+        $index = $index == 0 ? 1 : $index + 1;  
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection['.$index.']/sub[last()]',"\t\t","\n");    
         if($addXml === true) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }
     }        
 
