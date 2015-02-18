@@ -55,7 +55,8 @@ class ScratchCard extends MY_Controller
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
             $isMemberRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')
                                            ->findOneBy([
-                                               'memberId' => $result[0]['c_member_id']
+                                               'memberId' => $this->session->userdata('member_id'),
+                                               'promoType' => \EasyShop\Entities\EsPromoType::SCRATCH_AND_WIN,
                                            ]);
             $this->serviceContainer['promo_manager']->hydratePromoData($product);
             $result = [
@@ -104,6 +105,26 @@ class ScratchCard extends MY_Controller
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data = array(), TRUE);
         $viewData['product'] = $this->em->getRepository('EasyShop\Entities\EsPromo')
                                         ->validateCodeForScratchAndWin($this->input->get('code'));
+
+        if ( $viewData['product']) {
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $viewData['product'][0]['idProduct']]);
+            $isMemberRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                                           ->findOneBy([
+                                               'memberId' => $this->session->userdata('member_id'),
+                                               'promoType' => (int) \EasyShop\Entities\EsPromoType::SCRATCH_AND_WIN,
+                                           ]);
+            $this->serviceContainer['promo_manager']->hydratePromoData($product);
+            $viewData['product'] = [
+                'id_product'=> $product->getIdProduct(),
+                'price'=> $product->getPrice(),
+                'product' => $product->getName(),
+                'brief' => $product->getBrief(),
+                'c_id_code' => $viewData['product'][0]['c_member_id'],
+                'can_purchase' => (bool) $isMemberRegistered ? false : true,
+                'product_image_path' => $viewData['product'][0]['path']
+            ];
+        }
+
         $viewData['code'] = $this->input->get('code');
         if (!$viewData['product']) {
             redirect('/Scratch-And-Win', 'refresh');
