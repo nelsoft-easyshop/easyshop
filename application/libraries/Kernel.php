@@ -205,11 +205,23 @@ class Kernel
                                                         );        
         };
 
-        $jsServerConfig = require APPPATH . 'config/param/js_config.php';
-        $container['message_manager'] = function ($c) use ($container, $jsServerConfig) {
+        $container['message_manager'] = function ($c) use ($container) {
             $em = $container['entity_manager'];
-            $localConfig = $container['local_configuration'];
-            return new \EasyShop\Message\MessageManager($em, $localConfig, $jsServerConfig);
+            $configLoader = $container['config_loader'];
+            $languageLoader = $container['language_loader'];
+            $socialMediaManager = $container['social_media_manager'];
+            $emailService = $container['email_notification'];
+            $parser = new \CI_Parser();
+            $redisClient = $container['redis_client'];
+            $localConfiguration = $container['local_configuration'];
+            return new \EasyShop\Message\MessageManager($em, 
+                                                        $configLoader,
+                                                        $languageLoader,
+                                                        $socialMediaManager,
+                                                        $emailService, 
+                                                        $parser,
+                                                        $redisClient,
+                                                        $localConfiguration);
         };
 
         // Paths
@@ -510,8 +522,10 @@ class Kernel
         $container['email_notification'] = function($c) use ($emailConfig){
             return new \EasyShop\Notifications\EmailNotification($emailConfig);
         };
-        $container['mobile_notification'] = function($c) use ($smsConfig){
-            return new \EasyShop\Notifications\MobileNotification($smsConfig);
+        $container['mobile_notification'] = function($c) use ($smsConfig, $container){
+            $em = $container['entity_manager']; 
+
+            return new \EasyShop\Notifications\MobileNotification($em,$smsConfig);
         };
 
         $awsConfig = require_once(APPPATH . "config/param/aws.php");
@@ -582,6 +596,19 @@ class Kernel
             return $sphinxClient;
         };
 
+        $container['json_web_token'] = function ($c) {
+            return new \JWT();
+        };
+        
+        $nodejsConfig = require_once(APPPATH . "config/param/nodejs.php");
+        $container['redis_client'] = function ($c) use ($nodejsConfig) {
+            return new \Predis\Client([
+                'scheme' => 'tcp',
+                'host' =>  $nodejsConfig['HOST'],
+                'port' => $nodejsConfig['REDIS_PORT'],
+            ]);
+        };
+       
 
         /* Register services END */
         $this->serviceContainer = $container;

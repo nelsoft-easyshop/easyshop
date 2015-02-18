@@ -28,7 +28,9 @@ class EsQueueType
      */
     private $name;
 
+    const TYPE_EMAIL = 1;
 
+    const TYPE_MOBILE = 2;
 
     /**
      * Get idType

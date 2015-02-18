@@ -86,14 +86,15 @@ class NewHomeWebService extends MY_Controller
 
         $index = $index == 0 ? 1 : $index + 1;
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
+        $subPanelIndex = ($this->input->get("subpanelindex")) ? $this->input->get("subpanelindex") : null;          
         if($nodename == "subSliderSection" || $nodename == "mainSliderSection") {
             $this->file = $this->tempHomefile;
         }
-        $remove = $this->xmlCmsService->removeXmlNode($this->file,$nodename,$index, $subIndex);
-        if($remove == true) {
+        $remove = $this->xmlCmsService->removeXmlNode($this->file, $nodename,$index, $subIndex, $subPanelIndex);
+        if($remove) {
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }            
     }
 
@@ -388,7 +389,7 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $value = $this->input->get("value");
-        $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
+        $string = $this->xmlCmsService->getString("productPanel",$value, "", "", ""); 
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
@@ -705,13 +706,13 @@ class NewHomeWebService extends MY_Controller
      *  Sets subCategory node under parent categorySection node
      *  @return JSON
      */
-    public function setSubCategoriesSection()
+    public function setSubCategorySection()
     {
         $map = simplexml_load_file($this->file);
 
         $index = (int)$this->input->get("index");
         $subIndex = (int) $this->input->get("subIndex");
-        $text = $this->input->get("text");
+        $text = $this->input->get("value");
         $target = $this->input->get("target");
 
         $map->categorySection[$index]->sub[$subIndex]->text = $text;
@@ -722,7 +723,23 @@ class NewHomeWebService extends MY_Controller
                     ->set_content_type('application/json')
                     ->set_output($this->json);
         }  
-    }    
+    } 
+
+    /**
+     * Sets main category section slug
+     */
+    public function setCategorySection()
+    {
+        $map = simplexml_load_file($this->file); 
+        $index = (int) $this->input->get("index");  
+        $value = $this->input->get("value");  
+        $map->categorySection[$index]->categorySlug = $value;
+        if($map->asXML($this->file)) {
+            return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output($this->json);
+        }        
+    }       
 
     /**
      *  Sets productPanel under categorySection parent node
@@ -732,8 +749,9 @@ class NewHomeWebService extends MY_Controller
     {
         $map = simplexml_load_file($this->file);
 
-        $index = (int)$this->input->get("index");
-        $subIndex = (int)$this->input->get("subindex");
+        $index = (int) $this->input->get("index");
+        $subIndex = (int) $this->input->get("subindex");
+        $panelindex = (int) $this->input->get("subPanelIndex");
         $value = $this->input->get("value");
 
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -745,7 +763,7 @@ class NewHomeWebService extends MY_Controller
                 ->set_output( $this->slugerrorjson);            
         }
         else {
-            $map->categorySection[$index]->productPanel[$subIndex]->slug = $value;
+            $map->categorySection[$index]->sub[$subIndex]->productSlugs[$panelindex] = $value;
             if($map->asXML($this->file)) {
                 return $this->output
                         ->set_content_type('application/json')
@@ -784,23 +802,36 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $index = (int)$this->input->get("index");
+        $subindex = (int)$this->input->get("subindex");        
         $value = $this->input->get("value");
         $string = $this->xmlCmsService->getString("productPanelNew",$value, "", "", ""); 
         $index = $index == 0 ? 1 : $index + 1;  
+        $subindex = $subindex == 0 ? 1 : $subindex + 1;        
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy(['slug' => $value]);
                         
         if(!$product){
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);
+                        ->set_content_type('application/json')
+                        ->set_output( $this->slugerrorjson);
         }
         else {
-            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection['.$index.']/productPanel[last()]',"\t\t","\n");    
+            if(count($map->categorySection[$index-1]->sub[$subindex-1]->productSlugs) <= 1 &&
+                trim($map->categorySection[$index-1]->sub[$subindex-1]->productSlugs[0]) === "") {
+                $map->categorySection[$index-1]->sub[$subindex-1]->productSlugs[0]= $value;
+                $addXml = $map->asXML($this->file); 
+            }        
+            else {
+                $addXml = $this->xmlCmsService->addXmlFormatted($this->file,
+                                                                $string,
+                                                                '/map/categorySection['.$index.']/sub['.$subindex.']/productSlugs[last()]',
+                                                                "\t\t\t",
+                                                                "\n");    
+            }    
             if($addXml === true) {
                 return $this->output
-                        ->set_content_type('application/json')
-                        ->set_output($this->json);
+                            ->set_content_type('application/json')
+                            ->set_output($this->json);
             }
         }
 
@@ -819,8 +850,15 @@ class NewHomeWebService extends MY_Controller
         $value = $this->input->get("subCategoryText");
         $target = $this->input->get("subCategorySectionTarget");
         $string = $this->xmlCmsService->getString("subCategorySection",$value, "", "", $target); 
-        $index = $index == 0 ? 1 : $index + 1;  
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/categorySection['.$index.']/sub[last()]',"\t\t","\n");    
+        if(count($map->categorySection[$index]->sub) > 0 ) {
+            $index = $index == 0 ? 1 : $index + 1;  
+            $xmlTarget = '/map/categorySection['.$index.']/sub[last()]';            
+        }
+        else {
+            $index = $index == 0 ? 1 : $index + 1;              
+            $xmlTarget = '/map/categorySection['.$index.']/categorySlug[last()]';
+        }
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,$xmlTarget,"\t\t","\n");    
         if($addXml === true) {
             return $this->output
                     ->set_content_type('application/json')
@@ -838,12 +876,13 @@ class NewHomeWebService extends MY_Controller
         $order = (int) $this->input->get("order");  
         $index = (int)  $this->input->get("index");  
         $subIndex = (int) $this->input->get("subIndex"); 
+        $subPanelIndex = (int) $this->input->get("subpanelindex"); 
 
-        $tempSlug = (string)  $map->categorySection[$index]->productPanel[$order]->slug;
+        $tempSlug = (string) $map->categorySection[$index]->sub[$subIndex]->productSlugs[$order];
 
-        $map->categorySection[$index]->productPanel[$order]->slug =  $map->categorySection[$index]->productPanel[$subIndex]->slug;
+        $map->categorySection[$index]->sub[$subIndex]->productSlugs[$order] = $map->categorySection[$index]->sub[$subIndex]->productSlugs[$subPanelIndex];
 
-        $map->categorySection[$index]->productPanel[$subIndex]->slug =  $tempSlug;
+        $map->categorySection[$index]->sub[$subIndex]->productSlugs[$subPanelIndex] =  $tempSlug;
     
         if($map->asXML($this->file)) {
             return $this->output

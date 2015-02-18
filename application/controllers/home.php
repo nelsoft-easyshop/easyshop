@@ -24,7 +24,7 @@ class Home extends MY_Controller
      * @return View
      */
     public function index() 
-    {  
+    {      
         $view = $this->input->get('view') ? $this->input->get('view') : null;
         $memberId = $this->session->userdata('member_id');
         $headerData = [
@@ -293,12 +293,14 @@ class Home extends MY_Controller
                             ->getRepository('EasyShop\Entities\EsProduct')
                             ->findOneBy(['slug' => $productSlug]);
             if($product){
-                $data['productSections'][$productCounter]['product'] =  $this->serviceContainer['product_manager']->getProductDetails($product);
-                $secondaryImage =  $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsProductImage')
-                                        ->getSecondaryImage($product->getIdProduct());
-                $data['productSections'][$productCounter]['productSecondaryImage'] = $secondaryImage;
-                $data['productSections'][$productCounter]['userimage'] =   $this->serviceContainer['user_manager']->getUserImage($product->getMember()->getIdMember());
-                $productCounter++;
+                if($this->productManager->isProductActive($product)){
+                    $data['productSections'][$productCounter]['product'] =  $this->serviceContainer['product_manager']->getProductDetails($product);
+                    $secondaryImage =  $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsProductImage')
+                                            ->getSecondaryImage($product->getIdProduct());
+                    $data['productSections'][$productCounter]['productSecondaryImage'] = $secondaryImage;
+                    $data['productSections'][$productCounter]['userimage'] =   $this->serviceContainer['user_manager']->getUserImage($product->getMember()->getIdMember());
+                    $productCounter++;
+                }
             }
         }
 

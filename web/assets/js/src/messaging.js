@@ -1,15 +1,17 @@
 (function ($) {
-    var $userInfo = $('#userInfo');
-    var $chatServer = $('#chatServer');
-    var socket = io.connect( 'https://' + $chatServer.data('host') + ':' + $chatServer.data('port'));
+
     $(document).ready(function()
     {
+        
+        var $userInfo = $('#userInfo');
+        var $chatConfig = $('#chatServerConfig');
+        var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
+        
         /* Register events */
         socket.on('send message', function( data ) {
             onFocusReload(data.message);
         });
-        setAccountOnline($userInfo.data('store-name'));
-
+        
         $('#table_id').dataTable({
             "bScrollInfinite": true,
             "bScrollCollapse": false,
@@ -148,10 +150,6 @@
         }
     });
 
-    var setAccountOnline = function(memberId)
-    {
-        socket.emit('set account online', memberId);
-    };
 
     function sortObjectByKey (obj)
     {
@@ -168,13 +166,14 @@
         return arrayOfObject;
     };
 
+
     function onFocusReload(msgs)
     {
         var html = "";
         var span = "";
         var message = msgs.messages;
         var onfocusedConversationId = $('.Active').attr('id');
-        $("#table_id tbody").empty();
+        $("#table_id tbody").empty();        
         $.each(message,function(key,val) {
             var cnt = parseInt(Object.keys(val).length)- 1;
             var isActive ='';
@@ -213,6 +212,7 @@
             html +='</td>';
             html +='</tr>';
         });
+
         $("#table_id tbody").append(html);
         $("#table_id a").first().addClass("Active");
         specific_msgs();
@@ -233,20 +233,20 @@
                 $("#send_btn").hide();
             },
             data : {recipient:recipient,msg:msg,csrfname:csrftoken},
-            success : function(resultMsg)
+            success : function(jsonData)
             {
                 $("#out_txtarea").val("");
                 $("#msg_textarea img").hide();
                 $("#send_btn").show();
-                if (parseInt(resultMsg.success) === 1) {
-                    socket.emit('send message', {recipient: recipient, message: resultMsg.recipientMessage });
-                    if (onFocusReload(resultMsg.message) && !isOnConversation) {
+
+                if (jsonData.success) {
+                    if (onFocusReload(jsonData.updatedMessageList) && !isOnConversation) {
                         $('#modal-close').trigger('click');
                     }
                     result = true;
                 }
                 else {
-                    alert(resultMsg.errorMessage);
+                    alert(jsonData.errorMessage);
                     result = false;
                 }
             }

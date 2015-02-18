@@ -232,6 +232,7 @@ html, body{
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 10px;
+    height: 23px;
 }
 
 .search-item-price{
@@ -280,8 +281,8 @@ html, body{
     margin-right: 3px;
 }
 
-.search-item-seller-cont{
-    width: 32px;
+.search-item-seller-cont a {
+    width: 30px;
     height: 30px;
     display: table-cell;
     text-align: center;
@@ -289,7 +290,7 @@ html, body{
     border: solid #e2e2e2 1px;
 }
 .search-item-seller-img{
-    max-width: 32px;
+    max-width: 30px;
     height: auto;
     max-height: 30px;
 }
