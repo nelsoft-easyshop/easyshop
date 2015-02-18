@@ -13,7 +13,7 @@ class Register extends MY_Controller
         $this->load->library('encrypt');
         $this->load->library('session');
         session_start();
-        $this->load->config('oauth', TRUE);
+        $this->load->config('oauth', true);
         $this->form_validation->set_error_delimiters('', '');
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
     }

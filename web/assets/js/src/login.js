@@ -7,11 +7,12 @@
     
     
     $(document).ready(function(){
+        var pathName = window.location.pathname.substring(1);
 
-        if (window.location.pathname.substring(1) === "login") {
+        if (pathName === "login") {
             $('#tab-login').trigger('click');
         }
-        else if (window.location.pathname.substring(1) === "register") {
+        else if (pathName === "register") {
             $('#tab-create').trigger('click');
         }
 
