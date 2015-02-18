@@ -38,24 +38,35 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your username here">
+                                <input type="text" class="text-info text-required" id="usernameField" placeholder="Type your username here">
                             </div>
                         </div>                        
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Password : </label>
                             <div class="col-sm-5">
-                                <input type="password" class="text-info text-required" placeholder="Type your current password here">
+                                <input type="password" class="text-info text-required" id="passwordField" placeholder="Type your current password here">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-5">
-                                <input class="btn btn-setting-save-btn" type='submit' value='Activate'/>
+                            <div class="col-sm-5" id="submitButtons">
+                                <span class="btn btn-setting-save-btn" type='submit' id="activateProducts" data-action="restore"/>
+                                    Activate
+                                </span>
                                 <span class="btn btn-setting-cancel-btn" id="cancel-activate-products">
                                     Cancel
                                 </span>
-                            </div>
+                            </div>                           
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="actionLoader" style="display:none"/>                                                            
                         </div>
+                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="message"></span>
+                        </div>
+                                        
+                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
+                                Products successfully restored
+                        </div>                         
                     </form>
                 </div>
             </div>
@@ -79,23 +90,34 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your username here">
+                                <input type="text" class="text-info text-required" id="usernameField" placeholder="Type your username here">
                             </div>
                         </div>                        
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Password : </label>
                             <div class="col-sm-5">
-                                <input type="password" class="text-info text-required" placeholder="Type your current password here">
+                                <input type="password" class="text-info text-required" id="passwordField" placeholder="Type your current password here">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-5">
-                                <input class="btn btn-setting-save-btn" type='submit' value='Deactivate'/>
+                            <div class="col-sm-5" id="submitButtons">
+                                <span class="btn btn-setting-save-btn" type='submit' id="disableProducts" data-action="disable"/>
+                                    Disable
+                                </span>
                                 <span class="btn btn-setting-cancel-btn" id="cancel-deactivate-products">
                                     Cancel
                                 </span>
                             </div>
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="actionLoader" style="display:none"/>                                                            
+                        </div>
+                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="message"></span>
+                        </div>
+                                        
+                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
+                                Products successfully restored
                         </div>
                     </form>
                 </div>
@@ -120,23 +142,34 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
-                                <input type="text" class="text-info text-required" placeholder="Type your username here">
+                                <input type="text" class="text-info text-required" id="usernameField" placeholder="Type your username here">
                             </div>
                         </div>                        
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Password : </label>
                             <div class="col-sm-5">
-                                <input type="password" class="text-info text-required" placeholder="Type your current password here">
+                                <input type="password" class="text-info text-required" id="passwordField" placeholder="Type your current password here">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-5">
-                                <input class="btn btn-setting-save-btn" type='submit' value='Delete'/>
+                            <div class="col-sm-5" id="submitButtons">
+                                <span class="btn btn-setting-save-btn" type='submit' id="deleteProducts" data-action="delete"/>
+                                    Delete
+                                </span>
                                 <span class="btn btn-setting-cancel-btn" id="cancel-delete-products">
                                     Cancel
                                 </span>
                             </div>
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="actionLoader" style="display:none"/>                                                            
+                        </div>
+                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="message"></span>
+                        </div>
+                                        
+                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
+                                Products successfully restored
                         </div>
                     </form>
                 </div>
