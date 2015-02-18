@@ -57,7 +57,7 @@
                     <img src="/assets/images/es-logo-login.png" alt="Easyshop">
                 </a>
             </div>
-            <div class="login-tabs">
+            <div id="adv2" class="login-tabs">
                 <div id="alter-tab" class="idTabs">
                     <div class="idtabs-tab"><a href="#login">login</a></div>
                     <div id="anchor-create" class="idtabs-tab"><a href="#create-account">create an account</a></div>
