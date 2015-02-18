@@ -40,7 +40,7 @@
                 </div>
             </a>
             <div class="search-item-meta">
-                <a href="/item/<?=$productSlug;?>" class="search-item-name" <?php if(strlen($productName)>18): ?>rel="tooltiplist" data-toggle="tooltip" data-placement="top" title="<?php echo $productName."adasdahdjkhaskdhjkahsdjkhajksdhkahsdjkd"; ?>"<?php endif;?>>
+                <a href="/item/<?=$productSlug;?>" class="search-item-name" <?php if(strlen($productName)>18): ?>rel="tooltiplist" data-toggle="tooltip" data-placement="top" title="<?php echo $productName; ?>"<?php endif;?>>
                     <?=$productName; ?>
                 </a>
                 <div class="search-item-price with-discount">
