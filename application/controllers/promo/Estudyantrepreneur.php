@@ -39,7 +39,8 @@ class Estudyantrepreneur extends MY_Controller
         }
 
         $studentId = (int) trim($this->input->post('studentId'));
-        $data = $this->__vote($studentId);
+        $memberId = $this->session->userdata('member_id');
+        $data = $this->__vote($studentId, $memberId);
         $getCurrentStandings = $this->promoManager
                                     ->callSubclassMethod(
                                         \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
@@ -59,11 +60,10 @@ class Estudyantrepreneur extends MY_Controller
      * @Param $studentId
      * @Return array
      */
-    private function __vote($studentId)
+    private function __vote($studentId, $memberId)
     {
         $studentId = (int) $studentId;
         $studentEntity = $this->em->find('EasyShop\Entities\EsStudent', $studentId);
-        $memberId = $this->session->userdata('member_id');
         $isUserAlreadyVoted = $this->promoManager
                                    ->callSubclassMethod(
                                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
