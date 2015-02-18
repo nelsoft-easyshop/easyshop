@@ -260,7 +260,6 @@ class CMS
         <value>'.$value.'</value> 
         <type>image</type>
         <imagemap>
-            <coordinate>'.$type.'</coordinate>
             <target>'.$coordinate.'</target>
         </imagemap>
         <actionType>'.$target.'</actionType>

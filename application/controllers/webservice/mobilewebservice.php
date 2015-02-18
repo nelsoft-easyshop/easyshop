@@ -201,7 +201,6 @@ class MobileWebService extends MY_Controller
             else {
                 $map->mainSlide[$index]->value = $value;
                 $map->mainSlide[$index]->type = self::DEFAULT_MAINSLIDE_TYPE;
-                $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
                 $map->mainSlide[$index]->imagemap->target = $target;
                 $map->mainSlide[$index]->actionType = $actionType;
                 
@@ -217,7 +216,6 @@ class MobileWebService extends MY_Controller
             if(!isset($order) || $order == NULL){
                 $map->mainSlide[$index]->value = $value;
                 $map->mainSlide[$index]->type = self::DEFAULT_MAINSLIDE_TYPE;
-                $map->mainSlide[$index]->imagemap->coordinate = $coordinate;
                 $map->mainSlide[$index]->imagemap->target = $target;
                 $map->mainSlide[$index]->actionType = $actionType; 
             }
@@ -227,19 +225,16 @@ class MobileWebService extends MY_Controller
                 $tempValue = (string) $map->mainSlide[$order]->value;
                 $tempOrder = (string) $map->mainSlide[$order]->type;
                 $tempTarget = (string) $map->mainSlide[$order]->imagemap->target;
-                $tempCoordinate = (string) $map->mainSlide[$order]->imagemap->coordinate;
                 $tempType = (string) $map->mainSlide[$order]->actionType;
 
                 $map->mainSlide[$order]->value = $map->mainSlide[$index]->value;
                 $map->mainSlide[$order]->type = $map->mainSlide[$index]->type;
                 $map->mainSlide[$order]->imagemap->target = $map->mainSlide[$index]->imagemap->target;
-                $map->mainSlide[$order]->imagemap->coordinate = $map->mainSlide[$index]->imagemap->coordinate;
                 $map->mainSlide[$order]->actionType = $map->mainSlide[$index]->actionType;
 
                 $map->mainSlide[$index]->value = $tempValue;
                 $map->mainSlide[$index]->type = $tempOrder;
                 $map->mainSlide[$index]->imagemap->target = $tempTarget;
-                $map->mainSlide[$index]->imagemap->coordinate = $tempCoordinate;
                 $map->mainSlide[$index]->actionType = $tempType;
 
             }
