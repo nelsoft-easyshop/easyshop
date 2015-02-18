@@ -940,6 +940,8 @@ $string = '<typeNode>
             }   
             
             $sectionData['products'] = [];
+            $sectionData['subHeaders'] = [];
+
             $isFirstRun = true;
             foreach ($categorySection['sub'] as $index => $subCategory) {
             
@@ -977,6 +979,8 @@ $string = '<typeNode>
 
             $homePageData['categorySection'][] = $sectionData;
         }
+
+        
 
         $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
        
