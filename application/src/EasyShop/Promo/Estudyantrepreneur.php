@@ -277,21 +277,27 @@ class Estudyantrepreneur
      */
     public function getCurrentStandings()
     {
+        $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $roundData = $this->__getPreviousRounds();
+        $currentRound = $rounds[$roundData['round']];
         $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
         $schoolsAndStudents = $this->__getStudentsByDateAndSchool(
                                          $schools,
-                                         $roundData['previousStartDate'],
-                                         $roundData['previousEndDate'],
+                                         $currentRound['start'],
+                                         $currentRound['end'],
                                          $roundData['limit']
                                      );
-        $totalVotesPerSchool = $this->__getTotalVotesByDate($roundData['previousStartDate'], $roundData['previousEndDate']);
+        $totalVotesPerSchool = $this->__getTotalVotesByDate($currentRound['start'], $currentRound['end']);
 
         foreach ($schoolsAndStudents as $school => $students) {
 
             foreach ($students['students'] as $key => $student) {
-                $currentPercentage = ($student['vote'] / $totalVotesPerSchool[$school]) * 100;
-                $schoolsAndStudents[$school]['students'][$key]['currentPercentage'] = $currentPercentage;
+
+                if (isset($totalVotesPerSchool[$school])) {
+                    $currentPercentage = ($student['vote'] / $totalVotesPerSchool[$school]) * 100;
+                    $schoolsAndStudents[$school]['students'][$key]['currentPercentage'] = $currentPercentage;
+                }
+
             }
 
         }
