@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>  
     <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
     <link rel="stylesheet" href="/assets/css/jquery.cropper.css">
-    <link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
 <?php else: ?>
     <link type="text/css" href='/assets/css/min-easyshop.upload-step2.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
+    <link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
 
 
 <script type="text/javascript">
