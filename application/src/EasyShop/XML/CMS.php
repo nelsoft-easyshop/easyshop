@@ -162,7 +162,6 @@ class CMS
         <categorySlug>'.$value.'</categorySlug>
         <sub>
             <text>Default</text>
-            <target>/</target>
             <productSlugs> </productSlugs>
         </sub>
     </categorySection>'; 
@@ -176,7 +175,6 @@ class CMS
              $string = '
         <sub>
             <text>'.$value.'</text>
-            <target>'.$target.'</target>
             <productSlugs> </productSlugs>            
         </sub>'; 
         }           
@@ -255,13 +253,14 @@ class CMS
         }
         if($nodeName == "mainSlide") {
 
- $string = '<mainSlide> 
+        $string = '
+        <mainSlide> 
         <value>'.$value.'</value> 
         <type>image</type>
         <imagemap>
-            <coordinate>'.$coordinate.'</coordinate>
-            <target>'.$target.'</target>
+            <target>'.$coordinate.'</target>
         </imagemap>
+        <actionType>'.$target.'</actionType>
     </mainSlide>';   
 
         }
@@ -941,6 +940,8 @@ $string = '<typeNode>
             }   
             
             $sectionData['products'] = [];
+            $sectionData['subHeaders'] = [];
+
             $isFirstRun = true;
             foreach ($categorySection['sub'] as $index => $subCategory) {
             
@@ -978,6 +979,8 @@ $string = '<typeNode>
 
             $homePageData['categorySection'][] = $sectionData;
         }
+
+        
 
         $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
        
