@@ -1,5 +1,55 @@
 (function ($) {
 
+    $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
+        var btn = $(this);
+        var submitBtn = btn.closest("form");
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');          
+        var username = submitBtn.find("#usernameField").val().trim();
+        var password = submitBtn.find("#passwordField").val().trim();
+        var action = btn.data("action");
+
+        var errorPrompt = submitBtn.find("#errorPrompt");
+        var successPrompt = submitBtn.find("#successPrompt");
+        var loader = submitBtn.find("#actionLoader");
+        var activateButtons = btn.parent();
+
+        if(username !== "" || password !== "") {
+            $.ajax({
+                type: "post",
+                data: {username:username, password:password, action:action, csrfname : csrftoken},
+                url: '/memberpage/manageUserProduct',
+                beforeSend: function() {
+                    activateButtons.hide()
+                    errorPrompt.hide();
+                    successPrompt.hide();
+                    loader.show();
+                },
+                success: function(data){ 
+                    activateButtons.show();
+                    loader.hide();                
+                    var obj = jQuery.parseJSON(data);
+                    if(obj.result) {
+                        successPrompt.fadeIn();
+                    }
+                    else {
+                        errorPrompt.fadeIn();
+                        errorPrompt.find(".message").html(obj.message);
+                    }
+                },
+                error: function(data) {
+                    activateButtons.show();
+                    loader.hide();
+                }
+            });
+        }
+        else {
+            errorPrompt.fadeIn();
+            errorPrompt.find(".message").html("Please supply values to the required fields");
+        }
+
+    });
+
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
