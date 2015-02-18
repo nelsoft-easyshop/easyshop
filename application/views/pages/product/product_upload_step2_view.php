@@ -531,10 +531,8 @@
                 <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
                 <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
                 <center>
-                    <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
-                    <a class="zoomIn" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
-                    <a class="zoomOut" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-search-minus fa-2x"></i></a>
-                    <a class="rotateRight" title="Rotate Right" href="javascript:void(0)"><i class="fa fa-repeat fa-2x"></i></a>
+                    <a class="zoomIn" title="Zoom In Left" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
+                    <a class="zoomOut" title="Zoom Out" href="javascript:void(0)"><i class="fa fa-search-minus fa-2x"></i></a>
                 </center>
             </div>
             
@@ -557,8 +555,7 @@
 <script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 
 
-<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script src="/assets/js/src/vendor/hammer.js" type="text/javascript"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?> 
     <script src="/assets/js/src/vendor/jquery.cropper.js"></script> 
     <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
     <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script> 
