@@ -33,7 +33,14 @@ class MobileWebService extends MY_Controller
     /**
      * The Mobile XML resource
      */    
-    private $file;    
+    private $file;
+
+    /**
+     * @var string
+     *
+     * Default value for $type
+     */
+    const DEFAULT_MAINSLIDE_TYPE = "image";
 
     public function __construct() 
     {
@@ -109,7 +116,7 @@ class MobileWebService extends MY_Controller
     public function addMainSlide()
     {
         $value = $this->input->get("value");
-        $type = $this->input->get("type");
+        $type = self::DEFAULT_MAINSLIDE_TYPE;
         $coordinate = trim($this->input->get("coordinate"));
         $target = trim($this->input->get("target")) !== "" ?: "/"; 
         $action = $this->input->get("actionType");
@@ -158,11 +165,11 @@ class MobileWebService extends MY_Controller
         $filename = date('yhmdhs');
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");
-        $type = $this->input->get("type");
+        $type = self::DEFAULT_MAINSLIDE_TYPE;
         $order = $this->input->get("order");
         $coordinate = $this->input->get("coordinate");
         $actionType = $this->input->get("actionType");
-        $target = $this->input->get("target");
+        $target = trim($this->input->get("target")) !== "" ?: "/"; 
         $this->config->load("image_path");
 
         $map = simplexml_load_file($this->file);
