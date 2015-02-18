@@ -162,7 +162,6 @@ class CMS
         <categorySlug>'.$value.'</categorySlug>
         <sub>
             <text>Default</text>
-            <target>/</target>
             <productSlugs> </productSlugs>
         </sub>
     </categorySection>'; 
@@ -176,7 +175,6 @@ class CMS
              $string = '
         <sub>
             <text>'.$value.'</text>
-            <target>'.$target.'</target>
             <productSlugs> </productSlugs>            
         </sub>'; 
         }           
