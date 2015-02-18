@@ -588,7 +588,6 @@
     }
          
     $window.on('load resize', function() {
-        
         var widthOff = $(window).width();
         var heightHead = 200;
         var heightBanners = $(".search-parallax-container").outerHeight();
@@ -606,9 +605,16 @@
             $("#scrollUp").trigger("click");
             $(".panel-filter-search-cont").addClass("container-filter").removeAttr("style");
             $.stickysidebarscroll(".container-filter",{offset: {top: offsetTopData, bottom: 100}});
-
         }
+
+
+        
     });
+
+    $(document).find('[rel=tooltiplist]').tooltip({
+        placement : 'top'
+    });
+
 }(jQuery));
 
 
