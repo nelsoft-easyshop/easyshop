@@ -50,6 +50,25 @@ class ScratchCard extends MY_Controller
     {
         $result = $this->em->getRepository('EasyShop\Entities\EsPromo')
                            ->validateCodeForScratchAndWin($this->input->post('code'));
+
+        if ($result) {
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
+            $isMemberRegistered = $this->em->getRepository('EasyShop\Entities\EsPromo')
+                                           ->findOneBy([
+                                               'memberId' => $result[0]['c_member_id']
+                                           ]);
+            $this->serviceContainer['promo_manager']->hydratePromoData($product);
+            $result = [
+                'id_product'=> $product->getIdProduct(),
+                'price'=> $product->getPrice(),
+                'product' => $product->getName(),
+                'brief' => $product->getBrief(),
+                'c_id_code' => $result[0]['c_member_id'],
+                'can_purchase' => (bool) $isMemberRegistered ? false : true,
+                'product_image_path' => $result[0]['path']
+            ];
+        }
+
         $result['logged_in'] = true;
 
         if (!$this->session->userdata('usersession') && !$this->check_cookie()) {
