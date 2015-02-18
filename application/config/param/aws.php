@@ -3,13 +3,13 @@
 $config = [];
 
 if(ENVIRONMENT == 'production'){
-    $config['s3']['key'] = 'AKIAILHPRP3MKZRSRYPA';
-    $config['s3']['secret'] = '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';
+    $config['s3']['key'] = 'AKIAJIHHWXP22QNG5IYA';
+    $config['s3']['secret'] = '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';
     $config['s3']['bucket'] = "easyshop-production";
 }
 else{
-    $config['s3']['key'] = 'AKIAILHPRP3MKZRSRYPA';
-    $config['s3']['secret'] = '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';
+    $config['s3']['key'] = 'AKIAJIHHWXP22QNG5IYA';
+    $config['s3']['secret'] = '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';
     $config['s3']['bucket'] = "easyshop-staging";
 }
 
