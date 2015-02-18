@@ -9,13 +9,39 @@
 -->
 <map>
     <mainSlide>
-        <value>assets/images/homeslider/mobile/mobile3.jpg</value>
+        <value>assets/images/mobile/151002181046.jpg</value>
         <type>image</type>
         <imagemap>
-            <coordinate>0,0,589,352.00000000000006</coordinate>
             <target>/mobile/product/deals</target>
         </imagemap>
-        <actionType>show product list</actionType>
+        <actionType>go to page</actionType>
+    </mainSlide>
+
+	<mainSlide> 
+        <value>assets/images/mobile/151002181015.jpeg</value> 
+        <type>image</type>
+        <imagemap>
+            <target>targetasdsad</target>
+        </imagemap>
+        <actionType>go to page</actionType>
+    </mainSlide>
+
+	<mainSlide> 
+        <value>assets/images/mobile/151002181059.jpeg</value> 
+        <type>image</type>
+        <imagemap>
+            <target>asdawdasd</target>
+        </imagemap>
+        <actionType>show product details</actionType>
+    </mainSlide>
+
+	<mainSlide> 
+        <value>assets/images/mobile/151002181010.jpg</value> 
+        <type>image</type>
+        <imagemap>
+            <target>/</target>
+        </imagemap>
+        <actionType>show product details</actionType>
     </mainSlide>
 
     <section>
@@ -26,35 +52,35 @@
         <boxContent>
             <value>arbutus-soho-712-rff</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
             <value>kronen-sohne-royal-carving-116</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
             <value>arbutus-madison-ave-804-rbf</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
             <value>kronen-sohne-aviator-020</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent> 
 
         <boxContent>
             <value>kronen-sohne-royal-carving-119</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent> 
 
@@ -68,21 +94,21 @@
         <boxContent>
             <value>nature-cover-up-beach-dress</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
             <value>sweet-candy-stripe-two-piece-bikini-with-dress</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
             <value>two-piece-lace-floral-dress</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
     </section>
@@ -95,28 +121,28 @@
         <boxContent>
             <value>motives-foundation</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
 
         <boxContent>
             <value>the-make-up-of-make-up-artists</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
             <value>milea-mineral-powder-blusher-2g-rose</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
         
         <boxContent>
             <value>nova-2-in-1-hair-beauty-set</value>
             <type>product</type>
-            <target></target>
+            <target/>
             <actionType>show product details</actionType>
         </boxContent>
     </section>
