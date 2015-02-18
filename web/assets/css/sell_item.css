@@ -1428,38 +1428,45 @@ li.brand_result:hover{
 }
 
 @media (min-width: 320px) {
-    .imageContainer {
+    #imageTag, .imageContainer {
         height: auto !important; 
         width: auto !important;
         max-width: 200px !important;
-    }
-    .cropper-container{
-        left: 0 !important;
+        max-height: 200px !important;
     }
 } 
 
 @media (min-width: 767px) {
-    .imageContainer {
+    #imageTag, .imageContainer {
         height: auto !important; 
         width: auto !important;
-        max-width: 300px !important;
-    }
+        max-width: 310px !important;
+        max-height: 310px !important;
+    } 
 }
 
 @media (min-width: 991px) {
-    .imageContainer {
+    #imageTag, .imageContainer {
         height: auto !important; 
         width: auto !important;
         max-width: 370px !important;
+        max-height: 370px !important;
     }
 }
 
 @media (min-width: 1200px) {
-    .imageContainer {
+    #imageTag, .imageContainer {
         height: auto !important; 
         width: auto !important;
         max-width: 400px !important;
+        max-height: 400px !important;
     }
+}
+
+.cropper-container{
+    left: 0 !important;
+    top: 0 !important; 
+    margin: 0 auto;
 }
  
 

@@ -1176,11 +1176,10 @@ var errorValues = "";
 var axes = [];
 var sizeList = [];
 var extensionList = [];
-var imageCollection = []; 
-var ratioDifference = 25;
+var imageCollection = [];  
 var totalCropImage;
-var imageTage
-var rotateValue = 0;
+var imageTage;
+var rotateValue = 0; 
 var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
 
 (function($) {
@@ -1209,8 +1208,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             || currentExtension == 'jpg' 
             || currentExtension == 'png' 
             || currentExtension == 'jpeg') 
-            && currentSize < maxImageSize){
-           
+            && currentSize < maxImageSize){ 
             $('.imageContainer > #imageTag').attr('src',targetImage);
             $("<img/>") // Make in memory copy of image to avoid css issues
                 .attr("src", $('.imageContainer > #imageTag').attr("src"))
@@ -1226,7 +1224,11 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                                 var yCoord = $('#image_y').val();
                                 var wCoord = $('#image_w').val();
                                 var hCoord = $('#image_h').val();
-                                var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord + "," + rotateValue;
+                                var coordinate = xCoord + "," + 
+                                                 yCoord + "," + 
+                                                 wCoord + "," + 
+                                                 hCoord + "," + 
+                                                 rotateValue;
                                 af.push(afTemp[cropCurrentCount]);
                                 axes.push(coordinate); 
                                 cropCurrentCount++;  
@@ -1246,36 +1248,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             }
                         },
                         open: function() {
-                            $(this).parent().addClass('pop-up-fixed'); 
-                            imageTag = $(".imageContainer > #imageTag");
-                            var ImageHeight = imageTag.height(); 
-                            var ImageWidth = imageTag.width(); 
-                            imageTag.cropper({ 
-                                data: { 
-                                    width: ImageWidth,
-                                    height: ImageHeight
-                                }, 
-                                rotatable: true,
-                                multiple: false,
-                                dragCrop: false,
-                                dashed: false,
-                                movable: false, 
-                                resizable: false,
-                                dashed: true, 
-                                done: function(data) { 
-                                    $('#image_x').val(data.x);
-                                    $('#image_y').val(data.y);
-                                    $('#image_w').val(data.width);
-                                    $('#image_h').val(data.height);
-                                }
-                            });
-
-                            setTimeout(function() {
-                                var MainwindowHeight = $(window).height();
-                                var UidialogHeight = $(".ui-dialog").outerHeight();
-                                var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
-                                $(".ui-dialog").css("top", UidialogTop);
-                            }, 0);
+                            $(this).parent().addClass('pop-up-fixed');
+                            newCropper();
                         },
                         close: function(){
                             $('.imageContainer > #imageTag').attr('src', '');
@@ -1304,19 +1278,39 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                 $input.remove();
             }
         }
-    }
+    } 
 
-     $(document).on('click','.rotateLeft',function(e){
-        rotateValue += 90;
-        rotateValue = rotateValue >= 360 ? 0 : rotateValue; 
-        imageTag.cropper("rotate", -90);
-    });
+    function newCropper()
+    {
+        var imageContainerWidth = $(".imageContainer").width(); 
+        imageTag = $(".imageContainer > #imageTag");  
+        imageTag.cropper({ 
+            data: { 
+                x: 0,
+                y: 0
+            },  
+            minContainerWidth: imageContainerWidth, 
+            multiple: false,
+            dragCrop: false,
+            dashed: false,
+            movable: false, 
+            resizable: false,
+            dashed: true, 
+            done: function(data) { 
+                $('#image_x').val(data.x);
+                $('#image_y').val(data.y);
+                $('#image_w').val(data.width);
+                $('#image_h').val(data.height);
+            }
+        });
 
-    $(document).on('click','.rotateRight',function(e){
-        rotateValue -= 90; 
-        rotateValue = rotateValue < 0 ? 270 : rotateValue;
-        imageTag.cropper("rotate", 90);
-    });
+        setTimeout(function() { 
+            var MainwindowHeight = $(window).height();
+            var UidialogHeight = $(".ui-dialog").outerHeight();
+            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+            $(".ui-dialog").css("top", UidialogTop);
+        }, 50);
+    } 
 
     $(document).on('click','.zoomIn',function(e){ 
         imageTag.cropper("zoom", 0.2);
@@ -1587,36 +1581,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     },
                     open: function() { 
                         $(this).parent().addClass('pop-up-fixed');
-                        imageTag = $(".imageContainer > #imageTag"); 
-                        var ImageHeight = imageTag.height(); 
-                        var ImageWidth = imageTag.width(); 
-                        imageTag.cropper({ 
-                            data: { 
-                                width: ImageWidth,
-                                height: ImageHeight
-                            }, 
-                            rotatable: true,
-                            multiple: false,
-                            dragCrop: false,
-                            dashed: false,
-                            movable: false, 
-                            resizable: false,
-                            dashed: true, 
-                            done: function(data) { 
-                                $('#image_x').val(data.x);
-                                $('#image_y').val(data.y);
-                                $('#image_w').val(data.width);
-                                $('#image_h').val(data.height);
-                            }
-                        });
-
-
-                        setTimeout(function() { 
-                            var MainwindowHeight = $(window).height();
-                            var UidialogHeight = $(".ui-dialog").outerHeight();
-                            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
-                            $(".ui-dialog").css("top", UidialogTop);
-                        }, 0);
+                        newCropper();
                     },
                     close: function(){  
                         $('.imageContainer >  #imageTag').attr('src', '');
