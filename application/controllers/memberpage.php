@@ -1622,14 +1622,15 @@ class Memberpage extends MY_Controller
                         break;
                 }
                 $productManager = $this->serviceContainer['product_manager'];
+                $isUpdateSuccess = false;
                 if($isActionValid) {
-                    $updateResult = $productManager->updateUserProductStatus(
+                    $isUpdateSuccess = $productManager->updateUserProductStatus(
                                                         $member["member"]->getIdMember(), 
                                                         $productStatus, 
                                                         $desiredStatus
                                                     );
                 }
-                if(!$isActionValid || !$updateResult) {
+                if(!$isUpdateSuccess) {
                     $resultMessage = "Database Error";
                     $actionResult = false;
                 }
