@@ -345,6 +345,13 @@ class EsProduct
     /**
      *  @var integer
      *
+     *  isDelete value for deleted items
+     */
+    const DISABLE = 2;
+
+    /**
+     *  @var integer
+     *
      *  isDraft value for drafted items ( item can be restored )
      */
     const DRAFT = 1;
