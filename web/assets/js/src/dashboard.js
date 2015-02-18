@@ -5,8 +5,8 @@
         var submitBtn = btn.closest("form");
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');          
-        var username = submitBtn.find("#usernameField").val().trim();
-        var password = submitBtn.find("#passwordField").val().trim();
+        var username = submitBtn.find("#usernameField");
+        var password = submitBtn.find("#passwordField");
         var action = btn.data("action");
 
         var errorPrompt = submitBtn.find("#errorPrompt");
@@ -17,7 +17,10 @@
         if(username !== "" || password !== "") {
             $.ajax({
                 type: "post",
-                data: {username:username, password:password, action:action, csrfname : csrftoken},
+                data: {username:username.val().trim(), 
+                       password:password.val().trim(), 
+                       action:action, 
+                       csrfname : csrftoken},
                 url: '/memberpage/manageUserProduct',
                 beforeSend: function() {
                     activateButtons.hide()
@@ -27,15 +30,17 @@
                 },
                 success: function(data){ 
                     activateButtons.show();
-                    loader.hide();                
+                    loader.hide();
                     var obj = jQuery.parseJSON(data);
                     if(obj.result) {
-                        successPrompt.fadeIn();
+                        successPrompt.fadeIn().delay(1000).fadeOut("slow");
                     }
                     else {
-                        errorPrompt.fadeIn();
+                        errorPrompt.fadeIn().delay(1000).fadeOut("slow");
                         errorPrompt.find(".message").html(obj.message);
                     }
+                    username.val("");
+                    password.val("");
                 },
                 error: function(data) {
                     activateButtons.show();
@@ -44,7 +49,7 @@
             });
         }
         else {
-            errorPrompt.fadeIn();
+            errorPrompt.fadeIn().delay(1000).fadeOut("slow");
             errorPrompt.find(".message").html("Please supply values to the required fields");
         }
 
