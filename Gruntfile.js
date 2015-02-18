@@ -404,13 +404,14 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.user_register.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/jquery.cookie.js',
+                             'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/vendor/jquery.bxslider.min.js',
                              'web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
                              'web/assets/js/src/vendor/password_meter.js',
-                             'web/assets/js/src/landingpage-responsive-nav.js',
-                             'web/assets/js/src/landingpage.js'],
+                             'web/assets/js/src/landingpage.js',
+                             'web/assets/js/src/login.js'],
 
                     'web/assets/js/min/easyshop.user_register_subscribe_success.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',

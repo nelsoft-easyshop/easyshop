@@ -3,6 +3,7 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsPromoType;
 
 class EsPromoRepository extends EntityRepository
 {
@@ -54,24 +55,6 @@ class EsPromoRepository extends EntityRepository
                     ->setParameter('promoType', EsPromoType::SCRATCH_AND_WIN)
                     ->getQuery();
         $result = $query->getResult();
-
-        if ($result) {
-            $product = $this->_em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
-            $isMemberRegistered = $this->_em->getRepository('EasyShop\Entities\EsPromo')
-                                            ->findOneBy([
-                                                'memberId' => $result[0]['c_member_id']
-                                            ]);
-            $this->_em->serviceContainer['promo_manager']->hydratePromoData($product);
-            $result = [
-                'id_product'=> $product->getIdProduct(),
-                'price'=> $product->getPrice(),
-                'product' => $product->getName(),
-                'brief' => $product->getBrief(),
-                'c_id_code' => $result[0]['c_member_id'],
-                'can_purchase' => (bool) $isMemberRegistered ? false : true,
-                'product_image_path' => $result[0]['path']
-            ];
-        }
 
         return $result;
     }

@@ -53,42 +53,53 @@
      <section class="new-login-register">
         <div class="new-login-register-content">
             <div class="login-logo">
-                <a href="">
+                <a href="/">
                     <img src="/assets/images/es-logo-login.png" alt="Easyshop">
                 </a>
             </div>
             <div id="adv2" class="login-tabs">
                 <div id="alter-tab" class="idTabs">
-                    <div class="idtabs-tab"><a href="#login">login</a></div>
-                    <div id="anchor-create" class="idtabs-tab"><a href="#create-account">create an account</a></div>
+                    <div class="idtabs-tab" ><a href="#login" id="tab-login" >login</a></div>
+                    <div class="idtabs-tab" id="anchor-create" ><a href="#create-account" id="tab-create" >create an account</a></div>
                     <span class="clear"></span>
                 </div>
 
             </div>
 
             <div id="login">
+                <input type='hidden' value='<?php echo isset($loginFail)? $loginFail : ""; ?>' id='loginFail'/>
+                <input type='hidden' value='<?php echo isset($timeoutLeft)? $timeoutLeft : ""; ?>' id='timeoutLeft'/>
                 <div class="login-left-content">
                     <div class="login-left-border">
                         <h1>login to your account</h1>
                         <div>
-                            <?php echo form_open('login');?>
+                            <?php $attr = array('id'=>'login_form'); ?>
+                            <?php echo form_open('', $attr); ?>
                                 <div class="row">
                                     <label class="col-xs-12 col-sm-4">Username:</label>
                                     <span class="col-xs-12 col-sm-8 padding-reset">
-                                        <input class="ui-form-control" type="text" name='login_username'>
+                                        <input class="ui-form-control" type="text" id="login_username" name='login_username'>
+                                        <span id="username_error" style="color:#f42800">
                                     </span>
                                 </div>
                                 <div class="row">
                                     <label class="col-xs-12 col-sm-4">Password:</label>
                                     <span class="col-xs-12 col-sm-8 padding-reset">
-                                        <input class="ui-form-control" type="password" name='login_password'>
+                                        <input class="ui-form-control" type="password" id='login_password' name='login_password'>
+                                        <span id="passw_error" style="color:#f42800">
+                                        <span id="login_error" style="color:#f42800">
+                                        <?php $formError = isset($errors) ? reset($errors)['login'] : ''; ?>
+                                        <?php if($formError !== 'Account Deactivated' && $formError !== 'Account Banned'):  ?>
+                                            <?php echo html_escape($formError); ?>
+                                        <?php endif; ?>
+                                        </span>
                                     </span>
                                 </div>
-                                <div class="row">
+                                <div class="row" >
                                     <span class="col-xs-12  padding-right-reset">
-                                        <span class="input-error error-deactivated">
-                                            Oooops! This account is currently deactivated. 
-                                            If you want to reactivate your account click <a href="">here</a> to send 
+                                        <span id="deactivatedAccountPrompt" class="input-error error-deactivated" style="display: <?=$formError === 'Account Deactivated' ? 'block' : 'none'  ?>">
+                                            Oooops! This account is currently deactivated.
+                                            If you want to reactivate your account click <a id='sendReactivationLink' data-id="" >here</a> to send
                                             a reactivation link to your email.
                                         </span>
                                     </span>
@@ -108,6 +119,9 @@
                                         <input type="submit" class="btn btn-default-3" value='Login' name='login_form'/>
                                     </span>
                                 </div>
+                                <?php if($formError === 'Account Banned'): ?>
+                                    <input type="hidden" id="account-banned-error" value="true" data-message="<?php echo reset($errors)['message']; ?>">
+                                <?php endif; ?>
                             <?php echo form_close();?>
                         </div>
                     </div>
@@ -115,13 +129,13 @@
                 <div class="login-right-content">
                     <h1>use your social network account</h1>
                     <div>
-                         <a href="" class="btn facebook-btn">
+                         <a href="<?=$facebook_login_url?>" class="btn facebook-btn">
                             <span class="log-in-img"><img src="/assets/images/img-log-in-fb.png"></span>
                             <span class="text-center">Log In with Facebook</span>
                         </a>
                     </div>
                     <div>
-                        <a href="" class="btn google-btn">
+                        <a href="<?=$google_login_url?>" class="btn google-btn">
                             <span class="log-in-img"><img src="/assets/images/img-log-in-google.png"></span>
                             <span class="text-center">Log In with Google</span>
                         </a>
@@ -133,6 +147,9 @@
                         </span>
                     </div>
                 </div>
+                <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
+                <input type='hidden' value='<?php echo $dayRange.' '.$hourRange; ?>' id='office_hours'/>
+                <input type='hidden' value='<?php echo $officeContactNo ?>' id='office_contactno'/>
                 <div class="clear"></div>
             </div>
             <!-- create account section -->
@@ -173,7 +190,7 @@
                         <?php if($is_promo):?>
                             <div class="reg2_fullname" style="display: inline-block>">
                                 <div class="row">
-                                    <label class="col-xs-12 col-sm-5">Username</label>
+                                    <label class="col-xs-12 col-sm-5">Fullname</label>
                                     <span class="col-xs-12 col-sm-7">
                                         <input type="text" placeholder="" id="fullname" name="fullname" class="reqfield ui-form-control" autocomplete="off" value="">
                                         <span class="red ci_form_validation_error"><?php echo form_error('fullname'); ?></span>
@@ -437,7 +454,7 @@
 
 <script type="text/javascript">
     var config = {
-         base_url: "<?php echo base_url(); ?>",
+         base_url: "<?php echo base_url(); ?>"
     };
 </script>
 
@@ -446,10 +463,12 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.cookie.js"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
