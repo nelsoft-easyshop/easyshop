@@ -255,13 +255,15 @@ class CMS
         }
         if($nodeName == "mainSlide") {
 
- $string = '<mainSlide> 
+        $string = '
+        <mainSlide> 
         <value>'.$value.'</value> 
         <type>image</type>
         <imagemap>
-            <coordinate>'.$coordinate.'</coordinate>
-            <target>'.$target.'</target>
+            <coordinate>'.$type.'</coordinate>
+            <target>'.$coordinate.'</target>
         </imagemap>
+        <actionType>'.$target.'</actionType>
     </mainSlide>';   
 
         }
