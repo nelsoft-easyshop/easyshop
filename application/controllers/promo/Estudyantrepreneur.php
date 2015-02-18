@@ -20,59 +20,50 @@ class Estudyantrepreneur extends MY_Controller
      */
     public function EstudyantrepreneurPromo()
     {
-        $headerData = [
-            'memberId' => $this->session->userdata('member_id'),
-            'title' => 'Estudyantrepreneur | Easyshop.ph',
-            'metadescription' => ''
-        ];
         $data = $this->promoManager
                      ->callSubclassMethod(
                         \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
                         'getSchoolWithStudentsByRound'
                      );
-        $bodyData = [
-            'schools_and_students' => $data['schools_and_students'],
-            'round' => $data['round'],
-        ];
 
-        $this->load->spark('decorator');
-        // $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/promo/estudyantrepreneur', $bodyData);
-        // $this->load->view('templates/footer');
+        $this->load->view('pages/promo/estudyantrepreneur', $data);
     }
 
+    /**
+     * Retrieves success page
+     */
     public function EstudyantrepreneurPromoSuccess()
     {
-        $headerData = [
-            'memberId' => $this->session->userdata('member_id'),
-            'title' => 'Estudyantrepreneur | Easyshop.ph',
-            'metadescription' => ''
-        ];
-        $data = $this->promoManager
-                     ->callSubclassMethod(
-                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
-                        'getSchoolWithStudentsByRound'
-                     );
+        if (!$this->input->post('studentId') || !$this->input->post('schoolName')) {
+            redirect('/Estudyantrepreneur', 'refresh');
+        }
+
+        $studentId = (int) trim($this->input->post('studentId'));
+        $memberId = $this->session->userdata('member_id');
+        $data = $this->__vote($studentId, $memberId);
+        $getCurrentStandings = $this->promoManager
+                                    ->callSubclassMethod(
+                                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                                        'getCurrentStandings'
+                                    );
+
         $bodyData = [
-            'schools_and_students' => $data['schools_and_students'],
-            'round' => $data['round'],
+            'currentStandings' => $getCurrentStandings[$this->input->post('schoolName')],
+            'result' => $data,
         ];
 
-        $this->load->spark('decorator');
-        // $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/estudyantrepreneur_success', $bodyData);
-        // $this->load->view('templates/footer');
     }
 
     /**
      * Vote for a student
-     * @Return JSON
+     * @Param $studentId
+     * @Return array
      */
-    public function vote()
+    private function __vote($studentId, $memberId)
     {
-        $studentId = (int) trim($this->input->post('studentId'));
+        $studentId = (int) $studentId;
         $studentEntity = $this->em->find('EasyShop\Entities\EsStudent', $studentId);
-        $memberId = $this->session->userdata('member_id');
         $isUserAlreadyVoted = $this->promoManager
                                    ->callSubclassMethod(
                                        \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
@@ -87,9 +78,7 @@ class Estudyantrepreneur extends MY_Controller
         ];
 
         if ($isUserAlreadyVoted) {
-            $result = [
-                'errorMsg' => 'You have already voted'
-            ];
+            $result['errorMsg'] = 'Sorry, but you can only vote once per round. Please check back on the <a href="/Estudyantrepreneur#mechanics">mechanics</a> for the next round of voting.';
         }
         elseif ($studentEntity) {
             $isVoteStudentSuccessful = $this->promoManager
@@ -102,13 +91,13 @@ class Estudyantrepreneur extends MY_Controller
                                                 ]);
             if ($isVoteStudentSuccessful) {
                 $result = [
-                    'errorMsg' => 'You have successfully voted',
+                    'errorMsg' => '',
                     'isSuccessful' => true
                 ];
             }
         }
 
-        echo json_encode($result);
+        return $result;
     }
 
 }

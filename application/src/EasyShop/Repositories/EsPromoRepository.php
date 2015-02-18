@@ -115,4 +115,27 @@ class EsPromoRepository extends EntityRepository
         return $query->getOneOrNullResult();
     }
 
+    /**
+     * Get total vote per school by date
+     * @param $startDate
+     * @param $endDate
+     * @return array
+     */
+    public function getTotalVotesByDate($startDate, $endDate)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('schoolTbl.name, count(promoTbl.memberId) as vote')
+                    ->from('EasyShop\Entities\EsPromo', 'promoTbl')
+                    ->leftJoin('EasyShop\Entities\EsStudent', 'studentTbl', 'WITH', 'studentTbl.idStudent = promoTbl.studentId')
+                    ->leftJoin('EasyShop\Entities\EsSchool', 'schoolTbl', 'WITH', 'schoolTbl.idSchool = studentTbl.school')
+                    ->where('promoTbl.createdAt >= :startDate')
+                    ->andWhere('promoTbl.createdAt < :endDate')
+                    ->groupBy('studentTbl.school')
+                    ->setParameter('startDate', $startDate)
+                    ->setParameter('endDate', $endDate)
+                    ->getQuery();
+
+        return $query->getResult();
+    }
+
 }

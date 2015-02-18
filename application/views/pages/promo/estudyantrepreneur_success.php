@@ -56,20 +56,25 @@
         <section class="ty-comment-section">
             <div class="container load-animate">
                 <div class="box">
-                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
-                        <h3>THANK YOU COMMENT</h3>
-                        <p class="text-align-justify">
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod 
-                            tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis 
-                            nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. 
-                            Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel 
-                            illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui 
-                            blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber 
-                            tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat 
-                            facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit 
-                            eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.
-                        </p>
+                    <?PHP if ($result['isSuccessful'] === true) : ?>
+                    <div id="success">
+                        <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                            <h3><b>THANK YOU FOR VOTING!</b></h3>
+                            <p class="text-align-justify">
+                                We have already counted your vote.
+                            </p>
+                            <br>
+                            <h3>See below for the current standings:</h3>
+                        </div>
                     </div>
+                    <?PHP else : ?>
+                    <div id="failed">
+                        <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                            <h3><b><?=$result['errorMsg'] ?></b></h3>
+                            <h3>See below for the current standings:</h3>
+                        </div>
+                    </div>
+                    <?PHP endif; ?>
                 </div>
             </div>
         </section>
@@ -80,26 +85,18 @@
                     <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
                         <h3>CURRENT STATS</h3>
                         <ul>
-                            <li>
-                               <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor  Lorem ipsum dolor sit amet uis nostrud  Lorem ipsum 
-                                    dolor sit amet uis nostrud 
-                                     Lorem ipsum dolor sit amet uis nostrud 
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
-                            <li>
-                                <span class="school-name">
-                                    Lorem ipsum dolor sit amet uis nostrud exerci tation ullamcorper
-                                </span>
-                                <span class="school-percentage">50%</span>
-                            </li>
+                            <?PHP if (isset($currentStandings['students'])) : ?>
+                                <?PHP foreach ($currentStandings['students'] as $student) : ?>
+                                    <li>
+                                       <span class="school-name">
+                                            <?=html_escape($student['student'])?>
+                                        </span>
+                                        <span class="school-percentage"><?=number_format($student['currentPercentage'])?>%</span>
+                                    </li>
+                                <?PHP endforeach; ?>
+                            <?PHP else : ?>
+                                <p>School not available</p>
+                            <?PHP endif; ?>
                         </ul>
                     </div>
                 </div>
@@ -112,17 +109,20 @@
                     <div class="span12 padding-top-30">
                         <h3>Make sure you don't miss interesting events, sale, 
                             <br>and more by joining our newsletter program.
-                        </h5>
+                        </h3>
                         <br>
-                        <form method="post" action="newsletter.php" class="newsletter-form">
+                        <form method="post" id="register" action="/subscribe" class="newsletter-form">
                             <div class="row-fluid">
                                 <fieldset>
-                                    <input class="span6" type="email" placeholder="Your e-mail here" name="email" required><br>
-                                    <button class="btn btn-primary" type="submit">SUBSRIBE</button>
+                                    <?php echo form_open('/subscribe');?>
+                                    <input type="text" id="useremail" class="span6" name="email" placeholder="Your e-mail here">
+                                    <input type="submit" value="subscribe" class="btn btn-primary" name="subscribe_btn">
+                                    <?php echo form_close();?>
                                 </fieldset>
-                            </div>           
-                            <div class="newsletter-info">Thanks for subscribing</div>
-                            <div class="newsletter-validate">Please enter a valid e-mail'</div>
+                            </div>
+                            <div class="newsletter-info-blank">Please enter your email address.</div>
+                            <div class="newsletter-info">Thank you for subscribing.</div>
+                            <div class="newsletter-validate">Please enter a valid e-mail address</div>
                         </form>
                     </div>
                 </div>
