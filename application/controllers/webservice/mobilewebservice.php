@@ -118,7 +118,8 @@ class MobileWebService extends MY_Controller
         $value = $this->input->get("value");
         $type = self::DEFAULT_MAINSLIDE_TYPE;
         $coordinate = trim($this->input->get("coordinate"));
-        $target = trim($this->input->get("target")) !== "" ?: "/"; 
+        $target = trim($this->input->get("target")); 
+        $target = $target !== "" ? $target : "/";
         $action = $this->input->get("actionType");
         $this->config->load("image_path");
         $filename = date('yhmdhs');
@@ -169,7 +170,8 @@ class MobileWebService extends MY_Controller
         $order = $this->input->get("order");
         $coordinate = $this->input->get("coordinate");
         $actionType = $this->input->get("actionType");
-        $target = trim($this->input->get("target")) !== "" ?: "/"; 
+        $target = trim($this->input->get("target")); 
+        $target = $target !== "" ? $target : "/";
         $this->config->load("image_path");
 
         $map = simplexml_load_file($this->file);
@@ -282,9 +284,9 @@ class MobileWebService extends MY_Controller
 
         $value = $this->input->get("value");
         $type = $this->input->get("type");
-        $target = trim($this->input->get("target")) !== "" ?: "/";
+        $target = trim($this->input->get("target"));
         $actionType = $this->input->get("actionType");
-
+        $target = $target === "" ? "/" : $target;
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType); 
         $map = simplexml_load_file($this->file);
 
@@ -326,7 +328,8 @@ class MobileWebService extends MY_Controller
         $order = $this->input->get("order");
         $value = $this->input->get("value");
         $type = $this->input->get("type");
-        $target = trim($this->input->get("target")) !== "" ?: "/";
+        $target = trim($this->input->get("target")); 
+        $target = $target !== "" ? $target : "/";
         $actionType = $this->input->get("actionType");
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType);
 
