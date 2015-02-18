@@ -190,7 +190,7 @@
                         <?php if($is_promo):?>
                             <div class="reg2_fullname" style="display: inline-block>">
                                 <div class="row">
-                                    <label class="col-xs-12 col-sm-5">Username</label>
+                                    <label class="col-xs-12 col-sm-5">Fullname</label>
                                     <span class="col-xs-12 col-sm-7">
                                         <input type="text" placeholder="" id="fullname" name="fullname" class="reqfield ui-form-control" autocomplete="off" value="">
                                         <span class="red ci_form_validation_error"><?php echo form_error('fullname'); ?></span>
