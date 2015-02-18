@@ -1309,7 +1309,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             var UidialogHeight = $(".ui-dialog").outerHeight();
             var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
             $(".ui-dialog").css("top", UidialogTop);
-        }, 50);
+        }, 200);
     } 
 
     $(document).on('click','.zoomIn',function(e){ 

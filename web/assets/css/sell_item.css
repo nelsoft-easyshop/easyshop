@@ -1467,6 +1467,7 @@ li.brand_result:hover{
     left: 0 !important;
     top: 0 !important; 
     margin: 0 auto;
+    border: 1px dashed;
 }
  
 
