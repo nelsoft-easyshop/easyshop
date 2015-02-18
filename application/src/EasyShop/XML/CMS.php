@@ -162,7 +162,6 @@ class CMS
         <categorySlug>'.$value.'</categorySlug>
         <sub>
             <text>Default</text>
-            <target>/</target>
             <productSlugs> </productSlugs>
         </sub>
     </categorySection>'; 
