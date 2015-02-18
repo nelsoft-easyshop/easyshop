@@ -525,17 +525,17 @@
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
                 <div class="imageContainer"> 
                     <img src="" id="imageTag">
-                </div>
+                </div><br />
                 <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
                 <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
                 <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
                 <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
-                <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
-                <a class="zoomIn" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
-                <a class="zoomOut" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-search-minus fa-2x"></i></a>
-                
-                <a class="rotateRight" title="Rotate Right" href="javascript:void(0)"><i class="fa fa-repeat fa-2x"></i></a>
-            
+                <center>
+                    <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
+                    <a class="zoomIn" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
+                    <a class="zoomOut" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-search-minus fa-2x"></i></a>
+                    <a class="rotateRight" title="Rotate Right" href="javascript:void(0)"><i class="fa fa-repeat fa-2x"></i></a>
+                </center>
             </div>
             
         </div>
