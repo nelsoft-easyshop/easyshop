@@ -279,6 +279,10 @@ html, body {
     width: 100%;
 }
 
+.pass-container {
+    width: auto !important;
+}
+
 .pass-bar {
     border-radius: 4px;
     height: 8px;
