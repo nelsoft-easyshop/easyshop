@@ -10,12 +10,14 @@ module.exports = function (grunt) {
                 files: {
                     'js/src/vendor/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
-                    'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js'
+                    'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js',
+                    'js/src/vendor/jquery.cropper.js': 'cropper/dist/cropper.js'
                 }
             },
             stylesheets: {
                 files: {
-                    'css/bootstrap.css': 'bootstrap/dist/css/bootstrap.css'
+                    'css/bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
+                    'css/jquery.cropper.css': 'cropper/dist/cropper.min.css'
                 }
             },
         },
@@ -90,7 +92,8 @@ module.exports = function (grunt) {
                         'web/assets/css/ion.rangeSlider.skinFlat.css',
                         'web/assets/css/bootstrap.css',
                         'web/assets/css/bootstrap-mods.css', 
-                        'web/assets/css/jquery.cropbox.css',
+                        'web/assets/css/font-awesome/css/font-awesome.min.css',
+                        'web/assets/css/jquery.cropper.css',
                         'web/assets/css/chosenwtihcreate.min.css'], 
                      
                     'web/assets/css/min-easyshop.upload-step3.css':
@@ -290,9 +293,8 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/productUpload_step2.js',
                              'web/assets/tinymce/plugins/jbimages/js/jquery.form.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/vendor/hammer.js',
-                             'web/assets/js/src/vendor/jquery.cropbox.js'],
+                             'web/assets/js/src/vendor/jquery.validate.js', 
+                             'web/assets/js/src/vendor/jquery.cropper.js'],
 
                     'web/assets/js/min/easyshop.product_upload_step3_view.js':
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
