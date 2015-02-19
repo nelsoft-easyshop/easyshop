@@ -87,7 +87,7 @@
                                     <span class="col-xs-12 col-sm-8 padding-reset">
                                         <input class="ui-form-control" type="password" id='login_password' name='login_password'>
                                         <span id="passw_error" style="color:#f42800">
-                                        <span id="login_error" style="color:#f42800">
+                                        <span id="login_error">
                                         <?php $formError = isset($errors) ? reset($errors)['login'] : ''; ?>
                                         <?php if($formError !== 'Account Deactivated' && $formError !== 'Account Banned'):  ?>
                                             <?php echo html_escape($formError); ?>
