@@ -444,8 +444,8 @@ class NewHomeWebService extends MY_Controller
         if ( ! $this->upload->do_upload("myfile")) {
             $error = ['error' => $this->upload->display_errors()];
                      return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($error);
+                                 ->set_content_type('application/json')
+                                 ->set_output(json_encode($error));
         } 
         else {
             $uploadData = $this->upload->data();  
@@ -479,9 +479,10 @@ class NewHomeWebService extends MY_Controller
             } 
 
             if($result) {
+
                 return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json); 
+                            ->set_content_type('application/json')
+                            ->set_output($this->json); 
             }   
         } 
     }    
@@ -520,8 +521,8 @@ class NewHomeWebService extends MY_Controller
             if ( ! $this->upload->do_upload("myfile")) {
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
-                                ->set_content_type('application/json')
-                                ->set_output($error);
+                                     ->set_content_type('application/json')
+                                     ->set_output(json_encode($error));
             } 
             else {
                 $uploadData = $this->upload->data();                  
@@ -558,8 +559,8 @@ class NewHomeWebService extends MY_Controller
 
         if($result) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }          
         
     }
@@ -629,8 +630,8 @@ class NewHomeWebService extends MY_Controller
                         
         if(!$product){
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);
+                        ->set_content_type('application/json')
+                        ->set_output( $this->slugerrorjson);
         }
         else {
             $map->sellerSection->productPanel[$index]->slug = $slug;
@@ -924,7 +925,7 @@ class NewHomeWebService extends MY_Controller
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext)); 
             $this->config->load("image_path");                 
-            $path_directory = $this->config->item('assets_images_directory');
+            $path_directory = $this->config->item('partner_img_directory').($action === "logo" ? "/" : "/banners/");
 
             $this->upload->initialize([ 
                 "upload_path" => $path_directory,
@@ -939,7 +940,7 @@ class NewHomeWebService extends MY_Controller
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
                                 ->set_content_type('application/json')
-                                ->set_output($error);
+                                ->set_output(json_encode($error));
             } 
             else {
                 $uploadData = $this->upload->data();                
