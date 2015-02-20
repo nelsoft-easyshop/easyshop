@@ -26,7 +26,31 @@ class Estudyantrepreneur extends MY_Controller
                         'getSchoolWithStudentsByRound'
                      );
 
-        $this->load->view('pages/promo/estudyantrepreneur', $data);
+        if ($data['showSuccessPage'] || $data['doesPromoEnded']) {
+            $getCurrentStandings['schools_and_students'] = $this->promoManager
+                                        ->callSubclassMethod(
+                                            \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                                            'getStandingsByRound',
+                                            [
+                                                $data['previousRound']
+                                            ]
+                                        );
+
+            if ($data['round'] === 'second_round') {
+                $getCurrentStandings['successMessage'] = "Congratulations to the businesses who made it to the top 3. We wish you the best of luck at the inter-school poll!";
+            }
+            else {
+                $getCurrentStandings['successMessage'] = "success message for the winner";
+            }
+
+            $this->load->view('pages/promo/estudyantrepreneur_congrats', $getCurrentStandings);
+        }
+        else {
+            $this->load->view('pages/promo/estudyantrepreneur', $data);
+        }
+
+
+
     }
 
     /**
@@ -44,7 +68,7 @@ class Estudyantrepreneur extends MY_Controller
         $getCurrentStandings = $this->promoManager
                                     ->callSubclassMethod(
                                         \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
-                                        'getCurrentStandings'
+                                        'getStandingsByRound'
                                     );
 
         $bodyData = [

@@ -42,41 +42,50 @@ class Estudyantrepreneur
     {
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $date = new \DateTime;
-        $dateToday = $date->getTimestamp();
-        $round = false;
+//        $dateToday = $date->getTimestamp();
+        $dateToday = strtotime('2015-03-07');
         $previousStartDate = '';
         $previousEndDate = '';
         $case = '';
         $limit = 0;
         $previousRound = '';
         $round = false;
+        $keys = array_keys($rounds);
+        end($keys);
 
         foreach ($rounds as $key => $data) {
             $startDate = strtotime($data['start']);
             $endDate = strtotime($data['end']);
-            if ($dateToday >= $startDate && $dateToday < $endDate) {
+            $foundIndex = array_search($key, $keys);
+            $doesPromoStart = $dateToday >= $startDate && $dateToday < $endDate;
+
+            if ($foundIndex !== 0) {
+                $previousRound = $dateToday > $endDate && $foundIndex === key($keys) ? $keys[$foundIndex] : $keys[$foundIndex-1];
+                $previousStartDate = $rounds[$previousRound]['start'];
+                $previousEndDate = $rounds[$previousRound]['end'];
+            }
+
+            $showSuccessPage = $previousEndDate && ($dateToday > strtotime($previousEndDate) && $dateToday < $startDate);
+
+            if ($doesPromoStart || $showSuccessPage) {
                 $round = $key;
                 $case = $round;
                 $limit = (int) $data['limit'];
 
-                $keys = array_keys($rounds);
-                $found_index = array_search($key, $keys);
-                if ($found_index === true || $found_index !== 0) {
-                    $previousRound = $keys[$found_index-1];
-                    $previousStartDate = $rounds[$previousRound]['start'];
-                    $previousEndDate = $rounds[$previousRound]['end'];
-                }
-
                 break;
             }
         }
+
+        $doesPromoEnded = !$doesPromoStart && $previousRound === $keys[key($keys)];
         $data = [
             'round' => $round,
             'previousRound' => $previousRound,
             'case' => $case,
             'limit' => $limit,
             'previousStartDate' => $previousStartDate,
-            'previousEndDate' => $previousEndDate
+            'previousEndDate' => $previousEndDate,
+            'showSuccessPage' => $showSuccessPage,
+            'doesPromoEnded' => $doesPromoEnded
         ];
 
         return $data;
@@ -226,7 +235,10 @@ class Estudyantrepreneur
 
         $result = [
             'schools_and_students' => $result,
-            'round' => $roundData['round']
+            'round' => $roundData['round'],
+            'showSuccessPage' => $roundData['showSuccessPage'],
+            'doesPromoEnded' => $roundData['doesPromoEnded'],
+            'previousRound' => $roundData['previousRound']
         ];
 
         return $result;
@@ -277,14 +289,15 @@ class Estudyantrepreneur
     }
 
     /**
-     * Returns the current standing
+     * Returns the standing by round
+     * @param $round
      * @return array
      */
-    public function getCurrentStandings()
+    public function getStandingsByRound($round = false)
     {
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $roundData = $this->__getPreviousRounds();
-        $currentRound = $rounds[$roundData['round']];
+        $currentRound = $rounds[$round] ?: $rounds[$roundData['round']];
         $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
         $schoolsAndStudents = $this->__getStudentsByDateAndSchool(
                                          $schools,
