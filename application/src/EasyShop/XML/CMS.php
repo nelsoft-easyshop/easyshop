@@ -928,7 +928,7 @@ $string = '<typeNode>
         $xmlContent['categorySection']  = !isset($xmlContent['categorySection']) ? [] : $xmlContent['categorySection'];
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
+                                                ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
            
             if(!isset($categorySection["sub"])){
                 $categorySection["sub"] = [];
@@ -943,24 +943,24 @@ $string = '<typeNode>
             $sectionData['subHeaders'] = [];
 
             $isFirstRun = true;
-            foreach ($categorySection['sub'] as $index => $subCategory) {
+            foreach ($categorySection['sub'] as $index => $subHeaderSection) {
             
-                $subHeaderSection = $categorySection['sub'][$index];
                 $subHeaderSection['text'] = (is_array($subHeaderSection['text']) && empty($subHeaderSection['text'])) ? '' : $subHeaderSection['text'];
+                
+                if (!isset($subHeaderSection['productSlugs']) || !$subHeaderSection['productSlugs']) {
+                    $subHeaderSection['productSlugs'] = [];
+                }  
                 $sectionData['subHeaders'][$index] = $subHeaderSection;
-
+                
                 if(!$isFirstRun){
                     continue;
                 }
 
-                if (!isset($subCategory['productSlugs']) || !$subCategory['productSlugs']) {
-                    $subCategory['productSlugs'] = [];
-                }  
-                if(!is_array($subCategory['productSlugs'] )){
-                    $subCategory['productSlugs'] = [ $subCategory['productSlugs'] ];
+                if(!is_array($subHeaderSection['productSlugs'] )){
+                    $subHeaderSection['productSlugs'] = [ $subHeaderSection['productSlugs'] ];
                 }
 
-                foreach ($subCategory['productSlugs'] as $idx => $xmlProductData) {
+                foreach ($subHeaderSection['productSlugs'] as $idx => $xmlProductData) {
                     $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                         ->findOneBy(['slug' => $xmlProductData]);
                     if ($product) {
