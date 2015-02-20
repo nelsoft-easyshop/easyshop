@@ -433,8 +433,8 @@ class NewHomeWebService extends MY_Controller
         if ( ! $this->upload->do_upload("myfile")) {
             $error = ['error' => $this->upload->display_errors()];
                      return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output(json_encode($error));
+                                 ->set_content_type('application/json')
+                                 ->set_output(json_encode($error));
         } 
         else {
             $imageData = $this->upload->data();            
@@ -462,10 +462,10 @@ class NewHomeWebService extends MY_Controller
             $index = $index == 0 ? 1 : $index + 1;
             $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/adSection/ad[last()]',"\t\t","\n");
 
-            if($addXml === true) {
+            if($addXml) {
                 return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json); 
+                            ->set_content_type('application/json')
+                            ->set_output($this->json); 
             }   
         } 
     }    
@@ -503,8 +503,8 @@ class NewHomeWebService extends MY_Controller
             if ( ! $this->upload->do_upload("myfile")) {
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
-                                ->set_content_type('application/json')
-                                ->set_output(json_encode($error));
+                                     ->set_content_type('application/json')
+                                     ->set_output(json_encode($error));
             } 
             else {
                 $this->config->load('image_dimensions', true);
@@ -536,8 +536,8 @@ class NewHomeWebService extends MY_Controller
 
         if($map->asXML($this->file)) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }          
         
     }
