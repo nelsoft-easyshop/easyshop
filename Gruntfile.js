@@ -39,9 +39,7 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.header-alt.css':
                         ['web/assets/css/main-style.css', 
                         'web/assets/css/bootstrap.css',
-                        'web/assets/css/easy-icons/easy-icons.css',
-                        'web/assets/css/bootstrap-mods.css',
-                        'web/assets/css/font-awesome/css/font-awesome.min.css'],
+                        'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.header-primary.css':
                         ['web/assets/css/main-style.css',
                          'web/assets/css/normalize.min.css',
