@@ -7,18 +7,19 @@ var socketioJwt = require('socketio-jwt');
 require('./config').configureExpress(app);
 
 var NODE_PORT = app.get('NODE_PORT');
-var HOST = app.get('HOST');
+var NODE_HOST = app.get('NODE_HOST');
 var JWT_SECRET = app.get('JWT_SECRET');
 var CHAT_CHANNEL_NAME = app.get('REDIS_CHANNEL_NAME');
 var REDIS_PORT = app.get('REDIS_PORT');
+var REDIS_HOST = app.get('REDIS_HOST');
 var https_options = {
     key: app.get('KEY'),
     cert: app.get('CERT')
 };
 
-var server = https.createServer(https_options, app).listen(NODE_PORT, HOST);
+var server = https.createServer(https_options, app).listen(NODE_PORT, NODE_HOST);
 
-console.log('HTTPS Server listening on %s:%s', HOST, NODE_PORT);
+console.log('HTTPS Server listening on %s:%s', NODE_HOST, NODE_PORT);
 io = require('socket.io').listen(server);
 
 io.set('authorization',socketioJwt.authorize({
@@ -28,7 +29,7 @@ io.set('authorization',socketioJwt.authorize({
 
 io.sockets.on( 'connection', function(socket) {
  
-    var clientSubscribe = redis.createClient(REDIS_PORT, HOST, {});
+    var clientSubscribe = redis.createClient(REDIS_PORT, REDIS_HOST, {});
     clientSubscribe.subscribe(CHAT_CHANNEL_NAME);
     
     socket.on('set account online', function() {
