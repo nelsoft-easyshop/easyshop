@@ -192,13 +192,8 @@
                     <div id="cat-items" class="purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel">
                         
                         <?php if(empty($categorySection['products'])): ?>
-                            <div class="item" style="display:none">
+                            <div class="item hide-owlcarousel-div" style="display:none"  data-sectioncount="<?php echo $sectionCount ?>">
                             </div>
-                            <script type="text/javascript">
-                                jQuery(function(){
-                                    $('.purchased-items-slider-cat-<?php echo $sectionCount ?>').css('display','none');
-                                });
-                            </script>
                         <?php endif; ?>
                         
                         <?php foreach($categorySection['products'] as $productSection): ?>
