@@ -434,7 +434,7 @@ class NewHomeWebService extends MY_Controller
             $error = ['error' => $this->upload->display_errors()];
                      return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($error);
+                            ->set_output(json_encode($error));
         } 
         else {
             $imageData = $this->upload->data();            
