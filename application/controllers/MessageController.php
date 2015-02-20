@@ -180,7 +180,7 @@ class MessageController extends MY_Controller
                                                            ->find($this->userId);
         $redirectUrl = '/' . $recipientSlug . '/contact#Failed';
         if ($recipient) {
-            $this->messageManager->send($member, $recipient, trim($this->input->post('msg')));
+            $this->messageManager->sendMessage($member, $recipient, trim($this->input->post('msg')));
             $redirectUrl = '/' . $recipientSlug . '/contact#SendMessage';
         }
 
