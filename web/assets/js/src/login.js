@@ -14,6 +14,9 @@
         }
         else if (pathName === "register") {
             $('#tab-create').trigger('click');
+            setTimeout(function(){  
+                $("#login").hide();
+            }, 300);
         }
 
         if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
@@ -69,10 +72,10 @@
             },
             messages: {
                 login_username: {
-                    required: 'Username is required.'
+                    required: '<span class="input-error">Username is required.</span>'
                 },
                 login_password: {
-                    required: 'Password is required.'
+                    required: '<span class="input-error">Password is required.</span>'
                 }
             },
             errorElement: "span",
@@ -86,7 +89,7 @@
             },
             submitHandler: function (form) {
                 $('#loading_img').show();
-                $('#login').hide();
+                $('#login').show();
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",

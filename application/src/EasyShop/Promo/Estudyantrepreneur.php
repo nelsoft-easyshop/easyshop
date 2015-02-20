@@ -88,9 +88,10 @@ class Estudyantrepreneur
      * @param $previousStartDate
      * @param $previousEndDate
      * @param $limit
+     * @param $getStudentWithSameVote
      * @return mixed
      */
-    private function __getStudentsByDateAndSchool($schools, $previousStartDate, $previousEndDate, $limit)
+    private function __getStudentsByDateAndSchool($schools, $previousStartDate, $previousEndDate, $limit, $getStudentWithSameVote = false)
     {
         foreach ($schools as $school) {
             $schoolName = $school['name'];
@@ -117,7 +118,7 @@ class Estudyantrepreneur
                                                      $result[$schoolName]['students'][$lastKey]['student']
                                                  );
 
-                if ($studentsWithSameVote) {
+                if ($studentsWithSameVote && $getStudentWithSameVote) {
                     $result[$schoolName]['students'] = array_merge($result[$schoolName]['students'], $studentsWithSameVote);
                 }
             }
@@ -174,18 +175,20 @@ class Estudyantrepreneur
                         $result[$student['school']] = [];
                     }
 
-                    $result[$student['school']][] = $student;
+                    $result[$student['school']]['students'][] = $student;
                 }
 
                 break;
             case 'second_round' :
                 $firstRound = $rounds['first_round'];
+                $secondRound = $rounds['second_round'];
                 $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
                 $result = $this->__getStudentsByDateAndSchool(
                                      $schools,
                                      $firstRound['start'],
                                      $firstRound['end'],
-                                     $firstRound['limit']
+                                     $secondRound['limit'],
+                                     true
                                  );
 
                 break;
@@ -197,13 +200,15 @@ class Estudyantrepreneur
                                                      $schools,
                                                      $firstRound['start'],
                                                      $firstRound['end'],
-                                                     $firstRound['limit']
+                                                     $secondRound['limit'],
+                                                     true
                                                  );
                 $secondRoundWinners = $this->__getStudentsByDateAndSchool(
                                                  $schools,
                                                  $secondRound['start'],
                                                  $secondRound['end'],
-                                                 $secondRound['limit']
+                                                 $secondRound['limit'],
+                                                 true
                                              );
 
                 foreach ($qualifiedToSecondRound as $key => $schools) {
