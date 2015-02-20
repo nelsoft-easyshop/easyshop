@@ -439,6 +439,78 @@ class productUpload extends MY_Controller
     }
 
     /**
+     *  Upload image for attributes of the product
+     *  
+     *  @return JSON
+     */
+    public function fallBackUploadimage()
+    {
+        $imageUtility = $this->serviceContainer['image_utility'];
+        $this->config->load('image_dimensions', true);
+        $imageDimensions = $this->config->config['image_dimensions'];
+        $tempDirectory = $this->session->userdata('tempDirectory');  
+        $pathDirectory = $tempDirectory;
+        $tempId = $this->session->userdata('tempId');
+        $member_id = $this->session->userdata('member_id');
+        if($this->input->post('pictureName')){
+            $filename = trim($this->input->post('pictureName'));
+            $inputFile = "files";
+            $filenameArray = [$filename];
+        }
+        else{
+            $filenameArray = $filename = trim($this->input->post('pictureNameOther'));
+            $inputFile = "attr-image-input";
+            $pathDirectory = $tempDirectory.'/other/';
+        }
+
+        if (strpos($filename, $tempId."_".$member_id) === false) {
+            die('{"result":"false","msg":"Invalid filename. Please try again later."}');
+        }
+
+        $allowed =  ['gif','png' ,'jpg','jpeg']; // available format only for image
+        $fileExtension = explode('.', $filename);
+        $fileExtension = strtolower(end($fileExtension));
+
+        if(!in_array(strtolower($fileExtension),$allowed)){
+            die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
+        }
+
+        if (!file_exists ($pathDirectory)){
+            mkdir($pathDirectory, 0777, true);
+        }
+
+        $this->upload->initialize([
+            "upload_path" => $pathDirectory,
+            "overwrite" => false,
+            "file_name"=> $filenameArray,
+            "encrypt_name" => false,
+            "remove_spaces" => true,
+            "allowed_types" => "jpg|jpeg|png|gif",
+            "max_size" => $this->max_file_size_mb * 1024,
+            "xss_clean" => false
+        ]); 
+
+        if ($this->upload->do_multi_upload($inputFile)){  
+            $imageUtility->imageResize($pathDirectory.$filename, 
+                                       $pathDirectory."small/".$filename,
+                                       $imageDimensions["productImagesSizes"]["small"]);
+
+            $imageUtility->imageResize($pathDirectory."small/".$filename, 
+                                       $pathDirectory."categoryview/".$filename,
+                                       $imageDimensions["productImagesSizes"]["categoryview"]);
+
+            $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
+                                       $pathDirectory."thumbnail/".$filename,
+                                       $imageDimensions["productImagesSizes"]["thumbnail"]);
+
+            die('{"result":"ok","imageName":"'.$filename.'"}'); 
+        }
+        else{
+            die('{"result":"false","msg":"'.$this->upload->display_errors().'"}');
+        }
+    }
+
+    /**
      *  Upload image for primary and other
      *  alternative of the image of the product
      *
@@ -448,10 +520,11 @@ class productUpload extends MY_Controller
     {  
         $imageUtility = $this->serviceContainer['image_utility'];
         $pathDirectory = $this->session->userdata('tempDirectory');
-        $filescnttxt = $this->input->post('filescnttxt');
-        $afstart = $this->input->post('afstart');
+        $tempId = $this->session->userdata('tempId');
+        $member_id = $this->session->userdata('member_id');
+        $filescnttxt = $this->input->post('filescnttxt'); 
         $imageCollections = json_decode($this->input->post('imageCollections'));
-        $afstartArray = json_decode($afstart); 
+        $afstartArray = json_decode(trim($this->input->post('afstart'))); 
         $filenames_ar = [];
         $text = ""; 
         $error = 0;
@@ -460,21 +533,33 @@ class productUpload extends MY_Controller
         $this->config->load('image_dimensions', true);
         $imageDimensions = $this->config->config['image_dimensions']; 
 
-        foreach($_FILES['files']['name'] as $key => $value ) { 
-            $file_ext = strtolower(end(explode('.', $value))); 
+        foreach($_FILES['files']['name'] as $key => $value ) {
+            $file_ext = strtolower(end(explode('.', $value)));
             $filenames_ar[$key] = $afstartArray[$key];
-            if(!in_array(strtolower($file_ext),$allowed)){ 
-                unset($filenames_ar[$key]);   
+            if(!in_array(strtolower($file_ext),$allowed)){
+                unset($filenames_ar[$key]);
             }
+
             if(isset($_FILES['files']['name'][$key])){
                 if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb || (bool)$_FILES['files']['error'][$key]){ 
-                    unset($filenames_ar[$key]);   
+                    unset($filenames_ar[$key]);
                 }
             }
-        }  
+
+            if(isset($filenames_ar[$key])){
+                if (strpos($filenames_ar[$key], $tempId."_".$member_id) === false) {
+                   $return = [
+                        'msg' => "Invalid filename. Please try again later.", 
+                        'fcnt' => $filescnttxt,
+                        'err' => 1
+                    ];
+
+                    die(json_encode($return));
+                }
+            }
+        }
 
         $filenames_ar = array_values($filenames_ar);  
-
         if(count($filenames_ar) <= 0){
             $return = [
                 'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb", 
@@ -490,31 +575,26 @@ class productUpload extends MY_Controller
         }
         foreach ($imageCollections as $key => $base64String) { 
             $img = str_replace('data:image/jpeg;base64,', '', $base64String);
-            $fileNameArray = explode(".", $filenames_ar[$key]); 
+            $fileNameArray = explode(".", $filenames_ar[$key]);
             array_pop($fileNameArray);
             $filename = implode(".", $fileNameArray).".jpeg";
             $tempFilePath = $pathDirectory.$filename;
-            file_put_contents($tempFilePath, base64_decode($img));
-            $imageUtility->imageResize($pathDirectory.$filename, 
-                                       $pathDirectory."small/".$filename,
-                                       $imageDimensions["productImagesSizes"]["small"]);
+            $imageData = base64_decode($img);
+ 
+            if(getimagesize($base64String) && getimagesizefromstring($imageData)){
+                file_put_contents($tempFilePath, $imageData);
+                $imageUtility->imageResize($pathDirectory.$filename, 
+                                           $pathDirectory."small/".$filename,
+                                           $imageDimensions["productImagesSizes"]["small"]);
 
-            $imageUtility->imageResize($pathDirectory."small/".$filename, 
-                                       $pathDirectory."categoryview/".$filename,
-                                       $imageDimensions["productImagesSizes"]["categoryview"]);
+                $imageUtility->imageResize($pathDirectory."small/".$filename, 
+                                           $pathDirectory."categoryview/".$filename,
+                                           $imageDimensions["productImagesSizes"]["categoryview"]);
 
-            $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
-                                       $pathDirectory."thumbnail/".$filename,
-                                       $imageDimensions["productImagesSizes"]["thumbnail"]);
-
-            //If user uploaded image is too large, resize and overwrite original image
-            // if(isset($file_data[$i])){
-            //     if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
-            //         $imageUtility->imageResize($pathDirectory.$file_data[$i]['file_name'], 
-            //                                    $pathDirectory.$file_data[$i]['file_name'],
-            //                                    $imageDimensions["productImagesSizes"]["usersize"]);
-            //     }
-            // }
+                $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
+                                           $pathDirectory."thumbnail/".$filename,
+                                           $imageDimensions["productImagesSizes"]["thumbnail"]);
+            }
         }
 
         $return = [
@@ -537,17 +617,23 @@ class productUpload extends MY_Controller
         $this->config->load('image_dimensions', true);
         $imageDimensions = $this->config->config['image_dimensions'];
         $tempDirectory = $this->session->userdata('tempDirectory'); 
-        $filename =  $this->input->post('pictureName');
+        $filename = trim($this->input->post('pictureNameOther'));
+        $tempId = $this->session->userdata('tempId');
+        $member_id = $this->session->userdata('member_id');
         $imageCollections = json_decode($this->input->post('imageCollections'))[0]; 
         $allowed =  ['gif','png' ,'jpg','jpeg']; // available format only for image 
         $fileNameArray = explode('.', $filename);
-        $fileExtension = strtolower(end($fileNameArray));
+        $fileExtension = strtolower(end($fileNameArray)); 
         array_pop($fileNameArray);
         $filename = implode(".", $fileNameArray).".jpeg";
 
         if(!in_array(strtolower($fileExtension),$allowed)){
             die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
         }
+
+        if (strpos($filename, $tempId."_".$member_id) === false) { 
+            die('{"result":"false","msg":"Invalid filename. Please try again later."}');
+        } 
 
         $pathDirectory = $tempDirectory.'/other/';
 
@@ -557,21 +643,24 @@ class productUpload extends MY_Controller
 
         $img = str_replace('data:image/jpeg;base64,', '', $imageCollections);
         $tempFilePath = $pathDirectory.$filename;
-        file_put_contents($tempFilePath, base64_decode($img));
+        $imageFile = base64_decode($img);
+        if(getimagesize($imageCollections) && getimagesizefromstring($imageFile)){
+            file_put_contents($tempFilePath, $imageFile);
 
-        $imageUtility->imageResize($pathDirectory.$filename, 
-                                   $pathDirectory."small/".$filename,
-                                   $imageDimensions["productImagesSizes"]["small"]);
+            $imageUtility->imageResize($pathDirectory.$filename, 
+                                       $pathDirectory."small/".$filename,
+                                       $imageDimensions["productImagesSizes"]["small"]);
 
-        $imageUtility->imageResize($pathDirectory."small/".$filename, 
-                                   $pathDirectory."categoryview/".$filename,
-                                   $imageDimensions["productImagesSizes"]["categoryview"]);
+            $imageUtility->imageResize($pathDirectory."small/".$filename, 
+                                       $pathDirectory."categoryview/".$filename,
+                                       $imageDimensions["productImagesSizes"]["categoryview"]);
 
-        $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
-                                   $pathDirectory."thumbnail/".$filename,
-                                   $imageDimensions["productImagesSizes"]["thumbnail"]);
+            $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
+                                       $pathDirectory."thumbnail/".$filename,
+                                       $imageDimensions["productImagesSizes"]["thumbnail"]);
 
-        echo '{"result":"ok","imageName":"'.$filename.'"}';
+            echo '{"result":"ok","imageName":"'.$filename.'"}';
+        }
     }
 
     /**

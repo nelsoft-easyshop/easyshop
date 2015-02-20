@@ -1342,13 +1342,14 @@ var universalExtension = ".jpeg";
     }
 
     function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
-        canProceed = false;
+        var uploadUrl = badIE ? '/productUpload/fallBackUploadimage' : '/productUpload/uploadimage';
+        canProceed = false; 
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
         $('#afstart').val(JSON.stringify(afstart)); 
         $("#imageCollections").val(JSON.stringify(base64collection));
         $('#form_files').ajaxForm({
-            url: '/productUpload/uploadimage',
+            url: uploadUrl,
             type: "POST", 
             dataType: "json",
             xhr: function(){
@@ -1360,6 +1361,14 @@ var universalExtension = ".jpeg";
                     }
                 }, false);
                 return xhr;
+            },
+            beforeSubmit : function(arr, $form, options){ 
+                $('<input type="hidden">').attr({
+                    id: 'pictureName',
+                    name: 'pictureName',
+                    value: imageName
+                }).appendTo('#form_files');
+                arr.push({name:'pictureName', value:imageName});
             },
             success :function(d) {
                 filescntret = d.fcnt;
@@ -1385,15 +1394,18 @@ var universalExtension = ".jpeg";
                             .attr("src",'/'+tempDirectory+'/categoryview/'+value.image_name);
                     });
                 }
-                if(badIE == true){
+                if(badIE == true){ 
                     if(d.err != '1'){
+                        console.log(arrayUpload);
                         $.each( arrayUpload, function( key, value ) {
-                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/categoryview/'+imageName);
+                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/categoryview/'+d.imageName); 
+                            $('#previewList'+value + ' > .loadingfiles').remove();
                         });
                     } 
                     $(".files").remove();
                     $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" accept="image/*" required = "required"  /> ');
                 }
+                $('#form_files > #pictureName').remove();
             },
             error: function (request, status, error) {
 
@@ -1409,7 +1421,9 @@ var universalExtension = ".jpeg";
                     $(".files").remove();
                     $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]"  accept="image/*" required = "required"  /> ');
                 }
+                $('#form_files > #pictureName').remove();
             }
+
         }); 
         $('#form_files').submit();
     }
@@ -1497,9 +1511,8 @@ var universalExtension = ".jpeg";
             imageCustom = document.getElementById('files').value;
             var filename = imageCustom.match(/[^\/\\]+$/);
             extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-            var newName = tempId+'_'+memberId+'_'+fulldate+pictureCount+universalExtension;
-            af.push(newName+'||'+extension); 
+            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension; 
+            af.push(imageName+'||'+extension); 
             afstart.push(imageName); 
             arrayUpload.push(pictureCount);  
 
@@ -1592,24 +1605,25 @@ var universalExtension = ".jpeg";
 
     function triggerUploadOther(picName)
     {
+        var uploadUrl = badIE ? '/productUpload/fallBackUploadimage' : '/productUpload/uploadimageOther';
         $("#imageCollectionsOther").val(JSON.stringify(base64collection));
         $('#other_files').ajaxForm({
-            url: '/productUpload/uploadimageOther',
+            url: uploadUrl,
             type: "POST", 
             dataType: "json", 
             beforeSubmit : function(arr, $form, options){
                 $('<input type="hidden">').attr({
                     id: 'pictureName',
-                    name: 'pictureName',
+                    name: 'pictureNameOther',
                     value: picName
-                }).appendTo('form');
-                arr.push({name:'pictureName', value:picName});
+                }).appendTo('#other_files');
+                arr.push({name:'pictureNameOther', value:picName});
 
                 $('<input type="hidden">').attr({
                     id: 'pictureCount',
                     name: 'pictureCount',
                     value: pictureCountOther
-                }).appendTo('form');
+                }).appendTo('#other_files');
                 arr.push({name:'pictureCount', value:pictureCountOther});
                 canProceed = false;
                 $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
