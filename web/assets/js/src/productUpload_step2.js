@@ -1172,15 +1172,15 @@ var arrayUpload = [];
 var afstart = [];
 var afTemp = [];
 var imageName = "";
-var errorValues = "";
-var axes = [];
+var errorValues = ""; 
 var sizeList = [];
 var extensionList = [];
-var imageCollection = [];  
+var imageCollection = [];
+var base64collection = [];
 var totalCropImage;
-var imageTage;
-var rotateValue = 0; 
+var imageTage; 
 var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
+var universalExtension = ".jpeg";
 
 (function($) {
   
@@ -1219,20 +1219,10 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         width: 600,
                         modal: true,
                         buttons: {
-                            "Crop": function() {
-                                var imageCoord = imageTag.cropper("getData");
-                                var xCoord = imageCoord.x;
-                                var yCoord = imageCoord.y;
-                                var wCoord = imageCoord.width;
-                                var hCoord = imageCoord.height;
-                                var coordinate = xCoord + "," + 
-                                                 yCoord + "," + 
-                                                 wCoord + "," + 
-                                                 hCoord + "," + 
-                                                 rotateValue;
+                            "Crop": function() { 
+                                base64collection.push(imageTag.cropper("getDataURL", 'image/jpeg')); 
                                 af.push(afTemp[cropCurrentCount]);
-                                axes.push(coordinate); 
-                                cropCurrentCount++;  
+                                cropCurrentCount++;
                                 $(this).dialog("close"); 
                                 if(cropCurrentCount < totalCropImage){
                                     cropImage($input);
@@ -1256,14 +1246,12 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             $('.imageContainer > #imageTag').attr('src', '');
                             imageTag.cropper("destroy");
                             imageTag = null;
-                            rotateValue = 0;
                         },
                         "title": "Crop your image"
                     });
                 });
         }
-        else{
-            axes.push("0,0,0,0");
+        else{ 
             af.push(afTemp[cropCurrentCount]);
             cropCurrentCount++;
             if(cropCurrentCount < totalCropImage){
@@ -1321,20 +1309,15 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         imageTag.cropper("zoom", -0.2);
     });
 
-    $(document).on('click','.rotateRight',function(e){
-        rotateValue -= 90;
-        rotateValue = rotateValue < 0 ? 270 : rotateValue; 
+    $(document).on('click','.rotateRight',function(e){ 
         imageTag.cropper("rotate", 90); 
     });
 
-    $(document).on('click','.rotateLeft',function(e){
-        rotateValue += 90;
-        rotateValue = rotateValue >= 360 ? 0 : rotateValue;
+    $(document).on('click','.rotateLeft',function(e){ 
         imageTag.cropper("rotate", -90);
     });
 
     $(document).on('click','.refresh',function(e){
-        rotateValue = 0; 
         imageTag.cropper("reset");
     });
 
@@ -1362,8 +1345,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         canProceed = false;
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
-        $('#afstart').val(JSON.stringify(afstart));
-        $("#coordinates").val(JSON.stringify(axes));
+        $('#afstart').val(JSON.stringify(afstart)); 
+        $("#imageCollections").val(JSON.stringify(base64collection));
         $('#form_files').ajaxForm({
             url: '/productUpload/uploadimage',
             type: "POST", 
@@ -1435,8 +1418,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         arrayUpload = [];
         afstart = [];
         afTemp = [];
-        imageObject = [];
-        axes = [];
+        imageObject = []; 
+        base64collection = [];
         sizeList = [];
         extensionList = [];
         imageCollection = [];
@@ -1484,11 +1467,11 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                 }
 
                 imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-
+                var newName = tempId+'_'+memberId+'_'+fulldate+pictureCount+universalExtension;
                 arraySet['picture_count'] = pictureCount;
-                arraySet['image_name'] = imageName;
+                arraySet['image_name'] = newName;
                 imageCollection.push(arraySet);
-                afTemp.push(imageName+'||'+extension);
+                afTemp.push(newName+'||'+extension);
                 afstart.push(imageName);
                 arrayUpload.push(pictureCount);
                 imageObject.push(objectUrl);
@@ -1515,7 +1498,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             var filename = imageCustom.match(/[^\/\\]+$/);
             extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
             imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-            af.push(imageName+'||'+extension); 
+            var newName = tempId+'_'+memberId+'_'+fulldate+pictureCount+universalExtension;
+            af.push(newName+'||'+extension); 
             afstart.push(imageName); 
             arrayUpload.push(pictureCount);  
 
@@ -1587,17 +1571,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     modal: true,
                     buttons: {
                         "Crop": function() {
-                            var imageCoord = imageTag.cropper("getData");
-                            var xCoord = imageCoord.x;
-                            var yCoord = imageCoord.y;
-                            var wCoord = imageCoord.width;
-                            var hCoord = imageCoord.height;
-                            var coordinate = xCoord + "," + 
-                                             yCoord + "," + 
-                                             wCoord + "," + 
-                                             hCoord + "," + 
-                                             rotateValue;
-                            $("#coordinatesOther").val(coordinate);
+                            base64collection.push(imageTag.cropper("getDataURL", 'image/jpeg'));  
                             triggerUploadOther(picName);
                             $(this).dialog("close");
                         }
@@ -1608,8 +1582,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     },
                     close: function(){  
                         $('.imageContainer >  #imageTag').attr('src', '');
-                        imageTag.cropper("destroy");
-                        rotateValue = 0;
+                        imageTag.cropper("destroy"); 
                         imageTag = null;
                     },
                     "title": "Crop your image"
@@ -1619,6 +1592,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
 
     function triggerUploadOther(picName)
     {
+        $("#imageCollectionsOther").val(JSON.stringify(base64collection));
         $('#other_files').ajaxForm({
             url: '/productUpload/uploadimageOther',
             type: "POST", 
@@ -1647,9 +1621,9 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             success :function(d) {
                 canProceed = true;
                 if(d.result == "ok"){
-                    imageAttr.push(picName);
-                    var imagePath = '/'+tempDirectory+'other/categoryview/'+picName;
-                    $('.imageText'+currentCnt).val(picName); 
+                    imageAttr.push(d.imageName);
+                    var imagePath = '/'+tempDirectory+'other/categoryview/'+d.imageName;
+                    $('.imageText'+currentCnt).val(d.imageName); 
                     $('.imageFileText'+currentCnt).val(imagePath); 
                     $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src", imagePath);
                     pictureCountOther++;
@@ -1677,6 +1651,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         var val = $(this).val();
         var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
         var picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+        base64collection = [];
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':

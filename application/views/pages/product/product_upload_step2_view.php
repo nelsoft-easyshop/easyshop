@@ -74,6 +74,7 @@
                 <input type="hidden" class="filescnttxt" name="filescnttxt">
                 <input type="hidden" class="afstart" id="afstart" name="afstart">
                 <input type="hidden" class="coordinates" id="coordinates" name="coordinates">
+                <input type="hidden" class="imageCollections" id="imageCollections" name="imageCollections">
                 <div id="inputList" class="inputList"></div>
             </form> 
 
@@ -86,7 +87,7 @@
             );
             echo form_open('productUpload/uploadimageOther', $attr);
             ?>
-                <input type="hidden" class="coordinatesOther" id="coordinatesOther" name="coordinates">
+                <input type="hidden" class="imageCollectionsOther" id="imageCollectionsOther" name="imageCollections">
                 <input type="file" class="attr-image-input" accept="image/*" style="left: -9999px;position: absolute;z-index: -1900;" name="attr-image-input" >
             </form> 
 
@@ -525,11 +526,7 @@
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
                 <div class="imageContainer"> 
                     <img src="" id="imageTag">
-                </div><br />
-                <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
-                <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
-                <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
-                <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
+                </div><br /> 
                 <center>
                     <a class="zoomIn" title="Zoom In" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
                     <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
