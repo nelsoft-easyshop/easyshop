@@ -607,8 +607,8 @@ class NewHomeWebService extends MY_Controller
                         
         if(!$product){
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);
+                        ->set_content_type('application/json')
+                        ->set_output( $this->slugerrorjson);
         }
         else {
             $map->sellerSection->productPanel[$index]->slug = $slug;
