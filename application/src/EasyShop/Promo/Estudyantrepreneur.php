@@ -42,8 +42,7 @@ class Estudyantrepreneur
     {
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $date = new \DateTime;
-//        $dateToday = $date->getTimestamp();
-        $dateToday = strtotime('2015-03-07');
+        $dateToday = $date->getTimestamp();
         $previousStartDate = '';
         $previousEndDate = '';
         $case = '';
@@ -289,22 +288,23 @@ class Estudyantrepreneur
     }
 
     /**
-     * Returns the standing by round
+     * Returns the standing
      * @param $round
+     * @param $schoolAndStudents
      * @return array
      */
-    public function getStandingsByRound($round = false)
+    public function getStandingsByRound($round = false, $schoolAndStudents = false)
     {
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $roundData = $this->__getPreviousRounds();
-        $currentRound = $rounds[$round] ?: $rounds[$roundData['round']];
+        $currentRound = $round ? $rounds[$round] : $rounds[$roundData['round']];
         $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
-        $schoolsAndStudents = $this->__getStudentsByDateAndSchool(
-                                         $schools,
-                                         $currentRound['start'],
-                                         $currentRound['end'],
-                                         $roundData['limit']
-                                     );
+        $schoolsAndStudents = $schoolAndStudents ?: $this->__getStudentsByDateAndSchool(
+                                                              $schools,
+                                                              $currentRound['start'],
+                                                              $currentRound['end'],
+                                                              $roundData['limit']
+                                                          );
         $totalVotesPerSchool = $this->__getTotalVotesByDate($currentRound['start'], $currentRound['end']);
 
         foreach ($schoolsAndStudents as $school => $students) {

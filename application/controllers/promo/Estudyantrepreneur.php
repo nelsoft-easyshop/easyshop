@@ -32,14 +32,18 @@ class Estudyantrepreneur extends MY_Controller
                                             \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
                                             'getStandingsByRound',
                                             [
-                                                $data['previousRound']
+                                                $data['previousRound'],
+                                                $data['schools_and_students']
                                             ]
                                         );
 
-            if ($data['round'] === 'second_round') {
+            if ($data['previousRound'] === 'first_round') {
+                $getCurrentStandings['successMessage'] = "first round winners";
+            }
+            else if ($data['previousRound'] === 'inter_school_round'){
                 $getCurrentStandings['successMessage'] = "Congratulations to the businesses who made it to the top 3. We wish you the best of luck at the inter-school poll!";
             }
-            else {
+            else if ($data['previousRound'] === 'inter_school_round'){
                 $getCurrentStandings['successMessage'] = "success message for the winner";
             }
 
