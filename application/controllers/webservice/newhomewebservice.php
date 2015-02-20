@@ -901,7 +901,7 @@ class NewHomeWebService extends MY_Controller
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext)); 
             $this->config->load("image_path");                 
-            $path_directory = $this->config->item('assets_images_directory');
+            $path_directory = $this->config->item('partner_img_directory').($action === "logo" ? "/" : "/banners/");
 
             $this->upload->initialize([ 
                 "upload_path" => $path_directory,
@@ -916,7 +916,7 @@ class NewHomeWebService extends MY_Controller
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
                                 ->set_content_type('application/json')
-                                ->set_output($error);
+                                ->set_output(json_encode($error));
             } 
             else {
                 $value = "/".$path_directory.$filename.'.'.$file_ext; 
