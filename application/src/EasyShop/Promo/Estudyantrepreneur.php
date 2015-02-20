@@ -48,7 +48,7 @@ class Estudyantrepreneur
         $case = '';
         $limit = 0;
         $previousRound = '';
-        $round = false;
+        $round = '';
         $keys = array_keys($rounds);
         end($keys);
 
@@ -56,7 +56,7 @@ class Estudyantrepreneur
             $startDate = strtotime($data['start']);
             $endDate = strtotime($data['end']);
             $foundIndex = array_search($key, $keys);
-            $doesPromoStart = $dateToday >= $startDate && $dateToday < $endDate;
+            $isPromoStart = $dateToday >= $startDate && $dateToday < $endDate;
 
             if ($foundIndex !== 0) {
                 $previousRound = $dateToday > $endDate && $foundIndex === key($keys) ? $keys[$foundIndex] : $keys[$foundIndex-1];
@@ -66,7 +66,7 @@ class Estudyantrepreneur
 
             $showSuccessPage = $previousEndDate && ($dateToday > strtotime($previousEndDate) && $dateToday < $startDate);
 
-            if ($doesPromoStart || $showSuccessPage) {
+            if ($isPromoStart || $showSuccessPage) {
                 $round = $key;
                 $case = $round;
                 $limit = (int) $data['limit'];
@@ -75,7 +75,7 @@ class Estudyantrepreneur
             }
         }
 
-        $isPromoEnded = !$doesPromoStart && $previousRound === $keys[key($keys)];
+        $isPromoEnded = !$isPromoStart && $previousRound === $keys[key($keys)];
         $data = [
             'round' => $round,
             'previousRound' => $previousRound,
