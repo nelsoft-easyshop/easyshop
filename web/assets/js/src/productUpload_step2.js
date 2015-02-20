@@ -1220,10 +1220,11 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         modal: true,
                         buttons: {
                             "Crop": function() {
-                                var xCoord = $('#image_x').val();
-                                var yCoord = $('#image_y').val();
-                                var wCoord = $('#image_w').val();
-                                var hCoord = $('#image_h').val();
+                                var imageCoord = imageTag.cropper("getData");
+                                var xCoord = imageCoord.x;
+                                var yCoord = imageCoord.y;
+                                var wCoord = imageCoord.width;
+                                var hCoord = imageCoord.height;
                                 var coordinate = xCoord + "," + 
                                                  yCoord + "," + 
                                                  wCoord + "," + 
@@ -1282,26 +1283,26 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
 
     function newCropper()
     {
+        var widthRatio = 445;
+        var heightRatio = 538;
+        $(".imageContainer").css({
+            width: widthRatio,
+            height: heightRatio,
+        })
         var imageContainerWidth = $(".imageContainer").width(); 
         imageTag = $(".imageContainer > #imageTag");  
         imageTag.cropper({ 
-            data: { 
-                x: 0,
-                y: 0
-            },  
-            minContainerWidth: imageContainerWidth, 
+            aspectRatio: widthRatio / heightRatio,
+            minContainerWidth: 10,
+            minContainerHeight: 10,
+            autoCropArea: 1,
             multiple: false,
             dragCrop: false,
             dashed: false,
             movable: false, 
             resizable: false,
-            dashed: true, 
-            done: function(data) { 
-                $('#image_x').val(data.x);
-                $('#image_y').val(data.y);
-                $('#image_w').val(data.width);
-                $('#image_h').val(data.height);
-            }
+            dashed: true,
+            responsive: true,
         });
 
         setTimeout(function() { 
@@ -1318,6 +1319,23 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
 
     $(document).on('click','.zoomOut',function(e){ 
         imageTag.cropper("zoom", -0.2);
+    });
+
+    $(document).on('click','.rotateRight',function(e){
+        rotateValue -= 90;
+        rotateValue = rotateValue < 0 ? 270 : rotateValue; 
+        imageTag.cropper("rotate", 90); 
+    });
+
+    $(document).on('click','.rotateLeft',function(e){
+        rotateValue += 90;
+        rotateValue = rotateValue >= 360 ? 0 : rotateValue;
+        imageTag.cropper("rotate", -90);
+    });
+
+    $(document).on('click','.refresh',function(e){
+        rotateValue = 0; 
+        imageTag.cropper("reset");
     });
 
     $(document).on('click','.ui-dialog-titlebar-close',function(e){
@@ -1569,10 +1587,15 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     modal: true,
                     buttons: {
                         "Crop": function() {
-                            var coordinate = $('#image_x').val() + "," + 
-                                             $('#image_y').val() + "," + 
-                                             $('#image_w').val() + "," + 
-                                             $('#image_h').val() + "," + 
+                            var imageCoord = imageTag.cropper("getData");
+                            var xCoord = imageCoord.x;
+                            var yCoord = imageCoord.y;
+                            var wCoord = imageCoord.width;
+                            var hCoord = imageCoord.height;
+                            var coordinate = xCoord + "," + 
+                                             yCoord + "," + 
+                                             wCoord + "," + 
+                                             hCoord + "," + 
                                              rotateValue;
                             $("#coordinatesOther").val(coordinate);
                             triggerUploadOther(picName);

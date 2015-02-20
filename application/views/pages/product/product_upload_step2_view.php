@@ -532,6 +532,9 @@
                 <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
                 <center>
                     <a class="zoomIn" title="Zoom In" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
+                    <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
+                    <a class="refresh" title="Refresh" href="javascript:void(0)"><i class="fa fa-refresh fa-2x"></i></a>
+                    <a class="rotateRight" title="Rotate Right" href="javascript:void(0)"><i class="fa fa-repeat fa-2x"></i></a>
                     <a class="zoomOut" title="Zoom Out" href="javascript:void(0)"><i class="fa fa-search-minus fa-2x"></i></a>
                 </center>
             </div>
