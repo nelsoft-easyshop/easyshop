@@ -190,7 +190,17 @@
 
                     </div>
                     <div id="cat-items" class="purchased-items-slider-cat-<?php echo $sectionCount ?> owl-carousel">
-
+                        
+                        <?php if(empty($categorySection['products'])): ?>
+                            <div class="item" style="display:none">
+                            </div>
+                            <script type="text/javascript">
+                                jQuery(function(){
+                                    $('.purchased-items-slider-cat-<?php echo $sectionCount ?>').css('display','none');
+                                });
+                            </script>
+                        <?php endif; ?>
+                        
                         <?php foreach($categorySection['products'] as $productSection): ?>
                             <?php $product = $productSection['product']; ?>
                             <?php $sellerimage = $productSection['userimage']; ?>
