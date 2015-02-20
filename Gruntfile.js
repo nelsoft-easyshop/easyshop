@@ -155,11 +155,11 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.member-account-activate.css':
                         ['web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.register.css':
-                        ['web/assets/css/landingpage/style_v2.css',
-                         'web/assets/css/landingpage/jquery.bxslider.css',
-                         'web/assets/css/landingpage/responsive-nav.css',
+                        ['web/assets/css/bootstrap.css',
+                         'web/assets/css/new-login-register.css',
                          'web/assets/css/basic.css',
-                         'web/assets/css/jquery-ui.css'],
+                         'web/assets/css/responsive_css.css',
+                         'web/assets/css/main-style.css'],
                     'web/assets/css/min-easyshop.register-success.css':
                         ['web/assets/css/landingpage/bootstrap.css',
                          'web/assets/css/landingpage/bootstrap-responsive.css',
