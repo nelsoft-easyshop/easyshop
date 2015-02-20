@@ -26,16 +26,16 @@ class Estudyantrepreneur extends MY_Controller
                         'getSchoolWithStudentsByRound'
                      );
 
-        if ($data['showSuccessPage'] || $data['doesPromoEnded']) {
+        if ($data['showSuccessPage'] || $data['isPromoEnded']) {
             $getCurrentStandings['schools_and_students'] = $this->promoManager
-                                        ->callSubclassMethod(
-                                            \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
-                                            'getStandingsByRound',
-                                            [
-                                                $data['previousRound'],
-                                                $data['schools_and_students']
-                                            ]
-                                        );
+                                                                ->callSubclassMethod(
+                                                                    \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                                                                    'getStandingsByRound',
+                                                                    [
+                                                                        $data['previousRound'],
+                                                                        $data['schools_and_students']
+                                                                    ]
+                                                                );
 
             if ($data['previousRound'] === 'first_round') {
                 $getCurrentStandings['successMessage'] = "first round winners";

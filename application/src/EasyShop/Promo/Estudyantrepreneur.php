@@ -75,7 +75,7 @@ class Estudyantrepreneur
             }
         }
 
-        $doesPromoEnded = !$doesPromoStart && $previousRound === $keys[key($keys)];
+        $isPromoEnded = !$doesPromoStart && $previousRound === $keys[key($keys)];
         $data = [
             'round' => $round,
             'previousRound' => $previousRound,
@@ -84,7 +84,7 @@ class Estudyantrepreneur
             'previousStartDate' => $previousStartDate,
             'previousEndDate' => $previousEndDate,
             'showSuccessPage' => $showSuccessPage,
-            'doesPromoEnded' => $doesPromoEnded
+            'isPromoEnded' => $isPromoEnded
         ];
 
         return $data;
@@ -236,7 +236,7 @@ class Estudyantrepreneur
             'schools_and_students' => $result,
             'round' => $roundData['round'],
             'showSuccessPage' => $roundData['showSuccessPage'],
-            'doesPromoEnded' => $roundData['doesPromoEnded'],
+            'isPromoEnded' => $roundData['isPromoEnded'],
             'previousRound' => $roundData['previousRound']
         ];
 
