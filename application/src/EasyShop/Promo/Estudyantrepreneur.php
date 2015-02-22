@@ -45,7 +45,6 @@ class Estudyantrepreneur
         $dateToday = $date->getTimestamp();
         $previousStartDate = '';
         $previousEndDate = '';
-        $case = '';
         $limit = 0;
         $previousRound = '';
         $round = '';
@@ -68,7 +67,6 @@ class Estudyantrepreneur
 
             if ($isPromoStart || $showSuccessPage) {
                 $round = $key;
-                $case = $round;
                 $limit = (int) $data['limit'];
 
                 break;
@@ -79,7 +77,6 @@ class Estudyantrepreneur
         $data = [
             'round' => $round,
             'previousRound' => $previousRound,
-            'case' => $case,
             'limit' => $limit,
             'previousStartDate' => $previousStartDate,
             'previousEndDate' => $previousEndDate,
@@ -173,7 +170,7 @@ class Estudyantrepreneur
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $roundData = $this->__getPreviousRounds();
 
-        switch($roundData['case']) {
+        switch($roundData['round']) {
             case 'first_round' :
                 $students = $this->em->getRepository('EasyShop\Entities\EsStudent')->getAllStudents();
 
