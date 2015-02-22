@@ -30,8 +30,8 @@
         <header>
             <div class="container">
                 <div class="logo">
-                    <a href="/?view=basic">
-                        <img src="/assets/images/promo-images/easyshop_logo.png">
+                    <a href="/">
+                        <img src="<?=getAssetsDomain()?>assets/images/promo-images/easyshop_logo.png">
                     </a>
                 </div>
             </div>
@@ -42,7 +42,7 @@
             <div class="container single-image-before"></div>
 
             <div class="single-image">
-                <img src="/assets/images/promo-images/ESbanner.jpg" alt="">
+                <img src="<?=getAssetsDomain()?>assets/images/promo-images/ESbanner.jpg" alt="">
 
             </div>
 
@@ -136,7 +136,7 @@
 
             <section class="footer_links">
                 <ul>
-                    <li><a href="/?view=basic">Visit Site</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
+                    <li><a href="/">Visit Site</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
                     <li><a href="/terms">Terms &amp; Conditions</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
                     <li><a href="/policy">Privacy Policy</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
                     <li><a href="/contact">Contact</a></li>

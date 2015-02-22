@@ -92,11 +92,11 @@ class Estudyantrepreneur
 
     /**
      * Retrieves Students depending on date and school
-     * @param $schools
-     * @param $previousStartDate
-     * @param $previousEndDate
-     * @param $limit
-     * @param $getStudentWithSameVote
+     * @param array $schools
+     * @param string $previousStartDate
+     * @param string $previousEndDate
+     * @param int $limit
+     * @param bool $getStudentWithSameVote
      * @return mixed
      */
     private function __getStudentsByDateAndSchool($schools, $previousStartDate, $previousEndDate, $limit, $getStudentWithSameVote = false)
@@ -143,8 +143,8 @@ class Estudyantrepreneur
 
     /**
      * Get Total votes per school
-     * @param $startDate
-     * @param $endDate
+     * @param string $startDate
+     * @param string $endDate
      * @return array
      */
     private function __getTotalVotesByDate($startDate, $endDate)
@@ -245,8 +245,8 @@ class Estudyantrepreneur
 
     /**
      * Vote a student
-     * @param $studentId
-     * @param $memberId
+     * @param int $studentId
+     * @param int $memberId
      * @return EasyShop\Entities\EsPromo
      */
     public function voteStudent($studentId, $memberId)
@@ -264,7 +264,7 @@ class Estudyantrepreneur
 
     /**
      * Check is the user already voted
-     * @param $memberId
+     * @param int $memberId
      * @return EasyShop\Entities\EsPromo
      */
     public function isUserAlreadyVoted($memberId)
@@ -289,9 +289,9 @@ class Estudyantrepreneur
 
     /**
      * Returns the standing
-     * @param $round
-     * @param $schoolAndStudents
-     * @return array
+     * @param mixed $round
+     * @param mixed $schoolAndStudents
+     * @return mixed
      */
     public function getStandingsByRound($round = false, $schoolAndStudents = false)
     {
