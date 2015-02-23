@@ -123,18 +123,6 @@ class Kernel
             return $em;
         };
 
-        // ZeroMQ pusher
-        $container['user_pusher'] = function ($c) {
-            $wsConfig = require APPPATH . '/config/param/websocket.php';
-            $context = new \ZMQContext();
-            $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
-            $socket->connect($wsConfig['pushUrl']);
-            
-            // keeps from blocking when unable to send
-            $socket->setSockOpt(ZMQ::SOCKOPT_LINGER, 50);
-            
-            return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
-        };
 
         //Configuration Setter
         $container['local_configuration'] = function ($c) {

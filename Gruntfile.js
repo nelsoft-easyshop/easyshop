@@ -196,13 +196,6 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery.scrollUp.min.js',
                              'web/assets/js/src/vendor/jquery.auto-complete.js',
                              'web/assets/js/src/header.js'],
-
-                    'web/assets/js/min/easyshop.footer_full.js': 
-                            ['web/assets/js/src/ws.js'],
-
-                    'web/assets/js/min/easyshop.footer.js': 
-                            ['web/assets/js/src/ws.js'],
-
                     'web/assets/js/min/easyshop.header_alt.js': 
                             ['web/assets/js/src/vendor/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.auto-complete.js',

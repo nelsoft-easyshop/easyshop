@@ -10,8 +10,6 @@
     <script type='text/javascript' src="/assets/js/src/landingpage-responsive-nav.js" ></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery.cookie.js"></script>
-    <script type='text/javascript' src="/assets/js/src/lib/websocket/client.js"></script>
-    <script type='text/javascript' src="/assets/js/src/lib/eventdispatcher.js"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/socket.io.js"></script>
     <script type='text/javascript' src="/assets/js/src/nodeClient.js"></script>
     <script type='text/javascript' src="/assets/js/src/universal.js"></script>
@@ -20,10 +18,6 @@
 <?php endif; ?>
 
 <script type='text/javascript' src="/assets/js/src/vendor/jquery.jcarousel.min.js"></script>
-<script type='text/javascript' src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
-<script>
-    window.ab || document.write('<script src="/assets/js/src/vendor/autobahn.min.js">\x3C/script>');
-</script>
 
 <script type='text/javascript'>
     <?php if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT'])): ?>
@@ -40,6 +34,7 @@
     var config = {
         base_url: "<?php echo base_url(); ?>",
         badIE : badIE,
-        assetsDomain: "<?php echo getAssetsDomain(); ?>"
+        assetsDomain: "<?php echo getAssetsDomain(); ?>",
+        isSocketioEnabled: <?php echo json_encode(ES_ENABLE_SOCKETIO); ?>
     };
 </script>
