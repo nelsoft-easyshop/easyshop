@@ -371,10 +371,20 @@ class AssetsUploader
      */
     public function checkValidFileType($file)
     {
-        $mimeConfig = $this->configLoader->getItem('mimes'); 
+        $mimeConfig = $this->configLoader->getItem('mimes');
+        $arrayMimes = explode("|", self::ALLOWABLE_IMAGE_MIME_TYPES);
+        $acceptableMime = [];
+        foreach ($arrayMimes as $mime) {
+            if(is_array($mimeConfig[$mime])){
+                $acceptableMime = array_merge($acceptableMime, $mimeConfig[$mime]);
+            }
+            else{
+                $acceptableMime[] = $mimeConfig[$mime];
+            }
+        }
 
         $fileData = getimagesize($file);
-        if((bool)$fileData && in_array($fileData['mime'], $mimeConfig)){
+        if((bool)$fileData && in_array($fileData['mime'], $acceptableMime)){
             return true;
         }
 

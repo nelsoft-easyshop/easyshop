@@ -101,7 +101,7 @@ $mimes = array( 'hqx'   =>  'application/mac-binhex40',
                 'json' => array('application/json', 'text/json')
             );
 
-$config = array_merge($mimes['jpg'], $mimes['png'], [$mimes['gif']]);
+$config = $mimes;
 
 /* End of file mimes.php */
 /* Location: ./application/config/mimes.php */
