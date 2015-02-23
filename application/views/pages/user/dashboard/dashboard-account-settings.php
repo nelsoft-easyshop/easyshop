@@ -156,7 +156,7 @@
                 </div>
                 <div class="edit-status">
                     <p class="p-orange"> Are you sure you want to deactivate your account? </p>
-                    <form class="form-horizontal" id="deactivateAccountForm">
+                    <form class="form-horizontal" method="post" id="deactivateAccountForm">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
