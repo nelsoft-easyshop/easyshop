@@ -364,6 +364,21 @@ class AssetsUploader
         return $result;
     }
 
-    
+    /**
+     * Check if file type to be uploaded is valid
+     * @param  file    $file available for using getimagesize function
+     * @return boolean
+     */
+    public function checkValidFileType($file)
+    {
+        $mimeConfig = $this->configLoader->getItem('mimes'); 
+
+        $fileData = getimagesize($file);
+        if((bool)$fileData && in_array($fileData['mime'], $mimeConfig)){
+            return true;
+        }
+
+        return false;
+    }
 }
 

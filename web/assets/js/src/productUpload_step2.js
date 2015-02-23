@@ -1613,7 +1613,7 @@ var universalExtension = ".jpeg";
             dataType: "json", 
             beforeSubmit : function(arr, $form, options){
                 $('<input type="hidden">').attr({
-                    id: 'pictureName',
+                    id: 'pictureNameOther',
                     name: 'pictureNameOther',
                     value: picName
                 }).appendTo('#other_files');

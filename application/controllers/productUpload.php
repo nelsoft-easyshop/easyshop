@@ -527,23 +527,18 @@ class productUpload extends MY_Controller
         $afstartArray = json_decode(trim($this->input->post('afstart'))); 
         $filenames_ar = [];
         $text = ""; 
-        $error = 0;
-        $allowed =  ['gif','png' ,'jpg','jpeg']; // available format only for image
+        $error = 0; 
 
         $this->config->load('image_dimensions', true);
         $imageDimensions = $this->config->config['image_dimensions']; 
-
+        $assetsUploader = $this->serviceContainer["assets_uploader"]; 
         foreach($_FILES['files']['name'] as $key => $value ) {
             $file_ext = strtolower(end(explode('.', $value)));
             $filenames_ar[$key] = $afstartArray[$key];
-            if(!in_array(strtolower($file_ext),$allowed)){
+            if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb
+               || $_FILES['files']['error'][$key] !== UPLOAD_ERR_OK
+               || !$assetsUploader->checkValidFileType($_FILES['files']['tmp_name'][$key])){
                 unset($filenames_ar[$key]);
-            }
-
-            if(isset($_FILES['files']['name'][$key])){
-                if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb || (bool)$_FILES['files']['error'][$key]){ 
-                    unset($filenames_ar[$key]);
-                }
             }
 
             if(isset($filenames_ar[$key])){
@@ -581,7 +576,8 @@ class productUpload extends MY_Controller
             $tempFilePath = $pathDirectory.$filename;
             $imageData = base64_decode($img);
  
-            if(getimagesize($base64String) && getimagesizefromstring($imageData)){
+            if((bool)getimagesizefromstring($imageData) 
+                && $assetsUploader->checkValidFileType($base64String)){
                 file_put_contents($tempFilePath, $imageData);
                 $imageUtility->imageResize($pathDirectory.$filename, 
                                            $pathDirectory."small/".$filename,
@@ -620,15 +616,16 @@ class productUpload extends MY_Controller
         $filename = trim($this->input->post('pictureNameOther'));
         $tempId = $this->session->userdata('tempId');
         $member_id = $this->session->userdata('member_id');
-        $imageCollections = json_decode($this->input->post('imageCollections'))[0]; 
-        $allowed =  ['gif','png' ,'jpg','jpeg']; // available format only for image 
-        $fileNameArray = explode('.', $filename);
-        $fileExtension = strtolower(end($fileNameArray)); 
+        $imageCollections = json_decode($this->input->post('imageCollections'))[0];
+        $assetsUploader = $this->serviceContainer["assets_uploader"]; 
+        $fileNameArray = explode('.', $filename); 
         array_pop($fileNameArray);
         $filename = implode(".", $fileNameArray).".jpeg";
 
-        if(!in_array(strtolower($fileExtension),$allowed)){
-            die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
+        if(!$assetsUploader->checkValidFileType($_FILES['attr-image-input']['tmp_name'])
+            || $_FILES['attr-image-input']['error'] !== UPLOAD_ERR_OK
+            || $_FILES['attr-image-input']['size'] >= $this->maxFileSizeInMb){
+            die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb"}');
         }
 
         if (strpos($filename, $tempId."_".$member_id) === false) { 
@@ -644,9 +641,9 @@ class productUpload extends MY_Controller
         $img = str_replace('data:image/jpeg;base64,', '', $imageCollections);
         $tempFilePath = $pathDirectory.$filename;
         $imageFile = base64_decode($img);
-        if(getimagesize($imageCollections) && getimagesizefromstring($imageFile)){
+        if($assetsUploader->checkValidFileType($imageCollections) 
+            && (bool)getimagesizefromstring($imageFile)){
             file_put_contents($tempFilePath, $imageFile);
-
             $imageUtility->imageResize($pathDirectory.$filename, 
                                        $pathDirectory."small/".$filename,
                                        $imageDimensions["productImagesSizes"]["small"]);
