@@ -378,12 +378,13 @@
                 if(!data.isLoggedIn){
                     window.location.replace("/login");
                 }
-                
-                if(data.isSuccessful){
-                    window.location.replace("/cart");
-                }
-                else{
-                    alert("We cannot process your request at this time. Please try again in a few moment");
+                else {
+                    if(data.isSuccessful){
+                        window.location.replace("/cart");
+                    }
+                    else{
+                        alert("We cannot process your request at this time. Please try again in a few moment");
+                    }
                 }
             }
         });
