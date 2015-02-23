@@ -1704,18 +1704,18 @@ class Memberpage extends MY_Controller
     {
 
         $hashUtility = $this->serviceContainer['hash_utility'];
-        $getData = $hashUtility->decode($this->input->get('h'));
+        $getData = $hashUtility->decode($this->input->post('h'));
 
         $authenticationResult = $this->accountManager
-                                     ->authenticateMember($this->input->get('username'), 
-                                                          $this->input->get('password'), 
+                                     ->authenticateMember($this->input->post('username'), 
+                                                          $this->input->post('password'), 
                                                           false, 
                                                           true);  
         $isActivationRequestValid = $authenticationResult['member']
                                     && $authenticationResult['member']->getIdMember() === (int)$getData["memberId"] 
                                     && (bool)$authenticationResult['member']->getIsActive() === false ;
         $response = false;
-        if($this->input->get("activateAccountButton") && $isActivationRequestValid) {
+        if($this->input->post("activateAccountButton") && $isActivationRequestValid) {
             $this->em
                  ->getRepository('EasyShop\Entities\EsMember')
                  ->accountActivation($authenticationResult["member"], true);          

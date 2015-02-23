@@ -99,7 +99,7 @@
 
                 <input type="hidden" id="vid" value="<?php echo $arrVendorDetails['id_member']?>">
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
-                <input type="hidden" id="queryString" value='<?=json_encode($this->input->get()); ?>' />
+                <input type="hidden" id="queryString" value='<?=html_escape(json_encode($this->input->get())); ?>' />
 
                 <div class="vendor-select-con">
                     <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
