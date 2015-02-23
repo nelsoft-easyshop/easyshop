@@ -835,6 +835,10 @@ class ProductManager
      */
     public function isProductActive($product)
     {
+        if(!$product){
+            return false;
+        }
+
         $member = $product->getMember();
 
         $isNotDeleted = (int)$product->getIsDelete() === \EasyShop\Entities\EsProduct::ACTIVE;
@@ -845,5 +849,107 @@ class ProductManager
         return $isNotDeleted && $isNotDrafted && $isMemberNotBanned && $isMemberActive;
     }
     
+
+    /**
+     * Get random products from different users
+     *
+     * @param integer[] $memberIdArray
+     * @param integer $limit
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getRandomProductsFromUsers($memberIdArray, $limit = 10)
+    {
+        if(is_int($memberIdArray)){
+            $memberIdArray = [ $memberIdArray ];
+        }
+        
+        $numberOfMembers = count($memberIdArray);
+        if($numberOfMembers === 0){
+            return [];
+        }
+        
+        $productFromEachSeller = $limit/$numberOfMembers;
+        $productFromEachSeller = ceil($productFromEachSeller);
+        $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
+
+        $productResults = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                               ->getRandomProductsFromUsers($memberIdArray, $productFromEachSeller);
+
+        $productIds = [];
+        $memberIdsWithProducts = [];
+        
+        foreach($productResults as $result){
+            $productIds[] = $result['id_product'];
+            if(!in_array($result['member_id'], $memberIdsWithProducts)){
+                $memberIdsWithProducts[] = $result['member_id'];
+            }
+        }
+
+        $numberOfFoundProducts = count($productResults);
+        if($numberOfFoundProducts < $limit){
+            $numberOfProductsToFill =  $limit - $numberOfFoundProducts;
+            $numberOfMembersWithProducts =  count($memberIdsWithProducts) ;
+            if($numberOfMembersWithProducts > 0){
+                $productFromEachSeller = $numberOfProductsToFill/$numberOfMembersWithProducts;
+                $productFromEachSeller = ceil($productFromEachSeller);
+                $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
+                $fillerProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                       ->getRandomProductsFromUsers($memberIdsWithProducts, $productFromEachSeller, $productIds);
+                foreach($fillerProducts as $fillerProduct){
+                    $productIds[] = $fillerProduct['id_product'];
+                }
+            } 
+        }
+        
+        if(count($productIds) > $limit){
+            shuffle($productIds);
+            $productIds = array_splice($productIds, 0, $limit);
+           
+        }
+
+        $products = []; 
+        if(!empty($productIds)){
+            $qb = $this->em->createQueryBuilder();
+            $products = $qb->select('p')
+                        ->from('EasyShop\Entities\EsProduct','p') 
+                        ->where($qb->expr()->in('p.idProduct', $productIds) ) 
+                        ->getQuery()
+                        ->getResult();
+        }
+
+        return $products;
+    }
+
+    /**
+     * Updates Product Status
+     * 
+     * @param int $memberId
+     * @param int $productStatus
+     * @param int $desiredStatus
+     * 
+     * @return bool
+     */
+    public function updateUserProductStatus($memberId, $productStatus, $desiredStatus)
+    {
+        $products = $this->em
+                         ->getRepository('EasyShop\Entities\EsProduct')
+                         ->findBy([
+                                "member" => $memberId,
+                                "isDelete" => $productStatus,
+                                "isDraft" => !EsProduct::DRAFT
+                            ]);
+        try{
+            foreach ($products as $value) {
+               $value->setIsDelete($desiredStatus);
+            }
+            $this->em->flush();
+            return true;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
+
 }
 

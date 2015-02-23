@@ -80,6 +80,23 @@ class ImageUtility
         $this->imageLibrary->clear();
     }
 
+    /**
+    * Rotate Image
+    * @param string $souceImage
+    * @param integer $angle
+    */
+    public function imageRotate($souceImage, $angle)
+    {
+        $config = [
+        'image_library' => 'gd2',
+        'source_image' => $souceImage,
+        'rotation_angle' => $angle
+        ];
+        $this->imageLibrary->initialize($config);
+        $this->imageLibrary->rotate();
+        $this->imageLibrary->clear();
+    }
+
 }
 
 

@@ -3,6 +3,7 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsPromoType;
 
 class EsPromoRepository extends EntityRepository
 {
@@ -55,24 +56,6 @@ class EsPromoRepository extends EntityRepository
                     ->getQuery();
         $result = $query->getResult();
 
-        if ($result) {
-            $product = $this->_em->getRepository('EasyShop\Entities\EsProduct')->findOneBy(['idProduct' => $result[0]['idProduct']]);
-            $isMemberRegistered = $this->_em->getRepository('EasyShop\Entities\EsPromo')
-                                            ->findOneBy([
-                                                'memberId' => $result[0]['c_member_id']
-                                            ]);
-            $this->_em->serviceContainer['promo_manager']->hydratePromoData($product);
-            $result = [
-                'id_product'=> $product->getIdProduct(),
-                'price'=> $product->getPrice(),
-                'product' => $product->getName(),
-                'brief' => $product->getBrief(),
-                'c_id_code' => $result[0]['c_member_id'],
-                'can_purchase' => (bool) $isMemberRegistered ? false : true,
-                'product_image_path' => $result[0]['path']
-            ];
-        }
-
         return $result;
     }
 
@@ -113,6 +96,29 @@ class EsPromoRepository extends EntityRepository
                     ->getQuery();
 
         return $query->getOneOrNullResult();
+    }
+
+    /**
+     * Get total vote per school by date
+     * @param $startDate
+     * @param $endDate
+     * @return array
+     */
+    public function getTotalVotesByDate($startDate, $endDate)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('schoolTbl.name, count(promoTbl.memberId) as vote')
+                    ->from('EasyShop\Entities\EsPromo', 'promoTbl')
+                    ->leftJoin('EasyShop\Entities\EsStudent', 'studentTbl', 'WITH', 'studentTbl.idStudent = promoTbl.studentId')
+                    ->leftJoin('EasyShop\Entities\EsSchool', 'schoolTbl', 'WITH', 'schoolTbl.idSchool = studentTbl.school')
+                    ->where('promoTbl.createdAt >= :startDate')
+                    ->andWhere('promoTbl.createdAt < :endDate')
+                    ->groupBy('studentTbl.school')
+                    ->setParameter('startDate', $startDate)
+                    ->setParameter('endDate', $endDate)
+                    ->getQuery();
+
+        return $query->getResult();
     }
 
 }

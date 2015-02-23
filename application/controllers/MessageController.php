@@ -69,58 +69,42 @@ class MessageController extends MY_Controller
     /**
      * Sends a message
      *
+     * @return json
      */
     public function send()
     {
         $storeName = trim($this->input->post("recipient"));
         $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
                                    ->getUserWithStoreName($storeName);
-        $memberEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
+        $receiverEntity = $receiverEntity ? $receiverEntity[0] : null;
+        $senderEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
+        $msg = trim($this->input->post("msg"));
 
-        if (!$receiverEntity) {
-            $result['success'] = 0;
-            $result['errorMessage'] = "The store name " . html_escape($storeName) . ' does not exist';
+        $result = [
+            'success' => false,
+            'errorMessage' => '',
+            'updatedMessageList' => '',
+        ];
+        
+        $messageSendingResult = $this->messageManager->sendMessage($senderEntity, $receiverEntity, $msg);
+        if($messageSendingResult['isSuccessful']){
+            $result['success'] = true;
+            $result['updatedMessageList'] = $messageSendingResult['allMessages'];
         }
-        else if ( (int) $this->userId === (int) $receiverEntity[0]->getIdMember() ) {
-            $result['success'] = 0;
-            $result['errorMessage'] = "Sorry, it seems that you are trying to send a message to yourself.";
-        }
-        else {
-            $receiverEntity = $receiverEntity[0];
-            $msg = trim($this->input->post("msg"));
-            $isSendingSuccesful = $this->messageManager->send($memberEntity, $receiverEntity, $msg);
-            if ($isSendingSuccesful) {
-                $messages = $this->messageManager->getAllMessage($this->userId);
-                $recipientMessages = $this->messageManager->getAllMessage($receiverEntity->getIdMember(), true);
-                $emailRecipient = $receiverEntity->getEmail();
-                $emailSubject = $this->lang->line('new_message_notif');
-                $this->config->load('email', true);
-                $imageArray = $this->config->config['images'];
-                $imageArray[] = "/assets/images/appbar.home.png";
-                $imageArray[] = "/assets/images/appbar.message.png";
-
-                $socialMediaLinks = $this->serviceContainer['social_media_manager']->getSocialMediaLinks();
-                $parseData = [
-                    'user' => $memberEntity->getUsername(),
-                    'recipient' => $receiverEntity->getUsername(),
-                    'home_link' => base_url(),
-                    'store_link' => base_url() . $memberEntity->getSlug(),
-                    'msg_link' => base_url() . "messages/#" . $memberEntity->getUsername(),
-                    'msg' => $msg,
-                    'facebook' => $socialMediaLinks["facebook"],
-                    'twitter' => $socialMediaLinks["twitter"],
-                ];
-
-                $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, true);
-                $this->emailService->setRecipient($emailRecipient)
-                                   ->setSubject($emailSubject)
-                                   ->setMessage($emailMsg, $imageArray)
-                                   ->queueMail();
-                $result = [
-                    'success' => 1,
-                    'message' => $messages,
-                    'recipientMessage' => $recipientMessages
-                ];
+        else{
+            switch($messageSendingResult['error']){
+                case EasyShop\Message\MessageManager::SENDER_DOES_NOT_EXIST_ERROR:
+                    $result['errorMessage'] = "The user " . html_escape($storeName) . ' does not exist';
+                    break;
+                case EasyShop\Message\MessageManager::SELF_SENDING_ERROR:
+                    $result['errorMessage'] = "Sorry, it seems that you are trying to send a message to yourself";
+                    break;
+                case EasyShop\Message\MessageManager::MESSAGE_IS_EMPTY_ERROR:
+                    $result['errorMessage'] = "Please write a message.";
+                    break;
+                default:
+                    $result['errorMessage'] = "Sorry, we cannot process your request at this time. Please try again later";
+                    break;
             }
         }
 
@@ -154,19 +138,6 @@ class MessageController extends MY_Controller
     }
 
     /**
-     * Gets all messages
-     *
-     * @return json
-     */
-    public function getAllMessage()
-    {
-        $getUnreadMessages = $this->input->post("isUnread");
-        $message = $this->messageManager->getAllMessage($this->userId, $getUnreadMessages);
-
-        echo json_encode($message);
-    }
-
-    /**
      * Update message status to seen
      *
      * @return json
@@ -183,7 +154,16 @@ class MessageController extends MY_Controller
 
         $result = $this->em->getRepository("EasyShop\Entities\EsMessages")
                            ->updateToSeen($this->userId, $messageIdArray);
-
+        if($result){
+            $member = $this->serviceContainer['entity_manager']
+                           ->find('EasyShop\Entities\EsMember', $this->userId);
+            $redisChatChannel = $this->messageManager->getRedisChannelName();
+            $this->serviceContainer['redis_client']->publish($redisChatChannel, json_encode([
+                'event' => 'message-opened',
+                'reader' => $member->getStorename(),
+            ]));
+        }
+        
         echo json_encode($result);
     }
 
@@ -200,7 +180,7 @@ class MessageController extends MY_Controller
                                                            ->find($this->userId);
         $redirectUrl = '/' . $recipientSlug . '/contact#Failed';
         if ($recipient) {
-            $this->messageManager->send($member, $recipient, trim($this->input->post('msg')));
+            $this->messageManager->sendMessage($member, $recipient, trim($this->input->post('msg')));
             $redirectUrl = '/' . $recipientSlug . '/contact#SendMessage';
         }
 

@@ -3,19 +3,39 @@
 /**********************************************************************/
 
 var ajaxStat = {};
-var navigation = responsiveNav(".nav-collapse");
 
 (function( $ ) {
-    $('.bxslider_slides').bxSlider({
-        infiniteLoop: true,
-        auto: true
+    $(".show-why-create-mobileview").click( function(){
+        $(".why-create-mobileview").slideToggle();
     });
-    $('#reg_btn,#reg_txt').click(function(event) {
-        event.preventDefault();
-        var n = $(document).height();
-        $('html, body').animate({ scrollTop: 200 }, 300);
-        navigation.close();
+
+    $(".open-create-account").click( function(){
+        $("#alter-tab div:first-child").children().removeClass("selected");
+        $("#alter-tab div:first-child").next().children().addClass("selected");
+        $("#login").fadeOut(0);
+        $("#create-account").fadeIn(300);
     });
+
+    $(".terms_and_conditions").click( function(){
+        $("#terms-section").fadeIn();
+    });
+
+    $(".close-term").click( function(){
+        $("#terms-section").fadeOut();
+    });
+
+    $("#adv2").idTabs(function(id,list,set){ 
+        $("a",set).removeClass("selected") 
+        .filter("[href='"+id+"']",set).addClass("selected");
+
+        for(i in list) {
+          $(list[i]).hide();
+        }
+
+        $(id).fadeIn(); 
+        return false; 
+    }); 
+
 })(jQuery);
 
 
@@ -364,13 +384,13 @@ function username_check(trigger){
     jQuery.post('/register/username_check', {username: username, csrfname : csrftoken}, function(result){
         if(result == 1){
             showcheck(jQuery('#username'));
-            jQuery('.username_availability').html('');
+            jQuery('.username_availability').html('<span class="input-success">Username is available</span>');
             jQuery('#usernamecheck').attr('value', jQuery('#username').val());
             field.addClass('pass');
         }
         else{
             showx(jQuery('#username'));
-            jQuery('.username_availability').html('Username already exists.');
+            jQuery('.username_availability').html('<span class="input-error">Username already exists.</span>');
             field.removeClass('pass');
         }
         field.removeClass('forSearch');
@@ -401,7 +421,7 @@ function email_check(trigger){
         }
         else{
             showx(jQuery('#email'));
-            jQuery('.email_availability').html('Email is already in use.');
+            jQuery('.email_availability').html('<span class="input-error">Email is already in use.</span>');
             field.removeClass('pass');
         }
         field.removeClass('forSearch');
@@ -439,7 +459,7 @@ function mobile_check(trigger){
         }
         else{
             showx(jQuery('#mobile'));
-            jQuery('.mobile_availability').html('Mobile is already in use.');
+            jQuery('.mobile_availability').html('<span class="input-error">Mobile is already in use.</span>');
             field.removeClass('pass');
             field.addClass('fail');
         }
@@ -447,73 +467,6 @@ function mobile_check(trigger){
         jQuery('#mobile_loader').hide();
     });
 }
-
-/**********************************************************************************************/
-/****************************	SUBSCRIPTION FORM	*******************************************/
-/**********************************************************************************************/
-jQuery(document).ready(function(){
-
-    jQuery('#subscription_form').validate({
-        rules: {           
-            subscribe_email: {
-                required: true,
-                email: true,
-                minlength: 6,
-                }
-            },
-            messages:{
-            subscribe_email:{
-                required: "Please enter a valid email address",
-                email: 'Please enter a valid email address',
-                minlength: '*Email too short',
-            }
-            },
-            errorElement: "span",
-            errorPlacement: function(error, element) {
-                error.addClass('red');
-                error.appendTo(element.parent());
-            },
-            submitHandler: function(form){
-            jQuery('#subscribe_btn').attr('disabled', true);
-
-            jQuery.post('/register/subscribe', jQuery(form).serializeArray(), function(data){
-                jQuery('#subscribe_loadingimg').hide();
-                jQuery('#subscribe_btn').attr('disabled', false);
-                if(data == 1){
-                    jQuery('#result_desc').html("Thank you for subscribing to Easyshop.ph!");
-                    var title = "Subscription Complete";
-                    jQuery(form).find('input[type="text"]').each(function(){
-                        jQuery(this).prop('value', '');
-                    });
-                        jQuery('#success_subscribe').submit();
-                }
-                else{
-                    jQuery('#result_desc').html("We are currently encountering a problem. Please try again later.");
-                    var title= "Failed to Subscribe";
-                    
-                    jQuery('#register_result').dialog({
-                    width:'65%',
-                    autoOpen: false,
-                    title: title,
-                    modal: true,
-                    closeOnEscape: false,
-                    draggable:false,
-                    buttons:{
-                        OK: function(){
-                            jQuery(this).dialog("close");
-                            }
-                        }
-                    });
-                    jQuery('#register_result').dialog('open');
-                }
-                
-            });
-            return false;
-        }
-    });
-
-});
-
 
 function showcheck(element){
     var name = element.attr('name');
@@ -533,71 +486,5 @@ function hidecheckx(element){
     jQuery('#'+name+'_x').hide();
 }
 
-/*******************************************************************************************************/
-/******************************* Terms and Conditions Dialog box ***************************************/
-/*******************************************************************************************************/
-jQuery(function() {
-    jQuery( ".dialog" ).dialog({
-        width:"65%",
-        autoOpen: false,
-        modal: true,
-        closeOnEscape: true,
-        draggable:false,
-    });
-
-    jQuery( ".terms_and_conditions" ).click(function() {
-    jQuery( ".dialog" ).dialog( "open" );
-    jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
-    });
-});
-
-/**** video player dialog box ****/
-jQuery(function() {
-    jQuery( "#videoplayer" ).dialog({
-        width:"68%",
-        autoOpen: false,
-        modal: true,
-        closeOnEscape: true,
-        draggable:false,
-        show: {
-            effect: "fade",
-            duration: 600
-        },
-        hide: {
-            effect: "fade",
-            duration: 400
-        }
-    });
-
-    jQuery( ".vidplay" ).click(function() {
-    jQuery( "#videoplayer" ).dialog( "open" );
-    });
-});
-
-/****** Terms and Conditions Dialog box ********/
-jQuery(function() {
-    jQuery( ".dialog" ).dialog({
-        width:"65%",
-        autoOpen: false,
-        modal: true,
-        closeOnEscape: true,
-        draggable:false,
-        show: {
-            effect: "fade",
-            duration: 1000
-        },
-        hide: {
-            effect: "fade",
-            duration: 400
-        }
-    });
-
-    jQuery( ".terms_and_conditions" ).click(function() {
-        jQuery(".dialog" ).dialog( "open" );
-        jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
-    });
-    
-    
-});
 
 

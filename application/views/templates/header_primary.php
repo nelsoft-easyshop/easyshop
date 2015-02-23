@@ -439,7 +439,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="clear"></div>        
 
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
-<input type="hidden" id="chatClientInfo" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-store-name="<?=html_escape($user ? $user->getStoreName() : 'false')?>">
+<input type="hidden" id="chatServerConfig" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-jwttoken="<?php echo html_escape($jwtToken); ?>">
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>

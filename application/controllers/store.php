@@ -776,7 +776,7 @@ class Store extends MY_Controller
 
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Contact '.$bannerData['arrVendorDetails']['store_name'].'| Easyshop.ph',
+            'title' => 'Contact '.html_escape($bannerData['arrVendorDetails']['store_name']).'| Easyshop.ph',
             'metadescription' => html_escape($bannerData['arrVendorDetails']['store_desc']),
             'relCanonical' => base_url().$sellerslug.'/contact',
         ];
@@ -968,7 +968,6 @@ class Store extends MY_Controller
                 }
             }
             else{
-                $um->setStoreName($storeName);
                 $data['errors'] =  $this->serviceContainer['form_error_helper']->getFormErrors($form);
                 if(!$isAddressValid){
                     $data['errors']['location'] = ["address must be complete"];

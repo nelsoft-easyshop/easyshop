@@ -63,6 +63,7 @@ class Header_decorator extends Viewdecorator
         $this->view_data['renderSearchbar'] = $renderSearchbar;
         $this->view_data['chatServerHost'] = $chatServerHost;
         $this->view_data['chatServerPort'] = $chatServerPort;
+        $this->view_data['jwtToken'] = $this->jwtToken;
     }
 }
 
