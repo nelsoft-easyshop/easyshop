@@ -426,6 +426,10 @@ html, body {
     margin-top:25px;
 }
 
+#sendReactivationLink{
+    cursor: pointer; 
+}
+
 @media (min-width: 280px) {
     .new-login-register-content,
     .terms-and-condition {

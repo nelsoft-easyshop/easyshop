@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="row">
                                     <span class="col-xs-12 padding-right-reset">
-                                        <input type="submit" class="btn btn-default-3" value='Login' name='login_form'/>
+                                        <input type="submit" class="btn btn-default-3 login-btn" value='Login' name='login_form'/>
                                     </span>
                                 </div>
                                 <?php if($formError === 'Account Banned'): ?>
@@ -489,6 +489,7 @@
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type='text/javascript' src="/assets/js/src/universal.js"></script>
     <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>

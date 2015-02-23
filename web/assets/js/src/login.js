@@ -47,7 +47,11 @@
             type: 'post',
             data: {username:username, password:password, csrfname : csrftoken},
             url: "/memberpage/sendDeactivateNotification",
+            beforeSend: function(){
+                $('.login-btn').val('Please wait...');
+            },
             success: function(data) {
+                $('.login-btn').val('Login');
                 $('#login')[0].disabled = false;                        
                 var obj = jQuery.parseJSON(data);   
                 $('#loading_img_activate').hide();
@@ -102,38 +106,43 @@
                     dataType: "JSON",
                     url: "/login/authenticate",
                     data: $(form).serializeArray(),
-                    success:function(data){
+                    beforeSend: function(){
+                        $('.login-btn').val('Please wait...');
+                    },
+                    success:function(data){                        
+                        $('.login-btn').val('Login');
                         if(data.timeoutLeft >= 1){
                             $('#login').hide();
                             $('.login-throttle').fadeIn();
                             $('#login-timeout').html(data.timeoutLeft);
                         }
                         else{
+                            var $loginErrorContainer = $("#login_error");
                             if(data.o_success <= 0){
-                                $("#login_error").empty();
+                                $loginErrorContainer.empty();
                                 if(data['o_message'] === 'Account Banned'){
                                     var officeHours = $('#office_hours').val();
                                     var officeContactno = $('#office_contactno').val();
-                                    var alertMessage = data['errors'][0]['message'] + " Contact our Customer Service Support for further details: " + officeHours + " " +  officeContactno;
-                                    alert(escapeHtml(alertMessage));
+                                    var message = data['errors'][0]['message'] + " Contact our Customer Service Support for further details: " + officeHours + " " +  officeContactno;
+                                    $loginErrorContainer.html(escapeHtml(message));
                                 }
                                 else if(data["o_message"] == "Account Deactivated") {
                                     $("#deactivatedAccountPrompt").css("display","block");
                                     $("#deactivatedAccountPrompt").find("a").attr("data-id",data["errors"][0]["id"]);
                                 }
                                 else {
-                                    $("#login_error").html(data["o_message"] );
+                                    $loginErrorContainer.html(data["o_message"] );
                                 }
                                 $('#loading_img').hide();
                                 $('#login').show();
                             }
                             else{
                                 $('.error_cont').text('');
-                                $('#login_error').text('');
+                                $loginErrorContainer.text('');
                                 $('#loading_img').hide();
-                                $('#login').val('Redirecting...');
                                 $('#login')[0].disabled = true;
                                 $('#login').show();
+                                $('.login-btn').val('Redirecting...');
 
                                 var url = $('#redirect_url').val();
                                 var first_uri_segment = url.substring(0, url.indexOf('/'));
@@ -161,9 +170,10 @@
                         }
                     },
                     error: function(xhr, error) {
-                        $('#loading_img').hide();
+                        $('.login-btn').val('Login');
                         $('#login').show();
-                        alert('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');
+                        var $loginErrorContainer = $("#login_error");
+                        $loginErrorContainer.html('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');
                     }            
                 });
                 return false;
