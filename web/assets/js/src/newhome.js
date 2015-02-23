@@ -225,5 +225,15 @@
         }
 
     });
-
+    
+    
+    $(document).ready(function(){
+        $('.hide-owlcarousel-div').each(function(){
+            var owlCarouselSectionId = $(this).data('sectioncount');
+            $('.purchased-items-slider-cat-' + owlCarouselSectionId).css('display','none')
+        });
+    });
+                                 
+                  
+    
 }(jQuery));

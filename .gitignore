@@ -9,6 +9,10 @@
 !/web/assets/user/default
 /web/assets/product/product_description/*
 /web/assets/images/ads/*
+!/web/assets/images/ads/readme.md
+/web/assets/images/partner/*
+!/web/assets/images/partner/readme.md
+!/web/assets/images/partner/banners/readme.md
 /web/assets/images/mainslide/*
 /web/assets/images/homeslider/*
 /web/assets/images/mobile/*
