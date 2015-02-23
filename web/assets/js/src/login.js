@@ -47,7 +47,11 @@
             type: 'post',
             data: {username:username, password:password, csrfname : csrftoken},
             url: "/memberpage/sendDeactivateNotification",
+            beforeSend: function(){
+                $('.login-btn').val('Please wait...');
+            },
             success: function(data) {
+                $('.login-btn').val('Login');
                 $('#login')[0].disabled = false;                        
                 var obj = jQuery.parseJSON(data);   
                 $('#loading_img_activate').hide();
