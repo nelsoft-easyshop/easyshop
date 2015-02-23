@@ -34,7 +34,16 @@
                 </div>
                 <div class="edit-activate-prod">
                     <form class="form-horizontal" id="deactivateAccountForm">
-                        <p class="p-orange"> Are you sure you want to activate your products? </p>
+                        <p class="p-orange"> Are you sure you want to activate your items? </p>
+                        
+                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="message"></span>
+                        </div>
+                                        
+                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
+                                Products successfully restored
+                        </div> 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
@@ -58,15 +67,7 @@
                                 </span>
                             </div>                           
                             <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="actionLoader" style="display:none"/>                                                            
-                        </div>
-                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            <span class="message"></span>
-                        </div>
-                                        
-                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
-                                Products successfully restored
-                        </div>                         
+                        </div>                        
                     </form>
                 </div>
             </div>
@@ -86,7 +87,15 @@
                 </div>
                 <div class="edit-deactivate-prod">
                     <form class="form-horizontal" id="deactivateAccountForm">
-                        <p class="p-orange"> Are you sure you want to activate your products? </p>
+                        <p class="p-orange"> Are you sure you want to disable your active items? </p>
+                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="message"></span>
+                        </div>
+                                        
+                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
+                                Products successfully restored
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
@@ -111,14 +120,6 @@
                             </div>
                             <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="actionLoader" style="display:none"/>                                                            
                         </div>
-                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            <span class="message"></span>
-                        </div>
-                                        
-                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
-                                Products successfully restored
-                        </div>
                     </form>
                 </div>
             </div>
@@ -138,7 +139,15 @@
                 </div>
                 <div class="edit-delete-prod">
                     <form class="form-horizontal" id="deactivateAccountForm">
-                        <p class="p-orange"> Are you sure you want to activate your products? </p>
+                        <p class="p-orange"> Are you sure you want to delete all inactive items? </p>
+                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="message"></span>
+                        </div>
+                                        
+                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
+                                Products successfully restored
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
                             <div class="col-sm-5">
@@ -163,14 +172,7 @@
                             </div>
                             <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="actionLoader" style="display:none"/>                                                            
                         </div>
-                        <div class="alert alert-danger" style="display:none" role="alert" id="errorPrompt">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            <span class="message"></span>
-                        </div>
-                                        
-                        <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
-                                Products successfully restored
-                        </div>
+                        
                     </form>
                 </div>
             </div>
