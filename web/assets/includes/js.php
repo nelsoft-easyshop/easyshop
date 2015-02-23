@@ -34,6 +34,7 @@
     var config = {
         base_url: "<?php echo base_url(); ?>",
         badIE : badIE,
-        assetsDomain: "<?php echo getAssetsDomain(); ?>"
+        assetsDomain: "<?php echo getAssetsDomain(); ?>",
+        isSocketioEnabled: <?php echo json_encode(ES_ENABLE_SOCKETIO); ?>
     };
 </script>

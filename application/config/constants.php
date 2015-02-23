@@ -48,6 +48,7 @@ else{
 }
 define('ES_FILE_VERSION',$fileVersion);
 define('ES_ENABLE_CHRISTMAS_MODS', false);
+define('ES_ENABLE_SOCKETIO', false);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
