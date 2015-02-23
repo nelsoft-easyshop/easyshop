@@ -102,7 +102,11 @@
                     dataType: "JSON",
                     url: "/login/authenticate",
                     data: $(form).serializeArray(),
+                    beforeSend: function(){
+                        $('.login-btn').val('Please wait...');
+                    },
                     success:function(data){
+                        $('.login-btn').val('Login');
                         if(data.timeoutLeft >= 1){
                             $('#login').hide();
                             $('.login-throttle').fadeIn();
@@ -131,9 +135,9 @@
                                 $('.error_cont').text('');
                                 $('#login_error').text('');
                                 $('#loading_img').hide();
-                                $('#login').val('Redirecting...');
                                 $('#login')[0].disabled = true;
                                 $('#login').show();
+                                $('.login-btn').val('Redirecting...');
 
                                 var url = $('#redirect_url').val();
                                 var first_uri_segment = url.substring(0, url.indexOf('/'));
@@ -161,6 +165,7 @@
                         }
                     },
                     error: function(xhr, error) {
+                        $('.login-btn').val('Login');
                         $('#loading_img').hide();
                         $('#login').show();
                         alert('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');

@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="row">
                                     <span class="col-xs-12 padding-right-reset">
-                                        <input type="submit" class="btn btn-default-3" value='Login' name='login_form'/>
+                                        <input type="submit" class="btn btn-default-3 login-btn" value='Login' name='login_form'/>
                                     </span>
                                 </div>
                                 <?php if($formError === 'Account Banned'): ?>
