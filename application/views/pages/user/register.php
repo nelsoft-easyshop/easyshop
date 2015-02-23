@@ -67,8 +67,7 @@
             </div>
 
             <div id="login">
-                <input type='hidden' value='<?php echo isset($loginFail)? $loginFail : ""; ?>' id='loginFail'/>
-                <input type='hidden' value='<?php echo isset($timeoutLeft)? $timeoutLeft : ""; ?>' id='timeoutLeft'/>
+
                 <div class="login-left-content">
                     <div class="login-left-border">
                         <h1>login to your account</h1>
@@ -219,7 +218,7 @@
                                     <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
                                     
                                 </span>
-                            </div>
+                            </div>create-account
                         </div>
                         <div class="reg2_email">
                             <div class="row">
@@ -283,7 +282,29 @@
                 </div>
                 <div class="clear"></div>
             </div>
+            
+   
+            <div class="login-throttle" style="display:none;">
+                <div class="login-throttle-border">
+                    <div>
+                        <h1>TROUBLE LOGGING-IN?</h1>
+                    </div>
+                    <div >
+                        <p class="login-throttle-message">Too many failed login-attempts.</p>
+                        <p>Timeout Remaining: <span class="login-throttle-message" id="login-timeout">60</span> sec </p>
+                    </div>
+                    <div class="row throttle-btn-container" >
+                        <input type="submit" class="btn btn-default-3" id="login-try-again" value="Try again" name="retry">
+                        <a href="/login/identifyEmail">
+                        <input type="submit" class="btn help-me-locate-account-btn" value="Help me locate my account" name="forgot-password">
+                        </a>
+                   </div>
+                </div>
+            </div>
         </div>
+    
+     
+    
     </section>
     <div id="terms-section">
         <div class="terms-overlay-bg">&nbsp;
