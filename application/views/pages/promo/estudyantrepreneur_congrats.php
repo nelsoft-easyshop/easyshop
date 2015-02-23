@@ -14,15 +14,15 @@
         <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
         <script type="text/javascript">
 
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', 'UA-33801742-8']);
-          _gaq.push(['_trackPageview']);
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-33801742-8']);
+            _gaq.push(['_trackPageview']);
 
-          (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
 
         </script>
     </head>
@@ -47,29 +47,27 @@
             </div>
 
             <div class="container single-image-after" style="height=20;padding:10px 0;">
-                
+
             </div>
 
         </section>
         <section>
+            <center><?=$successMessage?></center>
             <?php echo form_open('/EstudyantrepreneurSuccess', ['id' => 'frm-vote']); ?>
             <div class="container load-animate">
                 <div class="text-center dropdown-school-list">
-                    <select id="ddown-school">
+                    <select id="ddown-school" class="success">
                         <option value=""></option>
                         <?PHP foreach($schools_and_students as $school => $students) : ?>
-                        <option value="<?=html_escape(str_replace(' ', '-', $school))?>" data-students='<?=json_encode(html_escape($students['students']))?>'><?=html_escape($school)?></option>
+                            <option value="<?=html_escape(str_replace(' ', '-', $school))?>" data-students='<?=json_encode(html_escape($students['students']))?>'><?=html_escape($school)?></option>
                         <?PHP endforeach; ?>
                     </select>
                 </div>
                 <div>
-                    <div id="student-container" class="select-school mrgn-top-35">
+                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
+                        <ul id="student-container">
+                        </ul>
                     </div>
-                </div>
-                <div class="vote-btn mrgn-top-35">
-                    <input type="hidden" name="studentId" id="stud-id" value="">
-                    <input type="hidden" name="schoolName" id="school-name" value="">
-                    <button id="btn-vote" class="btn btn-primary"> VOTE </button>
                 </div>
             </div>
             <?php echo form_close();?>
@@ -79,9 +77,6 @@
             <div class="container load-animate">
                 <div class="box">
                     <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30 ss">
-                        <p>
-                            The 2014 EStudyantrepreneur Awards will give recognition to the most preferred student-owned business establishment around the Metro through online voting hosted by EasyShop.ph.
-                        </p>
                         <h3><b>MECHANICS</b></h3>
                         <ul>
                             <li>
