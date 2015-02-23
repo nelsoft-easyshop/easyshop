@@ -28,6 +28,7 @@
             $('#login_password').val('');
             $('.login-throttle').hide();
             $('#login').fadeIn();
+            $('#passw_error').hide();
         });
         
     });

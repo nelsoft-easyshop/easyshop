@@ -66,7 +66,7 @@
 
             </div>
 
-            <div id="login" style="display:none;">
+            <div id="login">
 
                 <div class="login-left-content">
                     <div class="login-left-border">
