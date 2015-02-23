@@ -94,7 +94,7 @@
                         </div>
                                         
                         <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
-                                Products successfully restored
+                                Products successfully deactivated
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
@@ -146,7 +146,7 @@
                         </div>
                                         
                         <div class="alert alert-success" style="display:none" role="alert" id="successPrompt">
-                                Products successfully restored
+                                Products successfully deleted
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Your Username : </label>
