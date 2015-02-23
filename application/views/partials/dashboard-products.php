@@ -1,3 +1,298 @@
+<!--- ============================================================== -->
+<!--- ====================DUMMY ITEM =============================== -->
+<!--- ============================================================== -->
+<div class="items-list-container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="item-list-panel">
+                <table width="100%">
+                    <tr>
+                        <td class="td-image-cont" width="20%">
+                            <div class="div-product-image" style="background: url(/assets/product/25_128_20141020/25_128_20141020959110.jpeg) center no-repeat; background-cover: cover; background-size: 90%;">
+                            </div>
+                        </td>
+                        <td class="td-meta-info">
+                            <p class="item-list-name">
+                                <a class="color-default">
+                                    Lorem Ipsum
+                                </a>
+                            </p>
+                            <p class="item-amount">
+                                <span class="item-original-amount">P 22,222.00</span>
+                                <span class="item-current-amount">P 2.00</span>
+                            </p>
+                            <div class="div-meta-description">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <span class="strong-label">Sold Item(s) : 1
+                                    </div>
+                                    <div class="col-xs-8 col-stock">
+                                        <span class="strong-label">Available Stock(s) : 1
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <span class="strong-label">Category : </span> Toys, Hobbies &amp; Collectibles 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <table width="100%">
+                                            <tr>
+                                                <td class="td-label-desc"><span class="strong-label">Description: </span></td>
+                                                <td class="td-desc-item">
+                                                    lorem ipsum
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="td-item-actions" width="25%">
+                            <p>Last Modified: Last Modified: Oct 20, 2014</p>
+                            <div class="">
+                                <i class="icon-star star-stat"></i>
+                            </div>
+                            <p>Total Reviews : 0</p>
+                            <button class="btn btn-action-edit open-express-edit">
+                                <i class="icon-edit"></i>edit
+                            </button>
+                            <button class="btn btn-action-delete">
+                                <i class="icon-delete"></i>delete
+                            </button> 
+                        </td>
+                    </tr>
+                    <tr class="tr-attributes-drop">
+                        <td></td>
+                        <td colspan="2" class="td-attributes">
+                            <div class="info-main-cont">
+                                <div class="toggle-info more-info-attribute">
+                                    <i class="info-item-icon fa fa-plus-circle"></i> <span class="text-info-icon">more info</span>
+                                </div>
+                                <div class="info-attributes">
+                                    <div class="row">
+                                        <div class="col-xs-5">
+                                            <span class="strong-label"> Color : </span>
+                                            Black, Blue, Red 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--- ============================================================== -->
+<!--- ====================EXPRESS EDIT CONTENT====================== -->
+<!--- ============================================================== -->
+
+<div id="express-edit-section">
+    <div class="express-edit-content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-2">
+                <div class="express-edit-product-image" style="background: url(/assets/product/25_128_20141020/25_128_20141020959110.jpeg) center no-repeat; background-cover: cover; background-size: 90%;">
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-7">
+                <div>
+                    <p><strong>Product Name:</strong></p>
+                    <input type="text" class="ui-form-control width-100p">
+                </div>
+                <div class="row edit-sub-content">
+                    <div class="col-xs-4 col-sm-4">
+                        <p><strong>Base Price</strong></p>
+                        <span><strong>P</strong></span>
+                        <input type="text" class="ui-form-control" value="400.00">
+                    </div>
+                    <div class="col-xs-4 col-sm-4">
+                        <p><strong>Discounted Price</strong></p>
+                        <span><strong>P</strong></span>
+                        <input type="text" class="ui-form-control" value="200.00">
+                    </div>
+                    <div class="col-xs-4 col-sm-4">
+                        <p><strong>Discount Rate</strong></p>
+                        <input type="text" class="ui-form-control" value="50">
+                        <span><strong>%</strong></span>
+                    </div>
+                </div>
+                <div class="row edit-sub-content2">
+                    <div class="col-xs-4 col-sm-4">
+                        <span><strong>Available Stock(s):</strong></span>
+                        <input type="text" class="ui-form-control" value="10">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-3 express-edit-btn">
+                <p class="text-center mrgn-bttm-10">Last Modified: <br />Oct 20, 2014</p>
+                <button class="btn btn-default-1">advanced</button>
+                <button class="btn btn-set-default">cancel</button> 
+                <button class="btn btn-default-3">save</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-7 col-sm-offset-2">
+                <div class="error-message bg-warning">
+                    Error message
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="product-attributes-section">
+                <div class="col-xs-12 col-sm-3">
+                    <input type="text" class="ui-form-control width-100p" value="(e.g. Color, Size ...)">
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div class="prod-att-2">
+                        <input type="text" class="ui-form-control width-50p prod-att-input-2" value="(e.g. Blue, Red, Small, Large ...)">
+                        <span class="prod-att-p"><strong>P</strong></span>
+                        <input type="text" class="ui-form-control prod-att-input-price">
+                        <span class="prod-att-img"><i class="icon-camera"></i></span>
+                    </div>
+                    <div class="prod-att-add-more-property-btn">
+                        <button class="btn btn-default-1">add more property values</button>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3 prod-att-add-property-btn">
+                    <button class="btn btn-default-3">add property</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table prod-att-table" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="20%">quantity</th>
+                            <th width="60%">item property</th>
+                            <th width="20%">actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td width="20%"><input type="type" class="ui-form-control"></td>
+                            <td width="60%" class="prod-item-att-content">
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                            </td>
+                            <td width="20%">
+                                <button class="btn btn-default-1">remove</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><input type="type" class="ui-form-control"></td>
+                            <td width="60%" class="prod-item-att-content">
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                            </td>
+                            <td width="20%">
+                                <button class="btn btn-default-1">remove</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><input type="type" class="ui-form-control"></td>
+                            <td width="60%" class="prod-item-att-content">
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                            </td>
+                            <td width="20%">
+                                <button class="btn btn-default-1">remove</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><input type="type" class="ui-form-control"></td>
+                            <td width="60%" class="prod-item-att-content">
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                                <select class="ui-form-control">
+                                    <option>Please select</option>
+                                    <option>Small</option>
+                                    <option>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                            </td>
+                            <td width="20%">
+                                <button class="btn btn-default-3">add</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
 
 <?php foreach ($products as $product): ?>
 <div id="item-list-<?=$product->getIdProduct(); ?>" class="items-list-container">

@@ -3326,7 +3326,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 100%;
     }
     /*** step 2 ***/
-    .col-xs-12 .ui-form-control {
+    .seller_product_content .ui-form-control {
         width: 100%;
     }
     .price-val.ui-form-control {
