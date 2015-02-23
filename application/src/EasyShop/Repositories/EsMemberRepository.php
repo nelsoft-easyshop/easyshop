@@ -79,7 +79,7 @@ class EsMemberRepository extends EntityRepository
                 es_member
             WHERE 
                 store_name = :storeName OR
-                ((store_name IS NULL AND store_name = "") AND username = :storeName)
+                ((store_name IS NULL OR store_name = "") AND username = :storeName)
         ';
         
         if($excludeMemberId !== null){
@@ -97,6 +97,52 @@ class EsMemberRepository extends EntityRepository
         return $query->getResult();
     }
 
+    
+    /**
+     *  Fetch entries in es_member with storename or username
+     *
+     *  @param string $name
+     *  @param integer $excludeMemberId
+     *  @return boolean
+     */
+    public function getUserWithStoreNameOrUsername($name, $excludeMemberId = null)
+    {
+        $em = $this->_em;
+
+        $rsm = new ResultSetMapping();
+        $rsm->addEntityResult('EasyShop\Entities\EsMember','m');
+        $rsm->addFieldResult('m','id_member','idMember');
+        $rsm->addFieldResult('m','username','username');
+        $rsm->addFieldResult('m','store_name','storeName');
+
+        $sql =  '
+            SELECT 
+                id_member, 
+                store_name, 
+                username
+            FROM 
+                es_member
+            WHERE 
+                (store_name = :storeName OR username = :userName)
+        ';
+        
+        if($excludeMemberId !== null){
+            $sql .= ' AND id_member != :memberId';
+        }
+ 
+        $query = $em->createNativeQuery($sql, $rsm);
+
+        $query->setParameter('storeName', $name);
+        $query->setParameter('userName', $name);
+
+        if($excludeMemberId !== null){
+            $query->setParameter('memberId',$excludeMemberId);
+        }
+
+        return $query->getResult();
+    }
+    
+    
     /**
      *  Fetch member entity using $mobileNum
      */
