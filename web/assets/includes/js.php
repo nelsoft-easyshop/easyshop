@@ -20,10 +20,6 @@
 <?php endif; ?>
 
 <script type='text/javascript' src="/assets/js/src/vendor/jquery.jcarousel.min.js"></script>
-<script type='text/javascript' src="https://autobahn.s3.amazonaws.com/js/autobahn.min.js"></script>
-<script>
-    window.ab || document.write('<script src="/assets/js/src/vendor/autobahn.min.js">\x3C/script>');
-</script>
 
 <script type='text/javascript'>
     <?php if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT'])): ?>
