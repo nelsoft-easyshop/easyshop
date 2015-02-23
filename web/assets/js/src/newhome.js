@@ -196,8 +196,10 @@
         var csrfname = $("meta[name='csrf-name']").attr('content');
 
         if(!$this.hasClass('btn-tag-active')) {
-            var productView = $container.find('.product-view-' + headerCount).html();
-
+            var productView = $container.find('.product-view-' + headerCount).html(); 
+            var currentlyActiveTab = $container.find('.featured-categories .btn-tag-active');
+            var activeHeaderCounter = currentlyActiveTab.data('subcounter');
+            
             if ($.trim(productView) === "") {
                 $.ajax({
                     type: "POST",
@@ -208,20 +210,30 @@
                         $container.find('.product-view-' + headerCount).html(result);
                         $container.find('.purchased-items-slider-cat-' + sectionId).html(result);
                         $container.find('.purchased-items-slider-cat-' + sectionId).data('owlCarousel').reinit({});
+                        currentlyActiveTab.removeClass('btn-tag-active');
+                        $this.addClass('btn-tag-active');
                     }
                 });
             }
             else {
                 $container.find('.purchased-items-slider-cat-' + sectionId).html(productView);
                 $container.find('.purchased-items-slider-cat-' + sectionId).data('owlCarousel').reinit({});
+                currentlyActiveTab.removeClass('btn-tag-active');
+                $this.addClass('btn-tag-active');
             }
 
-            var currentlyActiveTab = $container.find('.featured-categories .btn-tag-active');
-            var activeHeaderCounter = currentlyActiveTab.data('subcounter');
-            currentlyActiveTab.removeClass('btn-tag-active');
-            $this.addClass('btn-tag-active');
         }
 
     });
-
+    
+    
+    $(document).ready(function(){
+        $('.hide-owlcarousel-div').each(function(){
+            var owlCarouselSectionId = $(this).data('sectioncount');
+            $('.purchased-items-slider-cat-' + owlCarouselSectionId).css('display','none')
+        });
+    });
+                                 
+                  
+    
 }(jQuery));

@@ -28,7 +28,9 @@ class EsQueueStatus
      */
     private $name;
 
-
+    const QUEUED = 1;
+    const SENT = 2;
+    const FAILED = 3;
 
     /**
      * Get idStatus

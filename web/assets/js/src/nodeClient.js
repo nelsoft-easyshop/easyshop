@@ -1,20 +1,20 @@
 (function ($) {
-    /*
+
     $(document).ready(function () {
         
-        var $chatClient = $('#chatClientInfo');
+        var $chatConfig = $('#chatServerConfig');
         var $isLoggedIn = $('[name="is-logged-in"]');
 
         if ($.parseJSON($isLoggedIn.val())) {
 
-            var socket = io.connect( 'https://' + $chatClient.data('host') + ':' + $chatClient.data('port'));
-     
-            var setAccountOnline = function(storeName) {
-                socket.emit('set account online', storeName);
+            var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
+        
+            var setAccountOnline = function() {
+                socket.emit('set account online');
             };
 
-            var setAccountOffline = function(storeName) {
-                socket.emit('set account offline', storeName, function(data) {});
+            var setAccountOffline = function() {
+                socket.emit('set account offline');
             };
 
             socket.on('send message', function( data ) {
@@ -25,16 +25,10 @@
                 updateMessageCountIcons();
             });
 
-            setAccountOnline($chatClient.data('store-name'));
-
-            $('.logoutClient').on('click', function(e) {
-                e.preventDefault();
-                setAccountOffline($chatClient.data('store-name'));
-                window.location.replace('/login/logout');
-            });
+            setAccountOnline();
         }
 
     });
-    */
+  
   
 })(jQuery);

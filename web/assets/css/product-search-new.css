@@ -180,6 +180,7 @@ html, body{
     padding: 15px;
     margin-bottom: 15px;
     transition: all 0.3s ease; 
+    position: relative;
 }
 
 .search-results-container .col-md-3{
@@ -232,6 +233,7 @@ html, body{
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 10px;
+    height: 23px;
 }
 
 .search-item-price{
@@ -280,8 +282,8 @@ html, body{
     margin-right: 3px;
 }
 
-.search-item-seller-cont{
-    width: 32px;
+.search-item-seller-cont a {
+    width: 30px;
     height: 30px;
     display: table-cell;
     text-align: center;
@@ -289,7 +291,7 @@ html, body{
     border: solid #e2e2e2 1px;
 }
 .search-item-seller-img{
-    max-width: 32px;
+    max-width: 30px;
     height: auto;
     max-height: 30px;
 }
@@ -970,6 +972,19 @@ ul.list-category-search li:last-child > .search-category-link{
     margin-top: 7px; 
 }
 
+/* =============================================
+-----------------  Tooltip --------------
+==============================================*/
+.tooltip,
+.tooltip-inner{
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.tooltip-inner{
+    padding: 10px !important;
+    word-break: break-all;
+}
 
 /* =============================================
 -----------------  Sticky Mobile Filter --------------

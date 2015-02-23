@@ -26,7 +26,7 @@
                             
                             
                                 <?php if($secondaryImagePath !== null): ?>
-                                <span class="span-img-wrapper" style="background: url(<?php echo getAssetsDomain().$secondaryImagePath;?>) center no-repeat; background-cover: cover;">
+                                <span class="span-img-wrapper" style="background:#fff  url(<?php echo getAssetsDomain().$secondaryImagePath;?>) center no-repeat; background-cover: cover;">
                                     <center>
                                         <div class="span-img-container">
                                         </div>
@@ -37,7 +37,7 @@
                                 
                 
                                 
-                                <div class="<?php echo $secondaryImagePath ? 'image-hover-none' : ''; ?> main-image" style="background: url(<?php echo getAssetsDomain().$productImagePath; ?>) no-repeat center; background-size: cover;">
+                                <div class="<?php echo $secondaryImagePath ? 'image-hover-none' : ''; ?> main-image" style="background: #fff url(<?php echo getAssetsDomain().$productImagePath; ?>) no-repeat center; background-size: cover;">
                                     <center>
                                         <div class="span-img-container">
                                         </div>
@@ -85,7 +85,7 @@
                                 <div style="position: relative; height: 100%; width: 100%;">
                                 
                                     <?php if($secondaryImagePath !== null): ?>
-                                        <div style="background: url(<?php echo getAssetsDomain().$secondaryImagePath;?>) center no-repeat; background-size: cover; width: 100%; height:100%;">
+                                        <div style="background:#fff url(<?php echo getAssetsDomain().$secondaryImagePath;?>) center no-repeat; background-size: cover; width: 100%; height:100%;">
                                             <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
                                                 <div class="span-space">
                                                     
@@ -94,7 +94,7 @@
                                         </div>
                                     <?php endif; ?>
               
-                                    <div class="<?php echo $secondaryImagePath ? 'main-image-list image-hover-none ' : ''; ?>" style="background: url(<?php echo getAssetsDomain().$productImagePath; ?>) center no-repeat; background-size: cover;">
+                                    <div class="<?php echo $secondaryImagePath ? 'main-image-list image-hover-none ' : ''; ?>" style="#fff background: url(<?php echo getAssetsDomain().$productImagePath; ?>) center no-repeat; background-size: cover;">
                                         <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
                                             <div class="span-space">
                                             
