@@ -18,6 +18,7 @@
                         <ul class="sidebar-submenu">
                             <a href="#transactions"  class="aaa id-transactions-trigger"><li id="transactions-trigger-li"class="f-li ms-f">Transactions</li></a>
                             <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
+                            <a href="#product-management" id="product-management-tab"><li class="f-li">Customize Category</li></a>
                             <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
                         </ul>
                     </div>
