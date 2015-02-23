@@ -61,7 +61,7 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.global-includes.css':
                         ['web/assets/css/style.css',
                         'web/assets/css/responsive_css.css', 
-                        'web/assets/css/basic.css.css'],
+                        'web/assets/css/basic.css'],
                     'web/assets/css/min-easyshop.payment.css':
                         ['web/assets/css/bootstrap.css',
                         'web/assets/css/my_cart_css.css', 
