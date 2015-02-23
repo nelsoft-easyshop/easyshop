@@ -202,7 +202,7 @@
         <script type="text/javascript" src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
         <script type="text/javascript" src="/assets/js/src/promo/estudyantrepreneur.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
         <script type="text/javascript" src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
-        <script type="text/javascript" src="/assets/js/src/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+        <script type="text/javascript" src="/assets/js/src/promo/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
     <?php else: ?>
         <script src="/assets/js/min/easyshop.estudyantrepreneur-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <?php endif; ?>
