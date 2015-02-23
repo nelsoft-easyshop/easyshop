@@ -405,6 +405,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/universal.js',
                              'web/assets/js/src/login.js',
                              'web/assets/js/src/landingpage.js',
                              'web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
