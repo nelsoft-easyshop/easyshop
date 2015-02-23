@@ -18,12 +18,18 @@
                 $("#login").hide();
             }, 300);
         }
-
-        if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
-            $("p#lockoutDuration").html("Timeout Remaining: " + $("#timeoutLeft").val());
-            $("#failed-login").show();
-            $("#login-form").hide();
-        }
+        
+        $('#tab-login , #tab-create').on('click', function(){
+            $('.login-throttle').hide();
+        });
+        
+        $('#login-try-again').on('click', function(){
+            $('#login_username').val('');
+            $('#login_password').val('');
+            $('.login-throttle').hide();
+            $('#login').fadeIn();
+        });
+        
     });
     
     
@@ -97,9 +103,9 @@
                     data: $(form).serializeArray(),
                     success:function(data){
                         if(data.timeoutLeft >= 1){
-                            $("p#lockoutDuration").html("Timeout Remaining: " + data.timeoutLeft);
-                            $("#failed-login").show();
-                            $("#login-form").hide();
+                            $('#login').hide();
+                            $('.login-throttle').fadeIn();
+                            $('#login-timeout').html(data.timeoutLeft);
                         }
                         else{
                             if(data.o_success <= 0){
