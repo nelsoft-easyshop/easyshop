@@ -13,8 +13,11 @@
     var csrfname = $("meta[name='csrf-name']").attr('content');  
 
     /********************* DEACTIVATE ACCOUNT **************************/
+    
+    $("#deactivateAccountForm").submit(function(e) {
+        e.preventDefault();
+    }).validate({
 
-     $("#deactivateAccountForm").validate({
          rules: {
             deactivatePassword: {
                 required: true,
@@ -22,7 +25,6 @@
             deactivateUserName: {
                 required: true,
                 },                
-
          },
          messages:{
             deactivatePassword:{
@@ -35,8 +37,7 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form, event){
-            event.preventDefault();
+         submitHandler: function(form){
             var password = $("#deactivatePassword").val();
             var username = $("#deactivateUsername").val();
             var actionGroupChangePass = $('#deactivateActionPanel');    
