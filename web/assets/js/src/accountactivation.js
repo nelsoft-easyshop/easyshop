@@ -36,7 +36,7 @@
             event.preventDefault();
             var postData = $("#activateAccountForm").serializeArray();
             $.ajax({
-                type: 'get',
+                type: 'post',
                 data: postData,
                 url: "/memberpage/doReactivateAccount",                
                 success: function(data) {   
