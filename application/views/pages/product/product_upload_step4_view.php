@@ -1,9 +1,16 @@
-<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
-<div class="container">
-    <div class="seller_product_content row">
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-mods.css"  media="screen"/>
+<?php else: ?>
+    <link  rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.upload-step4.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
+
+<div class="res_wrapper">
+    <div class="seller_product_content">
+
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
                 <div class="sell_steps sell_steps4">
@@ -56,50 +63,43 @@
         <?php echo form_close();?>
 
 
-<div class="container step4_section mrgn-top-35">
+<div class="old-page-container step4_section mrgn-top-35">
     <div class="seller_product_content">
-        <div class="row">
-            <div class="step4_header col-xs-12">
+        <div class="">
+            <div class="step4_header">
                 <h5>Product Delivery</h5>
             </div>
             <div class="clear"></div>
             <div class="step4_content step4_delivery col-xs-12 pd-top-15">
                 <div class="row">
-                    <div class="col-sx-12 col-sm-12 col-md-9">
-                        <div class="row">
-                            <?php if( (int)$product->getIsMeetup() === 1 ):?>
-                                <div class="col-sx-12 col-sm-12 col-md-3 pd-bttm-15">
-                                    <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-                                    <span class="pd-lr-10">For meetup</span>
-                                </div>
-                            <?php endif;?>
-            
-                            <?php if( $shipping_summary['is_delivery'] ):?>
-                                <div class="col-sx-12 col-sm-12 col-md-3">
-                                    <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-                                    <span class="pd-lr-10">For delivery</span>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <?php if( (int)$product->getIsCod() === 1 ):?>
-                            
-                                <div class="col-sx-12 col-sm-12 col-md-3">
-                                    <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-                                    <span class="pd-lr-10">Cash-on-Delivery</span>
-                                </div>
-                            
-                            <?php endif;?>
-                                
-                            
+                    <?php if( (int)$product->getIsMeetup() === 1 ):?>
+                        <div class="col-xs-12 col-sm-12 col-md-3 pd-bttm-15">
+                            <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                            <span class="pd-lr-10">For meetup</span>
                         </div>
-                    </div>
+                    <?php endif;?>
+    
+                    <?php if( $shipping_summary['is_delivery'] ):?>
+                        <div class="col-xs-12 col-sm-12 col-md-3 pd-bttm-15">
+                            <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                            <span class="pd-lr-10">For delivery</span>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if( (int)$product->getIsCod() === 1 ):?>
+                    
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                            <span class="pd-lr-10">Cash-on-Delivery</span>
+                        </div>
+                    
+                    <?php endif;?>
                 </div>
 
                 <?php if( $shipping_summary['is_delivery'] ):?>
                     <div class="clear"></div>
                     <div>
                         <div class="step4_delivery_sub">
-                            <div class="clear"></div>
                             <?php if( $shipping_summary['is_freeshipping'] ):?>
                                 <p>Free shipping</p>
                             <?php elseif( $shipping_summary['has_shippingsummary'] ):?>
@@ -110,11 +110,11 @@
                                         <div class="pd-top-4">
                                             <?php foreach( $garr['location'] as $price=>$locarr ):?>
                                             <div class="row col-sx-mrgn">
-                                                <div class="col-sx-12 col-sm-4 col-md-4">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
                                                     <span>&#8369;</span>
                                                     <div class="delivery-sub-box step4-price"><?=html_escape($price)?></div>
                                                 </div>
-                                                <div class="col-sx-12 col-sm-8 col-md-8">
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
                                                     <span class="display-ib line-height">Locations:</span>
                                                     <div class="delivery-sub-box width-75p">
                                                         <?php foreach($locarr as $locID):?>
@@ -126,8 +126,7 @@
                                             <?php endforeach;?>
                                             <div class="clear"></div>
                                             <div class="step4_attr">
-                                                
-                                                <div class="col-sx-12 col-sm-12 col-md-12">
+                                                <div class="">
                                                     <?php if( !$attr['has_attr'] ):?>
                                                         <p>&bull; All Combinations</p>
                                                     <?php else:?>
@@ -140,6 +139,7 @@
                                                         <?php endforeach; ?>
                                                     <?php endif;?>
                                                 </div>
+                                                <div class="clear"></div>
                                             </div>
                                             <div class="clear"></div>
                                         </div>
@@ -155,12 +155,13 @@
     </div>
 </div>
 
-        <div style="margin-top:3em;">
+        <div class="mrgn-top-30">
             <div>
-                <div class="container step4_section" style="max-height:100%; border:1px solid #CECECE;padding:0 0 16px 0;">
+                <div class="old-page-container step4_section">
                     <div class="step4_header col-xs-12">
                         <h5>Product Preview</h5>
                     </div>
+                    <div class="clear"></div>
                     <?=$productView; ?>
                 </div>
             </div>

@@ -1,10 +1,10 @@
-
-<link type="text/css" href='/assets/css/easy-icons/easy-icons.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css"  rel="stylesheet" href="/assets/css/chosen.min.css" media="screen"/>
-<link type="text/css" href='/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href="/assets/css/chosen.min.css" rel="stylesheet"  media="screen"/>
+    <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-primary.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
 
 <section class="section-dashboard ">
     <div class="container container-dashboard">
@@ -17,7 +17,8 @@
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
                             <a href="#transactions"  class="aaa id-transactions-trigger"><li id="transactions-trigger-li"class="f-li ms-f">Transactions</li></a>
-                            <a href="#setup" id="store-setup-tab"><li class="f-li">Store Setup</li></a>
+                            <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
+                            <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
                         </ul>
                     </div>
                     <a><li id="my-account-menu-trigger" class="ml-li">My Account <i class="a icon-control-down toggle-down pull-right"></i></li></a>
@@ -49,6 +50,7 @@
                     <ul class="my-store-menu-mobile-ul">
                         <a class="ms-trans dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
                         <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
+                        <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
                     </ul>
                 </div>
                 <div class="my-account-menu-mobile-cont">
@@ -72,6 +74,9 @@
                     </div>
                     <div id="setup">
                         <?php include("dashboard-store-setup.php");?>
+                    </div>
+                    <div id="product-management">
+                        <?php include("dashboard-product-management.php");?>
                     </div>
                     <div id="personal-information">
                         <?php include("dashboard-personal-info.php");?>

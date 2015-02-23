@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "37281f6994be6b2b83257d4aa3e94fd2",
+    "hash": "3d1b4ee637259dacd7f998ee3df53652",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -695,12 +695,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "1ac14fac3ced533047d8feae8edc7c283d5b8a67"
+                "reference": "058a4635ac9b80a5b1997df28a754e64b1425a1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/1ac14fac3ced533047d8feae8edc7c283d5b8a67",
-                "reference": "1ac14fac3ced533047d8feae8edc7c283d5b8a67",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/058a4635ac9b80a5b1997df28a754e64b1425a1d",
+                "reference": "058a4635ac9b80a5b1997df28a754e64b1425a1d",
                 "shasum": ""
             },
             "require": {
@@ -745,7 +745,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2015-01-19 02:26:02"
+            "time": "2015-02-19 08:13:05"
         },
         {
             "name": "doctrine/orm",
@@ -956,16 +956,16 @@
         },
         {
             "name": "facebook/php-sdk-v4",
-            "version": "4.0.16",
+            "version": "4.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/facebook-php-sdk-v4.git",
-                "reference": "66da9e0e123b6440974bfe22210a8a053e9b5599"
+                "reference": "93ea67bf68439e17433537c0e9f308fa0d2ce42c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/facebook-php-sdk-v4/zipball/66da9e0e123b6440974bfe22210a8a053e9b5599",
-                "reference": "66da9e0e123b6440974bfe22210a8a053e9b5599",
+                "url": "https://api.github.com/repos/facebook/facebook-php-sdk-v4/zipball/93ea67bf68439e17433537c0e9f308fa0d2ce42c",
+                "reference": "93ea67bf68439e17433537c0e9f308fa0d2ce42c",
                 "shasum": ""
             },
             "require": {
@@ -1001,7 +1001,52 @@
                 "facebook",
                 "sdk"
             ],
-            "time": "2015-02-03 19:20:31"
+            "time": "2015-02-19 22:52:24"
+        },
+        {
+            "name": "firebase/php-jwt",
+            "version": "dev-master",
+            "target-dir": "Firebase/PHP-JWT",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "724b1fcfb88b7bbbbd92fddd5deb7518c3988267"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/724b1fcfb88b7bbbbd92fddd5deb7518c3988267",
+                "reference": "724b1fcfb88b7bbbbd92fddd5deb7518c3988267",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Authentication/",
+                    "Exceptions/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "time": "2015-02-12 15:57:00"
         },
         {
             "name": "google/apiclient",
@@ -1371,6 +1416,61 @@
                 "dependency injection"
             ],
             "time": "2014-07-24 07:10:08"
+        },
+        {
+            "name": "predis/predis",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nrk/predis.git",
+                "reference": "b8decc75a884fce1bfc62d5bc6823298a678f890"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/b8decc75a884fce1bfc62d5bc6823298a678f890",
+                "reference": "b8decc75a884fce1bfc62d5bc6823298a678f890",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net"
+                }
+            ],
+            "description": "Flexible and feature-complete PHP client library for Redis",
+            "homepage": "http://github.com/nrk/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "time": "2015-01-02 13:37:26"
         },
         {
             "name": "psr/log",
@@ -1974,12 +2074,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "8864432a4488d1fbbf9ed88b4d98e011be19d09f"
+                "reference": "6da08d34bac415ebe8690a3745c9f9ea49b54d93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/8864432a4488d1fbbf9ed88b4d98e011be19d09f",
-                "reference": "8864432a4488d1fbbf9ed88b4d98e011be19d09f",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/6da08d34bac415ebe8690a3745c9f9ea49b54d93",
+                "reference": "6da08d34bac415ebe8690a3745c9f9ea49b54d93",
                 "shasum": ""
             },
             "require": {
@@ -2030,7 +2130,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2015-02-11 07:12:14"
+            "time": "2015-02-17 13:25:32"
         },
         {
             "name": "symfony/framework-bundle",
@@ -3072,7 +3172,9 @@
         "symfony/config": 20,
         "google/apiclient": 10,
         "noiselabs/nusoap-bundle": 20,
-        "neutron/sphinxsearch-api": 20
+        "neutron/sphinxsearch-api": 20,
+        "firebase/php-jwt": 20,
+        "predis/predis": 20
     },
     "platform": [
 

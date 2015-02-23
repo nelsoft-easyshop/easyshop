@@ -1423,41 +1423,51 @@ li.brand_result:hover{
     margin: 0 auto;
 }
 
-
 .pop-up-fixed{
     position: fixed !important;
 }
 
 @media (min-width: 320px) {
-    #imageTag {
-        height: auto !important;
-        max-height: 300px !important;
-        max-width: 240px;
+    #imageTag, .imageContainer {
+        height: auto !important; 
         width: auto !important;
+        max-width: 200px !important;
+        max-height: 200px !important;
     }
-}
+} 
 
 @media (min-width: 767px) {
-    #imageTag {
-        height: auto !important;
-        max-height: 320px !important;
-        max-width: 359px;
-    }
+    #imageTag, .imageContainer {
+        height: auto !important; 
+        width: auto !important;
+        max-width: 310px !important;
+        max-height: 310px !important;
+    } 
 }
 
 @media (min-width: 991px) {
-    #imageTag {
-        height: auto !important;
-        max-height: 350px !important;
-        max-width: 471px;
+    #imageTag, .imageContainer {
+        height: auto !important; 
+        width: auto !important;
+        max-width: 370px !important;
+        max-height: 370px !important;
     }
 }
 
 @media (min-width: 1200px) {
-    #imageTag {
-        height: auto !important;
+    #imageTag, .imageContainer {
+        height: auto !important; 
+        width: auto !important;
+        max-width: 400px !important;
         max-height: 400px !important;
-        max-width: 534px;
     }
 }
+
+.cropper-container{
+    left: 0 !important;
+    top: 0 !important; 
+    margin: 0 auto;
+    border: 1px dashed;
+}
+ 
 

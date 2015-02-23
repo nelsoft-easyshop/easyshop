@@ -1,9 +1,17 @@
-<link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
-<link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
-<link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
-<link rel="stylesheet" href="/assets/css/bootstrap.css" />
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
-<link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
+    <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
+    <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>  
+    <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/jquery.cropper.css">
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.upload-step2.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
+    <link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
+
 
 <script type="text/javascript">
     var af = new Array();
@@ -66,6 +74,7 @@
                 <input type="hidden" class="filescnttxt" name="filescnttxt">
                 <input type="hidden" class="afstart" id="afstart" name="afstart">
                 <input type="hidden" class="coordinates" id="coordinates" name="coordinates">
+                <input type="hidden" class="imageCollections" id="imageCollections" name="imageCollections">
                 <div id="inputList" class="inputList"></div>
             </form> 
 
@@ -78,7 +87,7 @@
             );
             echo form_open('productUpload/uploadimageOther', $attr);
             ?>
-                <input type="hidden" class="coordinatesOther" id="coordinatesOther" name="coordinates">
+                <input type="hidden" class="imageCollectionsOther" id="imageCollectionsOther" name="imageCollections">
                 <input type="file" class="attr-image-input" accept="image/*" style="left: -9999px;position: absolute;z-index: -1900;" name="attr-image-input" >
             </form> 
 
@@ -515,12 +524,18 @@
                 </div>
             </div>
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
+                <div class="imageContainer"> 
                     <img src="" id="imageTag">
-                    <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
-                    <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
-                    <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
-                    <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
+                </div><br /> 
+                <center>
+                    <a class="zoomIn" title="Zoom In" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
+                    <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
+                    <a class="refresh" title="Refresh" href="javascript:void(0)"><i class="fa fa-refresh fa-2x"></i></a>
+                    <a class="rotateRight" title="Rotate Right" href="javascript:void(0)"><i class="fa fa-repeat fa-2x"></i></a>
+                    <a class="zoomOut" title="Zoom Out" href="javascript:void(0)"><i class="fa fa-search-minus fa-2x"></i></a>
+                </center>
             </div>
+            
         </div>
     </div>
 </div>
@@ -537,13 +552,13 @@
     var isEdit =  '<?=(isset($is_edit)) ? "1" : "0" ?>';
     var maxImageSize = parseInt('<?=$maxImageSize; ?>');
 </script>
-<link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
 <script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 
-<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?> 
+    <script src="/assets/js/src/vendor/jquery.cropper.js"></script> 
     <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
-    <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
-    <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript' ></script>
+    <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script> 
     <script src="/assets/js/src/vendor/jquery.simplemodal.js" type='text/javascript' ></script>
     <script src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript" ></script> 
     <script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>

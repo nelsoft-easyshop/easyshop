@@ -18,11 +18,18 @@ class Viewdecorator
      * @var mixed
      */
     protected $serviceContainer;
+    
+    /**
+     * The JWT Token
+     *
+     */
+    protected $jwtToken;
 
     public function __construct()
     {
         $CI =& get_instance();
         $this->serviceContainer = $CI->kernel->serviceContainer;
+        $this->jwtToken = $CI->session->userdata('jwtToken');
     }
     
     /**

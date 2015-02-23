@@ -1,6 +1,13 @@
-<link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
-<link rel="stylesheet" href="/assets/css/promo.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media="all"/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
+    <link rel="stylesheet" href="/assets/css/promo.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
+    <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media="all"/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.scratch-to-win.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
+
+
 <div class="clear"></div>
 <?PHP if (isset($product)) : ?>
 <div class="promo-wrapper margin-top-10" id="main_search_container">
@@ -46,14 +53,14 @@
     <h2 class="head-cngrts">CONGRATULATIONS!</h2>
     <div class="scratch-congrats">
         <span id="checker" data_id="<?=$product['id_product']?>" data_name="<?=$product['product']?>"
-                data_price="<?=$product['price']?>" data_code="<?=$code;?>" run_js="<?=$user['fullname'] ? TRUE : FALSE ?>">
+                data_price="<?=$product['price']?>" data_code="<?=$code;?>" run_js="<?=$user->getFullName() ? TRUE : FALSE ?>">
         </span>
         <div class="claim-bg">
             <div id="prod_image">
                 <img src="<?php echo getAssetsDomain(); ?><?=$product['product_image_path']?>">
             </div>
             <div class="claim-details">
-                <p>To claim your prize,  <?=$user['fullname'] ?'': '<span id="complete">complete the <a href="javascript:void(0)" id="register">registration</a> form and </span>'?>visit
+                <p>To claim your prize,  <?=$user->getFullName() ?'': '<span id="complete">complete the <a href="javascript:void(0)" id="register">registration</a> form and </span>'?>visit
                     Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
                     Malate, Manila
                     Don't forget to print this page and bring the
@@ -262,7 +269,7 @@
         <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
         <script src="/assets/js/src/vendor/jquery.simplemodal.js" type="text/javascript"></script>
         <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-        <script src="/assets/js/src/scratchwinpromo.js" type="text/javascript"></script>
+        <script src="/assets/js/src/promo/scratchwinpromo.js" type="text/javascript"></script>
     <?php else: ?>
         <script src="/assets/js/min/easyshop.scratch_to_win.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <?php endif; ?>

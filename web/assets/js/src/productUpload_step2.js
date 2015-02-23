@@ -3,22 +3,7 @@ function updateCountdown() {
     // 150 is the max message length
     var remaining = 150 - $('#prod_keyword').val().length;
     $('.countdown').text(remaining + ' characters remaining.');
-}
-
-// ERROR HANDLER
-function validateRedTextBox(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"});
 } 
-
-function validateWhiteTextBox(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-}
 
 // NUMBER ONLY IN SPECIFIC FIELDS
 function isNumberKey(evt)
@@ -219,16 +204,7 @@ function resetControlPanel(buttonReset)
         });
     }
     valueData.trigger("liszt:updated");
-}
-
-function ReplaceNumberWithCommas(thisnumber){
-    //Seperates the components of the number
-    var n= thisnumber.toString().split(".");
-    //Comma-fies the first part
-    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //Combines the two sections
-    return n.join(".");
-}
+} 
 
 function get_discPrice() {
     var prcnt = $("#slider_val").val().replace("%",'');
@@ -246,7 +222,7 @@ function get_discPrice() {
     discounted = act_price * (prcnt/100);
     var v = parseFloat(act_price - discounted);
     tempval = Math.abs(v);
-    disc_price = ReplaceNumberWithCommas(tempval.toFixed(2));
+    disc_price = replaceNumberWithCommas(tempval.toFixed(2));
     $("#discountedP").val(disc_price);
     $( "span#discounted_price_con" ).text( disc_price );
 }
@@ -516,7 +492,6 @@ function processAttributes()
     return JSON.stringify(completeAttributes);
 }
 
-
 (function($) {
 
      // if keyword change. counter will change also either increase or decrease until reach its limit..
@@ -666,7 +641,7 @@ function processAttributes()
 
         $("#slider_val").val(sum+"%");
         tempval = Math.abs(discountPrice);
-        discountPrice = ReplaceNumberWithCommas(tempval.toFixed(2));
+        discountPrice = replaceNumberWithCommas(tempval.toFixed(2));
         $this.val(discountPrice);
         $("span#discounted_price_con").text(discountPrice);
     });
@@ -1197,17 +1172,15 @@ var arrayUpload = [];
 var afstart = [];
 var afTemp = [];
 var imageName = "";
-var errorValues = "";
-var axes = [];
+var errorValues = ""; 
 var sizeList = [];
 var extensionList = [];
 var imageCollection = [];
-var widthRatio = 445;
-var heightRatio = 538;
-// var CropImageMaxWidth = 534;
+var base64collection = [];
 var totalCropImage;
-
+var imageTage; 
 var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
+var universalExtension = ".jpeg";
 
 (function($) {
   
@@ -1224,17 +1197,9 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         $('.files.active').click(); 
     });
 
-    function showCoords(c){ 
-        $('#image_x').val(c.x);
-        $('#image_y').val(c.y);
-        $('#image_w').val(c.w);
-        $('#image_h').val(c.h);
-    }
-
     var cropImage = function($input)
     {
-        totalCropImage = imageObject.length;
-        var jcrop_api, imgHeight, imgWidth;
+        totalCropImage = imageObject.length; 
         var targetImage = imageObject[cropCurrentCount];
         var currentExtension = extensionList[cropCurrentCount];
         var currentSize = sizeList[cropCurrentCount];
@@ -1243,34 +1208,21 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             || currentExtension == 'jpg' 
             || currentExtension == 'png' 
             || currentExtension == 'jpeg') 
-            && currentSize < maxImageSize){
-           
-            $('#crop-image-main > #imageTag').attr('src',targetImage);
+            && currentSize < maxImageSize){ 
+            $('.imageContainer > #imageTag').attr('src',targetImage);
             $("<img/>") // Make in memory copy of image to avoid css issues
-                .attr("src", $('#crop-image-main > #imageTag').attr("src"))
-                .load(function() {
-                    imgWidth = this.width;   // Note: $(this).width() will not 
-                    imgHeight = this.height; // work for in memory images.
-                    var x1 = imgWidth / 2 - widthRatio / 2; 
-                    var x2 = x1 + widthRatio; 
-                    var y1 = 0;
-                    var y2 = imgHeight; 
+                .attr("src", $('.imageContainer > #imageTag').attr("src"))
+                .load(function() { 
                     $('#crop-image-main').dialog({
                         resizable: false,
                         "resize": "auto",
                         width: 600,
                         modal: true,
                         buttons: {
-                            "Crop": function() {
-                                var xCoord = $('#image_x').val();
-                                var yCoord = $('#image_y').val();
-                                var wCoord = $('#image_w').val();
-                                var hCoord = $('#image_h').val();
-                                var coordinate = xCoord + "," + yCoord + "," + wCoord + "," + hCoord;
-                                jcrop_api.destroy();  
+                            "Crop": function() { 
+                                base64collection.push(imageTag.cropper("getDataURL", 'image/jpeg')); 
                                 af.push(afTemp[cropCurrentCount]);
-                                axes.push(coordinate); 
-                                cropCurrentCount++;  
+                                cropCurrentCount++;
                                 $(this).dialog("close"); 
                                 if(cropCurrentCount < totalCropImage){
                                     cropImage($input);
@@ -1287,44 +1239,19 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             }
                         },
                         open: function() {
-                            var MainwindowHeight = $(window).height();
                             $(this).parent().addClass('pop-up-fixed');
-                            setTimeout(function() {
-                                var CropImageMaxWidth = $("#crop-image-main").width();
-                                $("#imageTag").css("max-width", CropImageMaxWidth);
-                                jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
-                                    aspectRatio: widthRatio / heightRatio,
-                                    setSelect: [ x1 / 2, y1, x2, y2 ],
-                                    boxWidth: 500,
-                                    boxHeight: 431,
-                                    minSize: [
-                                        imgWidth * 0.1,
-                                        imgHeight * 0.1
-                                    ],
-                                    trueSize: [
-                                        imgWidth,
-                                        imgHeight
-                                    ],
-                                    onChange: showCoords,
-                                    onSelect: showCoords
-                                });
-                            
-                                var UidialogHeight = $(".ui-dialog").outerHeight();
-                                var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
-                                $(".ui-dialog").css("top", UidialogTop);
-                            }, 0);
+                            newCropper();
                         },
                         close: function(){
-                            $('#crop-image-main >  #imageTag').attr('src', ''); 
-                            $('#crop-image-main').append('<img src="" id="imageTag">');
-                            jcrop_api.destroy();
+                            $('.imageContainer > #imageTag').attr('src', '');
+                            imageTag.cropper("destroy");
+                            imageTag = null;
                         },
                         "title": "Crop your image"
                     });
                 });
         }
-        else{
-            axes.push("0,0,0,0");
+        else{ 
             af.push(afTemp[cropCurrentCount]);
             cropCurrentCount++;
             if(cropCurrentCount < totalCropImage){
@@ -1340,7 +1267,59 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                 $input.remove();
             }
         }
-    }
+    } 
+
+    function newCropper()
+    {
+        var widthRatio = 445;
+        var heightRatio = 538;
+        $(".imageContainer").css({
+            width: widthRatio,
+            height: heightRatio,
+        })
+        var imageContainerWidth = $(".imageContainer").width(); 
+        imageTag = $(".imageContainer > #imageTag");  
+        imageTag.cropper({ 
+            aspectRatio: widthRatio / heightRatio,
+            minContainerWidth: 10,
+            minContainerHeight: 10,
+            autoCropArea: 1,
+            multiple: false,
+            dragCrop: false,
+            dashed: false,
+            movable: false, 
+            resizable: false,
+            dashed: true,
+            responsive: true,
+        });
+
+        setTimeout(function() { 
+            var MainwindowHeight = $(window).height();
+            var UidialogHeight = $(".ui-dialog").outerHeight();
+            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
+            $(".ui-dialog").css("top", UidialogTop);
+        }, 200);
+    } 
+
+    $(document).on('click','.zoomIn',function(e){ 
+        imageTag.cropper("zoom", 0.2);
+    });
+
+    $(document).on('click','.zoomOut',function(e){ 
+        imageTag.cropper("zoom", -0.2);
+    });
+
+    $(document).on('click','.rotateRight',function(e){ 
+        imageTag.cropper("rotate", 90); 
+    });
+
+    $(document).on('click','.rotateLeft',function(e){ 
+        imageTag.cropper("rotate", -90);
+    });
+
+    $(document).on('click','.refresh',function(e){
+        imageTag.cropper("reset");
+    });
 
     $(document).on('click','.ui-dialog-titlebar-close',function(e){
             af.push(afTemp[cropCurrentCount]); 
@@ -1363,13 +1342,14 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
     }
 
     function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
-        canProceed = false;
+        var uploadUrl = badIE ? '/productUpload/fallBackUploadimage' : '/productUpload/uploadimage';
+        canProceed = false; 
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
-        $('#afstart').val(JSON.stringify(afstart));
-        $("#coordinates").val(JSON.stringify(axes));
+        $('#afstart').val(JSON.stringify(afstart)); 
+        $("#imageCollections").val(JSON.stringify(base64collection));
         $('#form_files').ajaxForm({
-            url: '/productUpload/uploadimage',
+            url: uploadUrl,
             type: "POST", 
             dataType: "json",
             xhr: function(){
@@ -1381,6 +1361,14 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     }
                 }, false);
                 return xhr;
+            },
+            beforeSubmit : function(arr, $form, options){ 
+                $('<input type="hidden">').attr({
+                    id: 'pictureName',
+                    name: 'pictureName',
+                    value: imageName
+                }).appendTo('#form_files');
+                arr.push({name:'pictureName', value:imageName});
             },
             success :function(d) {
                 filescntret = d.fcnt;
@@ -1406,15 +1394,18 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             .attr("src",'/'+tempDirectory+'/categoryview/'+value.image_name);
                     });
                 }
-                if(badIE == true){
+                if(badIE == true){ 
                     if(d.err != '1'){
+                        console.log(arrayUpload);
                         $.each( arrayUpload, function( key, value ) {
-                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/categoryview/'+imageName);
+                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/categoryview/'+d.imageName); 
+                            $('#previewList'+value + ' > .loadingfiles').remove();
                         });
                     } 
                     $(".files").remove();
                     $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" accept="image/*" required = "required"  /> ');
                 }
+                $('#form_files > #pictureName').remove();
             },
             error: function (request, status, error) {
 
@@ -1430,7 +1421,9 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     $(".files").remove();
                     $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]"  accept="image/*" required = "required"  /> ');
                 }
+                $('#form_files > #pictureName').remove();
             }
+
         }); 
         $('#form_files').submit();
     }
@@ -1439,8 +1432,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         arrayUpload = [];
         afstart = [];
         afTemp = [];
-        imageObject = [];
-        axes = [];
+        imageObject = []; 
+        base64collection = [];
         sizeList = [];
         extensionList = [];
         imageCollection = [];
@@ -1488,11 +1481,11 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                 }
 
                 imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-
+                var newName = tempId+'_'+memberId+'_'+fulldate+pictureCount+universalExtension;
                 arraySet['picture_count'] = pictureCount;
-                arraySet['image_name'] = imageName;
+                arraySet['image_name'] = newName;
                 imageCollection.push(arraySet);
-                afTemp.push(imageName+'||'+extension);
+                afTemp.push(newName+'||'+extension);
                 afstart.push(imageName);
                 arrayUpload.push(pictureCount);
                 imageObject.push(objectUrl);
@@ -1518,7 +1511,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             imageCustom = document.getElementById('files').value;
             var filename = imageCustom.match(/[^\/\\]+$/);
             extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension; 
             af.push(imageName+'||'+extension); 
             afstart.push(imageName); 
             arrayUpload.push(pictureCount);  
@@ -1578,20 +1571,12 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         $("#pop-image").parents("#simplemodal-container").addClass("prod-upload-con");
     });
 
-
     var cropImageOther = function(imageCustom, picName)
-    {
-        var jcrop_api, imgHeight, imgWidth;
-        $('#crop-image-main > #imageTag').attr('src',imageCustom);
+    { 
+        $('.imageContainer > #imageTag').attr('src',imageCustom);
         $("<img/>") // Make in memory copy of image to avoid css issues
-            .attr("src", $('#crop-image-main > #imageTag').attr("src"))
-            .load(function() {
-                imgWidth = this.width;   // Note: $(this).width() will not 
-                imgHeight = this.height; // work for in memory images.
-                var x1 = imgWidth / 2 - widthRatio / 2; 
-                var x2 = x1 + widthRatio; 
-                var y1 = 0;
-                var y2 = imgHeight;
+            .attr("src", $('.imageContainer > #imageTag').attr("src"))
+            .load(function() { 
                 $('#crop-image-main').dialog({
                     resizable: false,
                     "resize": "auto",
@@ -1599,43 +1584,19 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     modal: true,
                     buttons: {
                         "Crop": function() {
-                            var coordinate = $('#image_x').val() + "," + $('#image_y').val()  + "," + $('#image_w').val() + "," + $('#image_h').val();
-                            $("#coordinatesOther").val(coordinate);
+                            base64collection.push(imageTag.cropper("getDataURL", 'image/jpeg'));  
                             triggerUploadOther(picName);
                             $(this).dialog("close");
                         }
                     },
                     open: function() { 
-                        var MainwindowHeight = $(window).height();
                         $(this).parent().addClass('pop-up-fixed');
-                        setTimeout(function() {
-                            var CropImageMaxWidth = $("#crop-image-main").width();
-                            $("#imageTag").css("max-width", CropImageMaxWidth);
-                            jcrop_api = $.Jcrop($('#crop-image-main > #imageTag'),{
-                                aspectRatio: widthRatio / heightRatio,
-                                setSelect: [ x1 / 2, y1, x2, y2 ],
-                                boxWidth: 500,
-                                boxHeight: 431,
-                                minSize: [
-                                    imgWidth * 0.1,
-                                    imgHeight * 0.1
-                                ],
-                                trueSize: [
-                                    imgWidth,
-                                    imgHeight
-                                ],
-                                onChange: showCoords,
-                                onSelect: showCoords
-                            });
-                            var UidialogHeight = $(".ui-dialog").outerHeight();
-                            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
-                            $(".ui-dialog").css("top", UidialogTop);
-                        }, 0);
+                        newCropper();
                     },
-                    close: function(){ 
-                        jcrop_api.destroy(); 
-                        $('#crop-image-main >  #imageTag').attr('src', ''); 
-                        $('#crop-image-main').append('<img src="" id="imageTag">');
+                    close: function(){  
+                        $('.imageContainer >  #imageTag').attr('src', '');
+                        imageTag.cropper("destroy"); 
+                        imageTag = null;
                     },
                     "title": "Crop your image"
                 });
@@ -1644,23 +1605,25 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
 
     function triggerUploadOther(picName)
     {
+        var uploadUrl = badIE ? '/productUpload/fallBackUploadimage' : '/productUpload/uploadimageOther';
+        $("#imageCollectionsOther").val(JSON.stringify(base64collection));
         $('#other_files').ajaxForm({
-            url: '/productUpload/uploadimageOther',
+            url: uploadUrl,
             type: "POST", 
             dataType: "json", 
             beforeSubmit : function(arr, $form, options){
                 $('<input type="hidden">').attr({
-                    id: 'pictureName',
-                    name: 'pictureName',
+                    id: 'pictureNameOther',
+                    name: 'pictureNameOther',
                     value: picName
-                }).appendTo('form');
-                arr.push({name:'pictureName', value:picName});
+                }).appendTo('#other_files');
+                arr.push({name:'pictureNameOther', value:picName});
 
                 $('<input type="hidden">').attr({
                     id: 'pictureCount',
                     name: 'pictureCount',
                     value: pictureCountOther
-                }).appendTo('form');
+                }).appendTo('#other_files');
                 arr.push({name:'pictureCount', value:pictureCountOther});
                 canProceed = false;
                 $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
@@ -1672,9 +1635,9 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             success :function(d) {
                 canProceed = true;
                 if(d.result == "ok"){
-                    imageAttr.push(picName);
-                    var imagePath = '/'+tempDirectory+'other/categoryview/'+picName;
-                    $('.imageText'+currentCnt).val(picName); 
+                    imageAttr.push(d.imageName);
+                    var imagePath = '/'+tempDirectory+'other/categoryview/'+d.imageName;
+                    $('.imageText'+currentCnt).val(d.imageName); 
                     $('.imageFileText'+currentCnt).val(imagePath); 
                     $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src", imagePath);
                     pictureCountOther++;
@@ -1702,6 +1665,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         var val = $(this).val();
         var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
         var picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+        base64collection = [];
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':

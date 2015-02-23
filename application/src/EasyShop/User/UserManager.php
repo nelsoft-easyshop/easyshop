@@ -848,18 +848,18 @@ class UserManager
      * Updates the user store name
      *
      * @param EasyShop\Entities\EsMember $memberEntity
-     * @param string $storename
+     * @param string $name
      * @param bool $executeFlush
      * @return bool
      */
-    public function updateStorename($memberEntity, $storename, $executeFlush = true)
+    public function updateStorename($memberEntity, $name, $executeFlush = true)
     {
         $isSuccessful = false;
         $usersWithStorename = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                   ->getUserWithStoreName($storename, $memberEntity->getIdMember());
-        $isRestricted = $this->isStringReservered($storename);
+                                   ->getUserWithStoreNameOrUsername($name, $memberEntity->getIdMember());
+        $isRestricted = $this->isStringReservered($name);
         if(empty($usersWithStorename) && !$isRestricted){
-            $memberEntity->setStorename($storename);
+            $memberEntity->setStorename($name);
             $isSuccessful = true;
             if($executeFlush){
                 try{

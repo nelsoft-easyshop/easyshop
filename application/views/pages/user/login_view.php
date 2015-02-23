@@ -1,5 +1,9 @@
-<link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
+<?php else: ?>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.login.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+<?php endif; ?>
 
 <div class="clear mrgn-top-35 display-ib"></div>
 

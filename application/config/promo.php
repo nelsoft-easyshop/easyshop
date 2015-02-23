@@ -182,5 +182,36 @@ $config = [
             ],
             'viewable_button_product_page' =>true,
         ],
+        /* Estudyantrepreneur promo */
+        '7' => [
+            'implementation' => 'EasyShop\Promo\Estudyantrepreneur',
+            'calculation_id' => '7',
+            'purchase_limit' => PHP_INT_MAX,
+            'payment_method' => [],
+            'banner' => 'generic',
+            'is_buyable_outside_promo' => true,
+            'cart_solo_restriction' => false,
+            'option' => [
+                'first_round' =>
+                    [
+                        'start' => '2015-02-23 00:00:00',
+                        'end' => '2015-02-24 23:59:59',
+                        'limit' => PHP_INT_MAX
+                    ],
+                'second_round' =>
+                    [
+                        'start' => '2015-02-25 12:00:00',
+                        'end' => '2015-02-25 23:59:59',
+                        'limit' => 3
+                    ],
+                'inter_school_round' =>
+                    [
+                        'start' => '2015-02-26 12:00:00',
+                        'end' => '2015-02-27 23:59:59',
+                        'limit' => 1
+                    ],
+            ],
+            'viewable_button_product_page' =>false,
+        ],
     ]
 ];

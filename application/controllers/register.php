@@ -12,41 +12,11 @@ class Register extends MY_Controller
         $this->load->model("register_model");
         $this->load->library('encrypt');
         $this->load->library('session');
+        session_start();
+        $this->load->config('oauth', true);
         $this->form_validation->set_error_delimiters('', '');
+        $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
     }
-
-    public function index()
-    {    
-        $url = 'landingpage';
-        $is_promo = false;
-        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
-            $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
-            $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
-            $is_promo = true;
-        }
-        else{
-            if($this->session->userdata('usersession')){
-                redirect('/');
-            }
-        }
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
-            'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData = [
-            'redirect_url' => $url,
-            'is_promo' => $is_promo,
-            'facebook' => $socialMediaLinks["facebook"],
-            'twitter' => $socialMediaLinks["twitter"],
-        ];
-      
-        $this->load->spark('decorator');    
-        $this->load->view('pages/user/register',  array_merge($this->decorator->decorate('header', 'view', $headerData), $bodyData));
-    }
-
 
     /**
      *   Registration Handler
