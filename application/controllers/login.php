@@ -32,59 +32,83 @@ class Login extends MY_Controller
      */
     public function index() 
     {
-        $this->load->config('officeoperation', true);
-        
+        $url = 'landingpage';
+        $is_promo = false;
+        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
+            $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
+            $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
+            $is_promo = true;
+        }
+        else {
+
+            if ($this->session->userdata('usersession')) {
+                redirect('/');
+            }
+
+        }
+
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Login | Easyshop.ph',
+            'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
             'relCanonical' => base_url().'login',
             'renderSearchbar' => false,
         ];
-        $bodyData['url'] = $this->session->userdata('uri_string');
+        $this->load->config('officeoperation', true);
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         $facebookScope = $this->config->item('facebook', 'oauth');
         $googleScope = $this->config->item('google', 'oauth');
-        $bodyData['facebook_login_url'] = $this->socialMediaManager
-                                                ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK,
-                                                              $facebookScope['permission_to_access']);
-        $bodyData['google_login_url'] = $this->socialMediaManager
-                                             ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::GOOGLE,
-                                                           $googleScope['permission_to_access']);
-        $loginData = [];
-        $bodyData['officeContactNo'] = $this->config->item('contactno', 'officeoperation');
         $daysInWeek = $this->config->item('dayRange', 'officeoperation');
         $firstDayOfWeek = date('D', strtotime("Sunday + ".$daysInWeek[0]." days"));
         $lastDayOfWeek = date('D', strtotime("Sunday + ".$daysInWeek[1]." days"));
-        $bodyData['dayRange'] = $firstDayOfWeek.' to '.$lastDayOfWeek;
         $hoursInDay = $this->config->item('hourRange', 'officeoperation');
-        $bodyData['hourRange'] = date('h:i A', strtotime($hoursInDay[0])).' to '.date('h:i A', strtotime($hoursInDay[1]));
-  
-        if($this->input->post('login_form')){
-            if($this->form_validation->run('login_form')){
+
+        $bodyData = [
+            'url' => $this->session->userdata('uri_string'),
+            'redirect_url' => $url,
+            'is_promo' => $is_promo,
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+            'facebook_login_url' =>$this->socialMediaManager
+                                        ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK,
+                                            $facebookScope['permission_to_access']),
+            'google_login_url' => $this->socialMediaManager
+                                       ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::GOOGLE,
+                                           $googleScope['permission_to_access']),
+            'officeContactNo' => $this->config->item('contactno', 'officeoperation'),
+            'dayRange' => $firstDayOfWeek.' to '.$lastDayOfWeek,
+            'hourRange' => date('h:i A', strtotime($hoursInDay[0])).' to '.date('h:i A', strtotime($hoursInDay[1])),
+        ];
+        $loginData = [];
+
+        if ($this->input->post('login_form')) {
+
+            if ($this->form_validation->run('login_form')) {
                 $uname = $this->input->post('login_username');
                 $pass = $this->input->post('login_password');
                 $loginData = $this->login($uname, $pass);
             }
-            if(isset($loginData['o_success']) && $loginData['o_success'] >= 1){
+
+            if (isset($loginData['o_success']) && $loginData['o_success'] >= 1) {
                 redirect('/');
             }
-            else{
-                if(array_key_exists('timeoutLeft', $loginData) && $loginData['timeoutLeft'] >= 1){
+            else {
+
+                if (array_key_exists('timeoutLeft', $loginData) && $loginData['timeoutLeft'] >= 1) {
                     $bodyData['loginFail'] = true;
                     $bodyData['timeoutLeft'] = $loginData['timeoutLeft'];
                 }
+
             }  
         }
         
         $bodyData = array_merge($bodyData, $loginData);
 
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/user/login_view',$bodyData);
-        $this->load->view('templates/footer');
+        $this->load->spark('decorator');
+        $this->load->view('pages/user/register', array_merge($this->decorator->decorate('header', 'view', $headerData), $bodyData));
       }
 
-      
     /**
      * Authenticates if the user is able to login succesfully or not
      *

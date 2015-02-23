@@ -295,6 +295,16 @@ class MessageManager {
     }
     
     /**
+     * Retrieves the REDIS HOST
+     *
+     * @return int
+     */
+    public function getRedisHost()
+    {
+        return $this->jsServerConfig['REDIS_HOST'];
+    }
+    
+    /**
      * Retrieves the REDIS PORT
      *
      * @return int

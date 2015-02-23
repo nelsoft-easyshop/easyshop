@@ -48,7 +48,10 @@
                         Just fill in the required information below and and you'll be done in a jiffy.<br>
                         </p>
                         <br>
-                        <form class="form-horizontal" id="activateAccountForm">
+                            <?php 
+                                $attr = array('class' => 'form-horizontal','id' => 'activateAccountForm');
+                                echo form_open('/memberpage/doReactivateAccount', $attr);
+                             ?>                             
                             <div class="form-group">
                                 <label class="col-sm-5 control-label">Type your username: </label>
                                 <div class="col-sm-7">

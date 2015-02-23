@@ -10,12 +10,14 @@ module.exports = function (grunt) {
                 files: {
                     'js/src/vendor/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
-                    'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js'
+                    'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js',
+                    'js/src/vendor/jquery.cropper.js': 'cropper/dist/cropper.js'
                 }
             },
             stylesheets: {
                 files: {
-                    'css/bootstrap.css': 'bootstrap/dist/css/bootstrap.css'
+                    'css/bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
+                    'css/jquery.cropper.css': 'cropper/dist/cropper.min.css'
                 }
             },
         },
@@ -37,9 +39,7 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.header-alt.css':
                         ['web/assets/css/main-style.css', 
                         'web/assets/css/bootstrap.css',
-                        'web/assets/css/easy-icons/easy-icons.css',
-                        'web/assets/css/bootstrap-mods.css',
-                        'web/assets/css/font-awesome/css/font-awesome.min.css'],
+                        'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.header-primary.css':
                         ['web/assets/css/main-style.css',
                          'web/assets/css/normalize.min.css',
@@ -90,7 +90,7 @@ module.exports = function (grunt) {
                         'web/assets/css/ion.rangeSlider.skinFlat.css',
                         'web/assets/css/bootstrap.css',
                         'web/assets/css/bootstrap-mods.css', 
-                        'web/assets/css/jquery.cropbox.css',
+                        'web/assets/css/jquery.cropper.css',
                         'web/assets/css/chosenwtihcreate.min.css'], 
                      
                     'web/assets/css/min-easyshop.upload-step3.css':
@@ -153,11 +153,11 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.member-account-activate.css':
                         ['web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.register.css':
-                        ['web/assets/css/landingpage/style_v2.css',
-                         'web/assets/css/landingpage/jquery.bxslider.css',
-                         'web/assets/css/landingpage/responsive-nav.css',
+                        ['web/assets/css/bootstrap.css',
+                         'web/assets/css/new-login-register.css',
                          'web/assets/css/basic.css',
-                         'web/assets/css/jquery-ui.css'],
+                         'web/assets/css/responsive_css.css',
+                         'web/assets/css/main-style.css'],
                     'web/assets/css/min-easyshop.register-success.css':
                         ['web/assets/css/landingpage/bootstrap.css',
                          'web/assets/css/landingpage/bootstrap-responsive.css',
@@ -290,9 +290,8 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/productUpload_step2.js',
                              'web/assets/tinymce/plugins/jbimages/js/jquery.form.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/vendor/hammer.js',
-                             'web/assets/js/src/vendor/jquery.cropbox.js'],
+                             'web/assets/js/src/vendor/jquery.validate.js', 
+                             'web/assets/js/src/vendor/jquery.cropper.js'],
 
                     'web/assets/js/min/easyshop.product_upload_step3_view.js':
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
@@ -401,14 +400,15 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.user_register.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                             'web/assets/js/src/vendor/jquery.cookie.js',
+                             'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/vendor/jquery.bxslider.min.js',
+                             'web/assets/js/src/login.js',
+                             'web/assets/js/src/landingpage.js',
                              'web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
-                             'web/assets/js/src/vendor/password_meter.js',
-                             'web/assets/js/src/landingpage-responsive-nav.js',
-                             'web/assets/js/src/landingpage.js'],
+                             'web/assets/js/src/vendor/password_meter.js'],
 
                     'web/assets/js/min/easyshop.user_register_subscribe_success.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
@@ -450,6 +450,12 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/socket.io.js',
                              'web/assets/js/src/nodeClient.js',
                              'web/assets/js/src/universal.js'],
+
+                    'web/assets/js/min/easyshop.estudyantrepreneur-promo.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                            'web/assets/js/src/estudyantrepreneur.js',
+                            'web/assets/js/src/plugins.js',
+                            'web/assets/js/src/vendor/christmas-promo.js']
                 }
             }
         }

@@ -7,6 +7,18 @@
     
     
     $(document).ready(function(){
+        var pathName = window.location.pathname.substring(1);
+
+        if (pathName === "login") {
+            $('#tab-login').trigger('click');
+        }
+        else if (pathName === "register") {
+            $('#tab-create').trigger('click');
+            setTimeout(function(){  
+                $("#login").hide();
+            }, 300);
+        }
+
         if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
             $("p#lockoutDuration").html("Timeout Remaining: " + $("#timeoutLeft").val());
             $("#failed-login").show();
@@ -43,7 +55,7 @@
                     $("#login_error").html(obj);
                 }                
 
-            },
+            }
         });         
     });        
     
@@ -60,10 +72,10 @@
             },
             messages: {
                 login_username: {
-                    required: 'Username is required.'
+                    required: '<span class="input-error">Username is required.</span>'
                 },
                 login_password: {
-                    required: 'Password is required.'
+                    required: '<span class="input-error">Password is required.</span>'
                 }
             },
             errorElement: "span",
@@ -77,7 +89,7 @@
             },
             submitHandler: function (form) {
                 $('#loading_img').show();
-                $('#login').hide();
+                $('#login').show();
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",

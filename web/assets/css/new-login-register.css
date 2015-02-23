@@ -57,7 +57,7 @@ html, body {
     border-top: 1px solid #00a388;
     border-bottom: 1px solid #00a388;
     display: inline-block;
-    margin-bottom: 45px;
+    margin-bottom: 35px;
     width: 100%;
 }
 
@@ -74,6 +74,10 @@ html, body {
     font-weight: bold;
     text-transform: uppercase;
     text-align: center;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
 }
 
 .idtabs-tab a:hover {
@@ -105,12 +109,12 @@ html, body {
 #create-account h1 {
     font-size: 16px;
     font-weight: bold;
-    margin-bottom: 38px;
+    margin-bottom: 15px;
     text-transform: uppercase;
 }
 
 .login-left-content form > div {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .login-left-content form .row .ui-form-control,
@@ -121,8 +125,8 @@ html, body {
 
 .login-left-content form .row .col-sm-4,
 .login-right-content fieldset .row .col-sm-5 {
-    height: 38px;
-    line-height: 38px;
+    height: 28px;
+    line-height: 28px;
 }
 
 .login-left-content form .row span {
@@ -150,7 +154,7 @@ html, body {
 
 .btn.facebook-btn,
 .btn.google-btn {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .btn.facebook-btn {
@@ -241,7 +245,7 @@ html, body {
 }
 
 .login-right-content fieldset .row {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .input-error,
@@ -273,6 +277,10 @@ html, body {
     padding: 6px;
     text-align: left;
     width: 100%;
+}
+
+.pass-container {
+    width: auto !important;
 }
 
 .pass-bar {
@@ -402,7 +410,7 @@ html, body {
 
     .login-left-content,
     .login-right-content {
-        padding: 0 25px 35px;
+        padding: 0 15px 10px;
     }
 
     #login h1 {
@@ -476,17 +484,16 @@ html, body {
     .login-left-content,
     .login-right-content {
         float: left;
-        padding: 0 40px 15px;
         width: 50%;
     }
 
     .login-left-content form > div {
-        padding-right: 40px;
+        padding-right: 15px;
     }
 
     .login-left-border {
         border-right: 1px solid #cecece;
-        margin-right: -40px;
+        margin-right: -15px;
     }
 
     #login h1 {
@@ -495,6 +502,12 @@ html, body {
 
     .login-left-content form .row {
         margin-right: 0;
+    }
+
+    .login-left-content form .row .col-sm-4,
+    .login-right-content fieldset .row .col-sm-5 {
+        height: 38px;
+        line-height: 38px;
     }
 
     #create-account .md-hide-content {
@@ -507,17 +520,8 @@ html, body {
 }
 
 @media (min-width: 980px) {
-    .new-login-register-content,
-    .terms-and-condition {
-        max-width: 840px;
-    }
-
-    .login-logo {
-        padding: 50px 0;
-    }
-
     .idtabs-tab a {
-        padding: 28px 0;
+        padding: 20px 0;
     }
 
     .why-create-content img {

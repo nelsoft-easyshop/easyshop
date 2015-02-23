@@ -171,7 +171,7 @@ class product_search extends MY_Controller {
 
         $headerData = [ 
             "memberId" => $this->session->userdata('member_id'),
-            'title' => (($response['string']==='')?"Search":$response['string']).' | Easyshop.ph' 
+            'title' => (($response['string']==='')?"Search":html_escape($response['string'])).' | Easyshop.ph' 
         ];
 
         $productViewData = [

@@ -444,8 +444,8 @@ class NewHomeWebService extends MY_Controller
         if ( ! $this->upload->do_upload("myfile")) {
             $error = ['error' => $this->upload->display_errors()];
                      return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output($error);
+                                 ->set_content_type('application/json')
+                                 ->set_output(json_encode($error));
         } 
         else {
             $uploadData = $this->upload->data();  
@@ -479,9 +479,10 @@ class NewHomeWebService extends MY_Controller
             } 
 
             if($result) {
+
                 return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json); 
+                            ->set_content_type('application/json')
+                            ->set_output($this->json); 
             }   
         } 
     }    
@@ -520,8 +521,8 @@ class NewHomeWebService extends MY_Controller
             if ( ! $this->upload->do_upload("myfile")) {
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
-                                ->set_content_type('application/json')
-                                ->set_output($error);
+                                     ->set_content_type('application/json')
+                                     ->set_output(json_encode($error));
             } 
             else {
                 $uploadData = $this->upload->data();                  
@@ -558,8 +559,8 @@ class NewHomeWebService extends MY_Controller
 
         if($result) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }          
         
     }
@@ -629,8 +630,8 @@ class NewHomeWebService extends MY_Controller
                         
         if(!$product){
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);
+                        ->set_content_type('application/json')
+                        ->set_output( $this->slugerrorjson);
         }
         else {
             $map->sellerSection->productPanel[$index]->slug = $slug;
@@ -713,15 +714,13 @@ class NewHomeWebService extends MY_Controller
         $index = (int)$this->input->get("index");
         $subIndex = (int) $this->input->get("subIndex");
         $text = $this->input->get("value");
-        $target = $this->input->get("target");
 
         $map->categorySection[$index]->sub[$subIndex]->text = $text;
-        $map->categorySection[$index]->sub[$subIndex]->target = $target;
 
         if($map->asXML($this->file)) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }  
     } 
 
@@ -772,7 +771,7 @@ class NewHomeWebService extends MY_Controller
         }
 
 
-    }  
+    } 
 
     /**
      *  Adds categorySection parent node
@@ -848,8 +847,7 @@ class NewHomeWebService extends MY_Controller
 
         $index = (int)$this->input->get("index");
         $value = $this->input->get("subCategoryText");
-        $target = $this->input->get("subCategorySectionTarget");
-        $string = $this->xmlCmsService->getString("subCategorySection",$value, "", "", $target); 
+        $string = $this->xmlCmsService->getString("subCategorySection",$value, "", "", ""); 
         if(count($map->categorySection[$index]->sub) > 0 ) {
             $index = $index == 0 ? 1 : $index + 1;  
             $xmlTarget = '/map/categorySection['.$index.']/sub[last()]';            
@@ -857,12 +855,12 @@ class NewHomeWebService extends MY_Controller
         else {
             $index = $index == 0 ? 1 : $index + 1;              
             $xmlTarget = '/map/categorySection['.$index.']/categorySlug[last()]';
-        }
+        }        
         $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,$xmlTarget,"\t\t","\n");    
-        if($addXml === true) {
+        if($addXml) {
             return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json);
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
         }
     }        
 
@@ -927,7 +925,7 @@ class NewHomeWebService extends MY_Controller
             $file_ext = explode('.', $_FILES['myfile']['name']);
             $file_ext = strtolower(end($file_ext)); 
             $this->config->load("image_path");                 
-            $path_directory = $this->config->item('assets_images_directory');
+            $path_directory = $this->config->item('partner_img_directory').($action === "logo" ? "/" : "/banners/");
 
             $this->upload->initialize([ 
                 "upload_path" => $path_directory,
@@ -942,7 +940,7 @@ class NewHomeWebService extends MY_Controller
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
                                 ->set_content_type('application/json')
-                                ->set_output($error);
+                                ->set_output(json_encode($error));
             } 
             else {
                 $uploadData = $this->upload->data();                

@@ -162,7 +162,6 @@ class CMS
         <categorySlug>'.$value.'</categorySlug>
         <sub>
             <text>Default</text>
-            <target>/</target>
             <productSlugs> </productSlugs>
         </sub>
     </categorySection>'; 
@@ -176,7 +175,6 @@ class CMS
              $string = '
         <sub>
             <text>'.$value.'</text>
-            <target>'.$target.'</target>
             <productSlugs> </productSlugs>            
         </sub>'; 
         }           
@@ -255,13 +253,14 @@ class CMS
         }
         if($nodeName == "mainSlide") {
 
- $string = '<mainSlide> 
+        $string = '
+        <mainSlide> 
         <value>'.$value.'</value> 
         <type>image</type>
         <imagemap>
-            <coordinate>'.$coordinate.'</coordinate>
-            <target>'.$target.'</target>
+            <target>'.$coordinate.'</target>
         </imagemap>
+        <actionType>'.$target.'</actionType>
     </mainSlide>';   
 
         }
@@ -929,7 +928,7 @@ $string = '<typeNode>
         $xmlContent['categorySection']  = !isset($xmlContent['categorySection']) ? [] : $xmlContent['categorySection'];
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
+                                                ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
            
             if(!isset($categorySection["sub"])){
                 $categorySection["sub"] = [];
@@ -941,25 +940,27 @@ $string = '<typeNode>
             }   
             
             $sectionData['products'] = [];
-            $isFirstRun = true;
-            foreach ($categorySection['sub'] as $index => $subCategory) {
-            
-                $subHeaderSection = $categorySection['sub'][$index];
-                $subHeaderSection['text'] = (is_array($subHeaderSection['text']) && empty($subHeaderSection['text'])) ? '' : $subHeaderSection['text'];
-                $sectionData['subHeaders'][$index] = $subHeaderSection;
+            $sectionData['subHeaders'] = [];
 
+            $isFirstRun = true;
+            foreach ($categorySection['sub'] as $index => $subHeaderSection) {
+            
+                $subHeaderSection['text'] = (is_array($subHeaderSection['text']) && empty($subHeaderSection['text'])) ? '' : $subHeaderSection['text'];
+                
+                if (!isset($subHeaderSection['productSlugs']) || !$subHeaderSection['productSlugs']) {
+                    $subHeaderSection['productSlugs'] = [];
+                }  
+                $sectionData['subHeaders'][$index] = $subHeaderSection;
+                
                 if(!$isFirstRun){
                     continue;
                 }
 
-                if (!isset($subCategory['productSlugs']) || !$subCategory['productSlugs']) {
-                    $subCategory['productSlugs'] = [];
-                }  
-                if(!is_array($subCategory['productSlugs'] )){
-                    $subCategory['productSlugs'] = [ $subCategory['productSlugs'] ];
+                if(!is_array($subHeaderSection['productSlugs'] )){
+                    $subHeaderSection['productSlugs'] = [ $subHeaderSection['productSlugs'] ];
                 }
 
-                foreach ($subCategory['productSlugs'] as $idx => $xmlProductData) {
+                foreach ($subHeaderSection['productSlugs'] as $idx => $xmlProductData) {
                     $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                         ->findOneBy(['slug' => $xmlProductData]);
                     if ($product) {
@@ -978,6 +979,8 @@ $string = '<typeNode>
 
             $homePageData['categorySection'][] = $sectionData;
         }
+
+        
 
         $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
        

@@ -1584,7 +1584,70 @@ class Memberpage extends MY_Controller
         return $viewData;
     }
     
-    
+    /**
+     * Updates user's products status
+     * @return JSON
+     */
+    public function manageUserProduct()
+    {
+        $member = $this->accountManager
+                       ->authenticateMember($this->input->post('username'), 
+                                            $this->input->post('password'), 
+                                            false, 
+                                            true);  
+        $actionResult = false;
+        $resultMessage = "";
+        if ($member['member']) {
+            if($this->session->userdata('member_id') && ($member["member"]->getIdMember() !== $this->session->userdata('member_id'))) {
+                $resultMessage = 'Invalid Username/Password';
+            }
+            else {
+                $postedAction = strtolower($this->input->post("action"));
+                $isActionValid = $actionResult = true;
+                switch ($postedAction) {
+                    case 'restore':
+                        $productStatus = EsProduct::DELETE;
+                        $desiredStatus = EsProduct::ACTIVE;
+                        break;
+                    case 'disable':
+                        $productStatus = EsProduct::ACTIVE;
+                        $desiredStatus = EsProduct::DELETE;
+                        break;
+                    case 'delete':
+                        $productStatus = EsProduct::DELETE;
+                        $desiredStatus = EsProduct::DISABLE;
+                        break;
+                    default:
+                        $isActionValid = false;
+                        break;
+                }
+                $productManager = $this->serviceContainer['product_manager'];
+                $isUpdateSuccess = false;
+                if($isActionValid) {
+                    $isUpdateSuccess = $productManager->updateUserProductStatus(
+                                                        $member["member"]->getIdMember(), 
+                                                        $productStatus, 
+                                                        $desiredStatus
+                                                    );
+                }
+                if(!$isUpdateSuccess) {
+                    $resultMessage = "Database Error";
+                    $actionResult = false;
+                }
+            }
+        }
+        else {
+            $resultMessage = 'Invalid Username/Password';
+        }
+
+        $result = [
+            "result" => $actionResult,
+            "message" => $resultMessage
+        ];
+
+        echo json_encode($result); 
+    }
+
     /**
      * send notification to user and deactivate account
      * @param id
@@ -1641,18 +1704,18 @@ class Memberpage extends MY_Controller
     {
 
         $hashUtility = $this->serviceContainer['hash_utility'];
-        $getData = $hashUtility->decode($this->input->get('h'));
+        $getData = $hashUtility->decode($this->input->post('h'));
 
         $authenticationResult = $this->accountManager
-                                     ->authenticateMember($this->input->get('username'), 
-                                                          $this->input->get('password'), 
+                                     ->authenticateMember($this->input->post('username'), 
+                                                          $this->input->post('password'), 
                                                           false, 
                                                           true);  
         $isActivationRequestValid = $authenticationResult['member']
                                     && $authenticationResult['member']->getIdMember() === (int)$getData["memberId"] 
                                     && (bool)$authenticationResult['member']->getIsActive() === false ;
         $response = false;
-        if($this->input->get("activateAccountButton") && $isActivationRequestValid) {
+        if($this->input->post("activateAccountButton") && $isActivationRequestValid) {
             $this->em
                  ->getRepository('EasyShop\Entities\EsMember')
                  ->accountActivation($authenticationResult["member"], true);          

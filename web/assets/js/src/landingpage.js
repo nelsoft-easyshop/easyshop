@@ -12,8 +12,8 @@ var ajaxStat = {};
     $(".open-create-account").click( function(){
         $("#alter-tab div:first-child").children().removeClass("selected");
         $("#alter-tab div:first-child").next().children().addClass("selected");
-        $("#login").css("display","none");
-        $("#create-account").css("display","block");
+        $("#login").fadeOut(0);
+        $("#create-account").fadeIn(300);
     });
 
     $(".terms_and_conditions").click( function(){
@@ -24,12 +24,18 @@ var ajaxStat = {};
         $("#terms-section").fadeOut();
     });
 
-    $('#reg_btn,#reg_txt').click(function(event) {
-        event.preventDefault();
-        var n = $(document).height();
-        $('html, body').animate({ scrollTop: 200 }, 300);
-        navigation.close();
-    });
+    $("#adv2").idTabs(function(id,list,set){ 
+        $("a",set).removeClass("selected") 
+        .filter("[href='"+id+"']",set).addClass("selected");
+
+        for(i in list) {
+          $(list[i]).hide();
+        }
+
+        $(id).fadeIn(); 
+        return false; 
+    }); 
+
 })(jQuery);
 
 
@@ -462,73 +468,6 @@ function mobile_check(trigger){
     });
 }
 
-/**********************************************************************************************/
-/****************************	SUBSCRIPTION FORM	*******************************************/
-/**********************************************************************************************/
-jQuery(document).ready(function(){
-
-    jQuery('#subscription_form').validate({
-        rules: {           
-            subscribe_email: {
-                required: true,
-                email: true,
-                minlength: 6,
-                }
-            },
-            messages:{
-            subscribe_email:{
-                required: "Please enter a valid email address",
-                email: 'Please enter a valid email address',
-                minlength: '*Email too short',
-            }
-            },
-            errorElement: "span",
-            errorPlacement: function(error, element) {
-                error.addClass('red');
-                error.appendTo(element.parent());
-            },
-            submitHandler: function(form){
-            jQuery('#subscribe_btn').attr('disabled', true);
-
-            jQuery.post('/register/subscribe', jQuery(form).serializeArray(), function(data){
-                jQuery('#subscribe_loadingimg').hide();
-                jQuery('#subscribe_btn').attr('disabled', false);
-                if(data == 1){
-                    jQuery('#result_desc').html("Thank you for subscribing to Easyshop.ph!");
-                    var title = "Subscription Complete";
-                    jQuery(form).find('input[type="text"]').each(function(){
-                        jQuery(this).prop('value', '');
-                    });
-                        jQuery('#success_subscribe').submit();
-                }
-                else{
-                    jQuery('#result_desc').html("We are currently encountering a problem. Please try again later.");
-                    var title= "Failed to Subscribe";
-                    
-                    jQuery('#register_result').dialog({
-                    width:'65%',
-                    autoOpen: false,
-                    title: title,
-                    modal: true,
-                    closeOnEscape: false,
-                    draggable:false,
-                    buttons:{
-                        OK: function(){
-                            jQuery(this).dialog("close");
-                            }
-                        }
-                    });
-                    jQuery('#register_result').dialog('open');
-                }
-                
-            });
-            return false;
-        }
-    });
-
-});
-
-
 function showcheck(element){
     var name = element.attr('name');
     jQuery('#'+name+'_check').show().css('display','inline-block');
@@ -547,71 +486,5 @@ function hidecheckx(element){
     jQuery('#'+name+'_x').hide();
 }
 
-/*******************************************************************************************************/
-/******************************* Terms and Conditions Dialog box ***************************************/
-/*******************************************************************************************************/
-jQuery(function() {
-    jQuery( ".dialog" ).dialog({
-        width:"65%",
-        autoOpen: false,
-        modal: true,
-        closeOnEscape: true,
-        draggable:false,
-    });
-
-    jQuery( ".terms_and_conditions" ).click(function() {
-    jQuery( ".dialog" ).dialog( "open" );
-    jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
-    });
-});
-
-/**** video player dialog box ****/
-jQuery(function() {
-    jQuery( "#videoplayer" ).dialog({
-        width:"68%",
-        autoOpen: false,
-        modal: true,
-        closeOnEscape: true,
-        draggable:false,
-        show: {
-            effect: "fade",
-            duration: 600
-        },
-        hide: {
-            effect: "fade",
-            duration: 400
-        }
-    });
-
-    jQuery( ".vidplay" ).click(function() {
-    jQuery( "#videoplayer" ).dialog( "open" );
-    });
-});
-
-/****** Terms and Conditions Dialog box ********/
-jQuery(function() {
-    jQuery( ".dialog" ).dialog({
-        width:"65%",
-        autoOpen: false,
-        modal: true,
-        closeOnEscape: true,
-        draggable:false,
-        show: {
-            effect: "fade",
-            duration: 1000
-        },
-        hide: {
-            effect: "fade",
-            duration: 400
-        }
-    });
-
-    jQuery( ".terms_and_conditions" ).click(function() {
-        jQuery(".dialog" ).dialog( "open" );
-        jQuery(".dialog").siblings().parent('.ui-dialog').addClass('terms_container');
-    });
-    
-    
-});
 
 
