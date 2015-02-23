@@ -375,11 +375,13 @@ class AssetsUploader
         $arrayMimes = explode("|", self::ALLOWABLE_IMAGE_MIME_TYPES);
         $acceptableMime = [];
         foreach ($arrayMimes as $mime) {
-            if(is_array($mimeConfig[$mime])){
-                $acceptableMime = array_merge($acceptableMime, $mimeConfig[$mime]);
-            }
-            else{
-                $acceptableMime[] = $mimeConfig[$mime];
+            if(isset($mimeConfig[$mime])){
+                if(is_array($mimeConfig[$mime])){
+                    $acceptableMime = array_merge($acceptableMime, $mimeConfig[$mime]);
+                }
+                else{
+                    $acceptableMime[] = $mimeConfig[$mime];
+                }
             }
         }
 
