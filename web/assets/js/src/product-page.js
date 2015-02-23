@@ -339,6 +339,7 @@
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
+                $("#control-quantity").html('<option value="0">0</option>');
                 $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
                 return false;
             }
