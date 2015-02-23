@@ -78,7 +78,8 @@ class EsMemberRepository extends EntityRepository
             FROM 
                 es_member
             WHERE 
-                (store_name = :storeName OR username = :userName)
+                store_name = :storeName OR
+                ((store_name IS NULL AND store_name = "") AND username = :storeName)
         ';
         
         if($excludeMemberId !== null){
@@ -88,8 +89,7 @@ class EsMemberRepository extends EntityRepository
         $query = $em->createNativeQuery($sql, $rsm);
 
         $query->setParameter('storeName',$storeName);
-        $query->setParameter('userName',$storeName);
-        
+
         if($excludeMemberId !== null){
             $query->setParameter('memberId',$excludeMemberId);
         }
