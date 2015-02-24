@@ -27,14 +27,14 @@ class IsUserMobileUniqueValidator extends ConstraintValidator
         }
 
         $result = $this->em->createQueryBuilder()
-                                 ->select('b')
-                                 ->from('\EasyShop\Entities\EsMember', 'b')
-                                 ->where('b.idMember != :member')
-                                 ->andWhere('b.contactno = :contact_number')
-                                 ->setParameter('member', $memberId)
-                                 ->setParameter('contact_number', $value)
-                                 ->getQuery()
-                                 ->getOneOrNullResult();
+                           ->select('b')
+                           ->from('\EasyShop\Entities\EsMember', 'b')
+                           ->where('b.idMember != :member')
+                           ->andWhere('b.contactno = :contact_number')
+                           ->setParameter('member', $memberId)
+                           ->setParameter('contact_number', $value)
+                           ->getQuery()
+                           ->getOneOrNullResult();
 
         if($result){
             $this->context->addViolation(
