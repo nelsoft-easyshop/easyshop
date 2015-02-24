@@ -150,8 +150,7 @@ class ValidationRules
                                 new Assert\Email()
                     ),
                     'mobile' => array(
-                                new CustomAssert\IsValidMobile(),
-                                new CustomAssert\IsMobileUnique(),
+                                new CustomAssert\IsValidMobile()
                     ),
                     'storeDescription' => array(
                                 new Assert\Length(['max' => '1024'])
