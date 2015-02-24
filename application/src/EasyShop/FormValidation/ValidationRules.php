@@ -84,7 +84,6 @@ class ValidationRules
                     'contactno' => array(
                                 new Assert\Length(['min' => '11',
                                                      'max' => '11']),
-                                new CustomAssert\IsMobileUnique(),
                                 new CustomAssert\IsValidMobile(),
                     ),
                     'email' => array(
@@ -106,7 +105,6 @@ class ValidationRules
                     ),
                     'contact_number' => array(
                                 new CustomAssert\IsValidMobileOptional(),
-                                new CustomAssert\IsMobileUnique(),
                     ), 
                     'street_address' => array(
                                 new CustomAssert\IsValidAddressOptional(),
