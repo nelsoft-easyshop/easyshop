@@ -1147,7 +1147,7 @@ class Store extends MY_Controller
         $rules = $formValidation->getRules('personal_info');
         $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                             ->setMethod('POST');
-        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsUserMobileUnique(['memberId' => $memberId]);        
+        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);        
         $formBuild->add('store_name', 'text', ['constraints' => $rules['shop_name']])
                   ->add('mobile', 'text', ['constraints' => $rules['mobile']])
                   ->add('city', 'text')
