@@ -103,6 +103,10 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         var city = $('.cityselect').val();
         var stateRegionSelected = $(".stateregionselect option:selected").html();
         var citySelected = $(".cityselect option:selected").html();
+
+        stateRegion = (typeof stateRegionSelected === "undefined") ? 0 : stateRegionSelected;
+        city = (typeof citySelected === "undefined") ? 0 : citySelected;
+
         changeSlug = jQuery.ajax({
             type: "POST",
             dataType: "JSON",
