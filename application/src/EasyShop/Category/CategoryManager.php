@@ -417,13 +417,15 @@ class CategoryManager
     /**
      * Updates is_delete field to '1' of a custom category
      * Inserts new record with a is_delete value of '1' if category name is not found
+     * @param array $categoryArray
+     * @param int $memberId
      * 
      * @return bool
      */
-    public function deleteUserCustomCategory($categoryNames, $memberId)
+    public function deleteUserCustomCategory($categoryArray, $memberId)
     {
         try{
-            foreach ($categoryNames as $value) {
+            foreach ($categoryArray as $value) {
                 if(isset($value->memberCatId) && (int) $value->memberCatId !== 0)
                 {
                     $memberCat = $this->em
