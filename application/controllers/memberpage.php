@@ -2356,7 +2356,7 @@ class Memberpage extends MY_Controller
     public function addCustomCategory()
     {
         return  $this->categoryManager->createCustomCategory(
-                        $this->input->post("catName"),
+                        $this->input->post("userCategoryName"),
                         $this->session->userdata('member_id')
                     );
     }
