@@ -405,7 +405,6 @@ class CategoryManager
      */
     public function deleteUserCustomCategory($categoryNames, $memberId)
     {
-        $memberCat = new EsMemberCat();
         try{
             foreach ($categoryNames as $value) {
                 $memberCat = $this->em
