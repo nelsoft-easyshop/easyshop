@@ -84,7 +84,7 @@ class Store extends MY_Controller
                     $productView['isSearching'] = TRUE;
                     $parameter = $this->input->get();
                     $parameter['seller'] = "seller:".$memberEntity->getUsername();
-                    $parameter['limit'] = 12;
+                    $parameter['limit'] = $this->vendorProdPerPage;
                     
                     // getting all products
                     $search = $searchProductService->getProductBySearch($parameter);
