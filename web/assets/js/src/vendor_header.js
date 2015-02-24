@@ -129,7 +129,6 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         $("#placeStock > strong").html("Location not set");
                     }
                     else{
-                        alert(citySelected + " " + stateRegionSelected);
                         $("#placeStock > strong").html(escapeHtml(citySelected)+', '+escapeHtml(stateRegionSelected));
                     }
                     
