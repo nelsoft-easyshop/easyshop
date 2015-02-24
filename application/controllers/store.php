@@ -75,18 +75,16 @@ class Store extends MY_Controller
                     redirect($vendorSlug.'/about');
                 }
                 
-                $getUserProduct = $this->getUserCategoryProducts($bannerData['arrVendorDetails']['id_member']);
+                $getUserProduct = $this->getInitialCategoryProductsByMemberId($bannerData['arrVendorDetails']['id_member']);
                 $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
-                
-                // If searching in  page
+
                 if($this->input->get() && !$bannerData['hasNoItems']){
 
                     $productView['isSearching'] = TRUE;
                     $parameter = $this->input->get();
                     $parameter['seller'] = "seller:".$memberEntity->getUsername();
                     $parameter['limit'] = $this->vendorProdPerPage;
-                    
-                    // getting all products
+
                     $search = $searchProductService->getProductBySearch($parameter);
                     $searchProduct = $search['collection'];
                     $count = $search['count'];
@@ -157,7 +155,6 @@ class Store extends MY_Controller
                 $this->load->view('templates/footer_alt', ['sellerSlug' => $vendorSlug]);
             }
         }
-        // Load invalid link error page
         else{
             show_404();
         }
@@ -425,7 +422,7 @@ class Store extends MY_Controller
      *
      *  @return array
      */
-    private function getUserCategoryProducts($memberId)
+    private function getInitialCategoryProductsByMemberId($memberId)
     {
         $em = $this->serviceContainer['entity_manager'];
         $categoryManager = $this->serviceContainer['category_manager'];
