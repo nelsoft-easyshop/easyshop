@@ -2368,7 +2368,7 @@ class Memberpage extends MY_Controller
     public function deleteCustomCategory()
     {
         $customCategories = [];
-        foreach ($this->input->post("catName") as $value) {
+        foreach ($this->input->post("userCategoryName") as $value) {
             $customCategories[] = json_decode($value);
         }
 
