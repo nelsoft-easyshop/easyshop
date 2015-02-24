@@ -125,7 +125,7 @@ class CategoryManager
                      ->setCreatedDate(date_create())
                      ->setlastModifiedDate(date_create());
             if($isForDeleteCategory) {
-                $category->setIsDelete((int) !EsMemberCat::DEFAULT_IS_DELETE);
+                $category->setIsDelete(EsMemberCat::IS_DELETE);
             }
             $this->em->persist($category);
             $this->em->flush();
@@ -414,7 +414,7 @@ class CategoryManager
                                         "catName" => trim($value)
                                     ]); 
                 if($memberCat) {
-                    $memberCat->setIsDelete((int)!EsMemberCat::DEFAULT_IS_DELETE);
+                    $memberCat->setIsDelete(EsMemberCat::IS_DELETE);
                     $memberCat->setlastModifiedDate(date_create());
                     $this->em->flush();
                 }

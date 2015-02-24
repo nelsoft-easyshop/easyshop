@@ -77,7 +77,7 @@ class EsMemberCat
      *
      *  @var int
      */
-    const DEFAULT_IS_DELETE = 0;
+    const IS_DELETE = 1;
 
     /**
      * Get idMemcat
