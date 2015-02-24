@@ -425,7 +425,7 @@ class Store extends MY_Controller
      *
      *  @return array
      */
-    private function getUserCategoryProducts($memberId, $catType = "default")
+    private function getUserCategoryProducts($memberId)
     {
         $em = $this->serviceContainer['entity_manager'];
         $categoryManager = $this->serviceContainer['category_manager'];
@@ -437,10 +437,18 @@ class Store extends MY_Controller
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType, $prodLimit);
+
+            $categoryIdCollection = $categoryProperties['child_cat'];
+            $isCustom = false;
+            if( (int)$categoryProperties['memberCategoryId'] !== 0 ){
+                $categoryIdCollection = [$categoryProperties['memberCategoryId']];
+                $isCustom = true;
+            }
+ 
+            $result = $categoryManager->getProductsWithinCategory($memberId, $categoryIdCollection, $isCustom, $prodLimit);
             
             if( (int)$result['filtered_product_count'] === 0 && 
-                (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_DEFAULT_TYPE 
+                (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_NONSEARCH_TYPE 
             ){
                 unset($parentCat[$idCat]);
                 break;
@@ -1023,7 +1031,7 @@ class Store extends MY_Controller
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
         $isCount = intval($this->input->get('count')) === 1;
-
+        $isCustom = $this->input->get('isCustom') ? true : false;
         $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('condition')] : "";
         $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lowerPrice')) : "";
         $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('upperPrice')) : "";
@@ -1084,18 +1092,13 @@ class Store extends MY_Controller
                 $parameter['page'] = $page - 1;
                 $search = $searchProductService->getProductBySearch($parameter);
                 $products = $search['collection']; 
-                $productCount = $search['count'];;
+                $productCount = $search['count'];
                 break;
-            case CategoryManager::CATEGORY_CUSTOM_TYPE: 
-                $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "custom", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
-                $products = $result['products'];
-                $productCount = $result['filtered_product_count'];
-                break;
-            case CategoryManager::CATEGORY_DEFAULT_TYPE: 
+            case CategoryManager::CATEGORY_NONSEARCH_TYPE: 
             default:
-                $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
-                $products = $result['products'];
-                $productCount = $result['filtered_product_count'];
+                    $result = $categoryManager->getProductsWithinCategory($vendorId, $catId, $isCustom, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                    $products = $result['products'];
+                    $productCount = $result['filtered_product_count'];
                 break;
         }
 

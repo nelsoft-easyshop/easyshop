@@ -23,20 +23,12 @@ class CategoryManager
     const CATEGORY_SEARCH_TYPE = 0;
     
     /**
-     * Custom category type 
+     * Non search category type 
      *
      * @var integer
      */
-    const CATEGORY_CUSTOM_TYPE = 1;
-    
-    
-    /**
-     * Default category type 
-     *
-     * @var integer
-     */
-    const CATEGORY_DEFAULT_TYPE = 2;
-    
+    const CATEGORY_NONSEARCH_TYPE = 1;
+
     
     /**
      *  Entity Manager Instance
@@ -172,19 +164,23 @@ class CategoryManager
     
     
     /**
-     *  Fetch products under parent category, based on child cat ids ($arrCatId)
+     *  Fetch products under category
      *
      *  @param integer $memberId
-     *  @param array $arrCatId 
+     *  @param integer[] $arrCatId 
+     *  @param boolean $isCustom
+     *  @param integer $productLimit
+     *  @param integer $page
+     *  @param string[] $orderBy
+     *  @param string $condition
+     *  @param string $lprice
+     *  @param string $uprice
      *
      *  @return array - filter count of products and array of product objects
      */
-    public function getVendorDefaultCategoryAndProducts($memberId, $arrCatId, $catType="default", $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
+    public function getProductsWithinCategory($memberId, $arrCatId, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
     {
-        // Container for products fetched
-        $categoryProducts = array();
-
-        // Condition parameters passed
+        $categoryProducts = [];
         $currentPage = (int) $page <= 0 ? 0 : $page-1;
         $page = (int) $page <= 0 ? 0 : ($page-1) * $productLimit;
         $condition = strval($condition);
@@ -192,35 +188,36 @@ class CategoryManager
         $lprice = str_replace(",", "", (string)$lprice);
         $uprice = str_replace(",", "", (string)$uprice);
 
-        // Identify which query to use in fetching product Ids and product count
         if($condition === "" && $lprice === "" && $uprice === ""){
-            switch( $catType ){
-                case "custom":
-                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+            if($isCustom){
+                /**
+                 * Do custom stuff here
+                 */
+                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
                                                    ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
-                    $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
                                              ->countCustomCategoryProducts($memberId, $arrCatId);
-                    break;
-                default:
-                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getPagedNotCustomCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
-                    $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                             ->countNotCustomCategorizedProducts($memberId, $arrCatId);    
-                    break;
-            }        
+            }
+            else{
+                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                               ->getPagedNotCustomCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
+                $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                         ->countNotCustomCategorizedProducts($memberId, $arrCatId);    
+            }
             $isFiltered = false;    
         }
         else{
               
-            switch( $catType ){
-                case "custom":
-                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
-                    break;
-                default:
-                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
-                    break;
+            if($isCustom){
+                /**
+                 * Do other custom stuff
+                 */
+                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                               ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
+            }
+            else{
+                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                               ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
             }
 
             if($lprice !== "" || $uprice !== "") {
@@ -231,7 +228,6 @@ class CategoryManager
                     }
                 }   
             }             
-            
 
             $isFiltered = true;  
         }
@@ -243,7 +239,7 @@ class CategoryManager
                 $categoryProductIds = $filteredCategoryProducts[$currentPage];
             }
         }
-        // Fetch product object and append image
+
         foreach($categoryProductIds as $productId){
             $product = $this->productManager->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
@@ -263,15 +259,13 @@ class CategoryManager
                 $product->secondaryImageFileName = $secondaryProductImage->getFilename();
             }
 
-            
             $categoryProducts[] = $product;
         }
 
-        // Generate result array
-        $result = array(
+        $result = [
             'products' => $categoryProducts,
-            'filtered_product_count' => $productCount
-        );
+           'filtered_product_count' => $productCount,
+        ];
 
         return $result;
     }
@@ -342,7 +336,7 @@ class CategoryManager
                 $vendorCategories[$parentId]['products'] = [];
                 $vendorCategories[$parentId]['product_count'] = 0;
                 $vendorCategories[$parentId]['isActive'] = false;
-                $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_DEFAULT_TYPE;
+                $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
                 $vendorCategories[$parentId]['categoryId'] = $parentId;
                 $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['id_memcat'] : 0;
                 $vendorCategories[$parentId]['memberCategoryId'] = $memberCategoryId;           
@@ -359,36 +353,5 @@ class CategoryManager
         return $vendorCategories;
     }
 
-    /**
-     *  Fetch custom categories of $memberId
-     *
-     *  @param integer $memberId
-     *
-     *  @return array
-     */
-    public function getAllUserProductCustomCategory($memberId)
-    {
-        $customCategories = array();
-        $arrCustomCategories = $this->em->getRepository("EasyShop\Entities\EsMemberCat")
-                                    ->getCustomCategoriesArray($memberId);
 
-        foreach( $arrCustomCategories as $customCat ){
-            $customCategories[$customCat['id_memcat']] = array(
-                'name' => $customCat['cat_name'],
-                'is_featured' => $customCat['is_featured'],
-                'child_cat' => [ $customCat['id_memcat'] ],
-                'products' => [],
-                'isActive' => false,
-                 $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_CUSTOM_TYPE,
-            );
-        }
-
-        return $customCategories;
-    }
-
-    
-    
-    
-    
-    
 } 
