@@ -444,7 +444,7 @@ class Store extends MY_Controller
         $totalProductCount = 0; 
 
         foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
+            $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType, $prodLimit);
             
             if( (int)$result['filtered_product_count'] === 0 && 
                 (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_DEFAULT_TYPE 
