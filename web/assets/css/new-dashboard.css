@@ -2594,6 +2594,14 @@ label.css-label {
     background-color: #EAE9E9;
 }
 
+.prod-att-table tr td:first-child {
+    text-align: center;
+}
+
+.prod-att-table tr td:first-child .ui-form-control {
+    width: 50%;
+}
+
 .prod-att-table .ui-form-control {
     width: 100%;
 }
@@ -2612,6 +2620,8 @@ label.css-label {
 }
 
 .prod-item-att-content .ui-form-control {
+    margin-bottom: 4px;
+    margin-top: 4px;
     margin-right: 1%;
     width: 31.5%;
 }
