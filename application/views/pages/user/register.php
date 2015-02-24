@@ -218,7 +218,7 @@
                                     <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
                                     
                                 </span>
-                            </div>create-account
+                            </div>
                         </div>
                         <div class="reg2_email">
                             <div class="row">
