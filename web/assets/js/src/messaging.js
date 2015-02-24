@@ -2,15 +2,16 @@
 
     $(document).ready(function()
     {
-        
-        var $userInfo = $('#userInfo');
-        var $chatConfig = $('#chatServerConfig');
-        var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
-        
-        /* Register events */
-        socket.on('send message', function( data ) {
-            onFocusReload(data.message);
-        });
+        if(config.isSocketioEnabled){
+            var $userInfo = $('#userInfo');
+            var $chatConfig = $('#chatServerConfig');
+            var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
+            
+            /* Register events */
+            socket.on('send message', function( data ) {
+                onFocusReload(data.message);
+            });
+        }
         
         $('#table_id').dataTable({
             "bScrollInfinite": true,

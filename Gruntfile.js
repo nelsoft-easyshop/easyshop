@@ -61,7 +61,7 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.global-includes.css':
                         ['web/assets/css/style.css',
                         'web/assets/css/responsive_css.css', 
-                        'web/assets/css/basic.css.css'],
+                        'web/assets/css/basic.css'],
                     'web/assets/css/min-easyshop.payment.css':
                         ['web/assets/css/bootstrap.css',
                         'web/assets/css/my_cart_css.css', 
@@ -194,13 +194,6 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery.scrollUp.min.js',
                              'web/assets/js/src/vendor/jquery.auto-complete.js',
                              'web/assets/js/src/header.js'],
-
-                    'web/assets/js/min/easyshop.footer_full.js': 
-                            ['web/assets/js/src/ws.js'],
-
-                    'web/assets/js/min/easyshop.footer.js': 
-                            ['web/assets/js/src/ws.js'],
-
                     'web/assets/js/min/easyshop.header_alt.js': 
                             ['web/assets/js/src/vendor/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.auto-complete.js',
@@ -312,7 +305,7 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.christmas-promo.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/plugins.js',
-                             'web/assets/js/src/christmas-promo.js',
+                             'web/assets/js/src/promo/christmas-promo.js',
                              'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                              'web/assets/js/src/vendor/jquery.plugin.min.js',
                              'web/assets/js/src/vendor/jquery.countdown.min.js',
@@ -322,7 +315,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.plugin.min.js',
-                             'web/assets/js/src/scratchwinpromo.js'],
+                             'web/assets/js/src/promo/scratchwinpromo.js'],
 
                     'web/assets/js/min/easyshop.advance_search_main.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
@@ -404,6 +397,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/universal.js',
                              'web/assets/js/src/login.js',
                              'web/assets/js/src/landingpage.js',
                              'web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
@@ -452,9 +446,9 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.estudyantrepreneur-promo.js':
                         ['web/assets/js/src/vendor/jquery-1.9.1.js',
-                            'web/assets/js/src/estudyantrepreneur.js',
+                            'web/assets/js/src/promo/estudyantrepreneur.js',
                             'web/assets/js/src/plugins.js',
-                            'web/assets/js/src/vendor/christmas-promo.js']
+                            'web/assets/js/src/vendor/promo/christmas-promo.js']
                 }
             }
         }
