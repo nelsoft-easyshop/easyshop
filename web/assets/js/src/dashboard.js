@@ -662,18 +662,6 @@
         }
     });
 
-    $(document.body).on('click','.btn-edit-product',function () {
-        var $this = $(this);
-        var $productId = $this.data('productid');
-        var $categoryId = $this.data('categoryid');
-        var $categoryName = $this.data('othercategoryname'); 
-
-        $("#editTextProductId").val($productId);
-        $("#editTextCategoryId").val($categoryId);
-        $("#editTextCategoryName").val($categoryName);
-        $("#formEdit").submit();
-    });
-
     $("#feedbacks").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page');
