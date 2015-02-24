@@ -429,7 +429,7 @@ class CategoryManager
                     $memberCat = $this->em
                                       ->getRepository("EasyShop\Entities\EsMemberCat")
                                       ->findOneBy([
-                                            "idMemcat" => $value->memberCatId,
+                                            "idMemcat" => (int)$value->memberCatId,
                                             "member" => $memberId
                                         ]); 
                     if($memberCat) {
