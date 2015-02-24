@@ -1145,20 +1145,19 @@ class Store extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $rules = $formValidation->getRules('personal_info');
-        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                            ->setMethod('POST')
-                            ->add('store_name', 'text', ['constraints' => $rules['shop_name']])
-                            ->add('mobile', 'text', ['constraints' => $rules['mobile']])
-                            ->add('city', 'text')
-                            ->add('stateregion', 'text')
-                            ->getForm();
-
-        $form->submit([
-            'store_name' => $this->input->post('store_name'),
-            'mobile' => $this->input->post('mobile'),
-            'city' => $this->input->post('city'),
-            'stateregion' => $this->input->post('stateregion')
-        ]);
+        $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                            ->setMethod('POST');
+        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);        
+        $formBuild->add('store_name', 'text', ['constraints' => $rules['shop_name']])
+                  ->add('mobile', 'text', ['constraints' => $rules['mobile']])
+                  ->add('city', 'text')
+                  ->add('stateregion', 'text');
+        $formData["store_name"] = $this->input->post('store_name');
+        $formData["mobile"] = $this->input->post('mobile');
+        $formData["city"] = $this->input->post('city');
+        $formData["stateregion"] = $this->input->post('stateregion');                            
+        $form = $formBuild->getForm();
+        $form->submit($formData); 
 
         if( $form->isValid() ){
             $formData = $form->getData();
