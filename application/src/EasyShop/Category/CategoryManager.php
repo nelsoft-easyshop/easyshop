@@ -411,8 +411,8 @@ class CategoryManager
                 $memberCat = $this->em
                                   ->getRepository("EasyShop\Entities\EsMemberCat")
                                   ->findOneBy([
-                                        "member" => $memberId
-                                        "catName" => trim($value),
+                                        "member" => $memberId,
+                                        "catName" => trim($value)
                                     ]); 
                 if($memberCat) {
                     $memberCat->setIsDelete((int)!EsMemberCat::DEFAULT_IS_DELETE);
