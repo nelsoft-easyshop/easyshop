@@ -104,8 +104,10 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         var stateRegionSelected = $(".stateregionselect option:selected").html();
         var citySelected = $(".cityselect option:selected").html();
 
-        stateRegion = (typeof stateRegionSelected === "undefined") ? 0 : stateRegionSelected;
-        city = (typeof citySelected === "undefined") ? 0 : citySelected;
+        stateRegion = (stateRegion === null) ? 0 : stateRegion;
+        city = (city === null) ? 0 : city;
+        stateRegionSelected = (typeof stateRegionSelected === "undefined") ? "--- Select State/Region ---" : stateRegionSelected;
+        citySelected = (typeof citySelected === "undefined") ? "--- Select City ---" : citySelected;
 
         changeSlug = jQuery.ajax({
             type: "POST",
@@ -127,6 +129,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         $("#placeStock > strong").html("Location not set");
                     }
                     else{
+                        alert(citySelected + " " + stateRegionSelected);
                         $("#placeStock > strong").html(escapeHtml(citySelected)+', '+escapeHtml(stateRegionSelected));
                     }
                     
