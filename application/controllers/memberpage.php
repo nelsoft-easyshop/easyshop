@@ -258,7 +258,7 @@ class Memberpage extends MY_Controller
         $rules = $formValidation->getRules('personal_info');
         $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                             ->setMethod('POST');
-        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsUserMobileUnique(['memberId' => $memberId]);
+        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);
         $formBuild->add('fullname', 'text');
         $formBuild->add('gender', 'text', ['constraints' => $rules['gender']]);
         $formBuild->add('dateofbirth', 'text', ['constraints' => $rules['dateofbirth']]);
