@@ -278,13 +278,13 @@ class CategoryManager
 
     
     /**
-     * Get parent category of products uploaded by user
+     * Get User Categories (Combines custom and main categories)
      *
      * @param integer $memberId
      *
      * @return array
      */
-    public function getAllUserProductParentCategory($memberId)
+    public function getUserCategories($memberId)
     {
         $defaultCategoryImage = "assets/images/default_icon_small.png";
         $vendorCategories = [];
@@ -354,7 +354,8 @@ class CategoryManager
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
             return $sortArgumentA['sortOrder'] - $sortArgumentB['sortOrder'];
         });
-     
+        
+  
         return $vendorCategories;
     }
 

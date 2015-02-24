@@ -2077,7 +2077,7 @@ class Memberpage extends MY_Controller
                                        ->getRepository('EasyShop\Entities\EsStoreColor')
                                        ->getAllColors(true);
             $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
-                                                             ->getAllUserProductParentCategory($memberId));
+                                                             ->getUserCategories($memberId));
         }
         echo json_encode($response);
     }

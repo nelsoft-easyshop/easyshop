@@ -75,7 +75,7 @@ class Store extends MY_Controller
                     redirect($vendorSlug.'/about');
                 }
                 
-                $getUserProduct = $this->getUserDefaultCategoryProducts($bannerData['arrVendorDetails']['id_member']);
+                $getUserProduct = $this->getUserCategoryProducts($bannerData['arrVendorDetails']['id_member']);
                 $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
                 
                 // If searching in  page
@@ -421,24 +421,17 @@ class Store extends MY_Controller
     }
     
     /**
-     *  Fetch Default categories and initial products for first load of page.
+     *  Fetch categories and initial products for first load of page.
      *
      *  @return array
      */
-    private function getUserDefaultCategoryProducts($memberId, $catType = "default")
+    private function getUserCategoryProducts($memberId, $catType = "default")
     {
         $em = $this->serviceContainer['entity_manager'];
         $categoryManager = $this->serviceContainer['category_manager'];
         $prodLimit = $this->vendorProdPerPage;
 
-        switch($catType){
-            case "custom":
-                $parentCat = $categoryManager->getAllUserProductCustomCategory($memberId);
-                break;
-            default:
-                $parentCat = $categoryManager->getAllUserProductParentCategory($memberId);
-                break;
-        }
+        $parentCat = $categoryManager->getUserCategories($memberId);
 
         $categoryProductCount = array();
         $totalProductCount = 0; 
