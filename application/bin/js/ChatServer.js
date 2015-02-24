@@ -36,7 +36,6 @@ var messageHandler = function(channel, jsonString){
         io.to(data.reader).emit('message opened');
     }
     else if(data.event === 'message-sent' && data.recipient && data.message){
-        console.log(data.recipient);
         io.to(data.recipient).emit('send message', {
             recipient: data.recipient,
             message: data.message
