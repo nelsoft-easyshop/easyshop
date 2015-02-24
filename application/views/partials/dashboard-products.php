@@ -81,9 +81,18 @@ PLEASE WAIT!!
                                     <div class="row row-action-mobile">
                                         <div class="col-md-12">
                                             <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
-                                            <button class="btn btn-action-edit btn-edit-product" data-slug="<?=$product->getSlug(); ?>">
-                                                <i class="icon-edit"></i>edit
-                                            </button>
+                                                <?php if((int)$product->getIsDraft() === EasyShop\Entities\EsProduct::ACTIVE):?>
+                                                    <button class="btn btn-action-edit btn-edit-product" data-slug="<?=$product->getSlug(); ?>">
+                                                        <i class="icon-edit"></i>edit
+                                                    </button>
+                                                <?php else: ?> 
+                                                    <button class="btn btn-action-edit btn-edit-draft-product" 
+                                                        data-productid="<?=$product->getIdProduct(); ?>"
+                                                        data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
+                                                        data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>">
+                                                        <i class="icon-edit"></i>edit
+                                                    </button>
+                                                <?php endif;?> 
                                             <?php else: ?>
                                             <button data-id=<?=$product->getIdProduct(); ?> class="btn btn-action-delete btn-restore">
                                                 <i class="icon-delete"></i>Restore
@@ -106,9 +115,18 @@ PLEASE WAIT!!
                                 </div>
                                 <p>Total Reviews : <?=$product->reviewCount; ?></p>
                                 <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
-                                <button class="btn btn-action-edit btn-edit-product" data-slug="<?=$product->getSlug(); ?>">
-                                    <i class="icon-edit"></i>edit
-                                </button>
+                                    <?php if((int)$product->getIsDraft() === EasyShop\Entities\EsProduct::ACTIVE):?>
+                                        <button class="btn btn-action-edit btn-edit-product" data-slug="<?=$product->getSlug(); ?>">
+                                            <i class="icon-edit"></i>edit
+                                        </button>
+                                    <?php else: ?>
+                                        <button class="btn btn-action-edit btn-edit-draft-product" 
+                                            data-productid="<?=$product->getIdProduct(); ?>"
+                                            data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
+                                            data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>">
+                                            <i class="icon-edit"></i>edit
+                                        </button>
+                                    <?php endif;?>
                                 <?php else: ?>
                                 <button data-id=<?=$product->getIdProduct(); ?> class="btn btn-action-delete btn-restore">
                                     <i class="icon-delete"></i>Restore
