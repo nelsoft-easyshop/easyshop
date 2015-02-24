@@ -70,6 +70,7 @@ class Memberpage extends MY_Controller
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
         $this->accountManager = $this->serviceContainer['account_manager'];        
         $this->em = $this->serviceContainer['entity_manager'];
+        $this->categoryManager = $this->serviceContainer['category_manager'];
         $this->transactionManager = $this->serviceContainer['transaction_manager'];
         $this->esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         $this->esMemberRepo = $this->em->getRepository('EasyShop\Entities\EsMember');
@@ -2346,6 +2347,30 @@ class Memberpage extends MY_Controller
         $singleCategoryData->memberCategoryId =  $id;   
         
         return $singleCategoryData;
+    }
+
+    /**
+     * Performs the database insertion of member custom category
+     * @return MIXED
+     */
+    public function addCustomCategory()
+    {
+        return  $this->categoryManager->createCustomCategory(
+                        $this->input->post("catName"),
+                        $this->session->userdata('member_id')
+                    );
+    }
+
+    /**
+     * Updates is_delete field to '1' of a custom category
+     * @return bool
+     */
+    public function deleteCustomCategory()
+    {
+        return $this->categoryManager->deleteUserCustomCategory(
+                        $this->input->post("categoryNames"),
+                        $this->session->userdata('member_id')
+                    );
     }
 
 }
