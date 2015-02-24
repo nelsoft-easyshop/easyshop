@@ -2356,7 +2356,7 @@ class Memberpage extends MY_Controller
     public function addCustomCategory()
     {
         return  $this->categoryManager->createCustomCategory(
-                        $this->input->post("userCategoryName"),
+                        $this->input->post("userCategory"),
                         $this->session->userdata('member_id')
                     );
     }
@@ -2368,7 +2368,7 @@ class Memberpage extends MY_Controller
     public function deleteCustomCategory()
     {
         $customCategories = [];
-        foreach ($this->input->post("userCategoryName") as $value) {
+        foreach ($this->input->post("userCategory") as $value) {
             $customCategories[] = json_decode($value);
         }
 
