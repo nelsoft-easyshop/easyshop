@@ -27,27 +27,30 @@ io.set('authorization',socketioJwt.authorize({
     handshake: true
 }));
 
+var clientSubscribe = redis.createClient(REDIS_PORT, REDIS_HOST, {});
+clientSubscribe.subscribe(CHAT_CHANNEL_NAME);
+
+var messageHandler = function(channel, jsonString){
+    var data = JSON.parse(jsonString);
+    if(data.event === 'message-opened' && data.reader){
+        io.to(data.reader).emit('message opened');
+    }
+    else if(data.event === 'message-sent' && data.recipient && data.message){
+        console.log(data.recipient);
+        io.to(data.recipient).emit('send message', {
+            recipient: data.recipient,
+            message: data.message
+        });
+    }
+};
+
+clientSubscribe.on("message", messageHandler);
+
 io.sockets.on( 'connection', function(socket) {
- 
-    var clientSubscribe = redis.createClient(REDIS_PORT, REDIS_HOST, {});
-    clientSubscribe.subscribe(CHAT_CHANNEL_NAME);
-    
+
     socket.on('set account online', function() {
        var storename = socket.client.request.decoded_token.storename; 
        socket.join(storename);
-    });
-    
-    clientSubscribe.on("message", function(channel, jsonString){
-        var data = JSON.parse(jsonString);
-        if(data.event === 'message-opened' && data.reader){
-            io.to(data.reader).emit('message opened');
-        }
-        else if(data.event === 'message-sent' && data.recipient && data.message){
-            io.to(data.recipient).emit('send message', {
-                recipient: data.recipient,
-                message: data.message
-            });
-        }
     });
 
     /**
