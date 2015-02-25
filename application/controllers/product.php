@@ -499,7 +499,9 @@ class product extends MY_Controller
 
         $product = $esProductRepo->findOneBy([
             'slug' => $slug,
-            'member' => $memberId
+            'member' => $memberId,
+            'isDraft' => EsProduct::ACTIVE,
+            'isDelete' => EsProduct::ACTIVE,
         ]);
 
         if($product){
@@ -514,16 +516,14 @@ class product extends MY_Controller
 
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                      ->getDefaultImage($product->getIdProduct());
-            $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-            $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-            if($productImage !== null){
-                $product->directory = $productImage->getDirectory();
-                $product->imageFileName = $productImage->getFilename();
-            }
+            $product->directory = $productImage->getDirectory();
+            $product->imageFileName = $productImage->getFilename();
+
             $combination = $productManager->getProductCombinationAvailable($product->getIdProduct());
-            if(trim($combination['noMoreSelection']) !== ""){
+            $soloProductItemId = $combination['noMoreSelection'];
+            if(trim($soloProductItemId) !== ""){
                 $hasCombination = false;
-                $soloQuantity = $combination['productCombinationAvailable'][$combination['noMoreSelection']]['quantity'];
+                $soloQuantity = $combination['productCombinationAvailable'][$soloProductItemId]['quantity'];
             }
 
             $viewData = [
@@ -556,7 +556,7 @@ class product extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $slug = trim($this->input->post('slug'));
         $productName = (string) $stringUtility->removeNonUTF(trim($this->input->post('productName')));
-        $prodcutPrice = (float) trim($this->input->post('productPrice'));
+        $productPrice = (float) trim($this->input->post('productPrice'));
         $productDiscount = (float) trim($this->input->post('discount'));
         $soloQuantity = (int) trim($this->input->post('quantity'));
         $removeCombination = json_decode(trim($this->input->post('remove')), true);
@@ -566,97 +566,94 @@ class product extends MY_Controller
         ];
         $product = $esProductRepo->findOneBy([
             'slug' => $slug,
-            'member' => $memberId
+            'member' => $memberId,
+            'isDraft' => EsProduct::ACTIVE,
+            'isDelete' => EsProduct::ACTIVE,
         ]); 
 
-        try { 
-            if($prodcutPrice > 0){
-                if(strlen($productName) > 0){
-                    if($productDiscount >= 0 && $productDiscount <= 99){
-                        if($product && strlen($slug) > 0){
-                            $product->setName($productName);
-                            $product->setPrice($prodcutPrice);
-                            $product->setDiscount($productDiscount);
-                            $product->setLastmodifieddate(date_create());
+        try {
+            if($productPrice <= 0){
+                throw new Exception("Invalid price. Product price cannot be less than 0.");
+            }
 
-                            if(empty($retainCombination)){
-                                $combination = $productManager->getProductCombinationAvailable($product->getIdProduct());
-                                if(trim($combination['noMoreSelection']) !== ""){
-                                    $productItem = $esProductItemRepo->findOneBy([
-                                        'product' => $product->getIdProduct(),
-                                        'idProductItem' => (int) $combination['noMoreSelection']
-                                    ]);
-                                    if($productItem){
-                                        $productItem->setQuantity($soloQuantity);
-                                    }
-                                }
-                            }
-                            else{
-                                foreach ($retainCombination as $value) {
-                                    $productItem = $esProductItemRepo->findOneBy([
-                                        'product' => $product->getIdProduct(),
-                                        'idProductItem' => (int) $value['itemId']
-                                    ]);
-                                    if($productItem){
-                                        $productItem->setQuantity($value['quantity']);
-                                    }
-                                }
+            if(strlen($productName) <= 0){
+                throw new Exception("Product name cannot be empty.");
+            }
 
-                                if(empty($retainCombination) === false){
-                                    foreach ($removeCombination as $value) {
-                                        $itemId = $value;
-                                        $productItem = $esProductItemRepo->findOneBy([
-                                            'product' => $product->getIdProduct(),
-                                            'idProductItem' => (int) $itemId
-                                        ]);
-                                        if($productItem){
-                                            $itemAttr = $esProductItemAttrRepo->findBy([
-                                                'productItem' => (int) $itemId
-                                            ]);
-                                            if($itemAttr){
-                                                foreach ($itemAttr as $attr) { 
-                                                    $this->em->remove($attr);
-                                                }
-                                            }
+            if($productDiscount <= 0 || $productDiscount > 99){
+                throw new Exception("Invalid discount. Range must be 0 - 99 only."); 
+            }
 
-                                            $shippingDetails = $esShippingDetailRepo->findBy([
-                                                'productItem' => (int) $itemId
-                                            ]);
+            if(!$product || strlen($slug) <= 0){
+                throw new Exception("Invalid request."); 
+            }
 
-                                            foreach ($shippingDetails as $detail) {
-                                                $shippingHead = $esShippingHeadRepo->findOneBy([
-                                                    'idShipping' => $detail->getShipping()->getidShipping(),
-                                                    'product' => $product->getIdProduct()
-                                                ]);
-                                                if($shippingHead){ 
-                                                    $this->em->remove($detail);
-                                                    $this->em->remove($shippingHead);
-                                                }
-                                            }
-                                            $this->em->remove($productItem);
-                                        }
-                                    }
-                                }
-                            }
-                            $serverResponse['result'] = true;
-                            $this->em->flush(); 
-                        }
-                        else{
-                            throw new Exception("Invalid request."); 
-                        }
+            $product->setName($productName);
+            $product->setPrice($productPrice);
+            $product->setDiscount($productDiscount);
+            $product->setLastmodifieddate(date_create());
+
+            if(empty($retainCombination)){
+                $combination = $productManager->getProductCombinationAvailable($product->getIdProduct());
+                if(trim($combination['noMoreSelection']) !== ""){
+                    $productItem = $esProductItemRepo->findOneBy([
+                        'product' => $product->getIdProduct(),
+                        'idProductItem' => (int) $combination['noMoreSelection']
+                    ]);
+                    if($productItem){
+                        $productItem->setQuantity($soloQuantity);
                     }
-                    else{
-                        throw new Exception("Invalid discount. Range must be 0 - 99 only."); 
-                    }
-                }
-                else{
-                    throw new Exception("Product name cannot be empty.");
                 }
             }
             else{
-                throw new Exception("Invalid price. Product price cannot be less than 0.");
+                foreach ($retainCombination as $value) {
+                    $productItem = $esProductItemRepo->findOneBy([
+                        'product' => $product->getIdProduct(),
+                        'idProductItem' => (int) $value['itemId']
+                    ]);
+                    if($productItem){
+                        $productItem->setQuantity($value['quantity']);
+                    }
+                }
+
+                if(empty($retainCombination) === false){
+                    foreach ($removeCombination as $itemId) { 
+                        $productItem = $esProductItemRepo->findOneBy([
+                            'product' => $product->getIdProduct(),
+                            'idProductItem' => (int) $itemId
+                        ]);
+                        if($productItem){
+                            $itemAttr = $esProductItemAttrRepo->findBy([
+                                'productItem' => (int) $itemId
+                            ]);
+                            if($itemAttr){
+                                foreach ($itemAttr as $attr) { 
+                                    $this->em->remove($attr);
+                                }
+                            }
+
+                            $shippingDetails = $esShippingDetailRepo->findBy([
+                                'productItem' => (int) $itemId
+                            ]);
+
+                            foreach ($shippingDetails as $detail) {
+                                $shippingHead = $esShippingHeadRepo->findOneBy([
+                                    'idShipping' => $detail->getShipping()->getidShipping(),
+                                    'product' => $product->getIdProduct()
+                                ]);
+                                if($shippingHead){ 
+                                    $this->em->remove($detail);
+                                    $this->em->remove($shippingHead);
+                                }
+                            }
+                            $this->em->remove($productItem);
+                        }
+                    }
+                }
             }
-        }
+            $serverResponse['result'] = true;
+            $this->em->flush();
+        }  
         catch (Exception $e) {
             $serverResponse['error'] = $e->getMessage();
         }
