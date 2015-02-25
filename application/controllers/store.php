@@ -76,7 +76,7 @@ class Store extends MY_Controller
                 }
                 
                 $getUserProduct = $this->getInitialCategoryProductsByMemberId($bannerData['arrVendorDetails']['id_member']);
-                $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
+                $productView['categoryProducts'] = $getUserProduct['parentCategory'];
 
                 if($this->input->get() && !$bannerData['hasNoItems']){
 
@@ -89,26 +89,26 @@ class Store extends MY_Controller
                     $searchProduct = $search['collection'];
                     $count = $search['count'];
 
-                    $productView['defaultCatProd'][0]['name'] ='Search Result';
-                    $productView['defaultCatProd'][0]['products'] = $searchProduct; 
-                    $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
-                    $productView['defaultCatProd'][0]['json_subcat'] = "{}";
-                    $productView['defaultCatProd'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
+                    $productView['categoryProducts'][0]['name'] ='Search Result';
+                    $productView['categoryProducts'][0]['products'] = $searchProduct; 
+                    $productView['categoryProducts'][0]['non_categorized_count'] = $count;
+                    $productView['categoryProducts'][0]['json_subcat'] = "{}";
+                    $productView['categoryProducts'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
                         ,'isHyperLink' => false
                     );
-                    $productView['defaultCatProd'][0]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+                    $productView['categoryProducts'][0]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
 
                     $view = array(
                         'arrCat' => array(
                             'products'=>$searchProduct,
                             'page' => 1,
-                            'pagination' => $productView['defaultCatProd'][0]['pagination'],
+                            'pagination' => $productView['categoryProducts'][0]['pagination'],
                         )
                     );
-                    $productView['defaultCatProd'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+                    $productView['categoryProducts'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
                 }
 
                 //HEADER DATA
@@ -125,8 +125,7 @@ class Store extends MY_Controller
                 ];
 
                 $viewData = array(
-                    "customCatProd" => [],
-                    "defaultCatProd" => $productView['defaultCatProd'],
+                    "categoryProducts" => $productView['categoryProducts'],
                     "product_condition" => $this->lang->line('product_condition'),
                     "isLoggedIn" => $this->session->userdata('usersession'),
                     "prodLimit" => $this->vendorProdPerPage,
@@ -139,13 +138,13 @@ class Store extends MY_Controller
         
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
-                if(isset($productView['isSearching']) && isset($viewData['defaultCatProd'][0])){
-                    $viewData['defaultCatProd'][0]['isActive'] = true;
+                if(isset($productView['isSearching']) && isset($viewData['categoryProducts'][0])){
+                    $viewData['categoryProducts'][0]['isActive'] = true;
                 }
                 else{
-                    reset($viewData['defaultCatProd']);
-                    $firstCategoryId = key($viewData['defaultCatProd']);
-                    $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
+                    reset($viewData['categoryProducts']);
+                    $firstCategoryId = key($viewData['categoryProducts']);
+                    $viewData['categoryProducts'][$firstCategoryId]['isActive'] = true;
                 }
 
                 $this->load->spark('decorator');
