@@ -15,7 +15,7 @@ class Version20150225130207 extends AbstractMigration
     {
         $this->addSql("
                         ALTER TABLE `es_product_shipping_comment`
-                        CHANGE COLUMN `expected_date` `expected_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ;
+                        CHANGE COLUMN `expected_date` `expected_date` DATETIME NULL ;
                     ");
     }
 
@@ -23,7 +23,7 @@ class Version20150225130207 extends AbstractMigration
     {
         $this->addSql("
                         ALTER TABLE `es_product_shipping_comment`
-                        CHANGE COLUMN `expected_date` `expected_date` DATETIME NOT NULL DEFAULT;
+                        CHANGE COLUMN `expected_date` `expected_date` DATETIME NOT NULL ;
                     ");
     }
 }
