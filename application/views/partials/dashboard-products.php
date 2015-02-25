@@ -1,6 +1,6 @@
 
 <div id="express-edit-section">
-PLEASE WAIT!!
+    PLEASE WAIT!!
 </div>
 
 <?php foreach ($products as $product): ?>
