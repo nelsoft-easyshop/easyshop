@@ -2367,28 +2367,24 @@
         });
      
         // move to custom category function
-        var allItems_icon = "<a href='#' class='icon-move icon-move-to-all-items'></a>";
+        var allItems_icon = "<a href='#' class='icon-move icon-move-to-all-items pull-right'></a>";
         function moveToCustom( $item ) {
           $item.fadeOut(function() {
-            var $list = $( "ul", $customCategory ).length ?
-              $( "ul", $customCategory ) :
-              $( "<ul class='allItems ui-helper-reset'/>" ).appendTo( $customCategory );
-     
             $item.find( "a.icon-move" ).remove();
-            $item.appendTo( $list ).fadeIn();
+            $item.prependTo( $customCategory ).fadeIn();
             $item.find(".icon-holder").append( allItems_icon );
           });
         }
      
         // move to all items function
-        var customCategory_icon = "<a href='#' class='icon-move icon-move-to-custom-category'></a>";
+        var customCategory_icon = "<a href='#' class='icon-move icon-move-to-custom-category pull-right'></a>";
         function moveToAll( $item ) {
           $item.fadeOut(function() {
             $item
               .find( "a.icon-move-to-all-items" )
                 .remove()
               .end()
-              .appendTo( $allItems )
+              .prependTo( $allItems )
               .fadeIn();
             $item.find(".icon-holder").append( customCategory_icon );
           });
@@ -2451,37 +2447,35 @@
             moveToAll_edit( ui.draggable );
           }
         });
+
+        $allItems_edit.sortable();
      
         // move to custom category function
-        var allItems_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-all-items_edit'></a>";
+        var allItems_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-all-items_edit pull-right'></a>";
         function moveToCustom_edit( $item_edit ) {
           $item_edit.fadeOut(function() {
-            var $list_edit = $( "ul", $customCategory_edit ).length ?
-              $( "ul", $customCategory_edit ) :
-              $( "<ul class='allItems_edit ui-helper-reset'/>" ).appendTo( $customCategory_edit );
-     
-            $item_edit.find( "a.icon-move_edit" ).remove();
-            $item_edit.appendTo( $list_edit ).fadeIn();
+            $item_edit.find( "a.icon-move-to-custom-category_edit" ).remove();
+            $item_edit.prependTo( $customCategory_edit ).fadeIn();
             $item_edit.find(".icon-holder_edit").append( allItems_icon_edit );
           });
         }
      
         // move to all items function
-        var customCategory_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-custom-category_edit'></a>";
+        var customCategory_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-custom-category_edit pull-right'></a>";
         function moveToAll_edit( $item_edit ) {
           $item_edit.fadeOut(function() {
             $item_edit
               .find( "a.icon-move-to-all-items_edit" )
                 .remove()
               .end()
-              .appendTo( $allItems_edit )
+              .prependTo( $allItems_edit )
               .fadeIn();
             $item_edit.find(".icon-holder_edit").append( customCategory_icon_edit );
           });
         }
 
         // resolve the icons behavior with event delegation
-        $( "ul.allItems_edit > li" ).click(function( event ) {
+        $( "ul.allItems_edit li" ).click(function( event ) {
           var $item_edit = $( this ),
               $target_edit = $( event.target );
      
@@ -2495,7 +2489,7 @@
         });
 
         // resolve the icons behavior with event delegation
-        $( "ul.customCategory_edit > li" ).click(function( event ) {
+        $( "ul.customCategory_edit li" ).click(function( event ) {
           var $item_edit = $( this ),
               $target_edit = $( event.target );
      
@@ -2517,10 +2511,11 @@
             $(".add-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
             var addContentHeight = $(".add-category-modal").outerHeight();
 
-            if($browserWidth <= 769){
-                $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
-            }else{
-                $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+            if(browserWidth <= 769){
+                $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
+            }
+            else{
+                $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
             }
             
         });{
@@ -2534,7 +2529,7 @@
             $(".edit-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
             var addContentHeight = $(".edit-category-modal").outerHeight();
             
-            if($browserWidth <= 769){
+            if(browserWidth <= 769){
                 $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
             }else{
                 $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
