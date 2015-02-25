@@ -5,6 +5,7 @@ namespace EasyShop\Category;
 use EasyShop\Entities\EsMemberCat;
 use EasyShop\Entities\EsMemberProdcat;
 use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsMember;
 use EasyShop\Entities\EsCat;
 
 /**
@@ -436,18 +437,19 @@ class CategoryManager
         $errorMessage = "";
 
         try{
-            $obj = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);
-            foreach ($obj as $value) {
-                $memCatObj = $esMemberCatRepo->find($value->getMemcat()->getIdMemCat());
-                if($memCatObj && ($memCatObj->getMember()->getIdMember() === $memberId)) {
-                    $this->em->remove($value);
+            $memberCategory = $esMemberCatRepo->findBy(["idMemCat" => $memCatId, "member" => $member]);
+            if($memberCategory) {
+                $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);                
+                foreach ($memberCategoryProducts as $memberCategoryProduct) {
+                    $this->em->remove($memberCategoryProduct);
                 }
             }
+
             $this->em->flush();
 
-            $categoryNameCount = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                          ->checkIfEditedCustomCategoryExist($categoryName,$memberId);
-            if((int)$categoryNameCount > 0) {
+            $doesCategoryExist = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                          ->checkIfCustomCategoryNameExists($categoryName,$memberId);
+            if($doesCategoryExist) {
                 $memCatObj = $esMemberCatRepo->find($memCatId);
                 $memCatObj->setCatName($categoryName);
 
@@ -475,17 +477,16 @@ class CategoryManager
                 $errorMessage = "Category name already exists";
             }
 
-            return [
-                "errorMessage" => $errorMessage,
-                "actionResult" => $actionResult
-            ];
         }
         catch(Exception $e) {
-            return [
-                "errorMessage" => "Database Error",
-                "actionResult" => false
-            ];
+            $errorMessage = "Database Error";
+            $actionResult = false;
         }            
+
+        return [
+            "errorMessage" => $errorMessage,
+            "result" => $actionResult
+        ];
     }
 
     /**

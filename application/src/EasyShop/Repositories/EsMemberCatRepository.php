@@ -15,9 +15,9 @@ class EsMemberCatRepository extends EntityRepository
      *
      *  @param string $categoryName
      *  @param integer $idMember
-     *  @return int
+     *  @return bool
      */
-    public function checkIfEditedCustomCategoryExist($categoryName, $idMember)
+    public function checkIfCustomCategoryNameExists($categoryName, $idMember)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
@@ -31,7 +31,9 @@ class EsMemberCatRepository extends EntityRepository
                     ->setParameter("catName", $categoryName)
                     ->setParameter("memberId", $idMember);
 
-        return $query->getSingleScalarResult();
+        $numberOfCategories = $query->getSingleScalarResult();
+
+        return $numberOfCategories > 0;
     }
 
     /**
