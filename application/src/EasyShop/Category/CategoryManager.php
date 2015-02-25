@@ -436,7 +436,7 @@ class CategoryManager
         $errorMessage = "";
 
         try{
-            $memberCategory = $esMemberCatRepo->findBy(["idMemCat" => $memCatId, "member" => $member]);
+            $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memCatId, "member" => $memberId]);
             if($memberCategory) {
                 $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);                
                 foreach ($memberCategoryProducts as $memberCategoryProduct) {
