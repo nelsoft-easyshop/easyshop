@@ -36,20 +36,6 @@ var ajaxStat = {};
         return false; 
     }); 
 
-    var $window = $(window);
-    $window.on('load', function() {
-        var windowsHeight = $(window).height();
-        var logincontainer = $(".new-login-register-content").outerHeight();
-        var loginHeight = (windowsHeight - logincontainer)/2;
-
-        if (logincontainer <= windowsHeight) {
-            $(".new-login-register-content").css({'margin-top': loginHeight});
-        }
-        else {
-            $(".new-login-register-content").css("margin-top","20px");
-        }
-    });
-
 })(jQuery);
 
 
