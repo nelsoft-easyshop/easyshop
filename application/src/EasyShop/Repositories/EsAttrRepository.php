@@ -24,8 +24,7 @@ class EsAttrRepository extends EntityRepository
             a.name AS attrName 
             , a.attr_lookuplist_id as lookuplistId
         FROM
-            es_attr a
-            , es_datatype b
+            es_attr a 
             , es_attr_lookuplist c
         WHERE a.datatype_id = b.id_datatype
             AND a.attr_lookuplist_id = c.id_attr_lookuplist
