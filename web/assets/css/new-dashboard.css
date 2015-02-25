@@ -3879,5 +3879,12 @@ label.css-label {
         margin-bottom: 20px;
     }
 
+    .edit-store-cat .btn,
+    .div-store-setup .btn{
+        width: auto !important;
+        display: inline-block !important;
+        margin-bottom: 5px !important;
+    }
+
 
 }
