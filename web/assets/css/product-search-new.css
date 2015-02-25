@@ -239,6 +239,7 @@ html, body{
 .search-item-price{
     font-weight: bold;
     font-size: 15px;
+    min-height: 37px;
 }
 
 .search-item-price.with-discount{
@@ -260,7 +261,7 @@ html, body{
 }
 
 .search-item-actions{
-    margin-top: 10px;
+    margin-top: 2px;
 }
 
 .btn-search-add-cart{
