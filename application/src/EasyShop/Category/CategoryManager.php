@@ -445,11 +445,11 @@ class CategoryManager
             $memCatId = $this->em->find('EasyShop\Entities\EsMemberCat', $memCatId);
             foreach ($productIdsArray as $product) {
                 $productObj = $esProductRepo->findOneBy([
-                                "member" => $memberId,
-                                "idProduct" => $product,
-                                "isDelete" => (int)!EsProduct::DELETE,
-                                "isDraft" => (int)!EsProduct::DRAFT
-                              ]);
+                                    "member" => $memberId,
+                                    "idProduct" => $product,
+                                    "isDelete" => (int)!EsProduct::DELETE,
+                                    "isDraft" => (int)!EsProduct::DRAFT
+                                ]);
 
                 if($productObj) {
                     $memProdCatObj = new EsMemberProdcat();
