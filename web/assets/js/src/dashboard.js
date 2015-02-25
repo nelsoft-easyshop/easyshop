@@ -1,7 +1,4 @@
 (function ($) {
-    $(window).on("load", function(){
-        $("#customize-category-tab").trigger("click");
-    });
     
     $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
         var btn = $(this);
@@ -80,6 +77,14 @@
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
         $( ".ms-setup" ).addClass( "selectedM" );
+    });
+
+    $( "#customize-category-tab" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ms-customize" ).addClass( "selectedM" );
     });
 
     $( "#product-management-tab" ).click(function() {
@@ -1112,6 +1117,15 @@
     
     $('.ms-setup').click(function() {
         $('#store-setup-tab').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $(this).addClass("selectedM");
+    });
+
+    $('.ms-customize').click(function() {
+        $('#customize-category-tab').trigger("click");
         $('.dash-mobile-trigger').removeClass("selectedM");
         $('.dashboard-home-mobile').removeClass("selectedM");
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
