@@ -343,6 +343,7 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.dashboard-primary.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/jquery.ui.touch-punch.min.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
                              'web/assets/js/src/vendor/jquery.raty.min.js',
                              'web/assets/js/src/vendor/image.js',
