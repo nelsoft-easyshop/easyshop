@@ -18,6 +18,16 @@ body{
     text-transform: uppercase;
 }
 
+.my-modal-footer .btn.btn-default-1{
+    font-weight: 900;
+    font-size: 11px;
+    border-radius: 6px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-transform: uppercase;
+    width: auto !important;
+}
+
 a{
     color: #565656;
 }
@@ -3830,11 +3840,12 @@ label.css-label {
     }
 
     .category-items-holder{
-        height: 90px;
-        overflow-x:scoll;
+        height: 105px;
         overflow-y: hidden;
-        width: 1200;
+        overflow-x:scroll;
+        
     }
+
 
    .allItems li, 
    .customCategory li, 
@@ -3854,6 +3865,18 @@ label.css-label {
 
     .customCategory_edit > li:first-child{
         margin-top: -1px;
+    }
+
+    .custom-left-panel{
+        padding-right: 2.5px;
+    }
+
+    .all-right-panel{
+        padding-left: 2.5px;
+    }
+
+    .category-form .form-horizontal{
+        margin-bottom: 20px;
     }
 
 
