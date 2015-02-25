@@ -419,51 +419,72 @@ class CategoryManager
     /**
      * Performs the update actions of User Custom Category Products
      * 
-     * @param int $memCatId
+     * @param int $memberCategory
      * @param string $categoryName
      * @param array $productIdsArray
      * @param int $memberId
      * 
-     * @return bool
+     * @return Array
      */
-    public function editUserCustomCategoryProducts($memCatId, $categoryName, $productIdsArray, $memberId)
+    public function editUserCustomCategoryProducts($memberCategory, $categoryName, $productIdsArray, $memberId)
     {
         $esMemberProdcatRepo = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat");
         $esMemberCatRepo = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
         $esProductRepo = $this->em->getRepository("EasyShop\Entities\EsProduct");
 
+        $actionResult = false;
+        $errorMessage = "";
+
         try{
-            $obj = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);
+            $obj = $esMemberProdcatRepo->findBy(["memcat" => $memberCategory]);
             foreach ($obj as $value) {
-                $this->em->remove($value);
-            }
-            $this->em->flush();
-
-            $memCatObj = $esMemberCatRepo->find($memCatId);
-            $memCatObj->setCatName($categoryName);
-
-            $memCatId = $this->em->find('EasyShop\Entities\EsMemberCat', $memCatId);
-            foreach ($productIdsArray as $product) {
-                $productObj = $esProductRepo->findOneBy([
-                                    "member" => $memberId,
-                                    "idProduct" => $product,
-                                    "isDelete" => (int)!EsProduct::DELETE,
-                                    "isDraft" => (int)!EsProduct::DRAFT
-                                ]);
-
-                if($productObj) {
-                    $memProdCatObj = new EsMemberProdcat();
-                    $memProdCatObj->setMemcat($memCatId);
-                    $memProdCatObj->setProduct($this->em->find('EasyShop\Entities\EsProduct', $product));
-                    $memProdCatObj->setCreatedDate(date_create());
-                    $this->em->persist($memProdCatObj);
+                $memCatObj = $esMemberCatRepo->find($value->getMemcat()->getIdMemCat());
+                if($memCatObj && ($memCatObj->getMember()->getIdMember() === $memberId)) {
+                    $this->em->remove($value);
                 }
             }
             $this->em->flush();
-            return true;
+
+            $categoryNameCount = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                          ->checkIfEditedCustomCategoryExist($categoryName,$memberId);
+            if((int)$categoryNameCount > 0) {
+                $memCatObj = $esMemberCatRepo->find($memberCategory);
+                $memCatObj->setCatName($categoryName);
+
+                $memCatId = $this->em->find('EasyShop\Entities\EsMemberCat', $memberCategory);
+                foreach ($productIdsArray as $product) {
+                    $productObj = $esProductRepo->findOneBy([
+                                        "member" => $memberId,
+                                        "idProduct" => $product,
+                                        "isDelete" => EsProduct::ACTIVE,
+                                        "isDraft" => EsProduct::ACTIVE
+                                    ]);
+
+                    if($productObj) {
+                        $memProdCatObj = new EsMemberProdcat();
+                        $memProdCatObj->setMemcat($memCatId);
+                        $memProdCatObj->setProduct($this->em->find('EasyShop\Entities\EsProduct', $product));
+                        $memProdCatObj->setCreatedDate(date_create());
+                        $this->em->persist($memProdCatObj);
+                    }
+                }
+                $this->em->flush();
+                $actionResult = true;
+            }
+            else {
+                $errorMessage = "Category name already exist";
+            }
+
+            return [
+                "errorMessage" => $errorMessage,
+                "actionResult" => $actionResult
+            ];
         }
         catch(Exception $e) {
-            return false;
+            return [
+                "errorMessage" => "Database Error",
+                "actionResult" => false
+            ];
         }            
     }
 
