@@ -14,10 +14,8 @@
     {
         var finalPrice;
         var finalDiscountRate;
-        if(discountPrice === 0){ 
-            discountPrice = basePrice * (discountRate/100);
-            finalPrice = basePrice - discountPrice;
-            $(".discount-price").val(replaceNumberWithCommas(finalPrice.toFixed(2)));
+        if(discountPrice === 0){
+            $(".discount-price").val(replaceNumberWithCommas(basePrice.toFixed(2)));
         }
         else{
             finalDiscountRate = ((basePrice - discountPrice) / basePrice) * 100;
@@ -104,7 +102,7 @@
         var $value = parseInt(removeComma($this.val()));
         var $discountRate = parseFloat(removeComma($container.find('.discount-rate').val()));
         validate($this);
-        if($value >= 0){  
+        if($value >= 0){
             computeDiscountPrice($value, $discountRate, 0);
         }
         $this.val(replaceNumberWithCommas($value.toFixed(2)));
