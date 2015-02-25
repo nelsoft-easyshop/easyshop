@@ -1,32 +1,36 @@
 (function ($) {
 
     $(document).ready(function () {
-        
-        var $chatConfig = $('#chatServerConfig');
-        var $isLoggedIn = $('[name="is-logged-in"]');
+ 
+            var $chatConfig = $('#chatServerConfig');
+            var $isLoggedIn = $('[name="is-logged-in"]');
 
-        if ($.parseJSON($isLoggedIn.val())) {
+            if ($.parseJSON($isLoggedIn.val())) {
 
-            var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
-        
-            var setAccountOnline = function() {
-                socket.emit('set account online');
-            };
+                if(config.isSocketioEnabled){
 
-            var setAccountOffline = function() {
-                socket.emit('set account offline');
-            };
+                    var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
+                
+                    var setAccountOnline = function() {
+                        socket.emit('set account online');
+                    };
 
-            socket.on('send message', function( data ) {
-                updateMessageCountIcons();
-            });
+                    var setAccountOffline = function() {
+                        socket.emit('set account offline');
+                    };
 
-            socket.on('message opened', function( data ) {
-                updateMessageCountIcons();
-            });
+                    socket.on('send message', function( data ) {
+                        updateMessageCountIcons();
+                    });
 
-            setAccountOnline();
-        }
+                    socket.on('message opened', function( data ) {
+                        updateMessageCountIcons();
+                    });
+
+                    setAccountOnline();
+            
+                }
+            }
 
     });
   

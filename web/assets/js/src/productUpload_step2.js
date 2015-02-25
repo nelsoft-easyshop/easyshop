@@ -1172,15 +1172,15 @@ var arrayUpload = [];
 var afstart = [];
 var afTemp = [];
 var imageName = "";
-var errorValues = "";
-var axes = [];
+var errorValues = ""; 
 var sizeList = [];
 var extensionList = [];
-var imageCollection = [];  
+var imageCollection = [];
+var base64collection = [];
 var totalCropImage;
-var imageTage;
-var rotateValue = 0; 
+var imageTage; 
 var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.jpg';
+var universalExtension = ".jpeg";
 
 (function($) {
   
@@ -1219,19 +1219,10 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                         width: 600,
                         modal: true,
                         buttons: {
-                            "Crop": function() {
-                                var xCoord = $('#image_x').val();
-                                var yCoord = $('#image_y').val();
-                                var wCoord = $('#image_w').val();
-                                var hCoord = $('#image_h').val();
-                                var coordinate = xCoord + "," + 
-                                                 yCoord + "," + 
-                                                 wCoord + "," + 
-                                                 hCoord + "," + 
-                                                 rotateValue;
+                            "Crop": function() { 
+                                base64collection.push(imageTag.cropper("getDataURL", 'image/jpeg')); 
                                 af.push(afTemp[cropCurrentCount]);
-                                axes.push(coordinate); 
-                                cropCurrentCount++;  
+                                cropCurrentCount++;
                                 $(this).dialog("close"); 
                                 if(cropCurrentCount < totalCropImage){
                                     cropImage($input);
@@ -1255,14 +1246,12 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             $('.imageContainer > #imageTag').attr('src', '');
                             imageTag.cropper("destroy");
                             imageTag = null;
-                            rotateValue = 0;
                         },
                         "title": "Crop your image"
                     });
                 });
         }
-        else{
-            axes.push("0,0,0,0");
+        else{ 
             af.push(afTemp[cropCurrentCount]);
             cropCurrentCount++;
             if(cropCurrentCount < totalCropImage){
@@ -1282,26 +1271,26 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
 
     function newCropper()
     {
+        var widthRatio = 445;
+        var heightRatio = 538;
+        $(".imageContainer").css({
+            width: widthRatio,
+            height: heightRatio,
+        })
         var imageContainerWidth = $(".imageContainer").width(); 
         imageTag = $(".imageContainer > #imageTag");  
         imageTag.cropper({ 
-            data: { 
-                x: 0,
-                y: 0
-            },  
-            minContainerWidth: imageContainerWidth, 
+            aspectRatio: widthRatio / heightRatio,
+            minContainerWidth: 10,
+            minContainerHeight: 10,
+            autoCropArea: 1,
             multiple: false,
             dragCrop: false,
             dashed: false,
             movable: false, 
             resizable: false,
-            dashed: true, 
-            done: function(data) { 
-                $('#image_x').val(data.x);
-                $('#image_y').val(data.y);
-                $('#image_w').val(data.width);
-                $('#image_h').val(data.height);
-            }
+            dashed: true,
+            responsive: true,
         });
 
         setTimeout(function() { 
@@ -1318,6 +1307,18 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
 
     $(document).on('click','.zoomOut',function(e){ 
         imageTag.cropper("zoom", -0.2);
+    });
+
+    $(document).on('click','.rotateRight',function(e){ 
+        imageTag.cropper("rotate", 90); 
+    });
+
+    $(document).on('click','.rotateLeft',function(e){ 
+        imageTag.cropper("rotate", -90);
+    });
+
+    $(document).on('click','.refresh',function(e){
+        imageTag.cropper("reset");
     });
 
     $(document).on('click','.ui-dialog-titlebar-close',function(e){
@@ -1341,13 +1342,14 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
     }
 
     function startUpload(cnt,filescnt,arrayUpload,afstart,imageName,errorValues){
-        canProceed = false;
+        var uploadUrl = badIE ? '/productUpload/fallBackUploadimage' : '/productUpload/uploadimage';
+        canProceed = false; 
         $('.counter').val(cnt); 
         $('.filescnttxt').val(filescnt); 
-        $('#afstart').val(JSON.stringify(afstart));
-        $("#coordinates").val(JSON.stringify(axes));
+        $('#afstart').val(JSON.stringify(afstart)); 
+        $("#imageCollections").val(JSON.stringify(base64collection));
         $('#form_files').ajaxForm({
-            url: '/productUpload/uploadimage',
+            url: uploadUrl,
             type: "POST", 
             dataType: "json",
             xhr: function(){
@@ -1359,6 +1361,14 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     }
                 }, false);
                 return xhr;
+            },
+            beforeSubmit : function(arr, $form, options){ 
+                $('<input type="hidden">').attr({
+                    id: 'pictureName',
+                    name: 'pictureName',
+                    value: imageName
+                }).appendTo('#form_files');
+                arr.push({name:'pictureName', value:imageName});
             },
             success :function(d) {
                 filescntret = d.fcnt;
@@ -1384,15 +1394,18 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                             .attr("src",'/'+tempDirectory+'/categoryview/'+value.image_name);
                     });
                 }
-                if(badIE == true){
+                if(badIE == true){ 
                     if(d.err != '1'){
+                        console.log(arrayUpload);
                         $.each( arrayUpload, function( key, value ) {
-                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/categoryview/'+imageName);
+                            $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/categoryview/'+d.imageName); 
+                            $('#previewList'+value + ' > .loadingfiles').remove();
                         });
                     } 
                     $(".files").remove();
                     $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]" accept="image/*" required = "required"  /> ');
                 }
+                $('#form_files > #pictureName').remove();
             },
             error: function (request, status, error) {
 
@@ -1408,7 +1421,9 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     $(".files").remove();
                     $('#inputList').append('<input type="file"  id="files" class="files active" name="files[]"  accept="image/*" required = "required"  /> ');
                 }
+                $('#form_files > #pictureName').remove();
             }
+
         }); 
         $('#form_files').submit();
     }
@@ -1417,8 +1432,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         arrayUpload = [];
         afstart = [];
         afTemp = [];
-        imageObject = [];
-        axes = [];
+        imageObject = []; 
+        base64collection = [];
         sizeList = [];
         extensionList = [];
         imageCollection = [];
@@ -1466,11 +1481,11 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                 }
 
                 imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
-
+                var newName = tempId+'_'+memberId+'_'+fulldate+pictureCount+universalExtension;
                 arraySet['picture_count'] = pictureCount;
-                arraySet['image_name'] = imageName;
+                arraySet['image_name'] = newName;
                 imageCollection.push(arraySet);
-                afTemp.push(imageName+'||'+extension);
+                afTemp.push(newName+'||'+extension);
                 afstart.push(imageName);
                 arrayUpload.push(pictureCount);
                 imageObject.push(objectUrl);
@@ -1496,7 +1511,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             imageCustom = document.getElementById('files').value;
             var filename = imageCustom.match(/[^\/\\]+$/);
             extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
-            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension;
+            imageName = tempId+'_'+memberId+'_'+fulldate+pictureCount+'.'+extension; 
             af.push(imageName+'||'+extension); 
             afstart.push(imageName); 
             arrayUpload.push(pictureCount);  
@@ -1569,12 +1584,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     modal: true,
                     buttons: {
                         "Crop": function() {
-                            var coordinate = $('#image_x').val() + "," + 
-                                             $('#image_y').val() + "," + 
-                                             $('#image_w').val() + "," + 
-                                             $('#image_h').val() + "," + 
-                                             rotateValue;
-                            $("#coordinatesOther").val(coordinate);
+                            base64collection.push(imageTag.cropper("getDataURL", 'image/jpeg'));  
                             triggerUploadOther(picName);
                             $(this).dialog("close");
                         }
@@ -1585,8 +1595,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                     },
                     close: function(){  
                         $('.imageContainer >  #imageTag').attr('src', '');
-                        imageTag.cropper("destroy");
-                        rotateValue = 0;
+                        imageTag.cropper("destroy"); 
                         imageTag = null;
                     },
                     "title": "Crop your image"
@@ -1596,23 +1605,25 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
 
     function triggerUploadOther(picName)
     {
+        var uploadUrl = badIE ? '/productUpload/fallBackUploadimage' : '/productUpload/uploadimageOther';
+        $("#imageCollectionsOther").val(JSON.stringify(base64collection));
         $('#other_files').ajaxForm({
-            url: '/productUpload/uploadimageOther',
+            url: uploadUrl,
             type: "POST", 
             dataType: "json", 
             beforeSubmit : function(arr, $form, options){
                 $('<input type="hidden">').attr({
-                    id: 'pictureName',
-                    name: 'pictureName',
+                    id: 'pictureNameOther',
+                    name: 'pictureNameOther',
                     value: picName
-                }).appendTo('form');
-                arr.push({name:'pictureName', value:picName});
+                }).appendTo('#other_files');
+                arr.push({name:'pictureNameOther', value:picName});
 
                 $('<input type="hidden">').attr({
                     id: 'pictureCount',
                     name: 'pictureCount',
                     value: pictureCountOther
-                }).appendTo('form');
+                }).appendTo('#other_files');
                 arr.push({name:'pictureCount', value:pictureCountOther});
                 canProceed = false;
                 $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",'/assets/images/loading/preloader-whiteBG.gif');
@@ -1624,9 +1635,9 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
             success :function(d) {
                 canProceed = true;
                 if(d.result == "ok"){
-                    imageAttr.push(picName);
-                    var imagePath = '/'+tempDirectory+'other/categoryview/'+picName;
-                    $('.imageText'+currentCnt).val(picName); 
+                    imageAttr.push(d.imageName);
+                    var imagePath = '/'+tempDirectory+'other/categoryview/'+d.imageName;
+                    $('.imageText'+currentCnt).val(d.imageName); 
                     $('.imageFileText'+currentCnt).val(imagePath); 
                     $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src", imagePath);
                     pictureCountOther++;
@@ -1654,6 +1665,7 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
         var val = $(this).val();
         var extension = val.substring(val.lastIndexOf('.') + 1).toLowerCase();
         var picName = tempId+'_'+memberId+'_'+fulldate+pictureCountOther+'o.'+extension;
+        base64collection = [];
 
         switch(extension){
             case 'gif': case 'jpg': case 'png': case 'jpeg':
@@ -1724,7 +1736,8 @@ var default_upload_image = config.assetsDomain+'assets/images/img_upload_photo.j
                 prod_price :{
                     required: true,
                     number: true,
-                    range :[0.1,Infinity]
+                    range :[0.1,Infinity],
+                    maxlength: 18
                 },
                 prod_condition: {
                     required: true

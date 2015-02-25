@@ -889,7 +889,7 @@ class PaymentService
 
             $this->smsService->setMobile($buyer->getContactno())
                              ->setMessage($buyerSmsMsg)
-                             ->sendSms();
+                             ->queueSMS();
 
             if($messageSender){
                 $this->messageManager->send($messageSender, $buyer, $this->languageLoader->getLine('message_to_buyer'));
@@ -914,7 +914,7 @@ class PaymentService
                 
                 $this->smsService->setMobile($sellerContact)
                                  ->setMessage($sellerSmsMsg)
-                                 ->sendSms();
+                                 ->queueSMS();
 
                 if($messageSender){
                     $this->messageManager->send($messageSender, $seller, $this->languageLoader->getLine('message_to_seller'));

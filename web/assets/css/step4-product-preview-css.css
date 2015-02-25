@@ -13,7 +13,6 @@
 
 .thumb-list-container {
     height: 492px;
-    margin-left: -15px;
     overflow: hidden;
     position: relative;
     width: 100%;
@@ -27,12 +26,9 @@
     margin-left: 0;
 }
 
-.carousel-nav-btn-wrapper {
-    margin: 10px 0;
-}
-
 .thumbnails-img-container {
     display: block;
+    margin-left: 0;
     margin-right: 0;
 }
 
@@ -62,6 +58,7 @@
     bottom: 0;
     margin: auto;
     max-height: 542px;
+    max-width: 365px;
     width: auto;
     height: auto;
 }
@@ -106,6 +103,68 @@
 
 .prod-detail-main {
     padding: 10px 0;
+}
+
+.prod-gallery-container {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.step4_header {
+    padding: 0 15px;
+}
+
+.step4_header h5 {
+    margin: 0;
+    padding: 10px 0;
+}
+
+#thumblist li {
+    width: 92px;
+}
+
+#thumblist li a {
+    width: 92px;
+}
+
+.carousel-nav-btn-wrapper {
+    width: 92px;
+}
+
+.jcarousel-control-prev {
+    background-position: -2px -418px;
+    width: 46px;
+}
+
+.jcarousel-control-prev:hover {
+    background-position: -86px -418px;
+}
+
+.jcarousel-control-next {
+    background-position: -41px -418px;
+    width: 39px;
+}
+
+.jcarousel-control-next:hover {
+    background-position: -125px -418px;
+}
+
+.prod-quantity-container {
+    padding-top: 0;
+}
+
+.prod-quantity-container p {
+    width: 100%;
+}
+
+.div-detail-container {
+    margin-bottom: 25px;
+}
+
+@media (min-width: 991px) {
+    .prod-add-to-cart-btn {
+        background-position: 16% center;
+    }
 }
 
 
