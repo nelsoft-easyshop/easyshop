@@ -2563,17 +2563,20 @@
             });
             $(".add-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
             var addContentHeight = $(".add-category-modal").outerHeight();
-
+            var countAllItems = $("#allItems li").size();
+            var widthOfitem = 70;
+            var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
             if(browserWidth <= 769){
                 $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
+                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px")
             }
             else{
                 $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
             }
             
-        });{
+        });
 
-        }
+        
 
         $(".edit-category").click(function(){
             $(".edit-category-modal").modal({
