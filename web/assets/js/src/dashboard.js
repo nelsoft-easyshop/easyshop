@@ -1,8 +1,8 @@
 (function ($) {
-    /*$(window).on("load", function(){
+    $(window).on("load", function(){
         $("#customize-category-tab").trigger("click");
     });
-    */
+    
     $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
         var btn = $(this);
         var submitBtn = btn.closest("form");
@@ -2323,7 +2323,7 @@
 
         var browserWidth = $(window).width();
         var modalCategoryModalWidth = browserWidth * 0.6;
-
+        var modalCategoryModalWidthMobile = browserWidth * 0.95;
 
         /********FOR DRAG AND DROP*******/
         // allItems and the customCategory
@@ -2515,8 +2515,14 @@
                 persist:true
             });
             $(".add-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
-            var addContentHeight = $(".add-category-modal").outerHeight()+20;
-            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight);
+            var addContentHeight = $(".add-category-modal").outerHeight();
+
+            if($browserWidth <= 769){
+                $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
+            }else{
+                $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+            }
+            
         });{
 
         }
@@ -2526,8 +2532,13 @@
                 persist:true
             });
             $(".edit-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
-            var addContentHeight = $(".edit-category-modal").outerHeight()+20;
-            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight);
+            var addContentHeight = $(".edit-category-modal").outerHeight();
+            
+            if($browserWidth <= 769){
+                $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
+            }else{
+                $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+            }
         });{
 
         }

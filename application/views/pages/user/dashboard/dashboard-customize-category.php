@@ -159,7 +159,7 @@
         </div>
         <div class="form-group">
             <label>Add items to this category : </label>
-            <p class="note-category">Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, convallis magna vitae, porta leo. Phasellus suscipit pulvinar tortor, ac gravida felis sodales et. Vestibulum justo ante.</p>
+            <p class="note-category">Vestibulum quis placerat enim. Vestibulum at aliquet nibh,</p>
         </div>
  
         <div class="drag-drop-container">
@@ -262,15 +262,15 @@
     <div class="category-form">
         <div class="form-horizontal">
            <div class="form-group">
-                <label class="col-sm-3">Category Name : </label>
-                <div class="col-sm-9">
+                <label class="col-md-3">Category Name : </label>
+                <div class="col-md-9">
                     <input type="text" class="form-control" placeholder="Type the category name here" value="Easy Treats"/>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <label>Add items to this category : </label>
-            <p class="note-category">Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, convallis magna vitae, porta leo. Phasellus suscipit pulvinar tortor, ac gravida felis sodales et. Vestibulum justo ante.</p>
+            <p class="note-category">Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, </p>
         </div>
  
         <div class="drag-drop-container">

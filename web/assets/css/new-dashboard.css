@@ -3394,3 +3394,46 @@ label.css-label {
     }
 }
 
+@media screen and (max-width: 769px) {
+    .category-panel-header{
+        padding: 5px;
+    }
+
+    .category-panel-header .col-md-7{
+        display: none;
+    }
+
+    .category-form{
+        padding: 10px 20px;
+    }
+
+    .drag-drop-group-list{
+        margin-bottom: 10px;
+    }
+
+    .category-items-holder{
+        height: 90px;
+    }
+
+   .allItems li, 
+   .customCategory li, 
+   .allItems_edit li, 
+   .customCategory_edit li{
+        width: 56px;
+   }
+
+    #customCategory,
+    #customCategory_edit {
+        min-height: 77px;
+    }
+
+    .category-item-image{
+        height: 35px;
+    }
+
+    .customCategory_edit > li:first-child{
+        margin-top: -1px;
+    }
+
+
+}
