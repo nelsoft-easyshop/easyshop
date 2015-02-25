@@ -2582,10 +2582,11 @@
             var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
             if(browserWidth <= 769){
                 $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
-                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px")
+                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
             }
             else{
                 $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
+                $(".ui-droppable").css("width", "100%");
             }
             
         });
@@ -2603,9 +2604,10 @@
             var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
             if(browserWidth <= 769){
                 $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
-                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px")
+                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
             }else{
                 $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+                $(".ui-droppable").css("width", "100%");
             }
         });{
 
