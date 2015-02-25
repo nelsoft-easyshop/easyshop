@@ -40,9 +40,9 @@
                         <label class="col-sm-3 control-label">Reorder List : </label>
                         <div class="col-sm-5 col-with-radio">
                             <ul class="category_sort list new-store-category-draggable ui-sortable">
-                        		<li><i class="fa fa-sort"></i>Clothing  &amp; Accessories <i class="icon-edit modal-category-edit pull-right" id="edit-category"></i></li>
-                    			<li><i class="fa fa-sort"></i>Jewellery &amp; Watches <i class="icon-edit modal-category-edit pull-right"></i></li>
-                    			<li><i class="fa fa-sort"></i>Toys, Hobbies &amp; Collectibles <i class="icon-edit modal-category-edit pull-right"></i></li>
+                        		<li><i class="fa fa-sort"></i>Clothing  &amp; Accessories <i class="icon-edit modal-category-edit pull-right edit-category"></i></li>
+                    			<li><i class="fa fa-sort"></i>Jewellery &amp; Watches <i class="icon-edit modal-category-edit pull-right edit-category"></i></li>
+                    			<li><i class="fa fa-sort"></i>Toys, Hobbies &amp; Collectibles <i class="icon-edit modal-category-edit pull-right edit-category"></i></li>
                             </ul>
                             <p class="note-category">Drag the category items to reorder</p>
                             <br/>
@@ -153,7 +153,7 @@
            <div class="form-group">
                 <label class="col-sm-3">Category Name : </label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control"  placeholder="Type the category name here" />
                 </div>
             </div>
         </div>
@@ -264,7 +264,7 @@
            <div class="form-group">
                 <label class="col-sm-3">Category Name : </label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" />
+                    <input type="text" class="form-control" placeholder="Type the category name here" value="Easy Treats"/>
                 </div>
             </div>
         </div>
