@@ -51,6 +51,7 @@
                     <ul class="my-store-menu-mobile-ul">
                         <a class="ms-trans dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
                         <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
+                        <a class="ms-customize dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-customize">Customize Category</li></a>
                         <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
                     </ul>
                 </div>
