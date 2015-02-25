@@ -94,7 +94,7 @@
                                         </div>
                                     <?php endif; ?>
               
-                                    <div class="<?php echo $secondaryImagePath ? 'main-image-list image-hover-none ' : ''; ?>" style="background: url(<?php echo getAssetsDomain().$productImagePath; ?>) center no-repeat; background-size: cover;">
+                                    <div class="<?php echo $secondaryImagePath ? 'main-image-list image-hover-none ' : ''; ?>" style="background: #fff url(<?php echo getAssetsDomain().$productImagePath; ?>) center no-repeat; background-size: cover;">
                                         <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
                                             <div class="span-space">
                                             
