@@ -498,9 +498,9 @@ class product extends MY_Controller
         $soloQuantity = 0;
 
         $product = $esProductRepo->findOneBy([
-                                       'slug' => $slug,
-                                       'member' => $memberId
-                                   ]);
+            'slug' => $slug,
+            'member' => $memberId
+        ]);
 
         if($product){
             $product = $productManager->getProductDetails($product);
@@ -573,7 +573,7 @@ class product extends MY_Controller
             if($prodcutPrice > 0){
                 if(strlen($productName) > 0){
                     if($productDiscount >= 0 && $productDiscount <= 99){
-                        if($product){
+                        if($product && strlen($slug) > 0){
                             $product->setName($productName);
                             $product->setPrice($prodcutPrice);
                             $product->setDiscount($productDiscount);
