@@ -189,7 +189,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     </div>
 </header>
 
-<form action="/search/search.html" name="search_form" method="get">
+<form action="/search/search.html" id="search_form" name="search_form" method="get">
 
     <section class="<?php echo ES_ENABLE_CHRISTMAS_MODS ? 'header-theme-bg' : ''?>">
 
@@ -261,6 +261,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 },
                 onSelect: function(term){
                     $('#main_search').addClass('selectedClass');
+                    $("#search_form").submit();
                 }
             })
             .focus(function() {

@@ -805,7 +805,7 @@ a.msgs_link:hover {
     background: #fff url('../images/global_sprite.png') no-repeat -249px -8px;    
     border: 3px solid #f48000;
     color: #333;
-    height: 30px;
+    height: 41px;
     padding:5px 35px 0px;
     vertical-align: middle;
     width: 50%;
@@ -3332,7 +3332,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 100%;
     }
     /*** step 2 ***/
-    .col-xs-12 .ui-form-control {
+    .seller_product_content .ui-form-control {
         width: 100%;
     }
     .price-val.ui-form-control {

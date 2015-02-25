@@ -1736,7 +1736,8 @@ var universalExtension = ".jpeg";
                 prod_price :{
                     required: true,
                     number: true,
-                    range :[0.1,Infinity]
+                    range :[0.1,Infinity],
+                    maxlength: 18
                 },
                 prod_condition: {
                     required: true

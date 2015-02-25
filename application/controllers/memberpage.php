@@ -257,20 +257,19 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $rules = $formValidation->getRules('personal_info');
-        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                    ->setMethod('POST')
-                    ->add('fullname', 'text')
-                    ->add('gender', 'text', ['constraints' => $rules['gender']])
-                    ->add('dateofbirth', 'text', ['constraints' => $rules['dateofbirth']])
-                    ->add('mobile', 'text', ['constraints' => $rules['mobile']])
-                    ->getForm();
-
-        $form->submit([
-             'fullname' => $this->input->post('fullname')
-            , 'gender' => $this->input->post('gender')
-            , 'dateofbirth' => $this->input->post('dateofbirth')
-            , 'mobile' => $this->input->post('mobile')
-        ]);
+        $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                 ->setMethod('POST');
+        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);
+        $formBuild->add('fullname', 'text');
+        $formBuild->add('gender', 'text', ['constraints' => $rules['gender']]);
+        $formBuild->add('dateofbirth', 'text', ['constraints' => $rules['dateofbirth']]);
+        $formBuild->add('mobile', 'text', ['constraints' => $rules['mobile']]);
+        $formData["fullname"] = $this->input->post('fullname');
+        $formData["gender"] = $this->input->post('gender');
+        $formData["dateofbirth"] = $this->input->post('dateofbirth');
+        $formData["mobile"] = $this->input->post('mobile');
+        $form = $formBuild->getForm();
+        $form->submit($formData); 
 
         if($form->isValid()){
             $formData = $form->getData();
@@ -876,7 +875,7 @@ class Memberpage extends MY_Controller
                     'transact_num' => $this->input->post('transact_num'),
                     'courier' => $this->input->post('courier'),
                     'tracking_num' => $this->input->post('tracking_num'),
-                    'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "0000-00-00 00:00:00",
+                    'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "",
                     'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
                 ];
 

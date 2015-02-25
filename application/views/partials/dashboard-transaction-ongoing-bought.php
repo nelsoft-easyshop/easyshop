@@ -112,7 +112,7 @@
                                                     Expected Date of Arrival:
                                                 </div>
                                                 <div class="col-md-8">
-                                                    <input type="text" class="ui-form-control" value="<?=date_format($product['expectedDate'], 'Y - m - d')?>" disabled="disabled">
+                                                    <input type="text" class="ui-form-control" value="<?=$product['expectedDate'] ? date_format($product['expectedDate'], 'Y - m - d') : ''?>" disabled="disabled">
                                                 </div>
                                                 <div class="col-xs-12">
                                                     <textarea disabled="disabled"><?=html_escape($product['shipping_comment'])?></textarea>
