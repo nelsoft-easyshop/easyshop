@@ -1,6 +1,5 @@
-CODEIGNITER MODELS 
+## CODEIGNITER MODELS ##
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 The use of Codeigniter models has been deprecated and will no longer be supported as decided by the development team. 
 Instead business entities are to be accessed using the Doctrine ORM which can be found in src/EasyShop/Entities.
