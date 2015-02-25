@@ -2929,7 +2929,8 @@ label.css-label {
     }
     
     .m-menu-setup,
-    .m-menu-prod{
+    .m-menu-prod,
+    .m-menu-customize{
         border-top: solid #e2e2e2 1px;
     }
     
