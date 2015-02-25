@@ -2307,18 +2307,17 @@ class Memberpage extends MY_Controller
                     $newMemberCategories[$index]->setCatName($newCategory->name);
                     $newMemberCategories[$index]->setSortOrder($newCategory->order);
                     $newMemberCategories[$index]->setCreatedDate(date_create(date("Y-m-d H:i:s")));
+                    $newMemberCategories[$index]->setlastModifiedDate(date_create(date("Y-m-d H:i:s")));
                     $entityManager->persist($newMemberCategories[$index]);
                 }
                 $entityManager->flush();
-                
+
                 foreach($newMemberCategories as $newMemberCategory){
                     $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
                                                     $newMemberCategory->getSortOrder(),
                                                     $newMemberCategory->getIdMemcat());
                 }
-                
-                
-                
+
                 $jsonResponse['isSuccessful'] =  true;
                 $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {
                     return $sortArgumentA->order - $sortArgumentB->order;
