@@ -22,9 +22,9 @@ class CollectionHelper
         $organizeArray = array();
 
         if(!$all){
-            foreach ($array as $key => $value) {
+            foreach ($array as $value) {
                 $arrayKey = array_keys($value); 
-                $head = $value[$arrayKey[0]];
+                $head = strtolower($value[$arrayKey[0]]);
                 if(!array_key_exists($head,$organizeArray)){
                     $organizeArray[$head] = array();
                 }
@@ -33,7 +33,7 @@ class CollectionHelper
             }
         }
         else{ 
-            foreach($array as $key=>$row){ 
+            foreach($array as $row){ 
                 $arrayKey = array_keys($row);
                 $head = strtolower($row[$arrayKey[0]]);
                 $head = $noQuote ? $head : "'$head'";

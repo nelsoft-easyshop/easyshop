@@ -88,34 +88,30 @@
 }
 
 #prod_image > img{
+    display: inline-block;
     height: 211px;
-    left: 0;
-    position: absolute;
-    top: 0;
     width: 211px;
 }
+
 #prod_image{
-    background-color: #ffffff;
-    left: 2%;
-    padding: 105.4px;
-    position: relative;
-    top: 5%;
-    width: 35%;
-    float: left;
-    max-height: 212px;
+    background-color: #fff;
+    display: inline-block;
+    margin-right: 10px;
+    text-align: center;
+    vertical-align: top;
+    width: 30%;
 }
+
 .claim-bg{
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     height: 235px;
-    left: 0;
-    position: relative;
-    top: 0;
     width: 100%;
 }
 .claim-details{
-    padding-left: 40%;
-    padding-top: 1%;
-    width: 100%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    width: 60%;
 }
 .claim-details p{
     font-size: 12px;
@@ -406,27 +402,23 @@
     width: 211px;
 }
 #prod_image{
-    background-color: #ffffff;
-    left: 2%;
-    padding: 105.4px;
-    position: relative;
-    top: 5%;
-    width: 35%;
-    float: left;
-    max-height: 212px;
+    background-color: #fff;
+    display: inline-block;
+    margin-right: 10px;
+    text-align: center;
+    vertical-align: top;
+    width: 30%;
 }
 .claim-bg{
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
     height: 235px;
-    left: 0;
-    position: relative;
-    top: 0;
     width: 100%;
 }
 .claim-details{
-    padding-left: 40%;
-    padding-top: 1%;
-    width: 100%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    width: 60%;
 }
 .claim-details p{
     font-size: 12px;
@@ -602,3 +594,87 @@
     margin-right: 15px;
 }
 
+@media print {
+    header {
+        background-color: #4e83ef !important;
+        height: 10px !important;
+        margin-bottom: 30px !important;
+        width: 100% !important;
+    }
+
+    footer,
+    header .res_wrapper,
+    #search-container,
+    a[rel*="publisher"],
+    .prevent[href]:after,
+    .promo-print,
+    .header-galore33 a[href]:after,
+    .notification_container {
+        display: none !important;
+    }
+
+    .logo span {
+        display: list-item;
+        list-style-image: url(../images/img_logo.png);
+        list-style-position: inside;
+    }
+
+    #prod_image,
+    .claim-details {
+        display:inline-block;
+    }
+    
+    .scratch-congrats  {
+        background-color: #F5F5F5 !important;
+        width: 210mm;
+    }
+    
+    #prod_image {
+        padding-right: 10mm;
+        vertical-align: top;
+        width: 60mm;
+    }
+
+    .claim-details {
+        margin-top: 10px;
+        padding: 10px 10px 10px 20px;
+        vertical-align: top;
+        width: 120mm;
+    }
+
+    .promo-img {
+        height: 100px !important;
+        padding: 0 !important;
+        width: 150px !important;
+    }
+
+    .img-container {
+        height: 150px !important;
+    }
+
+    .promo-gallery-data p, .promo-gallery-data span {
+        font-size: 8pt;
+        height: auto;
+    }
+
+    .promo-gallery-data span {
+        color: #f90000;
+    }
+    
+    .img-container {
+        height: 150px !important;
+    }
+
+    .promo-gallery-data a {
+        margin: 8px 0 !important;
+        width: 98% !important;
+    }
+
+    .promo-gallery-data a[href]:after {
+        display: none;
+    }
+
+    .header-galore33 {
+        margin-top: 10px !important; 
+    }
+}
