@@ -164,7 +164,7 @@
  
         <div class="drag-drop-container">
             <div class="row">
-                <div class="col-xs-6">
+                <div class="col-xs-6 custom-left-panel">
                     <div class="drag-drop-group-list">
                         <div class="category-panel-header">
                             <div class="row">
@@ -182,7 +182,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="col-xs-6 all-right-panel">
                     <div class="drag-drop-group-list">
                         <div class="category-panel-header">
                             <div class="row">
@@ -248,7 +248,7 @@
     <div class="my-modal-footer">
         <center>
             <button class="btn btn-default-3">Add Category</button>
-            <button class="btn btn-setting-cancel-btn simplemodal-close">Cancel</button>
+            <button class="btn btn-default-1 simplemodal-close">Cancel</button>
         </center>
     </div>
 </div>
@@ -275,7 +275,7 @@
  
         <div class="drag-drop-container">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-xs-6 custom-left-panel">
                     <div class="drag-drop-group-list">
                         <div class="category-panel-header">
                             <div class="row">
@@ -300,7 +300,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-xs-6 all-right-panel">
                     <div class="drag-drop-group-list">
                         <div class="category-panel-header">
                             <div class="row">
@@ -352,7 +352,7 @@
     <div class="my-modal-footer">
         <center>
             <button class="btn btn-default-3">Save Changes</button>
-            <button class="btn btn-setting-cancel-btn simplemodal-close">Cancel</button>
+            <button class="btn btn-default-1 simplemodal-close">Cancel</button>
         </center>
     </div>
 </div>
