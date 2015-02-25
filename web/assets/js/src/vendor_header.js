@@ -96,9 +96,8 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
  
-        // get all variables
         var storName = $("#storeNameTxt").val();
-        var mobileNumber = $("#mobileNumberTxt").val();
+        var mobileNumber = $("#mobileNumberTxt").val(); 
         var stateRegion = $(".stateregionselect").val();
         var city = $('.cityselect').val();
         var stateRegionSelected = $(".stateregionselect option:selected").html();
@@ -106,8 +105,8 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
 
         stateRegion = (stateRegion === null) ? 0 : stateRegion;
         city = (city === null) ? 0 : city;
-        stateRegionSelected = (typeof stateRegionSelected === "undefined") ? "--- Select State/Region ---" : stateRegionSelected;
-        citySelected = (typeof citySelected === "undefined") ? "--- Select City ---" : citySelected;
+        stateRegionSelected = (typeof stateRegionSelected === "undefined") ? $('.stateregionselect option[value="0"]') : stateRegionSelected;
+        citySelected = (typeof citySelected === "undefined") ? $('.cityselect option[value="0"]') : citySelected;
 
         changeSlug = jQuery.ajax({
             type: "POST",
