@@ -3,6 +3,7 @@
     var $csrftoken = $("meta[name='csrf-token']").attr('content'); 
     var $removeCombination = [];
     var $slug;
+    var $productId; 
 
     function removeComma(number)
     {
@@ -28,6 +29,17 @@
     {
         $(".error-message").show().append(message + "<br>");
     } 
+
+    function getTotalStock($this)
+    {
+        var $container = $this.closest('.express-edit-content');
+        var $totalStock = 0;
+        $container.find('.txt-quantity').each(function(){
+            $totalStock += parseInt($(this).val());
+        });
+
+        return $totalStock;
+    }
 
     function validate($this)
     {   
@@ -81,6 +93,11 @@
         return true;
     }
 
+    $(document).on('change',".txt-quantity",function () {
+        var $this = $(this);
+        $(".txt-total-stock").val(getTotalStock($this));
+    });
+
     $(document).on('change',".base-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
@@ -90,7 +107,7 @@
         if($value >= 0){  
             computeDiscountPrice($value, $discountRate, 0);
         }
-        $this.val($value.toFixed(2));
+        $this.val(replaceNumberWithCommas($value.toFixed(2)));
     });
 
     $(document).on('change',".discount-rate",function () {
@@ -118,7 +135,7 @@
             computeDiscountPrice($basePrice, 0, $value);
             validate($this);
         }
-        $this.val($value.toFixed(2));
+        $this.val(replaceNumberWithCommas($value.toFixed(2)));
     });
 
     $(document.body).on('click','.cancel-btn',function () {
@@ -136,6 +153,7 @@
         var $basePrice = $container.find('.base-price').val();
         var $discountRate = $container.find('.discount-rate').val();
         var $soloCombination = $container.find('.solo-quantity').val();
+        var $discountPrice = parseFloat(removeComma($container.find('.discount-price').val()));
         $container.find('.combination-row').each(function(){
             $itemArray = {};
             $itemArray.quantity = $(this).find('.quantity-control').val();
@@ -159,13 +177,48 @@
                 url: '/me/product/expressedit-update',
                 success: function(requestResponse){
                     var $response = $.parseJSON(requestResponse);
+                    var $itemContainer = $("#item-list-"+$productId);
+                    var $imageContainer = $itemContainer.find('.div-product-image')
+                    var $discountContainer = $imageContainer.find('.pin-discount');
+                    var $amountContainer = $itemContainer.find('.item-amount');
+                    var $originalAmountContainer = $amountContainer.find('.item-original-amount');
                     if($response.result){
                         $removeCombination = [];
-                        reload();
+                        $itemContainer
+                            .find(".item-list-name")
+                            .children("a")
+                            .html(escapeHtml($productName));
+                        $itemContainer
+                            .find(".stock-number")
+                            .html(escapeHtml(getTotalStock($this)));
+
+                        if(parseInt($discountRate) > 0){
+                            if($discountContainer.length > 0){
+                                $discountContainer.html(escapeHtml(parseInt($discountRate)) + "%");
+                            }
+                            else{
+                                $imageContainer.html('<div class="pin-discount">'+escapeHtml(parseInt($discountRate))+'%</div>');
+                            }
+                            if($originalAmountContainer.length > 0){
+                                $originalAmountContainer.html(escapeHtml("P"+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))));
+                            }
+                            else{
+                                $amountContainer.prepend('<span class="item-original-amount">P'+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))+'</span>');
+                            }
+                            $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($discountPrice.toFixed(2)));
+                        }
+                        else{
+                            $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($basePrice));
+                            $originalAmountContainer.remove();
+                            $discountContainer.remove();
+                        }
+                        $this.closest('.ui-dialog-content').dialog('close');  
                     }
                     else{
                         alert($response.error);
                     }
+                    $slug = null;
+                    $productId = null; 
                 }
             });
         }
@@ -195,6 +248,7 @@
     $(document.body).on('click','.btn-edit-product',function () {
         var $this = $(this);
         $slug = $this.data('slug');
+        $productId = $this.data('pid');
 
         $(".ui-dialog > #express-edit-section").html("PLEASE WAIT!");
         $('#express-edit-section').dialog({

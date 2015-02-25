@@ -30,7 +30,7 @@
             <div class="row edit-sub-content2">
                 <div class="col-xs-4 col-sm-4">
                     <span><strong>Available Stock(s):</strong></span>
-                    <input type="text" class="ui-form-control" readonly value="<?=$availableStock;?>">
+                    <input type="text" class="ui-form-control txt-total-stock" readonly value="<?=$availableStock;?>">
                 </div>
             </div>
         </div>
@@ -69,7 +69,7 @@
                         <?php foreach ($productCombination as $itemId => $combination): ?>
                             <tr class="combination-row">
                                 <td width="20%">
-                                    <input type="text" value="<?=$combination['quantity'];?>" class="ui-form-control quantity-control" onkeypress="return isNumberKey(event);">
+                                    <input type="text" value="<?=$combination['quantity'];?>" class="ui-form-control txt-quantity quantity-control" onkeypress="return isNumberKey(event);">
                                     <input type="hidden" value="<?=$itemId;?>" class="item-control">
                                 </td>
                                 <td width="60%" class="prod-item-att-content"> 
@@ -86,7 +86,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td width="20%"><input type="text" value="<?=$soloQuantity; ?>" class="ui-form-control solo-quantity"  onkeypress="return isNumberKey(event);"></td>
+                            <td width="20%"><input type="text" value="<?=$soloQuantity; ?>" class="ui-form-control txt-quantity solo-quantity"  onkeypress="return isNumberKey(event);"></td>
                         </tr> 
                     <?php endif; ?>
                 </tbody>

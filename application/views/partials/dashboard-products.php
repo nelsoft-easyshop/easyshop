@@ -54,7 +54,7 @@ PLEASE WAIT!!
                                             <span class="strong-label">Sold Item(s) : </span> <?=$product->soldCount; ?>
                                         </div>
                                         <div class="col-xs-8 col-stock">
-                                            <span class="strong-label">Available Stock(s) : </span> <?=$product->availableStock; ?>
+                                            <span class="strong-label">Available Stock(s) : </span> <span class="stock-number"> <?=$product->availableStock; ?></span>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -116,7 +116,9 @@ PLEASE WAIT!!
                                 <p>Total Reviews : <?=$product->reviewCount; ?></p>
                                 <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
                                     <?php if((int)$product->getIsDraft() === EasyShop\Entities\EsProduct::ACTIVE):?>
-                                        <button class="btn btn-action-edit btn-edit-product" data-slug="<?=$product->getSlug(); ?>">
+                                        <button class="btn btn-action-edit btn-edit-product" 
+                                            data-slug="<?=$product->getSlug(); ?>"
+                                            data-pid="<?=$product->getIdProduct();?>">
                                             <i class="icon-edit"></i>edit
                                         </button>
                                     <?php else: ?>
