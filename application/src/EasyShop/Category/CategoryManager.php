@@ -5,7 +5,6 @@ namespace EasyShop\Category;
 use EasyShop\Entities\EsMemberCat;
 use EasyShop\Entities\EsMemberProdcat;
 use EasyShop\Entities\EsProduct;
-use EasyShop\Entities\EsMember;
 use EasyShop\Entities\EsCat;
 
 /**
