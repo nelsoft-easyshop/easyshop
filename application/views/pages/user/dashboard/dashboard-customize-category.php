@@ -164,7 +164,7 @@
  
         <div class="drag-drop-container">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-xs-6">
                     <div class="drag-drop-group-list">
                         <div class="category-panel-header">
                             <div class="row">
@@ -182,7 +182,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-xs-6">
                     <div class="drag-drop-group-list">
                         <div class="category-panel-header">
                             <div class="row">
@@ -247,7 +247,7 @@
     </div>
     <div class="my-modal-footer">
         <center>
-            <button class="btn btn-setting-edit-btn">Add Category</button>
+            <button class="btn btn-default-3">Add Category</button>
             <button class="btn btn-setting-cancel-btn simplemodal-close">Cancel</button>
         </center>
     </div>
@@ -351,7 +351,7 @@
     </div>
     <div class="my-modal-footer">
         <center>
-            <button class="btn btn-setting-edit-btn">Save Changes</button>
+            <button class="btn btn-default-3">Save Changes</button>
             <button class="btn btn-setting-cancel-btn simplemodal-close">Cancel</button>
         </center>
     </div>
