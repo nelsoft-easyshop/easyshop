@@ -446,6 +446,7 @@ class productUpload extends MY_Controller
     public function fallBackUploadimage()
     {
         $imageUtility = $this->serviceContainer['image_utility'];
+        $assetsUploader = $this->serviceContainer["assets_uploader"]; 
         $this->config->load('image_dimensions', true);
         $imageDimensions = $this->config->config['image_dimensions'];
         $tempDirectory = $this->session->userdata('tempDirectory');  
@@ -456,24 +457,30 @@ class productUpload extends MY_Controller
             $filename = trim($this->input->post('pictureName'));
             $inputFile = "files";
             $filenameArray = [$filename];
+
+            if(!$assetsUploader->checkValidFileType($_FILES[$inputFile]['tmp_name'][0])
+                || !$assetsUploader->checkValidFileDimension($_FILES[$inputFile]['tmp_name'][0])
+                || $_FILES[$inputFile]['error'][0] !== UPLOAD_ERR_OK
+                || $_FILES[$inputFile]['size'][0] >= $this->maxFileSizeInMb){
+                die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px","err":"1"}');
+            }
         }
         else{
             $filenameArray = $filename = trim($this->input->post('pictureNameOther'));
             $inputFile = "attr-image-input";
             $pathDirectory = $tempDirectory.'/other/';
+
+            if(!$assetsUploader->checkValidFileType($_FILES[$inputFile]['tmp_name'])
+                || !$assetsUploader->checkValidFileDimension($_FILES[$inputFile]['tmp_name'])
+                || $_FILES[$inputFile]['error'] !== UPLOAD_ERR_OK
+                || $_FILES[$inputFile]['size'] >= $this->maxFileSizeInMb){
+                die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px","err":"1"}');
+            }
         }
 
         if (strpos($filename, $tempId."_".$member_id) === false) {
-            die('{"result":"false","msg":"Invalid filename. Please try again later."}');
-        }
-
-        $allowed =  ['gif','png' ,'jpg','jpeg']; // available format only for image
-        $fileExtension = explode('.', $filename);
-        $fileExtension = strtolower(end($fileExtension));
-
-        if(!in_array(strtolower($fileExtension),$allowed)){
-            die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
-        }
+            die('{"result":"false","msg":"Invalid filename. Please try again later.","err":"1"}');
+        } 
 
         if (!file_exists ($pathDirectory)){
             mkdir($pathDirectory, 0777, true);
@@ -490,7 +497,7 @@ class productUpload extends MY_Controller
             "xss_clean" => false
         ]); 
 
-        if ($this->upload->do_multi_upload($inputFile)){  
+        if ($this->upload->do_multi_upload($inputFile)){
             $imageUtility->imageResize($pathDirectory.$filename, 
                                        $pathDirectory."small/".$filename,
                                        $imageDimensions["productImagesSizes"]["small"]);
@@ -503,10 +510,10 @@ class productUpload extends MY_Controller
                                        $pathDirectory."thumbnail/".$filename,
                                        $imageDimensions["productImagesSizes"]["thumbnail"]);
 
-            die('{"result":"ok","imageName":"'.$filename.'"}'); 
+            die('{"result":"ok","imageName":"'.$filename.'","err":"0"}'); 
         }
         else{
-            die('{"result":"false","msg":"'.$this->upload->display_errors().'"}');
+            die('{"result":"false","msg":"'.$this->upload->display_errors().'","err":"1"}');
         }
     }
 
@@ -536,7 +543,8 @@ class productUpload extends MY_Controller
             $filenames_ar[$key] = $afstartArray[$key];
             if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb
                || $_FILES['files']['error'][$key] !== UPLOAD_ERR_OK
-               || !$assetsUploader->checkValidFileType($_FILES['files']['tmp_name'][$key])){
+               || !$assetsUploader->checkValidFileType($_FILES['files']['tmp_name'][$key])
+               || !$assetsUploader->checkValidFileDimension($_FILES['files']['tmp_name'][$key])){
                 unset($filenames_ar[$key]);
             }
 
@@ -556,7 +564,7 @@ class productUpload extends MY_Controller
         $filenames_ar = array_values($filenames_ar);  
         if(count($filenames_ar) <= 0){
             $return = [
-                'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb", 
+                'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb. Allowed max dimension 5000px", 
                 'fcnt' => $filescnttxt,
                 'err' => 1
             ];
@@ -622,9 +630,10 @@ class productUpload extends MY_Controller
         $filename = implode(".", $fileNameArray).".jpeg";
 
         if(!$assetsUploader->checkValidFileType($_FILES['attr-image-input']['tmp_name'])
+            || !$assetsUploader->checkValidFileDimension($_FILES['attr-image-input']['tmp_name'])
             || $_FILES['attr-image-input']['error'] !== UPLOAD_ERR_OK
             || $_FILES['attr-image-input']['size'] >= $this->maxFileSizeInMb){
-            die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb"}');
+            die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px"}');
         }
 
         if (strpos($filename, $tempId."_".$member_id) === false) { 
