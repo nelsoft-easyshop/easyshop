@@ -459,9 +459,7 @@ class productUpload extends MY_Controller
             $inputFile = "files";
             $filenameArray = [$filename];
 
-            if(!$assetsUploader->checkValidFileType($_FILES[$inputFile]['tmp_name'][0])
-                || !$assetsUploader->checkValidFileDimension($_FILES[$inputFile]['tmp_name'][0])
-                || $_FILES[$inputFile]['error'][0] !== UPLOAD_ERR_OK
+            if($_FILES[$inputFile]['error'][0] !== UPLOAD_ERR_OK
                 || $_FILES[$inputFile]['size'][0] >= $this->maxFileSizeInMb){
                 die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px","err":"1"}');
             }
