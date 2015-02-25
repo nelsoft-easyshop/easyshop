@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
 use EasyShop\Entities\EsProductShippingDetail as EsProductShippingDetail;
+use Easyshop\Upload\AssetsUploader as AssetsUploader;
 
 class productUpload extends MY_Controller 
 {
@@ -470,9 +471,7 @@ class productUpload extends MY_Controller
             $inputFile = "attr-image-input";
             $pathDirectory = $tempDirectory.'/other/';
 
-            if(!$assetsUploader->checkValidFileType($_FILES[$inputFile]['tmp_name'])
-                || !$assetsUploader->checkValidFileDimension($_FILES[$inputFile]['tmp_name'])
-                || $_FILES[$inputFile]['error'] !== UPLOAD_ERR_OK
+            if($_FILES[$inputFile]['error'] !== UPLOAD_ERR_OK
                 || $_FILES[$inputFile]['size'] >= $this->maxFileSizeInMb){
                 die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px","err":"1"}');
             }
@@ -492,8 +491,10 @@ class productUpload extends MY_Controller
             "file_name"=> $filenameArray,
             "encrypt_name" => false,
             "remove_spaces" => true,
-            "allowed_types" => "jpg|jpeg|png|gif",
-            "max_size" => $this->max_file_size_mb * 1024,
+            "allowed_types" => AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES,
+            "max_size" => AssetsUploader::MAX_ALLOWABLE_SIZE_KB,
+            "max_width" => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+            "max_height" => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
             "xss_clean" => false
         ]); 
 
