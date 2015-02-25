@@ -202,8 +202,10 @@
                         }
                     });
                 },
-                onSelect: function(term){
+                onSelect: function(term){ 
+                    $('#primary-search2').val(term);
                     $('#primary-search').addClass('selectedClass');
+                    $("#nav-searchbar1").submit();
                 }
             }) 
             .focus(function() {
@@ -277,7 +279,9 @@
                     });
                 },
                 onSelect: function(term){
+                    $('#primary-search').val(term);
                     $('#primary-search2').addClass('selectedClass');
+                    $("#nav-searchbar2").submit();
                 }
             })
             .focusout(function() {
