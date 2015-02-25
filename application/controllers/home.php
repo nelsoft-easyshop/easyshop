@@ -228,6 +228,8 @@ class Home extends MY_Controller
      */
     public function bugReport()
     {
+        show_404();
+        exit();
         $isValid = false;
         $formValidation = $this->serviceContainer['form_validation'];
         $formFactory = $this->serviceContainer['form_factory'];
