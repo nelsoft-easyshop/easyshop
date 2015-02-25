@@ -48,7 +48,10 @@ html, body {
 .new-login-register-content {
     background: rgba(255,255,255,0.93);
     border-radius: 4px;
-    margin: 100px auto;
+    margin-bottom: 70px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
     max-width: 840px;
     width: 100%;
     -webkit-box-shadow: 0px 0px 15px 10px rgba(50, 50, 50, 0.45);
@@ -93,8 +96,11 @@ html, body {
     color: #fff;
 }
 
-.idtabs-tab .selected:after {
-    content: "";
+.idtabs-tab .tab-down-arrow {
+    opacity: 0;
+}
+
+.idtabs-tab .selected .tab-down-arrow {
     border-style: solid;
     border-width: 11px 12.5px 0 12.5px;
     border-color: #00a388 transparent transparent transparent;
@@ -102,17 +108,22 @@ html, body {
     height: 0;
     left: 0;
     margin: auto;
+    opacity: 1;
     position: absolute;
     right: 0;
     width: 0;
     -webkit-transform:rotate(360deg);
+    -webkit-transition: opacity 0.4s ease-in-out;
+    -moz-transition:    opacity 0.4s ease-in-out;
+    -o-transition:      opacity 0.4s ease-in-out;
+     transition:        opacity 0.4s ease-in-out;
 }
 
 #login h1,
 #create-account h1 {
     font-size: 15px;
     font-weight: bold;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     text-transform: uppercase;
 }
 
@@ -450,12 +461,12 @@ html, body {
 
     .idtabs-tab a {
         font-size: 11px;
-        padding: 12px 0;
+        padding: 16px 0;
     }
 
     .login-left-content,
     .login-right-content {
-        padding: 0 15px 25px;
+        padding: 0 25px 25px;
     }
 
     #login h1,
@@ -468,10 +479,21 @@ html, body {
     }
 }
 
+@media (min-width: 320px) {
+    .new-login-register-content,
+    .terms-and-condition {
+        max-width: 300px;
+    }
+
+    .idtabs-tab a {
+        font-size: 12px;
+    }
+}
+
 @media (min-width: 360px) {
     .new-login-register-content,
     .terms-and-condition {
-        max-width: 320px;
+        max-width: 340px;
     }
 
     .why-create-content > span {
@@ -482,7 +504,7 @@ html, body {
 @media (min-width: 480px) {
     .new-login-register-content,
     .terms-and-condition {
-        max-width: 340px;
+        max-width: 440px;
     }
 
     .idtabs-tab a {
@@ -491,6 +513,15 @@ html, body {
 
     .why-create-content > span {
         width: 72%;
+    }
+
+    .idtabs-tab a {
+        font-size: 14px;
+    }
+
+    .login-left-content,
+    .login-right-content {
+        padding: 0 35px 25px;
     }
 }
 
@@ -512,10 +543,6 @@ html, body {
 
     .login-logo {
         padding: 30px 0;
-    }
-
-    .idtabs-tab a {
-        font-size: 14px;
     }
 }
 
@@ -550,11 +577,6 @@ html, body {
     .login-left-border {
         border-right: 1px solid #cecece;
         margin-right: -25px;
-    }
-
-    #login h1,
-    #create-account h1 {
-        margin-bottom: 25px;
     }
 
     #login h1 {
