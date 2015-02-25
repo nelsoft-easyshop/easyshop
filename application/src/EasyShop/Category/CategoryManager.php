@@ -419,14 +419,14 @@ class CategoryManager
     /**
      * Performs the update actions of User Custom Category Products
      * 
-     * @param int $memberCategory
+     * @param int $memCatId
      * @param string $categoryName
      * @param array $productIdsArray
      * @param int $memberId
      * 
      * @return Array
      */
-    public function editUserCustomCategoryProducts($memberCategory, $categoryName, $productIdsArray, $memberId)
+    public function editUserCustomCategoryProducts($memCatId, $categoryName, $productIdsArray, $memberId)
     {
         $esMemberProdcatRepo = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat");
         $esMemberCatRepo = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
@@ -436,7 +436,7 @@ class CategoryManager
         $errorMessage = "";
 
         try{
-            $obj = $esMemberProdcatRepo->findBy(["memcat" => $memberCategory]);
+            $obj = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);
             foreach ($obj as $value) {
                 $memCatObj = $esMemberCatRepo->find($value->getMemcat()->getIdMemCat());
                 if($memCatObj && ($memCatObj->getMember()->getIdMember() === $memberId)) {
@@ -448,10 +448,10 @@ class CategoryManager
             $categoryNameCount = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                           ->checkIfEditedCustomCategoryExist($categoryName,$memberId);
             if((int)$categoryNameCount > 0) {
-                $memCatObj = $esMemberCatRepo->find($memberCategory);
+                $memCatObj = $esMemberCatRepo->find($memCatId);
                 $memCatObj->setCatName($categoryName);
 
-                $memCatId = $this->em->find('EasyShop\Entities\EsMemberCat', $memberCategory);
+                $memberCategory = $this->em->find('EasyShop\Entities\EsMemberCat', $memCatId);
                 foreach ($productIdsArray as $product) {
                     $productObj = $esProductRepo->findOneBy([
                                         "member" => $memberId,
@@ -462,7 +462,7 @@ class CategoryManager
 
                     if($productObj) {
                         $memProdCatObj = new EsMemberProdcat();
-                        $memProdCatObj->setMemcat($memCatId);
+                        $memProdCatObj->setMemcat($memberCategory);
                         $memProdCatObj->setProduct($this->em->find('EasyShop\Entities\EsProduct', $product));
                         $memProdCatObj->setCreatedDate(date_create());
                         $this->em->persist($memProdCatObj);
