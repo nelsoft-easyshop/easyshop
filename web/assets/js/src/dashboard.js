@@ -1,8 +1,8 @@
 (function ($) {
-    $(window).on("load", function(){
+    /*$(window).on("load", function(){
         $("#customize-category-tab").trigger("click");
     });
-    
+    */
     $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
         var btn = $(this);
         var submitBtn = btn.closest("form");
@@ -2521,7 +2521,7 @@
 
         }
 
-        $("#edit-category").click(function(){
+        $(".edit-category").click(function(){
             $(".edit-category-modal").modal({
                 persist:true
             });
