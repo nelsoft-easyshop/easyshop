@@ -472,7 +472,7 @@ class CategoryManager
                 $actionResult = true;
             }
             else {
-                $errorMessage = "Category name already exist";
+                $errorMessage = "Category name already exists";
             }
 
             return [
