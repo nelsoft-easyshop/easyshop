@@ -18,7 +18,7 @@ for a given task.
 
 Have a look at the Codeigniter source code at https://github.com/EllisLab/CodeIgniter
 
-***The Good Stuff that CodeIgniter was Bad At***
+***The Good Stuff that CodeIgniter is Bad At***
 
 Some of the good stuff that was added to the application: 
 - [Composer](https://getcomposer.org/) PHP Package Manager
