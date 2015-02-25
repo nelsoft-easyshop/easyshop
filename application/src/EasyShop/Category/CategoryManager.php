@@ -222,9 +222,9 @@ class CategoryManager
                  * Do custom stuff here
                  */
                 $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
+                                               ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
                 $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                             ->countCustomCategoryProducts($memberId, $arrCatId);
+                                         ->countCustomCategoryProducts($memberId, $arrCatId);
             }
             else{
                 $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
