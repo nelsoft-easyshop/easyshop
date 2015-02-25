@@ -46,7 +46,7 @@ var ajaxStat = {};
             $(".new-login-register-content").css({'margin-top': loginHeight});
         }
         else {
-            $(".new-login-register-content").css("margin-top","0px");
+            $(".new-login-register-content").css("margin-top","20px");
         }
     });
 
