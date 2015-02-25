@@ -248,6 +248,19 @@
         // return $uniqueSelected;
     }
 
+    var $attrSelectCounter = 0;
+    var $attrHideCounter = 0;
+    $(".attr-select").each(function(){
+        var $this = $(this);
+        if($this.hasClass('element-hide')){
+            $attrHideCounter++;
+        }
+        $attrSelectCounter++;
+    });
+
+    if($attrSelectCounter === $attrHideCounter){
+        $("#attribute-container").hide();
+    }
 
     // hiden values variables
     $productCombQuantity = JSON.parse($("#productCombQuantity").val());
