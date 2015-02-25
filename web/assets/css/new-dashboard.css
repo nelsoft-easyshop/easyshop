@@ -16,6 +16,7 @@ body{
     padding-top: 8px;
     padding-bottom: 8px;
     text-transform: uppercase;
+    margin-right: 5px;
 }
 
 .my-modal-footer .btn.btn-default-1{
