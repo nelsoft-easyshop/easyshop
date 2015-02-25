@@ -3,6 +3,7 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use EasyShop\Entities\EsProduct;
+use EasyShop\Entities\EsPromo;
 use EasyShop\Entities\EsPromoType;
 
 class EsPromoRepository extends EntityRepository

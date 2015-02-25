@@ -339,6 +339,7 @@
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
+                $("#control-quantity").html('<option value="0">0</option>');
                 $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
                 return false;
             }
@@ -378,12 +379,13 @@
                 if(!data.isLoggedIn){
                     window.location.replace("/login");
                 }
-                
-                if(data.isSuccessful){
-                    window.location.replace("/cart");
-                }
-                else{
-                    alert("We cannot process your request at this time. Please try again in a few moment");
+                else {
+                    if(data.isSuccessful){
+                        window.location.replace("/cart");
+                    }
+                    else{
+                        alert("We cannot process your request at this time. Please try again in a few moment");
+                    }
                 }
             }
         });

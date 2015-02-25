@@ -93,7 +93,7 @@ class MessageController extends MY_Controller
         }
         else{
             switch($messageSendingResult['error']){
-                case EasyShop\Message\MessageManager::SENDER_DOES_NOT_EXIST_ERROR:
+                case EasyShop\Message\MessageManager::RECIPIENT_DOES_NOT_EXIST_ERROR:
                     $result['errorMessage'] = "The user " . html_escape($storeName) . ' does not exist';
                     break;
                 case EasyShop\Message\MessageManager::SELF_SENDING_ERROR:
@@ -158,10 +158,13 @@ class MessageController extends MY_Controller
             $member = $this->serviceContainer['entity_manager']
                            ->find('EasyShop\Entities\EsMember', $this->userId);
             $redisChatChannel = $this->messageManager->getRedisChannelName();
-            $this->serviceContainer['redis_client']->publish($redisChatChannel, json_encode([
-                'event' => 'message-opened',
-                'reader' => $member->getStorename(),
-            ]));
+            try{
+                $this->serviceContainer['redis_client']->publish($redisChatChannel, json_encode([
+                    'event' => 'message-opened',
+                    'reader' => $member->getStorename(),
+                ]));
+            }
+            catch(\Exception $e){}
         }
         
         echo json_encode($result);
