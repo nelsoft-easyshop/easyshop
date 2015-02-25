@@ -76,8 +76,9 @@ class Store extends MY_Controller
                 }
                 
                 $getUserProduct = $this->getInitialCategoryProductsByMemberId($bannerData['arrVendorDetails']['id_member']);
-                $productView['categoryProducts'] = $getUserProduct['parentCategory'];
 
+                $productView['categoryProducts'] = $getUserProduct['parentCategory'];
+                
                 if($this->input->get() && !$bannerData['hasNoItems']){
 
                     $productView['isSearching'] = TRUE;
@@ -138,15 +139,17 @@ class Store extends MY_Controller
         
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
-                if(isset($productView['isSearching']) && isset($viewData['categoryProducts'][0])){
-                    $viewData['categoryProducts'][0]['isActive'] = true;
+                if(!empty($viewData['categoryProducts'])){
+                    if(isset($productView['isSearching'])){
+                        $viewData['categoryProducts'][0]['isActive'] = true;
+                    }
+                    else{
+                        reset($viewData['categoryProducts']);
+                        $firstCategoryId = key($viewData['categoryProducts']);
+                        $viewData['categoryProducts'][$firstCategoryId]['isActive'] = true;
+                    }
                 }
-                else{
-                    reset($viewData['categoryProducts']);
-                    $firstCategoryId = key($viewData['categoryProducts']);
-                    $viewData['categoryProducts'][$firstCategoryId]['isActive'] = true;
-                }
-
+             
                 $this->load->spark('decorator');
                 $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
                 $this->load->view('templates/vendor_banner',$bannerData);
@@ -432,7 +435,7 @@ class Store extends MY_Controller
         $categoryProductCount = array();
         $totalProductCount = 0; 
 
-        foreach( $parentCat as $idCat=>$categoryProperties ){ 
+        foreach( $parentCat as $idCat => $categoryProperties ){ 
 
             $categoryIdCollection = $categoryProperties['child_cat'];
             $isCustom = false;
@@ -442,19 +445,18 @@ class Store extends MY_Controller
             }
  
             $result = $categoryManager->getProductsWithinCategory($memberId, $categoryIdCollection, $isCustom, $prodLimit);
-            
+
             if( (int)$result['filtered_product_count'] === 0 && 
                 (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_NONSEARCH_TYPE 
             ){
                 unset($parentCat[$idCat]);
-                break;
+                continue;
             }
 
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
             $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
-            $parentCat[$idCat]['hasMostProducts'] = false; 
             $categoryProductCount[$idCat] = count($result['products']);
             
             // Generate pagination view
@@ -474,13 +476,10 @@ class Store extends MY_Controller
 
             $parentCat[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
-        
-        $categoryWithMostProducts = reset(array_keys($categoryProductCount, max($categoryProductCount)));
-        $parentCat[$categoryWithMostProducts]['hasMostProducts'] = true;
 
         $returnData['totalProductCount'] = $totalProductCount;
         $returnData['parentCategory'] = $parentCat;
-
+        
         return $returnData;
     }
 
@@ -1012,7 +1011,7 @@ class Store extends MY_Controller
 
     
     /**
-     * AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
+     * AJAX REQUEST HANDLER FOR LOADING PRODUCTS
      *
      * @return JSON
      */
@@ -1106,18 +1105,18 @@ class Store extends MY_Controller
         
         $pageCount = $productCount > 0 ? ceil($productCount/$prodLimit) : 1;
 
-        $paginationData = array(
-            'lastPage' => $pageCount
-            , 'isHyperLink' => false
-            , 'currentPage' => $page
-        );
+        $paginationData = [
+            'lastPage' => $pageCount,
+            'isHyperLink' => false,
+            'currentPage' => $page,
+        ];
         $parseData['arrCat']['pagination'] = $this->load->view("pagination/default", $paginationData, true);
-        $serverResponse = array(
-            'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
-            , 'isCount' => $isCount
-            , 'pageCount' => $pageCount
-            , 'paginationData' => $this->load->view("pagination/default", $paginationData, true)
-        );
+        $serverResponse = [
+            'htmlData' => $this->load->view("pages/user/display_product", $parseData, true),
+            'isCount' => $isCount,
+            'pageCount' => $pageCount,
+            'paginationData' => $this->load->view("pagination/default", $paginationData, true),
+        ];
 
         echo json_encode($serverResponse);
     }
