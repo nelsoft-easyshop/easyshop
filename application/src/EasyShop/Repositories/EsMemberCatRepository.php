@@ -17,7 +17,7 @@ class EsMemberCatRepository extends EntityRepository
      *  @param integer $idMember
      *  @return int
      */
-    public function checkIfCustomCategoryExist($categoryName, $idMember)
+    public function checkIfEditedCustomCategoryExist($categoryName, $idMember)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
