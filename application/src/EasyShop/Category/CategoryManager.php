@@ -3,6 +3,8 @@
 namespace EasyShop\Category;
 
 use EasyShop\Entities\EsMemberCat;
+use EasyShop\Entities\EsMemberProdcat;
+use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsCat;
 
 /**
@@ -412,6 +414,57 @@ class CategoryManager
         }
 
         return $customCategories;
+    }
+
+    /**
+     * Performs the update actions of User Custom Category Products
+     * 
+     * @param int $memCatId
+     * @param string $categoryName
+     * @param array $productIdsArray
+     * @param int $memberId
+     * 
+     * @return bool
+     */
+    public function editUserCustomCategoryProducts($memCatId, $categoryName, $productIdsArray, $memberId)
+    {
+        $esMemberProdcatRepo = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat");
+        $esMemberCatRepo = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
+        $esProductRepo = $this->em->getRepository("EasyShop\Entities\EsProduct");
+
+        try{
+            $obj = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);
+            foreach ($obj as $value) {
+                $this->em->remove($value);
+            }
+            $this->em->flush();
+
+            $memCatObj = $esMemberCatRepo->find($memCatId);
+            $memCatObj->setCatName($categoryName);
+
+            $memCatId = $this->em->find('EasyShop\Entities\EsMemberCat', $memCatId);
+            foreach ($productIdsArray as $product) {
+                $productObj = $esProductRepo->findOneBy([
+                                "member" => $memberId,
+                                "idProduct" => $product,
+                                "isDelete" => (int)!EsProduct::DELETE,
+                                "isDraft" => (int)!EsProduct::DRAFT
+                              ]);
+
+                if($productObj) {
+                    $memProdCatObj = new EsMemberProdcat();
+                    $memProdCatObj->setMemcat($memCatId);
+                    $memProdCatObj->setProduct($this->em->find('EasyShop\Entities\EsProduct', $product));
+                    $memProdCatObj->setCreatedDate(date_create());
+                    $this->em->persist($memProdCatObj);
+                }
+            }
+            $this->em->flush();
+            return true;
+        }
+        catch(Exception $e) {
+            return false;
+        }            
     }
 
     /**

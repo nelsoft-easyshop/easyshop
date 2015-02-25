@@ -2329,7 +2329,7 @@ class Memberpage extends MY_Controller
         
         echo json_encode($jsonResponse);
     }
-    
+
     /**
      * Creates a category standard object 
      *
@@ -2359,6 +2359,22 @@ class Memberpage extends MY_Controller
                         $this->session->userdata('member_id')
                     );
     }
+
+
+    /**
+     * Performs the update actions of User Custom Category Products
+     *
+     * @return bool
+     */
+    public function editCustomCategory()
+    {
+        return $this->categoryManager->editUserCustomCategoryProducts(
+                    $this->input->post("memCatId"),
+                    $this->input->post("catName"),
+                    $this->input->post("userCategoryProductIds"),
+                    $this->session->userdata('member_id')
+                );
+    }    
 
     /**
      * Updates is_delete field to '1' of a custom category
