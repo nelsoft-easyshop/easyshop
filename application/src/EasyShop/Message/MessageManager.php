@@ -156,11 +156,14 @@ class MessageManager {
             $updatedMessageListForReciver = $this->getAllMessage($recipient->getIdMember());
 
             $redisChatChannel = $this->getRedisChannelName();
-            $this->redisClient->publish($redisChatChannel, json_encode([
-                'event' => 'message-sent',
-                'recipient' => $recipient->getStorename(),
-                'message' => $updatedMessageListForReciver,
-            ]));
+            try{
+                $this->redisClient->publish($redisChatChannel, json_encode([
+                    'event' => 'message-sent',
+                    'recipient' => $recipient->getStorename(),
+                    'message' => $updatedMessageListForReciver,
+                ]));
+            }
+            catch(\Exception $e){}
             $response['isSuccessful'] = true;
             $response['allMessages'] = $updatedMessageListForSender;
         }

@@ -21,13 +21,13 @@
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
         <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-        <link type="text/css" href="/assets/css/easy-icons/easy-icons.css?<?=ES_FILE_VERSION?>" rel="stylesheet">
         <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-        <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php else: ?>
         <link type="text/css" href='/assets/css/min-easyshop.header-alt.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php endif; ?>
     
+    <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href="/assets/css/easy-icons/easy-icons.css?<?=ES_FILE_VERSION?>" rel="stylesheet">
     
     <?php if(isset($relCanonical)): ?>
         <link rel="canonical" href="<?php echo $relCanonical ?>"/>
@@ -104,7 +104,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <option value="1">On Seller's Page</option>
                             <option value="2">Main Page</option> 
                         </select>
-                        <input type="text" id="main_search_alt" autocomplete="off" class="search-bar-input ui-form-control" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>" class="ui-form-control">
+                        <input type="text" id="main_search_alt" autocomplete="off" class="search-bar-input ui-form-control" name="q_str" value="<?=($this->input->get('q_str'))?trim(html_escape($this->input->get('q_str'))):""?>" class="ui-form-control">
                         <input type="submit"  value="" class="submitSearch span_bg">
                     </form>
                 </div>
@@ -248,7 +248,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <option value="1">On Seller's Page</option>
                         <option value="2">Main Page</option> 
                     </select>
-                    <input type="text" id="main_search_alt2" autocomplete="off" class="ui-form-control search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim($this->input->get('q_str')):""?>">
+                    <input type="text" id="main_search_alt2" autocomplete="off" class="ui-form-control search-bar-input" name="q_str" value="<?=($this->input->get('q_str'))?trim(html_escape($this->input->get('q_str'))):""?>">
                     <input type="submit"  value="" class="submitSearch span_bg">
                 </form>
             </li>

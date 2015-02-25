@@ -70,6 +70,7 @@ class Memberpage extends MY_Controller
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
         $this->accountManager = $this->serviceContainer['account_manager'];        
         $this->em = $this->serviceContainer['entity_manager'];
+        $this->categoryManager = $this->serviceContainer['category_manager'];
         $this->transactionManager = $this->serviceContainer['transaction_manager'];
         $this->esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
         $this->esMemberRepo = $this->em->getRepository('EasyShop\Entities\EsMember');
@@ -256,20 +257,19 @@ class Memberpage extends MY_Controller
         $formErrorHelper = $this->serviceContainer['form_error_helper'];
 
         $rules = $formValidation->getRules('personal_info');
-        $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                    ->setMethod('POST')
-                    ->add('fullname', 'text')
-                    ->add('gender', 'text', ['constraints' => $rules['gender']])
-                    ->add('dateofbirth', 'text', ['constraints' => $rules['dateofbirth']])
-                    ->add('mobile', 'text', ['constraints' => $rules['mobile']])
-                    ->getForm();
-
-        $form->submit([
-             'fullname' => $this->input->post('fullname')
-            , 'gender' => $this->input->post('gender')
-            , 'dateofbirth' => $this->input->post('dateofbirth')
-            , 'mobile' => $this->input->post('mobile')
-        ]);
+        $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                 ->setMethod('POST');
+        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);
+        $formBuild->add('fullname', 'text');
+        $formBuild->add('gender', 'text', ['constraints' => $rules['gender']]);
+        $formBuild->add('dateofbirth', 'text', ['constraints' => $rules['dateofbirth']]);
+        $formBuild->add('mobile', 'text', ['constraints' => $rules['mobile']]);
+        $formData["fullname"] = $this->input->post('fullname');
+        $formData["gender"] = $this->input->post('gender');
+        $formData["dateofbirth"] = $this->input->post('dateofbirth');
+        $formData["mobile"] = $this->input->post('mobile');
+        $form = $formBuild->getForm();
+        $form->submit($formData); 
 
         if($form->isValid()){
             $formData = $form->getData();
@@ -875,7 +875,7 @@ class Memberpage extends MY_Controller
                     'transact_num' => $this->input->post('transact_num'),
                     'courier' => $this->input->post('courier'),
                     'tracking_num' => $this->input->post('tracking_num'),
-                    'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "0000-00-00 00:00:00",
+                    'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "",
                     'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
                 ];
 
@@ -1704,18 +1704,18 @@ class Memberpage extends MY_Controller
     {
 
         $hashUtility = $this->serviceContainer['hash_utility'];
-        $getData = $hashUtility->decode($this->input->get('h'));
+        $getData = $hashUtility->decode($this->input->post('h'));
 
         $authenticationResult = $this->accountManager
-                                     ->authenticateMember($this->input->get('username'), 
-                                                          $this->input->get('password'), 
+                                     ->authenticateMember($this->input->post('username'), 
+                                                          $this->input->post('password'), 
                                                           false, 
                                                           true);  
         $isActivationRequestValid = $authenticationResult['member']
                                     && $authenticationResult['member']->getIdMember() === (int)$getData["memberId"] 
                                     && (bool)$authenticationResult['member']->getIsActive() === false ;
         $response = false;
-        if($this->input->get("activateAccountButton") && $isActivationRequestValid) {
+        if($this->input->post("activateAccountButton") && $isActivationRequestValid) {
             $this->em
                  ->getRepository('EasyShop\Entities\EsMember')
                  ->accountActivation($authenticationResult["member"], true);          
@@ -2346,6 +2346,35 @@ class Memberpage extends MY_Controller
         $singleCategoryData->memberCategoryId =  $id;   
         
         return $singleCategoryData;
+    }
+
+    /**
+     * Performs the database insertion of member custom category
+     * @return MIXED
+     */
+    public function addCustomCategory()
+    {
+        return  $this->categoryManager->createCustomCategory(
+                        $this->input->post("userCategory"),
+                        $this->session->userdata('member_id')
+                    );
+    }
+
+    /**
+     * Updates is_delete field to '1' of a custom category
+     * @return bool
+     */
+    public function deleteCustomCategory()
+    {
+        $customCategories = [];
+        foreach ($this->input->post("userCategory") as $value) {
+            $customCategories[] = json_decode($value);
+        }
+
+        return $this->categoryManager->deleteUserCustomCategory(
+                        $customCategories,
+                        $this->session->userdata('member_id')
+                    );
     }
 
 }

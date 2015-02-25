@@ -59,16 +59,25 @@
             </div>
             <div id="adv2" class="login-tabs">
                 <div id="alter-tab" class="idTabs">
-                    <div class="idtabs-tab" ><a href="#login" id="tab-login" >login</a></div>
-                    <div class="idtabs-tab" id="anchor-create" ><a href="#create-account" id="tab-create" >create an account</a></div>
+                    <div class="idtabs-tab" >
+                        <a href="#login" id="tab-login">
+                            login
+                            <span class="tab-down-arrow"></span>
+                        </a>
+                    </div>
+                    <div class="idtabs-tab" id="anchor-create" >
+                        <a href="#create-account" id="tab-create" >
+                            create an account
+                            <span class="tab-down-arrow"></span>
+                        </a>
+                    </div>
                     <span class="clear"></span>
                 </div>
 
             </div>
 
             <div id="login">
-                <input type='hidden' value='<?php echo isset($loginFail)? $loginFail : ""; ?>' id='loginFail'/>
-                <input type='hidden' value='<?php echo isset($timeoutLeft)? $timeoutLeft : ""; ?>' id='timeoutLeft'/>
+
                 <div class="login-left-content">
                     <div class="login-left-border">
                         <h1>login to your account</h1>
@@ -116,7 +125,7 @@
                                 </div>
                                 <div class="row">
                                     <span class="col-xs-12 padding-right-reset">
-                                        <input type="submit" class="btn btn-default-3" value='Login' name='login_form'/>
+                                        <input type="submit" class="btn btn-default-3 login-btn" value='Login' name='login_form'/>
                                     </span>
                                 </div>
                                 <?php if($formError === 'Account Banned'): ?>
@@ -283,7 +292,29 @@
                 </div>
                 <div class="clear"></div>
             </div>
+            
+   
+            <div class="login-throttle" style="display:none;">
+                <div class="login-throttle-border">
+                    <div>
+                        <h1>TROUBLE LOGGING-IN?</h1>
+                    </div>
+                    <div >
+                        <p class="login-throttle-message">Too many failed login-attempts.</p>
+                        <p>Timeout Remaining: <span class="login-throttle-message" id="login-timeout">60</span> sec </p>
+                    </div>
+                    <div class="row throttle-btn-container" >
+                        <input type="submit" class="btn btn-default-3" id="login-try-again" value="Try again" name="retry">
+                        <a href="/login/identifyEmail">
+                        <input type="submit" class="btn help-me-locate-account-btn" value="Help me locate my account" name="forgot-password">
+                        </a>
+                   </div>
+                </div>
+            </div>
         </div>
+    
+     
+    
     </section>
     <div id="terms-section">
         <div class="terms-overlay-bg">&nbsp;
@@ -468,6 +499,7 @@
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type='text/javascript' src="/assets/js/src/universal.js"></script>
     <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>

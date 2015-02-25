@@ -43,40 +43,45 @@ class Estudyantrepreneur
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $date = new \DateTime;
         $dateToday = $date->getTimestamp();
-        $round = false;
         $previousStartDate = '';
         $previousEndDate = '';
-        $case = '';
         $limit = 0;
         $previousRound = '';
-        $round = false;
+        $round = '';
+        $keys = array_keys($rounds);
+        end($keys);
 
         foreach ($rounds as $key => $data) {
             $startDate = strtotime($data['start']);
             $endDate = strtotime($data['end']);
-            if ($dateToday >= $startDate && $dateToday < $endDate) {
-                $round = $key;
-                $case = $round;
-                $limit = (int) $data['limit'];
+            $foundIndex = array_search($key, $keys);
+            $isPromoStart = $dateToday >= $startDate && $dateToday < $endDate;
 
-                $keys = array_keys($rounds);
-                $found_index = array_search($key, $keys);
-                if ($found_index === true || $found_index !== 0) {
-                    $previousRound = $keys[$found_index-1];
-                    $previousStartDate = $rounds[$previousRound]['start'];
-                    $previousEndDate = $rounds[$previousRound]['end'];
-                }
+            if ($foundIndex !== 0) {
+                $previousRound = $dateToday > $endDate && $foundIndex === key($keys) ? $keys[$foundIndex] : $keys[$foundIndex-1];
+                $previousStartDate = $rounds[$previousRound]['start'];
+                $previousEndDate = $rounds[$previousRound]['end'];
+            }
+
+            $showSuccessPage = $previousEndDate && ($dateToday > strtotime($previousEndDate) && $dateToday < $startDate);
+
+            if ($isPromoStart || $showSuccessPage) {
+                $round = $key;
+                $limit = (int) $data['limit'];
 
                 break;
             }
         }
+
+        $isPromoEnded = !$isPromoStart && $previousRound === $keys[key($keys)];
         $data = [
             'round' => $round,
             'previousRound' => $previousRound,
-            'case' => $case,
             'limit' => $limit,
             'previousStartDate' => $previousStartDate,
-            'previousEndDate' => $previousEndDate
+            'previousEndDate' => $previousEndDate,
+            'showSuccessPage' => $showSuccessPage,
+            'isPromoEnded' => $isPromoEnded
         ];
 
         return $data;
@@ -84,11 +89,11 @@ class Estudyantrepreneur
 
     /**
      * Retrieves Students depending on date and school
-     * @param $schools
-     * @param $previousStartDate
-     * @param $previousEndDate
-     * @param $limit
-     * @param $getStudentWithSameVote
+     * @param array $schools
+     * @param string $previousStartDate
+     * @param string $previousEndDate
+     * @param int $limit
+     * @param bool $getStudentWithSameVote
      * @return mixed
      */
     private function __getStudentsByDateAndSchool($schools, $previousStartDate, $previousEndDate, $limit, $getStudentWithSameVote = false)
@@ -135,8 +140,8 @@ class Estudyantrepreneur
 
     /**
      * Get Total votes per school
-     * @param $startDate
-     * @param $endDate
+     * @param string $startDate
+     * @param string $endDate
      * @return array
      */
     private function __getTotalVotesByDate($startDate, $endDate)
@@ -165,7 +170,7 @@ class Estudyantrepreneur
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $roundData = $this->__getPreviousRounds();
 
-        switch($roundData['case']) {
+        switch($roundData['round']) {
             case 'first_round' :
                 $students = $this->em->getRepository('EasyShop\Entities\EsStudent')->getAllStudents();
 
@@ -226,7 +231,10 @@ class Estudyantrepreneur
 
         $result = [
             'schools_and_students' => $result,
-            'round' => $roundData['round']
+            'round' => $roundData['round'],
+            'showSuccessPage' => $roundData['showSuccessPage'],
+            'isPromoEnded' => $roundData['isPromoEnded'],
+            'previousRound' => $roundData['previousRound']
         ];
 
         return $result;
@@ -234,8 +242,8 @@ class Estudyantrepreneur
 
     /**
      * Vote a student
-     * @param $studentId
-     * @param $memberId
+     * @param int $studentId
+     * @param int $memberId
      * @return EasyShop\Entities\EsPromo
      */
     public function voteStudent($studentId, $memberId)
@@ -253,7 +261,7 @@ class Estudyantrepreneur
 
     /**
      * Check is the user already voted
-     * @param $memberId
+     * @param int $memberId
      * @return EasyShop\Entities\EsPromo
      */
     public function isUserAlreadyVoted($memberId)
@@ -277,21 +285,23 @@ class Estudyantrepreneur
     }
 
     /**
-     * Returns the current standing
-     * @return array
+     * Returns the standing
+     * @param mixed $round
+     * @param mixed $schoolAndStudents
+     * @return mixed
      */
-    public function getCurrentStandings()
+    public function getStandingsByRound($round = false, $schoolAndStudents = false)
     {
         $rounds = $this->promoConfig[EsPromoType::ESTUDYANTREPRENEUR]['option'];
         $roundData = $this->__getPreviousRounds();
-        $currentRound = $rounds[$roundData['round']];
+        $currentRound = $round ? $rounds[$round] : $rounds[$roundData['round']];
         $schools = $this->em->getRepository('EasyShop\Entities\EsSchool')->getAllSchools();
-        $schoolsAndStudents = $this->__getStudentsByDateAndSchool(
-                                         $schools,
-                                         $currentRound['start'],
-                                         $currentRound['end'],
-                                         $roundData['limit']
-                                     );
+        $schoolsAndStudents = $schoolAndStudents ?: $this->__getStudentsByDateAndSchool(
+                                                              $schools,
+                                                              $currentRound['start'],
+                                                              $currentRound['end'],
+                                                              $roundData['limit']
+                                                          );
         $totalVotesPerSchool = $this->__getTotalVotesByDate($currentRound['start'], $currentRound['end']);
 
         foreach ($schoolsAndStudents as $school => $students) {

@@ -68,14 +68,7 @@
           <p>Copyright &copy; <?php echo date("Y"); ?> Easyshop.ph</p>
       </div>
     </div>
-    
-    
 
-    <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <script src="/assets/js/src/ws.js?ver=<?php echo ES_FILE_VERSION?>"></script>
-    <?php else: ?>
-        <script src="/assets/js/min/easyshop.footer_full.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-    <?php endif; ?>
     <input id="user-session" type="hidden" value="<?php echo $this->session->userdata('session_id');?>">
 
 </footer>

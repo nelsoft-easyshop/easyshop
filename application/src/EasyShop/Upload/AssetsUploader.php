@@ -364,6 +364,47 @@ class AssetsUploader
         return $result;
     }
 
-    
+    /**
+     * Check if file type to be uploaded is valid
+     * @param  file    $file available for using getimagesize function
+     * @return boolean
+     */
+    public function checkValidFileType($file)
+    {
+        $mimeConfig = $this->configLoader->getItem('mimes');
+        $arrayMimes = explode("|", self::ALLOWABLE_IMAGE_MIME_TYPES);
+        $acceptableMime = [];
+        foreach ($arrayMimes as $mime) {
+            if(isset($mimeConfig[$mime])){
+                if(is_array($mimeConfig[$mime])){
+                    $acceptableMime = array_merge($acceptableMime, $mimeConfig[$mime]);
+                }
+                else{
+                    $acceptableMime[] = $mimeConfig[$mime];
+                }
+            }
+        }
+
+        $fileData = getimagesize($file);
+        if((bool)$fileData && in_array($fileData['mime'], $acceptableMime)){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if file dimension to be uploaded is valid
+     * @param  file    $file available for using getimagesize function
+     * @return boolean
+     */
+    public function checkValidFileDimension($file)
+    {
+        list($width, $height) = $imageData = getimagesize($file); 
+        if($imageData && $width <= self::MAX_ALLOWABLE_DIMENSION_PX && $height <= self::MAX_ALLOWABLE_DIMENSION_PX){
+            return true;
+        }
+        return false;
+    }
 }
 

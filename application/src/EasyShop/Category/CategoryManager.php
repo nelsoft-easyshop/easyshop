@@ -109,21 +109,49 @@ class CategoryManager
     /**
      *  Create custom category for memberId @table es_member_cat
      *
-     *  @param string $catName - category name
+     *  @param string $catName
+     *  @param int $memberId
+     *  @param bool $isForDeleteCategory
      *
-     *  @return integer $lastId
+     *  @return array
      */
-    public function createCustomCategory($catName, $memberId)
+    public function createCustomCategory($catName, $memberId, $isForDeleteCategory = false)
     {
-        $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
-        $category = new EsMemberCat();
-        $category->setCatName($catName)
-                 ->setMember($memberObj)
-                 ->setCreatedDate(date_create());
-        $this->em->persist($category);
-        $this->em->flush();
+        $errorMessage = "";
+        $actionResult = false;
+        $doesCategoryExist = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                            ->findBy([
+                                'catName' => $catName,
+                                'member' => $memberId
+                            ]);
+        if($doesCategoryExist) {
+            $errorMessage = "Category name already exists";
+        }
+        else {
+            try {
+                $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+                $category = new EsMemberCat();
+                $category->setCatName($catName)
+                         ->setMember($memberObj)
+                         ->setCreatedDate(date_create())
+                         ->setlastModifiedDate(date_create());
+                if($isForDeleteCategory) {
+                    $category->setIsDelete(EsMemberCat::IS_DELETE);
+                }
+                $this->em->persist($category);
+                $this->em->flush();
+                $actionResult = true;
+            }
+            catch(Exception $e) {
+                $errorMessage = "Database Error";
+            }
+        }
 
-        return $category;
+        return $result = [
+            "message" => $errorMessage,
+            "result" => $actionResult ? $category : false
+        ];
+       
     }
 
     /**
@@ -367,25 +395,63 @@ class CategoryManager
      */
     public function getAllUserProductCustomCategory($memberId)
     {
-        $customCategories = array();
-        $arrCustomCategories = $this->em->getRepository("EasyShop\Entities\EsMemberCat")
+        $customCategories = [];
+        $arrCustomCategories = $this->em
+                                    ->getRepository("EasyShop\Entities\EsMemberCat")
                                     ->getCustomCategoriesArray($memberId);
 
         foreach( $arrCustomCategories as $customCat ){
-            $customCategories[$customCat['id_memcat']] = array(
+            $customCategories[$customCat['id_memcat']] = [
                 'name' => $customCat['cat_name'],
                 'is_featured' => $customCat['is_featured'],
                 'child_cat' => [ $customCat['id_memcat'] ],
                 'products' => [],
                 'isActive' => false,
                  $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_CUSTOM_TYPE,
-            );
+            ];
         }
 
         return $customCategories;
     }
 
-    
+    /**
+     * Updates is_delete field to '1' of a custom category
+     * Inserts new record with a is_delete value of '1' if category name is not found
+     * @param array $categoryArray
+     * @param int $memberId
+     * 
+     * @return bool
+     */
+    public function deleteUserCustomCategory($categoryArray, $memberId)
+    {
+        try{
+            foreach ($categoryArray as $value) {
+                if(isset($value->memberCatId) && (int) $value->memberCatId !== 0)
+                {
+                    $memberCat = $this->em
+                                      ->getRepository("EasyShop\Entities\EsMemberCat")
+                                      ->findOneBy([
+                                            "idMemcat" => (int)$value->memberCatId,
+                                            "member" => $memberId
+                                        ]); 
+                    if($memberCat) {
+                        $memberCat->setIsDelete(EsMemberCat::IS_DELETE);
+                        $memberCat->setlastModifiedDate(date_create());
+                        $this->em->flush();
+                    }
+                }
+                else {
+                    $this->createCustomCategory(trim($value->catName), $memberId, true);
+                }
+            }
+            return true;
+        }
+        catch(Exception $e) {
+            return false;
+        }
+
+
+    }
     
     
     
