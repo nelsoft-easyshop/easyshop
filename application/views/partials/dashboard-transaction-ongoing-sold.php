@@ -213,7 +213,7 @@
                                     <input type="hidden" name="courier" value="<?=html_escape($product['courier'])?>">
                                     <input type="hidden" name="tracking_num" value="<?=html_escape($product['trackingNum']);?>">
                                     <input type="hidden" name="delivery_date" value="<?=$product['deliveryDate'] ? date_format($product['deliveryDate'], 'Y-M-d') : '' ?>" >
-                                    <input type="hidden" name="expected_date" value="<?=$product['expectedDate'] ? date_format($product['expectedDate'], 'Y-M-d') : '' ?>">
+                                    <input type="hidden" name="expected_date" value="<?=$product['expectedDate'] && date_format($product['expectedDate'], 'Y-m-d') !== '-0001-11-30' ? date_format($product['expectedDate'], 'Y-M-d') : '' ?>">
                                     <input type="hidden" name="comment" value="<?=html_escape($product['shipping_comment'])?>">
                                     <input type="hidden" name="is_new" value="<?= $disable ?>">
                                 </div>
