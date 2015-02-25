@@ -45,6 +45,9 @@ src/EasyShop/Auth/Authentication.php
 ```
 rather than in a CI User_model.
 
-In addition to this, re-usable database getter methods are placed in repositories following the repository pattern and can be found in `src/Easyshop/Repositories`. 
+In addition to this, re-usable database getter methods are placed in repositories following the repository pattern and can be found in 
+```
+src/Easyshop/Repositories
+```
 
 
