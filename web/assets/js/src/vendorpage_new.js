@@ -32,7 +32,6 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('.sort_select').on('change',function(){
         memconf.orderBy = $(this).val();
-        var group = $(this).data('group');
         var catDiv = $('.category-products.active');
         $('.product-paging').remove();
         ItemListAjax(catDiv,1);
@@ -170,6 +169,9 @@ var removeParam = function(key, sourceURL)
 
 function ItemListAjax(CatDiv,page)
 {
+    if(CatDiv.length < 1){
+        return false;
+    }
     var catId = CatDiv.attr("data-catId");
     var catType = CatDiv.attr("data-catType");
     var loadingDiv = CatDiv.find('div.loading_div');
