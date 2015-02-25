@@ -118,6 +118,9 @@ else {
     $route['(?i)me/sales'] = 'memberpage/requestSalesPage';
     $route['(?i)vendor/(:any)'] = 'store/oldUserProfile/$1';
 
+    $route['(?i)me/product/expressedit-request'] = 'product/requestProductExpressEdit';
+    $route['(?i)me/product/expressedit-update'] = 'product/updateProductExpressEdit';
+
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
     $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
     $route['(?i)exportbuytransactions'] = 'memberpage/exportBuyTransactions'; # inon baguio

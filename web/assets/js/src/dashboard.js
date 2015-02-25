@@ -597,6 +597,18 @@
         }
     });
 
+    $(document.body).on('click','.btn-edit-draft-product, .btn-advance-edit',function () {
+        var $this = $(this);
+        var $productId = $this.data('productid');
+        var $categoryId = $this.data('categoryid');
+        var $categoryName = $this.data('othercategoryname'); 
+
+        $("#editTextProductId").val($productId);
+        $("#editTextCategoryId").val($categoryId);
+        $("#editTextCategoryName").val($categoryName);
+        $("#formEdit").submit();
+    });
+
     $(document.body).on('click','.btn-restore',function () {
         var $confirm = confirm("Are you sure you want to restore this item?");
         if($confirm){
@@ -660,18 +672,6 @@
                 }
             });
         }
-    });
-
-    $(document.body).on('click','.btn-edit-product',function () {
-        var $this = $(this);
-        var $productId = $this.data('productid');
-        var $categoryId = $this.data('categoryid');
-        var $categoryName = $this.data('othercategoryname'); 
-
-        $("#editTextProductId").val($productId);
-        $("#editTextCategoryId").val($categoryId);
-        $("#editTextCategoryName").val($categoryName);
-        $("#formEdit").submit();
     });
 
     $("#feedbacks").on('click',".individual, .extremes",function () {
@@ -2288,6 +2288,59 @@
         }, 700);
     }
     
+    $('.open-express-edit').click(function() {
+        $('#express-edit-section').dialog({
+            autoOpen: true,
+            dialogClass: 'express-edit-wrapper',
+            width: 1180,
+            modal: true,
+            fluid: true,
+            draggable: false,
+        });
+    });
+
+    $("#express-edit-section").dialog({
+        autoOpen: false,
+        open: function(){
+            $('.ui-widget-overlay').bind('click',function(){
+                $('#express-edit-section').dialog('close');
+            })
+        }
+    });
+
+    // on window resize run function
+    $(window).resize(function () {
+        fluidDialog();
+    });
+
+    // catch dialog if opened within a viewport smaller than the dialog width
+    $(document).on("dialogopen", ".ui-dialog", function (event, ui) {
+        fluidDialog();
+    });
+
+    function fluidDialog() {
+        var $visible = $(".ui-dialog:visible");
+        // each open dialog
+        $visible.each(function () {
+            var $this = $(this);
+            var dialog = $this.find(".ui-dialog-content").data("ui-dialog");
+            // if fluid option == true
+            if (dialog.options.fluid) {
+                var wWidth = $(window).width();
+                // check window width against dialog width
+                if (wWidth < (parseInt(dialog.options.maxWidth) + 50))  {
+                    // keep dialog from filling entire screen
+                    $this.css("max-width", "90%");
+                } else {
+                    // fix maxWidth bug
+                    $this.css("max-width", dialog.options.maxWidth + "px");
+                }
+                //reposition dialog
+                dialog.option("position", dialog.options.position);
+            }
+        });
+    };
+
     $( "#activate-products" ).click(function() {
         $( ".current-activate-prod" ).slideToggle( "fast" );
         $( ".edit-activate-prod" ).slideToggle( "fast" );
@@ -2314,6 +2367,7 @@
     $( "#cancel-delete-products" ).click(function() {
         $( "#delete-products" ).trigger( "click" );
     });
+
 }(jQuery));
 
 
