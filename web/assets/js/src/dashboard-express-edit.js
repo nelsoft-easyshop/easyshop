@@ -14,8 +14,11 @@
     {
         var finalPrice;
         var finalDiscountRate;
+        var discounted;
         if(discountPrice === 0){
-            $(".discount-price").val(replaceNumberWithCommas(basePrice.toFixed(2)));
+            discounted = basePrice * (discountRate/100);
+            finalPrice = Math.abs(parseFloat(basePrice - discounted)); 
+            $(".discount-price").val(replaceNumberWithCommas(finalPrice.toFixed(2)));
         }
         else{
             finalDiscountRate = ((basePrice - discountPrice) / basePrice) * 100;
@@ -100,11 +103,12 @@
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
         var $value = parseInt(removeComma($this.val()));
-        var $discountRate = parseFloat(removeComma($container.find('.discount-rate').val()));
-        validate($this);
+        var $discountRate = parseFloat(removeComma($container.find('.discount-rate').val())); 
+        
         if($value >= 0){
             computeDiscountPrice($value, $discountRate, 0);
         }
+        validate($this);
         $this.val(replaceNumberWithCommas($value.toFixed(2)));
     });
 
@@ -117,8 +121,8 @@
         validate($this);
         if($value >= 0 && $value <= 99){  
             computeDiscountPrice($basePrice, $value, 0);
-            validate($this);
         }
+        validate($this);
         $this.val($value.toFixed(4));
     });
 
@@ -131,8 +135,8 @@
         validate($this);
         if($value <= $basePrice && $value > 0){  
             computeDiscountPrice($basePrice, 0, $value);
-            validate($this);
         }
+        validate($this);
         $this.val(replaceNumberWithCommas($value.toFixed(2)));
     });
 
