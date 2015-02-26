@@ -197,7 +197,6 @@ $(document).ready(function(){
         var selected = $('#deposit_info [value="'+account.billing_id+'"]');
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
-        console.log(account);
         jQuery.ajax({
             type: "POST",
             url: '/memberpage/updatePaymentAccount', 
@@ -453,11 +452,9 @@ $(function(){
                         return value != loc;
                     });
                 });
-            });		
+            });
         }
         $(this).closest('div.shipping_group').remove();
-        
-        console.log(checkData);
         
     });
     
@@ -493,9 +490,7 @@ $(function(){
             
         }
         
-        // $(this).parent().remove();
         divInput.remove();
-        console.log(checkData);
     });
     
     // On change handler for select location
@@ -562,8 +557,6 @@ $(function(){
                 });
             }
         }
-        
-        console.log(checkData);
     });
     
     // On change handler for checkbox
@@ -610,11 +603,7 @@ $(function(){
             }
             thisCheckbox.parent('label').removeClass('active');
         }
-        
-        
-        console.log(checkData);
     });
-    console.log(checkData);
 });
 
 
@@ -854,7 +843,6 @@ $(function(){
                 i++;
             });
         }
-        console.log(checkData);
     }); 
     
     /*
@@ -999,7 +987,6 @@ $(function(){
                     // Check each select and hide delete button when headId is selected (then is removed)
                     allSelect.each(function(){
                         selectedVal = parseInt($(this).val());
-                        console.log(selectedVal);
                         if( selectedVal === headId ){
                             $(this).siblings('.delete_ship_pref').hide();
                         }
