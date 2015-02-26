@@ -105,14 +105,14 @@
                 </div>
 
                 <?php foreach($categoryProducts as $catId => $categoryData):?>
-            
+
                     <div class="view row row-items grid category-products <?php echo $categoryData['isActive'] ? 'active' : ''?>" 
-                        id="def-<?php echo $catId?>"
-                        data-catId='<?php echo $categoryData['json_subcat']?>' 
+                        id="def-<?php echo html_escape($catId); ?>"
+                        data-catId='<?php echo html_escape($categoryData['json_subcat']);?>' 
                         style="display:<?php echo $categoryData['isActive'] ? '' : 'none'?>" 
-                        data-group="<?php echo $catId?>" 
-                        data-productcount="<?=$categoryData['non_categorized_count']?>"
-                        data-catType="<?php echo $categoryData['cat_type']?>"
+                        data-group="<?php echo html_escape($catId); ?>" 
+                        data-productcount="<?= html_escape($categoryData['non_categorized_count']) ?>"
+                        data-catType="<?php echo html_escape($categoryData['cat_type']); ?>"
                     >                    
                         <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
                         <?php if($categoryData['non_categorized_count'] === 0): ?>
