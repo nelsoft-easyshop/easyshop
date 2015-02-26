@@ -33,11 +33,11 @@ class EsMemberCatRepository extends EntityRepository
                 FROM es_member_cat
                 LEFT JOIN es_member_prodcat 
                     ON es_member_cat.id_memcat = es_member_prodcat.memcat_id
-                INNER JOIN es_product
+                LEFT JOIN es_product
                     ON es_product.is_draft = :nonDraft AND es_product.is_delete = :active
                     AND es_product.id_product = es_member_prodcat.product_id
                 WHERE es_member_cat.member_id = :member_id
-                GROUP BY es_member_prodcat.memcat_id
+                GROUP BY es_member_cat.id_memcat
                 ORDER BY es_member_cat.id_memcat DESC
                 ';
 
