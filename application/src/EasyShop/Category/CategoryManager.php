@@ -233,13 +233,13 @@ class CategoryManager
                 $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
                                                ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
                 $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                         ->countCustomCategoryProducts($memberId, $arrCatId);
+                                         ->countCustomCategoryProducts($memberId, $arrCatId);                            
             }
             else{
                 $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                               ->getPagedNotCustomCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
+                                               ->getDefaultCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
                 $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                         ->countNotCustomCategorizedProducts($memberId, $arrCatId);    
+                                         ->countDefaultCategorizedProducts($memberId, $arrCatId);    
             }
             $isFiltered = false;    
         }
@@ -254,7 +254,7 @@ class CategoryManager
             }
             else{
                 $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                               ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
+                                               ->getAllDefaultCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
             }
 
             if($lprice !== "" || $uprice !== "") {
@@ -330,11 +330,13 @@ class CategoryManager
         }    
 
         $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                     ->getCustomCategoriesArray($memberId);     
+                                     ->getCustomCategoriesArray($memberId);    
+
         /**
          * Obtain data for customized categories
          */
         $cleanNameMemberCategories = [];
+        $highestSortOrder = 0;
         foreach( $memberCategories as $memberCategory ){
             $index = 'custom-'.$memberCategory['id_memcat'];
             $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
@@ -347,12 +349,15 @@ class CategoryManager
             $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
             $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
             $cleanNameMemberCategories[] = $this->stringUtility->cleanString($memberCategory['cat_name']);
+            if((int)$memberCategory['sort_order'] > (int)$highestSortOrder){
+                $highestSortOrder = $memberCategory['sort_order'];
+            } 
         }
-        
         /**
          * Obtain data for default categories (grouped by main categories)
          * Matching category names with customized categories are ignored.
          */
+        $highestSortOrder =  empty($memberCategories) ? 0 : $highestSortOrder+1;
         foreach( $rawVendorCategories as $rawVendorCategory ){
             $parentId = (int)$rawVendorCategory['parent_cat'];
             $categoryName = $rawVendorCategory['p_cat_name'];
@@ -360,25 +365,30 @@ class CategoryManager
             $isParentArrayNotAvailable = !isset($vendorCategories[$index]);
             $isParentRoot = $parentId === EsCat::ROOT_CATEGORY_ID;
             if($isParentArrayNotAvailable){
-                $temporaryVendorCategory = [];
-                $sortOrder = 0;
+                $sortOrder = $highestSortOrder;
                 if($isParentRoot){
                     $categoryName = 'Others';
                     $sortOrder = PHP_INT_MAX;
                 }
-                $temporaryVendorCategory['sortOrder'] = $sortOrder;
-                $temporaryVendorCategory['name'] = $categoryName;
-                $temporaryVendorCategory['child_cat'] = [ $parentId ];
-                $temporaryVendorCategory['products'] = [];
-                $temporaryVendorCategory['product_count'] = 0;
-                $temporaryVendorCategory['isActive'] = false;
-                $temporaryVendorCategory['categoryId'] = $parentId;
-                $temporaryVendorCategory['memberCategoryId'] = 0;       
-                $temporaryVendorCategory['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+                $vendorCategories[$index]['sortOrder'] = $sortOrder;
+                $vendorCategories[$index]['name'] = $categoryName;
+                $vendorCategories[$index]['child_cat'] = [ $parentId ];
+                $vendorCategories[$index]['products'] = [];
+                $vendorCategories[$index]['product_count'] = 0;
+                $vendorCategories[$index]['isActive'] = false;
+                $vendorCategories[$index]['categoryId'] = $parentId;
+                $vendorCategories[$index]['memberCategoryId'] = 0;       
+                $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+            }              
+            /**
+             * Ignore default categories that have the same name as a custom category
+             */
+            $cleanedCategoryName = $this->stringUtility->cleanString($vendorCategories[$index]['name']);
+            if(in_array($cleanedCategoryName, $cleanNameMemberCategories)){
+                unset($vendorCategories[$index]);
+                continue;
             }
-            
-            $cleanedCategoryName = $this->stringUtility->cleanString($temporaryVendorCategory['name']);
-            $vendorCategories[$index] = $temporaryVendorCategory;
+
             if(!in_array($rawVendorCategory['cat_id'], $vendorCategories[$index]['child_cat'])){
                 $vendorCategories[$index]['child_cat'][] = $rawVendorCategory['cat_id'];
             }
@@ -388,7 +398,7 @@ class CategoryManager
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
             return $sortArgumentA['sortOrder'] - $sortArgumentB['sortOrder'];
         });
-
+        
         return $vendorCategories;
     }
 
