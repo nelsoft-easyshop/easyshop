@@ -14,12 +14,15 @@
     {
         var finalPrice;
         var finalDiscountRate;
+        var discounted;
         if(discountPrice === 0){
-            $(".discount-price").val(replaceNumberWithCommas(basePrice.toFixed(2)));
+            discounted = basePrice * (discountRate/100);
+            finalPrice = Math.abs(parseFloat(basePrice - discounted)); 
+            $(".discount-price").val(replaceNumberWithCommas(finalPrice.toFixed(2)));
         }
         else{
             finalDiscountRate = ((basePrice - discountPrice) / basePrice) * 100;
-            $(".discount-rate").val(finalDiscountRate.toFixed(4));
+            $(".discount-rate").val(finalDiscountRate.toFixed(2));
         }
     }
 
@@ -49,7 +52,7 @@
         var $productName = $.trim($container.find('.product-name').val());
         var $errorCount = 0;
 
-        if($basePrice > 0){
+        if(parseInt($basePrice) > 0){
             validateWhiteTextBox('.base-price');
         }
         else{
@@ -76,7 +79,7 @@
             showError("Invalid discount. Range must be 0 - 99 only.");
         }
 
-        if($discountPrice <= $basePrice && $discountPrice > 0){
+        if($discountPrice <= $basePrice && parseInt($discountPrice) > 0){
             validateWhiteTextBox('.discount-price');
         }
         else{
@@ -99,41 +102,40 @@
     $(document).on('change',".base-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseInt(removeComma($this.val()));
-        var $discountRate = parseFloat(removeComma($container.find('.discount-rate').val()));
-        validate($this);
-        if($value >= 0){
+        var $value = parseFloat(removeComma($this.val())).toFixed(2);
+        var $discountRate = parseFloat(removeComma($container.find('.discount-rate').val())); 
+        
+        if(parseInt($value) >= 0){
             computeDiscountPrice($value, $discountRate, 0);
         }
-        $this.val(replaceNumberWithCommas($value.toFixed(2)));
+        $this.val(replaceNumberWithCommas($value));
+        validate($this);
     });
 
     $(document).on('change',".discount-rate",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseInt(removeComma($this.val()));
+        var $value = parseFloat(removeComma($this.val())).toFixed(2);
         var $basePrice = parseFloat(removeComma($container.find('.base-price').val()));
 
-        validate($this);
-        if($value >= 0 && $value <= 99){  
+        if(parseInt($value) >= 0 && parseInt($value) <= 99){  
             computeDiscountPrice($basePrice, $value, 0);
-            validate($this);
         }
-        $this.val($value.toFixed(4));
+        $this.val($value);
+        validate($this);
     });
 
     $(document).on('change',".discount-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseInt(removeComma($this.val()));
+        var $value = parseFloat(removeComma($this.val())).toFixed(2);
         var $basePrice = parseFloat(removeComma($container.find('.base-price').val()));
 
-        validate($this);
-        if($value <= $basePrice && $value > 0){  
+        if($value <= $basePrice && parseInt($value) > 0){  
             computeDiscountPrice($basePrice, 0, $value);
-            validate($this);
         }
-        $this.val(replaceNumberWithCommas($value.toFixed(2)));
+        $this.val(replaceNumberWithCommas($value));
+        validate($this);
     });
 
     $(document.body).on('click','.cancel-btn',function () {
@@ -210,13 +212,13 @@
                             $originalAmountContainer.remove();
                             $discountContainer.remove();
                         }
-                        $this.closest('.ui-dialog-content').dialog('close');  
+                        $this.closest('.ui-dialog-content').dialog('close'); 
+                        $slug = null;
+                        $productId = null; 
                     }
                     else{
                         alert($response.error);
                     }
-                    $slug = null;
-                    $productId = null; 
                 }
             });
         }
