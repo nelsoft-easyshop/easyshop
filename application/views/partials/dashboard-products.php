@@ -1,6 +1,8 @@
 
 <div id="express-edit-section">
-    <center><img src="/assets/images/loading/preloader-whiteBG-small.gif" alt="Please wait !!!"></center>
+    <center class="loading-image"><img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG-small.gif" alt="Please wait !!!"></center>
+    <div class="express-edit-section-content">
+    </div>
 </div>
 
 <?php foreach ($products as $product): ?>

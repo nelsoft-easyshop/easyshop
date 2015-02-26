@@ -248,7 +248,8 @@
         $slug = $this.data('slug');
         $productId = $this.data('pid');
 
-        $(".ui-dialog > #express-edit-section").html('<center><img src="/assets/images/loading/preloader-whiteBG-small.gif" alt="Please wait !!!"></center>');
+        $(".loading-image").show();
+        $(".ui-dialog > #express-edit-section .express-edit-section-content").html("");
         $('#express-edit-section').dialog({
             autoOpen: true,
             dialogClass: 'express-edit-wrapper',
@@ -263,7 +264,8 @@
                     url: '/me/product/expressedit-request',
                     success: function(requestResponse){ 
                         var $response = $.parseJSON(requestResponse);
-                        $(".ui-dialog > #express-edit-section").html($response); 
+                         $(".loading-image").hide();
+                        $(".ui-dialog > #express-edit-section .express-edit-section-content").html($response); 
                         $(".error-message").hide(); 
                         $(".base-price").trigger("change");
                         fluidDialog();
