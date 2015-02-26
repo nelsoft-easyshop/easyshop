@@ -127,21 +127,12 @@
     // Bind event listener
     $window.resize(checkWidth);
 
-    var delay = (function(){
-        var timer = 0;
-        return function(callback, ms){
-            clearTimeout (timer);
-            timer = setTimeout(callback, ms);
-        };
-    })();
-
-    var $window = $(window);
     $window.on('load resize', function() {
-        delay(function(){
+        setTimeout(function(){ 
             var TdContactDetail = $(".panel-contact-details").width();
             var TdContactWidth = (TdContactDetail - 72);
             $(".text-contact").css("width", TdContactWidth);
-        }, 500);
+      }, 300);
     });
     
 })(jQuery);
