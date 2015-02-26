@@ -360,7 +360,11 @@ class CategoryManager
                 $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['id_memcat'] : 0;
                 $vendorCategories[$parentId]['memberCategoryId'] = $memberCategoryId;           
             }
-            $vendorCategories[$parentId]['child_cat'][] = $vendorCategory['cat_id'];
+            
+            $childCategoryId = $vendorCategory['cat_id'];
+            if(!in_array($childCategoryId, $vendorCategories[$parentId]['child_cat'])){
+                $vendorCategories[$parentId]['child_cat'][] = $vendorCategory['cat_id'];
+            }
             $vendorCategories[$parentId]['product_count'] += $vendorCategory['prd_count'];
         }
 
@@ -376,10 +380,11 @@ class CategoryManager
     /**
      * Updates is_delete field to '1' of a custom category
      * Inserts new record with a is_delete value of '1' if category name is not found
-     * @param array $categoryArray
+     * 
+     * @param mixed $categoryArray
      * @param int $memberId
      * 
-     * @return bool
+     * @return boolean
      */
     public function deleteUserCustomCategory($categoryArray, $memberId)
     {
@@ -408,8 +413,6 @@ class CategoryManager
         catch(Exception $e) {
             return false;
         }
-
-
     }
 
 } 
