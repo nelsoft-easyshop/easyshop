@@ -28,7 +28,9 @@ class IsAccountNumberUniqueValidator extends ConstraintValidator
                                 ->from('\EasyShop\Entities\EsBillingInfo', 'b')
                                 ->where('b.member = :member')
                                 ->andWhere('b.bankAccountNumber = :account_number')
+                                ->andWhere('b.isDelete = :isDelete')
                                 ->setParameter('member', $memberId)
+                                ->setParameter('isDelete', false)
                                 ->setParameter('account_number', $value);
         if($accountId !== null){
             $queryBuilder->andWhere('b.idBillingInfo != :idBillingInfo')
