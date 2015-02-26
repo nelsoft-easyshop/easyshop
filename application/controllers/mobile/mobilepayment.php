@@ -359,6 +359,7 @@ class mobilePayment extends MY_Controller
                 'quantity' => $value->getOrderQuantity(),
                 'price' => $value->getTotal(),
                 'name' => $productDetails->getProduct()->getName(),
+                'slug' => $productDetails->getProduct()->getSlug(),
                 'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
             ];
         }
