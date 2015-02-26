@@ -1,7 +1,3 @@
-
-<style>
-
-</style>
 <link rel="stylesheet" type="text/css" href="/assets/css/new-login.css" media='screen'/>
 <div class="clear"></div>
 <section>
