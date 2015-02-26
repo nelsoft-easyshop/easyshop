@@ -9,6 +9,33 @@ use EasyShop\Entities\EsMemberCat;
 
 class EsMemberCatRepository extends EntityRepository
 {
+
+    /**
+     *  Checks if a category name exists
+     *
+     *  @param string $categoryName
+     *  @param integer $idMember
+     *  @return bool
+     */
+    public function checkIfCustomCategoryNameExists($categoryName, $idMember)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('count','count');
+        $sql = 'SELECT COUNT(*) as count
+                FROM es_member_cat
+                WHERE cat_name != :catName 
+                AND member_id = :memberId
+                ';
+        $query = $em->createNativeQuery($sql,$rsm)
+                    ->setParameter("catName", $categoryName)
+                    ->setParameter("memberId", $idMember);
+
+        $numberOfCategories = $query->getSingleScalarResult();
+
+        return $numberOfCategories > 0;
+    }
+
     /**
      *  Fetch custom categories of memberId in array form
      *
