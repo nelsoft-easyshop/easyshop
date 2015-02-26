@@ -78,8 +78,8 @@ class EsMemberRepository extends EntityRepository
             FROM 
                 es_member
             WHERE 
-                store_name = :storeName OR
-                ((store_name IS NULL OR store_name = "") AND username = :storeName)
+                BINARY store_name  = :storeName OR
+                ((BINARY store_name IS NULL OR BINARY store_name = "") AND BINARY username = :storeName)
         ';
         
         if($excludeMemberId !== null){
