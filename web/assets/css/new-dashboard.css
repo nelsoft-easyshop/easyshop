@@ -1464,6 +1464,18 @@ a{
     margin: 0 7px 10px 0; 
     text-align: center; 
     z-index: 99999;
+    border-radius: 4px;
+}
+
+.allItems li:hover,
+.allItems li:active,
+.customCategory li:hover,
+.customCategory li:active,
+.allItems_edit li:hover,
+.allItems_edit li:active,
+.customCategory_edit li:hover,
+.customCategory_edit li:active{
+    border: solid #565656 1px;
 }
 
 .allItems li h5,
