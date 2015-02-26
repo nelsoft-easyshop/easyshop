@@ -408,7 +408,7 @@ class ApiFormatter
      * @param  integer $memberId
      * @return array
      */
-    public function updateCart($mobileCartContents, $memberId, $includeUnavailable = false)
+    public function updateCart($mobileCartContents, $memberId, $includeUnavailable = true)
     {
         $unavailableItem = [];
         $itemList = []; 

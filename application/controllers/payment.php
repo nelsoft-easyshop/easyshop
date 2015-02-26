@@ -1353,11 +1353,11 @@ class Payment extends MY_Controller{
             $emailService->setRecipient($buyerEmail)
                          ->setSubject($buyerSubject)
                          ->setMessage($buyerMsg, $imageArray)
-                         ->sendMail();
+                         ->queueMail();
 
             $smsService->setMobile($buyerData['buyer_contactno'])
                        ->setMessage($buyerSmsMsg)
-                       ->sendSms();
+                       ->queueSMS();
             
             #Send message via easyshop_messaging to buyer
             if($this->user_model->getUserById($sender)){
@@ -1395,11 +1395,11 @@ class Payment extends MY_Controller{
                 $emailService->setRecipient($sellerEmail)
                              ->setSubject($sellerSubject)
                              ->setMessage($sellerMsg, $imageArray)
-                             ->sendMail();
+                             ->queueMail();
                 
                 $smsService->setMobile($seller['seller_contactno'])
                            ->setMessage($sellerSmsMsg)
-                           ->sendSms();
+                           ->queueSMS();
 
                 #Send message via easyshop_messaging to seller
                 if($this->user_model->getUserById($sender)){
