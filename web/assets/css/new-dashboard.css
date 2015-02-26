@@ -2369,6 +2369,10 @@ label.css-label {
 }
 .express-edit-wrapper {
     width: 95% !important;
+    -webkit-transition: top 0.5s ease-in-out;
+    -moz-transition:    top 0.5s ease-in-out;
+    -o-transition:      top 0.5s ease-in-out;
+     transition:        top 0.5s ease-in-out;
 }
 
 .express-edit-wrapper.ui-widget-content {
