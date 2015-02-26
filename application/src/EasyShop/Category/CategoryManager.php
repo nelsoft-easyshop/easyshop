@@ -327,7 +327,7 @@ class CategoryManager
             $cleanedCategoryName = strtolower(str_replace(' ', '', $category['cat_name']));
             $indexedMemberCategoriesByName[$cleanedCategoryName] = $category;
         }
-
+   
         foreach( $rawVendorCategories as $vendorCategory ){
             $parentId = (int)$vendorCategory['parent_cat'];
             $categoryName = $vendorCategory['p_cat_name'];
@@ -338,7 +338,6 @@ class CategoryManager
             if($hasNoParent){
                 $vendorCategories[$parentId] = [];
                 if( !$isCategoryMainParent ){
-                    $vendorCategories[$parentId]['slug'] = $vendorCategory['p_cat_slug'];
                     $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : 0;
                     $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
@@ -346,7 +345,6 @@ class CategoryManager
                     $categoryName = 'Others';
                     $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
                     $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
-                    $vendorCategories[$parentId]['slug'] = "";
                     $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : PHP_INT_MAX;
                     $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
@@ -368,11 +366,11 @@ class CategoryManager
             $vendorCategories[$parentId]['product_count'] += $vendorCategory['prd_count'];
         }
 
+
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
             return $sortArgumentA['sortOrder'] - $sortArgumentB['sortOrder'];
         });
         
-  
         return $vendorCategories;
     }
 
