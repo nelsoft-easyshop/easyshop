@@ -1178,31 +1178,42 @@ class productUpload extends MY_Controller
         
         if( $this->input->post('data') && $this->input->post('name') ){
             $preferenceData = $this->input->post('data');
-            $preferenceName = $this->input->post('name');
-            
+            $preferenceName = trim($this->input->post('name'));
             $member_id = $this->session->userdata('member_id');
-            
-            // Insert name vs memid in shipping pref head
-            // Returns last id inserted on success, false on failure
-            $resultHead = $this->product_model->storeShippingPreferenceHead($member_id, $preferenceName);
-            
-            $serverResponse['result'] = $resultHead ? 'success' : 'fail';
-            $serverResponse['error'] = $resultHead ? '' : 'Failed to store preference head.';
-            
-            // if success, enter shipping details
-            if($resultHead){
-                foreach($preferenceData as $loc=>$price){
-                    $resultDetail = $this->product_model->storeShippingPreferenceDetail($resultHead, $loc, $price);
-                    
-                    if(!$resultDetail){
-                        $serverResponse['result'] = 'fail';
-                        $serverResponse['error'] = 'Failed to insert preference. Data stored may be incomplete.';
-                        break;
+
+            $preferenceCount = $this->em->getRepository('EasyShop\Entities\EsProductShippingPreferenceHead')
+                                        ->findBy([
+                                            'title' => $preferenceName,
+                                            'member' => $member_id,
+                                        ]);
+
+            if(count($preferenceCount) <= 0){
+                // Insert name vs memid in shipping pref head
+                // Returns last id inserted on success, false on failure
+                $resultHead = $this->product_model->storeShippingPreferenceHead($member_id, $preferenceName);
+                
+                $serverResponse['result'] = $resultHead ? 'success' : 'fail';
+                $serverResponse['error'] = $resultHead ? '' : 'Failed to store preference head.';
+                
+                // if success, enter shipping details
+                if($resultHead){
+                    foreach($preferenceData as $loc=>$price){
+                        $resultDetail = $this->product_model->storeShippingPreferenceDetail($resultHead, $loc, $price);
+                        
+                        if(!$resultDetail){
+                            $serverResponse['result'] = 'fail';
+                            $serverResponse['error'] = 'Failed to insert preference. Data stored may be incomplete.';
+                            break;
+                        }
+                    }
+                    if($resultDetail){
+                        $serverResponse['shipping_preference'] = $this->product_model->getShippingPreference($member_id);
                     }
                 }
-                if($resultDetail){
-                    $serverResponse['shipping_preference'] = $this->product_model->getShippingPreference($member_id);
-                }
+            }
+            else{  
+                $serverResponse['result'] = 'fail';
+                $serverResponse['error'] = 'Preference name already exist!';
             }
         }
         echo json_encode($serverResponse, JSON_FORCE_OBJECT);
