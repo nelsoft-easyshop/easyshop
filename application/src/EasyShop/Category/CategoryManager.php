@@ -66,16 +66,25 @@ class CategoryManager
      */
     private $sortUtility;
     
+    
+    /**
+     * String utility
+     *
+     * @var EasyShop\Utility\StringUtility
+     */
+    private $stringUtility;
+    
     /**
      *  Constructor. Retrieves Entity Manager instance
      */
-    public function __construct($configLoader, $em, $productManager, $promoManager, $sortUtility)
+    public function __construct($configLoader, $em, $productManager, $promoManager, $sortUtility, $stringUtility)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
         $this->productManager = $productManager;
         $this->promoManager = $promoManager;
         $this->sortUtility = $sortUtility;
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -319,58 +328,67 @@ class CategoryManager
             $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
                                         ->getUserCategoriesUsingNestedSet($memberId);
         }    
-        
+
         $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                     ->getCustomCategoriesArray($memberId);      
-        $indexedMemberCategoriesByName = [];
-        foreach($memberCategories as $category){
-            $cleanedCategoryName = strtolower(str_replace(' ', '', $category['cat_name']));
-            $indexedMemberCategoriesByName[$cleanedCategoryName] = $category;
+                                     ->getCustomCategoriesArray($memberId);     
+        /**
+         * Obtain data for customized categories
+         */
+        $cleanNameMemberCategories = [];
+        foreach( $memberCategories as $memberCategory ){
+            $index = 'custom-'.$memberCategory['id_memcat'];
+            $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
+            $vendorCategories[$index]['child_cat'] = [ $memberCategory['id_memcat'] ];
+            $vendorCategories[$index]['products'] = [];
+            $vendorCategories[$index]['product_count'] = $memberCategory['product_count'];
+            $vendorCategories[$index]['isActive'] = false;
+            $vendorCategories[$index]['categoryId'] = 0;
+            $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
+            $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
+            $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+            $cleanNameMemberCategories[] = $this->stringUtility->cleanString($memberCategory['cat_name']);
         }
-   
-        foreach( $rawVendorCategories as $vendorCategory ){
-            $parentId = (int)$vendorCategory['parent_cat'];
-            $categoryName = $vendorCategory['p_cat_name'];
-            $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
-            $hasNoParent = !isset($vendorCategories[$parentId]);
-            $isCategoryMainParent = $parentId === EsCat::ROOT_CATEGORY_ID;
-            $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
-            if($hasNoParent){
-                $vendorCategories[$parentId] = [];
-                if( !$isCategoryMainParent ){
-                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : 0;
-                    $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
-                }
-                else if( $hasNoParent && $isCategoryMainParent){
+        
+        /**
+         * Obtain data for default categories (grouped by main categories)
+         * Matching category names with customized categories are ignored.
+         */
+        foreach( $rawVendorCategories as $rawVendorCategory ){
+            $parentId = (int)$rawVendorCategory['parent_cat'];
+            $categoryName = $rawVendorCategory['p_cat_name'];
+            $index = 'default-'.$parentId;
+            $isParentArrayNotAvailable = !isset($vendorCategories[$index]);
+            $isParentRoot = $parentId === EsCat::ROOT_CATEGORY_ID;
+            if($isParentArrayNotAvailable){
+                $temporaryVendorCategory = [];
+                $sortOrder = 0;
+                if($isParentRoot){
                     $categoryName = 'Others';
-                    $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
-                    $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
-                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : PHP_INT_MAX;
-                    $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
+                    $sortOrder = PHP_INT_MAX;
                 }
-                $vendorCategories[$parentId]['name'] = $categoryName;
-                $vendorCategories[$parentId]['child_cat'] = [ $parentId ];
-                $vendorCategories[$parentId]['products'] = [];
-                $vendorCategories[$parentId]['product_count'] = 0;
-                $vendorCategories[$parentId]['isActive'] = false;
-                $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-                $vendorCategories[$parentId]['categoryId'] = $parentId;
-                $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['id_memcat'] : 0;
-                $vendorCategories[$parentId]['memberCategoryId'] = $memberCategoryId;           
+                $temporaryVendorCategory['sortOrder'] = $sortOrder;
+                $temporaryVendorCategory['name'] = $categoryName;
+                $temporaryVendorCategory['child_cat'] = [ $parentId ];
+                $temporaryVendorCategory['products'] = [];
+                $temporaryVendorCategory['product_count'] = 0;
+                $temporaryVendorCategory['isActive'] = false;
+                $temporaryVendorCategory['categoryId'] = $parentId;
+                $temporaryVendorCategory['memberCategoryId'] = 0;       
+                $temporaryVendorCategory['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
             }
             
-            $childCategoryId = $vendorCategory['cat_id'];
-            if(!in_array($childCategoryId, $vendorCategories[$parentId]['child_cat'])){
-                $vendorCategories[$parentId]['child_cat'][] = $vendorCategory['cat_id'];
+            $cleanedCategoryName = $this->stringUtility->cleanString($temporaryVendorCategory['name']);
+            $vendorCategories[$index] = $temporaryVendorCategory;
+            if(!in_array($rawVendorCategory['cat_id'], $vendorCategories[$index]['child_cat'])){
+                $vendorCategories[$index]['child_cat'][] = $rawVendorCategory['cat_id'];
             }
-            $vendorCategories[$parentId]['product_count'] += $vendorCategory['prd_count'];
+            $vendorCategories[$index]['product_count'] += $rawVendorCategory['prd_count'];
         }
-
 
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
             return $sortArgumentA['sortOrder'] - $sortArgumentB['sortOrder'];
         });
-        
+
         return $vendorCategories;
     }
 
