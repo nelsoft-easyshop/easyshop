@@ -81,6 +81,7 @@
             }
             $('.promoimgloader').show();
             $('#apply-fullname').hide();
+            $('#mdl-cancel').hide();
             $.ajax({
                 url : '/promo/ScratchCard/updateFullname',
                 dataType : 'json',
