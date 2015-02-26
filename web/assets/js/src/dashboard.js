@@ -2524,9 +2524,7 @@
             moveToAll_edit( ui.draggable );
           }
         });
-
-        $allItems_edit.sortable();
-     
+        
         // move to custom category function
         var allItems_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-all-items_edit pull-right'></a>";
         function moveToCustom_edit( $item_edit ) {
