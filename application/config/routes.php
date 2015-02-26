@@ -190,6 +190,9 @@ else {
     #MOBILE
     $route['mobile/payment-type'] = 'mobile/mobilepayment/getPaymentMethod';
     $route['mobile/payment/review'] = 'mobile/mobilepayment/reviewPayment';
+    $route['mobile/payment/pay/request'] = 'mobile/mobilepayment/paymentRequestToken';
+    $route['mobile/payment/pay/cod'] = 'mobile/mobilepayment/paymentCashOnDelivery';
+    $route['mobile/payment/pay/paypal'] = 'mobile/mobilepayment/paymentPaypalPersist';
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 

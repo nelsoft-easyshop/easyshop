@@ -408,7 +408,7 @@ class ApiFormatter
      * @param  integer $memberId
      * @return array
      */
-    public function updateCart($mobileCartContents, $memberId)
+    public function updateCart($mobileCartContents, $memberId, $includeUnavailable = false)
     {
         $unavailableItem = [];
         $itemList = []; 
@@ -453,6 +453,10 @@ class ApiFormatter
                 unset($itemList[$key]);
             }
         } 
+
+        if(!$includeUnavailable){
+            return $this->formatCart($cartData);
+        }
 
         return [
             'availableItems' => $this->formatCart($cartData),
