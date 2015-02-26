@@ -1,6 +1,6 @@
 
 <div id="express-edit-section">
-    PLEASE WAIT!!
+    <center><img src="/assets/images/loading/preloader-whiteBG-small.gif" alt="Please wait !!!"></center>
 </div>
 
 <?php foreach ($products as $product): ?>
