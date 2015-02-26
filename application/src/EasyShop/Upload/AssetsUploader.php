@@ -376,7 +376,6 @@ class AssetsUploader
     }
 
     /**
-<<<<<<< HEAD
      * Uploads the product image. 
      * This method supports multiple uploads
      * This method uploads the file in the $_FILES super global method
@@ -475,7 +474,9 @@ class AssetsUploader
             'fileNames' => $finalFileNames,
             'errorMessage' => $errorMessage,
         ];
-=======
+    }
+
+    /**
      * Check if file type to be uploaded is valid
      * @param  file    $file available for using getimagesize function
      * @return boolean
@@ -501,8 +502,7 @@ class AssetsUploader
             return true;
         }
 
-        return false;
->>>>>>> issue-2999
+        return false; 
     }
 }
 
