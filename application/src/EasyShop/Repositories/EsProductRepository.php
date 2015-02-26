@@ -554,14 +554,8 @@ class EsProductRepository extends EntityRepository
         $dql = "
             SELECT COUNT(p.idProduct)
             FROM EasyShop\Entities\EsProduct p
-            WHERE p.idProduct NOT IN (
-                    SELECT p2.idProduct
-                    FROM EasyShop\Entities\EsMemberProdcat pc
-                    JOIN pc.memcat mc
-                    JOIN pc.product p2
-                    WHERE mc.member = :member_id
-                )
-                AND p.member = :member_id
+            WHERE
+                p.member = :member_id
                 AND p.cat IN ( " . $catInCondition . " )
                 AND p.isDelete = 0
                 AND p.isDraft = 0 ";
@@ -608,14 +602,8 @@ class EsProductRepository extends EntityRepository
         $dql = "
             SELECT p
             FROM EasyShop\Entities\EsProduct p
-            WHERE p.idProduct NOT IN (
-                    SELECT p2.idProduct
-                    FROM EasyShop\Entities\EsMemberProdcat pc
-                    JOIN pc.memcat mc
-                    JOIN pc.product p2
-                    WHERE mc.member = :member_id
-                )
-                AND p.member = :member_id
+            WHERE
+                p.member = :member_id
                 AND p.cat IN ( " . $catInCondition . " )
                 AND p.isDelete = 0
                 AND p.isDraft = 0 
@@ -671,14 +659,8 @@ class EsProductRepository extends EntityRepository
         $dql = "
             SELECT p.idProduct
             FROM EasyShop\Entities\EsProduct p
-            WHERE p.idProduct NOT IN (
-                    SELECT p2.idProduct
-                    FROM EasyShop\Entities\EsMemberProdcat pc
-                    JOIN pc.memcat mc
-                    JOIN pc.product p2
-                    WHERE mc.member = :member_id
-                )
-                AND p.member = :member_id
+            WHERE
+                p.member = :member_id
                 AND p.cat IN ( " . $catInCondition . " )
                 AND p.isDelete = 0
                 AND p.isDraft = 0 ";
