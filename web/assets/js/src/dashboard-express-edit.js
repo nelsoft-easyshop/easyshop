@@ -118,7 +118,6 @@
         var $value = parseInt(removeComma($this.val()));
         var $basePrice = parseFloat(removeComma($container.find('.base-price').val()));
 
-        validate($this);
         if($value >= 0 && $value <= 99){  
             computeDiscountPrice($basePrice, $value, 0);
         }
@@ -132,7 +131,6 @@
         var $value = parseInt(removeComma($this.val()));
         var $basePrice = parseFloat(removeComma($container.find('.base-price').val()));
 
-        validate($this);
         if($value <= $basePrice && $value > 0){  
             computeDiscountPrice($basePrice, 0, $value);
         }
