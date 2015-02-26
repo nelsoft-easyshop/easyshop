@@ -17,6 +17,12 @@ if (typeof jQuery.ui != 'undefined') {
     };
 }
 
+$('a.open-redirect').on('click', function ()
+{
+    var url = $(this).data('url');
+    window.location.replace('/redirect?url=' + url)
+});
+
 var entityMap = {
     "&": "&amp;",
     "<": "&lt;",
