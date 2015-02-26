@@ -171,6 +171,7 @@ else {
     $route['(?i)messages'] = '/MessageController/messages';
 
     $route['(?i)register'] = '/login';
+    $route['(?i)redirect'] = '/home/redirect';
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';
     $route['(?i)faq'] = 'home/faq';
