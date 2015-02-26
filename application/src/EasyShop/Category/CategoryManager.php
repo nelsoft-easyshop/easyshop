@@ -464,7 +464,7 @@ class CategoryManager
                     if($productObj) {
                         $memProdCatObj = new EsMemberProdcat();
                         $memProdCatObj->setMemcat($memberCategory);
-                        $memProdCatObj->setProduct($this->em->find('EasyShop\Entities\EsProduct', $product));
+                        $memProdCatObj->setProduct($productObj);
                         $memProdCatObj->setCreatedDate(date_create());
                         $this->em->persist($memProdCatObj);
                     }
