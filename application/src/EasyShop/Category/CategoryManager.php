@@ -339,13 +339,7 @@ class CategoryManager
             if($hasNoParent){
                 $vendorCategories[$parentId] = [];
                 if( !$isCategoryMainParent ){
-                    $categoryImage = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
-                    if($vendorCategory['p_cat_img'] !== "" && file_exists($categoryImage)){
-                        $categoryImage = $defaultCategoryImage;
-                    }
                     $vendorCategories[$parentId]['slug'] = $vendorCategory['p_cat_slug'];
-                    $vendorCategories[$parentId]['cat_link'] = '/category/' . $vendorCategory['p_cat_slug'];
-                    $vendorCategories[$parentId]['cat_img'] = $categoryImage;
                     $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : 0;
                     $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
@@ -354,8 +348,6 @@ class CategoryManager
                     $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
                     $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
                     $vendorCategories[$parentId]['slug'] = "";
-                    $vendorCategories[$parentId]['cat_link'] = "";
-                    $vendorCategories[$parentId]['cat_img'] = $defaultCategoryImage;
                     $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : PHP_INT_MAX;
                     $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
                 }
@@ -369,8 +361,8 @@ class CategoryManager
                 $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['id_memcat'] : 0;
                 $vendorCategories[$parentId]['memberCategoryId'] = $memberCategoryId;           
             }
-            $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
-            $vendorCategories[$vendorCategory['parent_cat']]['product_count'] += $vendorCategory['prd_count'];
+            $vendorCategories[$parentId]['child_cat'][] = $vendorCategory['cat_id'];
+            $vendorCategories[$parentId]['product_count'] += $vendorCategory['prd_count'];
         }
 
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
