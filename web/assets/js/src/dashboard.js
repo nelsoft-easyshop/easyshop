@@ -2385,6 +2385,16 @@
         $( "#delete-products" ).trigger( "click" );
     });
 
+    $( "#btn-edit-delete-categories" ).click(function() {
+        $( ".current-btn-delete" ).slideToggle( "fast" );
+        $( ".edit-btn-delete" ).slideToggle( "fast" );
+    });
+    
+    $( "#cancel-delete-categories" ).click(function() {
+        $( "#btn-edit-delete-categories" ).trigger( "click" );
+    });
+
+
     $('.new-store-category-draggable').sortable();
     $(window).on("load resize",function(){
 
@@ -2590,8 +2600,6 @@
             }
             
         });
-
-        
 
         $(".edit-category").click(function(){
             $(".edit-category-modal").modal({
