@@ -197,13 +197,14 @@ $(document).ready(function(){
         var selected = $('#deposit_info [value="'+account.billing_id+'"]');
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
+        console.log(account);
         jQuery.ajax({
             type: "POST",
-            url: '/memberpage/billing_info_u', 
-            data: "bi_id="+account.billing_id+"&bi_payment_type"+"=Bank&bi_acct_name="+account.account_name+"&bi_acct_no="+account.account_no+"&bi_bank="+account.bank_list+"&"+csrfname+"="+csrftoken, 
+            url: '/memberpage/updatePaymentAccount', 
+            data: "payment-account-id="+account.billing_id+"&account-name="+account.account_name+"&account-number="+account.account_no+"&bank-id="+account.bank_list+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
-                var obj = JSON.parse(response);
-                if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
+                var jsonResponse = JSON.parse(response);
+                if(jsonResponse.isSuccessful){
                     selected.data('bankid',account.bank_list);
                     selected.data('acctname',account.account_name);
                     selected.data('acctno',account.account_no);
@@ -216,12 +217,9 @@ $(document).ready(function(){
                     $('.deposit_edit').show();
                     $('.deposit_update').hide();
                     $('.deposit_cancel').hide();
-                    
-                    
-                }else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
-                    alert('You are already using this account number.');
                 }else{
-                    alert('We are having a problem right now. Refresh the page to try again.');
+                    var error = jsonResponse.errors[0];
+                    alert(escapeHtml(error));
                 }
             }
         });
@@ -231,7 +229,7 @@ $(document).ready(function(){
         var account_name = $('#deposit_acct_name').val();
         var bank_name = $('#bank_name').val();
         var account_no = $('#deposit_acct_no').val();
-        var bank_list = $('#bank_list').val();
+        var bankId = $('#bank_list').val();
         var valid = true;
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -243,7 +241,7 @@ $(document).ready(function(){
             validateRedTextBox('#deposit_acct_no');
             valid = false;
         }
-        if(parseInt(bank_list,10) === 0){
+        if(parseInt(bankId,10) === 0){
             validateRedTextBox('#bank_list');
             valid = false;
         }
@@ -253,20 +251,18 @@ $(document).ready(function(){
         
         jQuery.ajax({
             type: "POST",
-            url: '/memberpage/billing_info', 
-            data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
+            url: '/memberpage/createPaymentAccount', 
+            data: "account-bank-id="+bankId+"&account-name="+account_name+"&account-number="+account_no+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
-                var obj = JSON.parse(response);
-                if((parseInt(obj.e,10) == 0)&&(obj.d=='duplicate')){
-                    alert('You are already using this account number');					
-                }else if((parseInt(obj.e,10) == 1)&&(obj.d=='success')){
+                var jsonResponse = JSON.parse(response);
+                if(jsonResponse.isSuccessful){
                     var new_option = $(document.createElement( "option" ));
                     new_option.data('bankname',bank_name);
-                    new_option.data('bankid',bank_list);
+                    new_option.data('bankid',bankId);
                     new_option.data('acctname',account_name);
                     new_option.data('acctno',account_no);
                     new_option.text('Bank: '+bank_name+' - '+ account_name);
-                    var new_id = parseInt(obj.id,10);
+                    var new_id = parseInt(jsonResponse.newId,10);
                     new_option.val(new_id);
                     new_option.insertBefore($('#deposit_info').find(':selected'));
                     $('#deposit_info').find(':selected').prop('selected', false);
@@ -279,9 +275,10 @@ $(document).ready(function(){
                     $('.deposit_save').hide();
                     $('.deposit_update').hide();
                     $('.deposit_cancel').hide();
-                    
-                }else{
-                    alert('Something went wrong. Pleasy try again later.');
+                }
+                else{
+                    var error = jsonResponse.errors[0];
+                    alert(escapeHtml(error)); 
                 }
             }
         });
