@@ -412,7 +412,10 @@ class AssetsUploader
                 "allowed_types" => self::ALLOWABLE_IMAGE_MIME_TYPES,
                 "max_size" => self::MAX_ALLOWABLE_SIZE_KB,
                 "xss_clean" => false,
+                "max_width" => self::MAX_ALLOWABLE_DIMENSION_PX,
+                "max_height" => self::MAX_ALLOWABLE_DIMENSION_PX,
             ];
+
             $this->uploadLibrary->initialize($config); 
 
             if($this->uploadLibrary->do_multi_upload($fieldName)){

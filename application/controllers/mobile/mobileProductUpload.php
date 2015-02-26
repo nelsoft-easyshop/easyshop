@@ -6,6 +6,7 @@ if (!defined('BASEPATH'))
 use EasyShop\Upload\AssetsUploader as AssetsUploader;
 use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsBillingInfo as EsBillingInfo;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 
 class MobileProductUpload extends MY_Controller 
 {
@@ -106,52 +107,24 @@ class MobileProductUpload extends MY_Controller
     public function uploadImage()
     { 
         $assetsUploader = $this->serviceContainer['assets_uploader']; 
-
         $fileNames = [];
         $imageUpload = [];
-
         $currentImageCount = (int) trim($this->input->post('count')); 
-        $tempId = (string) trim($this->input->post('upload_token'));
-
-        if(isset($_FILES['userfile'])){ 
-            $allowedMime = explode('|', AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES);
-            $fileExtension = strtolower(end(explode('.', $_FILES['userfile']['name'][0]))); 
- 
-            if(in_array(strtolower($fileExtension),$allowedMime)
-               && $_FILES['userfile']['size'][0] < AssetsUploader::MAX_ALLOWABLE_SIZE_KB * 1024
-               && (bool) $_FILES['userfile']['error'][0] === false
-               && $tempId === (string) $this->member->getTempId()){ 
-                
-                $memberId = $this->member->getIdMember();
-                $date = date("Ymd"); 
-                $fullDate = date("YmdGis");
-                $tempDirectory =  'assets/temp_product/'. $tempId.'_'.$memberId.'_'.$date.'/'; 
-                 
-                foreach ($_FILES['userfile']['name'] as $key => $value) {
-                    if($key !== 0){
-                        unset($_FILES['userfile']['name'][$key]);
-                        unset($_FILES['userfile']['type'][$key]);
-                        unset($_FILES['userfile']['tmp_name'][$key]);
-                        unset($_FILES['userfile']['error'][$key]);
-                        unset($_FILES['userfile']['size'][$key]);
-                    }
-                    else{
-                        $fileNames[] = $tempId.'_'.$memberId.'_'.$fullDate.$currentImageCount.'.'.$fileExtension;
-                        $currentImageCount++;
-                    }
-                }
-
-                $imageUpload = $assetsUploader->uploadProductImage($fileNames, $tempDirectory);
-                $imageUpload['pictureCount'] = $currentImageCount;
+        $tempId = (string) trim($this->input->post('upload_token')); 
+        if(isset($_FILES['userfile'])){   
+            $memberId = $this->member->getIdMember();
+            $date = date("Ymd"); 
+            $fullDate = date("YmdGis");
+            $tempDirectory =  'assets/temp_product/'. $tempId.'_'.$memberId.'_'.$date.'/'; 
+             
+            foreach ($_FILES['userfile']['name'] as $key => $value) {
+                $fileExtension = strtolower(end(explode('.', $_FILES['userfile']['name'][$key]))); 
+                $fileNames[] = $tempId.'_'.$memberId.'_'.$fullDate.$currentImageCount.'.'.$fileExtension;
+                $currentImageCount++; 
             }
-            else{ 
-                $imageUpload = [
-                    'isSuccess' => false,
-                    'fileNames' => [],
-                    'errorMessage' => "Please select valid image type. Allowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." Allowed max size: ".AssetsUploader::MAX_ALLOWABLE_SIZE_KB." kb",
-                    'pictureCount' => $currentImageCount
-                ];
-            }
+
+            $imageUpload = $assetsUploader->uploadProductImage($fileNames, $tempDirectory);
+            $imageUpload['pictureCount'] = $currentImageCount; 
         }
         else{
             $imageUpload = [
@@ -306,20 +279,27 @@ class MobileProductUpload extends MY_Controller
                     }
                     $productCombination = $this->productUploadManager->addNewCombination($product, $quantity);
 
-                    foreach( $shippingInfo as $info ){
-                        $price = trim(str_replace(',', '', $info['price']));
-                        $mustBreak = false;
-                        if($info['location_id'] === \EasyShop\Entities\EsLocationLookup::PHILIPPINES_LOCATION_ID){
-                            $price = 0;
-                            $mustBreak = true;
-                        }
+                    if($isFreeShippingNationwide){
                         $this->productUploadManager->addShippingInfo($product, 
                                                                      $productCombination->getIdProductItem(),
-                                                                     trim($info['location_id']),
-                                                                     $price);
-
-                        if($mustBreak){
-                            break;
+                                                                     EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                                                                     0);
+                    }
+                    else{
+                        foreach( $shippingInfo as $info ){
+                            $price = trim(str_replace(',', '', $info['price']));
+                            $mustBreak = false;
+                            if($info['location_id'] === EsLocationLookup::PHILIPPINES_LOCATION_ID){
+                                $price = 0;
+                                $mustBreak = true;
+                            }
+                            $this->productUploadManager->addShippingInfo($product, 
+                                                                         $productCombination->getIdProductItem(),
+                                                                         trim($info['location_id']),
+                                                                         $price);
+                            if($mustBreak){
+                                break;
+                            }
                         }
                     }
 
