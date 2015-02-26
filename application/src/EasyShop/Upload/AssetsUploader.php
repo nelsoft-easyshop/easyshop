@@ -504,5 +504,19 @@ class AssetsUploader
 
         return false; 
     }
+
+    /**
+     * Check if file dimension to be uploaded is valid
+     * @param  file    $file available for using getimagesize function
+     * @return boolean
+     */
+    public function checkValidFileDimension($file)
+    {
+        list($width, $height) = $imageData = getimagesize($file); 
+        if($imageData && $width <= self::MAX_ALLOWABLE_DIMENSION_PX && $height <= self::MAX_ALLOWABLE_DIMENSION_PX){
+            return true;
+        }
+        return false;
+    }
 }
 
