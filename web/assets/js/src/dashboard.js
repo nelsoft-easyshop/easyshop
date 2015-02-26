@@ -1342,11 +1342,25 @@
             escClose: false,
             onShow: function() {
                 if ( thisbtn.hasClass('isform') ) {
-                    $( ".modal_date" ).datepicker({
+                    $( ".dp-delivery-date" ).datepicker({
                         changeMonth: true,
                         changeYear: true,
                         yearRange: '2013:2050',
-                        dateFormat:"yy-M-dd"
+                        dateFormat:"yy-M-dd",
+                        onClose: function( selectedDate ) {
+                            $( ".dp-expected-date" ).datepicker( "option", "minDate", selectedDate );
+                        }
+                    }).on('keypress',function(){
+                        return false;
+                    });
+                    $( ".dp-expected-date" ).datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        yearRange: '2013:2050',
+                        dateFormat:"yy-M-dd",
+                        onClose: function( selectedDate ) {
+                            $( ".dp-delivery-date" ).datepicker( "option", "maxDate", selectedDate );
+                        }
                     }).on('keypress',function(){
                         return false;
                     });
