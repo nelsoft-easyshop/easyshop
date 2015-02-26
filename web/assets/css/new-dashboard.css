@@ -1080,9 +1080,14 @@ a{
 .edit-store-cat-new,
 .edit-activate-prod,
 .edit-deactivate-prod,
-.edit-delete-prod
+.edit-delete-prod,
+.edit-btn-delete
 {
     display: none;
+}
+
+.edit-btn-delete{
+    margin-top: 20px;
 }
 
 .form-action-password{
@@ -1281,7 +1286,7 @@ a{
     border: dotted #ff893a 1px;
     margin-bottom: 5px;
     padding: 5px 10px;
-    cursor: move;
+    cursor: url(/assets/images/grabbing.png), move;
     background: #fff;
 }
 
