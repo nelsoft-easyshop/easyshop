@@ -531,14 +531,14 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     *  Count Not Custom categorized products
+     *  Count products categorized by default categories
      *
      *  @param integer $memberId
      *  @param array $catId
      *
      *  @return integer 
      */
-    public function countNotCustomCategorizedProducts($memberId, $catId)
+    public function countDefaultCategorizedProducts($memberId, $catId)
     {
         $em = $this->_em;
         $result = array();
@@ -571,7 +571,7 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     *  Get user products that have no assigned custom category
+     *  Get products categorized by default categories
      *  Returns Product IDs ONLY!
      *
      *  @param integer $memberId
@@ -579,7 +579,7 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getPagedNotCustomCategorizedProducts($memberId, $catId, $productLimit=12, $page=0, $orderBy=array("clickcount"=>"DESC") )
+    public function getDefaultCategorizedProducts($memberId, $catId, $productLimit=12, $page=0, $orderBy=array("clickcount"=>"DESC") )
     {
         $em = $this->_em;
         $result = array();
@@ -628,7 +628,7 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     *  Get user products that have no assigned custom category
+     *  Get all user products in a default category
      *  Returns Product IDs ONLY!
      *
      *  @param integer $memberId
@@ -637,7 +637,7 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
+    public function getAllDefaultCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
     {
         $em = $this->_em;
         $result = array();
