@@ -149,7 +149,7 @@ class CategoryManager
             }
         }
 
-        return $result = [
+        return [
             "message" => $errorMessage,
             "result" => $actionResult ? $category : false
         ];
