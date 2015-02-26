@@ -308,7 +308,6 @@ class CategoryManager
      */
     public function getUserCategories($memberId)
     {
-        $defaultCategoryImage = "assets/images/default_icon_small.png";
         $vendorCategories = [];
         $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
                                            ->getNestedSetCategoryCount();
