@@ -86,7 +86,7 @@
         $("#editIconClose").css("display","none");
         $("#save-edit").css("display","none");
         $("#editIconOpen").css("display","inline");
-        $(".text-contact").css("display","inline");
+        $(".text-contact").css("display","block");
 
         // hide all fields that are empty
         if($( "p#validatedStoreName" ).html() == ""){
@@ -126,6 +126,15 @@
     checkWidth();
     // Bind event listener
     $window.resize(checkWidth);
+
+    $window.on('load resize', function() {
+        setTimeout(function(){ 
+            var TdContactDetail = $(".panel-contact-details").width();
+            var TdContactWidth = (TdContactDetail - 72);
+            $(".text-contact").css("width", TdContactWidth);
+      }, 300);
+    });
+    
 })(jQuery);
 
 

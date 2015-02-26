@@ -183,14 +183,14 @@
                                             Delivery Date:
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" class="ui-form-control modal_date" name="delivery_date" value="<?=$product['deliveryDate'] ? date_format($product['deliveryDate'], 'Y-M-d') : '' ?>" >
+                                            <input type="text" class="ui-form-control modal_date dp-delivery-date" name="delivery_date" value="<?=$product['deliveryDate'] ? date_format($product['deliveryDate'], 'Y-M-d') : '' ?>" >
                                         </div>
                                         <div class="col-xs-12 pd-bttm-10"></div>
                                         <div class="col-md-4">
                                             Expected Date of Arrival:
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" class="ui-form-control modal_date" name="expected_date" value="<?=$product['expectedDate'] ? date_format($product['expectedDate'], 'Y-M-d') : '' ?>" >
+                                            <input type="text" class="ui-form-control modal_date dp-expected-date" name="expected_date" value="<?=$product['expectedDate'] ? date_format($product['expectedDate'], 'Y-M-d') : '' ?>" >
                                         </div>
                                         <div class="col-xs-12">
                                             <textarea name="comment" placeholder="Write your comment..." data-value="<?=html_escape($product['shipping_comment']); ?>" ><?=html_escape($product['shipping_comment'])?></textarea>
