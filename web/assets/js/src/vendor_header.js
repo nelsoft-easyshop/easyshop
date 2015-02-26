@@ -179,8 +179,9 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 else{
                     // Display error
                     var errString = "";
-                    $.each(data.error, function(k,v){
-                        errString = errString + v + "<br>";
+                    $.each(data.error, function(key,errorMessage){
+                        errString = errorMessage;
+                        return false;
                     });
                     alert(errString);
                 }
