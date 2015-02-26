@@ -178,13 +178,14 @@ function ItemListAjax(CatDiv,page)
     var productPage = CatDiv.find('.product-paging');
     var currentQueryString = $("#queryString").val();
     var paginationContainer = CatDiv.find('.pagination-container');
+    var isCustom = CatDiv.attr("data-isCustom");
 
     memconf.ajaxStat = jQuery.ajax({
         type: "GET",
         url: '/store/vendorLoadProducts',
         data: "vendorId="+memconf.vid+"&vendorName="+memconf.vname+"&catId="+catId+"&catType="+catType+
             "&page="+page+"&orderby="+memconf.orderBy+"&order="+memconf.order+"&queryString="+currentQueryString+"&condition="+memconf.condition+"&lowerPrice="+memconf.lprice+"&upperPrice="+memconf.uprice+
-            "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken,
+            "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken+"&isCustom="+isCustom,
         beforeSend: function(){
             loadingDiv.show();
             productPage.hide();

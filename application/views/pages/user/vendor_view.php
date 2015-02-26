@@ -113,6 +113,7 @@
                         data-group="<?php echo html_escape($catId); ?>" 
                         data-productcount="<?= html_escape($categoryData['non_categorized_count']) ?>"
                         data-catType="<?php echo html_escape($categoryData['cat_type']); ?>"
+                        data-isCustom="<?php echo json_encode(isset($categoryData['memberCategoryId']) && (int)$categoryData['memberCategoryId'] !== 0); ?>"
                     >                    
                         <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
                         <?php if($categoryData['non_categorized_count'] === 0): ?>
