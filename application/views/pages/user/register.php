@@ -156,7 +156,6 @@
                         </span>
                     </div>
                 </div>
-                <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
                 <input type='hidden' value='<?php echo $dayRange.' '.$hourRange; ?>' id='office_hours'/>
                 <input type='hidden' value='<?php echo $officeContactNo ?>' id='office_contactno'/>
                 <div class="clear"></div>

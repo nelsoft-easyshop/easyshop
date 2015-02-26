@@ -144,22 +144,22 @@
                                 $('#login').show();
                                 $('.login-btn').val('Redirecting...');
 
-                                var url = $('#redirect_url').val();
+                                var url = $('.referrer').val();      
                                 var first_uri_segment = url.substring(0, url.indexOf('/'));
                                 var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
 
                                 if( typeof vendorSubscriptionUri !== "undefined" ){
                                     window.location = '/' + vendorSubscriptionUri;
                                 }
-                                else if (first_uri_segment == 'promo') {
+                                else if (first_uri_segment === 'promo') {
                                     var code = url.split("/");
                                     window.location = '/' + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
                                 }
                                 else{
-                                    if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
+                                    if((url === 'sell/step1')||(first_uri_segment === 'item')|| (url === 'cart')){
                                         window.location = '/' + url;
                                     }
-                                    else if(first_uri_segment == 'cart'){
+                                    else if(first_uri_segment === 'cart'){
                                         window.location = '/' + first_uri_segment;
                                     }
                                     else{
