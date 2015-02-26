@@ -20,10 +20,11 @@ class MY_Controller extends CI_Controller
     {
         parent::__construct();        
         $url = uri_string();
-        
-        if($url !== 'login' && $url !== 'register'){
+        $firstSegment = $this->uri->segment(1);
+        if($url !== 'login' && $url !== 'register' && $firstSegment !== 'assets'){
             $this->session->set_userdata('uri_string', $url);
         }
+
         if (isset ($this->kernel)) {
             /* This way service container is more accessible to child classes */
             $this->serviceContainer = $this->kernel->serviceContainer;

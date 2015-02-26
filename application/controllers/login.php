@@ -32,8 +32,8 @@ class Login extends MY_Controller
      */
     public function index() 
     {
-        $url = 'landingpage';
         $is_promo = false;
+        $url = $this->session->userdata('uri_string');
         if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
             $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
             $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
@@ -65,7 +65,6 @@ class Login extends MY_Controller
         $hoursInDay = $this->config->item('hourRange', 'officeoperation');
 
         $bodyData = [
-            'url' => $this->session->userdata('uri_string'),
             'redirect_url' => $url,
             'is_promo' => $is_promo,
             'facebook' => $socialMediaLinks["facebook"],
