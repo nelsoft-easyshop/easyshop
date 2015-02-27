@@ -159,7 +159,7 @@
                     <?php if($isEditable): ?>
                     <div class="vendor-profile-btn edit-profile-btn edit-banner-profile">
                         <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1 btn-edit-profile-info-banner btn-cancel-me-wide">Cancel</a>
-                        <a href="javascript:void(0)" id="banner-save-changes"class="btn btn-default-3 btn-edit-profile-info-banner">Save Changes</a>
+                        <a href="javascript:void(0)" id="banner-save-changes" class="btn btn-default-3 btn-edit-profile-info-banner clickable">Save Changes</a>
                     </div>
                     <?php endif; ?>
                 </div>
