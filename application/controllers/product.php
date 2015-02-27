@@ -556,7 +556,7 @@ class product extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $slug = trim($this->input->post('slug'));
         $productName = (string) $stringUtility->removeNonUTF(trim($this->input->post('productName')));
-        $productPrice = (float) trim($this->input->post('productPrice'));
+        $productPrice = (float) str_replace(',', '',trim($this->input->post('productPrice')));
         $productDiscount = (float) trim($this->input->post('discount'));
         $soloQuantity = (int) trim($this->input->post('quantity'));
         $removeCombination = json_decode(trim($this->input->post('remove')), true);
@@ -572,7 +572,7 @@ class product extends MY_Controller
         ]); 
 
         try {
-            if($productPrice <= 0){
+            if((int)$productPrice <= 0){
                 throw new Exception("Invalid price. Product price cannot be less than 0.");
             }
 
@@ -580,7 +580,7 @@ class product extends MY_Controller
                 throw new Exception("Product name cannot be empty.");
             }
 
-            if($productDiscount < 0 || $productDiscount > 99){
+            if((int)$productDiscount < 0 || (int)$productDiscount > 99){
                 throw new Exception("Invalid discount. Range must be 0 - 99 only."); 
             }
 
