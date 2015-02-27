@@ -1885,7 +1885,6 @@
                     });
                     unorderedList.append( colorList.join('') );
                     unorderedList.find('#color-item-'+currentColorId).append(' </i>');
-                    //createCategoryList(jsonResponse.storeCategories);
                     isStoreSetupInitialized = true;
                     $('.store-setup-loading').hide();
                     $('.store-setup-ajax').fadeIn();
@@ -1904,8 +1903,7 @@
                 url: '/memberpage/getStoreCategories',
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);
-
-                    //createCategoryList(jsonResponse.storeCategories);
+                    createCategoryList(jsonResponse.storeCategories);
                     isCategorySetupInitialized = true;
                     $('.category-setup-loading').hide();
                     $('.category-setup-ajax').fadeIn();
@@ -1946,24 +1944,26 @@
     
     function createCategoryList(categoryData)
     {
-        var categoryViewList = [];
-        var categoryDraggableList = [];
-        $.each(categoryData, function(index, category) {
-            var html =  '<div class="div-cat">'+category.name+'</div>';
-            categoryViewList.push(html);
-            var categoryIdentifier = category.memberCategoryId;
-            if(categoryIdentifier == 0){
-                categoryIdentifier = index + '_new';
-            }
-            var escapedName = escapeHtml(category.name);
-            html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'</li>';
-            categoryDraggableList.push(html);
-        });
-        $('.store-category-view').html('');
-        $('.store-category-draggable').html('');
-        $('.store-category-view').append( categoryViewList.join('') );
-        $('.store-category-draggable').append( categoryDraggableList.join('') );
-        $('.store-category-draggable').sortable();
+     var categoryViewList = [];
+            var categoryDraggableList = [];
+            $.each(categoryData, function(index, category) {
+                var escapedName = escapeHtml(category.name);
+                var html =  '<div class="div-cat">'+escapedName+'</div>';
+                categoryViewList.push(html);
+                var categoryIdentifier = parseInt(category.memberCategoryId, 10);
+                if(categoryIdentifier === 0){
+                    categoryIdentifier = index + '_new';
+                }
+                html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
+                categoryDraggableList.push(html);
+            });
+
+            $('.store-category-view').html('');
+            $('.new-store-category-draggable').html('');
+            $('.store-category-view').append( categoryViewList.join('') );
+            $('.new-store-category-draggable').append( categoryDraggableList.join('') );
+            $('.new-store-category-draggable').sortable();
+
     }
 
     $('#store-color-save').on('click', function(){
@@ -2580,7 +2580,7 @@
             
         });
 
-        $(".edit-category").click(function(){
+        $(".category-setup-ajax").on('click','.edit-category', function(){
             $(".edit-category-modal").modal({
                 persist:true
             });
@@ -2596,9 +2596,9 @@
                 $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
                 $(".ui-droppable").css("width", "100%");
             }
-        });{
+        });
 
-        }
+        
 
     });
 }(jQuery));
