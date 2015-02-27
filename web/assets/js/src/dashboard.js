@@ -1857,7 +1857,7 @@
         if(!isStoreSetupInitialized){
             $.ajax({
                 type: "get",
-                url: '/memberpage/getStoreSettings',
+                url: '/memberpage/getStoreColor',
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);
                     var unorderedList = $("#store-color-dropdown");
@@ -1885,7 +1885,7 @@
                     });
                     unorderedList.append( colorList.join('') );
                     unorderedList.find('#color-item-'+currentColorId).append(' </i>');
-                    createCategoryList(jsonResponse.storeCategories);
+                    //createCategoryList(jsonResponse.storeCategories);
                     isStoreSetupInitialized = true;
                     $('.store-setup-loading').hide();
                     $('.store-setup-ajax').fadeIn();
@@ -1893,7 +1893,27 @@
             });
         }
     });
+    
+    
+    
+    var isCategorySetupInitialized = false;
+    $('#customize-category-tab').on('click', function(){
+        if(!isCategorySetupInitialized){
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getStoreCategories',
+                success: function(data){ 
+                    var jsonResponse = $.parseJSON(data);
 
+                    //createCategoryList(jsonResponse.storeCategories);
+                    isCategorySetupInitialized = true;
+                    $('.category-setup-loading').hide();
+                    $('.category-setup-ajax').fadeIn();
+                }
+            });
+        }
+    });
+   
     
     $('#category-order-save').on('click', function(){
         var errorContainer = $('#store-category-error');

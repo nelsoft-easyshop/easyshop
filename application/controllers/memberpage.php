@@ -1915,11 +1915,11 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     * Gets the store settings
+     * Gets the store colors
      *
      * @return JSON
      */
-    public function getStoreSettings()
+    public function getStoreColor()
     {
         $memberId = $this->session->userdata('member_id');
         $response = [];
@@ -1927,12 +1927,28 @@ class Memberpage extends MY_Controller
             $response['colors'] = $this->serviceContainer['entity_manager']
                                        ->getRepository('EasyShop\Entities\EsStoreColor')
                                        ->getAllColors(true);
-            $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
-                                                             ->getUserCategories($memberId));
         }
         echo json_encode($response);
     }
     
+        /**
+     * Gets the store colors
+     *
+     * @return JSON
+     */
+    public function getStoreCategories()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
+                                                             ->getUserCategories($memberId));
+        }
+
+        echo json_encode($response);
+    }
+    
+
 
     /**
      * Returns all the payment accounts of the logged-in user
