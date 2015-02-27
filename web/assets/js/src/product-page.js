@@ -378,17 +378,21 @@
             var $attrParent = $thisSelect.children('option:selected').data('headvalue'); 
             var $attrName = $thisSelect.children('option:selected').data('textvalue');
             var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
-
             $optionsObject[$attrParent] = $attrName + '~' + $additionalPrice.toFixed(2); 
         });
-     
+        
+        var $isLoggedIn = JSON.parse($('.es-data[name="is-logged-in"]').val());
+        if(!$isLoggedIn){
+            window.location.replace("/login");
+            return false;
+        }
+
         $.ajax({
             url: "/cart/doAddItem",
             type:"POST",
             dataType:"JSON",
             data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
             success:function(data){
-
                 if(!data.isLoggedIn){
                     window.location.replace("/login");
                 }

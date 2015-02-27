@@ -699,7 +699,7 @@ class Payment extends MY_Controller{
         // Set this to 0 once you go live or don't require logging.
         $PayPalMode = $this->paypal->getMode(); 
         $paypalmode = ($PayPalMode == '.sandbox' ? '.sandbox' : '');
-        define("DEBUG", 1);
+        define("DEBUG", 0);
         define("LOG_FILE", "./ipn.log");
 
         // Read POST data
