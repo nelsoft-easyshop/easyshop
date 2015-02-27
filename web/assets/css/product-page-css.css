@@ -837,6 +837,12 @@ body{
     max-width: 1200px !important;
 }
 
+.step4_section .p-html-description img {
+    display: block;
+    height: auto;
+    max-width: 100% !important;
+}
+
 .div-banner-container{
     margin-top: 20px;
     width: 100%;

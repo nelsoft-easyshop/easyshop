@@ -25,8 +25,8 @@
             }
         });
     });
-
-    $(window).on('load',function() {
+    
+    $(window).bind('load', function(){
         mainwindowsize = $(window).width();
         if (mainwindowsize < 565) {
             $('.bxslider').bxSlider({

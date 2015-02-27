@@ -92,13 +92,13 @@
                                     </li>
                                     <?php foreach ($attributes as $attrName => $attrListValue):?>
                                     <li>
-                                        <p class="p-filter-name">By <?=html_escape($attrName); ?></p>
+                                        <p class="p-filter-name">By <?=html_escape(ucfirst(strtolower($attrName))); ?></p>
                                         <ul class="list-unstyled">
                                             <?php foreach ($attrListValue as $value):?>
                                                 <li class="checkbox">
                                                     <label>
                                                         <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox cbx" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
-                                                        <?= html_escape(ucfirst($value));?>
+                                                        <?= html_escape(strtoupper($value));?>
                                                     </label>
                                                 </li>
                                             <?php endforeach; ?>

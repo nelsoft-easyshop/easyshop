@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
 use EasyShop\Entities\EsProductShippingDetail as EsProductShippingDetail;
+use Easyshop\Upload\AssetsUploader as AssetsUploader;
 
 class productUpload extends MY_Controller 
 {
@@ -446,6 +447,7 @@ class productUpload extends MY_Controller
     public function fallBackUploadimage()
     {
         $imageUtility = $this->serviceContainer['image_utility'];
+        $assetsUploader = $this->serviceContainer["assets_uploader"]; 
         $this->config->load('image_dimensions', true);
         $imageDimensions = $this->config->config['image_dimensions'];
         $tempDirectory = $this->session->userdata('tempDirectory');  
@@ -456,24 +458,26 @@ class productUpload extends MY_Controller
             $filename = trim($this->input->post('pictureName'));
             $inputFile = "files";
             $filenameArray = [$filename];
+
+            if($_FILES[$inputFile]['error'][0] !== UPLOAD_ERR_OK
+                || $_FILES[$inputFile]['size'][0] >= $this->maxFileSizeInMb){
+                die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px","err":"1"}');
+            }
         }
         else{
             $filenameArray = $filename = trim($this->input->post('pictureNameOther'));
             $inputFile = "attr-image-input";
             $pathDirectory = $tempDirectory.'/other/';
+
+            if($_FILES[$inputFile]['error'] !== UPLOAD_ERR_OK
+                || $_FILES[$inputFile]['size'] >= $this->maxFileSizeInMb){
+                die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px","err":"1"}');
+            }
         }
 
         if (strpos($filename, $tempId."_".$member_id) === false) {
-            die('{"result":"false","msg":"Invalid filename. Please try again later."}');
-        }
-
-        $allowed =  ['gif','png' ,'jpg','jpeg']; // available format only for image
-        $fileExtension = explode('.', $filename);
-        $fileExtension = strtolower(end($fileExtension));
-
-        if(!in_array(strtolower($fileExtension),$allowed)){
-            die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
-        }
+            die('{"result":"false","msg":"Invalid filename. Please try again later.","err":"1"}');
+        } 
 
         if (!file_exists ($pathDirectory)){
             mkdir($pathDirectory, 0777, true);
@@ -485,12 +489,14 @@ class productUpload extends MY_Controller
             "file_name"=> $filenameArray,
             "encrypt_name" => false,
             "remove_spaces" => true,
-            "allowed_types" => "jpg|jpeg|png|gif",
-            "max_size" => $this->max_file_size_mb * 1024,
+            "allowed_types" => AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES,
+            "max_size" => AssetsUploader::MAX_ALLOWABLE_SIZE_KB,
+            "max_width" => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+            "max_height" => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
             "xss_clean" => false
         ]); 
 
-        if ($this->upload->do_multi_upload($inputFile)){  
+        if ($this->upload->do_multi_upload($inputFile)){
             $imageUtility->imageResize($pathDirectory.$filename, 
                                        $pathDirectory."small/".$filename,
                                        $imageDimensions["productImagesSizes"]["small"]);
@@ -503,10 +509,10 @@ class productUpload extends MY_Controller
                                        $pathDirectory."thumbnail/".$filename,
                                        $imageDimensions["productImagesSizes"]["thumbnail"]);
 
-            die('{"result":"ok","imageName":"'.$filename.'"}'); 
+            die('{"result":"ok","imageName":"'.$filename.'","err":"0"}'); 
         }
         else{
-            die('{"result":"false","msg":"'.$this->upload->display_errors().'"}');
+            die('{"result":"false","msg":"'.$this->upload->display_errors().'","err":"1"}');
         }
     }
 
@@ -536,7 +542,8 @@ class productUpload extends MY_Controller
             $filenames_ar[$key] = $afstartArray[$key];
             if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb
                || $_FILES['files']['error'][$key] !== UPLOAD_ERR_OK
-               || !$assetsUploader->checkValidFileType($_FILES['files']['tmp_name'][$key])){
+               || !$assetsUploader->checkValidFileType($_FILES['files']['tmp_name'][$key])
+               || !$assetsUploader->checkValidFileDimension($_FILES['files']['tmp_name'][$key])){
                 unset($filenames_ar[$key]);
             }
 
@@ -556,7 +563,7 @@ class productUpload extends MY_Controller
         $filenames_ar = array_values($filenames_ar);  
         if(count($filenames_ar) <= 0){
             $return = [
-                'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb", 
+                'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb. Allowed max dimension 5000px", 
                 'fcnt' => $filescnttxt,
                 'err' => 1
             ];
@@ -622,9 +629,10 @@ class productUpload extends MY_Controller
         $filename = implode(".", $fileNameArray).".jpeg";
 
         if(!$assetsUploader->checkValidFileType($_FILES['attr-image-input']['tmp_name'])
+            || !$assetsUploader->checkValidFileDimension($_FILES['attr-image-input']['tmp_name'])
             || $_FILES['attr-image-input']['error'] !== UPLOAD_ERR_OK
             || $_FILES['attr-image-input']['size'] >= $this->maxFileSizeInMb){
-            die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb"}');
+            die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px"}');
         }
 
         if (strpos($filename, $tempId."_".$member_id) === false) { 
@@ -1170,31 +1178,41 @@ class productUpload extends MY_Controller
         
         if( $this->input->post('data') && $this->input->post('name') ){
             $preferenceData = $this->input->post('data');
-            $preferenceName = $this->input->post('name');
-            
+            $preferenceName = trim($this->input->post('name'));
             $member_id = $this->session->userdata('member_id');
             
-            // Insert name vs memid in shipping pref head
-            // Returns last id inserted on success, false on failure
-            $resultHead = $this->product_model->storeShippingPreferenceHead($member_id, $preferenceName);
-            
-            $serverResponse['result'] = $resultHead ? 'success' : 'fail';
-            $serverResponse['error'] = $resultHead ? '' : 'Failed to store preference head.';
-            
-            // if success, enter shipping details
-            if($resultHead){
-                foreach($preferenceData as $loc=>$price){
-                    $resultDetail = $this->product_model->storeShippingPreferenceDetail($resultHead, $loc, $price);
-                    
-                    if(!$resultDetail){
-                        $serverResponse['result'] = 'fail';
-                        $serverResponse['error'] = 'Failed to insert preference. Data stored may be incomplete.';
-                        break;
+            $preferenceCount = $this->em->getRepository('EasyShop\Entities\EsProductShippingPreferenceHead')
+                                        ->findBy([
+                                            'title' => $preferenceName,
+                                            'member' => $member_id,
+                                        ]);
+            if(count($preferenceCount) <= 0){
+                // Insert name vs memid in shipping pref head
+                // Returns last id inserted on success, false on failure
+                $resultHead = $this->product_model->storeShippingPreferenceHead($member_id, $preferenceName);
+                
+                $serverResponse['result'] = $resultHead ? 'success' : 'fail';
+                $serverResponse['error'] = $resultHead ? '' : 'Failed to store preference head.';
+                
+                // if success, enter shipping details
+                if($resultHead){
+                    foreach($preferenceData as $loc=>$price){
+                        $resultDetail = $this->product_model->storeShippingPreferenceDetail($resultHead, $loc, $price);
+                        
+                        if(!$resultDetail){
+                            $serverResponse['result'] = 'fail';
+                            $serverResponse['error'] = 'Failed to insert preference. Data stored may be incomplete.';
+                            break;
+                        }
+                    }
+                    if($resultDetail){
+                        $serverResponse['shipping_preference'] = $this->product_model->getShippingPreference($member_id);
                     }
                 }
-                if($resultDetail){
-                    $serverResponse['shipping_preference'] = $this->product_model->getShippingPreference($member_id);
-                }
+            }
+            else{
+                $serverResponse['result'] = 'fail';
+                $serverResponse['error'] = 'Preference name already exist!';
             }
         }
         echo json_encode($serverResponse, JSON_FORCE_OBJECT);

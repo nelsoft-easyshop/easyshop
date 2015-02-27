@@ -91,18 +91,26 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         $(this).closest(".search-form").submit();
     });
    
-    $(document).on('click','#banner-save-changes',function() {
+    $(document).on('click','#banner-save-changes.clickable',function() {
+        
+        var button = $(this);
+        button.removeClass('clickable');
         
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
  
-        // get all variables
         var storName = $("#storeNameTxt").val();
-        var mobileNumber = $("#mobileNumberTxt").val();
+        var mobileNumber = $("#mobileNumberTxt").val(); 
         var stateRegion = $(".stateregionselect").val();
         var city = $('.cityselect').val();
         var stateRegionSelected = $(".stateregionselect option:selected").html();
         var citySelected = $(".cityselect option:selected").html();
+
+        stateRegion = (stateRegion === null) ? 0 : stateRegion;
+        city = (city === null) ? 0 : city;
+        stateRegionSelected = (typeof stateRegionSelected === "undefined") ? $('.stateregionselect option[value="0"]') : stateRegionSelected;
+        citySelected = (typeof citySelected === "undefined") ? $('.cityselect option[value="0"]') : citySelected;
+
         changeSlug = jQuery.ajax({
             type: "POST",
             dataType: "JSON",
@@ -174,11 +182,13 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 else{
                     // Display error
                     var errString = "";
-                    $.each(data.error, function(k,v){
-                        errString = errString + v + "<br>";
+                    $.each(data.error, function(key,errorMessage){
+                        errString = errorMessage;
+                        return false;
                     });
                     alert(errString);
                 }
+                button.addClass('clickable');
             } 
         });
     });

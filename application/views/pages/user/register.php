@@ -59,8 +59,18 @@
             </div>
             <div id="adv2" class="login-tabs">
                 <div id="alter-tab" class="idTabs">
-                    <div class="idtabs-tab" ><a href="#login" id="tab-login" >login</a></div>
-                    <div class="idtabs-tab" id="anchor-create" ><a href="#create-account" id="tab-create" >create an account</a></div>
+                    <div class="idtabs-tab" >
+                        <a href="#login" id="tab-login">
+                            login
+                            <span class="tab-down-arrow"></span>
+                        </a>
+                    </div>
+                    <div class="idtabs-tab" id="anchor-create" >
+                        <a href="#create-account" id="tab-create" >
+                            create an account
+                            <span class="tab-down-arrow"></span>
+                        </a>
+                    </div>
                     <span class="clear"></span>
                 </div>
 
@@ -146,7 +156,6 @@
                         </span>
                     </div>
                 </div>
-                <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
                 <input type='hidden' value='<?php echo $dayRange.' '.$hourRange; ?>' id='office_hours'/>
                 <input type='hidden' value='<?php echo $officeContactNo ?>' id='office_contactno'/>
                 <div class="clear"></div>
@@ -470,7 +479,7 @@
 </body>
 
 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
-<input type="hidden" name="referrer" class="referrer" value="<?=$redirect_url ?>"/>
+    <input type="hidden" name="referrer" class="referrer" value="<?= $is_promo ? $redirect_url : 'registration'?>"/>
 <?php echo form_close();?>
 
 <script type="text/javascript">

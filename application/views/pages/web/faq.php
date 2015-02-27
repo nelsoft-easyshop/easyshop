@@ -50,8 +50,8 @@
 
         <p>
             <strong>Can I change my email address?</strong>
-            To change your EasyShop.ph password, login and click on “Account Name”. Click on “Personal Information”. 
-            Here you can edit all your personal details.
+            To change your EasyShop.ph email, login and go to your dashboard. Click on "My Account" and then "Account Settings". 
+            Here you can edit all your account details.
         </p>
 
         <p>

@@ -45,7 +45,7 @@ class EsProductShippingComment
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expected_date", type="datetime", nullable=false)
+     * @ORM\Column(name="expected_date", type="datetime", nullable=true)
      */
     private $expectedDate;
 
@@ -88,7 +88,7 @@ class EsProductShippingComment
     /**
      * Get idShippingComment
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdShippingComment()
     {
@@ -111,7 +111,7 @@ class EsProductShippingComment
     /**
      * Get courier
      *
-     * @return string 
+     * @return string
      */
     public function getCourier()
     {
@@ -134,7 +134,7 @@ class EsProductShippingComment
     /**
      * Get trackingNum
      *
-     * @return string 
+     * @return string
      */
     public function getTrackingNum()
     {
@@ -157,7 +157,7 @@ class EsProductShippingComment
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -180,7 +180,7 @@ class EsProductShippingComment
     /**
      * Get expectedDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpectedDate()
     {
@@ -203,7 +203,7 @@ class EsProductShippingComment
     /**
      * Get datemodified
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDatemodified()
     {
@@ -226,7 +226,7 @@ class EsProductShippingComment
     /**
      * Get deliveryDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDeliveryDate()
     {
@@ -249,7 +249,7 @@ class EsProductShippingComment
     /**
      * Get orderProduct
      *
-     * @return \EasyShop\Entities\EsOrderProduct 
+     * @return \EasyShop\Entities\EsOrderProduct
      */
     public function getOrderProduct()
     {
@@ -272,7 +272,7 @@ class EsProductShippingComment
     /**
      * Get member
      *
-     * @return \EasyShop\Entities\EsMember 
+     * @return \EasyShop\Entities\EsMember
      */
     public function getMember()
     {
