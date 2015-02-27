@@ -6,7 +6,7 @@
 </div>
 
 <?php foreach ($products as $product): ?>
-<div id="item-list-<?=$product->getIdProduct(); ?>" class="items-list-container">
+<div id="item-list-<?=$product->getIdProduct(); ?>" class="items-list-container item-list-<?=$product->getIdProduct(); ?>">
     <div class="row">
         <div class="col-md-12">
             <div class="item-list-panel">
