@@ -189,10 +189,10 @@
 
                         if(parseInt($discountRate) > 0){
                             if($discountContainer.length > 0){
-                                $discountContainer.html(escapeHtml(parseInt(Math.round($discountRate))) + "%");
+                                $discountContainer.html(escapeHtml(Math.round($discountRate)) + "%");
                             }
                             else{
-                                $imageContainer.html('<div class="pin-discount">'+escapeHtml(parseInt(Math.round($discountRate)))+'%</div>');
+                                $imageContainer.html('<div class="pin-discount">'+escapeHtml(Math.round($discountRate))+'%</div>');
                             }
                             if($originalAmountContainer.length > 0){
                                 $originalAmountContainer.html(escapeHtml("P"+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))));
