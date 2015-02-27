@@ -32,20 +32,11 @@ class Login extends MY_Controller
      */
     public function index() 
     {
-        $is_promo = false;
+        if ($this->session->userdata('usersession')) {
+            redirect('/');
+        }
         $url = $this->session->userdata('uri_string');
-        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
-            $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
-            $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
-            $is_promo = true;
-        }
-        else {
-
-            if ($this->session->userdata('usersession')) {
-                redirect('/');
-            }
-
-        }
+        $isPromo = strpos($url, 'ScratchCard') !== false;
 
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
@@ -66,7 +57,7 @@ class Login extends MY_Controller
 
         $bodyData = [
             'redirect_url' => $url,
-            'is_promo' => $is_promo,
+            'is_promo' => $isPromo,
             'facebook' => $socialMediaLinks["facebook"],
             'twitter' => $socialMediaLinks["twitter"],
             'facebook_login_url' =>$this->socialMediaManager
@@ -93,12 +84,10 @@ class Login extends MY_Controller
                 redirect('/');
             }
             else {
-
                 if (array_key_exists('timeoutLeft', $loginData) && $loginData['timeoutLeft'] >= 1) {
                     $bodyData['loginFail'] = true;
                     $bodyData['timeoutLeft'] = $loginData['timeoutLeft'];
                 }
-
             }  
         }
         
