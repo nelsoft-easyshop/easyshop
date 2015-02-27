@@ -27,12 +27,14 @@
                     <span><strong>%</strong></span>
                 </div>
             </div>
+            <?php if(!$hasCombination): ?>
             <div class="row edit-sub-content2">
                 <div class="col-xs-4 col-sm-4">
                     <span><strong>Available Stock(s):</strong></span>
-                    <input type="text" class="ui-form-control txt-total-stock" readonly value="<?=$availableStock;?>">
+                    <input type="text" class="ui-form-control txt-total-stock txt-quantity solo-quantity" value="<?=$availableStock;?>">
                 </div>
             </div>
+            <?php endif; ?>
         </div>
         <div class="col-xs-12 col-sm-3 express-edit-btn">
             <p class="text-center mrgn-bttm-10">Last Modified: <br /><?=$product->getLastmodifieddate()->format('M d, Y'); ?></p>
@@ -54,18 +56,18 @@
         </div>
     </div> 
 
-    <div class="row">
-        <div class="col-xs-12">
-            <table class="table prod-att-table" width="100%">
-                <thead>
-                    <tr>
-                        <th width="20%">quantity</th>
-                        <th width="60%">item property</th>
-                        <th width="20%">actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if($hasCombination): ?>
+    <?php if($hasCombination): ?>
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table prod-att-table" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="20%">quantity</th>
+                            <th width="60%">item property</th>
+                            <th width="20%">actions</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
                         <?php foreach ($productCombination as $itemId => $combination): ?>
                             <tr class="combination-row">
                                 <td width="20%">
@@ -83,16 +85,12 @@
                                     <?php endif; ?>
                                 </td>
                             </tr> 
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td width="20%"><input type="text" value="<?=$soloQuantity; ?>" class="ui-form-control txt-quantity solo-quantity"  onkeypress="return isNumberKey(event);"></td>
-                        </tr> 
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                        <?php endforeach; ?> 
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
 </div> 
 
 
