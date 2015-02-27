@@ -502,7 +502,7 @@ class Memberpage extends MY_Controller
                                                     $this->input->post("invoiceNo"),
                                                     $this->input->post("paymentMethod")
                                                 );
-
+        $boughtTransactions["transactions"] = []; 
         foreach ($transactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
                 $data = [];
@@ -551,7 +551,7 @@ class Memberpage extends MY_Controller
                                                                       $this->input->post("invoiceNo"),
                                                                       $this->input->post("paymentMethod")
                                                                       );  
-
+        $soldTransactions["transactions"] = [];
         foreach ($transactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
                 $data = [];   
