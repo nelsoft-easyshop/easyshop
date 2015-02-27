@@ -156,7 +156,7 @@
                 </div>
 
                 <br/>
-                <div class="jumbotron no-items no-category-display">
+                <div class="jumbotron no-items no-category-display" style="display:none">
                     <i class="icon-category"></i> No available category
                 </div>
 
