@@ -31,7 +31,7 @@ class IsMobileUniqueValidator extends ConstraintValidator
                                  ->from('\EasyShop\Entities\EsMember', 'b')
                                  ->where('b.contactno = :contact_number')
                                  ->setParameter('contact_number', $value);
-        if($memberId !== null) {
+        if($memberId !== 0) {
             $queryBuilder->andWhere('b.idMember != :member')
                          ->setParameter('member', $memberId);
         }
