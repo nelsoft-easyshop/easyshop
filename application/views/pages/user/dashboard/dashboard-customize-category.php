@@ -17,7 +17,7 @@
     
             <div class="div-store-setup">
                 <p class="panel-setup-title">CATEGORIES</p>
-                <div class="div-store-content">
+                <div class="div-store-content concealable">
                     <div class="current-store-cat">
                         <div class="form-horizontal">
                         <div class="form-group">
@@ -63,12 +63,13 @@
                         when someone views your store.
                     </p>
                 </div>
-                <!-- Display this markup if there are no available categories
+      
                 <br/>
-                <div class="jumbotron no-items">
+                
+                <div class="jumbotron no-items no-category-display" style="display:none">
                     <i class="icon-category"></i> No available category
                 </div>
-                -->
+      
             </div>
             
 
@@ -105,6 +106,7 @@
                                 <label class="col-sm-3 control-label">Current Categories : </label>
                                 <div class="col-sm-9 col-with-radio">
                                     <ul class="list-unstyled list-currect-categories">
+
                                         <li class="checkbox">
                                             <label>
                                                 <input type="checkbox" class="checkBox">

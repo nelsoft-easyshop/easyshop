@@ -1904,6 +1904,12 @@
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);
                     createCategoryList(jsonResponse.storeCategories);
+       
+                    if(jsonResponse.storeCategories.length === 0){
+                        $('.div-store-content.concealable').hide();
+                        $('.no-category-display').show();
+                    }
+
                     isCategorySetupInitialized = true;
                     $('.category-setup-loading').hide();
                     $('.category-setup-ajax').fadeIn();
