@@ -88,43 +88,20 @@
                         Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, convallis magna vitae, porta leo. Phasellus suscipit pulvinar tortor, ac gravida felis sodales et.
                     </p>
                 </div>
-                <!-- Display this markup if there are no available categories
-                <br/>
-                <div class="jumbotron no-items">
-                    <i class="icon-category"></i> No available category
-                </div>
-                -->
+
             </div>
 
 
             <div class="div-store-setup">
                 <p class="panel-setup-title">DELETE CATEGORIES</p>
-                <div class="div-store-content">
+                <div class="div-store-content concealable">
                     <div class="delete-store-cat">
                         <div class="form-horizontal">
                         <div class="form-group">
                                 <label class="col-sm-3 control-label">Current Categories : </label>
                                 <div class="col-sm-9 col-with-radio">
-                                    <ul class="list-unstyled list-currect-categories">
+                                    <ul class="list-unstyled list-currect-categories" id="delete-list-categories">                                        
 
-                                        <li class="checkbox">
-                                            <label>
-                                                <input type="checkbox" class="checkBox">
-                                                Clothing &amp; Accessories
-                                            </label>
-                                        </li>
-                                        <li class="checkbox">
-                                            <label>
-                                                <input type="checkbox" class="checkBox">
-                                                Jewellery &amp; Watches
-                                            </label>
-                                        </li>
-                                        <li class="checkbox">
-                                            <label>
-                                                <input type="checkbox" class="checkBox">
-                                                Toys, Hobbies &amp; Collectibles
-                                            </label>
-                                        </li>
                                     </ul>
                                     <div class="current-btn-delete">
                                         <br/>   
@@ -177,12 +154,12 @@
                         Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, convallis magna vitae, porta leo. Phasellus suscipit pulvinar tortor, ac gravida felis sodales et
                     </p>
                 </div>
-                <!-- Display this markup if there are no available categories
+
                 <br/>
-                <div class="jumbotron no-items">
+                <div class="jumbotron no-items no-category-display">
                     <i class="icon-category"></i> No available category
                 </div>
-                -->
+
             </div>
         
         

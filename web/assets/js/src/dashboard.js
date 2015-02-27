@@ -1904,12 +1904,6 @@
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);
                     createCategoryList(jsonResponse.storeCategories);
-       
-                    if(jsonResponse.storeCategories.length === 0){
-                        $('.div-store-content.concealable').hide();
-                        $('.no-category-display').show();
-                    }
-
                     isCategorySetupInitialized = true;
                     $('.category-setup-loading').hide();
                     $('.category-setup-ajax').fadeIn();
@@ -1949,9 +1943,16 @@
     
     
     function createCategoryList(categoryData)
-    {
-     var categoryViewList = [];
+    {       
+            if(categoryData.length === 0){
+                $('.div-store-content.concealable').hide();
+                $('.no-category-display').show();
+                return false;
+            }
+        
+            var categoryViewList = [];
             var categoryDraggableList = [];
+            var categoryDeleteList = [];
             $.each(categoryData, function(index, category) {
                 var escapedName = escapeHtml(category.name);
                 var html =  '<div class="div-cat">'+escapedName+'</div>';
@@ -1962,6 +1963,8 @@
                 }
                 html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
                 categoryDraggableList.push(html);
+                html = '<li class="checkbox"><label><input data-categoryid="'+escapeHtml(categoryIdentifier) + '" type="checkbox" class="checkBox">'+escapedName+'</label></li>';
+                categoryDeleteList.push(html);
             });
 
             $('.store-category-view').html('');
@@ -1969,7 +1972,8 @@
             $('.store-category-view').append( categoryViewList.join('') );
             $('.new-store-category-draggable').append( categoryDraggableList.join('') );
             $('.new-store-category-draggable').sortable();
-
+            $('#delete-list-categories').html();
+            $('#delete-list-categories').append( categoryDeleteList.join('') );
     }
 
     $('#store-color-save').on('click', function(){
