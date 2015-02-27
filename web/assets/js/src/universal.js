@@ -21,7 +21,6 @@ $(document).ready(function()
 {
     $('.external-links-container a').on('click', function ()
     {
-        $(this).attr('rel', 'nofollow');
         window.location.replace('/redirect?url=' + $(this).attr('href'))
         return false;
     });

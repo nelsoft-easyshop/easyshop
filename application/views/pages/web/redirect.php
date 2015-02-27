@@ -10,7 +10,7 @@
                 </p>
             </div>
             <div class="input-group identify-email-bottom-group ">
-                <a class="form-control submit-email-form redirect-link" href="<?=html_escape($url)?>"> Click here to continue</a>
+                <a class="form-control submit-email-form redirect-link" href="<?=html_escape($url)?>" rel="nofollow"> Click here to continue</a>
             </div>
         </center>
     </div>
