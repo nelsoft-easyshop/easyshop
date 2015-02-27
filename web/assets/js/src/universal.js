@@ -17,11 +17,14 @@ if (typeof jQuery.ui != 'undefined') {
     };
 }
 
-$('.external-links-container a').on('click', function ()
+$(document).ready(function()
 {
-    $(this).attr('rel', 'nofollow');
-    window.location.replace('/redirect?url=' + $(this).attr('href'))
-    return false;
+    $('.external-links-container a').on('click', function ()
+    {
+        $(this).attr('rel', 'nofollow');
+        window.location.replace('/redirect?url=' + $(this).attr('href'))
+        return false;
+    });
 });
 
 var entityMap = {
