@@ -94,11 +94,6 @@
         return true;
     }
 
-    $(document).on('change',".txt-quantity",function () {
-        var $this = $(this);
-        $(".txt-total-stock").val(getTotalStock($this));
-    });
-
     $(document).on('change',".base-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
@@ -194,10 +189,10 @@
 
                         if(parseInt($discountRate) > 0){
                             if($discountContainer.length > 0){
-                                $discountContainer.html(escapeHtml(parseInt($discountRate)) + "%");
+                                $discountContainer.html(escapeHtml(parseInt(Math.round($discountRate))) + "%");
                             }
                             else{
-                                $imageContainer.html('<div class="pin-discount">'+escapeHtml(parseInt($discountRate))+'%</div>');
+                                $imageContainer.html('<div class="pin-discount">'+escapeHtml(parseInt(Math.round($discountRate)))+'%</div>');
                             }
                             if($originalAmountContainer.length > 0){
                                 $originalAmountContainer.html(escapeHtml("P"+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))));
