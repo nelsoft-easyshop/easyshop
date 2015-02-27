@@ -1,5 +1,5 @@
 (function ($) {
-
+    
     $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
         var btn = $(this);
         var submitBtn = btn.closest("form");
@@ -77,6 +77,14 @@
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
         $( ".ms-setup" ).addClass( "selectedM" );
+    });
+
+    $( "#customize-category-tab" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ms-customize" ).addClass( "selectedM" );
     });
 
     $( "#product-management-tab" ).click(function() {
@@ -1109,6 +1117,15 @@
     
     $('.ms-setup').click(function() {
         $('#store-setup-tab').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $(this).addClass("selectedM");
+    });
+
+    $('.ms-customize').click(function() {
+        $('#customize-category-tab').trigger("click");
         $('.dash-mobile-trigger').removeClass("selectedM");
         $('.dashboard-home-mobile').removeClass("selectedM");
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
@@ -2329,6 +2346,241 @@
         $( "#delete-products" ).trigger( "click" );
     });
 
+    $( "#btn-edit-delete-categories" ).click(function() {
+        $( ".current-btn-delete" ).slideToggle( "fast" );
+        $( ".edit-btn-delete" ).slideToggle( "fast" );
+    });
+    
+    $( "#cancel-delete-categories" ).click(function() {
+        $( "#btn-edit-delete-categories" ).trigger( "click" );
+    });
+
+
+    $('.new-store-category-draggable').sortable();
+    $(window).on("load resize",function(){
+
+        var browserWidth = $(window).width();
+        var modalCategoryModalWidth = browserWidth * 0.6;
+        var modalCategoryModalWidthMobile = browserWidth * 0.95;
+
+        /********FOR DRAG AND DROP*******/
+        // allItems and the customCategory
+        var $allItems = $( "#allItems" ),
+            $customCategory = $( "#customCategory" );
+     
+        // let the allItems items be draggable
+        $( "li", $allItems ).draggable({
+          cancel: "a.icon-move", // clicking an icon won't initiate dragging
+          revert: "invalid", // when not dropped, the item will revert back to its initial position
+          containment: "body",
+          helper: "clone",
+          cursor: "url(/assets/images/grabbing.png), move"
+        });
+     
+        $( "li", $customCategory ).draggable({
+          cancel: "a.icon-move", // clicking an icon won't initiate dragging
+          revert: "invalid", // when not dropped, the item will revert back to its initial position
+          containment: "body",
+          helper: "clone",
+          cursor: "url(/assets/images/grabbing.png), move"
+        });
+
+        // let the customCategory be droppable, accepting the allItems items
+        $customCategory.droppable({
+          accept: "#allItems > li",
+          helper: "clone",
+          activeClass: "ui-state-highlight",
+          drop: function( event, ui ) {
+            moveToCustom( ui.draggable );
+          }
+        });
+     
+        // let the allItems be droppable as well, accepting items from the customCategory
+        $allItems.droppable({
+          accept: "#customCategory li",
+          activeClass: "custom-state-active",
+          drop: function( event, ui ) {
+            moveToAll( ui.draggable );
+          }
+        });
+     
+        // move to custom category function
+        var allItems_icon = "<a href='#' class='icon-move icon-move-to-all-items pull-right'></a>";
+        function moveToCustom( $item ) {
+          $item.fadeOut(function() {
+            $item.find( "a.icon-move" ).remove();
+            $item.prependTo( $customCategory ).fadeIn();
+            $item.find(".icon-holder").append( allItems_icon );
+          });
+        }
+     
+        // move to all items function
+        var customCategory_icon = "<a href='#' class='icon-move icon-move-to-custom-category pull-right'></a>";
+        function moveToAll( $item ) {
+          $item.fadeOut(function() {
+            $item
+              .find( "a.icon-move-to-all-items" )
+                .remove()
+              .end()
+              .prependTo( $allItems )
+              .fadeIn();
+            $item.find(".icon-holder").append( customCategory_icon );
+          });
+        }
+
+        // resolve the icons behavior with event delegation
+        $( "ul.allItems > li" ).click(function( event ) {
+          var $item = $( this ),
+              $target = $( event.target );
+     
+          if ( $target.is( "a.icon-move-to-custom-category" ) ) {
+            moveToCustom( $item );
+          } else if ( $target.is( "a.icon-move-to-all-items" ) ) {
+            moveToAll( $item );
+          }
+     
+          return false;
+        });
+        /********END DRAG AND DROP*******/
+
+
+        /********FOR EDIT CATEGORY  DRAG AND DROP*******/
+        // allItems and the customCategory
+        var $allItems_edit = $( "#allItems_edit" ),
+            $customCategory_edit = $( "#customCategory_edit" );
+     
+        // let the allItems items be draggable
+        $( "li", $allItems_edit ).draggable({
+          cancel: "a.icon-move_edit", // clicking an icon won't initiate dragging
+          revert: "invalid", // when not dropped, the item will revert back to its initial position
+          containment: "body",
+          helper: "clone",
+          cursor: "url(/assets/images/grabbing.png), move"
+        });
+     
+        $( "li", $customCategory_edit ).draggable({
+          cancel: "a.icon-move_edit", // clicking an icon won't initiate dragging
+          revert: "invalid", // when not dropped, the item will revert back to its initial position
+          containment: "body",
+          helper: "clone",
+          cursor: "url(/assets/images/grabbing.png), move"
+        });
+
+        // let the customCategory be droppable, accepting the allItems items
+        $customCategory_edit.droppable({
+          accept: "#allItems_edit > li",
+          helper: "clone",
+          activeClass: "ui-state-highlight",
+          drop: function( event, ui ) {
+            moveToCustom_edit( ui.draggable );
+          }
+        });
+     
+        // let the allItems be droppable as well, accepting items from the customCategory
+        $allItems_edit.droppable({
+          accept: "#customCategory_edit li",
+          helper: "clone",
+          activeClass: "custom-state-active",
+          drop: function( event, ui ) {
+            moveToAll_edit( ui.draggable );
+          }
+        });
+        
+        // move to custom category function
+        var allItems_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-all-items_edit pull-right'></a>";
+        function moveToCustom_edit( $item_edit ) {
+          $item_edit.fadeOut(function() {
+            $item_edit.find( "a.icon-move-to-custom-category_edit" ).remove();
+            $item_edit.prependTo( $customCategory_edit ).fadeIn();
+            $item_edit.find(".icon-holder_edit").append( allItems_icon_edit );
+          });
+        }
+     
+        // move to all items function
+        var customCategory_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-custom-category_edit pull-right'></a>";
+        function moveToAll_edit( $item_edit ) {
+          $item_edit.fadeOut(function() {
+            $item_edit
+              .find( "a.icon-move-to-all-items_edit" )
+                .remove()
+              .end()
+              .prependTo( $allItems_edit )
+              .fadeIn();
+            $item_edit.find(".icon-holder_edit").append( customCategory_icon_edit );
+          });
+        }
+
+        // resolve the icons behavior with event delegation
+        $( "ul.allItems_edit li" ).click(function( event ) {
+          var $item_edit = $( this ),
+              $target_edit = $( event.target );
+     
+          if ( $target_edit.is( "a.icon-move-to-custom-category_edit" ) ) {
+            moveToCustom_edit( $item_edit );
+          } else if ( $target_edit.is( "a.icon-move-to-all-items_edit" ) ) {
+            moveToAll_edit( $item_edit );
+          }
+     
+          return false;
+        });
+
+        // resolve the icons behavior with event delegation
+        $( "ul.customCategory_edit li" ).click(function( event ) {
+          var $item_edit = $( this ),
+              $target_edit = $( event.target );
+     
+          if ( $target_edit.is( "a.icon-move-to-custom-category_edit" ) ) {
+            moveToCustom_edit( $item_edit );
+          } else if ( $target_edit.is( "a.icon-move-to-all-items_edit" ) ) {
+            moveToAll_edit( $item_edit );
+          }
+     
+          return false;
+        });
+        /********END OF EDIT CATEGORY DRAG AND DROP*******/
+
+
+        $("#add-category").click(function(){
+            $(".add-category-modal").modal({
+                persist:true
+            });
+            $(".add-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+            var addContentHeight = $(".add-category-modal").outerHeight();
+            var countAllItems = $("#allItems li").size();
+            var widthOfitem = 70;
+            var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
+            if(browserWidth <= 769){
+                $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
+                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+            }
+            else{
+                $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
+                $(".ui-droppable").css("width", "100%");
+            }
+            
+        });
+
+        $(".edit-category").click(function(){
+            $(".edit-category-modal").modal({
+                persist:true
+            });
+            $(".edit-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+            var addContentHeight = $(".edit-category-modal").outerHeight();
+            var countAllItems = $("#allItems li").size();
+            var widthOfitem = 70;
+            var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
+            if(browserWidth <= 769){
+                $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
+                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+            }else{
+                $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+                $(".ui-droppable").css("width", "100%");
+            }
+        });{
+
+        }
+
+    });
 }(jQuery));
 
 
