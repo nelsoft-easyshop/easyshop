@@ -135,8 +135,9 @@
 
     $(document.body).on('click','.cancel-btn',function () {
         var $this = $(this);
-        var $container = $this.closest('.express-edit-content');
-        $container.find('cancel-btn').trigger('click');
+        $this.closest('.ui-dialog-content').dialog('close');
+        $slug = null;
+        $productId = null; 
     });
 
     $(document.body).on('click','.save-btn',function () {
