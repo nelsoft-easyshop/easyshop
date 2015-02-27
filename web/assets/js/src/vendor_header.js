@@ -91,7 +91,10 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
         $(this).closest(".search-form").submit();
     });
    
-    $(document).on('click','#banner-save-changes',function() {
+    $(document).on('click','#banner-save-changes.clickable',function() {
+        
+        var button = $(this);
+        button.removeClass('clickable');
         
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -185,6 +188,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     });
                     alert(errString);
                 }
+                button.addClass('clickable');
             } 
         });
     });
