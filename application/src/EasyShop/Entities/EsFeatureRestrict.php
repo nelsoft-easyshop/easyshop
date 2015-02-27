@@ -35,6 +35,10 @@ class EsFeatureRestrict
      */
     private $maxUser;
 
+    /**
+     * @var integer
+     */
+    const REAL_TIME_CHAT = 1;
 
 
     /**
