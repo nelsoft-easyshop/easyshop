@@ -2148,6 +2148,7 @@ class Memberpage extends MY_Controller
             if(!$hasCategoryError){
                 $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
                                                  ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+                $datetimeToday = date_create(date("Y-m-d H:i:s"));
                 $categoryDataResult = [];
                 foreach($savedCategories as $savedCategory){
                     $memberCategoryId = $savedCategory->getIdMemcat(); 
@@ -2155,6 +2156,7 @@ class Memberpage extends MY_Controller
                         $currentCategory = $indexedCategoryData[$memberCategoryId];
                         $savedCategory->setCatName($currentCategory->name);
                         $savedCategory->setSortOrder($currentCategory->order);
+                        $savedCategory->setlastModifiedDate($datetimeToday);
                         $categoryDataResult[] = $this->createCategoryStdObject($currentCategory->name,
                                                                             $currentCategory->order,
                                                                             $memberCategoryId);
@@ -2167,7 +2169,8 @@ class Memberpage extends MY_Controller
                     $newMemberCategories[$index]->setMember($member);
                     $newMemberCategories[$index]->setCatName($newCategory->name);
                     $newMemberCategories[$index]->setSortOrder($newCategory->order);
-                    $newMemberCategories[$index]->setCreatedDate(date_create(date("Y-m-d H:i:s")));
+                    $newMemberCategories[$index]->setCreatedDate($datetimeToday);
+                    $newMemberCategories[$index]->setlastModifiedDate($datetimeToday);
                     $entityManager->persist($newMemberCategories[$index]);
                 }
                 $entityManager->flush();
