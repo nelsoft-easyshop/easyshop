@@ -323,13 +323,14 @@ class Home extends MY_Controller
             redirect('/', 'refresh');
         }
 
-        $data = [
-            'url' => trim($this->input->get('url'))
-        ];
-
+        $urlData = $this->serviceContainer['url_utility']->parseExternalUrl(trim($this->input->get('url')));
+        if($urlData['targetString'] === '_self'){
+            redirect($urlData['url']);
+        }
+        
         $this->load->spark('decorator');
         $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/redirect', $data);
+        $this->load->view('pages/web/redirect', $urlData);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
 
