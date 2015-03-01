@@ -177,10 +177,8 @@ module.exports = function (grunt) {
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
                     'web/assets/css/min-easyshop.dashboard-primary.css':
-                        ['web/assets/css/contact.css',
-                         'web/assets/css/main-style.css',
-                         'web/assets/css/chosen.min.css',
-                         'web/assets/css/new-homepage.css',
+                        ['web/assets/css/contact.css', 
+                         'web/assets/css/chosen.min.css', 
                          'web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
                         ['web/assets/css/bootstrap.css',
@@ -344,7 +342,8 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/dashboard.js',
-                             'web/assets/js/src/dashboard-myaccount.js'],
+                             'web/assets/js/src/dashboard-myaccount.js',
+                             'web/assets/js/src/dashboard-express-edit.js'],
 
                     'web/assets/js/min/easyshop.product_search_by_searchbox.js':
                             ['web/assets/js/src/vendor/bootstrap.js',

@@ -8,6 +8,7 @@ use EasyShop\Entities\EsMember as EsMember;
 use EasyShop\Entities\EsCat as EsCat; 
 use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsSocialMediaProvider as EsSocialMediaProvider;
+use EasyShop\Entities\EsProductImage as EsProductImage;
 
 class product extends MY_Controller 
 { 
@@ -480,7 +481,185 @@ class product extends MY_Controller
         #return 3 if username doesnt exist (NOT-QUALIFIED)
     }
 
+    /**
+     * request view for express edit
+     * @return view in json type
+     */
+    public function requestProductExpressEdit()
+    {
+        $productManager = $this->serviceContainer['product_manager'];
+        $collectionHelper = $this->serviceContainer['collection_helper'];
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
+        $memberId = $this->session->userdata('member_id');
+        $slug = trim($this->input->post('slug')); 
+        $eachAttribute = [];
+        $hasCombination = true;
+        $soloQuantity = 0;
+
+        $product = $esProductRepo->findOneBy([
+            'slug' => $slug,
+            'member' => $memberId,
+            'isDraft' => EsProduct::ACTIVE,
+            'isDelete' => EsProduct::ACTIVE,
+        ]);
+
+        if($product){
+            $product = $productManager->getProductDetails($product);
+            $productAttributes = $esProductRepo->getAttributesByProductIds($product->getIdProduct());
+            $productAttributes = $collectionHelper->organizeArray($productAttributes, true); 
+            foreach ($productAttributes as $attrKey => $attrValue) { 
+                foreach ($attrValue as $key => $value) {
+                    $eachAttribute[$value['detail_id']] = $value['value'];  
+                 } 
+            }
+
+            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                     ->getDefaultImage($product->getIdProduct());
+            $product->directory = $productImage->getDirectory();
+            $product->imageFileName = $productImage->getFilename();
+
+            $combination = $productManager->getProductCombinationAvailable($product->getIdProduct());
+            $soloProductItemId = $combination['noMoreSelection'];
+            if(trim($soloProductItemId) !== ""){
+                $hasCombination = false;
+                $soloQuantity = $combination['productCombinationAvailable'][$soloProductItemId]['quantity'];
+            }
+
+            $viewData = [
+                'product' => $product,
+                'productAttributes' => $eachAttribute,
+                'productCombination' => $combination['productCombinationAvailable'],
+                'hasCombination' => $hasCombination,
+                'soloQuantity' => $soloQuantity,
+                'availableStock' => $esProductRepo->getProductAvailableStocks($product->getIdProduct()),
+            ]; 
+
+            echo json_encode($this->load->view('partials/dashboard-express-edit', $viewData, true)); 
+        } 
+    }
+
+    /**
+     * Controller for update data in express edit
+     * @return json
+     */
+    public function updateProductExpressEdit()
+    {
+        $productManager = $this->serviceContainer['product_manager'];
+        $stringUtility = $this->serviceContainer['string_utility'];
+        $esProductItemRepo = $this->em->getRepository('EasyShop\Entities\EsProductItem');
+        $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $esProductItemAttrRepo = $this->em->getRepository('EasyShop\Entities\EsProductItemAttr');
+        $esShippingHeadRepo = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead');
+        $esShippingDetailRepo = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail');
+
+        $memberId = $this->session->userdata('member_id');
+        $slug = trim($this->input->post('slug'));
+        $productName = (string) $stringUtility->removeNonUTF(trim($this->input->post('productName')));
+        $productPrice = (float) str_replace(',', '',trim($this->input->post('productPrice')));
+        $productDiscount = (float) trim($this->input->post('discount'));
+        $soloQuantity = (int) trim($this->input->post('quantity'));
+        $removeCombination = json_decode(trim($this->input->post('remove')), true);
+        $retainCombination = json_decode(trim($this->input->post('retain')), true);
+        $serverResponse = [
+            'result' => false,
+        ];
+        $product = $esProductRepo->findOneBy([
+            'slug' => $slug,
+            'member' => $memberId,
+            'isDraft' => EsProduct::ACTIVE,
+            'isDelete' => EsProduct::ACTIVE,
+        ]); 
+
+        try {
+            if((int)$productPrice <= 0){
+                throw new Exception("Invalid price. Product price cannot be less than 0.");
+            }
+
+            if(strlen($productName) <= 0){
+                throw new Exception("Product name cannot be empty.");
+            }
+
+            if((int)$productDiscount < 0 || (int)$productDiscount > 99){
+                throw new Exception("Invalid discount. Range must be 0 - 99 only."); 
+            }
+
+            if(!$product || strlen($slug) <= 0){
+                throw new Exception("Invalid request."); 
+            }
+
+            $product->setName($productName);
+            $product->setPrice($productPrice);
+            $product->setDiscount($productDiscount);
+            $product->setLastmodifieddate(date_create());
+
+            if(empty($retainCombination)){
+                $combination = $productManager->getProductCombinationAvailable($product->getIdProduct());
+                if(trim($combination['noMoreSelection']) !== ""){
+                    $productItem = $esProductItemRepo->findOneBy([
+                        'product' => $product->getIdProduct(),
+                        'idProductItem' => (int) $combination['noMoreSelection']
+                    ]);
+                    if($productItem){
+                        $productItem->setQuantity($soloQuantity);
+                    }
+                }
+            }
+            else{
+                foreach ($retainCombination as $value) {
+                    $productItem = $esProductItemRepo->findOneBy([
+                        'product' => $product->getIdProduct(),
+                        'idProductItem' => (int) $value['itemId']
+                    ]);
+                    if($productItem){
+                        $productItem->setQuantity($value['quantity']);
+                    }
+                }
+
+                if(empty($retainCombination) === false){
+                    foreach ($removeCombination as $itemId) { 
+                        $productItem = $esProductItemRepo->findOneBy([
+                            'product' => $product->getIdProduct(),
+                            'idProductItem' => (int) $itemId
+                        ]);
+                        if($productItem){
+                            $itemAttr = $esProductItemAttrRepo->findBy([
+                                'productItem' => (int) $itemId
+                            ]);
+                            if($itemAttr){
+                                foreach ($itemAttr as $attr) { 
+                                    $this->em->remove($attr);
+                                }
+                            }
+
+                            $shippingDetails = $esShippingDetailRepo->findBy([
+                                'productItem' => (int) $itemId
+                            ]);
+
+                            foreach ($shippingDetails as $detail) {
+                                $shippingHead = $esShippingHeadRepo->findOneBy([
+                                    'idShipping' => $detail->getShipping()->getidShipping(),
+                                    'product' => $product->getIdProduct()
+                                ]);
+                                if($shippingHead){ 
+                                    $this->em->remove($detail);
+                                    $this->em->remove($shippingHead);
+                                }
+                            }
+                            $this->em->remove($productItem);
+                        }
+                    }
+                }
+            }
+            $serverResponse['result'] = true;
+            $this->em->flush();
+        }  
+        catch (Exception $e) {
+            $serverResponse['error'] = $e->getMessage();
+        }
+
+        echo json_encode($serverResponse);
+    }
 }
 
 
