@@ -33,7 +33,6 @@
                     var html = '<ul>';
                     var data_content, data_id, cnt;
                     var delim_img = ' <img src = "/assets/images/img_bullet2.jpg"/> ';
-                    console.log(obj.length);
                     if((obj.length)>0){
                         jQuery.each(obj,function(){
                             data_content = '';
@@ -132,8 +131,6 @@
 
     function editCategory(ids,customCategory)
     {
-        console.log(ids);
-        console.log(typeof(ids));
         var obj = JSON.parse(ids);
         var other_cat_name = escapeHtml(customCategory); 
         if(obj.length > 0){
@@ -202,8 +199,7 @@
         var selector = $(this);
         var value = escapeHtml(selector.val());
         var catId = selector.data('catid');
-        var level = selector.data('level');
-        console.log(value);
+        var level = selector.data('level'); 
         if(selector.val().trim() == "" || selector == "undefined"){
             $(this).replaceWith('<a class="custom_category_link pd-13-12 display-ib" data-level="'+level+'" data-catid="'+catId+'" >Add Category <span class="span_bg icon-add border-rad-90"></span></a>');
         }
