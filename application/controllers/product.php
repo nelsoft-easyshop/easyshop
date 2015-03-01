@@ -84,6 +84,7 @@ class product extends MY_Controller
             $response['productCount'] = $search['count'];
             $response['totalPage'] = ceil($search['count'] / $searchProductService::PER_PAGE);
             $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
+            $response['productView'] = '';
             if($search['count'] > 0){
                 $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
                 $response['availableCondition'] = [];
