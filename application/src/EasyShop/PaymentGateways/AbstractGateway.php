@@ -181,7 +181,7 @@ abstract class AbstractGateway implements GatewayInterface
      *
      * @return mixed
      */
-    protected function persistPayment($ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid, $gatewayReference)
+    protected function persistPayment($ItemTotalPrice, $member_id, $productstring, $productCount, $apiResponse, $tid, $gatewayReference)
     {
         // remap variables
         $invoiceNo = $member_id.'-'.date('ymdhs');
