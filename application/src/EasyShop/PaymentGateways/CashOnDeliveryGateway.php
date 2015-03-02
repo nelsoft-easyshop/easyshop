@@ -16,8 +16,7 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
  *
  *
  * Params needed
- *      method:"CashOnDelivery"
- *      lastDigit:$('input[name=paymentToken]').val().slice(-1)
+ *      method:"CashOnDelivery" 
  */
 class CashOnDeliveryGateway extends AbstractGateway
 {
@@ -37,26 +36,17 @@ class CashOnDeliveryGateway extends AbstractGateway
      * Pay method for Cash On Delivery Gateway Class
      * 
      */
-    public function pay($validatedCart, $memberId, $paymentService)
+    public function pay($validatedCart, $memberId)
     {
         // Set status response
         $response['status'] = PaymentService::STATUS_FAIL;
         
         // Point Gateway
-        $pointGateway = $paymentService->getPointGateway();
+        $pointGateway = $this->paymentService->getPointGateway();
+        $response['paymentType'] = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
+        $response['textType'] = 'cashondelivery';
+        $response['message'] = 'Your payment has been completed through Cash on Delivery.';
 
-        $lastDigit = $this->getParameter('lastDigit');
-        if(intval($lastDigit) === 2){
-            $response['paymentType'] = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
-            $response['textType'] = 'directbankdeposit';
-            $response['message'] = 'Your payment has been completed through Direct Bank Deposit.';
-        }
-        else{
-            $response['paymentType'] = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
-            $response['textType'] = 'cashondelivery';
-            $response['message'] = 'Your payment has been completed through Cash on Delivery.';
-        }
-        
         $this->setParameter('paymentType', $response['paymentType']);
         $productCount = count($validatedCart['itemArray']);
 
@@ -65,7 +55,7 @@ class CashOnDeliveryGateway extends AbstractGateway
                             ->getShippingAddress(intval($memberId));
 
         // Compute shipping fee
-        $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
+        $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
         $grandTotal = $prepareData['totalPrice'];
         $this->setParameter('amount', $grandTotal);
         $productString = $prepareData['productstring'];
@@ -74,7 +64,7 @@ class CashOnDeliveryGateway extends AbstractGateway
         $response['txnid'] = $txnid;
 
         if($validatedCart['itemCount'] === $productCount){
-            $return = $paymentService->persistPayment(
+            $return = $this->persistPayment(
                 $grandTotal, 
                 $memberId, 
                 $productString, 

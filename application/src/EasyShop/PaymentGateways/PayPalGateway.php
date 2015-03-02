@@ -39,10 +39,10 @@ class PayPalGateway extends AbstractGateway
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
  
         if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
-            $configLoad = $paymentService->configLoader->getItem('payment','production'); 
+            $configLoad = $this->paymentService->configLoader->getItem('payment','production'); 
         }
         else{ 
-            $configLoad = $paymentService->configLoader->getItem('payment','testing'); 
+            $configLoad = $this->paymentService->configLoader->getItem('payment','testing'); 
         }
         $config = $configLoad['payment_type']['paypal']['Easyshop'];
 
@@ -132,7 +132,7 @@ class PayPalGateway extends AbstractGateway
      * Pay method for Cash On Delivery Gateway Class
      * 
      */
-    public function pay($validatedCart, $memberId, $paymentService)
+    public function pay($validatedCart, $memberId)
     {
         header('Content-type: application/json');
         if(!$memberId){
@@ -140,7 +140,7 @@ class PayPalGateway extends AbstractGateway
         }
 
         // Point Gateway
-        $pointGateway = $paymentService->getPointGateway();
+        $pointGateway = $this->paymentService->getPointGateway();
 
         $PayPalMode = $this->getMode(); 
         $paypalReturnURL = $this->returnUrl; 
@@ -182,7 +182,7 @@ class PayPalGateway extends AbstractGateway
         $regionDesc = $shippingAddress->getStateregion()->getLocation();
 
         // Compute shipping fee
-        $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
+        $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
         
         // Persist point credit for postback method
         $userPoints = $this->em->getRepository('EasyShop\Entities\EsPoint')
@@ -245,7 +245,7 @@ class PayPalGateway extends AbstractGateway
         $httpParsedResponseAr = $this->PPHttpPost('SetExpressCheckout', $padata);
         if("SUCCESS" === strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" === strtoupper($httpParsedResponseAr["ACK"])){   
             $transactionID = urldecode($httpParsedResponseAr["TOKEN"]);
-            $return = $paymentService->persistPayment(
+            $return = $this->persistPayment(
                 $grandTotal, 
                 $memberId, 
                 $productstring, 
@@ -301,10 +301,10 @@ class PayPalGateway extends AbstractGateway
      * Postback function for paypal
      * 
      */
-    public function postBackMethod($validatedCart, $memberId, $paymentService, $params=[])
+    public function postBackMethod($validatedCart, $memberId, $params=[])
     {
         // Point Gateway
-        $pointGateway = $paymentService->getPointGateway();
+        $pointGateway = $this->paymentService->getPointGateway();
 
         $getItems = $this->getParameter("getArray");
 
@@ -328,7 +328,7 @@ class PayPalGateway extends AbstractGateway
             $response['orderId'] = $orderId = $return->getIdOrder();
 
             // Compute shipping fee
-            $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
+            $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
 
             $itemList = $prepareData['newItemList'];
             $grandTotal = $prepareData['totalPrice'];
