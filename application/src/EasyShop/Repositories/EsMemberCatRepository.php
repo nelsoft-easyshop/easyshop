@@ -51,11 +51,13 @@ class EsMemberCatRepository extends EntityRepository
         $rsm->addScalarResult('cat_name','cat_name');
         $rsm->addScalarResult('is_featured','is_featured');
         $rsm->addScalarResult('sort_order','sort_order');
+        $rsm->addScalarResult('is_delete','is_delete');
         $rsm->addScalarResult('product_count','product_count');
         $sql = 'SELECT es_member_cat.id_memcat,
                     es_member_cat.cat_name,
                     es_member_cat.is_featured,
                     es_member_cat.sort_order,
+                    es_member_cat.is_delete,
                     COUNT(es_member_prodcat.id_memprod) as product_count
                 FROM es_member_cat
                 LEFT JOIN es_member_prodcat 

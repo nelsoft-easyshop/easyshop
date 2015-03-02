@@ -479,7 +479,7 @@ class Store extends MY_Controller
 
         $returnData['totalProductCount'] = $totalProductCount;
         $returnData['parentCategory'] = $parentCat;
-        
+  
         return $returnData;
     }
 
@@ -888,11 +888,21 @@ class Store extends MY_Controller
 
         if($storeName !== false || $contactNumber !== false || $streetAddress !== false || $website !== false || $citySelect !== false || $regionSelect !== false){
 
-            $contactNumberConstraint = $contactNumber === $data['validatedContactNo'] ? array() :  array('constraints' => $rules['contact_number']);
+            /**
+             * Overload default IsMobileUnique constraint
+             */
+            $contactNumberConstraints = $rules['contact_number'];
+            foreach($contactNumberConstraints as $key => $mobileRule){
+                if($mobileRule instanceof EasyShop\FormValidation\Constraints\IsMobileUnique){
+                    unset($contactNumberConstraints[$key]);
+                    break;
+                }
+            }
+            $contactNumberConstraints[] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $member->getIdMember()]);  
             $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                                 ->setMethod('POST')
-                                ->add('shop_name', 'text', array('constraints' => $rules['shop_name']))
-                                ->add('contact_number', 'text', $contactNumberConstraint)
+                                ->add('shop_name', 'text', ['constraints' => $rules['shop_name']])
+                                ->add('contact_number', 'text', ['constraints' => $contactNumberConstraints])
                                 ->add('street_address', 'text')
                                 ->add('city', 'text')
                                 ->add('region', 'text')
@@ -1138,7 +1148,17 @@ class Store extends MY_Controller
         $rules = $formValidation->getRules('personal_info');
         $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                             ->setMethod('POST');
-        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);        
+        /**
+         * Overload default IsMobileUnique constraint
+         */
+        foreach($rules['mobile'] as $key => $mobileRule){
+            if($mobileRule instanceof EasyShop\FormValidation\Constraints\IsMobileUnique){
+                unset($rules['mobile'][$key]);
+                break;
+            }
+        }
+        $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);  
+        
         $formBuild->add('store_name', 'text', ['constraints' => $rules['shop_name']])
                   ->add('mobile', 'text', ['constraints' => $rules['mobile']])
                   ->add('city', 'text')

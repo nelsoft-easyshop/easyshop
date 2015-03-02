@@ -2868,6 +2868,10 @@ label.css-label {
     width: 31.5%;
 }
 
+#express-edit-section{
+    display: none;
+}
+
 @media only screen and (max-width: 991px){
     .no-items{
         font-size: 15px;

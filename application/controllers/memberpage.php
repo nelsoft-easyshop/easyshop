@@ -258,7 +258,17 @@ class Memberpage extends MY_Controller
 
         $rules = $formValidation->getRules('personal_info');
         $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                                 ->setMethod('POST');
+                                 ->setMethod('POST');                    
+        
+        /**
+         * Overload default IsMobileUnique constraint
+         */
+        foreach($rules['mobile'] as $key => $mobileRule){
+            if($mobileRule instanceof EasyShop\FormValidation\Constraints\IsMobileUnique){
+                unset($rules['mobile'][$key]);
+                break;
+            }
+        }
         $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);
         $formBuild->add('fullname', 'text');
         $formBuild->add('gender', 'text', ['constraints' => $rules['gender']]);
@@ -492,7 +502,7 @@ class Memberpage extends MY_Controller
                                                     $this->input->post("invoiceNo"),
                                                     $this->input->post("paymentMethod")
                                                 );
-
+        $boughtTransactions["transactions"] = []; 
         foreach ($transactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
                 $data = [];
@@ -541,7 +551,7 @@ class Memberpage extends MY_Controller
                                                                       $this->input->post("invoiceNo"),
                                                                       $this->input->post("paymentMethod")
                                                                       );  
-
+        $soldTransactions["transactions"] = [];
         foreach ($transactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
                 $data = [];   
@@ -2141,6 +2151,7 @@ class Memberpage extends MY_Controller
             $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
                                     ->findOneBy(['idMember' => $memberId]);
             $categoryData = json_decode($this->input->post('categoryData'));
+
             $indexedCategoryData = [];
             $hasCategoryError = false;
             foreach($categoryData as $category){
@@ -2154,6 +2165,7 @@ class Memberpage extends MY_Controller
             if(!$hasCategoryError){
                 $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
                                                  ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+                $datetimeToday = date_create(date("Y-m-d H:i:s"));
                 $categoryDataResult = [];
                 foreach($savedCategories as $savedCategory){
                     $memberCategoryId = $savedCategory->getIdMemcat(); 
@@ -2161,6 +2173,7 @@ class Memberpage extends MY_Controller
                         $currentCategory = $indexedCategoryData[$memberCategoryId];
                         $savedCategory->setCatName($currentCategory->name);
                         $savedCategory->setSortOrder($currentCategory->order);
+                        $savedCategory->setlastModifiedDate($datetimeToday);
                         $categoryDataResult[] = $this->createCategoryStdObject($currentCategory->name,
                                                                             $currentCategory->order,
                                                                             $memberCategoryId);
@@ -2168,22 +2181,41 @@ class Memberpage extends MY_Controller
                     }
                 }
                 $newMemberCategories = [];
-                foreach($indexedCategoryData as $index=>$newCategory){
-                    $newMemberCategories[$index] = new EasyShop\Entities\EsMemberCat();
-                    $newMemberCategories[$index]->setMember($member);
-                    $newMemberCategories[$index]->setCatName($newCategory->name);
-                    $newMemberCategories[$index]->setSortOrder($newCategory->order);
-                    $newMemberCategories[$index]->setCreatedDate(date_create(date("Y-m-d H:i:s")));
-                    $newMemberCategories[$index]->setlastModifiedDate(date_create(date("Y-m-d H:i:s")));
-                    $entityManager->persist($newMemberCategories[$index]);
+                
+                if(empty($indexedCategoryData) === false){
+                    $allUserCategories = $this->serviceContainer['category_manager']->getUserCategories($memberId);
+                    foreach($indexedCategoryData as $index => $newCategory){
+                        $newMemberCategory = new EasyShop\Entities\EsMemberCat();
+                        $newMemberCategory->setMember($member);
+                        $newMemberCategory->setCatName($newCategory->name);
+                        $newMemberCategory->setSortOrder($newCategory->order);
+                        $newMemberCategory->setCreatedDate($datetimeToday);
+                        $newMemberCategory->setlastModifiedDate($datetimeToday);
+                        $entityManager->persist($newMemberCategory);
+                        if(isset($allUserCategories[$index])){
+                            $childCategories = $allUserCategories[$index]['child_cat'];
+                            $productIds = $this->serviceContainer['entity_manager']
+                                               ->getRepository('EasyShop\Entities\EsProduct')
+                                               ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
+  
+                            $products = $this->serviceContainer['entity_manager']
+                                             ->getRepository('EasyShop\Entities\EsProduct')
+                                             ->findByIdProduct($productIds);
+                            foreach($products as $product){
+                                $memberCategoryProduct = new EasyShop\Entities\EsMemberProdcat();
+                                $memberCategoryProduct->setMemcat($newMemberCategory);
+                                $memberCategoryProduct->setProduct($product);
+                                $memberCategoryProduct->setCreatedDate($datetimeToday);
+                                $entityManager->persist($memberCategoryProduct);
+                            } 
+                        }
+                        $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
+                                                        $newMemberCategory->getSortOrder(),
+                                                        $newMemberCategory->getIdMemcat());
+                    } 
                 }
-                $entityManager->flush();
 
-                foreach($newMemberCategories as $newMemberCategory){
-                    $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
-                                                    $newMemberCategory->getSortOrder(),
-                                                    $newMemberCategory->getIdMemcat());
-                }
+                $entityManager->flush();
 
                 $jsonResponse['isSuccessful'] =  true;
                 $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {
