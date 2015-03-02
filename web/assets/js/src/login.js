@@ -123,8 +123,20 @@
                                 if(data['o_message'] === 'Account Banned'){
                                     var officeHours = $('#office_hours').val();
                                     var officeContactno = $('#office_contactno').val();
-                                    var message = data['errors'][0]['message'] + " Contact our Customer Service Support for further details: " + officeHours + " " +  officeContactno;
-                                    $loginErrorContainer.html(escapeHtml(message));
+                                    var message = data['errors'][0]['message'];
+                                    var messageSpan =  document.createElement("span");
+                                    var newContent = document.createTextNode(message); 
+                                    messageSpan.appendChild(newContent);
+                                    $loginErrorContainer.append(messageSpan);
+                                    var linebreak = document.createElement("br");
+                                    $loginErrorContainer.append(linebreak);
+                                    linebreak = document.createElement("br");
+                                    $loginErrorContainer.append(linebreak);
+                                    message = "Contact our Customer Service Support for further details: " + officeHours + " " +  officeContactno;
+                                    newContent = document.createTextNode(escapeHtml(message)); 
+                                    messageSpan =  document.createElement("span");
+                                    messageSpan.appendChild(newContent);
+                                    $loginErrorContainer.append(messageSpan);
                                 }
                                 else if(data["o_message"] == "Account Deactivated") {
                                     $("#deactivatedAccountPrompt").css("display","block");
