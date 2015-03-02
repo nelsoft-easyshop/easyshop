@@ -448,7 +448,7 @@ class Kernel
                 $container['social_media_manager'],
                 $container['language_loader'],
                 $container['message_manager'],
-                $container['nusoap_client']
+                $container['dragonpay_soap_client']
             );
         };
 
@@ -478,7 +478,7 @@ class Kernel
         };
 
         // NUSoap Client
-        $container['nusoap_client'] = function ($c) use ($container) {
+        $container['dragonpay_soap_client'] = function ($c) use ($container) {
             $url = '';
             if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
                 // LIVE

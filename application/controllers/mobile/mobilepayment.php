@@ -47,6 +47,15 @@ class mobilePayment extends MY_Controller
         
         $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        
+        if((bool)$this->member->getIsEmailVerify() === false){
+            $outputData = [
+                'cartData' => [],
+                'canContinue' => false,
+                'errorMessage' => "Please verify your email address.",
+            ];
+            die(json_encode($outputData, JSON_PRETTY_PRINT));
+        }
     }
 
     /**
@@ -67,21 +76,22 @@ class mobilePayment extends MY_Controller
                               : []; 
 
         $paymentType = $checkoutService->getPaymentTypeByString($postPaymentType);
-        $cart = $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember());
-        $formatCart = $cart['rawItems']; 
+        $cart = $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember()); 
         $memberCartData = unserialize($this->member->getUserdata());
         $isCartNotEmpty = empty($memberCartData) === false;
-        $cartData = $isCartNotEmpty ? $memberCartData : []; 
-        if((int)$this->member->getIsEmailVerify()){
-            $validatedCart = $checkoutService->validateCartContent($this->member, $formatCart);
-            $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
-            $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $postPaymentType); 
+        $cartData = $isCartNotEmpty ? $memberCartData : [];  
+        $validatedCart = $checkoutService->validateCartContent($this->member);
+        $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
+        $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $postPaymentType);
+
+        if(empty($validatedCart) === false){
             if(!$canContinue){
                 $errorMessage = "One of your item is not available.";
-            } 
+            }
         }
         else{
-            $errorMessage = "Please verify your email address.";
+            $canContinue = false;
+            $errorMessage = "You have no item in your cart.";
         }
 
         $outputData = [
@@ -266,7 +276,6 @@ class mobilePayment extends MY_Controller
      */
     public function paymentPaypalPersist()
     {
-        $paymentController = $this->loadController('payment'); 
         $checkoutService = $this->serviceContainer['checkout_service'];
         $paymentService = $this->serviceContainer['payment_service'];
 
@@ -346,14 +355,8 @@ class mobilePayment extends MY_Controller
 
             $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                      ->getDefaultImage($productDetails->getProduct()->getIdProduct());
-
-            $imageDirectory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-            $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-
-            if($productImage != null){
-                $imageDirectory = $productImage->getDirectory();
-                $imageFileName = $productImage->getFilename();
-            }
+            $imageDirectory = $productImage->getDirectory();
+            $imageFileName = $productImage->getFilename(); 
 
             $displayArray['products'][] = [
                 'quantity' => $value->getOrderQuantity(),
@@ -371,11 +374,11 @@ class mobilePayment extends MY_Controller
      * NOTE STARTING HERE IS THE OLD API!
      */
     
-     /**
-    * Load controller to access the controller function
-    * @param string $fileName
-    * @return object
-    */
+    /**
+     * Load controller to access the controller function
+     * @param string $fileName
+     * @return object
+     */
     private function loadController($fileName)
     {
         $CI = & get_instance();
@@ -397,28 +400,25 @@ class mobilePayment extends MY_Controller
     * @return JSON
     */
     public function doPaymentReview()
-        {
+    {
         $apiFormatter = $this->serviceContainer['api_formatter'];
         // Load controller
         $this->paymentController = $this->loadController('payment');
         $mobileCartContents = $this->input->post('cartData')
                               ? json_decode($this->input->post('cartData'))
                               : [];
-        $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember());
+        $cartData = $apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember(), false);
         $formattedCartContents = [];
         $canContinue = false;
         $paymentType = [];
-        $errorMessage = "Please verify your email address.";
-        if((int)$this->member->getIsEmailVerify() > 0){
-            $errorMessage = "You have no item in you cart";
-            if(empty($cartData) === false){
-                $dataCollection = $this->paymentController->mobileReviewBridge();
-                $cartData = $dataCollection['cartData'];
-                $canContinue = $dataCollection['canContinue'];
-                $errorMessage = $dataCollection['errMsg'];
-                $paymentType = $dataCollection['paymentType'];
-                $formattedCartContents = $apiFormatter->formatCart($cartData);
-            }
+        $errorMessage = "You have no item in you cart"; 
+        if(empty($cartData) === false){
+            $dataCollection = $this->paymentController->mobileReviewBridge();
+            $cartData = $dataCollection['cartData'];
+            $canContinue = $dataCollection['canContinue'];
+            $errorMessage = $dataCollection['errMsg'];
+            $paymentType = $dataCollection['paymentType'];
+            $formattedCartContents = $apiFormatter->formatCart($cartData);
         }
         $finalPaymentType = [];
         foreach ($paymentType as $key => $value) {
@@ -435,10 +435,10 @@ class mobilePayment extends MY_Controller
         print(json_encode($outputData,JSON_PRETTY_PRINT));
     }
 
-     /**
-    * Persist Cash on delivery payment
-    * @return JSON
-    */
+    /**
+     * Persist Cash on delivery payment
+     * @return JSON
+     */
     public function doMobilePayCod()
     {
         $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
@@ -448,13 +448,13 @@ class mobilePayment extends MY_Controller
         $cartData = $dataCollection['cartData'];
         $check = $this->checkAvailableInPayment($cartData,$paymentType);
         if(empty($cartData) === false){
-        $returnArray = $this->paymentController->mobilePersistCod();
-        $returnArray['isSuccess'] = strtolower($returnArray['status']) === PaymentService::STATUS_SUCCESS;
+            $returnArray = $this->paymentController->mobilePersistCod();
+            $returnArray['isSuccess'] = strtolower($returnArray['status']) === PaymentService::STATUS_SUCCESS;
         }
         else{
             $returnArray = [
                 'isSuccess' => false,
-                'status' => 'f',
+                'status' => PaymentService::STATUS_FAIL,
                 'message' => 'You have no item in your cart',
             ];
         }
@@ -463,9 +463,9 @@ class mobilePayment extends MY_Controller
 
 
     /**
-    * Request payment token
-    * @return JSON
-    */
+     * Request payment token
+     * @return JSON
+     */
     public function doPayRequestToken()
     {
         $returnUrl = "";
@@ -477,6 +477,7 @@ class mobilePayment extends MY_Controller
                          ? $this->config->item('production', 'payment')
                          : $this->config->item('testing', 'payment');
         if(empty($cartData) === false && $this->input->post('paymentType')){
+            $postStringPayment = trim($this->input->post('paymentType'));
             if($this->input->post('paymentType') == "paypal"){
                 $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
             }
@@ -489,8 +490,8 @@ class mobilePayment extends MY_Controller
             $check = $this->checkAvailableInPayment($cartData,$paymentType);
             $requestData = $this->paymentController->mobilePayBridge($paymentType);
             $urlReturn = "";
-            if($this->input->post('paymentType') == "paypal"){
-                if($requestData['e'] == 1){
+            if($postStringPayment === "paypal"){
+                if((bool)$requestData['e']){
                     $isSuccess = true;
                     $urlReturn = $requestData['d'];
                     $message = "";
@@ -501,8 +502,8 @@ class mobilePayment extends MY_Controller
                     $message = $requestData['d'];
                 }
             }
-            elseif($this->input->post('paymentType') == "dragonpay"){
-                if($requestData['e'] == 1){
+            elseif($postStringPayment === "dragonpay"){
+                if((bool)$requestData['e']){
                     $isSuccess = true;
                     $urlReturn = $requestData['u'];
                     $message = "";
@@ -532,10 +533,10 @@ class mobilePayment extends MY_Controller
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
     }
 
-     /**
-    * Persist Payment in paypal
-    * @return json
-    */
+    /**
+     * Persist Payment in paypal
+     * @return json
+     */
     public function doPaypalPersistPayment()
     {
         $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
@@ -548,19 +549,25 @@ class mobilePayment extends MY_Controller
             $cartData = $dataCollection['cartData'];
             $check = $this->checkAvailableInPayment($cartData,$paymentType);
             $requestData = $this->paymentController->mobilePayPersist($paymentType, $token, $payerId);
-            $isSuccess = (strtolower($requestData['status']) == 's') ? true : false;
+            $isSuccess = strtolower($requestData['status']) === PaymentService::STATUS_SUCCESS;
             $returnArray = array_merge(['isSuccess' => $isSuccess],$requestData);
         }
         else{
             $returnArray = [
                 'isSuccess' => false,
-                'status' => 'f',
+                'status' => PaymentService::STATUS_FAIL,
                 'message' => 'You have no item in your cart',
             ];
         }
         echo json_encode($returnArray,JSON_PRETTY_PRINT);
     }
 
+    /**
+     * Check if payment type is available for checkout
+     * @param  array  $itemArray
+     * @param  string $paymentType
+     * @return array
+     */
     private function checkAvailableInPayment($itemArray,$paymentType)
     {
         if($paymentType == EsPaymentMethod::PAYMENT_PAYPAL){
@@ -578,7 +585,7 @@ class mobilePayment extends MY_Controller
         $error = 0;
         foreach ($itemArray as $key => $value) {
             $value['isAvailable'] = "true";
-            if(!$value[$keyString]){
+            if(isset($value[$keyString]) === false || !$value[$keyString]){
                 $itemArray[$key]['isAvailable'] = "false";
                 $error++;
             }
@@ -592,8 +599,7 @@ class mobilePayment extends MY_Controller
                 'cancelUrl' => '',
                 'cartData' => $this->serviceContainer['api_formatter']->formatCart($itemArray),
             ];
-            echo json_encode($returnArray,JSON_PRETTY_PRINT);
-            exit();
+            die(json_encode($returnArray,JSON_PRETTY_PRINT));
         }
         return $itemArray;
     }

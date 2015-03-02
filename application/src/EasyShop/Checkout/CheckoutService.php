@@ -71,11 +71,9 @@ class CheckoutService
      * @param  EasyShop\Entities\EsMember $member
      * @return array
      */
-    public function validateCartContent($member, $cartContent = [])
+    public function validateCartContent($member)
     {
-        if(empty($cartContent)){
-            $cartContent = $this->cartManager->getValidatedCartContents($member->getIdMember());
-        }
+        $cartContent = $this->cartManager->getValidatedCartContents($member->getIdMember());
 
         foreach ($cartContent as $key => $value) {
             $productId = $value['id'];
@@ -130,8 +128,8 @@ class CheckoutService
         $quantityData = $this->productManager->getProductInventory($product, false, true);
 
         if(isset($quantityData[$itemId]['quantity'])){
-            return $quantityData[$itemId]['quantity'] >= $quantity 
-                   && $quantityData[$itemId]['quantity'] > 0;
+            return $quantityData[$itemId]['quantity'] > 0
+                   && $quantityData[$itemId]['quantity'] >= $quantity;
         }
 
         return false;
@@ -229,7 +227,7 @@ class CheckoutService
             } 
         }
 
-        return $itemFail === 0;
+        return $itemFail === 0 && count($cartData) !== 0;
     }
 
     /**

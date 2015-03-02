@@ -272,10 +272,10 @@ class ApiFormatter
 
     /**
      * Format cart array to display on mobile api
-     * @param  array   $cartData 
-     * @param  boolean $forPayment
-     * @param  string  $paymentType
-     * @return array
+     * @param  mixed   $cartData
+     * @param  boolean $includeValidation
+     * @param  string  $paymentTypeString
+     * @return mixed
      */
     public function formatCart($cartData, $includeValidation = false, $paymentTypeString = "")
     { 
@@ -404,16 +404,16 @@ class ApiFormatter
 
     /**
      * Update Cart data and format cart item array
-     * @param  array $mobileCartContents
-     * @param  integer $memberId
-     * @return array
+     * @param  mixed    $mobileCartContents 
+     * @param  integer  $memberId 
+     * @param  boolean  $includeUnavailable
+     * @return mixed
      */
     public function updateCart($mobileCartContents, $memberId, $includeUnavailable = true)
     {
         $unavailableItem = [];
         $itemList = []; 
-        $slugList = []; 
-        $rawItems = [];
+        $slugList = [];  
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
             $options = [];
@@ -428,13 +428,13 @@ class ApiFormatter
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
             if($product){
                 $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
-                $rawItems[] = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
-                                                                            $options, 
-                                                                            $mobileCartContent->quantity)['itemData'];
+                $cartContent = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
+                                                                             $options, 
+                                                                             $mobileCartContent->quantity)['itemData'];
                 $itemList[] = [
                     'rowid' => $product->getIdProduct(),
                     'id' =>  $product->getIdProduct(),
-                    'product_itemID' => 0, 
+                    'product_itemID' => $cartContent['product_itemID'], 
                     'slug' => $product->getSlug(),
                     'name' => utf8_encode($product->getName()),
                     'qty' => $mobileCartContent->quantity, 
@@ -442,7 +442,7 @@ class ApiFormatter
                     'price' => $product->getPrice(),
                     'options' => [], 
                 ];
-                $slugList[] = $product->getSlug();
+                $slugList[] = $product->getSlug(); 
             }
         }
         $this->cartImplementation->persist($memberId);
@@ -460,8 +460,7 @@ class ApiFormatter
 
         return [
             'availableItems' => $this->formatCart($cartData),
-            'unavailableItems' => $this->formatCart($itemList),
-            'rawItems' => $rawItems,
+            'unavailableItems' => $this->formatCart($itemList), 
         ];
     }
 
@@ -538,4 +537,4 @@ class ApiFormatter
         return $modifiedArray;
     }
 }
- 
+
