@@ -333,7 +333,7 @@ class CategoryManager
 
         $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                      ->getCustomCategoriesArray($memberId);    
-
+                                     
         /**
          * Obtain data for customized categories
          */
@@ -350,6 +350,7 @@ class CategoryManager
             $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
             $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
             $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+            $vendorCategories[$index]['is_delete'] = $memberCategory['is_delete'];
             $cleanNameMemberCategories[] = $this->stringUtility->cleanString($memberCategory['cat_name']);
             if((int)$memberCategory['sort_order'] > (int)$highestSortOrder){
                 $highestSortOrder = $memberCategory['sort_order'];
@@ -381,6 +382,7 @@ class CategoryManager
                 $vendorCategories[$index]['categoryId'] = $parentId;
                 $vendorCategories[$index]['memberCategoryId'] = 0;       
                 $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+                $vendorCategories[$index]['is_delete'] = 0;
             }              
             /**
              * Ignore default categories that have the same name as a custom category
@@ -395,6 +397,14 @@ class CategoryManager
                 $vendorCategories[$index]['child_cat'][] = $rawVendorCategory['cat_id'];
             }
             $vendorCategories[$index]['product_count'] += $rawVendorCategory['prd_count'];
+        }
+        /**
+         * Remove deleted categories
+         */
+        foreach($vendorCategories as $key => $vendorCategory){
+            if((int)$vendorCategory['is_delete'] === EsMemberCat::DELETED){
+                unset($vendorCategories[$key]);
+            }
         }
 
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
