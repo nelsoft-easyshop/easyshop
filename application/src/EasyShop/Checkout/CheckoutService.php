@@ -71,11 +71,9 @@ class CheckoutService
      * @param  EasyShop\Entities\EsMember $member
      * @return array
      */
-    public function validateCartContent($member, $cartContent = [])
+    public function validateCartContent($member)
     {
-        if(empty($cartContent)){
-            $cartContent = $this->cartManager->getValidatedCartContents($member->getIdMember());
-        }
+        $cartContent = $this->cartManager->getValidatedCartContents($member->getIdMember());
 
         foreach ($cartContent as $key => $value) {
             $productId = $value['id'];

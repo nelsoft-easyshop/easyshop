@@ -72,7 +72,6 @@ class cart extends MY_Controller
                               : [];
         $booleanInclude = $this->input->post('includeUnavailable'); 
         $cartData = $this->apiFormatter->updateCart($mobileCartContents,$this->member->getIdMember(), $booleanInclude); 
-        unset($cartData['rawFormat']);
         print(json_encode($cartData,JSON_PRETTY_PRINT));
     }
 

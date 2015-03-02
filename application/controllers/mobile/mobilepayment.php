@@ -76,16 +76,15 @@ class mobilePayment extends MY_Controller
                               : []; 
 
         $paymentType = $checkoutService->getPaymentTypeByString($postPaymentType);
-        $cart = $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember());
-        $formatCart = $cart['rawItems']; 
+        $cart = $apiFormatter->updateCart($mobileCartContents, $this->member->getIdMember()); 
         $memberCartData = unserialize($this->member->getUserdata());
         $isCartNotEmpty = empty($memberCartData) === false;
         $cartData = $isCartNotEmpty ? $memberCartData : [];  
-        $validatedCart = $checkoutService->validateCartContent($this->member, $formatCart);
+        $validatedCart = $checkoutService->validateCartContent($this->member);
         $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
         $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $postPaymentType);
 
-        if(empty($validatedCart) === false && empty($formatCart) === false){
+        if(empty($validatedCart) === false){
             if(!$canContinue){
                 $errorMessage = "One of your item is not available.";
             }

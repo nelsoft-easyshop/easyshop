@@ -21,9 +21,8 @@ class DragonPayGateway extends AbstractGateway
 {
 
     private $merchantId; 
-    private $merchantPwd;  
-    private $url;
-    private $ps;
+    private $merchantPwd;
+    private $redirectUrl;
     private $client;
 
     private $errorCodes = [
@@ -59,7 +58,7 @@ class DragonPayGateway extends AbstractGateway
         }
         $config = $configLoad['payment_type']['dragonpay']['Easyshop'];
 
-        $this->ps = $config['redirect_url'];
+        $this->redirectUrl = $config['redirect_url'];
         $this->merchantId = $config['merchant_id'];
         $this->merchantPwd = $config['merchant_password']; 
         $this->client = $paymentService->soapClient;
@@ -105,7 +104,7 @@ class DragonPayGateway extends AbstractGateway
             return '{"e":"0","m":"'.$errorCodes[$token].'","c":"'.$token.'"}';
         }
         else{
-            return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$this->ps.'?tokenid='.$token.'&mode=7"}';
+            return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$this->redirectUrl.'?tokenid='.$token.'&mode=7"}';
         }
     }
 

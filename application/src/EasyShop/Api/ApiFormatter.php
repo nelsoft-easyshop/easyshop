@@ -412,8 +412,7 @@ class ApiFormatter
     {
         $unavailableItem = [];
         $itemList = []; 
-        $slugList = []; 
-        $rawItems = [];
+        $slugList = [];  
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
             $options = [];
@@ -442,8 +441,7 @@ class ApiFormatter
                     'price' => $product->getPrice(),
                     'options' => [], 
                 ];
-                $slugList[] = $product->getSlug();
-                $rawItems[] = $cartContent;
+                $slugList[] = $product->getSlug(); 
             }
         }
         $this->cartImplementation->persist($memberId);
@@ -461,8 +459,7 @@ class ApiFormatter
 
         return [
             'availableItems' => $this->formatCart($cartData),
-            'unavailableItems' => $this->formatCart($itemList),
-            'rawItems' => $rawItems,
+            'unavailableItems' => $this->formatCart($itemList), 
         ];
     }
 
