@@ -156,7 +156,6 @@
                         </span>
                     </div>
                 </div>
-                <input type='hidden' value='<?php echo $url?>' id='redirect_url'/>
                 <input type='hidden' value='<?php echo $dayRange.' '.$hourRange; ?>' id='office_hours'/>
                 <input type='hidden' value='<?php echo $officeContactNo ?>' id='office_contactno'/>
                 <div class="clear"></div>
@@ -480,7 +479,7 @@
 </body>
 
 <?php echo form_open('registration/success', array('id'=>'success_register'));?>
-<input type="hidden" name="referrer" class="referrer" value="<?=$redirect_url ?>"/>
+    <input type="hidden" name="referrer" class="referrer" value="<?= $is_promo ? $redirect_url : 'registration'?>"/>
 <?php echo form_close();?>
 
 <script type="text/javascript">

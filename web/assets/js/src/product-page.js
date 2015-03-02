@@ -131,6 +131,7 @@
                 if($combinationQuantity <= 0){
                     $("#control-quantity").append('<option value="0">0</option>');
                     $addToCartButton.removeClass("enabled").addClass("disabled");
+                    $("#shipment_locations").val($("#shipment_locations option:first").val());
                     $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
                 }
                 else{
@@ -155,8 +156,9 @@
 
             $("#shipment_locations > option").each(function() { 
                 $(this).empty().append($(this).data('text'));
-            });
+            }); 
 
+            $("#shipment_locations").val($("#shipment_locations option:first").val());
             $addToCartButton.removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
             $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
@@ -351,6 +353,7 @@
         }
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
+                $("#shipment_locations").val($("#shipment_locations option:first").val());
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
                 $("#control-quantity").html('<option value="0">0</option>');
                 $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
@@ -378,17 +381,21 @@
             var $attrParent = $thisSelect.children('option:selected').data('headvalue'); 
             var $attrName = $thisSelect.children('option:selected').data('textvalue');
             var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
-
             $optionsObject[$attrParent] = $attrName + '~' + $additionalPrice.toFixed(2); 
         });
-     
+        
+        var $isLoggedIn = JSON.parse($('.es-data[name="is-logged-in"]').val());
+        if(!$isLoggedIn){
+            window.location.replace("/login");
+            return false;
+        }
+
         $.ajax({
             url: "/cart/doAddItem",
             type:"POST",
             dataType:"JSON",
             data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
             success:function(data){
-
                 if(!data.isLoggedIn){
                     window.location.replace("/login");
                 }

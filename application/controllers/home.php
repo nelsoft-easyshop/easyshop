@@ -307,6 +307,33 @@ class Home extends MY_Controller
         echo json_encode($this->load->view('partials/home-productlist', $data, true));
     }
 
+    /**
+     * Retrieves the redirect page for external links
+     */
+    public function redirect()
+    {
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Redirect | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
+        ];
+
+        if (!$this->input->get('url')) {
+            redirect('/', 'refresh');
+        }
+
+        $urlData = $this->serviceContainer['url_utility']->parseExternalUrl(trim($this->input->get('url')));
+        if($urlData['targetString'] === '_self'){
+            redirect($urlData['url']);
+        }
+        
+        $this->load->spark('decorator');
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/web/redirect', $urlData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+    }
+
 }
 
 /* End of file home.php */

@@ -30,11 +30,13 @@
                     <div class="div-detail-container ">
                         <p class="p-detail-title">Product Detail</p>
                         <div class="p-html-description">
-                            <?=$productDetails; ?>
-                            <?php foreach ($additionalInformation as $value): ?>
-                                <?=$value; ?>
-                                <br>
-                            <?php endforeach; ?>
+                            <div class="external-links-container">
+                                <?=$productDetails; ?>
+                                <?php foreach ($additionalInformation as $value): ?>
+                                    <?=$value; ?>
+                                    <br>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
                         <div class="clear"></div>
                     </div>

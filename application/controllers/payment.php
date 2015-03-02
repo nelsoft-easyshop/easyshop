@@ -486,8 +486,8 @@ class Payment extends MY_Controller{
         // Set this to 0 once you go live or don't require logging.
         $PayPalMode = $this->paypal->getMode(); 
         $paypalmode = ($PayPalMode == '.sandbox' ? '.sandbox' : '');
-        define("DEBUG", 1);
-        define("LOG_FILE", "./ipn.log");
+        define("DEBUG", 0);
+        define("LOG_FILE", "../application/logs/ipn-log-".date('Y-m-d-H-i-s').".log");
 
         // Read POST data
         // reading posted data directly from $_POST causes serialization

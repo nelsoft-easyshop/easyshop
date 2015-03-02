@@ -1,10 +1,12 @@
 
 <div id="express-edit-section">
-    PLEASE WAIT!!
+    <center class="loading-image"><img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG-small.gif" alt="Please wait !!!"></center>
+    <div class="express-edit-section-content">
+    </div>
 </div>
 
 <?php foreach ($products as $product): ?>
-<div id="item-list-<?=$product->getIdProduct(); ?>" class="items-list-container">
+<div id="item-list-<?=$product->getIdProduct(); ?>" class="items-list-container item-list-<?=$product->getIdProduct(); ?>">
     <div class="row">
         <div class="col-md-12">
             <div class="item-list-panel">
