@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMemberProdcat
  *
  * @ORM\Table(name="es_member_prodcat", indexes={@ORM\Index(name="fk_es_member_prodcat_1_idx", columns={"memcat_id"}), @ORM\Index(name="fk_es_member_prodcat_2_idx", columns={"product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberProdcatRepository")
  */
 class EsMemberProdcat
 {

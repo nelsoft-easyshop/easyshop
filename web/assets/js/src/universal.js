@@ -17,6 +17,15 @@ if (typeof jQuery.ui != 'undefined') {
     };
 }
 
+$(document).ready(function()
+{
+    $('.external-links-container a').on('click', function ()
+    {
+        window.location.replace('/redirect?url=' + $(this).attr('href'))
+        return false;
+    });
+});
+
 var entityMap = {
     "&": "&amp;",
     "<": "&lt;",

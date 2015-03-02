@@ -14,12 +14,15 @@
     {
         var finalPrice;
         var finalDiscountRate;
+        var discounted;
         if(discountPrice === 0){
-            $(".discount-price").val(replaceNumberWithCommas(basePrice.toFixed(2)));
+            discounted = basePrice * (discountRate/100);
+            finalPrice = Math.abs(parseFloat(basePrice - discounted)); 
+            $(".discount-price").val(replaceNumberWithCommas(finalPrice.toFixed(2)));
         }
         else{
             finalDiscountRate = ((basePrice - discountPrice) / basePrice) * 100;
-            $(".discount-rate").val(finalDiscountRate.toFixed(4));
+            $(".discount-rate").val(finalDiscountRate.toFixed(2));
         }
     }
 
@@ -49,7 +52,7 @@
         var $productName = $.trim($container.find('.product-name').val());
         var $errorCount = 0;
 
-        if($basePrice > 0){
+        if(parseInt($basePrice) > 0){
             validateWhiteTextBox('.base-price');
         }
         else{
@@ -76,7 +79,7 @@
             showError("Invalid discount. Range must be 0 - 99 only.");
         }
 
-        if($discountPrice <= $basePrice && $discountPrice > 0){
+        if($discountPrice <= $basePrice && parseInt($discountPrice) > 0){
             validateWhiteTextBox('.discount-price');
         }
         else{
@@ -91,55 +94,50 @@
         return true;
     }
 
-    $(document).on('change',".txt-quantity",function () {
-        var $this = $(this);
-        $(".txt-total-stock").val(getTotalStock($this));
-    });
-
     $(document).on('change',".base-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseInt(removeComma($this.val()));
-        var $discountRate = parseFloat(removeComma($container.find('.discount-rate').val()));
-        validate($this);
-        if($value >= 0){
+        var $value = parseFloat(removeComma($this.val())).toFixed(2);
+        var $discountRate = parseFloat(removeComma($container.find('.discount-rate').val())); 
+        
+        if(parseInt($value) >= 0){
             computeDiscountPrice($value, $discountRate, 0);
         }
-        $this.val(replaceNumberWithCommas($value.toFixed(2)));
+        $this.val(replaceNumberWithCommas($value));
+        validate($this);
     });
 
     $(document).on('change',".discount-rate",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseInt(removeComma($this.val()));
+        var $value = parseFloat(removeComma($this.val())).toFixed(2);
         var $basePrice = parseFloat(removeComma($container.find('.base-price').val()));
 
-        validate($this);
-        if($value >= 0 && $value <= 99){  
+        if(parseInt($value) >= 0 && parseInt($value) <= 99){  
             computeDiscountPrice($basePrice, $value, 0);
-            validate($this);
         }
-        $this.val($value.toFixed(4));
+        $this.val($value);
+        validate($this);
     });
 
     $(document).on('change',".discount-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseInt(removeComma($this.val()));
+        var $value = parseFloat(removeComma($this.val())).toFixed(2);
         var $basePrice = parseFloat(removeComma($container.find('.base-price').val()));
 
-        validate($this);
-        if($value <= $basePrice && $value > 0){  
+        if($value <= $basePrice && parseInt($value) > 0){  
             computeDiscountPrice($basePrice, 0, $value);
-            validate($this);
         }
-        $this.val(replaceNumberWithCommas($value.toFixed(2)));
+        $this.val(replaceNumberWithCommas($value));
+        validate($this);
     });
 
     $(document.body).on('click','.cancel-btn',function () {
         var $this = $(this);
-        var $container = $this.closest('.express-edit-content');
-        $container.find('cancel-btn').trigger('click');
+        $this.closest('.ui-dialog-content').dialog('close');
+        $slug = null;
+        $productId = null; 
     });
 
     $(document.body).on('click','.save-btn',function () {
@@ -175,48 +173,55 @@
                 url: '/me/product/expressedit-update',
                 success: function(requestResponse){
                     var $response = $.parseJSON(requestResponse);
-                    var $itemContainer = $("#item-list-"+$productId);
-                    var $imageContainer = $itemContainer.find('.div-product-image')
-                    var $discountContainer = $imageContainer.find('.pin-discount');
-                    var $amountContainer = $itemContainer.find('.item-amount');
-                    var $originalAmountContainer = $amountContainer.find('.item-original-amount');
+                    var $itemContainer;
+                    var $imageContainer;
+                    var $discountContainer;
+                    var $amountContainer;
+                    var $originalAmountContainer;
                     if($response.result){
-                        $removeCombination = [];
-                        $itemContainer
-                            .find(".item-list-name")
-                            .children("a")
-                            .html(escapeHtml($productName));
-                        $itemContainer
-                            .find(".stock-number")
-                            .html(escapeHtml(getTotalStock($this)));
+                        $(".item-list-"+$productId).each(function () { 
+                            $itemContainer = $(this);
+                            $imageContainer = $itemContainer.find('.div-product-image')
+                            $discountContainer = $imageContainer.find('.pin-discount');
+                            $amountContainer = $itemContainer.find('.item-amount');
+                            $originalAmountContainer = $amountContainer.find('.item-original-amount');
+                            $removeCombination = [];
+                            $itemContainer
+                                .find(".item-list-name")
+                                .children("a")
+                                .html(escapeHtml($productName));
+                            $itemContainer
+                                .find(".stock-number")
+                                .html(escapeHtml(getTotalStock($this)));
 
-                        if(parseInt($discountRate) > 0){
-                            if($discountContainer.length > 0){
-                                $discountContainer.html(escapeHtml(parseInt($discountRate)) + "%");
+                            if(parseInt($discountRate) > 0){
+                                if($discountContainer.length > 0){
+                                    $discountContainer.html(escapeHtml(Math.round($discountRate)) + "%");
+                                }
+                                else{
+                                    $imageContainer.html('<div class="pin-discount">'+escapeHtml(Math.round($discountRate))+'%</div>');
+                                }
+                                if($originalAmountContainer.length > 0){
+                                    $originalAmountContainer.html(escapeHtml("P"+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))));
+                                }
+                                else{
+                                    $amountContainer.prepend('<span class="item-original-amount">P'+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))+'</span>');
+                                }
+                                $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($discountPrice.toFixed(2)));
                             }
                             else{
-                                $imageContainer.html('<div class="pin-discount">'+escapeHtml(parseInt($discountRate))+'%</div>');
+                                $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($basePrice));
+                                $originalAmountContainer.remove();
+                                $discountContainer.remove();
                             }
-                            if($originalAmountContainer.length > 0){
-                                $originalAmountContainer.html(escapeHtml("P"+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))));
-                            }
-                            else{
-                                $amountContainer.prepend('<span class="item-original-amount">P'+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))+'</span>');
-                            }
-                            $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($discountPrice.toFixed(2)));
-                        }
-                        else{
-                            $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($basePrice));
-                            $originalAmountContainer.remove();
-                            $discountContainer.remove();
-                        }
-                        $this.closest('.ui-dialog-content').dialog('close');  
+                        });
+                        $this.closest('.ui-dialog-content').dialog('close'); 
+                        $slug = null;
+                        $productId = null; 
                     }
                     else{
                         alert($response.error);
                     }
-                    $slug = null;
-                    $productId = null; 
                 }
             });
         }
@@ -248,7 +253,8 @@
         $slug = $this.data('slug');
         $productId = $this.data('pid');
 
-        $(".ui-dialog > #express-edit-section").html("PLEASE WAIT!");
+        $(".loading-image").show();
+        $(".ui-dialog > #express-edit-section .express-edit-section-content").html("");
         $('#express-edit-section').dialog({
             autoOpen: true,
             dialogClass: 'express-edit-wrapper',
@@ -263,13 +269,68 @@
                     url: '/me/product/expressedit-request',
                     success: function(requestResponse){ 
                         var $response = $.parseJSON(requestResponse);
-                        $(".ui-dialog > #express-edit-section").html($response); 
+                        $(".loading-image").hide();
+                        $(".ui-dialog > #express-edit-section .express-edit-section-content").html($response); 
                         $(".error-message").hide(); 
                         $(".base-price").trigger("change");
+                        fluidDialog();
                     }
                 });
             }
         });
     });
+
+    $('.open-express-edit').click(function() {
+        $('#express-edit-section').dialog({
+            autoOpen: true,
+            dialogClass: 'express-edit-wrapper',
+            width: 1180,
+            modal: true,
+            fluid: true,
+            draggable: false,
+        });
+    });
+
+    $("#express-edit-section").dialog({
+        autoOpen: false,
+        open: function(){
+            $('.ui-widget-overlay').bind('click',function(){
+                $('#express-edit-section').dialog('close');
+            })
+        }
+    });
+
+    // on window resize run function
+    $(window).resize(function () {
+        fluidDialog();
+    });
+
+    // catch dialog if opened within a viewport smaller than the dialog width
+    $(document).on("dialogopen", ".ui-dialog", function (event, ui) {
+        fluidDialog();
+    });
+
+    function fluidDialog() {
+        var $visible = $(".ui-dialog:visible");
+        // each open dialog
+        $visible.each(function () {
+            var $this = $(this);
+            var dialog = $this.find(".ui-dialog-content").data("ui-dialog");
+            // if fluid option == true
+            if (dialog.options.fluid) {
+                var wWidth = $(window).width();
+                // check window width against dialog width
+                if (wWidth < (parseInt(dialog.options.maxWidth) + 50))  {
+                    // keep dialog from filling entire screen
+                    $this.css("max-width", "90%");
+                } else {
+                    // fix maxWidth bug
+                    $this.css("max-width", dialog.options.maxWidth + "px");
+                }
+                //reposition dialog
+                dialog.option("position", dialog.options.position);
+            }
+        });
+    };
 
 })(jQuery);

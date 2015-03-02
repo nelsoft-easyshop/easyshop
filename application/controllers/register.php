@@ -99,14 +99,15 @@ class Register extends MY_Controller
     public function success($action = '')
     {
         $data['title'] = 'Easyshop.ph - Thank You';
-        $referrer = $this->input->post('referrer') ? trim($this->input->post('referrer')) : '';
+
         $socialMediaLinks = $this->serviceContainer['social_media_manager'] 
-                                 ->getSocialMediaLinks();        
-        if(!($referrer)){
+                                 ->getSocialMediaLinks();      
+        if($this->input->post('referrer') === false){
             show_404();
         }
         else{
-            if ($referrer === 'landingpage') {
+            $referrer =  trim($this->input->post('referrer'));
+            if ($referrer === 'registration') {
                 $data['content'] = 'You have successfully registered!';
                 $data['sub_content'] = 'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
 
