@@ -256,7 +256,7 @@ class EsOrderRepository extends EntityRepository
         return $qbResult;   
     }
 
-    public function updatePaymentIfComplete($id, $data, $tid, $paymentType, $orderStatus = 99, $flag = 0)
+    public function updatePaymentIfComplete($id, $data, $tid, $paymentType, $orderStatus = orderStatus::STATUS_DRAFT, $flag = false)
     {
         $order = $this->_em->getRepository('EasyShop\Entities\EsOrder')
                         ->find(intval($id));

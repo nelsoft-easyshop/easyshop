@@ -6,6 +6,7 @@ use EasyShop\Entities\EsPaymentGateway;
 use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\PaymentService\PaymentService as PaymentService;
 
 
 /**
@@ -39,7 +40,7 @@ class CashOnDeliveryGateway extends AbstractGateway
     public function pay($validatedCart, $memberId, $paymentService)
     {
         // Set status response
-        $response['status'] = 'f';
+        $response['status'] = PaymentService::STATUS_FAIL;
         
         // Point Gateway
         $pointGateway = $paymentService->getPointGateway();
@@ -61,7 +62,7 @@ class CashOnDeliveryGateway extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                        ->getShippingAddress(intval($memberId));
+                            ->getShippingAddress(intval($memberId));
 
         // Compute shipping fee
         $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
@@ -81,7 +82,7 @@ class CashOnDeliveryGateway extends AbstractGateway
                 json_encode($itemList),
                 $txnid,
                 $this
-                );
+            );
 
             if($return['o_success'] <= 0){
                 $response['message'] = $return['o_message'];
@@ -89,7 +90,7 @@ class CashOnDeliveryGateway extends AbstractGateway
             else{
                 $response['orderId'] = $v_order_id = $return['v_order_id'];
                 $response['invoice'] = $invoice = $return['invoice_no'];
-                $response['status'] = 's';
+                $response['status'] = PaymentService::STATUS_SUCCESS;
 
                 foreach ($itemList as $key => $value) {  
                     $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
@@ -97,10 +98,10 @@ class CashOnDeliveryGateway extends AbstractGateway
                 }
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                            ->find($v_order_id);
+                                  ->find($v_order_id);
 
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                            ->find($this->getParameter('paymentType'));
+                                          ->find($this->getParameter('paymentType'));
 
                 $paymentRecord = new EsPaymentGateway();
                 $paymentRecord->setAmount($this->getParameter('amount'));
@@ -110,12 +111,12 @@ class CashOnDeliveryGateway extends AbstractGateway
                 
                 $this->em->persist($paymentRecord);
 
-                if($pointGateway !== NULL){
+                if($pointGateway !== null){
                     $pointGateway->setParameter('memberId', $memberId);
                     $pointGateway->setParameter('itemArray', $return['item_array']);
 
                     $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                            ->find($pointGateway->getParameter('paymentType'));
+                                              ->find($pointGateway->getParameter('paymentType'));
 
                     $trueAmount = $pointGateway->pay();
 

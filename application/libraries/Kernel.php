@@ -435,12 +435,21 @@ class Kernel
         // Payment Service
         $container['payment_service'] = function ($c) use ($container) {
             return new \EasyShop\PaymentService\PaymentService(
-                            $container['entity_manager'],
-                            $container['http_request'],
-                            $container['point_tracker'],
-                            $container['promo_manager'],
-                            $container['product_manager']
-                            );
+                $container['entity_manager'],
+                $container['http_request'],
+                $container['point_tracker'],
+                $container['promo_manager'],
+                $container['product_manager'],
+                $container['email_notification'],
+                $container['mobile_notification'],
+                new \CI_Parser(),
+                $container['config_loader'],
+                $container['xml_resource'],
+                $container['social_media_manager'],
+                $container['language_loader'],
+                $container['message_manager'],
+                $container['dragonpay_soap_client']
+            );
         };
 
 
@@ -469,16 +478,19 @@ class Kernel
         };
 
         // NUSoap Client
-        $container['nusoap_client'] = function ($c) {
+        $container['dragonpay_soap_client'] = function ($c) use ($container) {
             $url = '';
             if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
-            // LIVE
-                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+                // LIVE
+                $configLoad = $container['config_loader']->getItem('payment','production');  
             }
             else{
-            // SANDBOX
-                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+                // SANDBOX
+                $configLoad = $container['config_loader']->getItem('payment','testing');  
             }
+
+            $url = $configLoad['payment_type']['dragonpay']['Easyshop']['webservice_url'];
+
             return new \nusoap_client($url,true);
         };
 
@@ -574,7 +586,8 @@ class Kernel
                             $container['product_manager'],
                             $container['promo_manager'],
                             $container['cart_manager'],
-                            $container['payment_service']
+                            $container['payment_service'],
+                            $container['product_shipping_location_manager']
                         );
         };
         
