@@ -316,7 +316,7 @@ class PaymentService
      *
      * @return mixed
      */
-    public function persistPayment($ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid, $gatewayReference)
+    protected function persistPayment($ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid, $gatewayReference)
     {
         // remap variables
         $invoiceNo = $member_id.'-'.date('ymdhs');

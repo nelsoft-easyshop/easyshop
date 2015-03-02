@@ -229,7 +229,7 @@ class CheckoutService
             } 
         }
 
-        return $itemFail === 0;
+        return $itemFail === 0 && count($cartData) !== 0;
     }
 
     /**
