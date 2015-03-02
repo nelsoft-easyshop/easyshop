@@ -38,21 +38,18 @@ class PayPalGateway extends AbstractGateway
     {
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
  
-        if(strtolower(ENVIRONMENT) === 'production'){
-            // LIVE
-            $this->PayPalMode             = ''; 
-            $this->PayPalApiUsername      = 'admin_api1.easyshop.ph'; 
-            $this->PayPalApiPassword      = 'GDWFS6D9ACFG45E7'; 
-            $this->PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT'; 
+        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
+            $configLoad = $paymentService->configLoader->getItem('payment','production'); 
         }
-        else{
-            // SANDBOX
-            $this->PayPalMode             = 'sandbox'; 
-            $this->PayPalApiUsername      = 'easyseller_api1.yahoo.com'; 
-            $this->PayPalApiPassword      = '1396000698'; 
-            $this->PayPalApiSignature     = 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG';
+        else{ 
+            $configLoad = $paymentService->configLoader->getItem('payment','testing'); 
         }
+        $config = $configLoad['payment_type']['paypal']['Easyshop'];
 
+        $this->PayPalMode             = $config['api_mode']; 
+        $this->PayPalApiUsername      = $config['api_username']; 
+        $this->PayPalApiPassword      = $config['api_password']; 
+        $this->PayPalApiSignature     = $config['api_signature'];
         $this->returnUrl = isset($params['returnUrl']) ? $params['returnUrl'] : base_url().'pay/postBackPayPal';
         $this->cancelUrl = isset($params['cancelUrl']) ? $params['cancelUrl'] : base_url().'payment/review';
     }
