@@ -195,8 +195,8 @@ else {
     $route['mobile/payment/pay/cod'] = 'mobile/mobilepayment/paymentCashOnDelivery';
     $route['mobile/payment/pay/paypal'] = 'mobile/mobilepayment/paymentPaypalPersist';
 
-    $route['mobile/product/upload/addImage'] = 'mobile/mobileProductUpload/uploadImage';
-    $route['mobile/product/upload/requestToken'] = 'mobile/mobileProductUpload/requestUploadToken';
+    $route['mobile/product/upload/add-image'] = 'mobile/mobileProductUpload/uploadImage';
+    $route['mobile/product/upload/request-token'] = 'mobile/mobileProductUpload/requestUploadToken';
     $route['mobile/product/upload/process'] = 'mobile/mobileProductUpload/processUpload';
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
