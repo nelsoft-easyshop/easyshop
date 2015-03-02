@@ -2394,190 +2394,52 @@
         $( "#btn-edit-delete-categories" ).trigger( "click" );
     });
 
+    
+    
 
-    $('.new-store-category-draggable').sortable();
     $(window).on("load resize",function(){
 
         var browserWidth = $(window).width();
         var modalCategoryModalWidth = browserWidth * 0.6;
         var modalCategoryModalWidthMobile = browserWidth * 0.95;
 
-        /********FOR DRAG AND DROP*******/
-        // allItems and the customCategory
-        var $allItems = $( "#allItems" ),
-            $customCategory = $( "#customCategory" );
-     
-        // let the allItems items be draggable
-        $( "li", $allItems ).draggable({
-          cancel: "a.icon-move", // clicking an icon won't initiate dragging
-          revert: "invalid", // when not dropped, the item will revert back to its initial position
-          containment: "body",
-          helper: "clone",
-          cursor: "url(/assets/images/grabbing.png), move"
+        //Drag and drop sorting for edit category
+        $("#customCategory_edit").sortable({
+            connectWith: "#allItems_edit"
         });
-     
-        $( "li", $customCategory ).draggable({
-          cancel: "a.icon-move", // clicking an icon won't initiate dragging
-          revert: "invalid", // when not dropped, the item will revert back to its initial position
-          containment: "body",
-          helper: "clone",
-          cursor: "url(/assets/images/grabbing.png), move"
+        $("#allItems_edit").sortable({
+            connectWith: "#customCategory_edit"
         });
 
-        // let the customCategory be droppable, accepting the allItems items
-        $customCategory.droppable({
-          accept: "#allItems > li",
-          helper: "clone",
-          activeClass: "ui-state-highlight",
-          drop: function( event, ui ) {
-            moveToCustom( ui.draggable );
-          }
-        });
-     
-        // let the allItems be droppable as well, accepting items from the customCategory
-        $allItems.droppable({
-          accept: "#customCategory li",
-          activeClass: "custom-state-active",
-          drop: function( event, ui ) {
-            moveToAll( ui.draggable );
-          }
-        });
-     
-        // move to custom category function
-        var allItems_icon = "<a href='#' class='icon-move icon-move-to-all-items pull-right'></a>";
-        function moveToCustom( $item ) {
-          $item.fadeOut(function() {
-            $item.find( "a.icon-move" ).remove();
-            $item.prependTo( $customCategory ).fadeIn();
-            $item.find(".icon-holder").append( allItems_icon );
-          });
-        }
-     
-        // move to all items function
-        var customCategory_icon = "<a href='#' class='icon-move icon-move-to-custom-category pull-right'></a>";
-        function moveToAll( $item ) {
-          $item.fadeOut(function() {
-            $item
-              .find( "a.icon-move-to-all-items" )
-                .remove()
-              .end()
-              .prependTo( $allItems )
-              .fadeIn();
-            $item.find(".icon-holder").append( customCategory_icon );
-          });
-        }
-
-        // resolve the icons behavior with event delegation
-        $( "ul.allItems > li" ).click(function( event ) {
-          var $item = $( this ),
-              $target = $( event.target );
-     
-          if ( $target.is( "a.icon-move-to-custom-category" ) ) {
-            moveToCustom( $item );
-          } else if ( $target.is( "a.icon-move-to-all-items" ) ) {
-            moveToAll( $item );
-          }
-     
-          return false;
-        });
-        /********END DRAG AND DROP*******/
-
-
-        /********FOR EDIT CATEGORY  DRAG AND DROP*******/
-        // allItems and the customCategory
-        var $allItems_edit = $( "#allItems_edit" ),
-            $customCategory_edit = $( "#customCategory_edit" );
-     
-        // let the allItems items be draggable
-        $( "li", $allItems_edit ).draggable({
-          cancel: "a.icon-move_edit", // clicking an icon won't initiate dragging
-          revert: "invalid", // when not dropped, the item will revert back to its initial position
-          containment: "body",
-          helper: "clone",
-          cursor: "url(/assets/images/grabbing.png), move"
-        });
-     
-        $( "li", $customCategory_edit ).draggable({
-          cancel: "a.icon-move_edit", // clicking an icon won't initiate dragging
-          revert: "invalid", // when not dropped, the item will revert back to its initial position
-          containment: "body",
-          helper: "clone",
-          cursor: "url(/assets/images/grabbing.png), move"
+        $('.icon-move-to-all-items_edit, .icon-move-to-custom-category_edit').on('click', function () {
+            item_edit = $(this).parent();
+            item_edit.fadeOut(function () {
+                if (item_edit.parent().attr('id') == 'allItems_edit') {
+                    $('#customCategory_edit').prepend(item_edit.fadeIn());
+                } else {
+                    $('#allItems_edit').prepend(item_edit.fadeIn());
+                }
+            });
         });
 
-        // let the customCategory be droppable, accepting the allItems items
-        $customCategory_edit.droppable({
-          accept: "#allItems_edit > li",
-          helper: "clone",
-          activeClass: "ui-state-highlight",
-          drop: function( event, ui ) {
-            moveToCustom_edit( ui.draggable );
-          }
+        //Drag and drop sorting for add category
+        $("#customCategory").sortable({
+            connectWith: "#allItems"
         });
-     
-        // let the allItems be droppable as well, accepting items from the customCategory
-        $allItems_edit.droppable({
-          accept: "#customCategory_edit li",
-          helper: "clone",
-          activeClass: "custom-state-active",
-          drop: function( event, ui ) {
-            moveToAll_edit( ui.draggable );
-          }
-        });
-        
-        // move to custom category function
-        var allItems_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-all-items_edit pull-right'></a>";
-        function moveToCustom_edit( $item_edit ) {
-          $item_edit.fadeOut(function() {
-            $item_edit.find( "a.icon-move-to-custom-category_edit" ).remove();
-            $item_edit.prependTo( $customCategory_edit ).fadeIn();
-            $item_edit.find(".icon-holder_edit").append( allItems_icon_edit );
-          });
-        }
-     
-        // move to all items function
-        var customCategory_icon_edit = "<a href='#' class='icon-move_edit icon-move-to-custom-category_edit pull-right'></a>";
-        function moveToAll_edit( $item_edit ) {
-          $item_edit.fadeOut(function() {
-            $item_edit
-              .find( "a.icon-move-to-all-items_edit" )
-                .remove()
-              .end()
-              .prependTo( $allItems_edit )
-              .fadeIn();
-            $item_edit.find(".icon-holder_edit").append( customCategory_icon_edit );
-          });
-        }
-
-        // resolve the icons behavior with event delegation
-        $( "ul.allItems_edit li" ).click(function( event ) {
-          var $item_edit = $( this ),
-              $target_edit = $( event.target );
-     
-          if ( $target_edit.is( "a.icon-move-to-custom-category_edit" ) ) {
-            moveToCustom_edit( $item_edit );
-          } else if ( $target_edit.is( "a.icon-move-to-all-items_edit" ) ) {
-            moveToAll_edit( $item_edit );
-          }
-     
-          return false;
+        $("#allItems").sortable({
+            connectWith: "#customCategory"
         });
 
-        // resolve the icons behavior with event delegation
-        $( "ul.customCategory_edit li" ).click(function( event ) {
-          var $item_edit = $( this ),
-              $target_edit = $( event.target );
-     
-          if ( $target_edit.is( "a.icon-move-to-custom-category_edit" ) ) {
-            moveToCustom_edit( $item_edit );
-          } else if ( $target_edit.is( "a.icon-move-to-all-items_edit" ) ) {
-            moveToAll_edit( $item_edit );
-          }
-     
-          return false;
+        $('.icon-move-to-all-items, .icon-move-to-custom-category').on('click', function () {
+            item = $(this).parent();
+            item.fadeOut(function () {
+                if (item.parent().attr('id') == 'allItems') {
+                    $('#customCategory').prepend(item.fadeIn());
+                } else {
+                    $('#allItems').prepend(item.fadeIn());
+                }
+            });
         });
-        /********END OF EDIT CATEGORY DRAG AND DROP*******/
-
 
         $("#add-category").click(function(){
             $(".add-category-modal").modal({
@@ -2615,9 +2477,7 @@
                 $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
                 $(".ui-droppable").css("width", "100%");
             }
-        });{
-
-        }
+        });
 
     });
 }(jQuery));
