@@ -272,10 +272,10 @@ class ApiFormatter
 
     /**
      * Format cart array to display on mobile api
-     * @param  array   $cartData 
-     * @param  boolean $forPayment
-     * @param  string  $paymentType
-     * @return array
+     * @param  mixed   $cartData
+     * @param  boolean $includeValidation
+     * @param  string  $paymentTypeString
+     * @return mixed
      */
     public function formatCart($cartData, $includeValidation = false, $paymentTypeString = "")
     { 
@@ -428,13 +428,13 @@ class ApiFormatter
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
             if($product){
                 $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
-                $rawItems[] = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
-                                                                            $options, 
-                                                                            $mobileCartContent->quantity)['itemData'];
+                $cartContent = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
+                                                                             $options, 
+                                                                             $mobileCartContent->quantity)['itemData'];
                 $itemList[] = [
                     'rowid' => $product->getIdProduct(),
                     'id' =>  $product->getIdProduct(),
-                    'product_itemID' => 0, 
+                    'product_itemID' => $cartContent['product_itemID'], 
                     'slug' => $product->getSlug(),
                     'name' => utf8_encode($product->getName()),
                     'qty' => $mobileCartContent->quantity, 
@@ -443,6 +443,7 @@ class ApiFormatter
                     'options' => [], 
                 ];
                 $slugList[] = $product->getSlug();
+                $rawItems[] = $cartContent;
             }
         }
         $this->cartImplementation->persist($memberId);
@@ -538,4 +539,4 @@ class ApiFormatter
         return $modifiedArray;
     }
 }
- 
+
