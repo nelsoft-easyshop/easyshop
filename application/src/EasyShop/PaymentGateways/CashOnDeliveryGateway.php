@@ -16,8 +16,7 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
  *
  *
  * Params needed
- *      method:"CashOnDelivery"
- *      lastDigit:$('input[name=paymentToken]').val().slice(-1)
+ *      method:"CashOnDelivery" 
  */
 class CashOnDeliveryGateway extends AbstractGateway
 {
@@ -44,19 +43,10 @@ class CashOnDeliveryGateway extends AbstractGateway
         
         // Point Gateway
         $pointGateway = $paymentService->getPointGateway();
+        $response['paymentType'] = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
+        $response['textType'] = 'cashondelivery';
+        $response['message'] = 'Your payment has been completed through Cash on Delivery.';
 
-        $lastDigit = $this->getParameter('lastDigit');
-        if(intval($lastDigit) === 2){
-            $response['paymentType'] = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
-            $response['textType'] = 'directbankdeposit';
-            $response['message'] = 'Your payment has been completed through Direct Bank Deposit.';
-        }
-        else{
-            $response['paymentType'] = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
-            $response['textType'] = 'cashondelivery';
-            $response['message'] = 'Your payment has been completed through Cash on Delivery.';
-        }
-        
         $this->setParameter('paymentType', $response['paymentType']);
         $productCount = count($validatedCart['itemArray']);
 

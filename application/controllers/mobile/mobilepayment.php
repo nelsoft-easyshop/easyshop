@@ -120,7 +120,6 @@ class mobilePayment extends MY_Controller
         $gateWayMethod = [
             'CODGateway' => [
                 'method' => "CashOnDelivery",
-                'lastDigit' => 1,
             ]
         ];
 
