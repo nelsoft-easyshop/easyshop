@@ -258,7 +258,17 @@ class Memberpage extends MY_Controller
 
         $rules = $formValidation->getRules('personal_info');
         $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                                 ->setMethod('POST');
+                                 ->setMethod('POST');                    
+        
+        /**
+         * Overload default IsMobileUnique constraint
+         */
+        foreach($rules['mobile'] as $key => $mobileRule){
+            if($mobileRule instanceof EasyShop\FormValidation\Constraints\IsMobileUnique){
+                unset($rules['mobile'][$key]);
+                break;
+            }
+        }
         $rules['mobile'][] = new EasyShop\FormValidation\Constraints\IsMobileUnique(['memberId' => $memberId]);
         $formBuild->add('fullname', 'text');
         $formBuild->add('gender', 'text', ['constraints' => $rules['gender']]);
@@ -492,7 +502,7 @@ class Memberpage extends MY_Controller
                                                     $this->input->post("invoiceNo"),
                                                     $this->input->post("paymentMethod")
                                                 );
-
+        $boughtTransactions["transactions"] = []; 
         foreach ($transactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
                 $data = [];
@@ -541,7 +551,7 @@ class Memberpage extends MY_Controller
                                                                       $this->input->post("invoiceNo"),
                                                                       $this->input->post("paymentMethod")
                                                                       );  
-
+        $soldTransactions["transactions"] = [];
         foreach ($transactions["transactions"] as $value) {
             foreach ($value["product"] as $product) {
                 $data = [];   
@@ -2154,6 +2164,7 @@ class Memberpage extends MY_Controller
             if(!$hasCategoryError){
                 $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
                                                  ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+                $datetimeToday = date_create(date("Y-m-d H:i:s"));
                 $categoryDataResult = [];
                 foreach($savedCategories as $savedCategory){
                     $memberCategoryId = $savedCategory->getIdMemcat(); 
@@ -2161,6 +2172,7 @@ class Memberpage extends MY_Controller
                         $currentCategory = $indexedCategoryData[$memberCategoryId];
                         $savedCategory->setCatName($currentCategory->name);
                         $savedCategory->setSortOrder($currentCategory->order);
+                        $savedCategory->setlastModifiedDate($datetimeToday);
                         $categoryDataResult[] = $this->createCategoryStdObject($currentCategory->name,
                                                                             $currentCategory->order,
                                                                             $memberCategoryId);
@@ -2173,8 +2185,8 @@ class Memberpage extends MY_Controller
                     $newMemberCategories[$index]->setMember($member);
                     $newMemberCategories[$index]->setCatName($newCategory->name);
                     $newMemberCategories[$index]->setSortOrder($newCategory->order);
-                    $newMemberCategories[$index]->setCreatedDate(date_create(date("Y-m-d H:i:s")));
-                    $newMemberCategories[$index]->setlastModifiedDate(date_create(date("Y-m-d H:i:s")));
+                    $newMemberCategories[$index]->setCreatedDate($datetimeToday);
+                    $newMemberCategories[$index]->setlastModifiedDate($datetimeToday);
                     $entityManager->persist($newMemberCategories[$index]);
                 }
                 $entityManager->flush();

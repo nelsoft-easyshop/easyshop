@@ -94,11 +94,6 @@
         return true;
     }
 
-    $(document).on('change',".txt-quantity",function () {
-        var $this = $(this);
-        $(".txt-total-stock").val(getTotalStock($this));
-    });
-
     $(document).on('change',".base-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
@@ -140,8 +135,9 @@
 
     $(document.body).on('click','.cancel-btn',function () {
         var $this = $(this);
-        var $container = $this.closest('.express-edit-content');
-        $container.find('cancel-btn').trigger('click');
+        $this.closest('.ui-dialog-content').dialog('close');
+        $slug = null;
+        $productId = null; 
     });
 
     $(document.body).on('click','.save-btn',function () {
@@ -177,41 +173,48 @@
                 url: '/me/product/expressedit-update',
                 success: function(requestResponse){
                     var $response = $.parseJSON(requestResponse);
-                    var $itemContainer = $("#item-list-"+$productId);
-                    var $imageContainer = $itemContainer.find('.div-product-image')
-                    var $discountContainer = $imageContainer.find('.pin-discount');
-                    var $amountContainer = $itemContainer.find('.item-amount');
-                    var $originalAmountContainer = $amountContainer.find('.item-original-amount');
+                    var $itemContainer;
+                    var $imageContainer;
+                    var $discountContainer;
+                    var $amountContainer;
+                    var $originalAmountContainer;
                     if($response.result){
-                        $removeCombination = [];
-                        $itemContainer
-                            .find(".item-list-name")
-                            .children("a")
-                            .html(escapeHtml($productName));
-                        $itemContainer
-                            .find(".stock-number")
-                            .html(escapeHtml(getTotalStock($this)));
+                        $(".item-list-"+$productId).each(function () { 
+                            $itemContainer = $(this);
+                            $imageContainer = $itemContainer.find('.div-product-image')
+                            $discountContainer = $imageContainer.find('.pin-discount');
+                            $amountContainer = $itemContainer.find('.item-amount');
+                            $originalAmountContainer = $amountContainer.find('.item-original-amount');
+                            $removeCombination = [];
+                            $itemContainer
+                                .find(".item-list-name")
+                                .children("a")
+                                .html(escapeHtml($productName));
+                            $itemContainer
+                                .find(".stock-number")
+                                .html(escapeHtml(getTotalStock($this)));
 
-                        if(parseInt($discountRate) > 0){
-                            if($discountContainer.length > 0){
-                                $discountContainer.html(escapeHtml(parseInt($discountRate)) + "%");
+                            if(parseInt($discountRate) > 0){
+                                if($discountContainer.length > 0){
+                                    $discountContainer.html(escapeHtml(Math.round($discountRate)) + "%");
+                                }
+                                else{
+                                    $imageContainer.html('<div class="pin-discount">'+escapeHtml(Math.round($discountRate))+'%</div>');
+                                }
+                                if($originalAmountContainer.length > 0){
+                                    $originalAmountContainer.html(escapeHtml("P"+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))));
+                                }
+                                else{
+                                    $amountContainer.prepend('<span class="item-original-amount">P'+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))+'</span>');
+                                }
+                                $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($discountPrice.toFixed(2)));
                             }
                             else{
-                                $imageContainer.html('<div class="pin-discount">'+escapeHtml(parseInt($discountRate))+'%</div>');
+                                $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($basePrice));
+                                $originalAmountContainer.remove();
+                                $discountContainer.remove();
                             }
-                            if($originalAmountContainer.length > 0){
-                                $originalAmountContainer.html(escapeHtml("P"+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))));
-                            }
-                            else{
-                                $amountContainer.prepend('<span class="item-original-amount">P'+replaceNumberWithCommas(parseFloat(removeComma($basePrice)).toFixed(2))+'</span>');
-                            }
-                            $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($discountPrice.toFixed(2)));
-                        }
-                        else{
-                            $amountContainer.find('.item-current-amount').html("P"+replaceNumberWithCommas($basePrice));
-                            $originalAmountContainer.remove();
-                            $discountContainer.remove();
-                        }
+                        });
                         $this.closest('.ui-dialog-content').dialog('close'); 
                         $slug = null;
                         $productId = null; 

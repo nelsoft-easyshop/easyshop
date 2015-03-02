@@ -17,10 +17,13 @@ if (typeof jQuery.ui != 'undefined') {
     };
 }
 
-$('a.open-redirect').on('click', function ()
+$(document).ready(function()
 {
-    var url = $(this).data('url');
-    window.location.replace('/redirect?url=' + url)
+    $('.external-links-container a').on('click', function ()
+    {
+        window.location.replace('/redirect?url=' + $(this).attr('href'))
+        return false;
+    });
 });
 
 var entityMap = {
