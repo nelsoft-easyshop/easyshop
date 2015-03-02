@@ -404,9 +404,10 @@ class ApiFormatter
 
     /**
      * Update Cart data and format cart item array
-     * @param  array $mobileCartContents
-     * @param  integer $memberId
-     * @return array
+     * @param  mixed    $mobileCartContents 
+     * @param  integer  $memberId 
+     * @param  boolean  $includeUnavailable
+     * @return mixed
      */
     public function updateCart($mobileCartContents, $memberId, $includeUnavailable = true)
     {
