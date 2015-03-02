@@ -1972,7 +1972,7 @@
             $('.store-category-view').append( categoryViewList.join('') );
             $('.new-store-category-draggable').append( categoryDraggableList.join('') );
             $('.new-store-category-draggable').sortable();
-            $('#delete-list-categories').html();
+            $('#delete-list-categories').html('');
             $('#delete-list-categories').append( categoryDeleteList.join('') );
     }
 
