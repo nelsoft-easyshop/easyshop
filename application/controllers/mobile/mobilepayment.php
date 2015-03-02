@@ -277,7 +277,6 @@ class mobilePayment extends MY_Controller
      */
     public function paymentPaypalPersist()
     {
-        $paymentController = $this->loadController('payment'); 
         $checkoutService = $this->serviceContainer['checkout_service'];
         $paymentService = $this->serviceContainer['payment_service'];
 
