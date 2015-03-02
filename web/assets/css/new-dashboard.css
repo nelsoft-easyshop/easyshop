@@ -1423,14 +1423,14 @@ a{
     
 }
 
-.icon-move-to-custom-category,
-.icon-move-to-custom-category_edit{
+#allItems_edit > li > .icon-move_edit,
+#allItems > li > .icon-move{
     background: url("/assets/images/icon-add-dark.png") no-repeat center;
     background-size: 100%;
 }
 
-.icon-move-to-all-items,
-.icon-move-to-all-items_edit{
+#customCategory_edit > li > .icon-move_edit,
+#customCategory > li > .icon-move{
     background: url("/assets/images/icon-remove-dark.png") no-repeat center;
     background-size: 100%;
 }
