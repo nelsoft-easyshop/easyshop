@@ -228,9 +228,9 @@ class PaymentService
     private $messageManager;
 
     /**
-     * Soap client
+     * Soap client for dragonpay
      */
-    public $soapClient;
+    public $dragonPaySoapClient;
 
     /**
      * Constructor
@@ -249,7 +249,7 @@ class PaymentService
                                 $socialMediaManager,
                                 $languageLoader,
                                 $messageManager,
-                                $soapClient)
+                                $dragonPaySoapClient)
     {
         $this->em = $em;
         $this->request = $request;
@@ -264,7 +264,7 @@ class PaymentService
         $this->socialMediaManager = $socialMediaManager;
         $this->languageLoader = $languageLoader;
         $this->messageManager = $messageManager;
-        $this->soapClient = $soapClient;
+        $this->dragonPaySoapClient = $dragonPaySoapClient;
     }
 
 

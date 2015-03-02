@@ -61,7 +61,7 @@ class DragonPayGateway extends AbstractGateway
         $this->redirectUrl = $config['redirect_url'];
         $this->merchantId = $config['merchant_id'];
         $this->merchantPwd = $config['merchant_password']; 
-        $this->client = $paymentService->soapClient;
+        $this->client = $paymentService->dragonPaySoapClient;
     }
 
     /**
