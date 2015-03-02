@@ -1917,7 +1917,7 @@
         var errorContainer = $('#store-category-error');
         errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var categoryDraggableList =  $('.store-category-draggable li');
+        var categoryDraggableList =  $('.new-store-category-draggable li');
         var categoryOrderData = [];
         var order = 0;
         var categoryOrderData = $.map(categoryDraggableList, function(el, order) {

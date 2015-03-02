@@ -2151,6 +2151,7 @@ class Memberpage extends MY_Controller
             $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
                                     ->findOneBy(['idMember' => $memberId]);
             $categoryData = json_decode($this->input->post('categoryData'));
+
             $indexedCategoryData = [];
             $hasCategoryError = false;
             foreach($categoryData as $category){
@@ -2180,7 +2181,7 @@ class Memberpage extends MY_Controller
                     }
                 }
                 $newMemberCategories = [];
-                foreach($indexedCategoryData as $index=>$newCategory){
+                foreach($indexedCategoryData as $index => $newCategory){
                     $newMemberCategories[$index] = new EasyShop\Entities\EsMemberCat();
                     $newMemberCategories[$index]->setMember($member);
                     $newMemberCategories[$index]->setCatName($newCategory->name);
