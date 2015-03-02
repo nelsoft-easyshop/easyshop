@@ -80,7 +80,7 @@ class mobilePayment extends MY_Controller
         $memberCartData = unserialize($this->member->getUserdata());
         $isCartNotEmpty = empty($memberCartData) === false;
         $cartData = $isCartNotEmpty ? $memberCartData : [];  
-        $validatedCart = $checkoutService->validateCartContent($this->member);
+        $validatedCart = $checkoutService->includeCartItemValidation($this->member);
         $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType); 
         $formattedCartContents = $apiFormatter->formatCart($validatedCart, true, $postPaymentType);
 
@@ -115,7 +115,7 @@ class mobilePayment extends MY_Controller
         $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $cartData = unserialize($this->member->getUserdata());
         $memberId = $this->member->getIdMember();
-        $validCart = $checkoutService->validateCartContent($this->member);
+        $validCart = $checkoutService->includeCartItemValidation($this->member);
         $canContinue = $checkoutService->checkoutCanContinue($validCart, $paymentType); 
         $gateWayMethod = [
             'CODGateway' => [
@@ -182,7 +182,7 @@ class mobilePayment extends MY_Controller
                          ? $this->config->item('production', 'payment')
                          : $this->config->item('testing', 'payment'); 
 
-        $validatedCart = $checkoutService->validateCartContent($this->member);
+        $validatedCart = $checkoutService->includeCartItemValidation($this->member);
         $postPaymentType = trim(strtolower($this->input->post('paymentType')));
 
         if(empty($cartData) === false && strlen($postPaymentType) > 0){  
@@ -279,7 +279,7 @@ class mobilePayment extends MY_Controller
         $paymentService = $this->serviceContainer['payment_service'];
 
         $paymentType = EsPaymentMethod::PAYMENT_PAYPAL;
-        $validatedCart = $checkoutService->validateCartContent($this->member); 
+        $validatedCart = $checkoutService->includeCartItemValidation($this->member); 
         $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType);
         $cartData = unserialize($this->member->getUserdata());
         $memberId = $this->member->getIdMember(); 
