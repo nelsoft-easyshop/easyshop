@@ -479,7 +479,7 @@ class Store extends MY_Controller
 
         $returnData['totalProductCount'] = $totalProductCount;
         $returnData['parentCategory'] = $parentCat;
-        
+  
         return $returnData;
     }
 

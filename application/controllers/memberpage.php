@@ -2181,22 +2181,41 @@ class Memberpage extends MY_Controller
                     }
                 }
                 $newMemberCategories = [];
-                foreach($indexedCategoryData as $index => $newCategory){
-                    $newMemberCategories[$index] = new EasyShop\Entities\EsMemberCat();
-                    $newMemberCategories[$index]->setMember($member);
-                    $newMemberCategories[$index]->setCatName($newCategory->name);
-                    $newMemberCategories[$index]->setSortOrder($newCategory->order);
-                    $newMemberCategories[$index]->setCreatedDate($datetimeToday);
-                    $newMemberCategories[$index]->setlastModifiedDate($datetimeToday);
-                    $entityManager->persist($newMemberCategories[$index]);
+                
+                if(empty($indexedCategoryData) === false){
+                    $allUserCategories = $this->serviceContainer['category_manager']->getUserCategories($memberId);
+                    foreach($indexedCategoryData as $index => $newCategory){
+                        $newMemberCategory = new EasyShop\Entities\EsMemberCat();
+                        $newMemberCategory->setMember($member);
+                        $newMemberCategory->setCatName($newCategory->name);
+                        $newMemberCategory->setSortOrder($newCategory->order);
+                        $newMemberCategory->setCreatedDate($datetimeToday);
+                        $newMemberCategory->setlastModifiedDate($datetimeToday);
+                        $entityManager->persist($newMemberCategory);
+                        if(isset($allUserCategories[$index])){
+                            $childCategories = $allUserCategories[$index]['child_cat'];
+                            $productIds = $this->serviceContainer['entity_manager']
+                                               ->getRepository('EasyShop\Entities\EsProduct')
+                                               ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
+  
+                            $products = $this->serviceContainer['entity_manager']
+                                             ->getRepository('EasyShop\Entities\EsProduct')
+                                             ->findByIdProduct($productIds);
+                            foreach($products as $product){
+                                $memberCategoryProduct = new EasyShop\Entities\EsMemberProdcat();
+                                $memberCategoryProduct->setMemcat($newMemberCategory);
+                                $memberCategoryProduct->setProduct($product);
+                                $memberCategoryProduct->setCreatedDate($datetimeToday);
+                                $entityManager->persist($memberCategoryProduct);
+                            } 
+                        }
+                        $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
+                                                        $newMemberCategory->getSortOrder(),
+                                                        $newMemberCategory->getIdMemcat());
+                    } 
                 }
-                $entityManager->flush();
 
-                foreach($newMemberCategories as $newMemberCategory){
-                    $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
-                                                    $newMemberCategory->getSortOrder(),
-                                                    $newMemberCategory->getIdMemcat());
-                }
+                $entityManager->flush();
 
                 $jsonResponse['isSuccessful'] =  true;
                 $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {

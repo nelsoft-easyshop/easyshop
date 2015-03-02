@@ -1949,7 +1949,7 @@
                 $('.no-category-display').show();
                 return false;
             }
-        
+
             var categoryViewList = [];
             var categoryDraggableList = [];
             var categoryDeleteList = [];
@@ -1959,7 +1959,7 @@
                 categoryViewList.push(html);
                 var categoryIdentifier = parseInt(category.memberCategoryId, 10);
                 if(categoryIdentifier === 0){
-                    categoryIdentifier = index + '_new';
+                    categoryIdentifier = 'default-' + category.categoryId;
                 }
                 html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
                 categoryDraggableList.push(html);
