@@ -1342,11 +1342,25 @@
             escClose: false,
             onShow: function() {
                 if ( thisbtn.hasClass('isform') ) {
-                    $( ".modal_date" ).datepicker({
+                    $( ".dp-delivery-date" ).datepicker({
                         changeMonth: true,
                         changeYear: true,
                         yearRange: '2013:2050',
-                        dateFormat:"yy-M-dd"
+                        dateFormat:"yy-M-dd",
+                        onClose: function( selectedDate ) {
+                            $( ".dp-expected-date" ).datepicker( "option", "minDate", selectedDate );
+                        }
+                    }).on('keypress',function(){
+                        return false;
+                    });
+                    $( ".dp-expected-date" ).datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        yearRange: '2013:2050',
+                        dateFormat:"yy-M-dd",
+                        onClose: function( selectedDate ) {
+                            $( ".dp-delivery-date" ).datepicker( "option", "maxDate", selectedDate );
+                        }
                     }).on('keypress',function(){
                         return false;
                     });
@@ -1843,7 +1857,7 @@
         if(!isStoreSetupInitialized){
             $.ajax({
                 type: "get",
-                url: '/memberpage/getStoreSettings',
+                url: '/memberpage/getStoreColor',
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);
                     var unorderedList = $("#store-color-dropdown");
@@ -1871,7 +1885,6 @@
                     });
                     unorderedList.append( colorList.join('') );
                     unorderedList.find('#color-item-'+currentColorId).append(' </i>');
-                    createCategoryList(jsonResponse.storeCategories);
                     isStoreSetupInitialized = true;
                     $('.store-setup-loading').hide();
                     $('.store-setup-ajax').fadeIn();
@@ -1879,7 +1892,26 @@
             });
         }
     });
-
+    
+    
+    
+    var isCategorySetupInitialized = false;
+    $('#customize-category-tab').on('click', function(){
+        if(!isCategorySetupInitialized){
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getStoreCategories',
+                success: function(data){ 
+                    var jsonResponse = $.parseJSON(data);
+                    createCategoryList(jsonResponse.storeCategories);
+                    isCategorySetupInitialized = true;
+                    $('.category-setup-loading').hide();
+                    $('.category-setup-ajax').fadeIn();
+                }
+            });
+        }
+    });
+   
     
     $('#category-order-save').on('click', function(){
         var errorContainer = $('#store-category-error');
@@ -1911,25 +1943,37 @@
     
     
     function createCategoryList(categoryData)
-    {
-        var categoryViewList = [];
-        var categoryDraggableList = [];
-        $.each(categoryData, function(index, category) {
-            var html =  '<div class="div-cat">'+category.name+'</div>';
-            categoryViewList.push(html);
-            var categoryIdentifier = category.memberCategoryId;
-            if(categoryIdentifier == 0){
-                categoryIdentifier = index + '_new';
+    {       
+            if(categoryData.length === 0){
+                $('.div-store-content.concealable').hide();
+                $('.no-category-display').show();
+                return false;
             }
-            var escapedName = escapeHtml(category.name);
-            html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'</li>';
-            categoryDraggableList.push(html);
-        });
-        $('.store-category-view').html('');
-        $('.store-category-draggable').html('');
-        $('.store-category-view').append( categoryViewList.join('') );
-        $('.store-category-draggable').append( categoryDraggableList.join('') );
-        $('.store-category-draggable').sortable();
+        
+            var categoryViewList = [];
+            var categoryDraggableList = [];
+            var categoryDeleteList = [];
+            $.each(categoryData, function(index, category) {
+                var escapedName = escapeHtml(category.name);
+                var html =  '<div class="div-cat">'+escapedName+'</div>';
+                categoryViewList.push(html);
+                var categoryIdentifier = parseInt(category.memberCategoryId, 10);
+                if(categoryIdentifier === 0){
+                    categoryIdentifier = index + '_new';
+                }
+                html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
+                categoryDraggableList.push(html);
+                html = '<li class="checkbox"><label><input data-categoryid="'+escapeHtml(categoryIdentifier) + '" type="checkbox" class="checkBox">'+escapedName+'</label></li>';
+                categoryDeleteList.push(html);
+            });
+
+            $('.store-category-view').html('');
+            $('.new-store-category-draggable').html('');
+            $('.store-category-view').append( categoryViewList.join('') );
+            $('.new-store-category-draggable').append( categoryDraggableList.join('') );
+            $('.new-store-category-draggable').sortable();
+            $('#delete-list-categories').html();
+            $('#delete-list-categories').append( categoryDeleteList.join('') );
     }
 
     $('#store-color-save').on('click', function(){
@@ -2304,59 +2348,6 @@
             scrollTop: $('.input-shop-link').offset().top
         }, 700);
     }
-    
-    $('.open-express-edit').click(function() {
-        $('#express-edit-section').dialog({
-            autoOpen: true,
-            dialogClass: 'express-edit-wrapper',
-            width: 1180,
-            modal: true,
-            fluid: true,
-            draggable: false,
-        });
-    });
-
-    $("#express-edit-section").dialog({
-        autoOpen: false,
-        open: function(){
-            $('.ui-widget-overlay').bind('click',function(){
-                $('#express-edit-section').dialog('close');
-            })
-        }
-    });
-
-    // on window resize run function
-    $(window).resize(function () {
-        fluidDialog();
-    });
-
-    // catch dialog if opened within a viewport smaller than the dialog width
-    $(document).on("dialogopen", ".ui-dialog", function (event, ui) {
-        fluidDialog();
-    });
-
-    function fluidDialog() {
-        var $visible = $(".ui-dialog:visible");
-        // each open dialog
-        $visible.each(function () {
-            var $this = $(this);
-            var dialog = $this.find(".ui-dialog-content").data("ui-dialog");
-            // if fluid option == true
-            if (dialog.options.fluid) {
-                var wWidth = $(window).width();
-                // check window width against dialog width
-                if (wWidth < (parseInt(dialog.options.maxWidth) + 50))  {
-                    // keep dialog from filling entire screen
-                    $this.css("max-width", "90%");
-                } else {
-                    // fix maxWidth bug
-                    $this.css("max-width", dialog.options.maxWidth + "px");
-                }
-                //reposition dialog
-                dialog.option("position", dialog.options.position);
-            }
-        });
-    };
 
     $( "#activate-products" ).click(function() {
         $( ".current-activate-prod" ).slideToggle( "fast" );
@@ -2461,7 +2452,7 @@
             
         });
 
-        $(".edit-category").click(function(){
+        $(".category-setup-ajax").on('click','.edit-category', function(){
             $(".edit-category-modal").modal({
                 persist:true
             });

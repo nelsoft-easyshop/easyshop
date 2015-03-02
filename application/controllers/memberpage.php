@@ -1093,156 +1093,7 @@ class Memberpage extends MY_Controller
         echo json_encode($result);
     }
 
-    /**
-     *  Used for verifying mobile verification code input by user
-     *  NOTE : NOT USED AT THE MOMENT
-     *
-     *  @return integer
-     */
-    public function verify_mobilecode()
-    {
-        if($this->input->post('mobileverify') === 'true'){
-            $user_mobilecode = html_escape($this->input->post('data'));
-
-            if($user_mobilecode === $this->session->userdata('mobilecode')){
-                $data = array(
-                    'is_contactno_verify' => 1,
-                    'member_id' => $this->session->userdata('member_id')
-                );
-                $this->session->unset_userdata('mobilecode');
-                $this->register_model->update_verification_status($data);
-                echo 1;
-            }
-            else{
-                echo 0;
-            }
-        }
-    }
-    
-    /**
-     *  Fetch bank info
-     *
-     *  @return JSON
-     */
-    public function bank_info()
-    {
-        $q = $this->input->get('q');
-        if(!empty($q)){
-            $bank_names = $this->memberpage_model->get_bank($q, 'name');
-            echo json_encode($bank_names);
-        }
-    }
-    
-    /**
-     *  Fetch billing info/details of user
-     *
-     *  @return JSON
-     */
-    public function billing_info()
-    {
-        # if(($this->input->post('bi_acct_no')) && ($this->form_validation->run('billing_info'))){
-        if($this->input->post('bi_acct_no')){
-            $member_id = $this->session->userdata('member_id');
-            $bi_payment_type = $this->input->post('bi_payment_type');
-            $bi_user_account = ""; // pang paypal ito or any online account
-            $bi_bank = $this->input->post('bi_bank');
-            $bi_acct_name = $this->input->post('bi_acct_name');
-            $bi_acct_no = $this->input->post('bi_acct_no');
-            $data = array(
-                'member_id' => $member_id,
-                'payment_type' => $bi_payment_type,
-                'user_account' => $bi_user_account,
-                'bank_id' => $bi_bank,
-                'bank_account_name' => $bi_acct_name,
-                'bank_account_number' => $bi_acct_no
-            );
-            
-            if($this->memberpage_model->isBankAccountUnique($data)){
-                $result = $this->memberpage_model->billing_info($data);
-                echo '{"e":"1","d":"success","id":'.$result.'}';
-            }
-            else{
-                echo '{"e":"0","d":"duplicate"}';
-            }
-        }
-        else{
-            echo '{"e":"0","d":"fail"}';
-        }
-    }
-    
-    /**
-     *  Used to update user's billing info
-     *
-     *  @return JSON
-     */
-    public function billing_info_u()
-    {
-        if($this->input->post('bi_id')){
-            $member_id = $this->session->userdata('member_id');
-            $bi_id = $this->input->post('bi_id');
-            $bi_bank = $this->input->post('bi_bank');
-            $bi_payment_type = $this->input->post('bi_payment_type');
-            $bi_acct_name = $this->input->post('bi_acct_name');
-            $bi_acct_no = $this->input->post('bi_acct_no');
-            $bi_def = $this->input->post('bi_def');
-            $bi_user_account = "";
-            $data = array(
-                'member_id' => $member_id,
-                'payment_type' => $bi_payment_type,
-                'ibi' => $bi_id,
-                'bank_id' => $bi_bank,
-                'bank_account_name' => $bi_acct_name,
-                'bank_account_number' => $bi_acct_no,
-                'is_default' => $bi_def,
-                'user_account' => $bi_user_account,
-            );
-            if($this->memberpage_model->isBankAccountUnique($data)){
-                $this->memberpage_model->billing_info_update($data);
-                $return = '{"e":"1","d":"success"}';
-            }
-            else{
-                $return = '{"e":"0","d":"duplicate"}';
-            }
-        }
-        else{
-            $return = '{"e":"0","d":"fail"}';
-        }
-        echo $return;
-    }
-    
-    /**
-     *  Used to delete user's billing info
-     */
-    public function billing_info_d()
-    {
-        if($this->input->post('bi_id')){
-            $member_id = $this->session->userdata('member_id');
-            $bi_id = $this->input->post('bi_id');
-            $member_id = $this->session->userdata('member_id');
-            $data = array(
-                'member_id' => $member_id,
-                'ibi' => $bi_id
-            );
-            $this->memberpage_model->billing_info_delete($data);
-        }
-    }
-    
-    /**
-     *  Used for setting default billing info
-     */
-    public function billing_info_f()
-    {
-        if($this->input->post('bi_id')){
-            $member_id = $this->session->userdata('member_id');
-            $bi_id = $this->input->post('bi_id');
-            $member_id = $this->session->userdata('member_id');
-            $data = array(
-                'member_id' => $member_id,
-                'ibi' => $bi_id
-            );
-            $this->memberpage_model->billing_info_default($data);
-        }
-    }
+   
 
     public function removeUserImage()
     {
@@ -2064,11 +1915,11 @@ class Memberpage extends MY_Controller
     }
 
     /**
-     * Gets the store settings
+     * Gets the store colors
      *
      * @return JSON
      */
-    public function getStoreSettings()
+    public function getStoreColor()
     {
         $memberId = $this->session->userdata('member_id');
         $response = [];
@@ -2076,12 +1927,28 @@ class Memberpage extends MY_Controller
             $response['colors'] = $this->serviceContainer['entity_manager']
                                        ->getRepository('EasyShop\Entities\EsStoreColor')
                                        ->getAllColors(true);
-            $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
-                                                             ->getAllUserProductParentCategory($memberId));
         }
         echo json_encode($response);
     }
     
+        /**
+     * Gets the store colors
+     *
+     * @return JSON
+     */
+    public function getStoreCategories()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $response = [];
+        if($memberId){
+            $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
+                                                             ->getUserCategories($memberId));
+        }
+
+        echo json_encode($response);
+    }
+    
+
 
     /**
      * Returns all the payment accounts of the logged-in user
@@ -2307,18 +2174,17 @@ class Memberpage extends MY_Controller
                     $newMemberCategories[$index]->setCatName($newCategory->name);
                     $newMemberCategories[$index]->setSortOrder($newCategory->order);
                     $newMemberCategories[$index]->setCreatedDate(date_create(date("Y-m-d H:i:s")));
+                    $newMemberCategories[$index]->setlastModifiedDate(date_create(date("Y-m-d H:i:s")));
                     $entityManager->persist($newMemberCategories[$index]);
                 }
                 $entityManager->flush();
-                
+
                 foreach($newMemberCategories as $newMemberCategory){
                     $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
                                                     $newMemberCategory->getSortOrder(),
                                                     $newMemberCategory->getIdMemcat());
                 }
-                
-                
-                
+
                 $jsonResponse['isSuccessful'] =  true;
                 $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {
                     return $sortArgumentA->order - $sortArgumentB->order;
@@ -2329,7 +2195,7 @@ class Memberpage extends MY_Controller
         
         echo json_encode($jsonResponse);
     }
-    
+
     /**
      * Creates a category standard object 
      *
@@ -2350,15 +2216,33 @@ class Memberpage extends MY_Controller
 
     /**
      * Performs the database insertion of member custom category
-     * @return MIXED
+     * @return JSON
      */
     public function addCustomCategory()
     {
-        return  $this->categoryManager->createCustomCategory(
+        $result = $this->categoryManager->createCustomCategory(
                         $this->input->post("userCategory"),
                         $this->session->userdata('member_id')
                     );
+        echo json_encode($result);
     }
+
+
+    /**
+     * Performs the update actions of User Custom Category Products
+     *
+     * @return JSON
+     */
+    public function editCustomCategory()
+    {
+        $result = $this->categoryManager->editUserCustomCategoryProducts(
+                    $this->input->post("memCatId"),
+                    $this->input->post("catName"),
+                    $this->input->post("userCategoryProductIds"),
+                    $this->session->userdata('member_id')
+                );
+        echo json_encode($result);
+    }    
 
     /**
      * Updates is_delete field to '1' of a custom category

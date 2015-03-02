@@ -580,7 +580,7 @@ class product extends MY_Controller
                 throw new Exception("Product name cannot be empty.");
             }
 
-            if($productDiscount <= 0 || $productDiscount > 99){
+            if($productDiscount < 0 || $productDiscount > 99){
                 throw new Exception("Invalid discount. Range must be 0 - 99 only."); 
             }
 

@@ -76,7 +76,7 @@
                     <input name="fullname" type="text"  class="form-control" id="promo-fullname">
                 </div>
                 <br/>
-                <span class="modalCloseImg simplemodal-close btn btn-default-1">Cancel</span>
+                <span class="modalCloseImg simplemodal-close btn btn-default-1" id="mdl-cancel">Cancel</span>
                 <button class="btn btn-default-3" id="apply-fullname">Apply</button>
                 <img class="promoimgloader" src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG-small.gif">
             </div>

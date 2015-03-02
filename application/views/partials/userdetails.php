@@ -42,11 +42,11 @@
 
                 <?php echo form_open('/' . html_escape($member->getSlug()) . '/' . $targetPage); ?>
                 <tr id="storeNameRow">
-                    <td class="td-contact-icon"><i><img src="<?php echo getAssetsDomain() ?>assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Seller Name:"/></i</td>
+                    <td class="td-contact-icon"><i><img src="<?php echo getAssetsDomain() ?>assets/images/vendor-icons/profile.png" width="32px" height="32px" alt="Store Name:"/></i</td>
                     <td class="td-contact-detail">
                         <p id="validatedStoreName" class="text-contact"><?php echo html_escape($validatedStoreName); ?></p>
                         <input type="hidden" id="postStoreName" value="<?php echo html_escape($storeName)?>"/>
-                        <input type="text" class="input-detail" placeholder="Seller Name..." name="storeName" id="storeName" value="<?php echo html_escape($storeName); ?>">
+                        <input type="text" class="input-detail" placeholder="Store Name..." name="storeName" id="storeName" value="<?php echo html_escape($storeName); ?>">
                     </td>
                 </tr>
                 <tr id="contactNoRow">
