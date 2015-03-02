@@ -804,11 +804,11 @@ class PaymentService
 
         $dataArraySeller = [];
 
-        foreach ($orderProducts as $key => $valueProduct) {
-            $seller = $valueProduct->getSeller();
+        foreach ($orderProducts as $orderProduct) {
+            $seller = $orderProduct->getSeller();
             $sellerId = $seller->getIdMember();
-            $orderProductId = $valueProduct->getIdOrderProduct();
-            $product = $valueProduct->getProduct();
+            $orderProductId = $orderProduct->getIdOrderProduct();
+            $product = $orderProduct->getProduct();
             $productAttr = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr')
                                     ->findBy(['orderProduct' => $orderProductId]);
 
@@ -827,10 +827,10 @@ class PaymentService
                     'seller_store' => $seller->getStoreName(),
                     'buyer_store' => $buyer->getStoreName(), 
                     'name' => $product->getName(),
-                    'baseprice' => number_format($valueProduct->getPrice(), 2, '.', ','),
-                    'order_quantity' => $valueProduct->getOrderQuantity(),
-                    'handling_fee' => number_format($valueProduct->getHandlingFee(), 2, '.', ','),
-                    'finalprice' => number_format($valueProduct->getTotal(), 2, '.', ','),
+                    'baseprice' => number_format($orderProduct->getPrice(), 2, '.', ','),
+                    'order_quantity' => $orderProduct->getOrderQuantity(),
+                    'handling_fee' => number_format($orderProduct->getHandlingFee(), 2, '.', ','),
+                    'finalprice' => number_format($orderProduct->getTotal(), 2, '.', ','),
                     'attr' => $attrArray,
                 ];
  
@@ -863,14 +863,14 @@ class PaymentService
                 $arrayCollection = [
                     'order_product_id' => $orderProductId,  
                     'name' => $product->getName(),
-                    'baseprice' => number_format($valueProduct->getPrice(), 2, '.', ','),
-                    'order_quantity' => $valueProduct->getOrderQuantity(),
-                    'handling_fee' => number_format($valueProduct->getHandlingFee(), 2, '.', ','),
-                    'finalprice' => number_format($valueProduct->getTotal(), 2, '.', ','),
-                    'easyshop_charge' => number_format($valueProduct->getEasyshopCharge(), 2, '.', ','),
-                    'payment_method_charge' => number_format($valueProduct->getPaymentMethodCharge(), 2, '.', ','),
+                    'baseprice' => number_format($orderProduct->getPrice(), 2, '.', ','),
+                    'order_quantity' => $orderProduct->getOrderQuantity(),
+                    'handling_fee' => number_format($orderProduct->getHandlingFee(), 2, '.', ','),
+                    'finalprice' => number_format($orderProduct->getTotal(), 2, '.', ','),
+                    'easyshop_charge' => number_format($orderProduct->getEasyshopCharge(), 2, '.', ','),
+                    'payment_method_charge' => number_format($orderProduct->getPaymentMethodCharge(), 2, '.', ','),
                     'attr' => $attrArray,
-                    'net' => number_format($valueProduct->getNet(), 2, '.', ','),
+                    'net' => number_format($orderProduct->getNet(), 2, '.', ','),
                 ];
 
                 $dataArraySeller[$sellerId]['products'][$orderProductId] = $arrayCollection;
