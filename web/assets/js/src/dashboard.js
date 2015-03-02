@@ -2591,22 +2591,73 @@
         });
 
         $(".category-setup-ajax").on('click','.edit-category', function(){
-            $(".edit-category-modal").modal({
-                persist:true
-            });
-            $(".edit-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
-            var addContentHeight = $(".edit-category-modal").outerHeight();
-            var countAllItems = $("#allItems li").size();
-            var widthOfitem = 70;
-            var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
-            if(browserWidth <= 769){
-                $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
-                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
-            }else{
-                $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
-                $(".ui-droppable").css("width", "100%");
+            
+            var categoryIdString = $(this).parent('li').data('categoryid');
+            var categoryId;
+            var isCustom;
+
+            if(typeof categoryIdString === 'string' && categoryIdString.indexOf('default') !== false){
+                var splitString = categoryIdString.split("-");
+                categoryId = parseInt(splitString[1],10);
+                isCustom = false;
             }
+            else{
+                categoryId = parseInt(categoryIdString,10);
+                isCustom = true;
+            }
+
+            $.ajax({
+                type: "GET",
+                url: '/memberpage/getCustomCategory',
+                data: {categoryId:categoryId, isCustom:  isCustom},
+                success: function(data){ 
+                    var response = $.parseJSON(data);
+                    if(response){
+                        var clonedDiv = $(".edit-category-modal").clone();
+                        clonedDiv.find('.category-name').val(response.categoryName);
+                        var listHtmlCollection = [];
+                        $.each(response.products, function(key, product){
+                            var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
+                            var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
+                                                '<a href="#" class="icon-move_edit icon-move-to-all-items_edit pull-right" ></a>'+
+                                                '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
+                                                '<div class="category-item-name">'+product.productName+'</div>'+
+                                            '</li>';
+                            listHtmlCollection.push(listHtml);
+                        });
+                        clonedDiv.find('.category-product-list').append(listHtmlCollection);
+
+                        clonedDiv.modal({
+                            persist:true
+                        });
+                        clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+                        var addContentHeight = clonedDiv.outerHeight();
+                        var countAllItems = $("#allItems li").size();
+                        var widthOfitem = 70;
+                        var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
+                        if(browserWidth <= 769){
+                            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
+                            $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+                        }else{
+                            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+                            $(".ui-droppable").css("width", "100%");
+                        }
+                        
+                        
+                        
+                    }
+                    
+                },
+            });
+   
+                
+            
+            
+
         });
+        
+        
+
 
         
 

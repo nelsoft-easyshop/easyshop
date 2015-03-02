@@ -290,7 +290,7 @@
            <div class="form-group">
                 <label class="col-md-3">Category Name : </label>
                 <div class="col-md-9">
-                    <input type="text" class="form-control" placeholder="Type the category name here" value="Easy Treats"/>
+                    <input type="text" class="form-control category-name" placeholder="Type the category name here" value=""/>
                 </div>
             </div>
         </div>
@@ -314,18 +314,17 @@
                             </div>
                         </div>
                         <div class="category-items-holder my-category-container" >
-                            <ul class="customCategory_edit" id="customCategory_edit" >
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    <span class="icon-holder_edit">
-                                        <a href="#" class="icon-move_edit icon-move-to-all-items_edit pull-right" ></a>
-                                    </span>
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/htc-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">HTC One</div>
-                                 </li>
+
+                            <ul class="customCategory_edit category-product-list">
+  
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div>  
+                
+                
+                
+                
                 <div class="col-xs-6 all-right-panel">
                     <div class="drag-drop-group-list">
                         <div class="category-panel-header">
