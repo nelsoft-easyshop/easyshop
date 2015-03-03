@@ -41,14 +41,8 @@ class PesoPayGateWay extends AbstractGateway
         $this->redirectUrl = $config['redirect_url'];
     }
 
-
     /**
      * Pay method for Pesopay Gateway Class
-     * 
-     */
-    
-    /**
-     * Pay method for Dragon Pay Gateway Class
      * 
      * @param mixed $validatedCart
      * @param mixed $memberId Cart
