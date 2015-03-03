@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMemberFeatureRestrict
  *
  * @ORM\Table(name="es_member_feature_restrict", indexes={@ORM\Index(name="fk_es_member_feature_restrict_1_idx", columns={"member_id"}), @ORM\Index(name="fk_es_member_feature_restrict_2_idx", columns={"feature_restrict_id"})})
- * @ORM\Entity(repositoryClass="EasyShop\Repository\EsMemberFeatureRestrictRepository")
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberFeatureRestrictRepository")
  */
 class EsMemberFeatureRestrict
 {

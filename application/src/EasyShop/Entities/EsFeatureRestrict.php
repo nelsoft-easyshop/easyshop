@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsFeatureRestrict
  *
  * @ORM\Table(name="es_feature_restrict")
- * @ORM\Entity(repositoryClass="EasyShop\Repository\EsFeatureRestrictRepository")
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsFeatureRestrictRepository")
  */
 class EsFeatureRestrict
 {
