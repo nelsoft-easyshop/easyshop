@@ -290,14 +290,15 @@ class DragonPayGateway extends AbstractGateway
                     $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
                     $this->paymentService->productManager->updateSoldoutStatus($value['id']);
                 }
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($toBeLocked,$orderId); 
+                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                         ->deleteLockItem($orderId, $toBeLocked); 
             }
             $orderStatus = strtolower($status) === PaymentService::STATUS_SUCCESS ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
             $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                  ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus);
         }
         elseif(strtolower($status) === PaymentService::STATUS_FAIL){
-            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($toBeLocked,$orderId);
+            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($orderId, $toBeLocked);
             $orderHistory = [
                 'order_id' => $orderId,
                 'order_status' => EsOrderStatus::STATUS_VOID,

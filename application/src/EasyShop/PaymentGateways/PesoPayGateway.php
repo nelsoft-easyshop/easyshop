@@ -237,7 +237,7 @@ class PesoPayGateWay extends AbstractGateway
                                          ->updateSoldoutStatus($item['id']);
                 }
                 $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($toBeLocked,$orderId); 
+                         ->deleteLockItem($orderId, $toBeLocked); 
                 $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                      ->updatePaymentIfComplete(
                                             $orderId,
@@ -250,7 +250,7 @@ class PesoPayGateWay extends AbstractGateway
             }
             else{
                 $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($toBeLocked,$orderId);
+                         ->deleteLockItem($orderId, $toBeLocked);
                 $orderHistory = [
                     'order_id' => $orderId,
                     'order_status' => EsOrderStatus::STATUS_VOID,
