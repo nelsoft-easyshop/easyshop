@@ -202,8 +202,8 @@ class PesoPayGateWay extends AbstractGateway
      */
     public function postBackMethod($params)
     {
-        extract($params);
-        // paymentType
+        $txnId = $params['txnId'];
+        $successCode = $params['successCode'];
         $paymentType = EsPaymentMethod::PAYMENT_PESOPAYCC;
         $this->setParameter('paymentType', $paymentType);
 

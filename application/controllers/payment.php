@@ -1570,7 +1570,7 @@ class Payment extends MY_Controller{
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
         if($paymentMethodString === "PayPal"
            || $paymentMethodString === "DragonPay"){
-            echo $response;
+            echo json_encode($response);
         }
         elseif($paymentMethodString === "PesoPay"){
             $responseArray = [
@@ -1581,8 +1581,13 @@ class Payment extends MY_Controller{
             echo json_encode($responseArray);
         }
         else{
-            extract($response);
-            $this->removeItemFromCart();  
+            $txnid = $response['txnid'];
+            $message = $response['message'];
+            $status = $response['status'];
+            $orderId = $response['orderId'];
+            $invoice = $response['invoice'];
+            $textType = $response['textType'];
+            $this->removeItemFromCart();
             $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
             $this->generateFlash($txnid,$message,$status);
             echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
@@ -1626,13 +1631,17 @@ class Payment extends MY_Controller{
         // Validate Cart Data
         $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
-
+        
         $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'), null);
-    
-        extract($response);
+        $message = $response['message'];
+        $status = $response['status'];
+        $txnid = $response['txnid'];
+        $orderId = $response['orderId'];
+        $invoice = $response['invoice'];
+        
         $this->removeItemFromCart();
         $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
-        $this->generateFlash($txnid,$message,$status);
+        $this->generateFlash($txnid, $message, $status);
         redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 
@@ -1647,17 +1656,17 @@ class Payment extends MY_Controller{
         }
         $paymentService = $this->serviceContainer['payment_service'];
         $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
-
-        $params['txnId'] = $this->input->get('txnid');
-        $params['refNo'] = $this->input->get('refno');
-        $params['status'] =  $this->input->get('status');
-        $params['message'] = $this->input->get('message');
-        $params['digest'] = $this->input->get('digest');
+        $params['txnId'] = trim($this->input->get('txnid'));
+        $params['refNo'] = trim($this->input->get('refno'));
+        $params['status'] =  trim($this->input->get('status'));
+        $params['message'] = trim($this->input->get('message'));
+        $params['digest'] = trim($this->input->get('digest'));
 
         $response = $paymentService->returnMethod($paymentMethods, $params);
-        
-        extract($response);
-        $this->generateFlash($txnId,$message,$status);
+        $message = $response['message'];
+        $txnId = $response['txnId'];
+        $status = $response['status'];
+        $this->generateFlash($txnId, $message, $status);
         redirect('/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
@@ -1696,8 +1705,10 @@ class Payment extends MY_Controller{
 
         $params['ref'] = $this->input->get('Ref'); 
         $params['status'] =  $this->input->get('status'); 
-        extract($paymentService->returnMethod($paymentMethods, $params));
-
+        $response = $paymentService->returnMethod($paymentMethods, $params);
+        $txnId = $response['txnId'];
+        $message = $response['message'];
+        $status = $response['status'];
         if($status === PaymentService::STATUS_SUCCESS){
             $this->removeItemFromCart();
         }

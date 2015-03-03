@@ -65,16 +65,6 @@ class DragonPayGateway extends AbstractGateway
     }
 
     /**
-     * Retrive Processors
-     * 
-     */
-    public function getProcessors()
-    { 
-        $result = $this->client->call('GetProcessors');
-        return $result['GetProcessorsResult']['ProcessorInfo'];
-    }
-
-    /**
      * Retrieve Transaction Token
      * 
      * @param float $amount
@@ -95,16 +85,27 @@ class DragonPayGateway extends AbstractGateway
             'ccy' => $ccy,
             'description' => $description,
             'email' => $email,
+            'param1' => 'Easyshop',
         ];
         
         $result = $this->client->call('GetTxnToken',$param);
         $token = $result['GetTxnTokenResult'];
 
         if(strlen($token) <= 3){
-            return '{"e":"0","m":"'.$errorCodes[$token].'","c":"'.$token.'"}';
+            return [
+                'e' => false,
+                'm' => $errorCodes[$token],
+                'c' => $token,
+            ];
         }
         else{
-            return '{"e":"1","m":"SUCCESS","c":"'.$token.'","tid":"'.$txnId.'","u":"'.$this->redirectUrl.'?tokenid='.$token.'&mode=7"}';
+            return [
+                'e' => true,
+                'm' => "SUCCESS",
+                'c' => $token,
+                'tid' => $txnId,
+                'u' => $this->redirectUrl.'?tokenid='.$token.'&mode=7',
+            ];
         }
     }
 
@@ -166,7 +167,10 @@ class DragonPayGateway extends AbstractGateway
         $productCount = count($validatedCart['itemArray']); 
 
         if($validatedCart['itemCount'] !== $productCount){
-            return '{"e":"0","m":"Item quantity not available."}';
+            return [
+                'e' => false,
+                'm' => "Item quantity not available.",
+            ];
         }
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
@@ -187,8 +191,6 @@ class DragonPayGateway extends AbstractGateway
 
         $txnid = $this->generateReferenceNumber($memberId);
         $dpReturn = $this->getTxnToken($grandTotal, $name, $member->getEmail(), $txnid);
-        $dpReturnArray = json_decode($dpReturn);
-
         $this->setParameter('amount', $grandTotal);
 
         $return = $this->persistPayment(
@@ -201,8 +203,11 @@ class DragonPayGateway extends AbstractGateway
             $this
         );
 
-        if($return['o_success'] <= 0){
-           return '{"e":"0","m":"'.$return['o_message'].'"}';  
+        if($return['o_success'] <= 0){ 
+            return [
+                'e' => false,
+                'm' => $return['o_message'],
+            ];
         }
         else{ 
             $orderId = $return['v_order_id'];
@@ -255,7 +260,10 @@ class DragonPayGateway extends AbstractGateway
      */
     public function postBackMethod($params)
     {
-        extract($params);
+        $txnId = $params['txnId'];
+        $status = $params['status'];
+        $message = $params['message']; 
+
         // paymentType
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $this->setParameter('paymentType', $paymentType);
@@ -315,13 +323,13 @@ class DragonPayGateway extends AbstractGateway
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $this->setParameter('paymentType', $paymentType);
 
-        extract($params);
-
-        $response['txnId'] = $txnId;
+        $txnId = $response['txnId'] = $params['txnId'];
+        $status = $params['status'];
+        $message = $params['message'];
 
         if(strtolower($status) === PaymentService::STATUS_PENDING || strtolower($status) === PaymentService::STATUS_SUCCESS){
             $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                ->findOneBy(['transactionId' => $txnId, 'paymentMethod' => $paymentType]);
+                               ->findOneBy(['transactionId' => $txnId, 'paymentMethod' => $paymentType]);
             $orderId = $return->getIdOrder();
             $response['status'] = PaymentService::STATUS_SUCCESS;
             $response['message'] = 'Your payment has been completed through Dragon Pay. '.urldecode($message);
