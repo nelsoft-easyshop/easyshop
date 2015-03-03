@@ -27,36 +27,38 @@
     });
     
     $(window).bind('load', function(){
-        mainwindowsize = $(window).width();
-        if (mainwindowsize < 565) {
-            $('.bxslider').bxSlider({
-                minslides : 1,
-                maxSlides: 1,
-                moveSlides: 1,
-                speed: 1000,
-                pause: 6000,
-                prevText : '',
-                nextText : '',
-                touchEnabled : true,
-                infiniteLoop: true
-            });
-        }
+        setTimeout(function(){
+            mainwindowsize = $(window).width();
+            if (mainwindowsize < 565) {
+                $('.bxslider').bxSlider({
+                    minslides : 1,
+                    maxSlides: 1,
+                    moveSlides: 1,
+                    speed: 1000,
+                    pause: 6000,
+                    prevText : '',
+                    nextText : '',
+                    touchEnabled : true,
+                    infiniteLoop: true
+                });
+            }
 
-        else {
-            $('.bxslider').bxSlider({
-                minslides : 1,
-                maxSlides: 2,
-                moveSlides: 1,
-                speed: 1000,
-                auto: true,
-                pause: 6000,
-                prevText : '',
-                nextText : '',
-                slideMargin : 10,
-                touchEnabled : true,
-                infiniteLoop: true
-            });
-        }
+            else {
+                $('.bxslider').bxSlider({
+                    minslides : 1,
+                    maxSlides: 2,
+                    moveSlides: 1,
+                    speed: 1000,
+                    auto: true,
+                    pause: 6000,
+                    prevText : '',
+                    nextText : '',
+                    slideMargin : 10,
+                    touchEnabled : true,
+                    infiniteLoop: true
+                });
+            }
+        }, 300);
     });
 
     //Sort random function
