@@ -67,11 +67,11 @@ class CheckoutService
     }
 
     /**
-     * Validate Cart before checking out
+     * Include Cart Content Validation before checking out
      * @param  EasyShop\Entities\EsMember $member
      * @return array
      */
-    public function validateCartContent($member)
+    public function includeCartItemValidation($member)
     {
         $cartContent = $this->cartManager->getValidatedCartContents($member->getIdMember());
 

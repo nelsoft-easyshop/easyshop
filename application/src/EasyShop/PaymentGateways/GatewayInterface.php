@@ -10,7 +10,7 @@ namespace EasyShop\PaymentGateways;
  */
 interface GatewayInterface
 {
-    public function pay($validatedCart, $memberId, $paymentService);
+    public function pay($validatedCart, $memberId);
 
     /*
         Breakdown = [$param_arr1, $param_arr2 ...]

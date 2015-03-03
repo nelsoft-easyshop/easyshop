@@ -51,17 +51,17 @@ class DragonPayGateway extends AbstractGateway
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
 
         if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
-            $configLoad = $paymentService->configLoader->getItem('payment','production'); 
+            $configLoad = $this->paymentService->configLoader->getItem('payment','production'); 
         }
         else{ 
-            $configLoad = $paymentService->configLoader->getItem('payment','testing'); 
+            $configLoad = $this->paymentService->configLoader->getItem('payment','testing'); 
         }
         $config = $configLoad['payment_type']['dragonpay']['Easyshop'];
 
         $this->redirectUrl = $config['redirect_url'];
         $this->merchantId = $config['merchant_id'];
         $this->merchantPwd = $config['merchant_password']; 
-        $this->client = $paymentService->dragonPaySoapClient;
+        $this->client = $this->paymentService->dragonPaySoapClient;
     }
 
     /**
@@ -149,14 +149,13 @@ class DragonPayGateway extends AbstractGateway
      * 
      * @param mixed $validatedCart
      * @param mixed $memberId Cart
-     * @param mixed $paymentService
      */
-    public function pay($validatedCart, $memberId, $paymentService)
+    public function pay($validatedCart, $memberId)
     {
         header('Content-type: application/json');
 
         // Point Gateway
-        $pointGateway = $paymentService->getPointGateway();
+        $pointGateway = $this->paymentService->getPointGateway();
 
         // paymentType
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
@@ -179,7 +178,7 @@ class DragonPayGateway extends AbstractGateway
 
         // Compute shipping fee
         $pointSpent = $pointGateway ? $pointGateway->getParameter('amount') : "0";
-        $prepareData = $paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$address);
+        $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$address);
         $grandTotal = $prepareData['totalPrice'];
         $productString = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
@@ -192,7 +191,7 @@ class DragonPayGateway extends AbstractGateway
 
         $this->setParameter('amount', $grandTotal);
 
-        $return = $paymentService->persistPayment(
+        $return = $this->persistPayment(
             $grandTotal, 
             $memberId, 
             $productString, 
@@ -252,10 +251,9 @@ class DragonPayGateway extends AbstractGateway
      *
      * Dragonpay's PostBack URL is routed to here
      * 
-     * @param mixed $paymentService
      * @param mixed $params
      */
-    public function postBackMethod($paymentService, $params)
+    public function postBackMethod($params)
     {
         extract($params);
         // paymentType
@@ -276,7 +274,7 @@ class DragonPayGateway extends AbstractGateway
                             ->getShippingAddress((int)$memberId);
 
         // Compute shipping fee
-        $prepareData = $paymentService->computeFeeAndParseData($itemList, (int)$address);
+        $prepareData = $this->paymentService->computeFeeAndParseData($itemList, (int)$address);
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
 
