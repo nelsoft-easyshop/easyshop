@@ -3,6 +3,7 @@
 namespace Easyshop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
+use EasyShop\Entities\EsMemberFeatureRestrict;
 
 class EsMemberFeatureRestrictRepository extends EntityRepository
 {
@@ -13,7 +14,7 @@ class EsMemberFeatureRestrictRepository extends EntityRepository
      * @param $memberId
      * @return bool
      */
-    public function isMemberAllowedInFeature($feature, $memberId)
+    public function checkIfMemberIsAllowedInFeature($feature, $memberId)
     {
         $query =  $this->_em->createQueryBuilder()
                             ->select('tbl_mfr')
@@ -25,6 +26,16 @@ class EsMemberFeatureRestrictRepository extends EntityRepository
                             ->getQuery();
         $isMemberInFeatureRestrict = $query->getResult();
 
+        return (bool) $isMemberInFeatureRestrict;
+    }
+
+    /**
+     * Check if Feature is full
+     * @param $feature
+     * @return bool
+     */
+    public function checkIfFeatureIsFull($feature)
+    {
         $query =  $this->_em->createQueryBuilder()
                             ->select('COUNT(tbl_mfr)')
                             ->from('EasyShop\Entities\EsMemberFeatureRestrict', 'tbl_mfr')
@@ -35,9 +46,24 @@ class EsMemberFeatureRestrictRepository extends EntityRepository
                             ->getQuery();
         $isFeatureFull = $query->getResult();
 
-        return [
-            'isMemberInFeatureRestrict' => (bool) $isMemberInFeatureRestrict,
-            'isFeatureFull' => (bool) $isFeatureFull,
-        ];
+        return (bool) $isFeatureFull;
+    }
+
+    /**
+     * Create a new member feature restrict
+     * @param $feature
+     * @param $member
+     * @return EasyShop\Entities\EsMemberFeatureRestrict
+     */
+    public function addMemberToFeature($feature, $member)
+    {
+        $memberFeatureRestrict = new EsMemberFeatureRestrict();
+        $memberFeatureRestrict->setMember($member);
+        $memberFeatureRestrict->setFeatureRestrict($feature);
+        $memberFeatureRestrict->setIsDelete(0);
+        $this->_em->persist($memberFeatureRestrict);
+        $this->_em->flush();
+
+        return $memberFeatureRestrict;
     }
 }

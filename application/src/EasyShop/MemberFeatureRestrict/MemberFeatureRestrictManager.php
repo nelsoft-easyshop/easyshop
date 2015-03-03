@@ -1,8 +1,6 @@
 <?php
 namespace Easyshop\MemberFeatureRestrict;
 
-use EasyShop\Doctrine\Proxies\__CG__\EasyShop\Entities\EsMemberFeatureRestrict;
-
 class MemberFeatureRestrictManager
 {
 
@@ -36,8 +34,13 @@ class MemberFeatureRestrictManager
 
         foreach ($featuresObj as $feature) {
             $isMemberAllowedInFeature = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
-                                                 ->isMemberAllowedInFeature($feature, $memberId);
-            $features[$feature->getIdFeatureRestrict()] = $isMemberAllowedInFeature['isMemberInFeatureRestrict'];
+                                                 ->checkIfMemberIsAllowedInFeature($feature, $memberId);
+            $isFeatureIsFull = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
+                                        ->checkIfFeatureIsFull($feature);
+            $features[$feature->getIdFeatureRestrict()] = [
+                                                              'isMemberAllowedInFeature' => $isMemberAllowedInFeature,
+                                                              'isFeatureIsFull' => $isFeatureIsFull
+                                                          ];
         }
 
         return $features;
