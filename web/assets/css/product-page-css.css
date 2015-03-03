@@ -834,7 +834,8 @@ body{
 .p-html-description img {
     display: block;
     height: auto;
-    max-width: 1200px !important;
+    max-width: 100%;
+    margin-bottom: 10px;
 }
 
 .step4_section .p-html-description img {
