@@ -168,7 +168,7 @@ class MobileProductUpload extends MY_Controller
             $imageArray = json_decode(trim($this->input->post('images')), true);
             $shippingArray = json_decode(trim($this->input->post('shippingInfo')), true);
             $attributeArray = json_decode(trim($this->input->post('attributes')), true);
-            $condition = $this->lang->line('product_condition')[0];
+            $condition = trim($this->input->post('condition'));
             $bankDetails = json_decode(trim($this->input->post('bankDetails')), true);
             $isFreeShippingNationwide = (bool) trim($this->input->post('isFreeShippingNationwide'));
             
