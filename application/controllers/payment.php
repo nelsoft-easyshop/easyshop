@@ -1808,7 +1808,7 @@ class Payment extends MY_Controller{
         return $qtySuccess;
     }
 
-    function generateFlash($txnId,$message,$status)
+    private function generateFlash($txnId,$message,$status)
     {
         $this->session->set_flashdata('txnid',$txnId);
         $this->session->set_flashdata('msg',$message);
