@@ -134,7 +134,6 @@ class PayPalGateway extends AbstractGateway
      */
     public function pay($validatedCart, $memberId)
     {
-        header('Content-type: application/json');
         if(!$memberId){
             redirect('/', 'refresh');
         }

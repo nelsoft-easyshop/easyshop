@@ -153,8 +153,6 @@ class DragonPayGateway extends AbstractGateway
      */
     public function pay($validatedCart, $memberId)
     {
-        header('Content-type: application/json');
-
         // Point Gateway
         $pointGateway = $this->paymentService->getPointGateway();
 
