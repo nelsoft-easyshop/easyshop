@@ -40,7 +40,7 @@ class EsMemberFeatureRestrictRepository extends EntityRepository
                             ->select('COUNT(tbl_mfr)')
                             ->from('EasyShop\Entities\EsMemberFeatureRestrict', 'tbl_mfr')
                             ->where('tbl_mfr.featureRestrict = :featureId')
-                            ->having('COUNT(tbl_mfr.idMemberFeatureRestrict) = :maxUser')
+                            ->having('COUNT(tbl_mfr.idMemberFeatureRestrict) >= :maxUser')
                             ->setParameter('featureId', $feature->getIdFeatureRestrict())
                             ->setParameter('maxUser', $feature->getMaxUser())
                             ->getQuery();
