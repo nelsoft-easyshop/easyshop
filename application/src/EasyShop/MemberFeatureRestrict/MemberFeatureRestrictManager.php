@@ -35,12 +35,7 @@ class MemberFeatureRestrictManager
         foreach ($featuresObj as $feature) {
             $isMemberAllowedInFeature = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
                                                  ->checkIfMemberIsAllowedInFeature($feature, $memberId);
-            $isFeatureFull = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
-                                      ->checkIfFeatureIsFull($feature);
-            $features[$feature->getIdFeatureRestrict()] = [
-                                                              'isMemberAllowedInFeature' => $isMemberAllowedInFeature,
-                                                              'isFeatureFull' => $isFeatureFull
-                                                          ];
+            $features[$feature->getIdFeatureRestrict()] = $isMemberAllowedInFeature;
         }
 
         return $features;
