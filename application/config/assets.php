@@ -9,10 +9,10 @@ $config = [
 ];
 
 if(ENVIRONMENT == 'production'){
-    $config['assetsBaseUrl'] = "http://s3-ap-southeast-1.amazonaws.com/easyshop-production/";
+    $config['assetsBaseUrl'] = "https://s3-ap-southeast-1.amazonaws.com/easyshop-production/";
 }
 else if(ENVIRONMENT == 'staging'){
-    $config['assetsBaseUrl'] = "http://s3-ap-southeast-1.amazonaws.com/easyshop-staging/";
+    $config['assetsBaseUrl'] = "https://s3-ap-southeast-1.amazonaws.com/easyshop-staging/";
 }
 else{
     $config['assetsBaseUrl'] = "/";
