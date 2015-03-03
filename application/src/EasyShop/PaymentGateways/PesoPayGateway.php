@@ -170,19 +170,17 @@ class PesoPayGateWay extends AbstractGateway
                                'paymentMethod' => $paymentType
                            ]); 
         if($order 
-            && (strtolower($status) === PaymentService::STATUS_PENDING 
-                || strtolower($status) === PaymentService::STATUS_SUCCESS)){
+            && strtolower($status) === PaymentService::STATUS_SUCCESS){
             $response['status'] = PaymentService::STATUS_SUCCESS;
-            $response['message'] = 'Your payment has been completed through Pesopay Credit/Debit Card. Reference Number: ' . $txnId;
+            $response['message'] = 'Your payment is still processing through Pesopay Credit/Debit Card.';
         }
         else{
             $response['status'] = PaymentService::STATUS_FAIL;
-            $response['message'] = 'Transaction Not Completed. Reference Number: ' . $txnId;
+            $response['message'] = 'Transaction Not Completed.';
         }
 
         return $response;
-    }
-
+    } 
 
     /**
      * Postback callback method
