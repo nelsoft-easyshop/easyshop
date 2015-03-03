@@ -51,11 +51,11 @@ class EsMemberFeatureRestrictRepository extends EntityRepository
 
     /**
      * Create a new member feature restrict
-     * @param $feature
      * @param $member
+     * @param $feature
      * @return EasyShop\Entities\EsMemberFeatureRestrict
      */
-    public function addMemberToFeature($feature, $member)
+    public function addMemberToFeature($member, $feature)
     {
         $memberFeatureRestrict = new EsMemberFeatureRestrict();
         $memberFeatureRestrict->setMember($member);

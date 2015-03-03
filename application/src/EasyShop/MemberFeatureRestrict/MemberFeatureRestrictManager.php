@@ -35,15 +35,42 @@ class MemberFeatureRestrictManager
         foreach ($featuresObj as $feature) {
             $isMemberAllowedInFeature = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
                                                  ->checkIfMemberIsAllowedInFeature($feature, $memberId);
-            $isFeatureIsFull = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
-                                        ->checkIfFeatureIsFull($feature);
+            $isFeatureFull = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
+                                      ->checkIfFeatureIsFull($feature);
             $features[$feature->getIdFeatureRestrict()] = [
                                                               'isMemberAllowedInFeature' => $isMemberAllowedInFeature,
-                                                              'isFeatureIsFull' => $isFeatureIsFull
+                                                              'isFeatureFull' => $isFeatureFull
                                                           ];
         }
 
         return $features;
+    }
+
+    /**
+     * Insert member to EsMemberFeatureRestrict
+     * @param $memberId
+     * @param $featureId
+     * @return EasyShop\Entities\EsMemberFeatureRestrict
+     */
+    public function addMemberToFeature($memberId, $featureId)
+    {
+        $featureRestrictEntity = $this->em->find('EasyShop\Entities\EsFeatureRestrict', $featureId);
+        $memberEntity = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+        $memberFeatureRestrictEntity = '';
+        if ($featureRestrictEntity) {
+            $isMemberAllowedInFeature = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
+                                                 ->checkIfMemberIsAllowedInFeature($featureRestrictEntity, $memberId);
+            $isFeatureFull = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
+                                      ->checkIfFeatureIsFull($featureRestrictEntity);
+
+            if (!($isMemberAllowedInFeature && $isFeatureFull)) {
+                $memberFeatureRestrictEntity = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
+                                                        ->addMemberToFeature($memberEntity, $featureRestrictEntity);
+            }
+
+        }
+
+        return $memberFeatureRestrictEntity;
     }
 
 }
