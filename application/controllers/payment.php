@@ -1477,13 +1477,25 @@ class Payment extends MY_Controller{
         return $qtySuccess;
     }
 
-    private function __generateFlash($txnId,$message,$status)
+    /**
+     * Set Flash data into variable
+     * @param string $txnId
+     * @param string $message
+     * @param string $status
+     */
+    private function __generateFlash($txnId, $message, $status) 
     {
         $this->session->set_flashdata('txnid',$txnId);
         $this->session->set_flashdata('msg',$message);
         $this->session->set_flashdata('status',$status);
     }
 
+    /**
+     * Generate reference number by payment type
+     * @param  integer $paymentType 
+     * @param  integer $member_id 
+     * @return string
+     */
     private function generateReferenceNumber($paymentType,$member_id){
     
         switch($paymentType)
