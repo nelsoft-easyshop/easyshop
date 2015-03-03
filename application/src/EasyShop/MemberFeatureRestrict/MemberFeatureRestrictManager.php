@@ -61,7 +61,7 @@ class MemberFeatureRestrictManager
 
             if (!$isMemberAllowedInFeature && !$isFeatureFull) {
                 $memberFeatureRestrictEntity = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
-                                                        ->addMemberToFeature($memberEntity, $featureRestrictEntity);
+                                                        ->addMemberToFeature($memberEntity, $featureRestrictEntity, 0);
             }
 
         }

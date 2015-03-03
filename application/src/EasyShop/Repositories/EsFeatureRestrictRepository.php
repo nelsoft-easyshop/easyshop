@@ -14,9 +14,9 @@ class EsFeatureRestrictRepository extends EntityRepository
      */
     public function getFeatureIds()
     {
-        return array(
+        return [
             EsFeatureRestrict::REAL_TIME_CHAT
-        );
+        ];
     }
 
     /**

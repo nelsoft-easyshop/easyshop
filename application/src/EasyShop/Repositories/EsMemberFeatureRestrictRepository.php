@@ -10,8 +10,8 @@ class EsMemberFeatureRestrictRepository extends EntityRepository
 
     /**
      * Check if member is allowed in a specific feature
-     * @param $feature
-     * @param $memberId
+     * @param obj $feature
+     * @param int $memberId
      * @return bool
      */
     public function checkIfMemberIsAllowedInFeature($feature, $memberId)
@@ -31,7 +31,7 @@ class EsMemberFeatureRestrictRepository extends EntityRepository
 
     /**
      * Check if Feature is full
-     * @param $feature
+     * @param obj $feature
      * @return bool
      */
     public function checkIfFeatureIsFull($feature)
@@ -51,16 +51,17 @@ class EsMemberFeatureRestrictRepository extends EntityRepository
 
     /**
      * Create a new member feature restrict
-     * @param $member
-     * @param $feature
+     * @param obj $member
+     * @param obj $feature
+     * @param int $isDelete
      * @return EasyShop\Entities\EsMemberFeatureRestrict
      */
-    public function addMemberToFeature($member, $feature)
+    public function addMemberToFeature($member, $feature, $isDelete)
     {
         $memberFeatureRestrict = new EsMemberFeatureRestrict();
         $memberFeatureRestrict->setMember($member);
         $memberFeatureRestrict->setFeatureRestrict($feature);
-        $memberFeatureRestrict->setIsDelete(0);
+        $memberFeatureRestrict->setIsDelete($isDelete);
         $this->_em->persist($memberFeatureRestrict);
         $this->_em->flush();
 
