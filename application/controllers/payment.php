@@ -652,7 +652,7 @@ class Payment extends MY_Controller{
             $message = 'Some parameters are missing.';
         }
 
-        $this->generateFlash($txnid,$message,$status);
+        $this->__generateFlash($txnid,$message,$status);
         redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 
@@ -836,12 +836,15 @@ class Payment extends MY_Controller{
             $message = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.'; 
         }
 
-        $this->generateFlash($txnid,$message,$status);
+        $this->__generateFlash($txnid,$message,$status);
         redirect('/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
-    #START OF DRAGONPAY PAYMENT
-    function payDragonPay()
+    /**
+     * Request dragonpay token
+     * @return json
+     */
+    public function payDragonPay()
     {
         header('Content-type: application/json');
 
@@ -1025,7 +1028,7 @@ class Payment extends MY_Controller{
                 $message = 'Transaction Not Completed. '.urldecode($message);
             }
             
-            $this->generateFlash($txnId,$message,$status);
+            $this->__generateFlash($txnId,$message,$status);
             $redirectUrl = '/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status;
         }
         elseif($client === "Easydeal"){
@@ -1474,7 +1477,7 @@ class Payment extends MY_Controller{
         return $qtySuccess;
     }
 
-    private function generateFlash($txnId,$message,$status)
+    private function __generateFlash($txnId,$message,$status)
     {
         $this->session->set_flashdata('txnid',$txnId);
         $this->session->set_flashdata('msg',$message);
@@ -1589,7 +1592,7 @@ class Payment extends MY_Controller{
             $textType = $response['textType'];
             $this->removeItemFromCart();
             $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
-            $this->generateFlash($txnid,$message,$status);
+            $this->__generateFlash($txnid,$message,$status);
             echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
         }
     }
@@ -1641,7 +1644,7 @@ class Payment extends MY_Controller{
         
         $this->removeItemFromCart();
         $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
-        $this->generateFlash($txnid, $message, $status);
+        $this->__generateFlash($txnid, $message, $status);
         redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 
@@ -1666,7 +1669,10 @@ class Payment extends MY_Controller{
         $message = $response['message'];
         $txnId = $response['txnId'];
         $status = $response['status'];
-        $this->generateFlash($txnId, $message, $status);
+        if($status === PaymentService::STATUS_SUCCESS){
+            $this->removeItemFromCart();
+        }
+        $this->__generateFlash($txnId, $message, $status);
         redirect('/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
@@ -1712,7 +1718,7 @@ class Payment extends MY_Controller{
         if($status === PaymentService::STATUS_SUCCESS){
             $this->removeItemFromCart();
         }
-        $this->generateFlash($txnId, $message, $status);
+        $this->__generateFlash($txnId, $message, $status);
         redirect('/payment/success/debitcreditcard'
                     .'?txnid='.$txnId
                     .'&msg='.$message
