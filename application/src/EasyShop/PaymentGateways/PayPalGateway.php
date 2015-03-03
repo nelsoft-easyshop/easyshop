@@ -337,7 +337,7 @@ class PayPalGateway extends AbstractGateway
             $lockCountExist = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->getLockCount($orderId);
 
             if($lockCountExist >= 1){
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($orderId,$toBeLocked); 
+                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($toBeLocked, $orderId); 
                 if($validatedCart['itemCount'] === $productCount){
                     $padata = '&TOKEN='.urlencode($token).
                     '&PAYERID='.urlencode($payerid).
