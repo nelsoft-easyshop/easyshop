@@ -172,7 +172,7 @@ class PesoPayGateWay extends AbstractGateway
         if($order 
             && strtolower($status) === PaymentService::STATUS_SUCCESS){
             $response['status'] = PaymentService::STATUS_SUCCESS;
-            $response['message'] = 'Your payment has been processed through Pesopay Credit/Debit Card. Once validated you will receiv an email regarding the status of your purchase.';
+            $response['message'] = 'Your payment has been processed through Pesopay Credit/Debit Card. Once validated you will receive an email regarding the status of your purchase.';
         }
         else{
             $response['status'] = PaymentService::STATUS_FAIL;
