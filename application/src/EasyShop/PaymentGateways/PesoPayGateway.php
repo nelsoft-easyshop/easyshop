@@ -161,7 +161,6 @@ class PesoPayGateWay extends AbstractGateway
     {
         // paymentType
         $paymentType = EsPaymentMethod::PAYMENT_PESOPAYCC;
-        $this->setParameter('paymentType', $paymentType);
 
         $txnId = $response['txnId'] = $params['ref'];
         $status = $params['status'];
