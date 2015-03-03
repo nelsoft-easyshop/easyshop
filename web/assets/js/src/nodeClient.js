@@ -4,7 +4,7 @@
  
             var $chatConfig = $('#chatServerConfig');
             var $isLoggedIn = $('[name="is-logged-in"]');
-            var isChatAllowed = $('#listOfFeatureWithRestriction').data('real-time-chat');
+            var isChatAllowed = $.parseJSON($('#listOfFeatureWithRestriction').data('real-time-chat'));
 
             if ($.parseJSON($isLoggedIn.val())) {
 

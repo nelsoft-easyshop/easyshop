@@ -2,7 +2,7 @@
 
     $(document).ready(function()
     {
-        var isChatAllowed = $('#listOfFeatureWithRestriction').data('real-time-chat');
+        var isChatAllowed = $.parseJSON($('#listOfFeatureWithRestriction').data('real-time-chat'));
 
         if(config.isSocketioEnabled && isChatAllowed){
             var $userInfo = $('#userInfo');
