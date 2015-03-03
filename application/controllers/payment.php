@@ -1043,127 +1043,6 @@ class Payment extends MY_Controller{
         redirect($redirectUrl, 'refresh');
     }
 
-    #START OF PESOPAY PAYMENT
-    function payPesoPay()
-    {
-        header('Content-type: application/json');
-
-        $paymentType = $this->PayMentPesoPayCC; 
-
-        $member_id =  $this->session->userdata('member_id'); 
-        $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtysuccess = $this->resetPriceAndQty(); 
-        $itemList =  $this->session->userdata('choosen_items');
-        $productCount = count($itemList); 
-
-        if($qtysuccess != $productCount){
-           die('{"e":"0","m":"Item quantity not available."}');
-        } 
-
-        $address = $this->memberpage_model->get_member_by_id($member_id);  
-
-        $prepareData = $this->processData($itemList,$address);
-        $grandTotal = $prepareData['totalPrice'];
-        $productstring = $prepareData['productstring'];
-        $itemList = $prepareData['newItemList'];
-        $toBeLocked = $prepareData['toBeLocked'];  
-        $transactionID = $this->generateReferenceNumber($paymentType,$member_id);
-
-        $return = $this->payment_model->payment($paymentType,$grandTotal,$member_id,$productstring,$productCount,json_encode($itemList),$transactionID);
-        
-        if($return['o_success'] <= 0){
-            die('{"e":"0","m":"'.$return['o_message'].'"}');  
-        }else{ 
-            $mode =  $this->pesopay->getMode();
-            $data = array(
-                'orderRef' => $transactionID,
-                'amount' => $grandTotal,
-                'url' => $mode['url'],
-                'merchantId' =>  $mode['merchantId']
-                );
-            $orderId = $return['v_order_id'];
-            $locked = $this->lockItem($toBeLocked,$orderId,'insert');   
-            die('{"e":"1","d":'.json_encode($this->load->view('pages/payment/pesopayform',$data,TRUE)).'}');
-        }
-    }
-
-
-    function pesoPayReturnUrl()
-    { 
-        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect('/', 'refresh');
-        }
- 
-        $status =  $this->input->get('status');
-        $txnId = $this->input->get('Ref');
-        $paymentType = $this->PayMentPesoPayCC;     
- 
-        if(strtolower($status) == PaymentService::STATUS_SUCCESS){
-
-            $return = $this->payment_model->selectFromEsOrder($txnId,$paymentType); 
-            $orderId = $return['id_order'];
-            $message = 'Your payment has been completed through Credit/Debit Card.';
-            $this->removeItemFromCart();  
-   
-        }else{
-            $txnId = $this->input->get('Fref');
-            $message = 'Transaction Not Completed.';
-            $status = PaymentService::STATUS_FAIL;
-        }
-
-        $this->generateFlash($txnId,$message,$status);
-        redirect('/payment/success/debitcreditcard?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
-    }
-
-    function pesoPayDataFeed()
-    {
-
-        header("Content-Type:text/plain");
-
-        $ref = $this->input->post('Ref'); 
-        $successCode = $this->input->post('successcode'); 
-
-        echo 'OK'; # acknowledgemenet
-        
-        $paymentType = $this->PayMentPesoPayCC; 
-
-        $txnId = $ref;
-        $payDetails = $this->payment_model->selectFromEsOrder($txnId,$paymentType);
-        $invoice = $payDetails['invoice_no'];
-        $orderId = $payDetails['id_order'];
-        $member_id = $payDetails['buyer_id'];
-        $itemList = json_decode($payDetails['data_response'],true);  
-
-        $address = $this->memberpage_model->get_member_by_id($member_id); 
-
-        $prepareData = $this->processData($itemList,$address);  
-        $itemList = $prepareData['newItemList'];
-        $toBeLocked = $prepareData['toBeLocked'];
-        $locked = $this->lockItem($toBeLocked,$orderId,'delete');
-        
-        if($successCode == "0"){
-
-            foreach ($itemList as $key => $value) {               
-                $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                $this->product_model->update_soldout_status($value['id']);
-            }
-
-            $complete = $this->payment_model->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,0,0);
-            $this->sendNotification(array('member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice));  
-
-        }else{
-
-            $orderId = $this->payment_model->cancelTransaction($txnId,true);
-            $orderHistory = array(
-                'order_id' => $orderId,
-                'order_status' => 2,
-                'comment' => 'Dragonpay transaction failed: ' . $message
-                );
-            $this->payment_model->addOrderHistory($orderHistory);
-        }
-    }
-
-
     /** 
      * Generates the payment succes or error view
      * 
@@ -1595,7 +1474,7 @@ class Payment extends MY_Controller{
         return $qtySuccess;
     }
 
-    function generateFlash($txnId,$message,$status)
+    private function generateFlash($txnId,$message,$status)
     {
         $this->session->set_flashdata('txnid',$txnId);
         $this->session->set_flashdata('msg',$message);
@@ -1689,11 +1568,17 @@ class Payment extends MY_Controller{
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
-        if($paymentMethodString === "PayPal"){
+        if($paymentMethodString === "PayPal"
+           || $paymentMethodString === "DragonPay"){
             echo $response;
         }
-        elseif($paymentMethodString === "DragonPay"){
-            echo $response;
+        elseif($paymentMethodString === "PesoPay"){
+            $responseArray = [
+                'error' => $response['error'],
+                'message' => $response['message'],
+                'form' => $this->load->view('pages/payment/pesopayform', $response, true)
+            ];
+            echo json_encode($responseArray);
         }
         else{
             extract($response);
@@ -1751,6 +1636,10 @@ class Payment extends MY_Controller{
         redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 
+    /**
+     * Return url for dragonpay
+     * @return view
+     */
     public function returnDragonPay()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
@@ -1772,6 +1661,9 @@ class Payment extends MY_Controller{
         redirect('/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
+    /**
+     * Post back url for dragonpay 
+     */
     public function postBackDragonPay()
     {
         header("Content-Type:text/plain");
@@ -1786,9 +1678,52 @@ class Payment extends MY_Controller{
 
         $response = $paymentService->postBack($paymentMethods, null, null, $params);
 
-        echo 'result=OK'; 
+        echo 'result=OK'; // acknowledgement
     }
 
+    /**
+     * Return url for pesopay 
+     * @return view
+     */
+    public function pesoPayReturnUrl()
+    { 
+        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+            redirect('/', 'refresh');
+        }
+
+        $paymentService = $this->serviceContainer['payment_service'];
+        $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]];
+
+        $params['ref'] = $this->input->get('Ref'); 
+        $params['status'] =  $this->input->get('status'); 
+        extract($paymentService->returnMethod($paymentMethods, $params));
+
+        if($status === PaymentService::STATUS_SUCCESS){
+            $this->removeItemFromCart();
+        }
+        $this->generateFlash($txnId, $message, $status);
+        redirect('/payment/success/debitcreditcard'
+                    .'?txnid='.$txnId
+                    .'&msg='.$message
+                    .'&status='.$status, 'refresh');
+    }
+
+    /**
+     * Post Back url for pesopay
+     * @return [type] [description]
+     */
+    public function pesoPayDataFeed()
+    {
+        header("Content-Type:text/plain");
+        echo 'OK'; // acknowledgemenet
+
+        $paymentService = $this->serviceContainer['payment_service'];
+        $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
+
+        $params['txnId'] = $this->input->post('Ref'); 
+        $params['successCode'] = $this->input->post('successcode'); 
+        $paymentService->postBack($paymentMethods, null, null, $params);
+    }
 
     /**
      * NOTE STARTING HERE IS THE OLD API!
