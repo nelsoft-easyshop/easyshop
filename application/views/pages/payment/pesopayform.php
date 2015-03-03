@@ -1,4 +1,4 @@
-<form name='payFormCcard' id='payFormCcard' method='post' action='<?php echo $url?>'> 
+<form name='payFormCcard' id='payFormCcard' method='post' action='<?php echo $redirectUrl?>'> 
 	<input type='hidden' name='merchantId' value='<?php echo $merchantId; ?>'>
 	<input type='hidden' name='amount' value='<?php echo $amount?>' >
 	<input type='hidden' name='orderRef' value='<?php echo $orderRef?>'>

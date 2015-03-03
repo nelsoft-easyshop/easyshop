@@ -13,7 +13,7 @@
     <div class="row">
         <br/>
         <div class="col-md-12">
-            <?php echo $message; ?>
+            <?php echo html_escape($message); ?>
         </div>
         <br/>
     </div>

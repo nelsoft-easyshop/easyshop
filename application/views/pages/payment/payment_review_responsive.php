@@ -463,24 +463,11 @@
                             <?php endif; ?>
     <!-- #### PESOPAY #### -->
                             <?php if($key == 'pesopaycdb'): ?>
-                                <div id="pesopaycdb" class="payment_inner_content">                          
-                                    <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> <label for='chk_ppcdb'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br><br>
-                                    <input type="button" style='width: 153px;' class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
-                                
+                                <div id="pesopaycdb" class="payment_inner_content">
                                     <?php if($pesopaysucess): ?>
-
-                                        <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p><br>
-                                        <?php 
-                                        $attr = array('class' => 'dbdFrm','id' => 'dbdFrm','name' => 'dbdFrm');
-                                        echo form_open('pay/directbank/', $attr);
-                                        ?>
-                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
-                                            <br/>
-                                            <input type="button" class="payment_dbd orange_btn3" value="Proceed to Payment"> 
-                                            <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
-                                        <?php echo form_close();?>
+                                        <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> <label for='chk_ppcdb'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br><br>
+                                        <input type="button" style='width: 153px;' class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
                                         <p class="notify">You will be notified regarding your order status via email or sms.</p>
-                                    
                                     <?php else: ?>
                                         <span><strong>NOTE: one or more of your chosen items are not available for Credit Card.</strong></span>
                                         <table width="100%" class="table font-12">
