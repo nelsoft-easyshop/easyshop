@@ -91,7 +91,7 @@ class EsProductItemLockRepository extends EntityRepository
      * @param mixed $ids
      * @param int $orderId
      */
-    public function deleteLockItem($orderId, $ids = array())
+    public function deleteLockItem($ids, $orderId)
     {
         if(count($ids) > 0){
             $itemIds = array_keys($ids);
