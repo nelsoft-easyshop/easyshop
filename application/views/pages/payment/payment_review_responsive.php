@@ -465,7 +465,18 @@
                             <?php if($key == 'pesopaycdb'): ?>
                                 <div id="pesopaycdb" class="payment_inner_content">
                                     <?php if($pesopaysucess): ?>
-                                        <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> <label for='chk_ppcdb'>I acknowledge I have read and understood Easyshop.ph's  </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br><br>
+                                        <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> 
+                                            <label for='chk_ppcdb'>
+                                                I acknowledge I have read and understood Easyshop.ph's
+                                            </label>
+                                            <a href="/policy" target='_blank'>
+                                                <span style='border-bottom:1px dotted'>
+                                                    Privacy Policy
+                                                </span>
+                                            </a>.
+                                        </p>
+                                        <br />
+                                        <br />
                                         <input type="button" style='width: 153px;' class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
                                         <p class="notify">You will be notified regarding your order status via email or sms.</p>
                                     <?php else: ?>
