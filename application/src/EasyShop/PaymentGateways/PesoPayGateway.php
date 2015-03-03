@@ -12,11 +12,8 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
 /**
  * Pesopay Gateway Class
  *
- * @author LA roberto <la.roberto@easyshop.ph>
- *
  * Params needed:
  *      method:"PesoPayCreditCard"
- *      type:$(this).data('type')
  */
 class PesoPayGateWay extends AbstractGateway
 {
@@ -317,3 +314,4 @@ class PesoPayGateWay extends AbstractGateway
         return EsOrderStatus::STATUS_PAID;
     }
 }
+
