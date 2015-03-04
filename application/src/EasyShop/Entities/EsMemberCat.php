@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EsMemberCat
 {
+
+    const DELETED = 1;
+
     /**
      * @var integer
      *

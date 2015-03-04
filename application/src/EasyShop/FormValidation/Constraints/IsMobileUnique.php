@@ -16,20 +16,22 @@ class IsMobileUnique extends Constraint
      *
      * @var integer
      */
-    private $memberId;
+    private $memberId = 0;
 
     /**
      * Constraint constructor
      *
      * @param integer $memberId
      */
-    public function __construct($options)
+    public function __construct($options = [])
     {      
-        if(isset($options["memberId"]) && is_int($options['memberId'])){
-            $this->memberId = $options['memberId'];
-        }
-        else{
-            throw new \Exception("The member ID must be an integer");
+        if(isset($options["memberId"])){
+            if( is_int($options['memberId'])){
+                $this->memberId = $options['memberId'];
+            }
+            else{
+                throw new \Exception("The member ID must be an integer");
+            }
         }
     }
 

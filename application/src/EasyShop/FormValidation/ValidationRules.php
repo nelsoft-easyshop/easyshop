@@ -85,6 +85,7 @@ class ValidationRules
                                 new Assert\Length(['min' => '11',
                                                      'max' => '11']),
                                 new CustomAssert\IsValidMobile(),
+                                new CustomAssert\IsMobileUnique(),
                     ),
                     'email' => array(
                                 new Assert\NotBlank(),
@@ -105,6 +106,7 @@ class ValidationRules
                     ),
                     'contact_number' => array(
                                 new CustomAssert\IsValidMobileOptional(),
+                                new CustomAssert\IsMobileUnique(),
                     ), 
                     'street_address' => array(
                                 new CustomAssert\IsValidAddressOptional(),
@@ -148,7 +150,8 @@ class ValidationRules
                                 new Assert\Email()
                     ),
                     'mobile' => array(
-                                new CustomAssert\IsValidMobile()
+                                new CustomAssert\IsValidMobile(),
+                                new CustomAssert\IsMobileUnique(),
                     ),
                     'storeDescription' => array(
                                 new Assert\Length(['max' => '1024'])

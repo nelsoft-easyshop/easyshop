@@ -131,6 +131,7 @@
                 if($combinationQuantity <= 0){
                     $("#control-quantity").append('<option value="0">0</option>');
                     $addToCartButton.removeClass("enabled").addClass("disabled");
+                    $("#shipment_locations").val($("#shipment_locations option:first").val());
                     $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
                 }
                 else{
@@ -155,8 +156,9 @@
 
             $("#shipment_locations > option").each(function() { 
                 $(this).empty().append($(this).data('text'));
-            });
+            }); 
 
+            $("#shipment_locations").val($("#shipment_locations option:first").val());
             $addToCartButton.removeClass("enabled").addClass("disabled");
             $("#control-quantity").append('<option value="0">0</option>');
             $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
@@ -351,6 +353,7 @@
         }
         $(".attribute-control").each(function() {
             if($(this).val() == 0){
+                $("#shipment_locations").val($("#shipment_locations option:first").val());
                 $(".availability-status").html("Select Combination").removeClass("in-stock").removeClass("out-of-stock");
                 $("#control-quantity").html('<option value="0">0</option>');
                 $('.prod-add-to-cart-btn').removeClass("enabled").addClass("disabled");
