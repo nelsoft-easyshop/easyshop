@@ -1917,7 +1917,7 @@
         var errorContainer = $('#store-category-error');
         errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var categoryDraggableList =  $('.store-category-draggable li');
+        var categoryDraggableList =  $('.new-store-category-draggable li');
         var categoryOrderData = [];
         var order = 0;
         var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
@@ -1959,7 +1959,7 @@
                 categoryViewList.push(html);
                 var categoryIdentifier = parseInt(category.memberCategoryId, 10);
                 if(categoryIdentifier === 0){
-                    categoryIdentifier = index + '_new';
+                    categoryIdentifier = 'default-' + category.categoryId;
                 }
                 html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
                 categoryDraggableList.push(html);
@@ -1972,7 +1972,7 @@
             $('.store-category-view').append( categoryViewList.join('') );
             $('.new-store-category-draggable').append( categoryDraggableList.join('') );
             $('.new-store-category-draggable').sortable();
-            $('#delete-list-categories').html();
+            $('#delete-list-categories').html('');
             $('#delete-list-categories').append( categoryDeleteList.join('') );
     }
 
@@ -2471,6 +2471,7 @@
     $(".category-setup-ajax").on('click','.edit-category', function(){
         $(".overlay-for-waiting-modal").css("display", "block");
         var categoryIdString = $(this).parent('li').data('categoryid');
+        console.log(categoryIdString);
         var categoryId;
         var isCustom;
 
