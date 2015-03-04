@@ -9,6 +9,15 @@ body{
     border: none;
 }
 
+.overlay-for-waiting-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+    background-color: rgba(0,0,0,0.60);
+    z-index: 9999999;
+}
+
 .my-modal-footer .btn.btn-default-3{
     font-weight: 900;
     font-size: 11px;
@@ -2866,6 +2875,42 @@ label.css-label {
     margin-top: 4px;
     margin-right: 1%;
     width: 31.5%;
+}
+/* =============================================
+-----------------  Loading bar -----------------
+==============================================*/
+#loading-box {
+    padding: 2px;
+    background-color: #ff893a;
+    font-size: 10px;
+    border-radius: 0px;
+    text-align: center;
+    color: #fff;
+}
+
+.loading-bar-container{
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-bottom:100px;
+}
+
+.loading-label{
+    text-align: center;
+    display: block;
+    font-weight: bold;
+    color: #565656;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.outer-progress-box{
+    display: inline-block;
+    width: 310px;
+    padding: 0px;
+    border-radius: 0px;
+    background: #e2e2e2;
+    position: relative;
 }
 
 @media only screen and (max-width: 991px){
