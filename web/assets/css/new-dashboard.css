@@ -18,6 +18,14 @@ body{
     z-index: 9999999;
 }
 
+.overlay-loader-container{
+    display: table-cell;
+    position: absolute;
+    border: solid red 1px;
+    width: 100%;
+    height: 100%;
+}
+
 .my-modal-footer .btn.btn-default-3{
     font-weight: 900;
     font-size: 11px;

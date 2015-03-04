@@ -389,3 +389,8 @@
         </center>
     </div>
 </div>
+<div class="overlay-for-waiting-modal" style="display: block;">
+    <div class="overlay-loader-container">
+        sample
+    </div>
+</div>

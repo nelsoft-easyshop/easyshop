@@ -1917,7 +1917,7 @@
         var errorContainer = $('#store-category-error');
         errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var categoryDraggableList =  $('.new-store-category-draggable li');
+        var categoryDraggableList =  $('.store-category-draggable li');
         var categoryOrderData = [];
         var order = 0;
         var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
@@ -1949,7 +1949,7 @@
                 $('.no-category-display').show();
                 return false;
             }
-
+        
             var categoryViewList = [];
             var categoryDraggableList = [];
             var categoryDeleteList = [];
@@ -1959,7 +1959,7 @@
                 categoryViewList.push(html);
                 var categoryIdentifier = parseInt(category.memberCategoryId, 10);
                 if(categoryIdentifier === 0){
-                    categoryIdentifier = 'default-' + category.categoryId;
+                    categoryIdentifier = index + '_new';
                 }
                 html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
                 categoryDraggableList.push(html);
@@ -1972,7 +1972,7 @@
             $('.store-category-view').append( categoryViewList.join('') );
             $('.new-store-category-draggable').append( categoryDraggableList.join('') );
             $('.new-store-category-draggable').sortable();
-            $('#delete-list-categories').html('');
+            $('#delete-list-categories').html();
             $('#delete-list-categories').append( categoryDeleteList.join('') );
     }
 
@@ -2433,6 +2433,16 @@
             });
         });
 
+        $(".overlay-for-waiting-modal").css("height", browserHeight+"px").css("width", browserWidth+"px");
+        
+        //if($(".overlay-for-waiting-modal").is(":visible")) {
+         //   alert( " fail");
+        //}
+
+        $(".overlay-for-waiting-modal").each(function() {
+            if($(this).css("display")!="none") {
+            }
+        });
 
         $("#add-category").click(function(){
             $(".add-category-modal").modal({
