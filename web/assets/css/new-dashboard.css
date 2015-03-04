@@ -1440,14 +1440,14 @@ a{
     
 }
 
-#allItems_edit > li > .icon-move_edit,
-#allItems > li > .icon-move{
+.allItemsEdit > li > .icon-move_edit,
+.allItems > li > .icon-move{
     background: url("/assets/images/icon-add-dark.png") no-repeat center;
     background-size: 100%;
 }
 
-#customCategory_edit > li > .icon-move_edit,
-#customCategory > li > .icon-move{
+.customCategoryEdit > li > .icon-move_edit,
+.customCategory > li > .icon-move{
     background: url("/assets/images/icon-remove-dark.png") no-repeat center;
     background-size: 100%;
 }
@@ -1459,22 +1459,22 @@ a{
 }
 
 #allItems,
-#allItems_edit { 
+#allItemsEdit { 
     float: left; 
     width: 100%; 
     min-height: 195px; 
 }
 
 .allItems.custom-state-active,
-.allItems_edit.custom-state-active { 
+.allItemsEdit.custom-state-active { 
     background: #eee;
     border: dashed #8f8f8f 1px; 
 }
 
 .allItems li,
 .customCategory li,
-.allItems_edit li,
-.customCategory_edit li { 
+.allItemsEdit li,
+.customCategoryEdit li { 
     float: left; 
     width: 70px; 
     padding: 0.4em; 
@@ -1488,36 +1488,36 @@ a{
 .allItems li:active,
 .customCategory li:hover,
 .customCategory li:active,
-.allItems_edit li:hover,
-.allItems_edit li:active,
-.customCategory_edit li:hover,
-.customCategory_edit li:active{
+.allItemsEdit li:hover,
+.allItemsEdit li:active,
+.customCategoryEdit li:hover,
+.customCategoryEdit li:active{
     border: solid #565656 1px;
 }
 
 .allItems li h5,
-.allItems_edit li h5 { 
+.allItemsEdit li h5 { 
     margin: 0 0 0.4em; 
     cursor: move; 
 }
 
 .allItems li a,
-.allItems_edit li a { 
+.allItemsEdit li a { 
     float: right; 
 }
  
-#customCategory,
-#customCategory_edit{
+.customCategory,
+.customCategoryEdit{
     min-height: 195px;
 }
 
-#customCategory h4 .ui-icon,
-#customCategory_edit h4 .ui-icon { 
+.customCategory h4 .ui-icon,
+.customCategoryEdit h4 .ui-icon { 
     float: left; 
 }
 
-#customCategory.ui-state-highlight,
-#customCategory_edit.ui-state-highlight{
+.customCategory.ui-state-highlight,
+.customCategoryEdit.ui-state-highlight{
     background: #eee !important;
     border: dashed #8f8f8f 1px;
     min-height: 195px;
@@ -3929,13 +3929,13 @@ label.css-label {
 
    .allItems li, 
    .customCategory li, 
-   .allItems_edit li, 
-   .customCategory_edit li{
+   .allItemsEdit li, 
+   .customCategoryEdit li{
         width: 56px;
    }
 
-    #customCategory,
-    #customCategory_edit {
+    .customCategory,
+    .customCategoryEdit {
         min-height: 77px;
     }
 
@@ -3943,7 +3943,7 @@ label.css-label {
         height: 35px;
     }
 
-    .customCategory_edit > li:first-child{
+    .customCategoryEdit > li:first-child{
         margin-top: -1px;
     }
 

@@ -850,10 +850,13 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get all active products of specific user
-     * @param  integer  $memberId
-     * @param  integer $offset
-     * @param  integer $perPage
-     * @return object
+     * @param integer $memberId
+     * @param integer $offset
+     * @param integer $perPage
+     * @param string $searchString
+     * @param string $orderByField
+     * @param integer[] $excludeProductsIds
+     * @return EasyShop\Entities\EsProduct[]
      */
     public function getUserProducts($memberId,
                                     $isDelete,
@@ -861,7 +864,8 @@ class EsProductRepository extends EntityRepository
                                     $offset = 0,
                                     $perPage = 10,
                                     $searchString = "",
-                                    $orderByField = "p.idProduct")
+                                    $orderByField = "p.idProduct",
+                                    $excludeProductsIds = [])
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
@@ -879,6 +883,10 @@ class EsProductRepository extends EntityRepository
         if($searchString){
             $queryBuilder->andWhere('p.name LIKE :word')
                          ->setParameter('word', '%'.$searchString.'%');
+        }
+        
+        if(empty($excludeProductsIds) === false){
+            $queryBuilder->andWhere($queryBuilder->expr()->notIn('p.idProduct', $excludeProductsIds));
         }
 
         $queryBuilder->orderBy($orderByField,"DESC");

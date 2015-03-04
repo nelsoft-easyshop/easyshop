@@ -278,7 +278,7 @@
            <div class="form-group">
                 <label class="col-md-3">Category Name : </label>
                 <div class="col-md-9">
-                    <input type="text" class="form-control" placeholder="Type the category name here" value="Easy Treats"/>
+                    <input type="text" class="form-control category-name" placeholder="Type the category name here" value=""/>
                 </div>
             </div>
         </div>
@@ -302,25 +302,14 @@
                             </div>
                         </div>
                         <div class="category-items-holder my-category-container" >
-                            <ul class="customCategory_edit" id="customCategory_edit" >
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    
-                                        <a href="#" class="icon-move_edit icon-move-to-all-items_edit pull-right" ></a>
-                                    
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/htc-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">HTC One</div>
-                                 </li>
-                                  <li class="ui-widget-content ui-corner-tr">
-                                    
-                                        <a href="#" class="icon-move_edit icon-move-to-all-items_edit pull-right" ></a>
-                                    
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/htc-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">HTC One</div>
-                                 </li>
+                            <ul class="customCategoryEdit category-product-list">
+  
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div>  
+ 
+                
                 <div class="col-xs-6 all-right-panel">
                     <div class="drag-drop-group-list">
                         <div class="category-panel-header">
@@ -334,35 +323,7 @@
                             </div>
                         </div>
                         <div class="category-items-holder my-category-container">
-                           <ul id="allItems_edit" class="allItems_edit ui-helper-reset ui-helper-clearfix">
-                                <li class="ui-widget-content ui-corner-tr">
-                                    
-                                        <a href="#" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>
-                                   
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/lg-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">LG G3</div>
-                                 </li>
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    
-                                        <a href="#" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>
-                                   
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">Samsung Galaxy S4</div>
-                                 </li>
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    
-                                        <a href="#" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>
-                                    
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">Samsung Galaxy S4</div>
-                                 </li>
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    
-                                        <a href="#" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>
-                                   
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/fossil-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">Fossil Watch</div>
-                                 </li>
+                           <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list">
                             </ul>
                             <!--Start of loading animation-->
                             <center>
