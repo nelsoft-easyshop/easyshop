@@ -2451,10 +2451,14 @@
                                         '</li>';
                         listHtmlCollection.push(listHtml);
                     });
-
+                    var $categoryProductList = modalDiv.find('.category-product-list');
+                    var $allProductList = modalDiv.find('.all-product-list');
+                    $allProductList.append(listHtmlCollection);
                     
-                    var $productUnorderedList = modalDiv.find('ul.memberProductPool');
-                    $productUnorderedList.append(listHtmlCollection);
+                    $allProductList.sortable({
+                        connectWith: $categoryProductList
+                    });
+                    
                 }
             }
         });
@@ -2503,8 +2507,8 @@
                         listHtmlCollection.push(listHtml);
                         productsIds.push(product.id);
                     });
-                    var $categoryProductList = clonedDiv.find('.customCategoryEdit');
-                    var $allProductList = clonedDiv.find('.allItemsEdit');
+                    var $categoryProductList = clonedDiv.find('.category-product-list');
+                    var $allProductList = clonedDiv.find('.all-product-list');
                     $categoryProductList.append(listHtmlCollection);
                     
                     appendAllProductList(clonedDiv, 1, productsIds);

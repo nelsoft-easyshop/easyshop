@@ -302,7 +302,7 @@
                             </div>
                         </div>
                         <div class="category-items-holder my-category-container" >
-                            <ul class="customCategoryEdit">
+                            <ul class="customCategoryEdit category-product-list">
   
                             </ul>
                         </div>
@@ -323,7 +323,7 @@
                             </div>
                         </div>
                         <div class="category-items-holder my-category-container">
-                           <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix memberProductPool">
+                           <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list">
                             </ul>
                         </div>
                     </div>
