@@ -28,7 +28,8 @@ class EsApiType
      */
     private $apiType;
 
-
+    const TYPE_IOS = 1;
+    const TYPE_ANDROID = 2;
 
     /**
      * Get idApiType

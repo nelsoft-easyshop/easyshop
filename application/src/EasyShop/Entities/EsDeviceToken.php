@@ -36,6 +36,13 @@ class EsDeviceToken
     private $isActive;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateadded", type="datetime", nullable=true)
+     */
+    private $dateadded = 'CURRENT_TIMESTAMP';
+
+    /**
      * @var \EasyShop\Entities\EsApiType
      *
      * @ORM\ManyToOne(targetEntity="EasyShop\Entities\EsApiType")
@@ -46,6 +53,7 @@ class EsDeviceToken
     private $apiType;
 
 
+    const DEFAULT_ACTIVE = 1;
 
     /**
      * Get idDeviceToken
@@ -101,6 +109,29 @@ class EsDeviceToken
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set dateadded
+     *
+     * @param \DateTime $dateadded
+     * @return EsDeviceToken
+     */
+    public function setDateadded($dateadded)
+    {
+        $this->dateadded = $dateadded;
+
+        return $this;
+    }
+
+    /**
+     * Get dateadded
+     *
+     * @return \DateTime 
+     */
+    public function getDateadded()
+    {
+        return $this->dateadded;
     }
 
     /**
