@@ -109,7 +109,7 @@ class MobileProductUpload extends MY_Controller
         $assetsUploader = $this->serviceContainer['assets_uploader']; 
         $fileNames = [];
         $imageUpload = [];
-        $currentImageCount = (int) trim($this->input->post('count')); 
+        $currentImageCount = (int) trim($this->input->post('pictureCount')); 
         $tempId = (string) trim($this->input->post('upload_token')); 
         if(isset($_FILES['userfile'])){   
             $memberId = $this->member->getIdMember();
