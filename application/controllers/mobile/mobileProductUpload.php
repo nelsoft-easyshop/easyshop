@@ -177,7 +177,7 @@ class MobileProductUpload extends MY_Controller
                 $images = $imageArray; 
             }
 
-            if(is_null($attributes) === false ){
+            if(is_null($attributeArray) === false ){
                 $attributes = $attributeArray; 
             }
 
