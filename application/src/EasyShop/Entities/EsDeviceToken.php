@@ -24,7 +24,7 @@ class EsDeviceToken
     /**
      * @var string
      *
-     * @ORM\Column(name="device_token", type="string", length=100, nullable=false)
+     * @ORM\Column(name="device_token", type="string", length=300, nullable=false)
      */
     private $deviceToken;
 

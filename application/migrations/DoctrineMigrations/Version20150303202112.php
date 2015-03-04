@@ -28,7 +28,7 @@ class Version20150303202112 extends AbstractMigration
         $this->addSql("
             CREATE TABLE `es_device_token` (
                 `id_device_token` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                `device_token` VARCHAR(100) NOT NULL,
+                `device_token` VARCHAR(300) NOT NULL,
                 `api_type` INT UNSIGNED NOT NULL,
                 `is_active` TINYINT(1) NOT NULL,
             PRIMARY KEY (`id_device_token`),
