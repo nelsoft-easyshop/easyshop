@@ -14,16 +14,20 @@ body{
     top: 0;
     left: 0;
     opacity: 0.5;
-    background-color: rgba(0,0,0,0.60);
+    background-color: rgba(221,221,221,0.80);
     z-index: 9999999;
+    display: none;
 }
 
 .overlay-loader-container{
+    text-align: center;
     display: table-cell;
-    position: absolute;
-    border: solid red 1px;
-    width: 100%;
-    height: 100%;
+    vertical-align: middle;
+}
+
+.overlay-loader-container img{
+    width: 100px;
+    height: 100px;
 }
 
 .my-modal-footer .btn.btn-default-3{
