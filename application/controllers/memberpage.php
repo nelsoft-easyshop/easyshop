@@ -2313,12 +2313,14 @@ class Memberpage extends MY_Controller
                                     ->getRepository('EasyShop\Entities\EsProduct')
                                     ->findByIdProduct($productIds);
                 foreach($products as $key => $product){
+                    $productId = $product->getIdProduct();
                     $response['products'][$key]['productName'] = $product->getName();
                     $image = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsProductImage')
-                                    ->getDefaultImage($product->getIdProduct());
+                                    ->getDefaultImage($productId);
                     $response['products'][$key]['imageFilename'] = $image->getFilename();
                     $response['products'][$key]['imageDirectory'] = $image->getDirectory();
+                    $response['products'][$key]['id'] = $productId;
                 }
             }
         }
@@ -2326,6 +2328,39 @@ class Memberpage extends MY_Controller
         echo json_encode($response);
     }    
 
+    /**
+     * Get all products of a member
+     *
+     * @return JSON
+     */
+    public function getAllMemberProducts()
+    {
+        $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
+        $excludeIds = $this->input->get('excludeIds') ? json_decode($this->input->get('excludeIds')) : [];
+        $searchString = "";
+        $page--;
+        $page = $page >= 0 ? $page : 0;
+        $memberId = $this->session->userdata('member_id');
+        $products = $this->serviceContainer['entity_manager']
+                         ->getRepository('EasyShop\Entities\EsProduct')
+                         ->getUserProducts($memberId, 0, 0, $page, $this->productsPerCategory, $searchString, "p.idProduct", $excludeIds);
+        $response = false;
+        foreach($products as $product){
+            $productId = $product->getIdProduct();
+            $image = $this->serviceContainer['entity_manager']
+                          ->getRepository('EasyShop\Entities\EsProductImage')
+                          ->getDefaultImage($productId);
+            $response['products'][] = [
+                'productName' => $product->getName(),
+                'id' => $productId,
+                'imageFilename' => $image->getFilename(),
+                'imageDirectory' => $image->getDirectory(),
+            ];
+        }
+        
+        echo json_encode($response);
+    }
+    
     
 
     /**

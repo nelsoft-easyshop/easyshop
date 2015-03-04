@@ -2385,143 +2385,172 @@
         $( "#btn-edit-delete-categories" ).trigger( "click" );
     });
 
+    var browserWidth;
+    var modalCategoryModalWidth;
+    var modalCategoryModalWidthMobile;
+    var widthOfDragabbleItem = 70;
+    var mobileViewPortWidthLimit = 769;
     
     
-
     $(window).on("load resize",function(){
 
-        var browserWidth = $(window).width();
-        var modalCategoryModalWidth = browserWidth * 0.6;
-        var modalCategoryModalWidthMobile = browserWidth * 0.95;
-
-        //Drag and drop sorting for edit category
-        $("#customCategory_edit").sortable({
-            connectWith: "#allItems_edit"
-        });
-        $("#allItems_edit").sortable({
-            connectWith: "#customCategory_edit"
-        });
-
-        $('.icon-move-to-all-items_edit, .icon-move-to-custom-category_edit').on('click', function () {
-            item_edit = $(this).parent();
-            item_edit.fadeOut(function () {
-                if (item_edit.parent().attr('id') == 'allItems_edit') {
-                    $('#customCategory_edit').prepend(item_edit.fadeIn());
-                } else {
-                    $('#allItems_edit').prepend(item_edit.fadeIn());
-                }
-            });
-        });
-
-        //Drag and drop sorting for add category
-        $("#customCategory").sortable({
-            connectWith: "#allItems"
-        });
-        $("#allItems").sortable({
-            connectWith: "#customCategory"
-        });
-
-        $('.icon-move-to-all-items, .icon-move-to-custom-category').on('click', function () {
-            item = $(this).parent();
-            item.fadeOut(function () {
-                if (item.parent().attr('id') == 'allItems') {
-                    $('#customCategory').prepend(item.fadeIn());
-                } else {
-                    $('#allItems').prepend(item.fadeIn());
-                }
-            });
-        });
-
-        $("#add-category").click(function(){
-            $(".add-category-modal").modal({
-                persist:true
-            });
-            $(".add-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
-            var addContentHeight = $(".add-category-modal").outerHeight();
-            var countAllItems = $("#allItems li").size();
-            var widthOfitem = 70;
-            var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
-            if(browserWidth <= 769){
-                $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
-                $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
-            }
-            else{
-                $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
-                $(".ui-droppable").css("width", "100%");
-            }
-            
-        });
-
-        $(".category-setup-ajax").on('click','.edit-category', function(){
-            
-            var categoryIdString = $(this).parent('li').data('categoryid');
-            var categoryId;
-            var isCustom;
-
-            if(typeof categoryIdString === 'string' && categoryIdString.indexOf('default') !== false){
-                var splitString = categoryIdString.split("-");
-                categoryId = parseInt(splitString[1],10);
-                isCustom = false;
-            }
-            else{
-                categoryId = parseInt(categoryIdString,10);
-                isCustom = true;
-            }
-
-            $.ajax({
-                type: "GET",
-                url: '/memberpage/getCustomCategory',
-                data: {categoryId:categoryId, isCustom:  isCustom},
-                success: function(data){ 
-                    var response = $.parseJSON(data);
-                    if(response){
-                        var clonedDiv = $(".edit-category-modal").clone();
-                        clonedDiv.find('.category-name').val(response.categoryName);
-                        var listHtmlCollection = [];
-                        $.each(response.products, function(key, product){
-                            var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
-                            var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
-                                                '<a href="#" class="icon-move_edit icon-move-to-all-items_edit pull-right" ></a>'+
-                                                '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
-                                                '<div class="category-item-name">'+product.productName+'</div>'+
-                                            '</li>';
-                            listHtmlCollection.push(listHtml);
-                        });
-                        clonedDiv.find('.category-product-list').append(listHtmlCollection);
-
-                        clonedDiv.modal({
-                            persist:true
-                        });
-                        clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
-                        var addContentHeight = clonedDiv.outerHeight();
-                        var countAllItems = $("#allItems li").size();
-                        var widthOfitem = 70;
-                        var totalWidthOfMobileDroppable = countAllItems * widthOfitem;
-                        if(browserWidth <= 769){
-                            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
-                            $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
-                        }else{
-                            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
-                            $(".ui-droppable").css("width", "100%");
-                        }
-                        
-                        
-                        
-                    }
-                    
-                },
-            });
-   
-                
-            
-            
-
-        });
+        browserWidth = $(window).width();
+        modalCategoryModalWidth = browserWidth * 0.6;
+        modalCategoryModalWidthMobile = browserWidth * 0.95;
         
-        
-
-
     });
+    
+    
+    
+    //Drag and drop sorting for add category
+    $("#customCategory").sortable({
+        connectWith: "#allItems"
+    });
+    $("#allItems").sortable({
+        connectWith: "#customCategory"
+    });
+    
+    $("#add-category").click(function(){
+        $(".add-category-modal").modal({
+            persist:true
+        });
+        $(".add-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+        var addContentHeight = $(".add-category-modal").outerHeight();
+        var countAllItems = $("#allItems li").size();
+        var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
+        if(browserWidth <= mobileViewPortWidthLimit){
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
+            $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+        }
+        else{
+            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
+            $(".ui-droppable").css("width", "100%");
+        }
+        
+    });
+    
+    function appendAllProductList(modalDiv, page, excludeIds)
+    {
+        page = typeof page !== 'undefined' ? page : 1;
+        excludeIds = typeof excludeIds !== 'undefined' ? excludeIds : [];
+        var stringExcludeIds = JSON.stringify(excludeIds);
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getAllMemberProducts',
+            data: {page:page, excludeIds:stringExcludeIds},
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response){
+                    var listHtmlCollection = [];
+                    $.each(response.products, function(key, product){
+                        var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
+                        var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
+                                            '<a href="javascript:void(0)" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>'+
+                                            '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
+                                            '<div class="category-item-name">'+product.productName+'</div>'+
+                                        '</li>';
+                        listHtmlCollection.push(listHtml);
+                    });
+
+                    
+                    var $productUnorderedList = modalDiv.find('ul.memberProductPool');
+                    $productUnorderedList.append(listHtmlCollection);
+                }
+            }
+        });
+    }
+    
+
+    
+    $(".category-setup-ajax").on('click','.edit-category', function(){
+        
+        var categoryIdString = $(this).parent('li').data('categoryid');
+        var categoryId;
+        var isCustom;
+
+        if(typeof categoryIdString === 'string' && categoryIdString.indexOf('default') !== false){
+            var splitString = categoryIdString.split("-");
+            categoryId = parseInt(splitString[1],10);
+            isCustom = false;
+        }
+        else{
+            categoryId = parseInt(categoryIdString,10);
+            isCustom = true;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getCustomCategory',
+            data: {categoryId:categoryId, isCustom:  isCustom},
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response){
+                    var clonedDiv = $(".edit-category-modal").clone();
+                    clonedDiv.find('.category-name').val(response.categoryName);
+                    var listHtmlCollection = [];
+                    var productsIds = [];
+                    $.each(response.products, function(key, product){
+                        var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
+                        var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
+                                            '<a href="javascript:void(0)" class="icon-move_edit icon-move-to-all-items_edit pull-right" ></a>'+
+                                            '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
+                                            '<div class="category-item-name">'+product.productName+'</div>'+
+                                        '</li>';
+                        listHtmlCollection.push(listHtml);
+                        productsIds.push(product.id);
+                    });
+                    var $categoryProductList = clonedDiv.find('.customCategoryEdit');
+                    var $allProductList = clonedDiv.find('.allItemsEdit');
+                    $categoryProductList.append(listHtmlCollection);
+                    
+                    appendAllProductList(clonedDiv, 1, productsIds);
+                    
+                    $categoryProductList.sortable({
+                        connectWith: $allProductList
+                    });
+                    clonedDiv.modal({
+                        persist:true
+                    });
+                    clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+                    var addContentHeight = clonedDiv.outerHeight();
+                    var countAllItems = $allProductList.find('li').size();
+                    var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
+                    if(browserWidth <= mobileViewPortWidthLimit){
+                        $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
+                        $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+                    }
+                    else{
+                        $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+                        $(".ui-droppable").css("width", "100%");
+                    }
+                }            
+            },
+        });
+    });
+    
+            
+    $(document.body).on('click', '.icon-move-to-all-items_edit, .icon-move-to-custom-category_edit, .icon-move-to-all-items, .icon-move-to-custom-category', function () {
+        var listItem = $(this).parent();
+        var unorderList = listItem.parent();
+
+        listItem.fadeOut(function () {
+            if (unorderList.hasClass('allItemsEdit')) {
+                $('.customCategoryEdit').prepend(listItem.fadeIn());
+            } 
+            else if (unorderList.hasClass('customCategoryEdit')){
+                $('.allItemsEdit').prepend(listItem.fadeIn());
+            }
+            else if (unorderList.hasClass('allItems')){
+                $('.customCategory').prepend(listItem.fadeIn());
+            }
+            else if (unorderList.hasClass('customCategory')){
+                $('.allItems').prepend(listItem.fadeIn());
+            }
+        });
+        
+    });
+    
+
 }(jQuery));
 
 
