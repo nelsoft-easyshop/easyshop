@@ -39,6 +39,11 @@ class Version20150303202112 extends AbstractMigration
                 ON DELETE NO ACTION
                 ON UPDATE NO ACTION);
         ");
+
+        $this->addSql("
+            ALTER TABLE `es_device_token` 
+            ADD COLUMN `dateadded` DATETIME NULL DEFAULT CURRENT_TIMESTAMP AFTER `is_active`;
+        ");
     }
 
     public function down(Schema $schema)
