@@ -11,6 +11,7 @@ $config = [
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
+                // 'pesopaycdb' => 'Peso Pay' // uncomment to enable
             ],
             'banner' => '',
             'is_buyable_outside_promo' => true,

@@ -37,6 +37,12 @@ page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.
 <br><br>
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
 
+$lang['payment_pesopay_buyer'] = "Easyshop.ph has received your payment and has notified the seller(s) of the items you have purchased to 
+ship your items at the soonest possible time. You may view and manage your orders through your transactions 
+page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
+<br><br>
+Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
+
 $lang['payment_cod_buyer'] = "Easyshop.ph has notified the seller(s) of the items you have purchased to ship your items at the soonest possible time.
 You may view and manage your orders through your transactions page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
 <br><br>
