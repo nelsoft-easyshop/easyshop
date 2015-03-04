@@ -2477,7 +2477,7 @@
             categoryId = parseInt(categoryIdString,10);
             isCustom = true;
         }
-
+       
         $.ajax({
             type: "GET",
             url: '/memberpage/getCustomCategory',
@@ -2485,8 +2485,12 @@
             success: function(data){ 
                 var response = $.parseJSON(data);
                 if(response){
-                    var clonedDiv = $(".edit-category-modal").clone();
+                    var clonedDiv = $(".edit-category-modal").clone();    
                     clonedDiv.find('.category-name').val(response.categoryName);
+                    clonedDiv.modal({
+                        persist:true
+                    });
+                    
                     var listHtmlCollection = [];
                     var productsIds = [];
                     $.each(response.products, function(key, product){
@@ -2508,9 +2512,7 @@
                     $categoryProductList.sortable({
                         connectWith: $allProductList
                     });
-                    clonedDiv.modal({
-                        persist:true
-                    });
+
                     clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
                     var addContentHeight = clonedDiv.outerHeight();
                     var countAllItems = $allProductList.find('li').size();
