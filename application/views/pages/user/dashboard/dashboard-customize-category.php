@@ -350,8 +350,8 @@
         </center>
     </div>
 </div>
-<div class="overlay-for-waiting-modal" style="display: block;">
+<div class="overlay-for-waiting-modal" style="">
     <div class="overlay-loader-container">
-        sample
+        <img src="/assets/images/es-loader-2.gif">
     </div>
 </div>
