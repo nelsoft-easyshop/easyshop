@@ -364,6 +364,18 @@
                                     <div class="category-item-name">Fossil Watch</div>
                                  </li>
                             </ul>
+                            <!--Start of loading animation-->
+                            <center>
+                                <div class="loading-bar-container">
+                                    <span class="loading-label">
+                                        Loading more items
+                                    </span>
+                                    <div class="outer-progress-box" style="">
+                                        <div id="loading-box"></div>
+                                    </div>
+                                </div>
+                            </center>
+                            <!--End of loading animation-->
                         </div>
                     </div>
                 </div>
