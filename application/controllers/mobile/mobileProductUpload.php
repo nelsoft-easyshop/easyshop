@@ -162,15 +162,15 @@ class MobileProductUpload extends MY_Controller
             $categoryId = trim($this->input->post('category'));
             $price = (float) trim(str_replace(',', '', $this->input->post('price')));
             $discount = (float) trim($this->input->post('discount'));
-            $isCod = (bool) trim($this->input->post('isCod'));
-            $isMeetUp = (bool) trim($this->input->post('isMeetUp'));
+            $isCod = trim($this->input->post('isCod')) === "true";
+            $isMeetUp = trim($this->input->post('isMeetUp')) === "true";
             $quantity = (int) trim($this->input->post('quantity'));
             $imageArray = json_decode(trim($this->input->post('images')), true);
             $shippingArray = json_decode(trim($this->input->post('shippingInfo')), true);
             $attributeArray = json_decode(trim($this->input->post('attributes')), true);
             $condition = trim($this->input->post('condition'));
             $bankDetails = json_decode(trim($this->input->post('bankDetails')), true);
-            $isFreeShippingNationwide = (bool) trim($this->input->post('isFreeShippingNationwide'));
+            $isFreeShippingNationwide = trim($this->input->post('isFreeShippingNationwide')) === "true";
             
             if(is_null($imageArray) === false
                && isset($imageArray[0])){
