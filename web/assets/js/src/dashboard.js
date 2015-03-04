@@ -2393,7 +2393,6 @@
     
     
     $(window).on("load resize",function(){
-
         browserWidth = $(window).width();
         modalCategoryModalWidth = browserWidth * 0.6;
         modalCategoryModalWidthMobile = browserWidth * 0.95;
@@ -2553,8 +2552,36 @@
                 $('.allItems').prepend(listItem.fadeIn());
             }
         });
-        
     });
+    
+    
+    $(document).ready(function(){
+        var i = 0;
+        var max_value = 310;
+        var interval = 0;
+        startSetInterval();
+    });
+
+    function startSetInterval() {
+        interval = setInterval(render, 10);
+    }
+    
+    function render() {
+        $("#loading-box").css("width", i + "px");
+        i++;
+        if(i > max_value) {
+            i = 0;
+        }
+        if(i == max_value) {
+            clearInterval(interval);
+            $("#loading-box").css("backgroundColor", "#ff893a");
+            setTimeout(function() {
+                startSetInterval();
+            }, 1000);
+        }
+    }
+
+
     
 
 }(jQuery));

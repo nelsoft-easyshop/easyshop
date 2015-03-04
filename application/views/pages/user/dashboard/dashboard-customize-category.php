@@ -325,6 +325,18 @@
                         <div class="category-items-holder my-category-container">
                            <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list">
                             </ul>
+                            <!--Start of loading animation-->
+                            <center>
+                                <div class="loading-bar-container">
+                                    <span class="loading-label">
+                                        Loading more items
+                                    </span>
+                                    <div class="outer-progress-box" style="">
+                                        <div id="loading-box"></div>
+                                    </div>
+                                </div>
+                            </center>
+                            <!--End of loading animation-->
                         </div>
                     </div>
                 </div>
