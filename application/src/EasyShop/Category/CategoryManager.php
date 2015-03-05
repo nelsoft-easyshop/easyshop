@@ -435,19 +435,17 @@ class CategoryManager
         $errorMessage = "";
 
         try{
-            $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memCatId, "member" => $memberId]);
-            if($memberCategory) {
-                $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);                
-                foreach ($memberCategoryProducts as $memberCategoryProduct) {
-                    $this->em->remove($memberCategoryProduct);
-                }
-            }
-
-            $this->em->flush();
-
             $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                             ->isCustomCategoryNameAvailable($categoryName,$memberId);
             if($isCategoryNameAvailable) {
+                $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memCatId, "member" => $memberId]);
+                if($memberCategory) {
+                    $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);                
+                    foreach ($memberCategoryProducts as $memberCategoryProduct) {
+                        $this->em->remove($memberCategoryProduct);
+                    }
+                }
+            
                 $memberCategory = $esMemberCatRepo->find($memCatId);
                 $memberCategory->setCatName($categoryName);
                 foreach ($productIds as $productId) {
