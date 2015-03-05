@@ -2397,7 +2397,7 @@
         browserHeight = $(window).outerHeight();
         modalCategoryModalWidth = browserWidth * 0.6;
         modalCategoryModalWidthMobile = browserWidth * 0.95;
-        $(".overlay-for-waiting-modal, .overlay-loader-container").css("height", browserHeight+"px").css("width", browserWidth+"px");
+        $(".overlay-for-waiting-modal, .overlay-loader-container-main, .overlay-loader-container").css("height", browserHeight+"px").css("width", browserWidth+"px");
     });
     
     
