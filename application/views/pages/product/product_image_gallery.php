@@ -45,7 +45,7 @@
 <div class="mobile-product-gallery">
     <div id="mobile-product-gallery" class="owl-carousel">
         <?php foreach($images as $image): ?>
-            <div> 
+            <div class="mobile-image-list owl-image<?=$image->getIdProductImage();?>"> 
                  <img src='<?php echo getAssetsDomain().$image->getDirectory(); ?>small/<?=$image->getFilename(); ?>'>
             </div>
         <?php endforeach;?>
