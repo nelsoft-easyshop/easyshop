@@ -9,7 +9,8 @@
     <div class="div-tab-inner">
     
         <div class="div-store-setup category-setup-loading" style="text-align:center">
-            <img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG.gif"/>
+            <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif"/>
+            <br/><br/>
             <p class="loading-text">Loading your category lists...</p>
         </div>
     
@@ -351,7 +352,10 @@
     </div>
 </div>
 <div class="overlay-for-waiting-modal" style="">
-    <div class="overlay-loader-container">
-        <img src="/assets/images/es-loader-2.gif">
+    <div class="overlay-loader-container-main">
+
+    </div>
+     <div class="overlay-loader-container">
+        <img src="/assets/images/es-loader-3.gif">
     </div>
 </div>
