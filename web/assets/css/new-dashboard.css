@@ -2645,6 +2645,7 @@ label.css-label {
 .express-edit-wrapper.ui-widget textarea, 
 .express-edit-wrapper.ui-widget button {
     font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif !important;
+    font-size: 14px;
 }
 
 .express-edit-wrapper .ui-widget-header {
@@ -2657,6 +2658,11 @@ label.css-label {
     right: 1.3em;
 }
 
+.express-edit-wrapper.ui-dialog .ui-dialog-titlebar-close:focus,
+.express-edit-wrapper .ui-widget-header .ui-state-hover {
+    background: #fff;
+    outline: none;
+}
 .express-edit-wrapper .ui-widget-header .ui-icon,
 .express-edit-wrapper .ui-widget-header .ui-state-active {
     background: none;
@@ -2691,18 +2697,17 @@ label.css-label {
 
 .express-edit-btn .btn-default-1,
 .express-edit-btn .btn-set-default {
-    font-size: 13px;
-    width: 47%;
+    font-size: 14px;
+    width: 49%;
 }
 
 .express-edit-btn .btn-default-1 {
-    margin-right: 4%;
     padding: 6px 7px;
 }
 
 .express-edit-btn .btn-default-3 {
     border: none !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     margin-top: 10px;
     padding: 8px 7px;
     width: 100%;
@@ -2723,9 +2728,17 @@ label.css-label {
     background-color: #434343;
 }
 
-.edit-sub-content,
 .edit-sub-content2 {
     margin-top: 12px;
+}
+
+.edit-sub-content-column1,
+.edit-sub-content-column2,
+.edit-sub-content-column3 {
+    float: left;
+    padding-right: 2%;
+    padding-top: 15px;
+    width: 100%;
 }
 
 .edit-sub-content span {
@@ -2735,12 +2748,6 @@ label.css-label {
     width: 5%;
 }
 
-.edit-sub-content2 span {
-    float: left;
-    line-height: 34px;
-    width: 70%;
-}
-
 .error-message {
     border: 1px solid #F7D9C0;
     border-radius: 4px;
@@ -2748,23 +2755,26 @@ label.css-label {
     padding: 8px;
 }
 
-.edit-sub-content div:last-child span {
+.edit-sub-content div:nth-child(3) span {
     margin-left: 4%;
     margin-right: 0;
 }
 
 .edit-sub-content .ui-form-control {
     float: left;
-    width: 90%;
+    width: 91%;
 }
 
-.edit-sub-content .col-xs-4:nth-child(2) .ui-form-control {
+.edit-sub-content .col-xs-4 {
+    padding-right: 0 !important;
+}
+
+.edit-sub-content-column2 .ui-form-control {
     color: #fe6136;
 }
 
 .edit-sub-content2 .ui-form-control {
-    float: left;
-    width: 30%;
+    width: 100%;
 }
 
 .product-attributes-section {
@@ -2832,7 +2842,7 @@ label.css-label {
     background-color: #cecece;
     border-bottom: none;
     font-weight: bold;
-    font-size: 13px !important;
+    font-size: 14px !important;
     text-align: center;
     text-transform: uppercase;
 }
@@ -3250,7 +3260,7 @@ label.css-label {
     
     .table-feed-mobile > tbody > tr > td{
         padding-left: 5px;
-        vetical-align: bottom;
+        vertical-align: bottom;
         text-align: left;
         padding-bottom: 10px;
     }
@@ -3454,6 +3464,15 @@ label.css-label {
     .prod-att-input-price {
         width: 21%;
     }
+
+    .edit-sub-content-column1,
+    .edit-sub-content-column2 {
+        width: 38%;
+    }
+
+    .edit-sub-content-column3 {
+        width: 24%;
+    }
 }
 
 @media screen and (min-width: 768px) {
@@ -3506,7 +3525,11 @@ label.css-label {
     }
 }
 
-@media (min-width: 767px) and (max-width: 1200px) {
+@media (min-width: 991px) and (max-width: 1200px) {
+    .trans-left-panel .div-product-image {
+        height: 145px;
+    }
+
     .express-edit-btn .btn-default-1 {
         margin: 0;
         margin-bottom: 10px;
@@ -3514,16 +3537,6 @@ label.css-label {
 
     .express-edit-btn .btn-default-1, .express-edit-btn .btn-set-default {
         width: 100%;
-    }
-
-    .edit-sub-content2 span {
-        line-height: 17px;
-    }
-}
-
-@media (min-width: 991px) and (max-width: 1200px) {
-    .trans-left-panel .div-product-image {
-        height: 145px;
     }
 }
 
@@ -3565,6 +3578,16 @@ label.css-label {
 
     .feedback-content textarea {
         margin: 15px 0;
+    }
+
+    .express-edit-content .col-xs-12.padding-reset {
+        margin-top: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .express-edit-btn {
+        margin-top: 30px;
     }
 }
 
@@ -3638,10 +3661,6 @@ label.css-label {
         padding: 10px;
     }
 
-    .express-edit-btn {
-        margin-top: 30px;
-    }
-
     .prod-att-2 {
         margin-top: 12px;
     }
@@ -3649,7 +3668,6 @@ label.css-label {
     .express-edit-btn .btn-default-1,
     .express-edit-btn .btn-set-default {
         font-size: 13px;
-        width: 47.5%;
     }
 
     .btn-default-3.btn-prod-manage{
@@ -3667,11 +3685,11 @@ label.css-label {
         margin-right: 0;
         width: 100%;
     }
-}
 
-@media (max-width: 635px) {
-    .edit-sub-content2 span {
-        line-height: 17px;
+    .edit-sub-content-column1,
+    .edit-sub-content-column2,
+    .edit-sub-content-column3 {
+        padding-right: 0;
     }
 }
 
@@ -3832,14 +3850,6 @@ label.css-label {
         margin-top: 10px;
     }
 
-    .edit-sub-content2 span {
-        width: 40%;
-    }
-
-    .edit-sub-content2 .ui-form-control {
-        width: 60%;
-    }
-
     .prod-att-2 .prod-att-input-2 {
         margin-bottom: 12px;
         width: 100%;
@@ -3847,16 +3857,12 @@ label.css-label {
     .express-edit-btn .btn-default-1,
     .express-edit-btn .btn-set-default {
         font-size: 13px;
-        width: 47%;
     }
 
     .prod-att-add-more-property-btn .btn.btn-default-1 {
         width: 100%;
     }
 
-    .edit-sub-content2 span {
-        line-height: 34px;
-    }
 }
 
 @media (max-width: 380px) {
@@ -3868,12 +3874,6 @@ label.css-label {
 
     .table.prod-att-table .btn {
         font-size: 10px !important;
-    }
-}
-
-@media (max-width: 350px) {
-    .edit-sub-content2 span {
-        line-height: 17px;
     }
 }
 

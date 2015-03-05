@@ -11,6 +11,7 @@ $config = [
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => '',
             'is_buyable_outside_promo' => true,
@@ -28,6 +29,7 @@ $config = [
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'countdown',
             'is_buyable_outside_promo' => false,
@@ -87,7 +89,8 @@ $config = [
                 'cdb'=>'Credit or Debit Card',
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
-                'cod'=>'Cash on Delivery'
+                'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'fixeddiscount',
             'is_buyable_outside_promo' => true,
@@ -104,7 +107,8 @@ $config = [
                 'cdb'=>'Credit or Debit Card',
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
-                'cod'=>'Cash on Delivery'
+                'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => '',
             'is_buyable_outside_promo' => false,
@@ -132,7 +136,8 @@ $config = [
                 'cdb'=>'Credit or Debit Card',
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
-                'cod'=>'Cash on Delivery'
+                'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'generic',
             'is_buyable_outside_promo' => true,
@@ -194,20 +199,20 @@ $config = [
             'option' => [
                 'first_round' =>
                     [
-                        'start' => '2015-02-23 00:00:00',
-                        'end' => '2015-02-24 23:59:59',
+                        'start' => '2015-03-05 12:00:00',
+                        'end' => '2015-03-05 12:59:59',
                         'limit' => PHP_INT_MAX
                     ],
                 'second_round' =>
                     [
-                        'start' => '2015-02-25 12:00:00',
-                        'end' => '2015-02-25 23:59:59',
+                        'start' => '2015-03-05 01:30:00',
+                        'end' => '2015-03-05 02:30:00',
                         'limit' => 3
                     ],
                 'inter_school_round' =>
                     [
-                        'start' => '2015-02-26 12:00:00',
-                        'end' => '2015-02-27 23:59:59',
+                        'start' => '2015-03-05 03:00:00',
+                        'end' => '2015-03-05 04:00:00',
                         'limit' => 1
                     ],
             ],
