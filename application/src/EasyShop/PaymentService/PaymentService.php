@@ -485,6 +485,11 @@ class PaymentService
                 $messageSeller = $this->languageLoader->getLine('payment_cod_seller');
                 $paymentString = "Cash on Delivery";
                 break;
+            case EsPaymentMethod::PAYMENT_PESOPAYCC:
+                $messageBuyer = $this->languageLoader->getLine('payment_pesopay_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
+                $paymentString = "Pesopay Credit/Debit Card";
+                break;
         }
 
 

@@ -16,6 +16,7 @@ class Home extends MY_Controller
         $this->productManager = $this->serviceContainer['product_manager'];
         $this->userManager = $this->serviceContainer['user_manager'];
         $this->em = $this->serviceContainer['entity_manager'];
+        $this->memberFeatureRestrictManager = $this->serviceContainer['member_feature_restrict_manager'];
     }
 
     /**
@@ -43,8 +44,9 @@ class Home extends MY_Controller
         }
         $data['homeContent'] = $homeContent; 
 
-        if( $memberId ){
+        if ($memberId) {
             $data['featuredCategorySection'] = $this->serviceContainer['xml_cms']->getFeaturedProducts($memberId);
+            $this->memberFeatureRestrictManager->addMemberToFeature($memberId, \EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT);
         }
 
         $this->load->spark('decorator');  

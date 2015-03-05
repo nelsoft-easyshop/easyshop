@@ -97,39 +97,52 @@
     $(document).on('change',".base-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseFloat(removeComma($this.val())).toFixed(2);
+        var $value = removeComma($this.val());  
+        if($this.val().trim() == "" || isNaN($value)){
+            $value = 0;
+        }
+        var $finalValue = parseFloat($value).toFixed(2);
         var $discountRate = parseFloat(removeComma($container.find('.discount-rate').val())); 
         
-        if(parseInt($value) >= 0){
-            computeDiscountPrice($value, $discountRate, 0);
+        if(parseInt($finalValue) >= 0){
+            computeDiscountPrice($finalValue, $discountRate, 0);
         }
-        $this.val(replaceNumberWithCommas($value));
+        $this.val(replaceNumberWithCommas($finalValue));
         validate($this);
     });
 
     $(document).on('change',".discount-rate",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseFloat(removeComma($this.val())).toFixed(2);
+        var $value = removeComma($this.val());  
+        if($this.val().trim() == "" || isNaN($value)){
+            $value = 0;
+        }
+
+        var $finalValue = parseFloat($value).toFixed(2);
         var $basePrice = parseFloat(removeComma($container.find('.base-price').val()));
 
-        if(parseInt($value) >= 0 && parseInt($value) <= 99){  
-            computeDiscountPrice($basePrice, $value, 0);
+        if(parseInt($finalValue) >= 0 && parseInt($finalValue) <= 99){  
+            computeDiscountPrice($basePrice, $finalValue, 0);
         }
-        $this.val($value);
+        $this.val($finalValue);
         validate($this);
     });
 
     $(document).on('change',".discount-price",function () {
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
-        var $value = parseFloat(removeComma($this.val())).toFixed(2);
+        var $value = removeComma($this.val());  
+        if($this.val().trim() == "" || isNaN($value)){
+            $value = 0;
+        }
+        var $finalValue = parseFloat($value).toFixed(2);
         var $basePrice = parseFloat(removeComma($container.find('.base-price').val()));
 
-        if($value <= $basePrice && parseInt($value) > 0){  
-            computeDiscountPrice($basePrice, 0, $value);
+        if($finalValue <= $basePrice && parseInt($finalValue) > 0){  
+            computeDiscountPrice($basePrice, 0, $finalValue);
         }
-        $this.val(replaceNumberWithCommas($value));
+        $this.val(replaceNumberWithCommas($finalValue));
         validate($this);
     });
 

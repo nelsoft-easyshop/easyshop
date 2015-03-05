@@ -1,43 +1,45 @@
 
 <div class="express-edit-content">
     <div class="row">
-        <div class="col-xs-12 col-sm-2">
-            <div class="express-edit-product-image" style="background: url(<?=getAssetsDomain().$product->directory.'categoryview/'.$product->imageFileName; ?>) center no-repeat; background-cover: cover; background-size: 90%;">
+        <div class="col-xs-12 col-md-3">
+            <div class="express-edit-product-image" style="background: url(<?=getAssetsDomain().$product->directory.'categoryview/'.$product->imageFileName; ?>) center no-repeat; background-cover: cover; background-size: 100%;">
             </div>
         </div>
-        <div class="col-xs-12 col-sm-7">
+        <div class="col-xs-12 col-md-6 padding-reset">
             <div>
                 <p><strong>Product Name:</strong></p>
                 <input type="text" value="<?=html_escape($product->getName());?>" class="ui-form-control width-100p product-name">
             </div>
-            <div class="row edit-sub-content">
-                <div class="col-xs-4 col-sm-4">
+            <div class="edit-sub-content">
+                <div class="edit-sub-content-column1">
                     <p><strong>Base Price</strong></p>
                     <span><strong>P</strong></span>
                     <input type="text" value="<?=html_escape(number_format($product->getPrice(), 2, '.', ','));?>" class="ui-form-control base-price" onkeypress="return isNumberKey(event);">
                 </div>
-                <div class="col-xs-4 col-sm-4">
+                <div class="edit-sub-content-column2">
                     <p><strong>Discounted Price</strong></p>
                     <span><strong>P</strong></span>
                     <input type="text" class="ui-form-control discount-price" value="" onkeypress="return isNumberKey(event);">
                 </div>
-                <div class="col-xs-4 col-sm-4">
+                <div class="edit-sub-content-column3">
                     <p><strong>Discount Rate</strong></p>
                     <input type="text" value="<?=html_escape(number_format($product->getDiscount(), 2));?>" class="ui-form-control discount-rate" onkeypress="return isNumberKey(event);">
                     <span><strong>%</strong></span>
                 </div>
+                <div class="clear"></div>
             </div>
             <?php if(!$hasCombination): ?>
-            <div class="row edit-sub-content2">
-                <div class="col-xs-4 col-sm-4">
-                    <span><strong>Available Stock(s):</strong></span>
+            <div class="edit-sub-content2">
+                <div class="edit-sub-content-column1">
+                    <p><strong>Available Stock(s):</strong></p>
                     <input type="text" class="ui-form-control txt-total-stock txt-quantity solo-quantity" value="<?=$availableStock;?>">
                 </div>
+                <div class="clear"></div>
             </div>
             <?php endif; ?>
         </div>
-        <div class="col-xs-12 col-sm-3 express-edit-btn">
-            <p class="text-center mrgn-bttm-10">Last Modified: <br /><?=$product->getLastmodifieddate()->format('M d, Y'); ?></p>
+        <div class="col-xs-12 col-md-3 express-edit-btn text-center">
+            <p class="text-center mrgn-bttm-10"><strong><span>Last Modified:</span> <span><?=$product->getLastmodifieddate()->format('M d, Y'); ?></span></strong></p>
             <button type="button" class="btn btn-default-1 btn-advance-edit"
                 data-productid="<?=$product->getIdProduct(); ?>"
                 data-categoryid="<?=$product->getCat()->getIdCat(); ?>"

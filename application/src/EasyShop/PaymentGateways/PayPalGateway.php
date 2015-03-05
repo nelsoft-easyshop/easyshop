@@ -134,7 +134,6 @@ class PayPalGateway extends AbstractGateway
      */
     public function pay($validatedCart, $memberId)
     {
-        header('Content-type: application/json');
         if(!$memberId){
             redirect('/', 'refresh');
         }
@@ -157,11 +156,17 @@ class PayPalGateway extends AbstractGateway
         $this->setParameter('paymentType', $paymentType);
 
         if($productCount <= 0){
-            return '{"e":"0","d":"There are no items in your cart."}';
+            return [
+                'e' => false,
+                'd' => 'There are not items in your cart.'
+            ];
         }
 
         if($validatedCart['itemCount'] !== $productCount){
-            return '{"e":"0","d":"One of the items in your cart is unavailable."}';
+            return [
+                'e' => false,
+                'd' => 'One of the items in your cart is unavailable.'
+            ];
         } 
 
         $shippingAddress = $this->em->getRepository('EasyShop\Entities\EsAddress')
@@ -204,7 +209,10 @@ class PayPalGateway extends AbstractGateway
         $this->setParameter('amount', $grandTotal);
 
         if($thereIsPromote <= 0 && $grandTotal < 50.00){
-            return '{"e":"0","d":"We only accept payments of at least PHP 50.00 in total value."}';
+            return [
+                'e' => false,
+                'd' => 'We only accept payments of at least PHP 50.00 in total value.'
+            ];
         }
 
         foreach ($itemList as $key => $value) {
@@ -286,14 +294,23 @@ class PayPalGateway extends AbstractGateway
                     $this->em->persist($paymentRecord);
                 }
                 $this->em->flush();
-                return '{"e":"1","d":"'.$paypalurl.'"}';
+                return [
+                    'e' => true,
+                    'd' => $paypalurl
+                ]; 
             }
-            else{
-                return '{"e":"0","d":"'.$return['o_message'].'"}';
+            else{ 
+                return [
+                    'e' => false,
+                    'd' => $return['o_message']
+                ]; 
             } 
         }
         else{
-            return '{"e":"0","d":"'.urldecode($httpParsedResponseAr["L_LONGMESSAGE0"]).'"}';
+            return [
+                'e' => false,
+                'd' => urldecode($httpParsedResponseAr["L_LONGMESSAGE0"])
+            ];
         }
     }
 
@@ -337,7 +354,8 @@ class PayPalGateway extends AbstractGateway
             $lockCountExist = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->getLockCount($orderId);
 
             if($lockCountExist >= 1){
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($orderId,$toBeLocked); 
+                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                         ->deleteLockItem($orderId, $toBeLocked); 
                 if($validatedCart['itemCount'] === $productCount){
                     $padata = '&TOKEN='.urlencode($token).
                     '&PAYERID='.urlencode($payerid).

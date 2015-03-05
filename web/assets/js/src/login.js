@@ -206,18 +206,34 @@
     });
     
     var $window = $(window);
-    $window.on('load', function() {
-        var windowsHeight = $(window).height();
-        var logincontainer = $(".new-login-register-content").outerHeight();
-        var loginHeight = (windowsHeight - logincontainer)/2;
+    $window.on('load resize', function() {
 
-        if (logincontainer <= windowsHeight) {
-            $(".new-login-register-content").css({'margin-top': loginHeight});
-        }
-        else {
-            $(".new-login-register-content").css("margin-top","20px");
-        }
+        setTimeout(function(){
+            $(".login-loading-content").hide();
+            $(".login-hide-content").fadeIn();
+        }, 300);
+
+        setTimeout(function(){
+            var windowsHeight = $(window).height();
+            var logincontainer = $(".new-login-register-content").outerHeight();
+            var loginHeight = (windowsHeight - logincontainer)/2;
+
+            if (logincontainer <= windowsHeight) {
+                $(".new-login-register-content").animate({
+                    'margin-top': loginHeight,
+                    'margin-bottom' : '20px'
+                }, 300);
+            }
+            else {
+                $(".new-login-register-content").css({
+                    'margin-top' : '20px',
+                    'margin-bottom' : '20px'
+                });
+            }
+        }, 1000);
     });
-    
+
+    $(".login-hide-content").hide();
+
 })(jQuery);
 
