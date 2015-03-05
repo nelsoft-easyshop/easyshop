@@ -51,7 +51,7 @@ class EsMemberProdcatRepository extends EntityRepository
      *  @return integer[]  
      */
     public function getPagedCustomCategoryProducts($memberId, $memcatId, $prodLimit, $offset = 0, $orderBy = ["idProduct" => "DESC"], $searchString = "")
-    {
+    {      
         $productIds = array();
 
         // Generate Order by condition
@@ -73,7 +73,7 @@ class EsMemberProdcatRepository extends EntityRepository
                     AND p.isDraft = 0";
         
         if($searchString !== ""){
-            $dql .= " AND WHERE p.name LIKE :queryString ";
+            $dql .= " AND p.name LIKE :queryString ";
         }
         
         $dql .= " ORDER BY " . $orderCondition;  
@@ -86,12 +86,14 @@ class EsMemberProdcatRepository extends EntityRepository
             $queryString = '%'.$searchString.'%';
             $query->setParameter('queryString', $queryString);
         }
-                    
+               
+  
         $query->setFirstResult($offset)
               ->setMaxResults($prodLimit);
 
         $paginator = new Paginator($query, $fetchJoinCollection = true);
-
+        
+     
         foreach($paginator as $prod){
             $productIds[] = $prod->getProduct()->getIdProduct();
         }
