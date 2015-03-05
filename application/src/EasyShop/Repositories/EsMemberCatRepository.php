@@ -5,6 +5,7 @@ namespace EasyShop\Repositories;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsMemberCat;
+use EasyShop\Entities\EsProduct;
 
 
 class EsMemberCatRepository extends EntityRepository
@@ -50,17 +51,29 @@ class EsMemberCatRepository extends EntityRepository
         $rsm->addScalarResult('cat_name','cat_name');
         $rsm->addScalarResult('is_featured','is_featured');
         $rsm->addScalarResult('sort_order','sort_order');
-        $sql = 'SELECT id_memcat
-                    , cat_name
-                    , is_featured
-                    , sort_order
+        $rsm->addScalarResult('is_delete','is_delete');
+        $rsm->addScalarResult('product_count','product_count');
+        $sql = 'SELECT es_member_cat.id_memcat,
+                    es_member_cat.cat_name,
+                    es_member_cat.is_featured,
+                    es_member_cat.sort_order,
+                    es_member_cat.is_delete,
+                    COUNT(es_member_prodcat.id_memprod) as product_count
                 FROM es_member_cat
-                WHERE member_id = :member_id
-                ORDER BY id_memcat DESC
+                LEFT JOIN es_member_prodcat 
+                    ON es_member_cat.id_memcat = es_member_prodcat.memcat_id
+                LEFT JOIN es_product
+                    ON es_product.is_draft = :nonDraft AND es_product.is_delete = :active
+                    AND es_product.id_product = es_member_prodcat.product_id
+                WHERE es_member_cat.member_id = :member_id
+                GROUP BY es_member_cat.id_memcat
+                ORDER BY es_member_cat.id_memcat DESC
                 ';
 
         $query = $em->createNativeQuery($sql,$rsm)
-                    ->setParameter('member_id', $memberId);
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('nonDraft', EsProduct::ACTIVE )
+                    ->setParameter('active', EsProduct::ACTIVE );
 
         return $query->getResult();
     }

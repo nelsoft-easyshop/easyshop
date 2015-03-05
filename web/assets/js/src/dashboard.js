@@ -1,5 +1,5 @@
 (function ($) {
-
+    
     $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
         var btn = $(this);
         var submitBtn = btn.closest("form");
@@ -77,6 +77,14 @@
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
         $( ".ms-setup" ).addClass( "selectedM" );
+    });
+
+    $( "#customize-category-tab" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ms-customize" ).addClass( "selectedM" );
     });
 
     $( "#product-management-tab" ).click(function() {
@@ -1116,6 +1124,15 @@
         $(this).addClass("selectedM");
     });
 
+    $('.ms-customize').click(function() {
+        $('#customize-category-tab').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
+        $(this).addClass("selectedM");
+    });
+
     $('.ms-prod').click(function() {
         $('#product-management-tab').trigger("click");
         $('.dash-mobile-trigger').removeClass("selectedM");
@@ -1840,7 +1857,7 @@
         if(!isStoreSetupInitialized){
             $.ajax({
                 type: "get",
-                url: '/memberpage/getStoreSettings',
+                url: '/memberpage/getStoreColor',
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);
                     var unorderedList = $("#store-color-dropdown");
@@ -1868,7 +1885,6 @@
                     });
                     unorderedList.append( colorList.join('') );
                     unorderedList.find('#color-item-'+currentColorId).append(' </i>');
-                    createCategoryList(jsonResponse.storeCategories);
                     isStoreSetupInitialized = true;
                     $('.store-setup-loading').hide();
                     $('.store-setup-ajax').fadeIn();
@@ -1876,13 +1892,32 @@
             });
         }
     });
-
+    
+    
+    
+    var isCategorySetupInitialized = false;
+    $('#customize-category-tab').on('click', function(){
+        if(!isCategorySetupInitialized){
+            $.ajax({
+                type: "get",
+                url: '/memberpage/getStoreCategories',
+                success: function(data){ 
+                    var jsonResponse = $.parseJSON(data);
+                    createCategoryList(jsonResponse.storeCategories);
+                    isCategorySetupInitialized = true;
+                    $('.category-setup-loading').hide();
+                    $('.category-setup-ajax').fadeIn();
+                }
+            });
+        }
+    });
+   
     
     $('#category-order-save').on('click', function(){
         var errorContainer = $('#store-category-error');
         errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var categoryDraggableList =  $('.store-category-draggable li');
+        var categoryDraggableList =  $('.new-store-category-draggable li');
         var categoryOrderData = [];
         var order = 0;
         var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
@@ -1908,25 +1943,37 @@
     
     
     function createCategoryList(categoryData)
-    {
-        var categoryViewList = [];
-        var categoryDraggableList = [];
-        $.each(categoryData, function(index, category) {
-            var html =  '<div class="div-cat">'+category.name+'</div>';
-            categoryViewList.push(html);
-            var categoryIdentifier = category.memberCategoryId;
-            if(categoryIdentifier == 0){
-                categoryIdentifier = index + '_new';
+    {       
+            if(categoryData.length === 0){
+                $('.div-store-content.concealable').hide();
+                $('.no-category-display').show();
+                return false;
             }
-            var escapedName = escapeHtml(category.name);
-            html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'</li>';
-            categoryDraggableList.push(html);
-        });
-        $('.store-category-view').html('');
-        $('.store-category-draggable').html('');
-        $('.store-category-view').append( categoryViewList.join('') );
-        $('.store-category-draggable').append( categoryDraggableList.join('') );
-        $('.store-category-draggable').sortable();
+        
+            var categoryViewList = [];
+            var categoryDraggableList = [];
+            var categoryDeleteList = [];
+            $.each(categoryData, function(index, category) {
+                var escapedName = escapeHtml(category.name);
+                var html =  '<div class="div-cat">'+escapedName+'</div>';
+                categoryViewList.push(html);
+                var categoryIdentifier = parseInt(category.memberCategoryId, 10);
+                if(categoryIdentifier === 0){
+                    categoryIdentifier = 'default-' + category.categoryId;
+                }
+                html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
+                categoryDraggableList.push(html);
+                html = '<li class="checkbox"><label><input data-categoryid="'+escapeHtml(categoryIdentifier) + '" type="checkbox" class="checkBox">'+escapedName+'</label></li>';
+                categoryDeleteList.push(html);
+            });
+
+            $('.store-category-view').html('');
+            $('.new-store-category-draggable').html('');
+            $('.store-category-view').append( categoryViewList.join('') );
+            $('.new-store-category-draggable').append( categoryDraggableList.join('') );
+            $('.new-store-category-draggable').sortable();
+            $('#delete-list-categories').html('');
+            $('#delete-list-categories').append( categoryDeleteList.join('') );
     }
 
     $('#store-color-save').on('click', function(){
@@ -2328,6 +2375,219 @@
     $( "#cancel-delete-products" ).click(function() {
         $( "#delete-products" ).trigger( "click" );
     });
+
+    $( "#btn-edit-delete-categories" ).click(function() {
+        $( ".current-btn-delete" ).slideToggle( "fast" );
+        $( ".edit-btn-delete" ).slideToggle( "fast" );
+    });
+    
+    $( "#cancel-delete-categories" ).click(function() {
+        $( "#btn-edit-delete-categories" ).trigger( "click" );
+    });
+
+    var browserWidth;
+    var modalCategoryModalWidth;
+    var modalCategoryModalWidthMobile;
+    var widthOfDragabbleItem = 70;
+    var mobileViewPortWidthLimit = 769;
+    
+    
+    $(window).on("load resize",function(){
+        browserWidth = $(window).width();
+        browserHeight = $(window).outerHeight();
+        modalCategoryModalWidth = browserWidth * 0.6;
+        modalCategoryModalWidthMobile = browserWidth * 0.95;
+        $(".overlay-for-waiting-modal, .overlay-loader-container-main, .overlay-loader-container").css("height", browserHeight+"px").css("width", browserWidth+"px");
+    });
+    
+    
+    
+    //Drag and drop sorting for add category
+    $("#customCategory").sortable({
+        connectWith: "#allItems"
+    });
+    $("#allItems").sortable({
+        connectWith: "#customCategory"
+    });
+    
+    $("#add-category").click(function(){
+        $(".add-category-modal").modal({
+            persist:true
+        });
+        $(".add-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+        var addContentHeight = $(".add-category-modal").outerHeight();
+        var countAllItems = $("#allItems li").size();
+        var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
+        if(browserWidth <= mobileViewPortWidthLimit){
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
+            $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+        }
+        else{
+            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
+            $(".ui-droppable").css("width", "100%");
+        }
+        
+    });
+    
+    function appendAllProductList(modalDiv, page, excludeIds)
+    {
+        page = typeof page !== 'undefined' ? page : 1;
+        excludeIds = typeof excludeIds !== 'undefined' ? excludeIds : [];
+        var stringExcludeIds = JSON.stringify(excludeIds);
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getAllMemberProducts',
+            data: {page:page, excludeIds:stringExcludeIds},
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response){
+                    var listHtmlCollection = [];
+                    $.each(response.products, function(key, product){
+                        var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
+                        var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
+                                            '<a href="javascript:void(0)" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>'+
+                                            '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
+                                            '<div class="category-item-name">'+product.productName+'</div>'+
+                                        '</li>';
+                        listHtmlCollection.push(listHtml);
+                    });
+                    var $categoryProductList = modalDiv.find('.category-product-list');
+                    var $allProductList = modalDiv.find('.all-product-list');
+                    $allProductList.append(listHtmlCollection);
+                    
+                    $allProductList.sortable({
+                        connectWith: $categoryProductList
+                    });
+                    
+                }
+            }
+        });
+
+        $(".overlay-for-waiting-modal").css("display", "none");
+    }
+    
+
+    
+    $(".category-setup-ajax").on('click','.edit-category', function(){
+        $(".overlay-for-waiting-modal").css("display", "block");
+        var categoryIdString = $(this).parent('li').data('categoryid');
+        console.log(categoryIdString);
+        var categoryId;
+        var isCustom;
+
+        if(typeof categoryIdString === 'string' && categoryIdString.indexOf('default') !== false){
+            var splitString = categoryIdString.split("-");
+            categoryId = parseInt(splitString[1],10);
+            isCustom = false;
+        }
+        else{
+            categoryId = parseInt(categoryIdString,10);
+            isCustom = true;
+        }
+       
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getCustomCategory',
+            data: {categoryId:categoryId, isCustom:  isCustom},
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response){
+                    var clonedDiv = $(".edit-category-modal").clone();    
+                    clonedDiv.find('.category-name').val(response.categoryName);
+                    clonedDiv.modal({
+                        persist:true
+                    });
+                    
+                    var listHtmlCollection = [];
+                    var productsIds = [];
+                    $.each(response.products, function(key, product){
+                        var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
+                        var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
+                                            '<a href="javascript:void(0)" class="icon-move_edit icon-move-to-all-items_edit pull-right" ></a>'+
+                                            '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
+                                            '<div class="category-item-name">'+product.productName+'</div>'+
+                                        '</li>';
+                        listHtmlCollection.push(listHtml);
+                        productsIds.push(product.id);
+                    });
+                    var $categoryProductList = clonedDiv.find('.category-product-list');
+                    var $allProductList = clonedDiv.find('.all-product-list');
+                    $categoryProductList.append(listHtmlCollection);
+                    
+                    appendAllProductList(clonedDiv, 1, productsIds);
+                    
+                    $categoryProductList.sortable({
+                        connectWith: $allProductList
+                    });
+
+                    clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+                    var addContentHeight = clonedDiv.outerHeight();
+                    var countAllItems = $allProductList.find('li').size();
+                    var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
+                    if(browserWidth <= mobileViewPortWidthLimit){
+                        $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
+                        $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+                    }
+                    else{
+                        $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+                        $(".ui-droppable").css("width", "100%");
+                    }
+                }            
+            },
+        });
+    });
+    
+            
+    $(document.body).on('click', '.icon-move-to-all-items_edit, .icon-move-to-custom-category_edit, .icon-move-to-all-items, .icon-move-to-custom-category', function () {
+        var listItem = $(this).parent();
+        var unorderList = listItem.parent();
+
+        listItem.fadeOut(function () {
+            if (unorderList.hasClass('allItemsEdit')) {
+                $('.customCategoryEdit').prepend(listItem.fadeIn());
+            } 
+            else if (unorderList.hasClass('customCategoryEdit')){
+                $('.allItemsEdit').prepend(listItem.fadeIn());
+            }
+            else if (unorderList.hasClass('allItems')){
+                $('.customCategory').prepend(listItem.fadeIn());
+            }
+            else if (unorderList.hasClass('customCategory')){
+                $('.allItems').prepend(listItem.fadeIn());
+            }
+        });
+    });
+    
+    $(document).ready(function(){
+        var i = 0;
+        var max_value = 310;
+        var interval = 0;
+        startSetInterval();
+
+        function startSetInterval() {
+            interval = setInterval(render, 10);
+         }
+    
+        function render() {
+            $("#loading-box").css("width", i + "px");
+            i++;
+            if(i > max_value) {
+                i = 0;
+            }
+            if(i == max_value) {
+                clearInterval(interval);
+                $("#loading-box").css("backgroundColor", "#ff893a");
+                setTimeout(function() {
+                    startSetInterval();
+                }, 1000);
+            }
+        }
+    });
+
+
+
+
+    
 
 }(jQuery));
 

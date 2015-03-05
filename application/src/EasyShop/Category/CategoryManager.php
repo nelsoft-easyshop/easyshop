@@ -25,20 +25,12 @@ class CategoryManager
     const CATEGORY_SEARCH_TYPE = 0;
     
     /**
-     * Custom category type 
+     * Non search category type 
      *
      * @var integer
      */
-    const CATEGORY_CUSTOM_TYPE = 1;
-    
-    
-    /**
-     * Default category type 
-     *
-     * @var integer
-     */
-    const CATEGORY_DEFAULT_TYPE = 2;
-    
+    const CATEGORY_NONSEARCH_TYPE = 1;
+
     
     /**
      *  Entity Manager Instance
@@ -76,16 +68,25 @@ class CategoryManager
      */
     private $sortUtility;
     
+    
+    /**
+     * String utility
+     *
+     * @var EasyShop\Utility\StringUtility
+     */
+    private $stringUtility;
+    
     /**
      *  Constructor. Retrieves Entity Manager instance
      */
-    public function __construct($configLoader, $em, $productManager, $promoManager, $sortUtility)
+    public function __construct($configLoader, $em, $productManager, $promoManager, $sortUtility, $stringUtility)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
         $this->productManager = $productManager;
         $this->promoManager = $promoManager;
         $this->sortUtility = $sortUtility;
+        $this->stringUtility = $stringUtility;
     }
 
     /**
@@ -202,19 +203,23 @@ class CategoryManager
     
     
     /**
-     *  Fetch products under parent category, based on child cat ids ($arrCatId)
+     *  Fetch products under category
      *
      *  @param integer $memberId
-     *  @param array $arrCatId 
+     *  @param integer[] $arrCatId 
+     *  @param boolean $isCustom
+     *  @param integer $productLimit
+     *  @param integer $page
+     *  @param string[] $orderBy
+     *  @param string $condition
+     *  @param string $lprice
+     *  @param string $uprice
      *
      *  @return array - filter count of products and array of product objects
      */
-    public function getVendorDefaultCategoryAndProducts($memberId, $arrCatId, $catType="default", $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
+    public function getProductsWithinCategory($memberId, $arrCatId, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
     {
-        // Container for products fetched
-        $categoryProducts = array();
-
-        // Condition parameters passed
+        $categoryProducts = [];
         $currentPage = (int) $page <= 0 ? 0 : $page-1;
         $page = (int) $page <= 0 ? 0 : ($page-1) * $productLimit;
         $condition = strval($condition);
@@ -222,35 +227,36 @@ class CategoryManager
         $lprice = str_replace(",", "", (string)$lprice);
         $uprice = str_replace(",", "", (string)$uprice);
 
-        // Identify which query to use in fetching product Ids and product count
         if($condition === "" && $lprice === "" && $uprice === ""){
-            switch( $catType ){
-                case "custom":
-                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
-                    $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                             ->countCustomCategoryProducts($memberId, $arrCatId);
-                    break;
-                default:
-                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getPagedNotCustomCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
-                    $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                             ->countNotCustomCategorizedProducts($memberId, $arrCatId);    
-                    break;
-            }        
+            if($isCustom){
+                /**
+                 * Do custom stuff here
+                 */
+                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                               ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
+                $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                         ->countCustomCategoryProducts($memberId, $arrCatId);                            
+            }
+            else{
+                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                               ->getDefaultCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
+                $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                         ->countDefaultCategorizedProducts($memberId, $arrCatId);    
+            }
             $isFiltered = false;    
         }
         else{
               
-            switch( $catType ){
-                case "custom":
-                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
-                    break;
-                default:
-                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getAllNotCustomCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
-                    break;
+            if($isCustom){
+                /**
+                 * Do other custom stuff
+                 */
+                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                               ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
+            }
+            else{
+                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                               ->getAllDefaultCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
             }
 
             if($lprice !== "" || $uprice !== "") {
@@ -261,7 +267,6 @@ class CategoryManager
                     }
                 }   
             }             
-            
 
             $isFiltered = true;  
         }
@@ -273,7 +278,7 @@ class CategoryManager
                 $categoryProductIds = $filteredCategoryProducts[$currentPage];
             }
         }
-        // Fetch product object and append image
+
         foreach($categoryProductIds as $productId){
             $product = $this->productManager->getProductDetails($productId);
             $objImage = $this->em->getRepository("EasyShop\Entities\EsProductImage")
@@ -293,30 +298,27 @@ class CategoryManager
                 $product->secondaryImageFileName = $secondaryProductImage->getFilename();
             }
 
-            
             $categoryProducts[] = $product;
         }
 
-        // Generate result array
-        $result = array(
+        $result = [
             'products' => $categoryProducts,
-            'filtered_product_count' => $productCount
-        );
+           'filtered_product_count' => $productCount,
+        ];
 
         return $result;
     }
 
     
     /**
-     * Get parent category of products uploaded by user
+     * Get User Categories (Combines custom and main categories)
      *
      * @param integer $memberId
      *
      * @return array
      */
-    public function getAllUserProductParentCategory($memberId)
+    public function getUserCategories($memberId)
     {
-        $defaultCategoryImage = "assets/images/default_icon_small.png";
         $vendorCategories = [];
         $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
                                            ->getNestedSetCategoryCount();
@@ -328,93 +330,90 @@ class CategoryManager
             $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
                                         ->getUserCategoriesUsingNestedSet($memberId);
         }    
-        
-        $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                     ->getCustomCategoriesArray($memberId);      
-        $indexedMemberCategoriesByName = [];
-        foreach($memberCategories as $category){
-            $cleanedCategoryName = strtolower(str_replace(' ', '', $category['cat_name']));
-            $indexedMemberCategoriesByName[$cleanedCategoryName] = $category;
-        }
 
-        foreach( $rawVendorCategories as $vendorCategory ){
-            $parentId = (int)$vendorCategory['parent_cat'];
-            $categoryName = $vendorCategory['p_cat_name'];
-            $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
-            $hasNoParent = !isset($vendorCategories[$parentId]);
-            $isCategoryMainParent = $parentId === EsCat::ROOT_CATEGORY_ID;
-            $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
-            if($hasNoParent){
-                $vendorCategories[$parentId] = [];
-                if( !$isCategoryMainParent ){
-                    $categoryImage = "assets/" . substr($vendorCategory['p_cat_img'],0,strrpos($vendorCategory['p_cat_img'],'.')) . "_small.png";
-                    if($vendorCategory['p_cat_img'] !== "" && file_exists($categoryImage)){
-                        $categoryImage = $defaultCategoryImage;
-                    }
-                    $vendorCategories[$parentId]['slug'] = $vendorCategory['p_cat_slug'];
-                    $vendorCategories[$parentId]['cat_link'] = '/category/' . $vendorCategory['p_cat_slug'];
-                    $vendorCategories[$parentId]['cat_img'] = $categoryImage;
-                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : 0;
-                    $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
-                }
-                else if( $hasNoParent && $isCategoryMainParent){
+        $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getCustomCategoriesArray($memberId);    
+                                     
+        /**
+         * Obtain data for customized categories
+         */
+        $cleanNameMemberCategories = [];
+        $highestSortOrder = 0;
+        foreach( $memberCategories as $memberCategory ){
+            $index = 'custom-'.$memberCategory['id_memcat'];
+            $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
+            $vendorCategories[$index]['child_cat'] = [ $memberCategory['id_memcat'] ];
+            $vendorCategories[$index]['products'] = [];
+            $vendorCategories[$index]['product_count'] = $memberCategory['product_count'];
+            $vendorCategories[$index]['isActive'] = false;
+            $vendorCategories[$index]['categoryId'] = 0;
+            $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
+            $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
+            $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+            $vendorCategories[$index]['is_delete'] = $memberCategory['is_delete'];
+            $cleanNameMemberCategories[] = $this->stringUtility->cleanString($memberCategory['cat_name']);
+            if((int)$memberCategory['sort_order'] > (int)$highestSortOrder){
+                $highestSortOrder = $memberCategory['sort_order'];
+            } 
+        }
+        /**
+         * Obtain data for default categories (grouped by main categories)
+         * Matching category names with customized categories are ignored.
+         */
+        $highestSortOrder =  empty($memberCategories) ? 0 : $highestSortOrder+1;
+        foreach( $rawVendorCategories as $rawVendorCategory ){
+            $parentId = (int)$rawVendorCategory['parent_cat'];
+            $categoryName = $rawVendorCategory['p_cat_name'];
+            $index = 'default-'.$parentId;
+            $isParentArrayNotAvailable = !isset($vendorCategories[$index]);
+            $isParentRoot = $parentId === EsCat::ROOT_CATEGORY_ID;
+            if($isParentArrayNotAvailable){
+                $sortOrder = $highestSortOrder;
+                if($isParentRoot){
                     $categoryName = 'Others';
-                    $cleanedCategoryName = strtolower(str_replace(' ', '', $categoryName));
-                    $isMemberCategorySet = isset($indexedMemberCategoriesByName[$cleanedCategoryName]);
-                    $vendorCategories[$parentId]['slug'] = "";
-                    $vendorCategories[$parentId]['cat_link'] = "";
-                    $vendorCategories[$parentId]['cat_img'] = $defaultCategoryImage;
-                    $sortOrder = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['sort_order'] : PHP_INT_MAX;
-                    $vendorCategories[$parentId]['sortOrder'] = $sortOrder;
+                    $sortOrder = PHP_INT_MAX;
                 }
-                $vendorCategories[$parentId]['name'] = $categoryName;
-                $vendorCategories[$parentId]['child_cat'] = [ $parentId ];
-                $vendorCategories[$parentId]['products'] = [];
-                $vendorCategories[$parentId]['product_count'] = 0;
-                $vendorCategories[$parentId]['isActive'] = false;
-                $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_DEFAULT_TYPE;
-                $vendorCategories[$parentId]['categoryId'] = $parentId;
-                $memberCategoryId = $isMemberCategorySet ? $indexedMemberCategoriesByName[$cleanedCategoryName]['id_memcat'] : 0;
-                $vendorCategories[$parentId]['memberCategoryId'] = $memberCategoryId;           
+                $vendorCategories[$index]['sortOrder'] = $sortOrder;
+                $vendorCategories[$index]['name'] = $categoryName;
+                $vendorCategories[$index]['child_cat'] = [ $parentId ];
+                $vendorCategories[$index]['products'] = [];
+                $vendorCategories[$index]['product_count'] = 0;
+                $vendorCategories[$index]['isActive'] = false;
+                $vendorCategories[$index]['categoryId'] = $parentId;
+                $vendorCategories[$index]['memberCategoryId'] = 0;       
+                $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+                $vendorCategories[$index]['is_delete'] = 0;
+            }              
+            /**
+             * Ignore default categories that have the same name as a custom category
+             */
+            $cleanedCategoryName = $this->stringUtility->cleanString($vendorCategories[$index]['name']);
+            if(in_array($cleanedCategoryName, $cleanNameMemberCategories)){
+                unset($vendorCategories[$index]);
+                continue;
             }
-            $vendorCategories[$vendorCategory['parent_cat']]['child_cat'][] = $vendorCategory['cat_id'];
-            $vendorCategories[$vendorCategory['parent_cat']]['product_count'] += $vendorCategory['prd_count'];
+
+            if(!in_array($rawVendorCategory['cat_id'], $vendorCategories[$index]['child_cat'])){
+                $vendorCategories[$index]['child_cat'][] = $rawVendorCategory['cat_id'];
+            }
+            $vendorCategories[$index]['product_count'] += $rawVendorCategory['prd_count'];
+        }
+        /**
+         * Remove deleted categories
+         */
+        foreach($vendorCategories as $key => $vendorCategory){
+            if((int)$vendorCategory['is_delete'] === EsMemberCat::DELETED){
+                unset($vendorCategories[$key]);
+            }
         }
 
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
             return $sortArgumentA['sortOrder'] - $sortArgumentB['sortOrder'];
         });
-     
+        
         return $vendorCategories;
     }
 
-    /**
-     *  Fetch custom categories of $memberId
-     *
-     *  @param integer $memberId
-     *
-     *  @return array
-     */
-    public function getAllUserProductCustomCategory($memberId)
-    {
-        $customCategories = [];
-        $arrCustomCategories = $this->em
-                                    ->getRepository("EasyShop\Entities\EsMemberCat")
-                                    ->getCustomCategoriesArray($memberId);
-
-        foreach( $arrCustomCategories as $customCat ){
-            $customCategories[$customCat['id_memcat']] = [
-                'name' => $customCat['cat_name'],
-                'is_featured' => $customCat['is_featured'],
-                'child_cat' => [ $customCat['id_memcat'] ],
-                'products' => [],
-                'isActive' => false,
-                 $vendorCategories[$parentId]['cat_type'] = self::CATEGORY_CUSTOM_TYPE,
-            ];
-        }
-
-        return $customCategories;
-    }
 
     /**
      * Performs the update actions of User Custom Category Products
@@ -491,10 +490,11 @@ class CategoryManager
     /**
      * Updates is_delete field to '1' of a custom category
      * Inserts new record with a is_delete value of '1' if category name is not found
-     * @param array $categoryArray
+     * 
+     * @param mixed $categoryArray
      * @param int $memberId
      * 
-     * @return bool
+     * @return boolean
      */
     public function deleteUserCustomCategory($categoryArray, $memberId)
     {
@@ -523,11 +523,6 @@ class CategoryManager
         catch(Exception $e) {
             return false;
         }
-
-
     }
-    
-    
-    
-    
+
 } 

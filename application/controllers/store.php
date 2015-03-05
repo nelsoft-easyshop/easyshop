@@ -75,42 +75,41 @@ class Store extends MY_Controller
                     redirect($vendorSlug.'/about');
                 }
                 
-                $getUserProduct = $this->getUserDefaultCategoryProducts($bannerData['arrVendorDetails']['id_member']);
-                $productView['defaultCatProd'] = $getUserProduct['parentCategory'];
+                $getUserProduct = $this->getInitialCategoryProductsByMemberId($bannerData['arrVendorDetails']['id_member']);
+
+                $productView['categoryProducts'] = $getUserProduct['parentCategory'];
                 
-                // If searching in  page
                 if($this->input->get() && !$bannerData['hasNoItems']){
 
                     $productView['isSearching'] = TRUE;
                     $parameter = $this->input->get();
                     $parameter['seller'] = "seller:".$memberEntity->getUsername();
-                    $parameter['limit'] = 12;
-                    
-                    // getting all products
+                    $parameter['limit'] = $this->vendorProdPerPage;
+
                     $search = $searchProductService->getProductBySearch($parameter);
                     $searchProduct = $search['collection'];
                     $count = $search['count'];
 
-                    $productView['defaultCatProd'][0]['name'] ='Search Result';
-                    $productView['defaultCatProd'][0]['products'] = $searchProduct; 
-                    $productView['defaultCatProd'][0]['non_categorized_count'] = $count;
-                    $productView['defaultCatProd'][0]['json_subcat'] = "{}";
-                    $productView['defaultCatProd'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
+                    $productView['categoryProducts'][0]['name'] ='Search Result';
+                    $productView['categoryProducts'][0]['products'] = $searchProduct; 
+                    $productView['categoryProducts'][0]['non_categorized_count'] = $count;
+                    $productView['categoryProducts'][0]['json_subcat'] = "{}";
+                    $productView['categoryProducts'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
                         ,'isHyperLink' => false
                     );
-                    $productView['defaultCatProd'][0]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+                    $productView['categoryProducts'][0]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
 
                     $view = array(
                         'arrCat' => array(
                             'products'=>$searchProduct,
                             'page' => 1,
-                            'pagination' => $productView['defaultCatProd'][0]['pagination'],
+                            'pagination' => $productView['categoryProducts'][0]['pagination'],
                         )
                     );
-                    $productView['defaultCatProd'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+                    $productView['categoryProducts'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
                 }
 
                 //HEADER DATA
@@ -127,8 +126,7 @@ class Store extends MY_Controller
                 ];
 
                 $viewData = array(
-                    "customCatProd" => [],
-                    "defaultCatProd" => $productView['defaultCatProd'],
+                    "categoryProducts" => $productView['categoryProducts'],
                     "product_condition" => $this->lang->line('product_condition'),
                     "isLoggedIn" => $this->session->userdata('usersession'),
                     "prodLimit" => $this->vendorProdPerPage,
@@ -141,15 +139,17 @@ class Store extends MY_Controller
         
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
-                if(isset($productView['isSearching']) && isset($viewData['defaultCatProd'][0])){
-                    $viewData['defaultCatProd'][0]['isActive'] = true;
+                if(!empty($viewData['categoryProducts'])){
+                    if(isset($productView['isSearching'])){
+                        $viewData['categoryProducts'][0]['isActive'] = true;
+                    }
+                    else{
+                        reset($viewData['categoryProducts']);
+                        $firstCategoryId = key($viewData['categoryProducts']);
+                        $viewData['categoryProducts'][$firstCategoryId]['isActive'] = true;
+                    }
                 }
-                else{
-                    reset($viewData['defaultCatProd']);
-                    $firstCategoryId = key($viewData['defaultCatProd']);
-                    $viewData['defaultCatProd'][$firstCategoryId]['isActive'] = true;
-                }
-
+             
                 $this->load->spark('decorator');
                 $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
                 $this->load->view('templates/vendor_banner',$bannerData);
@@ -157,7 +157,6 @@ class Store extends MY_Controller
                 $this->load->view('templates/footer_alt', ['sellerSlug' => $vendorSlug]);
             }
         }
-        // Load invalid link error page
         else{
             show_404();
         }
@@ -421,43 +420,43 @@ class Store extends MY_Controller
     }
     
     /**
-     *  Fetch Default categories and initial products for first load of page.
+     *  Fetch categories and initial products for first load of page.
      *
      *  @return array
      */
-    private function getUserDefaultCategoryProducts($memberId, $catType = "default")
+    private function getInitialCategoryProductsByMemberId($memberId)
     {
         $em = $this->serviceContainer['entity_manager'];
         $categoryManager = $this->serviceContainer['category_manager'];
         $prodLimit = $this->vendorProdPerPage;
 
-        switch($catType){
-            case "custom":
-                $parentCat = $categoryManager->getAllUserProductCustomCategory($memberId);
-                break;
-            default:
-                $parentCat = $categoryManager->getAllUserProductParentCategory($memberId);
-                break;
-        }
+        $parentCat = $categoryManager->getUserCategories($memberId);
 
         $categoryProductCount = array();
         $totalProductCount = 0; 
 
-        foreach( $parentCat as $idCat=>$categoryProperties ){ 
-            $result = $categoryManager->getVendorDefaultCategoryAndProducts($memberId, $categoryProperties['child_cat'], $catType);
-            
+        foreach( $parentCat as $idCat => $categoryProperties ){ 
+
+            $categoryIdCollection = $categoryProperties['child_cat'];
+            $isCustom = false;
+            if( (int)$categoryProperties['memberCategoryId'] !== 0 ){
+                $categoryIdCollection = [$categoryProperties['memberCategoryId']];
+                $isCustom = true;
+            }
+ 
+            $result = $categoryManager->getProductsWithinCategory($memberId, $categoryIdCollection, $isCustom, $prodLimit);
+
             if( (int)$result['filtered_product_count'] === 0 && 
-                (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_DEFAULT_TYPE 
+                (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_NONSEARCH_TYPE 
             ){
                 unset($parentCat[$idCat]);
-                break;
+                continue;
             }
 
             $parentCat[$idCat]['products'] = $result['products'];
             $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
             $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
-            $parentCat[$idCat]['hasMostProducts'] = false; 
             $categoryProductCount[$idCat] = count($result['products']);
             
             // Generate pagination view
@@ -477,13 +476,10 @@ class Store extends MY_Controller
 
             $parentCat[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
-        
-        $categoryWithMostProducts = reset(array_keys($categoryProductCount, max($categoryProductCount)));
-        $parentCat[$categoryWithMostProducts]['hasMostProducts'] = true;
 
         $returnData['totalProductCount'] = $totalProductCount;
         $returnData['parentCategory'] = $parentCat;
-
+  
         return $returnData;
     }
 
@@ -1025,7 +1021,7 @@ class Store extends MY_Controller
 
     
     /**
-     * AJAX REQUEST HANDLER FOR LOADING PRODUCTS W/O FILTER
+     * AJAX REQUEST HANDLER FOR LOADING PRODUCTS
      *
      * @return JSON
      */
@@ -1040,7 +1036,7 @@ class Store extends MY_Controller
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
         $isCount = intval($this->input->get('count')) === 1;
-
+        $isCustom = $this->input->get('isCustom') ? true : false;
         $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('condition')] : "";
         $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lowerPrice')) : "";
         $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('upperPrice')) : "";
@@ -1101,18 +1097,13 @@ class Store extends MY_Controller
                 $parameter['page'] = $page - 1;
                 $search = $searchProductService->getProductBySearch($parameter);
                 $products = $search['collection']; 
-                $productCount = $search['count'];;
+                $productCount = $search['count'];
                 break;
-            case CategoryManager::CATEGORY_CUSTOM_TYPE: 
-                $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "custom", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
-                $products = $result['products'];
-                $productCount = $result['filtered_product_count'];
-                break;
-            case CategoryManager::CATEGORY_DEFAULT_TYPE: 
+            case CategoryManager::CATEGORY_NONSEARCH_TYPE: 
             default:
-                $result = $categoryManager->getVendorDefaultCategoryAndProducts($vendorId, $catId, "default", $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
-                $products = $result['products'];
-                $productCount = $result['filtered_product_count'];
+                    $result = $categoryManager->getProductsWithinCategory($vendorId, $catId, $isCustom, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                    $products = $result['products'];
+                    $productCount = $result['filtered_product_count'];
                 break;
         }
 
@@ -1124,18 +1115,18 @@ class Store extends MY_Controller
         
         $pageCount = $productCount > 0 ? ceil($productCount/$prodLimit) : 1;
 
-        $paginationData = array(
-            'lastPage' => $pageCount
-            , 'isHyperLink' => false
-            , 'currentPage' => $page
-        );
+        $paginationData = [
+            'lastPage' => $pageCount,
+            'isHyperLink' => false,
+            'currentPage' => $page,
+        ];
         $parseData['arrCat']['pagination'] = $this->load->view("pagination/default", $paginationData, true);
-        $serverResponse = array(
-            'htmlData' => $this->load->view("pages/user/display_product", $parseData, true)
-            , 'isCount' => $isCount
-            , 'pageCount' => $pageCount
-            , 'paginationData' => $this->load->view("pagination/default", $paginationData, true)
-        );
+        $serverResponse = [
+            'htmlData' => $this->load->view("pages/user/display_product", $parseData, true),
+            'isCount' => $isCount,
+            'pageCount' => $pageCount,
+            'paginationData' => $this->load->view("pagination/default", $paginationData, true),
+        ];
 
         echo json_encode($serverResponse);
     }
