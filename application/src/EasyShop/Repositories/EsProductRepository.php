@@ -575,55 +575,40 @@ class EsProductRepository extends EntityRepository
      *  Returns Product IDs ONLY!
      *
      *  @param integer $memberId
-     *  @param array $catId
+     *  @param integer[] $catId
+     *  @param integer $productLimit
+     *  @param integer $offset
+     *  @param mixed $orderBy
      *
-     *  @return array
+     *  @return integer[]
      */
-    public function getDefaultCategorizedProducts($memberId, $catId, $productLimit=12, $page=0, $orderBy=array("clickcount"=>"DESC") )
+    public function getDefaultCategorizedProducts($memberId, $catId, $productLimit=12, $offset=0, $orderBy = ["clickcount"=>"DESC"] )
     {
-        $em = $this->_em;
-        $result = array();
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('p')
+                     ->from('EasyShop\Entities\EsProduct','p')
+                     ->andWhere('p.isDelete = :active')
+                     ->andWhere('p.isDraft = :active')
+                     ->setParameter('active', \EasyShop\Entities\EsProduct::ACTIVE)
+                    
+                     ->andWhere('p.member = :member_id')
+                     ->setParameter('member_id', $memberId)
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.cat', $catId)
+                      );
+        $queryBuilder->orderBy("p.".key($orderBy), reset($orderBy));
 
-        // Generate category IN condition
-        $catCount = count($catId);
-        $arrCatParam = array();
-        for($i=1;$i<=$catCount;$i++){
-            $arrCatParam[] = ":i" . $i;
+        $qbStatement = $queryBuilder->setFirstResult($offset)
+                                    ->setMaxResults($productLimit)
+                                    ->getQuery();
+        $resultSet = $qbStatement->getResult();
+        
+        $result = [];
+        foreach( $resultSet as $product ){
+            $result[] = $product->getIdProduct();
         }
-        $catInCondition = implode(',',$arrCatParam);
-
-        // Generate Order by condition
-        $orderCondition = "";
-        foreach($orderBy as $column=>$order){
-            $orderCondition .= "p." . $column . " " . $order . ", ";
-        }
-        $orderCondition = rtrim($orderCondition, ", ");
-
-        $dql = "
-            SELECT p
-            FROM EasyShop\Entities\EsProduct p
-            WHERE
-                p.member = :member_id
-                AND p.cat IN ( " . $catInCondition . " )
-                AND p.isDelete = 0
-                AND p.isDraft = 0 
-                ORDER BY " . $orderCondition;
-
-        $query = $em->createQuery($dql)
-                    ->setParameter('member_id', $memberId)
-                    ->setFirstResult($page)
-                    ->setMaxResults($productLimit);
-
-        for($i=1;$i<=$catCount;$i++){
-            $query->setParameter('i'.$i, $catId[$i-1]);
-        }
-
-        $rawResult = new Paginator($query, $fetchJoinCollection = TRUE);
-
-        foreach( $rawResult as $row ){
-            $result[] = $row->getIdProduct();
-        }
-
+      
         return $result;
     }
 
