@@ -317,6 +317,8 @@
         var $imageid = $this.children('option:selected').data('imageid');
         var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
         var $arraySelected = [];
+        var $indexImage;
+        var $owl;
         if($("#noMoreSelection").val() != ""){ 
             $.each($productCombQuantity, function(i, val) {
                 $arraySelected = val.product_attribute_ids;
@@ -349,6 +351,9 @@
         $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
 
         if($imageid > 0){
+            $owl = $("#mobile-product-gallery").data('owlCarousel');
+            $indexImage = $('.mobile-image-list').index($('.owl-image'+$imageid));
+            $owl.jumpTo($indexImage)
             $("#image"+$imageid).trigger('click'); 
         }
         $(".attribute-control").each(function() {
