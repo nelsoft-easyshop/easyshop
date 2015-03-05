@@ -1949,7 +1949,7 @@ class Memberpage extends MY_Controller
         echo json_encode($response);
     }
     
-        /**
+    /**
      * Gets the store colors
      *
      * @return JSON
@@ -1957,10 +1957,64 @@ class Memberpage extends MY_Controller
     public function getStoreCategories()
     {
         $memberId = $this->session->userdata('member_id');
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
+                                ->findOneBy(['idMember' => $memberId]);
+                                    
         $response = [];
-        if($memberId){
-            $response['storeCategories'] = array_values($this->serviceContainer['category_manager']
-                                                             ->getUserCategories($memberId));
+        if($member){
+            $numberOfCustomCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
+                                                      ->getCountCustomCategories($memberId);
+            /**
+             * If there are no memberCategories yet, save default categories as
+             * new custom categories
+             */
+            if((int)$numberOfCustomCategories === 0){
+                $allUserCategories = $this->serviceContainer['category_manager']
+                                          ->getUserCategories($memberId);
+            
+                foreach($allUserCategories as $index => $category){
+                    $datetimeToday = date_create(date("Y-m-d H:i:s"));
+                    $newMemberCategory = new EasyShop\Entities\EsMemberCat();
+                    $newMemberCategory->setMember($member);
+                    $newMemberCategory->setCatName($category['name']);
+                    $newMemberCategory->setSortOrder($category['sortOrder']);
+                    $newMemberCategory->setCreatedDate($datetimeToday);
+                    $newMemberCategory->setlastModifiedDate($datetimeToday);
+                    $entityManager->persist($newMemberCategory); 
+
+                    $childCategories = $category['child_cat'];
+                    $productIds = $entityManager->getRepository('EasyShop\Entities\EsProduct')
+                                                ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
+                    $products = $entityManager->getRepository('EasyShop\Entities\EsProduct')
+                                              ->findByIdProduct($productIds);
+                    foreach($products as $product){
+                        $memberCategoryProduct = new EasyShop\Entities\EsMemberProdcat();
+                        $memberCategoryProduct->setMemcat($newMemberCategory);
+                        $memberCategoryProduct->setProduct($product);
+                        $memberCategoryProduct->setCreatedDate($datetimeToday);
+                        $entityManager->persist($memberCategoryProduct);
+                    } 
+                } 
+                $entityManager->flush();
+            }
+            
+            
+            $memberCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
+                                              ->getCustomCategoriesObject($memberId);     
+            $resultCategories = [];
+            foreach($memberCategories as $memberCategory){
+                $resultCategories[] = $this->createCategoryStdObject(    
+                                                $memberCategory->getCatName(),
+                                                $memberCategory->getSortOrder(),
+                                                $memberCategory->getIdMemcat()
+                                            );
+            }
+            $this->serviceContainer['sort_utility']->stableUasort($resultCategories, function($sortArgumentA, $sortArgumentB) {
+                return $sortArgumentA->order - $sortArgumentB->order;
+            });
+
+            $response['storeCategories'] = $resultCategories;;
         }
 
         echo json_encode($response);
@@ -2159,82 +2213,33 @@ class Memberpage extends MY_Controller
             $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
                                     ->findOneBy(['idMember' => $memberId]);
             $categoryData = json_decode($this->input->post('categoryData'));
-
             $indexedCategoryData = [];
-            $hasCategoryError = false;
             foreach($categoryData as $category){
                 $indexedCategoryData[$category->categoryid] = $category;
-                if(trim($category->name) === ""){
-                    $hasCategoryError = true;
-                    break;
-                }
             }
 
-            if(!$hasCategoryError){
-                $savedCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                                 ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
-                $datetimeToday = date_create(date("Y-m-d H:i:s"));
-                $categoryDataResult = [];
-                foreach($savedCategories as $savedCategory){
-                    $memberCategoryId = $savedCategory->getIdMemcat(); 
-                    if( isset($indexedCategoryData[$memberCategoryId]) ){
-                        $currentCategory = $indexedCategoryData[$memberCategoryId];
-                        $savedCategory->setCatName($currentCategory->name);
-                        $savedCategory->setSortOrder($currentCategory->order);
-                        $savedCategory->setlastModifiedDate($datetimeToday);
-                        $categoryDataResult[] = $this->createCategoryStdObject($currentCategory->name,
-                                                                            $currentCategory->order,
-                                                                            $memberCategoryId);
-                        unset($indexedCategoryData[$memberCategoryId]);
-                    }
+            $memberCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
+                                              ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+            $datetimeToday = date_create(date("Y-m-d H:i:s"));
+            $categoryDataResult = [];
+            foreach($memberCategories as $memberCategory){
+                $memberCategoryId = $memberCategory->getIdMemcat(); 
+                if( isset($indexedCategoryData[$memberCategoryId]) ){
+                    $inputCategoryData = $indexedCategoryData[$memberCategoryId];
+                    $memberCategory->setSortOrder($inputCategoryData->order);
+                    $memberCategory->setlastModifiedDate($datetimeToday);
+                    $categoryDataResult[] = $this->createCategoryStdObject($inputCategoryData->name,
+                                                                           $inputCategoryData->order,
+                                                                           $memberCategoryId);
                 }
-                $newMemberCategories = [];
-                
-                if(empty($indexedCategoryData) === false){
-                    $allUserCategories = $this->serviceContainer['category_manager']->getUserCategories($memberId);
-                    foreach($indexedCategoryData as $index => $newCategory){
-                        $newMemberCategory = new EasyShop\Entities\EsMemberCat();
-                        $newMemberCategory->setMember($member);
-                        $newMemberCategory->setCatName($newCategory->name);
-                        $newMemberCategory->setSortOrder($newCategory->order);
-                        $newMemberCategory->setCreatedDate($datetimeToday);
-                        $newMemberCategory->setlastModifiedDate($datetimeToday);
-                        $entityManager->persist($newMemberCategory); 
-                        $newMemberCategories[] = $newMemberCategory;
-                        if(isset($allUserCategories[$index])){
-                            $childCategories = $allUserCategories[$index]['child_cat'];
-                            $productIds = $this->serviceContainer['entity_manager']
-                                               ->getRepository('EasyShop\Entities\EsProduct')
-                                               ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
-  
-                            $products = $this->serviceContainer['entity_manager']
-                                             ->getRepository('EasyShop\Entities\EsProduct')
-                                             ->findByIdProduct($productIds);
-                            foreach($products as $product){
-                                $memberCategoryProduct = new EasyShop\Entities\EsMemberProdcat();
-                                $memberCategoryProduct->setMemcat($newMemberCategory);
-                                $memberCategoryProduct->setProduct($product);
-                                $memberCategoryProduct->setCreatedDate($datetimeToday);
-                                $entityManager->persist($memberCategoryProduct);
-                            } 
-                        }
-                    } 
-                }
-
-                $entityManager->flush();
-                
-                foreach($newMemberCategories as $newMemberCategory){
-                    $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
-                                                                           $newMemberCategory->getSortOrder(),
-                                                                           $newMemberCategory->getIdMemcat());
-                }
-
-                $jsonResponse['isSuccessful'] =  true;
-                $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {
-                    return $sortArgumentA->order - $sortArgumentB->order;
-                });
-                $jsonResponse['categoryData'] =  array_values($categoryDataResult);
             }
+            $entityManager->flush();
+
+            $jsonResponse['isSuccessful'] =  true;
+            $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {
+                return $sortArgumentA->order - $sortArgumentB->order;
+            });
+            $jsonResponse['categoryData'] =  array_values($categoryDataResult);
         }
         
         echo json_encode($jsonResponse);
@@ -2279,74 +2284,47 @@ class Memberpage extends MY_Controller
     public function getCustomCategory()
     {
         $categoryId = (int)$this->input->get('categoryId');
-        $isCustom = $this->input->get('isCustom') === 'true';
         $searchString = $this->input->get('searchString') ? trim( $this->input->get('searchString') ) : '';
         $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
         $page--;
         $page = $page >= 0 ? $page : 0;
         $offset = $page * $this->productsPerCategoryPage;
-        
-        
         $memberId = $this->session->userdata('member_id');
         $response = false;
         $allUserCategories = $this->serviceContainer['category_manager']
-                                  ->getUserCategories($memberId);
-        if($isCustom){
-            $category = $this->serviceContainer['entity_manager']
-                             ->getRepository('EasyShop\Entities\EsMemberCat')
-                             ->findOneBy(['idMemcat' => $categoryId, 'member' => $memberId]);
-        }
-        else{
-            $category = $this->serviceContainer['entity_manager']
-                             ->getRepository('EasyShop\Entities\EsCat')
-                             ->findOneBy(['idCat' => $categoryId]);
-        }
-
-        if($category){
-            $response['isCustom'] = $isCustom;
-            $response['categoryName'] = $isCustom ? $category->getCatName() : $category->getName();
+                                  ->getUserCategories($memberId);    
+        $categories = $this->serviceContainer['entity_manager']
+                            ->getRepository('EasyShop\Entities\EsMemberCat')
+                            ->getCustomCategoriesObject($memberId, [$categoryId]);    
+        if($categories){
+            $category = reset($categories);
+            $response['categoryName'] = $category->getCatName();
             $response['categoryId'] = $categoryId;
             $response['products'] = [];
-            $categoryIndex = $isCustom ? 'custom-'.$categoryId : 'default-'.$categoryId;
-            if(isset($allUserCategories[$categoryIndex])){
-                $childCategories = $allUserCategories[$categoryIndex]['child_cat'];
-                if($isCustom){
-                    $productIds = $this->serviceContainer['entity_manager']
-                                       ->getRepository('EasyShop\Entities\EsMemberProdcat')
-                                       ->getPagedCustomCategoryProducts(
-                                            $memberId, 
-                                            $childCategories[0], 
-                                            $this->productsPerCategoryPage, 
-                                            $offset, 
-                                            ["idProduct" => "DESC"],
-                                            $searchString
-                                        );
-                }
-                else{
-                    $productIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                           ->getDefaultCategorizedProducts(
-                                                $memberId, 
-                                                $childCategories, 
-                                                $this->productsPerCategoryPage, 
-                                                $offset,
-                                                ["idProduct"=>"DESC"],
-                                                $searchString
-                                            );
-                }
-                $products = $this->serviceContainer['entity_manager']
-                                    ->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findByIdProduct($productIds);
-                foreach($products as $key => $product){
-                    $productId = $product->getIdProduct();
-                    $response['products'][$key]['productName'] = $product->getName();
-                    $image = $this->serviceContainer['entity_manager']
-                                    ->getRepository('EasyShop\Entities\EsProductImage')
-                                    ->getDefaultImage($productId);
-                    $response['products'][$key]['imageFilename'] = $image->getFilename();
-                    $response['products'][$key]['imageDirectory'] = $image->getDirectory();
-                    $response['products'][$key]['id'] = $productId;
-                }
+            $productIds = $this->serviceContainer['entity_manager']
+                                ->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                ->getPagedCustomCategoryProducts(
+                                    $memberId, 
+                                    $categoryId, 
+                                    $this->productsPerCategoryPage, 
+                                    $offset, 
+                                    ["idProduct" => "DESC"],
+                                    $searchString
+                                );
+            $products = $this->serviceContainer['entity_manager']
+                                ->getRepository('EasyShop\Entities\EsProduct')
+                                ->findByIdProduct($productIds);
+            foreach($products as $key => $product){
+                $productId = $product->getIdProduct();
+                $response['products'][$key]['productName'] = $product->getName();
+                $image = $this->serviceContainer['entity_manager']
+                                ->getRepository('EasyShop\Entities\EsProductImage')
+                                ->getDefaultImage($productId);
+                $response['products'][$key]['imageFilename'] = $image->getFilename();
+                $response['products'][$key]['imageDirectory'] = $image->getDirectory();
+                $response['products'][$key]['id'] = $productId;
             }
+    
         }
 
         echo json_encode($response);

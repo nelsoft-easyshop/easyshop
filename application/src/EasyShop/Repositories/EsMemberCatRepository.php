@@ -101,13 +101,14 @@ class EsMemberCatRepository extends EntityRepository
      */
     public function getCustomCategoriesObject($memberId, $categoryIdFilters = [])
     {
-    
         $em = $this->_em;
         $queryBuilder = $em->createQueryBuilder()
                            ->select('mc')
                            ->from('EasyShop\Entities\EsMemberCat', 'mc')
-                           ->where('mc.member = :memberId');
+                           ->where('mc.member = :memberId')
+                           ->andWhere('mc.isDelete != :deleted');
         $queryBuilder->setParameter('memberId', $memberId); 
+        $queryBuilder->setParameter('deleted', \EasyShop\Entities\EsMemberCat::DELETED); 
         if(!empty($categoryIdFilters)){
             $queryBuilder->andWhere('mc.idMemcat IN (:categoryIds)')
                          ->setParameter('categoryIds', $categoryIdFilters);
@@ -117,6 +118,36 @@ class EsMemberCatRepository extends EntityRepository
                                          ->getResult();                      
         return $customCategories;
     }
-  
+    
+    /**
+     *  Count categories of memberId in object form
+     *
+     *  @param integer $memberId
+     *  @param integer[] $categoryIdFilters
+     *  @return EasyShop\Entities\EsMemberCat[]
+     */
+    public function getCountCustomCategories($memberId, $categoryIdFilters = [])
+    {   
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('numberOfCategories','numberOfCategories');
+        $sql = 'SELECT 
+                    COUNT(id_memcat) as numberOfCategories
+                FROM 
+                    es_member_cat
+                WHERE
+                    member_id = :member_id AND 
+                    is_delete != :deleted
+                ';
 
+        $query = $em->createNativeQuery($sql,$rsm)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('deleted', \EasyShop\Entities\EsMemberCat::DELETED );
+        $results = $query->getResult()[0];
+
+        return $results['numberOfCategories'];                  
+
+    }
+
+  
 }

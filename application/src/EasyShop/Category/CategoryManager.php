@@ -311,99 +311,74 @@ class CategoryManager
 
     
     /**
-     * Get User Categories (Combines custom and main categories)
+     * Get User Categories. Return custom categories if available otherwise 
+     * this will return the default categories
      *
      * @param integer $memberId
-     *
-     * @return array
+     * @return mixed
      */
     public function getUserCategories($memberId)
     {
         $vendorCategories = [];
-        $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
-                                           ->getNestedSetCategoryCount();
-        if((int)$categoryNestedSetCount === 0){
-            $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                        ->getUserCategoriesUsingAdjacencyList($memberId);
-        }
-        else{
-            $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                        ->getUserCategoriesUsingNestedSet($memberId);
-        }    
-
+        
         $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                      ->getCustomCategoriesArray($memberId);    
-                                     
-        /**
-         * Obtain data for customized categories
-         */
-        $cleanNameMemberCategories = [];
-        $highestSortOrder = 0;
-        foreach( $memberCategories as $memberCategory ){
-            $index = 'custom-'.$memberCategory['id_memcat'];
-            $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
-            $vendorCategories[$index]['child_cat'] = [ $memberCategory['id_memcat'] ];
-            $vendorCategories[$index]['products'] = [];
-            $vendorCategories[$index]['product_count'] = $memberCategory['product_count'];
-            $vendorCategories[$index]['isActive'] = false;
-            $vendorCategories[$index]['categoryId'] = 0;
-            $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
-            $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
-            $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-            $vendorCategories[$index]['is_delete'] = $memberCategory['is_delete'];
-            $cleanNameMemberCategories[] = $this->stringUtility->cleanString($memberCategory['cat_name']);
-            if((int)$memberCategory['sort_order'] > (int)$highestSortOrder){
-                $highestSortOrder = $memberCategory['sort_order'];
-            } 
-        }
-        /**
-         * Obtain data for default categories (grouped by main categories)
-         * Matching category names with customized categories are ignored.
-         */
-        $highestSortOrder =  empty($memberCategories) ? 0 : $highestSortOrder+1;
-        foreach( $rawVendorCategories as $rawVendorCategory ){
-            $parentId = (int)$rawVendorCategory['parent_cat'];
-            $categoryName = $rawVendorCategory['p_cat_name'];
-            $index = 'default-'.$parentId;
-            $isParentArrayNotAvailable = !isset($vendorCategories[$index]);
-            $isParentRoot = $parentId === EsCat::ROOT_CATEGORY_ID;
-            if($isParentArrayNotAvailable){
-                $sortOrder = $highestSortOrder;
-                if($isParentRoot){
-                    $categoryName = 'Others';
-                    $sortOrder = PHP_INT_MAX;
+        
+        if(empty($memberCategories)){
+            $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
+                                            ->getNestedSetCategoryCount();
+            if((int)$categoryNestedSetCount === 0){
+                $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                            ->getUserCategoriesUsingAdjacencyList($memberId);
+            }
+            else{
+                $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                            ->getUserCategoriesUsingNestedSet($memberId);
+            }    
+            
+            foreach( $rawVendorCategories as $rawVendorCategory ){
+                $parentId = (int)$rawVendorCategory['parent_cat'];
+                $categoryName = $rawVendorCategory['p_cat_name'];
+                $index = 'default-'.$parentId;
+                $isParentArrayNotAvailable = !isset($vendorCategories[$index]);
+                $isParentRoot = $parentId === EsCat::ROOT_CATEGORY_ID;
+                if($isParentArrayNotAvailable){
+                    $sortOrder = 0;
+                    if($isParentRoot){
+                        $categoryName = 'Others';
+                        $sortOrder = 1;
+                    }
+                    $vendorCategories[$index]['sortOrder'] = $sortOrder;
+                    $vendorCategories[$index]['name'] = $categoryName;
+                    $vendorCategories[$index]['child_cat'] = [ $parentId ];
+                    $vendorCategories[$index]['products'] = [];
+                    $vendorCategories[$index]['product_count'] = 0;
+                    $vendorCategories[$index]['isActive'] = false;
+                    $vendorCategories[$index]['categoryId'] = $parentId;
+                    $vendorCategories[$index]['memberCategoryId'] = 0;       
+                    $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+                    $vendorCategories[$index]['is_delete'] = 0;
+                }              
+                if(!in_array($rawVendorCategory['cat_id'], $vendorCategories[$index]['child_cat'])){
+                    $vendorCategories[$index]['child_cat'][] = $rawVendorCategory['cat_id'];
                 }
-                $vendorCategories[$index]['sortOrder'] = $sortOrder;
-                $vendorCategories[$index]['name'] = $categoryName;
-                $vendorCategories[$index]['child_cat'] = [ $parentId ];
-                $vendorCategories[$index]['products'] = [];
-                $vendorCategories[$index]['product_count'] = 0;
-                $vendorCategories[$index]['isActive'] = false;
-                $vendorCategories[$index]['categoryId'] = $parentId;
-                $vendorCategories[$index]['memberCategoryId'] = 0;       
-                $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-                $vendorCategories[$index]['is_delete'] = 0;
-            }              
-            /**
-             * Ignore default categories that have the same name as a custom category
-             */
-            $cleanedCategoryName = $this->stringUtility->cleanString($vendorCategories[$index]['name']);
-            if(in_array($cleanedCategoryName, $cleanNameMemberCategories)){
-                unset($vendorCategories[$index]);
-                continue;
-            }
-
-            if(!in_array($rawVendorCategory['cat_id'], $vendorCategories[$index]['child_cat'])){
-                $vendorCategories[$index]['child_cat'][] = $rawVendorCategory['cat_id'];
-            }
-            $vendorCategories[$index]['product_count'] += $rawVendorCategory['prd_count'];
+                $vendorCategories[$index]['product_count'] += $rawVendorCategory['prd_count'];
+            }   
         }
-        /**
-         * Remove deleted categories
-         */
-        foreach($vendorCategories as $key => $vendorCategory){
-            if((int)$vendorCategory['is_delete'] === EsMemberCat::DELETED){
-                unset($vendorCategories[$key]);
+        else{
+            foreach( $memberCategories as $memberCategory ){
+                $index = 'custom-'.$memberCategory['id_memcat'];
+                $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
+                $vendorCategories[$index]['child_cat'] = [ $memberCategory['id_memcat'] ];
+                $vendorCategories[$index]['products'] = [];
+                $vendorCategories[$index]['product_count'] = $memberCategory['product_count'];
+                $vendorCategories[$index]['isActive'] = false;
+                $vendorCategories[$index]['categoryId'] = 0;
+                $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
+                $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
+                $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+                $vendorCategories[$index]['is_delete'] = $memberCategory['is_delete'];
+                $cleanNameMemberCategories[] = $this->stringUtility->cleanString($memberCategory['cat_name']);
             }
         }
 
