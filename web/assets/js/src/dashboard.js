@@ -2399,21 +2399,31 @@
         $(".overlay-for-waiting-modal, .overlay-loader-container").css("height", browserHeight+"px").css("width", browserWidth+"px");
     });
 
-    //Drag and drop sorting for add category
-    $("#customCategory").sortable({
-        connectWith: "#allItems"
-    });
-    $("#allItems").sortable({
-        connectWith: "#customCategory"
-    });
+  
     
     $("#add-category").click(function(){
-        $(".add-category-modal").modal({
+        
+        $(".overlay-for-waiting-modal").css("display", "block");
+        
+        var clonedDiv = $(".add-category-modal").clone(); 
+        retrieveAllProductList(clonedDiv, 1);
+        
+        clonedDiv.modal({
             persist:true
         });
-        $(".add-category-modal").parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
-        var addContentHeight = $(".add-category-modal").outerHeight();
-        var countAllItems = $("#allItems li").size();
+        
+        
+        var $allProductList = clonedDiv.find('.all-product-list');              
+        var $categoryProductList = clonedDiv.find('.category-product-list');
+        $categoryProductList.sortable({
+            connectWith: $allProductList
+        });                 
+        $allProductList.sortable({
+            connectWith: $categoryProductList
+        });
+        clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+        var addContentHeight = clonedDiv.outerHeight();
+        var countAllItems = $allProductList.find('li').size();
         var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
         if(browserWidth <= mobileViewPortWidthLimit){
             $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
@@ -2423,7 +2433,13 @@
             $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
             $(".ui-droppable").css("width", "100%");
         }
-        
+
+        clonedDiv.find(".category-items-holder").bind('scroll', function(){
+                loadMoreCategoryProducts($(this));
+        });
+
+        $(".overlay-for-waiting-modal").css("display", "none");
+
     });
 
     
@@ -2483,7 +2499,7 @@
     });
 
                 
-    $(document.body).on('click', '.icon-move-to-all-items_edit, .icon-move-to-custom-category_edit, .icon-move-to-all-items, .icon-move-to-custom-category', function () {
+    $(document.body).on('click', '.icon-move-to-all-items, .icon-move-to-custom-category', function () {
         var listItem = $(this).parent();
         var unorderList = listItem.parent();
 
@@ -2587,7 +2603,7 @@
                     $.each(response.products, function(key, product){
                         var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
                         var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
-                                            '<a href="javascript:void(0)" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>'+
+                                            '<a href="javascript:void(0)" class="icon-move icon-move-to-custom-category pull-right" ></a>'+
                                             '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
                                             '<div class="category-item-name" data-id="'+product.id+'">'+product.productName+'</div>'+
                                         '</li>';
@@ -2610,7 +2626,7 @@
         $.each(products, function(key, product){
             var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
             var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
-                                '<a href="javascript:void(0)" class="icon-move_edit icon-move-to-all-items_edit pull-right" ></a>'+
+                                '<a href="javascript:void(0)" class="icon-move icon-move-to-all-items pull-right" ></a>'+
                                 '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
                                 '<div class="category-item-name" data-id="'+product.id+'">'+product.productName+'</div>'+
                             '</li>';
@@ -2622,7 +2638,7 @@
 
     
     function loadMoreCategoryProducts($div)
-    {   
+    {    
         var isComplete = $div.attr('data-isComplete');
         if($.parseJSON(isComplete)){
             return false;
@@ -2630,15 +2646,12 @@
         var div = $div[0];
         if(div.scrollTop + div.clientHeight >= div.scrollHeight){
             
-            $modalDiv = $div.closest('.edit-category-modal');
+            $modalDiv = $div.closest('.category-modal');            
             var categoryId = $modalDiv.find('.hidden-category-id').val();
             var page = parseInt($div.attr('data-page'), 10) + 1;
-            
-            
             var $searchDiv = $div.siblings('.category-panel-header');
             var searchString = $searchDiv.find('.search-category').val();
-            
-            
+
             var $loader = $div.find('.loader');
             $loader.show();
 
@@ -2661,7 +2674,6 @@
                 });
             }
             else if($div.hasClass('all-items')){
-                var $modalDiv = $div.closest(".edit-category-modal");  
                 retrieveAllProductList($modalDiv, page, searchString)
             }
         }
@@ -2679,7 +2691,7 @@
             }
             
             var $searchDiv = $this.closest('.category-panel-header');
-            var $modalDiv = $this.closest(".edit-category-modal");  
+            var $modalDiv = $this.closest(".category-modal");  
             var $itemListDiv = $searchDiv.siblings('.category-items-holder');
             var page = 1;
             var categoryId = $modalDiv.find('.hidden-category-id').val();
@@ -2689,6 +2701,7 @@
 
             var url;
             var data = "";
+
             if($itemListDiv.hasClass('category-items')){
                 url = '/memberpage/getCustomCategory';
                 data = 'categoryId='+categoryId+'&page='+page+'&searchString='+searchString;

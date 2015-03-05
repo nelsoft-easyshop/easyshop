@@ -2341,10 +2341,8 @@ class Memberpage extends MY_Controller
         $excludeCategoryId = $this->input->get('excludeCategoryId') ? (int)$this->input->get('excludeCategoryId') : 0;
         $searchString =  $this->input->get('searchString') ? trim( $this->input->get('searchString') ) : '';
         $inputExcludeProductIds =  $this->input->get('excludeProductId') ? json_decode( $this->input->get('excludeProductId') ) : [];
-        
         $page--;
         $page = $page >= 0 ? $page : 0;
-              
         $offset = $page * $this->productsPerCategoryPage;
         $memberId = $this->session->userdata('member_id');
 

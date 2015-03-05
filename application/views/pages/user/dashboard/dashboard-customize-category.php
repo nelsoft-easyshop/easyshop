@@ -172,7 +172,7 @@
 </div>
 
 <!--For ADD category modal-->
-<div class="add-category-modal">
+<div class="add-category-modal category-modal">
     <h3 class="my-modal-title">
         Add Category
     </h3>
@@ -187,7 +187,11 @@
         </div>
         <div class="form-group">
             <label>Add items to this category : </label>
-            <p class="note-category">Vestibulum quis placerat enim. Vestibulum at aliquet nibh,</p>
+            <div class="customized-category-error">
+                <div class="alert alert-danger" role="alert">
+                    <a href="javascript:void(0)" class="alert-link error-message" style="border:none;"></a>
+                </div>
+            </div>
         </div>
  
         <div class="drag-drop-container">
@@ -199,13 +203,10 @@
                                 <div class="col-md-5">
                                     <span class="category-panel-title">My Category</span>
                                 </div>
-                                <div class="col-md-7">
-                                    <input type="text" class="" placeholder="Search product from list...">
-                                </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container" >
-                            <ul class="customCategory" id="customCategory" >
+                        <div class="category-items-holder my-category-container category-items" >
+                            <ul class="customCategory category-product-list product-list">
                             </ul>
                         </div>
                     </div>
@@ -218,43 +219,19 @@
                                     <span class="category-panel-title">All Items</span>
                                 </div>
                                 <div class="col-md-7">
-                                    <input type="text" class="" placeholder="Search product from list...">
+                                    <input type="text" class="search-category" placeholder="Search product from list...">
+                                    <input type="hidden" class="isSearching" value="false">
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container">
-                           <ul id="allItems" class="allItems ui-helper-reset ui-helper-clearfix">
-                                <li class="ui-widget-content ui-corner-tr">
-                                    <a href="#" class="icon-move icon-move-to-custom-category pull-right" ></a>
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/apple-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">iPhone6 Black</div>
-                                 </li>
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    <a href="#" class="icon-move icon-move-to-custom-category pull-right" ></a>
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/htc-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">HTC One</div>
-                                 </li>
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    <a href="#" class="icon-move icon-move-to-custom-category pull-right" ></a>
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/lg-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">LG G3</div>
-                                 </li>
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    <a href="#" class="icon-move icon-move-to-custom-category pull-right" ></a>
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">Samsung Galaxy S4</div>
-                                 </li>
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    <a href="#" class="icon-move icon-move-to-custom-category pull-right" ></a>
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/samsung-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">Samsung Galaxy S4</div>
-                                 </li>
-                                 <li class="ui-widget-content ui-corner-tr">
-                                    <a href="#" class="icon-move icon-move-to-custom-category pull-right" ></a>
-                                    <div class="category-item-image" style="background: #fff url(/assets/images/products/fossil-p.jpg) center no-repeat; background-size: 90%;" ></div>
-                                    <div class="category-item-name">Fossil Watch</div>
-                                 </li>
+                        <div class="category-items-holder my-category-container all-items " data-page="1" data-isComplete="false">
+                            <ul class="allItems ui-helper-reset ui-helper-clearfix all-product-list product-list">
                             </ul>
+                            <div class="clear loader" style="text-align:center; display:none;">
+                                <p>
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_loading.gif" />
+                                </p>
+                            </div>                       
                         </div>
                     </div>
                 </div>
@@ -271,7 +248,7 @@
 
 
 <!--For EDIT category modal-->
-<div class="edit-category-modal">
+<div class="edit-category-modal category-modal">
     <h3 class="my-modal-title">
         Edit Category
     </h3>
@@ -359,8 +336,9 @@
             <button class="btn btn-default-1 simplemodal-close">Cancel</button> 
         </center>
     </div>
-
 </div>
+
+
 <div class="overlay-for-waiting-modal" style="">
     <div class="overlay-loader-container">
         <img src="/assets/images/es-loader-2.gif">
