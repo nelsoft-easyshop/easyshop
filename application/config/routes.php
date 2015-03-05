@@ -199,6 +199,10 @@ else {
     $route['mobile/product/upload/request-token'] = 'mobile/mobileProductUpload/requestUploadToken';
     $route['mobile/product/upload/process'] = 'mobile/mobileProductUpload/processUpload';
 
+    $route['mobile/resources/category-list'] = 'mobile/resources/getCategories';
+    $route['mobile/resources/location-shipping'] = 'mobile/resources/getLocationForShipping';
+    $route['mobile/resources/location-address'] = 'mobile/resources/getLocationForAddress';
+
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
 }
