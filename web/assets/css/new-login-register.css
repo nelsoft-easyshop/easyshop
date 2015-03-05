@@ -45,6 +45,10 @@ html, body {
     width: 80%;
 }
 
+.login-loading-content {
+    padding: 50px 0;
+}
+
 .new-login-register-content {
     background: rgba(255,255,255,0.93);
     border-radius: 4px;
@@ -54,9 +58,15 @@ html, body {
     margin-top: 100px;
     max-width: 840px;
     width: 100%;
+
     -webkit-box-shadow: 0px 0px 15px 10px rgba(50, 50, 50, 0.45);
     -moz-box-shadow:    0px 0px 15px 10px rgba(50, 50, 50, 0.45);
     box-shadow:         0px 0px 15px 10px rgba(50, 50, 50, 0.45);
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
 }
 
 .idTabs {
