@@ -2339,7 +2339,6 @@ class Memberpage extends MY_Controller
     {
         $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
         $excludeCategoryId = $this->input->get('excludeCategoryId') ? (int)$this->input->get('excludeCategoryId') : 0;
-        $excludeCategoryIsCustom = $this->input->get('isCustom') === 'true';
         $searchString =  $this->input->get('searchString') ? trim( $this->input->get('searchString') ) : '';
         $inputExcludeProductIds =  $this->input->get('excludeProductId') ? json_decode( $this->input->get('excludeProductId') ) : [];
         
@@ -2351,22 +2350,9 @@ class Memberpage extends MY_Controller
 
         $excludeIds = [];
         if($excludeCategoryId !== 0){
-            $allUserCategories = $this->serviceContainer['category_manager']
-                                      ->getUserCategories($memberId);                
-            $categoryKey = $excludeCategoryIsCustom ?  'custom' : 'default';
-            $categoryKey .= '-' . $excludeCategoryId;
-            if(isset($allUserCategories[$categoryKey])){
-                $childCategories = $allUserCategories[$categoryKey]['child_cat'];
-                if($excludeCategoryIsCustom){
-                    $excludeIds = $this->serviceContainer['entity_manager']
-                                        ->getRepository('EasyShop\Entities\EsMemberProdcat')
-                                        ->getPagedCustomCategoryProducts($memberId, $childCategories, PHP_INT_MAX);
-                }
-                else{
-                    $excludeIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                            ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
-                }
-            }
+            $excludeIds = $this->serviceContainer['entity_manager']
+                               ->getRepository('EasyShop\Entities\EsMemberProdcat')
+                               ->getPagedCustomCategoryProducts($memberId, [ $excludeCategoryId ], PHP_INT_MAX);
         }
         
         $excludeIds = array_merge($excludeIds, $inputExcludeProductIds);
