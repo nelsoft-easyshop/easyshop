@@ -2525,11 +2525,23 @@
         
         var categoryId = modalDiv.find('.hidden-category-id').val();
         var isCustom = modalDiv.find('.hidden-isCategoryCustom').val();
+        var $currentCategoryProductList = modalDiv.find('.category-product-list .category-item-name');  
+        var currentCategoryProductsIds = [];
+        $.each($currentCategoryProductList, function(key, $itemNameDiv){
+            currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
+        });
         
+
         $.ajax({
             type: "GET",
             url: '/memberpage/getAllMemberProducts',
-            data: {page:page, excludeCategoryId: categoryId, isCustom: isCustom, searchString: searchString},
+            data: {
+                page:page, 
+                excludeCategoryId: categoryId, 
+                isCustom: isCustom, 
+                searchString: searchString, 
+                excludeProductId: JSON.stringify(currentCategoryProductsIds)
+            },
             success: function(data){ 
                 var response = $.parseJSON(data);
                 var $allProductDiv = modalDiv.find('.all-items');
@@ -2549,6 +2561,9 @@
                                         '</li>';
                         listHtmlCollection.push(listHtml);
                     });
+                    
+                    
+                    
                     var $allProductList = modalDiv.find('.all-product-list');
                     $allProductList.append(listHtmlCollection);
                 }
@@ -2649,8 +2664,14 @@
                 data = 'categoryId='+categoryId+'&isCustom='+isCustom+'&page='+page+'&searchString='+searchString;
             }
             else if($itemListDiv.hasClass('all-items')){
+                var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
+                var currentCategoryProductsIds = [];
+                $.each($currentCategoryProductList, function(key, $itemNameDiv){
+                    currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
+                });
                 url = '/memberpage/getAllMemberProducts';
-                data = 'excludeCategoryId='+categoryId+'&isCustom='+isCustom+'&page='+page+'&searchString='+searchString;
+                data = 'excludeCategoryId='+categoryId+'&isCustom='+isCustom+'&page='+page+'&searchString='+searchString+
+                       '&excludeProductId='+JSON.stringify(currentCategoryProductsIds);
             }
             else{
                 return false;
