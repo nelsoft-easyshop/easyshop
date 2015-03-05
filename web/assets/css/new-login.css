@@ -317,14 +317,23 @@ strong > a{
     text-transform: uppercase;
 }
 
-.submit-email-form:hover , 
+.submit-email-form:hover ,
 .submit-password-form:hover {
     background-color: #ff6237;
-}
+ }
 
 .identify-email-container{
     min-height: 330px;
     text-align: center
+}
+
+
+.identify-email-top-group {
+    margin-top: 45px;
+}
+
+.identify-email-top-group p {
+    font-size: 16px;
 }
 
 .identify-email-bottom-group {
@@ -333,7 +342,7 @@ strong > a{
 
 .password-update-label{
     text-align: left;
-    font-weight: bold;
+    font-weight: 900;
     font-size: 14px;
 }
 
