@@ -2340,13 +2340,36 @@ class Memberpage extends MY_Controller
     public function getAllMemberProducts()
     {
         $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
-        $excludeIds = $this->input->get('excludeIds') ? json_decode($this->input->get('excludeIds')) : [];
+        $excludeCategoryId = $this->input->get('excludeCategoryId') ? (int)$this->input->get('excludeCategoryId') : 0;
+        $excludeCategoryIsCustom = $this->input->get('isCustom') === 'true';
+ 
         $searchString = "";
         $page--;
         $page = $page >= 0 ? $page : 0;
+              
         $offset = $page * $this->productsPerCategoryPage;
-        
         $memberId = $this->session->userdata('member_id');
+
+        $excludeIds = [];
+        if($excludeCategoryId !== 0){
+            $allUserCategories = $this->serviceContainer['category_manager']
+                                      ->getUserCategories($memberId);                
+            $categoryKey = $excludeCategoryIsCustom ?  'custom' : 'default';
+            $categoryKey .= '-' . $excludeCategoryId;
+            if(isset($allUserCategories[$categoryKey])){
+                $childCategories = $allUserCategories[$categoryKey]['child_cat'];
+                if($excludeCategoryIsCustom){
+                    $excludeIds = $this->serviceContainer['entity_manager']
+                                        ->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                        ->getPagedCustomCategoryProducts($memberId, $childCategories, PHP_INT_MAX);
+                }
+                else{
+                    $excludeIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                            ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
+                }
+            }
+        }
+        
         $products = $this->serviceContainer['entity_manager']
                          ->getRepository('EasyShop\Entities\EsProduct')
                          ->getUserProducts($memberId, 0, 0, $offset, $this->productsPerCategoryPage, $searchString, "p.idProduct", $excludeIds);
