@@ -1898,9 +1898,11 @@
     var isCategorySetupInitialized = false;
     $('#customize-category-tab').on('click', function(){
         if(!isCategorySetupInitialized){
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
             $.ajax({
-                type: "get",
+                type: "POST",
                 url: '/memberpage/getStoreCategories',
+                data: {csrfname: csrftoken},
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);
                     createCategoryList(jsonResponse.storeCategories);
@@ -1956,9 +1958,6 @@
             $.each(categoryData, function(index, category) {
                 var escapedName = escapeHtml(category.name);
                 var categoryIdentifier = parseInt(category.memberCategoryId, 10);
-                if(categoryIdentifier === 0){
-                    categoryIdentifier = 'default-' + category.categoryId;
-                }
                 var html =  '<div class="div-cat" data-categoryId="'+categoryIdentifier+'">'+escapedName+'</div>';
                 categoryViewList.push(html);
                 html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
