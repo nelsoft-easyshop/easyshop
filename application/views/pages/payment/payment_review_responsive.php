@@ -477,7 +477,7 @@
                                         </p>
                                         <br />
                                         <br />
-                                        <input type="button" style='width: 153px;' class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
+                                        <input type="button" class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
                                         <p class="notify">You will be notified regarding your order status via email or sms.</p>
                                     <?php else: ?>
                                         <span><strong>NOTE: one or more of your chosen items are not available for Credit Card.</strong></span>
