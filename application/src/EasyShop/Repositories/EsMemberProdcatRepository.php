@@ -82,9 +82,9 @@ class EsMemberProdcatRepository extends EntityRepository
                     ->setParameter('member_id', $memberId)
                     ->setParameter('cat_id', $memcatId);
                     
-        if($searchString === ""){
-            $queryString = '%'.$queryString.'%';
-            $query->setParameter('queryString', $queryString)
+        if($searchString !== ""){
+            $queryString = '%'.$searchString.'%';
+            $query->setParameter('queryString', $queryString);
         }
                     
         $query->setFirstResult($offset)
