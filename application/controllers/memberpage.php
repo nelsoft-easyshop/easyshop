@@ -2199,7 +2199,8 @@ class Memberpage extends MY_Controller
                         $newMemberCategory->setSortOrder($newCategory->order);
                         $newMemberCategory->setCreatedDate($datetimeToday);
                         $newMemberCategory->setlastModifiedDate($datetimeToday);
-                        $entityManager->persist($newMemberCategory);
+                        $entityManager->persist($newMemberCategory); 
+                        $newMemberCategories[] = $newMemberCategory;
                         if(isset($allUserCategories[$index])){
                             $childCategories = $allUserCategories[$index]['child_cat'];
                             $productIds = $this->serviceContainer['entity_manager']
@@ -2217,13 +2218,16 @@ class Memberpage extends MY_Controller
                                 $entityManager->persist($memberCategoryProduct);
                             } 
                         }
-                        $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
-                                                        $newMemberCategory->getSortOrder(),
-                                                        $newMemberCategory->getIdMemcat());
                     } 
                 }
 
                 $entityManager->flush();
+                
+                foreach($newMemberCategories as $newMemberCategory){
+                    $categoryDataResult[] = $this->createCategoryStdObject($newMemberCategory->getCatName(),
+                                                                           $newMemberCategory->getSortOrder(),
+                                                                           $newMemberCategory->getIdMemcat());
+                }
 
                 $jsonResponse['isSuccessful'] =  true;
                 $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {
@@ -2408,8 +2412,7 @@ class Memberpage extends MY_Controller
         
         echo json_encode($response);
     }
-    
-    
+
 
     /**
      * Performs the update actions of User Custom Category Products
@@ -2418,11 +2421,18 @@ class Memberpage extends MY_Controller
      */
     public function editCustomCategory()
     {
+        $memberId =   $this->session->userdata('member_id');
+        $memberCategoryId = $this->input->post("memberCategoryId");
+        $categoryName = $this->input->post("catName") ? 
+                        trim($this->input->post("catName")) : [] ;
+        $productIds =    $this->input->post("userCategoryProductIds") ? 
+                        json_encode($this->input->post("userCategoryProductIds")) 
+                        : [];
         $result = $this->categoryManager->editUserCustomCategoryProducts(
-                    $this->input->post("memCatId"),
-                    $this->input->post("catName"),
-                    $this->input->post("userCategoryProductIds"),
-                    $this->session->userdata('member_id')
+                    $memberCategoryId,
+                    $categoryName,
+                    $productIds,
+                    $memberId
                 );
         echo json_encode($result);
     }    
