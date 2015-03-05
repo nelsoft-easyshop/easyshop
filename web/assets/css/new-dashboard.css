@@ -30,6 +30,12 @@ body{
     height: 100px;
 }
 
+.customized-category-error{
+    padding-left: 20px;
+    padding-right: 20px;
+    display: none;
+}
+
 .my-modal-footer .btn.btn-default-3{
     font-weight: 900;
     font-size: 11px;

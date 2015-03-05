@@ -1926,7 +1926,7 @@
         });
         $.ajax({
             type: "post",
-            url: '/memberpage/updateStoreCategories',
+            url: '/memberpage/updateStoreCategoryOrder',
             data: {csrfname: csrftoken, categoryData: JSON.stringify(categoryOrderData)},
             success: function(data){ 
                 var response = $.parseJSON(data);
@@ -1955,12 +1955,12 @@
             var categoryDeleteList = [];
             $.each(categoryData, function(index, category) {
                 var escapedName = escapeHtml(category.name);
-                var html =  '<div class="div-cat">'+escapedName+'</div>';
-                categoryViewList.push(html);
                 var categoryIdentifier = parseInt(category.memberCategoryId, 10);
                 if(categoryIdentifier === 0){
                     categoryIdentifier = 'default-' + category.categoryId;
                 }
+                var html =  '<div class="div-cat" data-categoryId="'+categoryIdentifier+'">'+escapedName+'</div>';
+                categoryViewList.push(html);
                 html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
                 categoryDraggableList.push(html);
                 html = '<li class="checkbox"><label><input data-categoryid="'+escapeHtml(categoryIdentifier) + '" type="checkbox" class="checkBox">'+escapedName+'</label></li>';
@@ -2515,6 +2515,56 @@
                 $('.allItems').prepend(listItem.fadeIn());
             }
         });
+    });
+    
+    $(document.body).on('click', '.save-category-changes', function(){
+        var $btn = $(this);
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');   
+        var $modalDiv = $btn.closest('.edit-category-modal');
+        var categoryId = $modalDiv.find('.hidden-category-id').val();
+        var isCategoryCustom = $modalDiv.find('.hidden-isCategoryCustom').val();
+        var categoryName = $modalDiv.find('.category-name').val();
+        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
+        var currentCategoryProductsIds = [];
+        $.each($currentCategoryProductList, function(key, $itemNameDiv){
+            currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '/memberpage/editCustomCategory',
+            data: {
+                categoryId:categoryId, 
+                isCustom: isCategoryCustom, 
+                categoryName: categoryName, 
+                productIds: JSON.stringify(currentCategoryProductsIds),
+                csrfname: csrftoken
+            },
+            success: function(data){ 
+                var jsonData = $.parseJSON(data);
+                if(jsonData.result){
+                    var escapedCategoryName = escapeHtml(categoryName);
+                    $modalDiv.find('.simplemodal-close').click();
+                    $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').html(escapedCategoryName);
+                    var draggableListItem = $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]');
+                    draggableListItem.attr('data-categoryname', escapedCategoryName);
+                    var html = '<i class="fa fa-sort"></i>'+
+                                   escapedCategoryName+
+                               '<i class="icon-edit modal-category-edit pull-right edit-category"></i>';
+                    draggableListItem.html(html);
+                    var deleteCheckBoxLabel = $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('label');
+                    html = '<input data-categoryid="'+categoryId+'" type="checkbox" class="checkBox">'+escapedCategoryName;
+                    deleteCheckBoxLabel.html(html);
+                }
+                else{
+                    var errorDiv = $modalDiv.find('.customized-category-error');
+                    errorDiv.fadeIn().delay(2000).fadeOut();
+                    errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' +jsonData.errorMessage);
+                }
+            }
+        });
+
     });
 
     

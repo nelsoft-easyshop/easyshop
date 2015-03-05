@@ -2146,7 +2146,7 @@ class Memberpage extends MY_Controller
      *
      * @return JSON
      */
-    public function updateStoreCategories()
+    public function updateStoreCategoryOrder()
     {
         $memberId = $this->session->userdata('member_id'); 
         $entityManager =  $this->serviceContainer['entity_manager'];
@@ -2422,11 +2422,11 @@ class Memberpage extends MY_Controller
     public function editCustomCategory()
     {
         $memberId =   $this->session->userdata('member_id');
-        $memberCategoryId = $this->input->post("memberCategoryId");
-        $categoryName = $this->input->post("catName") ? 
-                        trim($this->input->post("catName")) : [] ;
-        $productIds =    $this->input->post("userCategoryProductIds") ? 
-                        json_encode($this->input->post("userCategoryProductIds")) 
+        $memberCategoryId = $this->input->post("categoryId");
+        $categoryName = $this->input->post("categoryName") ? 
+                        trim($this->input->post("categoryName")) : [] ;
+        $productIds =    $this->input->post("productIds") ? 
+                        json_decode($this->input->post("productIds")) 
                         : [];
         $result = $this->categoryManager->editUserCustomCategoryProducts(
                     $memberCategoryId,

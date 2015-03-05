@@ -16,9 +16,10 @@ class EsMemberCatRepository extends EntityRepository
      *
      *  @param string $categoryName
      *  @param integer $idMember
+     *  @param integer $excludeCategoryId
      *  @return bool
      */
-    public function isCustomCategoryNameAvailable($categoryName, $idMember)
+    public function isCustomCategoryNameAvailable($categoryName, $idMember, $excludeCategoryId = 0)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
@@ -32,10 +33,19 @@ class EsMemberCatRepository extends EntityRepository
                 cat_name = :catName 
                 AND member_id = :memberId
             ';
+            
+        if($excludeCategoryId !== 0){
+            $sql .= " AND id_memcat != :excludeCategoryId";
+        }
+            
         $query = $em->createNativeQuery($sql,$rsm)
                     ->setParameter("catName", $categoryName)
                     ->setParameter("memberId", $idMember);
 
+        if($excludeCategoryId !== 0){
+            $query->setParameter("excludeCategoryId", $excludeCategoryId);
+        }
+        
         $numberOfCategories = $query->getSingleScalarResult();
 
         return !($numberOfCategories > 0);

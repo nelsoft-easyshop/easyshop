@@ -436,7 +436,7 @@ class CategoryManager
 
         try{
             $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                            ->isCustomCategoryNameAvailable($categoryName,$memberId);
+                                            ->isCustomCategoryNameAvailable($categoryName,$memberId, $memCatId);
             if($isCategoryNameAvailable) {
                 $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memCatId, "member" => $memberId]);
                 if($memberCategory) {
@@ -448,6 +448,7 @@ class CategoryManager
             
                 $memberCategory = $esMemberCatRepo->find($memCatId);
                 $memberCategory->setCatName($categoryName);
+                $memberCategory->setlastModifiedDate(date_create());
                 foreach ($productIds as $productId) {
                     $product =  $esProductRepo->findOneBy([
                                     "member" => $memberId,
@@ -460,7 +461,7 @@ class CategoryManager
                         $memberProductCategory = new EsMemberProdcat();
                         $memberProductCategory->setMemcat($memberCategory);
                         $memberProductCategory->setProduct($product);
-                        $memberProductCategory->setCreatedDate(date_create('Y-m-d H:i:s'));
+                        $memberProductCategory->setCreatedDate(date_create());
                         $this->em->persist($memberProductCategory);
                     }
                 }

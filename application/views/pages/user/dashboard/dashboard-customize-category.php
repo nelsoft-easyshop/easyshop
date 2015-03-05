@@ -6,6 +6,8 @@
             <li class="bc-arrow"><i class="fa fa-angle-right"></i>Store Setup</li>
         </ul>
     </div>
+
+    
     <div class="div-tab-inner">
     
         <div class="div-store-setup category-setup-loading" style="text-align:center">
@@ -286,7 +288,13 @@
         </div>
         <div class="form-group">
             <label>Add items to this category : </label>
-            <p class="note-category">Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, </p>
+  
+            <div class="customized-category-error">
+                <div class="alert alert-danger" role="alert">
+                    <a href="javascript:void(0)" class="alert-link error-message" style="border:none;"></a>
+                </div>
+            </div>
+
         </div>
  
         <div class="drag-drop-container">
@@ -348,10 +356,11 @@
     </div>
     <div class="my-modal-footer">
         <center>
-            <button class="btn btn-default-3">Save Changes</button>
-            <button class="btn btn-default-1 simplemodal-close">Cancel</button>
+            <button class="btn btn-default-3 save-category-changes">Save Changes</button>
+            <button class="btn btn-default-1 simplemodal-close">Cancel</button> 
         </center>
     </div>
+
 </div>
 <div class="overlay-for-waiting-modal" style="">
     <div class="overlay-loader-container">
