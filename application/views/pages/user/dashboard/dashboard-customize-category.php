@@ -303,10 +303,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container category-items" data-page="1">
+                        <div class="category-items-holder my-category-container category-items" data-page="1" data-isComplete="false">
                             <ul class="customCategoryEdit category-product-list">
   
                             </ul>
+                            
+                            <div class="clear loader" style="text-align:center; display:none;">
+                                <p>
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_loading.gif" />
+                                </p>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>  
@@ -324,21 +331,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container all-items" data-page="1">
-                           <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list">
+                        <div class="category-items-holder my-category-container all-items" data-page="1" data-isComplete="false">
+                            <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list">
                             </ul>
-                            <!--Start of loading animation-->
-                            <center>
-                                <div class="loading-bar-container">
-                                    <span class="loading-label">
-                                        Loading more items
-                                    </span>
-                                    <div class="outer-progress-box" style="">
-                                        <div id="loading-box"></div>
-                                    </div>
-                                </div>
-                            </center>
-                            <!--End of loading animation-->
+                            <div class="loader clear" style="text-align:center; display:none;">
+                                <br/>
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_loading.gif" />
+                            </div>
                         </div>
                     </div>
                 </div>
