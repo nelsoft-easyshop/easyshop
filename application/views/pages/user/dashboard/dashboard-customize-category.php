@@ -282,7 +282,6 @@
                 <div class="col-md-9">
                     <input type="text" class="form-control category-name" placeholder="Type the category name here" value=""/>
                     <input type="hidden" class="hidden-category-id" value="0"/>
-                    <input type="hidden" class="hidden-isCategoryCustom" value="false"/>
                 </div>
             </div>
         </div>

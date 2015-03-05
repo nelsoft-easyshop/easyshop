@@ -2430,30 +2430,17 @@
     $(".category-setup-ajax").on('click','.edit-category', function(){
         $(".overlay-for-waiting-modal").css("display", "block");
         var categoryIdString = $(this).parent('li').data('categoryid');
-        var categoryId;
-        var isCustom;
-
-        if(typeof categoryIdString === 'string' && categoryIdString.indexOf('default') !== false){
-            var splitString = categoryIdString.split("-");
-            categoryId = parseInt(splitString[1],10);
-            isCustom = false;
-        }
-        else{
-            categoryId = parseInt(categoryIdString,10);
-            isCustom = true;
-        }
-                           
+        var categoryId = parseInt(categoryIdString,10);
         $.ajax({
             type: "GET",
             url: '/memberpage/getCustomCategory',
-            data: {categoryId:categoryId, isCustom: isCustom},
+            data: {categoryId:categoryId},
             success: function(data){ 
                 var response = $.parseJSON(data);
                 if(response){
                     var clonedDiv = $(".edit-category-modal").clone();  
                     clonedDiv.find('.category-name').val(response.categoryName);
                     clonedDiv.find('.hidden-category-id').val(response.categoryId);
-                    clonedDiv.find('.hidden-isCategoryCustom').val(response.isCustom);
                     
                     clonedDiv.modal({
                         persist:true
@@ -2522,7 +2509,6 @@
         var csrfname = $("meta[name='csrf-name']").attr('content');   
         var $modalDiv = $btn.closest('.edit-category-modal');
         var categoryId = $modalDiv.find('.hidden-category-id').val();
-        var isCategoryCustom = $modalDiv.find('.hidden-isCategoryCustom').val();
         var categoryName = $modalDiv.find('.category-name').val();
         var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
         var currentCategoryProductsIds = [];
@@ -2535,7 +2521,6 @@
             url: '/memberpage/editCustomCategory',
             data: {
                 categoryId:categoryId, 
-                isCustom: isCategoryCustom, 
                 categoryName: categoryName, 
                 productIds: JSON.stringify(currentCategoryProductsIds),
                 csrfname: csrftoken
@@ -2573,7 +2558,6 @@
         searchString = typeof searchString !== 'undefined' ? searchString : '';
         
         var categoryId = modalDiv.find('.hidden-category-id').val();
-        var isCustom = modalDiv.find('.hidden-isCategoryCustom').val();
         var $currentCategoryProductList = modalDiv.find('.category-product-list .category-item-name');  
         var currentCategoryProductsIds = [];
         $.each($currentCategoryProductList, function(key, $itemNameDiv){
@@ -2587,7 +2571,6 @@
             data: {
                 page:page, 
                 excludeCategoryId: categoryId, 
-                isCustom: isCustom, 
                 searchString: searchString, 
                 excludeProductId: JSON.stringify(currentCategoryProductsIds)
             },
@@ -2649,7 +2632,6 @@
             
             $modalDiv = $div.closest('.edit-category-modal');
             var categoryId = $modalDiv.find('.hidden-category-id').val();
-            var isCustom = $modalDiv.find('.hidden-isCategoryCustom').val();
             var page = parseInt($div.attr('data-page'), 10) + 1;
             
             
@@ -2664,7 +2646,7 @@
                 $.ajax({
                     type: "GET",
                     url: '/memberpage/getCustomCategory',
-                    data: {categoryId:categoryId, isCustom:  isCustom, page: page, searchString: searchString},
+                    data: {categoryId:categoryId, page: page, searchString: searchString},
                     success: function(data){
                         $loader.hide();
                         var jsonResponse = $.parseJSON(data);
@@ -2701,7 +2683,6 @@
             var $itemListDiv = $searchDiv.siblings('.category-items-holder');
             var page = 1;
             var categoryId = $modalDiv.find('.hidden-category-id').val();
-            var isCustom = $modalDiv.find('.hidden-isCategoryCustom').val();
             var searchString = $this.val();
             var $categoryProductList = $itemListDiv.find('.product-list');
             var $loader = $itemListDiv.find('.loader');
@@ -2710,7 +2691,7 @@
             var data = "";
             if($itemListDiv.hasClass('category-items')){
                 url = '/memberpage/getCustomCategory';
-                data = 'categoryId='+categoryId+'&isCustom='+isCustom+'&page='+page+'&searchString='+searchString;
+                data = 'categoryId='+categoryId+'&page='+page+'&searchString='+searchString;
             }
             else if($itemListDiv.hasClass('all-items')){
                 var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
@@ -2719,7 +2700,7 @@
                     currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
                 });
                 url = '/memberpage/getAllMemberProducts';
-                data = 'excludeCategoryId='+categoryId+'&isCustom='+isCustom+'&page='+page+'&searchString='+searchString+
+                data = 'excludeCategoryId='+categoryId+'&page='+page+'&searchString='+searchString+
                        '&excludeProductId='+JSON.stringify(currentCategoryProductsIds);
             }
             else{
