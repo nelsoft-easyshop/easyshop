@@ -2388,7 +2388,7 @@ class Memberpage extends MY_Controller
         $products = $this->serviceContainer['entity_manager']
                          ->getRepository('EasyShop\Entities\EsProduct')
                          ->getUserProducts($memberId, 0, 0, $offset, $this->productsPerCategoryPage, $searchString, "p.idProduct", $excludeIds);
-        $response = false;
+        $response['products'] = [];
         foreach($products as $product){
             $productId = $product->getIdProduct();
             $image = $this->serviceContainer['entity_manager']

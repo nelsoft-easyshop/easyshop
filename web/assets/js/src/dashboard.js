@@ -2532,28 +2532,25 @@
             data: {page:page, excludeCategoryId: categoryId, isCustom: isCustom, searchString: searchString},
             success: function(data){ 
                 var response = $.parseJSON(data);
-                if(response){
-                    
-                    var $allProductDiv = modalDiv.find('.all-items');
-                    $allProductDiv.find('loader').hide();
-                    if(response.products.length === 0){
-                        $allProductDiv.attr('data-isComplete', 'true');
-                    }
-                    else{
-                        $allProductDiv.attr('data-page', page);
-                        var listHtmlCollection = [];
-                        $.each(response.products, function(key, product){
-                            var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
-                            var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
-                                                '<a href="javascript:void(0)" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>'+
-                                                '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
-                                                '<div class="category-item-name" data-id="'+product.id+'">'+product.productName+'</div>'+
-                                            '</li>';
-                            listHtmlCollection.push(listHtml);
-                        });
-                        var $allProductList = modalDiv.find('.all-product-list');
-                        $allProductList.append(listHtmlCollection);
-                    }
+                var $allProductDiv = modalDiv.find('.all-items');
+                $allProductDiv.find('.loader').hide();
+                if(response.products.length === 0){
+                    $allProductDiv.attr('data-isComplete', 'true');
+                }
+                else{
+                    $allProductDiv.attr('data-page', page);
+                    var listHtmlCollection = [];
+                    $.each(response.products, function(key, product){
+                        var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
+                        var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
+                                            '<a href="javascript:void(0)" class="icon-move_edit icon-move-to-custom-category_edit pull-right" ></a>'+
+                                            '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
+                                            '<div class="category-item-name" data-id="'+product.id+'">'+product.productName+'</div>'+
+                                        '</li>';
+                        listHtmlCollection.push(listHtml);
+                    });
+                    var $allProductList = modalDiv.find('.all-product-list');
+                    $allProductList.append(listHtmlCollection);
                 }
             }
         });
