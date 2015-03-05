@@ -349,7 +349,8 @@
 <div id="hidden-paginate-loader">
     <center>
         <div id="loader-div">
-            <img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG.gif">
+            <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
+            <br/><br/>
             <p class="loading-text">Loading data...</p>
         </div>
     </center>
