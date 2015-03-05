@@ -565,8 +565,15 @@ class Kernel
         // Product Shipping Manager
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(
-                            $container['entity_manager']
-                        );
+                $container['entity_manager']
+            );
+        };
+
+        // Member Feature Restrict Manager
+        $container['member_feature_restrict_manager'] = function ($c) use ($container) {
+            return new \EasyShop\MemberFeatureRestrict\MemberFeatureRestrictManager(
+                $container['entity_manager']
+            );
         };
 
         $container['language_loader'] = function ($c) {

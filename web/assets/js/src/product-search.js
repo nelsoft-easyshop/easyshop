@@ -401,7 +401,18 @@
     });
 
     $(document).on('click',".page-link",function () {
-        var currentPageNumber = parseInt($(this).html().trim()); 
+        var currentPageNumber;
+
+        if($(this).hasClass('next')){
+            currentPageNumber = parseInt($(".nav li.active > a").text().trim()) + 1;
+        }
+        else if($(this).hasClass('prev')){
+            currentPageNumber = parseInt($(".nav li.active > a").text().trim()) - 1;
+        }
+        else{
+            currentPageNumber = parseInt($(this).html().trim());
+        }
+
         var afterPage = currentPageNumber + 1; 
         var requestPage = currentPageNumber - 1; 
         var mainElement = $('.search-results-container > #page-'+ currentPageNumber);
@@ -409,7 +420,6 @@
         $('.individual').removeClass('active');
         $('.individual[data-page="'+currentPageNumber+'"]').addClass('active');
         $('#simplePagination').pagination('selectPage', currentPageNumber);
-
         if(isNaN(currentPageNumber) === false){ 
             appendString = '<div class="row loading-row" id="page-'+currentPageNumber+'">\
                 <div class="loading-bar-container">\
