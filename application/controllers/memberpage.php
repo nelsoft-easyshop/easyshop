@@ -2282,6 +2282,7 @@ class Memberpage extends MY_Controller
         $page = $page >= 0 ? $page : 0;
         $offset = $page * $this->productsPerCategoryPage;
         
+        
         $memberId = $this->session->userdata('member_id');
         $response = false;
         $allUserCategories = $this->serviceContainer['category_manager']
@@ -2383,8 +2384,7 @@ class Memberpage extends MY_Controller
                 }
             }
         }
-
-        
+  
         $products = $this->serviceContainer['entity_manager']
                          ->getRepository('EasyShop\Entities\EsProduct')
                          ->getUserProducts($memberId, 0, 0, $offset, $this->productsPerCategoryPage, $searchString, "p.idProduct", $excludeIds);

@@ -2645,9 +2645,18 @@
             var $categoryProductList = $itemListDiv.find('.product-list');
             var $loader = $itemListDiv.find('.loader');
 
-            var url = '/memberpage/getCustomCategory';
-            if(isCustom){
+            var url;
+            var data = "";
+            if($itemListDiv.hasClass('category-items')){
+                url = '/memberpage/getCustomCategory';
+                data = 'categoryId='+categoryId+'&isCustom='+isCustom+'&page='+page+'&searchString='+searchString;
+            }
+            else if($itemListDiv.hasClass('all-items')){
                 url = '/memberpage/getAllMemberProducts';
+                data = 'excludeCategoryId='+categoryId+'&isCustom='+isCustom+'&page='+page+'&searchString='+searchString;
+            }
+            else{
+                return false;
             }
             
             $itemListDiv.attr('data-page', page);
@@ -2659,7 +2668,7 @@
             $.ajax({
                 type: "GET",
                 url: url,
-                data: {categoryId:categoryId, isCustom:  isCustom, page: page, searchString: searchString},
+                data: data,
                 success: function(data){
                     var jsonResponse = $.parseJSON(data);
                     appendCategoryProductList($itemListDiv, jsonResponse.products)
