@@ -60,7 +60,7 @@ class Memberpage extends MY_Controller
      *
      * @var integer
      */
-    public $productsPerCategory = 12;
+    public $productsPerCategoryPage = 16;
 
     /**
      *  Class Constructor
@@ -2279,6 +2279,8 @@ class Memberpage extends MY_Controller
         $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
         $page--;
         $page = $page >= 0 ? $page : 0;
+        $offset = $page * $this->productsPerCategoryPage;
+        
         $memberId = $this->session->userdata('member_id');
         $response = false;
         $allUserCategories = $this->serviceContainer['category_manager']
@@ -2295,7 +2297,9 @@ class Memberpage extends MY_Controller
         }
 
         if($category){
+            $response['isCustom'] = $isCustom;
             $response['categoryName'] = $isCustom ? $category->getCatName() : $category->getName();
+            $response['categoryId'] = $categoryId;
             $response['products'] = [];
             $categoryIndex = $isCustom ? 'custom-'.$categoryId : 'default-'.$categoryId;
             if(isset($allUserCategories[$categoryIndex])){
@@ -2303,11 +2307,11 @@ class Memberpage extends MY_Controller
                 if($isCustom){
                     $productIds = $this->serviceContainer['entity_manager']
                                        ->getRepository('EasyShop\Entities\EsMemberProdcat')
-                                       ->getPagedCustomCategoryProducts($memberId, $childCategories, $this->productsPerCategory, $page);
+                                       ->getPagedCustomCategoryProducts($memberId, $childCategories, $this->productsPerCategoryPage, $offset);
                 }
                 else{
                     $productIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                           ->getDefaultCategorizedProducts($memberId, $childCategories, $this->productsPerCategory, $page);
+                                           ->getDefaultCategorizedProducts($memberId, $childCategories, $this->productsPerCategoryPage, $offset);
                 }
                 $products = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsProduct')
@@ -2340,10 +2344,12 @@ class Memberpage extends MY_Controller
         $searchString = "";
         $page--;
         $page = $page >= 0 ? $page : 0;
+        $offset = $page * $this->productsPerCategoryPage;
+        
         $memberId = $this->session->userdata('member_id');
         $products = $this->serviceContainer['entity_manager']
                          ->getRepository('EasyShop\Entities\EsProduct')
-                         ->getUserProducts($memberId, 0, 0, $page, $this->productsPerCategory, $searchString, "p.idProduct", $excludeIds);
+                         ->getUserProducts($memberId, 0, 0, $offset, $this->productsPerCategoryPage, $searchString, "p.idProduct", $excludeIds);
         $response = false;
         foreach($products as $product){
             $productId = $product->getIdProduct();

@@ -2471,7 +2471,6 @@
     $(".category-setup-ajax").on('click','.edit-category', function(){
         $(".overlay-for-waiting-modal").css("display", "block");
         var categoryIdString = $(this).parent('li').data('categoryid');
-        console.log(categoryIdString);
         var categoryId;
         var isCustom;
 
@@ -2484,20 +2483,23 @@
             categoryId = parseInt(categoryIdString,10);
             isCustom = true;
         }
-       
+                           
         $.ajax({
             type: "GET",
             url: '/memberpage/getCustomCategory',
-            data: {categoryId:categoryId, isCustom:  isCustom},
+            data: {categoryId:categoryId, isCustom: isCustom},
             success: function(data){ 
                 var response = $.parseJSON(data);
                 if(response){
-                    var clonedDiv = $(".edit-category-modal").clone();    
+                    var clonedDiv = $(".edit-category-modal").clone();  
                     clonedDiv.find('.category-name').val(response.categoryName);
+                    clonedDiv.find('.hidden-category-id').val(response.categoryId);
+                    clonedDiv.find('.hidden-isCategoryCustom').val(response.isCustom);
+                    
                     clonedDiv.modal({
                         persist:true
                     });
-                    
+
                     var listHtmlCollection = [];
                     var productsIds = [];
                     $.each(response.products, function(key, product){
@@ -2519,7 +2521,7 @@
                     $categoryProductList.sortable({
                         connectWith: $allProductList
                     });
-
+                    
                     clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
                     var addContentHeight = clonedDiv.outerHeight();
                     var countAllItems = $allProductList.find('li').size();
@@ -2532,11 +2534,45 @@
                         $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
                         $(".ui-droppable").css("width", "100%");
                     }
+
+                    clonedDiv.find(".category-items-holder").bind('scroll', function(){
+                        loadMoreCategoryProducts($(this));
+                    });
+ 
                 }            
             },
         });
     });
     
+    function loadMoreCategoryProducts($div)
+    {
+        var div = $div[0];
+        if(div.scrollTop + div.clientHeight >= div.scrollHeight){
+            if($div.hasClass('category-items')){
+            
+                $modalDiv = $div.closest('.edit-category-modal');
+   
+                var categoryId = $modalDiv.find('.hidden-category-id').val();
+                var isCustom = $modalDiv.find('.hidden-isCategoryCustom').val();
+                var page = parseInt($div.data('page'), 10) + 1;
+
+                
+                $.ajax({
+                    type: "GET",
+                    url: '/memberpage/getCustomCategory',
+                    data: {categoryId:categoryId, isCustom:  isCustom, page: page},
+                    success: function(data){
+                        
+                    }
+                });
+            }
+            
+            /*
+           
+            */
+        }
+    
+    }
             
     $(document.body).on('click', '.icon-move-to-all-items_edit, .icon-move-to-custom-category_edit, .icon-move-to-all-items, .icon-move-to-custom-category', function () {
         var listItem = $(this).parent();
@@ -2557,6 +2593,7 @@
             }
         });
     });
+
     
     $(document).ready(function(){
         var i = 0;

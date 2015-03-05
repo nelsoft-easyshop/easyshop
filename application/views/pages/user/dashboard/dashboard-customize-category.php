@@ -279,6 +279,8 @@
                 <label class="col-md-3">Category Name : </label>
                 <div class="col-md-9">
                     <input type="text" class="form-control category-name" placeholder="Type the category name here" value=""/>
+                    <input type="hidden" class="hidden-category-id" value="0"/>
+                    <input type="hidden" class="hidden-isCategoryCustom" value="false"/>
                 </div>
             </div>
         </div>
@@ -301,7 +303,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container" >
+                        <div class="category-items-holder my-category-container category-items" data-page="1">
                             <ul class="customCategoryEdit category-product-list">
   
                             </ul>
@@ -322,7 +324,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container">
+                        <div class="category-items-holder my-category-container all-items" data-page="1">
                            <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list">
                             </ul>
                             <!--Start of loading animation-->
