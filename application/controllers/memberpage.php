@@ -2276,6 +2276,7 @@ class Memberpage extends MY_Controller
     {
         $categoryId = (int)$this->input->get('categoryId');
         $isCustom = $this->input->get('isCustom') === 'true';
+        $searchString = $this->input->get('searchString') ? trim( $this->input->get('searchString') ) : '';
         $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
         $page--;
         $page = $page >= 0 ? $page : 0;
@@ -2307,11 +2308,25 @@ class Memberpage extends MY_Controller
                 if($isCustom){
                     $productIds = $this->serviceContainer['entity_manager']
                                        ->getRepository('EasyShop\Entities\EsMemberProdcat')
-                                       ->getPagedCustomCategoryProducts($memberId, $childCategories, $this->productsPerCategoryPage, $offset);
+                                       ->getPagedCustomCategoryProducts(
+                                            $memberId, 
+                                            $childCategories[0], 
+                                            $this->productsPerCategoryPage, 
+                                            $offset, 
+                                            ["idProduct" => "DESC"],
+                                            $searchString
+                                        );
                 }
                 else{
                     $productIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                           ->getDefaultCategorizedProducts($memberId, $childCategories, $this->productsPerCategoryPage, $offset);
+                                           ->getDefaultCategorizedProducts(
+                                                $memberId, 
+                                                $childCategories, 
+                                                $this->productsPerCategoryPage, 
+                                                $offset,
+                                                ["idProduct"=>"DESC"],
+                                                $searchString
+                                            );
                 }
                 $products = $this->serviceContainer['entity_manager']
                                     ->getRepository('EasyShop\Entities\EsProduct')
@@ -2342,8 +2357,7 @@ class Memberpage extends MY_Controller
         $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
         $excludeCategoryId = $this->input->get('excludeCategoryId') ? (int)$this->input->get('excludeCategoryId') : 0;
         $excludeCategoryIsCustom = $this->input->get('isCustom') === 'true';
- 
-        $searchString = "";
+        $searchString =  $this->input->get('searchString') ? trim( $this->input->get('searchString') ) : '';
         $page--;
         $page = $page >= 0 ? $page : 0;
               
@@ -2369,6 +2383,7 @@ class Memberpage extends MY_Controller
                 }
             }
         }
+
         
         $products = $this->serviceContainer['entity_manager']
                          ->getRepository('EasyShop\Entities\EsProduct')

@@ -579,10 +579,11 @@ class EsProductRepository extends EntityRepository
      *  @param integer $productLimit
      *  @param integer $offset
      *  @param mixed $orderBy
+     *  @param string $searchString
      *
      *  @return integer[]
      */
-    public function getDefaultCategorizedProducts($memberId, $catId, $productLimit=12, $offset=0, $orderBy = ["clickcount"=>"DESC"] )
+    public function getDefaultCategorizedProducts($memberId, $catId, $productLimit=12, $offset=0, $orderBy = ["clickcount"=>"DESC"], $searchString = "")
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
@@ -597,6 +598,14 @@ class EsProductRepository extends EntityRepository
                      ->andWhere(
                             $queryBuilder->expr()->in('p.cat', $catId)
                       );
+                      
+        
+        if($searchString !== ""){
+            $searchQuery = '%'.$searchString.'%';
+            $queryBuilder->andWhere('p.name LIKE :searchQuery')
+                         ->setParameter('searchQuery', $searchQuery);
+        }
+                      
         $queryBuilder->orderBy("p.".key($orderBy), reset($orderBy));
 
         $qbStatement = $queryBuilder->setFirstResult($offset)

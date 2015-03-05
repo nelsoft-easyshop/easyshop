@@ -299,12 +299,13 @@
                                     <span class="category-panel-title">My Category</span>
                                 </div>
                                 <div class="col-md-7">
-                                    <input type="text" class="" placeholder="Search product from list...">
+                                    <input type="text" class="search-category" placeholder="Search product from list...">
+                                    <input type="hidden" class="isSearching" value="false">
                                 </div>
                             </div>
                         </div>
                         <div class="category-items-holder my-category-container category-items" data-page="1" data-isComplete="false">
-                            <ul class="customCategoryEdit category-product-list">
+                            <ul class="customCategoryEdit category-product-list product-list">
   
                             </ul>
                             
@@ -327,12 +328,13 @@
                                     <span class="category-panel-title">All Items</span>
                                 </div>
                                 <div class="col-md-7">
-                                    <input type="text" class="" placeholder="Search product from list...">
+                                    <input type="text" class="search-category" placeholder="Search product from list...">
+                                    <input type="hidden" class="isSearching" value="false">
                                 </div>
                             </div>
                         </div>
                         <div class="category-items-holder my-category-container all-items" data-page="1" data-isComplete="false">
-                            <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list">
+                            <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list product-list">
                             </ul>
                             <div class="loader clear" style="text-align:center; display:none;">
                                 <br/>
