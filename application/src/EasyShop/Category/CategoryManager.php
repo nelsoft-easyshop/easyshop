@@ -347,12 +347,10 @@ class CategoryManager
                 $vendorCategories[$index]['name'] = 'Others';
                 $vendorCategories[$index]['child_cat'] = [];
                 $vendorCategories[$index]['products'] = [];
-                $vendorCategories[$index]['product_count'] = $totalCountNonCategorizedProducts;
                 $vendorCategories[$index]['categoryId'] = 0;
                 $vendorCategories[$index]['memberCategoryId'] = 0;;
                 $vendorCategories[$index]['sortOrder'] = $highestSortOrder;
                 $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-                $vendorCategories[$index]['total_product_count'] = $totalCountNonCategorizedProducts;
             }
         }
 
