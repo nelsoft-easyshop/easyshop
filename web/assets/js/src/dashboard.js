@@ -2544,7 +2544,7 @@
     });
     
      
-    $(document.body).on('keypress', '.search-category', function(){
+    $(document.body).on('keypress', '.search-category', function(event){
         if ( event.which == 13 ) {
             event.preventDefault();
             var $this = $(this);
