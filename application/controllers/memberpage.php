@@ -1958,9 +1958,8 @@ class Memberpage extends MY_Controller
     {
         $memberId = $this->session->userdata('member_id');
         $entityManager = $this->serviceContainer['entity_manager'];
-        $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
-                                ->findOneBy(['idMember' => $memberId]);
-                                    
+        $member = $entityManager->find('EasyShop\Entities\EsMember', $memberId)
+                 
         $response = [];
         if($member){
             $numberOfCustomCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
