@@ -410,41 +410,47 @@ class CategoryManager
         $errorMessage = "";
 
         try{
-            $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                            ->isCustomCategoryNameAvailable($categoryName,$memberId, $memCatId);
-            if($isCategoryNameAvailable) {
-                $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memCatId, "member" => $memberId]);
-                if($memberCategory) {
-                    $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);                
-                    foreach ($memberCategoryProducts as $memberCategoryProduct) {
-                        $this->em->remove($memberCategoryProduct);
-                    }
-                }
-            
-                $memberCategory = $esMemberCatRepo->find($memCatId);
-                $memberCategory->setCatName($categoryName);
-                $memberCategory->setlastModifiedDate(date_create());
-                foreach ($productIds as $productId) {
-                    $product =  $esProductRepo->findOneBy([
-                                    "member" => $memberId,
-                                    "idProduct" => $productId,
-                                    "isDelete" => EsProduct::ACTIVE,
-                                    "isDraft" => EsProduct::ACTIVE
-                                ]);
-
-                    if($product) {
-                        $memberProductCategory = new EsMemberProdcat();
-                        $memberProductCategory->setMemcat($memberCategory);
-                        $memberProductCategory->setProduct($product);
-                        $memberProductCategory->setCreatedDate(date_create());
-                        $this->em->persist($memberProductCategory);
-                    }
-                }
-                $this->em->flush();
-                $actionResult = true;
+        
+            if(empty($categoryName)){
+                 $errorMessage = "Category name cannot be empty";
             }
-            else {
-                $errorMessage = "Category name already exists";
+            else{
+                $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                            ->isCustomCategoryNameAvailable($categoryName,$memberId, $memCatId);
+                if($isCategoryNameAvailable) {
+                    $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memCatId, "member" => $memberId]);
+                    if($memberCategory) {
+                        $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);                
+                        foreach ($memberCategoryProducts as $memberCategoryProduct) {
+                            $this->em->remove($memberCategoryProduct);
+                        }
+                    }
+                
+                    $memberCategory = $esMemberCatRepo->find($memCatId);
+                    $memberCategory->setCatName($categoryName);
+                    $memberCategory->setlastModifiedDate(date_create());
+                    foreach ($productIds as $productId) {
+                        $product =  $esProductRepo->findOneBy([
+                                        "member" => $memberId,
+                                        "idProduct" => $productId,
+                                        "isDelete" => EsProduct::ACTIVE,
+                                        "isDraft" => EsProduct::ACTIVE
+                                    ]);
+
+                        if($product) {
+                            $memberProductCategory = new EsMemberProdcat();
+                            $memberProductCategory->setMemcat($memberCategory);
+                            $memberProductCategory->setProduct($product);
+                            $memberProductCategory->setCreatedDate(date_create());
+                            $this->em->persist($memberProductCategory);
+                        }
+                    }
+                    $this->em->flush();
+                    $actionResult = true;
+                }
+                else {
+                    $errorMessage = "Category name already exists";
+                }
             }
         }
         catch(Exception $e) {
