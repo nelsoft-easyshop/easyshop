@@ -111,41 +111,18 @@
                                         Delete
                                         </button>
                                     </div>
-                                    <div class="edit-btn-delete">
+                                    <br/>
+                                    <div class="">
                                         <form class="form-horizontal">
-                                            <p class="p-orange"> Are you sure you want to delete the selected categories? </p>
-                                            
-                                            <div class="alert alert-danger" role="alert">
+                                            <div class="alert alert-danger delete-dialog-fail" role="alert" style="display:none">
                                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                                <span class="message">Sample error message</span>
+                                                <span class="message">Sorry, something went wrong. Please try again later.</span>
                                             </div>
                                                             
-                                            <div class="alert alert-success" role="alert">
-                                                    Product categories successfully deleted
+                                            <div class="alert alert-success delete-dialog-success" role="alert" style="display:none">
+                                                    Product categories successfully deleted.
                                             </div> 
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">Your Username : </label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="text-info text-required" placeholder="Type your username here">
-                                                </div>
-                                            </div>                        
-                                            <div class="form-group">
-                                                <label class="col-sm-4 control-label">Your Password : </label>
-                                                <div class="col-sm-6">
-                                                    <input type="password" class="text-info text-required" placeholder="Type your current password here">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4"></div>
-                                                <div class="col-sm-6" id="submitButtons">
-                                                    <span class="btn btn-setting-save-btn" type='submit'/>
-                                                        Delete
-                                                    </span>
-                                                    <span class="btn btn-setting-cancel-btn" id="cancel-delete-categories">
-                                                        Cancel
-                                                    </span>
-                                                </div>
-                                            </div>                        
+                        
                                         </form>
                                     </div>
                                 </div>

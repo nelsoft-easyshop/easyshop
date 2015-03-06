@@ -2376,14 +2376,38 @@
     });
 
     $( "#btn-edit-delete-categories" ).click(function() {
-        $( ".current-btn-delete" ).slideToggle( "fast" );
-        $( ".edit-btn-delete" ).slideToggle( "fast" );
+        
+        var isConfirmed = confirm('Are you sure you want to delete the selected categories?');
+        if(isConfirmed){
+            var checkedBoxes = $("#delete-list-categories input[type='checkbox']:checked");
+            var categoryIds = [];
+            var csrftoken = $("meta[name='csrf-token']").attr('content');
+            var csrfname = $("meta[name='csrf-name']").attr('content');   
+            $.each(checkedBoxes, function(key, checkbox){
+                categoryIds.push(checkbox.getAttribute("data-categoryid"));
+            });
+            $.ajax({
+                type: "POST",
+                url: '/memberpage/deleteCustomCategory',
+                data: {categoryIds:JSON.stringify(categoryIds), csrfname:csrftoken},
+                success: function(data){ 
+                    var response = $.parseJSON(data);
+                    if(response){
+                        $('.delete-dialog-success').fadeIn().delay(2000).fadeOut();
+                        $.each(categoryIds, function(key, categoryId){
+                             $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').fadeOut();
+                             $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]').fadeOut();
+                             $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('li.checkbox').fadeOut();
+                        });
+                    }
+                    else{
+                        $('.delete-dialog-fail').fadeIn().delay(2000).fadeOut();
+                    }
+                }
+            });
+        }
     });
     
-    $( "#cancel-delete-categories" ).click(function() {
-        $( "#btn-edit-delete-categories" ).trigger( "click" );
-    });
-
     var browserWidth;
     var modalCategoryModalWidth;
     var modalCategoryModalWidthMobile;

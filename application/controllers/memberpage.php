@@ -2423,15 +2423,18 @@ class Memberpage extends MY_Controller
      */
     public function deleteCustomCategory()
     {
-        $customCategories = [];
-        foreach ($this->input->post("userCategory") as $value) {
-            $customCategories[] = json_decode($value);
+        $customCategoryIds[] = $this->input->post("categoryIds") ? 
+                               json_decode($this->input->post("categoryIds")) : [];
+        $memberId = $this->session->userdata('member_id');
+        $response = false;
+        if($memberId){
+            $response =  $this->categoryManager
+                              ->deleteUserCustomCategory(
+                                    $customCategoryIds,
+                                    $memberId
+                                );
         }
-
-        return $this->categoryManager->deleteUserCustomCategory(
-                        $customCategories,
-                        $this->session->userdata('member_id')
-                    );
+        echo json_encode($response);
     }
 
 }
