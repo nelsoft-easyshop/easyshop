@@ -53,6 +53,11 @@ a:focus {
   width: 100%;
 }
 
+.container.old-page-container {
+  max-width: 980px;
+  width: 100%;
+}
+
 header {
   min-width: inherit !important;
 }
@@ -202,6 +207,10 @@ a.tooltips span {
         float: none !important;
         text-align: center;
     }
+    .old-page-container .prob_search_box, .prob_search_box {
+        float: none;
+        width: auto;
+    }
 }
 @media only screen and (max-width : 62em) { /*** 992px ***/
   .prod_con_gal {
@@ -228,6 +237,7 @@ a.tooltips span {
         padding-right: 0;
     }
 }
+
 @media only screen and (min-width: 481px) {
   /*** modal ***/
     #simplemodal-container {
