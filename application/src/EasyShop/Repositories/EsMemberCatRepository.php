@@ -79,13 +79,16 @@ class EsMemberCatRepository extends EntityRepository
                 LEFT JOIN es_product
                     ON es_product.is_draft = :nonDraft AND es_product.is_delete = :active
                     AND es_product.id_product = es_member_prodcat.product_id
-                WHERE es_member_cat.member_id = :member_id
+                WHERE
+                    es_member_cat.member_id = :member_id
+                    AND es_member_cat.is_delete = :categoryDeleteStatus
                 GROUP BY es_member_cat.id_memcat
                 ORDER BY es_member_cat.id_memcat DESC
                 ';
 
         $query = $em->createNativeQuery($sql,$rsm)
                     ->setParameter('member_id', $memberId)
+                    ->setParameter('categoryDeleteStatus', EsMemberCat::ACTIVE)
                     ->setParameter('nonDraft', EsProduct::ACTIVE )
                     ->setParameter('active', EsProduct::ACTIVE );
 
