@@ -79,7 +79,7 @@
                 <p class="panel-setup-title">NEW CATEGORY</p>
                 <div class="div-store-content">
                     <div class="add-store-cat">
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-success add-store-cat-message" role="alert" style="display:none;">
                                 Product category has been successfully added
                         </div> 
                         <button class="btn btn-setting-edit-btn" id="add-category">
@@ -181,7 +181,7 @@
            <div class="form-group">
                 <label class="col-sm-3">Category Name : </label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control"  placeholder="Type the category name here" />
+                    <input type="text" class="form-control category-name"  placeholder="Type the category name here" />
                 </div>
             </div>
         </div>
@@ -240,7 +240,7 @@
     </div>
     <div class="my-modal-footer">
         <center>
-            <button class="btn btn-default-3">Add Category</button>
+            <button class="btn btn-default-3 save-new-category">Add Category</button>
             <button class="btn btn-default-1 simplemodal-close">Cancel</button>
         </center>
     </div>

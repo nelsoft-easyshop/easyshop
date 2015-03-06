@@ -148,6 +148,33 @@ class EsMemberCatRepository extends EntityRepository
         return $results['numberOfCategories'];                  
 
     }
+    
+    /**
+     * Returns the highest sort order among a user's active categories
+     *
+     * @param integer $memberId
+     * @return integer
+     */
+    public function getHighestSortOrder($memberId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('maxSortOrder','maxSortOrder');
+        $sql = 'SELECT 
+                    MAX(sort_order) as maxSortOrder
+                FROM 
+                    es_member_cat
+                WHERE
+                    member_id = :member_id AND 
+                    is_delete != :deleted
+                ';
+        $query = $em->createNativeQuery($sql,$rsm)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('deleted', \EasyShop\Entities\EsMemberCat::DELETED );
+        $results = $query->getResult()[0];
+
+        return (int)$results['maxSortOrder'];                  
+    }
 
   
 }

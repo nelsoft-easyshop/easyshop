@@ -2263,18 +2263,6 @@ class Memberpage extends MY_Controller
         return $singleCategoryData;
     }
 
-    /**
-     * Performs the database insertion of member custom category
-     * @return JSON
-     */
-    public function addCustomCategory()
-    {
-        $result = $this->categoryManager->createCustomCategory(
-                        $this->input->post("userCategory"),
-                        $this->session->userdata('member_id')
-                    );
-        echo json_encode($result);
-    }
 
     /**
      * Returns the Custom Category json
@@ -2375,6 +2363,33 @@ class Memberpage extends MY_Controller
         echo json_encode($response);
     }
 
+    
+    /**
+     * Performs the database insertion of new member custom category
+     *
+     * @return JSON
+     */
+    public function addCustomCategory()
+    {
+        $memberId =   $this->session->userdata('member_id');
+        $categoryName = $this->input->post("categoryName") ? 
+                        trim($this->input->post("categoryName")) : '';
+        $productIds =  $this->input->post("productIds") ? 
+                        json_decode($this->input->post("productIds")) 
+                        : [];
+        $result = false;
+        if($memberId){
+              $result = $this->categoryManager
+                             ->createCustomCategory(
+                                    $categoryName,
+                                    $memberId,
+                                    $productIds
+                              );
+        }
+      
+        echo json_encode($result);
+    }
+    
 
     /**
      * Performs the update actions of User Custom Category Products
@@ -2384,18 +2399,21 @@ class Memberpage extends MY_Controller
     public function editCustomCategory()
     {
         $memberId =   $this->session->userdata('member_id');
-        $memberCategoryId = $this->input->post("categoryId");
-        $categoryName = $this->input->post("categoryName") ? 
-                        trim($this->input->post("categoryName")) : [] ;
-        $productIds =    $this->input->post("productIds") ? 
-                        json_decode($this->input->post("productIds")) 
-                        : [];
-        $result = $this->categoryManager->editUserCustomCategoryProducts(
-                    $memberCategoryId,
-                    $categoryName,
-                    $productIds,
-                    $memberId
-                );
+        $result = false;
+        if($memberId){
+            $memberCategoryId = $this->input->post("categoryId");
+            $categoryName = $this->input->post("categoryName") ? 
+                            trim($this->input->post("categoryName")) : '';
+            $productIds =    $this->input->post("productIds") ? 
+                            json_decode($this->input->post("productIds")) 
+                            : [];
+            $result = $this->categoryManager->editUserCustomCategoryProducts(
+                        $memberCategoryId,
+                        $categoryName,
+                        $productIds,
+                        $memberId
+                    );
+        }
         echo json_encode($result);
     }    
 

@@ -110,54 +110,6 @@ class CategoryManager
     }
 
     /**
-     *  Create custom category for memberId @table es_member_cat
-     *
-     *  @param string $catName
-     *  @param int $memberId
-     *  @param bool $isForDeleteCategory
-     *
-     *  @return array
-     */
-    public function createCustomCategory($catName, $memberId, $isForDeleteCategory = false)
-    {
-        $errorMessage = "";
-        $actionResult = false;
-        $doesCategoryExist = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                            ->findBy([
-                                'catName' => $catName,
-                                'member' => $memberId
-                            ]);
-        if($doesCategoryExist) {
-            $errorMessage = "Category name already exists";
-        }
-        else {
-            try {
-                $memberObj = $this->em->find('EasyShop\Entities\EsMember', $memberId);
-                $category = new EsMemberCat();
-                $category->setCatName($catName)
-                         ->setMember($memberObj)
-                         ->setCreatedDate(date_create())
-                         ->setlastModifiedDate(date_create());
-                if($isForDeleteCategory) {
-                    $category->setIsDelete(EsMemberCat::IS_DELETE);
-                }
-                $this->em->persist($category);
-                $this->em->flush();
-                $actionResult = true;
-            }
-            catch(Exception $e) {
-                $errorMessage = "Database Error";
-            }
-        }
-
-        return [
-            "message" => $errorMessage,
-            "result" => $actionResult ? $category : false
-        ];
-       
-    }
-
-    /**
      *  Set category as featured @table es_member_cat. is_featured = 1
      *  Pass an array of categoryIDs for batch updating.
      *
@@ -391,16 +343,88 @@ class CategoryManager
 
 
     /**
+     *  Create custom category for memberId @table es_member_cat
+     *
+     *  @param string $categoryName
+     *  @param integer $memberId
+     *  @param inetger[] $productIds
+     *
+     *  @return array
+     */
+    public function createCustomCategory($categoryName, $memberId, $productIds)
+    {
+        $errorMessage = "";
+        $actionResult = false;
+        $newCategoryId = 0;
+   
+        if(empty($categoryName)){
+            $errorMessage = "Category name cannot be empty";
+        }
+        else{
+            $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                            ->isCustomCategoryNameAvailable($categoryName,$memberId);
+            if(!$isCategoryNameAvailable) {
+                $errorMessage = "Category name already exists";
+            }
+            else{
+                try {
+                    $esProductRepo = $this->em->getRepository("EasyShop\Entities\EsProduct");
+                    $esMemberCategoryRepository =  $this->em->getRepository("EasyShop\Entities\EsMemberCat");
+                    $datetimeToday = date_create();
+                    $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+                    $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId);
+                    $higestSortOrder++;
+                    $memberCategory = new EsMemberCat();
+                    $memberCategory->setCatName($categoryName)
+                                   ->setMember($member)
+                                   ->setCreatedDate($datetimeToday)
+                                   ->setSortOrder($higestSortOrder)
+                                   ->setlastModifiedDate($datetimeToday);
+                    $this->em->persist($memberCategory);
+                    foreach ($productIds as $productId) {
+                        $product =  $esProductRepo->findOneBy([
+                                        "member" => $memberId,
+                                        "idProduct" => $productId,
+                                        "isDelete" => EsProduct::ACTIVE,
+                                        "isDraft" => EsProduct::ACTIVE
+                                    ]);
+                        if($product) {
+                            $memberProductCategory = new EsMemberProdcat();
+                            $memberProductCategory->setMemcat($memberCategory);
+                            $memberProductCategory->setProduct($product);
+                            $memberProductCategory->setCreatedDate($datetimeToday);
+                            $this->em->persist($memberProductCategory);
+                        }
+                    }
+                    $this->em->flush();
+                    $newCategoryId = $memberCategory->getIdMemcat();
+                    $actionResult = true;
+                }
+                catch(Exception $e) {
+                    $errorMessage = "Database Error";
+                }
+            }
+        }
+
+        return [
+            "errorMessage" => $errorMessage,
+            "result" => $actionResult,
+            "newCategoryId" => $newCategoryId,
+        ];
+       
+    }
+
+    /**
      * Performs the update actions of User Custom Category Products
      * 
-     * @param integer $memCatId
+     * @param integer $memberCategoryId
      * @param string $categoryName
      * @param integer[] $productIds
      * @param integer $memberId
      * 
      * @return mixed
      */
-    public function editUserCustomCategoryProducts($memCatId, $categoryName, $productIds, $memberId)
+    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId)
     {
         $esMemberProdcatRepo = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat");
         $esMemberCatRepo = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
@@ -408,6 +432,7 @@ class CategoryManager
 
         $actionResult = false;
         $errorMessage = "";
+        $categoryName = trim($categoryName);
 
         try{
         
@@ -416,19 +441,19 @@ class CategoryManager
             }
             else{
                 $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                            ->isCustomCategoryNameAvailable($categoryName,$memberId, $memCatId);
+                                            ->isCustomCategoryNameAvailable($categoryName,$memberId, $memberCategoryId);
                 if($isCategoryNameAvailable) {
-                    $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memCatId, "member" => $memberId]);
+                    $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memberCategoryId, "member" => $memberId]);
                     if($memberCategory) {
-                        $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memCatId]);                
+                        $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memberCategoryId]);                
                         foreach ($memberCategoryProducts as $memberCategoryProduct) {
                             $this->em->remove($memberCategoryProduct);
                         }
                     }
-                
-                    $memberCategory = $esMemberCatRepo->find($memCatId);
+                    $datetimeToday = date_create();
+                    $memberCategory = $esMemberCatRepo->find($memberCategoryId);
                     $memberCategory->setCatName($categoryName);
-                    $memberCategory->setlastModifiedDate(date_create());
+                    $memberCategory->setlastModifiedDate($datetimeToday);
                     foreach ($productIds as $productId) {
                         $product =  $esProductRepo->findOneBy([
                                         "member" => $memberId,
@@ -441,7 +466,7 @@ class CategoryManager
                             $memberProductCategory = new EsMemberProdcat();
                             $memberProductCategory->setMemcat($memberCategory);
                             $memberProductCategory->setProduct($product);
-                            $memberProductCategory->setCreatedDate(date_create());
+                            $memberProductCategory->setCreatedDate($datetimeToday);
                             $this->em->persist($memberProductCategory);
                         }
                     }

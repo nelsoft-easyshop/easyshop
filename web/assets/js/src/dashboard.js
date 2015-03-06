@@ -2519,6 +2519,65 @@
         });
     });
     
+     
+    $(document.body).on('keypress', '.search-category', function(){
+        if ( event.which == 13 ) {
+            event.preventDefault();
+            var $this = $(this);
+            var isSearchingField = $this.siblings('.isSearching');
+            var isSearching = isSearchingField.val();
+            if(isSearching === 'true'){
+                return false;
+            }
+            
+            var $searchDiv = $this.closest('.category-panel-header');
+            var $modalDiv = $this.closest(".category-modal");  
+            var $itemListDiv = $searchDiv.siblings('.category-items-holder');
+            var page = 1;
+            var categoryId = $modalDiv.find('.hidden-category-id').val();
+            var searchString = $this.val();
+            var $categoryProductList = $itemListDiv.find('.product-list');
+            var $loader = $itemListDiv.find('.loader');
+
+            var url;
+            var data = "";
+
+            if($itemListDiv.hasClass('category-items')){
+                url = '/memberpage/getCustomCategory';
+                data = 'categoryId='+categoryId+'&page='+page+'&searchString='+searchString;
+            }
+            else if($itemListDiv.hasClass('all-items')){
+                var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
+                var currentCategoryProductsIds = [];
+                $.each($currentCategoryProductList, function(key, $itemNameDiv){
+                    currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
+                });
+                url = '/memberpage/getAllMemberProducts';
+                data = 'excludeCategoryId='+categoryId+'&page='+page+'&searchString='+searchString+
+                       '&excludeProductId='+JSON.stringify(currentCategoryProductsIds);
+            }
+            else{
+                return false;
+            }
+            
+            $itemListDiv.attr('data-page', page);
+            $categoryProductList.html('');
+            $loader.show();
+            isSearchingField.val('true');
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: data,
+                success: function(data){
+                    var jsonResponse = $.parseJSON(data);
+                    appendCategoryProductList($itemListDiv, jsonResponse.products)
+                    $loader.hide();
+                    isSearchingField.val('false');
+                }
+            });  
+        }
+    });   
+    
     $(document.body).on('click', '.save-category-changes', function(){
         var $btn = $(this);
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -2545,7 +2604,6 @@
                 var jsonData = $.parseJSON(data);
                 if(jsonData.result){
                     var escapedCategoryName = escapeHtml(categoryName);
-                    $modalDiv.find('.simplemodal-close').click();
                     $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').html(escapedCategoryName);
                     var draggableListItem = $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]');
                     draggableListItem.attr('data-categoryname', escapedCategoryName);
@@ -2556,6 +2614,61 @@
                     var deleteCheckBoxLabel = $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('label');
                     html = '<input data-categoryid="'+categoryId+'" type="checkbox" class="checkBox">'+escapedCategoryName;
                     deleteCheckBoxLabel.html(html);
+                    $modalDiv.find('.simplemodal-close').click();
+                }
+                else{
+                    var errorDiv = $modalDiv.find('.customized-category-error');
+                    errorDiv.fadeIn().delay(2000).fadeOut();
+                    errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' +jsonData.errorMessage);
+                }
+            }
+        });
+
+    });
+    
+    
+     $(document.body).on('click', '.save-new-category', function(){
+        var $btn = $(this);
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');   
+        var $modalDiv = $btn.closest('.add-category-modal');
+        var categoryName = $modalDiv.find('.category-name').val();
+        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
+        var currentCategoryProductsIds = [];
+        $.each($currentCategoryProductList, function(key, $itemNameDiv){
+            currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
+        });
+
+        $.ajax({
+            type: "POST",
+            url: '/memberpage/addCustomCategory',
+            data: {
+                categoryName: categoryName, 
+                productIds: JSON.stringify(currentCategoryProductsIds),
+                csrfname: csrftoken
+            },
+            success: function(data){ 
+                var jsonData = $.parseJSON(data);
+                if(jsonData.result){
+                    var escapedCategoryName = escapeHtml(categoryName);
+                    var memberCategoryId = jsonData.newCategoryId;
+                    var html = '<div class="div-cat" data-catgeoryid="'+memberCategoryId+'">'+escapedCategoryName+'</div>';
+                    $('.store-category-view').append(html);
+                    var draggableUnorderList = $('.new-store-category-draggable');
+                    var html = '<li data-categoryid="'+memberCategoryId+'" data-categoryname="'+escapedCategoryName+'">'+
+                                    '<i class="fa fa-sort"></i>'+
+                                        escapedCategoryName +
+                                    '<i class="icon-edit modal-category-edit pull-right edit-category"></i>' +
+                                '</li>';
+                    draggableUnorderList.append(html);
+                    var deleteCheckBoxList = $('#delete-list-categories');
+                    html = '<li class="checkbox"><label>' +
+                                '<input data-categoryid="'+memberCategoryId+'" type="checkbox" class="checkBox"/>' +
+                                escapedCategoryName +
+                            '</label><li>';
+                    deleteCheckBoxList.append(html);
+                    $modalDiv.find('.simplemodal-close').click();
+                    $('.add-store-cat-message').fadeIn().delay(2000).fadeOut();
                 }
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
@@ -2679,72 +2792,7 @@
         }
     }
 
-    
-    $(document.body).on('keypress', '.search-category', function(){
-        if ( event.which == 13 ) {
-            event.preventDefault();
-            var $this = $(this);
-            var isSearchingField = $this.siblings('.isSearching');
-            var isSearching = isSearchingField.val();
-            if(isSearching === 'true'){
-                return false;
-            }
-            
-            var $searchDiv = $this.closest('.category-panel-header');
-            var $modalDiv = $this.closest(".category-modal");  
-            var $itemListDiv = $searchDiv.siblings('.category-items-holder');
-            var page = 1;
-            var categoryId = $modalDiv.find('.hidden-category-id').val();
-            var searchString = $this.val();
-            var $categoryProductList = $itemListDiv.find('.product-list');
-            var $loader = $itemListDiv.find('.loader');
-
-            var url;
-            var data = "";
-
-            if($itemListDiv.hasClass('category-items')){
-                url = '/memberpage/getCustomCategory';
-                data = 'categoryId='+categoryId+'&page='+page+'&searchString='+searchString;
-            }
-            else if($itemListDiv.hasClass('all-items')){
-                var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
-                var currentCategoryProductsIds = [];
-                $.each($currentCategoryProductList, function(key, $itemNameDiv){
-                    currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
-                });
-                url = '/memberpage/getAllMemberProducts';
-                data = 'excludeCategoryId='+categoryId+'&page='+page+'&searchString='+searchString+
-                       '&excludeProductId='+JSON.stringify(currentCategoryProductsIds);
-            }
-            else{
-                return false;
-            }
-            
-            $itemListDiv.attr('data-page', page);
-            
-            $categoryProductList.html('');
-
-            $loader.show();
-            isSearchingField.val('true');
-            $.ajax({
-                type: "GET",
-                url: url,
-                data: data,
-                success: function(data){
-                    var jsonResponse = $.parseJSON(data);
-                    appendCategoryProductList($itemListDiv, jsonResponse.products)
-                    $loader.hide();
-                    isSearchingField.val('false');
-                }
-            });
-            
-            
-        }
-    });   
-
-    
-    
-
+   
 
 }(jQuery));
 
