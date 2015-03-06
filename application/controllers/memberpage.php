@@ -2278,35 +2278,30 @@ class Memberpage extends MY_Controller
         $offset = $page * $this->productsPerCategoryPage;
         $memberId = $this->session->userdata('member_id');
         $response = false;
-        $allUserCategories = $this->serviceContainer['category_manager']
-                                  ->getUserCategories($memberId);    
-        $categories = $this->serviceContainer['entity_manager']
-                            ->getRepository('EasyShop\Entities\EsMemberCat')
-                            ->getCustomCategoriesObject($memberId, [$categoryId]);    
+        $allUserCategories = $this->em->getUserCategories($memberId);    
+        $categories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                               ->getCustomCategoriesObject($memberId, [$categoryId]);    
         if($categories){
             $category = reset($categories);
             $response['categoryName'] = $category->getCatName();
             $response['categoryId'] = $categoryId;
             $response['products'] = [];
-            $productIds = $this->serviceContainer['entity_manager']
-                                ->getRepository('EasyShop\Entities\EsMemberProdcat')
-                                ->getPagedCustomCategoryProducts(
-                                    $memberId, 
-                                    $categoryId, 
-                                    $this->productsPerCategoryPage, 
-                                    $offset, 
-                                    ["idProduct" => "DESC"],
-                                    $searchString
-                                );
-            $products = $this->serviceContainer['entity_manager']
-                                ->getRepository('EasyShop\Entities\EsProduct')
-                                ->findByIdProduct($productIds);
+            $productIds = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                   ->getPagedCustomCategoryProducts(
+                                        $memberId, 
+                                        $categoryId, 
+                                        $this->productsPerCategoryPage, 
+                                        $offset, 
+                                        ["idProduct" => "DESC"],
+                                        $searchString
+                                    );
+            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                 ->findByIdProduct($productIds);
             foreach($products as $key => $product){
                 $productId = $product->getIdProduct();
                 $response['products'][$key]['productName'] = $product->getName();
-                $image = $this->serviceContainer['entity_manager']
-                                ->getRepository('EasyShop\Entities\EsProductImage')
-                                ->getDefaultImage($productId);
+                $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                  ->getDefaultImage($productId);
                 $response['products'][$key]['imageFilename'] = $image->getFilename();
                 $response['products'][$key]['imageDirectory'] = $image->getDirectory();
                 $response['products'][$key]['id'] = $productId;
@@ -2335,22 +2330,28 @@ class Memberpage extends MY_Controller
 
         $excludeIds = [];
         if($excludeCategoryId !== 0){
-            $excludeIds = $this->serviceContainer['entity_manager']
-                               ->getRepository('EasyShop\Entities\EsMemberProdcat')
-                               ->getPagedCustomCategoryProducts($memberId, [ $excludeCategoryId ], PHP_INT_MAX);
+            $excludeIds = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                   ->getPagedCustomCategoryProducts($memberId, [ $excludeCategoryId ], PHP_INT_MAX);
         }
         
         $excludeIds = array_merge($excludeIds, $inputExcludeProductIds);
   
-        $products = $this->serviceContainer['entity_manager']
-                         ->getRepository('EasyShop\Entities\EsProduct')
-                         ->getUserProducts($memberId, 0, 0, $offset, $this->productsPerCategoryPage, $searchString, "p.idProduct", $excludeIds);
+        $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                         ->getUserProducts(
+                                $memberId, 
+                                0, 
+                                0, 
+                                $offset, 
+                                $this->productsPerCategoryPage, 
+                                $searchString, 
+                                "p.idProduct", 
+                                $excludeIds
+                            );
         $response['products'] = [];
         foreach($products as $product){
             $productId = $product->getIdProduct();
-            $image = $this->serviceContainer['entity_manager']
-                          ->getRepository('EasyShop\Entities\EsProductImage')
-                          ->getDefaultImage($productId);
+            $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                              ->getDefaultImage($productId);
             $response['products'][] = [
                 'productName' => $product->getName(),
                 'id' => $productId,

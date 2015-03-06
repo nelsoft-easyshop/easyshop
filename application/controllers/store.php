@@ -139,7 +139,7 @@ class Store extends MY_Controller
         
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
-                if(!empty($viewData['categoryProducts'])){
+                if(empty($viewData['categoryProducts']) === false){
                     if(isset($productView['isSearching'])){
                         $viewData['categoryProducts'][0]['isActive'] = true;
                     }
@@ -1101,7 +1101,17 @@ class Store extends MY_Controller
                 break;
             case CategoryManager::CATEGORY_NONSEARCH_TYPE: 
             default:
-                    $result = $categoryManager->getProductsWithinCategory($vendorId, $catId, $isCustom, $prodLimit, $page, $orderBy, $condition, $lprice, $uprice);
+                    $result = $categoryManager->getProductsWithinCategory(
+                                                    $vendorId, 
+                                                    $catId, 
+                                                    $isCustom, 
+                                                    $prodLimit, 
+                                                    $page, 
+                                                    $orderBy, 
+                                                    $condition, 
+                                                    $lprice, 
+                                                    $uprice
+                                                );
                     $products = $result['products'];
                     $productCount = $result['filtered_product_count'];
                 break;
