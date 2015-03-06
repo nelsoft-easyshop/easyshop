@@ -30,6 +30,13 @@ class CategoryManager
      * @var integer
      */
     const CATEGORY_NONSEARCH_TYPE = 1;
+    
+    /**
+     * Category ID placeholder for non existent EsCat or EsMemberCat
+     *
+     * @var integer
+     */
+    const NON_EXISTENT_CATEGORYID_PLACEHOLDER = 0;
 
     
     /**
@@ -317,7 +324,7 @@ class CategoryManager
                     $vendorCategories[$index]['child_cat'] = [ $parentId ];
                     $vendorCategories[$index]['products'] = [];
                     $vendorCategories[$index]['categoryId'] = $parentId;
-                    $vendorCategories[$index]['memberCategoryId'] = 0;       
+                    $vendorCategories[$index]['memberCategoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;       
                     $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
                 }              
                 if(!in_array($rawVendorCategory['cat_id'], $vendorCategories[$index]['child_cat'])){
@@ -332,7 +339,7 @@ class CategoryManager
                 $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
                 $vendorCategories[$index]['child_cat'] = [ $memberCategory['id_memcat'] ];
                 $vendorCategories[$index]['products'] = [];
-                $vendorCategories[$index]['categoryId'] = 0;
+                $vendorCategories[$index]['categoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
                 $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
                 $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
                 $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
@@ -347,8 +354,8 @@ class CategoryManager
                 $vendorCategories[$index]['name'] = 'Others';
                 $vendorCategories[$index]['child_cat'] = [];
                 $vendorCategories[$index]['products'] = [];
-                $vendorCategories[$index]['categoryId'] = 0;
-                $vendorCategories[$index]['memberCategoryId'] = 0;;
+                $vendorCategories[$index]['categoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
+                $vendorCategories[$index]['memberCategoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
                 $vendorCategories[$index]['sortOrder'] = $highestSortOrder;
                 $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
             }
