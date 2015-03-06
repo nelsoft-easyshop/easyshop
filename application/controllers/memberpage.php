@@ -2278,7 +2278,8 @@ class Memberpage extends MY_Controller
         $offset = $page * $this->productsPerCategoryPage;
         $memberId = $this->session->userdata('member_id');
         $response = false;
-        $allUserCategories = $this->em->getUserCategories($memberId);    
+        $allUserCategories = $this->serviceContainer['category_manager']
+                                  ->getUserCategories($memberId);    
         $categories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                ->getCustomCategoriesObject($memberId, [$categoryId]);    
         if($categories){
