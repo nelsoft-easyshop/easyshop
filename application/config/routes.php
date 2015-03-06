@@ -195,7 +195,6 @@ else {
     $route['mobile/payment/pay/cod'] = 'mobile/mobilepayment/paymentCashOnDelivery';
     $route['mobile/payment/pay/paypal'] = 'mobile/mobilepayment/paymentPaypalPersist';
 
-<<<<<<< HEAD
     $route['mobile/product/upload/add-image'] = 'mobile/mobileProductUpload/uploadImage';
     $route['mobile/product/upload/request-token'] = 'mobile/mobileProductUpload/requestUploadToken';
     $route['mobile/product/upload/process'] = 'mobile/mobileProductUpload/processUpload';
@@ -203,9 +202,8 @@ else {
     $route['mobile/resources/category-list'] = 'mobile/resources/getCategories';
     $route['mobile/resources/location-shipping'] = 'mobile/resources/getLocationForShipping';
     $route['mobile/resources/location-address'] = 'mobile/resources/getLocationForAddress';
-=======
+
     $route['mobile/add-device-token'] = 'mobile/notification/addDeviceToken';
->>>>>>> dev
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
