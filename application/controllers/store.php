@@ -474,21 +474,7 @@ class Store extends MY_Controller
             ];
 
             $parentCategories[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
-        }
-        
-
-            
-            
-            
-            
-            
-   
-        
-        
-        
-        
-        
-    
+        }    
         $returnData['parentCategory'] = $parentCategories;
  
         return $returnData;
