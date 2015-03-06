@@ -1243,8 +1243,10 @@ class EsProductRepository extends EntityRepository
             'lastmodifieddate' => 'lastmodifieddate', 
             'isHot' => 'is_hot',
         ];
-        $orderByField = isset($orderByFields[key($orderBy)]) ? $orderByFields[key($orderBy)] : $orderByFields['clickcount'];
-        $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
+        $orderByField = isset($orderByFields[key($orderBy)]) ? 
+                        $orderByFields[key($orderBy)] : $orderByFields['clickcount'];
+        $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
+                            $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
 
         $em = $this->_em;
         $rsm = new ResultSetMapping();
