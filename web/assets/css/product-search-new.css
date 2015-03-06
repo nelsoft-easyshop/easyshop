@@ -217,8 +217,17 @@ html, body{
 }
 
 .loader img{
-    margin-top: 10%;
+    margin-top: 15%;
+    width: 110px;
+    width: 110px;
 }
+
+.loader span {
+    font-size: 14px;
+    color: #ff893a;
+    font-weight: bold;
+}
+
 .search-item-img-container:hover .search-item-img-container-hover{
     opacity: 1;
 }
