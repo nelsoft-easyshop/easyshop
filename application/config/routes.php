@@ -195,6 +195,8 @@ else {
     $route['mobile/payment/pay/cod'] = 'mobile/mobilepayment/paymentCashOnDelivery';
     $route['mobile/payment/pay/paypal'] = 'mobile/mobilepayment/paymentPaypalPersist';
 
+    $route['mobile/add-device-token'] = 'mobile/notification/addDeviceToken';
+
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
 }
