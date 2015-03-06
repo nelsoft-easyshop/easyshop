@@ -458,21 +458,19 @@ class Store extends MY_Controller
             $totalProductCount += count($result['products']);
             $parentCategories[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
             $categoryProductCount[$idCat] = count($result['products']);
-            
-            // Generate pagination view
-            $paginationData = array(
-                'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage)
-                ,'isHyperLink' => false
-            );
+            $paginationData = [
+                'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage),
+                'isHyperLink' => false,
+            ];
             $parentCategories[$idCat]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
 
-            $view = array(
+            $view = [
                 'arrCat' => [
                     'products'=>$result['products'],
                     'page' => 1,
                     'pagination' => $parentCategories[$idCat]['pagination'],
                 ]
-            );
+            ];
 
             $parentCategories[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
