@@ -26,13 +26,18 @@
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">    
-                                
+                                    <?php $isFirst = true; ?>
                                     <?php foreach( $categoryProducts as $catId => $arrCat ):?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                                             <li>
-                                                <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo html_escape($arrCat['name']);?></span>
+                                                <span style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
+                                                </span> 
+                                                <span class='catText'>
+                                                    <?php echo html_escape($arrCat['name']);?>
+                                                </span>
                                             </li>
                                         </a>
+                                        <?php $isFirst = false; ?>
                                     <?php endforeach;?>
                                 </ul>
                             </div>
@@ -103,17 +108,16 @@
                     </select>
                     <div class="clear"></div>
                 </div>
-
+                <?php $isFirst = true; ?>
                 <?php foreach($categoryProducts as $catId => $categoryData):?>
-
-                    <div class="view row row-items grid category-products <?php echo $categoryData['isActive'] ? 'active' : ''?>" 
+                    <div class="view row row-items grid category-products <?php echo $isFirst ? 'active' : ''; ?>" 
                         id="def-<?php echo html_escape($catId); ?>"
                         data-catId='<?php echo html_escape($categoryData['json_subcat']);?>' 
-                        style="display:<?php echo $categoryData['isActive'] ? '' : 'none'?>" 
                         data-group="<?php echo html_escape($catId); ?>" 
                         data-productcount="<?= html_escape($categoryData['non_categorized_count']) ?>"
                         data-catType="<?php echo html_escape($categoryData['cat_type']); ?>"
                         data-isCustom="<?php echo json_encode(isset($categoryData['memberCategoryId']) && (int)$categoryData['memberCategoryId'] !== 0); ?>"
+                        style = "<?php echo $isFirst ? '' : 'display:none;'; ?>"
                     >                    
                         <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
                         <?php if($categoryData['non_categorized_count'] === 0): ?>
@@ -122,6 +126,7 @@
                             <?=$categoryData['product_html_data'];?>
                         <?php endif;?>
                     </div>
+                    <?php $isFirst = false; ?>
                 <?php endforeach;?>
             </div>
         </div>
@@ -149,12 +154,18 @@
     <div id="category-list" class="panel-collapse collapse in">
         <div class="panel-body border-0 no-padding">
             <ul class="list-unstyled list-category">
+                <?php $isFirst = true; ?>
                 <?php foreach( $categoryProducts as $catId=>$arrCat ):?>
                     <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                         <li>
-                            <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo html_escape($arrCat['name']);?></span>
+                            <span  style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
+                            </span>  
+                            <span class='catText'>
+                                <?php echo html_escape($arrCat['name']);?>
+                            </span>
                         </li>
                     </a>
+                    <?php $isFirst = false; ?>
                 <?php endforeach;?>
             </ul>
         </div>
