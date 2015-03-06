@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
 
 use EasyShop\Entities\EsDeviceToken as EsDeviceToken;
 use EasyShop\Entities\EsApiType as EsApiType;
+use EasyShop\Entities\OauthClients as OauthClients;
 
 class Notification extends MY_Controller 
 {
@@ -25,21 +26,23 @@ class Notification extends MY_Controller
         header('Content-type: application/json');
         $jwtContainer = $this->serviceContainer['json_web_token'];
         $jwt = trim($this->input->post('jwt'));
-        $isSuccess = false;
-        $this->load->config('mobile_api', true); 
-        $mobileApiConfig = strtolower(ENVIRONMENT) === 'production'
-                           ? $this->config->config['mobile_api']['production']
-                           : $this->config->config['mobile_api']['development']; 
+        $isSuccess = false; 
+        $clientId = strtolower(ENVIRONMENT) === 'production'
+                    ? OauthClients::PROD_CLIENTID
+                    : OauthClients::DEV_CLIENTID;
 
         try {
             if($jwt){
-                $jwtObject = $jwtContainer->decode($jwt, $mobileApiConfig['client_secret']);
+                $oauthClients = $this->em->getRepository('EasyShop\Entities\OauthClients')
+                                         ->find($clientId);
+                $jwtObject = $jwtContainer->decode($jwt, $oauthClients->getClientSecret());
                 if($jwtObject
+                    && $oauthClients
                     && isset($jwtObject->api_type) 
                     && isset($jwtObject->deviceToken) 
                     && isset($jwtObject->client_id)){
 
-                    if($jwtObject->client_id === $mobileApiConfig['client_id']){
+                    if($jwtObject->client_id === $clientId){
                         $apiType = $this->em->getRepository('EasyShop\Entities\EsApiType')
                                             ->findOneBy(['apiType' => $jwtObject->api_type]);
 
@@ -47,7 +50,7 @@ class Notification extends MY_Controller
                             $isTokenSupported = $this->supportDeviceToken($jwtObject->deviceToken, $apiType->getIdApiType());
                             if($isTokenSupported){
                                 $token = $this->em->getRepository('EasyShop\Entities\EsDeviceToken')
-                                              ->findOneBy(['deviceToken' => $jwtObject->deviceToken]);
+                                                  ->findOneBy(['deviceToken' => $jwtObject->deviceToken]);
                                 if(!$token){
                                     $newToken = new EsDeviceToken();
                                     $newToken->setDeviceToken($jwtObject->deviceToken);
@@ -77,7 +80,8 @@ class Notification extends MY_Controller
      * @param  integer $apiType
      * @return boolean
      */
-    private function supportDeviceToken($token, $apiType){
+    private function supportDeviceToken($token, $apiType)
+    {
         if($apiType === EsApiType::TYPE_IOS){
             return (ctype_xdigit($token) && 64 === strlen($token));
         }
