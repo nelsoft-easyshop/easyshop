@@ -1222,6 +1222,49 @@ class EsProductRepository extends EntityRepository
 
         return $products;    
     }
+
+    /**
+     * Get non-catgegorized product ids
+     *
+     * @param integer $memberId
+     * @return integer[]
+     */
+    public function getNonCategorizedProductIds($memberId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('productId', 'productId');
+        $query = $em->createNativeQuery("
+            SELECT 
+                es_product.id_product as productId
+            FROM 
+                es_product
+            LEFT JOIN es_member_prodcat ON 
+                es_member_prodcat.product_id = es_product.id_product
+            LEFT JOIN es_member_cat ON 
+                es_member_prodcat.memcat_id = es_member_cat.id_memcat AND
+                es_member_cat.is_delete = :memberCategoryActiveFlag
+            WHERE 
+                es_product.is_delete = :productDeleteFlag AND 
+                es_product.is_draft = :productDraftFlag AND 
+                es_product.member_id = :memberId AND
+                es_member_prodcat.memcat_id IS NULL
+            GROUP BY 
+                es_product.id_product;
+        ", $rsm);
+        $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
+        $query->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE);
+        $query->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE);
+        $query->setParameter('memberId', $memberId);
+        $results = $query->execute();
+        $productIds = [];
+        foreach($results as $result){
+            $productIds[] = $result['productId'];
+        }
+        
+        return $productIds;
+    }
     
 }
 
