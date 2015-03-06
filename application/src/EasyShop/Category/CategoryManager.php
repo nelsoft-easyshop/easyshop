@@ -188,22 +188,22 @@ class CategoryManager
         if($condition === "" && $lprice === "" && $uprice === ""){
             if($getAllNonCategorized){
                 $categoryProductIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                           ->getNonCategorizedProductIds($memberId, $productLimit, $offset, $orderBy);
+                                               ->getNonCategorizedProductIds($memberId, $productLimit, $offset, $orderBy);
                 $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
                                          ->getCountNonCategorizedProducts($memberId);
             }
             else{
                 if($isCustom){
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
+                                                   ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                            ->countCustomCategoryProducts($memberId, $arrCatId);                            
+                                             ->countCustomCategoryProducts($memberId, $arrCatId);                            
                 }
                 else{
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                ->getDefaultCategorizedProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
+                                                   ->getDefaultCategorizedProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                            ->countDefaultCategorizedProducts($memberId, $arrCatId);    
+                                             ->countDefaultCategorizedProducts($memberId, $arrCatId);    
                 }
             }
             $isFiltered = false;    
@@ -211,16 +211,16 @@ class CategoryManager
         else{
             if($getAllNonCategorized){
                 $categoryProductIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                           ->getNonCategorizedProductIds($memberId, PHP_INT_MAX);
+                                               ->getNonCategorizedProductIds($memberId, PHP_INT_MAX);
             }
             else{
                 if($isCustom){
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
+                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
                 }
                 else{
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                ->getAllDefaultCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
+                                                   ->getAllDefaultCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
                 }
             }
 
