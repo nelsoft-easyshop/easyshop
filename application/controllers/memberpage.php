@@ -1972,7 +1972,7 @@ class Memberpage extends MY_Controller
                 $allUserCategories = $this->serviceContainer['category_manager']
                                           ->getUserCategories($memberId);
             
-                foreach($allUserCategories as $index => $category){
+                foreach($allUserCategories as $category){
                     $datetimeToday = date_create(date("Y-m-d H:i:s"));
                     $newMemberCategory = new EasyShop\Entities\EsMemberCat();
                     $newMemberCategory->setMember($member);
