@@ -305,7 +305,7 @@ class AccountManager
             }
             else{
                 $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                               ->findByUsernameCase($validatedUsername);
+                               ->findOneByUsernameCase($validatedUsername);
             }
             
             if($member){

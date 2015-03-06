@@ -367,7 +367,7 @@ class EsMemberRepository extends EntityRepository
      * @param  string $username [description]
      * @return EasyShop\Entities\EsMember
      */
-    public function findByUsernameCase($username)
+    public function findOneByUsernameCase($username)
     {
         $em = $this->_em;
         $dql = "
