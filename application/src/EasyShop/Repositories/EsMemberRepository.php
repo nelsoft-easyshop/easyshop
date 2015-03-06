@@ -360,6 +360,29 @@ class EsMemberRepository extends EntityRepository
         }
         $member->setLastmodifieddate(new \DateTime('now'));
         $em->flush();
-    }            
+    }
+
+    /**
+     * Find member by username with case sensitive rule
+     * @param  string $username [description]
+     * @return EasyShop\Entities\EsMember
+     */
+    public function findByUsernameCase($username)
+    {
+        $em = $this->_em;
+        $dql = "
+            SELECT m
+            FROM EasyShop\Entities\EsMember m
+            WHERE m.username = BINARY(:username)
+        ";
+        $query = $em->createQuery($dql)
+                    ->setParameter('username', $username)
+                    ->setMaxResults(1);
+
+        $member = $query->getResult();
+        $member = isset($member[0]) ? $member[0] : $member;
+
+        return $member;
+    }
 
 }
