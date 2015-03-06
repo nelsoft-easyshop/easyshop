@@ -1227,10 +1227,25 @@ class EsProductRepository extends EntityRepository
      * Get product ids that do not belong to any member category
      *
      * @param integer $memberId
+     * @param integer $limit
+     * @param integer $offset
+     * @param mixed $orderBy
      * @return integer[]
      */
-    public function getNonCategorizedProductIds($memberId)
+    public function getNonCategorizedProductIds($memberId, $limit = 12, $offset = 0, $orderBy = ["clickcount"=>"DESC"])
     {
+        $orderByDirections = [
+            'ASC' => 'ASC', 
+            'DESC' => 'DESC',
+        ];
+        $orderByFields = [
+            'clickcount' => 'clickcount', 
+            'lastmodifieddate' => 'lastmodifieddate', 
+            'isHot' => 'is_hot',
+        ];
+        $orderByField = isset($orderByFields[key($orderBy)]) ? $orderByFields[key($orderBy)] : $orderByFields['clickcount'];
+        $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
+
         $em = $this->_em;
         $rsm = new ResultSetMapping();
 
@@ -1251,19 +1266,62 @@ class EsProductRepository extends EntityRepository
                 es_product.member_id = :memberId AND
                 es_member_prodcat.memcat_id IS NULL
             GROUP BY 
-                es_product.id_product;
+                es_product.id_product
+            ORDER BY es_product.".$orderByField." ".$orderByDirection." 
+            LIMIT :limit OFFSET :offset
         ", $rsm);
         $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
         $query->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE);
         $query->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE);
         $query->setParameter('memberId', $memberId);
+        $query->setParameter('limit', $limit);
+        $query->setParameter('offset', $offset);
         $results = $query->execute();
         $productIds = [];
         foreach($results as $result){
             $productIds[] = $result['productId'];
         }
-        
+
         return $productIds;
+    }
+    
+      /**
+     * Get products that do not belong to any member category
+     *
+     * @param integer $memberId
+     * @param integer $limit
+     * @return integer
+     */
+    public function getCountNonCategorizedProducts($memberId)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+
+        $rsm->addScalarResult('idProduct', 'idProduct');
+        $query = $em->createNativeQuery("
+            SELECT 
+                es_product.id_product as idProduct
+            FROM 
+                es_product
+            LEFT JOIN es_member_prodcat ON 
+                es_member_prodcat.product_id = es_product.id_product
+            LEFT JOIN es_member_cat ON 
+                es_member_prodcat.memcat_id = es_member_cat.id_memcat AND
+                es_member_cat.is_delete = :memberCategoryActiveFlag
+            WHERE 
+                es_product.is_delete = :productDeleteFlag AND 
+                es_product.is_draft = :productDraftFlag AND 
+                es_product.member_id = :memberId AND
+                es_member_prodcat.memcat_id IS NULL
+            GROUP BY 
+                es_product.id_product
+        ", $rsm);
+        $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
+        $query->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE);
+        $query->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE);
+        $query->setParameter('memberId', $memberId);
+
+        return count($query->execute());
     }
     
 }
