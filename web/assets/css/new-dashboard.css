@@ -937,6 +937,12 @@ a{
     margin-top: 40px;
 }
 
+.clear.loader{
+     font-size: 10px; 
+     color: #ff893a; 
+     font-weight: bold;
+}
+
 .map-trigger{
     border-left: solid #e2e2e2 1px;
     margin-left:10px;
