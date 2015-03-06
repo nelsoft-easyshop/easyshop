@@ -308,6 +308,8 @@ class MobileProductUpload extends MY_Controller
                              ->uploadImageDirectory($tempDirectory, $pathDirectory, $productId, $images);
                     }
 
+                    $this->member->setTempId("");
+                    $this->em->flush();
                     $isSuccess = true;
                 }
             }
@@ -327,3 +329,4 @@ class MobileProductUpload extends MY_Controller
         echo json_encode($returnArray, JSON_PRETTY_PRINT);
     }
 }
+
