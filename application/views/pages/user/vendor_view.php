@@ -6,7 +6,6 @@
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.vendorview.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>
 
-
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>
 <div class="container bg-product-section">
@@ -23,20 +22,15 @@
                                 </a>
                             </h4>
                         </div>
+
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
-                                <ul class="list-unstyled list-category">
-                                    <?php foreach( $customCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
-                                            <li>
-                                                <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
-                                            </li>
-                                        </a>
-                                    <?php endforeach;?>
-                                    <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                                <ul class="list-unstyled list-category">    
+                                
+                                    <?php foreach( $categoryProducts as $catId => $arrCat ):?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                                             <li>
-                                                <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
+                                                <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo html_escape($arrCat['name']);?></span>
                                             </li>
                                         </a>
                                     <?php endforeach;?>
@@ -102,7 +96,7 @@
                 <input type="hidden" id="queryString" value='<?=html_escape(json_encode($this->input->get())); ?>' />
 
                 <div class="vendor-select-con">
-                    <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
+                    <select class="sort_select form-select-default color-default pull-right">
                         <option value="2">Default Sorting</option>
                         <option value="1">Popularity</option>
                         <option value="3">Hot</option>
@@ -110,45 +104,22 @@
                     <div class="clear"></div>
                 </div>
 
-                <?php foreach($customCatProd as $catId => $arrCat):?>
+                <?php foreach($categoryProducts as $catId => $categoryData):?>
 
-                <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" 
-                    id="cus-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' 
-                    style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" 
-                    data-productcount="<?=$arrCat['non_categorized_count']?>"
-                    data-catType="<?php echo $arrCat['cat_type']?>"
-                >
-                    <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
-
-                    <?php if((string)$arrCat['non_categorized_count'] === "0"): ?>
-                        <span>No items available for this category.</span>
-                    <?php else:?>
-                        <?=$arrCat['product_html_data'];?>
-                        <div class="clear"></div>
-                        <div id="paginationDiv-<?php echo $catId?>" class="pagination-container">
-                            <center>
-                                <?php echo $arrCat['pagination']?>
-                            </center>
-                        </div>
-                   <?php endif;?>
-                </div>
-                <?php endforeach;?>
-
-                <?php foreach($defaultCatProd as $catId => $arrCat):?>
-
-                    <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" 
-                        id="def-<?php echo $catId?>"
-                        data-catId='<?php echo $arrCat['json_subcat']?>' 
-                        style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" 
-                        data-group="<?php echo $catId?>" 
-                        data-productcount="<?=$arrCat['non_categorized_count']?>"
-                        data-catType="<?php echo $arrCat['cat_type']?>"
-                    >
+                    <div class="view row row-items grid category-products <?php echo $categoryData['isActive'] ? 'active' : ''?>" 
+                        id="def-<?php echo html_escape($catId); ?>"
+                        data-catId='<?php echo html_escape($categoryData['json_subcat']);?>' 
+                        style="display:<?php echo $categoryData['isActive'] ? '' : 'none'?>" 
+                        data-group="<?php echo html_escape($catId); ?>" 
+                        data-productcount="<?= html_escape($categoryData['non_categorized_count']) ?>"
+                        data-catType="<?php echo html_escape($categoryData['cat_type']); ?>"
+                        data-isCustom="<?php echo json_encode(isset($categoryData['memberCategoryId']) && (int)$categoryData['memberCategoryId'] !== 0); ?>"
+                    >                    
                         <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
-                        <?php if($arrCat['non_categorized_count'] === 0): ?>
+                        <?php if($categoryData['non_categorized_count'] === 0): ?>
                             <span>No items available for this category.</span>
                         <?php else:?>
-                            <?=$arrCat['product_html_data'];?>
+                            <?=$categoryData['product_html_data'];?>
                         <?php endif;?>
                     </div>
                 <?php endforeach;?>
@@ -178,17 +149,10 @@
     <div id="category-list" class="panel-collapse collapse in">
         <div class="panel-body border-0 no-padding">
             <ul class="list-unstyled list-category">
-                <?php foreach( $customCatProd as $catId=>$arrCat ):?>
-                    <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
-                        <li>
-                            <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
-                        </li>
-                    </a>
-                <?php endforeach;?>
-                <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
+                <?php foreach( $categoryProducts as $catId=>$arrCat ):?>
                     <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
                         <li>
-                            <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
+                            <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo html_escape($arrCat['name']);?></span>
                         </li>
                     </a>
                 <?php endforeach;?>

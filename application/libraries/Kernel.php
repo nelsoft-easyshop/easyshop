@@ -424,7 +424,9 @@ class Kernel
             $configLoader = $container['config_loader'];
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
-            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager, $promoManager, $container['sort_utility']);
+            $sortUtility = $container['sort_utility'];
+            $stringUtility = $container['string_utility'];
+            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager, $promoManager, $sortUtility, $stringUtility);
         };
         
         $container['config_loader'] = function ($c) {

@@ -531,14 +531,14 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     *  Count Not Custom categorized products
+     *  Count products categorized by default categories
      *
      *  @param integer $memberId
      *  @param array $catId
      *
      *  @return integer 
      */
-    public function countNotCustomCategorizedProducts($memberId, $catId)
+    public function countDefaultCategorizedProducts($memberId, $catId)
     {
         $em = $this->_em;
         $result = array();
@@ -554,14 +554,8 @@ class EsProductRepository extends EntityRepository
         $dql = "
             SELECT COUNT(p.idProduct)
             FROM EasyShop\Entities\EsProduct p
-            WHERE p.idProduct NOT IN (
-                    SELECT p2.idProduct
-                    FROM EasyShop\Entities\EsMemberProdcat pc
-                    JOIN pc.memcat mc
-                    JOIN pc.product p2
-                    WHERE mc.member = :member_id
-                )
-                AND p.member = :member_id
+            WHERE
+                p.member = :member_id
                 AND p.cat IN ( " . $catInCondition . " )
                 AND p.isDelete = 0
                 AND p.isDraft = 0 ";
@@ -577,70 +571,58 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     *  Get user products that have no assigned custom category
+     *  Get products categorized by default categories
      *  Returns Product IDs ONLY!
      *
      *  @param integer $memberId
-     *  @param array $catId
+     *  @param integer[] $catId
+     *  @param integer $productLimit
+     *  @param integer $offset
+     *  @param mixed $orderBy
+     *  @param string $searchString
      *
-     *  @return array
+     *  @return integer[]
      */
-    public function getPagedNotCustomCategorizedProducts($memberId, $catId, $productLimit=12, $page=0, $orderBy=array("clickcount"=>"DESC") )
+    public function getDefaultCategorizedProducts($memberId, $catId, $productLimit=12, $offset=0, $orderBy = ["clickcount"=>"DESC"], $searchString = "")
     {
-        $em = $this->_em;
-        $result = array();
-
-        // Generate category IN condition
-        $catCount = count($catId);
-        $arrCatParam = array();
-        for($i=1;$i<=$catCount;$i++){
-            $arrCatParam[] = ":i" . $i;
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('p')
+                     ->from('EasyShop\Entities\EsProduct','p')
+                     ->andWhere('p.isDelete = :active')
+                     ->andWhere('p.isDraft = :active')
+                     ->setParameter('active', \EasyShop\Entities\EsProduct::ACTIVE)
+                    
+                     ->andWhere('p.member = :member_id')
+                     ->setParameter('member_id', $memberId)
+                     ->andWhere(
+                            $queryBuilder->expr()->in('p.cat', $catId)
+                      );
+                      
+        
+        if($searchString !== ""){
+            $searchQuery = '%'.$searchString.'%';
+            $queryBuilder->andWhere('p.name LIKE :searchQuery')
+                         ->setParameter('searchQuery', $searchQuery);
         }
-        $catInCondition = implode(',',$arrCatParam);
+                      
+        $queryBuilder->orderBy("p.".key($orderBy), reset($orderBy));
 
-        // Generate Order by condition
-        $orderCondition = "";
-        foreach($orderBy as $column=>$order){
-            $orderCondition .= "p." . $column . " " . $order . ", ";
+        $qbStatement = $queryBuilder->setFirstResult($offset)
+                                    ->setMaxResults($productLimit)
+                                    ->getQuery();
+        $resultSet = $qbStatement->getResult();
+        
+        $result = [];
+        foreach( $resultSet as $product ){
+            $result[] = $product->getIdProduct();
         }
-        $orderCondition = rtrim($orderCondition, ", ");
-
-        $dql = "
-            SELECT p
-            FROM EasyShop\Entities\EsProduct p
-            WHERE p.idProduct NOT IN (
-                    SELECT p2.idProduct
-                    FROM EasyShop\Entities\EsMemberProdcat pc
-                    JOIN pc.memcat mc
-                    JOIN pc.product p2
-                    WHERE mc.member = :member_id
-                )
-                AND p.member = :member_id
-                AND p.cat IN ( " . $catInCondition . " )
-                AND p.isDelete = 0
-                AND p.isDraft = 0 
-                ORDER BY " . $orderCondition;
-
-        $query = $em->createQuery($dql)
-                    ->setParameter('member_id', $memberId)
-                    ->setFirstResult($page)
-                    ->setMaxResults($productLimit);
-
-        for($i=1;$i<=$catCount;$i++){
-            $query->setParameter('i'.$i, $catId[$i-1]);
-        }
-
-        $rawResult = new Paginator($query, $fetchJoinCollection = TRUE);
-
-        foreach( $rawResult as $row ){
-            $result[] = $row->getIdProduct();
-        }
-
+      
         return $result;
     }
 
     /**
-     *  Get user products that have no assigned custom category
+     *  Get all user products in a default category
      *  Returns Product IDs ONLY!
      *
      *  @param integer $memberId
@@ -649,7 +631,7 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getAllNotCustomCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
+    public function getAllDefaultCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
     {
         $em = $this->_em;
         $result = array();
@@ -671,14 +653,8 @@ class EsProductRepository extends EntityRepository
         $dql = "
             SELECT p.idProduct
             FROM EasyShop\Entities\EsProduct p
-            WHERE p.idProduct NOT IN (
-                    SELECT p2.idProduct
-                    FROM EasyShop\Entities\EsMemberProdcat pc
-                    JOIN pc.memcat mc
-                    JOIN pc.product p2
-                    WHERE mc.member = :member_id
-                )
-                AND p.member = :member_id
+            WHERE
+                p.member = :member_id
                 AND p.cat IN ( " . $catInCondition . " )
                 AND p.isDelete = 0
                 AND p.isDraft = 0 ";
@@ -868,10 +844,13 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get all active products of specific user
-     * @param  integer  $memberId
-     * @param  integer $offset
-     * @param  integer $perPage
-     * @return object
+     * @param integer $memberId
+     * @param integer $offset
+     * @param integer $perPage
+     * @param string $searchString
+     * @param string $orderByField
+     * @param integer[] $excludeProductsIds
+     * @return EasyShop\Entities\EsProduct[]
      */
     public function getUserProducts($memberId,
                                     $isDelete,
@@ -879,7 +858,8 @@ class EsProductRepository extends EntityRepository
                                     $offset = 0,
                                     $perPage = 10,
                                     $searchString = "",
-                                    $orderByField = "p.idProduct")
+                                    $orderByField = "p.idProduct",
+                                    $excludeProductsIds = [])
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
@@ -897,6 +877,10 @@ class EsProductRepository extends EntityRepository
         if($searchString){
             $queryBuilder->andWhere('p.name LIKE :word')
                          ->setParameter('word', '%'.$searchString.'%');
+        }
+        
+        if(empty($excludeProductsIds) === false){
+            $queryBuilder->andWhere($queryBuilder->expr()->notIn('p.idProduct', $excludeProductsIds));
         }
 
         $queryBuilder->orderBy($orderByField,"DESC");
