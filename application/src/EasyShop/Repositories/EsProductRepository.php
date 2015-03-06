@@ -1287,11 +1287,10 @@ class EsProductRepository extends EntityRepository
         return $productIds;
     }
     
-      /**
-     * Get products that do not belong to any member category
+    /**
+     * Get number of products that do not belong to any member category
      *
      * @param integer $memberId
-     * @param integer $limit
      * @return integer
      */
     public function getCountNonCategorizedProducts($memberId)
