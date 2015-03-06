@@ -1033,7 +1033,7 @@ class Store extends MY_Controller
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
         $isCount = intval($this->input->get('count')) === 1;
-        $isCustom = $this->input->get('isCustom') === 'true' ? true : false;
+        $isCustom = $this->input->get('isCustom') === 'true';
         $condition = $this->input->get('condition') !== "" 
                     && isset($this->lang->line('product_condition')[$this->input->get('condition')]) 
                     ? $this->lang->line('product_condition')[$this->input->get('condition')] : "";
