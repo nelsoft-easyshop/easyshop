@@ -33,7 +33,7 @@ use Doctrine\ORM\Query\AST\Functions\FunctionNode,
 class Binary extends FunctionNode
 {
     private $stringPrimary;
-	
+    
     /**
      * @override
      */
@@ -46,7 +46,7 @@ class Binary extends FunctionNode
         
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
-	
+    
     /**
      * @override
      */
@@ -55,3 +55,4 @@ class Binary extends FunctionNode
         return 'BINARY('.$sqlWalker->walkSimpleArithmeticExpression($this->stringPrimary).')';
     }
 }
+
