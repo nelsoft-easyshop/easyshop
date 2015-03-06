@@ -63,7 +63,7 @@
                     </div>
                     <p class="p-note-setting">
                         Arrange the order of the categories in your store page based on your preference. The first category will always appear first
-                        when someone views your store.
+                        when someone views your store. You may also edit the products that appear within your categories.
                     </p>
                 </div>
       
@@ -88,7 +88,9 @@
                         </button>
                     </div>
                     <p class="p-note-setting">
-                        Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, convallis magna vitae, porta leo. Phasellus suscipit pulvinar tortor, ac gravida felis sodales et.
+                        Add a new category to your list of store categories. You may also assign products to your new
+                        category. Take note that uncategorized products will appears under the <i>OTHERS</i> category 
+                        when viewed in your store page.
                     </p>
                 </div>
 
@@ -131,7 +133,8 @@
                         </div>
                     </div>
                     <p class="p-note-setting">
-                        Vestibulum quis placerat enim. Vestibulum at aliquet nibh, fringilla porta nulla. Cras at sem convallis, convallis magna vitae, porta leo. Phasellus suscipit pulvinar tortor, ac gravida felis sodales et
+                        Delete any of your current categories by selecting them from the list above. Clean up your store page by removing
+                        duplicate categories.
                     </p>
                 </div>
 
