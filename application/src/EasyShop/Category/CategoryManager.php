@@ -330,7 +330,6 @@ class CategoryManager
                 $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
                 $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
                 $vendorCategories[$index]['is_delete'] = $memberCategory['is_delete'];
-                $cleanNameMemberCategories[] = $this->stringUtility->cleanString($memberCategory['cat_name']);
             }
         }
 
