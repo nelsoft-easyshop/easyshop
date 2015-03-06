@@ -2479,7 +2479,7 @@
                 var response = $.parseJSON(data);
                 if(response){
                     var clonedDiv = $(".edit-category-modal").clone();  
-                    clonedDiv.find('.category-name').val(response.categoryName);
+                    clonedDiv.find('.category-name').val(escapeHtml(response.categoryName));
                     clonedDiv.find('.hidden-category-id').val(response.categoryId);
                     
                     clonedDiv.modal({
