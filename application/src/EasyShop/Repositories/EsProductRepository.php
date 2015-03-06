@@ -1224,7 +1224,7 @@ class EsProductRepository extends EntityRepository
     }
 
     /**
-     * Get non-catgegorized product ids
+     * Get product ids that do not belong to any member category
      *
      * @param integer $memberId
      * @return integer[]
