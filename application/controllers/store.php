@@ -433,7 +433,6 @@ class Store extends MY_Controller
         $parentCategories = $categoryManager->getUserCategories($memberId);
 
         $categoryProductCount = [];
-        $totalProductCount = 0; 
 
         foreach( $parentCategories as $idCat => $categoryProperties ){ 
 
@@ -443,9 +442,12 @@ class Store extends MY_Controller
                 $categoryIdCollection = [$categoryProperties['memberCategoryId']];
                 $isCustom = true;
             }
- 
-            $result = $categoryManager->getProductsWithinCategory($memberId, $categoryIdCollection, $isCustom, $prodLimit);
-
+            $result = $categoryManager->getProductsWithinCategory(
+                                            $memberId, 
+                                            $categoryIdCollection, 
+                                            $isCustom, 
+                                            $prodLimit
+                                        );
             if( (int)$result['filtered_product_count'] === 0 && 
                 (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_NONSEARCH_TYPE 
             ){
@@ -455,7 +457,6 @@ class Store extends MY_Controller
 
             $parentCategories[$idCat]['products'] = $result['products'];
             $parentCategories[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
-            $totalProductCount += count($result['products']);
             $parentCategories[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
             $categoryProductCount[$idCat] = count($result['products']);
             $paginationData = [
@@ -474,10 +475,22 @@ class Store extends MY_Controller
 
             $parentCategories[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
+        
 
-        $returnData['totalProductCount'] = $totalProductCount;
+            
+            
+            
+            
+            
+   
+        
+        
+        
+        
+        
+    
         $returnData['parentCategory'] = $parentCategories;
-  
+ 
         return $returnData;
     }
 
@@ -1034,7 +1047,7 @@ class Store extends MY_Controller
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
         $isCount = intval($this->input->get('count')) === 1;
-        $isCustom = $this->input->get('isCustom') ? true : false;
+        $isCustom = $this->input->get('isCustom') === 'true' ? true : false;
         $condition = $this->input->get('condition') !== "" ? $this->lang->line('product_condition')[$this->input->get('condition')] : "";
         $lprice = $this->input->get('lowerPrice') !== "" ? floatval($this->input->get('lowerPrice')) : "";
         $uprice = $this->input->get('upperPrice') !== "" ? floatval($this->input->get('upperPrice')) : "";
