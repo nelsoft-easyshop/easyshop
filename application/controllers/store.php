@@ -430,12 +430,12 @@ class Store extends MY_Controller
         $categoryManager = $this->serviceContainer['category_manager'];
         $prodLimit = $this->vendorProdPerPage;
 
-        $parentCat = $categoryManager->getUserCategories($memberId);
+        $parentCategories = $categoryManager->getUserCategories($memberId);
 
-        $categoryProductCount = array();
+        $categoryProductCount = [];
         $totalProductCount = 0; 
 
-        foreach( $parentCat as $idCat => $categoryProperties ){ 
+        foreach( $parentCategories as $idCat => $categoryProperties ){ 
 
             $categoryIdCollection = $categoryProperties['child_cat'];
             $isCustom = false;
@@ -449,14 +449,14 @@ class Store extends MY_Controller
             if( (int)$result['filtered_product_count'] === 0 && 
                 (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_NONSEARCH_TYPE 
             ){
-                unset($parentCat[$idCat]);
+                unset($parentCategories[$idCat]);
                 continue;
             }
 
-            $parentCat[$idCat]['products'] = $result['products'];
-            $parentCat[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
+            $parentCategories[$idCat]['products'] = $result['products'];
+            $parentCategories[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $totalProductCount += count($result['products']);
-            $parentCat[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
+            $parentCategories[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
             $categoryProductCount[$idCat] = count($result['products']);
             
             // Generate pagination view
@@ -464,21 +464,21 @@ class Store extends MY_Controller
                 'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage)
                 ,'isHyperLink' => false
             );
-            $parentCat[$idCat]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+            $parentCategories[$idCat]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
 
             $view = array(
-                'arrCat' => array(
+                'arrCat' => [
                     'products'=>$result['products'],
                     'page' => 1,
-                    'pagination' => $parentCat[$idCat]['pagination'],
-                )
+                    'pagination' => $parentCategories[$idCat]['pagination'],
+                ]
             );
 
-            $parentCat[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+            $parentCategories[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
         }
 
         $returnData['totalProductCount'] = $totalProductCount;
-        $returnData['parentCategory'] = $parentCat;
+        $returnData['parentCategory'] = $parentCategories;
   
         return $returnData;
     }
