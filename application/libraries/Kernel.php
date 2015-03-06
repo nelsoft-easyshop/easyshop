@@ -63,6 +63,7 @@ class Kernel
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
+        $config->addCustomStringFunction('BINARY', 'EasyShop\Doctrine\Query\MySql\Binary');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
