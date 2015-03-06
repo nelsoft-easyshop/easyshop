@@ -12,9 +12,6 @@ class Notification extends MY_Controller
     {
         parent::__construct();
 
-        //Making response json type
-        header('Content-type: application/json');
-
         //Load service 
         $this->em = $this->serviceContainer['entity_manager'];
     }
@@ -25,25 +22,68 @@ class Notification extends MY_Controller
      */
     public function addDeviceToken()
     {
-        $deviceToken = trim($this->input->post('deviceToken'));
-        $apiType = trim($this->input->post('isIOS')) === "true" ? EsApiType::TYPE_IOS 
-                                                                : EsApiType::TYPE_ANDROID; 
+        header('Content-type: application/json');
+        $jwtContainer = $this->serviceContainer['json_web_token'];
+        $jwt = trim($this->input->post('jwt'));
+        $isSuccess = false;
+        $this->load->config('mobile_api', true); 
+        $mobileApiConfig = strtolower(ENVIRONMENT) === 'production'
+                           ? $this->config->config['mobile_api']['production']
+                           : $this->config->config['mobile_api']['development']; 
 
-        $token = $this->em->getRepository('EasyShop\Entities\EsDeviceToken')
-                          ->findOneBy(['deviceToken' => $deviceToken]);
- 
-        if(!$token && strlen($deviceToken) > 0){ 
-            $newToken = new EsDeviceToken();
-            $newToken->setDeviceToken($deviceToken);
-            $newToken->setIsActive(EsDeviceToken::DEFAULT_ACTIVE);
-            $newToken->setApiType($this->em->find('EasyShop\Entities\EsApiType', $apiType));
-            $newToken->setDateadded(date_create());
-            $this->em->persist($newToken);
-            $this->em->flush();
-        } 
+        try {
+            if($jwt){
+                $jwtObject = $jwtContainer->decode($jwt, $mobileApiConfig['client_secret']);
+                if($jwtObject
+                    && isset($jwtObject->api_type) 
+                    && isset($jwtObject->deviceToken) 
+                    && isset($jwtObject->client_id)){
 
-        //always show 404 after request. not expecting any return after request.
-        show_404();
+                    if($jwtObject->client_id === $mobileApiConfig['client_id']){
+                        $apiType = $this->em->getRepository('EasyShop\Entities\EsApiType')
+                                            ->findOneBy(['apiType' => $jwtObject->api_type]);
+
+                        if($apiType){
+                            $isTokenSupported = $this->supportDeviceToken($jwtObject->deviceToken, $apiType->getIdApiType());
+                            if($isTokenSupported){
+                                $token = $this->em->getRepository('EasyShop\Entities\EsDeviceToken')
+                                              ->findOneBy(['deviceToken' => $jwtObject->deviceToken]);
+                                if(!$token){
+                                    $newToken = new EsDeviceToken();
+                                    $newToken->setDeviceToken($jwtObject->deviceToken);
+                                    $newToken->setIsActive(EsDeviceToken::DEFAULT_ACTIVE);
+                                    $newToken->setApiType($apiType);
+                                    $newToken->setDateadded(date_create());
+                                    $this->em->persist($newToken);
+                                    $this->em->flush();
+                                }
+                                $isSuccess = true;
+                            }
+                        }
+                    }
+                } 
+            }
+        }
+        catch (Exception $e) {
+            $isSuccess = false;
+        }
+
+        echo json_encode(['isSuccess' => $isSuccess]);
+    }
+
+    /**
+     * Validate of device token is valid
+     * @param  string  $token 
+     * @param  integer $apiType
+     * @return boolean
+     */
+    private function supportDeviceToken($token, $apiType){
+        if($apiType === EsApiType::TYPE_IOS){
+            return (ctype_xdigit($token) && 64 === strlen($token));
+        }
+        elseif($apiType === EsApiType::TYPE_ANDROID){
+            return (bool) preg_match('/^[0-9a-zA-Z\-\_]+$/i', $token);
+        }
     }
 }
 
