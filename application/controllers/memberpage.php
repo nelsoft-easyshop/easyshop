@@ -1958,7 +1958,7 @@ class Memberpage extends MY_Controller
     {
         $memberId = $this->session->userdata('member_id');
         $entityManager = $this->serviceContainer['entity_manager'];
-        $member = $entityManager->find('EasyShop\Entities\EsMember', $memberId)
+        $member = $entityManager->find('EasyShop\Entities\EsMember', $memberId);
                  
         $response = [];
         if($member){
