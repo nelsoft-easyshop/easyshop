@@ -37,7 +37,7 @@ body{
 
 .old-page-container {
     margin: 0 auto;
-    max-width: 980px;
+    width: 980px;
 }
 
 .clear {
@@ -958,9 +958,13 @@ a.msgs_link:hover {
 
 /*** search box ***/
 
-
+.old-page-container .prob_search_box,
 .prob_search_box {
     float: right;
+}
+
+.old-page-container .search_box {
+    width: 74%;
 }
 
 /*.prob_search_box input {
