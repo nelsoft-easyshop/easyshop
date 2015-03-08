@@ -2303,8 +2303,14 @@ class Memberpage extends MY_Controller
                 $response['products'][$key]['productName'] = $product->getName();
                 $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                   ->getDefaultImage($productId);
-                $response['products'][$key]['imageFilename'] = $image->getFilename();
-                $response['products'][$key]['imageDirectory'] = $image->getDirectory();
+                $imageFilename = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_FILE;
+                $imageDirectory = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_DIRECTORY;
+                if($image){
+                    $imageFilename = $image->getFilename();
+                    $imageDirectory = $image->getDirectory();
+                }                                    
+                $response['products'][$key]['imageFilename'] = $imageFilename;
+                $response['products'][$key]['imageDirectory'] = $imageDirectory;
                 $response['products'][$key]['id'] = $productId;
             }
     
@@ -2353,11 +2359,17 @@ class Memberpage extends MY_Controller
             $productId = $product->getIdProduct();
             $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                               ->getDefaultImage($productId);
+            $imageFilename = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_FILE;
+            $imageDirectory = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_DIRECTORY;
+            if($image){
+                $imageFilename = $image->getFilename();
+                $imageDirectory = $image->getDirectory();
+            }              
             $response['products'][] = [
                 'productName' => $product->getName(),
                 'id' => $productId,
-                'imageFilename' => $image->getFilename(),
-                'imageDirectory' => $image->getDirectory(),
+                'imageFilename' => $imageFilename,
+                'imageDirectory' => $imageDirectory,
             ];
         }
         
