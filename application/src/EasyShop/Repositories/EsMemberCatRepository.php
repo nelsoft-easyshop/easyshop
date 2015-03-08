@@ -179,5 +179,34 @@ class EsMemberCatRepository extends EntityRepository
         return (int)$results['maxSortOrder'];                  
     }
 
+    /**
+     * Gets the number of custom categories of a user
+     * 
+     * @param integer $memberId
+     * @param boolean $isIncludeDeleted
+     * @return integer
+     */
+    public function getNumberOfCustomCategories($memberId, $isIncludeDeleted = false)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('numberOfCategories','numberOfCategories');
+        $sql = "SELECT 
+                    COUNT(id_memcat) as numberOfCategories
+                FROM 
+                    es_member_cat
+                WHERE
+                    member_id = :member_id
+                ";
+        if(!$isIncludeDeleted){
+            $sql .= " AND is_delete = :categoryDeleteStatus ";
+        }
+        $query = $em->createNativeQuery($sql,$rsm)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('categoryDeleteStatus', EsMemberCat::ACTIVE);
+        $result = $query->getResult()[0];
+
+        return (int)$result['numberOfCategories'];
+    }
   
 }

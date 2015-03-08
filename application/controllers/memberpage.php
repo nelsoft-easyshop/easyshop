@@ -2436,8 +2436,8 @@ class Memberpage extends MY_Controller
      */
     public function deleteCustomCategory()
     {
-        $customCategoryIds[] = $this->input->post("categoryIds") ? 
-                               json_decode($this->input->post("categoryIds")) : [];
+        $customCategoryIds = $this->input->post("categoryIds") ? 
+                             json_decode($this->input->post("categoryIds")) : [];
         $memberId = $this->session->userdata('member_id');
         $response = false;
         if($memberId){
