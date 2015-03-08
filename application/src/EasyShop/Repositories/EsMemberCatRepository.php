@@ -201,9 +201,6 @@ class EsMemberCatRepository extends EntityRepository
         if(!$isIncludeDeleted){
             $sql .= " AND is_delete = :categoryDeleteStatus ";
         }
-        
-      
-
         $query = $em->createNativeQuery($sql,$rsm)
                     ->setParameter('member_id', $memberId)
                     ->setParameter('categoryDeleteStatus', EsMemberCat::ACTIVE);
