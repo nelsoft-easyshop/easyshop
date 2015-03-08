@@ -292,10 +292,10 @@ class CategoryManager
     {
         $vendorCategories = [];
         
-        $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                     ->getCustomCategoriesArray($memberId);    
+        $numberOfAllCustomCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                            ->getNumberOfCustomCategories($memberId, true);  
         
-        if(empty($memberCategories)){
+        if($numberOfAllCustomCategories === 0){
             $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
                                             ->getNestedSetCategoryCount();
             if((int)$categoryNestedSetCount === 0){
@@ -333,6 +333,8 @@ class CategoryManager
             }   
         }
         else{
+            $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getCustomCategoriesArray($memberId);    
             $highestSortOrder = 0;
             foreach( $memberCategories as $memberCategory ){
                 $index = 'custom-'.$memberCategory['id_memcat'];
