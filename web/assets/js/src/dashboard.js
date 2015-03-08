@@ -2742,7 +2742,7 @@
                         var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
                                             '<a href="javascript:void(0)" class="icon-move icon-move-to-custom-category pull-right" ></a>'+
                                             '<div class="category-item-image" style="background: #fff url('+image+')center no-repeat; background-size: 90%;" ></div>'+
-                                            '<div class="category-item-name" data-id="'+product.id+'">'+product.productName+'</div>'+
+                                            '<div class="category-item-name" data-id="'+product.id+'">'+escapeHtml(product.productName)+'</div>'+
                                         '</li>';
                         listHtmlCollection.push(listHtml);
                     });
