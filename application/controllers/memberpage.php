@@ -1963,7 +1963,7 @@ class Memberpage extends MY_Controller
         $response = [];
         if($member){
             $numberOfCustomCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                                      ->getCountCustomCategories($memberId);
+                                                      ->getNumberOfCustomCategories($memberId, true);
             /**
              * If there are no memberCategories yet, save default categories as
              * new custom categories

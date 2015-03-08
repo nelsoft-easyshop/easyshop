@@ -121,36 +121,7 @@ class EsMemberCatRepository extends EntityRepository
                                          ->getResult();                      
         return $customCategories;
     }
-    
-    /**
-     *  Count categories of memberId in object form
-     *
-     *  @param integer $memberId
-     *  @param integer[] $categoryIdFilters
-     *  @return EasyShop\Entities\EsMemberCat[]
-     */
-    public function getCountCustomCategories($memberId, $categoryIdFilters = [])
-    {   
-        $em = $this->_em;
-        $rsm = new ResultSetMapping();
-        $rsm->addScalarResult('numberOfCategories','numberOfCategories');
-        $sql = 'SELECT 
-                    COUNT(id_memcat) as numberOfCategories
-                FROM 
-                    es_member_cat
-                WHERE
-                    member_id = :member_id AND 
-                    is_delete != :deleted
-                ';
 
-        $query = $em->createNativeQuery($sql,$rsm)
-                    ->setParameter('member_id', $memberId)
-                    ->setParameter('deleted', \EasyShop\Entities\EsMemberCat::DELETED );
-        $results = $query->getResult()[0];
-
-        return $results['numberOfCategories'];                  
-
-    }
     
     /**
      * Returns the highest sort order among a user's active categories
