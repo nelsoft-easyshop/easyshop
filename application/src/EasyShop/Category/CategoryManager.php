@@ -348,19 +348,7 @@ class CategoryManager
                 if($vendorCategories[$index]['sortOrder']  > $highestSortOrder){
                     $highestSortOrder = $vendorCategories[$index]['sortOrder'];
                 }
-            }            
-            $totalCountNonCategorizedProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                                     ->getCountNonCategorizedProducts($memberId);
-            if($totalCountNonCategorizedProducts > 0){
-                $index = 'custom-noncategorized';
-                $vendorCategories[$index]['name'] = 'Others';
-                $vendorCategories[$index]['child_cat'] = [];
-                $vendorCategories[$index]['products'] = [];
-                $vendorCategories[$index]['categoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
-                $vendorCategories[$index]['memberCategoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
-                $vendorCategories[$index]['sortOrder'] = $highestSortOrder;
-                $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-            }
+            }                      
         }
 
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
