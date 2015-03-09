@@ -1749,7 +1749,6 @@ class Payment extends MY_Controller{
         $paymentService = $this->serviceContainer['payment_service'];
         $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
 
-        log_message('error', 'PESOPAY PARAMS'.json_encode($_POST));
         $params['txnId'] = $this->input->post('Ref'); 
         $params['successCode'] = $this->input->post('successcode'); 
         $paymentService->postBack($paymentMethods, null, null, $params);
