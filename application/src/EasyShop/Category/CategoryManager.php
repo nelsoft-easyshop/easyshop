@@ -403,11 +403,18 @@ class CategoryManager
         $errorMessage = "";
         $actionResult = false;
         $newCategoryId = 0;
-   
-        if(empty($categoryName)){
-            $errorMessage = "Category name cannot be empty";
-        }
-        else{
+
+        $rules = $this->formValidation->getRules('custom_category');
+        $form = $this->formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                     ->setMethod('POST')
+                     ->add('name', 'text', array('constraints' => $rules['name']))
+                     ->getForm();
+        
+        $form->submit([ 
+            'name' => $categoryName,
+        ]);
+        
+        if ($form->isValid()) {
             $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                             ->isCustomCategoryNameAvailable($categoryName,$memberId);
             if(!$isCategoryNameAvailable) {
@@ -451,6 +458,9 @@ class CategoryManager
                     $errorMessage = "Database Error";
                 }
             }
+        }
+        else{
+            $errorMessage = reset($this->formErrorHelper->getFormErrors($form));
         }
 
         return [
