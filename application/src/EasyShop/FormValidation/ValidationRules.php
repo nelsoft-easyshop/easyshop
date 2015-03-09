@@ -166,20 +166,23 @@ class ValidationRules
                     ),                 
             ),
             'store_setup' => [
-                    'shop_name' =>  [new Assert\NotBlank(),
-                                     new Assert\Length(['min' => '5',
-                                                       'max' => '60']),],
+                    'shop_name' =>  [
+                        new Assert\NotBlank(),
+                        new Assert\Length(['min' => '5',
+                                           'max' => '60']),
+                        new CustomAssert\IsAlphanumericSpace(),
+                    ],
                     'shop_slug' => [
-                                new Assert\NotBlank(),
-                                new CustomAssert\ContainsAlphanumericUnderscore(),
-                                new Assert\Length(['min' => '3',
-                                                   'max' => '25']),
-                                ],
+                        new Assert\NotBlank(),
+                        new CustomAssert\ContainsAlphanumericUnderscore(),
+                        new Assert\Length(['min' => '3',
+                                            'max' => '25']),
+                    ],
                     'category_name' => [
-                                new Assert\NotBlank(),
-                                new Assert\Length(['min' => '3',
-                                                   'max' => '50']),
-                                ],
+                        new Assert\NotBlank(),
+                        new Assert\Length(['min' => '3',
+                                            'max' => '50']),
+                    ],
             ],
             'payment_account' => [
                     'account-bank-id' => [
