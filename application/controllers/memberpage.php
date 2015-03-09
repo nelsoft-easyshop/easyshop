@@ -1963,7 +1963,7 @@ class Memberpage extends MY_Controller
         $response = [];
         if($member){
             $numberOfCustomCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                                      ->getCountCustomCategories($memberId);
+                                                      ->getNumberOfCustomCategories($memberId, true);
             /**
              * If there are no memberCategories yet, save default categories as
              * new custom categories
@@ -2303,8 +2303,14 @@ class Memberpage extends MY_Controller
                 $response['products'][$key]['productName'] = $product->getName();
                 $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                   ->getDefaultImage($productId);
-                $response['products'][$key]['imageFilename'] = $image->getFilename();
-                $response['products'][$key]['imageDirectory'] = $image->getDirectory();
+                $imageFilename = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_FILE;
+                $imageDirectory = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_DIRECTORY;
+                if($image){
+                    $imageFilename = $image->getFilename();
+                    $imageDirectory = $image->getDirectory();
+                }                                    
+                $response['products'][$key]['imageFilename'] = $imageFilename;
+                $response['products'][$key]['imageDirectory'] = $imageDirectory;
                 $response['products'][$key]['id'] = $productId;
             }
     
@@ -2353,11 +2359,17 @@ class Memberpage extends MY_Controller
             $productId = $product->getIdProduct();
             $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                               ->getDefaultImage($productId);
+            $imageFilename = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_FILE;
+            $imageDirectory = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_DIRECTORY;
+            if($image){
+                $imageFilename = $image->getFilename();
+                $imageDirectory = $image->getDirectory();
+            }              
             $response['products'][] = [
                 'productName' => $product->getName(),
                 'id' => $productId,
-                'imageFilename' => $image->getFilename(),
-                'imageDirectory' => $image->getDirectory(),
+                'imageFilename' => $imageFilename,
+                'imageDirectory' => $imageDirectory,
             ];
         }
         
@@ -2424,8 +2436,8 @@ class Memberpage extends MY_Controller
      */
     public function deleteCustomCategory()
     {
-        $customCategoryIds[] = $this->input->post("categoryIds") ? 
-                               json_decode($this->input->post("categoryIds")) : [];
+        $customCategoryIds = $this->input->post("categoryIds") ? 
+                             json_decode($this->input->post("categoryIds")) : [];
         $memberId = $this->session->userdata('member_id');
         $response = false;
         if($memberId){

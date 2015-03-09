@@ -30,6 +30,13 @@ class CategoryManager
      * @var integer
      */
     const CATEGORY_NONSEARCH_TYPE = 1;
+    
+    /**
+     * Category ID placeholder for non existent EsCat or EsMemberCat
+     *
+     * @var integer
+     */
+    const NON_EXISTENT_CATEGORYID_PLACEHOLDER = 0;
 
     
     /**
@@ -155,7 +162,8 @@ class CategoryManager
     
     
     /**
-     *  Fetch products under category
+     *  Fetch products under category. If array of category Ids is empty all 
+     *  non categorized products are returned.
      *
      *  @param integer $memberId
      *  @param integer[] $arrCatId 
@@ -169,46 +177,58 @@ class CategoryManager
      *
      *  @return array - filter count of products and array of product objects
      */
-    public function getProductsWithinCategory($memberId, $arrCatId, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = array("clickcount"=>"DESC"), $condition = "", $lprice = "", $uprice ="")
+    public function getProductsWithinCategory($memberId, $arrCatId, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ "clickcount" => "DESC" ], $condition = "", $lprice = "", $uprice ="")
     {
+        $getAllNonCategorized = false;
+        if(empty($arrCatId)){
+            $getAllNonCategorized = true;
+        }
+
         $categoryProducts = [];
         $currentPage = (int) $page <= 0 ? 0 : $page-1;
-        $page = (int) $page <= 0 ? 0 : ($page-1) * $productLimit;
+        $offset = (int) $page <= 0 ? 0 : ($page-1) * $productLimit;
         $condition = strval($condition);
 
         $lprice = str_replace(",", "", (string)$lprice);
         $uprice = str_replace(",", "", (string)$uprice);
 
         if($condition === "" && $lprice === "" && $uprice === ""){
-            if($isCustom){
-                /**
-                 * Do custom stuff here
-                 */
-                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                               ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
-                $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                         ->countCustomCategoryProducts($memberId, $arrCatId);                            
+            if($getAllNonCategorized){
+                $categoryProductIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                               ->getNonCategorizedProductIds($memberId, $productLimit, $offset, $orderBy);
+                $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                         ->getCountNonCategorizedProducts($memberId);
             }
             else{
-                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                               ->getDefaultCategorizedProducts($memberId, $arrCatId, $productLimit, $page, $orderBy);
-                $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                         ->countDefaultCategorizedProducts($memberId, $arrCatId);    
+                if($isCustom){
+                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                                   ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
+                    $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                             ->countCustomCategoryProducts($memberId, $arrCatId);                            
+                }
+                else{
+                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                                   ->getDefaultCategorizedProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
+                    $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                             ->countDefaultCategorizedProducts($memberId, $arrCatId);    
+                }
             }
             $isFiltered = false;    
         }
         else{
-              
-            if($isCustom){
-                /**
-                 * Do other custom stuff
-                 */
-                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                               ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
+            if($getAllNonCategorized){
+                $categoryProductIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                               ->getNonCategorizedProductIds($memberId, PHP_INT_MAX);
             }
             else{
-                $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                               ->getAllDefaultCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
+                if($isCustom){
+                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
+                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
+                }
+                else{
+                    $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
+                                                   ->getAllDefaultCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
+                }
             }
 
             if($lprice !== "" || $uprice !== "") {
@@ -219,7 +239,6 @@ class CategoryManager
                     }
                 }   
             }             
-
             $isFiltered = true;  
         }
 
@@ -255,7 +274,7 @@ class CategoryManager
 
         $result = [
             'products' => $categoryProducts,
-           'filtered_product_count' => $productCount,
+            'filtered_product_count' => $productCount,
         ];
 
         return $result;
@@ -273,10 +292,10 @@ class CategoryManager
     {
         $vendorCategories = [];
         
-        $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                     ->getCustomCategoriesArray($memberId);    
+        $numberOfAllCustomCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                            ->getNumberOfCustomCategories($memberId, true);  
         
-        if(empty($memberCategories)){
+        if($numberOfAllCustomCategories === 0){
             $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
                                             ->getNestedSetCategoryCount();
             if((int)$categoryNestedSetCount === 0){
@@ -304,33 +323,43 @@ class CategoryManager
                     $vendorCategories[$index]['name'] = $categoryName;
                     $vendorCategories[$index]['child_cat'] = [ $parentId ];
                     $vendorCategories[$index]['products'] = [];
-                    $vendorCategories[$index]['product_count'] = 0;
-                    $vendorCategories[$index]['isActive'] = false;
                     $vendorCategories[$index]['categoryId'] = $parentId;
-                    $vendorCategories[$index]['memberCategoryId'] = 0;       
+                    $vendorCategories[$index]['memberCategoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;       
                     $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-                    $vendorCategories[$index]['is_delete'] = 0;
                 }              
                 if(!in_array($rawVendorCategory['cat_id'], $vendorCategories[$index]['child_cat'])){
                     $vendorCategories[$index]['child_cat'][] = $rawVendorCategory['cat_id'];
                 }
-                $vendorCategories[$index]['product_count'] += $rawVendorCategory['prd_count'];
             }   
         }
         else{
+            $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getCustomCategoriesArray($memberId);    
+            $highestSortOrder = 0;
             foreach( $memberCategories as $memberCategory ){
                 $index = 'custom-'.$memberCategory['id_memcat'];
                 $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
                 $vendorCategories[$index]['child_cat'] = [ $memberCategory['id_memcat'] ];
                 $vendorCategories[$index]['products'] = [];
-                $vendorCategories[$index]['product_count'] = $memberCategory['product_count'];
-                $vendorCategories[$index]['isActive'] = false;
-                $vendorCategories[$index]['categoryId'] = 0;
+                $vendorCategories[$index]['categoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
                 $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
                 $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
                 $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-                $vendorCategories[$index]['is_delete'] = $memberCategory['is_delete'];
-                $cleanNameMemberCategories[] = $this->stringUtility->cleanString($memberCategory['cat_name']);
+                if($vendorCategories[$index]['sortOrder']  > $highestSortOrder){
+                    $highestSortOrder = $vendorCategories[$index]['sortOrder'];
+                }
+            }            
+            $totalCountNonCategorizedProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                     ->getCountNonCategorizedProducts($memberId);
+            if($totalCountNonCategorizedProducts > 0){
+                $index = 'custom-noncategorized';
+                $vendorCategories[$index]['name'] = 'Others';
+                $vendorCategories[$index]['child_cat'] = [];
+                $vendorCategories[$index]['products'] = [];
+                $vendorCategories[$index]['categoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
+                $vendorCategories[$index]['memberCategoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
+                $vendorCategories[$index]['sortOrder'] = $highestSortOrder;
+                $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
             }
         }
 

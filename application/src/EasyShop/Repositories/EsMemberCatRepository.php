@@ -79,13 +79,16 @@ class EsMemberCatRepository extends EntityRepository
                 LEFT JOIN es_product
                     ON es_product.is_draft = :nonDraft AND es_product.is_delete = :active
                     AND es_product.id_product = es_member_prodcat.product_id
-                WHERE es_member_cat.member_id = :member_id
+                WHERE
+                    es_member_cat.member_id = :member_id
+                    AND es_member_cat.is_delete = :categoryDeleteStatus
                 GROUP BY es_member_cat.id_memcat
                 ORDER BY es_member_cat.id_memcat DESC
                 ';
 
         $query = $em->createNativeQuery($sql,$rsm)
                     ->setParameter('member_id', $memberId)
+                    ->setParameter('categoryDeleteStatus', EsMemberCat::ACTIVE)
                     ->setParameter('nonDraft', EsProduct::ACTIVE )
                     ->setParameter('active', EsProduct::ACTIVE );
 
@@ -118,36 +121,7 @@ class EsMemberCatRepository extends EntityRepository
                                          ->getResult();                      
         return $customCategories;
     }
-    
-    /**
-     *  Count categories of memberId in object form
-     *
-     *  @param integer $memberId
-     *  @param integer[] $categoryIdFilters
-     *  @return EasyShop\Entities\EsMemberCat[]
-     */
-    public function getCountCustomCategories($memberId, $categoryIdFilters = [])
-    {   
-        $em = $this->_em;
-        $rsm = new ResultSetMapping();
-        $rsm->addScalarResult('numberOfCategories','numberOfCategories');
-        $sql = 'SELECT 
-                    COUNT(id_memcat) as numberOfCategories
-                FROM 
-                    es_member_cat
-                WHERE
-                    member_id = :member_id AND 
-                    is_delete != :deleted
-                ';
 
-        $query = $em->createNativeQuery($sql,$rsm)
-                    ->setParameter('member_id', $memberId)
-                    ->setParameter('deleted', \EasyShop\Entities\EsMemberCat::DELETED );
-        $results = $query->getResult()[0];
-
-        return $results['numberOfCategories'];                  
-
-    }
     
     /**
      * Returns the highest sort order among a user's active categories
@@ -176,5 +150,34 @@ class EsMemberCatRepository extends EntityRepository
         return (int)$results['maxSortOrder'];                  
     }
 
+    /**
+     * Gets the number of custom categories of a user
+     * 
+     * @param integer $memberId
+     * @param boolean $isIncludeDeleted
+     * @return integer
+     */
+    public function getNumberOfCustomCategories($memberId, $isIncludeDeleted = false)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('numberOfCategories','numberOfCategories');
+        $sql = "SELECT 
+                    COUNT(id_memcat) as numberOfCategories
+                FROM 
+                    es_member_cat
+                WHERE
+                    member_id = :member_id
+                ";
+        if(!$isIncludeDeleted){
+            $sql .= " AND is_delete = :categoryDeleteStatus ";
+        }
+        $query = $em->createNativeQuery($sql,$rsm)
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('categoryDeleteStatus', EsMemberCat::ACTIVE);
+        $result = $query->getResult()[0];
+
+        return (int)$result['numberOfCategories'];
+    }
   
 }
