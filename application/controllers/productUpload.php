@@ -1534,7 +1534,7 @@ class productUpload extends MY_Controller
                                                          ->getNumberOfCustomCategories($memberId, true);
                         /**
                          * If there are no memberCategories yet, save default categories as
-                         * new custom categories and the migrate the product to its default
+                         * new custom categories and then migrate the product to its default
                          * category
                          */
                         if((int)$numberOfCustomCategories === 0){
