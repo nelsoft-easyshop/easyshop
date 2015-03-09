@@ -1528,6 +1528,36 @@ class productUpload extends MY_Controller
                         $product->setIsMeetup($isMeetup);
                         $product->setShipsWithinDays($shipWithinDays);
                         $product->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
+                        
+                        
+                        
+                        $memberProducts = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                                   ->findBy(['product' => $productId]);
+                        if(empty($memberProducts)){
+                            $categoryId = $product->getCat()->getIdCat();
+                            $topParentCategoryName = $this->categoryManager
+                                                        ->getTopParentCategory($categoryId)
+                                                        ->getName();
+                            $cleanedCategoryName = strtolower($this->stringUtility->cleanString($topParentCategoryName));
+                            $memberCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
+                                                              ->getCustomCategoriesObject($memberId);     
+                            foreach($memberCategories as $memberCategory){
+                                $cleanedName = strtolower($this->stringUtility->cleanString($memberCategory->getCatName()));
+                                if($cleanedName === $cleanedCategoryName){
+                                    $newMemberProduct = new EsMemberProdcat();
+                                    $newMemberProduct->setMemcat($memberCategory);
+                                    $newMemberProduct->setCreatedDate(date_create(date("Y-m-d H:i:s")));
+                                    $newMemberProduct->setProduct($product);
+                                    break;
+                                }
+                            }
+                            
+                        }
+                       
+                        
+                        
+                        
+  
                         $this->em->flush();
                         $serverResponse['result'] = 'success';
                         $serverResponse['error'] = '';
