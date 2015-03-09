@@ -1984,11 +1984,11 @@ class Memberpage extends MY_Controller
                                                 $memberCategory->getIdMemcat()
                                             );
             }
-            $this->serviceContainer['sort_utility']->stableUasort($resultCategories, function($sortArgumentA, $sortArgumentB) {
+
+            usort($resultCategories, function($sortArgumentA, $sortArgumentB) {
                 return $sortArgumentA->order - $sortArgumentB->order;
             });
-
-            $response['storeCategories'] = $resultCategories;;
+            $response['storeCategories'] = $resultCategories;
         }
 
         echo json_encode($response);
