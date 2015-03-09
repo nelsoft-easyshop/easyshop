@@ -1534,20 +1534,24 @@ class productUpload extends MY_Controller
                         $memberProducts = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
                                                    ->findBy(['product' => $productId]);
                         if(empty($memberProducts)){
+                            $stringUtility = $this->serviceContainer['string_utility'];
                             $categoryId = $product->getCat()->getIdCat();
-                            $topParentCategoryName = $this->categoryManager
-                                                        ->getTopParentCategory($categoryId)
-                                                        ->getName();
-                            $cleanedCategoryName = strtolower($this->stringUtility->cleanString($topParentCategoryName));
-                            $memberCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                                              ->getCustomCategoriesObject($memberId);     
+                            $topParentCategoryName = $this->serviceContainer['category_manager']
+                                                          ->getTopParentCategory($categoryId)
+                                                          ->getName();
+                            $cleanedCategoryName = $stringUtility->cleanString($topParentCategoryName);
+                            $cleanedCategoryName = strtolower($cleanedCategoryName);
+                            $memberCategories = $this->serviceContainer['entity_manager']
+                                                     ->getRepository('EasyShop\Entities\EsMemberCat')
+                                                     ->getCustomCategoriesObject($memberId);     
                             foreach($memberCategories as $memberCategory){
-                                $cleanedName = strtolower($this->stringUtility->cleanString($memberCategory->getCatName()));
+                                $cleanedName = strtolower($stringUtility->cleanString($memberCategory->getCatName()));
                                 if($cleanedName === $cleanedCategoryName){
-                                    $newMemberProduct = new EsMemberProdcat();
+                                    $newMemberProduct = new EasyShop\Entities\EsMemberProdcat();
                                     $newMemberProduct->setMemcat($memberCategory);
                                     $newMemberProduct->setCreatedDate(date_create(date("Y-m-d H:i:s")));
                                     $newMemberProduct->setProduct($product);
+                                    $this->em->persist($newMemberProduct);
                                     break;
                                 }
                             }
