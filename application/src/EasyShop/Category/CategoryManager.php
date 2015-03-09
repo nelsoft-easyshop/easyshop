@@ -365,7 +365,6 @@ class CategoryManager
         else{
             $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                      ->getCustomCategoriesArray($memberId);    
-            $highestSortOrder = 0;
             foreach( $memberCategories as $memberCategory ){
                 $index = 'custom-'.$memberCategory['id_memcat'];
                 $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
@@ -375,9 +374,6 @@ class CategoryManager
                 $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
                 $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
                 $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-                if($vendorCategories[$index]['sortOrder']  > $highestSortOrder){
-                    $highestSortOrder = $vendorCategories[$index]['sortOrder'];
-                }
             }                      
         }
 
