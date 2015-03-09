@@ -35,7 +35,8 @@ class IsMobileUniqueValidator extends ConstraintValidator
             $queryBuilder->andWhere('b.idMember != :member')
                          ->setParameter('member', $memberId);
         }
-        $userMobile =  $queryBuilder->getQuery()
+        $userMobile =  $queryBuilder->setMaxResults(1)
+                                    ->getQuery()
                                     ->getOneOrNullResult();
 
         if($userMobile){

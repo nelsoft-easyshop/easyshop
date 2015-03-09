@@ -135,6 +135,9 @@
                     $(".availability-status").html("Out of Stock").removeClass("in-stock").addClass("out-of-stock");
                 }
                 else{
+                    if($combinationQuantity >= 9999){
+                        $combinationQuantity = 9999
+                    }
                     for (var i = 1 ; i <= $combinationQuantity; i++) { 
                         $appendString += '<option value="'+i+'">'+ i +'</option>';
                     };
