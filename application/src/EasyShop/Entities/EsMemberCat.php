@@ -29,7 +29,7 @@ class EsMemberCat
     /**
      * @var string
      *
-     * @ORM\Column(name="cat_name", type="string", length=45, nullable=true)
+     * @ORM\Column(name="cat_name", type="string", length=255, nullable=true)
      */
     private $catName;
 
