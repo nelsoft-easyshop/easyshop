@@ -550,5 +550,34 @@ class CategoryManager
             return false;
         }
     }
+    
+    /**
+     * Retrieves the top most parent category
+     *
+     * @param integer $categoryId
+     * @return EasyShop\Entities\EsCat
+     */
+    public function getTopParentCategory($categoryId)
+    {
+        $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
+                                       ->getNestedSetCategoryCount();
+        $parentCategoryId = 0;
+        if((int)$categoryNestedSetCount === 0){
+            $ancestor =  $this->em->getRepository('EasyShop\Entities\EsCat')
+                                    ->getParentCategoryRecursive($categoryId);
+            $parentCategoryId = reset($ancestor)['idCat'];
+        }
+        else{
+            $ancestorIds = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                    ->getAncestorsWithNestedSet($categoryId);
+            $parentCategoryId = reset($ancestorIds);
+        }    
+        if(!is_int($parentCategoryId)){
+            $parentCategoryId = $categoryId;
+        }
+        $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $parentCategoryId);
+
+        return $topLevelParent;
+    }
 
 } 
