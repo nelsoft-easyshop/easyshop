@@ -693,7 +693,7 @@ class CategoryManager
                         $highestSortOrder = $memberCategory->getSortOrder();
                     }
                     if($cleanedName === $cleanedCategoryName){
-                        $newMemberProduct = new EasyShop\Entities\EsMemberProdcat();
+                        $newMemberProduct = new \EasyShop\Entities\EsMemberProdcat();
                         $newMemberProduct->setMemcat($memberCategory);
                         $newMemberProduct->setCreatedDate($datetimeToday);
                         $newMemberProduct->setProduct($product);
