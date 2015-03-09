@@ -426,7 +426,20 @@ class Kernel
             $promoManager = $container['promo_manager'];
             $sortUtility = $container['sort_utility'];
             $stringUtility = $container['string_utility'];
-            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager, $promoManager, $sortUtility, $stringUtility);
+            $formFactory = $container['form_factory'];
+            $formValidation = $container['form_validation'];
+            $formErrorHelper = $container['form_error_helper'];
+            return new \EasyShop\Category\CategoryManager(
+                            $configLoader,
+                            $em, 
+                            $productManager, 
+                            $promoManager, 
+                            $sortUtility,
+                            $stringUtility,
+                            $formFactory,
+                            $formValidation,
+                            $formErrorHelper
+                        );
         };
         
         $container['config_loader'] = function ($c) {

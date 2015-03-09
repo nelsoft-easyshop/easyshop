@@ -2121,7 +2121,7 @@
                 }
                 else{
                     var paymentErrorContainer = $('#payment-create-error');
-                    paymentErrorContainer.html(jsonResponse.errors);
+                    paymentErrorContainer.html(escapeHtml(jsonResponse.errors));
                     paymentErrorContainer.show();
                 }
             }
@@ -2275,7 +2275,7 @@
                 }
                 else{
                     var errorContainer = container.find('.update-payment-account-error');
-                    errorContainer.html(jsonResponse.errors);
+                    errorContainer.html(escapeHtml(jsonResponse.errors));
                     errorContainer.css('display', 'block');
                     setTimeout(function(){
                         errorContainer.fadeOut('slow');
@@ -2643,7 +2643,7 @@
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
                     errorDiv.fadeIn().delay(2000).fadeOut();
-                    errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' +jsonData.errorMessage);
+                    errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' + escapeHtml(jsonData.errorMessage));
                 }
             }
         });
@@ -2697,7 +2697,7 @@
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
                     errorDiv.fadeIn().delay(2000).fadeOut();
-                    errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' +jsonData.errorMessage);
+                    errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' + escapeHtml(jsonData.errorMessage));
                 }
             }
         });
