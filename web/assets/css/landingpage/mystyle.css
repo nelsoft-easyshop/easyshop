@@ -18,11 +18,7 @@ body {
     line-height: 70px;
     width: 100%;
     color: #FFFFFF;
-    background: #013a87 url('/assets/images/landingpage/img_header_bg.jpg') no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background: #013a87 url('/assets/images/landingpage/img_header_bg.jpg') no-repeat center top fixed;
     margin:0;
 }
 
