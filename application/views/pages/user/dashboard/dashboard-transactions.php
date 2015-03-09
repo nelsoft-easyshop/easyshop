@@ -142,7 +142,7 @@
                 <div class="on-going-transaction-list-sold-completed list-container">
                     <?PHP if ( (int) $completeSoldTransactionsCount >= 1) : ?>
                     <div class="mrgn-top-20 mrgn-bttm-15 row">
-                        <div class="col-sm-8">
+                        <div class="col-sm-8 transaction-top-btns">
                             <input type="text" class="ui-form-control transaction-search search-transaction-num" data="complete-sold" placeholder="Enter transaction no.">
                             <button class="btn btn-default-3 printTransactions" data-url="/memberpage/printSellTransactions" data-isongoing = "0">
                                 <i class="icon-fax"></i> <span>Print</span>

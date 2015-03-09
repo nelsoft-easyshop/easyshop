@@ -1788,12 +1788,13 @@ class Memberpage extends MY_Controller
         $jsonResponse = ['isSuccessful' => false,
                          'errors' => []];        
                          
-        if($this->input->post('storename')){
+        if($this->input->post()){
             $rules = $formValidation->getRules('store_setup');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
             $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
-            $formData['storename'] = $this->input->post('storename');$form = $formBuild->getForm();
+            $formData['storename'] = $this->input->post('storename');
+            $form = $formBuild->getForm();
             $form->submit($formData);
             
             if($form->isValid()){
@@ -1983,11 +1984,11 @@ class Memberpage extends MY_Controller
                                                 $memberCategory->getIdMemcat()
                                             );
             }
-            $this->serviceContainer['sort_utility']->stableUasort($resultCategories, function($sortArgumentA, $sortArgumentB) {
+
+            usort($resultCategories, function($sortArgumentA, $sortArgumentB) {
                 return $sortArgumentA->order - $sortArgumentB->order;
             });
-
-            $response['storeCategories'] = $resultCategories;;
+            $response['storeCategories'] = $resultCategories;
         }
 
         echo json_encode($response);

@@ -37,7 +37,7 @@ body{
 
 .old-page-container {
     margin: 0 auto;
-    max-width: 980px;
+    width: 980px;
 }
 
 .clear {
@@ -614,6 +614,7 @@ input[type="button"] {
     left: 0 !important;
     margin: auto;
     max-height: 190px;
+    max-width: 500px;
     position: fixed !important;
     right: 0;
     top: 0 !important;
@@ -626,8 +627,9 @@ input[type="button"] {
     z-index: 100102;
 }
 
-.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
-    border-bottom: 1px solid #cecece;
+.error-modal .ui-widget-header {
+    background: #fff;
+    border: none;
 }
 
 .ui-dialog-title {
@@ -638,13 +640,16 @@ input[type="button"] {
     padding-bottom: 8px;
 }
 
-.ui-button.ui-dialog-titlebar-close {
+.error-modal .ui-widget-header .ui-dialog-titlebar-close,
+.error-modal .ui-widget-header .ui-state-hover,
+.error-modal .ui-state-active .ui-icon {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
     border: medium none;
     box-shadow: none;
-    color: #666666;
+    color: #fff;
     cursor: pointer;
     height: 36px;
+    outline: none;
     padding: 0;
     right: 0;
     text-align: center;
@@ -659,7 +664,8 @@ input[type="button"] {
     right: 0;
 }
 
-.ui-dialog-buttonset {
+.error-modal.ui-dialog .ui-dialog-buttonpane  .ui-dialog-buttonset {
+    float: none;
     text-align: center;
 }
 
@@ -673,14 +679,11 @@ input[type="button"] {
 }
 
 .ui-dialog-titlebar-close:before {
-/*    border: 1px solid #6D6D6D;
-    border-radius: 2px;
-    color: #6D6D6D;*/
     background: url(../images/img-close.png) no-repeat center center;
     content: " ";
     display: inline-block;
-    height: 20px;
-    line-height: 20px;
+    height: 36px;
+    line-height: 36px;
     width: 20px;
 }
 
@@ -714,12 +717,12 @@ input[type="button"] {
 
 .ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix {
     border-top: 1px solid #DFDFDF;
-    padding-top: 15px;
-    text-align: right;
+    padding: 15px 0px 0px 0px;
+    text-align: center;
 }
 
 .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
-    background-color: #F18200;
+    background: #02846f;
     border: medium none;
     color: #FFFFFF;
     cursor: pointer;
@@ -736,7 +739,6 @@ input[type="button"] {
 .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only:hover {
     background-color: #ff4400;	
 }
-
 
 /*** header ***/
 
@@ -958,9 +960,13 @@ a.msgs_link:hover {
 
 /*** search box ***/
 
-
+.old-page-container .prob_search_box,
 .prob_search_box {
     float: right;
+}
+
+.old-page-container .search_box {
+    width: 74%;
 }
 
 /*.prob_search_box input {
