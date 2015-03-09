@@ -103,6 +103,7 @@ class ValidationRules
             'vendor_contact' => array(
                     'shop_name' => array(
                                 new CustomAssert\IsValidStoreNameOptional(),
+                                new CustomAssert\IsAlphanumericSpace(),
                     ),
                     'contact_number' => array(
                                 new CustomAssert\IsValidMobileOptional(),
@@ -161,6 +162,7 @@ class ValidationRules
                     ),   
                     'shop_name' => array(
                                 new CustomAssert\IsValidStoreNameOptional(),
+                                new CustomAssert\IsAlphanumericSpace(),
                     ),                 
             ),
             'store_setup' => [
