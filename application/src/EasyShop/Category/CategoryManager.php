@@ -567,5 +567,120 @@ class CategoryManager
 
         return $topLevelParent;
     }
+    
+    /**
+     * Migrate the default categories to the EsMemberCat table
+     * 
+     * @param integer $memberId
+     * @return boolean
+     */
+    public function migrateUserCategories($memberId)
+    {
+        $allUserCategories = $this->getUserCategories($memberId);
+        $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+        foreach($allUserCategories as $category){
+            $datetimeToday = date_create(date("Y-m-d H:i:s"));
+            $newMemberCategory = new \EasyShop\Entities\EsMemberCat();
+            $newMemberCategory->setMember($member);
+            $newMemberCategory->setCatName($category['name']);
+            $newMemberCategory->setSortOrder($category['sortOrder']);
+            $newMemberCategory->setCreatedDate($datetimeToday);
+            $newMemberCategory->setlastModifiedDate($datetimeToday);
+            $this->em->persist($newMemberCategory); 
+
+            $childCategories = $category['child_cat'];
+            $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                   ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
+            $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                 ->findByIdProduct($productIds);
+            foreach($products as $product){
+                $memberCategoryProduct = new \EasyShop\Entities\EsMemberProdcat();
+                $memberCategoryProduct->setMemcat($newMemberCategory);
+                $memberCategoryProduct->setProduct($product);
+                $memberCategoryProduct->setCreatedDate($datetimeToday);
+                $this->em->persist($memberCategoryProduct);
+            } 
+        } 
+        $isSuccessful = true;
+        try{
+            $this->em->flush();
+        }
+        catch(\Exception $e){
+            $isSuccessful = false;
+        }
+        return $isSuccessful;
+    }
+    
+    
+    /**
+     * Migrate a single product to its default category (it's top most parent
+     * category) in EsMemberCat
+     * 
+     * @param EasyShop\Entities\EsProduct $product
+     * @param boolean $isSuccessful
+     *
+     */
+    public function migrateProductToDefaultCustomCategory($product)
+    {
+        $isSuccessful = false;
+        if($product){
+            $productId = $product->getIdProduct();
+            $member = $product->getMember();
+            $memberProducts = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                        ->findBy(['product' => $productId]);
+            if(empty($memberProducts)){
+                $stringUtility = $this->stringUtility;
+                $categoryId = $product->getCat()->getIdCat();
+                $topParentCategoryName = $this->getTopParentCategory($categoryId)
+                                              ->getName();
+                $cleanedCategoryName = $stringUtility->cleanString($topParentCategoryName);
+                $cleanedCategoryName = strtolower($cleanedCategoryName);
+                $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                             ->getCustomCategoriesObject($member->getIdMember());     
+                $isCustomCategoryFound = false;
+                $datetimeToday = date_create(date("Y-m-d H:i:s"));
+                $highestSortOrder = 0;
+                foreach($memberCategories as $memberCategory){
+                    $cleanedName = strtolower($stringUtility->cleanString($memberCategory->getCatName()));
+                    if($memberCategory->getSortOrder() > $highestSortOrder){
+                        $highestSortOrder = $memberCategory->getSortOrder();
+                    }
+                    if($cleanedName === $cleanedCategoryName){
+                        $newMemberProduct = new EasyShop\Entities\EsMemberProdcat();
+                        $newMemberProduct->setMemcat($memberCategory);
+                        $newMemberProduct->setCreatedDate($datetimeToday);
+                        $newMemberProduct->setProduct($product);
+                        $this->em->persist($newMemberProduct);
+                        $isCustomCategoryFound = true;
+                        break;
+                    }
+                }
+                if(!$isCustomCategoryFound){
+                    $highestSortOrder++;
+                    $newMemberCategory = new \EasyShop\Entities\EsMemberCat();
+                    $newMemberCategory->setMember($member);
+                    $newMemberCategory->setCatName($topParentCategoryName);
+                    $newMemberCategory->setSortOrder($highestSortOrder);
+                    $newMemberCategory->setCreatedDate($datetimeToday);
+                    $newMemberCategory->setlastModifiedDate($datetimeToday);
+                    $this->em->persist($newMemberCategory);
+                    $newMemberProduct = new \EasyShop\Entities\EsMemberProdcat();
+                    $newMemberProduct->setMemcat($newMemberCategory);
+                    $newMemberProduct->setCreatedDate($datetimeToday);
+                    $newMemberProduct->setProduct($product);
+                    $this->em->persist($newMemberProduct);
+                }
+                try{
+                    $isSuccessful = true;
+                    $this->em->flush();
+                }
+                catch(\Exception $e){
+                    $isSuccessful = false;
+                }
+            }
+        }
+        
+        return $isSuccessful;
+    }
 
 } 

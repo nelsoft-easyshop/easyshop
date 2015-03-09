@@ -1969,35 +1969,9 @@ class Memberpage extends MY_Controller
              * new custom categories
              */
             if((int)$numberOfCustomCategories === 0){
-                $allUserCategories = $this->serviceContainer['category_manager']
-                                          ->getUserCategories($memberId);
-            
-                foreach($allUserCategories as $category){
-                    $datetimeToday = date_create(date("Y-m-d H:i:s"));
-                    $newMemberCategory = new EasyShop\Entities\EsMemberCat();
-                    $newMemberCategory->setMember($member);
-                    $newMemberCategory->setCatName($category['name']);
-                    $newMemberCategory->setSortOrder($category['sortOrder']);
-                    $newMemberCategory->setCreatedDate($datetimeToday);
-                    $newMemberCategory->setlastModifiedDate($datetimeToday);
-                    $entityManager->persist($newMemberCategory); 
-
-                    $childCategories = $category['child_cat'];
-                    $productIds = $entityManager->getRepository('EasyShop\Entities\EsProduct')
-                                                ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
-                    $products = $entityManager->getRepository('EasyShop\Entities\EsProduct')
-                                              ->findByIdProduct($productIds);
-                    foreach($products as $product){
-                        $memberCategoryProduct = new EasyShop\Entities\EsMemberProdcat();
-                        $memberCategoryProduct->setMemcat($newMemberCategory);
-                        $memberCategoryProduct->setProduct($product);
-                        $memberCategoryProduct->setCreatedDate($datetimeToday);
-                        $entityManager->persist($memberCategoryProduct);
-                    } 
-                } 
-                $entityManager->flush();
+                $this->serviceContainer['category_manager']
+                     ->migrateUserCategories($memberId);
             }
-            
             
             $memberCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
                                               ->getCustomCategoriesObject($memberId);     
