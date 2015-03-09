@@ -572,10 +572,10 @@ class CategoryManager
                                     ->getAncestorsWithNestedSet($categoryId);
             $parentCategoryId = reset($ancestorIds);
         }    
-        if(!is_int($parentCategoryId)){
-            $parentCategoryId = $categoryId;
-        }
         $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $parentCategoryId);
+        if($topLevelParent === null){
+            $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $categoryId);
+        }
 
         return $topLevelParent;
     }
