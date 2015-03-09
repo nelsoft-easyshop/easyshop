@@ -5,7 +5,7 @@ namespace EasyShop\FormValidation\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class isAlphanumericSpaceValidator extends ConstraintValidator
+class IsAlphanumericSpaceValidator extends ConstraintValidator
 {
     public function validate($value, Constraint $constraint)
     {
