@@ -657,6 +657,7 @@ function processAttributes()
     });
 })( jQuery );
 
+var maxQuantity = 9999;
 // Manipulating of additional attributes
 var cnt = 1; 
 var previous,editSelectedValue,editSelectedId; 
@@ -817,7 +818,7 @@ var previous,editSelectedValue,editSelectedId;
 
             if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
 
-                var rowString = '<div class="col-xs-2 col-sm-2 col-md-2 div1"><input class="qty ui-form-control" onkeypress="return isNumberKey(event)" name="allQuantity" type="text" size=3 value="1" /></div>\
+                var rowString = '<div class="col-xs-2 col-sm-2 col-md-2 div1"><input class="qty ui-form-control" onkeypress="return isNumberKey(event)" name="allQuantity" maxlength="4" type="text" size=3 value="1" /></div>\
                 <div class="col-xs-8 col-sm-8 col-md-8  div2">'+selectString+'</div>\
                 <div class="col-xs-2 col-sm-2 col-md-2 div3"><input type="button" class="select-combination  orange_btn3 width-70p" value="Add" /></div>';
 
@@ -918,7 +919,7 @@ var previous,editSelectedValue,editSelectedId;
             return false;
         }
         var combinationQuantity = parseInt($('.select-control-panel-option > .div1 > .qty').val());
-        if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false){
+        if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false || combinationQuantity > maxQuantity){
             validateRedTextBox('.qty');
             return false;
         }
@@ -995,7 +996,7 @@ var previous,editSelectedValue,editSelectedId;
                 $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                 $('.select-control-panel-option').append('\
                     <div class="col-xs-2 col-sm-2 col-md-2 div1">\
-                    <input type="text" name="allQuantity" value="1" size="3" class="qty ui-form-control" onkeypress="return isNumberKey(event)">\
+                    <input type="text" name="allQuantity" value="1" size="3" class="qty ui-form-control" maxlength="4" onkeypress="return isNumberKey(event)">\
                     </div>\
                     <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
                     <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
@@ -1768,7 +1769,7 @@ var universalExtension = ".jpeg";
         if( !$.trim( $('.list-choosen-combination-div').html() ).length ) {
             var qtySelector = $(".select-control-panel-option > .div1 > .qty");
             var soloQty = parseInt(qtySelector.val());
-            if( soloQty <= 0 || $.isNumeric(soloQty) == false){
+            if( soloQty <= 0 || $.isNumeric(soloQty) == false || soloQty > maxQuantity){
                 validateRedTextBox(qtySelector);
                 qtySelector.focus();
                 return false;
@@ -1780,7 +1781,7 @@ var universalExtension = ".jpeg";
             error = 0;
             $(".list-choosen-combination-div > .div-combination > .div1 > .qty").each(function() {
                 var combinationQuantity = parseInt($(this).val()); 
-                if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false){
+                if( combinationQuantity <= 0 || $.isNumeric(combinationQuantity) == false || combinationQuantity > maxQuantity){
                     validateRedTextBox(this);
                     this.focus();
                     error++;

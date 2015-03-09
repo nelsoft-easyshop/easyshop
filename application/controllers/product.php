@@ -9,6 +9,7 @@ use EasyShop\Entities\EsCat as EsCat;
 use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsSocialMediaProvider as EsSocialMediaProvider;
 use EasyShop\Entities\EsProductImage as EsProductImage;
+use EasyShop\Entities\EsProductItem as EsProductItem;
 
 class product extends MY_Controller 
 { 
@@ -602,6 +603,9 @@ class product extends MY_Controller
                         'idProductItem' => (int) $combination['noMoreSelection']
                     ]);
                     if($productItem){
+                        $soloQuantity = $soloQuantity > EsProductItem::MAX_QUANTITY 
+                                        ? EsProductItem::MAX_QUANTITY 
+                                        : $soloQuantity;
                         $productItem->setQuantity($soloQuantity);
                     }
                 }
@@ -613,7 +617,10 @@ class product extends MY_Controller
                         'idProductItem' => (int) $value['itemId']
                     ]);
                     if($productItem){
-                        $productItem->setQuantity($value['quantity']);
+                        $combQuantity = $value['quantity'] > EsProductItem::MAX_QUANTITY 
+                                        ? EsProductItem::MAX_QUANTITY 
+                                        : $value['quantity'];
+                        $productItem->setQuantity($combQuantity);
                     }
                 }
 

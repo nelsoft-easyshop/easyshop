@@ -2,6 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsProductItem as EsProductItem;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
 use EasyShop\Entities\EsProductShippingDetail as EsProductShippingDetail;
@@ -873,11 +874,17 @@ class productUpload extends MY_Controller
 
                 #saving combination
                 if(count($combination) <= 0){
-                    $idProductItem = $this->product_model->addNewCombination($product_id,$this->input->post('allQuantity'));
+                    $allQuantity = (int) $this->input->post('allQuantity') > EsProductItem::MAX_QUANTITY 
+                                   ? EsProductItem::MAX_QUANTITY
+                                   : (int) $this->input->post('allQuantity');
+                    $idProductItem = $this->product_model->addNewCombination($product_id, $allQuantity);
                 }
                 else{
                     foreach ($combination as $key => $value) {
-                        $idProductItem = $this->product_model->addNewCombination($product_id,$value['quantity']);
+                        $combQuantity = (int) $value['quantity'] > EsProductItem::MAX_QUANTITY
+                                        ? EsProductItem::MAX_QUANTITY
+                                        : (int) $value['quantity'];
+                        $idProductItem = $this->product_model->addNewCombination($product_id, $combQuantity);
                         foreach ($value['data'] as $keydata => $valuedata) {
                             $productAttributeId = $this->product_model->selectProductAttributeOther($keydata,$valuedata,$product_id);
                             $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,1);
@@ -1135,7 +1142,10 @@ class productUpload extends MY_Controller
 
             #saving combination
             if(count($combination) <= 0){
-                $idProductItem = $this->product_model->addNewCombination($product_id,$this->input->post('allQuantity'));
+                $allQuantity = (int) $this->input->post('allQuantity') > EsProductItem::MAX_QUANTITY 
+                               ? EsProductItem::MAX_QUANTITY
+                               : (int) $this->input->post('allQuantity');
+                $idProductItem = $this->product_model->addNewCombination($product_id, $allQuantity);
                 if(isset($noCombination) && count($combination) <= 0){
                     foreach ($retainShippingDetails as $key => $value) {
                         foreach ($value as $key2 => $value2) {
@@ -1147,7 +1157,10 @@ class productUpload extends MY_Controller
             }
             else{
                 foreach ($combination as $key => $value) { 
-                    $idProductItem = $this->product_model->addNewCombination($product_id,$value['quantity']);
+                    $combQuantity = (int) $value['quantity'] > EsProductItem::MAX_QUANTITY
+                                    ? EsProductItem::MAX_QUANTITY
+                                    : (int) $value['quantity'];
+                    $idProductItem = $this->product_model->addNewCombination($product_id, $combQuantity);
                     if(count($retainShippingDetails) > 0){
                         if (array_key_exists($key,$retainShippingDetails)){
                             foreach ($retainShippingDetails[$key] as $key => $valueShip) {
