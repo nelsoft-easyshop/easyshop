@@ -2847,6 +2847,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 25%;
     }
 
+    #simplemodal-container {
+        width: 80% !important;
+    }
+
     .adv_srch_lnk {
         display: block;
         margin: 0;
@@ -3181,10 +3185,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     .pop-image-container .attr-image img {
         max-width: 250px;
         max-height: 250px;
-    }
-
-    #simplemodal-container {
-        width: 80% !important;
     }
 
     .add-property-value {
