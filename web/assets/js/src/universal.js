@@ -4,7 +4,7 @@ if (typeof jQuery.ui != 'undefined') {
     var detail = (typeof detail === "undefined") ? "" : '<hr/>'+detail;
     var html_content = '<b>'+message+'</b>'+detail;        
     $(document.createElement('div'))
-        .attr({title: 'Easyshop.ph', class: 'alert'})
+        .attr({title: '', class: 'alert'})
         .html(html_content)
         .dialog({
             buttons: {OK: function(){$(this).dialog('close');}},
@@ -13,9 +13,11 @@ if (typeof jQuery.ui != 'undefined') {
             modal: true,
             resizable: false,
             dialogClass: 'error-modal',
+            width:'auto',
         });
     };
 }
+
 
 $(document).ready(function()
 {
@@ -25,6 +27,7 @@ $(document).ready(function()
         return false;
     });
 });
+
 
 var entityMap = {
     "&": "&amp;",
