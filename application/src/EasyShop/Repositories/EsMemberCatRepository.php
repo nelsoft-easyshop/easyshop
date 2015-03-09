@@ -32,6 +32,7 @@ class EsMemberCatRepository extends EntityRepository
             WHERE 
                 cat_name = :catName 
                 AND member_id = :memberId
+                AND is_delete = :deletedStatus
             ';
             
         if($excludeCategoryId !== 0){
@@ -40,7 +41,8 @@ class EsMemberCatRepository extends EntityRepository
             
         $query = $em->createNativeQuery($sql,$rsm)
                     ->setParameter("catName", $categoryName)
-                    ->setParameter("memberId", $idMember);
+                    ->setParameter("memberId", $idMember)
+                    ->setParameter("deletedStatus", \EasyShop\Entities\EsMemberCat::ACTIVE);
 
         if($excludeCategoryId !== 0){
             $query->setParameter("excludeCategoryId", $excludeCategoryId);
