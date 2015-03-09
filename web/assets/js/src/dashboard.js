@@ -2393,7 +2393,7 @@
                 success: function(data){ 
                     var response = $.parseJSON(data);
                     if(response){
-                        $('.delete-dialog-success').fadeIn().delay(2000).fadeOut();
+                        $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();
                         $.each(categoryIds, function(key, categoryId){
                              $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').fadeOut();
                              $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]').fadeOut();
@@ -2401,7 +2401,7 @@
                         });
                     }
                     else{
-                        $('.delete-dialog-fail').fadeIn().delay(2000).fadeOut();
+                        $('.delete-dialog-fail').fadeIn().delay(5000).fadeOut();
                     }
                 }
             });
@@ -2450,11 +2450,11 @@
         var countAllItems = $allProductList.find('li').size();
         var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
         if(browserWidth <= mobileViewPortWidthLimit){
-            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
             $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
         }
         else{
-            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
+            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
             $(".ui-droppable").css("width", "100%");
         }
 
@@ -2503,11 +2503,11 @@
                     var countAllItems = $allProductList.find('li').size();
                     var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
                     if(browserWidth <= mobileViewPortWidthLimit){
-                        $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
+                        $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
                         $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
                     }
                     else{
-                        $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+                        $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
                         $(".ui-droppable").css("width", "100%");
                     }
 
@@ -2642,7 +2642,9 @@
                 }
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
-                    errorDiv.fadeIn().delay(2000).fadeOut();
+                    var me = $(".my-category-modal").outerHeight();
+                    var mo = me + 30;
+                    errorDiv.fadeIn().delay(5000).fadeOut();
                     errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' + escapeHtml(jsonData.errorMessage));
                 }
             }
@@ -2692,11 +2694,11 @@
                             '</label><li>';
                     deleteCheckBoxList.append(html);
                     $modalDiv.find('.simplemodal-close').click();
-                    $('.add-store-cat-message').fadeIn().delay(2000).fadeOut();
+                    $('.add-store-cat-message').fadeIn().delay(5000).fadeOut();
                 }
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
-                    errorDiv.fadeIn().delay(2000).fadeOut();
+                    errorDiv.fadeIn().delay(5000).fadeOut();
                     errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' + escapeHtml(jsonData.errorMessage));
                 }
             }
