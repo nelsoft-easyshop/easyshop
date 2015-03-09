@@ -88,9 +88,7 @@
                         </button>
                     </div>
                     <p class="p-note-setting">
-                        Add a new category to your list of store categories. You may also assign products to your new
-                        category. Take note that uncategorized products will appears under the <i>OTHERS</i> category 
-                        when viewed in your store page.
+                        Add a new category to your list of store categories and assign products to your new category. 
                     </p>
                 </div>
 
