@@ -83,10 +83,37 @@ class CategoryManager
      */
     private $stringUtility;
     
+        
+    /**
+     * Form factory
+     *
+     */
+    private $formFactory;
+    
+    /**
+     * Form validation
+     *
+     */
+    private $formValidation;
+    
+    /**
+     * Form error helper
+     *
+     */
+    private $formErrorHelper;
+    
     /**
      *  Constructor. Retrieves Entity Manager instance
      */
-    public function __construct($configLoader, $em, $productManager, $promoManager, $sortUtility, $stringUtility)
+    public function __construct($configLoader,
+                                $em, 
+                                $productManager, 
+                                $promoManager, 
+                                $sortUtility, 
+                                $stringUtility,
+                                $formFactory, 
+                                $formValidation,
+                                $formErrorHelper)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
@@ -94,6 +121,9 @@ class CategoryManager
         $this->promoManager = $promoManager;
         $this->sortUtility = $sortUtility;
         $this->stringUtility = $stringUtility;
+        $this->formFactory = $formFactory;
+        $this->formValidation = $formValidation;
+        $this->formErrorHelper = $formErrorHelper;
     }
 
     /**
@@ -451,14 +481,22 @@ class CategoryManager
         $errorMessage = "";
         $categoryName = trim($categoryName);
 
-        try{
+        $rules = $this->formValidation->getRules('custom_category');
+        $form = $this->formFactory->createBuilder('form', null, array('csrf_protection' => false))
+                     ->setMethod('POST')
+                     ->add('name', 'text', array('constraints' => $rules['name']))
+                     ->getForm();
         
-            if(empty($categoryName)){
-                 $errorMessage = "Category name cannot be empty";
-            }
-            else{
+        $form->submit([ 
+            'name' => $categoryName,
+        ]);
+        
+        if ($form->isValid()) {
+            $formData = $form->getData();
+            $categoryName = $formData['name'];
+            try{
                 $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                                ->isCustomCategoryNameAvailable($categoryName,$memberId, $memberCategoryId);
+                                                ->isCustomCategoryNameAvailable($categoryName, $memberId, $memberCategoryId);
                 if($isCategoryNameAvailable) {
                     $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memberCategoryId, "member" => $memberId]);
                     if($memberCategory) {
@@ -492,13 +530,16 @@ class CategoryManager
                 }
                 else {
                     $errorMessage = "Category name already exists";
-                }
+                }   
             }
+            catch(Exception $e) {
+                $errorMessage = "Database Error";
+            }            
         }
-        catch(Exception $e) {
-            $errorMessage = "Database Error";
-        }            
-
+        else{
+            $errorMessage = reset($this->formErrorHelper->getFormErrors($form));
+        }
+        
         return [
             "errorMessage" => $errorMessage,
             "result" => $actionResult
