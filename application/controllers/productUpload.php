@@ -1529,6 +1529,21 @@ class productUpload extends MY_Controller
                         $product->setShipsWithinDays($shipWithinDays);
                         $product->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
                         $this->em->flush();
+                        
+                        $numberOfCustomCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                                         ->getNumberOfCustomCategories($memberId, true);
+                        /**
+                         * If there are no memberCategories yet, save default categories as
+                         * new custom categories and then migrate the product to its default
+                         * category
+                         */
+                        if((int)$numberOfCustomCategories === 0){
+                            $this->serviceContainer['category_manager']
+                                 ->migrateUserCategories($memberId);
+                        }
+                        $this->serviceContainer['category_manager']
+                             ->migrateProductToDefaultCustomCategory($product);
+                             
                         $serverResponse['result'] = 'success';
                         $serverResponse['error'] = '';
                     }

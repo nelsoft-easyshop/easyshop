@@ -41,10 +41,17 @@ class EsMemberProdcatRepository extends EntityRepository
     /**
      *  Fetch Custom categorized products
      *
-     *  @return array - array of product ids
+     *  @param integer $memberId
+     *  @param integer $memcatId
+     *  @param integer $prodLimit
+     *  @param integer $offset
+     *  @param mixed $orderBy
+     *  @param string $searchString
+     *
+     *  @return integer[]  
      */
-    public function getPagedCustomCategoryProducts($memberId, $memcatId, $prodLimit, $page = 0, $orderBy = array("idProduct" => "DESC") )
-    {
+    public function getPagedCustomCategoryProducts($memberId, $memcatId, $prodLimit, $offset = 0, $orderBy = ["idProduct" => "DESC"], $searchString = "")
+    {      
         $productIds = array();
 
         // Generate Order by condition
@@ -63,17 +70,30 @@ class EsMemberProdcatRepository extends EntityRepository
                 WHERE mc.idMemcat = :cat_id
                     AND m.idMember = :member_id
                     AND p.isDelete = 0
-                    AND p.isDraft = 0
-                ORDER BY " . $orderCondition;
-
+                    AND p.isDraft = 0";
+        
+        if($searchString !== ""){
+            $dql .= " AND p.name LIKE :queryString ";
+        }
+        
+        $dql .= " ORDER BY " . $orderCondition;  
+  
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
-                    ->setParameter('cat_id', $memcatId)
-                    ->setFirstResult($page)
-                    ->setMaxResults($prodLimit);
+                    ->setParameter('cat_id', $memcatId);
+                    
+        if($searchString !== ""){
+            $queryString = '%'.$searchString.'%';
+            $query->setParameter('queryString', $queryString);
+        }
+               
+  
+        $query->setFirstResult($offset)
+              ->setMaxResults($prodLimit);
 
         $paginator = new Paginator($query, $fetchJoinCollection = true);
-
+        
+     
         foreach($paginator as $prod){
             $productIds[] = $prod->getProduct()->getIdProduct();
         }
