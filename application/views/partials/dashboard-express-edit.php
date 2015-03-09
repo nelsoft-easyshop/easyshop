@@ -32,7 +32,7 @@
             <div class="edit-sub-content2">
                 <div class="edit-sub-content-column1">
                     <p><strong>Available Stock(s):</strong></p>
-                    <input type="text" class="ui-form-control txt-total-stock txt-quantity solo-quantity" value="<?=$availableStock;?>">
+                    <input type="text" maxlength="4" class="ui-form-control txt-total-stock txt-quantity solo-quantity" value="<?=$availableStock;?>">
                 </div>
                 <div class="clear"></div>
             </div>
@@ -73,7 +73,7 @@
                         <?php foreach ($productCombination as $itemId => $combination): ?>
                             <tr class="combination-row">
                                 <td width="20%">
-                                    <input type="text" value="<?=$combination['quantity'];?>" class="ui-form-control txt-quantity quantity-control" onkeypress="return isNumberKey(event);">
+                                    <input type="text" value="<?=$combination['quantity'];?>" class="ui-form-control txt-quantity quantity-control" maxlength="4" onkeypress="return isNumberKey(event);">
                                     <input type="hidden" value="<?=$itemId;?>" class="item-control">
                                 </td>
                                 <td width="60%" class="prod-item-att-content"> 

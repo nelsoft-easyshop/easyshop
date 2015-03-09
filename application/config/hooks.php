@@ -10,13 +10,20 @@
 |
 */
 
+$hook['post_controller_constructor'][] = [
+  'class'    => 'IP_Filter',
+  'function' => 'isIpAllowed',
+  'filename' => 'filter.php',
+  'filepath' => 'hooks'
+];
 
-//
-// CSRF Protection hooks, don't touch these unless you know what you're
-// doing.
-//
-// THE ORDER OF THESE HOOKS IS EXTREMELY IMPORTANT!!
-//
+
+/**
+ * CSRF Protection hooks, don't touch these unless you know what you're
+ * doing.
+ *
+ * THE ORDER OF THESE HOOKS IS EXTREMELY IMPORTANT!!
+ */
  
 // THIS HAS TO GO FIRST IN THE post_controller_constructor HOOK LIST.
 $hook['post_controller_constructor'][] = array( // Mind the "[]", this is not the only post_controller_constructor hook

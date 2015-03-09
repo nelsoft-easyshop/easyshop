@@ -1,7 +1,7 @@
 (function ($) {
 
     $(window).load(function(){
-        $('div.loader').fadeOut("fast").css("display", "none");
+        $('div.loader').fadeOut("fast");
     });
    
     $(window).bind('scroll',function(e){
