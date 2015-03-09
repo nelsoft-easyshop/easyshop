@@ -202,11 +202,19 @@ class ValidationRules
             'reset_password' => [
                     'email' => [
                         new Assert\Email(),
-                            new Assert\NotBlank(),
+                        new Assert\NotBlank(),
                     ],
                     'hash' => [
                         new Assert\NotBlank(),
                     ],
+            ],
+            'custom_category' =>[
+                'name' => [
+                    new Assert\NotBlank([ "message" => "The category name cannot be blank",]),
+                    new Assert\Length(['min' => '3',
+                                       'max' => '255']),
+                    new CustomAssert\isAlphanumericSpace(),
+                ],
             ],
         );
     }
