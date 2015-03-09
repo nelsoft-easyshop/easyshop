@@ -448,11 +448,11 @@ class ApiFormatter
         $this->cartImplementation->persist($memberId);
         $cartData = $this->cartManager->getValidatedCartContents($memberId);
 
-        foreach ($cartData as $data) {  
-            if(($key = array_search($data['product_itemID'], $productItemList)) !== false) {
-                unset($itemList[$key]);
+        foreach ($cartData as $data) {
+            if(isset($itemList[$data['product_itemID']])) {
+                unset($itemList[$data['product_itemID']]);
             }
-        } 
+        }  
 
         if(!$includeUnavailable){
             return $this->formatCart($cartData);
