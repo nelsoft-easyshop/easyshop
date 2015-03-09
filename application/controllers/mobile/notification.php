@@ -35,7 +35,7 @@ class Notification extends MY_Controller
             if($jwt){
                 $oauthClients = $this->em->getRepository('EasyShop\Entities\OauthClients')
                                          ->find($clientId);
-                $jwtObject = $jwtContainer->decode($jwt, $oauthClients->getClientSecret());
+                $jwtObject = $jwtContainer->decode($jwt, $oauthClients->getClientSecret(), false);
                 if($jwtObject
                     && $oauthClients
                     && isset($jwtObject->api_type) 
