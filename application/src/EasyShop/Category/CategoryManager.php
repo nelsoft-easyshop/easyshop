@@ -348,19 +348,7 @@ class CategoryManager
                 if($vendorCategories[$index]['sortOrder']  > $highestSortOrder){
                     $highestSortOrder = $vendorCategories[$index]['sortOrder'];
                 }
-            }            
-            $totalCountNonCategorizedProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                                     ->getCountNonCategorizedProducts($memberId);
-            if($totalCountNonCategorizedProducts > 0){
-                $index = 'custom-noncategorized';
-                $vendorCategories[$index]['name'] = 'Others';
-                $vendorCategories[$index]['child_cat'] = [];
-                $vendorCategories[$index]['products'] = [];
-                $vendorCategories[$index]['categoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
-                $vendorCategories[$index]['memberCategoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
-                $vendorCategories[$index]['sortOrder'] = $highestSortOrder;
-                $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-            }
+            }                      
         }
 
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
@@ -549,6 +537,35 @@ class CategoryManager
         catch(Exception $e) {
             return false;
         }
+    }
+    
+    /**
+     * Retrieves the top most parent category
+     *
+     * @param integer $categoryId
+     * @return EasyShop\Entities\EsCat
+     */
+    public function getTopParentCategory($categoryId)
+    {
+        $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
+                                       ->getNestedSetCategoryCount();
+        $parentCategoryId = 0;
+        if((int)$categoryNestedSetCount === 0){
+            $ancestor =  $this->em->getRepository('EasyShop\Entities\EsCat')
+                                    ->getParentCategoryRecursive($categoryId);
+            $parentCategoryId = reset($ancestor)['idCat'];
+        }
+        else{
+            $ancestorIds = $this->em->getRepository('EasyShop\Entities\EsCat')
+                                    ->getAncestorsWithNestedSet($categoryId);
+            $parentCategoryId = reset($ancestorIds);
+        }    
+        $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $parentCategoryId);
+        if($topLevelParent === null){
+            $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $categoryId);
+        }
+
+        return $topLevelParent;
     }
 
 } 

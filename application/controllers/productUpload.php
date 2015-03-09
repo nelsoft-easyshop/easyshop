@@ -1528,6 +1528,57 @@ class productUpload extends MY_Controller
                         $product->setIsMeetup($isMeetup);
                         $product->setShipsWithinDays($shipWithinDays);
                         $product->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
+
+                        $memberProducts = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                                   ->findBy(['product' => $productId]);
+                        if(empty($memberProducts)){
+                            $stringUtility = $this->serviceContainer['string_utility'];
+                            $categoryId = $product->getCat()->getIdCat();
+                            $topParentCategoryName = $this->serviceContainer['category_manager']
+                                                          ->getTopParentCategory($categoryId)
+                                                          ->getName();
+                            $cleanedCategoryName = $stringUtility->cleanString($topParentCategoryName);
+                            $cleanedCategoryName = strtolower($cleanedCategoryName);
+                            $memberCategories = $this->serviceContainer['entity_manager']
+                                                     ->getRepository('EasyShop\Entities\EsMemberCat')
+                                                     ->getCustomCategoriesObject($memberId);     
+                            $isCustomCategoryFound = false;
+                            $datetimeToday = date_create(date("Y-m-d H:i:s"));
+                            $highestSortOrder = 0;
+                            foreach($memberCategories as $memberCategory){
+                                $cleanedName = strtolower($stringUtility->cleanString($memberCategory->getCatName()));
+                                if($memberCategory->getSortOrder() > $highestSortOrder){
+                                    $highestSortOrder = $memberCategory->getSortOrder();
+                                }
+                                if($cleanedName === $cleanedCategoryName){
+                                    $newMemberProduct = new EasyShop\Entities\EsMemberProdcat();
+                                    $newMemberProduct->setMemcat($memberCategory);
+                                    $newMemberProduct->setCreatedDate($datetimeToday);
+                                    $newMemberProduct->setProduct($product);
+                                    $this->em->persist($newMemberProduct);
+                                    $isCustomCategoryFound = true;
+                                    break;
+                                }
+                            }
+                            if(!$isCustomCategoryFound){
+                                $highestSortOrder++;
+                                $member = $this->serviceContainer['entity_manager']
+                                               ->find('EasyShop\Entities\EsMember', $memberId);
+                                $newMemberCategory = new EasyShop\Entities\EsMemberCat();
+                                $newMemberCategory->setMember($member);
+                                $newMemberCategory->setCatName($topParentCategoryName);
+                                $newMemberCategory->setSortOrder($highestSortOrder);
+                                $newMemberCategory->setCreatedDate($datetimeToday);
+                                $newMemberCategory->setlastModifiedDate($datetimeToday);
+                                $this->em->persist($newMemberCategory);
+                                $newMemberProduct = new EasyShop\Entities\EsMemberProdcat();
+                                $newMemberProduct->setMemcat($newMemberCategory);
+                                $newMemberProduct->setCreatedDate($datetimeToday);
+                                $newMemberProduct->setProduct($product);
+                                $this->em->persist($newMemberProduct);
+                            }
+                        }
+                       
                         $this->em->flush();
                         $serverResponse['result'] = 'success';
                         $serverResponse['error'] = '';
