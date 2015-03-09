@@ -20,11 +20,12 @@
 
 /* Container */
 #simplemodal-container {
+	background-color:#fff;
 	border-radius: 4px;
 	/*height:290px !important;*/
 	height: auto !important;
-	width:600px; 
-	background-color:#fff;
+	max-width:600px; 
+	width: 90% !important;
 }
 
 #simplemodal-container code {

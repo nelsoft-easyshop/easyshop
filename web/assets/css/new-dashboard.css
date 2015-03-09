@@ -3320,7 +3320,8 @@ label.css-label {
         margin-top: 150px !important;
     }
 
-    .item-list-panel > div:nth-child(2) .trans-left-panel {
+    .item-list-panel > div:nth-child(2) .trans-left-panel,
+    .item-list-products .trans-left-panel {
         margin-top: 120px;
     }
 
@@ -3445,7 +3446,8 @@ label.css-label {
         width: 100% !important;
     }
 
-    .item-list-panel > div:nth-child(2) .trans-left-panel {
+    .item-list-panel > div:nth-child(2) .trans-left-panel,
+    .item-list-products .trans-left-panel {
         margin-top: 160px;
     }
 

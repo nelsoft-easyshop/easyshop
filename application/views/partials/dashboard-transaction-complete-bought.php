@@ -8,7 +8,7 @@
                         <div><span class="strong-label">Total : Php </span> <?=number_format($boughtTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
                     </div>
                     <?PHP foreach($boughtTransactionDetails['product'] as $productKey => $product) : ?>
-                        <div class="pd-top-15">
+                        <div class="pd-top-15 item-list-products">
                             <div class="col-xs-12 col-sm-9 padding-reset trans-left-panel pd-top-10">
                                 <div class="pd-bottom-20">
                                     <div class="col-xs-3 col-sm-4 padding-reset">
