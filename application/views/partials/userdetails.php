@@ -24,7 +24,7 @@
                                 &times;
                             </button>
                             <?php foreach($errors as $key => $value): ?>
-                                <?php echo "<p><strong>".ucwords(str_replace('_', ' ', $key)) . '</strong>: ' . $value[0] . "</p>" ?>
+                                <?php echo "<p><strong>".html_escape(ucwords(str_replace('_', ' ', $key))) . '</strong>: ' . html_escape($value[0]) . "</p>" ?>
                             <?php endforeach; ?>
                         </div>
 

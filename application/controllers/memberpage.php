@@ -1788,12 +1788,13 @@ class Memberpage extends MY_Controller
         $jsonResponse = ['isSuccessful' => false,
                          'errors' => []];        
                          
-        if($this->input->post('storename')){
+        if($this->input->post()){
             $rules = $formValidation->getRules('store_setup');
             $formBuild = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                                      ->setMethod('POST');
             $formBuild->add('storename', 'text', array('constraints' => $rules['shop_name']));
-            $formData['storename'] = $this->input->post('storename');$form = $formBuild->getForm();
+            $formData['storename'] = $this->input->post('storename');
+            $form = $formBuild->getForm();
             $form->submit($formData);
             
             if($form->isValid()){

@@ -189,7 +189,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         errString = errorMessage;
                         return false;
                     });
-                    alert(errString);
+                    alert(escapeHtml(errString));
                 }
                 button.addClass('clickable');
             } 
@@ -501,7 +501,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     sibling.show();
                 }
                 else{
-                    alert(obj.error);
+                    alert(escapeHtml(obj.error));
                 }
             });
         }
