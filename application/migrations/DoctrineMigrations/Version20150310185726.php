@@ -15,7 +15,7 @@ class Version20150310185726 extends AbstractMigration
     public function up(Schema $schema)
     {
         $this->addSql('
-            ALTER TABLE `es_member_feedback` modify COLUMN `feedb_msg` VARCHAR(255)
+            ALTER TABLE `es_member_feedback` modify COLUMN `feedb_msg` VARCHAR(1024)
         ');
 
     }
