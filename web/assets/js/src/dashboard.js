@@ -2714,6 +2714,12 @@
         page = typeof page !== 'undefined' ? page : 1;
         searchString = typeof searchString !== 'undefined' ? searchString : '';
         
+        var $allProductDiv = modalDiv.find('.all-items');
+        var isProcessing = JSON.parse($allProductDiv.attr('data-isProcessing'));
+        if(isProcessing){
+            return false;
+        }
+   
         var categoryId = modalDiv.find('.hidden-category-id').val();
         var $currentCategoryProductList = modalDiv.find('.category-product-list .category-item-name');  
         var currentCategoryProductsIds = [];
@@ -2731,9 +2737,13 @@
                 searchString: searchString, 
                 excludeProductId: JSON.stringify(currentCategoryProductsIds)
             },
+            beforeSend: function( xhr ) {
+                $allProductDiv.attr('data-isProcessing', 'true');
+            },
             success: function(data){ 
                 var response = $.parseJSON(data);
-                var $allProductDiv = modalDiv.find('.all-items');
+                $allProductDiv.attr('data-isProcessing', 'false');
+               
                 $allProductDiv.find('.loader').hide();
                 if(response.products.length === 0){
                     $allProductDiv.attr('data-isComplete', 'true');
@@ -2781,6 +2791,7 @@
         if($.parseJSON(isComplete)){
             return false;
         }
+        
         var div = $div[0];
         if(div.scrollTop + div.clientHeight >= div.scrollHeight){
             
@@ -2794,13 +2805,22 @@
             $loader.show();
 
             if($div.hasClass('category-items')){
+                var isProcessing = $.parseJSON($div.attr('data-isProcessing'));
+                if(isProcessing){
+                    return false;
+                }
+                
                 $.ajax({
                     type: "GET",
                     url: '/memberpage/getCustomCategory',
                     data: {categoryId:categoryId, page: page, searchString: searchString},
+                    beforeSend: function( xhr ) {
+                        $div.attr('data-isProcessing', 'true');
+                    },
                     success: function(data){
                         $loader.hide();
                         var jsonResponse = $.parseJSON(data);
+                        $div.attr('data-isProcessing', 'false');
                         if(jsonResponse.products.length === 0){
                             $div.attr('data-isComplete', 'true');
                         }
