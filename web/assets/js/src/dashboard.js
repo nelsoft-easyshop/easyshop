@@ -281,16 +281,14 @@
         $("#active-items").css("display", "block");
     });
 
-    $('.transaction-title-bought').click(function() {
+    $('.transaction-title-bought').click(function() {          
         $(this).toggleClass("active-bar",0);
         $(this).next('.on-going-transaction-list-bought').slideToggle();
         $('.on-going-transaction-list-sold').slideUp();
         $('.transaction-title-sold').removeClass("active-bar");
-        
         $('html, body').animate({
             scrollTop: $(".transaction-tabs").offset().top
         }, 300);
-        
     });
 
     $('.transaction-title-sold').click(function() {
@@ -1760,10 +1758,13 @@
     });
 
     $('#transactions').on('click', '.transaction-button-head', function() {
-        var $container = $(this).data('method');
-        var $page = 1;
-
-        getTransactionDetails($page, $container, $container, '', '');
+        var $this = $(this);
+        if($this.hasClass('active-bar')){
+            var $container = $this.data('method');
+            $('.payment-filter[data="'+$container+'"]').val('all');
+            var $page = 1;
+            getTransactionDetails($page, $container, $container, '', '');
+        }
     });
 
     var getTransactionDetails = function ($page, $requestType, $container, $searchFor, $value)
