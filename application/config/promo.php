@@ -11,7 +11,7 @@ $config = [
                 #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
-                'pesopaycdb' => 'Peso Pay'
+                #'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => '',
             'is_buyable_outside_promo' => true,
@@ -29,7 +29,7 @@ $config = [
                 #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
-                'pesopaycdb' => 'Peso Pay'
+                #'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'countdown',
             'is_buyable_outside_promo' => false,
@@ -90,7 +90,7 @@ $config = [
                 #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
-                'pesopaycdb' => 'Peso Pay'
+                #'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'fixeddiscount',
             'is_buyable_outside_promo' => true,
@@ -108,7 +108,7 @@ $config = [
                 #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
-                'pesopaycdb' => 'Peso Pay'
+                #'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => '',
             'is_buyable_outside_promo' => false,
@@ -137,7 +137,7 @@ $config = [
                 #'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
-                'pesopaycdb' => 'Peso Pay'
+                #'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'generic',
             'is_buyable_outside_promo' => true,
