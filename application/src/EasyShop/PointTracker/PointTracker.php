@@ -34,12 +34,14 @@ class PointTracker
     /**
      * Updates point history and adds point to a user
      *
-     * @param int $userId ID of a user
-     * @param int $actionId ID of an action
+     * @param int   $userId ID of a user
+     * @param int   $actionId ID of an action
+     * @param bool  $isPercentage
+     * @param float $price
      *
      * @return boolean
      */
-    public function addUserPoint($userId, $actionId)
+    public function addUserPoint($userId, $actionId, $isPercentage = false, $price = 0)
     {
         // Get Point Type object
         $points = $this->em->getRepository('EasyShop\Entities\EsPointType')
@@ -57,29 +59,41 @@ class PointTracker
             return false;
         }
 
+        if($isPercentage && $price <= 0){
+            return false;
+        }
+
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
                               ->findOneBy(['member' => $userId]);
+
+
+        if($isPercentage){
+            $addPoints = ($points->getPoint() / 100) * $price;
+        }
+        else{
+            $addPoints = $points->getPoint();
+        }
 
         // Insert to point history
         $pointHistory = new EsPointHistory();
         $pointHistory->setMember($user);
         $pointHistory->setType($points);
         $pointHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
-        $pointHistory->setPoint($points->getPoint());
+        $pointHistory->setPoint($addPoints);
 
         $this->em->persist($pointHistory);
         $this->em->flush();
 
         if($userPoint !== null){
             // Update existing user    
-            $userPoint->setPoint($userPoint->getPoint() + $points->getPoint()); 
+            $userPoint->setPoint($userPoint->getPoint() + $addPoints); 
             $this->em->flush();
         }
         else{
             // Insert new user
             $userPoint = new EsPoint();
-            $userPoint->setPoint($points->getPoint());
+            $userPoint->setPoint($addPoints);
             $userPoint->setMember($user);
 
             $this->em->persist($userPoint);
