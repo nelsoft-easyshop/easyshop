@@ -308,19 +308,21 @@ abstract class AbstractGateway implements GatewayInterface
                     $billingInfo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo')
                                                 ->find($prod->getBillingInfoId());
 
-                    $bankInfo = $this->em->getRepository('EasyShop\Entities\EsBankInfo')
-                                                ->find($billingInfo->getBankId());
-                    
-                    $orderBillingInfo = new EsOrderBillingInfo();
-                    $orderBillingInfo->setBankName($bankInfo->getBankName());
-                    $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
-                    $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
-                    $orderBillingInfo->setCreatedAt(date_create(date("Y-m-d H:i:s")));
-                    $orderBillingInfo->setUpdatedAt(date_create(date("Y-m-d H:i:s")));
-                    $this->em->persist($orderBillingInfo);
-                    $this->em->flush();
+                    if($billingInfo){
+                        $bankInfo = $this->em->getRepository('EasyShop\Entities\EsBankInfo')
+                                                    ->find($billingInfo->getBankId());
+                        
+                        $orderBillingInfo = new EsOrderBillingInfo();
+                        $orderBillingInfo->setBankName($bankInfo->getBankName());
+                        $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
+                        $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
+                        $orderBillingInfo->setCreatedAt(date_create(date("Y-m-d H:i:s")));
+                        $orderBillingInfo->setUpdatedAt(date_create(date("Y-m-d H:i:s")));
+                        $this->em->persist($orderBillingInfo);
+                        $this->em->flush();
 
-                    $billingInfoId = $orderBillingInfo->getIdOrderBillingInfo();
+                        $billingInfoId = $orderBillingInfo->getIdOrderBillingInfo();
+                    }
                 }
 
                 $response['o_message'] = $this->error['EsMember-repo-fail']['code'];
