@@ -858,8 +858,7 @@ class EsProductRepository extends EntityRepository
                                     $offset = 0,
                                     $perPage = 10,
                                     $searchString = "",
-                                    $orderByField = "p.idProduct",
-                                    $excludeProductsIds = [])
+                                    $orderByField = "p.idProduct")
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
@@ -878,11 +877,6 @@ class EsProductRepository extends EntityRepository
             $queryBuilder->andWhere('p.name LIKE :word')
                          ->setParameter('word', '%'.$searchString.'%');
         }
-        
-        if(empty($excludeProductsIds) === false){
-            $queryBuilder->andWhere($queryBuilder->expr()->notIn('p.idProduct', $excludeProductsIds));
-        }
-
         $queryBuilder->orderBy($orderByField,"DESC");
         $qbStatement = $queryBuilder->setFirstResult($offset)
                                     ->setMaxResults($perPage)
