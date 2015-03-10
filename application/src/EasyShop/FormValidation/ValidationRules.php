@@ -213,12 +213,25 @@ class ValidationRules
                         new Assert\NotBlank(),
                     ],
             ],
-            'custom_category' =>[
+            'custom_category' => [
                 'name' => [
                     new Assert\NotBlank([ "message" => "The category name cannot be blank",]),
                     new Assert\Length(['min' => '3',
                                        'max' => '255']),
                     new CustomAssert\isAlphanumericSpace(),
+                ],
+            ],
+            'user_feedback' => [
+                'message' => [
+                    new Assert\NotBlank([ "message" => "The feedback cannot be empty",]),
+                    new Assert\Length(['max' => '1024']),
+                ],
+                'rating' => [
+                    new Assert\NotBlank([ "message" => "The feedback cannot be empty"]),
+                    new Assert\Range([
+                        'min' => 1,
+                        'max' => 5,
+                    ]),
                 ],
             ],
         );

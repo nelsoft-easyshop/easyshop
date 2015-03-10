@@ -648,12 +648,15 @@ class Store extends MY_Controller
     public function doCreateFeedback()
     {
         $em = $this->serviceContainer['entity_manager'];
-        $reviewer = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                           ->find(intval($this->session->userdata('member_id')));
-        $reviewee = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                           ->find(intval($this->input->post('userId')));
-        $orderToReview = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsOrder')
-                                                           ->find(intval($this->input->post('feeback-order')));   
+        $reviewer = $this->serviceContainer['entity_manager']
+                         ->getRepository('EasyShop\Entities\EsMember')
+                         ->find(intval($this->session->userdata('member_id')));
+        $reviewee = $this->serviceContainer['entity_manager']
+                         ->getRepository('EasyShop\Entities\EsMember')
+                         ->find(intval($this->input->post('userId')));
+        $orderToReview = $this->serviceContainer['entity_manager']
+                              ->getRepository('EasyShop\Entities\EsOrder')
+                              ->find(intval($this->input->post('feeback-order')));   
         $rating1 = (int) $this->input->post('rating1');
         $rating2 = (int) $this->input->post('rating2');
         $rating3 = (int) $this->input->post('rating3');
@@ -661,29 +664,50 @@ class Store extends MY_Controller
         $message = $this->input->post('feedback-message');
                 
         if($reviewer && $reviewee && $orderToReview && strlen($message) > 0 && $areAllRatingsSet){
-            if($reviewer->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
-                $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_BUYER;
+        
+            $formValidation = $this->serviceContainer['form_validation'];
+            $formFactory = $this->serviceContainer['form_factory'];
+            $formErrorHelper = $this->serviceContainer['form_error_helper'];
+            $rules = $formValidation->getRules('user_feedback');
+            $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                     ->setMethod('POST');                    
+            $formBuild->add('message', 'text', ['constraints' => $rules['message']]);
+            $formBuild->add('rating1', 'text', ['constraints' => $rules['rating']]);
+            $formBuild->add('rating2', 'text', ['constraints' => $rules['rating']]);
+            $formBuild->add('rating3', 'text', ['constraints' => $rules['rating']]);
+            $formData["message"] =  $message;
+            $formData["rating1"] =  $rating1;
+            $formData["rating2"] =  $rating2;
+            $formData["rating3"] =  $rating3;
+            $form = $formBuild->getForm();
+            $form->submit($formData); 
+
+            if($form->isValid()){
+                $feedbackType = false;
+                if($reviewer->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
+                    $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_BUYER;
+                }
+                else if($reviewee->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
+                    $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_SELLER;
+                }
+                if($feedbackType !== false){
+                    $feedback = new EasyShop\Entities\EsMemberFeedback();
+                    $feedback->setMember($reviewer);
+                    $feedback->setForMemberid($reviewee);
+                    $feedback->setOrder($orderToReview);
+                    $feedback->setFeedbMsg($message);
+                    $feedback->setDateadded(new DateTime('now'));
+                    $feedback->setRating1($rating1);
+                    $feedback->setRating2($rating2);
+                    $feedback->setRating3($rating3);
+                    $feedback->setFeedbKind($feedbackType);
+                    $em->persist($feedback);
+                    $em->flush();
+                }
             }
-            else if($reviewee->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
-                $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_SELLER;
-            }
-            else{
-                return false;
-            }
-            $feedback = new EasyShop\Entities\EsMemberFeedback();
-            $feedback->setMember($reviewer);
-            $feedback->setForMemberid($reviewee);
-            $feedback->setOrder($orderToReview);
-            $feedback->setFeedbMsg($message);
-            $feedback->setDateadded(new DateTime('now'));
-            $feedback->setRating1($rating1);
-            $feedback->setRating2($rating2);
-            $feedback->setRating3($rating3);
-            $feedback->setFeedbKind($feedbackType);
-            $em->persist($feedback);
-            $em->flush();
+            redirect('/'.$reviewee->getSlug().'/about');
         }
-        redirect('/'.$reviewee->getSlug().'/about');
+        redirect('/');
     }
     
 
