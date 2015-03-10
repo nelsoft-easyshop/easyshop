@@ -582,6 +582,14 @@ class Kernel
                             );
         };
 
+        // Feedback Transaction
+        $container['feedback_transaction_service'] = function ($c) use ($container) {
+            return new \EasyShop\Review\FeedbackTransactionService(
+                $container['entity_manager'],
+                $container['point_tracker']
+            );
+        };
+
         // Product Shipping Manager
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(

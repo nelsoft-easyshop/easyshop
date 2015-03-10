@@ -671,17 +671,17 @@ class Store extends MY_Controller
                 return false;
             }
 
-            $em->getRepository('EasyShop\Entities\EsMemberFeedback')
-               ->addFeedback(
-                   $reviewer,
-                   $reviewee,
-                   $message,
-                   $feedbackType,
-                   $orderToReview,
-                   $rating1,
-                   $rating2,
-                   $rating3
-                );
+            $this->serviceContainer['feedback_transaction_service']
+                 ->createTransactionFeedback(
+                    $reviewer,
+                    $reviewee,
+                    $message,
+                    $feedbackType,
+                    $orderToReview,
+                    $rating1,
+                    $rating2,
+                    $rating3
+                 );
         }
         redirect('/'.$reviewee->getSlug().'/about');
     }

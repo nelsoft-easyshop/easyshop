@@ -663,26 +663,17 @@ class Memberpage extends MY_Controller
                 $member = $this->esMemberRepo->find($data['uid']);
                 $forMember = $this->esMemberRepo->find($data['for_memberid']);
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
-                $doesFeedbackExists = $this->esMemberFeedbackRepo
-                                           ->findOneBy([
-                                               'member' => $member,
-                                               'forMemberid' => $forMember,
-                                               'feedbKind' => $data['feedb_kind'],
-                                               'order' => $order
-                                           ]);
-                if (! (bool) $doesFeedbackExists) {
-                    $result = $this->esMemberFeedbackRepo
-                                   ->addFeedback(
-                                       $member,
-                                       $forMember,
-                                       $data['feedb_msg'],
-                                       $data['feedb_kind'],
-                                       $order,
-                                       $data['rating1'],
-                                       $data['rating2'],
-                                       $data['rating3']
-                                   );
-                }
+                $result = $this->serviceContainer['feedback_transaction_service']
+                               ->createTransactionFeedback(
+                                    $member,
+                                    $forMember,
+                                    $data['feedb_msg'],
+                                    $data['feedb_kind'],
+                                    $order,
+                                    $data['rating1'],
+                                    $data['rating2'],
+                                    $data['rating3']
+                              ); 
             }
 
             echo (bool) $result;

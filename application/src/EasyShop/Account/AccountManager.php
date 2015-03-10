@@ -125,7 +125,7 @@ class AccountManager
     private $hashUtility;
     
     /**
-     * Hash Utility
+     * Point Tracker
      *
      * @var EasyShop\PointTracker\PointTracker
      */
