@@ -1,8 +1,8 @@
 <?php
 
-echo "\nLoading Instance...";
-
 include_once  __DIR__.'/bootstrap.php';
+
+echo "\nLoading Instance...";
 
 $CI =& get_instance();
 
