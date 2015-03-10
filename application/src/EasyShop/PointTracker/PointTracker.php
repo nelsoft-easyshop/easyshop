@@ -43,7 +43,7 @@ class PointTracker
     {
         // Get Point Type object
         $points = $this->em->getRepository('EasyShop\Entities\EsPointType')
-                                ->find($actionId);
+                           ->find($actionId);
 
         if($points === null){
             return false;
@@ -51,7 +51,7 @@ class PointTracker
 
         // Get Member object
         $user = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                ->find($userId);
+                         ->find($userId);
 
         if($user === null){
             return false;
@@ -59,7 +59,7 @@ class PointTracker
 
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(['member' => $userId]);
+                              ->findOneBy(['member' => $userId]);
 
         // Insert to point history
         $pointHistory = new EsPointHistory();
@@ -105,15 +105,15 @@ class PointTracker
 
         // Get deduct point type instance
         $deduct = $this->em->getRepository('EasyShop\Entities\EsPointType')
-                                ->find($typeId);
+                           ->find($typeId);
 
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(['member' => $userId]);
+                              ->findOneBy(['member' => $userId]);
 
         // Get Member object
         $user = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                ->find($userId);
+                         ->find($userId);
 
        
         if($userPoint === null || $userPoint->getPoint() < $points || 
@@ -196,3 +196,4 @@ class PointTracker
                             ->findAll();
     }
 }
+
