@@ -2018,7 +2018,55 @@ td.td-view.p-view2.color-default{
 .close-hide{
     display: none;
 }
+
+/*--Alert overwrites--*/
+.alert{
+    font-size: 13px;
+}
+
+.alert .fa{
+    margin-right: 10px;
+}
+
+.alert-es-danger {
+  color: #ffffff;
+  background-color: #a94442;
+  border-color: #a94442;
+}
+
+.alert-es-danger hr {
+  border-top-color: #e4b9c0;
+}
+
+.alert-es-danger .alert-link {
+  color: #ffffff;
+}
+
+.alert-es-success {
+  color: #ffffff;
+  background-color: #3c763d;
+  border-color: #3c763d;
+}
+
+.alert-es-success hr {
+  border-top-color: #e4b9c0;
+}
+
+.alert-es-success .alert-link {
+  color: #ffffff;
+}
+
+/*--End of Alert overwrites--*/
+
+/*--Bootstrap overwrites--*/
+.progress{
+    height: 10px !important;
+    border-radius: 2px !important;
+}
+/*--End of boostrap overwrites--*/
 /*** end of Vendor style ***/
+
+
 
 /* =============================================
 ----------------- Responsive  ------------------
