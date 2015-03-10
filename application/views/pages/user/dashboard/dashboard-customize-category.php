@@ -203,7 +203,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container all-items " data-page="1" data-isComplete="false">
+                        <div class="category-items-holder my-category-container all-items " data-page="1" data-isComplete="false" data-isProcessing="false">
                             <ul class="allItems ui-helper-reset ui-helper-clearfix all-product-list product-list">
                             </ul>
                             <div class="clear loader" style="text-align:center; display:none;">
@@ -267,7 +267,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container category-items" data-page="1" data-isComplete="false">
+                        <div class="category-items-holder my-category-container category-items" data-page="1" data-isComplete="false" data-isProcessing="false">
                             <ul class="customCategoryEdit category-product-list product-list">
   
                             </ul>
@@ -296,7 +296,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container all-items" data-page="1" data-isComplete="false">
+                        <div class="category-items-holder my-category-container all-items" data-page="1" data-isComplete="false" data-isProcessing="false">
                             <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list product-list">
                             </ul>
                             <div class="loader clear" style="text-align:center; display:none;">
