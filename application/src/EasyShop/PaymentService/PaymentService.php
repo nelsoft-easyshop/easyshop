@@ -600,7 +600,7 @@ class PaymentService
                              ->queueSMS();
 
             if($messageSender){
-                $this->messageManager->send($messageSender, $buyer, $this->languageLoader->getLine('message_to_buyer'));
+                $this->messageManager->sendMessage($messageSender, $buyer, $this->languageLoader->getLine('message_to_buyer'));
             }
         }
 
@@ -625,7 +625,7 @@ class PaymentService
                                  ->queueSMS();
 
                 if($messageSender){
-                    $this->messageManager->send($messageSender, $seller, $this->languageLoader->getLine('message_to_seller'));
+                    $this->messageManager->sendMessage($messageSender, $seller, $this->languageLoader->getLine('message_to_seller'));
                 }
             }
         } 
