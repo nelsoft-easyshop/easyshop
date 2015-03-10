@@ -57,241 +57,245 @@
                     <img src="/assets/images/es-logo-login.png" alt="Easyshop">
                 </a>
             </div>
-            <div id="adv2" class="login-tabs">
-                <div id="alter-tab" class="idTabs">
-                    <div class="idtabs-tab" >
-                        <a href="#login" id="tab-login">
-                            login
-                            <span class="tab-down-arrow"></span>
-                        </a>
+            <div class="login-loading-content text-center">
+                <img src="/assets/images/loading/preloader-whiteBG.gif" alt="loading...">
+            </div>
+            <div class="login-hide-content" style="display:none;">
+                <div id="adv2" class="login-tabs">
+                    <div id="alter-tab" class="idTabs">
+                        <div class="idtabs-tab" >
+                            <a href="#login" id="tab-login">
+                                login
+                                <span class="tab-down-arrow"></span>
+                            </a>
+                        </div>
+                        <div class="idtabs-tab" id="anchor-create" >
+                            <a href="#create-account" id="tab-create" >
+                                create an account
+                                <span class="tab-down-arrow"></span>
+                            </a>
+                        </div>
+                        <span class="clear"></span>
                     </div>
-                    <div class="idtabs-tab" id="anchor-create" >
-                        <a href="#create-account" id="tab-create" >
-                            create an account
-                            <span class="tab-down-arrow"></span>
-                        </a>
-                    </div>
-                    <span class="clear"></span>
+
                 </div>
 
-            </div>
+                <div id="login">
 
-            <div id="login">
-
-                <div class="login-left-content">
-                    <div class="login-left-border">
-                        <h1>login to your account</h1>
+                    <div class="login-left-content">
+                        <div class="login-left-border">
+                            <h1>login to your account</h1>
+                            <div>
+                                <?php $attr = array('id'=>'login_form'); ?>
+                                <?php echo form_open('', $attr); ?>
+                                    <div class="row">
+                                        <label class="col-xs-12 col-sm-4">Username:</label>
+                                        <span class="col-xs-12 col-sm-8 padding-reset">
+                                            <input class="ui-form-control" type="text" id="login_username" name='login_username'>
+                                            <span id="username_error" style="color:#f42800">
+                                        </span>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-xs-12 col-sm-4">Password:</label>
+                                        <span class="col-xs-12 col-sm-8 padding-reset">
+                                            <input class="ui-form-control" type="password" id='login_password' name='login_password'>
+                                            <span id="passw_error" style="color:#f42800">
+                                            <span id="login_error">
+                                            <?php $formError = isset($errors) ? reset($errors)['login'] : ''; ?>
+                                            <?php if($formError !== 'Account Deactivated' && $formError !== 'Account Banned'):  ?>
+                                                <?php echo html_escape($formError); ?>
+                                            <?php endif; ?>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="row" >
+                                        <span class="col-xs-12  padding-right-reset">
+                                            <span id="deactivatedAccountPrompt" class="input-error error-deactivated" style="display: <?=$formError === 'Account Deactivated' ? 'block' : 'none'  ?>">
+                                                Oooops! This account is currently deactivated.
+                                                If you want to reactivate your account click <a id='sendReactivationLink' data-id="" >here</a> to send
+                                                a reactivation link to your email.
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="row keepmeloggedin-cotent">
+                                        <span class="col-xs-12 col-sm-6">
+                                            <label for="keepmeloggedin">
+                                                <input type="checkbox" name="keepmeloggedin" id="keepmeloggedin"> Remember me
+                                            </label>
+                                        </span>
+                                        <span class="col-xs-12 col-sm-6 text-right padding-reset">
+                                            <a href="/login/identifyEmail" class="login-lnk2 font-bold">Forgot your password?</a>
+                                        </span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="col-xs-12 padding-right-reset">
+                                            <input type="submit" class="btn btn-default-3 login-btn" value='Login' name='login_form'/>
+                                        </span>
+                                    </div>
+                                    <?php if($formError === 'Account Banned'): ?>
+                                        <input type="hidden" id="account-banned-error" value="true" data-message="<?php echo reset($errors)['message']; ?>">
+                                    <?php endif; ?>
+                                <?php echo form_close();?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="login-right-content">
+                        <h1>use your social network account</h1>
                         <div>
-                            <?php $attr = array('id'=>'login_form'); ?>
-                            <?php echo form_open('', $attr); ?>
-                                <div class="row">
-                                    <label class="col-xs-12 col-sm-4">Username:</label>
-                                    <span class="col-xs-12 col-sm-8 padding-reset">
-                                        <input class="ui-form-control" type="text" id="login_username" name='login_username'>
-                                        <span id="username_error" style="color:#f42800">
-                                    </span>
-                                </div>
-                                <div class="row">
-                                    <label class="col-xs-12 col-sm-4">Password:</label>
-                                    <span class="col-xs-12 col-sm-8 padding-reset">
-                                        <input class="ui-form-control" type="password" id='login_password' name='login_password'>
-                                        <span id="passw_error" style="color:#f42800">
-                                        <span id="login_error">
-                                        <?php $formError = isset($errors) ? reset($errors)['login'] : ''; ?>
-                                        <?php if($formError !== 'Account Deactivated' && $formError !== 'Account Banned'):  ?>
-                                            <?php echo html_escape($formError); ?>
-                                        <?php endif; ?>
-                                        </span>
-                                    </span>
-                                </div>
-                                <div class="row" >
-                                    <span class="col-xs-12  padding-right-reset">
-                                        <span id="deactivatedAccountPrompt" class="input-error error-deactivated" style="display: <?=$formError === 'Account Deactivated' ? 'block' : 'none'  ?>">
-                                            Oooops! This account is currently deactivated.
-                                            If you want to reactivate your account click <a id='sendReactivationLink' data-id="" >here</a> to send
-                                            a reactivation link to your email.
-                                        </span>
-                                    </span>
-                                </div>
-                                <div class="row keepmeloggedin-cotent">
-                                    <span class="col-xs-12 col-sm-6">
-                                        <label for="keepmeloggedin">
-                                            <input type="checkbox" name="keepmeloggedin" id="keepmeloggedin"> Remember me
-                                        </label>
-                                    </span>
-                                    <span class="col-xs-12 col-sm-6 text-right padding-reset">
-                                        <a href="/login/identifyEmail" class="login-lnk2 font-bold">Forgot your password?</a>
-                                    </span>
-                                </div>
-                                <div class="row">
-                                    <span class="col-xs-12 padding-right-reset">
-                                        <input type="submit" class="btn btn-default-3 login-btn" value='Login' name='login_form'/>
-                                    </span>
-                                </div>
-                                <?php if($formError === 'Account Banned'): ?>
-                                    <input type="hidden" id="account-banned-error" value="true" data-message="<?php echo reset($errors)['message']; ?>">
-                                <?php endif; ?>
-                            <?php echo form_close();?>
+                             <a href="<?=$facebook_login_url?>" class="btn facebook-btn">
+                                <span class="log-in-img"><img src="/assets/images/img-log-in-fb.png"></span>
+                                <span class="text-center">Log In with Facebook</span>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="<?=$google_login_url?>" class="btn google-btn">
+                                <span class="log-in-img"><img src="/assets/images/img-log-in-google.png"></span>
+                                <span class="text-center">Log In with Google</span>
+                            </a>
+                        </div>
+                        <div class="text-center font-bold">
+                            <span>
+                                Don't have an account? 
+                                    <a href="#anchor-create" class="login-lnk open-create-account">Create an account</a>
+                            </span>
                         </div>
                     </div>
+                    <input type='hidden' value='<?php echo $dayRange.' '.$hourRange; ?>' id='office_hours'/>
+                    <input type='hidden' value='<?php echo $officeContactNo ?>' id='office_contactno'/>
+                    <div class="clear"></div>
                 </div>
-                <div class="login-right-content">
-                    <h1>use your social network account</h1>
-                    <div>
-                         <a href="<?=$facebook_login_url?>" class="btn facebook-btn">
-                            <span class="log-in-img"><img src="/assets/images/img-log-in-fb.png"></span>
-                            <span class="text-center">Log In with Facebook</span>
-                        </a>
+                <!-- create account section -->
+                <div id="create-account">
+                    <div class="login-left-content md-hide-content">
+                        <h1>why create an account?</h1>
+                        <div class="why-create-content">
+                            <img src="/assets/images/img-why-create1.png" alt="Buy the product you love">
+                            <span><strong>Buy</strong> the product you love</span>
+                        </div>
+                        <div class="why-create-content">
+                            <img src="/assets/images/img-why-create2.png" alt="Upload and Sell your items">
+                            <span><strong>Upload and Sell</strong> your items</span>
+                        </div>
+                        <div class="why-create-content">
+                            <img src="/assets/images/img-why-create3.png" alt="Unlimited upload of your items">
+                            <span><strong>Unlimited upload</strong> of your items</span>
+                        </div>
                     </div>
-                    <div>
-                        <a href="<?=$google_login_url?>" class="btn google-btn">
-                            <span class="log-in-img"><img src="/assets/images/img-log-in-google.png"></span>
-                            <span class="text-center">Log In with Google</span>
-                        </a>
-                    </div>
-                    <div class="text-center font-bold">
-                        <span>
-                            Don't have an account? 
-                                <a href="#anchor-create" class="login-lnk open-create-account">Create an account</a>
-                        </span>
-                    </div>
-                </div>
-                <input type='hidden' value='<?php echo $dayRange.' '.$hourRange; ?>' id='office_hours'/>
-                <input type='hidden' value='<?php echo $officeContactNo ?>' id='office_contactno'/>
-                <div class="clear"></div>
-            </div>
-            <!-- create account section -->
-            <div id="create-account">
-                <div class="login-left-content md-hide-content">
-                    <h1>why create an account?</h1>
-                    <div class="why-create-content">
-                        <img src="/assets/images/img-why-create1.png" alt="Buy the product you love">
-                        <span><strong>Buy</strong> the product you love</span>
-                    </div>
-                    <div class="why-create-content">
-                        <img src="/assets/images/img-why-create2.png" alt="Upload and Sell your items">
-                        <span><strong>Upload and Sell</strong> your items</span>
-                    </div>
-                    <div class="why-create-content">
-                        <img src="/assets/images/img-why-create3.png" alt="Unlimited upload of your items">
-                        <span><strong>Unlimited upload</strong> of your items</span>
-                    </div>
-                </div>
-                <div class="login-right-content">
-                     <h1>create your easyshop account</h1>
+                    <div class="login-right-content">
+                         <h1>create your easyshop account</h1>
 
-                     <?php echo form_open('', array('id'=>'register_form1'));?>
-                    <fieldset>
-                        <div class="<?= $is_promo ? 'reg2_password' : 'reg2_username'?>">
-                            <div class="row">
-                                <label class="col-xs-12 col-sm-5">Username</label>
-                                <span class="col-xs-12 col-sm-7">
-                                    <input maxlength='25' type="text" placeholder="" id="username" name="username" class="reqfield ui-form-control" autocomplete="off"/>
-                                    <input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
-                                    <span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
-                                    <div id="username_status">
-                                        <span class="username_availability"></span>
-                                    </div>
-                                </span>
-                            </div>
-                        </div>
-                        <?php if($is_promo):?>
-                            <div class="reg2_fullname" style="display: inline-block>">
+                         <?php echo form_open('', array('id'=>'register_form1'));?>
+                        <fieldset>
+                            <div class="<?= $is_promo ? 'reg2_password' : 'reg2_username'?>">
                                 <div class="row">
-                                    <label class="col-xs-12 col-sm-5">Fullname</label>
+                                    <label class="col-xs-12 col-sm-5">Username</label>
                                     <span class="col-xs-12 col-sm-7">
-                                        <input type="text" placeholder="" id="fullname" name="fullname" class="reqfield ui-form-control" autocomplete="off" value="">
-                                        <span class="red ci_form_validation_error"><?php echo form_error('fullname'); ?></span>
+                                        <input maxlength='25' type="text" placeholder="" id="username" name="username" class="reqfield ui-form-control" autocomplete="off"/>
+                                        <input  type="hidden" id="usernamecheck" value="" name="usernamecheck">
+                                        <span class="red ci_form_validation_error"><?php echo form_error('username'); ?></span>
+                                        <div id="username_status">
+                                            <span class="username_availability"></span>
+                                        </div>
                                     </span>
                                 </div>
                             </div>
-                        <?php endif; ?>
-                        <div class="reg2_password">
-                            <div class="row">
-                                <label class="col-xs-12 col-sm-5">Password</label>
-                                <span class="col-xs-12 col-sm-7">
-                                    <input class="ui-form-control" type="password" placeholder="" id="password" name="password" class="reqfield">
-                                    <span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="reg2_confirmpassword">
-                            <div class="row">
-                                <label class="col-xs-12 col-sm-5 padding-right-reset">Confirm Password</label>
-                                <span class="col-xs-12 col-sm-7">
-                                    <input type="password" class="ui-form-control" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
-                                    <span class="field_pword_status">
-                                        <span class="fieldstatus input-success" id="cpassword_check" style="display:none;"/>Password match</span>
-                                        <span class="fieldstatus input-error" id="cpassword_x" style="display:none; "/>password don't match</span>
-                                    </span>
-                                    <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
-                                    
-                                </span>
-                            </div>
-                        </div>
-                        <div class="reg2_email">
-                            <div class="row">
-                                <label class="col-xs-12 col-sm-5">Email Address</label>
-                                <span class="col-xs-12 col-sm-7">
-                                    <input type="text" placeholder="" id="email" name="email" class="reqfield ui-form-control" autocomplete="off">
-                                    <input type="hidden" id="emailcheck" value="">
-                                    <div id="email_status">
-                                        <span class="fieldstatus input-success"  id="email_check" style="display:none;"/>Email is valid</span>
+                            <?php if($is_promo):?>
+                                <div class="reg2_fullname" style="display: inline-block>">
+                                    <div class="row">
+                                        <label class="col-xs-12 col-sm-5">Fullname</label>
+                                        <span class="col-xs-12 col-sm-7">
+                                            <input type="text" placeholder="" id="fullname" name="fullname" class="reqfield ui-form-control" autocomplete="off" value="">
+                                            <span class="red ci_form_validation_error"><?php echo form_error('fullname'); ?></span>
+                                        </span>
                                     </div>
-                                    <span class="red email_availability"></span>
-                                    <span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
+                                </div>
+                            <?php endif; ?>
+                            <div class="reg2_password">
+                                <div class="row">
+                                    <label class="col-xs-12 col-sm-5">Password</label>
+                                    <span class="col-xs-12 col-sm-7">
+                                        <input class="ui-form-control" type="password" placeholder="" id="password" name="password" class="reqfield">
+                                        <span class="red ci_form_validation_error"><?php echo form_error('password'); ?></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="reg2_confirmpassword">
+                                <div class="row">
+                                    <label class="col-xs-12 col-sm-5 padding-right-reset">Confirm Password</label>
+                                    <span class="col-xs-12 col-sm-7">
+                                        <input type="password" class="ui-form-control" placeholder="" id="cpassword" name="cpassword" class="reqfield" disabled>
+                                        <span class="field_pword_status">
+                                            <span class="fieldstatus input-success" id="cpassword_check" style="display:none;"/>Password match</span>
+                                            <span class="fieldstatus input-error" id="cpassword_x" style="display:none; "/>password don't match</span>
+                                        </span>
+                                        <span class="red ci_form_validation_error"><?php echo form_error('cpassword'); ?></span>
+                                        
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="reg2_email">
+                                <div class="row">
+                                    <label class="col-xs-12 col-sm-5">Email Address</label>
+                                    <span class="col-xs-12 col-sm-7">
+                                        <input type="text" placeholder="" id="email" name="email" class="reqfield ui-form-control" autocomplete="off">
+                                        <input type="hidden" id="emailcheck" value="">
+                                        <div id="email_status">
+                                            <span class="fieldstatus input-success"  id="email_check" style="display:none;"/>Email is valid</span>
+                                        </div>
+                                        <span class="red email_availability"></span>
+                                        <span class="red ci_form_validation_error"><?php echo form_error('email'); ?></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mobile">
+                                <div class="row">
+                                <label class="col-xs-12 col-sm-5">Mobile Number</label>
+                                <span class="col-xs-12 col-sm-7">
+                                    <input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield ui-form-control" id="mobile" maxlength="11">
+                                    <input type="hidden" id="mobilecheck" value="">
+                                    <div id="mobile_status">
+                                        <span class="fieldstatus input-success" id="mobile_check" style="display:none;"/>Mobile is valid</span>
+                                        <span class=" red  mobile_availability"></span>
+                                    </div>
+                                    <span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
+                                    <span class="help-block spnmsg padding1"></span>
                                 </span>
                             </div>
-                        </div>
-                        <div class="mobile">
                             <div class="row">
-                            <label class="col-xs-12 col-sm-5">Mobile Number</label>
-                            <span class="col-xs-12 col-sm-7">
-                                <input type="text" placeholder="e.g. 09051234567" name="mobile" class="reqfield ui-form-control" id="mobile" maxlength="11">
-                                <input type="hidden" id="mobilecheck" value="">
-                                <div id="mobile_status">
-                                    <span class="fieldstatus input-success" id="mobile_check" style="display:none;"/>Mobile is valid</span>
-                                    <span class=" red  mobile_availability"></span>
-                                </div>
-                                <span class="red ci_form_validation_error"><?php echo form_error('mobile'); ?></span>
-                                <span class="help-block spnmsg padding1"></span>
-                            </span>
-                        </div>
-                        <div class="row">
-                            <span class="col-xs-12">
-                                <input type="submit" class="btn btn-default-3 create-account-btn" value="SEND" name="register_form1" id="register_form1_btn" >
-                            </span>
-                        </div>
-                        <div class="reg2_tc">
-                            <p class="terms_con padding1 padding-t1">
-                                By registering to Easyshop.ph, you agree to comply with our
-                                <span class="terms_and_conditions">Terms and Conditions</span>
-                            </p>
-                        </div>
-                    </fieldset>
-                    <?php echo form_close();?>
+                                <span class="col-xs-12">
+                                    <input type="submit" class="btn btn-default-3 create-account-btn" value="SEND" name="register_form1" id="register_form1_btn" >
+                                </span>
+                            </div>
+                            <div class="reg2_tc">
+                                <p class="terms_con padding1 padding-t1">
+                                    By registering to Easyshop.ph, you agree to comply with our
+                                    <span class="terms_and_conditions">Terms and Conditions</span>
+                                </p>
+                            </div>
+                        </fieldset>
+                        <?php echo form_close();?>
 
-                    <div class="why-create-mobile">
-                        <span class="show-why-create-mobileview">why create an account?</span>
-                        <div class="why-create-mobileview">
-                            <div class="why-create-content">
-                                <img src="/assets/images/img-why-create1.png" alt="Buy the product you love">
-                                <span><strong>Buy</strong> the product you love</span>
-                            </div>
-                            <div class="why-create-content">
-                                <img src="/assets/images/img-why-create2.png" alt="Upload and Sell your items">
-                                <span><strong>Upload and Sell</strong> your items</span>
-                            </div>
-                            <div class="why-create-content">
-                                <img src="/assets/images/img-why-create3.png" alt="Unlimited upload of your items">
-                                <span><strong>Unlimited upload</strong> of your items</span>
+                        <div class="why-create-mobile">
+                            <span class="show-why-create-mobileview">why create an account?</span>
+                            <div class="why-create-mobileview">
+                                <div class="why-create-content">
+                                    <img src="/assets/images/img-why-create1.png" alt="Buy the product you love">
+                                    <span><strong>Buy</strong> the product you love</span>
+                                </div>
+                                <div class="why-create-content">
+                                    <img src="/assets/images/img-why-create2.png" alt="Upload and Sell your items">
+                                    <span><strong>Upload and Sell</strong> your items</span>
+                                </div>
+                                <div class="why-create-content">
+                                    <img src="/assets/images/img-why-create3.png" alt="Unlimited upload of your items">
+                                    <span><strong>Unlimited upload</strong> of your items</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="clear"></div>
                 </div>
-                <div class="clear"></div>
             </div>
-            
    
             <div class="login-throttle" style="display:none;">
                 <div class="login-throttle-border">

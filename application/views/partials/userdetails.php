@@ -24,7 +24,7 @@
                                 &times;
                             </button>
                             <?php foreach($errors as $key => $value): ?>
-                                <?php echo "<p><strong>".ucwords(str_replace('_', ' ', $key)) . '</strong>: ' . $value[0] . "</p>" ?>
+                                <?php echo "<p><strong>".html_escape(ucwords(str_replace('_', ' ', $key))) . '</strong>: ' . html_escape($value[0]) . "</p>" ?>
                             <?php endforeach; ?>
                         </div>
 
@@ -87,7 +87,11 @@
                 <tr id="websiteRow">
                     <td class="td-contact-icon"><i><img src="<?php echo getAssetsDomain() ?>assets/images/vendor-icons/website.png" width="32px" height="32px" alt="Website:" /></i></td>
                     <td class="td-contact-detail">
-                        <p class="text-contact"><a href=" <?php echo preg_match("~^(?:f|ht)tps?://~i", $validatedWebsite) ? html_escape($validatedWebsite) : 'http://' . html_escape($validatedWebsite)?>/" id="validatedWebsite"><?php echo html_escape($validatedWebsite); ?></a></p>
+                        <p class="text-contact">
+                            <div class="external-links-container">
+                                <a href=" <?php echo preg_match("~^(?:f|ht)tps?://~i", $validatedWebsite) ? html_escape($validatedWebsite) : 'http://' . html_escape($validatedWebsite)?>/" id="validatedWebsite"><?php echo html_escape($validatedWebsite); ?></a>
+                            </div>
+                        </p>
                         <input type="hidden" id="postWebsite" value="<?php echo html_escape($website)?>"/>
                         <input type="text" class="input-detail" placeholder="Website..." name="website" id="website" value="<?php echo html_escape($website); ?>">
                     </td>

@@ -8,7 +8,7 @@
                         <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
                     </div>
                     <?PHP foreach($soldTransactionDetails['product'] as $productKey => $product) : ?>
-                        <div class="pd-top-15">
+                        <div class="pd-top-15 item-list-products">
                             <div class="col-xs-12 col-sm-9 padding-reset trans-left-panel pd-top-10">
                                 <div class="pd-bottom-20">
                                     <div class="col-xs-3 col-sm-4 padding-reset">
@@ -148,7 +148,7 @@
                                                     </div>
                                                     <span class="raty-error"></span>
                                                     <div>
-                                                        <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
+                                                        <textarea rows="4" cols="50" maxlength="1024" name="feedback-field" placeholder="Write your message..."></textarea>
                                                         <span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
                                                     </div>
                                                 </div>

@@ -1,6 +1,8 @@
 <div class="div-tab ">
     <div class="div-delivery-setup delivery-setup-loading" style="text-align:center">
-        <img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG.gif"/>
+        <br/><br/>
+        <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif"/>
+        <br/><br/>
         <p class="loading-text">Loading your delivery address info...</p>
     </div>
     <div id="deliverAddressDiv" style="display:none;">
@@ -16,6 +18,17 @@
                 <p class="panel-dashboard-title">Delivery Address</p>
                 <input type="hidden" name="c_country" value="">
                 <?php echo form_open('',array('id'=>'deliverAddressForm','class' => 'form-horizontal', 'role' => 'form'));?>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-es-danger alert-dismissible" style="display:none" role="alert" id="delivery-address-error">
+                                Please fix the errors in the delivery address you have provided.
+                            </div>
+                            
+                            <div class="alert alert-es-success" style="display:none" role="alert" id="delivery-address-success">
+                                Delivery address updated successfully.
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Consignee Name : </label>
                         <div class="col-sm-8">
@@ -118,16 +131,6 @@
                             <input type="submit" class="btn btn-lg btn-save-dashboard" name="c_deliver_address_btn" id="saveDeliverAddressBtn" value="Save Changes"/>
                         </div>
                     </div>
-                    
-                    <div class="alert alert-danger" style="display:none" role="alert" id="delivery-address-error">
-                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        Please fix the errors in the delivery address you have provided.
-                    </div>
-                    
-                    <div class="alert alert-success" style="display:none" role="alert" id="delivery-address-success">
-                        Delivery address updated successfully.
-                    </div>
-                    
                 <?php echo form_close();?>
             </div>
         </div>

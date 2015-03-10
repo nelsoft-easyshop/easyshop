@@ -38,41 +38,6 @@
 |
 */
 
-require_once __DIR__ . '/../src/EasyShop/Core/Configuration/Configuration.php';
-$configService = new EasyShop\Core\Configuration\Configuration();
-
-$enable_splash = false;
-$bypass_IP = '124.104.99.90';
-
-if($configService->isConfigFileExists()){
-    $serverConfig = $configService->getConfigValue();
-    if(isset($serverConfig['maintenance_on'])){
-        $enable_splash = $serverConfig['maintenance_on'];
-    }
-    if(isset($serverConfig['maintenance_bypass_ip'])){
-        $bypass_IP = $serverConfig['maintenance_bypass_ip'];
-    }
-}
-
-
-$headers = apache_request_headers();
-if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])){
-    $clientIP = ($_SERVER["HTTP_CF_CONNECTING_IP"]);
-}
-else if(isset($headers['X-Forwarded-For'])){
-    $clientIP = $headers['X-Forwarded-For'];
-}
-else{
-    $clientIP = $_SERVER['REMOTE_ADDR'];
-}
-
-
-if ($enable_splash && ($bypass_IP !== $clientIP)){
-    $route['default_controller'] = "home/splash";
-    $route['404_override'] = 'home/splash';
-    $route['(:any)'] = "home/splash";   
-}
-else {
     $route['default_controller'] = "home";
     $route['404_override'] = 'store/userprofile';
     
@@ -171,6 +136,7 @@ else {
     $route['(?i)messages'] = '/MessageController/messages';
 
     $route['(?i)register'] = '/login';
+    $route['(?i)redirect'] = '/home/redirect';
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';
     $route['(?i)faq'] = 'home/faq';
@@ -190,10 +156,15 @@ else {
     #MOBILE
     $route['mobile/payment-type'] = 'mobile/mobilepayment/getPaymentMethod';
     $route['mobile/payment/review'] = 'mobile/mobilepayment/reviewPayment';
+    $route['mobile/payment/pay/request'] = 'mobile/mobilepayment/paymentRequestToken';
+    $route['mobile/payment/pay/cod'] = 'mobile/mobilepayment/paymentCashOnDelivery';
+    $route['mobile/payment/pay/paypal'] = 'mobile/mobilepayment/paymentPaypalPersist';
+
+    $route['mobile/add-device-token'] = 'mobile/notification/addDeviceToken';
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
-}
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

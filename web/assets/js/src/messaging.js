@@ -2,7 +2,9 @@
 
     $(document).ready(function()
     {
-        if(config.isSocketioEnabled){
+        var isChatAllowed = $.parseJSON($('#listOfFeatureWithRestriction').data('real-time-chat'));
+
+        if(config.isSocketioEnabled && isChatAllowed){
             var $userInfo = $('#userInfo');
             var $chatConfig = $('#chatServerConfig');
             var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });

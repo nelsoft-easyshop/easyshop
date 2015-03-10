@@ -436,7 +436,7 @@
                                                     <?php foreach ($itemQuantity as $keyq => $valueq): ?>
                                                         <div class="div-combination zebra-div combination<?=$cmbcounter;?>" data-itemId="<?=$keyq;?>">
                                                             <div class="col-xs-2 col-sm-1 col-md-1 div1">
-                                                                <input type="text"  size="3" value="<?=$valueq['quantity']; ?>" class="qty ui-form-control"  onkeypress="return isNumberKey(event)">
+                                                                <input type="text"  size="3" value="<?=$valueq['quantity']; ?>" maxlength="4" class="qty ui-form-control"  onkeypress="return isNumberKey(event)">
                                                             </div>
                                                             <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                                                 <?php foreach ($eachAttribute as $key => $value): ?>
@@ -463,7 +463,7 @@
                                         <div class="container-select-control-panel-option clear bg-color">
                                             <div class="select-control-panel-option">
                                                 <div class="col-xs-2 col-sm-1 col-md-1 div1">
-                                                    <input type="text" name="allQuantity" value="<?=(isset($noCombinationQuantity))?$noCombinationQuantity:'1'; ?>" size="3"  onkeypress="return isNumberKey(event)" class="qty ui-form-control">
+                                                    <input type="text" name="allQuantity" value="<?=(isset($noCombinationQuantity))?$noCombinationQuantity:'1'; ?>" size="3" maxlength="4" onkeypress="return isNumberKey(event)" class="qty ui-form-control">
                                                 </div>           
                                                 <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                                     <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?> 

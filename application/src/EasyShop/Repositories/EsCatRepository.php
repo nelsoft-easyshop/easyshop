@@ -4,10 +4,34 @@ namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
 use EasyShop\Entities\EsCat;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\ResultSetMapping;
 
 class EsCatRepository extends EntityRepository
 {
+
+    /**
+     * Select all category but root is not included
+     * @return array
+     */
+    public function selectAllCategory()
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('id_cat','id_cat');
+        $rsm->addScalarResult('parent_id','parent_id');
+        $rsm->addScalarResult('slug','slug');
+        $rsm->addScalarResult('name','name');
+        $rsm->addScalarResult('description','description'); 
+
+        $sql = "SELECT id_cat, parent_id, slug, name, description FROM es_cat where id_cat != :rootCategory";
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter('rootCategory', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID);
+        $categories = $query->getResult();
+
+        return $categories;
+    }
+
     /**
      * Get all children category recursively up to last category of the selected category
      * @param  integer $categoryId

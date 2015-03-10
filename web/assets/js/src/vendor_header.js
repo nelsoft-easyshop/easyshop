@@ -84,11 +84,14 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     });
 
     // Search button click
-    $(document).on('click','.submitSearch',function() {
-        var searchType = $(this).closest(".search-form").find('.search-type').val();
-        var action =  (searchType == 1) ? "/" + $('#vendor-slug').val() : "/search/search.html";
-        $(this).closest(".search-form").attr("action",action);
+    $(document).on('click','.submitSearch',function() { 
         $(this).closest(".search-form").submit();
+    });
+
+    $(document).on('submit','form.search-form',function(){
+        var searchType = $(this).find('.search-type').val();
+        var action =  (searchType == 1) ? "/" + $('#vendor-slug').val() : "/search/search.html";
+        $(this).attr("action",action);
     });
    
     $(document).on('click','#banner-save-changes.clickable',function() {
@@ -186,7 +189,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                         errString = errorMessage;
                         return false;
                     });
-                    alert(errString);
+                    alert(escapeHtml(errString));
                 }
                 button.addClass('clickable');
             } 
@@ -498,7 +501,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     sibling.show();
                 }
                 else{
-                    alert(obj.error);
+                    alert(escapeHtml(obj.error));
                 }
             });
         }

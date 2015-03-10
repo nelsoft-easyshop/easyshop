@@ -2,7 +2,7 @@
 
 namespace EasyShop\PaymentService;
 
-use EasyShop\Entities\EsAddress;
+use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsOrderShippingAddress;
 use EasyShop\Entities\EsLocationLookup;
 use EasyShop\Entities\EsOrder;
@@ -33,73 +33,6 @@ class PaymentService
     const STATUS_SUCCESS = 's';
 
     const STATUS_PENDING = 'p';
-    /**
-     * Error Codes
-     *
-     * @var mixed
-     */
-    private $error = [
-        'init-failed' => [
-            'code' => 'Error Code: Payment000', 
-            'description' => 'Initialization failed'
-            ],
-        'EsAddress-repo-fail' => [
-            'code' => 'Error Code: Payment001', 
-            'description' => 'Failed to retrieve an address via repository'
-            ],
-        'EsLocationLookup-repo-fail' => [
-            'code' => 'Error Code: Payment001.1', 
-            'description' => 'Failed to retrieve multiple data from EsLocationLookup via repository'
-            ],
-        'EsOrderShippingAddress-failed-insert' => [
-            'code' => 'Error Code: Payment001.2', 
-            'description' => 'Failed to persist EsOrderShippingAddress object'
-            ],
-        'gateway-data-retrieval-fail' => [
-            'code' => 'Error Code: Payment002', 
-            'description' => 'Failed to retrieve gateway context data'
-            ],
-        'EsOrder-failed-insert' => [
-            'code' => 'Error Code: Payment002.1', 
-            'description' => 'Failed to persist EsOrder object'
-            ],
-        'EsOrderHistory-failed-insert' => [
-            'code' => 'Error Code: [HISTORY]Payment003', 
-            'description' => 'Failed to persist EsOrderHistory object'
-            ],
-        'EsOrder-failed-update' => [
-            'code' => 'Error Code: Payment003.1', 
-            'description' => 'Failed to update EsOrder Invoice No'
-            ],
-        'EsProduct-repo-failed' => [
-            'code' => 'Error Code: Payment007a', 
-            'description' => 'Failed to retrieve data from EsProduct repository'
-            ],
-        'EsOrderBillingInfo-failed-insert' => [
-            'code' => 'Error Code: Payment008c', 
-            'description' => 'Failed to persist EsOrderBillingInfo object'
-            ],
-        'EsMember-repo-fail' => [
-            'code' => 'Error Code: Payment007b', 
-            'description' => 'Failed to retrieve data from EsMember repository'
-            ],
-        'EsOrderProductStatus-repo-fail' => [
-            'code' => 'Error Code: Payment007c', 
-            'description' => 'Failed to retrieve data from EsOrderProductStatus repository'
-            ],
-        'EsOrderProduct-failed-insert' => [
-            'code' => 'Error Code: Payment008', 
-            'description' => 'Failed to persist EsOrderProduct object'
-            ],
-        'EsOrderProductAttr-failed-insert' => [
-            'code' => 'Error Code: Payment008b', 
-            'description' => 'Failed to persist EsOrderProductAttr object'
-            ],
-        'EsOrderProductHistory-failed-insert' => [
-            'code' => 'Error Code: Payment009', 
-            'description' => 'Failed to persist EsOrderProductHistory object'
-            ]
-    ];
 
     /**
      * Gateway path
@@ -172,16 +105,99 @@ class PaymentService
     private $postArray;
 
     /**
+     * Sms Notification Service
+     *
+     * @var  EasyShop\Notification\MobileNotification
+     */
+    private $smsService;
+
+    /**
+     * Email Notification Service
+     *
+     * @var EasyShop\Notification\EmailNotification
+     */
+    private $emailService;
+
+    /**
+     * Parser
+     *
+     * @var CI_Parser
+     */
+    private $parserLibrary;
+
+    /**
+     * Config Loader
+     *
+     * @var EasyShop\Config\ConfigLoader
+     */
+    public $configLoader;
+
+    /**
+     * XML Resource
+     *
+     * @var EasyShop\XML\Resource
+     */
+    private $xmlResourceService;
+
+    /**
+     * Social Media Manager
+     *
+     * @var EasyShop\SocialMedia\SocialMediaManager
+     */
+    private $socialMediaManager;
+
+    /**
+     * Language Loader
+     *
+     * @var EasyShop\LanguageLoader\LanguageLoader
+     */
+    private $languageLoader;
+
+    /**
+     * Message Manager
+     *
+     * @var EasyShop\Message\MessageManager
+     */
+    private $messageManager;
+
+    /**
+     * Soap client for dragonpay
+     */
+    public $dragonPaySoapClient;
+
+    /**
      * Constructor
      * 
      */
-    public function __construct($em, $request, $pointTracker, $promoManager, $productManager)
+    public function __construct($em, 
+                                $request, 
+                                $pointTracker, 
+                                $promoManager, 
+                                $productManager, 
+                                $emailService,
+                                $smsService, 
+                                $parserLibrary,
+                                $configLoader,
+                                $xmlResourceService,
+                                $socialMediaManager,
+                                $languageLoader,
+                                $messageManager,
+                                $dragonPaySoapClient)
     {
         $this->em = $em;
         $this->request = $request;
         $this->pointTracker = $pointTracker;
         $this->promoManager = $promoManager;
         $this->productManager = $productManager;
+        $this->smsService = $smsService;
+        $this->emailService = $emailService;
+        $this->parserLibrary = $parserLibrary;
+        $this->configLoader = $configLoader;
+        $this->xmlResourceService = $xmlResourceService;
+        $this->socialMediaManager = $socialMediaManager;
+        $this->languageLoader = $languageLoader;
+        $this->messageManager = $messageManager;
+        $this->dragonPaySoapClient = $dragonPaySoapClient;
     }
 
 
@@ -217,234 +233,6 @@ class PaymentService
                     $this,
                     $primaryGatewayValues
                     );
-    }
-
-    /**
-     * Persist Payment
-     * 
-     * @param int $paymentType Specifies payment method (included in gateway)
-     * @param double $ItemTotalPrice Contains total price of items
-     * @param string $member_id Contains member id
-     * @param string $productstring Contains product descriptions
-     * @param int $productCount Contains total count of products
-     * @param string $apiResponse Contains response of api
-     * @param string $tid Transaction id
-     *
-     *
-     * @return mixed
-     */
-    public function persistPayment($ItemTotalPrice,$member_id,$productstring,$productCount,$apiResponse,$tid, $gatewayReference)
-    {
-        // remap variables
-        $invoiceNo = $member_id.'-'.date('ymdhs');
-        $totalAmount = $ItemTotalPrice;
-        $ip = $this->request->getClientIp();
-        $memberId = $member_id;
-        $productString = $productstring;
-        $productCount = $productCount;
-        $dataResponse = $apiResponse;
-        $transactionId = $tid;
-        
-        // array for point gateway
-        $itemArr = [];
-
-        // start transaction
-        $this->em->getConnection()->beginTransaction();
-
-        $response['o_success'] = false;
-        $response['o_message'] = $this->error['init-failed']['code'];
-        
-        try{
-            $response['o_message'] = $this->error['EsAddress-repo-fail']['code'];
-
-            $addr = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                    ->findOneBy([
-                        'type' => 1,
-                        'idMember' => $memberId
-                        ]);
-
-            $response['o_message'] = $this->error['EsLocationLookup-repo-fail']['code'];
-            $locationLookupCity = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                        ->findOneBy(['idLocation' => $addr->getCity()]);
-
-            $locationLookupStateRegion = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                        ->findOneBy(['idLocation' => $addr->getStateregion()]);
-
-            $locationLookupCountry = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                                        ->findOneBy(['idLocation' => $addr->getCountry()]);
-            
-            $response['o_message'] = $this->error['EsOrderShippingAddress-failed-insert']['code'];
-            $shipOrderAddr = new EsOrderShippingAddress();
-            $shipOrderAddr->setCity($locationLookupCity);
-            $shipOrderAddr->setStateregion($locationLookupStateRegion);
-            $shipOrderAddr->setCountry($locationLookupCountry);
-            $shipOrderAddr->setAddress($addr->getAddress());
-            $shipOrderAddr->setConsignee($addr->getConsignee());
-            $shipOrderAddr->setMobile($addr->getMobile());
-            $shipOrderAddr->setTelephone($addr->getTelephone());
-            $shipOrderAddr->setLat($addr->getLat());
-            $shipOrderAddr->setLng($addr->getLng());
-
-            $this->em->persist($shipOrderAddr);
-            $this->em->flush();
-
-            $addrId = $shipOrderAddr->getIdOrderShippingAddress();
-            $response['o_message'] = $this->error['gateway-data-retrieval-fail']['code'];
-
-            $orderStatus = $gatewayReference->getOrderStatus();
-            $orderProductStatus = $gatewayReference->getOrderProductStatus();
-            $externalCharge = $gatewayReference->getExternalCharge();
-
-            $response['o_message'] = $this->error['EsOrder-failed-insert']['code'];
-            $net = $totalAmount - $externalCharge;
-
-            $buyer = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                    ->findOneBy(['idMember' => $memberId]);
-
-            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                            ->find($gatewayReference->getParameter('paymentType'));
-
-            $orderStatusObj = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')
-                                            ->findOneBy(['orderStatus' => $orderStatus]); 
-        
-            
-            $order = new EsOrder();
-            $order->setInvoiceNo($invoiceNo);
-            $order->setBuyer($buyer);
-            $order->setTotal($totalAmount);
-            $order->setDateadded(date_create(date("Y-m-d H:i:s")));
-            $order->setDatemodified(date_create(date("Y-m-d H:i:s")));
-            $order->setIp($ip);
-            $order->setShippingAddressId($addrId);
-            $order->setPaymentMethod($paymentMethod);
-            $order->setOrderStatus($orderStatusObj);
-            $order->setDataResponse($dataResponse);
-            $order->setTransactionId($transactionId);
-            $order->setPaymentMethodCharge($externalCharge);
-            $order->setNet($net);
-            $this->em->persist($order);
-            $this->em->flush();
-            
-
-            $response['o_message'] = $this->error['EsOrderHistory-failed-insert']['code'];
-            $orderHistory = new EsOrderHistory();
-            $orderHistory->setOrder($order);
-            $orderHistory->setComment("CREATED");
-            $orderHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
-            $orderHistory->setOrderStatus($orderStatusObj);
-            $this->em->persist($orderHistory);
-            $this->em->flush();
-
-
-            $response['o_message'] = $this->error['EsOrder-failed-update']['code'];
-            $order->setInvoiceNo($order->getIdOrder().'-'.$invoiceNo);
-            $this->em->flush();
-
-            $productCounter = 1;
-            $products = explode('<||>', $productString);
-            foreach ($products as $product) {
-
-                $details = explode('{+}', $product);
-                $productExternalCharge = (floatval($details[5])/$totalAmount) * $externalCharge;
-                $response['o_message'] = $this->error['EsProduct-repo-failed']['code'];
-                
-
-                $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                        ->find((int)$details[1]);
-
-                $billingInfoId = $prod->getBillingInfoId();
-
-                $response['o_message'] = $this->error['EsOrderBillingInfo-failed-insert']['code'];
-                if($billingInfoId != 0){
-                    
-                    $billingInfo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo')
-                                                ->find($prod->getBillingInfoId());
-
-                    $bankInfo = $this->em->getRepository('EasyShop\Entities\EsBankInfo')
-                                                ->find($billingInfo->getBankId());
-                    
-                    $orderBillingInfo = new EsOrderBillingInfo();
-                    $orderBillingInfo->setBankName($bankInfo->getBankName());
-                    $orderBillingInfo->setAccountName($billingInfo->getBankAccountName());
-                    $orderBillingInfo->setAccountNumber($billingInfo->getBankAccountNumber());
-                    $orderBillingInfo->setCreatedAt(date_create(date("Y-m-d H:i:s")));
-                    $orderBillingInfo->setUpdatedAt(date_create(date("Y-m-d H:i:s")));
-                    $this->em->persist($orderBillingInfo);
-                    $this->em->flush();                    
-                }
-
-                $response['o_message'] = $this->error['EsMember-repo-fail']['code'];
-                $net = floatval($details[5]) - $productExternalCharge;
-
-                $seller = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                        ->find((int)$details[0]);
-
-                $response['o_message'] = $this->error['EsOrderProductStatus-repo-fail']['code'];
-                $ordProdStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')
-                                            ->find($orderProductStatus);
-
-                $response['o_message'] = $this->error['EsOrderProduct-failed-insert']['code'];
-                $orderProduct = new EsOrderProduct();
-                $orderProduct->setOrder($order);
-                $orderProduct->setSeller($seller);
-                $orderProduct->setProduct($prod);
-                $orderProduct->setOrderQuantity((int)$details[2]);
-                $orderProduct->setPrice($details[3]);
-                $orderProduct->setHandlingFee($details[4]);
-                $orderProduct->setTotal($details[5]);
-                $orderProduct->setProductItemId((int)$details[6]);
-                $orderProduct->setStatus($ordProdStatus);
-                $orderProduct->setPaymentMethodCharge((string)$productExternalCharge);
-                $orderProduct->setNet((string)$net);
-                $orderProduct->setSellerBillingId($orderBillingInfo->getIdOrderBillingInfo());
-                $this->em->persist($orderProduct);
-                $this->em->flush();
-
-                for($x = 0; $x < (int)$details[2]; $x++){
-                    $data["order_id"] = $orderProduct->getIdOrderProduct();
-                    $data["point"] = $prod->getMaxAllowablePoint();
-                    $itemArr[] = $data;
-                }
-
-                if((int)$details[7] > 0){
-                    $response['o_message'] = $this->error['EsOrderProductAttr-failed-insert']['code'];
-                    $attrString = explode('(-)', $details[8]);
-                    foreach ($attrString as $attr) {
-                        $attrsExplode = explode('[]', $attr);
-                        $orderProductAttr = new EsOrderProductAttr();
-                        $orderProductAttr->setOrderProduct($orderProduct);
-                        $orderProductAttr->setAttrName($attrsExplode[0]);
-                        $orderProductAttr->setAttrValue($attrsExplode[1]);
-                        $orderProductAttr->setAttrPrice($attrsExplode[2]);
-                        $this->em->persist($orderProductAttr);
-                        $this->em->flush();  
-                    }
-                }
-
-                
-                $response['o_message'] = $this->error['EsOrderProductHistory-failed-insert']['code'];
-                $orderProductHistory = new EsOrderProductHistory();
-                $orderProductHistory->setOrderProduct($orderProduct);
-                $orderProductHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
-                $orderProductHistory->setOrderProductStatus($ordProdStatus);
-                $this->em->persist($orderProductHistory);
-                $this->em->flush();  
-            }
-            $response['o_message'] = 'Success! Transaction Saved';
-            $response['o_success'] = true;
-            
-            $this->em->getConnection()->commit();
-
-
-            $response['v_order_id'] = $order->getIdOrder();
-            $response['invoice_no'] = $order->getInvoiceNo();
-            $response['total'] = $order->getTotal();
-            $response['dateadded'] = $order->getDateadded();
-            $response['item_array'] = $itemArr;
-        } catch(Exception $e){
-            $this->em->getConnection()->rollback();
-        }
-        return $response;
     }
 
     /**
@@ -523,7 +311,7 @@ class PaymentService
      *
      * @return mixed
      */
-    function validateCartData($carts,$paymentMethod = "", $pointsAllocated = "0.00", $excludeMemberId = 0)
+    function validateCartData($carts, $pointsAllocated = "0.00", $excludeMemberId = 0)
     {
         $condition = true;
         $itemArray = $carts['choosen_items'];
@@ -592,7 +380,7 @@ class PaymentService
         $this->initializeGateways($paymentMethods);
 
         // Execute payment gateway pay method
-        $returnValue = $this->primaryGateway->pay($validatedCart, $memberId, $this);
+        $returnValue = $this->primaryGateway->pay($validatedCart, $memberId);
 
         return $returnValue;
     }
@@ -604,10 +392,10 @@ class PaymentService
 
         // Execute payment gateway postback method
         if($validatedCart === null && $memberId === null){
-            $returnValue = $this->primaryGateway->postBackMethod($this, $params);
+            $returnValue = $this->primaryGateway->postBackMethod($params);
         }
         else{
-            $returnValue = $this->primaryGateway->postBackMethod($validatedCart, $memberId, $this, $params);
+            $returnValue = $this->primaryGateway->postBackMethod($validatedCart, $memberId, $params);
         }
 
         return $returnValue;
@@ -651,6 +439,196 @@ class PaymentService
         }
 
         return $paymentArray;
+    }
+
+    /**
+     * Send email and sms notification after payment completed
+     * @param  integer $orderId 
+     * @param  integer $memberId 
+     * @param  boolean $buyer
+     * @param  boolean $seller
+     * @return boolean
+     */
+    public function sendPaymentNotification($orderId, $sendBuyer = true, $sendSeller = true)
+    {
+        $imageArray = $this->configLoader->getItem('email', 'images'); 
+        $imageArray[] = "/assets/images/appbar.home.png";
+        $imageArray[] = "/assets/images/appbar.message.png"; 
+        $xmlfile =  $this->xmlResourceService->getContentXMLfile();
+        $sender = $this->xmlResourceService->getXMlContent($xmlfile, 'message-sender-id', "select");
+        $messageSender = $this->em->find('EasyShop\Entities\EsMember', (int)$sender);
+         
+        $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                  ->findBy(['order'=>$orderId]);
+
+        $buyer = $orderProducts[0]->getOrder()->getBuyer();
+        $order = $orderProducts[0]->getOrder();
+
+        $buyerAddress  = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                  ->findOneBy(['idMember' => $buyer->getIdMember(), 'type' => EsAddress::TYPE_DELIVERY]);
+
+
+        switch($order->getPaymentMethod()->getIdPaymentMethod()){
+            case EsPaymentMethod::PAYMENT_PAYPAL:
+                $messageBuyer = $this->languageLoader->getLine('payment_paypal_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
+                $paymentString = "PayPal";
+                break;
+            case EsPaymentMethod::PAYMENT_DRAGONPAY:
+            //case 4:
+                $messageBuyer = $this->languageLoader->getLine('payment_dp_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
+                $paymentString = "DragonPay";
+                break;
+            case EsPaymentMethod::PAYMENT_CASHONDELIVERY:
+                $messageBuyer = $this->languageLoader->getLine('payment_cod_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_cod_seller');
+                $paymentString = "Cash on Delivery";
+                break;
+            case EsPaymentMethod::PAYMENT_PESOPAYCC:
+                $messageBuyer = $this->languageLoader->getLine('payment_pesopay_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
+                $paymentString = "Pesopay Credit/Debit Card";
+                break;
+        }
+
+
+        $socialMediaLinks = $this->socialMediaManager->getSocialMediaLinks(); 
+        $dataBuyer = [
+            'id_order' => $order->getIdOrder(),
+            'dateadded' => $order->getDateadded()->format('Y-m-d'),
+            'buyer_name' => $buyer->getUserName(),
+            'buyer_slug' => $buyer->getSlug(),  
+            'totalprice' => $order->getTotal(),
+            'invoice_no' => $order->getInvoiceNo(), 
+            'buyer_store' => $buyer->getStoreName(),
+            'store_link' => base_url(),
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+            'msg_link' => base_url() . "messages/#",
+            'payment_msg_buyer' => $messageBuyer,
+            'products' => [],
+        ];
+
+        $dataArraySeller = [];
+
+        foreach ($orderProducts as $orderProduct) {
+            $seller = $orderProduct->getSeller();
+            $sellerId = $seller->getIdMember();
+            $orderProductId = $orderProduct->getIdOrderProduct();
+            $product = $orderProduct->getProduct();
+            $productAttr = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr')
+                                    ->findBy(['orderProduct' => $orderProductId]);
+
+            $attrArray = [];
+            foreach ($productAttr as $attr) {
+                $attrArray[] = [
+                    'attr_name' => $attr->getAttrName(),
+                    'attr_value' => $attr->getAttrValue(),
+                ];
+            }
+            if(!isset($dataBuyer['products'][$orderProductId])){ 
+
+                $arrayCollection = [
+                    'order_product_id' => $orderProductId,
+                    'seller_slug' => $seller->getSlug(),
+                    'seller_store' => $seller->getStoreName(),
+                    'buyer_store' => $buyer->getStoreName(), 
+                    'name' => $product->getName(),
+                    'baseprice' => number_format($orderProduct->getPrice(), 2, '.', ','),
+                    'order_quantity' => $orderProduct->getOrderQuantity(),
+                    'handling_fee' => number_format($orderProduct->getHandlingFee(), 2, '.', ','),
+                    'finalprice' => number_format($orderProduct->getTotal(), 2, '.', ','),
+                    'attr' => $attrArray,
+                ];
+ 
+                $dataBuyer['products'][$orderProductId] = $arrayCollection; 
+            }
+
+            if(!isset($dataArraySeller[$sellerId])){
+                $dataArraySeller[$sellerId] = [
+                    'seller' => $seller,
+                    'seller_email' => $seller->getEmail(),
+                    'seller_store' => $seller->getStoreName(),
+                    'seller_contactno' => $seller->getContactno(),
+                    'buyer_store' => $buyer->getStoreName(),
+                    'store_link' => base_url(),
+                    'payment_msg_seller' => $messageSeller,
+                    'payment_method_name' => $paymentString,
+                    'invoice_no' => $order->getInvoiceNo(),
+                    'stateregion' => $buyerAddress->getStateregion()->getLocation(),
+                    'city' => $buyerAddress->getCity()->getLocation(), 
+                    'dateadded' => $order->getDateadded()->format('Y-m-d'),
+                    'address' => $buyerAddress->getAddress(),
+                    'buyer_contactno' => strlen(trim($buyerAddress->getMobile())) > 0 ? $buyerAddress->getMobile() : "N/A",
+                    'buyer_telephone' => strlen(trim($buyerAddress->getTelephone()))  > 0 ? $buyerAddress->getTelephone() : "N/A",
+                    'facebook' => $socialMediaLinks["facebook"],
+                    'twitter' => $socialMediaLinks["twitter"],
+                ];
+            }
+
+            if(!isset($dataArraySeller[$sellerId]['products'][$orderProductId])){
+                $arrayCollection = [
+                    'order_product_id' => $orderProductId,  
+                    'name' => $product->getName(),
+                    'baseprice' => number_format($orderProduct->getPrice(), 2, '.', ','),
+                    'order_quantity' => $orderProduct->getOrderQuantity(),
+                    'handling_fee' => number_format($orderProduct->getHandlingFee(), 2, '.', ','),
+                    'finalprice' => number_format($orderProduct->getTotal(), 2, '.', ','),
+                    'easyshop_charge' => number_format($orderProduct->getEasyshopCharge(), 2, '.', ','),
+                    'payment_method_charge' => number_format($orderProduct->getPaymentMethodCharge(), 2, '.', ','),
+                    'attr' => $attrArray,
+                    'net' => number_format($orderProduct->getNet(), 2, '.', ','),
+                ];
+
+                $dataArraySeller[$sellerId]['products'][$orderProductId] = $arrayCollection;
+            } 
+        }
+
+        if($sendBuyer){ 
+            $buyerMsg = $this->parserLibrary->parse('emails/email_purchase_notification_buyer', $dataBuyer, true);
+            $buyerSubject = $this->languageLoader->getLine('notification_subject_buyer');
+            $buyerSmsMsg = $buyer->getStoreName() . $this->languageLoader->getLine('notification_txtmsg_buyer');
+
+            $this->emailService->setRecipient($buyer->getEmail())
+                               ->setSubject($buyerSubject)
+                               ->setMessage($buyerMsg, $imageArray)
+                               ->queueMail();
+
+            $this->smsService->setMobile($buyer->getContactno())
+                             ->setMessage($buyerSmsMsg)
+                             ->queueSMS();
+
+            if($messageSender){
+                $this->messageManager->sendMessage($messageSender, $buyer, $this->languageLoader->getLine('message_to_buyer'));
+            }
+        }
+
+        if($sendSeller){
+            foreach ($dataArraySeller as $key => $value) {
+                $sellerEmail = $value['seller_email'];
+                $sellerContact = $value['seller_contactno'];
+                $seller = $value['seller'];
+                unset($value['seller']);
+
+                $sellerSubject = $this->languageLoader->getLine('notification_subject_seller');
+                $sellerMsg = $this->parserLibrary->parse('emails/email_purchase_notification_seller', $value, true);
+                $sellerSmsMsg = $value['seller_store'] . $this->languageLoader->getLine('notification_txtmsg_seller');
+
+                $this->emailService->setRecipient($sellerEmail)
+                                   ->setSubject($sellerSubject)
+                                   ->setMessage($sellerMsg, $imageArray)
+                                   ->queueMail();
+                
+                $this->smsService->setMobile($sellerContact)
+                                 ->setMessage($sellerSmsMsg)
+                                 ->queueSMS();
+
+                if($messageSender){
+                    $this->messageManager->sendMessage($messageSender, $seller, $this->languageLoader->getLine('message_to_seller'));
+                }
+            }
+        } 
     }
 
 }

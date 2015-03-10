@@ -17,6 +17,20 @@ $config = [
                         'return_url' => 'https://staging.easydeal.ph/payment/dragonPayReturn',
                         'postback_url' => 'http://staging.easydeal.ph/payment/dragonPayPostBack'
                     ]
+                ],
+                'paypal' => [
+                    'Easyshop' => [
+                        'api_mode' => 'sandbox',
+                        'api_username' => 'easyseller_api1.yahoo.com',
+                        'api_password' => '1396000698',
+                        'api_signature' => 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG',
+                    ]
+                ],
+                'pesopay' => [
+                    'Easyshop' => [
+                        'redirect_url' => 'https://test.pesopay.com/b2cDemo/eng/payment/payForm.jsp',
+                        'merchant_id' => '18061489',
+                    ]
                 ]
             ]
         ],
@@ -35,6 +49,20 @@ $config = [
                     'Easydeal' => [
                         'return_url' => 'https://www.easydeal.ph/payment/dragonPayReturn',
                         'postback_url' => 'https://www.easydeal.ph/payment/dragonPayPostBack'
+                    ]
+                ],
+                'paypal' => [
+                    'Easyshop' => [
+                        'api_mode' => '',
+                        'api_username' => 'admin_api1.easyshop.ph',
+                        'api_password' => 'GDWFS6D9ACFG45E7',
+                        'api_signature' => 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT',
+                    ]
+                ],
+                'pesopay' => [
+                    'Easyshop' => [
+                        'redirect_url' => 'https://www.pesopay.com/b2c2/eng/payment/payForm.jsp',
+                        'merchant_id' => '18139485',
                     ]
                 ]
             ]

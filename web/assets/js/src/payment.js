@@ -1,6 +1,6 @@
 $(document).ready(function(){
+    var stringAcknowledge = '<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>';
     var PAY_BY_GATEWAY = false;
-
     PAY_BY_GATEWAY ? $('#pointInput').show() : $('#pointInput').hide();
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
@@ -8,12 +8,10 @@ $(document).ready(function(){
     $('#c_mobile').numeric({negative : false});
 
     $(document).on('keypress','#c_telephone',function (evt) {
- 
         var charCode = (evt.which) ? evt.which : event.keyCode
         if (charCode != 45  && charCode > 31 && (charCode < 48 || charCode > 57)){
             return false;
         }
-
         return true;
     }); 
 
@@ -22,24 +20,10 @@ $(document).ready(function(){
         cityselect.find('option.echo').remove();
         if(stateregionID in jsonCity){ 
             $('.cityselect').empty();
-            jQuery.each(jsonCity[stateregionID], function(k,v){
+            $.each(jsonCity[stateregionID], function(k,v){
                 $('.cityselect').append('<option value="'+k+'">'+v+'</option>'); 
             });
         }
-    }
-
-    var validateRedTextBox = function (idclass)
-    {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-        "box-shadow": "0px 0px 2px 2px #FF0000"});
-    } 
-    
-    var validateWhiteTextBox = function (idclass)
-    {
-      $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-        "box-shadow": "0px 0px 2px 2px #FFFFFF"});
     }
 
     $('.stateregionselect').on('change', function(){
@@ -63,31 +47,26 @@ $(document).ready(function(){
 
         if(type == 1){
             if(!$('#chk_paypal1').is(':checked')){
-                $("#chk_paypal1").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "box-shadow": "0px 0px 2px 2px #FF0000"});
-                $('#paypal > .chck_privacy > p').empty();
-                $('#paypal > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
-
+                validateRedTextBox("#chk_paypal1"); 
+                $('#paypal > .chck_privacy > p').remove();
+                $('#paypal > .chck_privacy').append(stringAcknowledge); 
                 return false;
             }
-        }else{
+        }
+        else{
             if(!$('#chk_paypal2').is(':checked')){
-                $("#chk_paypal2").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                    "box-shadow": "0px 0px 2px 2px #FF0000"}); 
-                $('#cdb > .chck_privacy > p').empty();
-                $('#cdb > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
-
+                validateRedTextBox("#chk_paypal2");
+                $('#cdb > .chck_privacy > p').remove();
+                $('#cdb > .chck_privacy').append(stringAcknowledge);
                 return false;
             }
         }
 
         if(PAY_BY_GATEWAY){
             var pointAllocated = $('#pointsAllocated').val();
+            var paymentMethod;
             if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
-                var paymentMethod = JSON.stringify(
-                {
+                paymentMethod = JSON.stringify({
                     PaypalGateway:{
                         method:"PayPal", 
                         type:$(this).data('type')
@@ -100,8 +79,7 @@ $(document).ready(function(){
                 });
             }
             else{
-                var paymentMethod = JSON.stringify(
-                {
+                paymentMethod = JSON.stringify({
                     PaypalGateway:{
                         method:"PayPal", 
                         type:$(this).data('type')
@@ -128,7 +106,8 @@ $(document).ready(function(){
             success: function(d) {
                 if (d.e == 1) { 
                     window.location.replace(d.d);
-                }else{
+                }
+                else{
                     alert(d.d);
                     if(d.d == 'Item quantity not available.'){
                         location.reload();
@@ -139,9 +118,9 @@ $(document).ready(function(){
              
             }, 
             error: function (request, status, error) {
-                    alert('We are currently experiencing problems.','Please try again after a few minutes.');
-                    $('.paypal_loader').hide();
-                    $('.paypal_button').show();      
+                alert('We are currently experiencing problems.','Please try again after a few minutes.');
+                $('.paypal_loader').hide();
+                $('.paypal_button').show();
             }
         });
     });
@@ -156,12 +135,11 @@ $(document).ready(function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var type = $(this).data('type');
-        
+        var paymentMethod;
         if(PAY_BY_GATEWAY){
             var pointAllocated = $('#pointsAllocated').val();
             if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
-                var paymentMethod = JSON.stringify(
-                {
+                paymentMethod = JSON.stringify({
                     DragonPayGateway:{
                         method:"DragonPay", 
                     },
@@ -173,8 +151,7 @@ $(document).ready(function(){
                 });
             }
             else{
-                var paymentMethod = JSON.stringify(
-                {
+                paymentMethod = JSON.stringify({
                     DragonPayGateway:{
                         method:"DragonPay", 
                     }
@@ -199,24 +176,22 @@ $(document).ready(function(){
                 success: function(d) {
                     if(d.e == 1){ 
                         window.location.replace(d.u);
-                    }else{   
-
-                        $('.btnDp').val('Pay via DRAGON PAY'); 
-                        $('.btnDp').removeAttr('disabled');    
+                    }
+                    else{
+                        $('.btnDp').val('Pay via DRAGON PAY');
+                        $('.btnDp').removeAttr('disabled');
                         if(d.m == 'Item quantity not available.'){
                             location.reload();
                         }
                         alert(d.m);
-
                     }
                 }
             });
-        }else{
-            $("#chk_dp").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"}); 
-            $('#dragonpay > .chck_privacy > p').empty();
-            $('#dragonpay > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
+        }
+        else{
+            validateRedTextBox("#chk_dp");
+            $('#dragonpay > .chck_privacy > p').remove();
+            $('#dragonpay > .chck_privacy').append(stringAcknowledge);
         }
     });
 
@@ -227,21 +202,17 @@ $(document).ready(function(){
     $(document).on('click','.payment_cod',function () {
          if($('#chk_cod').is(':checked')){
             var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
-
             if(r == true){
                 $(this).val('Please wait...'); 
                 $(this).attr('disabled','disabled');
-
                 if(PAY_BY_GATEWAY){
                     var action = "/pay/pay"; 
                     var pointAllocated = $('#pointsAllocated').val();
-
+                    var paymentMethod;
                     if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
-                        var paymentMethod = JSON.stringify(
-                        {
+                        paymentMethod = JSON.stringify({
                             CODGateway:{
-                                method:"CashOnDelivery", 
-                                lastDigit:$('input[name=paymentToken]').val().slice(-1)
+                                method:"CashOnDelivery"
                             },
                             PointGateway:{
                                 method:"Point",
@@ -251,11 +222,9 @@ $(document).ready(function(){
                         });
                     }
                     else{
-                        var paymentMethod = JSON.stringify(
-                        {
+                        paymentMethod = JSON.stringify({
                             CODGateway:{
-                                method:"CashOnDelivery", 
-                                lastDigit:$('input[name=paymentToken]').val().slice(-1)
+                                method:"CashOnDelivery"
                             }
                         });
                     }
@@ -276,11 +245,9 @@ $(document).ready(function(){
             }
         }
         else{
-            $("#chk_cod").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                               "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                               "box-shadow": "0px 0px 2px 2px #FF0000"});
+            validateRedTextBox("#chk_cod");
             $('#cod > #codFrm > .chck_privacy > p').remove();
-            $('#cod > #codFrm > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
+            $('#cod > #codFrm > .chck_privacy').append(stringAcknowledge);
         }
     });
     
@@ -291,12 +258,11 @@ $(document).ready(function(){
     $(document).on('click','.payment_dbd',function () {
         if($('#chk_dbd').is(':checked')){
             $('#dbdFrm').submit();
-        }else{
-            $("#chk_dbd").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-            "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-            "box-shadow": "0px 0px 2px 2px #FF0000"}); 
-            $('#dbd > .chck_privacy > p').empty();
-            $('#dbd > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>')
+        }
+        else{
+            validateRedTextBox("#chk_dbd");
+            $('#dbd > .chck_privacy > p').remove();
+            $('#dbd > .chck_privacy').append(stringAcknowledge);
         }
     });
 
@@ -305,43 +271,45 @@ $(document).ready(function(){
 // -- PESO PAY CC PROCESS PAYMENT SECTION -- // 
 
     $(document).on('click','.pesopaycdb',function () {
-        var action = "/payment/payPesoPay"; 
+        var action = "/pay/pay"; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
-
-        if($('#chk_ppcdb').is(':checked')){
-            $(this).val('Please wait...');  
+        var paymentMethod = JSON.stringify({
+            PesoPayGateway:{
+                method:"PesoPay", 
+            }
+        });
+        if($('#chk_ppcdb').is(':checked')){ 
+            validateWhiteTextBox("#chk_ppcdb");
+            $(this).val('Please wait...');
             $.ajax({
                 type: "POST",
                 url:  action, 
                 dataType: "json",
-                data: csrfname+"="+csrftoken, 
+                data: csrfname+"="+csrftoken+ "&paymentMethods=" + paymentMethod,
                 success: function(d) {
-                     
-                    if(d.e == 1){ 
-                        console.log(d.d);
-                        $('#pesopaycdb').append(d.d); 
+                    if(d.error === false){
+                        $('#pesopaycdb').append(d.form);
                         $('#payFormCcard').submit();
-                    }else{   
-
+                    }
+                    else{
                         $('.btnDp').val('Pay via Credit or Debit Card'); 
-                        $('.btnDp').removeAttr('disabled');    
-                        if(d.m == 'Item quantity not available.'){
+                        $('.btnDp').removeAttr('disabled');
+                        if(d.message == 'Item quantity not available.'){
                             location.reload();
                         }
-                        alert(d.m);
+                        alert(d.message);
                     }
                 },
                 error: function(err){
                     alert('Something went wrong. Please try again later');
-                      $('.btnDp').val('Pay via Credit or Debit Card'); 
-                        $('.btnDp').removeAttr('disabled');    
+                    $('.btnDp').val('Pay via Credit or Debit Card'); 
+                    $('.btnDp').removeAttr('disabled');
                 }
             });
-        }else{
-            $("#chk_ppcdb").css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"}); 
+        }
+        else{
+            validateRedTextBox("#chk_ppcdb");
             $('#pesopaycdb > .chck_privacy > p').empty();
             $('#pesopaycdb > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
         }
@@ -369,7 +337,6 @@ $(document).ready(function(){
                 minWidth: 605,
                 maxHeight: 600,
             },
-            
         });
         $('#simplemodal-container').addClass('div_change_addree');
     });
@@ -378,14 +345,12 @@ $(document).ready(function(){
         var action = "/payment/changeAddress";
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
-
         var consignee = $('#consignee');
         var stateregion = $('.stateregionselect');
         var cityselect = $('.cityselect');
         var address =  $('.c_address');
         var mobile = $('#c_mobile');
         var telephone = $('#c_telephone');
-
 
         validateWhiteTextBox('#consignee');
         validateWhiteTextBox('.stateregionselect');
@@ -412,9 +377,11 @@ $(document).ready(function(){
             validateRedTextBox('#c_mobile');
         }
 
-
-
-        if(consignee.val().length == 0 || stateregion.val() == '0' || cityselect.val() == '0' || address.val().length == 0 || mobile.val().length == 0){
+        if(consignee.val().length == 0 
+            || stateregion.val() == '0' 
+            || cityselect.val() == '0' 
+            || address.val().length == 0 
+            || mobile.val().length == 0){
             alert('Please fill up all required fields.');
             return false;
         }
@@ -424,14 +391,12 @@ $(document).ready(function(){
             validateRedTextBox('#c_mobile');
             return false;
         }
-        
         var formD = $('#delAddressFrm').serializeArray();
         formD.push({name:'temp_lat', value:0});
         formD.push({name:'temp_lng', value:0});
         formD.push({name:'map_lat', value:0});
         formD.push({name:'map_lng', value:0});
         formD.push({name:'c_deliver_address_btn', value:"Save"});
-
         $.ajax({
             type: "POST", 
             url:  action,
@@ -440,7 +405,8 @@ $(document).ready(function(){
             success: function(d) {
                 if(d == "success"){
                     location.reload();
-                }else{
+                }
+                else{
                     alert(d);
                 }
             }, 
@@ -449,47 +415,37 @@ $(document).ready(function(){
             }
         });
     });
-
 // -- END OF CHANGE ADDRESS SECTION -- // 
 
 // -- START OF VIEW ITEM AVAILABILITY LOCATION -- //
-
-
- 
     $(document).on('click','.view_location_item',function () {
-
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var slug = $(this).data('slug');
         var iid = $(this).data('iid');
         var pname = $(this).data('name');
         var action = "/payment/getLocation"; 
-            $.ajax({
-                type: "POST",
-                url:  action, 
-                dataType: "json",
-                data: csrfname+"="+csrftoken+"&sid="+slug+"&iid="+iid+"&name="+pname, 
-                success: function(d) {
-                    $('.div_view_avail_location').empty();
-                    $('.div_view_avail_location').append(d);
-                },       
-                error: function (request, status, error) {
-                    alert(error);
-                }
-            });
+        $.ajax({
+            type: "POST",
+            url:  action, 
+            dataType: "json",
+            data: csrfname+"="+csrftoken+"&sid="+slug+"&iid="+iid+"&name="+pname, 
+            success: function(d) {
+                $('.div_view_avail_location').empty();
+                $('.div_view_avail_location').append(d);
+            },       
+            error: function (request, status, error) {
+                alert(error);
+            }
+        });
     });
-
-
 // -- END OF VIEW ITEM AVAILABILITY LOCATION -- //
 
 // -- START REMOVE ITEM FROM SELECTED CART --//
-
     $(document).on('click','.removeitem',function () {
-        
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content'); 
         var rowid = $(this).data('cart-id'); 
-
         $.ajax({
             type: "POST",
             url:  "/cart/doRemoveSelected",

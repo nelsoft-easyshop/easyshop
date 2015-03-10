@@ -103,6 +103,7 @@ class ValidationRules
             'vendor_contact' => array(
                     'shop_name' => array(
                                 new CustomAssert\IsValidStoreNameOptional(),
+                                new CustomAssert\IsAlphanumericSpace(),
                     ),
                     'contact_number' => array(
                                 new CustomAssert\IsValidMobileOptional(),
@@ -161,23 +162,27 @@ class ValidationRules
                     ),   
                     'shop_name' => array(
                                 new CustomAssert\IsValidStoreNameOptional(),
+                                new CustomAssert\IsAlphanumericSpace(),
                     ),                 
             ),
             'store_setup' => [
-                    'shop_name' =>  [new Assert\NotBlank(),
-                                     new Assert\Length(['min' => '5',
-                                                       'max' => '60']),],
+                    'shop_name' =>  [
+                        new Assert\NotBlank(),
+                        new Assert\Length(['min' => '5',
+                                           'max' => '60']),
+                        new CustomAssert\IsAlphanumericSpace(),
+                    ],
                     'shop_slug' => [
-                                new Assert\NotBlank(),
-                                new CustomAssert\ContainsAlphanumericUnderscore(),
-                                new Assert\Length(['min' => '3',
-                                                   'max' => '25']),
-                                ],
+                        new Assert\NotBlank(),
+                        new CustomAssert\ContainsAlphanumericUnderscore(),
+                        new Assert\Length(['min' => '3',
+                                            'max' => '25']),
+                    ],
                     'category_name' => [
-                                new Assert\NotBlank(),
-                                new Assert\Length(['min' => '3',
-                                                   'max' => '50']),
-                                ],
+                        new Assert\NotBlank(),
+                        new Assert\Length(['min' => '3',
+                                            'max' => '50']),
+                    ],
             ],
             'payment_account' => [
                     'account-bank-id' => [
@@ -202,11 +207,32 @@ class ValidationRules
             'reset_password' => [
                     'email' => [
                         new Assert\Email(),
-                            new Assert\NotBlank(),
+                        new Assert\NotBlank(),
                     ],
                     'hash' => [
                         new Assert\NotBlank(),
                     ],
+            ],
+            'custom_category' => [
+                'name' => [
+                    new Assert\NotBlank([ "message" => "The category name cannot be blank",]),
+                    new Assert\Length(['min' => '3',
+                                       'max' => '255']),
+                    new CustomAssert\isAlphanumericSpace(),
+                ],
+            ],
+            'user_feedback' => [
+                'message' => [
+                    new Assert\NotBlank([ "message" => "The feedback cannot be empty",]),
+                    new Assert\Length(['max' => '1024']),
+                ],
+                'rating' => [
+                    new Assert\NotBlank([ "message" => "The feedback cannot be empty"]),
+                    new Assert\Range([
+                        'min' => 1,
+                        'max' => 5,
+                    ]),
+                ],
             ],
         );
     }

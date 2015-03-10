@@ -165,7 +165,6 @@
                 </div>
             <?php endforeach;?>
         </div>
-        <!-- <?php echo $arrCat['pagination']?> -->
             <div class="clear"></div>
              
             <center>

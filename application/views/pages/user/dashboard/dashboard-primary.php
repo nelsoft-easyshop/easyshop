@@ -18,6 +18,7 @@
                         <ul class="sidebar-submenu">
                             <a href="#transactions"  class="aaa id-transactions-trigger"><li id="transactions-trigger-li"class="f-li ms-f">Transactions</li></a>
                             <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
+                            <a href="#customize-category" id="customize-category-tab"><li class="f-li ms-f">Customize Category</li></a>
                             <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
                         </ul>
                     </div>
@@ -50,6 +51,7 @@
                     <ul class="my-store-menu-mobile-ul">
                         <a class="ms-trans dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
                         <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
+                        <a class="ms-customize dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-customize">Customize Category</li></a>
                         <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
                     </ul>
                 </div>
@@ -74,6 +76,9 @@
                     </div>
                     <div id="setup">
                         <?php include("dashboard-store-setup.php");?>
+                    </div>
+                    <div id="customize-category">
+                        <?php include("dashboard-customize-category.php");?>
                     </div>
                     <div id="product-management">
                         <?php include("dashboard-product-management.php");?>
@@ -120,6 +125,7 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.ui.touch-punch.min.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.raty.min.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>

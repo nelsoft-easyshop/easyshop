@@ -4005,3 +4005,13 @@ h3 > b{
         padding: 40px 0px 0px 0px !important;
     }
 }
+
+a.redirect-link:hover,
+a.redirect-link:active,
+a.redirect-link:focus {
+    color:white !important;
+}
+
+.disclaimer-message {
+    font-size: 18px;
+}

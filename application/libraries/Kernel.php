@@ -63,6 +63,7 @@ class Kernel
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
+        $config->addCustomStringFunction('BINARY', 'EasyShop\Doctrine\Query\MySql\Binary');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
@@ -423,7 +424,22 @@ class Kernel
             $configLoader = $container['config_loader'];
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
-            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager, $promoManager, $container['sort_utility']);
+            $sortUtility = $container['sort_utility'];
+            $stringUtility = $container['string_utility'];
+            $formFactory = $container['form_factory'];
+            $formValidation = $container['form_validation'];
+            $formErrorHelper = $container['form_error_helper'];
+            return new \EasyShop\Category\CategoryManager(
+                            $configLoader,
+                            $em, 
+                            $productManager, 
+                            $promoManager, 
+                            $sortUtility,
+                            $stringUtility,
+                            $formFactory,
+                            $formValidation,
+                            $formErrorHelper
+                        );
         };
         
         $container['config_loader'] = function ($c) {
@@ -435,12 +451,21 @@ class Kernel
         // Payment Service
         $container['payment_service'] = function ($c) use ($container) {
             return new \EasyShop\PaymentService\PaymentService(
-                            $container['entity_manager'],
-                            $container['http_request'],
-                            $container['point_tracker'],
-                            $container['promo_manager'],
-                            $container['product_manager']
-                            );
+                $container['entity_manager'],
+                $container['http_request'],
+                $container['point_tracker'],
+                $container['promo_manager'],
+                $container['product_manager'],
+                $container['email_notification'],
+                $container['mobile_notification'],
+                new \CI_Parser(),
+                $container['config_loader'],
+                $container['xml_resource'],
+                $container['social_media_manager'],
+                $container['language_loader'],
+                $container['message_manager'],
+                $container['dragonpay_soap_client']
+            );
         };
 
 
@@ -469,16 +494,19 @@ class Kernel
         };
 
         // NUSoap Client
-        $container['nusoap_client'] = function ($c) {
+        $container['dragonpay_soap_client'] = function ($c) use ($container) {
             $url = '';
             if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
-            // LIVE
-                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+                // LIVE
+                $configLoad = $container['config_loader']->getItem('payment','production');  
             }
             else{
-            // SANDBOX
-                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+                // SANDBOX
+                $configLoad = $container['config_loader']->getItem('payment','testing');  
             }
+
+            $url = $configLoad['payment_type']['dragonpay']['Easyshop']['webservice_url'];
+
             return new \nusoap_client($url,true);
         };
 
@@ -552,8 +580,15 @@ class Kernel
         // Product Shipping Manager
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(
-                            $container['entity_manager']
-                        );
+                $container['entity_manager']
+            );
+        };
+
+        // Member Feature Restrict Manager
+        $container['member_feature_restrict_manager'] = function ($c) use ($container) {
+            return new \EasyShop\MemberFeatureRestrict\MemberFeatureRestrictManager(
+                $container['entity_manager']
+            );
         };
 
         $container['language_loader'] = function ($c) {
@@ -574,7 +609,8 @@ class Kernel
                             $container['product_manager'],
                             $container['promo_manager'],
                             $container['cart_manager'],
-                            $container['payment_service']
+                            $container['payment_service'],
+                            $container['product_shipping_location_manager']
                         );
         };
         
