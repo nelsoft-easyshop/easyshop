@@ -179,19 +179,24 @@ class Kernel
             $configLoader = $container['config_loader'];
             $languageLoader = $container['language_loader'];
             $hashUtitility = $container['hash_utility'];
-            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
-                                                        $userManager, 
-                                                        $formFactory, 
-                                                        $formValidation, 
-                                                        $formErrorHelper,
-                                                        $stringHelper,
-                                                        $httpRequest,
-                                                        $emailNotification,
-                                                        $parser,$encrypter,
-                                                        $configLoader,
-                                                        $languageLoader,
-                                                        $hashUtitility
-                                                        );        
+            $pointTracker = $container['point_tracker'];
+
+            return new \EasyShop\Account\AccountManager(
+                $em,
+                $brcyptEncoder, 
+                $userManager, 
+                $formFactory, 
+                $formValidation, 
+                $formErrorHelper,
+                $stringHelper,
+                $httpRequest,
+                $emailNotification,
+                $parser,$encrypter,
+                $configLoader,
+                $languageLoader,
+                $hashUtitility,
+                $pointTracker
+            );
         };
 
         $container['message_manager'] = function ($c) use ($container) {
