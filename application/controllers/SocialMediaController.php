@@ -237,7 +237,7 @@ class SocialMediaController extends MY_Controller
             $this->emailNotification->setRecipient($member->getEmail());
             $this->emailNotification->setSubject($this->lang->line('merge_subject'));
             $this->emailNotification->setMessage($message, $imageArray);
-            $this->emailNotification->sendMail();
+            $this->emailNotification->queueMail();
         }
 
         echo json_encode($result);
