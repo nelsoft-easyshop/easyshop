@@ -21,6 +21,7 @@ use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPointType as EsPointType;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use Easyshop\Upload\AssetsUploader as AssetsUploader;
 use EasyShop\Product\ProductManager as ProductManager;
 
@@ -812,7 +813,8 @@ class Memberpage extends MY_Controller
 
                 if($getTransaction 
                    && $getTransaction->getOrderStatus()->getOrderStatus() === EsOrderStatus::STATUS_COMPLETED
-                   && $data['status'] === EsOrderProductStatus::FORWARD_SELLER){
+                   && $data['status'] === EsOrderProductStatus::FORWARD_SELLER
+                   && $getTransaction->getPaymentMethod()->getIdPaymentMethod() !== EsPaymentMethod::PAYMENT_CASHONDELIVERY){
                     $this->serviceContainer['point_tracker']
                          ->addUserPoint($data['member_id'],
                                         EsPointType::TYPE_PURCHASE, 
