@@ -39,9 +39,11 @@ body{
 }
 
 .customized-category-error{
-    padding-left: 20px;
-    padding-right: 20px;
     display: none;
+}
+
+.customized-category-error .alert-link{
+    font-weight: normal;
 }
 
 .my-modal-footer .btn.btn-default-3{
@@ -819,7 +821,7 @@ a{
 
 .val-error{
     display: block;
-    color: #ff6237;
+    color: #a94442;
     font-size: 12px;
 }
 
@@ -840,11 +842,11 @@ a{
 }
 
 .val-error-icon{
-    color: #ff3e1d;
+    color: #a94442;
     font-size: 22px;
     position: absolute;
     right: 8px;
-    top: 8px;
+    top: 6px;
 }
 
 .val-success-pass{
@@ -1436,7 +1438,7 @@ a{
 .category-items-holder{
     height: 220px;
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     border-right: solid #e2e2e2 1px;
     overflow-y: scroll;
 }
@@ -1461,6 +1463,14 @@ a{
     width: 11px;
     height: 11px;
     
+}
+
+.custom-left-panel{
+    padding-right: 5px;
+}
+
+.all-right-panel{
+    padding-left: 5px;
 }
 
 .allItemsEdit > li > .icon-move,
@@ -1501,7 +1511,7 @@ a{
     float: left; 
     width: 70px; 
     padding: 0.4em; 
-    margin: 0 7px 10px 0; 
+    margin: 0 5px 7px 0; 
     text-align: center; 
     z-index: 99999;
     border-radius: 4px;
