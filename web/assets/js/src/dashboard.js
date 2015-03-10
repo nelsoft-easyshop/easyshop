@@ -1761,6 +1761,7 @@
         var $this = $(this);
         if($this.hasClass('active-bar')){
             var $container = $this.data('method');
+            $('.payment-filter[data="'+$container+'"]').val('all');
             var $page = 1;
             getTransactionDetails($page, $container, $container, '', '');
         }
