@@ -706,7 +706,7 @@ class Store extends MY_Controller
         $tab = $this->input->get('tab');
         $limit = $this->feedbackPerPage;
         $ratingHeaders = $this->lang->line('rating');
-        $feedbackview = $this->input->get('isMobile') ? 'feedback-mobileview' : 'feedback-desktopview';
+        $feedbackview = $this->input->get('isMobile') === 'true' ? 'feedback-mobileview' : 'feedback-desktopview';
 
         switch($tab){
             case 'as-buyer':
