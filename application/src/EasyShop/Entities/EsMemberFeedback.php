@@ -59,7 +59,7 @@ class EsMemberFeedback
     /**
      * @var string
      *
-     * @ORM\Column(name="feedb_msg", type="string", length=45, nullable=false)
+     * @ORM\Column(name="feedb_msg", type="string", length=1024, nullable=false)
      */
     private $feedbMsg;
 

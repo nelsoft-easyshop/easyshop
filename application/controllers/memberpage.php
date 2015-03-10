@@ -631,8 +631,11 @@ class Memberpage extends MY_Controller
      */
     public function addFeedback()
     {
+        $response = [
+            'isSuccess' => false,
+            'error' => '',
+        ];
         if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
-            $result = false;
             $data = [
                 'uid' => $this->session->userdata('member_id'),
                 'for_memberid' => $this->input->post('for_memberid'),
@@ -658,38 +661,63 @@ class Memberpage extends MY_Controller
                     'order_id' => $data['order_id']
                 ];
             }
-            $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
-            if ($doesTransactionExists) {
-                $member = $this->esMemberRepo->find($data['uid']);
-                $forMember = $this->esMemberRepo->find($data['for_memberid']);
-                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
-                $doesFeedbackExists = $this->esMemberFeedbackRepo
-                                           ->findOneBy([
-                                               'member' => $member,
-                                               'forMemberid' => $forMember,
-                                               'feedbKind' => $data['feedb_kind'],
-                                               'order' => $order
-                                           ]);
-                if (! (bool) $doesFeedbackExists) {
-                    $result = $this->esMemberFeedbackRepo
-                                   ->addFeedback(
-                                       $member,
-                                       $forMember,
-                                       $data['feedb_msg'],
-                                       $data['feedb_kind'],
-                                       $order,
-                                       $data['rating1'],
-                                       $data['rating2'],
-                                       $data['rating3']
-                                   );
+            
+            $formValidation = $this->serviceContainer['form_validation'];
+            $formFactory = $this->serviceContainer['form_factory'];
+            $formErrorHelper = $this->serviceContainer['form_error_helper'];
+            $rules = $formValidation->getRules('user_feedback');
+            $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
+                                     ->setMethod('POST');                    
+           
+            $formBuild->add('message', 'text', ['constraints' => $rules['message']]);
+            $formBuild->add('rating1', 'text', ['constraints' => $rules['rating']]);
+            $formBuild->add('rating2', 'text', ['constraints' => $rules['rating']]);
+            $formBuild->add('rating3', 'text', ['constraints' => $rules['rating']]);
+            $formData["message"] =  $data['feedb_msg'];
+            $formData["rating1"] =  $data['rating1'];
+            $formData["rating2"] =  $data['rating2'];
+            $formData["rating3"] =  $data['rating3'];
+            $form = $formBuild->getForm();
+            $form->submit($formData); 
+
+            if($form->isValid()){
+                $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
+                if ($doesTransactionExists) {
+                    $member = $this->esMemberRepo->find($data['uid']);
+                    $forMember = $this->esMemberRepo->find($data['for_memberid']);
+                    $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
+                    $doesFeedbackExists = $this->esMemberFeedbackRepo
+                                            ->findOneBy([
+                                                'member' => $member,
+                                                'forMemberid' => $forMember,
+                                                'feedbKind' => $data['feedb_kind'],
+                                                'order' => $order
+                                            ]);
+                    if (! (bool) $doesFeedbackExists) {
+                        $result = $this->esMemberFeedbackRepo
+                                    ->addFeedback(
+                                        $member,
+                                        $forMember,
+                                        $data['feedb_msg'],
+                                        $data['feedb_kind'],
+                                        $order,
+                                        $data['rating1'],
+                                        $data['rating2'],
+                                        $data['rating3']
+                                    );
+                        $response['isSuccess'] = (bool)$result;
+                    }
                 }
             }
-
-            echo (bool) $result;
+            else{
+                $response['error'] = reset($formErrorHelper->getFormErrors($form))[0];
+            }
         }
         else{
-            echo false;
+            $response['error'] = 'Malformed input data';
         }
+
+        echo json_encode($response);
     }
 
     /**
