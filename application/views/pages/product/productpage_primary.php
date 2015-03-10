@@ -203,7 +203,7 @@
                 <div class="row pad-top-23">
                     <div class="col-md-12 prod-payment-img-container">
                         <p class="attr-title">Payment:</p>
-                        <?php if(isset($paymentMethod['cdb'])): ?> 
+                        <?php if(isset($paymentMethod['cdb']) || isset($paymentMethod['pesopaycdb'])): ?> 
                             <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard-black.png" alt="Mastercard">
                             <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa-black.png" alt="Visa">
                         <?php endif; ?>
