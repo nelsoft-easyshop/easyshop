@@ -1509,6 +1509,7 @@ td.td-view.p-view2.color-default{
     color: #ff3d1f;
     font-weight: bold;
     font-size:15px;
+    line-height: 17px;
 }
 
 .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .div-amount > .p-price > span > s{
