@@ -19,7 +19,8 @@ use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsAddress as EsAddress;
-use EasyShop\Entities\EsOrderStatus;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsPointType as EsPointType;
 use Easyshop\Upload\AssetsUploader as AssetsUploader;
 use EasyShop\Product\ProductManager as ProductManager;
 
@@ -738,6 +739,13 @@ class Memberpage extends MY_Controller
         $imageArray[] = "/assets/images/appbar.home.png";
         $imageArray[] = "/assets/images/appbar.message.png";
 
+        $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                     ->findOneBy([
+                                        'idOrder' => $data['transaction_num'],
+                                        'invoiceNo' => $data['invoice_num'],
+                                        'buyer' => $data['member_id']
+                                     ]);
+
         /**
          *  DEFAULT RESPONSE HANDLER
          *  Item Received / Cancel Order / Complete(CoD)
@@ -802,6 +810,16 @@ class Memberpage extends MY_Controller
                     }
                 }
 
+                if($getTransaction 
+                   && $getTransaction->getOrderStatus()->getOrderStatus() === EsOrderStatus::STATUS_COMPLETED
+                   && $data['status'] === EsOrderProductStatus::FORWARD_SELLER){
+                    $this->serviceContainer['point_tracker']
+                         ->addUserPoint($data['member_id'],
+                                        EsPointType::TYPE_PURCHASE, 
+                                        true, 
+                                        $getTransaction->getTotal());
+                }
+
                 if($hasNotif){
                     $emailService->setRecipient($parseData['email'])
                                  ->setSubject($emailSubject)
@@ -822,13 +840,6 @@ class Memberpage extends MY_Controller
         else if ( $this->input->post('dragonpay') ) {
             $this->load->library('dragonpay');
 
-            $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                                  ->findOneBy([
-                                                      'idOrder' => $data['transaction_num'],
-                                                      'invoiceNo' => $data['invoice_num'],
-                                                      'buyer' => $data['member_id']
-                                                  ]);
-
             if ( (int) count($getTransaction) === 1) {
                 $dragonpayResult = $this->dragonpay->getStatus($getTransaction->getTransactionId());
 
@@ -848,13 +859,6 @@ class Memberpage extends MY_Controller
              */
         }
         else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
-            $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                       ->findOneBy([
-                                           'idOrder' => $data['transaction_num'],
-                                            'invoiceNo' => $data['invoice_num'],
-                                            'buyer' => $data['member_id']
-                                       ]);
-
             if ( (int) count($getTransaction) === 1 ) {
                 $postData = [
                     'order_id' => $data['transaction_num'],
@@ -873,12 +877,10 @@ class Memberpage extends MY_Controller
             }
         }
 
-        $orderEntity = $this->em->find("EasyShop\Entities\EsOrder", $data['transaction_num']);
-        $orderProductStatusEntity = $this->em->find("EasyShop\Entities\EsOrderProductStatus", EsOrderProductStatus::ON_GOING);
         $orderProductEntity = $this->esOrderProductRepo
                                    ->findOneBy([
-                                       "order" => $orderEntity,
-                                       "status" => $orderProductStatusEntity
+                                       "order" => $data['transaction_num'],
+                                       "status" => EsOrderProductStatus::ON_GOING
                                    ]);
         $serverResponse['isTransactionComplete'] = $orderProductEntity ? false : true;
 

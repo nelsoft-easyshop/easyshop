@@ -171,10 +171,6 @@ class TransactionManager
             ];
         }
 
-        $result = [
-            'o_success' => true,
-            'o_message' => 'Product Order entry updated!'
-        ];
         return $result;
     }
 
