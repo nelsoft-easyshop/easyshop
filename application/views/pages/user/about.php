@@ -149,7 +149,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 col-message-2">
-                                    <textarea class="input-lg input-message" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message" id="feedback-message"></textarea>
+                                    <textarea class="input-lg input-message" maxlength="1024" rows="7" placeholder="WRITE YOUR MESSAGE..." name="feedback-message" id="feedback-message"></textarea>
                                 </div>
                             </div>
                             <div class="row">

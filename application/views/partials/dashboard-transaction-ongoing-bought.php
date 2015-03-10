@@ -217,7 +217,7 @@
                                         </div>
                                         <span class="raty-error"></span>
                                         <div>
-                                            <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
+                                            <textarea rows="4" cols="50" maxlength="1024" name="feedback-field" placeholder="Write your message..."></textarea>
                                             <span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
                                         </div>
                                     </div>
