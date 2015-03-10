@@ -2430,12 +2430,14 @@
         $(".overlay-for-waiting-modal").css("display", "block");
         
         var clonedDiv = $(".add-category-modal").clone(); 
+        
+        clonedDiv.find('.category-items .product-list').html('');
+        
         retrieveAllProductList(clonedDiv, 1);
         
         clonedDiv.modal({
             persist:true
         });
-        
         
         var $allProductList = clonedDiv.find('.all-product-list');              
         var $categoryProductList = clonedDiv.find('.category-product-list');
@@ -2485,7 +2487,9 @@
                     clonedDiv.modal({
                         persist:true
                     });
-                    
+
+                    clonedDiv.find('.category-items .product-list').html('');
+
                     appendCategoryProductList(clonedDiv.find('.category-items') , response.products)
                     retrieveAllProductList(clonedDiv, 1);
 
@@ -2746,9 +2750,6 @@
                                         '</li>';
                         listHtmlCollection.push(listHtml);
                     });
-                    
-                    
-                    
                     var $allProductList = modalDiv.find('.all-product-list');
                     $allProductList.append(listHtmlCollection);
                 }
