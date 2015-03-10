@@ -281,16 +281,14 @@
         $("#active-items").css("display", "block");
     });
 
-    $('.transaction-title-bought').click(function() {
+    $('.transaction-title-bought').click(function() {          
         $(this).toggleClass("active-bar",0);
         $(this).next('.on-going-transaction-list-bought').slideToggle();
         $('.on-going-transaction-list-sold').slideUp();
         $('.transaction-title-sold').removeClass("active-bar");
-        
         $('html, body').animate({
             scrollTop: $(".transaction-tabs").offset().top
         }, 300);
-        
     });
 
     $('.transaction-title-sold').click(function() {
@@ -1654,12 +1652,17 @@
                             method : 'POST',
                             data : serializedData,
                             success : function (data) {
-                                if (parseInt(data) === 1) {
+                                var jsonResponse = $.parseJSON(data);
+                                if (jsonResponse.isSuccess) {
                                     alert('Your feedback has been submitted.');
                                     btn.remove();
                                 }
                                 else {
-                                    alert('An error was encountered. Try again later.');
+                                    var errorMessage = "An error was encountered. Please try again later";
+                                    if(jsonResponse.error !== ""){
+                                        errorMessage = jsonResponse.error;
+                                    }
+                                    alert(escapeHtml(errorMessage));
                                 }
                             }
                         });
@@ -1760,10 +1763,13 @@
     });
 
     $('#transactions').on('click', '.transaction-button-head', function() {
-        var $container = $(this).data('method');
-        var $page = 1;
-
-        getTransactionDetails($page, $container, $container, '', '');
+        var $this = $(this);
+        if($this.hasClass('active-bar')){
+            var $container = $this.data('method');
+            $('.payment-filter[data="'+$container+'"]').val('all');
+            var $page = 1;
+            getTransactionDetails($page, $container, $container, '', '');
+        }
     });
 
     var getTransactionDetails = function ($page, $requestType, $container, $searchFor, $value)
@@ -2393,7 +2399,7 @@
                 success: function(data){ 
                     var response = $.parseJSON(data);
                     if(response){
-                        $('.delete-dialog-success').fadeIn().delay(2000).fadeOut();
+                        $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();
                         $.each(categoryIds, function(key, categoryId){
                              $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').fadeOut();
                              $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]').fadeOut();
@@ -2401,7 +2407,7 @@
                         });
                     }
                     else{
-                        $('.delete-dialog-fail').fadeIn().delay(2000).fadeOut();
+                        $('.delete-dialog-fail').fadeIn().delay(5000).fadeOut();
                     }
                 }
             });
@@ -2430,12 +2436,14 @@
         $(".overlay-for-waiting-modal").css("display", "block");
         
         var clonedDiv = $(".add-category-modal").clone(); 
+        
+        clonedDiv.find('.category-items .product-list').html('');
+        
         retrieveAllProductList(clonedDiv, 1);
         
         clonedDiv.modal({
             persist:true
         });
-        
         
         var $allProductList = clonedDiv.find('.all-product-list');              
         var $categoryProductList = clonedDiv.find('.category-product-list');
@@ -2450,11 +2458,11 @@
         var countAllItems = $allProductList.find('li').size();
         var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
         if(browserWidth <= mobileViewPortWidthLimit){
-            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+40);
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
             $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
         }
         else{
-            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+40);
+            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
             $(".ui-droppable").css("width", "100%");
         }
 
@@ -2485,7 +2493,9 @@
                     clonedDiv.modal({
                         persist:true
                     });
-                    
+
+                    clonedDiv.find('.category-items .product-list').html('');
+
                     appendCategoryProductList(clonedDiv.find('.category-items') , response.products)
                     retrieveAllProductList(clonedDiv, 1);
 
@@ -2503,11 +2513,11 @@
                     var countAllItems = $allProductList.find('li').size();
                     var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
                     if(browserWidth <= mobileViewPortWidthLimit){
-                        $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height",addContentHeight+20);
+                        $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
                         $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
                     }
                     else{
-                        $(".my-category-modal").css("width", modalCategoryModalWidth).css("height",addContentHeight+20);
+                        $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
                         $(".ui-droppable").css("width", "100%");
                     }
 
@@ -2642,7 +2652,9 @@
                 }
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
-                    errorDiv.fadeIn().delay(2000).fadeOut();
+                    var me = $(".my-category-modal").outerHeight();
+                    var mo = me + 30;
+                    errorDiv.fadeIn().delay(5000).fadeOut();
                     errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' + escapeHtml(jsonData.errorMessage));
                 }
             }
@@ -2692,11 +2704,11 @@
                             '</label><li>';
                     deleteCheckBoxList.append(html);
                     $modalDiv.find('.simplemodal-close').click();
-                    $('.add-store-cat-message').fadeIn().delay(2000).fadeOut();
+                    $('.add-store-cat-message').fadeIn().delay(5000).fadeOut();
                 }
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
-                    errorDiv.fadeIn().delay(2000).fadeOut();
+                    errorDiv.fadeIn().delay(5000).fadeOut();
                     errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' + escapeHtml(jsonData.errorMessage));
                 }
             }
@@ -2710,6 +2722,12 @@
         page = typeof page !== 'undefined' ? page : 1;
         searchString = typeof searchString !== 'undefined' ? searchString : '';
         
+        var $allProductDiv = modalDiv.find('.all-items');
+        var isProcessing = JSON.parse($allProductDiv.attr('data-isProcessing'));
+        if(isProcessing){
+            return false;
+        }
+   
         var categoryId = modalDiv.find('.hidden-category-id').val();
         var $currentCategoryProductList = modalDiv.find('.category-product-list .category-item-name');  
         var currentCategoryProductsIds = [];
@@ -2727,9 +2745,13 @@
                 searchString: searchString, 
                 excludeProductId: JSON.stringify(currentCategoryProductsIds)
             },
+            beforeSend: function( xhr ) {
+                $allProductDiv.attr('data-isProcessing', 'true');
+            },
             success: function(data){ 
                 var response = $.parseJSON(data);
-                var $allProductDiv = modalDiv.find('.all-items');
+                $allProductDiv.attr('data-isProcessing', 'false');
+               
                 $allProductDiv.find('.loader').hide();
                 if(response.products.length === 0){
                     $allProductDiv.attr('data-isComplete', 'true');
@@ -2746,9 +2768,6 @@
                                         '</li>';
                         listHtmlCollection.push(listHtml);
                     });
-                    
-                    
-                    
                     var $allProductList = modalDiv.find('.all-product-list');
                     $allProductList.append(listHtmlCollection);
                 }
@@ -2780,6 +2799,7 @@
         if($.parseJSON(isComplete)){
             return false;
         }
+        
         var div = $div[0];
         if(div.scrollTop + div.clientHeight >= div.scrollHeight){
             
@@ -2793,13 +2813,22 @@
             $loader.show();
 
             if($div.hasClass('category-items')){
+                var isProcessing = $.parseJSON($div.attr('data-isProcessing'));
+                if(isProcessing){
+                    return false;
+                }
+                
                 $.ajax({
                     type: "GET",
                     url: '/memberpage/getCustomCategory',
                     data: {categoryId:categoryId, page: page, searchString: searchString},
+                    beforeSend: function( xhr ) {
+                        $div.attr('data-isProcessing', 'true');
+                    },
                     success: function(data){
                         $loader.hide();
                         var jsonResponse = $.parseJSON(data);
+                        $div.attr('data-isProcessing', 'false');
                         if(jsonResponse.products.length === 0){
                             $div.attr('data-isComplete', 'true');
                         }

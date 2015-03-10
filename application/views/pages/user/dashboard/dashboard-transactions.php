@@ -40,7 +40,7 @@
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL?>">PayPal</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
-                                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT?>">Direct Bank Deposit</option>
+                                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
                                 </select>
                             </div>
                             <div class="clear"></div>

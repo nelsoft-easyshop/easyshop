@@ -147,10 +147,12 @@ class MessageManager {
             ];
 
             $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, true);
-            $this->emailService->setRecipient($emailRecipient)
-                                ->setSubject($emailSubject)
-                                ->setMessage($emailMsg, $imageArray)
-                                ->queueMail();
+
+            // uncomment to queue mail
+            // $this->emailService->setRecipient($emailRecipient)
+            //                     ->setSubject($emailSubject)
+            //                     ->setMessage($emailMsg, $imageArray)
+            //                     ->queueMail();
                                 
             $updatedMessageListForSender = $this->getAllMessage($sender->getIdMember());
             $updatedMessageListForReciver = $this->getAllMessage($recipient->getIdMember());

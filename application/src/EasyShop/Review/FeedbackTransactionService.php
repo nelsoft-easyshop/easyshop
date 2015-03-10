@@ -60,7 +60,7 @@ class FeedbackTransactionService
         
         $doesFeedbackExists = $esMemberFeedbackRepo->findOneBy([
             'member' => $member,
-            'forMemberid' => $forMemberId,
+            'forMemberid' => $forMember,
             'feedbKind' => $feedbackKind,
             'order' => $order
         ]);

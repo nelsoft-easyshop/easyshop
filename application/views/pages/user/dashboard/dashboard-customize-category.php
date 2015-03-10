@@ -80,7 +80,7 @@
                 <p class="panel-setup-title">NEW CATEGORY</p>
                 <div class="div-store-content">
                     <div class="add-store-cat">
-                        <div class="alert alert-success add-store-cat-message" role="alert" style="display:none;">
+                        <div class="alert alert-es-success add-store-cat-message" role="alert" style="display:none;">
                                 Product category has been successfully added
                         </div> 
                         <button class="btn btn-setting-edit-btn" id="add-category">
@@ -100,6 +100,20 @@
                 <div class="div-store-content concealable">
                     <div class="delete-store-cat">
                         <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form class="form-horizontal">
+                                    <div class="alert alert-es-danger delete-dialog-fail" role="alert" style="display:none">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                        <span class="message">Sorry, something went wrong. Please try again later.</span>
+                                    </div>
+                                                    
+                                    <div class="alert alert-es-success delete-dialog-success" role="alert" style="display:none">
+                                            Product categories successfully deleted.
+                                    </div> 
+                                </form>
+                            </div>
+                        </div>
                         <div class="form-group">
                                 <label class="col-sm-3 control-label">Current Categories : </label>
                                 <div class="col-sm-9 col-with-radio">
@@ -113,19 +127,7 @@
                                         </button>
                                     </div>
                                     <br/>
-                                    <div class="">
-                                        <form class="form-horizontal">
-                                            <div class="alert alert-danger delete-dialog-fail" role="alert" style="display:none">
-                                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                                <span class="message">Sorry, something went wrong. Please try again later.</span>
-                                            </div>
-                                                            
-                                            <div class="alert alert-success delete-dialog-success" role="alert" style="display:none">
-                                                    Product categories successfully deleted.
-                                            </div> 
-                        
-                                        </form>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -167,7 +169,7 @@
         <div class="form-group">
             <label>Add items to this category : </label>
             <div class="customized-category-error">
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-es-danger" role="alert">
                     <a href="javascript:void(0)" class="alert-link error-message" style="border:none;"></a>
                 </div>
             </div>
@@ -203,7 +205,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container all-items " data-page="1" data-isComplete="false">
+                        <div class="category-items-holder my-category-container all-items " data-page="1" data-isComplete="false" data-isProcessing="false">
                             <ul class="allItems ui-helper-reset ui-helper-clearfix all-product-list product-list">
                             </ul>
                             <div class="loader clear" style="text-align:center; display:none; font-size:10px">
@@ -245,7 +247,7 @@
             <label>Add items to this category : </label>
   
             <div class="customized-category-error">
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-es-danger" role="alert">
                     <a href="javascript:void(0)" class="alert-link error-message" style="border:none;"></a>
                 </div>
             </div>
@@ -267,7 +269,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container category-items" data-page="1" data-isComplete="false">
+                        <div class="category-items-holder my-category-container category-items" data-page="1" data-isComplete="false" data-isProcessing="false">
                             <ul class="customCategoryEdit category-product-list product-list">
   
                             </ul>
@@ -296,7 +298,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="category-items-holder my-category-container all-items" data-page="1" data-isComplete="false">
+                        <div class="category-items-holder my-category-container all-items" data-page="1" data-isComplete="false" data-isProcessing="false">
                             <ul class="allItemsEdit ui-helper-reset ui-helper-clearfix all-product-list product-list">
                             </ul>
                             <div class="loader clear" style="text-align:center; display:none; font-size:10px">
