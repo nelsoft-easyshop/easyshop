@@ -1652,12 +1652,17 @@
                             method : 'POST',
                             data : serializedData,
                             success : function (data) {
-                                if (parseInt(data) === 1) {
+                                var jsonResponse = $.parseJSON(data);
+                                if (jsonResponse.isSuccess) {
                                     alert('Your feedback has been submitted.');
                                     btn.remove();
                                 }
                                 else {
-                                    alert('An error was encountered. Try again later.');
+                                    var errorMessage = "An error was encountered. Please try again later";
+                                    if(jsonResponse.error !== ""){
+                                        errorMessage = jsonResponse.error;
+                                    }
+                                    alert(escapeHtml(errorMessage));
                                 }
                             }
                         });
