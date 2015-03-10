@@ -63,7 +63,7 @@ class PointTracker
 
         // Insert to point history
         $pointHistory = new EsPointHistory();
-        $pointHistory->setM($user);
+        $pointHistory->setMember($user);
         $pointHistory->setType($points);
         $pointHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
         $pointHistory->setPoint($points->getPoint());
@@ -80,13 +80,13 @@ class PointTracker
             // Insert new user
             $userPoint = new EsPoint();
             $userPoint->setPoint($points->getPoint());
-            $userPoint->setM($user);
+            $userPoint->setMember($user);
 
             $this->em->persist($userPoint);
             $this->em->flush();
-        }    
+        }
 
-        return true;                
+        return true;
     }
 
 
