@@ -60,7 +60,7 @@
             <div class="login-loading-content text-center">
                 <img src="/assets/images/loading/preloader-whiteBG.gif" alt="loading...">
             </div>
-            <div class="login-hide-content">
+            <div class="login-hide-content" style="display:none;">
                 <div id="adv2" class="login-tabs">
                     <div id="alter-tab" class="idTabs">
                         <div class="idtabs-tab" >
