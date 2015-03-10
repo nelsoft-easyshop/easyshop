@@ -29,7 +29,7 @@
                 <button class="btn btn-setting-edit-btn" id="btn-edit-email">
                    <i class="icon-edit"></i> Edit
                 </button>
-                <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" class="verify_img" style="display:none"/>
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-sm.gif" class="verify_img" style="display:none"/>
                 <div id="verifyEmail" style="<?php echo $member->getIsEmailVerify() == 0 && trim($member->getEmail()) !== ''?'':'display:none;'?>"  <?php echo (trim($member->getEmail())==''?'':'disabled');?>>
                     <span class="val-error" style="color:blue !important; cursor:pointer;" id="verifyEmailAction">Resend Email Verification</span>
                 </div>
@@ -51,7 +51,7 @@
                             <span class="val-success"><i class="fa fa-check"></i></span>
                         </div>
                         <div class="col-md-5">
-                            <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" class="changeEmailLoader" style="display:none"/>
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-sm.gif" class="changeEmailLoader" style="display:none"/>
                              <div id="changeEmailBtnAction">   
                                 <button class="btn btn-setting-save-btn" id="changeEmailBtn">
                                     Save changes
@@ -90,6 +90,17 @@
                 </div>
                 <div class="edit-password">
                      <form class="form-horizontal" id="changePassForm">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-es-danger" style="display:none" role="alert" id="password-change-error">
+                                    Error
+                                </div>
+                                
+                                <div class="alert alert-es-success" style="display:none" role="alert" id="password-change-success">
+                                    Password updated successfully
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Current Password : </label>
                             <div class="col-sm-5">
@@ -113,9 +124,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                    
                             <div class="col-sm-4" style='text-align:center;'>
-                                <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" class="changePasswordLoader" style="display:none"/>
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-sm.gif" class="changePasswordLoader" style="display:none"/>
                             </div>
                             <div class="col-sm-5" id="actionGroupChangePass">
                                 <input type="submit" class="btn btn-setting-save-btn" id="changePassBtn" name="changePassBtn"  value="Save Changes">
@@ -124,17 +134,6 @@
                                 </span>
                             </div>
                         </div>
-
-                        <div class="alert alert-danger" style="display:none" role="alert" id="password-change-error">
-                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                            Error
-                        </div>
-                        
-                        <div class="alert alert-success" style="display:none" role="alert" id="password-change-success">
-                            Password updated successfully
-                        </div>
-                
-                        
                     </form>
                 </div>
                 <p class="p-note-setting">
@@ -179,7 +178,7 @@
                                         Cancel
                                     </span>
                                 </div>
-                                <img src="<?php echo getAssetsDomain(); ?>assets/images/orange_loader_small.gif" id="deactivateAccountLoader" style="display:none"/>                                
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-sm.gif" id="deactivateAccountLoader" style="display:none"/>                                
                             </div>
                         </div>
                     </form>
