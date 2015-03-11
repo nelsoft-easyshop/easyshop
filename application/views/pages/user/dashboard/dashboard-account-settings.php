@@ -125,13 +125,19 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-4" style='text-align:center;'>
-                                <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-sm.gif" class="changePasswordLoader" style="display:none"/>
+                                
                             </div>
-                            <div class="col-sm-5" id="actionGroupChangePass">
+                            <div class="col-sm-5" >
+                                <center>
+                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-sm.gif" class="changePasswordLoader" style="display:none"/>
+                                </center>
+                                <div id="actionGroupChangePass">
+                                
                                 <input type="submit" class="btn btn-setting-save-btn" id="changePassBtn" name="changePassBtn"  value="Save Changes">
                                 <span class="btn btn-setting-cancel-btn" id="cancel-edit-password">
                                     Cancel
                                 </span>
+                            </div>
                             </div>
                         </div>
                     </form>
