@@ -1562,27 +1562,34 @@ class Payment extends MY_Controller{
             redirect('/', 'refresh');
         }
 
-        /* JSON Decode*/
+        $paymentService = $this->serviceContainer['payment_service'];
+        $carts = $this->session->all_userdata();
         $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
-
-        $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
-
         $paymentMethodString = (string)reset($paymentMethods)['method'];
+        $pointsAllocated = "0.00";
+
+        $isPaymentAcceptPoints = $paymentService->isPaymentMethodAcceptPoints($paymentMethodString);
+        if($isPaymentAcceptPoints 
+            && array_key_exists("PointGateway", $paymentMethods)
+            && isset($paymentMethods["PointGateway"]["amount"])){
+            $pointsAllocated = $paymentMethods["PointGateway"]["amount"];
+        }
+        elseif(!$isPaymentAcceptPoints && array_key_exists("PointGateway", $paymentMethods)){
+            unset($paymentMethods["PointGateway"]);
+        }
+
+        $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated);
+
         if($paymentMethodString === 'CashOnDelivery'){
-            if($this->input->post('promo_type') !== FALSE ){
+            if($this->input->post('promo_type') !== false ){
                 $this->setPromoItemsToPayment($this->input->post('promo_type'));
             }
         }
 
-        $carts = $this->session->all_userdata();
-
-        $paymentService = $this->serviceContainer['payment_service'];
-
-        // Validate Cart Data and subtract points
-        $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
+
         if($paymentMethodString === "PayPal"
            || $paymentMethodString === "DragonPay"){
             echo json_encode($response);
@@ -1598,20 +1605,18 @@ class Payment extends MY_Controller{
         else{
             $txnid = $response['txnid'];
             $message = $response['message'];
-            $status = $response['status'];
-            $orderId = $response['orderId'];
-            $invoice = $response['invoice'];
+            $status = $response['status'];  
             $textType = $response['textType'];
-            $this->removeItemFromCart();
-            $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+            if($status === PaymentService::STATUS_SUCCESS){
+                $this->removeItemFromCart();
+            }
             $this->__generateFlash($txnid,$message,$status);
-            echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh';
+            echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status;
         }
     }
 
     /**
      * Postback function for PayPal
-     * 
      */
     public function postBackPayPal()
     {
@@ -1620,42 +1625,51 @@ class Payment extends MY_Controller{
         }
 
         $carts = $this->session->all_userdata();
+        $memberId = (int) $this->session->userdata('member_id');
+        $paypalToken = (string) trim($this->input->get('token'));
         $paymentService = $this->serviceContainer['payment_service'];
 
-        // get credit points if there are any
-        $points = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsPoint')
-                        ->findOneBy(["member" => intval($this->session->userdata('member_id'))]);
+        $order = $this->serviceContainer['entity_manager']
+                      ->getRepository('EasyShop\Entities\EsOrder')
+                      ->findOneBy(["transactionId" => $paypalToken]);
         
+        $transactionPoints = $this->serviceContainer['transaction_manager']
+                                  ->getTransactionPoints($order);
+
         // Create a fake decoded JSON for payment service
-        if($points && intval($points->getCreditPoint()) > 0 ){
+        if($order && (int) $transactionPoints > 0 ){
             $paymentMethods = [
-                "PaypalGateway" => 
-                    ["method" => "PayPal", "getArray" => $this->input->get()],
-                "PointGateway" =>
-                    ["method" => "Point", "amount" => $points->getCreditPoint(), "pointtype" => "purchase"]
+                "PaypalGateway" => [
+                    "method" => "PayPal",
+                    "getArray" => $this->input->get()
+                ],
+                "PointGateway" => [
+                    "method" => "Point", 
+                    "amount" => $transactionPoints, 
+                    "pointtype" => "purchase"
+                ]
             ];
-            $points->setCreditPoint(0);
-            $this->serviceContainer['entity_manager']->flush();
         }
         else{
-            $paymentMethods = ["PaypalGateway" => ["method" => "PayPal", "getArray" => $this->input->get()]];
+            $paymentMethods = [
+                "PaypalGateway" => [
+                    "method" => "PayPal", 
+                    "getArray" => $this->input->get()
+                ]
+            ];
         }
-        
-        $pointsAllocated = array_key_exists("PointGateway", $paymentMethods) ? $paymentMethods["PointGateway"]["amount"] : "0.00";
 
         // Validate Cart Data
-        $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated);
+        $validatedCart = $paymentService->validateCartData($carts, $transactionPoints);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
         
-        $response = $paymentService->postBack($paymentMethods, $validatedCart, $this->session->userdata('member_id'), null);
+        $response = $paymentService->postBack($paymentMethods, $validatedCart, $memberId, null);
         $message = $response['message'];
         $status = $response['status'];
         $txnid = $response['txnid'];
-        $orderId = $response['orderId'];
-        $invoice = $response['invoice'];
-        
-        $this->removeItemFromCart();
-        $this->sendNotification(array('member_id'=>$this->session->userdata('member_id'), 'order_id'=>$orderId, 'invoice_no'=>$invoice));
+        if($status === PaymentService::STATUS_SUCCESS){
+            $this->removeItemFromCart();
+        }
         $this->__generateFlash($txnid, $message, $status);
         redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
