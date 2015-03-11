@@ -3,8 +3,9 @@
     <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
     <link rel="stylesheet" href="/assets/css/promo.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
     <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media="all"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <?php else: ?>
-    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.scratch-to-win.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+    <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.scratch-to-win.css?ver=<?=ES_FILE_VERSION?>' media='all'/>
 <?php endif; ?>
 
 
