@@ -157,7 +157,7 @@ class Register extends MY_Controller
                 $emailer->setRecipient($subscriber->getEmail());
                 $emailer->setSubject($this->lang->line('subscription_subject'));
                 $emailer->setMessage($message, $imageArray);
-                $emailer->sendMail();
+                $emailer->queueMail();
                 
                 $data['content'] = 'You have successfully Subscribed!';
             }

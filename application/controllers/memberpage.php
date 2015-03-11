@@ -815,10 +815,10 @@ class Memberpage extends MY_Controller
                     $emailService->setRecipient($parseData['email'])
                                  ->setSubject($emailSubject)
                                  ->setMessage($emailMsg, $imageArray)
-                                 ->sendMail();
+                                 ->queueMail();
                     $smsService->setMobile($parseData['mobile'])
                                ->setMessage($smsMsg)
-                               ->sendSms();
+                               ->queueSMS();
                 }
             }
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
@@ -1581,7 +1581,7 @@ class Memberpage extends MY_Controller
                 $this->emailNotification->setRecipient($member['member']->getEmail());
                 $this->emailNotification->setSubject($this->lang->line('deactivate_subject'));
                 $this->emailNotification->setMessage($message,$imageArray);
-                $this->emailNotification->sendMail();
+                $this->emailNotification->queueMail();
                 $this->em->getRepository('EasyShop\Entities\EsMember')
                          ->accountActivation($member['member'], false);
             }

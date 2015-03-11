@@ -148,6 +148,14 @@
 
         }
      });
+     
+     
+    $('#changePassForm input[name="password"]').change(function(){
+        var $this = $(this);
+        if($this.val() === ''){
+            $('#changePassForm input[name="confirmPassword"]').val('');
+        }
+    });
 
     /**************** GOOGLE MAPS ******************************/
 
