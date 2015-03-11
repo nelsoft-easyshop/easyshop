@@ -431,6 +431,7 @@ class CategoryManager
                                    ->setSortOrder($higestSortOrder)
                                    ->setlastModifiedDate($datetimeToday);
                     $this->em->persist($memberCategory);
+                    $productSortOrder = 0;
                     foreach ($productIds as $productId) {
                         $product =  $esProductRepo->findOneBy([
                                         "member" => $memberId,
@@ -443,7 +444,9 @@ class CategoryManager
                             $memberProductCategory->setMemcat($memberCategory);
                             $memberProductCategory->setProduct($product);
                             $memberProductCategory->setCreatedDate($datetimeToday);
+                            $memberProductCategory->setSortOrder($productSortOrder);
                             $this->em->persist($memberProductCategory);
+                            $productSortOrder++;
                         }
                     }
                     $this->em->flush();
@@ -515,6 +518,7 @@ class CategoryManager
                     $memberCategory = $esMemberCatRepo->find($memberCategoryId);
                     $memberCategory->setCatName($categoryName);
                     $memberCategory->setlastModifiedDate($datetimeToday);
+                    $productSortOrder = 0;
                     foreach ($productIds as $productId) {
                         $product =  $esProductRepo->findOneBy([
                                         "member" => $memberId,
@@ -528,6 +532,8 @@ class CategoryManager
                             $memberProductCategory->setMemcat($memberCategory);
                             $memberProductCategory->setProduct($product);
                             $memberProductCategory->setCreatedDate($datetimeToday);
+                            $memberProductCategory->setSortOrder($productSortOrder);
+                            $productSortOrder++;
                             $this->em->persist($memberProductCategory);
                         }
                     }
@@ -640,11 +646,14 @@ class CategoryManager
                                    ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                  ->findByIdProduct($productIds);
+            $productSortOrder = 0;
             foreach($products as $product){
                 $memberCategoryProduct = new \EasyShop\Entities\EsMemberProdcat();
                 $memberCategoryProduct->setMemcat($newMemberCategory);
                 $memberCategoryProduct->setProduct($product);
                 $memberCategoryProduct->setCreatedDate($datetimeToday);
+                $memberCategoryProduct->setSortOrder($productSortOrder);
+                $productSortOrder++;
                 $this->em->persist($memberCategoryProduct);
             } 
         } 
@@ -693,10 +702,14 @@ class CategoryManager
                         $highestSortOrder = $memberCategory->getSortOrder();
                     }
                     if($cleanedName === $cleanedCategoryName){
+                        $memberCategoryId = $memberCategory->getIdMemcat();
+                        $highestProductSortOrder = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                                        ->getHighestProductSortOrderWithinCategory($memberCategoryId);
                         $newMemberProduct = new \EasyShop\Entities\EsMemberProdcat();
                         $newMemberProduct->setMemcat($memberCategory);
                         $newMemberProduct->setCreatedDate($datetimeToday);
                         $newMemberProduct->setProduct($product);
+                        $newMemberProduct->setSortOrder($highestProductSortOrder);
                         $this->em->persist($newMemberProduct);
                         $isCustomCategoryFound = true;
                         break;
@@ -715,6 +728,7 @@ class CategoryManager
                     $newMemberProduct->setMemcat($newMemberCategory);
                     $newMemberProduct->setCreatedDate($datetimeToday);
                     $newMemberProduct->setProduct($product);
+                    $newMemberProduct->setSortOrder(0);
                     $this->em->persist($newMemberProduct);
                 }
                 try{

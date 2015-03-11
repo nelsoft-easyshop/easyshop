@@ -112,9 +112,7 @@ class EsMemberProdcatRepository extends EntityRepository
      */
     public function getAllCustomCategoryProducts($memberId, $memcatId, $condition, $orderBy = array("idProduct" => "DESC"))
     {
-        $productIds = array();
-
-        // Generate Order by condition
+        $productIds = [];
         $orderCondition = "";
         foreach($orderBy as $column=>$order){
             $orderCondition .= "p." . $column . " " . $order . ", ";
@@ -150,4 +148,38 @@ class EsMemberProdcatRepository extends EntityRepository
 
         return $productIds;
     }
+    
+    /**
+     * Retrieves the highest product sort order within a custom category
+     *
+     * @param integer $memberCategoryId
+     * @return integer
+     */
+    public function getHighestProductSortOrderWithinCategory($memberCategoryId)
+    {
+        $em = $this->_em;
+        $dql = "
+            SELECT 
+                MAX(pc.sortOrder)
+            FROM 
+                EasyShop\Entities\EsMemberProdcat pc
+            JOIN 
+                pc.product p
+            WHERE 
+                pc.memcat = :memberCategoryId
+                AND p.isDelete = :deleteStatus
+                AND p.isDraft = :draftStatus
+        ";
+
+        $query = $em->createQuery($dql)
+                    ->setParameter("memberCategoryId", $memberCategoryId)
+                    ->setParameter("deleteStatus", \EasyShop\Entities\EsProduct::ACTIVE)
+                    ->setParameter("draftStatus", \EasyShop\Entities\EsProduct::ACTIVE);
+
+        $maxSortOrder = $query->getSingleScalarResult();
+        $maxSortOrder = $maxSortOrder === null ? 0: $maxSortOrder;
+        
+        return (int)$maxSortOrder;
+    }
+    
 }
