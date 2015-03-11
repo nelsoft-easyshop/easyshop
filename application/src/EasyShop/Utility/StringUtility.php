@@ -86,4 +86,18 @@ class StringUtility
 
         return $string;
     }
+    
+    
+    /**
+     * Remove all special characters except white space
+     * 
+     * @param string $string
+     * @return string
+     */
+    public function removeSpecialCharsExceptSpace($string)
+    {
+        $string = preg_replace('/[^A-Za-z0-9\s]/', '', $string);
+        $string = preg_replace('/\s+/', ' ', $string);
+        return $string;
+    }
 }
