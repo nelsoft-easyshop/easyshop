@@ -1400,16 +1400,6 @@ div.sell_steps4 ul li:nth-child(4) a {
     width: 95px !important;
 }
 
-/*.mce-container.mce-abs-layout-item.mce-formitem {
-    display: block;
-    height: auto !important;
-    left: auto !important;
-    margin-bottom: 10px;
-    position: relative !important;
-    top: auto !important;
-    width: 100% !important;
-}*/
-
 .mid_inner_con_list > div {
     border-bottom: 1px dotted #cecece;
     float: left;
