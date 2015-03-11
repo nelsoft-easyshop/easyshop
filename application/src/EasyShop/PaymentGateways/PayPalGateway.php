@@ -273,7 +273,7 @@ class PayPalGateway extends AbstractGateway
                     $pointGateway->setParameter('itemArray', $return['item_array']);
 
                     $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                                ->find($pointGateway->getParameter('paymentType'));
+                                              ->find($pointGateway->getParameter('paymentType'));
 
                     $trueAmount = $pointGateway->pay();
                     $paymentRecord = new EsPaymentGateway();
@@ -382,6 +382,8 @@ class PayPalGateway extends AbstractGateway
                                          ->addOrderHistory($orderHistory);
                                 $response['message'] = 'Your payment has been completed through Paypal';
                                 $response['status'] = PaymentService::STATUS_SUCCESS;
+
+                                $this->paymentService->sendPaymentNotification($orderId);
                             }
                             else{
                                 $response['message'] = 'Someting went wrong. Please contact us immediately. Your EASYSHOP INVOICE NUMBER: '.$invoice.'</div>'; 
