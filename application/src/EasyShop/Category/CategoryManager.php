@@ -627,9 +627,10 @@ class CategoryManager
         $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
         foreach($allUserCategories as $category){
             $datetimeToday = date_create(date("Y-m-d H:i:s"));
+            $categoryName = $this->stringUtility->removeSpecialCharsExceptSpace($category['name']);
             $newMemberCategory = new \EasyShop\Entities\EsMemberCat();
             $newMemberCategory->setMember($member);
-            $newMemberCategory->setCatName($category['name']);
+            $newMemberCategory->setCatName($categoryName);
             $newMemberCategory->setSortOrder($category['sortOrder']);
             $newMemberCategory->setCreatedDate($datetimeToday);
             $newMemberCategory->setlastModifiedDate($datetimeToday);
@@ -688,7 +689,8 @@ class CategoryManager
                 $datetimeToday = date_create(date("Y-m-d H:i:s"));
                 $highestSortOrder = 0;
                 foreach($memberCategories as $memberCategory){
-                    $cleanedName = strtolower($stringUtility->cleanString($memberCategory->getCatName()));
+                    $cleanedName = $this->stringUtility->removeSpecialCharsExceptSpace($memberCategory->getCatName());
+                    $cleanedName = strtolower($stringUtility->cleanString($cleanedName));
                     if($memberCategory->getSortOrder() > $highestSortOrder){
                         $highestSortOrder = $memberCategory->getSortOrder();
                     }
