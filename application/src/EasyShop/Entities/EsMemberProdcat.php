@@ -48,7 +48,12 @@ class EsMemberProdcat
      */
     private $product;
 
-
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sort_order", type="integer", nullable=false)
+     */
+    private $sortOrder = '0';
 
     /**
      * Get idMemprod
@@ -128,4 +133,28 @@ class EsMemberProdcat
     {
         return $this->product;
     }
+    
+        
+    /**
+     * Set sortOrder
+     *
+     * @param integer $sortOrder
+     * @return EsMemberCat
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+        return $this;
+    }
+    
+    /**
+     * Get sortOrder
+     *
+     * @return integer 
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
+
 }
