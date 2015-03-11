@@ -29,7 +29,10 @@
 	height: auto !important;
 	max-width:600px; 
 	width: 90% !important;
-	z-index: 99999 !important;
+}
+
+.simplemodal-container {
+	z-index: 999999 !important;
 }
 
 #simplemodal-container code {
