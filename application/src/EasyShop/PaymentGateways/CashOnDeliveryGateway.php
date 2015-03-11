@@ -43,6 +43,7 @@ class CashOnDeliveryGateway extends AbstractGateway
         
         // Point Gateway
         $pointGateway = $this->paymentService->getPointGateway();
+
         $response['paymentType'] = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $response['textType'] = 'cashondelivery';
         $response['message'] = 'Your payment has been completed through Cash on Delivery.';
@@ -63,6 +64,11 @@ class CashOnDeliveryGateway extends AbstractGateway
         $txnid = $this->generateReferenceNumber($memberId);
         $response['txnid'] = $txnid;
 
+        if($pointGateway && $this->pointTracker->getUserPoint($memberId) < $pointGateway->getParameter('amount')){
+            $response['message'] = "You have insufficient points.";
+            return $response;
+        }
+
         if($validatedCart['itemCount'] === $productCount){
             $return = $this->persistPayment(
                 $grandTotal, 
@@ -78,7 +84,7 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $response['message'] = $return['o_message'];
             }
             else{
-                $response['orderId'] = $v_order_id = $return['v_order_id'];
+                $response['orderId'] = $orderId = $return['v_order_id'];
                 $response['invoice'] = $invoice = $return['invoice_no'];
                 $response['status'] = PaymentService::STATUS_SUCCESS;
 
@@ -88,7 +94,7 @@ class CashOnDeliveryGateway extends AbstractGateway
                 }
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                  ->find($v_order_id);
+                                  ->find($orderId);
 
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                           ->find($this->getParameter('paymentType'));
@@ -118,6 +124,8 @@ class CashOnDeliveryGateway extends AbstractGateway
 
                     $this->em->persist($pointRecord);   
                 }
+                $this->paymentService->sendPaymentNotification($orderId);
+
                 $this->em->flush();
             }
         }
