@@ -1368,14 +1368,14 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .form_input input[type='text'],
 .form_input input[type='select'],
-.form_input textarea                {
+.form_input textarea {
     color: #494949;
     padding:10px 2px;
 }
 
 .mce-container.mce-panel.mce-floatpanel.mce-window.mce-in {
-    width: 70% !important;
     max-width: 600px !important;
+    width: 90% !important;
 }
 .mce-container-body.mce-abs-layout,
 .mce-container.mce-panel.mce-foot  {
@@ -1386,6 +1386,29 @@ div.sell_steps4 ul li:nth-child(4) a {
     right: 10px !important;
     left: inherit !important;
 }
+
+.mce-container.mce-form,
+.mce-container-body.mce-abs-layout {
+    width: 100% !important;
+}
+
+.mce-formitem {
+    width: 90% !important;
+}
+
+.mce-widget.mce-label {
+    width: 95px !important;
+}
+
+/*.mce-container.mce-abs-layout-item.mce-formitem {
+    display: block;
+    height: auto !important;
+    left: auto !important;
+    margin-bottom: 10px;
+    position: relative !important;
+    top: auto !important;
+    width: 100% !important;
+}*/
 
 .mid_inner_con_list > div {
     border-bottom: 1px dotted #cecece;
@@ -3096,9 +3119,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         padding-right: 0;
     }
 
-    .mce-container.mce-panel.mce-floatpanel.mce-window.mce-in {
-        width: 90% !important;
-    }
     .mce-container-body.mce-abs-layout,
     .mce-container.mce-panel.mce-foot {
         width: 100% !important;
