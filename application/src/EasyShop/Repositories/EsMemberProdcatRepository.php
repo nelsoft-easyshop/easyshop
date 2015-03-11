@@ -66,7 +66,7 @@ class EsMemberProdcatRepository extends EntityRepository
         $orderByField = isset($orderByFields[key($orderBy)]) ? 
                         $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_SORTORDER];
         $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
-                            $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
+                            $orderByDirections[reset($orderBy)] : $orderByDirections['ASC'];
 
         $productIds = [];
 
@@ -146,7 +146,7 @@ class EsMemberProdcatRepository extends EntityRepository
         $orderByField = isset($orderByFields[key($orderBy)]) ? 
                         $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_SORTORDER];
         $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
-                            $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
+                            $orderByDirections[reset($orderBy)] : $orderByDirections['ASC'];
 
         $orderByString = "";
         foreach($orderByField as $field){
