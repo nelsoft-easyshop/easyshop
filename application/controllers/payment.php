@@ -1077,9 +1077,10 @@ class Payment extends MY_Controller{
             $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         }
 
-        $txnId = $response['txnid'] = (string)$this->session->flashdata('txnid'); 
-        $response['message'] = (string)$this->session->flashdata('msg');
-        $status = (string)$this->session->flashdata('status');
+
+        $txnId = $response['txnid'] = (string)$this->session->userdata('payment_txnid'); 
+        $response['message'] = (string)$this->session->userdata('payment_msg');
+        $status = (string)$this->session->userdata('payment_status');
 
         $response['completepayment'] = false;
         if(strtolower($status) === PaymentService::STATUS_SUCCESS){
@@ -1133,6 +1134,10 @@ class Payment extends MY_Controller{
             'title' => 'Payment Review | Easyshop.ph',
         ];
         
+        $this->session->unset_userdata('payment_txnid');
+        $this->session->unset_userdata('payment_msg');
+        $this->session->unset_userdata('payment_status');
+
         $this->load->spark('decorator');  
         $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/payment/payment_response_responsive' ,$response);
@@ -1485,9 +1490,9 @@ class Payment extends MY_Controller{
      */
     private function __generateFlash($txnId, $message, $status) 
     {
-        $this->session->set_flashdata('txnid',$txnId);
-        $this->session->set_flashdata('msg',$message);
-        $this->session->set_flashdata('status',$status);
+        $this->session->set_userdata('payment_txnid',$txnId);
+        $this->session->set_userdata('payment_msg',$message);
+        $this->session->set_userdata('payment_status',$status);
     }
 
     /**
