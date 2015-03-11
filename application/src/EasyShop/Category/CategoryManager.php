@@ -38,6 +38,34 @@ class CategoryManager
      */
     const NON_EXISTENT_CATEGORYID_PLACEHOLDER = 0;
 
+    /**
+     * Order by product sort order
+     *
+     * @var integer
+     */
+    const ORDER_PRODUCTS_BY_SORTORDER = 0;
+    
+    /**
+     * Order by popularity
+     *
+     * @var integer
+     */
+    const ORDER_PRODUCTS_BY_CLICKCOUNT = 1;
+    
+    /**
+     * Order by last modified date of product
+     *
+     * @var integer
+     */
+    const ORDER_PRODUCTS_BY_LASTCHANGE = 2;
+    
+    /**
+     * Order by isHot and clickcount
+     *
+     * @var integer
+     */
+    const ORDER_PRODUCTS_BY_HOTNESS = 3;
+    
     
     /**
      *  Entity Manager Instance
@@ -207,7 +235,7 @@ class CategoryManager
      *
      *  @return array - filter count of products and array of product objects
      */
-    public function getProductsWithinCategory($memberId, $arrCatId, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ "clickcount" => "DESC" ], $condition = "", $lprice = "", $uprice ="")
+    public function getProductsWithinCategory($memberId, $arrCatId, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ self::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ] , $condition = "", $lprice = "", $uprice ="")
     {
         $getAllNonCategorized = false;
         if(empty($arrCatId)){
@@ -221,6 +249,10 @@ class CategoryManager
 
         $lprice = str_replace(",", "", (string)$lprice);
         $uprice = str_replace(",", "", (string)$uprice);
+        
+        if(!$isCustom && key($orderBy) === self::ORDER_PRODUCTS_BY_SORTORDER){
+            $orderBy = [ self::ORDER_PRODUCTS_BY_CLICKCOUNT => 'DESC' ];
+        }
 
         if($condition === "" && $lprice === "" && $uprice === ""){
             if($getAllNonCategorized){
@@ -248,7 +280,7 @@ class CategoryManager
         else{
             if($getAllNonCategorized){
                 $categoryProductIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                               ->getNonCategorizedProductIds($memberId, PHP_INT_MAX);
+                                               ->getNonCategorizedProductIds($memberId, PHP_INT_MAX, 0, $orderBy);
             }
             else{
                 if($isCustom){
