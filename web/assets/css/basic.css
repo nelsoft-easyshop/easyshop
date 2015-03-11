@@ -15,7 +15,10 @@
 
 /* Overlay */
 #simplemodal-overlay {
-	background-color:rgba(0,0,0,0.60);
+	background-color:#000;
+	opacity: .7 !important;
+    filter: Alpha(Opacity=70);
+	z-index: 99999 !important;
 }
 
 /* Container */
@@ -26,6 +29,7 @@
 	height: auto !important;
 	max-width:600px; 
 	width: 90% !important;
+	z-index: 99999 !important;
 }
 
 #simplemodal-container code {
