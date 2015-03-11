@@ -188,16 +188,6 @@ class PayPalGateway extends AbstractGateway
 
         // Compute shipping fee
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
-        
-        // Persist point credit for postback method
-        $userPoints = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(["member" => intval($memberId)]);
-
-        if($userPoints){
-            $pointSpent = $pointGateway ? $pointGateway->getParameter('amount') : "0";
-            $userPoints->setCreditPoint(intval($pointSpent));
-            $this->em->flush();
-        }
 
         $shipping_amt = round(floatval($prepareData['othersumfee']),2);
         $itemTotalPrice = round(floatval($prepareData['totalPrice']),2) - $shipping_amt;

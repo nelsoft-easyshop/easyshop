@@ -39,14 +39,6 @@ class EsPoint
     private $member;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="credit_point", type="integer", nullable=true)
-     */
-    private $creditPoint = '0';
-
-
-    /**
      * Get id
      *
      * @return integer 
@@ -100,28 +92,5 @@ class EsPoint
     public function getMember()
     {
         return $this->member;
-    }
-
-    /**
-     * Set creditPoint
-     *
-     * @param integer $creditPoint
-     * @return integer
-     */
-    public function setCreditPoint($creditPoint)
-    {
-        $this->creditPoint = $creditPoint;
-
-        return $this;
-    }
-
-    /**
-     * Get creditPoint
-     *
-     * @return integer 
-     */
-    public function getCreditPoint()
-    {
-        return $this->creditPoint;
     }
 }
