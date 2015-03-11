@@ -1361,6 +1361,29 @@ class EsProductRepository extends EntityRepository
         return count($query->execute());
     }
     
+    /**
+     * Get Products from ids
+     *
+     * @param integer[] $productIds
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getProductsByIdKeepOrder($productIds)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('p, FIELD(p.idProduct, :productIds ) as HIDDEN field')
+            ->from('EasyShop\Entities\EsProduct','p')
+            ->where('p.idProduct IN (:productIds)')
+            ->andWhere('p.isDraft = :draftStatus')
+            ->andWhere('p.isDelete = :deleteStatus')
+            ->orderBy('field');
+        $qb->setParameter('productIds', $productIds);
+        $qb->setParameter('draftStatus', \EasyShop\Entities\EsProduct::ACTIVE);
+        $qb->setParameter('deleteStatus', \EasyShop\Entities\EsProduct::ACTIVE);
+   
+        return $result;
+    }
+    
 }
 
 
