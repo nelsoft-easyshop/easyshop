@@ -66,7 +66,9 @@ class PointGateway extends AbstractGateway
                 );
 
             // update history data field
-            $historyObj->setData($jsonData);
+            if($historyObj){
+                $historyObj->setData($jsonData);
+            }
             $this->em->flush();
         }
         
