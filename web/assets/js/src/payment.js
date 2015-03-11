@@ -274,11 +274,28 @@ $(document).ready(function(){
         var action = "/pay/pay"; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
-        var paymentMethod = JSON.stringify({
-            PesoPayGateway:{
-                method:"PesoPay", 
-            }
-        });
+        var pointAllocated = $('#pointsAllocated').val();
+        var paymentMethod = null;
+
+        if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
+            paymentMethod = JSON.stringify({
+                PesoPayGateway:{
+                    method:"PesoPay", 
+                },
+                PointGateway:{
+                    method:"Point",
+                    amount:pointAllocated,
+                    pointtype: "purchase"
+                }
+            });
+        }
+        else{
+            paymentMethod = JSON.stringify({
+                PesoPayGateway:{
+                    method:"PesoPay", 
+                }
+            });
+        }
         if($('#chk_ppcdb').is(':checked')){ 
             validateWhiteTextBox("#chk_ppcdb");
             $(this).val('Please wait...');
