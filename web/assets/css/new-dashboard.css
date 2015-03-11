@@ -2307,6 +2307,12 @@ label.css-label {
     background-color: #565656;
 }
 
+.bank-account-item .bank-name-container,
+.bank-account-item .account-name-container,
+.bank-account-item .account-number-container {
+    word-wrap: break-word;
+}
+
 /** =============== Responsive CSS style =============== **/
 .chosen-container{
     width: 100% !important;
