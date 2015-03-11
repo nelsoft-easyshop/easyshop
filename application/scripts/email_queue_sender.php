@@ -50,37 +50,42 @@
         }
     
         echo "Sending email - queue id: " . $userData['id_queue'] . " ...\n";
-        
-        # SEND EMAIL
-        $transport = Swift_SmtpTransport::newInstance($configEmail['smtp_host'], $configEmail['smtp_port'], $configEmail['smtp_crypto'])
-                                        ->setUsername($configEmail['smtp_user'])
-                                        ->setPassword($configEmail['smtp_pass']);
+        try {
+            # SEND EMAIL
+            $transport = Swift_SmtpTransport::newInstance($configEmail['smtp_host'], $configEmail['smtp_port'], $configEmail['smtp_crypto'])
+                                            ->setUsername($configEmail['smtp_user'])
+                                            ->setPassword($configEmail['smtp_pass']);
 
-        $mailer = Swift_Mailer::newInstance($transport);
-        
-        $message = Swift_Message::newInstance($emailData['subject'])
-                                ->setFrom([$configEmail['from_email'] => $configEmail['from_name']])
-                                ->setTo($emailData['recipient']);
-        
-        // Embed Image
-        foreach($emailData["img"] as $imagePath){
-            $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
-            if( strpos($emailData['msg'], $image) !== false ){
-                $embeddedImg = $message->embed(\Swift_Image::fromPath(__DIR__ . "/../../web/" . $imagePath));
-                $emailData['msg'] = str_replace($image, $embeddedImg, $emailData['msg']);
+            $mailer = Swift_Mailer::newInstance($transport);
+            
+            $message = Swift_Message::newInstance($emailData['subject'])
+                                    ->setFrom([$configEmail['from_email'] => $configEmail['from_name']])
+                                    ->setTo($emailData['recipient']);
+            
+            // Embed Image
+            foreach($emailData["img"] as $imagePath){
+                $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
+                if( strpos($emailData['msg'], $image) !== false ){
+                    $embeddedImg = $message->embed(\Swift_Image::fromPath(__DIR__ . "/../../web/" . $imagePath));
+                    $emailData['msg'] = str_replace($image, $embeddedImg, $emailData['msg']);
+                }
             }
-        }
 
-        $message->setBody($emailData['msg'], 'text/html');
-    
-        $result = $mailer->send($message, $failedRecipients);
-    
-        if($result){
-            echo "Email sent! \n";
-            $numSent += $result;
-            $status = $configEmail['status']['sent'];
-        }
-        else{
+            $message->setBody($emailData['msg'], 'text/html');
+        
+            $result = $mailer->send($message, $failedRecipients);
+        
+            if($result){
+                echo "Email sent! \n";
+                $numSent += $result;
+                $status = $configEmail['status']['sent'];
+            }
+            else{
+                echo "Email sending FAILED! \n";
+                $status = $configEmail['status']['failed'];
+            }
+        } 
+        catch (Exception $e) {
             echo "Email sending FAILED! \n";
             $status = $configEmail['status']['failed'];
         }
