@@ -1380,7 +1380,8 @@ class EsProductRepository extends EntityRepository
         $qb->setParameter('productIds', $productIds);
         $qb->setParameter('draftStatus', \EasyShop\Entities\EsProduct::ACTIVE);
         $qb->setParameter('deleteStatus', \EasyShop\Entities\EsProduct::ACTIVE);
-   
+        $result = $qb->getQuery()
+                     ->getResult();
         return $result;
     }
     
