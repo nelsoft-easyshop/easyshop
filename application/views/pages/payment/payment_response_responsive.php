@@ -38,7 +38,7 @@
                                 <b>Payment Invoice Number:</b>
                             </td>
                             <td width="50%" style="padding: 5px;">
-                                <?php echo $invoice_no; ?>
+                                <?php echo (string) $invoice_no === "" ? "Not Available" : $invoice_no; ?>
                             </td>
                         </tr>
                         <tr>
@@ -75,7 +75,7 @@
                         </tr>
                         <tr>
                             <td width="50%" style="padding: 2px 5px 5px 5px;">
-                                <?php echo $invoice_no; ?>
+                                <?php echo (string) $invoice_no === "" ? "Not Available" : $invoice_no; ?>
                             </td>
                         </tr>
                         <tr>
