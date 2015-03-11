@@ -15,6 +15,7 @@ use EasyShop\Entities\EsOptionalAttrhead;
 use EasyShop\Entities\EsProductShippingHead;
 use EasyShop\Entities\EsProductShippingDetail;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use EasyShop\Category\CategoryManager as CategoryManager;
 
 class EsProductRepository extends EntityRepository
 {
@@ -583,8 +584,23 @@ class EsProductRepository extends EntityRepository
      *
      *  @return integer[]
      */
-    public function getDefaultCategorizedProducts($memberId, $catId, $productLimit=12, $offset=0, $orderBy = ["clickcount"=>"DESC"], $searchString = "")
+    public function getDefaultCategorizedProducts($memberId, $catId, $productLimit=12, $offset=0, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT => 'DESC' ], $searchString = "")
     {
+        $orderByDirections = [
+            'ASC' => 'ASC', 
+            'DESC' => 'DESC',
+        ];
+        $orderByFields = [
+            CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT =>  [ 'p.clickcount' ], 
+            CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => [ 'p.lastmodifieddate' ],
+            CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'p.isHot' , 'p.clickcount' ],
+        ];
+        $orderByField = isset($orderByFields[key($orderBy)]) ? 
+                        $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT];
+        $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
+                            $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
+    
+    
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->select('p')
@@ -592,22 +608,20 @@ class EsProductRepository extends EntityRepository
                      ->andWhere('p.isDelete = :active')
                      ->andWhere('p.isDraft = :active')
                      ->setParameter('active', \EasyShop\Entities\EsProduct::ACTIVE)
-                    
                      ->andWhere('p.member = :member_id')
                      ->setParameter('member_id', $memberId)
                      ->andWhere(
                             $queryBuilder->expr()->in('p.cat', $catId)
                       );
                       
-        
         if($searchString !== ""){
             $searchQuery = '%'.$searchString.'%';
             $queryBuilder->andWhere('p.name LIKE :searchQuery')
                          ->setParameter('searchQuery', $searchQuery);
         }
-                      
-        $queryBuilder->orderBy("p.".key($orderBy), reset($orderBy));
-
+        foreach($orderByField as $field){
+            $queryBuilder->orderBy($field, $orderByDirection);
+        }
         $qbStatement = $queryBuilder->setFirstResult($offset)
                                     ->setMaxResults($productLimit)
                                     ->getQuery();
@@ -631,12 +645,25 @@ class EsProductRepository extends EntityRepository
      *
      *  @return array
      */
-    public function getAllDefaultCategorizedProducts($memberId, $catId, $condition, $orderBy=array("clickcount"=>"DESC"))
+    public function getAllDefaultCategorizedProducts($memberId, $catId, $condition, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT => 'DESC' ])
     {
+        $orderByDirections = [
+            'ASC' => 'ASC', 
+            'DESC' => 'DESC',
+        ];
+        $orderByFields = [
+            CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT =>  [ 'p.clickcount' ], 
+            CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => [ 'p.lastmodifieddate' ],
+            CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'p.isHot' , 'p.clickcount' ],
+        ];
+        $orderByField = isset($orderByFields[key($orderBy)]) ? 
+                        $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT];
+        $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
+                            $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
+    
         $em = $this->_em;
-        $result = array();
+        $result = [];
 
-        // Generate category IN condition
         $catCount = count($catId);
         $arrCatParam = array();
         for($i=1;$i<=$catCount;$i++){
@@ -662,7 +689,13 @@ class EsProductRepository extends EntityRepository
         if($condition !== "") {
             $dql .= "AND p.condition = :condition";
         }
-            $dql .= " ORDER BY ". $orderCondition;
+        
+        $orderByString = "";
+        foreach($orderByField as $field){
+            $orderByString .= $field." ".$orderByDirection.",";
+        }
+        $orderByString = rtrim($orderByString, ",");
+        $dql .= " ORDER BY ". $orderByString;
 
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId);
@@ -1226,27 +1259,29 @@ class EsProductRepository extends EntityRepository
      * @param mixed $orderBy
      * @return integer[]
      */
-    public function getNonCategorizedProductIds($memberId, $limit = 12, $offset = 0, $orderBy = ["clickcount"=>"DESC"])
+    public function getNonCategorizedProductIds($memberId, $limit = 12, $offset = 0, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT => 'DESC' ])
     {
         $orderByDirections = [
             'ASC' => 'ASC', 
             'DESC' => 'DESC',
         ];
         $orderByFields = [
-            'clickcount' => 'clickcount', 
-            'lastmodifieddate' => 'lastmodifieddate', 
-            'isHot' => 'is_hot',
+            CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT =>  [ 'clickcount' ], 
+            CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => [ 'lastmodifieddate' ],
+            CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'is_hot' , 'clickcount' ],
         ];
+                
         $orderByField = isset($orderByFields[key($orderBy)]) ? 
-                        $orderByFields[key($orderBy)] : $orderByFields['clickcount'];
+                        $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT];
         $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
                             $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
-
+        
         $em = $this->_em;
         $rsm = new ResultSetMapping();
 
         $rsm->addScalarResult('productId', 'productId');
-        $query = $em->createNativeQuery("
+        
+        $sql = "
             SELECT 
                 es_product.id_product as productId
             FROM 
@@ -1263,9 +1298,16 @@ class EsProductRepository extends EntityRepository
                 es_member_prodcat.memcat_id IS NULL
             GROUP BY 
                 es_product.id_product
-            ORDER BY es_product.".$orderByField." ".$orderByDirection." 
-            LIMIT :limit OFFSET :offset
-        ", $rsm);
+            ORDER BY ";
+            
+        $orderByString = "";
+        foreach($orderByField as $field){
+            $orderByString .= "es_product.".$field." ".$orderByDirection.",";
+        }
+        $orderByString = rtrim($orderByString, ",");
+        $sql = $sql.$orderByString." LIMIT :limit OFFSET :offset";
+        
+        $query = $em->createNativeQuery($sql, $rsm);
         $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
         $query->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE);
         $query->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE);
@@ -1317,6 +1359,29 @@ class EsProductRepository extends EntityRepository
         $query->setParameter('memberId', $memberId);
 
         return count($query->execute());
+    }
+    
+    /**
+     * Get Products from ids
+     *
+     * @param integer[] $productIds
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getProductsByIdKeepOrder($productIds)
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('p, FIELD(p.idProduct, :productIds ) as HIDDEN field')
+            ->from('EasyShop\Entities\EsProduct','p')
+            ->where('p.idProduct IN (:productIds)')
+            ->andWhere('p.isDraft = :draftStatus')
+            ->andWhere('p.isDelete = :deleteStatus')
+            ->orderBy('field');
+        $qb->setParameter('productIds', $productIds);
+        $qb->setParameter('draftStatus', \EasyShop\Entities\EsProduct::ACTIVE);
+        $qb->setParameter('deleteStatus', \EasyShop\Entities\EsProduct::ACTIVE);
+   
+        return $result;
     }
     
 }

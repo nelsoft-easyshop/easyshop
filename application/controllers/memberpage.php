@@ -2296,11 +2296,12 @@ class Memberpage extends MY_Controller
                                         $categoryId, 
                                         $this->productsPerCategoryPage, 
                                         $offset, 
-                                        ["idProduct" => "DESC"],
+                                        [ EasyShop\Category\CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ],
                                         $searchString
                                     );
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                 ->findByIdProduct($productIds);
+                                 ->getProductsByIdKeepOrder($productIds);
+               
             foreach($products as $key => $product){
                 $productId = $product->getIdProduct();
                 $response['products'][$key]['productName'] = $product->getName();
