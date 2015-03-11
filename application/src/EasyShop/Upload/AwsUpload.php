@@ -63,7 +63,7 @@ class AwsUpload
             'SourceFile'  => $sourceFilePath,
             'ContentType' => $mimeType,
             'ACL'    => 'public-read',
-            'CacheControl' = 'max-age=604800',
+            'CacheControl' => 'max-age=604800',
         ]);
             
         return $result;
