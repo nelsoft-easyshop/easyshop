@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var stringAcknowledge = '<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>';
-    var PAY_BY_GATEWAY = false;
+    var PAY_BY_GATEWAY = true;
     PAY_BY_GATEWAY ? $('#pointInput').show() : $('#pointInput').hide();
     $('.paypal_loader').hide();
     $('.div_change_addree').hide();
