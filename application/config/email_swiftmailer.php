@@ -21,7 +21,7 @@ $config = Array(
             'status' => array(
                         'queued' => 1,
                         'sent' => 2,
-                        'failed' =>99
+                        'failed' => 3,
                   )
         );
 
