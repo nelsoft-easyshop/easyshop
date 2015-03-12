@@ -1713,13 +1713,12 @@ a{
     font-weight: bold;
 }
 
-
 #ui-datepicker-div {
     background-color: #fff !important;
     width: 217px !important;
     border: 1px solid #e2e2e2 !important;
     font-family: 'Helvetica' !important;
-    z-index:1003 !important;
+    z-index:999999 !important;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -2593,6 +2592,12 @@ label.css-label {
 
 .bank-account-item-btns .btn-set-default:hover {
     background-color: #565656;
+}
+
+.bank-account-item .bank-name-container,
+.bank-account-item .account-name-container,
+.bank-account-item .account-number-container {
+    word-wrap: break-word;
 }
 
 /** =============== Responsive CSS style =============== **/

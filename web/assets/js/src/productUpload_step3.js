@@ -887,12 +887,14 @@ $(function(){
         
         if( !isIncomplete ){
             $('#dialog_preference_name').dialog({
-                height: 180,
+                height: 'auto',
+                width: 'auto',
                 autoOpen: false,
                 title: "Enter Preference name",
                 modal: true,
                 closeOnEscape: false,
                 draggable: false,
+                fluid: true,
                 buttons:[
                     {
                         text: "Ok",

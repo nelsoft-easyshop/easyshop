@@ -11,7 +11,11 @@ $config = [
                         'webservice_url' => 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl',
                         'redirect_url' => 'http://test.dragonpay.ph/Pay.aspx',
                         'merchant_id' => 'EASYSHOP',
-                        'merchant_password' => 'UT78W5VQ'
+                        'merchant_password' => 'UT78W5VQ',
+                        'ip_address' => [
+                            '166.78.8.218',
+                            '180.232.69.52',
+                        ]
                     ],
                     'Easydeal' => [
                         'return_url' => 'https://staging.easydeal.ph/payment/dragonPayReturn',
@@ -30,6 +34,15 @@ $config = [
                     'Easyshop' => [
                         'redirect_url' => 'https://test.pesopay.com/b2cDemo/eng/payment/payForm.jsp',
                         'merchant_id' => '18061489',
+                        'ip_address' => [ 
+                            '180.232.69.52',
+                        ],
+                        'range_ip' => [
+                            [
+                                '58.64.198.68',
+                                '58.64.198.94'
+                            ],
+                        ]
                     ]
                 ]
             ]
@@ -44,7 +57,12 @@ $config = [
                         'webservice_url' => 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl',
                         'redirect_url' => 'https://gw.dragonpay.ph/Pay.aspx',
                         'merchant_id' => 'EASYSHOP',
-                        'merchant_password' => 'UT78W5VQ'
+                        'merchant_password' => 'UT78W5VQ',
+                        'ip_address' => [
+                            '119.81.11.114',
+                            '119.81.11.115',
+                            '180.232.69.52',
+                        ]
                     ],
                     'Easydeal' => [
                         'return_url' => 'https://www.easydeal.ph/payment/dragonPayReturn',
@@ -63,6 +81,15 @@ $config = [
                     'Easyshop' => [
                         'redirect_url' => 'https://www.pesopay.com/b2c2/eng/payment/payForm.jsp',
                         'merchant_id' => '18139485',
+                        'ip_address' => [
+                            '180.232.69.52',
+                        ],
+                        'range_ip' => [
+                            [
+                                '203.105.16.160',
+                                '203.105.16.191'
+                            ],
+                        ]
                     ]
                 ]
             ]

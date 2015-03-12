@@ -1607,13 +1607,14 @@ body{
 
 .prod-add-to-cart-btn {
     background-repeat: no-repeat;
-    background-color: #FEB483; 
+    background-color: #F17F36;
+    background-image: url(../images/sprites/shopping-cart.png);
     background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#FEB483), to(#F17F36));
     background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #FEB483, #F17F36);
     background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #FEB483, #F17F36);
     background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #FEB483, #F17F36);
     background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #FEB483, #F17F36);
-    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #FEB483, #F17F36);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#FEB483, endColorstr=#F17F36);
+    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #FEB483, #F17F36);
     border-top-color: #7D99CA;
     border-right-color: #7D99CA;
     border-bottom-color: #A55824;
@@ -1641,7 +1642,7 @@ body{
     background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #fe9550, #e46310);
     background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #fe9550, #e46310);
     background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #fe9550, #e46310);
-    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #fe9550, #e46310);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#fe9550, endColorstr=#e46310);
+    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #fe9550, #e46310);
     border-top-color: #fd771e;
     border-right-color: #fd771e;
     border-bottom-color: #80451d;
@@ -1651,23 +1652,26 @@ body{
 }
 
 .disabled{
-   background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#bfbfbf), to(#606060));
-    background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#6bfbfbf, endColorstr=#606060);
-    border-bottom-color: #606060;
-    opacity: 0.5;
-}
-
-.disabled:hover{
+    background-color: #606060;
+    background-image: url(../images/sprites/shopping-cart.png);
     background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#bfbfbf), to(#606060));
     background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #bfbfbf, #606060);
     background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #bfbfbf, #606060);
     background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #bfbfbf, #606060);
     background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#6bfbfbf, endColorstr=#606060);
+    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);
+    border-bottom-color: #606060;
+    opacity: 0.5;
+}
+
+.disabled:hover{
+    background-color: #606060;
+    background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#bfbfbf), to(#606060));
+    background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #bfbfbf, #606060);
+    background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #bfbfbf, #606060);
+    background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #bfbfbf, #606060);
+    background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #bfbfbf, #606060);
+    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);
     border-bottom-color: #606060;
 }
 
@@ -1903,11 +1907,6 @@ body{
     .facebook-lnk .fb_iframe_widget {
         left: 34px;
     }
-
-    .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-        width: 97% !important;
-        max-height: 210px !important;
-    }
 }
 
 
@@ -1943,10 +1942,6 @@ body{
 
     .footer-secondary .footer-ac {
         display: none;
-    }
-
-    .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-        width: 50% !important;
     }
 }
 
