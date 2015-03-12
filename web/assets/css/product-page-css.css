@@ -1904,11 +1904,6 @@ body{
     .facebook-lnk .fb_iframe_widget {
         left: 34px;
     }
-
-    .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-        width: 97% !important;
-        max-height: 210px !important;
-    }
 }
 
 
@@ -1944,10 +1939,6 @@ body{
 
     .footer-secondary .footer-ac {
         display: none;
-    }
-
-    .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-        width: 50% !important;
     }
 }
 
