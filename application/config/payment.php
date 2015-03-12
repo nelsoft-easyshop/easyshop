@@ -34,10 +34,14 @@ $config = [
                     'Easyshop' => [
                         'redirect_url' => 'https://test.pesopay.com/b2cDemo/eng/payment/payForm.jsp',
                         'merchant_id' => '18061489',
-                        'ip_address' => [
-                            '58.64.198.68',
-                            '58.64.198.94',
+                        'ip_address' => [ 
                             '180.232.69.52',
+                        ],
+                        'range_ip' => [
+                            [
+                                '58.64.198.68',
+                                '58.64.198.94'
+                            ],
                         ]
                     ]
                 ]
@@ -78,11 +82,14 @@ $config = [
                         'redirect_url' => 'https://www.pesopay.com/b2c2/eng/payment/payForm.jsp',
                         'merchant_id' => '18139485',
                         'ip_address' => [
-                            '203.105.16.160',
-                            '203.105.16.191',
                             '180.232.69.52',
+                        ],
+                        'range_ip' => [
+                            [
+                                '203.105.16.160',
+                                '203.105.16.191'
+                            ],
                         ]
-
                     ]
                 ]
             ]

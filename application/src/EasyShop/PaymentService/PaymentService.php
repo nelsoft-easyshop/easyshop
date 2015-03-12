@@ -631,5 +631,61 @@ class PaymentService
         } 
     }
 
+    /**
+     * Check if ip address in postback url
+     * @param  string  $ipAddress
+     * @param  integer $paymentType
+     * @return boolean
+     */
+    public function checkIpIsValidForPostback($ipAddress, $paymentType)
+    {
+        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
+            $configLoad = $this->configLoader->getItem('payment','production'); 
+        }
+        else{ 
+            $configLoad = $this->configLoader->getItem('payment','testing'); 
+        }
+        $config = $configLoad['payment_type'];
+        $ipList = [];
+        $ipRange = [];
+        switch($paymentType){ 
+            case EsPaymentMethod::PAYMENT_DRAGONPAY: 
+                $ipList = isset($config['dragonpay']['Easyshop']['ip_address']) 
+                          ? $config['dragonpay']['Easyshop']['ip_address']
+                          : [];
+                $ipRange = isset($config['dragonpay']['Easyshop']['range_ip']) 
+                          ? $config['dragonpay']['Easyshop']['range_ip']
+                          : [];
+                break; 
+            case EsPaymentMethod::PAYMENT_PESOPAYCC:
+                $ipList = isset($config['pesopay']['Easyshop']['ip_address']) 
+                          ? $config['pesopay']['Easyshop']['ip_address']
+                          : [];
+                $ipRange = isset($config['pesopay']['Easyshop']['range_ip']) 
+                          ? $config['pesopay']['Easyshop']['range_ip']
+                          : [];
+                break;
+        }
+
+        if(empty($ipList) === false){
+            if(in_array($ipAddress, $ipList)){
+                return true;
+            } 
+        }
+
+        if(empty($ipRange) === false){
+            foreach ($ipRange as $range) {
+                $lowIp = ip2long($range[0]);
+                $highIp = ip2long($range[1]);
+                if (ip2long($ipAddress) <= $highIp 
+                    && $lowIp <= ip2long($ipAddress)) {
+                    return true; 
+                }
+            }
+        }
+
+        return false;
+    }
+
 }
 
