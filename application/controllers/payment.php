@@ -1638,8 +1638,7 @@ class Payment extends MY_Controller{
                       ->getRepository('EasyShop\Entities\EsOrder')
                       ->findOneBy(["transactionId" => $paypalToken]);
         
-        $transactionPoints = $this->serviceContainer['transaction_manager']
-                                  ->getTransactionPoints($order);
+        $transactionPoints = $paymentService->getTransactionPoints($order);
 
         // Create a fake decoded JSON for payment service
         if($order && (int) $transactionPoints > 0 ){
