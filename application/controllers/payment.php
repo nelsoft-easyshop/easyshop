@@ -903,7 +903,7 @@ class Payment extends MY_Controller{
      * Postback url for dragonpay
      * @return string
      */
-    public function dragonPayPostBack()
+    private function old_dragonPayPostBack()
     {
         $this->config->load('payment', true);
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
@@ -1002,7 +1002,7 @@ class Payment extends MY_Controller{
     /**
      * Return url for dragon pay
      */
-    public function dragonPayReturn()
+    private function old_dragonPayReturn()
     {
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $txnId = $this->input->get('txnid');
@@ -1686,7 +1686,7 @@ class Payment extends MY_Controller{
      * Return url for dragonpay
      * @return view
      */
-    public function returnDragonPay()
+    public function dragonPayReturn()
     {
         if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');
@@ -1713,21 +1713,50 @@ class Payment extends MY_Controller{
     /**
      * Post back url for dragonpay 
      */
-    public function postBackDragonPay()
+    public function dragonPayPostBack()
     {
-        header("Content-Type:text/plain");
-        $paymentService = $this->serviceContainer['payment_service'];
-        $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
+        $this->config->load('payment', true);
+        $paymentConfig = strtolower(ENVIRONMENT) === 'production'
+                         ? $this->config->item('production', 'payment')
+                         : $this->config->item('testing', 'payment'); 
+        $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY; 
+        $ipAddress = $this->serviceContainer['http_request']->getClientIp();
+        $isValidIp = $this->serviceContainer['payment_service']
+                          ->checkIpIsValidForPostback($ipAddress, $paymentType);
+        $client = trim($this->input->post('param1'));
 
-        $params['txnId'] = $this->input->post('txnid');
-        $params['refNo'] = $this->input->post('refno');
-        $params['status'] =  $this->input->post('status');
-        $params['message'] = $this->input->post('message');
-        $params['digest'] = $this->input->post('digest');
-
-        $response = $paymentService->postBack($paymentMethods, null, null, $params);
-
-        echo 'result=OK'; // acknowledgement
+        if($isValidIp){
+            if($client === "Easyshop"){
+                $paymentService = $this->serviceContainer['payment_service'];
+                $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
+                $params['txnId'] = $this->input->post('txnid');
+                $params['refNo'] = $this->input->post('refno');
+                $params['status'] =  $this->input->post('status');
+                $params['message'] = $this->input->post('message');
+                $params['digest'] = $this->input->post('digest');
+                $response = $paymentService->postBack($paymentMethods, null, null, $params);
+                if($response === false){
+                    show_404();
+                }
+                else{
+                    header("Content-Type:text/plain");
+                    echo 'result=OK'; // acknowledgement
+                }
+            }
+            elseif($client === "Easydeal"){
+                $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
+                $curl = new Curl();
+                $curl->post($curlUrl, $this->input->post());
+                header("Content-Type:text/plain");
+                echo 'result=OK'; // acknowledgement
+            }
+            else{
+                show_404();
+            }
+        }
+        else{
+            show_404();
+        }
     }
 
     /**

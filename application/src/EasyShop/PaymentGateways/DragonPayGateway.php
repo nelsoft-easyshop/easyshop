@@ -276,61 +276,83 @@ class DragonPayGateway extends AbstractGateway
      */
     public function postBackMethod($params)
     {
-        $txnId = $params['txnId'];
-        $status = $params['status'];
-        $message = $params['message']; 
+        $arrayDigest = [
+            urldecode($params['txnId']),
+            urldecode($params['refNo']),
+            urldecode($params['status']),
+            urldecode($params['message']), 
+            urldecode($this->merchantPwd)
+        ];
 
-        // paymentType
-        $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
-        $this->setParameter('paymentType', $paymentType);
+        $correctDigest = (string)  sha1(implode(":", $arrayDigest));
 
-        $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                           ->findOneBy([
-                                'transactionId' => $txnId,
-                                'paymentMethod' => $paymentType
-                            ]);
+        if($correctDigest === $params['digest']){
+            $txnId = $params['txnId'];
+            $status = $params['status'];
+            $message = $params['message']; 
 
-        $invoice = $return->getInvoiceNo();
-        $orderId = $return->getIdOrder();
-        $memberId = $return->getBuyer()->getIdMember();
-        $itemList = json_decode($return->getDataResponse(), true);
-        $postBackCount = $return->getPostbackcount();
+            // paymentType
+            $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
+            $this->setParameter('paymentType', $paymentType);
 
-        // get address Id
-        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                            ->getShippingAddress((int)$memberId);
+            $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                               ->findOneBy([
+                                    'transactionId' => $txnId,
+                                    'paymentMethod' => $paymentType
+                                ]);
 
-        // Compute shipping fee
-        $prepareData = $this->paymentService->computeFeeAndParseData($itemList, (int)$address);
-        $itemList = $prepareData['newItemList'];
-        $toBeLocked = $prepareData['toBeLocked'];
+            $invoice = $return->getInvoiceNo();
+            $orderId = $return->getIdOrder();
+            $memberId = $return->getBuyer()->getIdMember();
+            $itemList = json_decode($return->getDataResponse(), true);
+            $postBackCount = $return->getPostbackcount();
 
-        if(strtolower($status) === PaymentService::STATUS_PENDING || strtolower($status) === PaymentService::STATUS_SUCCESS){
-            if(!$postBackCount){
-                foreach ($itemList as $key => $value) {     
-                    $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                    $this->paymentService->productManager->updateSoldoutStatus($value['id']);
+            // get address Id
+            $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                ->getShippingAddress((int)$memberId);
+
+            // Compute shipping fee
+            $prepareData = $this->paymentService->computeFeeAndParseData($itemList, (int)$address);
+            $itemList = $prepareData['newItemList'];
+            $toBeLocked = $prepareData['toBeLocked'];
+
+            if(strtolower($status) === PaymentService::STATUS_PENDING || strtolower($status) === PaymentService::STATUS_SUCCESS){
+                if((int) $postBackCount === 0){
+                    foreach ($itemList as $key => $value) {     
+                        $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                        $this->paymentService->productManager->updateSoldoutStatus($value['id']);
+                    }
+                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                             ->deleteLockItem($orderId, $toBeLocked); 
                 }
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($orderId, $toBeLocked); 
-            }
-            $orderStatus = strtolower($status) === PaymentService::STATUS_SUCCESS ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
-            $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                 ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus);
-        }
-        elseif(strtolower($status) === PaymentService::STATUS_FAIL){
-            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                     ->deleteLockItem($orderId, $toBeLocked);
-            $orderHistory = [
-                'order_id' => $orderId,
-                'order_status' => EsOrderStatus::STATUS_VOID,
-                'comment' => 'Dragonpay transaction failed: ' . $message
-            ];
-            $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
-                     ->addOrderHistory($orderHistory);
+                $orderStatus = strtolower($status) === PaymentService::STATUS_SUCCESS ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
+                $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                     ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus);
+            
+                if((int) $postBackCount === 0){
+                    $this->paymentService->sendPaymentNotification($orderId, true, false);
+                }
 
-            $this->paymentService->revertTransactionPoint($orderId);
+                if($orderStatus === PaymentService::STATUS_SUCCESS){
+                    $this->paymentService->sendPaymentNotification($orderId, false, true);
+                }
+            }
+            elseif(strtolower($status) === PaymentService::STATUS_FAIL){
+                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                         ->deleteLockItem($orderId, $toBeLocked);
+                $orderHistory = [
+                    'order_id' => $orderId,
+                    'order_status' => EsOrderStatus::STATUS_VOID,
+                    'comment' => 'Dragonpay transaction failed: ' . $message
+                ];
+                $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
+                         ->addOrderHistory($orderHistory);
+
+                $this->paymentService->revertTransactionPoint($orderId);
+            }
+            return true;
         }
+        return false;
     }
 
     /**
