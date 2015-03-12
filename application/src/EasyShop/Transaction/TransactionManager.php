@@ -433,10 +433,10 @@ class TransactionManager
      */
     public function getTransactionPoints($orderArgument)
     {
-        if(is_numeric($productArgument)){
-            $orderId = $productArgument;
+        if(is_numeric($orderArgument)){
+            $orderId = $orderArgument;
         }
-        else if(is_object($productArgument)){
+        else if(is_object($orderArgument)){
             $orderId = $orderArgument->getIdOrder();
         }
         else{
