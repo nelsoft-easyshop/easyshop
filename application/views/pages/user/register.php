@@ -58,7 +58,7 @@
                 </a>
             </div>
             <div class="login-loading-content text-center">
-                <img src="/assets/images/loading/preloader-whiteBG.gif" alt="loading...">
+                <img src="/assets/images/es-loader-3-md.gif" alt="loading...">
             </div>
             <div class="login-hide-content" style="display:none;">
                 <div id="adv2" class="login-tabs">
