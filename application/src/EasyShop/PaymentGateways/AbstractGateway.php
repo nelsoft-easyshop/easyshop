@@ -371,7 +371,6 @@ abstract class AbstractGateway implements GatewayInterface
                     }
                 }
 
-                
                 $response['o_message'] = $this->error['EsOrderProductHistory-failed-insert']['code'];
                 $orderProductHistory = new EsOrderProductHistory();
                 $orderProductHistory->setOrderProduct($orderProduct);
