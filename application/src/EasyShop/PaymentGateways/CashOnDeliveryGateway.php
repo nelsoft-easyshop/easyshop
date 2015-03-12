@@ -64,9 +64,12 @@ class CashOnDeliveryGateway extends AbstractGateway
         $txnid = $this->generateReferenceNumber($memberId);
         $response['txnid'] = $txnid;
 
-        if($pointGateway && $this->pointTracker->getUserPoint($memberId) < $pointGateway->getParameter('amount')){
-            $response['message'] = "You have insufficient points.";
-            return $response;
+        if($pointGateway){
+            $checkPointValid = $pointGateway->isPointValid($memberId);
+            if(!$checkPointValid['valid']){
+                $response['message'] = $checkPointValid['message'];
+                return $response;
+            }
         }
 
         if($validatedCart['itemCount'] === $productCount){
@@ -95,17 +98,7 @@ class CashOnDeliveryGateway extends AbstractGateway
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                   ->find($orderId);
-
-                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                          ->find($this->getParameter('paymentType'));
-
-                $paymentRecord = new EsPaymentGateway();
-                $paymentRecord->setAmount($this->getParameter('amount'));
-                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-                $paymentRecord->setOrder($order);
-                $paymentRecord->setPaymentMethod($paymentMethod);
-                
-                $this->em->persist($paymentRecord);
+                $deductAmount = "0.00";
 
                 if($pointGateway !== null){
                     $pointGateway->setParameter('memberId', $memberId);
@@ -114,16 +107,26 @@ class CashOnDeliveryGateway extends AbstractGateway
                     $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                               ->find($pointGateway->getParameter('paymentType'));
 
-                    $trueAmount = $pointGateway->pay();
+                    $deductAmount = $pointGateway->pay();
 
                     $pointRecord = new EsPaymentGateway();
-                    $pointRecord->setAmount($trueAmount);
+                    $pointRecord->setAmount($deductAmount);
                     $pointRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
                     $pointRecord->setOrder($order);
                     $pointRecord->setPaymentMethod($paymentMethod);
-
                     $this->em->persist($pointRecord);   
                 }
+
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                                          ->find($this->getParameter('paymentType'));
+
+                $paymentRecord = new EsPaymentGateway();
+                $paymentRecord->setAmount(bcsub($this->getParameter('amount'), $deductAmount));
+                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentRecord->setOrder($order);
+                $paymentRecord->setPaymentMethod($paymentMethod);
+                $this->em->persist($paymentRecord);
+
                 $this->paymentService->sendPaymentNotification($orderId);
 
                 $this->em->flush();
