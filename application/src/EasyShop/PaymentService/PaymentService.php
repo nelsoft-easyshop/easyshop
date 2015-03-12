@@ -34,6 +34,8 @@ class PaymentService
 
     const STATUS_PENDING = 'p';
 
+    const PAYMENT_MAX_ALLOWABLE_POINTS = 0;
+
     /**
      * Gateway path
      *
@@ -306,21 +308,21 @@ class PaymentService
     /**
      * Validate Cart Data (resetPriceAndQty)
      * 
-     * @param mixed $carts User Session data
-     * @param bool $condition Used for lock-related processing
+     * @param mixed  $carts User Session data
+     * @param string $pointsAllocated point allocated
+     * @param bool   $excludeMemberId
      *
      * @return mixed
      */
-    function validateCartData($carts, $pointsAllocated = "0.00", $excludeMemberId = 0)
+    public function validateCartData($carts, $pointsAllocated = "0.00", $excludeMemberId = 0)
     {
         $condition = true;
         $itemArray = $carts['choosen_items'];
         $availableItemCount = 0;
         $totalPointsAllowable = "0.00";
 
-        foreach ($itemArray as $key => $value) {
-            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')->find(intval($value['id']));
-            $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $prod->getMaxAllowablePoint()), $value['qty']);
+        foreach ($itemArray as $key => $value) { 
+            $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $value['price']), $value['qty']);
         }
 
         if(intval($totalPointsAllowable) === 0){
@@ -337,9 +339,9 @@ class PaymentService
             $itemId = $value['product_itemID'];
 
             $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->find($productId);
+                                     ->find($productId);
 
-            $pointDeductable = bcmul($pointsAllocated, bcdiv($productArray->getMaxAllowablePoint(), $totalPointsAllowable, 10), 10);
+            $pointDeductable = bcmul($pointsAllocated, bcdiv($value['price'], $totalPointsAllowable, 10), 10);
 
             /* Get actual price, apply any promo calculation */
             $this->promoManager->hydratePromoData($productArray);
@@ -355,7 +357,7 @@ class PaymentService
             $promoPrice = $productArray->getFinalPrice(); 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
-            $finalPromoPrice = round(floatval(bcsub($finalPromoPrice, $pointDeductable, 10)));
+            // $finalPromoPrice = round(floatval(bcsub($finalPromoPrice, $pointDeductable, 10)));
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
             $subtotal = $finalPromoPrice * $qty;
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
@@ -439,6 +441,28 @@ class PaymentService
         }
 
         return $paymentArray;
+    }
+
+    /**
+     * Check if payment method is accepts points deduction
+     * @param  string  $paymentMethodString
+     * @return boolean
+     */
+    public function isPaymentMethodAcceptPoints($paymentMethodString)
+    {   
+        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
+            $configLoad = $this->configLoader->getItem('payment','production'); 
+        }
+        else{ 
+            $configLoad = $this->configLoader->getItem('payment','testing'); 
+        }
+ 
+        if(isset($configLoad['payment_type'][strtolower($paymentMethodString)]) 
+            && isset($configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'])){  
+            return $configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'];
+        }
+
+        return false;
     }
 
     /**
