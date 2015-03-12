@@ -918,6 +918,8 @@ class Payment extends MY_Controller{
         $digest = $this->input->post('digest');
         $client = trim($this->input->post('param1'));
 
+        log_message('error', 'Dragon Pay Post detected from => '.$this->serviceContainer['http_request']->getClientIp());
+        
         if($client === "Easyshop"){
             $payDetails = $this->payment_model->selectFromEsOrder($txnId, $paymentType);
             $invoice = $payDetails['invoice_no'];
