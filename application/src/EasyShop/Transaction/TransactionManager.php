@@ -425,35 +425,4 @@ class TransactionManager
                 "productCount" => $orderProductCount
             ];
     }
-
-    /**
-     * Get order points spent in transaction
-     * @param  mixed $orderArgument
-     * @return integer
-     */
-    public function getTransactionPoints($orderArgument)
-    {
-        if(is_numeric($orderArgument)){
-            $orderId = $orderArgument;
-        }
-        else if(is_object($orderArgument)){
-            $orderId = $orderArgument->getIdOrder();
-        }
-        else{
-            return null;
-        }
-
-        $orderPoints = $this->em->getRepository('EasyShop\Entities\EsPaymentGateway')
-                                ->findOneBy([
-                                    'order' => $orderId,
-                                    'paymentMethod' => EsPaymentMethod::PAYMENT_POINTS
-                                ]);
-
-        if($orderPoints){
-            return (float) $orderPoints->getAmount();
-        }
-        else{
-            return null;
-        }
-    }
 }
