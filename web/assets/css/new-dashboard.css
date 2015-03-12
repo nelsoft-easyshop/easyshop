@@ -1425,13 +1425,12 @@ a{
     font-weight: bold;
 }
 
-
 #ui-datepicker-div {
     background-color: #fff !important;
     width: 217px !important;
     border: 1px solid #e2e2e2 !important;
     font-family: 'Helvetica' !important;
-    z-index:1003 !important;
+    z-index:999999 !important;
 }
 
 .ui-datepicker .ui-datepicker-prev,
