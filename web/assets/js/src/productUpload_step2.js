@@ -74,9 +74,9 @@ function askDraft(location)
     if(isEdit == 0){ 
         $("#question").dialog({
             resizable: false,
-            height: 200,
-            width: 530,
+            width: '90%',
             modal: true,
+            fluid: true,
             buttons: {
                 "Yes, please.": function() {
                     $(".ui-dialog-buttonset").hide();
@@ -92,7 +92,7 @@ function askDraft(location)
                 }
             },
             open: function() {
-                var draftmessage = '<p style="font-size:14px;padding-top:18px;padding-left:18px">You are about to close an incomplete upload. Would you like us to save this for you?</p>';
+                var draftmessage = '<p style="font-size:14px;padding-top:18px;">You are about to close an incomplete upload. Would you like us to save this for you?</p>';
                 $(this).html(draftmessage);
             },
             "title": "Save as Draft"
@@ -1217,8 +1217,9 @@ var universalExtension = ".jpeg";
                     $('#crop-image-main').dialog({
                         resizable: false,
                         "resize": "auto",
-                        width: 600,
+                        width: 'auto',
                         modal: true,
+                        fluid: true,
                         buttons: {
                             "Crop": function() { 
                                 base64collection.push(imageTag.cropper("getDataURL", 'image/jpeg')); 
@@ -1293,13 +1294,6 @@ var universalExtension = ".jpeg";
             dashed: true,
             responsive: true,
         });
-
-        setTimeout(function() { 
-            var MainwindowHeight = $(window).height();
-            var UidialogHeight = $(".ui-dialog").outerHeight();
-            var UidialogTop = (MainwindowHeight - UidialogHeight) / 2;
-            $(".ui-dialog").css("top", UidialogTop);
-        }, 200);
     } 
 
     $(document).on('click','.zoomIn',function(e){ 
@@ -1581,8 +1575,9 @@ var universalExtension = ".jpeg";
                 $('#crop-image-main').dialog({
                     resizable: false,
                     "resize": "auto",
-                    width: 600,
+                    width: 'auto',
                     modal: true,
+                    fluid: true,
                     buttons: {
                         "Crop": function() {
                             base64collection.push(imageTag.cropper("getDataURL", 'image/jpeg'));  

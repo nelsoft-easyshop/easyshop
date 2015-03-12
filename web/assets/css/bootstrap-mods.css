@@ -129,21 +129,6 @@ a.tooltips span {
   font-size: 0.85em;
 }
 
-.ui-dialog-title {
-    margin-right: 3%;
-    vertical-align: middle;
-    width: 90% !important;
-}
-
-.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-    left: 25% !important;
-    width: 50% !important;
-}
-
-.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close {
-    position: absolute;
-}
-
 .alert.ui-dialog-content.ui-widget-content b {
     font-weight: normal;
 }
@@ -243,14 +228,6 @@ a.tooltips span {
     #simplemodal-container {
         width: 60% !important;
     }
-}
-
-@media only screen and (max-width: 480px) {
-    /*** UI dialog box ***/
-  .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-    left: 10% !important;
-    width: 80% !important;
-  }
 }
 
 @media only screen and (max-width : 20em) {

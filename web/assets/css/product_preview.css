@@ -48,86 +48,16 @@ nav {
 }
 
 /* UI-Dialog CSS*/
-
-.ui-dialog {
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 3px 6px rgba( 0, 0, 0, 0.3 );
-    left: 0;
-    position: fixed;
-    top: 0;
-    z-index: 100102;
-    -webkit-box-shadow: 0 3px 6px rgba( 0, 0, 0, 0.3 );
+.ui-dialog-buttonpane .ui-button:first-child {
+    margin-right: 16px;
 }
 
-.ui-dialog-titlebar {
-    border-bottom: 1px solid #dfdfdf;
-    height: 36px;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 36px;
-    padding: 0 36px 0 16px;
+#dialog_preference_name {
+    padding: 15px 0;
 }
 
-.ui-button.ui-dialog-titlebar-close {
-    background: none;
-    border: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    color: #666;
-    cursor: pointer;
-    display: block;
-    padding: 0;
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 36px;
-    height: 36px;
-    text-align: center;
-}
-
-.ui-button.ui-dialog-titlebar-close:hover {
-    color: #2ea2cc;
-}
-
-.ui-dialog-titlebar-close .ui-button-text {
-    display: none;
-}
-
-.ui-dialog-content {
-    padding: 12px;
-}
-
-.ui-dialog-buttonpane {
-    border-top: 1px solid #dfdfdf;
-    padding: 16px;
-}
-
-.ui-dialog-buttonpane .ui-button {
-    margin-left: 16px;
-}
-
-.ui-dialog-buttonpane .ui-dialog-buttonset {
-/*    float: right;*/
-    margin-bottom: 20px;
-    text-align: right;
-}
-
-.ui-draggable .ui-dialog-titlebar {
-    cursor: move;
-}
-
-.ui-widget-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	min-height: 360px;
-	background: #000;
-	opacity: 0.7;
-	filter: alpha(opacity=70);
-	z-index: 100101;
+.pref-name {
+    line-height: 28px;
 }
 
 /** Menu Slider **/
@@ -425,41 +355,6 @@ span.seller-name span:hover {
 	display: inline-block;
 	font-size: 10px;
 	padding:5px 0;
-}
-
-.ui-dialog-buttonset button {
-	border-radius: 3px;
-	color: #fff;
-	cursor: pointer;
-	display: inline-block;
-	font-size: 14px;
-	padding:8px 40px;
-	text-align: center;
-	-webkit-transition: all 0.3s ease-in-out;
-	-moz-transition: 	all 0.3s ease-in-out;
-	-o-transition:	    all 0.3s ease-in-out;
-	 transition: 		all 0.3s ease-in-out;	
-}
-
-.ui-dialog-buttonset button:first-child {
-	border:1px solid #393939;
-	background-color: #393939;
-}
-
-.ui-dialog-buttonset button:first-child:hover {
-	color: #fff;
-	background-color: #626262;
-    border:1px solid #626262;	
-}
-
-.ui-dialog-buttonset button:nth-child(2) {
-	border:1px solid #f18200;
-	background-color: #f48000;
-}
-
-.ui-dialog-buttonset button:nth-child(2):hover {
-	background-color: #ff4400;
-	color: #fff;
 }
 
 .preview_buy_btn {
