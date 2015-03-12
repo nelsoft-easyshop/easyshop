@@ -4,6 +4,7 @@ namespace EasyShop\PointTracker;
 
 use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsPoint;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 
 /**
@@ -41,7 +42,7 @@ class PointTracker
      *
      * @return boolean
      */
-    public function addUserPoint($userId, $actionId, $isPercentage = false, $price = 0)
+    public function addUserPoint($userId, $actionId, $isPercentage = false, $price = 0, $customPoints = 0)
     {
         // Get Point Type object
         $points = $this->em->getRepository('EasyShop\Entities\EsPointType')
@@ -67,12 +68,16 @@ class PointTracker
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
                               ->findOneBy(['member' => $userId]);
 
-
-        if($isPercentage){
-            $addPoints = ($points->getPoint() / 100) * $price;
+        if($points->getId() === EsPointType::TYPE_REVERT){
+            $addPoints = $customPoints;
         }
         else{
-            $addPoints = $points->getPoint();
+            if($isPercentage){
+                $addPoints = ($points->getPoint() / 100) * $price;
+            }
+            else{
+                $addPoints = $points->getPoint();
+            }
         }
 
         // Insert to point history
