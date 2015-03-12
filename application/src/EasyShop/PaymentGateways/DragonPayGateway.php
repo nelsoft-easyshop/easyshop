@@ -319,7 +319,8 @@ class DragonPayGateway extends AbstractGateway
                                  ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus);
         }
         elseif(strtolower($status) === PaymentService::STATUS_FAIL){
-            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->deleteLockItem($orderId, $toBeLocked);
+            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                     ->deleteLockItem($orderId, $toBeLocked);
             $orderHistory = [
                 'order_id' => $orderId,
                 'order_status' => EsOrderStatus::STATUS_VOID,
@@ -327,6 +328,8 @@ class DragonPayGateway extends AbstractGateway
             ];
             $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                      ->addOrderHistory($orderHistory);
+
+            $this->paymentService->revertTransactionPoint($orderId);
         }
     }
 
@@ -405,11 +408,6 @@ class DragonPayGateway extends AbstractGateway
     public function getOrderProductStatus()
     {
         return EsOrderStatus::STATUS_PAID;
-    }
-
-    private function checkValidDigest($digest, $params)
-    {
-        
     }
 }
 
