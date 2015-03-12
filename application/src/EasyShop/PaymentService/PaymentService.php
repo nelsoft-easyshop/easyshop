@@ -674,8 +674,9 @@ class PaymentService
                 foreach ($ipRange as $range) {
                     $lowIp = ip2long($range[0]);
                     $highIp = ip2long($range[1]);
-                    if (ip2long($ipAddress) <= $highIp 
-                        && $lowIp <= ip2long($ipAddress)) {
+                    $longIpAddress = ip2long($ipAddress);
+                    if ($longIpAddress <= $highIp 
+                        && $lowIp <= $longIpAddress) {
                         return true; 
                     }
                 }
