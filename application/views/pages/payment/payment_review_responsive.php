@@ -306,7 +306,7 @@
                                                 </a>.
                                             </p>
                                             <br>
-                                            <input type="button" style='width: 153px;' class="btnDp orange_btn3" value="Pay via DRAGON PAY">
+                                            <input type="button" class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                                             <br>
                                             <br>
                                             <span style="font-size: 12px;font-style: italic;"><b>Note:</b> Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.</span>

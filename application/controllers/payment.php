@@ -906,93 +906,97 @@ class Payment extends MY_Controller{
     public function dragonPayPostBack()
     {
         $this->config->load('payment', true);
+        $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $paymentConfig = strtolower(ENVIRONMENT) === 'production'
                          ? $this->config->item('production', 'payment')
-                         : $this->config->item('testing', 'payment');
+                         : $this->config->item('testing', 'payment'); 
+        $ipAddress = $this->serviceContainer['http_request']->getClientIp();
+        $isValidIp = $this->serviceContainer['payment_service']
+                          ->checkIpIsValidForPostback($ipAddress, $paymentType);
 
-        $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $txnId = $this->input->post('txnid');
         $refNo = $this->input->post('refno');
         $status =  $this->input->post('status');
         $message = $this->input->post('message');
-        $digest = $this->input->post('digest');
-        $client = trim($this->input->post('param1'));
+        $digest = (string) $this->input->post('digest');
+        $client = trim($this->input->post('param1')); 
+        $arrayDigest = [
+            urldecode($txnId),
+            urldecode($refNo),
+            urldecode($status),
+            urldecode($message), 
+            urldecode($paymentConfig['payment_type']['dragonpay']['Easyshop']['merchant_password'])
+        ];
+        $correctDigest = (string)  sha1(implode(":", $arrayDigest));
 
-        if($client === "Easyshop"){
-            $payDetails = $this->payment_model->selectFromEsOrder($txnId, $paymentType);
-            $invoice = $payDetails['invoice_no'];
-            $orderId = $payDetails['id_order'];
-            $member_id = $payDetails['buyer_id'];
-            $itemList = json_decode($payDetails['data_response'], true); 
-            $postBackCount = (int) $payDetails['postbackcount']; 
-            $address = $this->memberpage_model->get_member_by_id($member_id);  
+        if($isValidIp){
+            if($correctDigest === $digest){
+                if($client === "Easyshop"){
+                    $payDetails = $this->payment_model->selectFromEsOrder($txnId, $paymentType);
+                    $invoice = $payDetails['invoice_no'];
+                    $orderId = $payDetails['id_order'];
+                    $member_id = $payDetails['buyer_id'];
+                    $itemList = json_decode($payDetails['data_response'], true); 
+                    $postBackCount = (int) $payDetails['postbackcount']; 
+                    $address = $this->memberpage_model->get_member_by_id($member_id);  
 
-            $prepareData = $this->processData($itemList,$address);  
-            $itemList = $prepareData['newItemList'];
-            $toBeLocked = $prepareData['toBeLocked'];
+                    $prepareData = $this->processData($itemList,$address);  
+                    $itemList = $prepareData['newItemList'];
+                    $toBeLocked = $prepareData['toBeLocked'];
 
-            if(strtolower($status) === PaymentService::STATUS_PENDING 
-               || strtolower($status) === PaymentService::STATUS_SUCCESS){
-                if($postBackCount === 0){
-                    foreach ($itemList as $value) {
-                        $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);  
-                        $this->product_model->update_soldout_status($value['id']);
+                    if(strtolower($status) === PaymentService::STATUS_PENDING 
+                       || strtolower($status) === PaymentService::STATUS_SUCCESS){
+                        if($postBackCount === 0){
+                            foreach ($itemList as $value) {
+                                $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);  
+                                $this->product_model->update_soldout_status($value['id']);
+                            }
+                            $locked = $this->lockItem($toBeLocked, $orderId, 'delete'); 
+                        }
+
+                        $orderStatus = (strtolower($status) === PaymentService::STATUS_SUCCESS) ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
+                        $complete = $this->payment_model->updatePaymentIfComplete($orderId, 
+                                                                                  json_encode($itemList), 
+                                                                                  $txnId, 
+                                                                                  $paymentType, 
+                                                                                  $orderStatus,
+                                                                                  0);
+
+                        if($postBackCount === 0){
+                            // send email to buyer
+                            $this->sendNotification(['member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice], true,  false);
+                        }
+
+                        if(strtolower($status) === PaymentService::STATUS_SUCCESS){ 
+                            // send email to seller
+                            $this->sendNotification(['member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice], false, true);
+                        }
                     }
-                    $locked = $this->lockItem($toBeLocked, $orderId, 'delete'); 
+                    elseif(strtolower($status) === PaymentService::STATUS_FAIL ){
+                        $locked = $this->lockItem($toBeLocked, $orderId, 'delete');
+                        $orderId = $this->payment_model->cancelTransaction($txnId, true);
+                        $orderHistory = [
+                                'order_id' => $orderId,
+                                'order_status' => EsOrderStatus::STATUS_VOID,
+                                'comment' => 'Dragonpay transaction failed: ' . $message
+                            ];
+                        $this->payment_model->addOrderHistory($orderHistory);
+                    }
                 }
-
-                $orderStatus = (strtolower($status) === PaymentService::STATUS_SUCCESS) ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
-                $complete = $this->payment_model->updatePaymentIfComplete($orderId, 
-                                                                          json_encode($itemList), 
-                                                                          $txnId, 
-                                                                          $paymentType, 
-                                                                          $orderStatus,
-                                                                          0);
-
-                if($postBackCount === 0){
-                    // send email to buyer
-                    $this->sendNotification(['member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice], true,  false);
+                elseif($client === "Easydeal"){
+                    $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
+                    $curl = new Curl();
+                    $curl->post($curlUrl, $this->input->post());
                 }
-
-                if(strtolower($status) === PaymentService::STATUS_SUCCESS){ 
-                    // send email to seller
-                    $this->sendNotification(['member_id'=>$member_id, 'order_id'=>$orderId, 'invoice_no'=>$invoice], false, true);
-                }
+                echo 'result=OK';
             }
-            elseif(strtolower($status) === PaymentService::STATUS_FAIL ){
-                $locked = $this->lockItem($toBeLocked, $orderId, 'delete');
-                $orderId = $this->payment_model->cancelTransaction($txnId, true);
-                $orderHistory = [
-                        'order_id' => $orderId,
-                        'order_status' => EsOrderStatus::STATUS_VOID,
-                        'comment' => 'Dragonpay transaction failed: ' . $message
-                    ];
-                $this->payment_model->addOrderHistory($orderHistory);
+            else{
+                show_404();
             }
-        }
-        elseif($client === "Easydeal"){
-            $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
-            $curl = new Curl();
-            $curl->post($curlUrl, $this->input->post());
-
-                log_message('error', 'EASYDEAL => '. json_encode($curlUrl));
-                log_message('error', 'EASYDEAL => '. json_encode($this->input->post()));
-                log_message('error', 'EASYDEAL => '. json_encode($paymentConfig));
-                
-
-            if ($curl->error) {
-                log_message('error', 'EASYDEAL CURL ERROR => '. $curl->error_code . ': ' . $curl->error_message);
-            }
-            else {
-                log_message('error', 'EASYDEAL CURL ERROR => '. $curl->response);
-            }
-            
         }
         else{
             show_404();
         }
-
-        echo 'result=OK';
     }
 
     /**
@@ -1761,15 +1765,28 @@ class Payment extends MY_Controller{
      */
     public function pesoPayDataFeed()
     {
-        header("Content-Type:text/plain");
-        echo 'OK'; // acknowledgemenet
+        $ipAddress = $this->serviceContainer['http_request']->getClientIp();
+        $this->config->load('payment', true);
+        $paymentConfig = strtolower(ENVIRONMENT) === 'production'
+                         ? $this->config->item('production', 'payment')
+                         : $this->config->item('testing', 'payment'); 
+        $isValidIp = $this->serviceContainer['payment_service']
+                          ->checkIpIsValidForPostback($ipAddress, EsPaymentMethod::PAYMENT_PESOPAYCC);
 
-        $paymentService = $this->serviceContainer['payment_service'];
-        $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
+        if($isValidIp){
+            header("Content-Type:text/plain");
+            echo 'OK'; // acknowledgemenet
 
-        $params['txnId'] = $this->input->post('Ref'); 
-        $params['successCode'] = $this->input->post('successcode'); 
-        $paymentService->postBack($paymentMethods, null, null, $params);
+            $paymentService = $this->serviceContainer['payment_service'];
+            $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
+
+            $params['txnId'] = $this->input->post('Ref'); 
+            $params['successCode'] = $this->input->post('successcode'); 
+            $paymentService->postBack($paymentMethods, null, null, $params);
+        }
+        else{
+            show_404();
+        }
     }
 
     /**
