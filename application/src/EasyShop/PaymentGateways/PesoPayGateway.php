@@ -76,10 +76,28 @@ class PesoPayGateWay extends AbstractGateway
         // Compute shipping fee
         $pointSpent = $pointGateway ? $pointGateway->getParameter('amount') : "0";
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$address);
-        $grandTotal = $prepareData['totalPrice'];
+        $grandTotal = $pesopayTotal = $prepareData['totalPrice'];
         $productString = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked']; 
+
+        if($pointGateway){
+            $checkPointValid = $pointGateway->isPointValid($memberId);
+            if(!$checkPointValid['valid']){ 
+                return [
+                    'error' => false,
+                    'message' => $checkPointValid['message']
+                ];
+            } 
+            $pesopayTotal = $grandTotal - $pointGateway->getParameter('amount'); 
+        }
+
+        if($pesopayTotal < 50.00){
+            return [
+                'error' => false,
+                'message' => 'We only accept payments of at least PHP 50.00 in total value.'
+            ];
+        }
 
         $txnid = $this->generateReferenceNumber($memberId);  
         $this->setParameter('amount', $grandTotal);
@@ -107,19 +125,7 @@ class PesoPayGateWay extends AbstractGateway
 
             $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                               ->find($orderId);
-
-            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                      ->find($this->getParameter('paymentType'));
-
-            $paymentRecord = new EsPaymentGateway();
-            $paymentRecord->setAmount($this->getParameter('amount'));
-            $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-            $paymentRecord->setOrder($order);
-            $paymentRecord->setPaymentMethod($paymentMethod);
-
-            $this->em->persist($paymentRecord);
-            $this->em->flush(); 
-
+            $deductAmount = "0.00";
             if($pointGateway !== null){
                 $pointGateway->setParameter('memberId', $memberId);
                 $pointGateway->setParameter('itemArray', $return['item_array']);
@@ -127,10 +133,10 @@ class PesoPayGateWay extends AbstractGateway
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                           ->find($pointGateway->getParameter('paymentType'));
 
-                $trueAmount = $pointGateway->pay();
+                $deductAmount = $pointGateway->pay();
 
                 $paymentRecord = new EsPaymentGateway();
-                $paymentRecord->setAmount($trueAmount);
+                $paymentRecord->setAmount($deductAmount);
                 $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
                 $paymentRecord->setOrder($order);
                 $paymentRecord->setPaymentMethod($paymentMethod);
@@ -139,11 +145,23 @@ class PesoPayGateWay extends AbstractGateway
                 $this->em->flush();
             }
 
+            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                                      ->find($this->getParameter('paymentType'));
+
+            $paymentRecord = new EsPaymentGateway();
+            $paymentRecord->setAmount(bcsub($this->getParameter('amount'), $deductAmount));
+            $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+            $paymentRecord->setOrder($order);
+            $paymentRecord->setPaymentMethod($paymentMethod);
+
+            $this->em->persist($paymentRecord);
+            $this->em->flush(); 
+
             return [
                 'error' => false,
                 'message' => '',
                 'merchantId' => $this->merchantId,
-                'amount' => $grandTotal,
+                'amount' => $pesopayTotal,
                 'orderRef' => $txnid,
                 'redirectUrl' => $this->redirectUrl,
             ];
@@ -255,6 +273,8 @@ class PesoPayGateWay extends AbstractGateway
                 ];
                 $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                          ->addOrderHistory($orderHistory);
+
+                $this->paymentService->revertTransactionPoint($orderId);
             }
         }
     }

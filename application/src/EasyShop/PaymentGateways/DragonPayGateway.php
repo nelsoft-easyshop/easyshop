@@ -231,19 +231,7 @@ class DragonPayGateway extends AbstractGateway
 
             $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                               ->find($orderId);
-
-            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                      ->find($this->getParameter('paymentType'));
-
-            $paymentRecord = new EsPaymentGateway();
-            $paymentRecord->setAmount($this->getParameter('amount'));
-            $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-            $paymentRecord->setOrder($order);
-            $paymentRecord->setPaymentMethod($paymentMethod);
-
-            $this->em->persist($paymentRecord);
-            $this->em->flush(); 
-
+            $deductAmount = "0.00";
             if($pointGateway !== null){
                 $pointGateway->setParameter('memberId', $memberId);
                 $pointGateway->setParameter('itemArray', $return['item_array']);
@@ -251,10 +239,9 @@ class DragonPayGateway extends AbstractGateway
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                           ->find($pointGateway->getParameter('paymentType'));
 
-                $trueAmount = $pointGateway->pay();
-
+                $deductAmount = $pointGateway->pay();
                 $paymentRecord = new EsPaymentGateway();
-                $paymentRecord->setAmount($trueAmount);
+                $paymentRecord->setAmount($deductAmount);
                 $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
                 $paymentRecord->setOrder($order);
                 $paymentRecord->setPaymentMethod($paymentMethod);
@@ -262,6 +249,18 @@ class DragonPayGateway extends AbstractGateway
                 $this->em->persist($paymentRecord);
                 $this->em->flush();
             }
+
+            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                                      ->find($this->getParameter('paymentType'));
+
+            $paymentRecord = new EsPaymentGateway();
+            $paymentRecord->setAmount(bcsub($this->getParameter('amount'), $deductAmount));
+            $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+            $paymentRecord->setOrder($order);
+            $paymentRecord->setPaymentMethod($paymentMethod);
+
+            $this->em->persist($paymentRecord);
+            $this->em->flush(); 
 
             return $dpReturn;
         }
