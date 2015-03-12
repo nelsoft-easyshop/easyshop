@@ -102,9 +102,11 @@
 }
 
 .claim-bg{
-    background-color: #f5f5f5;
+    background-color: #f5f5f5 !important;
+    height: 241px;
     padding: 15px;
     width: 100%;
+    -webkit-print-color-adjust:exact;
 }
 
 .claim-details{
@@ -283,12 +285,13 @@
 }
 
 .header-galore33{
-    background-color: #0078d5;
+    background-color: #0078d5 !important;
     margin-top: 75px;
     padding: 7px;
+    -webkit-print-color-adjust:exact;
 }
 .header-galore33 a{
-    color: #ffffff;
+    color: #fff !important;
     font-weight: bold;
     padding: 2%;
     text-decoration: none;
@@ -426,9 +429,11 @@
     width: 30%;
 }
 .claim-bg{
-    background-color: #f5f5f5;
+    background-color: #f5f5f5 !important;
+    height: 241px;
     padding: 15px;
     width: 100%;
+    -webkit-print-color-adjust:exact;
 }
 .claim-details{
     display: inline-block;
@@ -629,6 +634,7 @@
         height: 10px !important;
         margin-bottom: 30px !important;
         width: 100% !important;
+        -webkit-print-color-adjust: exact;
     }
 
     footer,

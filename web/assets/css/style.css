@@ -610,15 +610,12 @@ input[type="button"] {
     z-index: 99999 !important;
 }
 
-.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.error-modal.ui-dialog-buttons.ui-draggable {
+.ui-dialog {
+    border-radius: 4px;
+    background-color: #fff;
     margin: 10px;
     max-width: 500px;
     position: relative;
-}
-
-.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable{
-    border-radius: 4px;
-    background-color: #fff;
     padding: 15px;
     z-index: 100102;
 }
@@ -632,13 +629,12 @@ input[type="button"] {
     display: inline-block;
     font-size: 18px;
     font-weight: bold;
-    width: 264px;
     padding-bottom: 8px;
+    width: 95%;
+    word-wrap: break-word;
 }
 
-.error-modal .ui-widget-header .ui-dialog-titlebar-close,
-.error-modal .ui-widget-header .ui-state-hover,
-.error-modal .ui-state-active .ui-icon {
+.ui-dialog-titlebar-close {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
     border: medium none;
     box-shadow: none;
@@ -647,17 +643,11 @@ input[type="button"] {
     height: 36px;
     outline: none;
     padding: 0;
+    position: absolute;
     right: 0;
     text-align: center;
     top: 0;
     width: 36px;
-}
-
-.ui-dialog-titlebar-close {
-    background-color: #fff;
-    border: none;
-    position: absolute;
-    right: 0;
 }
 
 .error-modal.ui-dialog .ui-dialog-buttonpane  .ui-dialog-buttonset {
@@ -708,7 +698,10 @@ input[type="button"] {
 }
 
 .alert.ui-dialog-content.ui-widget-content {
-    padding:15px 8px;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding:15px 0px;
 }
 
 .ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix {
@@ -722,15 +715,16 @@ input[type="button"] {
     border: medium none;
     color: #FFFFFF;
     cursor: pointer;
-    min-width: 70px;
+    font-weight: bold;
     padding: 8px;
-        -webkit-border-radius: 3px;
+    text-transform: uppercase;
+    -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition: 	all 0.3s ease-in-out;
     -o-transition:	    all 0.3s ease-in-out;
-     transition: 		all 0.3s ease-in-out;	    
+     transition: 		all 0.3s ease-in-out;
 }
 .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only:hover {
     background-color: #ff4400;	
