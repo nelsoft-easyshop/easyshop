@@ -631,5 +631,60 @@ class PaymentService
         } 
     }
 
+    /**
+     * Check if ip address in postback url
+     * @param  string  $ipAddress
+     * @param  integer $paymentType
+     * @return boolean
+     */
+    public function checkIpIsValidForPostback($ipAddress, $paymentType)
+    {
+        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
+            $configLoad = $this->configLoader->getItem('payment','production'); 
+        }
+        else{ 
+            $configLoad = $this->configLoader->getItem('payment','testing'); 
+        }
+        $config = $configLoad['payment_type']; 
+        $configPayment = null;
+        switch($paymentType){ 
+            case EsPaymentMethod::PAYMENT_DRAGONPAY: 
+                $configPayment = $config['dragonpay']['Easyshop'];
+                break; 
+            case EsPaymentMethod::PAYMENT_PESOPAYCC:
+                $configPayment = $config['pesopay']['Easyshop'];
+                break;
+        }
+
+        if($configPayment){
+            $ipList = isset($configPayment['ip_address']) 
+                      ? $configPayment['ip_address']
+                      : [];
+            $ipRange = isset($configPayment['range_ip']) 
+                      ? $configPayment['range_ip']
+                      : []; 
+
+            if(empty($ipList) === false){
+                if(in_array($ipAddress, $ipList)){
+                    return true;
+                } 
+            }
+
+            if(empty($ipRange) === false){
+                foreach ($ipRange as $range) {
+                    $lowIp = ip2long($range[0]);
+                    $highIp = ip2long($range[1]);
+                    $longIpAddress = ip2long($ipAddress);
+                    if ($longIpAddress <= $highIp 
+                        && $lowIp <= $longIpAddress) {
+                        return true; 
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
 }
 

@@ -906,13 +906,14 @@ class Payment extends MY_Controller{
     public function dragonPayPostBack()
     {
         $this->config->load('payment', true);
+        $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $paymentConfig = strtolower(ENVIRONMENT) === 'production'
                          ? $this->config->item('production', 'payment')
-                         : $this->config->item('testing', 'payment');
-        $ipList = $paymentConfig['payment_type']['dragonpay']['Easyshop']['ip_address'];
+                         : $this->config->item('testing', 'payment'); 
         $ipAddress = $this->serviceContainer['http_request']->getClientIp();
+        $isValidIp = $this->serviceContainer['payment_service']
+                          ->checkIpIsValidForPostback($ipAddress, $paymentType);
 
-        $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $txnId = $this->input->post('txnid');
         $refNo = $this->input->post('refno');
         $status =  $this->input->post('status');
@@ -928,7 +929,7 @@ class Payment extends MY_Controller{
         ];
         $correctDigest = (string)  sha1(implode(":", $arrayDigest));
 
-        if(in_array($ipAddress, $ipList)){
+        if($isValidIp){
             if($correctDigest === $digest){
                 if($client === "Easyshop"){
                     $payDetails = $this->payment_model->selectFromEsOrder($txnId, $paymentType);
@@ -1755,10 +1756,11 @@ class Payment extends MY_Controller{
         $this->config->load('payment', true);
         $paymentConfig = strtolower(ENVIRONMENT) === 'production'
                          ? $this->config->item('production', 'payment')
-                         : $this->config->item('testing', 'payment');
-        $ipList = $paymentConfig['payment_type']['dragonpay']['Easyshop']['ip_address'];
+                         : $this->config->item('testing', 'payment'); 
+        $isValidIp = $this->serviceContainer['payment_service']
+                          ->checkIpIsValidForPostback($ipAddress, EsPaymentMethod::PAYMENT_PESOPAYCC);
 
-        if(in_array($ipAddress, $ipList)){
+        if($isValidIp){
             header("Content-Type:text/plain");
             echo 'OK'; // acknowledgemenet
 
