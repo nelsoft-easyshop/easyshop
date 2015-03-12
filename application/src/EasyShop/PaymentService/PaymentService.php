@@ -20,6 +20,7 @@ use EasyShop\Entities\EsOrderProductAttr;
 use EasyShop\Entities\EsOrderProductHistory;
 use EasyShop\Entities\EsPaymentGateway;
 use EasyShop\Entities\EsPoint;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 /**
  * Payment Service Class
@@ -460,6 +461,64 @@ class PaymentService
         if(isset($configLoad['payment_type'][strtolower($paymentMethodString)]) 
             && isset($configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'])){  
             return $configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Get order points spent in transaction
+     * @param  mixed $orderArgument
+     * @return integer
+     */
+    public function getTransactionPoints($orderArgument)
+    {
+        if(is_numeric($orderArgument)){
+            $orderId = $orderArgument;
+        }
+        else if(is_object($orderArgument)){
+            $orderId = $orderArgument->getIdOrder();
+        }
+        else{
+            return null;
+        }
+
+        $orderPoints = $this->em->getRepository('EasyShop\Entities\EsPaymentGateway')
+                                ->findOneBy([
+                                    'order' => $orderId,
+                                    'paymentMethod' => EsPaymentMethod::PAYMENT_POINTS
+                                ]);
+
+        if($orderPoints){
+            return (float) $orderPoints->getAmount();
+        }
+        else{
+            return null;
+        }
+    }
+
+    /**
+     * Revert point transaction
+     * @param  EasyShop\Entites\EsOrder $order 
+     * @return boolean
+     */
+    public function revertTransactionPoint($orderId)
+    {
+        $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                          ->find($orderId);
+
+        if($order){
+            $points = $this->getTransactionPoints($order);
+            $memberId = $order->getBuyer()->getIdMember();
+            $this->pointTracker->addUserPoint(
+                $memberId,
+                EsPointType::TYPE_REVERT, 
+                false, 
+                false, 
+                $points
+            );
+
+            return true;
         }
 
         return false;
