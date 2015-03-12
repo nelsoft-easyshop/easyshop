@@ -24,7 +24,8 @@ class Version20150310191736 extends AbstractMigration
                 ('2', 'LOGIN', '5'),
                 ('3', 'SHARE PRODUCT', '5'),
                 ('4', 'PURCHASE', '2'),
-                ('5', 'TRANSACTION FEEDBACK', '20');
+                ('5', 'TRANSACTION FEEDBACK', '20'),
+                ('6', 'REVERT', '0');
         ");
     }
 
