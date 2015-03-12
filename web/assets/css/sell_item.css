@@ -1364,13 +1364,6 @@ li.brand_result:hover{
 
 
 /*****	STEP 4 DESIGN	*******/
-.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable.pop-up-fixed {
-    left: 0 !important;
-    margin: auto;
-    max-width: 550px;
-    right: 0;
-}
-
 .step4_section{
     border: 1px solid #CECECE;
     margin-bottom: 1em;
@@ -1421,10 +1414,6 @@ li.brand_result:hover{
 
 #imageTag {
     margin: 0 auto;
-}
-
-.pop-up-fixed{
-    position: fixed !important;
 }
 
 @media (min-width: 320px) {

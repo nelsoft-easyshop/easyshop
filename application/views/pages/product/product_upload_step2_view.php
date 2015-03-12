@@ -578,30 +578,9 @@
     #simplemodal-container {
         width: 60%;
     }
-    .ui-dialog-title {
-        display: inline-block;
-        font-size: 18px;
-        font-weight: bold;
-        padding-bottom: 8px;
-        width: 475px;
-    }
-    .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
-        background-color: #f18200;
-        border: medium none;
-        border-radius: 3px;
-        color: #ffffff;
-        cursor: pointer;
-        margin: 5px;
-        min-width: 70px;
-        padding: 8px;
-        transition: all 0.3s ease-in-out 0s;
-    }
     label.errorTxt{
         color:red;
         font-size: 12px;
         margin-left: 5px;
-    }
-    .ui-dialog-titlebar-close:before {
-        line-height: 18px;
     }
 </style>
