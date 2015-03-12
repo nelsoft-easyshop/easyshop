@@ -480,7 +480,7 @@ class PaymentService
             $orderId = $orderArgument->getIdOrder();
         }
         else{
-            return null;
+            return 0;
         }
 
         $orderPoints = $this->em->getRepository('EasyShop\Entities\EsPaymentGateway')
@@ -493,13 +493,13 @@ class PaymentService
             return (float) $orderPoints->getAmount();
         }
         else{
-            return null;
+            return 0;
         }
     }
 
     /**
      * Revert point transaction
-     * @param  EasyShop\Entites\EsOrder $order 
+     * @param  integer $orderId
      * @return boolean
      */
     public function revertTransactionPoint($orderId)
