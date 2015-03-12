@@ -14,6 +14,8 @@ use EasyShop\Entities\EsPointType as EsPointType;
  */
 class PointGateway extends AbstractGateway
 {
+    const MAX_POINT_ALLOWED = PHP_INT_MAX;
+
     /**
      * Constructor
      * 
@@ -52,7 +54,7 @@ class PointGateway extends AbstractGateway
 
             foreach ($itemArray as $item) {
                 $data["order_product_id"] = $item['order_id'];
-                $data["points"] = round(floatval(bcmul($pointSpent, bcdiv($item['point'], $maxPointAllowable, 10), 10)));
+                $data["points"] = $this->getProductDeductPoint($item['point'], $maxPointAllowable);
                 $pointBreakdown[] = $data;
             }
 
@@ -73,6 +75,39 @@ class PointGateway extends AbstractGateway
         }
         
         return $pointSpent;
+    }
+
+    /**
+     * Get point distribution in product
+     * @param  float $productPrice
+     * @param  float $total
+     * @return float
+     */
+    public function getProductDeductPoint($productPrice, $total)
+    {
+        return round(floatval(bcmul($this->getParameter('amount'), bcdiv($productPrice, $total, 10), 10)));
+    }
+
+    /**
+     * Check if point request is valid
+     * @param  integer $memberId
+     * @return mixed
+     */
+    public function isPointValid($memberId)
+    {   
+        $pointAmount = $this->getParameter('amount');
+        $returnValue['valid'] = false;
+        if($this->pointTracker->getUserPoint($memberId) < $pointAmount){
+            $returnValue['message'] = "You have insufficient points.";
+        }
+        elseif((int) $pointAmount > self::MAX_POINT_ALLOWED){
+            $returnValue['message'] = "We only accept ".self::MAX_POINT_ALLOWED." points per transaction.";
+        }
+        else{
+            $returnValue['valid'] = true;
+        }
+
+        return $returnValue;
     }
 
     // Dummy functions to adhere to abstract gateway
