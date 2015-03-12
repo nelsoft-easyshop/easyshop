@@ -7,6 +7,7 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsMemberCat;
 use EasyShop\Entities\EsMemberProdcat;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use EasyShop\Category\CategoryManager as CategoryManager;
 
 class EsMemberProdcatRepository extends EntityRepository
 {
@@ -50,14 +51,28 @@ class EsMemberProdcatRepository extends EntityRepository
      *
      *  @return integer[]  
      */
-    public function getPagedCustomCategoryProducts($memberId, $memcatId, $prodLimit, $offset = 0, $orderBy = ["idProduct" => "DESC"], $searchString = "")
+    public function getPagedCustomCategoryProducts($memberId, $memcatId, $prodLimit, $offset = 0, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ], $searchString = "")
     {      
-        $productIds = array();
+        $orderByDirections = [
+            'ASC' => 'ASC', 
+            'DESC' => 'DESC',
+        ];
+        $orderByFields = [
+            CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => [ 'pc.sortOrder' ],
+            CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT =>  [ 'p.clickcount' ], 
+            CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => [ 'p.lastmodifieddate' ],
+            CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'p.isHot' , 'p.clickcount' ],
+        ];
+        $orderByField = isset($orderByFields[key($orderBy)]) ? 
+                        $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_SORTORDER];
+        $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
+                            $orderByDirections[reset($orderBy)] : $orderByDirections['ASC'];
 
-        // Generate Order by condition
+        $productIds = [];
+
         $orderCondition = "";
         foreach($orderBy as $column=>$order){
-            $orderCondition .= "p." . $column . " " . $order . ", ";
+            $orderCondition .= $column . " " . $order . ", ";
         }
         $orderCondition = rtrim($orderCondition, ", ");
 
@@ -75,9 +90,14 @@ class EsMemberProdcatRepository extends EntityRepository
         if($searchString !== ""){
             $dql .= " AND p.name LIKE :queryString ";
         }
-        
-        $dql .= " ORDER BY " . $orderCondition;  
-  
+                       
+        $orderByString = "";
+        foreach($orderByField as $field){
+            $orderByString .= $field." ".$orderByDirection.",";
+        }
+        $orderByString = rtrim($orderByString, ",");
+        $dql .= " ORDER BY " . $orderByString;  
+
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
                     ->setParameter('cat_id', $memcatId);
@@ -86,8 +106,7 @@ class EsMemberProdcatRepository extends EntityRepository
             $queryString = '%'.$searchString.'%';
             $query->setParameter('queryString', $queryString);
         }
-               
-  
+
         $query->setFirstResult($offset)
               ->setMaxResults($prodLimit);
 
@@ -110,16 +129,30 @@ class EsMemberProdcatRepository extends EntityRepository
      *
      *  @return array - array of product ids
      */
-    public function getAllCustomCategoryProducts($memberId, $memcatId, $condition, $orderBy = array("idProduct" => "DESC"))
+    public function getAllCustomCategoryProducts($memberId, $memcatId, $condition, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ])
     {
-        $productIds = array();
+        $productIds = [];
+        
+        $orderByDirections = [
+            'ASC' => 'ASC', 
+            'DESC' => 'DESC',
+        ];
+        $orderByFields = [
+            CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => [ 'pc.sortOrder' ],
+            CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT =>  [ 'p.clickcount' ], 
+            CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => [ 'p.lastmodifieddate' ],
+            CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'p.isHot' , 'p.clickcount' ],
+        ];
+        $orderByField = isset($orderByFields[key($orderBy)]) ? 
+                        $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_SORTORDER];
+        $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
+                            $orderByDirections[reset($orderBy)] : $orderByDirections['ASC'];
 
-        // Generate Order by condition
-        $orderCondition = "";
-        foreach($orderBy as $column=>$order){
-            $orderCondition .= "p." . $column . " " . $order . ", ";
+        $orderByString = "";
+        foreach($orderByField as $field){
+            $orderByString .= $field." ".$orderByDirection.",";
         }
-        $orderCondition = rtrim($orderCondition, ", ");
+        $orderByString = rtrim($orderByString, ",");
 
         $em = $this->_em;
         $dql = "SELECT pc,p
@@ -134,7 +167,7 @@ class EsMemberProdcatRepository extends EntityRepository
         if($condition !== "") {
             $dql .= "AND p.condition = :condition ";
         }
-        $dql .= "ORDER BY ".$orderCondition;
+        $dql .= "ORDER BY ".$orderByString;
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
                     ->setParameter('cat_id', $memcatId);
@@ -150,4 +183,38 @@ class EsMemberProdcatRepository extends EntityRepository
 
         return $productIds;
     }
+    
+    /**
+     * Retrieves the highest product sort order within a custom category
+     *
+     * @param integer $memberCategoryId
+     * @return integer
+     */
+    public function getHighestProductSortOrderWithinCategory($memberCategoryId)
+    {
+        $em = $this->_em;
+        $dql = "
+            SELECT 
+                MAX(pc.sortOrder)
+            FROM 
+                EasyShop\Entities\EsMemberProdcat pc
+            JOIN 
+                pc.product p
+            WHERE 
+                pc.memcat = :memberCategoryId
+                AND p.isDelete = :deleteStatus
+                AND p.isDraft = :draftStatus
+        ";
+
+        $query = $em->createQuery($dql)
+                    ->setParameter("memberCategoryId", $memberCategoryId)
+                    ->setParameter("deleteStatus", \EasyShop\Entities\EsProduct::ACTIVE)
+                    ->setParameter("draftStatus", \EasyShop\Entities\EsProduct::ACTIVE);
+
+        $maxSortOrder = $query->getSingleScalarResult();
+        $maxSortOrder = $maxSortOrder === null ? 0: $maxSortOrder;
+        
+        return (int)$maxSortOrder;
+    }
+    
 }

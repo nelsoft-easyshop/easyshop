@@ -240,7 +240,7 @@ class AccountManager
              * Mobile verification can be added here (unused for the time being)
              */
             $mobileCode = $this->hashUtility->generateRandomAlphaNumeric(6);
-            if($this->emailNotification->sendMail()){
+            if($this->emailNotification->queueMail()){
                 if($isNew){
                     $response['isSuccessful'] = $verifcodeRepository->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode) ? true : false;
                 }
@@ -638,7 +638,7 @@ class AccountManager
         $this->emailNotification->setRecipient($member->getEmail());
         $this->emailNotification->setSubject('Password reset on Easyshop.ph');
         $this->emailNotification->setMessage($message, $imageArray);    
-        return $this->emailNotification->sendMail();
+        return $this->emailNotification->queueMail();
     }
     
     

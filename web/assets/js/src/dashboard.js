@@ -2440,41 +2440,8 @@
         clonedDiv.find('.category-items .product-list').html('');
         
         retrieveAllProductList(clonedDiv, 1);
-        
-        clonedDiv.modal({
-            persist:true
-        });
-        
-        var $allProductList = clonedDiv.find('.all-product-list');              
-        var $categoryProductList = clonedDiv.find('.category-product-list');
-        $categoryProductList.sortable({
-            connectWith: $allProductList
-        });                 
-        $allProductList.sortable({
-            connectWith: $categoryProductList
-        });
-        clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
-        var addContentHeight = clonedDiv.outerHeight();
-        var countAllItems = $allProductList.find('li').size();
-        var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
-        if(browserWidth <= mobileViewPortWidthLimit){
-            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
-            $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
-        }
-        else{
-            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
-            $(".ui-droppable").css("width", "100%");
-        }
-
-        clonedDiv.find(".category-items-holder").bind('scroll', function(){
-                loadMoreCategoryProducts($(this));
-        });
-
-        $(".overlay-for-waiting-modal").css("display", "none");
-
     });
-
-    
+     
     $(".category-setup-ajax").on('click','.edit-category', function(){
         $(".overlay-for-waiting-modal").css("display", "block");
         var categoryIdString = $(this).parent('li').data('categoryid');
@@ -2489,44 +2456,10 @@
                     var clonedDiv = $(".edit-category-modal").clone();  
                     clonedDiv.find('.category-name').val(escapeHtml(response.categoryName));
                     clonedDiv.find('.hidden-category-id').val(response.categoryId);
-                    
-                    clonedDiv.modal({
-                        persist:true
-                    });
-
                     clonedDiv.find('.category-items .product-list').html('');
 
                     appendCategoryProductList(clonedDiv.find('.category-items') , response.products)
                     retrieveAllProductList(clonedDiv, 1);
-
-                    var $allProductList = clonedDiv.find('.all-product-list');              
-                    var $categoryProductList = clonedDiv.find('.category-product-list');
-                    $categoryProductList.sortable({
-                        connectWith: $allProductList
-                    });                 
-                    $allProductList.sortable({
-                        connectWith: $categoryProductList
-                    });
-                    
-                    clonedDiv.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
-                    var addContentHeight = clonedDiv.outerHeight();
-                    var countAllItems = $allProductList.find('li').size();
-                    var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
-                    if(browserWidth <= mobileViewPortWidthLimit){
-                        $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
-                        $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
-                    }
-                    else{
-                        $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
-                        $(".ui-droppable").css("width", "100%");
-                    }
-
-                    clonedDiv.find(".category-items-holder").bind('scroll', function(){
-                        loadMoreCategoryProducts($(this));
-                    });
-
-                    $(".overlay-for-waiting-modal").css("display", "none");
- 
                 }            
             },
         });
@@ -2770,6 +2703,7 @@
                     });
                     var $allProductList = modalDiv.find('.all-product-list');
                     $allProductList.append(listHtmlCollection);
+                    createCustomizedCategoryModal(modalDiv);
                 }
             }
         });
@@ -2844,6 +2778,41 @@
             }
         }
     }
+    
+    function createCustomizedCategoryModal(div)
+    {
+        div.modal({
+            persist:true
+        });
+        
+        var $allProductList = div.find('.all-product-list');              
+        var $categoryProductList = div.find('.category-product-list');
+        $categoryProductList.sortable({
+            connectWith: $allProductList
+        });                 
+        $allProductList.sortable({
+            connectWith: $categoryProductList
+        });
+        div.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+        var addContentHeight = div.outerHeight();
+        var countAllItems = $allProductList.find('li').size();
+        var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
+        if(browserWidth <= mobileViewPortWidthLimit){
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
+            $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+        }
+        else{
+            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
+            $(".ui-droppable").css("width", "100%");
+        }
+
+        div.find(".category-items-holder").bind('scroll', function(){
+            loadMoreCategoryProducts($(this));
+        });
+
+        $(".overlay-for-waiting-modal").css("display", "none");
+    }
+
 
    
 

@@ -14,10 +14,34 @@ if (typeof jQuery.ui != 'undefined') {
             resizable: false,
             dialogClass: 'error-modal',
             width:'auto',
+            fluid : true
         });
     };
 }
 
+// on window resize run function
+$(window).resize(function () {
+    fluidDialog();
+});
+
+// catch dialog if opened within a viewport smaller than the dialog width
+$(document).on("dialogopen", ".ui-dialog", function (event, ui) {
+    fluidDialog();
+});
+
+function fluidDialog() {
+    var $visible = $(".ui-dialog:visible");
+    // each open dialog
+    $visible.each(function () {
+        var $this = $(this);
+        var dialog = $this.find(".ui-dialog-content").data("ui-dialog");
+        // if fluid option == true
+        if (dialog.options.fluid) {
+            //reposition dialog
+            dialog.option("position", dialog.options.position);
+        }
+    });
+};
 
 $(document).ready(function()
 {

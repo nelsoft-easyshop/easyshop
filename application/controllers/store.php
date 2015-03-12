@@ -1083,19 +1083,19 @@ class Store extends MY_Controller
 
         switch($rawOrderBy){
             case 1:
-                $orderBy = array("clickcount" => $order);
+                $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT => $order ];
                 break;
             case 2:
                 $orderSearch = EsProduct::SEARCH_SORT_NEW;
-                $orderBy = array("lastmodifieddate" => $order);
+                $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => $order ];
                 break;
             case 3:
                 $orderSearch = EsProduct::SEARCH_SORT_HOT;
-                $orderBy = array("isHot"=>$order, "clickcount"=>$order);
+                $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => $order ];
                 break;
             default:
                 $orderSearch = "";
-                $orderBy = array("lastmodifieddate"=>$order);
+                $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => $order ];
                 break;
         }
 
