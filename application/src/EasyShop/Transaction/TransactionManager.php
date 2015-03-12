@@ -1,9 +1,9 @@
 <?php
 
 namespace EasyShop\Transaction;
-use EasyShop\Entities\EsOrderProductStatus;
-use EasyShop\Entities\EsOrderStatus;
-use EasyShop\Entities\EsPaymentMethod;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 class TransactionManager
 {
     /**
@@ -424,5 +424,36 @@ class TransactionManager
                 "transactionsCount" => count($soldTransactionDetails),
                 "productCount" => $orderProductCount
             ];
+    }
+
+    /**
+     * Get order points spent in transaction
+     * @param  mixed $orderArgument
+     * @return integer
+     */
+    public function getTransactionPoints($orderArgument)
+    {
+        if(is_numeric($productArgument)){
+            $orderId = $productArgument;
+        }
+        else if(is_object($productArgument)){
+            $orderId = $orderArgument->getIdOrder();
+        }
+        else{
+            return null;
+        }
+
+        $orderPoints = $this->em->getRepository('EasyShop\Entities\EsPaymentGateway')
+                                ->findOneBy([
+                                    'order' => $orderId,
+                                    'paymentMethod' => EsPaymentMethod::PAYMENT_POINTS
+                                ]);
+
+        if($orderPoints){
+            return (float) $orderPoints->getAmount();
+        }
+        else{
+            return null;
+        }
     }
 }
