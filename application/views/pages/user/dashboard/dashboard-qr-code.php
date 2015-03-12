@@ -17,7 +17,7 @@
         <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='all'/>
         <link rel="stylesheet" href="/assets/css/qr-code-css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="all">
     <?php else: ?>
-        <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-qr-code.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+        <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-qr-code.css?ver=<?=ES_FILE_VERSION?>' media='all'/>
     <?php endif; ?>
     
     <link rel="stylesheet" href="/assets/css/qr-code-print.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="print">
