@@ -181,14 +181,32 @@ class DragonPayGateway extends AbstractGateway
         // Compute shipping fee
         $pointSpent = $pointGateway ? $pointGateway->getParameter('amount') : "0";
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$address);
-        $grandTotal = $prepareData['totalPrice'];
+        $grandTotal = $dragonpayTotal = $prepareData['totalPrice'];
         $productString = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
         $name = $prepareData['productName'];
 
+        if($pointGateway){
+            $checkPointValid = $pointGateway->isPointValid($memberId);
+            if(!$checkPointValid['valid']){ 
+                return [
+                    'e' => false,
+                    'd' => $checkPointValid['message']
+                ];
+            } 
+            $dragonpayTotal = $grandTotal - $pointGateway->getParameter('amount'); 
+        }
+
+        if($dragonpayTotal < 50.00){ 
+            return [
+                'e' => false,
+                'd' => 'We only accept payments of at least PHP 50.00 in total value.'
+            ];
+        }
+
         $txnid = $this->generateReferenceNumber($memberId);
-        $dpReturn = $this->getTxnToken($grandTotal, $name, $member->getEmail(), $txnid);
+        $dpReturn = $this->getTxnToken($dragonpayTotal, $name, $member->getEmail(), $txnid);
         $this->setParameter('amount', $grandTotal);
 
         $return = $this->persistPayment(
@@ -267,7 +285,10 @@ class DragonPayGateway extends AbstractGateway
         $this->setParameter('paymentType', $paymentType);
 
         $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                           ->findOneBy(['transactionId' => $txnId, 'paymentMethod' => $paymentType]);
+                           ->findOneBy([
+                                'transactionId' => $txnId,
+                                'paymentMethod' => $paymentType
+                            ]);
 
         $invoice = $return->getInvoiceNo();
         $orderId = $return->getIdOrder();
@@ -384,6 +405,11 @@ class DragonPayGateway extends AbstractGateway
     public function getOrderProductStatus()
     {
         return EsOrderStatus::STATUS_PAID;
-    }   
+    }
+
+    private function checkValidDigest($digest, $params)
+    {
+        
+    }
 }
 
