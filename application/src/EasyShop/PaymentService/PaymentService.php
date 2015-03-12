@@ -645,41 +645,39 @@ class PaymentService
         else{ 
             $configLoad = $this->configLoader->getItem('payment','testing'); 
         }
-        $config = $configLoad['payment_type'];
-        $ipList = [];
-        $ipRange = [];
+        $config = $configLoad['payment_type']; 
+        $configPayment = null;
         switch($paymentType){ 
             case EsPaymentMethod::PAYMENT_DRAGONPAY: 
-                $ipList = isset($config['dragonpay']['Easyshop']['ip_address']) 
-                          ? $config['dragonpay']['Easyshop']['ip_address']
-                          : [];
-                $ipRange = isset($config['dragonpay']['Easyshop']['range_ip']) 
-                          ? $config['dragonpay']['Easyshop']['range_ip']
-                          : [];
+                $configPayment = $config['dragonpay']['Easyshop'];
                 break; 
             case EsPaymentMethod::PAYMENT_PESOPAYCC:
-                $ipList = isset($config['pesopay']['Easyshop']['ip_address']) 
-                          ? $config['pesopay']['Easyshop']['ip_address']
-                          : [];
-                $ipRange = isset($config['pesopay']['Easyshop']['range_ip']) 
-                          ? $config['pesopay']['Easyshop']['range_ip']
-                          : [];
+                $configPayment = $config['pesopay']['Easyshop'];
                 break;
         }
 
-        if(empty($ipList) === false){
-            if(in_array($ipAddress, $ipList)){
-                return true;
-            } 
-        }
+        if($configPayment){
+            $ipList = isset($configPayment['ip_address']) 
+                      ? $configPayment['ip_address']
+                      : [];
+            $ipRange = isset($configPayment['range_ip']) 
+                      ? $configPayment['range_ip']
+                      : []; 
 
-        if(empty($ipRange) === false){
-            foreach ($ipRange as $range) {
-                $lowIp = ip2long($range[0]);
-                $highIp = ip2long($range[1]);
-                if (ip2long($ipAddress) <= $highIp 
-                    && $lowIp <= ip2long($ipAddress)) {
-                    return true; 
+            if(empty($ipList) === false){
+                if(in_array($ipAddress, $ipList)){
+                    return true;
+                } 
+            }
+
+            if(empty($ipRange) === false){
+                foreach ($ipRange as $range) {
+                    $lowIp = ip2long($range[0]);
+                    $highIp = ip2long($range[1]);
+                    if (ip2long($ipAddress) <= $highIp 
+                        && $lowIp <= ip2long($ipAddress)) {
+                        return true; 
+                    }
                 }
             }
         }
