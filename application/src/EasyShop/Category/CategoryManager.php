@@ -720,8 +720,11 @@ class CategoryManager
             if(empty($memberProducts)){
                 $stringUtility = $this->stringUtility;
                 $categoryId = $product->getCat()->getIdCat();
-                $topParentCategoryName = $this->getTopParentCategory($categoryId)
-                                              ->getName();
+                $topParentCategory = $this->getTopParentCategory($categoryId); 
+                $topParentCategoryName = $topParentCategory->getName();
+                if((int)$categoryId === \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID){
+                    $topParentCategoryName = $product->getCatOtherName();
+                }
                 $cleanedCategoryName = $stringUtility->cleanString($topParentCategoryName);
                 $cleanedCategoryName = strtolower($cleanedCategoryName);
                 $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
