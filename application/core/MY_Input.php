@@ -62,11 +62,6 @@ class MY_Input extends CI_Input
         return $this->ip_address;
     }
     
-    
-
-
-    
-    
     /**
      * Compares two IPv4 addresses.
      * In case a subnet is given, it checks if it contains the request IP.
