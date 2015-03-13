@@ -207,7 +207,7 @@
             </div>
         <div class="tab-pane fade in active" id="details">
             <div class="div-detail-container ">
-                <div class="p-html-description">
+                <div class="p-html-description external-links-container">
                     <p>  
                         <?=$productDescription;?> 
                     </p>
