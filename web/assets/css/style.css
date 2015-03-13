@@ -640,7 +640,7 @@ input[type="button"] {
     box-shadow: none;
     color: #fff;
     cursor: pointer;
-    height: 36px;
+    height: 36px !important;
     outline: none;
     padding: 0;
     position: absolute;
