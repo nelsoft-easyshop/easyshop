@@ -1542,11 +1542,13 @@ var universalExtension = ".jpeg";
         $('.imageText'+currentCnt).val('');
         $('.imageFileText'+currentCnt).val('');
         $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
+        $("#other_files")[0].reset();
     });
 
     $(document).on('click',".attr-image",function (e){
         var selector = $(this);
         currentCnt = selector.data('cnt');
+        $("#other_files")[0].reset();
         $('.attr-image-input').click();
     });
 
