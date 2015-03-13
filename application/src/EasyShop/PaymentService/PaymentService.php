@@ -656,6 +656,7 @@ class PaymentService
                 break;
         }
 
+        // temporarily disable for dragonpay
         if((int)$paymentType === EsPaymentMethod::PAYMENT_DRAGONPAY){
             return true;
         }
