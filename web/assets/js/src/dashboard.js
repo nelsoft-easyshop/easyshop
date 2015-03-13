@@ -2710,8 +2710,8 @@
                     });
                     var $allProductList = modalDiv.find('.all-product-list');
                     $allProductList.append(listHtmlCollection);
-                    createCustomizedCategoryModal(modalDiv);
                 }
+                createCustomizedCategoryModal(modalDiv);
             }
         });
     }
