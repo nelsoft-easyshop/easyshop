@@ -81,8 +81,9 @@ $(function(){
         newPrice = parseFloat(newPrice).toFixed(2);
         
         if( $.isNumeric(newPrice) && newPrice >= 0 && !newPrice.match(/[a-zA-Z\+]/) ){
-            $(this).val( ReplaceNumberWithCommas(newPrice) );
-        }else{
+            $(this).val( newPrice );
+        }
+        else{
             $(this).val('');
         }
     }).on('keyup','input.shipprice',function(e){
@@ -91,8 +92,9 @@ $(function(){
         newPrice = parseFloat(newPrice).toFixed(2);
         
         if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice) && newPrice >= 0 && !newPrice.match(/[a-zA-Z\+]/) ){
-            $(this).val( ReplaceNumberWithCommas(newPrice) );
-        }else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
+            $(this).val( newPrice );
+        }
+        else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
             $(this).val('');
         }
     });
@@ -936,7 +938,9 @@ $(function(){
                                                 thisSelect.append('<option value="'+headId+'">'+name+'</option>');
                                             });
                                         });
-                                    }else{
+                                        prefSelect.children('option:last').attr("selected","selected");
+                                    }
+                                    else{
                                         alert(obj['error']);
                                     }
                                     thisdialog.dialog("close");
@@ -1030,18 +1034,6 @@ function chosenSelectedTrimmer(selectObj){
     
         $(this).text(newtext);
     });
-}
-
-/**
-* Function to handle display of Price Value
-**/
-function ReplaceNumberWithCommas(thisnumber){
-    //Seperates the components of the number
-    var n = thisnumber.toString().split(".");
-    //Comma-fies the first part
-    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //Combines the two sections
-    return n.join(".");
 }
 
 /**
