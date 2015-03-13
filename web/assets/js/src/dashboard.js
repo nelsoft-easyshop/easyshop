@@ -2621,7 +2621,7 @@
                 if(jsonData.result){
                     var escapedCategoryName = escapeHtml(categoryName);
                     var memberCategoryId = jsonData.newCategoryId;
-                    var html = '<div class="div-cat" data-catgeoryid="'+memberCategoryId+'">'+escapedCategoryName+'</div>';
+                    var html = '<div class="div-cat" data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'</div>';
                     $('.store-category-view').append(html);
                     var draggableUnorderList = $('.new-store-category-draggable');
                     var html = '<li data-categoryid="'+memberCategoryId+'" data-categoryname="'+escapedCategoryName+'">'+
