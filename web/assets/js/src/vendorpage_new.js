@@ -109,6 +109,7 @@ function ReplaceNumberWithCommas(thisnumber){
 
 })(jQuery);
 
+    $(".list-category").find("a[data-link='#def-0']").trigger("click");
 /**
  *  Filter Button function
  */
