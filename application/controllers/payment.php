@@ -1759,6 +1759,22 @@ class Payment extends MY_Controller{
         }
     }
 
+    // public function curlPP()
+    // {
+    //     $curlUrl = "https://test.pesopay.com/b2cDemo/eng/merchant/api/orderApi.jsp";
+    //     $curl = new Curl();
+    //     $data = [
+    //         'merchantId' => '18061489',
+    //         'loginId' => 'apiuser',
+    //         'password' => 'apipassword',
+    //         'actionType' =>'Query',
+    //     ];
+    //     echo '<pre>';
+    //     $curl->post($curlUrl, $data);
+
+    //     print_r($curl->response);
+    // }
+
     /**
      * Return url for pesopay 
      * @return view
