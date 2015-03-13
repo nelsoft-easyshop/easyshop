@@ -754,9 +754,10 @@ class CategoryManager
                 }
                 if(!$isCustomCategoryFound){
                     $highestSortOrder++;
+                    $validCategoryName = $this->stringUtility->removeSpecialCharsExceptSpace($topParentCategoryName);
                     $newMemberCategory = new \EasyShop\Entities\EsMemberCat();
                     $newMemberCategory->setMember($member);
-                    $newMemberCategory->setCatName($topParentCategoryName);
+                    $newMemberCategory->setCatName($validCategoryName);
                     $newMemberCategory->setSortOrder($highestSortOrder);
                     $newMemberCategory->setCreatedDate($datetimeToday);
                     $newMemberCategory->setlastModifiedDate($datetimeToday);
