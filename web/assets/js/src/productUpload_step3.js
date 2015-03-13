@@ -936,7 +936,9 @@ $(function(){
                                                 thisSelect.append('<option value="'+headId+'">'+name+'</option>');
                                             });
                                         });
-                                    }else{
+                                        prefSelect.children('option:last').attr("selected","selected");
+                                    }
+                                    else{
                                         alert(obj['error']);
                                     }
                                     thisdialog.dialog("close");
