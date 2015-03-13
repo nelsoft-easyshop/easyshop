@@ -150,10 +150,15 @@
      });
      
      
-    $('#changePassForm input[name="password"]').change(function(){
+    $('#changePassForm input[name="password"]').keyup(function(){
         var $this = $(this);
+        var $confirmPasswordInput = $('#changePassForm input[name="confirmPassword"]');
         if($this.val() === ''){
-            $('#changePassForm input[name="confirmPassword"]').val('');
+            $confirmPasswordInput.val('');
+            $confirmPasswordInput.prop('disabled', true);
+        }
+        else{
+            $confirmPasswordInput.prop('disabled', false);
         }
     });
 

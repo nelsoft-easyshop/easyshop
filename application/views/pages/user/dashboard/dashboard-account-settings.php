@@ -120,7 +120,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label text-required">Confirm New Password : </label>
                             <div class="col-sm-5">
-                                <input type="password" id="confirmPassword" name="confirmPassword" class="text-info" placeholder="Confirm your new password here">
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="text-info" placeholder="Confirm your new password here" disabled>
                             </div>
                         </div>
                         <div class="form-group">
