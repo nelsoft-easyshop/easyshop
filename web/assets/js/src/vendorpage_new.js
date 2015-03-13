@@ -94,6 +94,8 @@ function ReplaceNumberWithCommas(thisnumber){
         $('html,body').scrollTo(450); 
     });
 
+    $(".list-category").find("a[data-link='#def-0']").click();
+
     $(document).on('change',".price-field",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
         var v = parseFloat(priceval);
@@ -109,12 +111,10 @@ function ReplaceNumberWithCommas(thisnumber){
 
 })(jQuery);
 
-    $(".list-category").find("a[data-link='#def-0']").trigger("click");
 /**
  *  Filter Button function
  */
 (function ($){
-
     $('#filter-btn').on('click', function(){
         var activeCategoryProductsDiv = $('.category-products.active');
         var condition = $(this).closest("ul").find('#filter-condition').val();
