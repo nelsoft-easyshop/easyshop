@@ -379,7 +379,14 @@ $config['rewrite_short_tags'] = FALSE;
 | Comma-delimited, e.g. '10.0.1.200,10.0.1.201'
 |
 */
-$config['proxy_ips'] = '';
+$proxies = require_once __DIR__ . '/param/proxies.php';
+$proxyString = '';
+foreach($proxies as $proxy){
+    $proxyString .= $proxy.",";
+}
+rtrim($proxyString, ",");
+
+$config['proxy_ips'] = $proxyString;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
