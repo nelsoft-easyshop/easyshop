@@ -14,7 +14,6 @@
                                     <li><a href="/guide/buy">How to Shop</a></li>
                                     <li><a href="/guide/sell">How to Sell</a></li>
                                     <li><a href="/faq">FAQ</a></li>
-                                    <li><a href="/report">Report a Problem</a></li>
                                 </ul>
                             </div>
                             <div class="col-md-6 col-xs-6">
