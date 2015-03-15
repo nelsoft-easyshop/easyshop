@@ -603,43 +603,13 @@
                                                         <table border="0" align="left" cellpadding="0" cellspacing="0" class="container">
                                                             <tr>
                                                                 <td height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-facebook-color TB113" src="images/icon-facebook-color.png" width="30" alt="icon-facebook" style="max-width:30px;" border="0" hspace="0" vspace="0">  
+                                                                  <a href="{facebook}" target="_blank" style="text-decoration: none;">
+                                                                    <img mc:edit="icon-facebook-color TB113" src="icon-facebook.png" width="30" alt="icon-facebook" style="max-width:30px;" border="0" hspace="0" vspace="0">  
                                                                   </a>
                                                                 </td>
                                                                 <td style="padding-left:5px; " height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-twitter-color TB114" src="images/icon-twitter-color.png" width="30" alt="icon-twitter" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px; " height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-googleplus-color TB115" src="images/icon-googleplus-color.png" width="30" alt="icon-googleplus" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-rss-color TB116" src="images/icon-rss-color.png" width="30" alt="icon-rss" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-vimeo-color TB117" src="images/icon-vimeo-color.png" width="30" alt="icon-vimeo" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-pinterest-color TB118" src="images/icon-pinterest-color.png" width="30" alt="icon-pinterest" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-linkedIn-color TB119" src="images/icon-linkedIn-color.png" width="30" alt="icon-Linkedin" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                  <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-instagram-color TB120" src="images/icon-instagram-color.png" width="30" alt="icon-instagram" style="max-width:30px;" border="0" hspace="0" vspace="0">  
+                                                                  <a href="{twitter}" target="_blank" style="text-decoration: none;">
+                                                                    <img mc:edit="icon-twitter-color TB114" src="icon-twitter.png" width="30" alt="icon-twitter" style="max-width:30px;" border="0" hspace="0" vspace="0">  
                                                                   </a>
                                                                 </td>
                                                             </tr>

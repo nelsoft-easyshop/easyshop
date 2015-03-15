@@ -836,12 +836,12 @@
                                                             <tr>
                                                                 <td height="30" align="center" valign="middle" class="clear-padding">
                                                                   <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-facebook-color TB113" src="images/icon-facebook-color.png" width="30" alt="icon-facebook" style="max-width:30px;" border="0" hspace="0" vspace="0">  
+                                                                    <img mc:edit="icon-facebook-color TB113" src="icon-facebook.png" width="30" alt="icon-facebook" style="max-width:30px;" border="0" hspace="0" vspace="0">  
                                                                   </a>
                                                                 </td>
                                                                 <td style="padding-left:5px; " height="30" align="center" valign="middle" class="clear-padding">
                                                                   <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-twitter-color TB114" src="images/icon-twitter-color.png" width="30" alt="icon-twitter" style="max-width:30px;" border="0" hspace="0" vspace="0">  
+                                                                    <img mc:edit="icon-twitter-color TB114" src="icon-twitter.png" width="30" alt="icon-twitter" style="max-width:30px;" border="0" hspace="0" vspace="0">  
                                                                   </a>
                                                                 </td>
                                                                 <td style="padding-left:5px; " height="30" align="center" valign="middle" class="clear-padding">
