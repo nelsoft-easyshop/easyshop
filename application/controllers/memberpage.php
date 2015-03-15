@@ -1575,7 +1575,7 @@ class Memberpage extends MY_Controller
                 $parseData = [
                     'username' => $member['member']->getUsername(),
                     'hash' => $result,
-                    'reactivationLink' => site_url('memberpage/showActivateAccount'),
+                    'reactivationLink' => site_url('memberpage/showActivateAccount').'?h='.$result,
                     'baseUrl' => base_url(),
                     'facebook' => $socialMediaLinks['facebook'],
                     'twitter' => $socialMediaLinks['twitter'],
