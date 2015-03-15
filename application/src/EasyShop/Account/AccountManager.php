@@ -218,7 +218,8 @@ class AccountManager
             $emailAddress = $member->getEmail();
             $username = $member->getUserName();
             $emailSecretHash = sha1($emailAddress.time());
-            $socialMediaLinks = $socialMediaManager->getSocialMediaLinks();
+            $socialMediaLinks = $this->socialMediaManager
+                                     ->getSocialMediaLinks();
             $parseData = [
                 'user' => $username,
                 'hash' => $this->encrypter
