@@ -776,13 +776,15 @@ class Memberpage extends MY_Controller
                     $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
                     if( $result['o_success'] >= 1 ) {
                         $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
+                        $parseData['itemLink'] = base_url().'item/'.$parseData['productSlug'];
                         $parseData['store_link'] = base_url() . $parseData['user_slug'];
                         $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
                         $socialMediaLinks = $this->serviceContainer['social_media_manager']
                                                  ->getSocialMediaLinks();
                         $parseData['facebook'] = $socialMediaLinks["facebook"];
                         $parseData['twitter'] = $socialMediaLinks["twitter"];
-
+                        $parseData['baseUrl'] = base_url();
+                        
                         $hasNotif = false;
                         if (
                             (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
@@ -815,7 +817,7 @@ class Memberpage extends MY_Controller
                     $emailService->setRecipient($parseData['email'])
                                  ->setSubject($emailSubject)
                                  ->setMessage($emailMsg, $imageArray)
-                                 ->queueMail();
+                                 ->queueMail();       
                     $smsService->setMobile($parseData['mobile'])
                                ->setMessage($smsMsg)
                                ->queueSMS();
