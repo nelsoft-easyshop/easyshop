@@ -477,7 +477,7 @@
                                                                 <td align="center" valign="top" width="100%">
                                                                     <a href="{baseUrl}" style="text-decoration: none; display: inline-block" target="_blank">
                                                                         <center>
-                                                                        <img mc:edit="Top logo TB10" mc:allowdesigner mc:allowtex src="images/top-logo.png" width="120" style="max-width:120px;" alt="Logo" border="0" hspace="0" vspace="0">
+                                                                        <img mc:edit="Top logo TB10" mc:allowdesigner mc:allowtex src="es-logo-login.png" width="120" style="max-width:120px;" alt="Logo" border="0" hspace="0" vspace="0">
                                                                         </center>
                                                                     </a>
                                                                 </td>
