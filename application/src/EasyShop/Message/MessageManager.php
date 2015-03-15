@@ -138,22 +138,23 @@ class MessageManager {
             $parseData = [
                 'user' => $sender->getUsername(),
                 'recipient' => $recipient->getUsername(),
-                'home_link' => base_url(),
-                'store_link' => base_url() . $sender->getSlug(),
                 'msg_link' => base_url() . "messages/#" . $sender->getUsername(),
                 'msg' => $message->getMessage(),
                 'facebook' => $socialMediaLinks["facebook"],
                 'twitter' => $socialMediaLinks["twitter"],
+                'baseUrl' => base_url(),
             ];
 
             $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, true);
 
-            // uncomment to queue mail
-            // $this->emailService->setRecipient($emailRecipient)
-            //                     ->setSubject($emailSubject)
-            //                     ->setMessage($emailMsg, $imageArray)
-            //                     ->queueMail();
-                                
+            /*
+             uncomment to queue mail
+            $this->emailService->setRecipient($emailRecipient)
+                               ->setSubject($emailSubject)
+                               ->setMessage($emailMsg, $imageArray)
+                               ->queueMail();
+            */
+            
             $updatedMessageListForSender = $this->getAllMessage($sender->getIdMember());
             $updatedMessageListForReciver = $this->getAllMessage($recipient->getIdMember());
 
