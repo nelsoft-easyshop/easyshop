@@ -15,9 +15,10 @@ $config = Array(
             'multipart' => 'related',
             //'smtp_crypto' => 'ssl'
             'images' => [
-                "/assets/images/landingpage/templates/header-img.png",
-                "/assets/images/landingpage/templates/facebook.png",
-                "/assets/images/landingpage/templates/twitter.png",
+                "/assets/images/email/icon-facebook.png",
+                "/assets/images/email/icon-twitter.png",
+                "/assets/images/email/filler.jpg",
+                "/assets/images/es-logo-login.png",
             ]
         );
 
