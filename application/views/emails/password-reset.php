@@ -533,10 +533,10 @@
                                                             <tr>
                                                                 <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
 
-                                                                    <p style="margin-top: 20px; margin-bottom: 20px;">Hi <span style="color:#ff893b; font-weight: 400;">RecipientName</span>,</p>
+                                                                    <p style="margin-top: 20px; margin-bottom: 20px;">Hi <span style="color:#ff893b; font-weight: 400;">{username}</span>,</p>
                                                                     We received a password reset request for your <span style="color:#ff893b; font-weight: 400;">Easyshop.ph</span> account. To reset your password, kindly use the link below:
-                                                                    <br/><br/><a href="#" style="color:#ff893b; font-weight: 400; display: inline-block;">{baseUrl}login/updatePassword?confirm=D686CA6ECF52E9F3CB032E532BF846E1ECAB5E0D* </a>
-                                                                    <br/><br/>If you didn't make a request for a password reset, you can let us know at <a href="#" style="color:#555555; font-weight: 400;">info@easyshop.ph</a>. Thank you. 
+                                                                    <br/><br/><a href="{updatePasswordLink}" style="color:#ff893b; font-weight: 400; display: inline-block;">{updatePasswordLink}</a>
+                                                                    <br/><br/>If you didn't make a request for a password reset, you can let us know at <a href="mailto:info@easyshop.ph" style="color:#555555; font-weight: 400;">info@easyshop.ph</a>. Thank you. 
                                                                 </td>
                                                             </tr>
 
