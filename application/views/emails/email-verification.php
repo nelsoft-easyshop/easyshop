@@ -525,7 +525,7 @@
 
                                                 <tr>
                                                     <td valign="bottom" align="center">
-                                                        <a href="#" target="_blank" style="text-decoration: none;">
+                                                        <a href="{baseUrl}" target="_blank" style="text-decoration: none;">
                                                             <img mc:edit="image-2 TB25" src="filler.jpg" width="270" alt="image2_480x501" style="display:block; max-width:270px; " border="0" hspace="0" vspace="0"> 
                                                         </a>
                                                     </td>
