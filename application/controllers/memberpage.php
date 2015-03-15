@@ -975,19 +975,20 @@ class Memberpage extends MY_Controller
                             "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($postData['expected_date'])),
                             "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
                             "facebook" => $socialMediaLinks["facebook"],
-                            "twitter" => $socialMediaLinks["twitter"]
+                            "twitter" => $socialMediaLinks["twitter"],
+                            'baseUrl' => base_url(),
                         ]);
                         $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
 
                         $emailService->setRecipient($buyerEmail)
                                      ->setSubject($buyerEmailSubject)
                                      ->setMessage($buyerEmailMsg, $imageArray)
-                                     ->queueMail();
+                                     ->queueMail();  
                     }
 
                 }
                 else{
-                    $serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
+                    $serverResponse['error'] = 'The information you provided may be invalid. Please refresh the page and try again.';
                 }
             }
         }
