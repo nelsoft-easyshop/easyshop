@@ -475,7 +475,7 @@
                                                             <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" class="container">
                                                               <tr>
                                                                 <td align="center" valign="top" width="100%">
-                                                                    <a href="https://www.easyshop.ph/" style="text-decoration: none; display: inline-block" target="_blank">
+                                                                    <a href="{baseUrl}" style="text-decoration: none; display: inline-block" target="_blank">
                                                                         <center>
                                                                         <img mc:edit="Top logo TB10" mc:allowdesigner mc:allowtex src="https://s3-ap-southeast-1.amazonaws.com/easyshop-production/assets/images/es-logo-login.png" width="120" style="max-width:120px;" alt="Logo" border="0" hspace="0" vspace="0">
                                                                         </center>
@@ -535,7 +535,7 @@
 
                                                                     <p style="margin-top: 20px; margin-bottom: 20px;">Hi <span style="color:#ff893b; font-weight: 400;">RecipientName</span>,</p>
                                                                     We received a password reset request for your <span style="color:#ff893b; font-weight: 400;">Easyshop.ph</span> account. To reset your password, kindly use the link below:
-                                                                    <br/><br/><a href="#" style="color:#ff893b; font-weight: 400; display: inline-block;">https://www.easyshop.ph/login/updatePassword?confirm=D686CA6ECF52E9F3CB032E532BF846E1ECAB5E0D* </a>
+                                                                    <br/><br/><a href="#" style="color:#ff893b; font-weight: 400; display: inline-block;">{baseUrl}login/updatePassword?confirm=D686CA6ECF52E9F3CB032E532BF846E1ECAB5E0D* </a>
                                                                     <br/><br/>If you didn't make a request for a password reset, you can let us know at <a href="#" style="color:#555555; font-weight: 400;">info@easyshop.ph</a>. Thank you. 
                                                                 </td>
                                                             </tr>

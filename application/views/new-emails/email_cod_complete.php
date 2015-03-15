@@ -475,7 +475,7 @@
                                                             <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" class="container">
                                                               <tr>
                                                                 <td align="center" valign="top" width="100%">
-                                                                    <a href="https://www.easyshop.ph/" style="text-decoration: none; display: inline-block" target="_blank">
+                                                                    <a href="{baseUrl}" style="text-decoration: none; display: inline-block" target="_blank">
                                                                         <center>
                                                                         <img mc:edit="Top logo TB10" mc:allowdesigner mc:allowtex src="images/top-logo.png" width="120" style="max-width:120px;" alt="Logo" border="0" hspace="0" vspace="0">
                                                                         </center>
