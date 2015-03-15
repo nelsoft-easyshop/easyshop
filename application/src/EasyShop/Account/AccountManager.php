@@ -622,14 +622,17 @@ class AccountManager
         catch(\Exception $e){
             return false;
         }
-        
+        $socialMediaLinks = $this->socialMediaManager
+                                 ->getSocialMediaLinks();
         $parseData = [
             'username' => $member->getUsername(),
-            'trigger' => $hash,
+            'baseUrl' => base_url(),
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+            'updatePasswordLink' => base_url().'login/updatePassword?confirm='.$hash,
         ];
-        $imageArray = [ "/assets/images/img_logo.png" ];  
-
-        $message = $this->parser->parse('templates/email_forgot_pass' , $parseData,true);
+        $imageArray = $this->configLoader->getItem('email', 'images');  
+        $message = $this->parser->parse('emails/password-reset' , $parseData,true);
         $this->emailNotification->setRecipient($member->getEmail());
         $this->emailNotification->setSubject('Password reset on Easyshop.ph');
         $this->emailNotification->setMessage($message, $imageArray);    
