@@ -212,8 +212,9 @@ class AccountManager
             $parseData = [
                 'user' => $username,
                 'hash' => $this->encrypter
-                            ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
-                'site_url' => site_url('register/email_verification')
+                               ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
+                'site_url' => site_url('register/email_verification'),
+                'baseUrl' => base_url(),
             ];
             
             if($excludeVerificationLink){
@@ -221,7 +222,7 @@ class AccountManager
             }
             
             $imageArray = $this->configLoader->getItem('email', 'images');  
-            $message = $this->parser->parse('templates/landingpage/lp_reg_email' , $parseData,true);
+            $message = $this->parser->parse('emails/email-verification' , $parseData,true);
             
             $this->emailNotification->setRecipient($emailAddress);
             $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
