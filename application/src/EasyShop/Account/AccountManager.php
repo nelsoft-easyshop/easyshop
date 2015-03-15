@@ -123,6 +123,14 @@ class AccountManager
      */
     private $hashUtility;
     
+    
+    /**
+     * The social media manager
+     *
+     * @var EasyShop\SociaMedia\SocialMediaManager
+     */
+    private $socialMediaManager;
+    
     /**
      * Intialize dependencies
      *
@@ -140,7 +148,8 @@ class AccountManager
                                 $encrypter,
                                 $configLoader,
                                 $languageLoader,
-                                $hashUtility)
+                                $hashUtility,
+                                $socialMediaManager)
     {
         $this->em = $em;
         $this->bcryptEncoder = $bcryptEncoder;
@@ -156,6 +165,7 @@ class AccountManager
         $this->configLoader = $configLoader;
         $this->languageLoader = $languageLoader;
         $this->hashUtility = $hashUtility;
+        $this->socialMediaManager = $socialMediaManager;
     }
 
     /**
@@ -208,13 +218,15 @@ class AccountManager
             $emailAddress = $member->getEmail();
             $username = $member->getUserName();
             $emailSecretHash = sha1($emailAddress.time());
-
+            $socialMediaLinks = $socialMediaManager->getSocialMediaLinks();
             $parseData = [
                 'user' => $username,
                 'hash' => $this->encrypter
                                ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
                 'site_url' => site_url('register/email_verification'),
                 'baseUrl' => base_url(),
+                'facebook' => $socialMediaLinks["facebook"],
+                'twitter' => $socialMediaLinks["twitter"],
             ];
             
             if($excludeVerificationLink){
