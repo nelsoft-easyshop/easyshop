@@ -68,8 +68,10 @@
             </div>
         </div>
     </div>
-    <div class="border-1"></div>
-    <div class="border-2"></div>
+    <div class="hide-border-bottom">
+        <div class="border-1"></div>
+        <div class="border-2"></div>
+    </div>
 </section>
 </body>
 </html>

@@ -6,7 +6,6 @@
 .qr-code-wrapper {
     margin-top: 50px;
     position: relative;
-    overflow: hidden;
 }
 
 .border-1 {
@@ -62,6 +61,13 @@
     width: 80%;
 }
 
+.hide-border-bottom {
+    height: 10px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
 
 @media screen and (max-width: 480px) {
     .qr-sellername {
