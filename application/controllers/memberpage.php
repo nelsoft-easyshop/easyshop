@@ -1568,14 +1568,20 @@ class Memberpage extends MY_Controller
                     'memberId' => $member['member']->getIdMember(),
                 ]);                
                 $result = $this->encrypt->encode($hash);
-                $parseData = array(
+                
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                         ->getSocialMediaLinks();   
+                
+                $parseData = [
                     'username' => $member['member']->getUsername(),
                     'hash' => $result,
-                    'site_url' => site_url('memberpage/showActivateAccount')
-                );        
+                    'reactivationLink' => site_url('memberpage/showActivateAccount'),
+                    'baseUrl' => base_url(),
+                    'facebook' => $socialMediaLinks['facebook'],
+                    'twitter' => $socialMediaLinks['twitter'],
+                ];        
+
                 $imageArray = $this->config->config['images'];
-                $imageArray[] = "/assets/images/appbar.home.png";
-                $imageArray[] = "/assets/images/appbar.message.png";
                 $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
                 $this->emailNotification->setRecipient($member['member']->getEmail());
@@ -1592,7 +1598,7 @@ class Memberpage extends MY_Controller
         
         echo json_encode($result);
     }
-
+    
     /**
      * Flags member as activated
      * @return json
