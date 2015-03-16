@@ -397,6 +397,7 @@ class CategoryManager
         else{
             $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                      ->getCustomCategoriesArray($memberId);    
+            
             foreach( $memberCategories as $memberCategory ){
                 $index = 'custom-'.$memberCategory['id_memcat'];
                 $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
@@ -406,13 +407,30 @@ class CategoryManager
                 $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
                 $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
                 $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+
+                /**
+                 * change child_cat above later on
+                 */
+                $childrenData = explode('|', $memberCategory['childList']);
+                $vendorCategories[$index]['children'] = [];
+                foreach($childrenData as $childData){
+                    if(empty($childData)){
+                        continue;
+                    }
+                    $parsedData = explode("~", $childData, 2);
+                    $vendorCategories[$index]['children'][] = [
+                        'id' => $parsedData[0], 
+                        'name' => $parsedData[1]
+                    ];
+                }
+                
             }                      
         }
 
         $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
             return $sortArgumentA['sortOrder'] - $sortArgumentB['sortOrder'];
         });
-        
+
         return $vendorCategories;
     }
 
