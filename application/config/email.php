@@ -19,6 +19,7 @@ $config = Array(
                 "/assets/images/email/icon-twitter.png",
                 "/assets/images/email/filler.jpg",
                 "/assets/images/es-logo-login.png",
+                "/assets/images/email/shadow.png",
             ]
         );
 
