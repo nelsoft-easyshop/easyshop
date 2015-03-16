@@ -146,13 +146,35 @@
                         <td class="search-item-td-price">
                             <div class="search-item-price">
                                 <?php if($percentage > 0):?>
-                                <span class="original-price">
-                                    <s>P<?=$originalPrice; ?></s>
+                                 <?php
+                                        if((float) str_replace(",", "", $originalPrice) > 999999.00):
+                                    ?>
+                                    <span class="original-price" style="font-size: 15px !important">
+                                        <s>P<?=$originalPrice; ?></s>
+                                    </span>
+                                    <?php
+                                       else:
+                                    ?>
+                                    <span class="original-price">
+                                        <s>P<?=$originalPrice; ?></s>
+                                    </span>
+                                    <?php endif; ?> 
+                                 <?php endif; ?> 
+                                <?php
+                                    if((float) str_replace(",", "", $productPrice) > 999999.00):
+                                ?>
+                                <span class="new-price with-discount-list" style="font-size: 17px !important">
+                                    P <?=$productPrice?>
                                 </span>
-                                <?php endif; ?> 
-                                <span class="new-price with-discount-list">
-                                    P<?=$productPrice; ?>
-                                </span>
+                                <?php
+                                    else:
+                                ?>
+                                 <span class="new-price with-discount-list">
+                                    P <?=$productPrice?>
+                                 </span>
+                                <?php
+                                    endif; 
+                                  ?>
                             </div>
                             <button data-slug="<?=$productSlug;?>" data-productid="<?=$productId;?>" class="btn btn-search-add-cart btn-add-to-cart">
                                 <span class="fa icon-cart fa-lg"></span>
