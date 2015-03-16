@@ -739,6 +739,11 @@ class PaymentService
                 break;
         }
 
+        // temporarily disable for dragonpay
+        if((int)$paymentType === EsPaymentMethod::PAYMENT_DRAGONPAY){
+            return true;
+        }
+
         if($configPayment){
             $ipList = isset($configPayment['ip_address']) 
                       ? $configPayment['ip_address']

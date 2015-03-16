@@ -301,7 +301,7 @@
                             <div class="shipping_input si_css mrgn-bttm-15" data-sikey="<?php echo $siCounter;?>">
                                 <div class="col-xs-4 col-sm-4 col-md-3">
                                     <label for="price">&#8369;</label>
-                                    <input type="text" class="shipprice form-control" name="shipprice[<?php echo $sgCounter?>][<?php echo $siCounter?>]" value="<?php echo html_escape($price);?>">
+                                    <input type="text" class="shipprice form-control" maxlength="15" name="shipprice[<?php echo $sgCounter?>][<?php echo $siCounter?>]" value="<?php echo html_escape($price);?>">
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-7 upload_chosen">
                                     <label for="location">Select Location</label>
