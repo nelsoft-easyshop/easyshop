@@ -1667,7 +1667,6 @@ class Payment extends MY_Controller{
         
         $transactionPoints = $paymentService->getTransactionPoints($order);
 
-        // Create a fake decoded JSON for payment service
         if($order && (int) $transactionPoints > 0 ){
             $paymentMethods = [
                 "PaypalGateway" => [
