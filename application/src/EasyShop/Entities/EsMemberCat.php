@@ -16,6 +16,8 @@ class EsMemberCat
     const DELETED = 1;
     
     const ACTIVE = 0;
+    
+    const PARENT = 0;
 
     /**
      * @var integer

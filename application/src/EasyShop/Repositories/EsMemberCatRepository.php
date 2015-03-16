@@ -69,21 +69,34 @@ class EsMemberCatRepository extends EntityRepository
         $rsm->addScalarResult('sort_order','sort_order');
         $rsm->addScalarResult('is_delete','is_delete');
         $rsm->addScalarResult('product_count','product_count');
+        $rsm->addScalarResult('childList','childList');
         $sql = 'SELECT es_member_cat.id_memcat,
                     es_member_cat.cat_name,
                     es_member_cat.is_featured,
                     es_member_cat.sort_order,
                     es_member_cat.is_delete,
-                    COUNT(es_member_prodcat.id_memprod) as product_count
+                    COUNT(es_member_prodcat.id_memprod) as product_count,
+                    
+                    GROUP_CONCAT(
+                        DISTINCT CONCAT(CONCAT(level2.id_memcat, "~"), level2.cat_name) ORDER BY level2.sort_order ASC SEPARATOR "|"
+                    ) as childList
+                    
                 FROM es_member_cat
-                LEFT JOIN es_member_prodcat 
+                LEFT JOIN 
+                    es_member_prodcat 
                     ON es_member_cat.id_memcat = es_member_prodcat.memcat_id
-                LEFT JOIN es_product
+                LEFT JOIN 
+                    es_product
                     ON es_product.is_draft = :nonDraft AND es_product.is_delete = :active
                     AND es_product.id_product = es_member_prodcat.product_id
+                LEFT JOIN
+                    es_member_cat as level2  
+                    ON level2.parent_id = es_member_cat.id_memcat 
+                    AND level2.is_delete = :categoryDeleteStatus
                 WHERE
                     es_member_cat.member_id = :member_id
                     AND es_member_cat.is_delete = :categoryDeleteStatus
+                    AND es_member_cat.parent_id = :parentCustomCategory
                 GROUP BY es_member_cat.id_memcat
                 ORDER BY es_member_cat.id_memcat DESC
                 ';
@@ -92,7 +105,8 @@ class EsMemberCatRepository extends EntityRepository
                     ->setParameter('member_id', $memberId)
                     ->setParameter('categoryDeleteStatus', EsMemberCat::ACTIVE)
                     ->setParameter('nonDraft', EsProduct::ACTIVE )
-                    ->setParameter('active', EsProduct::ACTIVE );
+                    ->setParameter('active', EsProduct::ACTIVE )
+                    ->setParameter('parentCustomCategory', EsMemberCat::PARENT );
 
         return $query->getResult();
     }
