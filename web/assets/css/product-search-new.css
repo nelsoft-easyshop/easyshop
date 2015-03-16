@@ -242,7 +242,7 @@ html, body{
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 10px;
-    height: 23px;
+    height: 27px;
 }
 
 .search-item-price{
