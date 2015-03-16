@@ -1182,12 +1182,11 @@ class Payment extends MY_Controller{
 
         $emailService = $this->serviceContainer['email_notification'];
         $smsService = $this->serviceContainer['mobile_notification'];
+        $em = $this->serviceContainer['entity_manager'];
 
         $this->config->load('email', true);
         $imageArray = $this->config->config['images'];
-        $imageArray[] = "/assets/images/appbar.home.png";
-        $imageArray[] = "/assets/images/appbar.message.png";
-
+        
         $sender = intval($this->xmlmap->getFilenameID($xmlfile,'message-sender-id'));
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
 
@@ -1228,11 +1227,24 @@ class Payment extends MY_Controller{
         if($buyerFlag){
             $buyerEmail = $transactionData['buyer_email'];
             $buyerData = $transactionData;
-            
             $buyerData['facebook'] = $socialMediaLinks["facebook"];
             $buyerData['twitter'] = $socialMediaLinks["twitter"];            
             unset($buyerData['seller']);
             unset($buyerData['buyer_email']);
+
+            foreach($buyerData['products'] as $key => $productData){
+                $primaryImage = $em->getRepository('EasyShop\Entities\EsProductImage')
+                                   ->getDefaultImage($productData['productId']);
+                $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                if(strtolower(ENVIRONMENT) === 'development'){
+                    $imageArray[] = ltrim($imagePath, '.');
+                    $parsedImage = $primaryImage->getFilename();
+                }
+                else{
+                    $parsedImage = getAssetsDomain().$imagePath;
+                }
+                $buyerData['products'][$key]['primaryImage'] = $parsedImage;
+            }
 
             # Additional buyerData for email template
             $buyerData['store_link'] = base_url() ; #user appended on template
@@ -1245,7 +1257,6 @@ class Payment extends MY_Controller{
                          ->setSubject($buyerSubject)
                          ->setMessage($buyerMsg, $imageArray)
                          ->queueMail();
-
             $smsService->setMobile($buyerData['buyer_contactno'])
                        ->setMessage($buyerSmsMsg)
                        ->queueSMS();
