@@ -785,6 +785,17 @@ class Memberpage extends MY_Controller
                         $parseData['twitter'] = $socialMediaLinks["twitter"];
                         $parseData['baseUrl'] = base_url();
                         
+                        $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                             ->getDefaultImage($parseData['productId']);
+                        $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                        if(strtolower(ENVIRONMENT) === 'development'){
+                            $imageArray[] = ltrim($imagePath, '.');
+                            $parseData['primaryImage'] = $primaryImage->getFilename();
+                        }
+                        else{
+                            $parseData['primaryImage'] = getAssetsDomain().$imagePath;
+                        }
+                        
                         $hasNotif = false;
                         if (
                             (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
