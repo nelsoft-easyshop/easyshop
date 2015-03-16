@@ -32,10 +32,16 @@ class EmailNotification
     private $message;
 
     /**
+     * Entity manager instance 
+     */
+    private $em;
+
+    /**
      *  Constructor
      */
-    public function __construct($emailConfig)
-    {
+    public function __construct($em, $emailConfig)
+    {   
+        $this->em = $em;
         $this->emailConfig = $emailConfig;
 
         $transport = \Swift_SmtpTransport::newInstance($this->emailConfig['smtp_host'], $this->emailConfig['smtp_port'], $this->emailConfig['smtp_crypto'])

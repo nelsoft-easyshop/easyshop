@@ -536,8 +536,11 @@ class Kernel
         // Notification Services
         $emailConfig = require(APPPATH . "config/email_swiftmailer.php");
         $smsConfig = require(APPPATH . "config/sms.php");
-        $container['email_notification'] = function($c) use ($emailConfig){
-            return new \EasyShop\Notifications\EmailNotification($emailConfig);
+        $container['email_notification'] = function($c) use ($container ,$emailConfig){
+            return new \EasyShop\Notifications\EmailNotification(
+                $container['entity_manager'],
+                $emailConfig
+            );
         };
         $container['mobile_notification'] = function($c) use ($smsConfig, $container){
             $em = $container['entity_manager']; 
