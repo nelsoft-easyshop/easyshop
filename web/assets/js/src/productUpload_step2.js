@@ -537,6 +537,7 @@ function processAttributes()
             plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
             toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
             relative_urls: false,
+            target_list: []
         });
     });
 
@@ -1542,11 +1543,13 @@ var universalExtension = ".jpeg";
         $('.imageText'+currentCnt).val('');
         $('.imageFileText'+currentCnt).val('');
         $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
+        $("#other_files")[0].reset();
     });
 
     $(document).on('click',".attr-image",function (e){
         var selector = $(this);
         currentCnt = selector.data('cnt');
+        $("#other_files")[0].reset();
         $('.attr-image-input').click();
     });
 
