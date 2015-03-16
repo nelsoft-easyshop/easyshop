@@ -173,6 +173,10 @@ class EmailNotification
                        ->setStatus($queueStatus);
             $em->persist($emailQueue);
             $em->flush();
+            
+            if(strtolower(ENVIRONMENT) === 'development'){
+                $this->sendMail();
+            }
 
             return true;
         }
