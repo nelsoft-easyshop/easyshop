@@ -1860,7 +1860,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
  
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "" , "0.00" , $memberId);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "0.00" , $memberId);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -1975,7 +1975,7 @@ class Payment extends MY_Controller{
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
 
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "" , "0.00" , $memberId);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "0.00" , $memberId);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
