@@ -530,7 +530,7 @@
 
                                                             <tr>
                                                                 <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
-                                                                    <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{buyer_name}</span>,</p>
+                                                                    <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{buyer_store}</span>,</p>
                                                                     <p> {payment_msg_buyer}</p>
                                                                     Details for the item(s) you've purchased are as follows:                                                                   
                                                                 </td>
