@@ -145,14 +145,26 @@
                         </td>
                         <td class="search-item-td-price">
                             <div class="search-item-price">
+                                <?php $priceFontStyle = strlen((string)$originalPrice) > 12 ? "font-size:15px !important;" : ""; ?>  
                                 <?php if($percentage > 0):?>
-                                <span class="original-price">
-                                    <s>P<?=$originalPrice; ?></s>
-                                </span>
+                                
+                                    <span class="original-price" style="<?php echo $priceFontStyle; ?>">
+                                        <s>P<?=$originalPrice; ?></s>
+                                    </span>
+                              
                                 <?php endif; ?> 
-                                <span class="new-price with-discount-list">
-                                    P<?=$productPrice; ?>
-                                </span>
+                                
+                                <span class="new-price with-discount-list" style="<?php echo $priceFontStyle; ?>">
+                                    P <?=$productPrice?>
+                                 </span>
+                                  
+                                 <?php if($isFreeShipping): ?>
+                                     <span class="free-shipping-tag">
+                                        <i class="fa fa-truck fa-lg"></i> FREE 
+                                        SHIPPING
+                                        <span class="free-shipping-tag-tail"><span>
+                                    </span>
+                                <?php endif; ?>
                             </div>
                             <button data-slug="<?=$productSlug;?>" data-productid="<?=$productId;?>" class="btn btn-search-add-cart btn-add-to-cart">
                                 <span class="fa icon-cart fa-lg"></span>
