@@ -1317,7 +1317,7 @@ class Payment extends MY_Controller{
                     $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
                 }
 
-            }//close foreach seller loop
+            }
         }
     }
 
