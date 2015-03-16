@@ -11,22 +11,28 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
 
 class Payment extends MY_Controller{
 
+    private $paymentConfig;
+
     function __construct() {
         parent::__construct();
         $this->load->library('session');
         $this->load->library('cart');
         $this->load->library('paypal');
         $this->load->library('dragonpay');
-        $this->load->library('paypal');
-        $this->load->library('pesopay');
+        $this->load->library('paypal'); 
         $this->load->library('xmlmap'); 
         $this->load->model('cart_model');
         $this->load->model('user_model');
         $this->load->model('payment_model');
         $this->load->model('product_model');
         $this->load->model('messages_model');
-        $this->load->model('memberpage_model');
-        session_start();
+        $this->load->model('memberpage_model'); 
+
+
+        $this->config->load('payment', true);
+        $this->paymentConfig = strtolower(ENVIRONMENT) === 'production'
+                               ? $this->config->item('production', 'payment')
+                               : $this->config->item('testing', 'payment');
     }
 
     public $PayMentPayPal = 1;
@@ -253,32 +259,55 @@ class Payment extends MY_Controller{
      */
     public function review()
     {
-        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+        if(!$this->session->userdata('member_id') 
+           || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');
         }
 
-        $entityManager = $this->serviceContainer['entity_manager'];
+        if($this->input->get('Ref')){ 
+            // $curlUrl = "https://test.pesopay.com/b2cDemo/eng/merchant/api/orderApi.jsp";
+            // $curl = new Curl();
+            // $data = [
+            //     'merchantId' => '18061489',
+            //     'loginId' => 'apiuser',
+            //     'password' => 'apipassword',
+            //     'actionType' =>'Query',
+            //     'orderRef' => trim($this->input->get('Ref'))
+            // ];
+            // echo '<pre>';
+            // $curl->post($curlUrl, $data);
 
-        $member_id =  $this->session->userdata('member_id');
-        $remove = $this->payment_model->releaseAllLock($member_id);
-        $qtySuccess = $this->resetPriceAndQty(); 
-        $itemArray = $this->session->userdata('choosen_items'); 
-        $itemCount = count($itemArray); 
-        $address = $this->memberpage_model->get_member_by_id($member_id);
+            // print_r($curl->response);
+        }
+
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $paymentService = $this->serviceContainer['payment_service'];
+
+        $userData = $this->session->all_userdata();
+        $memberId =  $this->session->userdata('member_id'); 
+
+        $entityManager->getRepository('EasyShop\Entities\EsProductItemLock')
+                      ->releaseAllLock($memberId); 
+
+        $validatedCart = $paymentService->validateCartData($userData, "0.00", $memberId);
+        $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
+        $qtySuccess = (int) $validatedCart['itemCount'];
+        $itemCount = count($validatedCart['itemArray']); 
+        $address = $this->memberpage_model->get_member_by_id($memberId);
 
         // check the availability of the product
-        $productAvailability = $this->checkProductAvailability($itemArray,$member_id);
+        $productAvailability = $this->checkProductAvailability($validatedCart['itemArray'], $memberId);
         $itemArray = $productAvailability['item_array'];
-        $successCount = $productAvailability['success_count'];
-        $codCount = $productAvailability['cod_count'];
-        $paypalCount = $productAvailability['paypal_count'];
-        $dragonpayCount = $productAvailability['dragonpay_count'];
-        $pesoPayCount = $productAvailability['pesopay_count'];
-        $directBankCount = $productAvailability['directbank_count'];
+        $successCount = (int) $productAvailability['success_count'];
+        $codCount = (int) $productAvailability['cod_count'];
+        $paypalCount = (int) $productAvailability['paypal_count'];
+        $dragonpayCount = (int) $productAvailability['dragonpay_count'];
+        $pesoPayCount = (int) $productAvailability['pesopay_count'];
+        $directBankCount = (int) $productAvailability['directbank_count'];
         $data['shippingDetails'] = $productAvailability['shipping_details'];
 
         // check the purchase limit and payment type available
-        $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray,$member_id);
+        $purchaseLimitPaymentType = $this->checkPurchaseLimitAndPaymentType($itemArray, $memberId);
         $paymentType = $purchaseLimitPaymentType['payment_type'];
         $promoteSuccess['purchase_limit'] = $purchaseLimitPaymentType['purchase_limit'];
         $promoteSuccess['solo_restriction'] = $purchaseLimitPaymentType['solo_restriction']; 
@@ -286,7 +315,7 @@ class Payment extends MY_Controller{
         $data['paymentType'] = $paymentType;
         $data['promoteSuccess'] = $promoteSuccess;
 
-        if(!count($itemArray) <= 0){
+        if(count($itemArray) > 0){
 
             // add storename in item list collection
             foreach ($itemArray as $key => $value) {
@@ -298,26 +327,25 @@ class Payment extends MY_Controller{
             }
 
             $data['cat_item'] = $itemArray;
-            $data['qtysuccess'] = ($qtySuccess == $itemCount ? true : false);
-            $data['success'] = ($successCount == $itemCount ? true : false);
-            $data['codsuccess'] = ($codCount == $itemCount ? true : false);
-            $data['paypalsuccess'] = ($paypalCount == $itemCount ? true : false);
-            $data['dragonpaysuccess'] = ($dragonpayCount == $itemCount ? true : false);
-            $data['pesopaysucess'] = ($pesoPayCount == $itemCount ? true : false);
-            $data['directbanksuccess'] = ($directBankCount == $itemCount ? true : false);
- 
+            $data['qtysuccess'] = $qtySuccess === $itemCount;
+            $data['success'] = $successCount === $itemCount;
+            $data['codsuccess'] = $codCount === $itemCount;
+            $data['paypalsuccess'] = $paypalCount === $itemCount;
+            $data['dragonpaysuccess'] = $dragonpayCount === $itemCount;
+            $data['pesopaysucess'] = $pesoPayCount === $itemCount;
+            $data['directbanksuccess'] = $directBankCount === $itemCount;
 
             $headerData = [
-                "memberId" => $this->session->userdata('member_id'),
+                "memberId" => $memberId,
                 'title' => 'Payment Review | Easyshop.ph',
             ];
             
             $data = array_merge($data, $this->memberpage_model->getLocationLookup());
-            $data = array_merge($data,$address);
+            $data = array_merge($data, $address);
 
             // Get all available points
             $data['maxPoint'] = $entityManager->getRepository('EasyShop\Entities\EsPoint')
-                                              ->getMaxPoint((int)$member_id);
+                                              ->getMaxPoint((int)$memberId);
             
             // Load view
             $this->load->spark('decorator');  
@@ -327,8 +355,8 @@ class Payment extends MY_Controller{
         }
         else{
            redirect('/cart/', 'refresh'); 
-       }
-    }
+        }
+    } 
 
     #START OF PAYPAL PAYMENT
     #SET UP PAYPAL FOR PARAMETERS
@@ -904,12 +932,9 @@ class Payment extends MY_Controller{
      * @return string
      */
     private function old_dragonPayPostBack()
-    {
-        $this->config->load('payment', true);
+    { 
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
-        $paymentConfig = strtolower(ENVIRONMENT) === 'production'
-                         ? $this->config->item('production', 'payment')
-                         : $this->config->item('testing', 'payment'); 
+        $paymentConfig = $this->paymentConfig; 
         $ipAddress = $this->serviceContainer['http_request']->getClientIp();
         $isValidIp = $this->serviceContainer['payment_service']
                           ->checkIpIsValidForPostback($ipAddress, $paymentType);
@@ -1035,11 +1060,8 @@ class Payment extends MY_Controller{
             $this->__generateFlash($txnId,$message,$status);
             $redirectUrl = '/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status;
         }
-        elseif($client === "Easydeal"){
-            $this->config->load('payment', true);
-            $paymentConfig = strtolower(ENVIRONMENT) === 'production'
-                             ? $this->config->item('production', 'payment')
-                             : $this->config->item('testing', 'payment');
+        elseif($client === "Easydeal"){ 
+            $paymentConfig = $this->paymentConfig;
             $redirectUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['return_url'];
             $redirectUrl .= "?txnid=$txnId&refno=$refNo&status=$status&message=".urlencode($message)."&digest=$digest";
         }
@@ -1573,6 +1595,7 @@ class Payment extends MY_Controller{
 
         $paymentService = $this->serviceContainer['payment_service'];
         $carts = $this->session->all_userdata();
+        $memberId = $this->session->userdata('member_id');
         $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
         $paymentMethodString = (string)reset($paymentMethods)['method'];
         $pointsAllocated = "0.00";
@@ -1587,7 +1610,7 @@ class Payment extends MY_Controller{
             unset($paymentMethods["PointGateway"]);
         }
 
-        $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated);
+        $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated, $memberId);
 
         if($paymentMethodString === 'CashOnDelivery'){
             if($this->input->post('promo_type') !== false ){
@@ -1668,7 +1691,7 @@ class Payment extends MY_Controller{
         }
 
         // Validate Cart Data
-        $validatedCart = $paymentService->validateCartData($carts, $transactionPoints);
+        $validatedCart = $paymentService->validateCartData($carts, $transactionPoints, $memberId);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
         
         $response = $paymentService->postBack($paymentMethods, $validatedCart, $memberId, null);
@@ -1714,20 +1737,16 @@ class Payment extends MY_Controller{
      * Post back url for dragonpay 
      */
     public function dragonPayPostBack()
-    {
-        $this->config->load('payment', true);
-        $paymentConfig = strtolower(ENVIRONMENT) === 'production'
-                         ? $this->config->item('production', 'payment')
-                         : $this->config->item('testing', 'payment'); 
+    { 
+        $paymentConfig = $this->paymentConfig; 
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY; 
+        $paymentService = $this->serviceContainer['payment_service'];
         $ipAddress = $this->serviceContainer['http_request']->getClientIp();
-        $isValidIp = $this->serviceContainer['payment_service']
-                          ->checkIpIsValidForPostback($ipAddress, $paymentType);
+        $isValidIp = $paymentService->checkIpIsValidForPostback($ipAddress, $paymentType);
         $client = trim($this->input->post('param1'));
 
         if($isValidIp){
             if($client === "Easyshop"){
-                $paymentService = $this->serviceContainer['payment_service'];
                 $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
                 $params['txnId'] = $this->input->post('txnid');
                 $params['refNo'] = $this->input->post('refno');
@@ -1757,23 +1776,6 @@ class Payment extends MY_Controller{
         else{
             show_404();
         }
-    }
-
-    public function curlPP()
-    {
-        $curlUrl = "https://test.pesopay.com/b2cDemo/eng/merchant/api/orderApi.jsp";
-        $curl = new Curl();
-        $data = [
-            'merchantId' => '18061489',
-            'loginId' => 'apiuser',
-            'password' => 'apipassword',
-            'actionType' =>'Query',
-            'orderRef' => 'PPY-1503160147-129'
-        ];
-        echo '<pre>';
-        $curl->post($curlUrl, $data);
-
-        print_r($curl->response);
     }
 
     /**
@@ -1811,19 +1813,15 @@ class Payment extends MY_Controller{
      */
     public function pesoPayDataFeed()
     {
-        $ipAddress = $this->serviceContainer['http_request']->getClientIp();
-        $this->config->load('payment', true);
-        $paymentConfig = strtolower(ENVIRONMENT) === 'production'
-                         ? $this->config->item('production', 'payment')
-                         : $this->config->item('testing', 'payment'); 
-        $isValidIp = $this->serviceContainer['payment_service']
-                          ->checkIpIsValidForPostback($ipAddress, EsPaymentMethod::PAYMENT_PESOPAYCC);
+        $paymentService = $this->serviceContainer['payment_service'];
+        $ipAddress = $this->serviceContainer['http_request']->getClientIp(); 
+        $paymentConfig = $this->paymentConfig; 
+        $isValidIp = $paymentService->checkIpIsValidForPostback($ipAddress, EsPaymentMethod::PAYMENT_PESOPAYCC);
 
         if($isValidIp){
             header("Content-Type:text/plain");
             echo 'OK'; // acknowledgemenet
 
-            $paymentService = $this->serviceContainer['payment_service'];
             $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
 
             $params['txnId'] = $this->input->post('Ref'); 
