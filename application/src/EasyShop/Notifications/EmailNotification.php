@@ -6,7 +6,7 @@ require(getcwd() . '/../vendor/swiftmailer/swiftmailer/lib/swift_required.php');
 
 use EasyShop\Entities\EsQueue;
 use EasyShop\Entities\EsQueueType;
-use EasyShop\Entities\EsQueueStatus;
+use EasyShop\Entities\EsQueueStatus as EsQueueStatus;
 
 /**
  *  Email Notification Service using Swift Mailer
@@ -157,28 +157,26 @@ class EmailNotification
             return false;
         }
         else{
-            $em = &get_instance()->kernel->serviceContainer['entity_manager'];
-
-            $emailData = array(
+            $emailData = [
                 'from_email' => $this->emailConfig['from_email'],
                 'from_name' => $this->emailConfig['from_name'],
                 'recipient' => $this->recipient,
                 'subject' => $this->subject,
                 'msg' => $this->msg,
                 'img' => $this->imageArray
-            );
-            $queueType = $em->getRepository('EasyShop\Entities\EsQueueType')
-                                    ->find($this->emailConfig['queue_type']);
-            $queueStatus = $em->getRepository('EasyShop\Entities\EsQueueStatus')
-                                    ->find(1);
+            ];
+            $queueType = $this->em->getRepository('EasyShop\Entities\EsQueueType')
+                                  ->find($this->emailConfig['queue_type']);
+            $queueStatus = $this->em->getRepository('EasyShop\Entities\EsQueueStatus')
+                                    ->find(EsQueueStatus::QUEUED);
 
             $emailQueue = new EsQueue();
             $emailQueue->setData(json_encode($emailData))
                        ->setType($queueType)
                        ->setDateCreated(date_create(date("Y-m-d H:i:s")))
                        ->setStatus($queueStatus);
-            $em->persist($emailQueue);
-            $em->flush();
+            $this->em->persist($emailQueue);
+            $this->em->flush();
 
             return true;
         }
