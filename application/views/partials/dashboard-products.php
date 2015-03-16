@@ -45,22 +45,15 @@
                                     <?php endif; ?>
                                 </p>
                                 <p class="item-amount">
+                                    <?php $priceFontStyle = strlen((string)$product->getOriginalPrice()) > 12 ? "font-size:13px;" : ""; ?>
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>
-                                    <span class="item-original-amount"
-                                        <?php
-                                            if(($product->getOriginalPrice()) > 99999999999){
-                                                echo "style=\"font-size:13px;\"";
-                                            }
-                                        ?>
-                                    >P<?=number_format($product->getOriginalPrice(),2,'.',',');?></span>
+                                        <span class="item-original-amount" style="<?php echo $priceFontStyle; ?>">
+                                            P<?=number_format($product->getOriginalPrice(),2,'.',',');?>
+                                        </span>
                                     <?php endif; ?>
-                                    <span class="item-current-amount"
-                                        <?php
-                                            if(($product->getFinalPrice()) > 99999999999){
-                                                echo "style=\"font-size:13px;\"";
-                                            }
-                                        ?>
-                                    >P<?=number_format($product->getFinalPrice(),2,'.',',');?></span></span>
+                                    <span class="item-current-amount" style="<?php echo $priceFontStyle ?>">
+                                        P<?=number_format($product->getFinalPrice(),2,'.',',');?>
+                                    </span>
                                 </p>
                                 <div class="div-meta-description">
                                     <div class="row">

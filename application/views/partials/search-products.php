@@ -145,36 +145,19 @@
                         </td>
                         <td class="search-item-td-price">
                             <div class="search-item-price">
+                                <?php $priceFontStyle = strlen((string)$originalPrice) > 12 ? "font-size:15px !important;" : ""; ?>  
                                 <?php if($percentage > 0):?>
-                                 <?php
-                                        if((float) str_replace(",", "", $originalPrice) > 999999.00):
-                                    ?>
-                                    <span class="original-price" style="font-size: 15px !important">
+                                
+                                    <span class="original-price" style="<?php echo $priceFontStyle; ?>">
                                         <s>P<?=$originalPrice; ?></s>
                                     </span>
-                                    <?php
-                                       else:
-                                    ?>
-                                    <span class="original-price">
-                                        <s>P<?=$originalPrice; ?></s>
-                                    </span>
-                                    <?php endif; ?> 
-                                 <?php endif; ?> 
-                                <?php
-                                    if((float) str_replace(",", "", $productPrice) > 999999.00):
-                                ?>
-                                <span class="new-price with-discount-list" style="font-size: 17px !important">
-                                    P <?=$productPrice?>
-                                </span>
-                                <?php
-                                    else:
-                                ?>
-                                 <span class="new-price with-discount-list">
+                              
+                                <?php endif; ?> 
+                                
+                                <span class="new-price with-discount-list" style="<?php echo $priceFontStyle; ?>">
                                     P <?=$productPrice?>
                                  </span>
-                                <?php
-                                    endif; 
-                                  ?>
+                                  
                                  <?php if($isFreeShipping): ?>
                                      <span class="free-shipping-tag">
                                         <i class="fa fa-truck fa-lg"></i> FREE 
