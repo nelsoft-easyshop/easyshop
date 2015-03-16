@@ -63,7 +63,6 @@ header {
     font-weight: 900;
     line-height: 24px;
     max-width: 100px;
-    min-width: 100px;
     overflow: hidden;
     padding-right: 8px;
     text-align: left;
@@ -167,8 +166,7 @@ header {
     }
     .header-username {
         display: inline-block;
-        max-width: 185px;
-        min-width: 121px;
+        max-width: 180px;
     }
 }
 
