@@ -140,6 +140,10 @@ class MobileNotification
         $em->persist($smsQueue);
         $em->flush();
 
+        if(strtolower(ENVIRONMENT) === 'development'){
+            $this->sendSMS();
+        }
+        
         return true;
     }
 
