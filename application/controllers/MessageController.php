@@ -76,7 +76,7 @@ class MessageController extends MY_Controller
         $storeName = trim($this->input->post("recipient"));
         $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
                                    ->getUserWithStoreName($storeName);
-        $receiverEntity = $receiverEntity ? $receiverEntity[0] : null;
+        $receiverEntity = $receiverEntity ? $receiverEntity : null;        
         $senderEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
         $msg = trim($this->input->post("msg"));
 

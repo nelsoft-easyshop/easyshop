@@ -776,13 +776,26 @@ class Memberpage extends MY_Controller
                     $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
                     if( $result['o_success'] >= 1 ) {
                         $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
+                        $parseData['itemLink'] = base_url().'item/'.$parseData['productSlug'];
                         $parseData['store_link'] = base_url() . $parseData['user_slug'];
                         $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
                         $socialMediaLinks = $this->serviceContainer['social_media_manager']
                                                  ->getSocialMediaLinks();
                         $parseData['facebook'] = $socialMediaLinks["facebook"];
                         $parseData['twitter'] = $socialMediaLinks["twitter"];
-
+                        $parseData['baseUrl'] = base_url();
+                        
+                        $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                             ->getDefaultImage($parseData['productId']);
+                        $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                        if(strtolower(ENVIRONMENT) === 'development'){
+                            $imageArray[] = ltrim($imagePath, '.');
+                            $parseData['primaryImage'] = $primaryImage->getFilename();
+                        }
+                        else{
+                            $parseData['primaryImage'] = getAssetsDomain().$imagePath;
+                        }
+                        
                         $hasNotif = false;
                         if (
                             (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
@@ -815,7 +828,7 @@ class Memberpage extends MY_Controller
                     $emailService->setRecipient($parseData['email'])
                                  ->setSubject($emailSubject)
                                  ->setMessage($emailMsg, $imageArray)
-                                 ->queueMail();
+                                 ->queueMail();       
                     $smsService->setMobile($parseData['mobile'])
                                ->setMessage($smsMsg)
                                ->queueSMS();
@@ -975,19 +988,20 @@ class Memberpage extends MY_Controller
                             "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($postData['expected_date'])),
                             "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
                             "facebook" => $socialMediaLinks["facebook"],
-                            "twitter" => $socialMediaLinks["twitter"]
+                            "twitter" => $socialMediaLinks["twitter"],
+                            'baseUrl' => base_url(),
                         ]);
                         $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
 
                         $emailService->setRecipient($buyerEmail)
                                      ->setSubject($buyerEmailSubject)
                                      ->setMessage($buyerEmailMsg, $imageArray)
-                                     ->queueMail();
+                                     ->queueMail();  
                     }
 
                 }
                 else{
-                    $serverResponse['error'] = 'Server data mismatch. Possible hacking attempt';
+                    $serverResponse['error'] = 'The information you provided may be invalid. Please refresh the page and try again.';
                 }
             }
         }
@@ -1568,14 +1582,20 @@ class Memberpage extends MY_Controller
                     'memberId' => $member['member']->getIdMember(),
                 ]);                
                 $result = $this->encrypt->encode($hash);
-                $parseData = array(
+                
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                         ->getSocialMediaLinks();   
+                
+                $parseData = [
                     'username' => $member['member']->getUsername(),
                     'hash' => $result,
-                    'site_url' => site_url('memberpage/showActivateAccount')
-                );        
+                    'reactivationLink' => site_url('memberpage/showActivateAccount').'?h='.$result,
+                    'baseUrl' => base_url(),
+                    'facebook' => $socialMediaLinks['facebook'],
+                    'twitter' => $socialMediaLinks['twitter'],
+                ];        
+
                 $imageArray = $this->config->config['images'];
-                $imageArray[] = "/assets/images/appbar.home.png";
-                $imageArray[] = "/assets/images/appbar.message.png";
                 $this->emailNotification = $this->serviceContainer['email_notification'];
                 $message = $this->parser->parse('emails/email_deactivate_account', $parseData, true);
                 $this->emailNotification->setRecipient($member['member']->getEmail());
@@ -1592,7 +1612,7 @@ class Memberpage extends MY_Controller
         
         echo json_encode($result);
     }
-
+    
     /**
      * Flags member as activated
      * @return json

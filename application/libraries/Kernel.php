@@ -180,6 +180,7 @@ class Kernel
             $configLoader = $container['config_loader'];
             $languageLoader = $container['language_loader'];
             $hashUtitility = $container['hash_utility'];
+            $socialMediaManager = $container['social_media_manager'];
             return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
                                                         $userManager, 
                                                         $formFactory, 
@@ -191,7 +192,8 @@ class Kernel
                                                         $parser,$encrypter,
                                                         $configLoader,
                                                         $languageLoader,
-                                                        $hashUtitility
+                                                        $hashUtitility,
+                                                        $socialMediaManager
                                                         );        
         };
 
