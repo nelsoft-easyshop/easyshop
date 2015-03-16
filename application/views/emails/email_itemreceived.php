@@ -650,9 +650,6 @@
                                                     <td valign="middle" align="center">
                                                         <table width="270" border="0" cellspacing="0" cellpadding="0" align="left">
                                                             <tr>
-                                                                <td>
-                                                                    <img src="{primaryImage}" width="60" height="60" style="width: 60px; height: 60px; border: solid #e2e2e2 1px; text-align: center;">
-                                                                </td>
                                                                 <td valign="bottom" style="padding-left: 10px;">
                                                                     <a href="{itemLink}" style="font-size: 15px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:400; text-align:left; ">
                                                                         {product_name}
