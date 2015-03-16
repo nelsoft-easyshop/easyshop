@@ -302,6 +302,7 @@ a{
 }
 
 .progress-account{
+    height: 20px !important;
     margin-top: 0px !important;
     border-radius: 0px;
 }
