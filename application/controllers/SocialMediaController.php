@@ -360,7 +360,6 @@ class SocialMediaController extends MY_Controller
                                       ->findOneBy(['email' => $this->input->post('email')]);
         if ($member) {
             $result = [
-                'username' => $member->getUsername(),
                 'email' => $member->getEmail(),
                 'location' => '',
                 'image' =>  $this->userManager->getUserImage($member->getIdMember())
