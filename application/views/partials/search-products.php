@@ -153,6 +153,13 @@
                                 <span class="new-price with-discount-list">
                                     P<?=$productPrice; ?>
                                 </span>
+                                 <?php if($isFreeShipping): ?>
+                                     <span class="free-shipping-tag">
+                                        <i class="fa fa-truck fa-lg"></i> FREE 
+                                        SHIPPING
+                                        <span class="free-shipping-tag-tail"><span>
+                                    </span>
+                                <?php endif; ?>
                             </div>
                             <button data-slug="<?=$productSlug;?>" data-productid="<?=$productId;?>" class="btn btn-search-add-cart btn-add-to-cart">
                                 <span class="fa icon-cart fa-lg"></span>
