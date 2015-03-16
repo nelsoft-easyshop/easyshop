@@ -92,8 +92,6 @@
             max-width:124px !important;
           }
 
-
-
         @media only screen and (max-width: 640px){
           body{
             width:auto!important;
@@ -532,11 +530,9 @@
 
                                                             <tr>
                                                                 <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
-
                                                                     <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{buyer_name}</span>,</p>
                                                                     <p> {payment_msg_buyer}</p>
-                                                                    <p>Details for the item(s) you've purchased are as follows: </p>
-                                                                   
+                                                                    Details for the item(s) you've purchased are as follows:                                                                   
                                                                 </td>
                                                             </tr>
 
@@ -827,6 +823,7 @@
             <!-- End of title plate --> 
 
             <!-- Start of item --> 
+            {products}
             <tr mc:repeatable="Select" mc:variant="layout-2">
                 <td mc:hideable align="center" valign="top" class="fix-box">
 
@@ -852,11 +849,11 @@
                                                         <table width="270" border="0" cellspacing="0" cellpadding="0" align="left">
                                                             <tr>
                                                                 <td>
-                                                                    <img src="http://keyassets.timeincuk.net/inspirewp/live/wp-content/uploads/sites/13/2014/03/hs50exr_600.jpg" width="60" height="60" style="width: 60px; height: 60px; border: solid #e2e2e2 1px; text-align: center;">
+                                                                    <img src="{primaryImage}" width="60" height="60" style="width: 60px; height: 60px; border: solid #e2e2e2 1px; text-align: center;">
                                                                 </td>
                                                                 <td valign="bottom" style="padding-left: 10px;">
                                                                     <a href="#" style="font-size: 15px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:400; text-align:left; ">
-                                                                        Nikon Camera d300  with Flash
+                                                                        {name}
                                                                     </a>
                                                                 </td>
                                                             </tr>
@@ -878,16 +875,14 @@
                                                 <tr>
                                                     <td height="10"></td>
                                                 </tr>
+                                                {attr}
                                                 <tr>
                                                     <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:400; text-align:left; ">
-                                                        <span style="color: #555555; font-weight: bold;">Color : </span>Black
+                                                        <span style="color: #555555; font-weight: bold;">{attr_name}: </span>{attr_value}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:400; text-align:left; ">
-                                                        <span style="color: #555555; font-weight: bold;">Material : </span>Metal Alloy
-                                                    </td>
-                                                </tr>
+                                                {/attr}
+      
                                                 <!--start space height --> 
                                                 <tr>
                                                     <td height="20"></td>
@@ -923,7 +918,7 @@
                                                                                 Purchased From : 
                                                                             </td>
                                                                             <td width="50%" align="right" style="padding-right: 40px;">
-                                                                                SellerName 
+                                                                                {seller_store} 
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -931,7 +926,7 @@
                                                                                 Product Order # : 
                                                                             </td>
                                                                             <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                9823-234-23 
+                                                                                {order_product_id}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -939,7 +934,7 @@
                                                                                 Quantity : 
                                                                             </td>
                                                                             <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                1
+                                                                                {order_quantity}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -947,7 +942,7 @@
                                                                                 Base Price : 
                                                                             </td>
                                                                             <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                &#8369; 30, 000.00
+                                                                                &#8369; {baseprice}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -955,7 +950,7 @@
                                                                                 Handling Fee : 
                                                                             </td>
                                                                             <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                &#8369; 50.00
+                                                                                &#8369; {handling_fee}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -963,7 +958,7 @@
                                                                                 Final Price : 
                                                                             </td>
                                                                             <td width="50%" align="right" style="padding-right: 40px; font-size: 14px; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                &#8369; 30, 050.00
+                                                                                &#8369; {finalprice}
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -998,181 +993,10 @@
                     <!-- end layout-2 container width 600px -->
                 </td>
             </tr>
+            {/products}
             <!-- End of item  -->
             
-            <!-- Start of item --> 
-            <tr mc:repeatable="Select" mc:variant="layout-2">
-                <td mc:hideable align="center" valign="top" class="fix-box">
-
-                    <!-- start layout-2 container width 600px --> 
-                    <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" style="background-color: #ffffff;  ">
-                        <tr>
-                            <td valign="top">
-
-                                <!-- start layout-2 container width 600px --> 
-                                <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" style="background-color:#ffffff;">
-                                    <tr>
-                                        <td height="20"></td>
-                                    </tr>
-                                    <!-- start image and content --> 
-                                    <tr>
-                                        <td valign="top" width="100%">
-
-                                            <!-- start content left --> 
-                                            <table width="270" border="0" cellspacing="0" cellpadding="0" align="left" style="padding-left:50px;">
-
-                                                <tr>
-                                                    <td valign="middle" align="center">
-                                                        <table width="270" border="0" cellspacing="0" cellpadding="0" align="left">
-                                                            <tr>
-                                                                <td>
-                                                                    <img src="http://keyassets.timeincuk.net/inspirewp/live/wp-content/uploads/sites/13/2014/03/hs50exr_600.jpg" width="60" height="60" style="width: 60px; height: 60px; border: solid #e2e2e2 1px; text-align: center;">
-                                                                </td>
-                                                                <td valign="bottom" style="padding-left: 10px;">
-                                                                    <a href="#" style="font-size: 15px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:400; text-align:left; ">
-                                                                        Nikon Camera d300  with Flash
-                                                                    </a>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <!--start space height --> 
-                                                <tr>
-                                                    <td height="15"></td>
-                                                </tr>
-                                                <!--end space height --> 
-                                                <tr>
-                                                    <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
-                                                        <span style="text-transform: uppercase; font-size: 15px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#ff893b; font-weight:300; text-align:left; ">
-                                                            Product Specifications
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td height="10"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:400; text-align:left; ">
-                                                        <span style="color: #555555; font-weight: bold;">Color : </span>Black
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:400; text-align:left; ">
-                                                        <span style="color: #555555; font-weight: bold;">Material : </span>Metal Alloy
-                                                    </td>
-                                                </tr>
-                                                <!--start space height --> 
-                                                <tr>
-                                                    <td height="20"></td>
-                                                </tr>
-                                                <!--end space height --> 
-
-                                            </table>
-                                            <!-- end content left --> 
-
-
-                                            <!-- start space width --> 
-                                            <table class="remove" width="1" border="0" cellpadding="0" cellspacing="0" align="left" style="font-size: 0;line-height: 0;border-collapse: collapse;">
-                                                <tr>
-                                                    <td width="0" height="2" style="font-size: 0;line-height: 0;border-collapse: collapse;">
-                                                        <p style="padding-left: 20px;">&nbsp;</p>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <!-- end space width --> 
-
-
-
-                                            <!-- start content right --> 
-                                            <table width="270" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width-text">
-                                                 <tr>
-                                                    <td valign="top">
-                                                        <table border="0" cellspacing="0" cellpadding="0" align="left" width="100%">
-                                                            <tr>
-                                                                <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
-                                                                    <table width="100%">
-                                                                        <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                Purchased From : 
-                                                                            </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px;">
-                                                                                SellerName 
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                Product Order # : 
-                                                                            </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                9823-234-23 
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                Quantity : 
-                                                                            </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                1
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                Base Price : 
-                                                                            </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                &#8369; 30, 000.00
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                Handling Fee : 
-                                                                            </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                &#8369; 50.00
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                Final Price : 
-                                                                            </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-size: 14px; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                &#8369; 30, 050.00
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-
-                                                            <!--start space height --> 
-                                                            <tr>
-                                                                <td height="20"></td>
-                                                            </tr>
-                                                            <!--end space height --> 
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                                <!-- end text content --> 
-
-                                            </table>
-                                            <!-- end content right --> 
-                                        </td>
-                                    </tr>
-                                    <!-- end image and content --> 
-                                    <tr>
-                                        <td height="10" width="100%" style="border-top: solid #e2e2e2 1px;">
-
-                                        </td>
-                                    </tr>
-                                </table>
-                                <!-- end layout-2 container width 600px --> 
-                            </td>
-                        </tr>
-                    </table>
-                    <!-- end layout-2 container width 600px -->
-                </td>
-            </tr>
-            <!-- End of item  -->
+            
             
             <!-- Start of Social Media Footer -->
             <tr mc:repeatable="Select" mc:variant="layout-16">
