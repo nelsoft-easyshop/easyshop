@@ -35,7 +35,6 @@ class Payment extends MY_Controller{
                                : $this->config->item('testing', 'payment');
     }
 
-    public $PayMentPayPal = 1;
     public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
     public $PayMentPesoPayCC = 4;
@@ -367,7 +366,7 @@ class Payment extends MY_Controller{
         header('Content-type: application/json');
         if(!$this->session->userdata('member_id')){
             redirect('/', 'refresh');
-        };
+        }
 
         $paypalReturnURL    = base_url().'pay/paypal'; 
         $paypalCancelURL    = base_url().'payment/review'; 
@@ -376,12 +375,8 @@ class Payment extends MY_Controller{
         $remove = $this->payment_model->releaseAllLock($member_id);
         $qtysuccess = $this->resetPriceAndQty(); 
         $itemList = $this->session->userdata('choosen_items'); 
-        $productCount = count($itemList);  
-
-        $cnt = 0; 
-        $paypalType = $this->input->post('paypal'); 
-        $dataitem = '';  
-        $paymentType = $this->PayMentPayPal; #paypal 
+        $productCount = count($itemList);
+        $paypalType = $this->input->post('paypal');
 
         if($productCount <= 0){
             echo  '{"e":"0","d":"There are no items in your cart."}';
