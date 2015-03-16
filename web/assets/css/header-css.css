@@ -810,10 +810,6 @@ header {
     width: 100%;
 }
 
-.header-link .user-login-box {
-    max-width: 260px;
-}
-
 .header-text-container {
     text-align: right;
 }
