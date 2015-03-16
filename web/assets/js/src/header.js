@@ -148,13 +148,13 @@
 
         $(document).bind('ready scroll resize', function() {
             var docScroll = $(document).scrollTop();
-            if ((docScroll >= 180) && (browserWidth > 991)) {
+            if ((docScroll >= 160) && (browserWidth > 991)) {
                 if (!$('.sticky-header-nav').hasClass('sticky-nav-fixed')) {
                     $('.sticky-header-nav').addClass('sticky-nav-fixed').css({
                         top: '-155px'
                     }).stop().animate({
                         top: 0
-                    }, 200); 
+                    }, 600); 
                     $('.autocomplete-suggestions').hide();
                 }
 
