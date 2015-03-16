@@ -20,7 +20,7 @@
     
             <div class="div-store-setup">
                 <p class="panel-setup-title">CATEGORIES</p>
-                <div class="div-store-content concealable">
+                <div id="div-store-content-edit" class="div-store-content concealable">
                     <div class="current-store-cat">
                         <div class="form-horizontal">
                         <div class="form-group">
@@ -69,7 +69,7 @@
       
                 <br/>
                 
-                <div class="jumbotron no-items no-category-display" style="display:none">
+                <div id="no-category-display-edit" class="jumbotron no-items no-category-display" style="display:none">
                     <i class="icon-category"></i> No available category
                 </div>
       
@@ -97,7 +97,7 @@
 
             <div class="div-store-setup">
                 <p class="panel-setup-title">DELETE CATEGORIES</p>
-                <div class="div-store-content concealable">
+                <div id="div-store-content-delete" class="div-store-content concealable">
                     <div class="delete-store-cat">
                         <div class="form-horizontal">
                         <div class="row">
@@ -139,7 +139,7 @@
                 </div>
 
                 <br/>
-                <div class="jumbotron no-items no-category-display" style="display:none">
+                <div id="no-category-display-delete" class="jumbotron no-items no-category-display" style="display:none">
                     <i class="icon-category"></i> No available category
                 </div>
 
