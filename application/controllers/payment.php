@@ -1246,9 +1246,7 @@ class Payment extends MY_Controller{
                 $buyerData['products'][$key]['primaryImage'] = $parsedImage;
             }
 
-            # Additional buyerData for email template
-            $buyerData['store_link'] = base_url() ; #user appended on template
-            $buyerData['msg_link'] = base_url() . "messages/#"; #user appended on template
+            $buyerData['baseUrl'] = base_url();
             $buyerMsg = $this->parser->parse('emails/email_purchase_notification_buyer',$buyerData,true);
             $buyerSubject = $this->lang->line('notification_subject_buyer');
             $buyerSmsMsg = $buyerData['buyer_store'] . $this->lang->line('notification_txtmsg_buyer');
@@ -1289,16 +1287,27 @@ class Payment extends MY_Controller{
 
                 # Additional sellerData for email template
                 $sellerSubject = $this->lang->line('notification_subject_seller');
-                $sellerData['store_link'] = base_url() . $sellerData['buyer_slug'];
-                $sellerData['msg_link'] = base_url() . "messages/#" . $sellerData['buyer_name'];
+                $sellerData['baseUrl'] = base_url();
+                foreach($sellerData['products'] as $key => $productData){
+                    $primaryImage = $em->getRepository('EasyShop\Entities\EsProductImage')
+                                    ->getDefaultImage($productData['productId']);
+                    $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                    if(strtolower(ENVIRONMENT) === 'development'){
+                        $imageArray[] = ltrim($imagePath, '.');
+                        $parsedImage = $primaryImage->getFilename();
+                    }
+                    else{
+                        $parsedImage = getAssetsDomain().$imagePath;
+                    }
+                    $sellerData['products'][$key]['primaryImage'] = $parsedImage;
+                }
+
                 $sellerMsg = $this->parser->parse('emails/email_purchase_notification_seller',$sellerData,true);
                 $sellerSmsMsg = $seller['seller_store'] . $this->lang->line('notification_txtmsg_seller');
-
                 $emailService->setRecipient($sellerEmail)
                              ->setSubject($sellerSubject)
                              ->setMessage($sellerMsg, $imageArray)
                              ->queueMail();
-                
                 $smsService->setMobile($seller['seller_contactno'])
                            ->setMessage($sellerSmsMsg)
                            ->queueSMS();
