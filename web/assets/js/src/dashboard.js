@@ -2426,8 +2426,8 @@
     var modalCategoryModalWidthMobile;
     var widthOfDragabbleItem = 70;
     var mobileViewPortWidthLimit = 769;
-    
-    
+
+
     $(window).on("load resize",function(){
         browserWidth = $(window).width();
         browserHeight = $(window).outerHeight();
@@ -2805,12 +2805,12 @@
         var countAllItems = $allProductList.find('li').size();
         var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
         if(browserWidth <= mobileViewPortWidthLimit){
-            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
-            $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
         }
         else{
-            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
-            $(".ui-droppable").css("width", "100%");
+            $(".my-category-modal").css("width", modalCategoryModalWidth+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".category-items-holder .ui-sortable").css("width", "100%");
         }
 
         div.find(".category-items-holder").bind('scroll', function(){
@@ -2820,7 +2820,16 @@
         $(".overlay-for-waiting-modal").css("display", "none");
     }
 
-
+    $(window).on("load resize",function(){
+        if(browserWidth <= mobileViewPortWidthLimit){
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
+        }
+        else if (browserWidth > mobileViewPortWidthLimit){
+            $(".my-category-modal").css("width", modalCategoryModalWidth+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".category-items-holder .ui-sortable").css("width", "100%");
+        }
+    });
    
 
 }(jQuery));
