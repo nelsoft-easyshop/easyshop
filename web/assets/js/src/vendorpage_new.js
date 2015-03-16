@@ -32,6 +32,10 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $('.sort_select').on('change',function(){
         memconf.orderBy = $(this).val();
+        memconf.order = 1;
+        if(parseInt(memconf.orderBy,10) === 0){
+            memconf.order = 2;
+        }
         var catDiv = $('.category-products.active');
         $('.product-paging').remove();
         ItemListAjax(catDiv,1);
@@ -90,6 +94,8 @@ function ReplaceNumberWithCommas(thisnumber){
         $('html,body').scrollTo(450); 
     });
 
+    $(".list-category").find("a[data-link='#def-0']").click();
+
     $(document).on('change',".price-field",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
         var v = parseFloat(priceval);
@@ -109,7 +115,6 @@ function ReplaceNumberWithCommas(thisnumber){
  *  Filter Button function
  */
 (function ($){
-
     $('#filter-btn').on('click', function(){
         var activeCategoryProductsDiv = $('.category-products.active');
         var condition = $(this).closest("ul").find('#filter-condition').val();

@@ -1707,13 +1707,12 @@ a{
     font-weight: bold;
 }
 
-
 #ui-datepicker-div {
     background-color: #fff !important;
     width: 217px !important;
     border: 1px solid #e2e2e2 !important;
     font-family: 'Helvetica' !important;
-    z-index:1003 !important;
+    z-index:999999 !important;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -2589,6 +2588,12 @@ label.css-label {
     background-color: #565656;
 }
 
+.bank-account-item .bank-name-container,
+.bank-account-item .account-name-container,
+.bank-account-item .account-number-container {
+    word-wrap: break-word;
+}
+
 /** =============== Responsive CSS style =============== **/
 .chosen-container{
     width: 100% !important;
@@ -2649,7 +2654,9 @@ label.css-label {
     background-color: #454545 !important;
     opacity: 0.7 !important;
 }
-.express-edit-wrapper {
+
+.ui-dialog.ui-widget.ui-widget-content.express-edit-wrapper {
+    max-width: none;
     width: 95% !important;
     -webkit-transition: top 0.5s ease-in-out;
     -moz-transition:    top 0.5s ease-in-out;
@@ -2675,10 +2682,6 @@ label.css-label {
     background: none;
     border-radius: 0;
     border:none !important;
-}
-
-.express-edit-wrapper.ui-dialog .ui-dialog-titlebar-close {
-    right: 1.3em;
 }
 
 .express-edit-wrapper.ui-dialog .ui-dialog-titlebar-close:focus,
