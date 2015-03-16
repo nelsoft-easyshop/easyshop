@@ -78,6 +78,14 @@ class EsMemberCat
      */
     private $lastModifiedDate = 'CURRENT_TIMESTAMP';    
 
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="parent_id", type="integer", nullable=false)
+     */
+    private $parentId = 0;
+    
     /**
      *
      *  @var int
@@ -253,7 +261,27 @@ class EsMemberCat
     {
         return $this->sortOrder;
     }
+    
+    /**
+     * Get parent ID
+     *
+     * @return integer 
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
 
+    /**
+     * set parent ID
+     *
+     * @param integer $parentId 
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
+    }
+    
 }
 
 
