@@ -142,6 +142,8 @@
                                                 <?php endforeach;?>
                                             <?php endforeach;?>
                                         </select>
+                                        <select class="shiploc_copy" id="shipment_locations_copy"> 
+                                        </select>
                                     </div>
                                 <?php else: ?>
                                    <div class="free-shipping-tag-container">
