@@ -304,6 +304,10 @@ html, body {
     width: 100%;
 }
 
+.reg2_password .progress {
+    margin: 5px 0;
+}
+
 .pass-container {
     width: auto !important;
 }
