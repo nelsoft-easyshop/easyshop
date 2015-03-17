@@ -37,6 +37,8 @@ class PaymentService
 
     const PAYMENT_MAX_ALLOWABLE_POINTS = 0;
 
+    const SUCCESS_CODE = 0;
+
     /**
      * Gateway path
      *
@@ -169,6 +171,13 @@ class PaymentService
     public $dragonPaySoapClient;
 
     /**
+     * Transaction Manager
+     *
+     * @var EasyShop\Transaction\TransactionManager
+     */
+    private $transactionManager;
+
+    /**
      * Constructor
      * 
      */
@@ -185,7 +194,8 @@ class PaymentService
                                 $socialMediaManager,
                                 $languageLoader,
                                 $messageManager,
-                                $dragonPaySoapClient)
+                                $dragonPaySoapClient,
+                                $transactionManager)
     {
         $this->em = $em;
         $this->request = $request;
@@ -201,6 +211,7 @@ class PaymentService
         $this->languageLoader = $languageLoader;
         $this->messageManager = $messageManager;
         $this->dragonPaySoapClient = $dragonPaySoapClient;
+        $this->transactionManager = $transactionManager;
     }
 
 

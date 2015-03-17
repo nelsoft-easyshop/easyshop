@@ -20,8 +20,6 @@ class PesoPayGateWay extends AbstractGateway
     private $merchantId;
     private $redirectUrl;
 
-    const SUCCESS_CODE = 0;
-
     /**
      * Constructor
      * 
@@ -239,7 +237,7 @@ class PesoPayGateWay extends AbstractGateway
             $itemList = $prepareData['newItemList'];
             $toBeLocked = $prepareData['toBeLocked'];
             $successCode = (int)trim($successCode);
-            if($successCode === self::SUCCESS_CODE){ 
+            if($successCode === PaymentService::SUCCESS_CODE){ 
                 foreach ($itemList as $item){
                     $itemComplete = $this->paymentService
                                          ->productManager
@@ -274,6 +272,7 @@ class PesoPayGateWay extends AbstractGateway
                 $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                          ->addOrderHistory($orderHistory);
 
+                $this->paymentService->transactionManager->voidTransaction($orderId);
                 $this->paymentService->revertTransactionPoint($orderId);
             }
         }

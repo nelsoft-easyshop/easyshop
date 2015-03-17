@@ -406,7 +406,7 @@ class TransactionManager
                 $soldTransactionDetails[$transaction['idOrder']]['userImage'] = $this->userManager->getUserImage($transaction['buyerId']);
                 $orderProducts = $this->esOrderProductRepo->getOrderProductTransactionDetails($transaction['idOrder']);
                 foreach ($orderProducts as $productKey => $product) {
-                    if ( (int) $memberId !== (int) $product['seller_id']) {
+                    if ((int) $memberId !== (int) $product['seller_id']) {
                         continue;
                     }
                     if (!isset($soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']])) {
@@ -424,5 +424,37 @@ class TransactionManager
                 "transactionsCount" => count($soldTransactionDetails),
                 "productCount" => $orderProductCount
             ];
+    }
+
+    /**
+     * Void Transaction
+     * @param  integer $orderId
+     * @return boolean
+     */
+    public function voidTransaction($orderId)
+    {
+        $order = $this->esOrderRepo->find($orderId);
+        $voidStatus = EsOrderStatus::STATUS_VOID;
+        $orderProductStatus = EsOrderProductStatus::RETURNED_BUYER; 
+        if ($order && $order->getOrderStatus()->getOrderStatus() !== $voidStatus) {
+            $orderStatus = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')
+                                    ->find($voidStatus);
+            $order->setOrderStatus($orderStatus);
+
+            $orderProducts = $this->esOrderProductRepo->findBy(['order'=> $orderId]);
+
+            foreach ($orderProducts as $orderProduct) {
+                $esOrderProductStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')
+                                                 ->find($orderProductStatus);
+                $this->esOrderProductRepo
+                     ->updateOrderProductStatus($esOrderProductStatus, $orderProduct);
+           
+            }
+
+            $this->em->flush();
+            return true;
+        }
+
+        return false;
     }
 }
