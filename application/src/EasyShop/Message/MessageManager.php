@@ -131,8 +131,6 @@ class MessageManager {
             $emailRecipient = $recipient->getEmail();
             $emailSubject = $this->languageLoader->getLine('new_message_notif');
             $imageArray = $this->configLoader->getItem('email', 'images');
-            $imageArray[] = "/assets/images/appbar.home.png";
-            $imageArray[] = "/assets/images/appbar.message.png";
 
             $socialMediaLinks =  $this->socialManager->getSocialMediaLinks();
             $parseData = [
