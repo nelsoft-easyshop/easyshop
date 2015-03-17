@@ -325,7 +325,7 @@ strong > a{
     color: #fff;
     float: none !important;
     font-weight: 900;
-    padding: 10px 20px;
+    height: auto;
     text-transform: uppercase;
 }
 
