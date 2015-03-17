@@ -39,7 +39,7 @@
             $totalStock += parseInt($(this).val());
         });
 
-        return $totalStock;
+        return isNaN($totalStock) ? 0 : $totalStock;
     }
 
     function validate($this)
