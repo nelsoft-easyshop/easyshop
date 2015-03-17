@@ -235,5 +235,7 @@
 
     $(".login-hide-content").hide();
 
+    $('#password').pwstrength();
+
 })(jQuery);
 
