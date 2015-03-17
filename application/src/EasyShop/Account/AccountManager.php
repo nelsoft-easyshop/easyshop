@@ -124,6 +124,14 @@ class AccountManager
      */
     private $hashUtility;
     
+    
+    /**
+     * The social media manager
+     *
+     * @var EasyShop\SociaMedia\SocialMediaManager
+     */
+    private $socialMediaManager;
+    
     /**
      * Point Tracker
      *
@@ -149,7 +157,8 @@ class AccountManager
                                 $configLoader,
                                 $languageLoader,
                                 $hashUtility,
-                                $pointTracker)
+                                $pointTracker,
+                                $socialMediaManager)
     {
         $this->em = $em;
         $this->bcryptEncoder = $bcryptEncoder;
@@ -164,8 +173,9 @@ class AccountManager
         $this->encrypter = $encrypter;
         $this->configLoader = $configLoader;
         $this->languageLoader = $languageLoader;
-        $this->hashUtility = $hashUtility;
-        $this->pointTracker = $pointTracker;
+        $this->hashUtility = $hashUtility; 
+        $this->pointTracker = $pointTracker; 
+        $this->socialMediaManager = $socialMediaManager; 
     }
 
     /**
@@ -218,12 +228,16 @@ class AccountManager
             $emailAddress = $member->getEmail();
             $username = $member->getUserName();
             $emailSecretHash = sha1($emailAddress.time());
-
+            $socialMediaLinks = $this->socialMediaManager
+                                     ->getSocialMediaLinks();
             $parseData = [
                 'user' => $username,
                 'hash' => $this->encrypter
-                            ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
-                'site_url' => site_url('register/email_verification')
+                               ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
+                'site_url' => site_url('register/email_verification'),
+                'baseUrl' => base_url(),
+                'facebook' => $socialMediaLinks["facebook"],
+                'twitter' => $socialMediaLinks["twitter"],
             ];
             
             if($excludeVerificationLink){
@@ -231,7 +245,7 @@ class AccountManager
             }
             
             $imageArray = $this->configLoader->getItem('email', 'images');  
-            $message = $this->parser->parse('templates/landingpage/lp_reg_email' , $parseData,true);
+            $message = $this->parser->parse('emails/email-verification' , $parseData,true);
             
             $this->emailNotification->setRecipient($emailAddress);
             $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
@@ -627,14 +641,17 @@ class AccountManager
         catch(\Exception $e){
             return false;
         }
-        
+        $socialMediaLinks = $this->socialMediaManager
+                                 ->getSocialMediaLinks();
         $parseData = [
             'username' => $member->getUsername(),
-            'trigger' => $hash,
+            'baseUrl' => base_url(),
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+            'updatePasswordLink' => base_url().'login/updatePassword?confirm='.$hash,
         ];
-        $imageArray = [ "/assets/images/img_logo.png" ];  
-
-        $message = $this->parser->parse('templates/email_forgot_pass' , $parseData,true);
+        $imageArray = $this->configLoader->getItem('email', 'images');  
+        $message = $this->parser->parse('emails/password-reset' , $parseData,true);
         $this->emailNotification->setRecipient($member->getEmail());
         $this->emailNotification->setSubject('Password reset on Easyshop.ph');
         $this->emailNotification->setMessage($message, $imageArray);    

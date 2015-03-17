@@ -302,6 +302,7 @@ a{
 }
 
 .progress-account{
+    height: 20px !important;
     margin-top: 0px !important;
     border-radius: 0px;
 }
@@ -1364,6 +1365,8 @@ a{
     min-height: 150px;
     height: auto;
     background-color:#fff;
+    bottom: auto !important;
+    top: 15px !important;
 }
 .my-category-modal .simplemodal-wrap{
     overflow: hidden !important;

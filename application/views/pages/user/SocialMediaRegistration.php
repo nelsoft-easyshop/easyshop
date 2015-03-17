@@ -105,14 +105,6 @@
                                         <table width="100%" class="tbl-merge">
                                             <tr>
                                                 <td class="td-merge-label">
-                                                    Username:
-                                                </td>
-                                                <td class="td-merge-detail" id="available-username">
-                                                    
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="td-merge-label">
                                                     Email:
                                                 </td>
                                                 <td class="td-merge-detail" id="available-email">

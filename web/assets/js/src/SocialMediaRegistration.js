@@ -124,7 +124,6 @@ jQuery(function ($) {
                     $(".email-accepted").show();
                     $("#available-result").show();
                     $("#available-image").attr('src',data.image);
-                    $("#available-username").html(data.username);
                     $("#available-email").html(data.email);
                     $("#available-location").html(data.location);
                 }

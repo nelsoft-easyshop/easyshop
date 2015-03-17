@@ -179,8 +179,9 @@ class Kernel
             $encrypter = new \CI_Encrypt();
             $configLoader = $container['config_loader'];
             $languageLoader = $container['language_loader'];
-            $hashUtitility = $container['hash_utility'];
+            $hashUtitility = $container['hash_utility']; 
             $pointTracker = $container['point_tracker'];
+            $socialMediaManager = $container['social_media_manager'];
 
             return new \EasyShop\Account\AccountManager(
                 $em,
@@ -196,8 +197,9 @@ class Kernel
                 $configLoader,
                 $languageLoader,
                 $hashUtitility,
-                $pointTracker
-            );
+                $pointTracker,
+                $socialMediaManager
+            ); 
         };
 
         $container['message_manager'] = function ($c) use ($container) {
@@ -541,8 +543,11 @@ class Kernel
         // Notification Services
         $emailConfig = require(APPPATH . "config/email_swiftmailer.php");
         $smsConfig = require(APPPATH . "config/sms.php");
-        $container['email_notification'] = function($c) use ($emailConfig){
-            return new \EasyShop\Notifications\EmailNotification($emailConfig);
+        $container['email_notification'] = function($c) use ($container ,$emailConfig){
+            return new \EasyShop\Notifications\EmailNotification(
+                $container['entity_manager'],
+                $emailConfig
+            );
         };
         $container['mobile_notification'] = function($c) use ($smsConfig, $container){
             $em = $container['entity_manager']; 

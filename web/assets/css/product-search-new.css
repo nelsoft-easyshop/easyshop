@@ -242,7 +242,7 @@ html, body{
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 10px;
-    height: 23px;
+    height: 27px;
 }
 
 .search-item-price{
@@ -437,7 +437,7 @@ html, body{
 }
 
 .search-item-shipping-text{
-    display: inline-block;
+    display: none;
     margin-top: 8px;
     height: 20px;
 }
@@ -1177,6 +1177,7 @@ ul.list-category-search li:last-child > .search-category-link{
     }
 
     .list-search .search-item-shipping-text{
+        display: inline-block;
         float: left !important;
         margin-top: 0px;
     }
