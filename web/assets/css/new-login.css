@@ -33,7 +33,7 @@ strong > a{
 }
 
 #simplemodal-container {
-    height:250px !important;
+    height:260px !important;
     width:100%;
     color:#bbb;
     background-color:#fff;
@@ -61,8 +61,9 @@ strong > a{
     text-align: center;
     font-weight: 900;
     border-bottom: solid #c2c2c2 1px;
-    height: 120px;
+    max-height: 140px;
     margin-bottom: 20px;
+    overflow-y: auto;
     line-height: 30px;
 }
 
@@ -162,7 +163,17 @@ strong > a{
 }
 
 .btn{
+    border: none;
     font-weight: 900;
+}
+
+.btn.btn-default-1 {
+    font-size: 13px;
+    width: auto;
+}
+
+.btn.btn-default-2 {
+    padding: 8px 7px;
 }
 
 .div-validation-container{
@@ -299,6 +310,7 @@ strong > a{
 }
 
 .check-availability{
+    font-weight: bold;
     margin-top: 5px;
 }
 
@@ -383,14 +395,6 @@ strong > a{
     }
 }
 @media only screen and (max-width: 768px) {
-    .modal-text-content{
-        margin-top: 20px;
-        font-size: 12px;
-        font-weight: normal;
-        height: 150px;
-        line-height: 18px;
-    }
-
     #simplemodal-container {
         height: 150px !importants;
     }
