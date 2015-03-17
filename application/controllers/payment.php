@@ -310,13 +310,13 @@ class Payment extends MY_Controller{
             redirect('/', 'refresh');
         }
 
-        $this->__checkReservedPoints($this->session->userdata('member_id'));
         $entityManager = $this->serviceContainer['entity_manager'];
         $paymentService = $this->serviceContainer['payment_service'];
 
         $userData = $this->session->all_userdata();
         $memberId =  $this->session->userdata('member_id'); 
-
+        
+        $this->__checkReservedPoints($memberId);
         $entityManager->getRepository('EasyShop\Entities\EsProductItemLock')
                       ->releaseAllLock($memberId); 
 
