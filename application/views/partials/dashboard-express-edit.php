@@ -33,7 +33,7 @@
             <div class="edit-sub-content2">
                 <div class="edit-sub-content-column1">
                     <p><strong>Available Stock(s):</strong></p>
-                    <input type="text" maxlength="4" class="ui-form-control txt-total-stock txt-quantity solo-quantity" value="<?=$availableStock;?>" onkeypress="return isNumberKey(event);">
+                    <input type="text" maxlength="4" class="ui-form-control txt-total-stock txt-quantity solo-quantity" value="<?=$availableStock;?>" onkeypress="return isNumberKey(event, false);">
                 </div>
                 <div class="clear"></div>
             </div>
