@@ -452,8 +452,6 @@ class PaymentService
     public function sendPaymentNotification($orderId, $sendBuyer = true, $sendSeller = true)
     {
         $imageArray = $this->configLoader->getItem('email', 'images'); 
-        $imageArray[] = "/assets/images/appbar.home.png";
-        $imageArray[] = "/assets/images/appbar.message.png"; 
         $xmlfile =  $this->xmlResourceService->getContentXMLfile();
         $sender = $this->xmlResourceService->getXMlContent($xmlfile, 'message-sender-id', "select");
         $messageSender = $this->em->find('EasyShop\Entities\EsMember', (int)$sender);
@@ -475,7 +473,6 @@ class PaymentService
                 $paymentString = "PayPal";
                 break;
             case EsPaymentMethod::PAYMENT_DRAGONPAY:
-            //case 4:
                 $messageBuyer = $this->languageLoader->getLine('payment_dp_buyer');
                 $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
                 $paymentString = "DragonPay";
@@ -502,12 +499,12 @@ class PaymentService
             'totalprice' => $order->getTotal(),
             'invoice_no' => $order->getInvoiceNo(), 
             'buyer_store' => $buyer->getStoreName(),
-            'store_link' => base_url(),
             'facebook' => $socialMediaLinks["facebook"],
             'twitter' => $socialMediaLinks["twitter"],
-            'msg_link' => base_url() . "messages/#",
             'payment_msg_buyer' => $messageBuyer,
             'products' => [],
+            'baseUrl' => base_url(),
+            'payment_method_name' => $paymentString,
         ];
 
         $dataArraySeller = [];
@@ -527,8 +524,23 @@ class PaymentService
                     'attr_value' => $attr->getAttrValue(),
                 ];
             }
+            
+            /**
+             * Retrieve product image
+             */
+            $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                 ->getDefaultImage($product->getIdProduct());
+            $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+            $imagePath = ltrim($imagePath, '.');
+            if(strtolower(ENVIRONMENT) === 'development'){
+                $imageArray[] = $imagePath;
+                $parsedImage = $primaryImage->getFilename();
+            }
+            else{
+                $parsedImage = getAssetsDomain().$imagePath;
+            }
+            
             if(!isset($dataBuyer['products'][$orderProductId])){ 
-
                 $arrayCollection = [
                     'order_product_id' => $orderProductId,
                     'seller_slug' => $seller->getSlug(),
@@ -540,8 +552,8 @@ class PaymentService
                     'handling_fee' => number_format($orderProduct->getHandlingFee(), 2, '.', ','),
                     'finalprice' => number_format($orderProduct->getTotal(), 2, '.', ','),
                     'attr' => $attrArray,
+                    'primaryImage' => $parsedImage,
                 ];
- 
                 $dataBuyer['products'][$orderProductId] = $arrayCollection; 
             }
 
@@ -579,6 +591,7 @@ class PaymentService
                     'payment_method_charge' => number_format($orderProduct->getPaymentMethodCharge(), 2, '.', ','),
                     'attr' => $attrArray,
                     'net' => number_format($orderProduct->getNet(), 2, '.', ','),
+                    'primaryImage' => $parsedImage,
                 ];
 
                 $dataArraySeller[$sellerId]['products'][$orderProductId] = $arrayCollection;
@@ -610,6 +623,7 @@ class PaymentService
                 $sellerContact = $value['seller_contactno'];
                 $seller = $value['seller'];
                 unset($value['seller']);
+                $value['baseUrl'] = base_url();
 
                 $sellerSubject = $this->languageLoader->getLine('notification_subject_seller');
                 $sellerMsg = $this->parserLibrary->parse('emails/email_purchase_notification_seller', $value, true);
