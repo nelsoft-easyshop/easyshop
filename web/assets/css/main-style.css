@@ -251,7 +251,7 @@ textarea {
 
 .vendor-log-in-wrapper {
     width: 200px;
-    text-align: center;
+    text-align: right;
 }
 
 .vendor-login-con {
@@ -260,6 +260,7 @@ textarea {
     display: inline-block;
     color: #fff;
     font-size: 12px;
+    float: none !important;
     height: 33px;
     line-height: 33px;
     margin: 0 auto;
@@ -317,7 +318,6 @@ textarea {
     font-weight: bold;
     height: 34px;
     margin-right: 10px;
-    min-width: 67px;
     max-width: 109px;
     overflow: hidden;
     text-align: left;
@@ -765,7 +765,7 @@ textarea {
 }
 
 .persistent-nav-container .main-container {
-    padding: 10px 0px 0px;
+    padding-top: 10px;
 }
 
 .vendor-nav {
