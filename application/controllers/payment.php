@@ -252,6 +252,53 @@ class Payment extends MY_Controller{
             'itemArray' => $itemArray,
         );
     }
+
+    /**
+     * Check for points reserved per user
+     * @param  integer $memberId
+     */
+    private function __checkReservedPoints($memberId)
+    {
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $transactionManager = $this->serviceContainer['transaction_manager'];
+        $paymentService = $this->serviceContainer['payment_service'];
+
+        $orders = $entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                ->findBy([
+                                    'buyer' => $memberId,
+                                    'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
+                                    'orderStatus' => EsOrderStatus::STATUS_DRAFT,
+                                ]);
+        $pesopayConfig = $this->paymentConfig['payment_type']['pesopay']['Easyshop'];
+        $curlUrl = $pesopayConfig['api_url']; 
+        $data = [
+            'merchantId' => $pesopayConfig['merchant_id'],
+            'loginId' => $pesopayConfig['merchant_login_api'],
+            'password' => $pesopayConfig['merchant_password_api'],
+            'actionType' =>'Query',
+        ];  
+
+        foreach ($orders as $eachOrder) {
+            $transactionId = $eachOrder->getTransactionId();
+            $orderId = $eachOrder->getIdOrder();
+            $curl = new Curl();
+            $data['orderRef'] = trim($transactionId); 
+            $curl->post($curlUrl, $data);
+            $response = json_decode(json_encode((array)$curl->response), true);
+
+            if(isset($response['record']) === false){
+                $transactionManager->voidTransaction($orderId);
+                $paymentService->revertTransactionPoint($orderId);
+            }
+            else{
+                if(isset($response['successcode']) 
+                    && $response['successcode'] !== PaymentService::SUCCESS_CODE){  
+                    $transactionManager->voidTransaction($orderId);
+                    $paymentService->revertTransactionPoint($orderId);
+                }
+            }
+        } 
+    }
     
     /**
      * Render payment review
@@ -263,22 +310,7 @@ class Payment extends MY_Controller{
             redirect('/', 'refresh');
         }
 
-        if($this->input->get('Ref')){ 
-            // $curlUrl = "https://test.pesopay.com/b2cDemo/eng/merchant/api/orderApi.jsp";
-            // $curl = new Curl();
-            // $data = [
-            //     'merchantId' => '18061489',
-            //     'loginId' => 'apiuser',
-            //     'password' => 'apipassword',
-            //     'actionType' =>'Query',
-            //     'orderRef' => trim($this->input->get('Ref'))
-            // ];
-            // echo '<pre>';
-            // $curl->post($curlUrl, $data);
-
-            // print_r($curl->response);
-        }
-
+        $this->__checkReservedPoints($this->session->userdata('member_id'));
         $entityManager = $this->serviceContainer['entity_manager'];
         $paymentService = $this->serviceContainer['payment_service'];
 
