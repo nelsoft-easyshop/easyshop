@@ -6,6 +6,46 @@
             <li class="bc-arrow"><i class="fa fa-angle-right"></i>Store Setup</li>
         </ul>
     </div>
+    
+    <style>
+        div#foobar{
+            width: 425px;
+        }
+  
+        #foobar .jstree-anchor{
+            border: dotted #ff893a 1px;
+            cursor: url(/assets/images/grabbing.png), move;
+            background: #fff;
+            width: 100%;
+            height: 30px;
+        }
+        
+        #foobar li > a > .jstree-icon {  display:none !important; } 
+
+        #foobar li {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        
+    </style>
+    
+    <div id="foobar">
+        <ul>
+            <li>Oranges</li>
+            <li>Apples
+                <ul>
+                    <li>Apple A</li>
+                    <li>Apple B</li>
+                </ul>
+            </li>
+            <li>Mangoes
+                <ul>
+                    <li>Mango A</li>
+                    <li>Mango B</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 
     
     <div class="div-tab-inner">

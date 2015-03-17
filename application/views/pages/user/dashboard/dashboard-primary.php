@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-primary.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>
 
+<link rel="stylesheet" type="text/css" href='/assets/css/jstree/style.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+
 <section class="section-dashboard ">
     <div class="container container-dashboard">
         <div class="row-fluid">

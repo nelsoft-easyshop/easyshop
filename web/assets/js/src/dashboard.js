@@ -2848,6 +2848,23 @@
         }
     });
    
+    
+    $(document).ready(function(){
+        $('#foobar').jstree({
+            "core": {
+                "check_callback":true
+            },
+            "types" : {
+                "#" : {
+                    "max_depth" : 2
+                },
+            },
+            "plugins" : [
+                "dnd", "types"
+            ],
+        });
+    });
+    
 
 }(jQuery));
 
