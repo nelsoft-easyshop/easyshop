@@ -7,47 +7,6 @@
         </ul>
     </div>
     
-    <style>
-        div#foobar{
-            width: 425px;
-        }
-  
-        #foobar .jstree-anchor{
-            border: dotted #ff893a 1px;
-            cursor: url(/assets/images/grabbing.png), move;
-            background: #fff;
-            width: 100%;
-            height: 30px;
-        }
-        
-        #foobar li > a > .jstree-icon {  display:none !important; } 
-
-        #foobar li {
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-        
-    </style>
-    
-    <div id="foobar">
-        <ul>
-            <li>Oranges</li>
-            <li>Apples
-                <ul>
-                    <li>Apple A</li>
-                    <li>Apple B</li>
-                </ul>
-            </li>
-            <li>Mangoes
-                <ul>
-                    <li>Mango A</li>
-                    <li>Mango B</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-
-    
     <div class="div-tab-inner">
     
         <div class="div-store-setup category-setup-loading" style="text-align:center">
@@ -85,10 +44,27 @@
                     <div class="edit-store-cat form-horizontal">
                     <div class="form-group">
                             <label class="col-sm-3 control-label">Reorder List : </label>
-                            <div class="col-sm-5 col-with-radio">
-                                <ul class="category_sort list new-store-category-draggable ui-sortable">
+                            <div class="col-sm-6 col-with-radio">
+                                <ul class="category_sort list new-store-category-draggable ui-sortable" style="display: none;">
 
                                 </ul>
+                                <div id="category-tree">
+                                    <ul>
+                                        <li>Movies <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
+                                        <li>Electronics and Gadgets
+                                            <ul>
+                                                <li>Smart Phones <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
+                                                <li>Laptops <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
+                                            </ul>
+                                        </li>
+                                        <li>Clothing and Accessories
+                                            <ul>
+                                                <li>Men's Clothing <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
+                                                <li>Women's Clothing <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
                                 <p class="note-category">Drag the category items to reorder</p>
                                 <br/>
                                 <button class="btn btn-setting-save-btn" id="category-order-save">
@@ -157,13 +133,24 @@
                         <div class="form-group">
                                 <label class="col-sm-3 control-label">Current Categories : </label>
                                 <div class="col-sm-9 col-with-radio">
-                                    <ul class="list-unstyled list-currect-categories" id="delete-list-categories">                                        
+                                    <ul class="list-unstyled list-currect-categories" id="delete-list-categories" style="display: none;">                                        
+
+                                    </ul>
+                                    <ul class="list-unstyled list-currect-categories">                                        
+                                        <li class="checkbox"><label><input type="checkbox" class="checkBox">Clothing Accessories</label>
+                                            <ul>
+                                                <li class="checkbox"><label><input type="checkbox" class="checkBox">Men's Clothing</label></li>
+                                            </ul>
+                                        </li>
 
                                     </ul>
                                     <div class="current-btn-delete">
                                         <br/>   
                                         <button class="btn btn-setting-cancel-btn" id="btn-edit-delete-categories">
-                                        Delete
+                                            Delete
+                                        </button>
+                                        <button class="btn btn-setting-cancel-btn" id="btn-delete-modal-confirmation">
+                                            Delete Test Modal
                                         </button>
                                     </div>
                                     <br/>
@@ -191,7 +178,20 @@
     
     </div>
 </div>
-
+<!--For delete modal-->
+<div class="delete-confirmation-modal category-modal">
+    <p>
+        You are about to delete a parent category. By clicking cascade delete button, it will delete all the categories under Clothing and Accessories. Clicking delete button will only delete the Clothing and Accessories category and its sub categories will become parent categories.
+    </p>
+    <div class="my-modal-footer">
+        <center>
+            <button class="btn btn-default-3 save-new-category">Delete</button>
+            <button class="btn btn-default-3 save-new-category">Cascade Delete</button>
+            <button class="btn btn-default-1 simplemodal-close">Cancel</button>
+        </center>
+    </div>
+</div>
+<!--End of delete modal-->
 <!--For ADD category modal-->
 <div class="add-category-modal category-modal">
     <h3 class="my-modal-title">
@@ -203,6 +203,17 @@
                 <label class="col-sm-3">Category Name : </label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control category-name"  placeholder="Type the category name here" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Parent Category : </label>
+                <div class="col-md-9">
+                    <select class="form-control category-name" placeholder="Type the category name here">
+                        <option>None</option>
+                        <option>Clothing and Accessories</option>
+                        <option>Electronics and Gadgets</option>
+                        <option>Movies</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -282,6 +293,27 @@
                     <input type="hidden" class="hidden-category-id" value="0"/>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-md-3">Parent Category : </label>
+                <div class="col-md-9">
+                    <select class="form-control category-name" placeholder="Type the category name here">
+                        <option>None</option>
+                        <option>Clothing and Accessories</option>
+                        <option>Electronics and Gadgets</option>
+                        <option>Movies</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Add items to this category : </label>
+  
+            <div class="customized-category-error">
+                <div class="alert alert-es-danger" role="alert">
+                    <a href="javascript:void(0)" class="alert-link error-message" style="border:none;"></a>
+                </div>
+            </div>
+
         </div>
         <div class="form-group">
             <label>Add items to this category : </label>
