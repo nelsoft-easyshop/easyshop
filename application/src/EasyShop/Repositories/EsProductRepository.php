@@ -1270,56 +1270,48 @@ class EsProductRepository extends EntityRepository
             CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => [ 'lastmodifieddate' ],
             CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'is_hot' , 'clickcount' ],
         ];
-                
+     
         $orderByField = isset($orderByFields[key($orderBy)]) ? 
                         $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT];
         $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
                             $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
-        
-        $em = $this->_em;
-        $rsm = new ResultSetMapping();
 
-        $rsm->addScalarResult('productId', 'productId');
+                            
+        $categorizedProductIds = $this->getCategorizedProductIds($memberId);
+
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+
+        $result = $queryBuilder->select('p.idProduct')
+                            ->from('EasyShop\Entities\EsProduct','p') 
+                            ->where('p.isDelete = :productDeleteFlag')
+                            ->andWhere('p.isDraft = :productDraftFlag')
+                            ->andWhere('p.member = :memberId');
         
-        $sql = "
-            SELECT 
-                es_product.id_product as productId
-            FROM 
-                es_product
-            LEFT JOIN es_member_prodcat ON 
-                es_member_prodcat.product_id = es_product.id_product
-            LEFT JOIN es_member_cat ON 
-                es_member_prodcat.memcat_id = es_member_cat.id_memcat AND
-                es_member_cat.is_delete = :memberCategoryActiveFlag
-            WHERE 
-                es_product.is_delete = :productDeleteFlag AND 
-                es_product.is_draft = :productDraftFlag AND 
-                es_product.member_id = :memberId AND
-                es_member_prodcat.memcat_id IS NULL
-            GROUP BY 
-                es_product.id_product
-            ORDER BY ";
-            
-        $orderByString = "";
-        foreach($orderByField as $field){
-            $orderByString .= "es_product.".$field." ".$orderByDirection.",";
+                                        
+        if(!empty($categorizedProductIds)){
+            $queryBuilder->andWhere( 
+                            $queryBuilder->expr()->notIn('p.idProduct', $categorizedProductIds)
+                        );
         }
-        $orderByString = rtrim($orderByString, ",");
-        $sql = $sql.$orderByString." LIMIT :limit OFFSET :offset";
+   
+        $queryBuilder->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE)
+                     ->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE)
+                     ->setParameter('memberId', $memberId);
         
-        $query = $em->createNativeQuery($sql, $rsm);
-        $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
-        $query->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE);
-        $query->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE);
-        $query->setParameter('memberId', $memberId);
-        $query->setParameter('limit', $limit);
-        $query->setParameter('offset', $offset);
-        $results = $query->execute();
+        foreach($orderByField as $field){
+            $queryBuilder->orderBy('p.'.$field, $orderByDirection);
+        }
+        $queryBuilder->orderBy('p.idProduct', 'DESC')
+                     ->setFirstResult( $offset )
+                     ->setMaxResults( $limit );
+        $results = $queryBuilder->getQuery()
+                                ->getResult();
         $productIds = [];
         foreach($results as $result){
-            $productIds[] = $result['productId'];
-        }
-
+            $productIds[] = $result['idProduct'];
+        }        
+        
         return $productIds;
     }
     
@@ -1330,36 +1322,75 @@ class EsProductRepository extends EntityRepository
      * @return integer
      */
     public function getCountNonCategorizedProducts($memberId)
+    {   
+        $categorizedProductIds = $this->getCategorizedProductIds($memberId);
+
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+
+        $count = $queryBuilder->select('count(p.idProduct)')
+                                ->from('EasyShop\Entities\EsProduct','p') 
+                                ->where('p.isDelete = :productDeleteFlag')
+                                ->andWhere('p.isDraft = :productDraftFlag')
+                                ->andWhere('p.member = :memberId');
+                                
+        if(!empty($categorizedProductIds)){
+            $queryBuilder->andWhere( 
+                            $queryBuilder->expr()->notIn('p.idProduct', $categorizedProductIds)
+                        );
+        }
+                                
+        $count = $queryBuilder->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE)
+                              ->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE)
+                              ->setParameter('memberId', $memberId)        
+                              ->getQuery()
+                              ->getSingleScalarResult();
+            
+        return (int) $count;
+    }
+    
+    /**
+     * Get IDs of categorized products
+     *
+     * @param integer $memberId
+     * @return integer[]
+     */
+    public function getCategorizedProductIds($memberId)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
 
         $rsm->addScalarResult('idProduct', 'idProduct');
         $query = $em->createNativeQuery("
-            SELECT 
-                es_product.id_product as idProduct
-            FROM 
-                es_product
-            LEFT JOIN es_member_prodcat ON 
-                es_member_prodcat.product_id = es_product.id_product
-            LEFT JOIN es_member_cat ON 
-                es_member_prodcat.memcat_id = es_member_cat.id_memcat AND
-                es_member_cat.is_delete = :memberCategoryActiveFlag
-            WHERE 
+            SELECT
+                es_member_prodcat.product_id as idProduct
+            FROM
+                es_member_prodcat
+            INNER JOIN
+                es_member_cat ON
+                es_member_prodcat.memcat_id = es_member_cat.id_memcat AND 
+                es_member_cat.is_delete = :memberCategoryActiveFlag AND
+                es_member_cat.member_id = :memberId
+            INNER JOIN
+                es_product ON
                 es_product.is_delete = :productDeleteFlag AND 
-                es_product.is_draft = :productDraftFlag AND 
-                es_product.member_id = :memberId AND
-                es_member_prodcat.memcat_id IS NULL
+                es_product.is_draft = :productDraftFlag
             GROUP BY 
-                es_product.id_product
+                es_member_prodcat.product_id;
         ", $rsm);
         $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
         $query->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE);
         $query->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE);
         $query->setParameter('memberId', $memberId);
+        $results = $query->execute();
+        $productIds = [];
+        foreach($results as $result){
+            $productIds[] = $result['idProduct'];
+        }        
 
-        return count($query->execute());
+        return $productIds;
     }
+    
     
     /**
      * Get Products from ids

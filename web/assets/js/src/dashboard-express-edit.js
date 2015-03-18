@@ -289,7 +289,7 @@
         $('#express-edit-section').dialog({
             autoOpen: true,
             dialogClass: 'express-edit-wrapper',
-            width: 1180,
+            width: '90%',
             modal: true,
             fluid: true,
             draggable: false,

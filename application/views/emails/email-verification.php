@@ -562,8 +562,13 @@
                                                                    <p style="margin-bottom: 20px;">Hi <span style="color:#ff893b; font-weight: 400;">{user}</span>,</p>
                                                                     Welcome to your business&apos; new home!
                                                                     <br/><br/>
-                                                                    <span style="color:#555555; font-weight: 400;">You are one click away from activating your account. Just click the button below to verify your email</span>
-                                                                    
+                                                                    <?php if(isset($emailVerified) && $emailVerified): ?>
+                                                                        <span style="color:#555555; font-weight: 400;">
+                                                                            EasyShop.ph targets to cater a platform, where you can facilitate easy and safe online business transactions. We are offering you a free stage for your business, and ensuring the buyers scam-free and easy-shopping experience. EasyShop.ph is where shopping made easy!
+                                                                        </span>
+                                                                    <?php else: ?>
+                                                                        <span style="color:#555555; font-weight: 400;">You are one click away from activating your account. Just click the button below to verify your email</span>
+                                                                    <?php endif; ?>
                                                                 </td>
                                                             </tr>
                                                             <!--start space height --> 
@@ -572,30 +577,31 @@
                                                             </tr>
                                                             <!--end space height --> 
 
-                                                            <tr>
-                                                                <td valign="top" width="auto">
-                                                                    <!-- start button -->                                
-                                                                    <table border="0" align="left" cellpadding="0" cellspacing="0">
-                                                                        <tr>
-                                                                            <td mc:edit="button left (layout-5) TB42" id="mail-color" width="auto" align="center" valign="middle" height="32" style=" background-color:#4370cc;  border-radius:5px; background-clip: padding-box;font-size:13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; text-align:center;  color:#ffffff; font-weight: 300; padding-left:18px; padding-right:18px; ">
-                                                                                <a href="{site_url}?h={hash}" target="_blank" style="display: inline-block; text-decoration: none; color:#ffffff; font-weight: 300;">
-                                                                                    Verify Email
-                                                                                </a>
-                                                                            </td>
-                                                                        </tr>
-                                                                  </table>
-                                                                  <!-- end button -->
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td height="20"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
-                                                                    Once verified, you may start selling products in <span style="color:#ff893b; font-weight: 400;">EasyShop.ph</span>!
-                                                                </td>
-                                                            </tr>
-
+                                                            <?php if(isset($emailVerified) === false): ?>
+                                                                <tr>
+                                                                    <td valign="top" width="auto">
+                                                                        <!-- start button -->                                
+                                                                        <table border="0" align="left" cellpadding="0" cellspacing="0">
+                                                                            <tr>
+                                                                                <td mc:edit="button left (layout-5) TB42" id="mail-color" width="auto" align="center" valign="middle" height="32" style=" background-color:#4370cc;  border-radius:5px; background-clip: padding-box;font-size:13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; text-align:center;  color:#ffffff; font-weight: 300; padding-left:18px; padding-right:18px; ">
+                                                                                    <a href="{site_url}?h={hash}" target="_blank" style="display: inline-block; text-decoration: none; color:#ffffff; font-weight: 300;">
+                                                                                        Verify Email
+                                                                                    </a>
+                                                                                </td>
+                                                                            </tr>
+                                                                      </table>
+                                                                      <!-- end button -->
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td height="20"></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
+                                                                        Once verified, you may start selling products in <span style="color:#ff893b; font-weight: 400;">EasyShop.ph</span>!
+                                                                    </td>
+                                                                </tr> 
+                                                            <?php endif; ?>
                                                         </table>
                                                     </td>
                                                 </tr>
