@@ -75,7 +75,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <div class="container">
         <div class="row">
             <div class="col-xs-5 header-top-logo">
-                <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo.png" alt="Online Shopping">
+                <a href="/">
+                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img_logo.png" alt="Online Shopping">
+                </a>
             </div>
             <div class="col-xs-7 login-container">
                 <?php if(isset($logged_in) && $logged_in): ?>
