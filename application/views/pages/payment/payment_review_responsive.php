@@ -89,40 +89,41 @@
                         <th style="text-align: right !important;">Shipping Fee</th>
                         <th style="text-align: right !important;">Price</th>
                     </tr>
-                     <?php 
-                        $total = 0;
-                        $shipping_fee = 0;
-                        foreach ($cat_item as $key => $value):
-                            $total += $value['subtotal'] ;
-                            $shipping_fee = (isset($value['shipping_fee'])) ? $shipping_fee += $value['shipping_fee'] * $value['qty'] : $shipping_fee * $value['qty'];
-                             $value['qty'];
+                    <?php 
+                    $total = 0;
+                    $shipping_fee = 0;
+                    foreach ($cat_item as $key => $value):
+                        $total += $value['subtotal'] ;
+                        $shipping_fee = isset($value['shipping_fee'])
+                                        ? $shipping_fee += $value['shipping_fee'] * $value['qty'] 
+                                        : $shipping_fee * $value['qty']; 
                     ?>
-                    <tr>
-                        <td WIDTH="40%">
-                            <?php echo html_escape($value['name']); ?>
-                        </td>
-                        <td align="center">
-                            <?php echo $value['qty'] ?>
-                        </td>
-                        <td  align="right">
-                            <?php echo (isset($value['shipping_fee'])) ? number_format($value['shipping_fee'], 2, '.',',') : '<span style="color:red">Not available.</span>' ?>
-                        </td>
-                        <td  align="right">
-                            <?php echo number_format($value['price'], 2, '.',',') ?>
-                        </td>
-                    </tr>
-                    <?php if(!$value['availability']): ?>
-                    <tr>
-                        <td colspan="4" style="border-top: 0px;">
-                            <div class="error_shipping_address">
-                                <span>
-                                    This item is not available in your location. 
-                                    <a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item" data-toggle="modal" data-target="#avail_loc" >See the item location availability here.</a>
-                                        or <a href="javascript:void(0);" class="removeitem" data-cart-id="<?php echo $value["rowid"] ?>" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
-                            </div>
-                        </td>
-                    </tr>
-                    <?php endif; ?>
+                        <tr>
+                            <td WIDTH="40%">
+                                <?php echo html_escape($value['name']); ?>
+                            </td>
+                            <td align="center">
+                                <?php echo $value['qty'] ?>
+                            </td>
+                            <td  align="right">
+                                <?php echo (isset($value['shipping_fee'])) ? number_format($value['shipping_fee'], 2, '.',',') : '<span style="color:red">Not available.</span>' ?>
+                            </td>
+                            <td  align="right">
+                                <?php echo number_format($value['price'], 2, '.',',') ?>
+                            </td>
+                        </tr>
+                        <?php if(!$value['availability']): ?>
+                            <tr>
+                                <td colspan="4" style="border-top: 0px;">
+                                    <div class="error_shipping_address">
+                                        <span>
+                                            This item is not available in your location. 
+                                            <a style="color:#0654BA" href="javascript:{}" data-slug="<?= $value['id'] ?>" data-name="<?= $value['name'] ?>" data-iid="<?= $value['product_itemID']; ?>" class="view_location_item" data-toggle="modal" data-target="#avail_loc" >See the item location availability here.</a>
+                                                or <a href="javascript:void(0);" class="removeitem" data-cart-id="<?php echo $value["rowid"] ?>" data-slug="<?= $value['slug'] ?>" style="color:red">Remove</a> this item from your cart checkout to proceed.
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
                     
                     <?php endforeach; ?>
                     <tr>
@@ -167,7 +168,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="display-when-desktop-payment">
-                <?php if($success && $qtysuccess && $promoteSuccess['purchase_limit'] && $promoteSuccess['solo_restriction']): ?>
+                <?php if($success 
+                         && $qtysuccess 
+                         && $promoteSuccess['purchase_limit'] 
+                         && $promoteSuccess['solo_restriction']): ?>
                     <div>
                         <p class="fl_pay"><strong>How would you like to pay?</strong></p>
                         <ul class="idTabs payment_options_tabs">
@@ -209,8 +213,8 @@
                                             <br><br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="2"  class="paypal">
-                                                <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
-                                                <span></span>
+                                                    <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
+                                                    <span></span>
                                                 </a>
                                             </div>
                                             <div class="paypal_loader">
