@@ -34,33 +34,25 @@ $(document).ready(function(){
 
     $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
     $('.stateregionselect').trigger('change');
-    
 
-// -- PAYPAL PROCESS PAYMENT SECTION -- // 
-
+    // PAYPAL PROCESS PAYMENT SECTION
     $(document).on('click','.paypal',function () {
         var action = ''; 
         var postData = '';
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
-        var type = $(this).data('type');
+        var payType = parseInt($(this).data('type'));
+        var $container = $(this).closest('.paypal_button').parent();
+        var $checkBox = $container.find('.chck_privacy').find('.chk_paypal');
 
-        if(type == 1){
-            if(!$('#chk_paypal1').is(':checked')){
-                validateRedTextBox("#chk_paypal1"); 
-                $('#paypal > .chck_privacy > p').remove();
-                $('#paypal > .chck_privacy').append(stringAcknowledge); 
-                return false;
-            }
-        }
-        else{
-            if(!$('#chk_paypal2').is(':checked')){
-                validateRedTextBox("#chk_paypal2");
-                $('#cdb > .chck_privacy > p').remove();
-                $('#cdb > .chck_privacy').append(stringAcknowledge);
-                return false;
-            }
-        }
+        $container.find('.chck_privacy > p').remove();
+        validateWhiteTextBox('.chk_paypal');
+
+        if($checkBox.is(':checked') === false){
+            validateRedTextBox('.chk_paypal');
+            $container.find('.chck_privacy').append(stringAcknowledge); 
+            return false;
+        } 
 
         if(PAY_BY_GATEWAY){
             var pointAllocated = $('#pointsAllocated').val();
@@ -68,12 +60,12 @@ $(document).ready(function(){
             if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
                 paymentMethod = JSON.stringify({
                     PaypalGateway:{
-                        method:"PayPal", 
-                        type:$(this).data('type')
+                        method: "PayPal", 
+                        type: payType
                     },
                     PointGateway:{
-                        method:"Point",
-                        amount:pointAllocated,
+                        method: "Point",
+                        amount: pointAllocated,
                         pointtype: "purchase"
                     }
                 });
@@ -81,8 +73,8 @@ $(document).ready(function(){
             else{
                 paymentMethod = JSON.stringify({
                     PaypalGateway:{
-                        method:"PayPal", 
-                        type:$(this).data('type')
+                        method: "PayPal", 
+                        type: payType
                     }
                 });
             }
@@ -90,7 +82,7 @@ $(document).ready(function(){
             action = "/pay/pay";
         }
         else{
-            postData = csrfname+"="+csrftoken+"&paypal="+type;
+            postData = csrfname+"="+csrftoken+"&paypal="+payType;
             action = "/pay/setting/paypal";
         }
 
@@ -123,18 +115,15 @@ $(document).ready(function(){
                 $('.paypal_button').show();
             }
         });
-    });
+    }); 
 
-// -- END OF PAYPAL PROCESS PAYMENT SECTION -- // 
-
-// -- DRAGON PAY PROCESS PAYMENT SECTION -- // 
-
-    $(document).on('click','.btnDp',function () {
-        var action = '';
-        var postData = ''; 
+    // DRAGON PAY PROCESS PAYMENT SECTION
+    function submitDragonpay()
+    { 
+        var action;
+        var postData; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var csrfname = $("meta[name='csrf-name']").attr('content');
-        var type = $(this).data('type');
+        var csrfname = $("meta[name='csrf-name']").attr('content'); 
         var paymentMethod;
         if(PAY_BY_GATEWAY){
             var pointAllocated = $('#pointsAllocated').val();
@@ -165,69 +154,64 @@ $(document).ready(function(){
             action = "/payment/payDragonPay";
         }
 
-        if($('#chk_dp').is(':checked')){
+        $.ajax({
+            type: "POST",
+            url: action, 
+            dataType: "json",
+            data: postData, 
+            success: function(d) {
+                if(d.e == 1){ 
+                    window.location.replace(d.u);
+                }
+                else{
+                    $('.btnDp').val('Pay via DRAGON PAY');
+                    $('.btnDp').removeAttr('disabled');
+                    if(d.m == 'Item quantity not available.'){
+                        location.reload();
+                    }
+                    alert(d.m);
+                }
+            }
+        });
+    }
+
+    $(document).on('click','.btnDp',function () {
+        var $container = $(this).parent();
+        var $checkBox = $container.find('.chck_privacy').find('.chk_dp');
+
+        validateWhiteTextBox(".chk_dp");
+        $container.find('.chck_privacy > p').remove();
+        if($checkBox.is(':checked')){
             $(this).val('Please wait...'); 
             $(this).attr('disabled','disabled');
-            $.ajax({
-                type: "POST",
-                url:  action, 
-                dataType: "json",
-                data: postData, 
-                success: function(d) {
-                    if(d.e == 1){ 
-                        window.location.replace(d.u);
-                    }
-                    else{
-                        $('.btnDp').val('Pay via DRAGON PAY');
-                        $('.btnDp').removeAttr('disabled');
-                        if(d.m == 'Item quantity not available.'){
-                            location.reload();
-                        }
-                        alert(d.m);
-                    }
-                }
-            });
+            submitDragonpay();
         }
         else{
-            validateRedTextBox("#chk_dp");
-            $('#dragonpay > .chck_privacy > p').remove();
-            $('#dragonpay > .chck_privacy').append(stringAcknowledge);
+            validateRedTextBox(".chk_dp"); 
+            $container.find('.chck_privacy').append(stringAcknowledge);
         }
     });
 
-// -- END OFDRAGON PAY PROCESS PAYMENT SECTION -- // 
-
-// -- CASH ON DELIVERY PROCESS PAYMENT SECTION -- // 
-
+    // CASH ON DELIVERY PROCESS PAYMENT SECTION 
     $(document).on('click','.payment_cod',function () {
-         if($('#chk_cod').is(':checked')){
-            var r = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
-            if(r == true){
+        var $formContainer = $(this).parent();
+        var $checkBox = $formContainer.find('.chk_cod');
+
+        validateWhiteTextBox(".chk_cod");
+        $formContainer.find('.chck_privacy > p').remove();
+        if($checkBox.is(':checked')){
+            var askConfirm = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
+            if(askConfirm){
                 $(this).val('Please wait...'); 
                 $(this).attr('disabled','disabled');
                 if(PAY_BY_GATEWAY){
                     var action = "/pay/pay"; 
                     var pointAllocated = $('#pointsAllocated').val();
-                    var paymentMethod;
-                    if($.isNumeric(pointAllocated) && parseInt(pointAllocated) > 0){
-                        paymentMethod = JSON.stringify({
-                            CODGateway:{
-                                method:"CashOnDelivery"
-                            },
-                            PointGateway:{
-                                method:"Point",
-                                amount:pointAllocated,
-                                pointtype: "purchase"
-                            }
-                        });
-                    }
-                    else{
-                        paymentMethod = JSON.stringify({
-                            CODGateway:{
-                                method:"CashOnDelivery"
-                            }
-                        });
-                    }
+                    var paymentMethod = JSON.stringify({
+                        CODGateway:{
+                            method:"CashOnDelivery"
+                        }
+                    });
                     var data = $('#codFrm').serialize() + "&paymentMethods=" + paymentMethod;
                     $.ajax({
                         url: action,
@@ -240,37 +224,19 @@ $(document).ready(function(){
                     });
                 }
                 else{
-                    $('#codFrm').submit();
+                    $formContainer.submit();
                 }
             }
         }
         else{
-            validateRedTextBox("#chk_cod");
-            $('#cod > #codFrm > .chck_privacy > p').remove();
-            $('#cod > #codFrm > .chck_privacy').append(stringAcknowledge);
+            validateRedTextBox('.chk_cod'); 
+            $formContainer.find('.chck_privacy').append(stringAcknowledge);
         }
-    });
-    
-// -- END OF CASH ON DELIVERY PROCESS PAYMENT SECTION -- // 
+    }); 
 
-// -- DIRECT BANK DEPOSIT PROCESS PAYMENT SECTION -- // 
-
-    $(document).on('click','.payment_dbd',function () {
-        if($('#chk_dbd').is(':checked')){
-            $('#dbdFrm').submit();
-        }
-        else{
-            validateRedTextBox("#chk_dbd");
-            $('#dbd > .chck_privacy > p').remove();
-            $('#dbd > .chck_privacy').append(stringAcknowledge);
-        }
-    });
-
-// -- END OF DIRECT BANK DEPOSIT PROCESS PAYMENT SECTION -- // 
-
-// -- PESO PAY CC PROCESS PAYMENT SECTION -- // 
-
-    $(document).on('click','.pesopaycdb',function () {
+    // PESO PAY CC PROCESS PAYMENT SECTION
+    function requestPesopay()
+    {
         var action = "/pay/pay"; 
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -279,46 +245,61 @@ $(document).ready(function(){
                 method:"PesoPay", 
             }
         });
-        if($('#chk_ppcdb').is(':checked')){ 
-            validateWhiteTextBox("#chk_ppcdb");
-            $(this).val('Please wait...');
-            $.ajax({
-                type: "POST",
-                url:  action, 
-                dataType: "json",
-                data: csrfname+"="+csrftoken+ "&paymentMethods=" + paymentMethod,
-                success: function(d) {
-                    if(d.error === false){
-                        $('#pesopaycdb').append(d.form);
-                        $('#payFormCcard').submit();
-                    }
-                    else{
-                        $('.btnDp').val('Pay via Credit or Debit Card'); 
-                        $('.btnDp').removeAttr('disabled');
-                        if(d.message == 'Item quantity not available.'){
-                            location.reload();
-                        }
-                        alert(d.message);
-                    }
-                },
-                error: function(err){
-                    alert('Something went wrong. Please try again later');
-                    $('.btnDp').val('Pay via Credit or Debit Card'); 
-                    $('.btnDp').removeAttr('disabled');
+        $.ajax({
+            type: "POST",
+            url:  action, 
+            dataType: "json",
+            data: csrfname+"="+csrftoken+ "&paymentMethods=" + paymentMethod,
+            success: function(d) {
+                if(d.error === false){
+                    $('#pesopaycdb').append(d.form);
+                    $('#payFormCcard').submit();
                 }
-            });
+                else{
+                    $('.pesopaycdb_btn').val('Pay via Credit or Debit Card'); 
+                    $('.pesopaycdb_btn').removeAttr('disabled');
+                    if(d.message == 'Item quantity not available.'){
+                        location.reload();
+                    }
+                    alert(d.message);
+                }
+            },
+            error: function(err){
+                alert('Something went wrong. Please try again later');
+                $('.pesopaycdb_btn').val('Pay via Credit or Debit Card'); 
+                $('.pesopaycdb_btn').removeAttr('disabled');
+            }
+        });
+    }
+    $(document).on('click','.pesopaycdb',function () {
+        validateWhiteTextBox("#chk_ppcdb");
+        $('#pesopaycdb > .chck_privacy > p').remove();
+        if($('#chk_ppcdb').is(':checked')){ 
+            $(this).val('Please wait...')
+                   .attr('disabled','disabled');
+            requestPesopay();
         }
         else{
             validateRedTextBox("#chk_ppcdb");
-            $('#pesopaycdb > .chck_privacy > p').empty();
             $('#pesopaycdb > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
         }
     });
 
-// -- END OF PESO PAY CC PROCESS PAYMENT SECTION -- // 
+    $(document).on('click','.pesopaycdb_mobile',function () {
+        validateWhiteTextBox(".pesopay_chk_mobile");
+        $('#pesopaycdb_mobile > .chck_privacy > p').remove();
+        if($('.pesopay_chk_mobile').is(':checked')){ 
+            $(this).val('Please wait...')
+                   .attr('disabled','disabled');
+            requestPesopay();
+        }
+        else{
+            validateRedTextBox(".pesopay_chk_mobile");
+            $('#pesopaycdb_mobile > .chck_privacy').append('<p><span style="color:red"> * Please acknowledge that you have read and understood our privacy policy.</span></p>');
+        }
+    });
 
-// -- CHANGE ADDRESS SECTION -- // 
- 
+    // CHANGE ADDRESS SECTION 
     $(document).on('click','.show-form-address',function () {
         $("#delAddressFrm")[0].reset();
         $('.stateregionselect').trigger('change');
@@ -415,9 +396,8 @@ $(document).ready(function(){
             }
         });
     });
-// -- END OF CHANGE ADDRESS SECTION -- // 
 
-// -- START OF VIEW ITEM AVAILABILITY LOCATION -- //
+    // VIEW ITEM AVAILABILITY LOCATION
     $(document).on('click','.view_location_item',function () {
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -439,9 +419,8 @@ $(document).ready(function(){
             }
         });
     });
-// -- END OF VIEW ITEM AVAILABILITY LOCATION -- //
 
-// -- START REMOVE ITEM FROM SELECTED CART --//
+    // REMOVE ITEM FROM SELECTED CART
     $(document).on('click','.removeitem',function () {
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content'); 
@@ -452,16 +431,13 @@ $(document).ready(function(){
             dataType: "json",
             data: csrfname+"="+csrftoken+"&rowid="+rowid, 
             success: function(d) {
-                if(d.isSuccessful)
-                {
+                if(d.isSuccessful){
                     location.reload();
-                }else{
+                }
+                else{
                     alert('Something went wrong. Please refresh this page.');
                 }
             } 
         });
-    }); 
-
-// -- END OF REMOVE ITEM FROM SELECTED CART --//
-
+    });
 });
