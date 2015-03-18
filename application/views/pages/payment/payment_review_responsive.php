@@ -96,7 +96,7 @@
                         $total += $value['subtotal'] ;
                         $shipping_fee = isset($value['shipping_fee'])
                                         ? $shipping_fee += $value['shipping_fee'] * $value['qty'] 
-                                        : $shipping_fee * $value['qty']; 
+                                        : $shipping_fee; 
                     ?>
                         <tr>
                             <td WIDTH="40%">
