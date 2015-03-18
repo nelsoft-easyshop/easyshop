@@ -425,6 +425,7 @@ html, body{
     display: block;
     margin-top: -23px;
     margin-left: 38px;
+    word-break: break-all;
 }
 
 .search-item-shipping-text{
