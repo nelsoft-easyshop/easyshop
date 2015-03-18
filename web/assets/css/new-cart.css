@@ -14,7 +14,7 @@
 }
 
 .cart-table{
-	border: solid red 1px;
+	font-size: 12px;
 }
 
 .cart-table > thead > tr{
@@ -24,12 +24,45 @@
 
 .cart-table > thead > tr > th{
 	padding-bottom: 5px;
+	padding: 5px 10px;
 }
+
+.cart-table > thead > tr > th:nth-child(3){
+	text-align: center;
+}
+
+.cart-table > thead > tr > th:last-child{
+	text-align: right;
+}
+
 .cart-table > tbody > tr > td{
-	border: solid red 1px;
+	padding: 20px 10px;
 }
+
+.cart-table > tbody > tr > td:nth-child(5){
+	text-align: center;
+}
+
+.cart-table > tbody > tr > td:last-child{
+	text-align: right;
+}
+
+.cart-item-remove:hover{
+	color: #ff530d;
+	cursor: pointer;
+}
+
 .cart-item-thumbnail{
-	width: 70px;
-	height: 70px;
+	width: 80px;
+	height: 80px;
 	border: solid #e2e2e2 1px;
+}
+
+.cart-item-name{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.cart-item-attribute{
+	margin-top: 3px;
 }

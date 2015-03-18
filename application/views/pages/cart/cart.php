@@ -1,3 +1,4 @@
+<link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
 <div class="transaction-container">
@@ -12,7 +13,7 @@
                     <table class="cart-table" width="100%">
                         <thead>
                             <tr>
-                                <th colspan="3" width="55%">
+                                <th colspan="3" width="50%">
                                     Item List
                                 </th>
                                 <th width="15%">
@@ -21,7 +22,7 @@
                                 <th width="15%" align="center">
                                     Quantity
                                 </th>
-                                <th width="15%" style="text-align: right;">
+                                <th width="20%">
                                     Total
                                 </th>
                             </tr>
@@ -29,18 +30,67 @@
                         <tbody>
                             <tr>
                                 <td valign="middle">
-                                    <i class="fa fa-times fa-lg"></i>
+                                    <i class="fa fa-times fa-lg cart-item-remove"></i>
                                 </td>
                                 <td>
                                     <div class="cart-item-thumbnail" style="background: url(assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;"></div>
                                 </td>
                                 <td>
-                                    <a href="#">
+                                    <a href="#" class="cart-item-name">
                                         IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
                                     </a>
+                                    <div class="cart-item-attribute-container">
+                                        <div class="cart-item-attribute">
+                                            <b>Color : </b>Black
+                                        </div>
+                                        <div class="cart-item-attribute">
+                                            <b>Color : </b>Black
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>
-                                    Total
+                                    &#8369; 42,000.00
+                                </td>
+                                <td>
+                                    <select class="form-es-control input-sm">
+                                        <option>1</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    &#8369; 42,000.00
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td valign="middle">
+                                    <i class="fa fa-times fa-lg cart-item-remove"></i>
+                                </td>
+                                <td>
+                                    <div class="cart-item-thumbnail" style="background: url(assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;"></div>
+                                </td>
+                                <td>
+                                    <a href="#" class="cart-item-name">
+                                        IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
+                                    </a>
+                                    <div class="cart-item-attribute-container">
+                                        <div class="cart-item-attribute">
+                                            <b>Color : </b>Black
+                                        </div>
+                                        <div class="cart-item-attribute">
+                                            <b>Color : </b>Black
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    &#8369; 42,000.00
+                                </td>
+                                <td>
+                                    <select class="form-es-control input-sm">
+                                        <option>1</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    &#8369; 42,000.00
                                 </td>
                             </tr>
                         </tbody>
