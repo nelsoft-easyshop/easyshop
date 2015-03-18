@@ -305,26 +305,28 @@ class MobileProductUpload extends MY_Controller
                         }
                         $productCombination = $this->productUploadManager->addNewCombination($product, $quantity);
 
-                        if($isFreeShippingNationwide){
-                            $this->productUploadManager->addShippingInfo($product, 
-                                                                         $productCombination->getIdProductItem(),
-                                                                         EsLocationLookup::PHILIPPINES_LOCATION_ID,
-                                                                         0);
-                        }
-                        else{
-                            foreach( $shippingInfo as $info ){
-                                $price = trim(str_replace(',', '', $info['price']));
-                                $mustBreak = false;
-                                if($info['location_id'] === EsLocationLookup::PHILIPPINES_LOCATION_ID){
-                                    $price = 0;
-                                    $mustBreak = true;
-                                }
+                        if($isMeetUp === false){
+                            if($isFreeShippingNationwide){
                                 $this->productUploadManager->addShippingInfo($product, 
                                                                              $productCombination->getIdProductItem(),
-                                                                             trim($info['location_id']),
-                                                                             $price);
-                                if($mustBreak){
-                                    break;
+                                                                             EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                                                                             0);
+                            }
+                            else{
+                                foreach( $shippingInfo as $info ){
+                                    $price = trim(str_replace(',', '', $info['price']));
+                                    $mustBreak = false;
+                                    if($info['location_id'] === EsLocationLookup::PHILIPPINES_LOCATION_ID){
+                                        $price = 0;
+                                        $mustBreak = true;
+                                    }
+                                    $this->productUploadManager->addShippingInfo($product, 
+                                                                                 $productCombination->getIdProductItem(),
+                                                                                 trim($info['location_id']),
+                                                                                 $price);
+                                    if($mustBreak){
+                                        break;
+                                    }
                                 }
                             }
                         }
