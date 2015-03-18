@@ -1156,7 +1156,7 @@ textarea {
     border-left: solid #cccbc7 1px;
     padding-left: 10px;
     padding-top: 10px;
-    min-height: 715px !important;
+    min-height: 640px !important;
 }
 
 .div-product-view-option{
@@ -1191,7 +1191,7 @@ td.td-view.p-view2.color-default{
     -o-transition: all 0.5s ease;
     margin-left: 5px;
     margin-right: 5px;
-    font-size: 28px !important;
+    font-size: 18px !important;
     color: #b9b9b9;
 }
 .icon-view:hover{
@@ -1391,7 +1391,7 @@ td.td-view.p-view2.color-default{
 }
 
 .product-inner-container{
-    min-height: 620px;
+    min-height: 480px;
 }
 
 .grid > .product-paging > .product-inner-container > .panel-list-item{
@@ -1407,7 +1407,7 @@ td.td-view.p-view2.color-default{
 
 .grid > .product-paging > .product-inner-container > .thumb > .panel-item{
     width: 100%;
-    height: 275px;
+    height: 330px;
     border-radius: 4px;
     background: #ffffff;
     transition: all 0.5s fade;
@@ -1422,7 +1422,7 @@ td.td-view.p-view2.color-default{
 }
 .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item{
     width: 100%;
-    height: 165px;
+    height: 220px;
     border-radius: 4px 4px 0px 0px;
     position: relative;
 }
@@ -1442,6 +1442,41 @@ td.td-view.p-view2.color-default{
 
 .image-hover-none:hover{
     opacity: 0;
+}
+
+.grid-image-primary{
+    max-width: 100%;
+    max-height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.div-item:hover .grid-image-has-secondary{
+    opacity: 0;
+}
+
+.grid-image-secondary{
+    max-width: 100%;
+    max-height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+    z-index: 1;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.div-item:hover .grid-image-secondary{
+    opacity: 1;
 }
 
 .grid > .product-paging > .product-inner-container > .thumb > .panel-item > a > .div-item > .span-img-wrapper{
@@ -1713,6 +1748,7 @@ td.td-view.p-view2.color-default{
     width: 42px;
     font-weight:bold;
     top: 0;
+    z-index: 3;
 }
 .span-new-pin-list{
     position:absolute;
@@ -1740,6 +1776,7 @@ td.td-view.p-view2.color-default{
     right: -5px !important;
     margin-right: 5px !important;
     top: 0;
+    z-index: 3;
 }
 
 .main-image-list{

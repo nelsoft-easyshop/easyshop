@@ -536,13 +536,27 @@ a{
 
 .div-product-image{
     width: 185px;
-    height: 185px;
+    height: 223px;
     border-radius: 4px 0px 0px 4px;
+    position: relative;
+}
+
+.image-primary{
+    max-width: 100%;
+    max-height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+    z-index: 2;
+    transition: all 0.3s ease;
 }
 
 .td-meta-info{
     vertical-align: top;
-    padding-top: 5px;
+    padding-top: 20px;
     padding-left:10px;
     max-width: 428px !important;
 }
@@ -732,6 +746,8 @@ a{
     font-size: 12px;
     width: 42px;
     font-weight: 900;
+    z-index: 3;
+    position: relative;
 }
 
 .no-items{
