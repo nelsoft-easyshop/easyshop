@@ -266,8 +266,11 @@ class PesoPayGateWay extends AbstractGateway
      * @return int
      */
     public function getExternalCharge()
-    {
-        return 20.00;
+    {   
+        $transactionFee = (6.00 + 0.005 * $this->getParameter('amount'));
+        $vat = $transactionFee * 0.12;
+
+        return $transactionFee + $vat;
     }
 
     /**
