@@ -2515,6 +2515,7 @@
             var $this = $(this);
             var isSearchingField = $this.siblings('.isSearching');
             var isSearching = isSearchingField.val();
+
             if(isSearching === 'true'){
                 return false;
             }
@@ -2527,7 +2528,7 @@
             var searchString = $this.val();
             var $categoryProductList = $itemListDiv.find('.product-list');
             var $loader = $itemListDiv.find('.loader');
-
+            $itemListDiv.attr('data-isComplete', 'false');
             var url;
             var data = "";
 
