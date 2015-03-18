@@ -58,44 +58,40 @@ class EsMemberRepository extends EntityRepository
      *
      *  @param string $storeName
      *  @param integer $excludeMemberId
-     *  @return boolean
+     *  @return EasyShop\Entities\EsMember
      */
     public function getUserWithStoreName($storeName, $excludeMemberId = null)
     {
         $em = $this->_em;
 
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('EasyShop\Entities\EsMember','m');
-        $rsm->addFieldResult('m','id_member','idMember');
-        $rsm->addFieldResult('m','username','username');
-        $rsm->addFieldResult('m','store_name','storeName');
-
-        $sql =  '
-            SELECT 
-                id_member, 
-                store_name, 
-                username
-            FROM 
-                es_member
-            WHERE 
-                BINARY store_name  = :storeName OR
-                ((BINARY store_name IS NULL OR BINARY store_name = "") AND BINARY username = :storeName)
-        ';
-        
-        if($excludeMemberId !== null){
-            $sql .= ' AND id_member != :memberId';
-        }
- 
-        $query = $em->createNativeQuery($sql, $rsm);
-
-        $query->setParameter('storeName',$storeName);
+        $qb = $em->createQueryBuilder();
+        $qb->select('em')
+            ->from('EasyShop\Entities\EsMember','em')
+            ->where($qb->expr()->orX(
+                $qb->expr()->eq('em.storeName', 'BINARY(:storeName)'),
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('em.storeName'),
+                        $qb->expr()->eq('em.storeName',':emptyString')
+                    ),
+                    $qb->expr()->eq('em.username', 'BINARY(:storeName)')
+                )
+        ));
 
         if($excludeMemberId !== null){
-            $query->setParameter('memberId',$excludeMemberId);
+            $qb->andWhere('em.idMember != :memberId')
+               ->setParameter('memberId',$excludeMemberId);
         }
+      
+        $emptyString = "";
+        $query = $qb->setParameter('storeName',$storeName)
+                    ->setParameter('emptyString',$emptyString)
+                    ->setMaxResults(1)
+                    ->getQuery();
+        $result = $query->getResult();
 
-        return $query->getResult();
-    }
+        return $result ? $result[0] : null;
+    }   
 
     
     /**
@@ -103,43 +99,30 @@ class EsMemberRepository extends EntityRepository
      *
      *  @param string $name
      *  @param integer $excludeMemberId
-     *  @return boolean
+     *  @return EasyShop\Entities\EsMember
      */
     public function getUserWithStoreNameOrUsername($name, $excludeMemberId = null)
     {
         $em = $this->_em;
 
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('EasyShop\Entities\EsMember','m');
-        $rsm->addFieldResult('m','id_member','idMember');
-        $rsm->addFieldResult('m','username','username');
-        $rsm->addFieldResult('m','store_name','storeName');
-
-        $sql =  '
-            SELECT 
-                id_member, 
-                store_name, 
-                username
-            FROM 
-                es_member
-            WHERE 
-                (store_name = :storeName OR username = :userName)
-        ';
-        
-        if($excludeMemberId !== null){
-            $sql .= ' AND id_member != :memberId';
-        }
- 
-        $query = $em->createNativeQuery($sql, $rsm);
-
-        $query->setParameter('storeName', $name);
-        $query->setParameter('userName', $name);
+        $qb = $em->createQueryBuilder();
+        $qb->select('em')
+            ->from('EasyShop\Entities\EsMember','em')
+            ->where('em.storeName = :storeName')
+            ->orWhere('em.username = :userName');
 
         if($excludeMemberId !== null){
-            $query->setParameter('memberId',$excludeMemberId);
+            $qb->andWhere('em.idMember != :memberId')
+               ->setParameter('memberId',$excludeMemberId);
         }
+      
+        $query = $qb->setParameter('storeName',$name)
+                    ->setParameter('userName',$name)
+                    ->setMaxResults(1)
+                    ->getQuery();
+        $result = $query->getResult();
 
-        return $query->getResult();
+        return $result ? $result[0] : null;
     }
     
     

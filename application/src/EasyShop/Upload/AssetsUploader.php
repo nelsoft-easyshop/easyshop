@@ -336,7 +336,7 @@ class AssetsUploader
                 $config['image_library'] = 'gd2';
                 $config['source_image'] = $imagePath.'/'.$filename;
                 $config['new_image'] = $imagePath.'/'.$filename;
-                $config['maintain_ratio'] = true;
+                $config['maintain_ratio'] = false;
                 $imageData = $this->uploadLibrary->data(); 
                 $this->imageLibrary->initialize($config);
                 $this->imageLibrary->convert('png', true);

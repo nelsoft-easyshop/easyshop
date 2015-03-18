@@ -2390,15 +2390,20 @@
 
     $( "#btn-edit-delete-categories" ).click(function() {
         
+        var checkedBoxes = $("#delete-list-categories input[type='checkbox']:checked");
+        var categoryIds = [];
+        $.each(checkedBoxes, function(key, checkbox){
+            categoryIds.push(checkbox.getAttribute("data-categoryid"));
+        }); 
+        if($.isEmptyObject(categoryIds)){
+            return false;
+        }
+        
         var isConfirmed = confirm('Are you sure you want to delete the selected categories?');
         if(isConfirmed){
-            var checkedBoxes = $("#delete-list-categories input[type='checkbox']:checked");
-            var categoryIds = [];
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');   
-            $.each(checkedBoxes, function(key, checkbox){
-                categoryIds.push(checkbox.getAttribute("data-categoryid"));
-            });
+           
             $.ajax({
                 type: "POST",
                 url: '/memberpage/deleteCustomCategory',
@@ -2406,12 +2411,20 @@
                 success: function(data){ 
                     var response = $.parseJSON(data);
                     if(response){
-                        $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();
+                        $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();                             
+                        var numberOfCategories = $('.store-category-view .div-cat:visible').length;
                         $.each(categoryIds, function(key, categoryId){
-                             $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').fadeOut();
-                             $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]').fadeOut();
-                             $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('li.checkbox').fadeOut();
+                            $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').fadeOut();
+                            $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]').fadeOut();
+                            $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('li.checkbox').fadeOut();
+                            numberOfCategories--;
                         });
+                        if(numberOfCategories === 0){
+                            $('#no-category-display-edit').show();
+                            $('#div-store-content-edit').hide();
+                            $('#no-category-display-delete').show();
+                            $('#div-store-content-delete').hide();
+                        }
                     }
                     else{
                         $('.delete-dialog-fail').fadeIn().delay(5000).fadeOut();
@@ -2426,8 +2439,8 @@
     var modalCategoryModalWidthMobile;
     var widthOfDragabbleItem = 70;
     var mobileViewPortWidthLimit = 769;
-    
-    
+
+
     $(window).on("load resize",function(){
         browserWidth = $(window).width();
         browserHeight = $(window).outerHeight();
@@ -2500,6 +2513,7 @@
             var $this = $(this);
             var isSearchingField = $this.siblings('.isSearching');
             var isSearching = isSearchingField.val();
+
             if(isSearching === 'true'){
                 return false;
             }
@@ -2512,7 +2526,7 @@
             var searchString = $this.val();
             var $categoryProductList = $itemListDiv.find('.product-list');
             var $loader = $itemListDiv.find('.loader');
-
+            $itemListDiv.attr('data-isComplete', 'false');
             var url;
             var data = "";
 
@@ -2645,6 +2659,10 @@
                     deleteCheckBoxList.append(html);
                     $modalDiv.find('.simplemodal-close').click();
                     $('.add-store-cat-message').fadeIn().delay(5000).fadeOut();
+                    $('#no-category-display-edit').hide();
+                    $('#div-store-content-edit').show();
+                    $('#no-category-display-delete').hide();
+                    $('#div-store-content-delete').show();
                 }
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
@@ -2805,12 +2823,12 @@
         var countAllItems = $allProductList.find('li').size();
         var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
         if(browserWidth <= mobileViewPortWidthLimit){
-            $(".my-category-modal").css("width", modalCategoryModalWidthMobile).css("height","auto").css("bottom","auto").css("top","15px");
-            $(".ui-droppable").css("width", totalWidthOfMobileDroppable+"px");
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
         }
         else{
-            $(".my-category-modal").css("width", modalCategoryModalWidth).css("height","auto").css("bottom","auto").css("top","15px");
-            $(".ui-droppable").css("width", "100%");
+            $(".my-category-modal").css("width", modalCategoryModalWidth+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".category-items-holder .ui-sortable").css("width", "100%");
         }
 
         div.find(".category-items-holder").bind('scroll', function(){
@@ -2820,7 +2838,16 @@
         $(".overlay-for-waiting-modal").css("display", "none");
     }
 
-
+    $(window).on("load resize",function(){
+        if(browserWidth <= mobileViewPortWidthLimit){
+            $(".my-category-modal").css("width", modalCategoryModalWidthMobile+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
+        }
+        else if (browserWidth > mobileViewPortWidthLimit){
+            $(".my-category-modal").css("width", modalCategoryModalWidth+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".category-items-holder .ui-sortable").css("width", "100%");
+        }
+    });
    
 
 }(jQuery));
