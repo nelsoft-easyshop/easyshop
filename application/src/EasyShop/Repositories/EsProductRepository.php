@@ -1286,13 +1286,18 @@ class EsProductRepository extends EntityRepository
                             ->from('EasyShop\Entities\EsProduct','p') 
                             ->where('p.isDelete = :productDeleteFlag')
                             ->andWhere('p.isDraft = :productDraftFlag')
-                            ->andWhere('p.member = :memberId')
-                            ->andWhere( 
-                                $queryBuilder->expr()->notIn('p.idProduct', $categorizedProductIds)
-                            )
-                            ->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE)
-                            ->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE)
-                            ->setParameter('memberId', $memberId);
+                            ->andWhere('p.member = :memberId');
+        
+                                        
+        if(!empty($categorizedProductIds)){
+            $queryBuilder->andWhere( 
+                            $queryBuilder->expr()->notIn('p.idProduct', $categorizedProductIds)
+                        );
+        }
+   
+        $queryBuilder->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE)
+                     ->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE)
+                     ->setParameter('memberId', $memberId);
         
         foreach($orderByField as $field){
             $queryBuilder->orderBy('p.'.$field, $orderByDirection);
@@ -1327,15 +1332,20 @@ class EsProductRepository extends EntityRepository
                                 ->from('EasyShop\Entities\EsProduct','p') 
                                 ->where('p.isDelete = :productDeleteFlag')
                                 ->andWhere('p.isDraft = :productDraftFlag')
-                                ->andWhere('p.member = :memberId')
-                                ->andWhere( 
-                                    $queryBuilder->expr()->notIn('p.idProduct', $categorizedProductIds)
-                                )
-                                ->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE)
-                                ->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE)
-                                ->setParameter('memberId', $memberId)        
-                                ->getQuery()
-                                ->getSingleScalarResult();
+                                ->andWhere('p.member = :memberId');
+                                
+        if(!empty($categorizedProductIds)){
+            $queryBuilder->andWhere( 
+                            $queryBuilder->expr()->notIn('p.idProduct', $categorizedProductIds)
+                        );
+        }
+                                
+        $count = $queryBuilder->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE)
+                              ->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE)
+                              ->setParameter('memberId', $memberId)        
+                              ->getQuery()
+                              ->getSingleScalarResult();
+            
         return (int) $count;
     }
     
@@ -1377,7 +1387,7 @@ class EsProductRepository extends EntityRepository
         foreach($results as $result){
             $productIds[] = $result['idProduct'];
         }        
-        
+
         return $productIds;
     }
     
