@@ -722,7 +722,8 @@ class Memberpage extends MY_Controller
      *
      *  @return JSON
      */
-    public function transactionResponse() {
+    public function transactionResponse() 
+    {
         $serverResponse = [
             'result' => 'fail',
             'error' => 'Failed to validate form'
@@ -737,8 +738,6 @@ class Memberpage extends MY_Controller
 
         $this->config->load('email', true);
         $imageArray = $this->config->config['images'];
-        $imageArray[] = "/assets/images/appbar.home.png";
-        $imageArray[] = "/assets/images/appbar.message.png";
 
         $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                      ->findOneBy([
@@ -788,12 +787,13 @@ class Memberpage extends MY_Controller
                         $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
                                              ->getDefaultImage($parseData['productId']);
                         $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                        $imagePath = ltrim($imagePath, '.');
                         if(strtolower(ENVIRONMENT) === 'development'){
-                            $imageArray[] = ltrim($imagePath, '.');
+                            $imageArray[] = $imagePath;
                             $parseData['primaryImage'] = $primaryImage->getFilename();
                         }
                         else{
-                            $parseData['primaryImage'] = getAssetsDomain().$imagePath;
+                            $parseData['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
                         }
                         
                         $hasNotif = false;

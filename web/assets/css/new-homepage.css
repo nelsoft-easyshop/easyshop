@@ -2480,6 +2480,7 @@ a.redirect-link:focus {
     color:white !important;
 }
 
-.disclaimer-message {
+.identify-email-top-group  .disclaimer-message {
     font-size: 18px;
+    text-align: center;
 }

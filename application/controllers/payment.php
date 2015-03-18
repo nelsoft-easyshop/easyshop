@@ -1247,7 +1247,6 @@ class Payment extends MY_Controller{
                 $transactionData['payment_method_name'] = "PayPal";
                 break;
             case 2:
-            //case 4:
                 $transactionData['payment_msg_buyer'] = $this->lang->line('payment_dp_buyer');
                 $transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
                 $transactionData['payment_method_name'] = "DragonPay";
@@ -1285,12 +1284,13 @@ class Payment extends MY_Controller{
                 $primaryImage = $em->getRepository('EasyShop\Entities\EsProductImage')
                                    ->getDefaultImage($productData['productId']);
                 $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                $imagePath = ltrim($imagePath, '.');
                 if(strtolower(ENVIRONMENT) === 'development'){
-                    $imageArray[] = ltrim($imagePath, '.');
+                    $imageArray[] = $imagePath;
                     $parsedImage = $primaryImage->getFilename();
                 }
                 else{
-                    $parsedImage = getAssetsDomain().$imagePath;
+                    $parsedImage = getAssetsDomain().ltrim($imagePath, '/');
                 }
                 $buyerData['products'][$key]['primaryImage'] = $parsedImage;
             }
@@ -1325,7 +1325,8 @@ class Payment extends MY_Controller{
                 'payment_msg_seller' => $transactionData['payment_msg_seller'],
                 'payment_method_name' => $transactionData['payment_method_name'],
                 'facebook' => $socialMediaLinks["facebook"],
-                'twitter' => $socialMediaLinks["twitter"]
+                'twitter' => $socialMediaLinks["twitter"],
+                'baseUrl' => base_url(),
             ];
 
             foreach($transactionData['seller'] as $seller_id => $seller){
@@ -1336,17 +1337,17 @@ class Payment extends MY_Controller{
 
                 # Additional sellerData for email template
                 $sellerSubject = $this->lang->line('notification_subject_seller');
-                $sellerData['baseUrl'] = base_url();
                 foreach($sellerData['products'] as $key => $productData){
                     $primaryImage = $em->getRepository('EasyShop\Entities\EsProductImage')
                                     ->getDefaultImage($productData['productId']);
                     $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                    $imagePath = ltrim($imagePath, '.');
                     if(strtolower(ENVIRONMENT) === 'development'){
-                        $imageArray[] = ltrim($imagePath, '.');
+                        $imageArray[] = $imagePath;
                         $parsedImage = $primaryImage->getFilename();
                     }
                     else{
-                        $parsedImage = getAssetsDomain().$imagePath;
+                        $parsedImage = getAssetsDomain().ltrim($imagePath, '/');
                     }
                     $sellerData['products'][$key]['primaryImage'] = $parsedImage;
                 }

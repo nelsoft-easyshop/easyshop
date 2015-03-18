@@ -643,21 +643,21 @@
                                                     <td valign="top">
                                                         <table border="0" cellspacing="0" cellpadding="0" align="left" width="100%">
                                                             <tr>
-                                                                <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
+                                                                <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; word-break: break-all;">
                                                                     <table width="100%">
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Transaction # : 
                                                                             </td>
-                                                                            <td width="50%" align="left" style="">
+                                                                            <td valign="top" width="50%" align="left" style="word-break: break-all;">
                                                                                 {invoice_no}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Total Price : 
                                                                             </td>
-                                                                            <td width="50%" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                &#8369; {totalprice}
                                                                             </td>
                                                                         </tr>
@@ -701,18 +701,18 @@
                                                                 <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
                                                                     <table width="100%">
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Date : 
                                                                             </td>
-                                                                            <td width="50%" align="left" style="padding-right: 10px;">
+                                                                            <td valign="top" width="50%" align="left" style="padding-right: 10px; word-break: break-all;">
                                                                                 {dateadded}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Payment Method : 
                                                                             </td>
-                                                                            <td width="50%" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 {payment_method_name} 
                                                                             </td>
                                                                         </tr>
@@ -877,8 +877,8 @@
                                                 </tr>
                                                 {attr}
                                                 <tr>
-                                                    <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:400; text-align:left; ">
-                                                        <span style="color: #555555; font-weight: bold;">{attr_name}: </span>{attr_value}
+                                                    <td valign="top" mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:400; text-align:left; ">
+                                                        <span style="color: #555555; font-weight: bold; word-break: break-all;">{attr_name}: </span>{attr_value}
                                                     </td>
                                                 </tr>
                                                 {/attr}
@@ -914,50 +914,50 @@
                                                                 <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
                                                                     <table width="100%">
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Purchased From : 
                                                                             </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px;">
+                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; word-break: break-all;">
                                                                                 {seller_store} 
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top"width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Product Order # : 
                                                                             </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 {order_product_id}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Quantity : 
                                                                             </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 {order_quantity}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Base Price : 
                                                                             </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 &#8369; {baseprice}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Handling Fee : 
                                                                             </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 &#8369; {handling_fee}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Final Price : 
                                                                             </td>
-                                                                            <td width="50%" align="right" style="padding-right: 40px; font-size: 14px; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-size: 14px; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 &#8369; {finalprice}
                                                                             </td>
                                                                         </tr>

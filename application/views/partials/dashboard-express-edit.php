@@ -1,5 +1,6 @@
 
 <div class="express-edit-content">
+    <div class="express-edit-confirm"></div>
     <div class="row">
         <div class="col-xs-12 col-md-3">
             <div class="express-edit-product-image" style="background: url(<?=getAssetsDomain().$product->directory.'categoryview/'.$product->imageFileName; ?>) center no-repeat; background-cover: cover; background-size: 100%;">
@@ -32,7 +33,7 @@
             <div class="edit-sub-content2">
                 <div class="edit-sub-content-column1">
                     <p><strong>Available Stock(s):</strong></p>
-                    <input type="text" maxlength="4" class="ui-form-control txt-total-stock txt-quantity solo-quantity" value="<?=$availableStock;?>" onkeypress="return isNumberKey(event);">
+                    <input type="text" maxlength="4" class="ui-form-control txt-total-stock txt-quantity solo-quantity" value="<?=$availableStock;?>" onkeypress="return isNumberKey(event, false);">
                 </div>
                 <div class="clear"></div>
             </div>
