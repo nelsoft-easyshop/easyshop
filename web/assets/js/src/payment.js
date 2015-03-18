@@ -27,9 +27,10 @@ $(document).ready(function(){
     }
 
     $('.stateregionselect').on('change', function(){
-        var cityselect = $(this).parent('div').siblings('div').find('select.cityselect');
+        var $this = $(this);
+        var cityselect = $this.parent('div').siblings('div').find('select.cityselect');
         cityselect.val(0);
-        cityFilter( $(this), cityselect );
+        cityFilter( $this, cityselect );
     });
 
     $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
@@ -44,7 +45,7 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         var payType = parseInt($this.data('type'));
         var $container = $this.closest('.paypal_button').parent();
-        var $checkBox = $container.find('.chck_privacy').find('.chk_paypal');
+        var $checkBox = $container.find('.chk_paypal');
 
         $container.find('.chck_privacy > p').remove();
         validateWhiteTextBox('.chk_paypal');
@@ -101,7 +102,7 @@ $(document).ready(function(){
                     window.location.replace(d.d);
                 }
                 else{
-                    alert(d.d);
+                    alert(escapeHtml(d.d));
                     if(d.d == 'Item quantity not available.'){
                         location.reload();
                     }
@@ -170,21 +171,22 @@ $(document).ready(function(){
                     if(d.m == 'Item quantity not available.'){
                         location.reload();
                     }
-                    alert(d.m);
+                    alert(escapeHtml(d.m));
                 }
             }
         });
     }
 
     $(document).on('click','.btnDp',function () {
-        var $container = $(this).parent();
-        var $checkBox = $container.find('.chck_privacy').find('.chk_dp');
+        var $this = $(this);
+        var $container = $this.parent();
+        var $checkBox = $container.find('.chk_dp');
 
         validateWhiteTextBox(".chk_dp");
         $container.find('.chck_privacy > p').remove();
         if($checkBox.is(':checked')){
-            $(this).val('Please wait...'); 
-            $(this).attr('disabled','disabled');
+            $this.val('Please wait...'); 
+            $this.attr('disabled','disabled');
             submitDragonpay();
         }
         else{
@@ -195,7 +197,8 @@ $(document).ready(function(){
 
     // CASH ON DELIVERY PROCESS PAYMENT SECTION 
     $(document).on('click','.payment_cod',function () {
-        var $formContainer = $(this).closest('.codFrm');
+        var $this = $(this);
+        var $formContainer = $this.closest('.codFrm');
         var $checkBox = $formContainer.find('.chk_cod');
 
         validateWhiteTextBox(".chk_cod");
@@ -203,8 +206,8 @@ $(document).ready(function(){
         if($checkBox.is(':checked')){
             var askConfirm = confirm('Are you sure you want to make a purchase through Cash on Delivery?');
             if(askConfirm){
-                $(this).val('Please wait...'); 
-                $(this).attr('disabled','disabled');
+                $this.val('Please wait...'); 
+                $this.attr('disabled','disabled');
                 if(PAY_BY_GATEWAY){
                     var action = "/pay/pay"; 
                     var pointAllocated = $('#pointsAllocated').val();
@@ -262,7 +265,7 @@ $(document).ready(function(){
                     if(d.message == 'Item quantity not available.'){
                         location.reload();
                     }
-                    alert(d.message);
+                    alert(escapeHtml(d.message));
                 }
             },
             error: function(err){
@@ -389,7 +392,7 @@ $(document).ready(function(){
                     location.reload();
                 }
                 else{
-                    alert(d);
+                    alert(escapeHtml(d));
                 }
             }, 
             error: function (request, status, error) {
@@ -400,11 +403,12 @@ $(document).ready(function(){
 
     // VIEW ITEM AVAILABILITY LOCATION
     $(document).on('click','.view_location_item',function () {
+        var $this = $(this);
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
-        var slug = $(this).data('slug');
-        var iid = $(this).data('iid');
-        var pname = $(this).data('name');
+        var slug = $this.data('slug');
+        var iid = $this.data('iid');
+        var pname = $this.data('name');
         var action = "/payment/getLocation"; 
         $.ajax({
             type: "POST",
@@ -416,7 +420,7 @@ $(document).ready(function(){
                 $('.div_view_avail_location').append(d);
             },       
             error: function (request, status, error) {
-                alert(error);
+                alert(escapeHtml(error));
             }
         });
     });
@@ -442,3 +446,4 @@ $(document).ready(function(){
         });
     });
 });
+
