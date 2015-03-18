@@ -1,0 +1,182 @@
+/* =============================================
+---------------------  Header -----------------
+==============================================*/
+
+header {
+    background-color: #fff;
+    color: #565656;
+}
+
+.simple-header-container {
+    border-top: 3px solid #4370cc;
+    border-bottom: 1px solid #e2e2e2;
+    height: auto;
+    margin-bottom: 40px;
+    padding: 35px 0;
+}
+
+.login-container {
+    text-align: right;
+}
+
+.login-content {
+    background-color: #4370cc;
+    border-radius: 4px;
+    color: #fff;
+    display: inline-block;
+    padding: 4px 12px;
+    position: relative;
+    text-align: left;
+}
+
+.login-content a {
+    color: #fff;
+    font-weight: 900;
+}
+
+.login-content a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-user-msge {
+    position: absolute;
+    left: -5px;
+    top: -5px;
+}
+
+.header-user-profile-photo {
+    border-radius: 90px;
+    display: inline-block;
+    height: 25px;
+    margin-right: 6px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 25px;
+}
+
+.header-username {
+    color: #fff;
+    display: none;
+    font-weight: 900;
+    line-height: 24px;
+    max-width: 100px;
+    overflow: hidden;
+    padding-right: 8px;
+    text-align: left;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.header-username:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-user-arrow-down {
+    display: inline-block;
+    height: 13px;
+    position: relative;
+    vertical-align: middle;
+    width: 15px;
+}
+
+
+.header-user-arrow-down:after {
+    border-style: inset;
+     -webkit-transform:rotate(360deg);
+    content: " ";
+    cursor: pointer;
+    height: 0;
+    left: 1px;
+    line-height: 0;
+    position: absolute;
+    top: 3px;
+    width: 0;
+    border-style: solid;
+    border-width: 8px 6px 0;
+    border-color: #fff transparent transparent transparent;
+    _border-color: #fff #000000 #000000 #000000;
+    _filter: progid:DXImageTransform.Microsoft.Chroma(color='#000000');
+}
+
+.header-nav-dropdown {
+    background-color: #fff;
+    border: 1px solid #d5d5d5;
+    border-radius: 3px;
+    display: none;
+    list-style: none;
+    padding: 10px 0;
+    position: absolute;
+    right: 0;
+    top: 37px;
+    width: 200px;
+    z-index: 100000;
+    
+    -webkit-box-shadow: 0px 2px 6px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow:    0px 2px 6px rgba(50, 50, 50, 0.3);
+    box-shadow:         0px 2px 6px rgba(50, 50, 50, 0.3);
+}
+
+.header-nav-dropdown:before {
+    border-style: inset;
+     -webkit-transform:rotate(360deg);
+    content: " ";
+    position: absolute;
+    right: 4px;
+    top: -9px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width:0 15px 15px;
+    border-color: transparent transparent #fff transparent;
+    z-index: -9;
+}
+
+.login-content:hover .header-nav-dropdown {
+    display: block;
+}
+
+.header-nav-dropdown li a {
+    color: #494949;
+    display: block;
+    font-weight: normal;
+    padding:0px 10px;
+}
+
+.header-nav-dropdown li a:hover {
+    color: #fff;
+    background-color: #4370cc;
+    text-decoration: none;
+}
+
+.login-content .message-count-con {
+    position: absolute;
+    right: 5px;
+    top: 6px;
+}
+
+@media (min-width: 480px) {
+    .header-user-profile-photo {
+        height: 16px;
+        width: 16px;
+    }
+    .header-username {
+        display: inline-block;
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 360px) {
+    .header-top-logo {
+        padding-top: 5px;
+    }
+
+    .header-top-logo img {
+        width: 150px;
+    }
+}
+

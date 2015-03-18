@@ -83,9 +83,9 @@ class product_search extends MY_Controller {
         ];
 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/search/advance_search_main',$response);
-        $this->load->view('templates/footer');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
 
     /**

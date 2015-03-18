@@ -321,9 +321,9 @@ class Payment extends MY_Controller{
             
             // Load view
             $this->load->spark('decorator');  
-            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/payment/payment_review_responsive' ,$data);  
-            $this->load->view('templates/footer');  
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
         }
         else{
            redirect('/cart/', 'refresh'); 
@@ -1143,9 +1143,9 @@ class Payment extends MY_Controller{
         $this->session->unset_userdata('payment_status');
 
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/payment/payment_response_responsive' ,$response);
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
    }
 
 
