@@ -2667,12 +2667,7 @@ label.css-label {
 }
 
 .ui-dialog.ui-widget.ui-widget-content.express-edit-wrapper {
-    max-width: none;
-    width: 95% !important;
-    -webkit-transition: top 0.5s ease-in-out;
-    -moz-transition:    top 0.5s ease-in-out;
-    -o-transition:      top 0.5s ease-in-out;
-     transition:        top 0.5s ease-in-out;
+    max-width: 1180px;
 }
 
 .express-edit-wrapper.ui-widget-content {
@@ -2735,7 +2730,7 @@ label.css-label {
 .express-edit-btn .btn-default-1,
 .express-edit-btn .btn-set-default {
     font-size: 14px;
-    width: 49%;
+    width: 48%;
 }
 
 .express-edit-btn .btn-default-1 {
@@ -2747,7 +2742,7 @@ label.css-label {
     font-size: 14px !important;
     margin-top: 10px;
     padding: 8px 7px;
-    width: 100%;
+    width: 97%;
 }
 
 .express-edit-btn .btn-default-3:hover {
@@ -3522,7 +3517,7 @@ label.css-label {
     }
 
     .express-edit-wrapper {
-        width: 750px !important;
+        max-width: 750px;
     }
 
     .prod-att-input-price {
@@ -3548,13 +3543,17 @@ label.css-label {
     }
 
     .express-edit-wrapper {
-        width: 970px !important;
+        max-width: 970px;
+    }
+
+    .express-edit-btn .btn-default-3 {
+        width: 100%;
     }
 }
 
 @media (min-width: 1200px) {
     .express-edit-wrapper {
-        width: 1120px !important;
+        max-width: 1120px;
     }
 
     .prod-att-input-price {
