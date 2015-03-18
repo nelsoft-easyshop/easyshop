@@ -96,7 +96,7 @@ class MobileProductUpload extends MY_Controller
                 ];
             }
 
-            $isSuccess = false;
+            $isSuccess = true;
         }
         else{
             $errorMessage = "Please verify your email address.";
