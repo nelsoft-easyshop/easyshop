@@ -34,9 +34,9 @@ class ScratchCard extends MY_Controller
         $viewData['deals_banner'] = $this->load->view('templates/dealspage/scratchAndWin', $banner_data = array(), TRUE);
 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/scratch_to_win', $viewData);
-        $this->load->view('templates/footer');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
 
 
@@ -148,7 +148,7 @@ class ScratchCard extends MY_Controller
         $viewData['gadgets_galore'] = $product;
 
         $this->load->spark('decorator');
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_alt',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/scratch_to_win', $viewData);
         $this->load->view('templates/footer');
     }

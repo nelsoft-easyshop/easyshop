@@ -69,9 +69,9 @@ class Home extends MY_Controller
             'title' => 'Under Construction | Easyshop.ph'
         ];
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/underconstruction_view');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
 
 
@@ -114,9 +114,9 @@ class Home extends MY_Controller
             'metadescription' => "Read Easyshop.ph's Privacy Policy",
         ];
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/policy');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
   
     /**
@@ -133,9 +133,9 @@ class Home extends MY_Controller
         ];
 
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/terms');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
     
     
@@ -153,9 +153,9 @@ class Home extends MY_Controller
         ];
     
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/faq');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
      
     }
     
@@ -174,9 +174,9 @@ class Home extends MY_Controller
         ];
         
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/contact');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
     
     
@@ -198,7 +198,7 @@ class Home extends MY_Controller
         $bodyData['facebook'] = $socialMediaLinks["facebook"];
         $bodyData['twitter'] = $socialMediaLinks["twitter"];    
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/how-to-buy', $bodyData);
     }
     
@@ -220,7 +220,7 @@ class Home extends MY_Controller
         $bodyData['facebook'] = $socialMediaLinks["facebook"];
         $bodyData['twitter'] = $socialMediaLinks["twitter"];    
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/how-to-sell', $bodyData);
     }
         
@@ -271,9 +271,9 @@ class Home extends MY_Controller
         ];
 
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->output->append_output($formData); 
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));        
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));        
     }
     
     /**

@@ -103,7 +103,7 @@ class productUpload extends MY_Controller
                 'renderSearchbar' => false, 
             ];
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
+            $this->load->view('templates/header_alt',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step1_view',$data_item);
             $this->load->view('templates/footer'); 
         }
@@ -241,7 +241,7 @@ class productUpload extends MY_Controller
             }
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
+            $this->load->view('templates/header_alt',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step2_view',$response);
             $this->load->view('templates/footer');
         }else{
@@ -435,7 +435,7 @@ class productUpload extends MY_Controller
             'renderSearchbar' => false, 
         ]; 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
+        $this->load->view('templates/header_alt',  $this->decorator->decorate('header', 'view', $headerData));  
         $this->load->view('pages/product/product_upload_step2_view',$response);
         $this->load->view('templates/footer');
     }
@@ -1335,7 +1335,7 @@ class productUpload extends MY_Controller
             ]; 
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_preview',$preview_data);
             $this->load->view('templates/footer');
         }
@@ -1409,7 +1409,7 @@ class productUpload extends MY_Controller
             ]; 
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step3_view',$data);
             $this->load->view('templates/footer');
         }
@@ -1643,7 +1643,7 @@ class productUpload extends MY_Controller
             ];
 
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
             $this->load->view('templates/footer');
         }
