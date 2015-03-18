@@ -804,23 +804,14 @@ class Payment extends MY_Controller{
             $this->setPromoItemsToPayment($this->input->post('promo_type'));
         }
 
-        if(!$this->session->userdata('member_id') 
-            || !$this->input->post('paymentToken') 
+        if(!$this->session->userdata('member_id')  
             || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');
         }
-
-        $lastDigit = substr($this->input->post('paymentToken'), -1);
+ 
         $qtysuccess = $this->resetPriceAndQty();
-        $status = PaymentService::STATUS_FAIL;
-        if($lastDigit == 2) {
-            $paymentType = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
-            $textType = 'directbankdeposit';
-        }
-        else{
-            $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
-            $textType = 'cashondelivery';
-        }
+        $status = PaymentService::STATUS_FAIL; 
+        $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY; 
 
         $member_id =  $this->session->userdata('member_id');
         $itemList =  $this->session->userdata('choosen_items');
@@ -837,7 +828,7 @@ class Payment extends MY_Controller{
         }
 
         $this->__generateFlash($txnid,$message,$status);
-        redirect('/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
+        redirect('/payment/success/cashondelivery?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
     /**
