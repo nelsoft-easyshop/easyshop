@@ -15,6 +15,7 @@
                         <tr>
                             <td class="td-image-cont" width="20%" >
                                 <div class="div-product-image" style="background: url(<?php echo getAssetsDomain().$product->directory.$product->imageFileName?>) center no-repeat; background-cover: cover; background-size: 90%;">
+                                    <img src="<?php echo getAssetsDomain().$product->directory.$product->imageFileName?>" class="image-primary">
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>
                                     <div class="pin-discount">
                                         <?php echo number_format($product->getDiscountPercentage(),0,'.',',');?>%
@@ -22,7 +23,7 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td class="td-meta-info">
+                            <td class="td-meta-info" >
                                 <p class="item-list-name">
                                     <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT): ?>
                                             <?php if(strlen($product->getName()) > 40): ?>
