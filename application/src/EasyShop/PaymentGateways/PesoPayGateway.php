@@ -261,9 +261,7 @@ class PesoPayGateWay extends AbstractGateway
 
     /**
      * External Charge for Pesopay
-     *
-     * 
-     * @return int
+     * @return string
      */
     public function getExternalCharge()
     {
