@@ -1959,33 +1959,72 @@
     
     function createCategoryList(categoryData)
     {       
-            if(categoryData.length === 0){
-                $('.div-store-content.concealable').hide();
-                $('.no-category-display').show();
-                return false;
+        if(categoryData.length === 0){
+            $('.div-store-content.concealable').hide();
+            $('.no-category-display').show();
+            return false;
+        }
+    
+        var categoryDraggableList = [];
+        var categoryDeleteList = [];
+        var categoryViewList = [];
+        $.each(categoryData, function(index, category) {
+            var escapedName = escapeHtml(category.categoryName);
+            var categoryIdentifier = parseInt(category.memberCategoryId, 10);
+            var editHtml = '<li data-categoryid='+categoryIdentifier+'>'+escapedName+' <span class="icon-edit modal-category-edit pull-right edit-category"></span>';
+            var deleteHtml = '<li data-categoryid="'+categoryIdentifier + '">'+escapedName;
+            if(category.children.length > 0){
+                editHtml += '<ul>';
+                deleteHtml += '<ul>';
+                $.each(category.children, function(index, child){
+                    var childCategoryIdentifier = parseInt(child.memberCategoryId, 10);
+                    var childEscapedName = escapeHtml(child.categoryName);
+                    editHtml += '<li data-categoryid='+childCategoryIdentifier+'>'+childEscapedName+' <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>'
+                    deleteHtml += '<li data-categoryid="'+childCategoryIdentifier + '">'+childEscapedName+'</li>';
+                });
+                editHtml += '</ul>';
+                deleteHtml += '</ul>';
             }
+            editHtml += '</li>'
+            categoryDraggableList.push(editHtml);
+            categoryDeleteList.push(deleteHtml);
+            var viewHtml =  '<div class="div-cat" data-categoryId="'+categoryIdentifier+'">'+escapedName+'</div>';
+            categoryViewList.push(viewHtml);
+        });
+    
+        var $categoryView = $('.store-category-view');
+        var $draggableUnorderList = $('#edit-category-tree ul');
+        var $deletableCategoryList = $('#delete-list-categories');
+        $categoryView.html('');
+        $categoryView.append( categoryViewList.join('') );
+        $draggableUnorderList.html('');
+        $draggableUnorderList.append(categoryDraggableList.join(''));
+        $deletableCategoryList.html('');
+        $deletableCategoryList.append( categoryDeleteList.join('') );
+    
+        $('#edit-category-tree').jstree({
+            "core": {
+                "check_callback":true
+            },
+            "types" : {
+                "#" : {
+                    "max_depth" : 2
+                },
+            },
+            "plugins" : [
+                "dnd", "types"
+            ],
+        });
         
-            var categoryViewList = [];
-            var categoryDraggableList = [];
-            var categoryDeleteList = [];
-            $.each(categoryData, function(index, category) {
-                var escapedName = escapeHtml(category.name);
-                var categoryIdentifier = parseInt(category.memberCategoryId, 10);
-                var html =  '<div class="div-cat" data-categoryId="'+categoryIdentifier+'">'+escapedName+'</div>';
-                categoryViewList.push(html);
-                html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
-                categoryDraggableList.push(html);
-                html = '<li class="checkbox"><label><input data-categoryid="'+escapeHtml(categoryIdentifier) + '" type="checkbox" class="checkBox">'+escapedName+'</label></li>';
-                categoryDeleteList.push(html);
-            });
-
-            $('.store-category-view').html('');
-            $('.new-store-category-draggable').html('');
-            $('.store-category-view').append( categoryViewList.join('') );
-            $('.new-store-category-draggable').append( categoryDraggableList.join('') );
-            $('.new-store-category-draggable').sortable();
-            $('#delete-list-categories').html('');
-            $('#delete-list-categories').append( categoryDeleteList.join('') );
+         $('#delete-category-tree').jstree({
+            "checkbox" : {
+                "keep_selected_style" : false
+            },
+            "plugins" : [
+                "checkbox"
+            ],
+        });
+        
     }
 
     $('#store-color-save').on('click', function(){
@@ -2858,24 +2897,6 @@
             $(".my-category-modal-sm").css("width", modalCategoryModalSmWidth+"px").css("height",modalDeleteHeight+"px");
         }
     });
-
-    $(document).ready(function(){
-        $('#category-tree').jstree({
-            "core": {
-                "check_callback":true
-            },
-            "types" : {
-                "#" : {
-                    "max_depth" : 2
-                },
-            },
-            "plugins" : [
-                "dnd", "types"
-            ],
-        });
-    });
-    
-
 
 }(jQuery));
 

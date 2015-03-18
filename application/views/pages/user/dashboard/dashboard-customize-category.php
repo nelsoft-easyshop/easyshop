@@ -45,26 +45,13 @@
                     <div class="form-group">
                             <label class="col-sm-3 control-label">Reorder List : </label>
                             <div class="col-sm-6 col-with-radio">
-                                <ul class="category_sort list new-store-category-draggable ui-sortable" style="display: none;">
-
-                                </ul>
-                                <div id="category-tree">
+                                
+                                <div id="edit-category-tree">
                                     <ul>
-                                        <li>Movies <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
-                                        <li>Electronics and Gadgets
-                                            <ul>
-                                                <li>Smart Phones <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
-                                                <li>Laptops <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
-                                            </ul>
-                                        </li>
-                                        <li>Clothing and Accessories
-                                            <ul>
-                                                <li>Men's Clothing <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
-                                                <li>Women's Clothing <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>
-                                            </ul>
-                                        </li>
                                     </ul>
                                 </div>
+                                
+                                
                                 <p class="note-category">Drag the category items to reorder</p>
                                 <br/>
                                 <button class="btn btn-setting-save-btn" id="category-order-save">
@@ -133,17 +120,12 @@
                         <div class="form-group">
                                 <label class="col-sm-3 control-label">Current Categories : </label>
                                 <div class="col-sm-9 col-with-radio">
-                                    <ul class="list-unstyled list-currect-categories" id="delete-list-categories" style="display: none;">                                        
+                                    <div id="delete-category-tree">
+                                        <ul class="list-unstyled list-currect-categories" id="delete-list-categories">                                        
 
-                                    </ul>
-                                    <ul class="list-unstyled list-currect-categories">                                        
-                                        <li class="checkbox"><label><input type="checkbox" class="checkBox">Clothing Accessories</label>
-                                            <ul>
-                                                <li class="checkbox"><label><input type="checkbox" class="checkBox">Men's Clothing</label></li>
-                                            </ul>
-                                        </li>
-
-                                    </ul>
+                                        </ul>
+                                    </div>
+                                    
                                     <div class="current-btn-delete">
                                         <br/>   
                                         <button class="btn btn-setting-cancel-btn" id="btn-edit-delete-categories">

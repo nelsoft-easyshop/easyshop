@@ -1424,7 +1424,7 @@ a{
     margin-top: 30px;
 }
 
-#category-tree .jstree-anchor{
+#edit-category-tree .jstree-anchor{
     border: solid #ff893a 1px;
     cursor: url(/assets/images/grabbing.png), move;
     background: #fff;
@@ -1435,7 +1435,7 @@ a{
     border-radius: 4px;
 }
 
-#category-tree > ul > li > ul .jstree-anchor{
+#edit-category-tree > ul > li > ul .jstree-anchor{
     border: dotted #ff893a 1px !important;
 }
 
@@ -1443,16 +1443,21 @@ a{
     border: dotted #ff893a 1px;
 }
 
-#category-tree li > a > .jstree-icon {  
+#edit-category-tree li > a > .jstree-icon {  
     display:none !important; 
 } 
 
-#category-tree li {
+#delete-category-tree li > a > .jstree-themeicon {  
+    display:none !important; 
+} 
+
+
+#edit-category-tree li {
     margin-top: 7px;
     margin-bottom: 7px;
 }
 
-#category-tree .modal-category-edit{
+#edit-category-tree .modal-category-edit{
     margin-right: 5px;
     margin-top: 6px;
 }
