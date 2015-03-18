@@ -221,18 +221,14 @@ class SocialMediaController extends MY_Controller
             ]);
             $parseData = [
                 'username' => $member->getUsername(),
-                'hash' => $this->encrypt->encode($data),
-                'site_url' => site_url('SocialMediaController/mergeAccount'),
-                'error_in' => $this->input->post('error'),
                 'facebook' => $socialMediaLinks["facebook"],
-                'twitter' => $socialMediaLinks["twitter"]
+                'twitter' => $socialMediaLinks["twitter"],
+                'baseUrl' => base_url(),
+                'mergeLink' => site_url('SocialMediaController/mergeAccount').'?h='.$this->encrypt->encode($data)
             ];
 
             $this->config->load('email', true);
             $imageArray = $this->config->config['images'];
-            $imageArray[] = "/assets/images/appbar.home.png";
-            $imageArray[] = "/assets/images/appbar.message.png";
-
             $message = $this->parser->parse('emails/merge-account', $parseData, true);
             $this->emailNotification->setRecipient($member->getEmail());
             $this->emailNotification->setSubject($this->lang->line('merge_subject'));
@@ -243,6 +239,7 @@ class SocialMediaController extends MY_Controller
         echo json_encode($result);
     }
 
+    
     /**
      * Merge account
      */
@@ -262,9 +259,12 @@ class SocialMediaController extends MY_Controller
                                                  'socialMediaId' => $getData['socialMediaId'],
                                                  'socialMediaProvider' => $getData['socialMediaProvider']
                                              ]);
+
         if (intval($getData['socialMediaId']) === 0 || !$memberObj || !$this->input->get('h') || !$socialMediaProvider || $doesSocialMediaAccountExists) {
             redirect('/login', 'refresh');
         }
+        
+    
 
         $member = $this->socialMediaManager->mergeAccount($memberObj, $getData['socialMediaId'], $socialMediaProvider);
         $this->login($member);

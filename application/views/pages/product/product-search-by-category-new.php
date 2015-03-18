@@ -7,7 +7,10 @@
 <?php endif; ?>
 
 <div class="loader">
-    <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+    <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3.gif"/>
+    <br/>
+    <br/>
+    <span>Loading items...</span>
 </div>
 
 <section class="breadcrumbs-bg">

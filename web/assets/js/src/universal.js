@@ -94,18 +94,20 @@ function replaceNumberWithCommas(thisnumber){
 }
 
 function validateRedTextBox(idclass){
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000",
-                "-webkit-appearance":"none"}).addClass('my_err');
+    $(idclass).css({ 
+        "-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
+        "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
+        "box-shadow": "0px 0px 2px 2px #FF0000"
+    }).addClass('my_err');
     $(idclass).focus();
 } 
 
 function validateWhiteTextBox(idclass){
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-webkit-appearance":"none"}).removeClass('my_err');
+    $(idclass).css({ 
+        "-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
+        "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
+        "box-shadow": "0px 0px 2px 2px #FFFFFF"
+    }).removeClass('my_err');
 }
 
 function updateMessageCountIcons(){
@@ -144,12 +146,21 @@ function updateMessageCountIcons(){
     
 }
 
-function isNumberKey(evt)
+function isNumberKey(evt, withDecimal)
 {
+    var withDecimal = typeof withDecimal != 'undefined' ? withDecimal : true;
     var charCode = (evt.which) ? evt.which : event.keyCode;
-    if (charCode != 46 && charCode > 31 
-        && (charCode < 48 || charCode > 57)){
-        return false;
+
+    if(withDecimal){
+        if (charCode != 46 && charCode > 31 
+            && (charCode < 48 || charCode > 57)){
+            return false;
+        }
+    }
+    else{
+        if (charCode > 31 && (charCode < 48 || charCode > 57)){
+            return false;
+        }
     }
 
     return true;

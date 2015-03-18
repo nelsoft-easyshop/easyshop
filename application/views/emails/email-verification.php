@@ -501,51 +501,69 @@
                 </td>
             </tr>
             <!--End of email header-->
-
-            <!-- Start of paragraph intro -->
-            <tr mc:repeatable="Select" mc:variant="layout-1/2">
+            
+            <!-- START layout-4--> 
+            <tr mc:repeatable ="Select" mc:variant="layout-4">
                 <td mc:hideable align="center" valign="top" class="fix-box">
-                    <!-- start  container width 600px --> 
-                    <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="container" style="background-color: #ffffff; ">
+
+                    <!-- start layout-4 container width 600px --> 
+                    <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" bgcolor="#ffffff" style="background-color: #ffffff; ">
+                        <tr>
+                            <td valign="top" height="20">
+                            </td>
+                        </tr>
                         <tr>
                             <td valign="top">
-                                <!-- start container width 560px --> 
-                                <table width="540" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" bgcolor="#ffffff" style="background-color:#ffffff;">
-                                    <!-- start text content --> 
+                                <!-- start layout-4 container width 600px --> 
+                                <table width="600" align="center" border="0" cellspacing="0" cellpadding="0" class="full-width" bgcolor="#ffffff" style="background-color:#ffffff;">
+                                <!-- start image and content --> 
                                     <tr>
-                                        <td valign="top">
+                                        <td valign="top" width="100%" style="padding-left: 10px;">
+
+                                            <!-- start content right --> 
+                                            <table width="270" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width">
+
+                                                <tr>
+                                                    <td valign="bottom" align="center">
+                                                        <a href="{baseUrl}" target="_blank" style="text-decoration: none;">
+                                                            <img mc:edit="image-2 TB25" src="filler.jpg" width="270" alt="image2_480x501" style="display:block; max-width:270px; " border="0" hspace="0" vspace="0"> 
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <!-- end content right --> 
+
+
+                                            <!-- start space width --> 
+                                            <table class="remove" width="1" border="0" cellpadding="0" cellspacing="0" align="right" style="font-size: 0;line-height: 0;border-collapse: collapse;">
+                                                <tr>
+                                                    <td width="0" height="2" style="font-size: 0;line-height: 0;border-collapse: collapse;">
+                                                        <p style="padding-left: 20px;">&nbsp;</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <!-- end space width --> 
+
+
                                             <!-- start content left --> 
-                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" class="full-width-text" style="padding-left:20px;">
-
-
+                                            <table width="290" border="0" cellspacing="0" cellpadding="0" align="left" class="full-width-text" style="padding-left:20px;">
+                                                <!--start space height --> 
+                                                
+                                                
 
                                                 <!-- start text content --> 
                                                 <tr>
                                                     <td valign="top">
                                                         <table border="0" cellspacing="0" cellpadding="0" align="left">
-
-                                                            <!--start space height --> 
-                                                            <tr>
-                                                                <td height="15"></td>
-                                                            </tr>
-                                                            <!--end space height --> 
-
+                                                            
                                                             <tr>
                                                                 <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
-                                                                  <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{recipient}</span>,</p>
-                                                                    <span style="color: #ff893b; font-weight: 400;">{user}</span> has just sent you a personal message in Easyshop!
-                                                                </td>
-                                                            </tr>
-                                                            <!--start space height --> 
-                                                            <tr>
-                                                                <td height="20"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:400; text-align:left; font-style: italic; ">
 
-                                                                    <span style="color: #555555; font-size: 19px;">&#8220;</span>
-                                                                        {msg}
-                                                                    <span style="color: #555555; font-size: 19px;">&#8221;</span>
+                                                                   <p style="margin-bottom: 20px;">Hi <span style="color:#ff893b; font-weight: 400;">{user}</span>,</p>
+                                                                    Welcome to your business&apos; new home!
+                                                                    <br/><br/>
+                                                                    <span style="color:#555555; font-weight: 400;">You are one click away from activating your account. Just click the button below to verify your email</span>
+                                                                    
                                                                 </td>
                                                             </tr>
                                                             <!--start space height --> 
@@ -553,17 +571,16 @@
                                                                 <td height="20"></td>
                                                             </tr>
                                                             <!--end space height --> 
+
                                                             <tr>
                                                                 <td valign="top" width="auto">
                                                                     <!-- start button -->                                
                                                                     <table border="0" align="left" cellpadding="0" cellspacing="0">
                                                                         <tr>
                                                                             <td mc:edit="button left (layout-5) TB42" id="mail-color" width="auto" align="center" valign="middle" height="32" style=" background-color:#4370cc;  border-radius:5px; background-clip: padding-box;font-size:13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; text-align:center;  color:#ffffff; font-weight: 300; padding-left:18px; padding-right:18px; ">
-                                                                                <span style="color: #ffffff; font-weight: 300;">
-                                                                                    <a href="{msg_link}" target="_blank" style="text-decoration: none; color:#ffffff; font-weight: 300;">
-                                                                                        Send {user} a reply
-                                                                                    </a>
-                                                                                </span>
+                                                                                <a href="{site_url}?h={hash}" target="_blank" style="display: inline-block; text-decoration: none; color:#ffffff; font-weight: 300;">
+                                                                                    Verify Email
+                                                                                </a>
                                                                             </td>
                                                                         </tr>
                                                                   </table>
@@ -573,6 +590,12 @@
                                                             <tr>
                                                                 <td height="20"></td>
                                                             </tr>
+                                                            <tr>
+                                                                <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
+                                                                    Once verified, you may start selling products in <span style="color:#ff893b; font-weight: 400;">EasyShop.ph</span>!
+                                                                </td>
+                                                            </tr>
+
                                                         </table>
                                                     </td>
                                                 </tr>
@@ -585,22 +608,24 @@
                                                 <!--end space height --> 
 
                                             </table>
-                                            <!-- end content left -->
+                                            <!-- end content left --> 
                                         </td>
                                     </tr>
-                                    <!-- end text content --> 
+                                    <!-- end image and content --> 
+
                                 </table>
-                                <!-- end  container width 560px --> 
+                                <!-- end layout-4 container width 600px --> 
                             </td>
                         </tr>
                         <tr>
                             <td height="10" width="100%" style="border-top: solid #e2e2e2 1px;"></td>
                         </tr>
                     </table>
-                    <!-- end  container width 600px --> 
+                    <!-- end layout-4 container width 600px -->
                 </td>
             </tr>
-            <!-- End of paragraph intro-->
+            <!-- END layout-4  --> 
+
             <!-- Start of Social Media Footer -->
             <tr mc:repeatable="Select" mc:variant="layout-16">
                 <td mc:hideable align="center" valign="top" class="fix-box">

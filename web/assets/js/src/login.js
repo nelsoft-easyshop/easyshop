@@ -7,17 +7,6 @@
     
     
     $(document).ready(function(){
-        var pathName = window.location.pathname.substring(1);
-
-        if (pathName === "login") {
-            $('#tab-login').trigger('click');
-        }
-        else if (pathName === "register") {
-            $('#tab-create').trigger('click');
-            setTimeout(function(){  
-                $("#login").hide();
-            }, 300);
-        }
         
         $('#tab-login , #tab-create').on('click', function(){
             $('.login-throttle').hide();
@@ -211,6 +200,16 @@
         setTimeout(function(){
             $(".login-loading-content").hide();
             $(".login-hide-content").fadeIn();
+            
+            var pathName = window.location.pathname.substring(1);
+            if (pathName === "login") {
+                $('#tab-login').trigger('click');
+            }
+            else if (pathName === "register") {
+                $('#tab-create').trigger('click');
+                $("#login").hide();
+            }
+
         }, 300);
 
         setTimeout(function(){
@@ -234,6 +233,8 @@
     });
 
     $(".login-hide-content").hide();
+
+    $('#password').pwstrength();
 
 })(jQuery);
 

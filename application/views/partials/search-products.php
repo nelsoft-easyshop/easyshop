@@ -145,7 +145,7 @@
                         </td>
                         <td class="search-item-td-price">
                             <div class="search-item-price">
-                                <?php $priceFontStyle = strlen((string)$originalPrice) > 12 ? "font-size:15px !important;" : ""; ?>  
+                                <?php $priceFontStyle = strlen((string)$originalPrice) > 11 ? "font-size:15px !important;" : ""; ?>  
                                 <?php if($percentage > 0):?>
                                 
                                     <span class="original-price" style="<?php echo $priceFontStyle; ?>">

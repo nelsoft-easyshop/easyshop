@@ -39,7 +39,7 @@
             $totalStock += parseInt($(this).val());
         });
 
-        return $totalStock;
+        return isNaN($totalStock) ? 0 : $totalStock;
     }
 
     function validate($this)
@@ -240,20 +240,38 @@
         }
     });
 
-    $(document.body).on('click','.remove-row',function () {
-        var $ask = confirm("Are you sure want to remove this row?");
+    $(document.body).on('click','.remove-row',function () { 
         var $this = $(this);
         var $container = $this.closest('.express-edit-content');
         var $count; 
         var $closestTR = $this.closest('tr');
-        if($ask){  
-            $removeCombination.push($closestTR.find('.item-control').val());
-            $closestTR.remove();
-            $count = $container.find('.combination-row').length;
-            if($count <= 1){
-                $container.find('.prod-att-table').find('.remove-row').remove();
-            }
-        } 
+        
+
+        $container.find('.express-edit-confirm').dialog({
+            resizable: false,
+            "resize": "auto",
+            width: 'auto',
+            modal: true,
+            fluid: true,
+            buttons: {
+                "Remove": function() { 
+                    $removeCombination.push($closestTR.find('.item-control').val());
+                    $closestTR.remove();
+                    $count = $container.find('.combination-row').length;
+                    if($count <= 1){
+                        $container.find('.prod-att-table').find('.remove-row').remove();
+                    }
+                    $(this).dialog("close"); 
+                },
+                "Cancel": function() {
+                    $(this).dialog("close"); 
+                }
+            },
+            close: function(){
+                $container.prepend('<div class="express-edit-confirm"></div>');
+            },  
+            "title": "Remove Combination Row?"
+        }); 
     });
 
     $(document).on('change',".product-name",function () {

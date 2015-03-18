@@ -131,7 +131,9 @@ class Register extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper']; 
         $emailer = $this->serviceContainer['email_notification'];
-
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
+        $this->load->library('parser');
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                             ->setMethod('POST')
                             ->add('email', 'text', array('required' => false, 'label' => false, 'constraints' => $rules))
@@ -152,13 +154,18 @@ class Register extends MY_Controller
 
                 $this->config->load('email', true);
                 $imageArray = $this->config->config['images'];
-                $message = $this->load->view('templates/landingpage/lp_subscription_email', array(), true);
-                
+                $parseData = [
+                    'baseUrl' => base_url(),
+                    'facebook' => $socialMediaLinks['facebook'],
+                    'twitter' => $socialMediaLinks['twitter'],
+                ];
+
+                $message = $this->parser->parse('emails/newsletter-subscription' , $parseData, true);
                 $emailer->setRecipient($subscriber->getEmail());
                 $emailer->setSubject($this->lang->line('subscription_subject'));
                 $emailer->setMessage($message, $imageArray);
                 $emailer->queueMail();
-                
+
                 $data['content'] = 'You have successfully Subscribed!';
             }
             else{

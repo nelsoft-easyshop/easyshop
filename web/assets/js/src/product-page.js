@@ -122,7 +122,8 @@
             $combinationQuantity = val.quantity;
             $combinationLocation = val.location;
             $("#control-quantity").empty();
-            $('#shipment_locations > option').show().prop('disabled', true);
+            $("#shipment_locations").html($("#shipment_locations_copy").html()); 
+            $('#shipment_locations > option').prop('disabled', true);
             $('#shipment_locations > .default').prop('disabled', false);
 
             // if found atleast one combination
@@ -152,14 +153,10 @@
                     });
                 }
 
-                $('#shipment_locations > option:disabled').hide();
+                $('#shipment_locations > option:disabled').remove();
                 
                 return false;
             }
-
-            $("#shipment_locations > option").each(function() { 
-                $(this).empty().append($(this).data('text'));
-            }); 
 
             $("#shipment_locations").val($("#shipment_locations option:first").val());
             $addToCartButton.removeClass("enabled").addClass("disabled");
@@ -271,8 +268,8 @@
     $productCombQuantity = JSON.parse($("#productCombQuantity").val());
 
     removeNoCombination();
-    $("#error-review-title,#error-review-nessage,.error-label-textarea").hide();
-
+    $("#error-review-title,#error-review-nessage,.error-label-textarea").hide(); 
+    $("#shipment_locations_copy").html($("#shipment_locations").html()).hide();
     if($("#noMoreSelection").val() != ""){
         if($("#needToSelect").val() == ""){
             var $arraySelected = [];

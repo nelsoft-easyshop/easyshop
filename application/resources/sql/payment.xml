@@ -54,7 +54,7 @@
             IF(badd.mobile='','N/A',CONCAT('0',badd.mobile)) as buyer_contactno, IF(seller.contactno='','N/A',CONCAT('0',seller.contactno)) as seller_contactno,
             l0.location as stateregion, l1.location as city, badd.address,COALESCE(badd.telephone, 'N/A') as buyer_telephone,
             o.payment_method_id,
-            buyer.slug as buyer_slug, seller.slug as seller_slug
+            buyer.slug as buyer_slug, seller.slug as seller_slug, p.id_product as productId, CONCAT('item/', p.slug) as productLink
         FROM es_order o
         INNER JOIN es_order_product op 
             ON op.order_id = o.id_order AND o.buyer_id = :buyer_id AND o.id_order = :order_id AND o.invoice_no = :invoice_no

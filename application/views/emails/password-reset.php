@@ -532,47 +532,20 @@
 
                                                             <tr>
                                                                 <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
-                                                                  <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{recipient}</span>,</p>
-                                                                    <span style="color: #ff893b; font-weight: 400;">{user}</span> has just sent you a personal message in Easyshop!
-                                                                </td>
-                                                            </tr>
-                                                            <!--start space height --> 
-                                                            <tr>
-                                                                <td height="20"></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:400; text-align:left; font-style: italic; ">
 
-                                                                    <span style="color: #555555; font-size: 19px;">&#8220;</span>
-                                                                        {msg}
-                                                                    <span style="color: #555555; font-size: 19px;">&#8221;</span>
+                                                                    <p style="margin-top: 20px; margin-bottom: 20px;">Hi <span style="color:#ff893b; font-weight: 400;">{username}</span>,</p>
+                                                                    We received a password reset request for your <span style="color:#ff893b; font-weight: 400;">Easyshop.ph</span> account. To reset your password, kindly use the link below:
+                                                                    <br/><br/><a href="{updatePasswordLink}" style="color:#ff893b; font-weight: 400; display: inline-block;">{updatePasswordLink}</a>
+                                                                    <br/><br/>If you didn't make a request for a password reset, you can let us know at <a href="mailto:info@easyshop.ph" style="color:#555555; font-weight: 400;">info@easyshop.ph</a>. Thank you. 
                                                                 </td>
                                                             </tr>
+
                                                             <!--start space height --> 
                                                             <tr>
                                                                 <td height="20"></td>
                                                             </tr>
                                                             <!--end space height --> 
-                                                            <tr>
-                                                                <td valign="top" width="auto">
-                                                                    <!-- start button -->                                
-                                                                    <table border="0" align="left" cellpadding="0" cellspacing="0">
-                                                                        <tr>
-                                                                            <td mc:edit="button left (layout-5) TB42" id="mail-color" width="auto" align="center" valign="middle" height="32" style=" background-color:#4370cc;  border-radius:5px; background-clip: padding-box;font-size:13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; text-align:center;  color:#ffffff; font-weight: 300; padding-left:18px; padding-right:18px; ">
-                                                                                <span style="color: #ffffff; font-weight: 300;">
-                                                                                    <a href="{msg_link}" target="_blank" style="text-decoration: none; color:#ffffff; font-weight: 300;">
-                                                                                        Send {user} a reply
-                                                                                    </a>
-                                                                                </span>
-                                                                            </td>
-                                                                        </tr>
-                                                                  </table>
-                                                                  <!-- end button -->
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td height="20"></td>
-                                                            </tr>
+
                                                         </table>
                                                     </td>
                                                 </tr>
