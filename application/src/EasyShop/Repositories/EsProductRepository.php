@@ -1270,43 +1270,43 @@ class EsProductRepository extends EntityRepository
             CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => [ 'lastmodifieddate' ],
             CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'is_hot' , 'clickcount' ],
         ];
-                
+     
         $orderByField = isset($orderByFields[key($orderBy)]) ? 
                         $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT];
         $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
                             $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
-        
+
         $em = $this->_em;
         $rsm = new ResultSetMapping();
 
         $rsm->addScalarResult('productId', 'productId');
         
         $sql = "
-            SELECT 
-                es_product.id_product as productId
-            FROM 
-                es_product
-            LEFT JOIN es_member_prodcat ON 
-                es_member_prodcat.product_id = es_product.id_product
-            LEFT JOIN es_member_cat ON 
-                es_member_prodcat.memcat_id = es_member_cat.id_memcat AND
-                es_member_cat.is_delete = :memberCategoryActiveFlag
-            WHERE 
-                es_product.is_delete = :productDeleteFlag AND 
-                es_product.is_draft = :productDraftFlag AND 
-                es_product.member_id = :memberId AND
-                es_member_prodcat.memcat_id IS NULL
-            GROUP BY 
-                es_product.id_product
-            ORDER BY ";
+                SELECT 
+                    es_product.id_product as productId               
+                FROM 
+                    es_product
+                LEFT JOIN es_member_prodcat ON 
+                    es_member_prodcat.product_id = es_product.id_product
+                LEFT JOIN es_member_cat ON 
+                    es_member_prodcat.memcat_id = es_member_cat.id_memcat AND
+                    es_member_cat.is_delete = :memberCategoryActiveFlag
+                WHERE 
+                    es_product.is_delete = :productDeleteFlag AND 
+                    es_product.is_draft = :productDraftFlag AND 
+                    es_product.member_id = :memberId AND
+                    es_member_cat.id_memcat IS NULL
+                GROUP BY 
+                    es_product.id_product
+                ORDER BY
+           ";
             
         $orderByString = "";
         foreach($orderByField as $field){
             $orderByString .= "es_product.".$field." ".$orderByDirection.",";
         }
-        $orderByString = rtrim($orderByString, ",");
+        $orderByString .= " es_product.id_product DESC ";
         $sql = $sql.$orderByString." LIMIT :limit OFFSET :offset";
-        
         $query = $em->createNativeQuery($sql, $rsm);
         $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
         $query->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE);
@@ -1318,8 +1318,7 @@ class EsProductRepository extends EntityRepository
         $productIds = [];
         foreach($results as $result){
             $productIds[] = $result['productId'];
-        }
-
+        }        
         return $productIds;
     }
     
@@ -1349,7 +1348,7 @@ class EsProductRepository extends EntityRepository
                 es_product.is_delete = :productDeleteFlag AND 
                 es_product.is_draft = :productDraftFlag AND 
                 es_product.member_id = :memberId AND
-                es_member_prodcat.memcat_id IS NULL
+                es_member_cat.id_memcat IS NULL
             GROUP BY 
                 es_product.id_product
         ", $rsm);
