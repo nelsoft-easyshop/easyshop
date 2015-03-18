@@ -12,16 +12,16 @@
                     <table class="cart-table" width="100%">
                         <thead>
                             <tr>
-                                <th colspan="3">
+                                <th colspan="3" width="55%">
                                     Item List
                                 </th>
-                                <th>
+                                <th width="15%">
                                     Price
                                 </th>
-                                <th>
+                                <th width="15%" align="center">
                                     Quantity
                                 </th>
-                                <th>
+                                <th width="15%" style="text-align: right;">
                                     Total
                                 </th>
                             </tr>
@@ -33,9 +33,11 @@
                                 </td>
                                 <td>
                                     <div class="cart-item-thumbnail" style="background: url(assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;"></div>
-                                </th>
+                                </td>
                                 <td>
-                                    Quantity
+                                    <a href="#">
+                                        IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
+                                    </a>
                                 </td>
                                 <td>
                                     Total
