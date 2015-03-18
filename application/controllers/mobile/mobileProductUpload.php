@@ -197,8 +197,7 @@ class MobileProductUpload extends MY_Controller
                 $condition = trim($this->input->post('condition'));
                 $bankDetails = json_decode(trim($this->input->post('bankDetails')), true);
                 $isFreeShippingNationwide = strtolower(trim($this->input->post('isFreeShippingNationwide'))) === "true";
-                var_dump($isMeetUp);
-                exit;
+
                 if(is_null($imageArray) === false
                    && isset($imageArray[0])){
                     $images = $imageArray; 
