@@ -2021,21 +2021,25 @@ class Memberpage extends MY_Controller
                 $this->serviceContainer['category_manager']
                      ->migrateUserCategories($memberId);
             }
-            
-            $memberCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                              ->getCustomCategoriesObject($memberId);     
+
+            $memberCategories = $this->serviceContainer['category_manager']
+                                     ->getUserCategories($memberId);
+                                     
             $resultCategories = [];
             foreach($memberCategories as $memberCategory){
-                $resultCategories[] = $this->createCategoryStdObject(    
-                                                $memberCategory->getCatName(),
-                                                $memberCategory->getSortOrder(),
-                                                $memberCategory->getIdMemcat()
-                                            );
-            }
-
-            usort($resultCategories, function($sortArgumentA, $sortArgumentB) {
-                return $sortArgumentA->order - $sortArgumentB->order;
-            });
+                $categoryWrapper = new EasyShop\Category\CategoryWrapper();
+                $categoryWrapper->setCategoryName($memberCategory['name']);
+                $categoryWrapper->setSortOrder($memberCategory['sortOrder']);
+                $categoryWrapper->setMemberCategoryId($memberCategory['memberCategoryId']);
+                foreach($memberCategory['children'] as $child){
+                    $childCategory = new EasyShop\Category\CategoryWrapper();
+                    $childCategory->setCategoryName($child['name']);
+                    $childCategory->setSortOrder($child['sortOrder']);
+                    $childCategory->setMemberCategoryId($child['id']);
+                    $categoryWrapper->addChild($childCategory);
+                }
+                $resultCategories[] = $categoryWrapper->toArray();
+            }            
             $response['storeCategories'] = $resultCategories;
         }
 
@@ -2281,6 +2285,7 @@ class Memberpage extends MY_Controller
         $singleCategoryData->name =  $name;
         $singleCategoryData->order =  $order;
         $singleCategoryData->memberCategoryId =  $id;   
+        $singleCategoryData->children = [];
         
         return $singleCategoryData;
     }
