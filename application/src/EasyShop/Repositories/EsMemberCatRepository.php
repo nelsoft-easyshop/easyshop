@@ -54,12 +54,12 @@ class EsMemberCatRepository extends EntityRepository
     }
 
     /**
-     *  Fetch custom categories of memberId in array form
+     *  Fetch top level custom categories of memberId in array form
      *
      *  @param integer $memberId
      *  @return array $customCategories
      */
-    public function getCustomCategoriesArray($memberId)
+    public function getTopLevelCustomCategories($memberId)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
@@ -78,7 +78,9 @@ class EsMemberCatRepository extends EntityRepository
                     COUNT(es_member_prodcat.id_memprod) as product_count,
                     
                     GROUP_CONCAT(
-                        DISTINCT CONCAT(CONCAT(level2.id_memcat, "~"), level2.cat_name) ORDER BY level2.sort_order ASC SEPARATOR "|"
+                        DISTINCT CONCAT(CONCAT(CONCAT(CONCAT(level2.id_memcat, "~"), level2.cat_name), "~") ,level2.sort_order)
+                            ORDER BY 
+                        level2.sort_order ASC SEPARATOR "|"
                     ) as childList
                     
                 FROM es_member_cat

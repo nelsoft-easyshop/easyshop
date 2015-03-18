@@ -396,7 +396,7 @@ class CategoryManager
         }
         else{
             $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                     ->getCustomCategoriesArray($memberId);    
+                                     ->getTopLevelCustomCategories($memberId);    
             
             foreach( $memberCategories as $memberCategory ){
                 $index = 'custom-'.$memberCategory['id_memcat'];
@@ -410,6 +410,7 @@ class CategoryManager
 
                 /**
                  * change child_cat above later on
+                 * Also comment this section cause it's pretty smelly in here
                  */
                 $childrenData = explode('|', $memberCategory['childList']);
                 $vendorCategories[$index]['children'] = [];
@@ -417,13 +418,13 @@ class CategoryManager
                     if(empty($childData)){
                         continue;
                     }
-                    $parsedData = explode("~", $childData, 2);
+                    $parsedData = explode("~", $childData, 3);
                     $vendorCategories[$index]['children'][] = [
                         'id' => $parsedData[0], 
-                        'name' => $parsedData[1]
+                        'name' => $parsedData[1],
+                        'sortOrder' => $parsedData[2],
                     ];
                 }
-                
             }                      
         }
 
