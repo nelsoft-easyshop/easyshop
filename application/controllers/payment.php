@@ -1241,7 +1241,7 @@ class Payment extends MY_Controller{
                     $parsedImage = $primaryImage->getFilename();
                 }
                 else{
-                    $parsedImage = getAssetsDomain().$imagePath;
+                    $parsedImage = getAssetsDomain().ltrim($imagePath, '/');
                 }
                 $buyerData['products'][$key]['primaryImage'] = $parsedImage;
             }
@@ -1298,7 +1298,7 @@ class Payment extends MY_Controller{
                         $parsedImage = $primaryImage->getFilename();
                     }
                     else{
-                        $parsedImage = getAssetsDomain().$imagePath;
+                        $parsedImage = getAssetsDomain().ltrim($imagePath, '/');
                     }
                     $sellerData['products'][$key]['primaryImage'] = $parsedImage;
                 }

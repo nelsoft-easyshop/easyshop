@@ -537,7 +537,7 @@ class PaymentService
                 $parsedImage = $primaryImage->getFilename();
             }
             else{
-                $parsedImage = getAssetsDomain().$imagePath;
+                $parsedImage = getAssetsDomain().ltrim($imagePath, '/');
             }
             
             if(!isset($dataBuyer['products'][$orderProductId])){ 

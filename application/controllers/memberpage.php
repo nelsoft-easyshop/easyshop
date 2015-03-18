@@ -793,7 +793,7 @@ class Memberpage extends MY_Controller
                             $parseData['primaryImage'] = $primaryImage->getFilename();
                         }
                         else{
-                            $parseData['primaryImage'] = getAssetsDomain().$imagePath;
+                            $parseData['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
                         }
                         
                         $hasNotif = false;
