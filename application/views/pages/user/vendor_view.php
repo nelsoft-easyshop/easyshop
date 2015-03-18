@@ -25,20 +25,64 @@
 
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
-                                <ul class="list-unstyled list-category">    
-                                    <?php $isFirst = true; ?>
-                                    <?php foreach( $categoryProducts as $catId => $arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
-                                            <li>
-                                                <span style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
-                                                </span> 
-                                                <span class='catText'>
-                                                    <?php echo html_escape($arrCat['name']);?>
-                                                </span>
-                                            </li>
+                                <ul class="list-unstyled list-category"> 
+                                    <li>
+                                        <a>
+                                            Promo Deals
                                         </a>
-                                        <?php $isFirst = false; ?>
-                                    <?php endforeach;?>
+                                    </li>
+                                    <li>
+                                        <a class="active">
+                                            Easy Treats
+                                        </a>
+                                    </li>   
+                                    <li>
+                                        <a>Toys, Hobbies &amp; Collectibles <i class="fa fa-caret-down fa-lg pull-right"></i></a>
+                                        <ul class="list-sub-category">
+                                            <li>
+                                                <a href="#">
+                                                    Action Figures
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    Remote Control Toys
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    Dolls
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            Electronics &amp; Gadgets <i class="fa fa-caret-down fa-lg pull-right"></i>
+                                        </a>
+                                        <ul class="list-sub-category">
+                                            <li>
+                                                <a href="#">
+                                                   Smart Phones
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    Tablets
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#">
+                                                    Laptops
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            Books
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

@@ -346,4 +346,21 @@ function ItemListAjax(CatDiv,page)
     // Bind event listener
     $window.resize(checkWidthVendor);
     
+    $(document).ready(function(){
+        $(".list-category > li > a").click(function(){
+
+            var subCatContainer = $(this).parents("li").find(".list-sub-category");
+            $(".list-sub-category").slideUp("fast");
+            $(".list-category > li > a > .fa").removeClass("toggleIcon");
+
+            if(subCatContainer.is(":visible")){
+                subCatContainer.slideUp("fast");
+                $(this).find(".fa").removeClass("toggleIcon");
+            }else{
+                $(this).parents("li").find(".list-sub-category").slideToggle("fast").toggleClass("toggle");
+                $(this).find(".fa").toggleClass("toggleIcon");
+            }
+             
+        });
+    });
 })(jQuery);
