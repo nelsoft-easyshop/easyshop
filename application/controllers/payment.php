@@ -1483,23 +1483,28 @@ class Payment extends MY_Controller{
         $itemArray = $carts['choosen_items'];
         $qtySuccess = 0;
 
-        foreach ($itemArray as $value) {
+        foreach ($itemArray as $key => $value) {
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
             $productInventory = $productManager->getProductInventory($product, false, true, $memberId);
 
-            $maxqty = $productInventory[$itemId]['quantity'];
-            $qty = $value['qty'];
-            $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
-            $subtotal = $finalPromoPrice * $qty;
+            if(isset($productInventory[$itemId])){
+                $maxqty = $productInventory[$itemId]['quantity'];
+                $qty = $value['qty'];
+                $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
+                $subtotal = $finalPromoPrice * $qty;
 
-            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
-            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
-            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
+                $itemArray[$value['rowid']]['maxqty'] = $maxqty;
+                $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+                $itemArray[$value['rowid']]['subtotal'] = $subtotal;
 
-            if($maxqty >= $qty){
-                $qtySuccess++;
+                if($maxqty >= $qty){
+                    $qtySuccess++;
+                }
+            }
+            else{
+                unset($itemArray[$key]);
             }
         }
         $this->session->set_userdata('choosen_items', $itemArray);
