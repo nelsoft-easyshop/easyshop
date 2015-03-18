@@ -50,12 +50,7 @@ class Store extends MY_Controller
                 
         $vendorSlug = $this->uri->segment(1);
         $memberEntity = $em->getRepository("EasyShop\Entities\EsMember")
-                           ->findOneBy([
-                                'slug' => $vendorSlug, 
-                                'isActive' => true,
-                                'isBanned' => false,
-                            ]);
-
+                           ->getActiveMemberWithSlug($vendorSlug);                
         if( !empty($memberEntity) ){
             $pageSection = $this->uri->segment(2);
             if($pageSection === 'about'){
@@ -70,7 +65,8 @@ class Store extends MY_Controller
             else{
                 $viewerId = intval(!isset($sessionData['member_id']) ? 0 : $sessionData['member_id']);
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
-
+                
+                
                 if ($bannerData['hasNoItems']){
                     redirect($vendorSlug.'/about');
                 }
@@ -81,7 +77,7 @@ class Store extends MY_Controller
                 
                 if($this->input->get() && !$bannerData['hasNoItems']){
 
-                    $productView['isSearching'] = TRUE;
+                    $productView['isSearching'] = true;
                     $parameter = $this->input->get();
                     $parameter['seller'] = "seller:".$memberEntity->getUsername();
                     $parameter['limit'] = $this->vendorProdPerPage;
@@ -136,7 +132,6 @@ class Store extends MY_Controller
                 // count the followers 
                 $EsVendorSubscribe = $this->serviceContainer['entity_manager']
                                           ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
-        
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
 
                 if(empty($viewData['categoryProducts']) === false){
@@ -286,7 +281,7 @@ class Store extends MY_Controller
 
         $bannerData['storeColorScheme'] = $this->serviceContainer['entity_manager']
                                                ->getRepository('EasyShop\Entities\EsMember')
-                                               ->findOneBy(['slug' => $sellerslug])
+                                               ->getActiveMemberWithSlug($sellerslug)
                                                ->getStoreColor();
         
         $followerData['followerCount'] = $bannerData["followerCount"];
@@ -492,8 +487,9 @@ class Store extends MY_Controller
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
 
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                           ->findOneBy(['slug' => $sellerslug]);                                
+        $member = $this->serviceContainer['entity_manager']
+                       ->getRepository('EasyShop\Entities\EsMember')
+                       ->getActiveMemberWithSlug($sellerslug);                                
 
         $idMember = $member->getIdMember();
         $memberUsername = $member->getUsername();
@@ -507,7 +503,7 @@ class Store extends MY_Controller
                                    );
                       
         $feedbacks  = $this->serviceContainer['user_manager']
-                         ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);                                             
+                           ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_buyer'])/$limit),
                                                                    'isHyperLink' => false), true);
         $subViewData = [
@@ -539,7 +535,7 @@ class Store extends MY_Controller
         $feedbackTabsMobile['asSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);
 
         $feedbacks  = $this->serviceContainer['user_manager']
-                         ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);                                             
+                           ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_seller'])/$limit),
                                                                    'isHyperLink' => false), true);
         $subViewData = [
@@ -555,7 +551,7 @@ class Store extends MY_Controller
         $feedbackTabsMobile['forOthersAsSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);    
                                                                 
         $feedbacks  = $this->serviceContainer['user_manager']
-                         ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);                                             
+                           ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_buyer'])/$limit),
                                                                    'isHyperLink' => false), true);
         $subViewData = [
@@ -781,8 +777,9 @@ class Store extends MY_Controller
         $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
         
         // assign header_vendor data
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                   ->findOneBy(['slug' => $sellerslug]);                                  
+        $member = $this->serviceContainer['entity_manager']
+                       ->getRepository('EasyShop\Entities\EsMember')
+                       ->getActiveMemberWithSlug($sellerslug);                         
         $bannerData['storeColorScheme'] = $member->getStoreColor();
         $bannerData['vendorLink'] = "contact";
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
@@ -864,9 +861,9 @@ class Store extends MY_Controller
         $viewerId = intval($this->session->userdata('member_id'));
         $um = $this->serviceContainer['user_manager'];
         
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                               ->findOneBy(['slug' => $sellerslug]);
-
+        $member = $this->serviceContainer['entity_manager']
+                       ->getRepository('EasyShop\Entities\EsMember')
+                       ->getActiveMemberWithSlug($sellerslug);    
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();
