@@ -553,6 +553,7 @@ class PaymentService
                     'finalprice' => number_format($orderProduct->getTotal(), 2, '.', ','),
                     'attr' => $attrArray,
                     'primaryImage' => $parsedImage,
+                    'productLink' => 'item/'.$product->getSlug(),
                 ];
                 $dataBuyer['products'][$orderProductId] = $arrayCollection; 
             }
@@ -592,6 +593,7 @@ class PaymentService
                     'attr' => $attrArray,
                     'net' => number_format($orderProduct->getNet(), 2, '.', ','),
                     'primaryImage' => $parsedImage,
+                    'productLink' => 'item/'.$product->getSlug(),
                 ];
 
                 $dataArraySeller[$sellerId]['products'][$orderProductId] = $arrayCollection;
