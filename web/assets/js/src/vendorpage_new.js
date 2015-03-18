@@ -129,28 +129,25 @@ function ReplaceNumberWithCommas(thisnumber){
         memconf.uprice = !isNaN(uprice) ? uprice : "";
         memconf.countfiltered = memconf.uprice !== "" || memconf.lprice !== "" || memconf.condition !== "" ? 1 : 0;
 
+         if(isNaN(lprice) && !isNaN(uprice)){ 
+            validateRedTextBox('#filter-lprice');
+            return false;
+        }
+        else if(!isNaN(lprice) && isNaN(uprice)){
+            validateRedTextBox('#filter-uprice'); 
+            return false;
+        }
+        else if(lprice > uprice){ 
+            validateRedTextBox("#filter-lprice,#filter-uprice");  
+            return false;
+        }
+        validateWhiteTextBox("#filter-lprice,#filter-uprice");  
+
         $('.product-paging').remove();
         ItemListAjax(activeCategoryProductsDiv,1);
     });
 
-})(jQuery);
-
-
-
-var validateRedTextBox = function(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"});
-    $(idclass).focus();
-} 
-
-var validateWhiteTextBox = function(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-}
+})(jQuery); 
 
 var removeParam = function(key, sourceURL)
 {

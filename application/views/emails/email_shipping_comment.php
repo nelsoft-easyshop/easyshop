@@ -649,26 +649,26 @@
                                                                 <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
                                                                     <table width="100%">
                                                                         <tr>
-                                                                            <td width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
                                                                                 Transaction # : 
                                                                             </td>
-                                                                            <td width="50%" valign="top" align="left" style="">
+                                                                            <td valign="top" width="50%" valign="top" align="left" style="">
                                                                                 {invoice}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
                                                                                 Product Name : 
                                                                             </td>
-                                                                            <td width="50%" valign="top" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
                                                                                 {product_name}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
                                                                                 Delivery Date : 
                                                                             </td>
-                                                                            <td width="50%" valign="top" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
                                                                                {delivery_date}
                                                                             </td>
                                                                         </tr>
@@ -698,29 +698,29 @@
                                                     <td valign="top">
                                                         <table border="0" cellspacing="0" cellpadding="0" align="left" width="100%">
                                                             <tr>
-                                                                <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
+                                                                <td mc:edit="content (layout-2) TB21" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left;">
                                                                     <table width="100%">
                                                                         <tr>
-                                                                            <td width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Tracking Number : 
                                                                             </td>
-                                                                            <td width="50%" valign="top" align="left" style="padding-right: 10px;">
+                                                                            <td valign="top" width="50%" valign="top" align="left" style="padding-right: 10px; word-break: break-all;">
                                                                                 {tracking_num}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Courier : 
                                                                             </td>
-                                                                            <td width="50%" valign="top" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 {courier}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: normal;">
                                                                                 Expected Date of Arrival : 
                                                                             </td>
-                                                                            <td width="50%" valign="top" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
+                                                                            <td valign="top" width="50%" valign="top" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 {expected_date}
                                                                             </td>
                                                                         </tr>
@@ -777,7 +777,7 @@
                                                             <!--end space height --> 
 
                                                             <tr>
-                                                                <td mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; ">
+                                                                <td valign="top" mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; word-break: break-all;">
 
                                                                     <p style="margin-bottom: 10px; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color: #555;">Comment: </p>
 

@@ -1405,7 +1405,11 @@ var universalExtension = ".jpeg";
             },
             error: function (request, status, error) {
 
-                alert('Sorry, we have encountered a problem.\nPlease try again after a few minutes.');
+                alert('Sorry, we have encountered a problem.<br>\
+                    Please select valid image type. <br>\
+                    Allowed type: .PNG,.JPEG,.GIF <br>\
+                    Allowed max size: 5mb.<br>\
+                    Allowed max dimension 5000px');
                 
                 $.each( arrayUpload, function( key, value ) {
                     removeThisPictures.push(value); 
@@ -1650,7 +1654,11 @@ var universalExtension = ".jpeg";
                 
             },
             error: function (request, status, error) {
-                alert('Sorry, we have encountered a problem.','Please try again after a few minutes.');
+                alert('Sorry, we have encountered a problem.<br>\
+                    Please select valid image type. <br>\
+                    Allowed type: .PNG,.JPEG,.GIF <br>\
+                    Allowed max size: 5mb.<br>\
+                    Allowed max dimension 5000px');
                 $('.image'+currentCnt+' > img,.pop-image-container > a > img').attr("src",default_upload_image);
                 canProceed = true;
                 $('#other_files > #pictureCount').remove();
