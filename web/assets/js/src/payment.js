@@ -37,12 +37,13 @@ $(document).ready(function(){
 
     // PAYPAL PROCESS PAYMENT SECTION
     $(document).on('click','.paypal',function () {
+        var $this = $(this);
         var action = ''; 
         var postData = '';
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
-        var payType = parseInt($(this).data('type'));
-        var $container = $(this).closest('.paypal_button').parent();
+        var payType = parseInt($this.data('type'));
+        var $container = $this.closest('.paypal_button').parent();
         var $checkBox = $container.find('.chck_privacy').find('.chk_paypal');
 
         $container.find('.chck_privacy > p').remove();
