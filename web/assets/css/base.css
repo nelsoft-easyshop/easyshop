@@ -1,0 +1,7 @@
+.form-es-control{
+	display: inline-block;
+	height: 34px;
+  	padding: 6px 12px;
+  	border: solid #e2e2e2 1px;
+  	border-radius: 4px;
+}
