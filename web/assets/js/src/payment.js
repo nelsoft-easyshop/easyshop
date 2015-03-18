@@ -194,7 +194,7 @@ $(document).ready(function(){
 
     // CASH ON DELIVERY PROCESS PAYMENT SECTION 
     $(document).on('click','.payment_cod',function () {
-        var $formContainer = $(this).parent();
+        var $formContainer = $(this).closest('.codFrm');
         var $checkBox = $formContainer.find('.chk_cod');
 
         validateWhiteTextBox(".chk_cod");
@@ -212,7 +212,7 @@ $(document).ready(function(){
                             method:"CashOnDelivery"
                         }
                     });
-                    var data = $('#codFrm').serialize() + "&paymentMethods=" + paymentMethod;
+                    var data = $formContainer.serialize() + "&paymentMethods=" + paymentMethod;
                     $.ajax({
                         url: action,
                         type: 'POST',

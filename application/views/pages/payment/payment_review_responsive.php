@@ -421,8 +421,7 @@
                                                     <span style='border-bottom:1px dotted'> Privacy Policy </span>
                                                 </a>.
                                             </p><br>
-                                            <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
-                                            <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
+                                            <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery">  
                                         <?=form_close();?>
                                         <p class="notify">You will be notified regarding your order status via email or sms.</p>
                                     <?php else: ?>
@@ -787,7 +786,7 @@
                                                         <strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong>
                                                     </p>
                                                     <br>
-                                                    <?=form_open('pay/cashondelivery/', ['class' => 'codFrm','id' => 'codFrm','name' => 'codFrm']); ?>
+                                                    <?=form_open('pay/cashondelivery/', ['class' => 'codFrm','id' => 'codFrm_mobile','name' => 'codFrm']); ?>
                                                         <p class="chck_privacy" style="font-size: 12px;">
                                                             <input type="checkbox" checked class="chk_cod" name='chk_cod'> 
                                                             I acknowledge I have read and understood Easyshop.ph's 
@@ -798,8 +797,7 @@
                                                             </a>.
                                                         </p>
                                                         <br>
-                                                        <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
-                                                        <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
+                                                        <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery">     
                                                     <?=form_close();?>
                                                     <p class="notify" style="font-size: 10px;">You will be notified regarding your order status via email or sms.</p>
                                                 <?php else: ?>
