@@ -186,7 +186,9 @@ class EsMemberRepository extends EntityRepository
     }
 
     /**
-     *  Fetch vendor details
+     * Fetch active vendor details
+     *
+     * @param string $vendorSlug
      */
     public function getVendorDetails($vendorSlug)
     {
@@ -231,12 +233,17 @@ class EsMemberRepository extends EntityRepository
             LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
             LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
             LEFT JOIN es_location_lookup l3 ON a.country = l3.id_location
-            WHERE m.slug=:vendorslug
+            WHERE 
+                m.slug=:vendorslug AND 
+                m.is_active = :active AND 
+                m.is_banned = :notBanned
             LIMIT 1
         ";
 
         $query = $em->createNativeQuery($sql, $rsm)
-            ->setParameter('vendorslug', $vendorSlug);
+                    ->setParameter('vendorslug', $vendorSlug)
+                    ->setParameter('active', EsMember::DEFAULT_ACTIVE)
+                    ->setParameter('notBanned', EsMember::NOT_BANNED);
 
         $queryResult = $query->getResult();
 
@@ -365,6 +372,23 @@ class EsMemberRepository extends EntityRepository
         $member = $query->getResult();
         $member = isset($member[0]) ? $member[0] : $member;
 
+        return $member;
+    }
+    
+    /**
+     * Get active member by slug
+     *
+     * @param string $slug
+     * @areturn EasyShop\Entities\EsMember
+     */
+    public function getActiveMemberWithSlug($slug)
+    {
+        $member = $this->_em->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy([
+                                'slug' => $slug,
+                                'isActive' => true,
+                                'isBanned' => false,
+                            ]);     
         return $member;
     }
 
