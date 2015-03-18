@@ -99,7 +99,7 @@ class MobileProductUpload extends MY_Controller
             $isSuccess = false;
         }
         else{
-            $errorMessage = "Please verify your email address."
+            $errorMessage = "Please verify your email address.";
         }
 
         $returnArray = [
@@ -150,7 +150,7 @@ class MobileProductUpload extends MY_Controller
             }
         }
         else{
-            $errorMessage = "Please verify your email address."
+            $errorMessage = "Please verify your email address.";
         }
 
         $imageUpload = [
