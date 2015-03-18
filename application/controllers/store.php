@@ -65,8 +65,7 @@ class Store extends MY_Controller
             else{
                 $viewerId = intval(!isset($sessionData['member_id']) ? 0 : $sessionData['member_id']);
                 $bannerData = $this->generateUserBannerData($vendorSlug, $viewerId);
-                
-                
+
                 if ($bannerData['hasNoItems']){
                     redirect($vendorSlug.'/about');
                 }
@@ -427,7 +426,18 @@ class Store extends MY_Controller
 
         $parentCategories = $categoryManager->getUserCategories($memberId);
 
-        $categoryProductCount = [];
+        $totalCountNonCategorizedProducts = $em->getRepository('EasyShop\Entities\EsProduct')
+                                               ->getCountNonCategorizedProducts($memberId);
+        if($totalCountNonCategorizedProducts > 0){
+            $index = 'custom-noncategorized';
+            $parentCategories[$index]['name'] = 'Uncategorized';
+            $parentCategories[$index]['child_cat'] = [];
+            $parentCategories[$index]['products'] = [];
+            $parentCategories[$index]['categoryId'] = EasyShop\Category\CategoryManager::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
+            $parentCategories[$index]['memberCategoryId'] = EasyShop\Category\CategoryManager::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
+            $parentCategories[$index]['sortOrder'] = PHP_INT_MAX;
+            $parentCategories[$index]['cat_type'] = EasyShop\Category\CategoryManager::CATEGORY_NONSEARCH_TYPE;
+        }
 
         foreach( $parentCategories as $idCat => $categoryProperties ){ 
 
@@ -453,7 +463,6 @@ class Store extends MY_Controller
             $parentCategories[$idCat]['products'] = $result['products'];
             $parentCategories[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
             $parentCategories[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
-            $categoryProductCount[$idCat] = count($result['products']);
             $paginationData = [
                 'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage),
                 'isHyperLink' => false,
