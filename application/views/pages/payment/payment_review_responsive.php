@@ -160,7 +160,6 @@
                         </td>
                     </tr> 
                     -->
-
                 </table>
             </div>
         </div>
@@ -176,32 +175,53 @@
                                 <li><a href="#<?=$key;?>"><?=$value;?></a></li> 
                             <?php endforeach; ?>
                         </ul>
-                       <?php foreach($paymentType as $key => $value):?> 
+                        <?php foreach($paymentType as $key => $value):?> 
 
-    <!-- #### CREDIT CARD / DEBIT CARD #### -->
+                            <!-- CREDIT CARD / DEBIT CARD PAYPAL DESKTOP SECTION -->
                             <?php if($key == 'cdb'): ?>
                                 <div id="cdb" class="payment_inner_content">
-                                    <p class="cod_desc"><strong>Pay using  Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.</strong></p>  <br />
-                                    <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> What is PayPal?</a><br/>
+                                    <p class="cod_desc">
+                                        <strong>
+                                            Pay using  Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                                        </strong>
+                                    </p><br />
+                                    <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;">
+                                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> 
+                                        What is PayPal?
+                                    </a><br/>
                                     <?php if(count($cat_item) <= 0): ?>
-
                                         <br /> <br />
                                         No Items in Cart Can't Proceed.
-
                                     <?php else: ?> 
                                         <?php if($paypalsuccess): ?>
                                             <br/> <br/>
-                                            <p class="chck_privacy"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'><label for='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's</label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
-                                            <br/>
+                                            <p class="chck_privacy">
+                                                <input type="checkbox" checked class="chk_paypal">
+                                                <label for='chk_paypal2'> 
+                                                    I acknowledge I have read and understood Easyshop.ph's
+                                                </label>
+                                                <a href="/policy" target='_blank'>
+                                                    <span style='border-bottom:1px dotted'> 
+                                                        Privacy Policy 
+                                                    </span>
+                                                </a>.
+                                            </p>
+                                            <br><br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="2"  class="paypal">
                                                 <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
                                                 <span></span>
                                                 </a>
                                             </div>
-                                            <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div>
+                                            <div class="paypal_loader">
+                                                <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif">
+                                            </div>
                                         <?php else: ?>
-                                            <span><strong>NOTE: one or more of your chosen items are not available for paypal.</strong></span>
+                                            <span>
+                                                <strong>
+                                                    NOTE: one or more of your chosen items are not available for paypal.
+                                                </strong>
+                                            </span>
                                             <table width="100%" class="table font-12">
                                                 <tr class="tr-header-summary">
                                                     <th>Seller</th>
@@ -226,7 +246,9 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="border-top: 0px;">
-                                                            <?php echo ($value['paypal'] ? "<span style='color:green'>Available for Paypal</span>" : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                            <?=$value['paypal'] 
+                                                               ? "<span style='color:green'>Available for Paypal</span>" 
+                                                               : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)";?>
                                                         </td>
                                                     </tr> 
                                                 <?php endforeach; ?>
@@ -234,26 +256,46 @@
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <div style="clear:both"></div>
-                                    <p class="notify">You will be notified regarding your order status via email or sms.</p>
+                                    <p class="notify">
+                                        You will be notified regarding your order status via email or sms.
+                                    </p>
                                 </div>
                             <?php endif; ?>
-    <!-- #### PAYPAL #### -->
+
+                            <!-- PAYPAL DESKTOP SECTION -->
                             <?php if($key == 'paypal'): ?>
                                 <div id="paypal" class="payment_inner_content">
-                                    <p class="cod_desc"><strong>Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.</strong></p>  <br />
-                                    <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> What is PayPal?</a><br />
+                                    <p class="cod_desc">
+                                        <strong>
+                                            Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.
+                                        </strong>
+                                    </p><br />
+                                    <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;">
+                                        <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> 
+                                        What is PayPal?
+                                    </a><br />
                                     <?php if(count($cat_item) <= 0): ?>
                                         <br /> <br />
                                         There are no items in the cart.
                                     <?php else: ?> 
                                         <?php if($paypalsuccess): ?>
                                             <br /> <br />
-                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'><label for='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's </label><a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
-                                            <br/>
+                                            <p class="chck_privacy">
+                                                <input type="checkbox" checked class="chk_paypal">
+                                                <label for='chk_paypal1'> 
+                                                    I acknowledge I have read and understood Easyshop.ph's 
+                                                </label>
+                                                <a href="/policy" target='_blank'>
+                                                    <span style='border-bottom:1px dotted'> 
+                                                        Privacy Policy 
+                                                    </span>
+                                                </a>.
+                                            </p>
+                                            <br><br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="1"  class="paypal">
-                                                <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypal Checkout" align="left" style="margin-right:7px;">
-                                                <span></span>
+                                                    <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypal Checkout" align="left" style="margin-right:7px;">
+                                                    <span></span>
                                                 </a>
                                             </div>
                                             <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
@@ -283,7 +325,9 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="4" style="border-top: 0px;">
-                                                            <?php echo ($value['paypal'] ? "<span style='color:green'>Available for Paypal</span>" : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                            <?=$value['paypal'] 
+                                                               ? "<span style='color:green'>Available for Paypal</span>" 
+                                                               : "<span style='color:red; font-weight:bold;'>Not available for Paypal</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)";?>
                                                         </td>
                                                     </tr> 
                                                 <?php endforeach; ?>
@@ -291,18 +335,20 @@
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <div style="clear:both"></div>
-                                    <p class="notify">You will be notified regarding your order status via email or sms.</p>
+                                    <p class="notify">
+                                        You will be notified regarding your order status via email or sms.
+                                    </p>
                                 </div>
                             <?php endif; ?>
-    <!-- #### DRAGON PAY #### -->
+                            
+                            <!-- DRAGON PAY DESKTOP SECTION -->
                             <?php if($key == 'dragonpay'): ?>
                                 <div id="dragonpay" class="payment_inner_content">
                                     <?php if($dragonpaysuccess): ?>
-                                        
                                            <img src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto;">
                                            <br><br><br>
                                             <p class="chck_privacy">
-                                                <input type="checkbox" checked id="chk_dp" name='chk_dp'>
+                                                <input type="checkbox" checked class="chk_dp" name='chk_dp'>
                                                 <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's </label>
                                                 <a href="/policy" target='_blank'>
                                                     <span style='border-bottom:1px dotted'> Privacy Policy </span>
@@ -310,12 +356,17 @@
                                             </p>
                                             <br>
                                             <input type="button" class="btnDp orange_btn3" value="Pay via DRAGON PAY">
-                                            <br>
-                                            <br>
-                                            <span style="font-size: 12px;font-style: italic;"><b>Note:</b> Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.</span>
-                                        
+                                            <br><br>
+                                            <span style="font-size: 12px;font-style: italic;">
+                                                <b>Note:</b>
+                                                Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.
+                                            </span>
                                     <?php else: ?>
-                                        <span><strong>NOTE: one or more of your chosen items are not available for dragonpay payment.</strong></span>
+                                        <span>
+                                            <strong>
+                                                NOTE: one or more of your chosen items are not available for dragonpay payment.
+                                            </strong>
+                                        </span>
                                         <table width="100%" class="table font-12">
                                             <tr class="tr-header-summary">
                                                 <th>Seller</th>
@@ -347,27 +398,35 @@
                                         </table>
                                     <?php endif; ?>
                                 </div>
-                            <?php endif; ?>
-    <!-- #### DIRECT BANK DEPOSIT #### -->
-                            <?php if($key == 'dbd'): ?>
-                                <div id="dbd" class="payment_inner_content">
+                            <?php endif; ?>  
 
-                                    <?php if($directbanksuccess): ?>
-
-                                        <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p><br>
-                                        <?php 
-                                        $attr = array('class' => 'dbdFrm','id' => 'dbdFrm','name' => 'dbdFrm');
-                                        echo form_open('pay/directbank/', $attr);
-                                        ?>
-                                            <p class="chck_privacy"><input type="checkbox" checked  id="chk_dbd" name='chk_dbd'><label for='chk_dbd'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span>.</a>.</p><br>
-                                            <br/>
-                                            <input type="button" class="payment_dbd orange_btn3" value="Proceed to Payment"> 
-                                            <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'2';?>" name="paymentToken">   
-                                        <?php echo form_close();?>
+                            <!-- CASH ON DELIVERY DESKTOP SECTION -->
+                            <?php if($key == 'cod'): ?>
+                                <div id="cod" class="payment_inner_content">
+                                    <?php if($codsuccess): ?>
+                                        <p class="cod_desc">
+                                            <strong>
+                                                You can pay in cash to our courier when you receive the goods at your doorstep.
+                                            </strong>
+                                        </p><br>
+                                        <?=form_open('pay/cashondelivery/', ['class' => 'codFrm','id' => 'codFrm','name' => 'codFrm']); ?>
+                                            <p class="chck_privacy">
+                                                <input type="checkbox" checked class="chk_cod" name='chk_cod'>
+                                                <label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label>
+                                                <a href="/policy" target='_blank'>
+                                                    <span style='border-bottom:1px dotted'> Privacy Policy </span>
+                                                </a>.
+                                            </p><br>
+                                            <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
+                                            <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
+                                        <?=form_close();?>
                                         <p class="notify">You will be notified regarding your order status via email or sms.</p>
-                                    
                                     <?php else: ?>
-                                        <span><strong>NOTE: one or more of your chosen items are not available for Direct Bank Deposit.</strong></span>
+                                        <span>
+                                            <strong>
+                                                NOTE: one or more of your chosen items are not available for cash on delivery.
+                                            </strong>
+                                        </span>
                                         <table width="100%" class="table font-12">
                                             <tr class="tr-header-summary">
                                                 <th>Seller</th>
@@ -376,96 +435,44 @@
                                                 <th style="text-align: right;">Price</th>
                                             </tr>
                                             <?php foreach ($cat_item as $key => $value): ?>
-                                            <tr>
-                                                <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                    <?php echo html_escape($value['store_name']) ?>
-                                                </td>
-                                                <td width="40%">
-                                                    <?php echo html_escape($value['name']) ?>
-                                                </td>
-                                                <td  width="15%" align="center">
-                                                    <?php echo $value['qty'] ?>
-                                                </td>
-                                                <td align="right"  width="15%">
-                                                    <?php echo number_format($value['price'], 2, '.',',') ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4" style="border-top: 0px;">
-                                                    <?php echo ($value['directbank'] ? "<span style='color:green'>Available for Direct Bank Deposit</span>" : "<span style='color:red; font-weight:bold;'>Not available for Direct Bank Deposit</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
-                                                </td>
-                                            </tr>
-                                             
+                                                <tr>
+                                                    <td style="border: 0px 0px 0px 0px;"  width="30%">
+                                                        <?php echo html_escape($value['store_name']); ?>
+                                                    </td>
+                                                    <td width="40%">
+                                                        <?php echo html_escape($value['name']); ?>
+                                                    </td>
+                                                    <td  width="15%" align="center">
+                                                        <?php echo $value['qty'] ?>
+                                                    </td>
+                                                    <td align="right"  width="15%">
+                                                        <?php echo number_format($value['price'], 2, '.',',') ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" style="border-top: 0px;">
+                                                        <?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                    </td>
+                                                </tr>
+                                                <?php if(!$value['availability']): ?>
+                                                <tr>
+                                                    <td style="color:red"> 
+                                                          Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="/cart" style="color:#0654BA">Cart</a>.
+                                                    </td>
+                                                </tr>
+                                                <?php endif; ?> 
                                             <?php endforeach; ?>
-                                        </table>
+                                         </table> 
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
-    <!-- #### CASH ON DELIVERY #### -->
-                            <?php if($key == 'cod'): ?>
-                                <div id="cod" class="payment_inner_content">
-                                    <?php if($codsuccess): ?>
 
-                                        <p class="cod_desc"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p> <br>
-                                        <?php 
-                                        $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
-                                        echo form_open('pay/cashondelivery/', $attr);
-                                        ?>
-                                        <p class="chck_privacy"><input type="checkbox" checked  id="chk_cod" name='chk_cod'><label for='chk_cod'> I acknowledge I have read and understood Easyshop.ph's</label> <a href="/policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
-                                       
-                                        <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
-                                        <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
-                                        <?php echo form_close();?>
-                                        <p class="notify">You will be notified regarding your order status via email or sms.</p>
-
-                                    <?php else: ?>
-                                         <span><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
-                                         <table width="100%" class="table font-12">
-                                            <tr class="tr-header-summary">
-                                                <th>Seller</th>
-                                                <th>Product</th>
-                                                <th style="text-align: center;">Quantity</th>
-                                                <th style="text-align: right;">Price</th>
-                                            </tr>
-                                            <?php foreach ($cat_item as $key => $value): ?>
-                                            <tr>
-                                                <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                    <?php echo html_escape($value['store_name']); ?>
-                                                </td>
-                                                <td width="40%">
-                                                    <?php echo html_escape($value['name']); ?>
-                                                </td>
-                                                <td  width="15%" align="center">
-                                                    <?php echo $value['qty'] ?>
-                                                </td>
-                                                <td align="right"  width="15%">
-                                                    <?php echo number_format($value['price'], 2, '.',',') ?>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4" style="border-top: 0px;">
-                                                    <?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
-                                                </td>
-                                            </tr>
-                                            <?php if(!$value['availability']): ?>
-                                            <tr>
-                                                <td style="color:red">
-                                                  
-                                                      Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="/cart" style="color:#0654BA">Cart</a>.
-                                                </td>
-                                            </tr>
-                                             <?php endif; ?> 
-                                            <?php endforeach; ?>
-                                         </table>
-                                       
-                                    <?php endif; ?>  
-                                </div>
-                            <?php endif; ?>
-    <!-- #### PESOPAY #### -->
+                            <!-- PESOPAY DESKTOP SECTION -->
                             <?php if($key == 'pesopaycdb'): ?>
                                 <div id="pesopaycdb" class="payment_inner_content">
                                     <?php if($pesopaysucess): ?>
-                                        <p class="chck_privacy"><input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> 
+                                        <p class="chck_privacy">
+                                            <input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> 
                                             <label for='chk_ppcdb'>
                                                 I acknowledge I have read and understood Easyshop.ph's
                                             </label>
@@ -477,7 +484,7 @@
                                         </p>
                                         <br />
                                         <br />
-                                        <input type="button" class="pesopaycdb orange_btn3" value="Pay via Credit or Debit Card">
+                                        <input type="button" class="pesopaycdb pesopaycdb_btn orange_btn3" value="Pay via Credit or Debit Card">
                                         <p class="notify">You will be notified regarding your order status via email or sms.</p>
                                     <?php else: ?>
                                         <span><strong>NOTE: one or more of your chosen items are not available for Credit Card.</strong></span>
@@ -516,7 +523,7 @@
                                     <?php endif; ?>
                                 </div>
                             <?php endif; ?>
-    <!-- #### MORE PAYMENT HERE! #### -->
+
                         <?php endforeach; ?>
                     </div> 
                 <?php else: ?>
@@ -540,7 +547,10 @@
                 <?php endif; ?>
             </div>
             <div class="display-when-mobile-542">
-                <?php if($success && $qtysuccess && $promoteSuccess['purchase_limit'] && $promoteSuccess['solo_restriction']): ?>
+                <?php if($success 
+                         && $qtysuccess 
+                         && $promoteSuccess['purchase_limit'] 
+                         && $promoteSuccess['solo_restriction']): ?>
                     <p class="fl_pay"><strong>How would you like to pay?</strong></p>
                     <div class="panel-group" id="accordion">
                         <?php foreach($paymentType as $key => $value):?>
@@ -554,27 +564,47 @@
                                 </div>
                                 <div id="id-<?=$key;?>" class="panel-collapse collapse">
                                     <div class="panel-body">
-                                        <!-- #### CREDIT CARD / DEBIT CARD #### -->
+
+                                        <!-- PAYPAL MOBILE SECTION DIRECT TO CREDIT CARD / DEBIT CARD -->
                                         <?php if($key == 'cdb'): ?>
-                                            <div id="cdb">
-                                                <p class="cod_desc" style="font-size: 12px;">Pay using  Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.</p>
-                                                <a style="font-size: 13px;" href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline; "> What is PayPal?</a><br/>
+                                            <div id="cdb_mobile">
+                                                <p class="cod_desc" style="font-size: 12px;">
+                                                    Pay using  Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                                                </p>
+                                                <a style="font-size: 13px;" href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;">
+                                                    <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline; "> 
+                                                    What is PayPal?
+                                                </a><br/>
                                                 <?php if(count($cat_item) <= 0): ?>
                                                     <br /> <br />
                                                     No Items in Cart Can't Proceed.
                                                 <?php else: ?> 
                                                     <?php if($paypalsuccess): ?>
                                                         <br/> 
-                                                        <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_paypal2" name='chk_paypal2'> I acknowledge I have read and understood Easyshop.ph's<a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
+                                                        <p class="chck_privacy" style="font-size: 12px;">
+                                                            <input type="checkbox" checked class="chk_paypal" > 
+                                                            I acknowledge I have read and understood Easyshop.ph's
+                                                            <a href="/policy" target='_blank'>
+                                                                <span style='border-bottom:1px dotted'> 
+                                                                    Privacy Policy 
+                                                                </span>
+                                                            </a>.
+                                                        </p><br>
                                                         <div class="paypal_button">
                                                             <a style="cursor:pointer" data-type="2"  class="paypal">
-                                                            <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
-                                                            <span></span>
+                                                                <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
+                                                                <span></span>
                                                             </a>
                                                         </div>
-                                                        <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
+                                                        <div class="paypal_loader">
+                                                            <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif">
+                                                        </div> 
                                                     <?php else: ?>
-                                                        <span style="font-size: 10px;"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
+                                                        <span style="font-size: 10px;">
+                                                            <strong>
+                                                                NOTE: one or more of your chosen items are not available for cash on delivery.
+                                                            </strong>
+                                                        </span>
                                                         <table width="100%" class="table font-12">
                                                             <tr class="tr-header-summary">
                                                                 <th>Seller</th>
@@ -585,23 +615,23 @@
                                                             <?php foreach ($cat_item as $key => $value): ?>
                                                                 <tr>
                                                                     <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                        <?php echo html_escape($value['store_name']); ?>
+                                                                        <?=html_escape($value['store_name']); ?>
                                                                     </td>
                                                                     <td width="40%">
-                                                                        <?php echo html_escape($value['name']); ?>
+                                                                        <?=html_escape($value['name']); ?>
                                                                     </td>
                                                                     <td  width="15%" align="center">
-                                                                        <?php echo $value['qty'] ?>
+                                                                        <?=$value['qty'] ?>
                                                                     </td>
                                                                     <td align="right"  width="15%">
-                                                                        <?php echo number_format($value['price'], 2, '.',',') ?>
+                                                                        <?=number_format($value['price'], 2, '.',',') ?>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="4" style="border-top: 0px;">
-                                                                        <?php echo ($value['paypal']) 
-                                                                                        ? "<span style='color:green'>Available for Cash on Delivery</span>" 
-                                                                                        : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
+                                                                        <?=$value['paypal'] === true 
+                                                                           ? "<span style='color:green'>Available for Cash on Delivery</span>" 
+                                                                           : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)";?>
                                                                     </td>
                                                                 </tr> 
                                                             <?php endforeach; ?>
@@ -612,28 +642,45 @@
                                                 <p class="notify"  style="font-size: 13px !important;">You will be notified regarding your order status via email or sms.</p>
                                             </div>
                                         <?php endif; ?>
-                                        <!-- #### PAYPAL #### -->
+
+                                        <!-- PAYPAL MOBILE SECTION DIRECT TO LOGIN -->
                                         <?php if($key == 'paypal'): ?>
-                                            <div id="paypal">
+                                            <div id="paypal_mobile">
                                                 <p class="cod_desc" style="font-size: 12px;">Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.</p> 
-                                                <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;"><img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> What is PayPal?</a><br />
+                                                <a href="https://www.paypal.com/webapps/mpp/paypal-popup" title="How PayPal Works" onclick="javascript:window.open('https://www.paypal.com/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=700, height=350'); return false;">
+                                                    <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" border="0" alt="PayPal Logo" style="vertical-align:middle;text-decoration: underline;"> 
+                                                    What is PayPal?
+                                                </a><br />
                                                 <?php if(count($cat_item) <= 0): ?>
                                                     <br /> <br />
                                                     There are no items in the cart.
                                                 <?php else: ?>
                                                     <?php if($paypalsuccess): ?>
                                                         <br />
-                                                        <p class="chck_privacy" style="font-size:12px;"><input type="checkbox" checked  id="chk_paypal1" name='chk_paypal1'> I acknowledge I have read and understood Easyshop.ph's<a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
-                                                        
+                                                        <p class="chck_privacy" style="font-size:12px;">
+                                                            <input type="checkbox" checked class="chk_paypal"> 
+                                                            I acknowledge I have read and understood Easyshop.ph's
+                                                            <a href="/policy" target='_blank'>
+                                                                <span style='border-bottom:1px dotted'> 
+                                                                    Privacy Policy 
+                                                                </span>
+                                                            </a>.
+                                                        </p><br> 
                                                         <div class="paypal_button">
-                                                            <a style="cursor:pointer" data-type="1"  class="paypal">
+                                                            <a style="cursor:pointer" data-type="1" class="paypal">
                                                             <img class="img-responsive" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypal Checkout" align="left" style="margin-right:7px;">
                                                             <span></span>
                                                             </a>
                                                         </div>
-                                                        <div class="paypal_loader"><img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif"></div> 
+                                                        <div class="paypal_loader">
+                                                            <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_load.gif">
+                                                        </div> 
                                                     <?php else: ?>
-                                                        <span style="font-size: 10px;"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
+                                                        <span style="font-size: 10px;">
+                                                            <strong>
+                                                                NOTE: one or more of your chosen items are not available for cash on delivery.
+                                                            </strong>
+                                                        </span>
                                                         <table width="100%" class="table font-12">
                                                             <tr class="tr-header-summary">
                                                                 <th>Seller</th>
@@ -641,26 +688,26 @@
                                                                 <th style="text-align: center;">Quantity</th>
                                                                 <th style="text-align: right;">Price</th>
                                                             </tr>
-                                                            <?php foreach ($cat_item as $key => $value): ?>
+                                                            <?php foreach ($cat_item as $value): ?>
                                                                 <tr>
                                                                     <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                        <?php echo $value['store_name'] ?>
+                                                                        <?=$value['store_name'] ?>
                                                                     </td>
                                                                     <td width="40%">
-                                                                        <?php echo html_escape($value['name']); ?>
+                                                                        <?=html_escape($value['name']); ?>
                                                                     </td>
                                                                     <td  width="15%" align="center">
-                                                                        <?php echo html_escape($value['qty']); ?>
+                                                                        <?=html_escape($value['qty']); ?>
                                                                     </td>
                                                                     <td align="right"  width="15%">
-                                                                        <?php echo number_format($value['price'], 2, '.',',') ?>
+                                                                        <?=number_format($value['price'], 2, '.',',') ?>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td colspan="4" style="border-top: 0px;">
-                                                                        <?php echo ($value['paypal']) 
-                                                                                        ? "<span style='color:green'>Available for Cash on Delivery</span>" 
-                                                                                        : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
+                                                                        <?=$value['paypal'] === true
+                                                                           ? "<span style='color:green'>Available for Cash on Delivery</span>" 
+                                                                           : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
                                                                     </td>
                                                                 </tr> 
                                                             <?php endforeach; ?>
@@ -671,14 +718,22 @@
                                                 <p class="notify" style="font-size: 13px !important;">You will be notified regarding your order status via email or sms.</p>
                                             </div>
                                         <?php endif; ?>
-                                        <!-- #### DRAGON PAY #### -->
+
+                                        <!-- DRAGON PAY MOBILE SECTION -->
                                         <?php if($key == 'dragonpay'): ?>
-                                            <div id="dragonpay">
+                                            <div id="dragonpay_mobile">
                                                 <?php if($dragonpaysuccess): ?>
                                                     <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
                                                     <br><br><br>
-                                                    <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked id="chk_dp" name='chk_dp'> I acknowledge I have read and understood Easyshop.ph's <a href="/policy" target='_blank'><span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p>
-                                                  
+                                                    <p class="chck_privacy" style="font-size: 12px;">
+                                                        <input type="checkbox" checked class="chk_dp" name='chk_dp'>
+                                                        I acknowledge I have read and understood Easyshop.ph's 
+                                                        <a href="/policy" target='_blank'>
+                                                            <span style='border-bottom:1px dotted'> 
+                                                                Privacy Policy 
+                                                            </span>
+                                                        </a>.
+                                                    </p>
                                                     <input type="button" style='width: 153px;' class="btnDp orange_btn3" value="Pay via DRAGON PAY">
                                                     <br>
                                                     <br>
@@ -695,23 +750,23 @@
                                                         <?php foreach ($cat_item as $key => $value): ?>
                                                             <tr>
                                                                 <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                    <?php echo $value['store_name'] ?>
+                                                                    <?=$value['store_name'] ?>
                                                                 </td>
                                                                 <td width="40%">
-                                                                    <?php echo html_escape($value['name']); ?>
+                                                                    <?=html_escape($value['name']); ?>
                                                                 </td>
                                                                 <td  width="15%" align="center">
-                                                                    <?php echo html_escape($value['qty']); ?>
+                                                                    <?=html_escape($value['qty']); ?>
                                                                 </td>
                                                                 <td align="right"  width="15%">
-                                                                    <?php echo number_format($value['price'], 2, '.',',') ?>
+                                                                    <?=number_format($value['price'], 2, '.',',') ?>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="4" style="border-top: 0px;">
-                                                                    <?php echo ($value['dragonpay']) 
-                                                                                    ? "<span style='color:green'>Available for Dragonpay payment.</span>" 
-                                                                                    : "<span style='color:red; font-weight:bold;'>Not available for Dragonpay payment.</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
+                                                                    <?=$value['dragonpay'] === true
+                                                                       ? "<span style='color:green'>Available for Dragonpay payment.</span>" 
+                                                                       : "<span style='color:red; font-weight:bold;'>Not available for Dragonpay payment.</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)" ;?>
                                                                 </td>
                                                             </tr> 
                                                         <?php endforeach; ?>
@@ -719,23 +774,30 @@
                                                 <?php endif; ?>
                                             </div>
                                         <?php endif; ?>
-                                        <!-- #### CASH ON DELIVERY #### -->
+                                        
+                                        <!-- CASH ON DELIVERY MOBILE SECTION -->
                                         <?php if($key == 'cod'): ?>
-                                            <div id="cod">
+                                            <div id="cod_mobile">
                                                 <?php if($codsuccess): ?>
-
-                                                    <p class="cod_desc" style="font-size: 10px;"><strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong></p> <br>
-                                                    <?php 
-                                                    $attr = array('class' => 'codFrm','id' => 'codFrm','name' => 'codFrm');
-                                                    echo form_open('pay/cashondelivery/', $attr);
-                                                    ?>
-                                                    <p class="chck_privacy" style="font-size: 12px;"><input type="checkbox" checked  id="chk_cod" name='chk_cod'> I acknowledge I have read and understood Easyshop.ph's <a href="/policy" target='_blank'> <span style='border-bottom:1px dotted'> Privacy Policy </span></a>.</p><br>
-                                                   
-                                                    <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
-                                                    <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
-                                                    <?php echo form_close();?>
+                                                    <p class="cod_desc" style="font-size: 10px;">
+                                                        <strong>You can pay in cash to our courier when you receive the goods at your doorstep.</strong>
+                                                    </p>
+                                                    <br>
+                                                    <?=form_open('pay/cashondelivery/', ['class' => 'codFrm','id' => 'codFrm','name' => 'codFrm']); ?>
+                                                        <p class="chck_privacy" style="font-size: 12px;">
+                                                            <input type="checkbox" checked class="chk_cod" name='chk_cod'> 
+                                                            I acknowledge I have read and understood Easyshop.ph's 
+                                                            <a href="/policy" target='_blank'> 
+                                                                <span style='border-bottom:1px dotted'> 
+                                                                    Privacy Policy 
+                                                                </span>
+                                                            </a>.
+                                                        </p>
+                                                        <br>
+                                                        <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery"> 
+                                                        <input type="hidden" value="<?php echo md5(uniqid(mt_rand(), true)).'1';?>" name="paymentToken">   
+                                                    <?=form_close();?>
                                                     <p class="notify" style="font-size: 10px;">You will be notified regarding your order status via email or sms.</p>
-
                                                 <?php else: ?>
                                                      <span style="font-size: 10px;"><strong>NOTE: one or more of your chosen items are not available for cash on delivery.</strong></span>
                                                      <table width="100%" class="table font-12">
@@ -746,36 +808,95 @@
                                                             <th style="text-align: right;">Price</th>
                                                         </tr>
                                                         <?php foreach ($cat_item as $key => $value): ?>
+                                                            <tr>
+                                                                <td style="border: 0px 0px 0px 0px;"  width="30%">
+                                                                    <?=html_escape($value['store_name']); ?>
+                                                                </td>
+                                                                <td width="40%">
+                                                                    <?=html_escape($value['name']); ?>
+                                                                </td>
+                                                                <td  width="15%" align="center">
+                                                                    <?=$value['qty'] ?>
+                                                                </td>
+                                                                <td align="right"  width="15%">
+                                                                    <?=number_format($value['price'], 2, '.',',') ?>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" style="border-top: 0px;">
+                                                                    <?=$value['cash_delivery'] === true 
+                                                                       ? "<span style='color:green'>Available for Cash on Delivery</span>" 
+                                                                       : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)";?>
+                                                                </td>
+                                                            </tr>
+                                                            <?php if(!$value['availability']): ?>
+                                                                <tr>
+                                                                    <td style="color:red">
+                                                                          Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="/cart" style="color:#0654BA">Cart</a>.
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endif; ?> 
+                                                        <?php endforeach; ?>
+                                                     </table> 
+                                                <?php endif; ?>  
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <!-- PESOPAY MOBILE VERSION -->
+                                        <?php if($key == 'pesopaycdb'): ?>
+                                            <div id="pesopaycdb_mobile">
+                                                <?php if($pesopaysucess): ?>
+                                                    <p class="chck_privacy" style="font-size: 12px;">
+                                                        <input type="checkbox" checked class="checkprivacy pesopay_chk_mobile">
+                                                        I acknowledge I have read and understood Easyshop.ph's 
+                                                        <a href="/policy" target='_blank'> 
+                                                            <span style='border-bottom:1px dotted'> Privacy Policy </span>
+                                                        </a>.
+                                                    </p> 
+                                                    <br /> 
+                                                    <input type="button" class="pesopaycdb_mobile pesopaycdb_btn orange_btn3" value="Pay via Credit or Debit Card">
+                                                    <p class="notify">
+                                                        You will be notified regarding your order status via email or sms.
+                                                    </p>
+                                                <?php else: ?>
+                                                    <span style="font-size: 10px;">
+                                                        <strong>
+                                                            NOTE: one or more of your chosen items are not available for cash on delivery.
+                                                        </strong>
+                                                    </span>
+                                                    <table width="100%" class="table font-12">
+                                                        <tr class="tr-header-summary">
+                                                            <th>Seller</th>
+                                                            <th>Product</th>
+                                                            <th style="text-align: center;">Quantity</th>
+                                                            <th style="text-align: right;">Price</th>
+                                                        </tr>
+                                                        <?php foreach ($cat_item as $key => $value): ?>
                                                         <tr>
                                                             <td style="border: 0px 0px 0px 0px;"  width="30%">
-                                                                <?php echo html_escape($value['store_name']); ?>
+                                                                <?=html_escape($value['store_name']); ?>
                                                             </td>
                                                             <td width="40%">
-                                                                <?php echo html_escape($value['name']); ?>
+                                                                <?=html_escape($value['name']); ?>
                                                             </td>
                                                             <td  width="15%" align="center">
-                                                                <?php echo $value['qty'] ?>
+                                                                <?=$value['qty'] ?>
                                                             </td>
                                                             <td align="right"  width="15%">
-                                                                <?php echo number_format($value['price'], 2, '.',',') ?>
+                                                                <?=number_format($value['price'], 2, '.',',') ?>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="4" style="border-top: 0px;">
-                                                                <?php echo ($value['cash_delivery'] ? "<span style='color:green'>Available for Cash on Delivery</span>" : "<span style='color:red; font-weight:bold;'>Not available for Cash on Delivery</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)") ;?>
+                                                                <?=$value['pesopaycdb'] === true
+                                                                   ? "<span style='color:green'>Available for Credit Card</span>" 
+                                                                   : "<span style='color:red; font-weight:bold;'>Not available for Credit Card</span> (Go to your <a href='/cart' style='color:#0654BA'>Cart</a> and Remove this Item)";
+                                                                ?>
                                                             </td>
                                                         </tr>
-                                                        <?php if(!$value['availability']): ?>
-                                                        <tr>
-                                                            <td style="color:red">
-                                                                  Please <a style="color:#0654BA" href="javascript:{}" class="link_address">change your shipping address</a> or remove this from your <a href="/cart" style="color:#0654BA">Cart</a>.
-                                                            </td>
-                                                        </tr>
-                                                         <?php endif; ?> 
                                                         <?php endforeach; ?>
-                                                     </table>
-                                                   
-                                                <?php endif; ?>  
+                                                    </table> 
+                                                <?php endif; ?>
                                             </div>
                                         <?php endif; ?>
                                     </div>
@@ -808,8 +929,6 @@
 </div>
 
 
-
-
 <!-- Modal Change Shipping Address-->
 <div class="modal fade" id="change_ship" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog no-border font-roboto ">
@@ -818,10 +937,7 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" style="color: #ffffff;">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title" id="myModalLabel">Change Shipping Details</h4>
             </div>
-            <?php 
-                $attr = array('class' => 'delAddressFrm','id' => 'delAddressFrm','name' => 'delAddressFrm','enctype' => 'multipart/form-data');
-                echo form_open('', $attr);
-            ?>
+            <?=form_open('', ['class' => 'delAddressFrm','id' => 'delAddressFrm','name' => 'delAddressFrm','enctype' => 'multipart/form-data']);?>
             <div class="modal-body">
                 <table style="width: 100%">
                     <tr>
