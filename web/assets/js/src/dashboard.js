@@ -2002,32 +2002,75 @@
         $categoryView.html('');
         $categoryView.append( categoryViewList.join('') );
         $parentSelect.append(parentCategoryDroddownList.join(''));
-
-        $('#edit-category-tree').jstree({
-            "core": {
-                "check_callback":true
-            },
-            "types" : {
-                "#" : {
-                    "max_depth" : 2
-                },
-            },
-            "plugins" : [
-                "dnd", "types"
-            ],
-        });
-        
-         $('#delete-category-tree').jstree({
-            "checkbox" : {
-                "keep_selected_style" : false
-            },
-            "plugins" : [
-                "checkbox"
-            ],
-        });
-        
+        initializeEditTree();
+        initializeDeleteTree(); 
     }
-
+    
+    function initializeEditTree(data)
+    {       
+        $('#edit-category-tree').jstree('destroy');
+        if(typeof data === 'undefined'){
+            $('#edit-category-tree').jstree({
+                "core": {
+                    "check_callback":true
+                },
+                "types" : {
+                    "#" : {
+                        "max_depth" : 2
+                    },
+                },
+                "plugins" : [
+                    "dnd", "types"
+                ],
+            });
+        }
+        else{
+         
+            $('#edit-category-tree').jstree({
+                "core": {
+                    "check_callback":true,
+                    "data": data
+                },
+                "types" : {
+                    "#" : {
+                        "max_depth" : 2
+                    },
+                },
+                "plugins" : [
+                    "dnd", "types"
+                ],
+            });
+        }
+    }
+    
+    function initializeDeleteTree(data)
+    {
+        $('#delete-category-tree').jstree('destroy');
+        if(typeof data === 'undefined'){
+            $('#delete-category-tree').jstree({
+                "checkbox" : {
+                    "keep_selected_style" : false
+                },
+                "plugins" : [
+                    "checkbox"
+                ],
+            });
+        }
+        else{
+            $('#delete-category-tree').jstree({
+                "core": {
+                    "data": data
+                },
+                "checkbox" : {
+                    "keep_selected_style" : false
+                },
+                "plugins" : [
+                    "checkbox"
+                ],
+            });
+        }
+    }
+    
     $('#store-color-save').on('click', function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var selectedList = $('.color-li.selected');
@@ -2686,52 +2729,27 @@
                 if(jsonData.result){
                     var escapedCategoryName = escapeHtml(categoryName);
                     var memberCategoryId = jsonData.newCategoryId;
-                    var html = "";
-                    
+                    var $referenceTreeList = $('#category-tree-reference>ul');
+                    var newListElement = '<li data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
+                
                     if(parentCategory === 0){
-                        
+                        $referenceTreeList.append(newListElement);
+                        var newViewElement = '<div class="div-cat" data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'</div>';
+                        $('.store-category-view').append(newViewElement);
                     }
                     else{
-                        var $editTreeParent = $('#edit-category-tree ul>li[data-categoryid="'+parentCategory+'"]');
+                        var $editTreeParent = $referenceTreeList.find('li[data-categoryid="'+parentCategory+'"]');
                         if($editTreeParent.find('ul').length === 0){
                             $editTreeParent.append('<ul></ul>')
                         }
-                        $editTreeParent.find('ul').append('<li data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'</li>')
+                        $editTreeParent.find('ul').append(newListElement);
                     }
-                    
-                    
-                    $('#edit-category-tree').jstree({
-                        "core": {
-                            "check_callback":true
-                        },
-                        "types" : {
-                            "#" : {
-                                "max_depth" : 2
-                            },
-                        },
-                        "plugins" : [
-                            "dnd", "types"
-                        ],
-                    });
-                    
-                    /*
-                    var html = '<div class="div-cat" data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'</div>';
-                    $('.store-category-view').append(html);
-                    var draggableUnorderList = $('.new-store-category-draggable');
-                    var html = '<li data-categoryid="'+memberCategoryId+'" data-categoryname="'+escapedCategoryName+'">'+
-                                    '<i class="fa fa-sort"></i>'+
-                                        escapedCategoryName +
-                                    '<i class="icon-edit modal-category-edit pull-right edit-category"></i>' +
-                                '</li>';
+                    var listElements = '<ul>'+ $('#category-tree-reference>ul').get(0).innerHTML + '</ul>';
 
-                    draggableUnorderList.append(html);
-                    var deleteCheckBoxList = $('#delete-list-categories');
-                    html = '<li class="checkbox"><label>' +
-                                '<input data-categoryid="'+memberCategoryId+'" type="checkbox" class="checkBox"/>' +
-                                escapedCategoryName +
-                            '</label><li>';
-                    deleteCheckBoxList.append(html);
-                    */
+                    initializeEditTree(listElements);
+                    initializeDeleteTree(listElements); 
+                
+
                     $modalDiv.find('.simplemodal-close').click();
                     $('.add-store-cat-message').fadeIn().delay(5000).fadeOut();
                     $('#no-category-display-edit').hide();
