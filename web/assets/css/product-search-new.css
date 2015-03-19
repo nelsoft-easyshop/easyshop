@@ -193,6 +193,7 @@ html, body{
     height: 208px;
     position: relative;
     border: solid #f7f7f7 1px;
+    overflow: hidden;
 }
 
 .search-item-image-primary{

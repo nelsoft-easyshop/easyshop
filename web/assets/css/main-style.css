@@ -1425,6 +1425,7 @@ td.td-view.p-view2.color-default{
     height: 220px;
     border-radius: 4px 4px 0px 0px;
     position: relative;
+    overflow: hidden;
 }
 
 .main-image{
@@ -1447,6 +1448,8 @@ td.td-view.p-view2.color-default{
 .grid-image-primary{
     max-width: 100%;
     max-height: 100%;
+    width: 100%;
+    height: auto;
     top: 0;
     bottom: 0;
     left: 0;
@@ -1464,6 +1467,8 @@ td.td-view.p-view2.color-default{
 .grid-image-secondary{
     max-width: 100%;
     max-height: 100%;
+    width: 100%;
+    height: auto;
     top: 0;
     bottom: 0;
     left: 0;

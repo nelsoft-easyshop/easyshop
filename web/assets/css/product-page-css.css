@@ -483,6 +483,7 @@ body{
     margin-bottom: 10px;
     display: block !important;
     position: relative;
+    overflow: hidden;
 }
 
 .image-rec-primary{
