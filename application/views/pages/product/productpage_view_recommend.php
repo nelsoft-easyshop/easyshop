@@ -21,18 +21,12 @@
             <?php foreach ($recommended as $value): ?>
             <div class="item">
                     <a href="/item/<?=$value->getSlug(); ?>">
-                     
-                        <?php if(isset($value->secondaryImage)): ?>
-                            <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo getAssetsDomain().$value->directory.'small/'.$value->secondaryImage; ?>) center no-repeat; background-size: cover; "></div>
-
-                            <div class="div-rec-product-image main-prod-image">
-                        <?php else: ?>
-                            <div class="div-rec-product-image">
-                        <?php endif; ?>
-                                <div class="image-handler" style="background: #fff url(<?php echo getAssetsDomain().$value->directory.'small/'.$value->imageFileName; ?>) center no-repeat; background-size: cover;">
-                                
-                                </div>
-                            </div>
+                        <div class="div-rec-product-image">
+                            <img src="<?php echo getAssetsDomain().$value->directory.'small/'.$value->imageFileName; ?>" class="image-rec-primary <?php if(isset($value->secondaryImage)): ?> image-rec-has-secondary<?php endif;?>" />
+                            <?php if(isset($value->secondaryImage)): ?>
+                            <img src="<?php echo getAssetsDomain().$value->directory.'small/'.$value->secondaryImage; ?>" class="image-rec-secondary" />
+                            <?php endif;?>
+                        </div>
                     </a>
                 
                 <?php if($value->getIsNew()): ?>
@@ -57,7 +51,8 @@
                             <a href="/item/<?=$value->getSlug(); ?>"><?=htmlspecialchars(iconv("cp1252", "utf-8", $value->getName()),ENT_IGNORE,'UTF-8',true);?></a>
                         </p>
                 </div>
-                <p class="p-rec-product-price">
+                <?php $priceFontStyle = strlen((string)$value->getOriginalPrice()) > 11 ? "font-size:13px !important;" : ""; ?>
+                <p class="p-rec-product-price" style="<?php echo $priceFontStyle; ?>">
                     
                     <?php if(floatval($value->getDiscountPercentage()) > 0):?>
                         <s>P <?=number_format($value->getOriginalPrice(),2,'.',','); ?> </s>
