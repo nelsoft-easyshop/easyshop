@@ -6,12 +6,12 @@
             <li class="bc-arrow"><i class="fa fa-angle-right"></i>Store Setup</li>
         </ul>
     </div>
-    
-    <div id="category-tree-reference" style="display:none">
+      
+    <div id="category-tree-reference" style="display:none;">
         <ul>
         </ul>
     </div>
-    
+
     <div class="div-tab-inner">
     
         <div class="div-store-setup category-setup-loading" style="text-align:center">
@@ -53,8 +53,6 @@
                             <div class="col-sm-6 col-with-radio">
                                 
                                 <div id="edit-category-tree">
-                                    <ul>
-                                    </ul>
                                 </div>
                                 
                                 
@@ -127,18 +125,12 @@
                                 <label class="col-sm-3 control-label">Current Categories : </label>
                                 <div class="col-sm-6 col-with-radio">
                                     <div id="delete-category-tree">
-                                        <ul class="list-unstyled list-currect-categories" id="delete-list-categories">                                        
-
-                                        </ul>
                                     </div>
                                     
                                     <div class="current-btn-delete">
                                         <br/>   
                                         <button class="btn btn-setting-cancel-btn" id="btn-edit-delete-categories">
                                             Delete
-                                        </button>
-                                        <button class="btn btn-setting-cancel-btn" id="btn-delete-modal-confirmation">
-                                            Delete Test Modal
                                         </button>
                                     </div>
                                     <br/>
@@ -166,20 +158,7 @@
     
     </div>
 </div>
-<!--For delete modal-->
-<div class="delete-confirmation-modal category-modal">
-    <p>
-        You are about to delete a parent category. By clicking cascade delete button, it will delete all the categories under Clothing and Accessories. Clicking delete button will only delete the Clothing and Accessories category and its sub categories will become parent categories.
-    </p>
-    <div class="my-modal-footer">
-        <center>
-            <button class="btn btn-default-3 save-new-category">Delete</button>
-            <button class="btn btn-default-3 save-new-category">Cascade Delete</button>
-            <button class="btn btn-default-1 simplemodal-close">Cancel</button>
-        </center>
-    </div>
-</div>
-<!--End of delete modal-->
+
 <!--For ADD category modal-->
 <div class="add-category-modal category-modal">
     <h3 class="my-modal-title">

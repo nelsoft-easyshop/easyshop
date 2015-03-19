@@ -757,32 +757,51 @@ class CategoryManager
     
     /**
      * Updates is_delete field to '1' of a custom category
+     * Returns the IDs of the affected categories
      *
-     * @param integer[[ $customCategoryIds
+     * @param integer[] $customCategoryIds
      * @param integer $memberId
      * 
-     * @return boolean
+     * @return integer[]
      */
     public function deleteUserCustomCategory($customCategoryIds, $memberId)
     {
-        try{
-            foreach ($customCategoryIds as $categoryId) {
-                if($categoryId !== 0){
-                    $memberCat = $this->em
-                                      ->getRepository("EasyShop\Entities\EsMemberCat")
-                                      ->findOneBy([
-                                            "idMemcat" => $categoryId,
-                                            "member" => $memberId,
-                                            "isDelete" => EsMemberCat::ACTIVE,
-                                        ]); 
-                    if($memberCat) {
-                        $memberCat->setIsDelete(EsMemberCat::IS_DELETE);
-                        $memberCat->setlastModifiedDate(date_create());
-                    }
+        /**
+         * Delete child categories first to prevent categories from being orphaned
+         */
+        $deletedCategoryIds = [];
+        $childCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                ->getCustomCategoriesObject($memberId, $customCategoryIds, true);
+        
+        foreach($childCategories as $childCategory){
+            $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getNumberOfChildren($childCategory->getIdMemcat());
+            if($numberOfChildren === 0){
+                $childCategory->setIsDelete(EsMemberCat::IS_DELETE);
+                $childCategory->setlastModifiedDate(date_create());
+                $key = array_search($childCategory->getIdMemcat(), $customCategoryIds); 
+                if($key !== false){
+                    unset($customCategoryIds[$key]);
                 }
-            }                   
+                $deletedCategoryIds[] = $childCategory->getIdMemcat();
+            }
+        }
+        $nonChildCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                  ->getCustomCategoriesObject($memberId, $customCategoryIds);
+    
+        foreach($nonChildCategories as $category){
+            $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getNumberOfChildren($category->getIdMemcat());
+            if($numberOfChildren === 0){
+                $category->setIsDelete(EsMemberCat::IS_DELETE);
+                $category->setlastModifiedDate(date_create());
+            }
+            $deletedCategoryIds[] = $category->getIdMemcat();
+        }
+        
+        try{    
             $this->em->flush();
-            return true;
+            return $deletedCategoryIds;
         }
         catch(Exception $e) {
             return false;

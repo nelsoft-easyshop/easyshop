@@ -2072,7 +2072,7 @@
         $('#delete-category-tree').jstree('destroy');
         if(typeof data === 'undefined'){
             $('#delete-category-tree').on('check_node.jstree', function (e, data) {
-                data.instance.open_all();
+                data.instance.open_all(data.node, 300);
             })
             .jstree({
                 "checkbox" : {
@@ -2088,7 +2088,7 @@
         }
         else{
             $('#delete-category-tree').on('check_node.jstree', function (e, data) {
-                data.instance.open_all();
+                data.instance.open_all(data.node, 300);
             })
             .jstree({
                 "core": {
@@ -2510,22 +2510,24 @@
         $( "#delete-products" ).trigger( "click" );
     });
 
+
     $( "#btn-edit-delete-categories" ).click(function() {
-        
-        var checkedBoxes = $("#delete-list-categories input[type='checkbox']:checked");
         var categoryIds = [];
-        $.each(checkedBoxes, function(key, checkbox){
-            categoryIds.push(checkbox.getAttribute("data-categoryid"));
-        }); 
+        var $deleteTree = $("#delete-category-tree");
+        var selectedTreeNodes = $deleteTree.jstree("get_checked");
+        var $treeReference = $('#category-tree-reference');
+        $.each(selectedTreeNodes, function(index, nodeId){
+            var categoryId = parseInt($deleteTree.find('#'+nodeId+'').data('categoryid'), 10);
+            categoryIds.push(categoryId);
+        });
         if($.isEmptyObject(categoryIds)){
             return false;
         }
-        
         var isConfirmed = confirm('Are you sure you want to delete the selected categories?');
+
         if(isConfirmed){
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');   
-           
             $.ajax({
                 type: "POST",
                 url: '/memberpage/deleteCustomCategory',
@@ -2533,14 +2535,14 @@
                 success: function(data){ 
                     var response = $.parseJSON(data);
                     if(response){
-                        $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();                             
-                        var numberOfCategories = $('.store-category-view .div-cat:visible').length;
+                        $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();   
+                        var $categoryTreeReference = $('#category-tree-reference');
                         $.each(categoryIds, function(key, categoryId){
-                            $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').fadeOut();
-                            $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]').fadeOut();
-                            $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('li.checkbox').fadeOut();
-                            numberOfCategories--;
+                            $categoryTreeReference.find('li[data-categoryid="'+categoryId+'"]').remove();
                         });
+                        populateCategoryTrees();
+                        
+                        var numberOfCategories = $categoryTreeReference.find('li').length;
                         if(numberOfCategories === 0){
                             $('#no-category-display-edit').show();
                             $('#div-store-content-edit').hide();
@@ -3000,12 +3002,6 @@
     }
 
     var modalDeleteHeight =  $(".delete-confirmation-modal").outerHeight();
-    $("#btn-delete-modal-confirmation").click(function(){
-        $(".delete-confirmation-modal").modal();
-        $(".delete-confirmation-modal").parents(".simplemodal-container").addClass("my-category-modal-sm").removeAttr("id");
-        $(".my-category-modal-sm").css("width", modalCategoryModalSmWidth+"px");
-    });
-
     $(window).on("load resize",function(){
         var modalDeleteHeight =  $(".delete-confirmation-modal").outerHeight();
         if(browserWidth <= mobileViewPortWidthLimit){

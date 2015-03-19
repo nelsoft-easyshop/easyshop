@@ -118,9 +118,10 @@ class EsMemberCatRepository extends EntityRepository
      *
      *  @param integer $memberId
      *  @param integer[] $categoryIdFilters
+     *  @param boolean $isChildOnly
      *  @return EasyShop\Entities\EsMemberCat[]
      */
-    public function getCustomCategoriesObject($memberId, $categoryIdFilters = [])
+    public function getCustomCategoriesObject($memberId, $categoryIdFilters = [], $isChildOnly = false)
     {
         $em = $this->_em;
         $queryBuilder = $em->createQueryBuilder()
@@ -133,6 +134,10 @@ class EsMemberCatRepository extends EntityRepository
         if(!empty($categoryIdFilters)){
             $queryBuilder->andWhere('mc.idMemcat IN (:categoryIds)')
                          ->setParameter('categoryIds', $categoryIdFilters);
+        }
+        if($isChildOnly){
+            $queryBuilder->andWhere('mc.parentId != :parentId')
+                         ->setParameter('parentId',\EasyShop\Entities\EsMemberCat::PARENT);
         }
 
         $customCategories = $queryBuilder->getQuery()
