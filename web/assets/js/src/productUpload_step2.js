@@ -537,6 +537,8 @@ function processAttributes()
             plugins: ["lists link preview","table jbimages fullscreen","textcolor" ],  
             toolbar: "insertfile undo redo | sizeselect | fontselect  fontsizeselect styleselect  forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | jbimages | image_advtab: true ",  
             relative_urls: false,
+            remove_script_host : false,
+            convert_urls: true,
             target_list: []
         });
     });

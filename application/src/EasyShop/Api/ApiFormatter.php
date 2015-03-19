@@ -88,9 +88,9 @@ class ApiFormatter
                 'description' => $this->stringUtility->purifyHTML($product->getDescription()),
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
-                'discount' => $product->getDiscountPercentage(),
-                'price' => floatval($product->getFinalPrice()),
-                'original_price' => floatval($product->getOriginalPrice()),
+                'discount' => number_format($product->getDiscountPercentage(), 0, '.', ''),
+                'price' => number_format($product->getFinalPrice(), 2, '.', ''),
+                'original_price' => number_format($product->getOriginalPrice(), 2, '.', ''),
                 'isFreeShipping' => $product->getIsFreeShipping(),
             ];
 
@@ -210,7 +210,7 @@ class ApiFormatter
 
             unset($temporaryArray[$key]['product_attribute_ids']);
             $temporaryArray[$key]['id'] = $key;
-            $temporaryArray[$key]['price'] = floatval(number_format($totalPrice + $product->getFinalPrice(), 2,'.',''));
+            $temporaryArray[$key]['price'] = number_format($totalPrice + $product->getFinalPrice(), 2,'.','');
             if($newCombinationKey[0] === "a_0"){
                 if(empty($productAttributes) === false){
                     $allCombination = $this->collectionHelper
@@ -394,9 +394,9 @@ class ApiFormatter
             'name' => utf8_encode($product->getName()), 
             'slug' => $product->getSlug(),
             'condition' => $product->getCondition(),
-            'discount' => floatval($product->getDiscountPercentage()),
-            'price' => floatval($product->getFinalPrice()),
-            'original_price' => floatval($product->getOriginalPrice()),
+            'discount' => number_format($product->getDiscountPercentage(), 0, '.', ''),
+            'price' => number_format($product->getFinalPrice(), 2, '.', ''),
+            'original_price' => number_format($product->getOriginalPrice(), 2, '.', ''),
             'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
             'isFreeShipping' => $product->getIsFreeShipping(),
         ];
