@@ -171,24 +171,29 @@ ol.how-to-list li{
     padding: 10px 0px;
 }
 
-.transaction-summary-table > tbody > tr{
+.transaction-summary-table > tbody > tr,
+.transaction-summary-table > tfoot > tr{
     border-bottom: dotted #e2e2e2 1px;
 }
 
-.transaction-summary-table > tbody > tr:last-child{
+.transaction-summary-table > tbody > tr:last-child,
+.transaction-summary-table > tfoot > tr:last-child{
     border-bottom: solid #e2e2e2 3px;
 }
 
-.transaction-summary-table > tbody > tr.border-bottom-1{
-    border-bottom: solid #e2e2e2 1px;
+.transaction-summary-table > tbody > tr.border-bottom-1,
+.transaction-summary-table > tfoot > tr.border-bottom-1{
+    border-bottom: solid #e2e2e2 2px !important;
 }
 
-.transaction-summary-table > tbody > tr > td{
+.transaction-summary-table > tbody > tr > td,
+.transaction-summary-table > tfoot > tr > td{
     padding: 10px 0px;
     vertical-align: top;
 }
 
-.transaction-summary-table > tbody > tr > td:first-child{
+.transaction-summary-table > tbody > tr > td:first-child,
+.transaction-summary-table > tfoot > tr > td:first-child{
     font-weight: bold;
     text-transform: uppercase;
 }
@@ -294,6 +299,74 @@ ol.how-to-list li{
     font-size: 23px;
 }
 
+.circle-breadcrumb .fa-cube{
+    font-size: 23px;
+}
+/*----------------------------------*/
+/*---------Chekout styles-----------*/
+/*----------------------------------*/
+.transaction-checkout-order{
+    font-size: 11px;
+}
+
+.transaction-checkout-order > thead> tr >th:last-child{
+    text-align: right;
+}
+
+.transaction-checkout-order > thead > tr > th:nth-child(2),
+.transaction-checkout-order > thead > tr > th:nth-child(3){
+    text-align: center;
+}
+
+.transaction-checkout-order > tbody > tr > td:first-child{
+    padding-right: 3px;
+}
+
+.transaction-checkout-order > tbody > tr > td:nth-child(2),
+.transaction-checkout-order > tbody > tr > td:nth-child(3){
+    text-align: center;
+}
+
+.transaction-checkout-order > tbody > tr.checkout-item:last-child{
+    border-bottom: solid #e2e2e2 2px
+}
+
+.transaction-checkout-order > tbody > tr.checkout-item > td{
+    text-transform: none;
+}
+
+.transaction-checkout-order > tfoot > tr > td:last-child{
+    text-align: right;
+}
+
+.checkout-order-total{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.payment-method-container{
+    margin-top: 10px;
+    border-bottom: solid #e2e2e2 1px;
+}
+
+.payment-method-desc{
+    color: #b9b9b9;
+    padding-bottom: 7px;
+}
+
+.payment-method-container input[type="radio"]{
+    margin-top: 1px;
+    margin-left: 0px;
+}
+
+.checkbox  input[type="checkbox"]{
+    margin-top: 1px;
+}
+
+.radio, .checkbox{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 /*----------------------------------*/
 /*----------Modal styles------------*/
 /*----------------------------------*/
