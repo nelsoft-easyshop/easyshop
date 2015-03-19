@@ -2714,8 +2714,8 @@
                     if($parentListItem.length > 0){
                         previousParentCategory = parseInt($parentListItem.data('categoryid'),10);
                     }
-                    $('#category-tree-reference li[data-categoryId="'+categoryId+'"]').remove();
                     if(newParentCategory !== previousParentCategory){
+                        $('#category-tree-reference li[data-categoryId="'+categoryId+'"]').remove();
                         var parent = $('#category-tree-reference>ul');
                         var childHtml = '<li data-categoryid="'+categoryId+'">'+escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
                         if(newParentCategory !== 0){
@@ -2730,13 +2730,13 @@
                         parent.append(childHtml);
                     }
                     else{
-                        var categoryListItemToUpdate = $('#category-tree-reference li[data-categoryId="'+categoryId+'"]');
+                        var categoryListItemToUpdate = $('#category-tree-reference li[data-categoryid="'+categoryId+'"]');
                         var children = categoryListItemToUpdate.find('ul');
                         var childrenHtml = '';
                         if(children.length > 0){
                             childrenHtml = '<ul>'+children[0].innerHTML+'</ul>';
                         }
-                        categoryListItemToUpdate.html(escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span>'+childrenHtml);
+                        categoryListItemToUpdate.html(escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span>'+childrenHtml);                        
                     }
                     populateCategoryTrees();
                     $modalDiv.find('.simplemodal-close').click();
