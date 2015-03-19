@@ -128,8 +128,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div class="header-link-login user-login-box">
                                     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg" alt="login">
                                     <span>
-                                        <a href="/login">login</a>&nbsp;or&nbsp;
-                                        <a href="/register">create an account</a>
+                                        <a href="/login">login &nbsp;or&nbsp; create an account</a>
                                     </span>
                                 </div>
                             <?php endif; ?>
@@ -416,8 +415,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                             <div class="header-link">
                                                 <div class="user-login-box">
                                                     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg" alt="login">
-                                                    <a href="/login">login</a>&nbsp;or&nbsp;
-                                                    <a href="/register">create an account</a>
+                                                    <a href="/login">login &nbsp;or&nbsp; create an account</a>
                                                 </div>
                                             </div>
                                         <?php endif; ?>
