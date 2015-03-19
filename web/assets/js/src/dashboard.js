@@ -2733,7 +2733,7 @@
                         }
                         categoryListItemToUpdate.html(escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span>'+childrenHtml);
                     }
-                    
+                    populateCategoryTrees();
                     $modalDiv.find('.simplemodal-close').click();
                 }
                 else{
