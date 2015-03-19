@@ -311,26 +311,50 @@ class MobileProductUpload extends MY_Controller
 
                         if($isMeetUp === false){
                             if($isFreeShippingNationwide){
-                                $this->productUploadManager->addShippingInfo($product, 
-                                                                             $productCombination->getIdProductItem(),
-                                                                             EsLocationLookup::PHILIPPINES_LOCATION_ID,
-                                                                             0);
+                                $this->productUploadManager->addShippingInfo(
+                                    $product, 
+                                    $productCombination->getIdProductItem(),
+                                    EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                                    0
+                                );
                             }
                             else{
-                                foreach( $shippingInfo as $info ){
-                                    $price = trim(str_replace(',', '', $info['price']));
-                                    $mustBreak = false;
-                                    if($info['location_id'] === EsLocationLookup::PHILIPPINES_LOCATION_ID){
-                                        $price = 0;
-                                        $mustBreak = true;
+                                if(count($shippingInfo) > 0){
+                                    //check first if shipping array has philippine location id 
+                                    $hasPhilippines = false;
+                                    foreach ($shippingInfo as $info) {
+                                        if($info['location_id'] === EsLocationLookup::PHILIPPINES_LOCATION_ID){
+                                            $hasPhilippines = true;
+                                            break;
+                                        }
                                     }
-                                    $this->productUploadManager->addShippingInfo($product, 
-                                                                                 $productCombination->getIdProductItem(),
-                                                                                 trim($info['location_id']),
-                                                                                 $price);
-                                    if($mustBreak){
-                                        break;
+
+                                    if($hasPhilippines){ 
+                                        $this->productUploadManager->addShippingInfo(
+                                            $product, 
+                                            $productCombination->getIdProductItem(),
+                                            EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                                            0
+                                        );
                                     }
+                                    else{ 
+                                        foreach( $shippingInfo as $info ){ 
+                                            $this->productUploadManager->addShippingInfo(
+                                                $product, 
+                                                $productCombination->getIdProductItem(),
+                                                trim($info['location_id']),
+                                                trim(str_replace(',', '', $info['price']))
+                                            );
+                                        }
+                                    }
+                                }
+                                else{ 
+                                    $this->productUploadManager->addShippingInfo(
+                                        $product, 
+                                        $productCombination->getIdProductItem(),
+                                        EsLocationLookup::PHILIPPINES_LOCATION_ID,
+                                        0
+                                    );
                                 }
                             }
                         }
