@@ -301,6 +301,11 @@ class ProductUploadManager
             return $returnArray;
         }
 
+        if(strlen($productName) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){
+            $returnArray['message'] = "Product name must be atleast ".EsProduct::MINIMUM_PRODUCT_NAME_LEN." characters!";
+            return $returnArray;
+        }
+
         if(in_array($condition, $this->languageLoader->getLine('product_condition')) === false){
             $returnArray['message'] = "Invalid condition!";
             return $returnArray;
