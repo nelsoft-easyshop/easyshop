@@ -1984,6 +1984,7 @@
             referenceTreeHtml += '<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
             referenceTreeList.push(referenceTreeHtml);
         });
+
         var $referenceTreeList = $('#category-tree-reference ul');
         $referenceTreeList.html();
         $referenceTreeList.append(referenceTreeList.join(''));
@@ -2002,16 +2003,17 @@
         initializeDeleteTree(listElementsHtml);
         var categoryViewList = [];
         var parentCategoryDroddownList = [];
-        var children = $listElements.children('li');
+        var children = $listElements.children('li').clone();
         children.find('ul').remove();
         children.find('span').remove();
+        parentCategoryDroddownList.push('<option value="0">None</option>');
         $.each(children, function(index,listItem){
             var categoryIdentifier = parseInt(listItem.getAttribute('data-categoryid'), 10);
             var escapedName = listItem.innerHTML;
             var viewHtml = '<div class="div-cat" data-categoryid="'+categoryIdentifier+'">'+escapedName+'</div>';
             var parentDropdownHtml = '<option value="'+categoryIdentifier+'">'+escapedName+'</option>';
             categoryViewList.push(viewHtml);
-            parentCategoryDroddownList.push(parentCategoryDroddownList);
+            parentCategoryDroddownList.push(parentDropdownHtml);
         });
         $categoryView.html('');
         $parentSelect.html('');
@@ -2777,8 +2779,6 @@
                 
                     if(parentCategory === 0){
                         $referenceTreeList.append(newListElement);
-                        var newViewElement = '<div class="div-cat" data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'</div>';
-                        $('.store-category-view').append(newViewElement);
                     }
                     else{
                         var $editTreeParent = $referenceTreeList.find('li[data-categoryid="'+parentCategory+'"]');
@@ -2787,11 +2787,7 @@
                         }
                         $editTreeParent.find('ul').append(newListElement);
                     }
-                    var listElements = '<ul>'+ $('#category-tree-reference>ul').get(0).innerHTML + '</ul>';
-
-                    initializeEditTree(listElements);
-                    initializeDeleteTree(listElements); 
-                
+                    populateCategoryTrees();
 
                     $modalDiv.find('.simplemodal-close').click();
                     $('.add-store-cat-message').fadeIn().delay(5000).fadeOut();
