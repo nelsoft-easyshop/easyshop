@@ -441,11 +441,12 @@ class CategoryManager
      *
      *  @param string $categoryName
      *  @param integer $memberId
-     *  @param inetger[] $productIds
+     *  @param integer[] $productIds
+     *  @param integer $parentCategoryId
      *
      *  @return array
      */
-    public function createCustomCategory($categoryName, $memberId, $productIds)
+    public function createCustomCategory($categoryName, $memberId, $productIds, $parentCategoryId = 0)
     {
         $errorMessage = "";
         $actionResult = false;
@@ -464,23 +465,38 @@ class CategoryManager
         if ($form->isValid()) {
             $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                             ->isCustomCategoryNameAvailable($categoryName,$memberId);
+            
+            $esMemberCategoryRepository =  $this->em->getRepository("EasyShop\Entities\EsMemberCat"); 
+            
+            $parentMemberCategory = true;
+            if($parentCategoryId !== 0){
+                $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
+                                            'member' => $memberId,
+                                            'idMemcat' => $parentCategoryId,
+                                            'parentId' => EsMemberCat::PARENT,
+                                        ]);
+            }
+
             if(!$isCategoryNameAvailable) {
                 $errorMessage = "Category name already exists";
+            }
+            else if($parentMemberCategory === null){
+                $errorMessage = "Category cannot be added under selected parent category";
             }
             else{
                 try {
                     $esProductRepo = $this->em->getRepository("EasyShop\Entities\EsProduct");
-                    $esMemberCategoryRepository =  $this->em->getRepository("EasyShop\Entities\EsMemberCat");
                     $datetimeToday = date_create();
                     $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
-                    $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId);
+                    $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId, $parentCategoryId);
                     $higestSortOrder++;
                     $memberCategory = new EsMemberCat();
                     $memberCategory->setCatName($categoryName)
                                    ->setMember($member)
                                    ->setCreatedDate($datetimeToday)
                                    ->setSortOrder($higestSortOrder)
-                                   ->setlastModifiedDate($datetimeToday);
+                                   ->setlastModifiedDate($datetimeToday)
+                                   ->setParentId($parentCategoryId);
                     $this->em->persist($memberCategory);
                     $productSortOrder = 0;
                     foreach ($productIds as $productId) {
@@ -504,7 +520,7 @@ class CategoryManager
                     $newCategoryId = $memberCategory->getIdMemcat();
                     $actionResult = true;
                 }
-                catch(Exception $e) {
+                catch(\Exception $e) {
                     $errorMessage = "Database Error";
                 }
             }

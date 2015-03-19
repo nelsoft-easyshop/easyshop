@@ -2420,13 +2420,15 @@ class Memberpage extends MY_Controller
         $productIds =  $this->input->post("productIds") ? 
                         json_decode($this->input->post("productIds")) 
                         : [];
+        $parentCategory = (int)$this->input->post("parentCategory");
         $result = false;
         if($memberId){
               $result = $this->categoryManager
                              ->createCustomCategory(
                                     $categoryName,
                                     $memberId,
-                                    $productIds
+                                    $productIds,
+                                    $parentCategory
                               );
         }
       
