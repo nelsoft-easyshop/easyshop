@@ -11,34 +11,34 @@
 
 <div class="clear"></div>
 <?PHP if (isset($product)) : ?>
-<div class="promo-wrapper margin-top-10" id="main_search_container">
+<div class="container mrgn-top-40" id="main_search_container">
     <?PHP if (isset($product['can_purchase']) && $product['can_purchase'] === FALSE) : ?>
     <div class="scratch-congrats">
         <h2 class="head-cngrts">SORRY</h2>
-            <p>
-                Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won an item before.
-            </p>
-            <div class="claim-bg ">
-                <div id="prod_image">
-                    <img src="<?php echo getAssetsDomain(); ?><?=$product['product_image_path']?>">
-                </div>
-                <div class="claim-details">
-                    <p>To claim your prize,
-                        visit Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
-                        Malate, Manila
-                        Don't forget to bring the winning scratch card AND two (2) valid ID's
-                        You may claim your prize until March 1, 2015.
-                        Contact us for more information: (02) 353-0062 or (02)353-8337.
-                    </p>
-                </div>
+        <p>
+            Unfortunately, you can only win once in the Scratch & Win Promo and this account has already won an item before.
+        </p>
+        <div class="claim-bg ">
+            <div id="prod_image">
+                <img src="<?php echo getAssetsDomain(); ?><?=$product['product_image_path']?>">
             </div>
-            <p>This is to ensure that everyone gets an equal opportunity in winning an item.</p>
-            <p>
-                You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="<?php echo $facebook; ?>">Facebook</a> and be updated of future promotions
-                <br>
-                Feel free to contact us for more information: (02)353-0062 or (02)353-8337.
-            </p>
+            <div class="claim-details">
+                <p>To claim your prize,
+                    visit Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
+                    Malate, Manila
+                    Don't forget to bring the winning scratch card AND two (2) valid ID's
+                    You may claim your prize until March 1, 2015.
+                    Contact us for more information: (02) 353-0062 or (02)353-8337.
+                </p>
+            </div>
         </div>
+        <p>This is to ensure that everyone gets an equal opportunity in winning an item.</p>
+        <p>
+            You can also register at <a href="/">Easyshop.ph</a> or follow us on <a href="<?php echo $facebook; ?>">Facebook</a> and be updated of future promotions
+            <br>
+            Feel free to contact us for more information: (02)353-0062 or (02)353-8337.
+        </p>
+    </div>
     <?PHP elseif($product == 'purchase-limit-error') : ?>
         <h2 class="head-cngrts">SORRY!</h2>
         <div class="scratch-congrats">
@@ -97,15 +97,15 @@
                 <p><?=html_escape($product['product_name'])?></p>
                 <span>Php <?= number_format($product['price'], 2, '.', ',')?></span>
                 <br>
-                <a href="/item/<?=html_escape($product['slug'])?>"><img class="shop-now-img"> &nbsp SHOP NOW</a>
+                <a href="/item/<?=html_escape($product['slug'])?>"><img class="shop-now-img"> &nbsp; SHOP NOW</a>
             </div>
             <?PHP endforeach; ?>
-
         </div>
     </div>
     <?PHP endif; ?>
+</div>
 <?PHP else: ?>
-    <div class="promo-wrapper" id="main_search_container">
+    <div class="container" id="main_search_container">
         <?php echo $deals_banner; ?>
         <div id="scratch-win">
             <div class="scratch-win-form">
@@ -266,6 +266,8 @@
         </div>
         <?PHP endif; ?>
     </div>
+</div>
+</div>
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
         <script src="/assets/js/src/vendor/jquery.simplemodal.js" type="text/javascript"></script>

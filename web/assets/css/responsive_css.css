@@ -244,6 +244,10 @@
     margin-bottom: 25px;
 }
 
+.mrgn-bttm-45 {
+    margin-bottom: 45px;
+}
+
 /**** width ****/
 .width-300 {
     width: 300px;
@@ -465,19 +469,6 @@ input[type="checkbox"] {
 }
 
 /*** header ***/
-
-header {
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    display: block;
-    background-color: #003e91;
-    height: 32px;
-    line-height: 32px;
-    z-index: 10000;
-}
-
 .top_links_right_con2 {
     display: none;
 }
@@ -866,6 +857,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .sell_steps ul {
     list-style: none;
+    padding: 0;
 }
 
 .sell_steps ul li {
@@ -917,9 +909,9 @@ div.sell_steps4 ul li:nth-child(4) a {
     height: 35px;
     line-height: 35px;
     margin: 0 -4px;
-    min-width: 12em;
+    min-width: 10em;
     vertical-align: middle;
-    width: 85%;
+    width: 80%;
     text-align: center;
 }
 
@@ -930,9 +922,9 @@ div.sell_steps4 ul li:nth-child(4) a {
     height: 35px;
     line-height: 35px;
     margin: 0 -4px;
-    min-width: 12em;
+    min-width: 10em;
     vertical-align: middle;
-    width: 85%;
+    width: 80%;
     text-align: center;
 }
 
@@ -1195,7 +1187,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .add_category_submit {
-    margin:30px 0 32px;
+    padding:44px 0;
     text-align: center;
 }
 
@@ -2174,6 +2166,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     width: 100%;
 }
 
+.img-social-media-con a {
+    padding: 0 5px;
+}
+
 .img-social-media-con img {
     width: 100%;
 }
@@ -2745,7 +2741,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     }
 }
 
-@media screen and (max-width: 56em) { /*** 848px ****/
+@media screen and (max-width: 991px) { 
     span.steps_txt_active {
         width: 89%;
     }

@@ -18,7 +18,7 @@
     $attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
     echo form_open('',$attr);
 ?>
-<div class="wrapper display-when-desktop" id="main_search_container"> 
+<div class="container display-when-desktop" id="main_search_container"> 
     <div class="left_attribute">
         <?php if(isset($subCategory)): ?>
             <h3>Categories</h3>
@@ -209,7 +209,7 @@
     $attr = array('id'=>'madvsrch', 'autocomplete'=>'off', 'method'=>'get');
     echo form_open('',$attr);
 ?>
-    <div class="display-when-mobile-1024">
+    <div class="display-when-mobile-1024 pd-tb-45">
         <div class="container container-responsive container-search">
             <div class="row">
                 <div class="col-md-12">

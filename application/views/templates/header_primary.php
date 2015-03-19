@@ -54,6 +54,7 @@
         <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/footer-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
     <?php else: ?>
         <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.header-primary.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php endif; ?>

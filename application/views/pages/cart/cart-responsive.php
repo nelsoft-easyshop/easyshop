@@ -6,7 +6,7 @@
     <link type="text/css" href='/assets/css/min-easyshop.cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
 
-<div class="container container-cart-responsive">
+<div class="container">
     <h2 class="my_cart_title">My Cart</h2>
     <table width="100%" class="table table-responsive font-roboto hide-to-536 tbl_deskptop">
         <tr class="tr-header-cart">
