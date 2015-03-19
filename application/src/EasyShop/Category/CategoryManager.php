@@ -547,7 +547,7 @@ class CategoryManager
      * 
      * @return mixed
      */
-    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId)
+    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId, $parentCategoryId = 0)
     {
         $esMemberProdcatRepo = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat");
         $esMemberCatRepo = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
@@ -570,10 +570,25 @@ class CategoryManager
         if ($form->isValid()) {
             $formData = $form->getData();
             $categoryName = $formData['name'];
+            $esMemberCategoryRepository = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
             try{
-                $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                                ->isCustomCategoryNameAvailable($categoryName, $memberId, $memberCategoryId);
-                if($isCategoryNameAvailable) {
+                $isCategoryNameAvailable = $esMemberCategoryRepository->isCustomCategoryNameAvailable($categoryName, $memberId, $memberCategoryId);
+                $parentMemberCategory = true;
+                if($parentCategoryId !== 0){
+                    $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
+                                                                            'member' => $memberId,
+                                                                            'idMemcat' => $parentCategoryId,
+                                                                            'parentId' => EsMemberCat::PARENT,
+                                                                        ]);
+                }
+
+                if(!$isCategoryNameAvailable){
+                    $errorMessage = "Category name already exists";
+                }
+                else if($parentMemberCategory === null){
+                    $errorMessage = "Category cannot be added under selected parent category";
+                }
+                else{
                     $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memberCategoryId, "member" => $memberId]);
                     if($memberCategory) {
                         $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memberCategoryId]);                
@@ -585,6 +600,12 @@ class CategoryManager
                     $memberCategory = $esMemberCatRepo->find($memberCategoryId);
                     $memberCategory->setCatName($categoryName);
                     $memberCategory->setlastModifiedDate($datetimeToday);
+                    if($memberCategory->getParentId() !== $parentCategoryId){
+                        $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId, $parentCategoryId);
+                        $higestSortOrder++;
+                        $memberCategory->setParentId($parentCategoryId);
+                        $memberCategory->setSortOrder($higestSortOrder);
+                    }
                     $productSortOrder = 0;
                     foreach ($productIds as $productId) {
                         $product =  $esProductRepo->findOneBy([
@@ -607,9 +628,6 @@ class CategoryManager
                     $this->em->flush();
                     $actionResult = true;
                 }
-                else {
-                    $errorMessage = "Category name already exists";
-                }   
             }
             catch(Exception $e) {
                 $errorMessage = "Database Error";

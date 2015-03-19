@@ -2549,7 +2549,7 @@
      
     $(".category-setup-ajax").on('click','.edit-category', function(){
         $(".overlay-for-waiting-modal").css("display", "block");
-        var categoryIdString = $(this).parent('li').data('categoryid');
+        var categoryIdString = $(this).closest('li').data('categoryid');
         var categoryId = parseInt(categoryIdString,10);
         $.ajax({
             type: "GET",
@@ -2562,7 +2562,10 @@
                     clonedDiv.find('.category-name').val(escapeHtml(response.categoryName));
                     clonedDiv.find('.hidden-category-id').val(response.categoryId);
                     clonedDiv.find('.category-items .product-list').html('');
-
+                    var parentCategoryId = parseInt(response.parentCategoryId, 10);
+                    if(parentCategoryId > 0){
+                        clonedDiv.find('.parent-category-dropdown').val(parentCategoryId);
+                    } 
                     appendCategoryProductList(clonedDiv.find('.category-items') , response.products)
                     retrieveAllProductList(clonedDiv, 1);
                 }            
@@ -2658,18 +2661,20 @@
         var $modalDiv = $btn.closest('.edit-category-modal');
         var categoryId = $modalDiv.find('.hidden-category-id').val();
         var categoryName = $modalDiv.find('.category-name').val();
-        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
+        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
+        var parentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
         var currentCategoryProductsIds = [];
         $.each($currentCategoryProductList, function(key, $itemNameDiv){
             currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
         });
-
+        
         $.ajax({
             type: "POST",
             url: '/memberpage/editCustomCategory',
             data: {
                 categoryId:categoryId, 
                 categoryName: categoryName, 
+                parentCategory: parentCategory,
                 productIds: JSON.stringify(currentCategoryProductsIds),
                 csrfname: csrftoken
             },

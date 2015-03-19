@@ -281,11 +281,8 @@
             <div class="form-group">
                 <label class="col-md-3">Parent Category : </label>
                 <div class="col-md-9">
-                    <select class="form-control category-name" placeholder="Type the category name here">
-                        <option>None</option>
-                        <option>Clothing and Accessories</option>
-                        <option>Electronics and Gadgets</option>
-                        <option>Movies</option>
+                    <select class="form-control category-name parent-category-dropdown" placeholder="Type the category name here">
+                        <option value="0">None</option>
                     </select>
                 </div>
             </div>
@@ -298,17 +295,6 @@
                     <a href="javascript:void(0)" class="alert-link error-message" style="border:none;"></a>
                 </div>
             </div>
-
-        </div>
-        <div class="form-group">
-            <label>Add items to this category : </label>
-  
-            <div class="customized-category-error">
-                <div class="alert alert-es-danger" role="alert">
-                    <a href="javascript:void(0)" class="alert-link error-message" style="border:none;"></a>
-                </div>
-            </div>
-
         </div>
  
         <div class="drag-drop-container">

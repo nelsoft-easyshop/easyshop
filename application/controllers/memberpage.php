@@ -2314,6 +2314,7 @@ class Memberpage extends MY_Controller
             $category = reset($categories);
             $response['categoryName'] = $category->getCatName();
             $response['categoryId'] = $categoryId;
+            $response['parentCategoryId'] = $category->getParentId();
             $response['products'] = [];
             $productIds = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
                                    ->getPagedCustomCategoryProducts(
@@ -2452,11 +2453,13 @@ class Memberpage extends MY_Controller
             $productIds =    $this->input->post("productIds") ? 
                             json_decode($this->input->post("productIds")) 
                             : [];
+            $parentCategoryId = (int)$this->input->post("parentCategory");
             $result = $this->categoryManager->editUserCustomCategoryProducts(
                         $memberCategoryId,
                         $categoryName,
                         $productIds,
-                        $memberId
+                        $memberId,
+                        $parentCategoryId
                     );
         }
         echo json_encode($result);
