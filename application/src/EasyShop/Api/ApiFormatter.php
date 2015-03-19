@@ -281,6 +281,7 @@ class ApiFormatter
     { 
         $formattedCartContents = [];
         $finalCart = []; 
+
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['idProduct' => $cartItem['id']]);
@@ -332,36 +333,42 @@ class ApiFormatter
                     'isAvailable' => false,
                     'shippingFee' => 0,
                     'mapAttributes' => $mappedAttributes,
-                ]; 
+                    'error_message' => isset($cartItem['error_message']) ? $cartItem['error_message'] : [],
+                ];
 
                 if($includeValidation){
-                    $validation = [ 
-                        'error_message' => [],
-                        'shippingFee' => $cartItem['shippingFee'],
-                    ];
+                    $errorMessage = [];
 
                     if(!isset($cartItem[$paymentTypeString]) || !$cartItem[$paymentTypeString]){
-                        $validation['error_message'][] = "Not Available for selected payment type";
+                        $errorMessage[] = "Not Available for selected payment type";
                     }
 
                     if(!$cartItem['canPurchaseWithOther']){
-                        $validation['error_message'][] = "This item can only be purchased individually.";
+                        $errorMessage[] = "This item can only be purchased individually.";
                     }
 
                     if(!$cartItem['hasNoPuchaseLimitRestriction']){
-                        $validation['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
+                        $errorMessage[] = "You have exceeded your purchase limit for a promo for this item.";
                     }
 
                     if(!$cartItem['isAvailableInLocation']){
-                        $validation['error_message'][] = "This item is not available in your location.";
+                        $errorMessage[] = "This item is not available in your location.";
                     }
 
                     if(!$cartItem['isQuantityAvailable']){
-                        $validation['error_message'][] = "The availability of this items is less than your desired quantity.";
+                        $errorMessage[] = "The availability of this items is less than your desired quantity.";
                     }
-                    $formattedCartContents[$rowId]['isAvailable'] = empty($validation['error_message']);
-                    $formattedCartContents[$rowId] = array_merge($formattedCartContents[$rowId],$validation);
+
+                    if(isset($formattedCartContents[$rowId]['error_message'])){
+                        $formattedCartContents[$rowId]['error_message'] = array_merge($formattedCartContents[$rowId]['error_message'], $errorMessage);
+                    }
+                    else{
+                        $formattedCartContents[$rowId]['error_message'] = $errorMessage;
+                    }
+
+                    $formattedCartContents[$rowId]['shippingFee'] = $cartItem['shippingFee'];
                 }
+                $formattedCartContents[$rowId]['isAvailable'] = empty($formattedCartContents[$rowId]['error_message']);
 
                 $format = $this->formatItem($cartItem['id']);
                 $finalCart[] = array_merge($formattedCartContents[$rowId],$format);
@@ -412,8 +419,7 @@ class ApiFormatter
     public function updateCart($mobileCartContents, $memberId, $includeUnavailable = true)
     {
         $unavailableItem = [];
-        $itemList = []; 
-        $productItemList = [];  
+        $itemList = [];  
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
             $options = [];
@@ -427,7 +433,17 @@ class ApiFormatter
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
             if($product){
-                $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+                $errorMessage = [];
+
+                if($product->getMember()->getIdMember() !== (int) $memberId){
+                    $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+                }
+                else{
+                    if($product->getMember()->getIdMember() === (int) $memberId){
+                        $errorMessage[] = "This is your own item!";
+                    } 
+                }
+
                 $cartContent = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
                                                                              $options, 
                                                                              $mobileCartContent->quantity)['itemData'];
@@ -440,9 +456,9 @@ class ApiFormatter
                     'qty' => $mobileCartContent->quantity, 
                     'original_price' => $product->getPrice(),
                     'price' => $product->getPrice(),
-                    'options' => [], 
+                    'options' => [],
+                    'error_message' => $errorMessage,
                 ];
-                $productItemList[] = $cartContent['product_itemID']; 
             }
         }
         $this->cartImplementation->persist($memberId);
@@ -461,6 +477,7 @@ class ApiFormatter
         return [
             'availableItems' => $this->formatCart($cartData),
             'unavailableItems' => $this->formatCart($itemList), 
+            'canContinue' => count($itemList) ===  0,
         ];
     }
 
