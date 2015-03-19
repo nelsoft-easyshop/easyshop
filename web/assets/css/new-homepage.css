@@ -1639,6 +1639,7 @@ h3 > b{
         float: right;
         line-height: 34px;
         padding-top: 5px;
+        text-align: right;
         width: 72%;
     }
 
