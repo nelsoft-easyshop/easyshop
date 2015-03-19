@@ -1,329 +1,346 @@
 .transaction-container{
-	min-height: 300px;
-	background: #fff;
-	padding: 30px 0px;
-	color: #565656;
+    min-height: 300px;
+    background: #fff;
+    padding: 30px 0px;
+    color: #565656;
 }
 
 .bg-gray{
-	background: #f7f7f7;
+    background: #f7f7f7;
 }
 
 .transaction-container{
-	border: solid #e2e2e2 1px;
-	min-height: 30px;
-	width: 100%;
-	border-radius: 4px;
-	padding: 20px;
+    border: solid #e2e2e2 1px;
+    min-height: 30px;
+    width: 100%;
+    border-radius: 4px;
+    padding: 20px;
 }
 
 .transaction-container .form-group{
-	margin: 13px 0px;
+    margin: 13px 0px;
 }
 
 .transaction-container-title{
-	font-size: 16px;
-	font-weight: bold;
-	text-transform: uppercase;
-	margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 10px;
 }
 
 .transaction-container-text{
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 ol.how-to-list{
-	list-style-type: decimal;
-	padding-left: 18px;
+    list-style-type: decimal;
+    padding-left: 18px;
 }
 
 ol.how-to-list li{
-	margin-bottom: 10px;
-	line-height: 21px
+    margin-bottom: 10px;
+    line-height: 21px
+}
+
+.cart-empty{
+    margin: auto;
+    padding: 95px 0px;
+    text-align: center;
+    border: solid #e2e2e2 1px;
+    border-radius: 4px;
+}
+
+.cart-empty span{
+    display: inline-block;
+    font-size: 18px;
+    margin-bottom: 13px;
 }
 
 .cart-table{
-	font-size: 13px;
+    font-size: 13px;
 }
 
 .cart-table > thead > tr{
-	border-collapse: collapse;
-	border-bottom: solid #e2e2e2 2px;
+    border-collapse: collapse;
+    border-bottom: solid #e2e2e2 2px;
 }
 
 .cart-table > thead > tr > th{
-	padding-bottom: 5px;
-	padding: 5px 10px;
+    padding-bottom: 5px;
+    padding: 5px 10px;
 }
 
 .cart-table > thead > tr > th:nth-child(3){
-	text-align: center;
+    text-align: center;
 }
 
 .cart-table > thead > tr > th:last-child{
-	text-align: right;
+    text-align: right;
 }
 
 .cart-table > tbody > tr{
-	border-bottom: dotted #e2e2e2 1px;
+    border-bottom: dotted #e2e2e2 1px;
 }
 
 .cart-table > tbody > tr:last-child{
-	border-bottom: none;
+    border-bottom: none;
 }
 
 .cart-table > tbody > tr > td{
-	padding: 20px 10px;
+    padding: 20px 10px;
 }
 
 .cart-table > tbody > tr:last-child > td{
-	padding-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 .cart-table > tbody > tr > td:nth-child(5){
-	text-align: center;
+    text-align: center;
 }
 
 .cart-table > tbody > tr > td:last-child{
-	text-align: right;
+    text-align: right;
 }
 
 .cart-item-remove:hover{
-	color: #ff530d;
-	cursor: pointer;
+    color: #ff530d;
+    cursor: pointer;
 }
 
 .cart-item-thumbnail{
-	width: 80px;
-	height: 80px;
-	border: solid #e2e2e2 1px;
+    width: 80px;
+    height: 80px;
+    border: solid #e2e2e2 1px;
 }
 
 .cart-item-name{
-	font-size: 14px;
-	font-weight: bold;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .cart-item-attribute{
-	font-size: 10px;
-	margin-top: 3px;
+    font-size: 10px;
+    margin-top: 3px;
 }
 
 .mid-button-container{
-	position: relative;
-	margin: 10px 0px;
+    position: relative;
+    margin: 10px 0px;
 }
 
 .btn-mid{
-	font-weight: bold;
-	text-transform: uppercase;
-	margin: 15px 5px;
-	z-index: 2;
-  	position: relative;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 15px 5px;
+    z-index: 2;
+    position: relative;
 }
 
 .btn-mid-left .fa{
-	margin-right: 10px;
-	margin-top: -1px;
+    margin-right: 10px;
+    margin-top: -1px;
 }
 
 .btn-mid-right .fa{
-	margin-left: 10px;
-	margin-top: -1px;
-	font-size: 1em;
+    margin-left: 10px;
+    margin-top: -1px;
+    font-size: 1em;
 }
 
 .mid-button-divider{
-	height: 2px;
-	border-top: solid #e2e2e2 2px;
-	width: 100%;
-	position: absolute;
-	top: 30px;
-	z-index: 1;
+    height: 2px;
+    border-top: solid #e2e2e2 2px;
+    width: 100%;
+    position: absolute;
+    top: 30px;
+    z-index: 1;
 }
 
 .transaction-summary-table{
-	border-collapse: collapse;
-	margin: 10px 0px;
+    border-collapse: collapse;
+    margin: 10px 0px;
 }
 
 .transaction-summary-table > thead > tr{
-	border-bottom: solid #e2e2e2 3px;
+    border-bottom: solid #e2e2e2 3px;
 }
 
 .transaction-summary-table > thead > tr > th{
-	font-weight: bold;
-	text-transform: uppercase;
-	padding: 10px 0px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 0px;
 }
 
 .transaction-summary-table > tbody > tr{
-	border-bottom: dotted #e2e2e2 1px;
+    border-bottom: dotted #e2e2e2 1px;
 }
 
 .transaction-summary-table > tbody > tr:last-child{
-	border-bottom: solid #e2e2e2 3px;
+    border-bottom: solid #e2e2e2 3px;
 }
 
 .transaction-summary-table > tbody > tr.border-bottom-1{
-	border-bottom: solid #e2e2e2 1px;
+    border-bottom: solid #e2e2e2 1px;
 }
 
 .transaction-summary-table > tbody > tr > td{
-	padding: 10px 0px;
-	vertical-align: top;
+    padding: 10px 0px;
+    vertical-align: top;
 }
 
 .transaction-summary-table > tbody > tr > td:first-child{
-	font-weight: bold;
-	text-transform: uppercase;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .transaction-summary-table > tbody > tr > td:last-child{
-	text-align: right;
+    text-align: right;
 }
 
 .transaction-summary-table.payment-method{
-	margin-bottom: 2px;
+    margin-bottom: 2px;
 }
 
 .transaction-summary-table > tbody > tr.payment-method-tr{
-	border-bottom: 0px;
+    border-bottom: 0px;
 }
 
 .transaction-summary-table > tbody > tr.payment-method-tr > td{
-	text-align: left;
-	padding-bottom: 0px;
+    text-align: left;
+    padding-bottom: 0px;
 }
 
 .img-payment-method{
-	width: 30px;
-	height: 30px;
-	border-radius: 5px;
-	display: inline-block;
-	margin-right: 1px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 1px;
 }
 
 .transaction-breadcrumb-container{
-	padding: 0px 15px;
-	margin: 20px 0px;
+    padding: 0px 15px;
+    margin: 20px 0px;
 }
 
 .col-trans-breadcrumb{
-	text-align: center;
-	padding: 0px;
-	position: relative;
+    text-align: center;
+    padding: 0px;
+    position: relative;
 }
 
 .breadcrumb-left-wing{
-	border-top: solid #e2e2e2 3px;
-	position: absolute;
-	top: 25px;
-	left: 0;
-	height: 2px;
-	width: 50%;
-	z-index: 1;
+    border-top: solid #e2e2e2 3px;
+    position: absolute;
+    top: 25px;
+    left: 0;
+    height: 2px;
+    width: 50%;
+    z-index: 1;
 }
 
 .breadcrumb-right-wing{
-	border-top: solid #e2e2e2 3px;
-	position: absolute;
-	top: 25px;
-	right: 0;
-	height: 2px;
-	width: 50%;
-	z-index: 1;
+    border-top: solid #e2e2e2 3px;
+    position: absolute;
+    top: 25px;
+    right: 0;
+    height: 2px;
+    width: 50%;
+    z-index: 1;
 }
 
 .active-wing{
-	border-top: solid #00a388 3px;
+    border-top: solid #00a388 3px;
 }
 
 .circle-breadcrumb{
-	width: 50px;
-	height: 50px;
-	position: relative;
-	border-radius: 50%;
-	text-align: center;
-	background: #e2e2e2;
-	color: #fff;
-	display: table-cell;
-	vertical-align: middle;
-	z-index: 2;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    border-radius: 50%;
+    text-align: center;
+    background: #e2e2e2;
+    color: #fff;
+    display: table-cell;
+    vertical-align: middle;
+    z-index: 2;
 }
 
 .col-trans-breadcrumb.active .circle-breadcrumb{
-	background: #00a388;
+    background: #00a388;
 }
 
 .breadcrumb-title{
-	margin-top: 10px;
-	color: #e2e2e2;
-	text-transform: uppercase;
-	font-size: 13px;
+    margin-top: 10px;
+    color: #e2e2e2;
+    text-transform: uppercase;
+    font-size: 13px;
 }
 
 .col-trans-breadcrumb.active .breadcrumb-title{
-	color: #00a388;
-	font-weight: bold;
+    color: #00a388;
+    font-weight: bold;
 }
 
 .circle-breadcrumb .icon-cart{
-	font-size: 23px;
+    font-size: 23px;
 }
 
 .circle-breadcrumb .icon-payment{
-	font-size: 23px;
+    font-size: 23px;
 }
 
 .circle-breadcrumb .fa-check{
-	font-size: 23px;
+    font-size: 23px;
 }
 
 /*----------------------------------*/
 /*----------Modal styles------------*/
 /*----------------------------------*/
+.remove-item-modal{
+    display: none;
+}
 
 .my-modal{
-	background-color:#fff;
-	border-radius: 4px;
-	max-width:600px; 
-	width: 90% !important;
+    background-color:#fff;
+    border-radius: 4px;
+    max-width:600px; 
+    width: 90% !important;
 }
 
 .my-modal .simplemodal-wrap{
-	overflow:hidden !important;
+    overflow:hidden !important;
 }
 
 .my-modal a.modalCloseImg {
-	background:url(../images/img-close.png) no-repeat; 
-	width:25px; 
-	height:29px; 
-	display:inline; 
-	z-index:3200; 
-	position:absolute; 
-	top:8px; 
-	right: 10px; 
-	cursor:pointer;
+    background:url(../images/img-close.png) no-repeat; 
+    width:25px; 
+    height:29px; 
+    display:inline; 
+    z-index:3200; 
+    position:absolute; 
+    top:8px; 
+    right: 10px; 
+    cursor:pointer;
 }
 
 .my-modal-content{
-	overflow: hidden;
-	margin-bottom: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .my-modal-content p{
-	padding: 20px;
-	margin-top: 20px;
+    padding: 20px;
+    margin-top: 20px;
 }
 
 .my-modal .remove-item-name{
-	color: #ff893a;
-	font-weight: normal;
+    color: #ff893a;
+    font-weight: normal;
 }
 
 .my-modal-footer{
-	border-top: solid #e2e2e2 1px;
-	margin-top: 10px;
-	padding: 20px;
+    border-top: solid #e2e2e2 1px;
+    margin-top: 10px;
+    padding: 20px;
 }
