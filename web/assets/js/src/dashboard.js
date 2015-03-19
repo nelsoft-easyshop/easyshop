@@ -2073,7 +2073,9 @@
         if(typeof data === 'undefined'){
             $('#delete-category-tree').jstree({
                 "checkbox" : {
-                    "keep_selected_style" : false
+                    "keep_selected_style" : false,
+                    "cascade" : "down", 
+                    "three_state" : false 
                 },
                 "plugins" : [
                     "checkbox"
@@ -2086,7 +2088,9 @@
                     "data": data
                 },
                 "checkbox" : {
-                    "keep_selected_style" : false
+                    "keep_selected_style" : false,
+                    "cascade" : "down", 
+                    "three_state" : false 
                 },
                 "plugins" : [
                     "checkbox"
@@ -2094,6 +2098,9 @@
             });
         }
     }
+
+    
+   
     
     $('#store-color-save').on('click', function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
