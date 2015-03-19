@@ -108,7 +108,7 @@
                 <p class="panel-setup-title">DELETE CATEGORIES</p>
                 <div id="div-store-content-delete" class="div-store-content concealable">
                     <div class="delete-store-cat">
-                        <div class="f.'orm-horizontal">
+                        <div class="form-horizontal">
                         <div class="row">
                             <div class="col-md-12">
                                 <form class="form-horizontal">
@@ -125,7 +125,7 @@
                         </div>
                         <div class="form-group">
                                 <label class="col-sm-3 control-label">Current Categories : </label>
-                                <div class="col-sm-9 col-with-radio">
+                                <div class="col-sm-6 col-with-radio">
                                     <div id="delete-category-tree">
                                         <ul class="list-unstyled list-currect-categories" id="delete-list-categories">                                        
 
