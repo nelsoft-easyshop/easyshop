@@ -190,8 +190,45 @@ html, body{
 
 .search-item-img-container{
     width: 100%;
-    height: 180px;
+    height: 208px;
     position: relative;
+    border: solid #f7f7f7 1px;
+    overflow: hidden;
+}
+
+.search-item-image-primary{
+    max-width: 100%;
+    max-height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.search-item-img-container:hover .search-item-has-secondary{
+    opacity: 0;
+}
+
+.search-item-image-secondary{
+    max-width: 100%;
+    max-height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+    z-index: 1;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.search-item-img-container:hover .search-item-image-secondary{
+    opacity: 1;
 }
 
 .search-item-img-container-hover{

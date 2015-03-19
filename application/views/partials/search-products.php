@@ -24,12 +24,13 @@
     <div class="col-search-item <?=$isListView ? 'col-xs-12' : 'col-sm-3 col-xs-6' ; ?>">
         <div class="search-item-container">
             <a href="/item/<?=$productSlug;?>" class="search-item-link-image">
-                <div class="search-item-img-container" style="background: #fff url(<?=$productImagePath;?>) center no-repeat; background-size: cover;">
+                <div class="search-item-img-container">
+                    <img src="<?=$productImagePath;?>" class="search-item-image-primary <?php if($hasSecondImage): ?> search-item-has-secondary <?php endif; ?>"  />
+
                     <?php if($hasSecondImage): ?>
-                    <div class="search-item-img-container-hover" style="background: #fff url(<?=$secondaryImage;?>) center no-repeat; background-size: cover;">
-                    </div>
+                    <img src="<?=$secondaryImage;?>" class="search-item-image-secondary" />
                     <?php endif; ?>
-                    
+
                     <?php if($percentage > 0):?>
                     <span class="discount-circle-2"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                     <?php endif;?>
@@ -70,12 +71,12 @@
                     <tr>
                         <td class="search-item-td-image">
                             <a href="/item/<?=$productSlug;?>">
-                                <div class="search-item-img-container" style="background: #fff url(<?=$productImagePath;?>) center no-repeat; background-size: cover;">
+                                <div class="search-item-img-container">
+                                    <img src="<?=$productImagePath;?>" class="search-item-image-primary <?php if($hasSecondImage): ?> search-item-has-secondary <?php endif; ?>"  />
+
                                     <?php if($hasSecondImage): ?>
-                                    <div class="search-item-img-container-hover" style="background: #fff url(<?=$secondaryImage;?>)) center no-repeat; background-size: cover;">
-                                    </div>
-                                    <?php endif;?>
-                                    
+                                    <img src="<?=$secondaryImage;?>" class="search-item-image-secondary" />
+                                    <?php endif; ?>
                                     <?php if($percentage > 0):?>
                                     <span class="discount-circle-2"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                                     <?php endif;?>
@@ -143,9 +144,11 @@
                                 </div>
                             </div>
                         </td>
+                        <?php $priceFontStyle = strlen((string)$originalPrice) > 11 ? "font-size:15px !important;" : ""; ?>
+                        <?php $pricePaddingTop = strlen((string)$originalPrice) > 11 ? "margin-top:37px;" : ""; ?>
                         <td class="search-item-td-price">
                             <div class="search-item-price">
-                                <?php $priceFontStyle = strlen((string)$originalPrice) > 11 ? "font-size:15px !important;" : ""; ?>  
+                                <div style="<?php echo $pricePaddingTop; ?>">
                                 <?php if($percentage > 0):?>
                                 
                                     <span class="original-price" style="<?php echo $priceFontStyle; ?>">
@@ -158,7 +161,9 @@
                                     P <?=$productPrice?>
                                  </span>
                                   
-                                 <?php if($isFreeShipping): ?>
+                                 
+                                </div>
+                                <?php if($isFreeShipping): ?>
                                      <span class="free-shipping-tag">
                                         <i class="fa fa-truck fa-lg"></i> FREE 
                                         SHIPPING
