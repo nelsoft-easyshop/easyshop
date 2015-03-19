@@ -30,7 +30,7 @@
                     <div class="breadcrumb-left-wing"></div>
                     <center>
                         <div class="circle-breadcrumb">
-                            <i class="fa fa-check fa-lg"></i>
+                            <i class="fa fa-cube fa-lg"></i>
                         </div>
                          <div class="breadcrumb-title">Order Complete</div>
                     </center>
