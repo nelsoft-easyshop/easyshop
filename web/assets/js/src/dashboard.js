@@ -2071,11 +2071,15 @@
     {
         $('#delete-category-tree').jstree('destroy');
         if(typeof data === 'undefined'){
-            $('#delete-category-tree').jstree({
+            $('#delete-category-tree').on('check_node.jstree', function (e, data) {
+                data.instance.open_all();
+            })
+            .jstree({
                 "checkbox" : {
                     "keep_selected_style" : false,
                     "cascade" : "down", 
-                    "three_state" : false 
+                    "three_state" : false ,
+                    "tie_selection" : false
                 },
                 "plugins" : [
                     "checkbox"
@@ -2083,14 +2087,18 @@
             });
         }
         else{
-            $('#delete-category-tree').jstree({
+            $('#delete-category-tree').on('check_node.jstree', function (e, data) {
+                data.instance.open_all();
+            })
+            .jstree({
                 "core": {
                     "data": data
                 },
                 "checkbox" : {
                     "keep_selected_style" : false,
                     "cascade" : "down", 
-                    "three_state" : false 
+                    "three_state" : false ,
+                     "tie_selection" : false
                 },
                 "plugins" : [
                     "checkbox"
