@@ -2549,7 +2549,13 @@
      
     $(".category-setup-ajax").on('click','.edit-category', function(){
         $(".overlay-for-waiting-modal").css("display", "block");
-        var categoryIdString = $(this).closest('li').data('categoryid');
+        var $listItem = $(this).closest('li');
+        var parentCategoryId = 0;
+        var $parentListItem = $listItem.parentsUntil("#edit-category-tree", "li");
+        if($parentListItem.length > 0){
+            parentCategoryId = $parentListItem.data('categoryid');
+        }
+        var categoryIdString = $listItem.data('categoryid');
         var categoryId = parseInt(categoryIdString,10);
         $.ajax({
             type: "GET",
@@ -2563,7 +2569,6 @@
                     clonedDiv.find('.hidden-category-id').val(response.categoryId);
                     clonedDiv.find('.category-items .product-list').html('');
                     var dropdown = clonedDiv.find('.parent-category-dropdown');
-                    var parentCategoryId = parseInt(response.parentCategoryId, 10);
                     dropdown.find('option[value="'+categoryId+'"]').hide();
                     if(parentCategoryId > 0){
                         dropdown.val(parentCategoryId);
