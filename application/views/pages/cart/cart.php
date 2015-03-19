@@ -40,6 +40,15 @@
         </div>
         <!--End of transaction breadcrumb-->
 
+        <!--Start of empty cart display-->
+        <!--<div class="cart-empty">
+            <span>Your cart is currently empty.</span>
+            <br/>
+            <a href="#" class="btn btn-es-white btn-lg">Return to Shop</a>
+        </div>-->
+        <!--End of empty cart display-->
+
+
         <!--Start of transaction cart items-->
         <div class="row">
             <div class="col-md-12">
@@ -262,7 +271,8 @@
             <!--End of summary-->
         </div>
         <!--End of trio bottom boxes-->
-    </div>
+        
+    </div>    
 </div>
 <div class="my-modal-content remove-item-modal">
     <p>
@@ -271,9 +281,10 @@
     <div class="my-modal-footer">
         <center>
             <button class="btn btn-es-green">Remove</button>
-            <button class="btn btn-es-white">Cancel</button>
+            <button class="btn btn-es-white simplemodal-close">Cancel</button>
         </center>
     </div>
 </div>
+
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
