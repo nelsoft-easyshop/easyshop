@@ -200,5 +200,27 @@ class EsMemberCatRepository extends EntityRepository
 
         return (int)$result['numberOfCategories'];
     }
+    
+    /**
+     * Gets the number of children of a memberCategory
+     *
+     * @param integer $memberCategoryId
+     * @return integer
+     */
+    public function getNumberOfChildren($memberCategoryId)
+    {
+        $this->em = $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('COUNT(m.idMemcat)')
+                     ->from('EasyShop\Entities\EsMemberCat','m')
+                     ->where('m.parentId = :memberCategoryId')
+                     ->andWhere('m.isDelete = :deleteStatus')
+                     ->setParameter('memberCategoryId', $memberCategoryId)
+                     ->setParameter('deleteStatus', \EasyShop\Entities\EsMemberCat::ACTIVE);
+
+        $resultCount = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        return (int)$resultCount;
+    }
   
 }

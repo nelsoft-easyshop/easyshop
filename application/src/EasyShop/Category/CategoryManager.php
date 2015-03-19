@@ -594,44 +594,62 @@ class CategoryManager
                     $errorMessage = "Category cannot be added under selected parent category";
                 }
                 else{
-                    $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memberCategoryId, "member" => $memberId]);
-                    if($memberCategory) {
-                        $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memberCategoryId]);                
-                        foreach ($memberCategoryProducts as $memberCategoryProduct) {
-                            $this->em->remove($memberCategoryProduct);
-                        }
-                    }
-                    $datetimeToday = date_create();
-                    $memberCategory = $esMemberCatRepo->find($memberCategoryId);
-                    $memberCategory->setCatName($categoryName);
-                    $memberCategory->setlastModifiedDate($datetimeToday);
-                    if($memberCategory->getParentId() !== $parentCategoryId){
-                        $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId, $parentCategoryId);
-                        $higestSortOrder++;
-                        $memberCategory->setParentId($parentCategoryId);
-                        $memberCategory->setSortOrder($higestSortOrder);
-                    }
-                    $productSortOrder = 0;
-                    foreach ($productIds as $productId) {
-                        $product =  $esProductRepo->findOneBy([
-                                        "member" => $memberId,
-                                        "idProduct" => $productId,
-                                        "isDelete" => EsProduct::ACTIVE,
-                                        "isDraft" => EsProduct::ACTIVE
+                    $memberCategory = $esMemberCatRepo->findOneBy([
+                                        "idMemcat" => $memberCategoryId,
+                                        "member" => $memberId
                                     ]);
+                                    
+                    if($memberCategory){
+                        $isParentModified = $memberCategory->getParentId() !== $parentCategoryId;
+                        $isUpdateAllowed = true;
+                        if($isParentModified){
+                            $numberOfChildren = $esMemberCatRepo->getNumberOfChildren($memberCategoryId);
+                            $isUpdateAllowed = $numberOfChildren === 0;
+                        }
+                        
+                        if(!$isUpdateAllowed){
+                            $errorMessage = "Only a maximum of two levels are permitted in the category structure.";
+                        }
+                        else{          
+                            $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memberCategoryId]);                
+                            foreach ($memberCategoryProducts as $memberCategoryProduct) {
+                                $this->em->remove($memberCategoryProduct);
+                            }
+                            $datetimeToday = date_create();
+                            $memberCategory->setCatName($categoryName);
+                            $memberCategory->setlastModifiedDate($datetimeToday);                    
+                            if($isParentModified){
+                                $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId, $parentCategoryId);
+                                $higestSortOrder++;
+                                $memberCategory->setParentId($parentCategoryId);
+                                $memberCategory->setSortOrder($higestSortOrder);
+                            }
+                            $productSortOrder = 0;
+                            foreach ($productIds as $productId) {
+                                $product =  $esProductRepo->findOneBy([
+                                                "member" => $memberId,
+                                                "idProduct" => $productId,
+                                                "isDelete" => EsProduct::ACTIVE,
+                                                "isDraft" => EsProduct::ACTIVE
+                                            ]);
 
-                        if($product) {
-                            $memberProductCategory = new EsMemberProdcat();
-                            $memberProductCategory->setMemcat($memberCategory);
-                            $memberProductCategory->setProduct($product);
-                            $memberProductCategory->setCreatedDate($datetimeToday);
-                            $memberProductCategory->setSortOrder($productSortOrder);
-                            $productSortOrder++;
-                            $this->em->persist($memberProductCategory);
+                                if($product) {
+                                    $memberProductCategory = new EsMemberProdcat();
+                                    $memberProductCategory->setMemcat($memberCategory);
+                                    $memberProductCategory->setProduct($product);
+                                    $memberProductCategory->setCreatedDate($datetimeToday);
+                                    $memberProductCategory->setSortOrder($productSortOrder);
+                                    $productSortOrder++;
+                                    $this->em->persist($memberProductCategory);
+                                }
+                            }
+                            $this->em->flush();
+                            $actionResult = true;
                         }
                     }
-                    $this->em->flush();
-                    $actionResult = true;
+                    else{
+                        $errorMessage = "Category not found";
+                    }               
                 }
             }
             catch(Exception $e) {
