@@ -2703,8 +2703,6 @@
                 }
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
-                    var me = $(".my-category-modal").outerHeight();
-                    var mo = me + 30;
                     errorDiv.fadeIn().delay(5000).fadeOut();
                     errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' + escapeHtml(jsonData.errorMessage));
                 }
