@@ -1435,7 +1435,18 @@ a{
     border-radius: 4px;
 }
 
-#edit-category-tree > ul > li > ul .jstree-anchor{
+#delete-category-tree .jstree-anchor{
+    border: solid #ff893a 1px;
+    background: #fff;
+    width: 100%;
+    height: 30px;
+    padding-top: 2px;
+    padding-left: 10px;
+    border-radius: 4px;
+}
+
+#edit-category-tree > ul > li > ul .jstree-anchor,
+#delete-category-tree > ul > li > ul .jstree-anchor{
     border: dotted #ff893a 1px !important;
 }
 
@@ -1451,13 +1462,13 @@ a{
     display:none !important; 
 } 
 
-
 #delete-category-tree span.icon-edit{  
     display:none; 
 } 
 
 
-#edit-category-tree li {
+#edit-category-tree li,
+#delete-category-tree li {
     margin-top: 7px;
     margin-bottom: 7px;
 }
@@ -1506,6 +1517,27 @@ a{
 #jstree-dnd.jstree-default i{
     width: 20px !important;
     height: 20px !important;
+}
+
+.jstree-checkbox{
+    width: 16px !important;
+    height: 16px !important;
+    background-size: 100% !important;
+    margin-top: 3px !important;
+    margin-right: 5px !important;
+
+}
+
+i.jstree-icon.jstree-checkbox{
+    background: url(/assets/css/jstree/jstree-checkbox.png) !important;
+    background-size: 100% !important;
+    cursor: pointer !important;
+}
+
+.jstree-default.jstree-checkbox-selection .jstree-clicked > .jstree-checkbox, 
+.jstree-default .jstree-checked > .jstree-checkbox{
+    background: url(/assets/css/jstree/jstree-checkbox-checked.png) !important;
+    background-size: 100% !important;
 }
 
 .list-currect-categories > li > ul{
