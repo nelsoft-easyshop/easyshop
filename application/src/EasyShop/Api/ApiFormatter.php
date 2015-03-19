@@ -456,7 +456,7 @@ class ApiFormatter
                     'qty' => $mobileCartContent->quantity, 
                     'original_price' => $product->getPrice(),
                     'price' => $product->getPrice(),
-                    'options' => [],
+                    'options' => isset($cartContent['options']) ? $cartContent['options'] : [],
                     'error_message' => $errorMessage,
                 ];
             }
