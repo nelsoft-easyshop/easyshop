@@ -2562,9 +2562,11 @@
                     clonedDiv.find('.category-name').val(escapeHtml(response.categoryName));
                     clonedDiv.find('.hidden-category-id').val(response.categoryId);
                     clonedDiv.find('.category-items .product-list').html('');
+                    var dropdown = clonedDiv.find('.parent-category-dropdown');
                     var parentCategoryId = parseInt(response.parentCategoryId, 10);
+                    dropdown.find('option[value="'+categoryId+'"]').hide();
                     if(parentCategoryId > 0){
-                        clonedDiv.find('.parent-category-dropdown').val(parentCategoryId);
+                        dropdown.val(parentCategoryId);
                     } 
                     appendCategoryProductList(clonedDiv.find('.category-items') , response.products)
                     retrieveAllProductList(clonedDiv, 1);
