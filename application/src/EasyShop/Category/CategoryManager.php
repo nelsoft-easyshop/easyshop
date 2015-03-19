@@ -549,6 +549,8 @@ class CategoryManager
      */
     public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId, $parentCategoryId = 0)
     {
+        $memberCategoryId = (int)$memberCategoryId;
+        $parentCategoyId = (int)$parentCategoryId;
         $esMemberProdcatRepo = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat");
         $esMemberCatRepo = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
         $esProductRepo = $this->em->getRepository("EasyShop\Entities\EsProduct");
@@ -575,13 +577,16 @@ class CategoryManager
                 $isCategoryNameAvailable = $esMemberCategoryRepository->isCustomCategoryNameAvailable($categoryName, $memberId, $memberCategoryId);
                 $parentMemberCategory = true;
                 if($parentCategoryId !== 0){
-                    $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
-                                                                            'member' => $memberId,
-                                                                            'idMemcat' => $parentCategoryId,
-                                                                            'parentId' => EsMemberCat::PARENT,
-                                                                        ]);
+                    $parentMemberCategory = null;
+                    if($parentCategoryId !== $memberCategoryId){
+                        $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
+                                                                                'member' => $memberId,
+                                                                                'idMemcat' => $parentCategoryId,
+                                                                                'parentId' => EsMemberCat::PARENT,
+                                                                            ]);
+                    }
                 }
-
+     
                 if(!$isCategoryNameAvailable){
                     $errorMessage = "Category name already exists";
                 }
