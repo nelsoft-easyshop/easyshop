@@ -2669,7 +2669,7 @@
         var categoryId = $modalDiv.find('.hidden-category-id').val();
         var categoryName = $modalDiv.find('.category-name').val();
         var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
-        var parentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
+        var newParentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
         var currentCategoryProductsIds = [];
         $.each($currentCategoryProductList, function(key, $itemNameDiv){
             currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
@@ -2681,7 +2681,7 @@
             data: {
                 categoryId:categoryId, 
                 categoryName: categoryName, 
-                parentCategory: parentCategory,
+                parentCategory: newParentCategory,
                 productIds: JSON.stringify(currentCategoryProductsIds),
                 csrfname: csrftoken
             },
@@ -2689,16 +2689,36 @@
                 var jsonData = $.parseJSON(data);
                 if(jsonData.result){
                     var escapedCategoryName = escapeHtml(categoryName);
-                    $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').html(escapedCategoryName);
-                    var draggableListItem = $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]');
-                    draggableListItem.attr('data-categoryname', escapedCategoryName);
-                    var html = '<i class="fa fa-sort"></i>'+
-                                   escapedCategoryName+
-                               '<i class="icon-edit modal-category-edit pull-right edit-category"></i>';
-                    draggableListItem.html(html);
-                    var deleteCheckBoxLabel = $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('label');
-                    html = '<input data-categoryid="'+categoryId+'" type="checkbox" class="checkBox">'+escapedCategoryName;
-                    deleteCheckBoxLabel.html(html);
+                    var previousParentCategory = 0;
+                    var $parentListItem = $('#category-tree-reference li[data-categoryid="'+categoryId+'"]').parentsUntil("#category-tree-reference", "li");
+                    if($parentListItem.length > 0){
+                        previousParentCategory = parseInt($parentListItem.data('categoryid'),10);
+                    }
+                    $('#category-tree-reference li[data-categoryId="'+categoryId+'"]').remove();
+                    if(newParentCategory !== previousParentCategory){
+                        var parent = $('#category-tree-reference>ul');
+                        var childHtml = '<li data-categoryid="'+categoryId+'">'+escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
+                        if(newParentCategory !== 0){
+                            var parent = $('#category-tree-reference li[data-categoryId="'+newParentCategory+'"]');
+                            if(parent.find('ul').length > 0){
+                                parent = parent.find('ul');
+                            }
+                            else{
+                                childHtml = '<ul>'+childHtml+'</ul>';
+                            }
+                        }
+                        parent.append(childHtml);
+                    }
+                    else{
+                        var categoryListItemToUpdate = $('#category-tree-reference li[data-categoryId="'+categoryId+'"]');
+                        var children = categoryListItemToUpdate.find('ul');
+                        var childrenHtml = '';
+                        if(children.length > 0){
+                            childrenHtml = '<ul>'+children[0].innerHTML+'</ul>';
+                        }
+                        categoryListItemToUpdate.html(escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span>'+childrenHtml);
+                    }
+                    
                     $modalDiv.find('.simplemodal-close').click();
                 }
                 else{
