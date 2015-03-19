@@ -2572,6 +2572,8 @@
         }
         var categoryIdString = $listItem.data('categoryid');
         var categoryId = parseInt(categoryIdString,10);
+        var numberOfchildren = $('#category-tree-reference li[data-categoryid="'+categoryId+'"] ul>li').length;
+        
         $.ajax({
             type: "GET",
             url: '/memberpage/getCustomCategory',
@@ -2588,6 +2590,9 @@
                     if(parentCategoryId > 0){
                         dropdown.val(parentCategoryId);
                     } 
+                    if(numberOfchildren > 0){
+                        dropdown.prop('disabled', true);
+                    }
                     appendCategoryProductList(clonedDiv.find('.category-items') , response.products)
                     retrieveAllProductList(clonedDiv, 1);
                 }            
