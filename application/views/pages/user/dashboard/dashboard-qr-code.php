@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="/assets/css/qr-code-print.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="print">
 </head>
 
-<body onload="window.print();window.location.replace('/me')">
+<body >
 <section class="qr-code-wrapper">
     <div class="container text-center">
         <div class="row">
@@ -72,6 +72,12 @@
         <div class="border-1"></div>
         <div class="border-2"></div>
     </div>
-</section>
+</section> 
+<script type="text/javascript">
+    window.onload = function () {
+        window.print();
+        setTimeout(function(){window.close();}, 1);
+    }
+</script>
 </body>
 </html>
