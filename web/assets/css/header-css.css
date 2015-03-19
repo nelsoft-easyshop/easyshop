@@ -236,6 +236,7 @@ header {
 }
 
 .sticky-nav-fixed .header-link .user-login-box {
+    font-weight: bold;
     line-height: 28px;
     padding: 2px;
 }
