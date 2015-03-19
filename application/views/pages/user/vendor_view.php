@@ -187,3 +187,4 @@
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_vendor_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
+
