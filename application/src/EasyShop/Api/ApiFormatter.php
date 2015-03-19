@@ -88,7 +88,7 @@ class ApiFormatter
                 'description' => $this->stringUtility->purifyHTML($product->getDescription()),
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
-                'discount' => $product->getDiscountPercentage(),
+                'discount' => number_format($product->getDiscountPercentage(), 0, '.', '')),
                 'price' => number_format($product->getFinalPrice(), 2, '.', ''),
                 'original_price' => number_format($product->getOriginalPrice(), 2, '.', ''),
                 'isFreeShipping' => $product->getIsFreeShipping(),
