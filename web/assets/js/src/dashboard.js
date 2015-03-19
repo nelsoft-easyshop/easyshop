@@ -1968,11 +1968,13 @@
         var categoryDraggableList = [];
         var categoryDeleteList = [];
         var categoryViewList = [];
+        var parentCategoryDroddownList = [];
         $.each(categoryData, function(index, category) {
             var escapedName = escapeHtml(category.categoryName);
             var categoryIdentifier = parseInt(category.memberCategoryId, 10);
             var editHtml = '<li data-categoryid='+categoryIdentifier+'>'+escapedName+' <span class="icon-edit modal-category-edit pull-right edit-category"></span>';
             var deleteHtml = '<li data-categoryid="'+categoryIdentifier + '">'+escapedName;
+            var parentCategoryHtml = '<option value="'+categoryIdentifier+'">'+escapedName+'</option>';
             if(category.children.length > 0){
                 editHtml += '<ul>';
                 deleteHtml += '<ul>';
@@ -1990,17 +1992,19 @@
             categoryDeleteList.push(deleteHtml);
             var viewHtml =  '<div class="div-cat" data-categoryId="'+categoryIdentifier+'">'+escapedName+'</div>';
             categoryViewList.push(viewHtml);
+            parentCategoryDroddownList.push(parentCategoryHtml);
         });
     
         var $categoryView = $('.store-category-view');
         var $draggableUnorderList = $('#edit-category-tree ul');
         var $deletableCategoryList = $('#delete-list-categories');
+        var $parentSelect = $('.parent-category-dropdown');
         $categoryView.html('');
         $categoryView.append( categoryViewList.join('') );
         $draggableUnorderList.html('');
         $draggableUnorderList.append(categoryDraggableList.join(''));
         $deletableCategoryList.html('');
-        $deletableCategoryList.append( categoryDeleteList.join('') );
+        $parentSelect.append(parentCategoryDroddownList.join(''));
     
         $('#edit-category-tree').jstree({
             "core": {

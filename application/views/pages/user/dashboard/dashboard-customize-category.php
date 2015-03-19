@@ -190,11 +190,8 @@
             <div class="form-group">
                 <label class="col-md-3">Parent Category : </label>
                 <div class="col-md-9">
-                    <select class="form-control category-name" placeholder="Type the category name here">
-                        <option>None</option>
-                        <option>Clothing and Accessories</option>
-                        <option>Electronics and Gadgets</option>
-                        <option>Movies</option>
+                    <select class="parent-category-dropdown form-control category-name">
+                        <option value="0">None</option>
                     </select>
                 </div>
             </div>
