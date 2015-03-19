@@ -2021,26 +2021,9 @@ class Memberpage extends MY_Controller
                 $this->serviceContainer['category_manager']
                      ->migrateUserCategories($memberId);
             }
-
-            $memberCategories = $this->serviceContainer['category_manager']
-                                     ->getUserCategories($memberId);
-                                     
-            $resultCategories = [];
-            foreach($memberCategories as $memberCategory){
-                $categoryWrapper = new EasyShop\Category\CategoryWrapper();
-                $categoryWrapper->setCategoryName($memberCategory['name']);
-                $categoryWrapper->setSortOrder($memberCategory['sortOrder']);
-                $categoryWrapper->setMemberCategoryId($memberCategory['memberCategoryId']);
-                foreach($memberCategory['children'] as $child){
-                    $childCategory = new EasyShop\Category\CategoryWrapper();
-                    $childCategory->setCategoryName($child['name']);
-                    $childCategory->setSortOrder($child['sortOrder']);
-                    $childCategory->setMemberCategoryId($child['id']);
-                    $categoryWrapper->addChild($childCategory);
-                }
-                $resultCategories[] = $categoryWrapper->toArray();
-            }            
-            $response['storeCategories'] = $resultCategories;
+            
+            $response['storeCategories'] = $this->serviceContainer['category_manager']
+                                                ->getWrappedUserCategories($memberId);
         }
 
         echo json_encode($response);
@@ -2239,57 +2222,30 @@ class Memberpage extends MY_Controller
             $member = $entityManager->getRepository('EasyShop\Entities\EsMember')
                                     ->findOneBy(['idMember' => $memberId]);
             $categoryData = json_decode($this->input->post('categoryData'));
-            $indexedCategoryData = [];
+            $categoryWrappers = [];
             foreach($categoryData as $category){
-                $indexedCategoryData[$category->categoryid] = $category;
-            }
-
-            $memberCategories = $entityManager->getRepository('EasyShop\Entities\EsMemberCat')
-                                              ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
-            $datetimeToday = date_create(date("Y-m-d H:i:s"));
-            $categoryDataResult = [];
-            foreach($memberCategories as $memberCategory){
-                $memberCategoryId = $memberCategory->getIdMemcat(); 
-                if( isset($indexedCategoryData[$memberCategoryId]) ){
-                    $inputCategoryData = $indexedCategoryData[$memberCategoryId];
-                    $memberCategory->setSortOrder($inputCategoryData->order);
-                    $memberCategory->setlastModifiedDate($datetimeToday);
-                    $categoryDataResult[] = $this->createCategoryStdObject($inputCategoryData->name,
-                                                                           $inputCategoryData->order,
-                                                                           $memberCategoryId);
+                $categoryWrapper = new \EasyShop\Category\CategoryWrapper();
+                $categoryWrapper->setMemberCategoryId($category->categoryid);
+                $categoryWrapper->setSortOrder($category->order);
+                foreach($category->children as $child){
+                    $childCategoryWrapper = new \EasyShop\Category\CategoryWrapper();
+                    $childCategoryWrapper->setMemberCategoryId($child->categoryid);
+                    $childCategoryWrapper->setSortOrder($child->order);
+                    $categoryWrapper->addChild($childCategoryWrapper);
                 }
+                $categoryWrappers[] = $categoryWrapper;
             }
-            $entityManager->flush();
 
-            $jsonResponse['isSuccessful'] =  true;
-            $this->serviceContainer['sort_utility']->stableUasort($categoryDataResult, function($sortArgumentA, $sortArgumentB) {
-                return $sortArgumentA->order - $sortArgumentB->order;
-            });
-            $jsonResponse['categoryData'] =  array_values($categoryDataResult);
+            $isUpdateSuccessful = $this->serviceContainer['category_manager']
+                                       ->updateCategoryTree($memberId, $categoryWrappers);
+            if($isUpdateSuccessful){
+                $jsonResponse['isSuccessful'] = true;
+                $jsonResponse['categoryData'] = $this->serviceContainer['category_manager']
+                                                     ->getWrappedUserCategories($memberId);
+            }
         }
-        
         echo json_encode($jsonResponse);
     }
-
-    /**
-     * Creates a category standard object 
-     *
-     * @param string $name
-     * @param integer $order
-     * @param integer $id
-     * @return stdClass
-     */
-    private function createCategoryStdObject($name, $order, $id)
-    {
-        $singleCategoryData = new \stdClass();
-        $singleCategoryData->name =  $name;
-        $singleCategoryData->order =  $order;
-        $singleCategoryData->memberCategoryId =  $id;   
-        $singleCategoryData->children = [];
-        
-        return $singleCategoryData;
-    }
-
 
     /**
      * Returns the Custom Category json

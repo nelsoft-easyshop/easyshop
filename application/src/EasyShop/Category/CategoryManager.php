@@ -667,6 +667,95 @@ class CategoryManager
     }
 
     /**
+     * Update the category tree structure
+     *
+     * @param EasyShop\Category\CategoryWrapper[] $categoryWrappers
+     * @return mixed
+     */
+    public function updateCategoryTree($memberId, array $categoryWrappers)
+    {   
+        $indexedCategoryData = [];
+        foreach($categoryWrappers as $categoryWrapper){
+            $indexedCategoryData[$categoryWrapper->getMemberCategoryId()] = $categoryWrapper;
+        }
+
+        $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+        $datetimeToday = date_create(date("Y-m-d H:i:s"));
+        foreach($memberCategories as $memberCategory){
+            $memberCategoryId = $memberCategory->getIdMemcat(); 
+            if( isset($indexedCategoryData[$memberCategoryId]) ){ 
+                $inputCategoryData = $indexedCategoryData[$memberCategoryId];
+                $memberCategory->setSortOrder($inputCategoryData->getSortOrder());
+                $memberCategory->setlastModifiedDate($datetimeToday);
+                $memberCategory->setParentId(\EasyShop\Entities\EsMemberCat::PARENT);
+                if(!empty($inputCategoryData->getChildren())){
+                    $indexedChildrenData = [];
+                    foreach($inputCategoryData->getChildren() as $childWrapper){
+                        $indexedChildrenData[$childWrapper->getMemberCategoryId()] = $childWrapper;
+                    }        
+                    $childrenCategoryObject = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                                       ->getCustomCategoriesObject($memberId, array_keys($indexedChildrenData));
+                    foreach($childrenCategoryObject as $childObject){
+                        $childMemberCategoryId = $childObject->getIdMemcat();
+                        if(isset($indexedChildrenData[$childMemberCategoryId])){
+                            $isNotSameAsParent = (int)$childMemberCategoryId !== (int)$memberCategoryId;
+                            $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                                              ->getNumberOfChildren($childMemberCategoryId);
+                            if($isNotSameAsParent && $numberOfChildren === 0){
+                                $childInputCategoryData = $indexedChildrenData[$childMemberCategoryId];
+                                $childObject->setSortOrder($childInputCategoryData->getSortOrder());
+                                $childObject->setlastModifiedDate($datetimeToday);
+                                $childObject->setParentId($memberCategoryId);
+                            }
+                        }
+                    }
+                }  
+            }
+        }
+        
+        $isSuccess = true;
+        try{
+            $this->em->flush();
+        }
+        catch(\Exception $e){
+            $isSuccess = true;
+        }
+        
+        return $isSuccess;
+    }
+    
+    
+    /**
+     * Get User custom categories wrapped in CategoryWrapper class
+     *
+     * @param integer $memberId
+     * @return EasyShop\Category\CategoryWrapper[]
+     */
+    public function getWrappedUserCategories($memberId)
+    {
+        $memberCategories = $this->getUserCategories($memberId);           
+        $resultCategories = [];
+        foreach($memberCategories as $memberCategory){
+            $categoryWrapper = new CategoryWrapper();
+            $categoryWrapper->setCategoryName($memberCategory['name']);
+            $categoryWrapper->setSortOrder($memberCategory['sortOrder']);
+            $categoryWrapper->setMemberCategoryId($memberCategory['memberCategoryId']);
+            foreach($memberCategory['children'] as $child){
+                $childCategory = new CategoryWrapper();
+                $childCategory->setCategoryName($child['name']);
+                $childCategory->setSortOrder($child['sortOrder']);
+                $childCategory->setMemberCategoryId($child['id']);
+                $categoryWrapper->addChild($childCategory);
+            }
+            $resultCategories[] = $categoryWrapper->toArray();
+        }            
+        
+        return $resultCategories;
+    }
+    
+    
+    /**
      * Updates is_delete field to '1' of a custom category
      *
      * @param integer[[ $customCategoryIds

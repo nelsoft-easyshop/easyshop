@@ -1932,13 +1932,21 @@
         var errorContainer = $('#store-category-error');
         errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var categoryDraggableList =  $('.new-store-category-draggable li');
+
         var categoryOrderData = [];
-        var order = 0;
-        var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
-            var $el = $(el);
-            return {order: order++, categoryid: $el.data('categoryid'), name: $el.data('categoryname')}
+        var treedata = $('#edit-category-tree').jstree(true).get_json('#');
+        var topLevelOrder = 0;
+        var categoryOrderData = $.map(treedata, function(element, topLevelOrder) {
+            var categoryId = element.li_attr['data-categoryid'];
+            var children = element.children;
+            var childOrder = 0;
+            var childrenData = $.map(children, function(element, topLevelOrder) {
+                var childCategoryId = element.li_attr['data-categoryid'];
+                return {order: childOrder++, categoryid: childCategoryId, children: []}
+            });
+            return {order: topLevelOrder++, categoryid: categoryId, children: childrenData }
         });
+
         $.ajax({
             type: "post",
             url: '/memberpage/updateStoreCategoryOrder',
@@ -1967,6 +1975,8 @@
         /**
          * Build reference tree 
          */
+        var $referenceTreeList = $('#category-tree-reference ul');
+        $referenceTreeList.html('');
         var referenceTreeList = [];
         $.each(categoryData, function(index, category) {
             var escapedName = escapeHtml(category.categoryName);
@@ -1985,7 +1995,6 @@
             referenceTreeList.push(referenceTreeHtml);
         });
 
-        var $referenceTreeList = $('#category-tree-reference ul');
         $referenceTreeList.html();
         $referenceTreeList.append(referenceTreeList.join(''));
         populateCategoryTrees($referenceTreeList);
