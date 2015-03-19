@@ -1452,6 +1452,11 @@ a{
 } 
 
 
+#delete-category-tree span.icon-edit{  
+    display:none; 
+} 
+
+
 #edit-category-tree li {
     margin-top: 7px;
     margin-bottom: 7px;

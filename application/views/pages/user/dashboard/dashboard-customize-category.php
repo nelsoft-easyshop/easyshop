@@ -7,6 +7,11 @@
         </ul>
     </div>
     
+    <div id="category-tree-reference" style="display:none">
+        <ul>
+        </ul>
+    </div>
+    
     <div class="div-tab-inner">
     
         <div class="div-store-setup category-setup-loading" style="text-align:center">
@@ -20,6 +25,7 @@
             <div class="div-store-setup">
                 <p class="panel-setup-title">CATEGORIES</p>
                 <div id="div-store-content-edit" class="div-store-content concealable">
+                                 
                     <div class="current-store-cat">
                         <div class="form-horizontal">
                         <div class="form-group">
@@ -102,7 +108,7 @@
                 <p class="panel-setup-title">DELETE CATEGORIES</p>
                 <div id="div-store-content-delete" class="div-store-content concealable">
                     <div class="delete-store-cat">
-                        <div class="form-horizontal">
+                        <div class="f.'orm-horizontal">
                         <div class="row">
                             <div class="col-md-12">
                                 <form class="form-horizontal">

@@ -1964,48 +1964,45 @@
             $('.no-category-display').show();
             return false;
         }
-    
-        var categoryDraggableList = [];
-        var categoryDeleteList = [];
+        
+        var referenceTreeList = [];
         var categoryViewList = [];
         var parentCategoryDroddownList = [];
         $.each(categoryData, function(index, category) {
             var escapedName = escapeHtml(category.categoryName);
             var categoryIdentifier = parseInt(category.memberCategoryId, 10);
-            var editHtml = '<li data-categoryid='+categoryIdentifier+'>'+escapedName+' <span class="icon-edit modal-category-edit pull-right edit-category"></span>';
-            var deleteHtml = '<li data-categoryid="'+categoryIdentifier + '">'+escapedName;
             var parentCategoryHtml = '<option value="'+categoryIdentifier+'">'+escapedName+'</option>';
+            var referenceTreeHtml = '<li data-categoryid="'+categoryIdentifier + '">'+escapedName;
             if(category.children.length > 0){
-                editHtml += '<ul>';
-                deleteHtml += '<ul>';
+                referenceTreeHtml += '<ul>';
                 $.each(category.children, function(index, child){
                     var childCategoryIdentifier = parseInt(child.memberCategoryId, 10);
                     var childEscapedName = escapeHtml(child.categoryName);
-                    editHtml += '<li data-categoryid='+childCategoryIdentifier+'>'+childEscapedName+' <span class="icon-edit modal-category-edit pull-right edit-category"></span></li>'
-                    deleteHtml += '<li data-categoryid="'+childCategoryIdentifier + '">'+childEscapedName+'</li>';
+                    referenceTreeHtml += '<li data-categoryid="'+childCategoryIdentifier + '">'+childEscapedName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
                 });
-                editHtml += '</ul>';
-                deleteHtml += '</ul>';
+                referenceTreeHtml += '</ul>';
             }
-            editHtml += '</li>'
-            categoryDraggableList.push(editHtml);
-            categoryDeleteList.push(deleteHtml);
+            referenceTreeHtml += '<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
+            referenceTreeList.push(referenceTreeHtml);
+            parentCategoryDroddownList.push(parentCategoryHtml);
             var viewHtml =  '<div class="div-cat" data-categoryId="'+categoryIdentifier+'">'+escapedName+'</div>';
             categoryViewList.push(viewHtml);
-            parentCategoryDroddownList.push(parentCategoryHtml);
         });
-    
-        var $categoryView = $('.store-category-view');
-        var $draggableUnorderList = $('#edit-category-tree ul');
-        var $deletableCategoryList = $('#delete-list-categories');
+        
         var $parentSelect = $('.parent-category-dropdown');
+        var $categoryView = $('.store-category-view');
+        var $referenceTreeList = $('#category-tree-reference ul');
+        var $deletableCategoryList = $('#delete-category-tree ul');
+        var $draggableCategoryList = $('#edit-category-tree ul');
+        $referenceTreeList.html();
+        $referenceTreeList.append(referenceTreeList.join(''));
+        var listElements = $('#category-tree-reference>ul').get(0).innerHTML;
+        $draggableCategoryList.append(listElements);
+        $deletableCategoryList.append(listElements);
         $categoryView.html('');
         $categoryView.append( categoryViewList.join('') );
-        $draggableUnorderList.html('');
-        $draggableUnorderList.append(categoryDraggableList.join(''));
-        $deletableCategoryList.html('');
         $parentSelect.append(parentCategoryDroddownList.join(''));
-    
+
         $('#edit-category-tree').jstree({
             "core": {
                 "check_callback":true
@@ -2668,7 +2665,8 @@
         var csrfname = $("meta[name='csrf-name']").attr('content');   
         var $modalDiv = $btn.closest('.add-category-modal');
         var categoryName = $modalDiv.find('.category-name').val();
-        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
+        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
+        var parentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
         var currentCategoryProductsIds = [];
         $.each($currentCategoryProductList, function(key, $itemNameDiv){
             currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
@@ -2679,6 +2677,7 @@
             url: '/memberpage/addCustomCategory',
             data: {
                 categoryName: categoryName, 
+                parentCategory: parentCategory,
                 productIds: JSON.stringify(currentCategoryProductsIds),
                 csrfname: csrftoken
             },
@@ -2687,6 +2686,35 @@
                 if(jsonData.result){
                     var escapedCategoryName = escapeHtml(categoryName);
                     var memberCategoryId = jsonData.newCategoryId;
+                    var html = "";
+                    
+                    if(parentCategory === 0){
+                        
+                    }
+                    else{
+                        var $editTreeParent = $('#edit-category-tree ul>li[data-categoryid="'+parentCategory+'"]');
+                        if($editTreeParent.find('ul').length === 0){
+                            $editTreeParent.append('<ul></ul>')
+                        }
+                        $editTreeParent.find('ul').append('<li data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'</li>')
+                    }
+                    
+                    
+                    $('#edit-category-tree').jstree({
+                        "core": {
+                            "check_callback":true
+                        },
+                        "types" : {
+                            "#" : {
+                                "max_depth" : 2
+                            },
+                        },
+                        "plugins" : [
+                            "dnd", "types"
+                        ],
+                    });
+                    
+                    /*
                     var html = '<div class="div-cat" data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'</div>';
                     $('.store-category-view').append(html);
                     var draggableUnorderList = $('.new-store-category-draggable');
@@ -2695,6 +2723,7 @@
                                         escapedCategoryName +
                                     '<i class="icon-edit modal-category-edit pull-right edit-category"></i>' +
                                 '</li>';
+
                     draggableUnorderList.append(html);
                     var deleteCheckBoxList = $('#delete-list-categories');
                     html = '<li class="checkbox"><label>' +
@@ -2702,6 +2731,7 @@
                                 escapedCategoryName +
                             '</label><li>';
                     deleteCheckBoxList.append(html);
+                    */
                     $modalDiv.find('.simplemodal-close').click();
                     $('.add-store-cat-message').fadeIn().delay(5000).fadeOut();
                     $('#no-category-display-edit').hide();
