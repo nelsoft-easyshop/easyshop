@@ -220,6 +220,10 @@ class MobileProductUpload extends MY_Controller
                     'condition' => $condition, 
                 ]; 
 
+                if($isCod === false && $isFreeShippingNationwide === false){
+                    $isMeetUp = true;
+                }
+
                 $validate = $this->productUploadManager->validateUploadRequest($validData);
                 if($validate['isSuccess']){
 
