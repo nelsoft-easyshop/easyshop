@@ -261,13 +261,14 @@ class PesoPayGateWay extends AbstractGateway
 
     /**
      * External Charge for Pesopay
-     *
-     * 
-     * @return int
+     * @return string
      */
     public function getExternalCharge()
     {
-        return 20.00;
+        $transactionFee = bcadd("6.00", bcmul("0.005", $this->getParameter('amount'), 4), 4);
+        $vat = bcmul($transactionFee, "0.12", 4);
+
+        return bcadd($transactionFee, $vat, 4);
     }
 
     /**

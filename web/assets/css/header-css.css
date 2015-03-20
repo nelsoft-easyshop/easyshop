@@ -230,13 +230,12 @@ header {
 .sticky-nav-fixed .header-text-container {
     display: inline-block;
     font-size: 12px;
-    margin-left: 17px;
+    margin-left: 15px;
     margin-top: 2px;
-    width: 24%;
 }
 
-.sticky-nav-fixed .header-text-container .new-user-nav-dropdown {
-    width: 100%;
+.sticky-nav-fixed .header-text-container .header-seller-name {
+    max-width: 128px;
 }
 
 .sticky-nav-fixed .header-text-container .new-user-nav-dropdown .default-nav-dropdown {
@@ -245,6 +244,7 @@ header {
 }
 
 .sticky-nav-fixed .header-link .user-login-box {
+    font-weight: bold;
     line-height: 28px;
     padding: 2px;
 }
@@ -812,14 +812,10 @@ header {
     background-color: #4370cc;
     border-radius: 4px;
     color: #fff;
-    display: inline-block;
+    display: inline-block !important;
     padding: 4px 12px;
     text-align: center;
     width: 100%;
-}
-
-.header-link .user-login-box {
-    max-width: 260px;
 }
 
 .header-text-container {
@@ -862,7 +858,7 @@ header {
 
 .header-link a {
     color:#fff;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .header-link a:hover {
@@ -894,7 +890,6 @@ header {
     font-weight: 900;
     line-height: 24px;
     max-width: 100px;
-    min-width: 100px;
     overflow: hidden;
     padding-right: 8px;
     text-align: left;
@@ -1036,7 +1031,6 @@ header {
 @media (min-width: 480px) {
     .header-seller-name {
         max-width: 185px;
-        min-width: 121px;
     }
 }
 
@@ -1071,11 +1065,6 @@ header {
     }
 }
 
-@media only screen and (max-width: 1184px) {
-    .sticky-nav-fixed .header-text-container {
-        width: 27%;
-    }
-}
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
@@ -1146,10 +1135,6 @@ header {
 
     #header .dropdown-menu > li > a {
         text-align:center;
-    }
-
-    #inner-header {
-        padding-top:75px;
     }
 
     #inner-header .header-inner-right {
@@ -1223,10 +1208,6 @@ header {
 
     .header-link .user-login-box {
         max-width: 230px;
-    }
-
-    .new-user-nav-dropdown {
-        display: block !important;
     }
 }
 

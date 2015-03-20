@@ -475,9 +475,9 @@
                                                             <table width="100%" align="center" border="0" cellspacing="0" cellpadding="0" class="container">
                                                               <tr>
                                                                 <td align="center" valign="top" width="100%">
-                                                                    <a href="https://www.easyshop.ph/" style="text-decoration: none; display: inline-block" target="_blank">
+                                                                    <a href="{baseUrl}" style="text-decoration: none; display: inline-block" target="_blank">
                                                                         <center>
-                                                                        <img mc:edit="Top logo TB10" mc:allowdesigner mc:allowtex src="https://s3-ap-southeast-1.amazonaws.com/easyshop-production/assets/images/es-logo-login.png" width="120" style="max-width:120px;" alt="Logo" border="0" hspace="0" vspace="0">
+                                                                        <img mc:edit="Top logo TB10" mc:allowdesigner mc:allowtex src="es-logo-login.png" width="120" style="max-width:120px;" alt="Logo" border="0" hspace="0" vspace="0">
                                                                         </center>
                                                                     </a>
                                                                 </td>
@@ -525,8 +525,8 @@
 
                                                 <tr>
                                                     <td valign="bottom" align="center">
-                                                        <a href="#" target="_blank" style="text-decoration: none;">
-                                                            <img mc:edit="image-2 TB25" src="images/image17.jpg" width="270" alt="image2_480x501" style="display:block; max-width:270px; " border="0" hspace="0" vspace="0"> 
+                                                        <a href="{baseUrl}" target="_blank" style="text-decoration: none;">
+                                                            <img mc:edit="image-2 TB25" src="filler.jpg" width="270" alt="image2_480x501" style="display:block; max-width:270px; " border="0" hspace="0" vspace="0"> 
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -561,11 +561,11 @@
 
                                                                    <p style="margin-bottom: 20px;">Greetings,</p>
                                                                     
-                                                                    <span style="color:#555555; font-weight: 400;">Thank you for subscribing to <a href="#" style="color:#ff893b; font-weight: 400;">Easyshop.ph</a> Newsletter</span>
+                                                                    <span style="color:#555555; font-weight: 400;">Thank you for subscribing to <a href="{baseUrl}" style="color:#ff893b; font-weight: 400;">Easyshop.ph</a> Newsletter</span>
                                                                     <br/><br/>
-                                                                    <a href="#" style="color:#ff893b; font-weight: 400;">EasyShop.ph<a> targets to cater a platform, where you can facilitate easy and safe online business transactions. We are offering you a free stage for your business, and ensuring the buyers scam-free and easy-shopping experience.
+                                                                    <a href="{baseUrl}" style="color:#ff893b; font-weight: 400;">EasyShop.ph<a> targets to cater a platform, where you can facilitate easy and safe online business transactions. We are offering you a free stage for your business, and ensuring the buyers scam-free and easy-shopping experience.
                                                                     <br/><br/>
-                                                                    <a href="#" style="color:#ff893b; font-weight: 400;">EasyShop.ph</a> is where shopping made easy!
+                                                                    <a href="{baseUrl}" style="color:#ff893b; font-weight: 400;">EasyShop.ph</a> is where shopping made easy!
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -626,43 +626,13 @@
                                                         <table border="0" align="left" cellpadding="0" cellspacing="0" class="container">
                                                             <tr>
                                                                 <td height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-facebook-color TB113" src="images/icon-facebook-color.png" width="30" alt="icon-facebook" style="max-width:30px;" border="0" hspace="0" vspace="0">  
+                                                                  <a href="{facebook}" target="_blank" style="text-decoration: none;">
+                                                                    <img mc:edit="icon-facebook-color TB113" src="icon-facebook.png" width="30" alt="icon-facebook" style="max-width:30px;" border="0" hspace="0" vspace="0">  
                                                                   </a>
                                                                 </td>
                                                                 <td style="padding-left:5px; " height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-twitter-color TB114" src="images/icon-twitter-color.png" width="30" alt="icon-twitter" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px; " height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-googleplus-color TB115" src="images/icon-googleplus-color.png" width="30" alt="icon-googleplus" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-rss-color TB116" src="images/icon-rss-color.png" width="30" alt="icon-rss" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-vimeo-color TB117" src="images/icon-vimeo-color.png" width="30" alt="icon-vimeo" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-pinterest-color TB118" src="images/icon-pinterest-color.png" width="30" alt="icon-pinterest" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-linkedIn-color TB119" src="images/icon-linkedIn-color.png" width="30" alt="icon-Linkedin" style="max-width:30px;" border="0" hspace="0" vspace="0">  
-                                                                  </a>
-                                                                </td>
-                                                                  <td style="padding-left:5px;" height="30" align="center" valign="middle" class="clear-padding">
-                                                                  <a href="#" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-instagram-color TB120" src="images/icon-instagram-color.png" width="30" alt="icon-instagram" style="max-width:30px;" border="0" hspace="0" vspace="0">  
+                                                                  <a href="{twitter}" target="_blank" style="text-decoration: none;">
+                                                                    <img mc:edit="icon-twitter-color TB114" src="icon-twitter.png" width="30" alt="icon-twitter" style="max-width:30px;" border="0" hspace="0" vspace="0">  
                                                                   </a>
                                                                 </td>
                                                             </tr>

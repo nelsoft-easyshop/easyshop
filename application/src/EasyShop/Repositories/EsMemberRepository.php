@@ -58,44 +58,40 @@ class EsMemberRepository extends EntityRepository
      *
      *  @param string $storeName
      *  @param integer $excludeMemberId
-     *  @return boolean
+     *  @return EasyShop\Entities\EsMember
      */
     public function getUserWithStoreName($storeName, $excludeMemberId = null)
     {
         $em = $this->_em;
 
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('EasyShop\Entities\EsMember','m');
-        $rsm->addFieldResult('m','id_member','idMember');
-        $rsm->addFieldResult('m','username','username');
-        $rsm->addFieldResult('m','store_name','storeName');
-
-        $sql =  '
-            SELECT 
-                id_member, 
-                store_name, 
-                username
-            FROM 
-                es_member
-            WHERE 
-                BINARY store_name  = :storeName OR
-                ((BINARY store_name IS NULL OR BINARY store_name = "") AND BINARY username = :storeName)
-        ';
-        
-        if($excludeMemberId !== null){
-            $sql .= ' AND id_member != :memberId';
-        }
- 
-        $query = $em->createNativeQuery($sql, $rsm);
-
-        $query->setParameter('storeName',$storeName);
+        $qb = $em->createQueryBuilder();
+        $qb->select('em')
+            ->from('EasyShop\Entities\EsMember','em')
+            ->where($qb->expr()->orX(
+                $qb->expr()->eq('em.storeName', 'BINARY(:storeName)'),
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('em.storeName'),
+                        $qb->expr()->eq('em.storeName',':emptyString')
+                    ),
+                    $qb->expr()->eq('em.username', 'BINARY(:storeName)')
+                )
+        ));
 
         if($excludeMemberId !== null){
-            $query->setParameter('memberId',$excludeMemberId);
+            $qb->andWhere('em.idMember != :memberId')
+               ->setParameter('memberId',$excludeMemberId);
         }
+      
+        $emptyString = "";
+        $query = $qb->setParameter('storeName',$storeName)
+                    ->setParameter('emptyString',$emptyString)
+                    ->setMaxResults(1)
+                    ->getQuery();
+        $result = $query->getResult();
 
-        return $query->getResult();
-    }
+        return $result ? $result[0] : null;
+    }   
 
     
     /**
@@ -103,43 +99,30 @@ class EsMemberRepository extends EntityRepository
      *
      *  @param string $name
      *  @param integer $excludeMemberId
-     *  @return boolean
+     *  @return EasyShop\Entities\EsMember
      */
     public function getUserWithStoreNameOrUsername($name, $excludeMemberId = null)
     {
         $em = $this->_em;
 
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('EasyShop\Entities\EsMember','m');
-        $rsm->addFieldResult('m','id_member','idMember');
-        $rsm->addFieldResult('m','username','username');
-        $rsm->addFieldResult('m','store_name','storeName');
-
-        $sql =  '
-            SELECT 
-                id_member, 
-                store_name, 
-                username
-            FROM 
-                es_member
-            WHERE 
-                (store_name = :storeName OR username = :userName)
-        ';
-        
-        if($excludeMemberId !== null){
-            $sql .= ' AND id_member != :memberId';
-        }
- 
-        $query = $em->createNativeQuery($sql, $rsm);
-
-        $query->setParameter('storeName', $name);
-        $query->setParameter('userName', $name);
+        $qb = $em->createQueryBuilder();
+        $qb->select('em')
+            ->from('EasyShop\Entities\EsMember','em')
+            ->where('em.storeName = :storeName')
+            ->orWhere('em.username = :userName');
 
         if($excludeMemberId !== null){
-            $query->setParameter('memberId',$excludeMemberId);
+            $qb->andWhere('em.idMember != :memberId')
+               ->setParameter('memberId',$excludeMemberId);
         }
+      
+        $query = $qb->setParameter('storeName',$name)
+                    ->setParameter('userName',$name)
+                    ->setMaxResults(1)
+                    ->getQuery();
+        $result = $query->getResult();
 
-        return $query->getResult();
+        return $result ? $result[0] : null;
     }
     
     
@@ -203,7 +186,9 @@ class EsMemberRepository extends EntityRepository
     }
 
     /**
-     *  Fetch vendor details
+     * Fetch active vendor details
+     *
+     * @param string $vendorSlug
      */
     public function getVendorDetails($vendorSlug)
     {
@@ -248,12 +233,17 @@ class EsMemberRepository extends EntityRepository
             LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
             LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
             LEFT JOIN es_location_lookup l3 ON a.country = l3.id_location
-            WHERE m.slug=:vendorslug
+            WHERE 
+                m.slug=:vendorslug AND 
+                m.is_active = :active AND 
+                m.is_banned = :notBanned
             LIMIT 1
         ";
 
         $query = $em->createNativeQuery($sql, $rsm)
-            ->setParameter('vendorslug', $vendorSlug);
+                    ->setParameter('vendorslug', $vendorSlug)
+                    ->setParameter('active', EsMember::DEFAULT_ACTIVE)
+                    ->setParameter('notBanned', EsMember::NOT_BANNED);
 
         $queryResult = $query->getResult();
 
@@ -382,6 +372,23 @@ class EsMemberRepository extends EntityRepository
         $member = $query->getResult();
         $member = isset($member[0]) ? $member[0] : $member;
 
+        return $member;
+    }
+    
+    /**
+     * Get active member by slug
+     *
+     * @param string $slug
+     * @areturn EasyShop\Entities\EsMember
+     */
+    public function getActiveMemberWithSlug($slug)
+    {
+        $member = $this->_em->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy([
+                                'slug' => $slug,
+                                'isActive' => true,
+                                'isBanned' => false,
+                            ]);     
         return $member;
     }
 

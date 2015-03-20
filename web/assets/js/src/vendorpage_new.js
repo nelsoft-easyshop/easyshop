@@ -6,7 +6,7 @@ var memconf = {
     vid: $('#vid').val(),
     vname: $('#vname').val(),
     order: 1,
-    orderBy: 1,
+    orderBy: 0,
     condition: "",
     lprice: "",
     uprice: "",
@@ -31,11 +31,8 @@ function ReplaceNumberWithCommas(thisnumber){
 (function ($) {
 
     $('.sort_select').on('change',function(){
-        memconf.orderBy = $(this).val();
         memconf.order = 1;
-        if(parseInt(memconf.orderBy,10) === 0){
-            memconf.order = 2;
-        }
+        memconf.orderBy =  parseInt($(this).val(), 10);
         var catDiv = $('.category-products.active');
         $('.product-paging').remove();
         ItemListAjax(catDiv,1);
@@ -129,28 +126,25 @@ function ReplaceNumberWithCommas(thisnumber){
         memconf.uprice = !isNaN(uprice) ? uprice : "";
         memconf.countfiltered = memconf.uprice !== "" || memconf.lprice !== "" || memconf.condition !== "" ? 1 : 0;
 
+         if(isNaN(lprice) && !isNaN(uprice)){ 
+            validateRedTextBox('#filter-lprice');
+            return false;
+        }
+        else if(!isNaN(lprice) && isNaN(uprice)){
+            validateRedTextBox('#filter-uprice'); 
+            return false;
+        }
+        else if(lprice > uprice){ 
+            validateRedTextBox("#filter-lprice,#filter-uprice");  
+            return false;
+        }
+        validateWhiteTextBox("#filter-lprice,#filter-uprice");  
+
         $('.product-paging').remove();
         ItemListAjax(activeCategoryProductsDiv,1);
     });
 
-})(jQuery);
-
-
-
-var validateRedTextBox = function(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"});
-    $(idclass).focus();
-} 
-
-var validateWhiteTextBox = function(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-}
+})(jQuery); 
 
 var removeParam = function(key, sourceURL)
 {

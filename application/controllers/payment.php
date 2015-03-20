@@ -804,23 +804,14 @@ class Payment extends MY_Controller{
             $this->setPromoItemsToPayment($this->input->post('promo_type'));
         }
 
-        if(!$this->session->userdata('member_id') 
-            || !$this->input->post('paymentToken') 
+        if(!$this->session->userdata('member_id')  
             || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');
         }
-
-        $lastDigit = substr($this->input->post('paymentToken'), -1);
+ 
         $qtysuccess = $this->resetPriceAndQty();
-        $status = PaymentService::STATUS_FAIL;
-        if($lastDigit == 2) {
-            $paymentType = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
-            $textType = 'directbankdeposit';
-        }
-        else{
-            $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
-            $textType = 'cashondelivery';
-        }
+        $status = PaymentService::STATUS_FAIL; 
+        $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY; 
 
         $member_id =  $this->session->userdata('member_id');
         $itemList =  $this->session->userdata('choosen_items');
@@ -837,7 +828,7 @@ class Payment extends MY_Controller{
         }
 
         $this->__generateFlash($txnid,$message,$status);
-        redirect('/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
+        redirect('/payment/success/cashondelivery?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
     /**
@@ -1182,12 +1173,11 @@ class Payment extends MY_Controller{
 
         $emailService = $this->serviceContainer['email_notification'];
         $smsService = $this->serviceContainer['mobile_notification'];
+        $em = $this->serviceContainer['entity_manager'];
 
         $this->config->load('email', true);
         $imageArray = $this->config->config['images'];
-        $imageArray[] = "/assets/images/appbar.home.png";
-        $imageArray[] = "/assets/images/appbar.message.png";
-
+        
         $sender = intval($this->xmlmap->getFilenameID($xmlfile,'message-sender-id'));
         $transactionData = $this->payment_model->getPurchaseTransactionDetails($data);
 
@@ -1199,7 +1189,6 @@ class Payment extends MY_Controller{
                 $transactionData['payment_method_name'] = "PayPal";
                 break;
             case 2:
-            //case 4:
                 $transactionData['payment_msg_buyer'] = $this->lang->line('payment_dp_buyer');
                 $transactionData['payment_msg_seller'] = $this->lang->line('payment_ppdp_seller');
                 $transactionData['payment_method_name'] = "DragonPay";
@@ -1228,15 +1217,27 @@ class Payment extends MY_Controller{
         if($buyerFlag){
             $buyerEmail = $transactionData['buyer_email'];
             $buyerData = $transactionData;
-            
             $buyerData['facebook'] = $socialMediaLinks["facebook"];
             $buyerData['twitter'] = $socialMediaLinks["twitter"];            
             unset($buyerData['seller']);
             unset($buyerData['buyer_email']);
 
-            # Additional buyerData for email template
-            $buyerData['store_link'] = base_url() ; #user appended on template
-            $buyerData['msg_link'] = base_url() . "messages/#"; #user appended on template
+            foreach($buyerData['products'] as $key => $productData){
+                $primaryImage = $em->getRepository('EasyShop\Entities\EsProductImage')
+                                   ->getDefaultImage($productData['productId']);
+                $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                $imagePath = ltrim($imagePath, '.');
+                if(strtolower(ENVIRONMENT) === 'development'){
+                    $imageArray[] = $imagePath;
+                    $parsedImage = $primaryImage->getFilename();
+                }
+                else{
+                    $parsedImage = getAssetsDomain().ltrim($imagePath, '/');
+                }
+                $buyerData['products'][$key]['primaryImage'] = $parsedImage;
+            }
+
+            $buyerData['baseUrl'] = base_url();
             $buyerMsg = $this->parser->parse('emails/email_purchase_notification_buyer',$buyerData,true);
             $buyerSubject = $this->lang->line('notification_subject_buyer');
             $buyerSmsMsg = $buyerData['buyer_store'] . $this->lang->line('notification_txtmsg_buyer');
@@ -1245,7 +1246,6 @@ class Payment extends MY_Controller{
                          ->setSubject($buyerSubject)
                          ->setMessage($buyerMsg, $imageArray)
                          ->queueMail();
-
             $smsService->setMobile($buyerData['buyer_contactno'])
                        ->setMessage($buyerSmsMsg)
                        ->queueSMS();
@@ -1267,7 +1267,8 @@ class Payment extends MY_Controller{
                 'payment_msg_seller' => $transactionData['payment_msg_seller'],
                 'payment_method_name' => $transactionData['payment_method_name'],
                 'facebook' => $socialMediaLinks["facebook"],
-                'twitter' => $socialMediaLinks["twitter"]
+                'twitter' => $socialMediaLinks["twitter"],
+                'baseUrl' => base_url(),
             ];
 
             foreach($transactionData['seller'] as $seller_id => $seller){
@@ -1278,16 +1279,27 @@ class Payment extends MY_Controller{
 
                 # Additional sellerData for email template
                 $sellerSubject = $this->lang->line('notification_subject_seller');
-                $sellerData['store_link'] = base_url() . $sellerData['buyer_slug'];
-                $sellerData['msg_link'] = base_url() . "messages/#" . $sellerData['buyer_name'];
+                foreach($sellerData['products'] as $key => $productData){
+                    $primaryImage = $em->getRepository('EasyShop\Entities\EsProductImage')
+                                    ->getDefaultImage($productData['productId']);
+                    $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                    $imagePath = ltrim($imagePath, '.');
+                    if(strtolower(ENVIRONMENT) === 'development'){
+                        $imageArray[] = $imagePath;
+                        $parsedImage = $primaryImage->getFilename();
+                    }
+                    else{
+                        $parsedImage = getAssetsDomain().ltrim($imagePath, '/');
+                    }
+                    $sellerData['products'][$key]['primaryImage'] = $parsedImage;
+                }
+
                 $sellerMsg = $this->parser->parse('emails/email_purchase_notification_seller',$sellerData,true);
                 $sellerSmsMsg = $seller['seller_store'] . $this->lang->line('notification_txtmsg_seller');
-
                 $emailService->setRecipient($sellerEmail)
                              ->setSubject($sellerSubject)
                              ->setMessage($sellerMsg, $imageArray)
                              ->queueMail();
-                
                 $smsService->setMobile($seller['seller_contactno'])
                            ->setMessage($sellerSmsMsg)
                            ->queueSMS();
@@ -1297,7 +1309,7 @@ class Payment extends MY_Controller{
                     $this->messages_model->send_message($sender,$seller_id,$this->lang->line('message_to_seller'));
                 }
 
-            }//close foreach seller loop
+            }
         }
     }
 

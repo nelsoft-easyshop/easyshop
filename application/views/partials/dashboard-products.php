@@ -14,7 +14,8 @@
                     <tbody>
                         <tr>
                             <td class="td-image-cont" width="20%" >
-                                <div class="div-product-image" style="background: url(<?php echo getAssetsDomain().$product->directory.$product->imageFileName?>) center no-repeat; background-cover: cover; background-size: 90%;">
+                                <div class="div-product-image" >
+                                    <img src="<?php echo getAssetsDomain().$product->directory.$product->imageFileName?>" class="image-primary">
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>
                                     <div class="pin-discount">
                                         <?php echo number_format($product->getDiscountPercentage(),0,'.',',');?>%
@@ -22,7 +23,7 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td class="td-meta-info">
+                            <td class="td-meta-info" >
                                 <p class="item-list-name">
                                     <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT): ?>
                                             <?php if(strlen($product->getName()) > 40): ?>
@@ -45,10 +46,15 @@
                                     <?php endif; ?>
                                 </p>
                                 <p class="item-amount">
+                                    <?php $priceFontStyle = strlen((string)$product->getOriginalPrice()) > 12 ? "font-size:13px;" : ""; ?>
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>
-                                    <span class="item-original-amount">P<?=number_format($product->getOriginalPrice(),2,'.',',');?></span>
+                                        <span class="item-original-amount" style="<?php echo $priceFontStyle; ?>">
+                                            P<?=number_format($product->getOriginalPrice(),2,'.',',');?>
+                                        </span>
                                     <?php endif; ?>
-                                    <span class="item-current-amount">P<?=number_format($product->getFinalPrice(),2,'.',',');?></span></span>
+                                    <span class="item-current-amount" style="<?php echo $priceFontStyle ?>">
+                                        P<?=number_format($product->getFinalPrice(),2,'.',',');?>
+                                    </span>
                                 </p>
                                 <div class="div-meta-description">
                                     <div class="row">

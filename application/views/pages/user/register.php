@@ -499,11 +499,10 @@
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/universal.js"></script>
-    <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
-    <script type="text/javascript" src="/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js"></script>
-    <script type="text/javascript" src="/assets/js/src/vendor/password_meter.js"></script>
+    <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_register.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>

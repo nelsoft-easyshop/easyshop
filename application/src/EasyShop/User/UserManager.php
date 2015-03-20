@@ -858,7 +858,7 @@ class UserManager
         $usersWithStorename = $this->em->getRepository('EasyShop\Entities\EsMember')
                                    ->getUserWithStoreNameOrUsername($name, $memberEntity->getIdMember());
         $isRestricted = $this->isStringReservered($name);
-        if(empty($usersWithStorename) && !$isRestricted){
+        if($usersWithStorename === null && !$isRestricted){
             $memberEntity->setStorename($name);
             $isSuccessful = true;
             if($executeFlush){

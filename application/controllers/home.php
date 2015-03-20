@@ -46,7 +46,10 @@ class Home extends MY_Controller
 
         if ($memberId) {
             $data['featuredCategorySection'] = $this->serviceContainer['xml_cms']->getFeaturedProducts($memberId);
-            $this->memberFeatureRestrictManager->addMemberToFeature($memberId, \EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT);
+            /**
+             * Uncomment to activate real time char restriction
+             */
+            //$this->memberFeatureRestrictManager->addMemberToFeature($memberId, \EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT);
         }
 
         $this->load->spark('decorator');  
