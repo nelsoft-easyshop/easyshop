@@ -1,7 +1,7 @@
 <link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
-<div class="transaction-container">
+<div class="transaction-wrapper">
     <div class="container">
         <!--Start of transaction breadcrumb-->
         <div class="transaction-breadcrumb-container">
