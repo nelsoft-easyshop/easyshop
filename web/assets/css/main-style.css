@@ -1271,22 +1271,30 @@ td.td-view.p-view2.color-default{
 }
 
 .list-category > li{
-    padding:12px 0px;
     position:relative;
     z-index:1;
     border-top: solid #e0e0e0 1px;
 }
 
 .list-category > li > a{
-    padding-left: 15px;
-    padding-left: 15px;
+    padding: 12px 15px;
     font-weight: 600;
     display: block;
 }
 
+.tab_categories:active,
+.tab_categories:link,
+.tab_categories:visited{
+    text-decoration: none !important;
+}
+
+.tab_categories.toggledCat{
+    margin-bottom: 12px;
+}
+
 .list-category > li > a .fa{
     margin-top: 3px;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 .list-category > li > a .toggleIcon:before{
     content: "\f0d8" !important;
@@ -1315,11 +1323,11 @@ td.td-view.p-view2.color-default{
 .list-sub-category > li{
     display: block;
     border-top: dotted #e2e2e2 1px;
-    padding: 10px 0px 10px 16px;
 }
 
 .list-sub-category > li > a{
-    padding-left: 20px;
+    display: block;
+    padding: 10px 10px 10px 30px;
     font-weight: normal;
 }
 
