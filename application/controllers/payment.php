@@ -380,9 +380,9 @@ class Payment extends MY_Controller{
             
             // Load view
             $this->load->spark('decorator');  
-            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/payment/payment_review_responsive' ,$data);  
-            $this->load->view('templates/footer');  
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('pages/payment/payment-review');  
+            $this->load->view('templates/footer_primary');  
         }
         else{
            redirect('/cart/', 'refresh'); 
