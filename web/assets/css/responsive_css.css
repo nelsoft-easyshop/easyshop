@@ -2444,6 +2444,11 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     min-height: 10em;
 }
 
+.captcha-image-container img {
+    max-width: 150px;
+    width: 100%;
+}
+
 .feedback-img-con {
     border:2px dashed #cecece;
     display: table-cell;
@@ -2461,10 +2466,19 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     vertical-align: middle;
 }
 
-.send-btn-con input[type="submit"] {
+.send-btn-con .btn-default-4 {
     font-weight: bold;
-    min-width: 200px;
+    max-width: 300px;
     text-transform: uppercase;
+    width: 100%;
+}
+
+.feedback-loader-container {
+    padding: 15px 0 10px;
+}
+
+#bug-report h5 {
+    margin: 0;
 }
 
 /****** email verification css ******/
@@ -2875,9 +2889,14 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 @media only screen and (max-width : 30em) { /**** 480px ***/
     /*** report a problem ***/
-        .feedback-img-wrapper + input[type="file"] {
-        width: 87px;
+    .feedback-img-wrapper + input[type="file"] {
+        width: 82px;
     }
+
+    .send-btn-con .btn-default-4 {
+        max-width: none;
+    }
+
     .img_sell {
         display: inline-block;
         vertical-align: middle;
