@@ -578,8 +578,8 @@ class product extends MY_Controller
                 throw new Exception("Invalid price. Product price cannot be less than 0.");
             }
 
-            if(strlen($productName) <= 0){
-                throw new Exception("Product name cannot be empty.");
+            if(strlen($productName) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){
+                throw new Exception("Product name must be atleast ".EsProduct::MINIMUM_PRODUCT_NAME_LEN." characters!");
             }
 
             if((int)$productDiscount < 0 || (int)$productDiscount > 99){
