@@ -438,15 +438,30 @@ class Store extends MY_Controller
             $parentCategories[$index]['sortOrder'] = PHP_INT_MAX;
             $parentCategories[$index]['cat_type'] = EasyShop\Category\CategoryManager::CATEGORY_NONSEARCH_TYPE;
         }
+        
+        foreach( $parentCategories as $idCat => $categoryProperties ){
+            if(isset($categoryProperties['children'])){
+                $childData = $categoryProperties;
+                foreach($categoryProperties['children'] as $key => $child){
+                    $childData['children'] = [];
+                    $childData['child_cat'] = [ $child['id'] ];
+                    $childData['memberCategoryId'] = $child['id'];
+                    $childData['sortOrder'] = $child['sortOrder'];
+                    $childData['name'] = $child['name'];
+                    $childData['isHidden'] = true;
+                    $parentCategories['custom-'.$child['id']] = $childData;
+                }
+            }
+        }
 
         foreach( $parentCategories as $idCat => $categoryProperties ){ 
 
             $categoryIdCollection = $categoryProperties['child_cat'];
             $isCustom = false;
             if( (int)$categoryProperties['memberCategoryId'] !== 0 ){
-                $categoryIdCollection = [$categoryProperties['memberCategoryId']];
                 $isCustom = true;
             }
+
             $result = $categoryManager->getProductsWithinCategory(
                                             $memberId, 
                                             $categoryIdCollection, 
@@ -477,7 +492,7 @@ class Store extends MY_Controller
                 ]
             ];
 
-            $parentCategories[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+            $parentCategories[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);          
         }    
         $returnData['parentCategory'] = $parentCategories;
  

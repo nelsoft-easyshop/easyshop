@@ -52,9 +52,6 @@ function ReplaceNumberWithCommas(thisnumber){
         var pageDiv = catDiv.find('.product-paging[data-page="'+page+'"]');
         var paginationContainer = catDiv.find('.pagination-container');
 
-        // $(this).siblings('.individual').removeClass('active');
-        // $(this).addClass('active');
-
         if(pageDiv.length === 1){
             var lastPage = $(this).parent('ul').attr('data-lastpage');
             var previousPage = page - 1 < 1 ? 1 : page - 1;
@@ -72,24 +69,26 @@ function ReplaceNumberWithCommas(thisnumber){
     });
 
     $(document).on('click', ".tab_categories", function(e){
+        var $this = $(this);
         var divId = $(this).attr('data-link');
-        var pagingDiv = $(divId).find('.product-paging');
-        var productCount = parseInt($(divId).attr('data-productcount'));
-
+        var $div = $(divId);
+        var pagingDiv = $div.find('.product-paging');
+        var productCount = parseInt($div.attr('data-productcount'));
+   
         $('.category-products').removeClass('active').hide();
-        $(divId).addClass('active').show();
+        $div.addClass('active').show();
 
         $('.tab_categories').find('.selected-marker').hide();
 
-        var htmlText = $(this).find('.catText').text();
+        var htmlText = $this.find('.catText').text();
         $( ".catText" ).each(function(index) {
-            if(htmlText === $(this).text()) {
-                $(this).closest("li").find(".selected-marker").show();
+            if(htmlText === $this.text()) {
+                $this.closest("li").find(".selected-marker").show();
             }
         });
 
         if(pagingDiv.length === 0 && productCount !== 0){
-            ItemListAjax($(divId), 1);
+            ItemListAjax($div, 1);
         }
         $('html,body').scrollTo(450); 
     });

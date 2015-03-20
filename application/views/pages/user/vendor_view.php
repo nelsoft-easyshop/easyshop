@@ -25,64 +25,37 @@
 
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
-                                <ul class="list-unstyled list-category"> 
+                                <ul class="list-unstyled list-category">    
+                                    <?php $isFirst = true; ?>
+                                    <?php foreach( $categoryProducts as $categoryId => $categoryData ):?>
                                     <li>
-                                        <a>
-                                            Promo Deals
+                                        <?php if(isset($categoryData['isHidden']) && $categoryData['isHidden'] === true): ?>
+                                            <?php continue; ?>
+                                        <?php endif; ?>
+                                        <a href="javascript: void(0)" data-link="#def-<?php echo $categoryId?>" class="color-default tab_categories simplemodal-close">
+                                        <span style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
+                                        </span>
+                                        <span class='catText'>
+                                            <?php echo html_escape($categoryData['name']);?>
+                                        </span> 
+                                        <?php if(!empty($categoryData['children'])): ?>
+                                            <i class="fa fa-caret-down fa-lg pull-right"></i>
+                                            <ul class="list-sub-category">
+                                            <?php foreach($categoryData['children'] as $child): ?>
+                                                <li>
+                                                    <a href="javascript:void(0)" data-link="#def-custom-<?php echo $child['id']; ?>" class="color-default tab_categories simplemodal-close">
+                                                        <?php echo html_escape($child['name']); ?>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                            </ul>
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a class="active">
-                                            Easy Treats
+                                        <?php else: ?>
                                         </a>
-                                    </li>   
-                                    <li>
-                                        <a>Toys, Hobbies &amp; Collectibles <i class="fa fa-caret-down fa-lg pull-right"></i></a>
-                                        <ul class="list-sub-category">
-                                            <li>
-                                                <a href="#">
-                                                    Action Figures
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    Remote Control Toys
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    Dolls
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        <?php endif; ?>
                                     </li>
-                                    <li>
-                                        <a>
-                                            Electronics &amp; Gadgets <i class="fa fa-caret-down fa-lg pull-right"></i>
-                                        </a>
-                                        <ul class="list-sub-category">
-                                            <li>
-                                                <a href="#">
-                                                   Smart Phones
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    Tablets
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    Laptops
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            Books
-                                        </a>
-                                    </li>
+                                    <?php $isFirst = false; ?>
+                                    <?php endforeach;?>
                                 </ul>
                             </div>
                         </div>

@@ -235,10 +235,10 @@ class CategoryManager
      *
      *  @return array - filter count of products and array of product objects
      */
-    public function getProductsWithinCategory($memberId, $arrCatId, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ self::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ] , $condition = "", $lprice = "", $uprice ="")
+    public function getProductsWithinCategory($memberId, $categoryIdFilters, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ self::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ] , $condition = "", $lprice = "", $uprice ="")
     {
         $getAllNonCategorized = false;
-        if(empty($arrCatId)){
+        if(empty($categoryIdFilters)){
             $getAllNonCategorized = true;
         }
 
@@ -264,15 +264,15 @@ class CategoryManager
             else{
                 if($isCustom){
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
+                                                   ->getPagedCustomCategoryProducts($memberId, $categoryIdFilters, $productLimit, $offset, $orderBy);
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                             ->countCustomCategoryProducts($memberId, $arrCatId);                            
+                                             ->countCustomCategoryProducts($memberId, $categoryIdFilters);                            
                 }
                 else{
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getDefaultCategorizedProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
+                                                   ->getDefaultCategorizedProducts($memberId, $categoryIdFilters, $productLimit, $offset, $orderBy);
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                             ->countDefaultCategorizedProducts($memberId, $arrCatId);    
+                                             ->countDefaultCategorizedProducts($memberId, $categoryIdFilters);    
                 }
             }
             $isFiltered = false;    
@@ -424,6 +424,7 @@ class CategoryManager
                         'name' => $parsedData[1],
                         'sortOrder' => $parsedData[2],
                     ];
+                    $vendorCategories[$index]['child_cat'][] = $parsedData[0];
                 }
             }                      
         }
