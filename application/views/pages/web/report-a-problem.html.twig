@@ -54,7 +54,8 @@
                                     <div class="col-xs-6">
                                         {{ form_widget(form.captcha, {'attr': {'class': 'form-control feedback-captcha', 'maxlength' : '5'} }) }}
                                         <div class="error red">
-                                            {{ form_errors(form.captcha) | default(captchaMessage) }}
+                                            {{ form_errors(form.captcha)}}
+                                            {{ captchaMessage }}
                                         </div>
                                     </div>
                                      <div class="col-xs-6">

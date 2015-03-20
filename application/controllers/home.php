@@ -265,7 +265,7 @@ class Home extends MY_Controller
                 $form = $emptyForm;
             }
             else {
-                $captchaMessage = 'Captcha did not match';
+                $captchaMessage = '* Characters do not match';
             }
         }
    
