@@ -53,7 +53,7 @@ class ValidationRules
                     ],
                     'image' => [
                             new Assert\Image([
-                                'mimeTypes' => array('image/png','image/jpg','image/jpeg','image/gif'),
+                                'mimeTypes' => ['image/png','image/jpg','image/jpeg','image/gif'],
                                 'mimeTypesMessage' => 'This file is not a valid image. Accepted extensions are .png, .jpg, .jpeg and .gif only.',
                                 'maxSize' => '5M',
                                 'uploadIniSizeErrorMessage' => 'The file is too large. Allowed maximum size is 5 MB.'
