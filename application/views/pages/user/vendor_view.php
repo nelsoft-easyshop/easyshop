@@ -33,8 +33,6 @@
                                             <?php continue; ?>
                                         <?php endif; ?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $categoryId?>" class="color-default tab_categories simplemodal-close">
-                                        <span style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
-                                        </span>
                                         <span class='catText'>
                                             <?php echo html_escape($categoryData['name']);?>
                                         </span> 
