@@ -1,4 +1,4 @@
-.transaction-container{
+.transaction-wrapper{
     min-height: 300px;
     background: #fff;
     padding: 30px 0px;
@@ -15,6 +15,7 @@
     width: 100%;
     border-radius: 4px;
     padding: 20px;
+    margin-bottom: 20px;
 }
 
 .transaction-container .form-group{
@@ -183,7 +184,7 @@ ol.how-to-list li{
 
 .transaction-summary-table > tbody > tr.border-bottom-1,
 .transaction-summary-table > tfoot > tr.border-bottom-1{
-    border-bottom: solid #e2e2e2 2px !important;
+    border-bottom: solid #e2e2e2 1px !important;
 }
 
 .transaction-summary-table > tbody > tr > td,
@@ -328,7 +329,7 @@ ol.how-to-list li{
 }
 
 .transaction-checkout-order > tbody > tr.checkout-item:last-child{
-    border-bottom: solid #e2e2e2 2px
+    border-bottom: solid #e2e2e2 1px
 }
 
 .transaction-checkout-order > tbody > tr.checkout-item > td{
@@ -349,13 +350,14 @@ ol.how-to-list li{
     border-bottom: solid #e2e2e2 1px;
 }
 
+
 .payment-method-desc{
-    color: #b9b9b9;
+    color: #8f8f8f;
     padding-bottom: 7px;
 }
 
 .payment-method-container input[type="radio"]{
-    margin-top: 1px;
+    margin-top: 4px;
     margin-left: 0px;
 }
 
@@ -366,6 +368,18 @@ ol.how-to-list li{
 .radio, .checkbox{
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.payment-name{
+    font-weight: bold !important;
+}
+
+.payment-method-img{
+    display: inline-block;
+    width: 100px;
+    height: 35px;
+    margin-left: 10px;
+    margin-top: -11px;
 }
 /*----------------------------------*/
 /*----------Modal styles------------*/
