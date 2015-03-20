@@ -234,7 +234,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="vendor-profile-img-con">
                     <img src="<?php echo getAssetsDomain().'.'.$avatarImage?>" alt="Profile Photo">
                 </div>
-                <h4><?=html_escape($arrVendorDetails['store_name']);?></h4>
+                <h4 class="storeName"><?=html_escape($arrVendorDetails['store_name']);?></h4>
             </li>
             <li>
                 <a href="/<?=$arrVendorDetails['userslug']?>"><img src="<?php echo getAssetsDomain(); ?>assets/images/img-vendor-icon-promo.png" alt="Promo"></a>
