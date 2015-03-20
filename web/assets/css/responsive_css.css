@@ -2444,9 +2444,34 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     min-height: 10em;
 }
 
+.captcha-image-container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .captcha-image-container img {
     max-width: 150px;
     width: 100%;
+}
+
+.captcha-container .glyphicon-refresh {
+    background-color: #fff;
+    border: 1px solid #cecece;
+    color: #565656;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    font-size: 18px;
+    line-height: 34px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.captcha-container .glyphicon-refresh:hover {
+    background-color: #585a59;
+    color: #fff;
 }
 
 .feedback-img-con {
