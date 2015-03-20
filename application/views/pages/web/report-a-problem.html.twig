@@ -57,13 +57,14 @@
                                             {{ form_errors(form.description) }}
                                         </div>
                                     </div>
-                                    
                                     <div class="col-xs-6 captcha-image-container">
-                                        <img src="{{ captchaImage }}"/>
+                                        {{ form_widget(form.captcha, {'attr': {'class': 'form-control feedback-captcha', 'maxlength' : '5'} }) }}
+                                        <div class="error red">
+                                            {{ form_errors(form.captcha) | default(captchaMessage) }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="clear"></div>
                         </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6">

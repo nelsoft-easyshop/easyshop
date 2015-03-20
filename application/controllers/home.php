@@ -240,37 +240,45 @@ class Home extends MY_Controller
         $twig = $this->serviceContainer['twig'];
 
         $rules = $formValidation->getRules('bug_report');
-
         $form = $formFactory->createBuilder()
                             ->setMethod('POST')
                             ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
                             ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
                             ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['image']))
-                            ->add('captcha', 'text', array('required' => false, 'label' => false, 'constraints' => []))
+                            ->add('captcha', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['captcha']))
                             ->add('submit', 'submit', array('label' => 'SEND'))
                             ->getForm();
 
         $emptyForm = clone $form;
-
+        $captchaBuilder = $this->serviceContainer['captcha_builder'];
         $form->handleRequest($request);
 
+        $captchaMessage = '';
         if ($form->isValid()) {
-            $bugReporter = $this->serviceContainer['bug_reporter'];
-            $bugReporter->createReport($form->getData());
-            $isValid = true;
-            $form = $emptyForm;
+            $formData = $form->getData();
+            $captchaInput = $formData['captcha'];
+            unset($formData['captcha']);
+            if($captchaInput === $this->session->userdata('bugreport_captcha_phrase')) {
+                $bugReporter = $this->serviceContainer['bug_reporter'];
+                $bugReporter->createReport($formData);
+                $isValid = true;
+                $form = $emptyForm;
+            }
+            else {
+                $captchaMessage = 'Captcha did not match';
+            }
         }
-        
-        $builder = $this->serviceContainer['captcha_builder']
-                        ->build();
-        
-        $this->session->set_userdata('bugreport_captcha_pharse', $builder->getPhrase());
+   
+        $captchaBuilder->build();
+        $this->session->set_userdata('bugreport_captcha_phrase', $captchaBuilder->getPhrase());
         $formData =  $twig->render('pages/web/report-a-problem.html.twig', [
             'form' => $form->createView(), 
             'ES_FILE_VERSION' => ES_FILE_VERSION,
             'assetsDomain' => getAssetsDomain(),
             'isValid' => $isValid,
-            'captchaImage' => $builder->inline(),
+            'captchaImage' => $captchaBuilder->inline(),
+            'captchaMessage' => $captchaMessage, 
+            'environment' => strtolower(ENVIRONMENT),
         ]);
 
         $headerData = [
@@ -283,6 +291,23 @@ class Home extends MY_Controller
         $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->output->append_output($formData); 
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));        
+    }
+    
+    /**
+     * Refresh capctha image
+     */
+    public function refreshBugReportCaptcha()
+    {
+        if($this->input->post()){
+            $captchaBuilder = $this->serviceContainer['captcha_builder'];
+            $captchaBuilder->build();
+            $image = $captchaBuilder->inline();
+            $this->session->set_userdata('bugreport_captcha_phrase', $captchaBuilder->getPhrase());
+            echo "<img src='".$image."'/>";
+        }
+        else{
+            show_404();
+        }
     }
     
     /**
