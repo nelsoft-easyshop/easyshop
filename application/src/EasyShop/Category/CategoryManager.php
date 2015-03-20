@@ -690,7 +690,7 @@ class CategoryManager
                 $memberCategory->setSortOrder($inputCategoryData->getSortOrder());
                 $memberCategory->setlastModifiedDate($datetimeToday);
                 $memberCategory->setParentId(\EasyShop\Entities\EsMemberCat::PARENT);
-                if(empty($inputCategoryData->getChildren() === false){
+                if(empty($inputCategoryData->getChildren()) === false){
                     $indexedChildrenData = [];
                     foreach($inputCategoryData->getChildren() as $childWrapper){
                         $indexedChildrenData[$childWrapper->getMemberCategoryId()] = $childWrapper;
