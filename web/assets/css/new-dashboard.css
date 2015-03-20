@@ -1497,6 +1497,12 @@ a{
     margin-top: 6px;
 }
 
+@-moz-document url-prefix() {
+    #edit-category-tree .modal-category-edit{
+        margin-top: -18px;
+    }
+}
+
 #jstree-dnd .modal-category-edit{
     display: none !important;
 }
