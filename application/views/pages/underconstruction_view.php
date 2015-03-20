@@ -9,12 +9,13 @@
      
         <div class="underconstruction-form">
         <h4>Stay in touch to get the latest updates</h4>
-		    <?php echo form_open('subscribe');?>
-    			    <input type="text" name="subscribe_email" class="ui-form-control">
-              <input type="submit" value="Submit" name="subscribe_btn" class="btn btn-default-4">
-        <?php echo form_close();?>
-	      </div>
+            <?php echo form_open('subscribe');?>
+                    <input type="text" name="email" class="ui-form-control">
+                    <input type="submit" value="Submit" name="subscribe_btn" class="btn btn-default-4">
+            <?php echo form_close();?>
+        </div>
     </div>
 
   </section>
-   <div class="clear"></div>
+
+  <div class="clear"></div>
