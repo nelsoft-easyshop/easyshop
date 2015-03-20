@@ -260,12 +260,12 @@ class Home extends MY_Controller
             $form = $emptyForm;
         }
         
-        $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
+        $formData =  $twig->render('pages/web/report-a-problem.html.twig', [
             'form' => $form->createView(), 
             'ES_FILE_VERSION' => ES_FILE_VERSION,
             'assetsDomain' => getAssetsDomain(),
             'isValid' => $isValid
-            ));
+        ]);
 
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
