@@ -1,10 +1,10 @@
- <link type="text/css" href="assets/css/bootstrap.css?ver={{ ES_FILE_VERSION }}" rel="stylesheet" />
+ <link type="text/css" href="/assets/css/bootstrap.css?ver={{ ES_FILE_VERSION }}" rel="stylesheet" />
  <section id="bug-report">
      <div class="mrgn-top-35"></div>
      <div class="container">
           <div class="border-all border-rad-3">
                <div class="col-md-12 border-bottom bg-cl-f7f7f7">
-                    <div class="pd-tb-8">
+                    <div class="pd-tb-15">
                          <h5><strong>Your Feedback About Easyshop.ph</strong></h5>
                     </div>
                </div>
@@ -12,7 +12,7 @@
 
                <input type="hidden" id="validFlag" val="{{ isValid|escape('js') }}"/>
 
-               <div class="alert alert-success" id="success-alert">
+               <div class="alert alert-success" id="success-alert" style="display:none;">
                    <strong>Success!</strong> Your report has been sent successfully.
                </div>
 
@@ -88,4 +88,4 @@
      </div>
      <div class="mrgn-bttm-45"></div>
 </section>
-<script type="text/javascript" src="assets/js/src/bug-report.js"></script>
+<script type="text/javascript" src="/assets/js/src/bug-report.js"></script>
