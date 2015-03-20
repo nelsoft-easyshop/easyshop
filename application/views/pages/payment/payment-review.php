@@ -1,7 +1,7 @@
 <link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
-<div class="transaction-container">
+<div class="transaction-wrapper">
     <div class="container">
         <!--Start of transaction breadcrumb-->
         <div class="transaction-breadcrumb-container">
@@ -186,20 +186,21 @@
                             </tr>
                         </foot>
                     </table>
-                     <table class="transaction-summary-table transaction-checkout-order" width="100%">
+                    <br/>
+                     <!--<table class="transaction-summary-table transaction-checkout-order" width="100%">
                         <thead>
-                            <tr>
+                            <tr class="border-bottom-1">
                                 <th>How would you like to pay?</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
                     </table>
-
+                    -->
                     <div class="payment-method-container">
                         <div class="radio">
                             <input type="radio" name="payment-method" id="credit" class="payment-label" value="">
                             <label class="payment-label payment-name" for="credit">
-                                Credit Card or Debit Card
+                                Credit Card or Debit Card <img src="/assets/images/payment-methods/img-payment-credit.png" class="payment-method-img"/>
                             </label>
                         </div>
                         <div class="payment-method-desc">
@@ -211,11 +212,11 @@
                         <div class="radio">
                             <input type="radio" name="payment-method" id="paypal" class="payment-label" value="">
                             <label class="payment-label payment-name" for="paypal">
-                                PayPal Account
+                                PayPal Account <img src="/assets/images/payment-methods/img-payment-paypal.png" class="payment-method-img"/>
                             </label>
                         </div>
                         <div class="payment-method-desc" style="display: none;">
-                            Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                            Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.
                         </div>
                     </div>
                     
@@ -223,19 +224,19 @@
                         <div class="radio">
                             <input type="radio" id="dragonpay" name="payment-method" class="payment-label" value="">
                             <label class="payment-label payment-name" for="dragonpay">
-                                Dragonpay
+                                Dragonpay <img src="/assets/images/payment-methods/img-payment-dragonpay.png" class="payment-method-img"/>
                             </label>
                         </div>
                         <div class="payment-method-desc" style="display:none">
-                            Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                            Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.
                         </div>
                     </div>
 
                     <div class="payment-method-container">
                         <div class="radio">
                             <input type="radio" id="pesopay"name="payment-method" class="payment-label" value="">
-                            <label class="payment-label" for="pesopay">
-                                PesoPay
+                            <label class="payment-label payment-name" for="pesopay">
+                                PesoPay <img src="/assets/images/payment-methods/img-payment-pesopay.png" class="payment-method-img"/>
                             </label>
                         </div>
                         <div class="payment-method-desc" style="display:none">
@@ -246,17 +247,50 @@
                     <div class="payment-method-container">
                         <div class="radio">
                             <input type="radio" id="cod" name="payment-method" class="payment-label" value="">
-                            <label class="payment-label" for="cod">
+                            <label class="payment-label payment-name" for="cod">
                                 Cash on Delivery
                             </label>
                         </div>
                         <div class="payment-method-desc" style="display:none">
-                            Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Superstitione erunt vituperata iactant oderit consuevit propemodum eruditionem, tarentinis.
+                            <br/>
+                            <br/>
+                            <!--Display this table if one or more item is not available for COD-->
+                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                            <table  class="transaction-summary-table transaction-checkout-order" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="60%">
+                                            Product
+                                        </th>
+                                        <th width="20%">
+                                            Quantity
+                                        </th>
+                                        <th width="20%">
+                                            Price
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="checkout-item">
+                                        <td>
+                                            IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
+                                            <br/>
+                                            <small>Go to your <a href="#">Cart</a> and Remove this Item</small>
+                                        </td>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td>
+                                            &#8369; 42,000.00
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <br/>
                     <div class="checkbox">
-                        
                         <label>
                             <input type="checkbox" value="">
                             I acknowledge I have read and understood <a href="#">Easyshop.ph's  Privacy Policy</a>.
