@@ -204,7 +204,7 @@ class mobilePayment extends MY_Controller
                         ]
                     ];
 
-                    $response = json_decode($paymentService->pay($gateWayMethod, $validatedCart, $memberId), true); 
+                    $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId); 
                     if((bool)$response['e']){
                         $requestUrl = $response['d'];
                         $isSuccess = true;
@@ -221,7 +221,7 @@ class mobilePayment extends MY_Controller
                             'method' => 'DragonPay',
                         ]
                     ];
-                    $response = json_decode($paymentService->pay($gateWayMethod, $validatedCart, $memberId), true);  
+                    $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId);  
                     if((bool)$response['e']){
                         $requestUrl = $response['u'];
                         $returnUrl = $paymentConfig['payment_type']['dragonpay']['Easyshop']['return_url'];
