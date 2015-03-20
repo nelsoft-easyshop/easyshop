@@ -1,4 +1,4 @@
-{% if ENVIRONEMENT == 'development' %}
+{% if appEnvironment == 'development' %}
     <link type="text/css" href="/assets/css/bootstrap.css?ver={{ ES_FILE_VERSION }}" rel="stylesheet" />
 {% else %}
     <link type="text/css" href="/assets/css/min-easyshop.bug-report.css?ver={{ ES_FILE_VERSION }}" rel="stylesheet" />
@@ -62,7 +62,7 @@
                                         <img src="{{ captchaImage }}" />
                                     </div>
                                     <div class="col-xs-3 text-center">
-                                        <span class="glyphicon glyphicon-refresh"></span>
+                                        <span class="glyphicon glyphicon-refresh refresh-captcha"></span>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
     </div>
 </section>
 
-{% if ENVRONMENT == 'development' %}
+{% if appEnvironment == 'development' %}
     <script type="text/javascript" src="/assets/js/src/bug-report.js?ver={{ ES_FILE_VERSION }}"></script>
 {% else %}
     <script src="/assets/js/min/easyshop.bug_report.js?ver={{ ES_FILE_VERSION }}" type="text/javascript"></script>

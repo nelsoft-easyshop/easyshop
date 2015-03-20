@@ -13,5 +13,21 @@
         $("#bug-report").click(function(){
             $("div.error.red").hide();
         });
-     });
+        
+
+    });
+    
+    $('.refresh-captcha').on('click', function(){
+        var csrftoken = $("meta[name='csrf-token']").attr('content');
+        var csrfname = $("meta[name='csrf-name']").attr('content');
+        $.ajax({
+            url: '/home/refreshBugReportCaptcha',
+            method: 'POST',
+            data: {csrfname: csrftoken},
+            success : function(data) {
+                $('.captcha-image-container').html(data);
+            }
+        });
+    });
+
 })(jQuery);

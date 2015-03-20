@@ -278,7 +278,7 @@ class Home extends MY_Controller
             'isValid' => $isValid,
             'captchaImage' => $captchaBuilder->inline(),
             'captchaMessage' => $captchaMessage, 
-            'environment' => strtolower(ENVIRONMENT),
+            'appEnvironment' => strtolower(ENVIRONMENT),
         ]);
 
         $headerData = [
