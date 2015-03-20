@@ -38,7 +38,7 @@
             </p>
             <div class="clear"></div>
             <p class="p-review-content">
-                <?=html_escape($review)?>
+                <?=nl2br(html_escape($review))?>
             </p>
 
             <?php if($canReview): ?>
