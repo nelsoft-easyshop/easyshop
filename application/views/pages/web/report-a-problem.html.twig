@@ -54,14 +54,11 @@
                                     <div class="col-xs-6">
                                         {{ form_widget(form.captcha, {'attr': {'class': 'form-control feedback-captcha', 'maxlength' : '5'} }) }}
                                         <div class="error red">
-                                            {{ form_errors(form.description) }}
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 captcha-image-container">
-                                        {{ form_widget(form.captcha, {'attr': {'class': 'form-control feedback-captcha', 'maxlength' : '5'} }) }}
-                                        <div class="error red">
                                             {{ form_errors(form.captcha) | default(captchaMessage) }}
                                         </div>
+                                    </div>
+                                     <div class="col-xs-6">
+                                        <img src="{{ captchaImage }}" />
                                     </div>
                                 </div>
                             </div>
@@ -99,9 +96,7 @@
                         </div>
                         <div class="clear"></div>
                 </div>
-                <div class="feedback-loader-container text-center">
-                    <img src="{{ assetsDomain }}assets/images/es-loader-3-md.gif" alt="loading...">
-                </div>
+
                 {{ form_end(form) }}
             </div>
         </div>
