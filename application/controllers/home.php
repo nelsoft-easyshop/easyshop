@@ -246,6 +246,7 @@ class Home extends MY_Controller
                             ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
                             ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
                             ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['image']))
+                            ->add('captcha', 'text', array('required' => false, 'label' => false, 'constraints' => []))
                             ->add('submit', 'submit', array('label' => 'SEND'))
                             ->getForm();
 
@@ -260,11 +261,16 @@ class Home extends MY_Controller
             $form = $emptyForm;
         }
         
+        $builder = $this->serviceContainer['captcha_builder']
+                        ->build();
+        
+        $this->session->set_userdata('bugreport_captcha_pharse', $builder->getPhrase());
         $formData =  $twig->render('pages/web/report-a-problem.html.twig', [
             'form' => $form->createView(), 
             'ES_FILE_VERSION' => ES_FILE_VERSION,
             'assetsDomain' => getAssetsDomain(),
-            'isValid' => $isValid
+            'isValid' => $isValid,
+            'captchaImage' => $builder->inline(),
         ]);
 
         $headerData = [

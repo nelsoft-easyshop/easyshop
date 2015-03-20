@@ -35,20 +35,32 @@
                                 <div class="error red">
                                     {{ form_errors(form.title) }}
                                 </div>
-                                <!--{{ form_row(form.title, {'attr': {'class': 'form-control'}}) }}-->
-                                <!--<input type="text" class="form-control">-->
                             </div>
                             <div class="clear"></div>
                         </div>
-                        <div class="row">
+                        <div class="row mrgn-bttm-15">
                             <label class="col-xs-12 col-sm-3 col-md-3">Description:</label>
                             <div class="col-xs-12 col-sm-9 col-md-9">
                                 {{ form_widget(form.description, {'attr': {'class': 'form-control feedback-textarea'}}) }}
                                 <div class="error red">
                                     {{ form_errors(form.description) }}
                                 </div>
-                                <!--{{ form_row(form.description, {'attr': {'class': 'form-control feedback-textarea'}}) }}-->
-                                <!--<textarea class="form-control feedback-textarea"></textarea>-->
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="row">
+                            <label class="col-xs-12 col-sm-3 col-md-3">Confirm:</label>
+                            <div class="col-xs-12 col-sm-9 col-md-9">
+                                <div class="col-xs-6" >
+                                    {{ form_widget(form.captcha, {'attr': {'class': 'form-control feedback-captcha', 'maxlength' : '5'} }) }}
+                                    <div class="error red">
+                                        {{ form_errors(form.description) }}
+                                    </div>
+                                </div>
+                                
+                                <div class="col-xs-6" >
+                                    <img src="{{ captchaImage }}"/>
+                                </div>
                             </div>
                             <div class="clear"></div>
                         </div>
@@ -72,7 +84,6 @@
                                     <div class="error red">
                                             {{ form_errors(form.file) }}
                                     </div>
-                                    <!--<input type="file" class="">-->
                                 </label>
 
                             </div>
@@ -83,11 +94,9 @@
                 <div class="mrgn-bttm-15 mrgn-top-10">
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center send-btn-con">
                             {{ form_row(form.submit, {'attr': {'class': 'btn btn-default-4 width-30p'}}) }}
-                            <!--<input type="submit" value="Send" class="orange_btn3 width-20p">-->
                         </div>
                         <div class="clear"></div>
                 </div>
-                <!--{{ form_end(form, {'render_rest': false}) }}-->
                 {{ form_end(form) }}
             </div>
         </div>
