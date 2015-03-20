@@ -409,12 +409,12 @@ module.exports = function (grunt) {
                              'web/assets/js/src/landingpage-bootstrap.min.js'],
 
                     'web/assets/js/min/easyshop.user_vendor_view.js':
-                            ['web/assets/js/src/vendorpage_new.js',
-                             'web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.Jcrop.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.scrollTo.js',
-                             'web/assets/js/src/vendor/chosen.jquery.min.js'],
+                             'web/assets/js/src/vendor/chosen.jquery.min.js',
+                             'web/assets/js/src/vendorpage_new.js'],
 
                     'web/assets/js/min/easyshop.product-search-by-category-new.js':
                             ['web/assets/js/src/vendor/bootstrap.js',

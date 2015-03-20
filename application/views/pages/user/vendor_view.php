@@ -28,29 +28,28 @@
                                 <ul class="list-unstyled list-category">    
                                     <?php $isFirst = true; ?>
                                     <?php foreach( $categoryProducts as $categoryId => $categoryData ):?>
+                                    <?php if(isset($categoryData['isHidden']) && $categoryData['isHidden'] === true): ?>
+                                        <?php continue; ?>
+                                    <?php endif; ?>
                                     <li>
-                                        <?php if(isset($categoryData['isHidden']) && $categoryData['isHidden'] === true): ?>
-                                            <?php continue; ?>
-                                        <?php endif; ?>
                                         <a href="javascript: void(0)" data-link="#def-<?php echo $categoryId?>" class="color-default tab_categories simplemodal-close">
-                                        <span class='catText'>
-                                            <?php echo html_escape($categoryData['name']);?>
-                                        </span> 
-                                        <?php if(!empty($categoryData['children'])): ?>
+                                            <span class='catText'>
+                                                <?php echo html_escape($categoryData['name']);?>
+                                            </span> 
+                                        <?php if(empty($categoryData['children']) === false): ?>
                                             <i class="fa fa-caret-down fa-lg pull-right"></i>
+                                        </a>
                                             <ul class="list-sub-category">
                                             <?php foreach($categoryData['children'] as $child): ?>
                                                 <li>
-                                                    <a href="javascript:void(0)" data-link="#def-custom-<?php echo $child['id']; ?>" class="color-default tab_categories simplemodal-close">
-                                                        <?php echo html_escape($child['name']); ?>
+                                                    <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-custom-<?php echo $child['id']; ?>" >
+                                                        <?php echo html_escape($child['name']); ?> 
                                                     </a>
                                                 </li>
                                             <?php endforeach; ?>
                                             </ul>
-                                        </a>
-                                        <?php else: ?>
-                                        </a>
                                         <?php endif; ?>
+                                        </a>
                                     </li>
                                     <?php $isFirst = false; ?>
                                     <?php endforeach;?>
@@ -193,12 +192,13 @@
 </div>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
     <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript'></script>
     <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.scrollTo.js" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+    <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_vendor_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
+
