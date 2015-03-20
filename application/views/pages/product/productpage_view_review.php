@@ -99,7 +99,7 @@
                                                         </p>
                                                         <div class="clear"></div>
                                                         <p class="p-review-content">
-                                                            <?=html_escape($value['review']);?>
+                                                            <?=nl2br(html_escape($value['review']));?>
                                                         </p>
 
                                                         <?php if($canReview): ?>
@@ -174,7 +174,7 @@
                                                                     </div> 
                                                                     <div class="clear"></div>
                                                                     <p class="p-review-content">
-                                                                        <?=html_escape($valueReply['review']);?>
+                                                                        <?=nl2br(html_escape($valueReply['review']));?>
                                                                     </p>
                                                                 </div>
                                                             </div>

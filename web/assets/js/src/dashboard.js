@@ -2015,7 +2015,7 @@
 
     $('#setup').on('click','.printQrCode', function() {
         var url = $(this).data("url");
-        window.location.replace(url);
+        window.open(url, '_blank'); 
     });
 
     $(".add-bank-account").click(function() {

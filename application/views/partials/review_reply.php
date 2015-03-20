@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-2 col-user-image no-padding" align="center">
         <a href="#"><div class="div-user-image">
-            <img src=<?php echo getAssetsDomain().'.'.$userPic?>" class="img-user"/>
+            <img src="<?php echo getAssetsDomain().'.'.$userPic?>" class="img-user"/>
         </div></a>
         <div class="clear"></div>
         <a href="#"><p class="p-username"><?=html_escape($reviewUsername)?></p></a>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="clear"></div>
-            <p class="p-review-content"><?=html_escape($review)?></p>
+            <p class="p-review-content"><?=nl2br(html_escape($review))?></p>
         </div>
     </div>
 </div>
