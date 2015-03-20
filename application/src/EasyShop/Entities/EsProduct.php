@@ -380,6 +380,7 @@ class EsProduct
     const SEARCH_SORT_HOT = 'HOT';
     const SEARCH_SORT_NAME = 'NAME';
 
+    const MINIMUM_PRODUCT_NAME_LEN = 3;
 
     /**
      * @var integer
