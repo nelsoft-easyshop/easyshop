@@ -44,22 +44,25 @@ class ValidationRules
     public function initValidationRules()
     {
         $this->rules = array(
-            'bug_report' => array(
-                    'title' => array(
+            'bug_report' => [
+                    'title' => [
                             new Assert\NotNull(["message" => "This field is required."])
-                        ),
-                    'description' => array(
+                    ],
+                    'description' => [
                             new Assert\NotNull(["message" => "This field is required."])
-                        ),
-                    'image' => array(
+                    ],
+                    'image' => [
                             new Assert\Image([
                                 'mimeTypes' => array('image/png','image/jpg','image/jpeg','image/gif'),
                                 'mimeTypesMessage' => 'This file is not a valid image. Accepted extensions are .png, .jpg, .jpeg and .gif only.',
                                 'maxSize' => '5M',
                                 'uploadIniSizeErrorMessage' => 'The file is too large. Allowed maximum size is 5 MB.'
                                 ])
-                            )
-                ),
+                    ],
+                    'captcha' => [
+                            new Assert\NotNull(["message" => "This field is required."])
+                    ],
+             ],
             'login' => array(
                     'username' => array(
                                 new Assert\NotBlank(),
