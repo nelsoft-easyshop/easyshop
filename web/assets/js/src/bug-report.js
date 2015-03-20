@@ -5,8 +5,8 @@
         
         if(isValid){
             $("#success-alert").show();
-            $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
-           $("#success-alert").hide();
+            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                $("#success-alert").hide();
             });   
         }
 
