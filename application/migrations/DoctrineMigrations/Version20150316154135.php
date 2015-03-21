@@ -22,7 +22,7 @@ class Version20150316154135 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->addSql('
-            ALTER TABLE es_member_cat DROP COLUMN;
+            ALTER TABLE es_member_cat DROP COLUMN parent_id;
         ');
     }
 }
