@@ -137,5 +137,5 @@ class CategoryWrapper
         return $categoryArray;
     }
 
-
 }
+
