@@ -2137,10 +2137,6 @@ h3 > b{
     .td-logo-store{
         display: none;
     }
-    
-    .footer-primary{
-        padding-bottom: 18px;
-    }
 }
 
 @media only screen and (max-width: 320px) {
@@ -2286,39 +2282,6 @@ h3 > b{
         display: block;
         top: 47px;
         width: 252px;
-    }
-
-    .footer-primary {
-        text-align: center;
-    }
-
-    .social-media-wrapper ul {
-        display: inline-block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 316px;
-    }
-
-    .footer-bottom-content .col-md-6 {
-        text-align: center;
-    }
-
-    .footer-hide {
-        display: none;
-    }
-
-    .res-copyright {
-        background-color: #fff;
-        color: #565656;
-        display: block;
-        font-size: 0.85em;
-        padding:19px 0;
-        text-align: center;
-        width: 100%;
-    }
-
-    .social-media-wrapper ul {
-        width: 300px;
     }
     
     /*** --- 404 responsive css small devices --- ***/
@@ -2512,11 +2475,6 @@ h3 > b{
 
     .sticky-search-cart-wrapper .header-cart-wrapper {
         width: 17%;
-    }
-    
-    /*** Footer ***/
-    .social-media-wrapper ul {
-        width: 256px;
     }
 }
 

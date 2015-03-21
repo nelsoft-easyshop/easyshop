@@ -64,9 +64,9 @@ class Cart extends MY_Controller
             ];
 
             $this->load->spark('decorator');  
-            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/cart/cart-responsive', $bodyData);
-            $this->load->view('templates/footer_full',  $this->decorator->decorate('footer', 'view', $headerData));
+            $this->load->view('templates/footer_primary',  $this->decorator->decorate('footer', 'view', $headerData));
         } 
         else {
             redirect('/login', 'refresh');

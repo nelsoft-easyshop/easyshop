@@ -88,10 +88,6 @@ a{
     padding: 5px !important;
 }
 
-#product_content{
-    width: 781px !important;
-}
-
 .product{
     width: 244px !important;
 }
@@ -287,7 +283,7 @@ div.product-list{
         display: none;
     }
     .display-when-mobile-1024{
-        display:inline;
+        display:block;
     }
     .border-0{
         border: 0px !important;

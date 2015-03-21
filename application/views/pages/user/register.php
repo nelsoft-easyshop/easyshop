@@ -54,11 +54,11 @@
         <div class="new-login-register-content">
             <div class="login-logo">
                 <a href="/">
-                    <img src="/assets/images/es-logo-login.png" alt="Easyshop">
+                    <img src="<?php echo getAssetsDomain(); ?>assets/images/es-logo-login.png" alt="Easyshop">
                 </a>
             </div>
             <div class="login-loading-content text-center">
-                <img src="/assets/images/es-loader-3-md.gif" alt="loading...">
+                <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif" alt="loading...">
             </div>
             <div class="login-hide-content" style="display:none;">
                 <div id="adv2" class="login-tabs">
@@ -491,9 +491,6 @@
          base_url: "<?php echo base_url(); ?>"
     };
 </script>
-
-
-
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js"></script>

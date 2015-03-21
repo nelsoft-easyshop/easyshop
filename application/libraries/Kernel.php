@@ -639,6 +639,9 @@ class Kernel
             ]);
         };
        
+        $container['captcha_builder'] = function ($c) {
+            return new \Gregwar\Captcha\CaptchaBuilder();
+        };
 
         /* Register services END */
         $this->serviceContainer = $container;

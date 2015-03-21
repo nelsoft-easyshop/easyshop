@@ -17,7 +17,7 @@
     var af = new Array();
 </script>
 <!--  END OF simple slider-->
-<div class="res_wrapper">
+<div class="container">
 
     <div class="clear"></div>
 
