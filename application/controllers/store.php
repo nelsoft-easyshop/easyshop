@@ -439,7 +439,7 @@ class Store extends MY_Controller
             $parentCategories[$index]['cat_type'] = EasyShop\Category\CategoryManager::CATEGORY_NONSEARCH_TYPE;
         }
         
-        foreach( $parentCategories as $idCat => $categoryProperties ){
+        foreach( $parentCategories => $categoryProperties ){
             if(isset($categoryProperties['children'])){
                 $childData = $categoryProperties;
                 foreach($categoryProperties['children'] as $key => $child){
