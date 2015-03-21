@@ -20,7 +20,7 @@
     echo form_close();
 ?>
 
-<div class="res_wrapper"> 
+<div class="container"> 
     <input type="hidden" id="edit_cat_tree" value='<?php echo isset($cat_tree_edit)? html_escape($cat_tree_edit):json_encode(array()); ?>'/>
 
     <div class="clear"></div>
@@ -117,6 +117,7 @@
         </div>
         <?php echo form_close();?>
     </div>
+</div>
     <input type='hidden' class='draftCount' value="<?php echo (isset($draftItems))?count($draftItems):'0';?>"/>
     <input type='hidden' class='other_cat_name' value="<?php echo (isset($other_cat_name)?html_escape($other_cat_name):'') ?>"/>
 

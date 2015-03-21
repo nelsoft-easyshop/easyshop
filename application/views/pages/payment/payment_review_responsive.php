@@ -7,7 +7,7 @@
     <link type="text/css" href='/assets/css/min-easyshop.payment.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
 
-<div class="container font-roboto" style="max-width:980px; margin-top: 15px;">  
+<div class="container font-roboto">  
     <h2 class="checkout_title">Payment</h2>
     <div class="row">
         <div class="col-md-6">
@@ -165,7 +165,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row mrgn-bttm-45">
         <div class="col-md-12">
             <div class="display-when-desktop-payment">
                 <?php if($success 

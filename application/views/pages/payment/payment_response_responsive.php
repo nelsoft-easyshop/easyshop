@@ -8,7 +8,7 @@
 <?php endif; ?>
 
 
-<div class="container font-roboto" style="max-width:980px; margin-top: 15px;">  
+<div class="container font-roboto">
     <h2 class="checkout_title">Payment Result</h2>
     <div class="row">
         <br/>
@@ -202,11 +202,8 @@
                     </div>
                 <?php endif ?>
                 
-                 <div style='font-size: 14px; font-weight:bold;'>
-                    <br/><br/>
-                    <p>
-                        <a href="/">Continue Shopping</a>
-                    </p>
+                 <div class="pd-tb-45 text-center">
+                    <a href="/" class="btn btn-default-4">Continue Shopping</a>
                 </div>
         </div>
         

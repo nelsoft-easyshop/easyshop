@@ -4,7 +4,6 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
     <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
     <link rel="stylesheet" type="text/css" href='/assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
-    <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>"   media="screen"/>
     <link rel="stylesheet" type="text/css" href="/assets/css/chosen.min.css"  media="screen"/>
 <?php else: ?>
     <link type="text/css" href='/assets/css/min-easyshop.upload-step3.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
@@ -15,7 +14,7 @@
 
 <div class="clear"></div>
 
-    <div class="res_wrapper seller_product_content">
+    <div class="container seller_product_content">
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
             <div class="sell_steps sell_steps3"> 
@@ -238,7 +237,7 @@
     <?php echo form_open('sell/step4', array("id"=>"form_shipping"));?>
     <input id="has_attr" name="has_attr" value="<?php echo $attr["has_attr"]?>" type="hidden">
 
-    <div class="res_wrapper">
+    <div class="container">
     <div class="step3_shipping_options table-bordered mrgn-top-35">
         <div class="col-xs-12 bg-cl-e5e5e5">
             <h5>How would you like to deliver your item</h5>
@@ -407,7 +406,7 @@
     <input type="hidden" id="checkData" value='<?=$json_check_data?>'>
     <input type="hidden" id="shippingPreference" value='<?=$json_shippingpreference?>'>
 
-    <div style="margin-top: 3em;text-align:center;">
+    <div class="pd-tb-45 text-center">
         <input id="finish_step3" type="button" value="Finish" class="orange_btn3 width-20p">
         <input type="hidden" id="prod_h_id" name="prod_h_id" value="<?php echo $product['id_product']?>">
         <input type="hidden" id="billing_info_id" name="billing_info_id" value="<?php echo isset($first_accnt['id_billing_info'])?$first_accnt['id_billing_info']:'0'; ?>"/>

@@ -5,20 +5,11 @@
 <?php else: ?>
     <link type="text/css" href='/assets/css/min-easyshop.product-promo-category.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
-
-
-
-
-
-
-
-<div class="clear"></div> 
-
-
-<div class="wrapper" id="main_search_container">
-  
-    <?php echo $deals_banner; ?>
-
+<section class="bg-cl-fff">
+<div class="container" id="main_search_container">
+    <center>
+        <?php echo $deals_banner; ?>
+    </center>
     <div class="cd_product_container" id="peak_hour_sale">
         <div class='product_list'>
             <?php if(isset($peak_hour_items)) : ?>
@@ -163,6 +154,7 @@
     </div>
 
 </div>
+</section>
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>

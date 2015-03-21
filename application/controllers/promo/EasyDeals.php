@@ -33,9 +33,9 @@ class EasyDeals extends MY_Controller
         $viewData['items'] = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX);
 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/product/product_promo_category', $viewData);
-        $this->load->view('templates/footer');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
 
 }
