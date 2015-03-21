@@ -102,10 +102,10 @@
 
                 <div class="vendor-select-con">
                     <select class="sort_select form-select-default color-default pull-right">
-                        <option value="0">Default Sorting</option>
-                        <option value="1">Popularity</option>
-                        <option value="2">Most Recent</option>
-                        <option value="3">Hot</option>
+                        <option value="0" class="order-by-default">Default Sorting</option>
+                        <option value="1" class="order-by-popularity">Popularity</option>
+                        <option value="2" class="order-by-lastmodified">Most Recent</option>
+                        <option value="3" class="order-by-hotness">Hot</option>
                     </select>
                     <div class="clear"></div>
                 </div>
