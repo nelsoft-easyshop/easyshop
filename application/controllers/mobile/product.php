@@ -43,7 +43,7 @@ class Product extends MY_Controller {
             }
 
             $buttonLabel = "Add to Cart";
-            if(count($shippingDetails) === 0 && (int)$product->getIsMeetup() === 1){
+            if($productManager->isListingOnly($product)){
                 $isButtonClickable = false;
                 $buttonLabel = "Item is listed as an ad only. *";
             }
