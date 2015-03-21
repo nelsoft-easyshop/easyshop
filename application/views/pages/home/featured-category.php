@@ -59,21 +59,13 @@
                                         <?php $defaultImage = $product->getDefaultImage(); ?>
                                             <center>
                                                 <a href="/item/<?php echo $productSlug ?>">
+                                                    <div class="home-item-img-container">
+                                                        <img src="<?php echo  getAssetsDomain().$defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>" class="home-item-image-primary <?php if($secondaryImage): ?> home-item-has-secondary <?php endif; ?>"  />
 
-                                                    <!--hover image-->
-                                                    <?php if($secondaryImage): ?>
-                                                        <div class="div-rec-product-image hover-prod-image" style="background: #fff url(<?php echo  getAssetsDomain().$secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>) center no-repeat; background-size: cover; ">
-                                                            
-                                                        </div>
-                                                        <div class="div-rec-product-image main-prod-image">
-                                                    <?PHP else : ?>
-                                                        <div class="div-rec-product-image">
-                                                    <?PHP endif; ?>
-                                                    <!--main image-->
-                                                        <div class="image-handler" style="background: #fff url(<?php echo  getAssetsDomain().$defaultImage->getDirectory().'small/'.$defaultImage->getFilename() ?>) center no-repeat; background-size: cover;">
-
-                                                        </div>
-
+                                                        <?php if($secondaryImage): ?>
+                                                        <img src="<?php echo  getAssetsDomain().$secondaryImage->getDirectory().'small/'.$secondaryImage->getFilename() ?>" class="home-item-image-secondary" />
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </a>
                                             </center>
                                             <?php if ($product->getIsNew()): ?>

@@ -436,6 +436,7 @@ a:hover{
     text-align: center;
     background: #e2e2e2;
     margin-bottom: 10px;
+    position: relative;
 }
 
 .span-me{
@@ -536,6 +537,7 @@ a:hover{
     color: #fff;
     font-weight: bold;
     padding: 22.5px 0;
+    z-index: 3;
 }
 
 .span-circle-discount{
@@ -550,6 +552,7 @@ a:hover{
     color: #fff;
     font-weight: bold;
     padding: 22.5px 0;
+     z-index: 3;
 }
 
 .div-rec-title{

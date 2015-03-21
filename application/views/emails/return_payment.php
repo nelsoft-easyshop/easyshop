@@ -773,10 +773,10 @@
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                            <td valign="bottom" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
                                                                                 {payment_method_name} Charge : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" valign="top" align="right" style="padding-right: 40px; font-size: 13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                            <td valign="bottom" width="50%" valign="top" align="right" style="padding-right: 40px; font-size: 13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 &#8369; {payment_method_charge}
                                                                             </td>
                                                                         </tr>
