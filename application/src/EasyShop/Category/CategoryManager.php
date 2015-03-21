@@ -718,7 +718,7 @@ class CategoryManager
             $this->em->flush();
         }
         catch(\Exception $e){
-            $isSuccess = true;
+            $isSuccess = false;
         }
         
         return $isSuccess;
