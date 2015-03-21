@@ -192,8 +192,6 @@ module.exports = function (grunt) {
                          'web/assets/css/qr-code-css.css',
                          'web/assets/css/qr-code-print.css'],
                     'web/assets/css/min-easyshop.bug-report.css':
-                        ['web/assets/css/bootstrap.css'],
-                    'web/assets/css/min-easyshop.bug-report.css':
                         ['web/assets/css/bootstrap.css']
                 }
             },
