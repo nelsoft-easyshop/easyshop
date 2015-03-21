@@ -717,10 +717,10 @@
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: normal;">
+                                                                            <td valign="bottom" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: normal;">
                                                                                 Expected Date of Arrival : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" valign="top" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                            <td valign="bottom" width="50%" valign="top" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 {expected_date}
                                                                             </td>
                                                                         </tr>

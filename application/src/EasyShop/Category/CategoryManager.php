@@ -235,7 +235,7 @@ class CategoryManager
      *
      *  @return array - filter count of products and array of product objects
      */
-    public function getProductsWithinCategory($memberId, $categoryIdFilters, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ self::ORDER_PRODUCTS_BY_SORTORDER => 'DESC' ] , $condition = "", $lprice = "", $uprice ="")
+    public function getProductsWithinCategory($memberId, $categoryIdFilters, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ self::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ] , $condition = "", $lprice = "", $uprice ="")
     {
         $getAllNonCategorized = empty($categoryIdFilters);
         $categoryProducts = [];
