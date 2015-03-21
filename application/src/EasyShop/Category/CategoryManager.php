@@ -224,7 +224,7 @@ class CategoryManager
      *  non categorized products are returned.
      *
      *  @param integer $memberId
-     *  @param integer[] $arrCatId 
+     *  @param integer[] $categoryIdFilters 
      *  @param boolean $isCustom
      *  @param integer $productLimit
      *  @param integer $page
@@ -237,11 +237,7 @@ class CategoryManager
      */
     public function getProductsWithinCategory($memberId, $categoryIdFilters, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ self::ORDER_PRODUCTS_BY_SORTORDER => 'DESC' ] , $condition = "", $lprice = "", $uprice ="")
     {
-        $getAllNonCategorized = false;
-        if(empty($categoryIdFilters)){
-            $getAllNonCategorized = true;
-        }
-
+        $getAllNonCategorized = empty($categoryIdFilters);
         $categoryProducts = [];
         $currentPage = (int) $page <= 0 ? 0 : $page-1;
         $offset = (int) $page <= 0 ? 0 : ($page-1) * $productLimit;
@@ -670,6 +666,7 @@ class CategoryManager
     /**
      * Update the category tree structure
      *
+     * @param integer $memberId
      * @param EasyShop\Category\CategoryWrapper[] $categoryWrappers
      * @return mixed
      */
