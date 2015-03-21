@@ -51,7 +51,7 @@ class EsMemberProdcatRepository extends EntityRepository
      *
      *  @return integer[]  
      */
-    public function getPagedCustomCategoryProducts($memberId, $memcatId, $prodLimit, $offset = 0, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'DESC' ], $searchString = "")
+    public function getPagedCustomCategoryProducts($memberId, $memcatId, $prodLimit, $offset = 0, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ], $searchString = "")
     {      
         $orderByDirections = [
             'ASC' => 'ASC', 
