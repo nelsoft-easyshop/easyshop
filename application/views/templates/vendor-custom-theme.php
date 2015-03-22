@@ -69,3 +69,4 @@
         color: #<?php echo html_escape($colorHexadecimal); ?> !important;
     }
 </style>
+
