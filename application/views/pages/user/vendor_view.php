@@ -29,7 +29,7 @@
                                     <?php $isFirst = true; ?>
                                     <?php foreach( $categoryProducts as $categoryId => $categoryData ):?>
                                         <?php $categoryWrapper = $categoryData['category']; ?>
-                                        <?php if(isset($categoryData['isHidden']) && $categoryData['isHidden'] === true): ?>
+                                        <?php if($categoryWrapper->getIsHidden()): ?>
                                             <?php continue; ?>
                                         <?php endif; ?>
                                         <li>
@@ -43,7 +43,7 @@
                                                 <ul class="list-sub-category">
                                                 <?php foreach($categoryWrapper->getChildren() as $child): ?>
                                                     <li>
-                                                        <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-custom-<?php echo $child->getId(); ?>" >
+                                                        <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-<?php echo $child->getId(); ?>" >
                                                             <?php echo html_escape($child->getCategoryName()); ?> 
                                                         </a>
                                                     </li>

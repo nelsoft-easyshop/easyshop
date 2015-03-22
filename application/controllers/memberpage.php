@@ -2022,8 +2022,12 @@ class Memberpage extends MY_Controller
                      ->migrateUserCategories($memberId);
             }
             
-            $response['storeCategories'] = $this->serviceContainer['category_manager']
-                                                ->getWrappedUserCategories($memberId);
+            $userCategories = $this->serviceContainer['category_manager']
+                                   ->getUserCategories($memberId);
+            $response['storeCategories'] = [];
+            foreach($userCategories as $userCategory){
+                $response['storeCategories'][] = $userCategory->toArray();
+            }
         }
 
         echo json_encode($response);
@@ -2131,9 +2135,10 @@ class Memberpage extends MY_Controller
     public function deletePaymentAccount()
     {
         $memberId = $this->session->userdata('member_id');
-        $jsonResponse = ['isSuccessful' => false,
-                         'defaultId' => 0,
-                        ];
+        $jsonResponse = [
+            'isSuccessful' => false,
+            'defaultId' => 0,
+        ];
         if( $this->input->post('payment-account-id') && $memberId ){
             $billingInfoRepository = $this->serviceContainer['entity_manager']
                                           ->getRepository('EasyShop\Entities\EsBillingInfo');
@@ -2240,8 +2245,12 @@ class Memberpage extends MY_Controller
                                        ->updateCategoryTree($memberId, $categoryWrappers);
             if($isUpdateSuccessful){
                 $jsonResponse['isSuccessful'] = true;
-                $jsonResponse['categoryData'] = $this->serviceContainer['category_manager']
-                                                     ->getWrappedUserCategories($memberId);
+                $userCategories = $this->serviceContainer['category_manager']
+                                       ->getUserCategories($memberId);
+                $jsonResponse['categoryData'] = [];
+                foreach($userCategories as $userCategory){
+                    $jsonResponse['categoryData'][] = $userCategory->toArray();
+                }
             }
         }
         echo json_encode($jsonResponse);

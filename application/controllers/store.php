@@ -72,7 +72,7 @@ class Store extends MY_Controller
                 
                 $getUserProduct = $this->getInitialCategoryProductsByMemberId($bannerData['arrVendorDetails']['id_member']);
 
-                $productView['categoryProducts'] = $getUserProduct['parentCategory'];
+                $productView['categoryProducts'] = $getUserProduct;
                 
                 if($this->input->get() && !$bannerData['hasNoItems']){
 
@@ -429,74 +429,65 @@ class Store extends MY_Controller
         $totalCountNonCategorizedProducts = $em->getRepository('EasyShop\Entities\EsProduct')
                                                ->getCountNonCategorizedProducts($memberId);
         if($totalCountNonCategorizedProducts > 0){
-            $index = 'custom-noncategorized';
-            $parentCategories[$index]['name'] = 'Uncategorized';
-            $parentCategories[$index]['child_cat'] = [];
-            $parentCategories[$index]['products'] = [];
-            $parentCategories[$index]['categoryId'] = EasyShop\Category\CategoryManager::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
-            $parentCategories[$index]['memberCategoryId'] = EasyShop\Category\CategoryManager::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
-            $parentCategories[$index]['sortOrder'] = PHP_INT_MAX;
-            $parentCategories[$index]['cat_type'] = EasyShop\Category\CategoryManager::CATEGORY_NONSEARCH_TYPE;
+            $nonCategorizedCategory = new \EasyShop\Category\categoryWrapper();
+            $nonCategorizedCategory->setCategoryName('Uncategorized');
+            $nonCategorizedCategory->setSortOrder(PHP_INT_MAX);
+            $parentCategories['custom-noncategorized'] = $nonCategorizedCategory;
         }
-        
-        foreach( $parentCategories => $categoryProperties ){
-            if(isset($categoryProperties['children'])){
-                $childData = $categoryProperties;
-                foreach($categoryProperties['children'] as $key => $child){
-                    $childData['children'] = [];
-                    $childData['child_cat'] = [ $child['id'] ];
-                    $childData['memberCategoryId'] = $child['id'];
-                    $childData['sortOrder'] = $child['sortOrder'];
-                    $childData['name'] = $child['name'];
-                    $childData['isHidden'] = true;
-                    $parentCategories['custom-'.$child['id']] = $childData;
+        /**
+         * Append the data for the 2nd level categories
+         */
+        foreach( $parentCategories as $categoryProperties ){
+            $children = $categoryProperties->getChildren();
+            if(!empty($children)){
+                foreach($children as $child){
+                    $child->setIsHidden(true);
+                    $parentCategories[] = $child;
                 }
             }
         }
 
-        foreach( $parentCategories as $idCat => $categoryProperties ){ 
+        $categoryData = [];        
+        foreach( $parentCategories as $key => $categoryWrapper ){ 
 
-            $categoryIdCollection = $categoryProperties['child_cat'];
-            $isCustom = false;
-            if( (int)$categoryProperties['memberCategoryId'] !== 0 ){
-                $isCustom = true;
+            $categoryIdCollection = $categoryWrapper->getChildrenAsArray();
+            if($key !== 'custom-noncategorized'){
+                $categoryIdCollection[] = $categoryWrapper->getId();
             }
-
+            
+            $isCustom = $categoryWrapper->getIsCustom();
             $result = $categoryManager->getProductsWithinCategory(
                                             $memberId, 
                                             $categoryIdCollection, 
                                             $isCustom, 
                                             $prodLimit
                                         );
-            if( (int)$result['filtered_product_count'] === 0 && 
-                (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_NONSEARCH_TYPE 
-            ){
-                unset($parentCategories[$idCat]);
+            if( (int)$result['filtered_product_count'] === 0){
+                unset($parentCategories[$key]);
                 continue;
             }
 
-            $parentCategories[$idCat]['products'] = $result['products'];
-            $parentCategories[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
-            $parentCategories[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
+            $categoryData[$key]['category'] = $categoryWrapper;
+            $categoryData[$key]['products'] = $result['products'];
+            $categoryData[$key]['non_categorized_count'] = $result['filtered_product_count'];
+            $categoryData[$key]['json_subcat'] = json_encode($categoryIdCollection, JSON_FORCE_OBJECT);
+            $categoryData[$key]['cat_type'] = CategoryManager::CATEGORY_NONSEARCH_TYPE;
             $paginationData = [
                 'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage),
                 'isHyperLink' => false,
             ];
-            $parentCategories[$idCat]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
-
+            $pagination = $this->load->view('pagination/default', $paginationData, true);
             $view = [
                 'arrCat' => [
-                    'products'=>$result['products'],
+                    'products' => $result['products'],
                     'page' => 1,
-                    'pagination' => $parentCategories[$idCat]['pagination'],
+                    'pagination' => $pagination,
                 ]
             ];
-
-            $parentCategories[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);          
+            $categoryData[$key]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);          
         }    
-        $returnData['parentCategory'] = $parentCategories;
- 
-        return $returnData;
+
+        return $categoryData;
     }
 
 

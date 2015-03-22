@@ -46,6 +46,13 @@ class CategoryWrapper
     private $isCustom = true;
 
 
+    /** 
+     * Is Hidden (used for 2nd level categories)
+     *
+     * @var boolean
+     */
+    private $isHidden = false;
+    
     /**
      * Children categories
      *
@@ -151,6 +158,26 @@ class CategoryWrapper
     public function getIsCustom()
     {
         return $this->isCustom;
+    }
+    
+    /**
+     * Set the isHidden flag
+     *
+     * @param booleam $isHidden
+     */
+    public function setIsHidden($isHidden)
+    {
+        $this->isHidden = $isHidden;
+    }
+    
+    /**
+     * Get the isHidden flag
+     *
+     * @return boolean
+     */
+    public function getIsHidden()
+    {
+        return $this->isHidden;
     }
     
     
