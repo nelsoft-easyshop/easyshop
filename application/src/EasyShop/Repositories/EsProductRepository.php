@@ -1261,6 +1261,14 @@ class EsProductRepository extends EntityRepository
      */
     public function getNonCategorizedProductIds($memberId, $limit = 12, $offset = 0, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT => 'DESC' ])
     {
+        $this->em =  $this->_em;
+        
+        $numberOfAllCustomCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                            ->getNumberOfCustomCategories($memberId, true);  
+        if($numberOfAllCustomCategories === 0){
+            return [];
+        }
+        
         $orderByDirections = [
             'ASC' => 'ASC', 
             'DESC' => 'DESC',
@@ -1278,8 +1286,6 @@ class EsProductRepository extends EntityRepository
 
                             
         $categorizedProductIds = $this->getCategorizedProductIds($memberId);
-
-        $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
 
         $result = $queryBuilder->select('p.idProduct')
@@ -1323,9 +1329,14 @@ class EsProductRepository extends EntityRepository
      */
     public function getCountNonCategorizedProducts($memberId)
     {   
-        $categorizedProductIds = $this->getCategorizedProductIds($memberId);
-
         $this->em =  $this->_em;
+        $numberOfAllCustomCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                            ->getNumberOfCustomCategories($memberId, true);  
+        if($numberOfAllCustomCategories === 0){
+            return 0;
+        }
+    
+        $categorizedProductIds = $this->getCategorizedProductIds($memberId);
         $queryBuilder = $this->em->createQueryBuilder();
 
         $count = $queryBuilder->select('count(p.idProduct)')
