@@ -44,7 +44,7 @@ if(ENVIRONMENT == 'development'){
     $fileVersion = date('Ymdhis');
 }
 else{
-    $fileVersion = '17.0.11';
+    $fileVersion = '15.0.11';
 }
 define('ES_FILE_VERSION',$fileVersion);
 define('ES_ENABLE_CHRISTMAS_MODS', false);
