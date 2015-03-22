@@ -536,7 +536,7 @@ class CategoryManager
      * 
      * @return mixed
      */
-    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId, $parentCategoryId = 0)
+    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId, $parentCategoryId = EsMemberCat::PARENT)
     {
         $memberCategoryId = (int)$memberCategoryId;
         $parentCategoyId = (int)$parentCategoryId;
@@ -565,7 +565,7 @@ class CategoryManager
             try{
                 $isCategoryNameAvailable = $esMemberCategoryRepository->isCustomCategoryNameAvailable($categoryName, $memberId, $memberCategoryId);
                 $parentMemberCategory = true;
-                if($parentCategoryId !== 0){
+                if($parentCategoryId !== EsMemberCat::PARENT){
                     $parentMemberCategory = null;
                     if($parentCategoryId !== $memberCategoryId){
                         $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
