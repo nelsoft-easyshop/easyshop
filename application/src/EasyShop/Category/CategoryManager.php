@@ -405,7 +405,6 @@ class CategoryManager
                         continue;
                     }
                     $parsedData = explode("~", $childData, 3);
-                    
                     $childCategoryWrapper = new CategoryWrapper();
                     $childCategoryWrapper->setMemberCategoryId($parsedData[0]);
                     $childCategoryWrapper->setCategoryName($parsedData[1]);
