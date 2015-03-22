@@ -54,12 +54,12 @@ class EsMemberCatRepository extends EntityRepository
     }
 
     /**
-     *  Fetch custom categories of memberId in array form
+     *  Fetch top level custom categories of memberId in array form
      *
      *  @param integer $memberId
      *  @return array $customCategories
      */
-    public function getCustomCategoriesArray($memberId)
+    public function getTopLevelCustomCategories($memberId)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
@@ -69,21 +69,36 @@ class EsMemberCatRepository extends EntityRepository
         $rsm->addScalarResult('sort_order','sort_order');
         $rsm->addScalarResult('is_delete','is_delete');
         $rsm->addScalarResult('product_count','product_count');
+        $rsm->addScalarResult('childList','childList');
         $sql = 'SELECT es_member_cat.id_memcat,
                     es_member_cat.cat_name,
                     es_member_cat.is_featured,
                     es_member_cat.sort_order,
                     es_member_cat.is_delete,
-                    COUNT(es_member_prodcat.id_memprod) as product_count
+                    COUNT(es_member_prodcat.id_memprod) as product_count,
+                    
+                    GROUP_CONCAT(
+                        DISTINCT CONCAT(CONCAT(CONCAT(CONCAT(level2.id_memcat, "~"), level2.cat_name), "~") ,level2.sort_order)
+                            ORDER BY 
+                        level2.sort_order ASC SEPARATOR "|"
+                    ) as childList
+                    
                 FROM es_member_cat
-                LEFT JOIN es_member_prodcat 
+                LEFT JOIN 
+                    es_member_prodcat 
                     ON es_member_cat.id_memcat = es_member_prodcat.memcat_id
-                LEFT JOIN es_product
+                LEFT JOIN 
+                    es_product
                     ON es_product.is_draft = :nonDraft AND es_product.is_delete = :active
                     AND es_product.id_product = es_member_prodcat.product_id
+                LEFT JOIN
+                    es_member_cat as level2  
+                    ON level2.parent_id = es_member_cat.id_memcat 
+                    AND level2.is_delete = :categoryDeleteStatus
                 WHERE
                     es_member_cat.member_id = :member_id
                     AND es_member_cat.is_delete = :categoryDeleteStatus
+                    AND es_member_cat.parent_id = :parentCustomCategory
                 GROUP BY es_member_cat.id_memcat
                 ORDER BY es_member_cat.id_memcat DESC
                 ';
@@ -92,7 +107,8 @@ class EsMemberCatRepository extends EntityRepository
                     ->setParameter('member_id', $memberId)
                     ->setParameter('categoryDeleteStatus', EsMemberCat::ACTIVE)
                     ->setParameter('nonDraft', EsProduct::ACTIVE )
-                    ->setParameter('active', EsProduct::ACTIVE );
+                    ->setParameter('active', EsProduct::ACTIVE )
+                    ->setParameter('parentCustomCategory', EsMemberCat::PARENT );
 
         return $query->getResult();
     }
@@ -102,9 +118,10 @@ class EsMemberCatRepository extends EntityRepository
      *
      *  @param integer $memberId
      *  @param integer[] $categoryIdFilters
+     *  @param boolean $isChildOnly
      *  @return EasyShop\Entities\EsMemberCat[]
      */
-    public function getCustomCategoriesObject($memberId, $categoryIdFilters = [])
+    public function getCustomCategoriesObject($memberId, $categoryIdFilters = [], $isChildOnly = false)
     {
         $em = $this->_em;
         $queryBuilder = $em->createQueryBuilder()
@@ -118,6 +135,10 @@ class EsMemberCatRepository extends EntityRepository
             $queryBuilder->andWhere('mc.idMemcat IN (:categoryIds)')
                          ->setParameter('categoryIds', $categoryIdFilters);
         }
+        if($isChildOnly){
+            $queryBuilder->andWhere('mc.parentId != :parentId')
+                         ->setParameter('parentId',\EasyShop\Entities\EsMemberCat::PARENT);
+        }
 
         $customCategories = $queryBuilder->getQuery()
                                          ->getResult();                      
@@ -129,9 +150,10 @@ class EsMemberCatRepository extends EntityRepository
      * Returns the highest sort order among a user's active categories
      *
      * @param integer $memberId
+     * @param integer $parentCategoryId
      * @return integer
      */
-    public function getHighestSortOrder($memberId)
+    public function getHighestSortOrder($memberId, $parentCategoryId = \EasyShop\Entities\EsMemberCat::PARENT)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
@@ -141,12 +163,14 @@ class EsMemberCatRepository extends EntityRepository
                 FROM 
                     es_member_cat
                 WHERE
-                    member_id = :member_id AND 
-                    is_delete != :deleted
+                    member_id = :memberId AND 
+                    is_delete != :deleted AND 
+                    parent_id = :parentId
                 ';
         $query = $em->createNativeQuery($sql,$rsm)
-                    ->setParameter('member_id', $memberId)
-                    ->setParameter('deleted', \EasyShop\Entities\EsMemberCat::DELETED );
+                    ->setParameter('memberId', $memberId)
+                    ->setParameter('deleted', \EasyShop\Entities\EsMemberCat::DELETED )
+                    ->setParameter('parentId', $parentCategoryId);
         $results = $query->getResult()[0];
 
         return (int)$results['maxSortOrder'];                  
@@ -180,6 +204,28 @@ class EsMemberCatRepository extends EntityRepository
         $result = $query->getResult()[0];
 
         return (int)$result['numberOfCategories'];
+    }
+    
+    /**
+     * Gets the number of children of a memberCategory
+     *
+     * @param integer $memberCategoryId
+     * @return integer
+     */
+    public function getNumberOfChildren($memberCategoryId)
+    {
+        $this->em = $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder->select('COUNT(m.idMemcat)')
+                     ->from('EasyShop\Entities\EsMemberCat','m')
+                     ->where('m.parentId = :memberCategoryId')
+                     ->andWhere('m.isDelete = :deleteStatus')
+                     ->setParameter('memberCategoryId', $memberCategoryId)
+                     ->setParameter('deleteStatus', \EasyShop\Entities\EsMemberCat::ACTIVE);
+
+        $resultCount = $queryBuilder->getQuery()->getSingleScalarResult();
+
+        return (int)$resultCount;
     }
   
 }

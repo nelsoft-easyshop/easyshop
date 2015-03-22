@@ -1269,19 +1269,82 @@ td.td-view.p-view2.color-default{
     position:relative;
     z-index:1;
 }
+
+.list-category > li{
+    position:relative;
+    z-index:1;
+    border-top: solid #e0e0e0 1px;
+}
+
+.list-category > li > a{
+    padding: 12px 15px;
+    font-weight: 600;
+    display: block;
+}
+
+.tab_categories:active,
+.tab_categories:link,
+.tab_categories:visited{
+    text-decoration: none !important;
+}
+
+.tab_categories.toggledCat{
+    margin-bottom: 12px;
+}
+
+.list-category > li > a .fa{
+    margin-top: 3px;
+    margin-right: 5px;
+}
+.list-category > li > a .toggleIcon:before{
+    content: "\f0d8" !important;
+}
+
 .list-category > a > li{
     padding:12px 15px;
     position:relative;
     z-index:1;
     border-top: solid #e0e0e0 1px;
 }
+
 .list-category > a > li:hover{
     color: #575759;
 }
- .list-category > a,  .list-category > a:hover{
+
+.list-category > a,  .list-category > a:hover{
     color: #575759;
     text-decoration: none !important;
- }
+}
+
+.list-sub-category{
+    display: none;
+}
+
+.list-sub-category > li{
+    display: block;
+    border-top: dotted #e2e2e2 1px;
+}
+
+.list-sub-category > li > a{
+    display: block;
+    padding: 10px 10px 10px 30px;
+    font-weight: normal;
+}
+
+.list-category > li > a:hover,
+.list-sub-category > li > a:hover{
+    text-decoration: none;
+}
+
+.list-sub-category > li:first-child{
+    border-top: solid #e2e2e2 1px;
+    margin-top: 10px;
+}
+
+.list-sub-category > li:last-child{
+    padding-bottom: 0px;
+}
+
 .list-filter{
     margin-top: -1px !important;
     margin-bottom: 0px !important;
