@@ -37,11 +37,12 @@
                                                 <span class='catText'>
                                                     <?php echo html_escape($categoryWrapper->getCategoryName());?>
                                                 </span> 
-                                            <?php if($categoryWrapper->getIsCustom() && empty($categoryWrapper->getChildren()) === false): ?>
+                                            <?php $children = $categoryWrapper->getChildren(); ?>
+                                            <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>
                                                 <i class="fa fa-caret-down fa-lg pull-right"></i>
                                             </a>
                                                 <ul class="list-sub-category">
-                                                <?php foreach($categoryWrapper->getChildren() as $child): ?>
+                                                <?php foreach($children as $child): ?>
                                                     <li>
                                                         <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-<?php echo $child->getId(); ?>" >
                                                             <?php echo html_escape($child->getCategoryName()); ?> 
