@@ -38,6 +38,12 @@ function ReplaceNumberWithCommas(thisnumber){
         if(memconf.orderBy === ORDER_PRODUCTS_BY_SORTORDER){
             memconf.order = ORDER_DIRECTION_ASC;
         }
+        
+        var isSearching = $('#def-search').length > 0;
+        if(isSearching){
+            $('.tab_categories[data-link="#def-search"]').click(); 
+        }
+        
     });
 
     /**

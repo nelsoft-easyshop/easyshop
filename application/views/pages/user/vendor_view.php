@@ -29,11 +29,12 @@
                                     <?php $isFirst = true; ?>
                                     <?php foreach( $categoryProducts as $categoryId => $categoryData ):?>
                                         <?php $categoryWrapper = $categoryData['category']; ?>
+                                        <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
                                         <?php if($categoryWrapper->getIsHidden()): ?>
                                             <?php continue; ?>
                                         <?php endif; ?>
                                         <li>
-                                            <a href="javascript: void(0)" data-link="#def-<?php echo $categoryWrapper->getId(); ?>" class="color-default tab_categories simplemodal-close">
+                                            <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories simplemodal-close">
                                                 <span class='catText'>
                                                     <?php echo html_escape($categoryWrapper->getCategoryName());?>
                                                 </span> 
@@ -128,8 +129,9 @@
                 <?php $isFirst = true; ?>
                 <?php foreach($categoryProducts as $catId => $categoryData):?>
                     <?php $categoryWrapper = $categoryData['category']; ?>
+                    <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
                     <div class="view row row-items grid category-products <?php echo $isFirst ? 'active' : ''; ?>" 
-                        id="def-<?php echo $categoryWrapper->getId(); ?>"
+                        id="def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>"
                         data-catId='<?php echo html_escape($categoryData['json_subcat']);?>' 
                         data-group="<?php echo $categoryWrapper->getId(); ?>" 
                         data-productcount="<?php echo $categoryData['non_categorized_count'] ?>"
@@ -175,7 +177,8 @@
                 <?php $isFirst = true; ?>
                 <?php foreach( $categoryProducts as $categoryData ):?>
                     <?php $categoryWrapper = $categoryData['category']; ?>
-                    <a href="javascript: void(0)" data-link="#def-<?php echo $categoryWrapper->getId()?>" class="color-default tab_categories simplemodal-close">
+                    <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
+                    <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId()?>" class="color-default tab_categories simplemodal-close">
                         <li>
                             <span  style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
                             </span>  
