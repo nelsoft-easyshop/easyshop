@@ -153,16 +153,101 @@
                     <p>
                     Sellers must take full responsibility for the buyers to receive their purchased items.
                     </p>
-                    <h3 class="htitle2">Returns Refunds</h3>
+                    <h3 class="htitle2">Returns, Refunds and Cancellation</h3>
                     <p>
-                    The seller must ensure that the items that he sells are damage free and should conform with the warranties.
+                        FREE shipping is available to all our clients anywhere in the Philippines for selected items on the EasyShop.ph website. Our partner couriers will deliver your items directly at your doorstep. 
                     </p>
                     <p>
-                    Returns and refunds must be settled between the buyer and the seller should the seller has already received payment.
+                        For customers within Metro Manila, your order will be delivered 1-3 business days after full payment has been received. Meanwhile, for customers outside Metro Manila, expect your orders to arrive 3-10 business days after full payment has been received.
                     </p>
                     <p>
-                    A processing fee will be deducted by EasyShop.ph in case of refunds and returns.
+                        <strong>1. Returns </strong>
                     </p>
+                    <p>
+                        Unless otherwise stated in the product description, EasyShop.ph will accept returns seven (7) days after date of purchase. Items for return must be sent back in their ORIGINAL packaging. Before sending back the item, please contact our Customer Service Representative at (02) 354-5973.
+                    </p>
+                    <p>
+                        For damaged or defective items, the buyer has seven (7) days within receipt of the delivery to return the item. EasyShop.ph will not accept returns after it has exceeded the 7-day grace period. We will gladly refund you should the item be damaged/considered defective upon receiving it.
+                    </p>
+                    <p>
+                        Please send your items to: <br/>
+                        <div class="margin-left-15">
+                            EasyShop Online, Inc. <br/>
+                            Unit 8C, 8th Floor, Marc 2000 Tower, </br>
+                            Taft Avenue, San Andres, Manila </br>
+                        </div>
+                    </p>
+                    <p>
+                        We aim to process your returns and refunds as soon as can. Please allow at least five (5) business days for the process to be completed. Should you have further inquiries, don’t hesitate to contact us at info@easyshop.ph and we will respond to you immediately.
+                    </p>
+                    <p>
+                        Below are the general conditions for return types:
+                        
+                        <table class="terms-return-table">
+                            <tr>
+                                <th>Type of Return</th>
+                                <th>Description</th>
+                                <th>Condition for return</th>
+                            </tr>
+                            <tr>
+                                <td>Damaged or Defective</td>
+                                <td>Item/s arrive with scratches or dents</td>
+                                <td rowspan="3">Original packaging, all contents intact</td>
+                            </tr>
+                            <tr>
+                                <td>With Malfunction</td>
+                                <td>Item/s do not work based on product specifications</td>
+                            </tr>
+                            <tr>
+                                <td>Incorrect item</td>
+                                <td>Item/s sent in wrong size, volume, or color.</td>
+                            </tr>
+                        </table>    
+                    </p>
+                    
+                    <p>
+                        <strong>2. Refunds </strong>
+                    </p>
+                    <p>
+                        In cases wherein item/s are out of stock, EasyShop.ph can automatically refund your payment. Once both parties have agreed, the refund process starts.
+                    </p>
+                    <p>
+                        For payments made through PayPal, EasyShop.ph needs to file a claim that you are entitled for a refund. No Payment Method Charge (PMC) shall be subtracted from your refund.
+                    </p>
+                    <p>
+                        The EasyShop.ph Customer Service Representative will coordinate with you for your bank details either through phone or email. Once the refund process is done, please expect an email containing a scanned copy of the bank transaction slip.
+                    </p>
+                    
+                    <p>
+                        <strong>3. Cancellation </strong>
+                    </p>
+                    <p>
+                        As a customer, you have the right to cancel your orders. However, there will be respective charges depending on your payment gateway.
+                    </p>
+                    <p>
+                        In case of cancellations, EasyShop.ph will have no liability in shouldering the PMC of every transaction. Transactions made on PayPal will be processed by EasyShop.ph provided that you will file a case of refund. A confirmation from our end will be provided and PayPal will refund your payment without any charges subtracted. (PayPal charge: 4.4% + P15 transaction charge; PesoPay charge: 0.50% + P6, exclusive of VAT; Dragonpay charge: P20)
+                    </p>
+                    <p>
+                        For cancelled orders within Metro Manila and nearby provinces below are the refund percentages:
+                        <div class="margin-left-15">
+                            3 days before schedule for delivery: 100% refund <br/>
+                            2 days or less before schedule for delivery: 50% refund </br>
+                        </div>
+                    </p>
+                    <p>
+                        For cancelled orders outside Metro Manila (VisMin Area) below are the refund percentages:
+                        <div class="margin-left-15">
+                            3 days before schedule for delivery: 50% refund <br/>
+                            2 days or less before schedule for delivery: 35% refund</br>
+                        </div>
+                    </p>
+                    <p>
+                        For pre-order cases wherein your order has exceeded one month in waiting on your cart, it is in your discretion as a customer to cancel your order.
+                    </p>
+                    <p>
+                        Should you have any other inquiries, please feel free to contact our Customer Service Representative at info@easyshop.ph or (02) 354-5973.
+                    </p>
+                    
                     <h3 class="htitle2">Conflicts</h3>
                     <p>
                     For cases of conflict, the seller and buyer is expected to resolve the problem themselves. Under circumstances where conflicts are unresolvable, EasyShop.ph will not be involved in any legal proceedings.
