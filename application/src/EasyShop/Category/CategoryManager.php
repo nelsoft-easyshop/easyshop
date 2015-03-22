@@ -532,6 +532,7 @@ class CategoryManager
      * @param string $categoryName
      * @param integer[] $productIds
      * @param integer $memberId
+     * @param integer $parentCategoryId
      * 
      * @return mixed
      */
