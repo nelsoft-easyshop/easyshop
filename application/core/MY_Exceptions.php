@@ -38,8 +38,6 @@ class MY_Exceptions extends CI_Exceptions {
             $csrfHook = new CSRF_Protection();
             $csrfHook->generate_token();
             $csrfHook->inject_tokens();
-          
-            echo $CI->output->get_output();
             exit;
         } 
         else {
