@@ -434,7 +434,7 @@ class CategoryManager
      *
      *  @return array
      */
-    public function createCustomCategory($categoryName, $memberId, $productIds, $parentCategoryId = 0)
+    public function createCustomCategory($categoryName, $memberId, $productIds, $parentCategoryId = EsMemberCat::PARENT)
     {
         $errorMessage = "";
         $actionResult = false;
@@ -457,7 +457,7 @@ class CategoryManager
             $esMemberCategoryRepository =  $this->em->getRepository("EasyShop\Entities\EsMemberCat"); 
             
             $parentMemberCategory = true;
-            if($parentCategoryId !== 0){
+            if($parentCategoryId !== EsMemberCat::PARENT){
                 $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
                                             'member' => $memberId,
                                             'idMemcat' => $parentCategoryId,
