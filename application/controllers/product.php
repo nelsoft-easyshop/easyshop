@@ -170,9 +170,9 @@ class product extends MY_Controller
 
         
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/product/all_categories_view', $bodyData); 
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view')); 
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
 
 
@@ -409,37 +409,7 @@ class product extends MY_Controller
 
         echo json_encode($response);
     }
-
-    /**
-     * Renders view for the promo page
-     *  
-     * @return View
-     */
-    public function category_promo()
-    {
-        $this->load->config('protected_category', TRUE);
-        $category_id = $this->config->item('promo', 'protected_category');
-        $this->load->library('xmlmap');
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Deals | Easyshop.ph',
-            'metadescription' => 'Get the best price offers for the day at Easyshop.ph.',
-        ];
-        
-        $banner_data = [];
-        $view_data['deals_banner'] = $this->load->view('templates/dealspage/easytreats', $banner_data, TRUE);
-        #$view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,$this->per_page);
-        $view_data['items'] = $this->product_model->getProductsByCategory($category_id,array(),0,"<",0,PHP_INT_MAX);
-        #PEAK HOUR PROMO ,To activate: change deals_banner = easydeals
-        #$categoryId = $this->config->item('peak_hour_promo', 'protected_category');
-        #$view_data['peak_hour_items'] =$this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,PHP_INT_MAX,'createddate ASC,');
-
-        $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/product/product_promo_category', $view_data); 
-        $this->load->view('templates/footer');
-    }
-
+    
     /**
      * Renders page for post and win promo
      *  
@@ -458,9 +428,9 @@ class product extends MY_Controller
         $socialData['twitter'] = $socialMediaLinks["twitter"];
 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/promo/post_and_win_view', $socialData);
-        $this->load->view('templates/footer');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
 
     /**

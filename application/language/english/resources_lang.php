@@ -7,7 +7,7 @@ $lang['registration3_complete_previous'] = "Kindly complete the previous pages."
 $lang['registration3_invalid_confirmation'] = "Invalid confirmation code.";
 
 $lang['schoollevel_option'] = array('Please Select', 'Undergraduate degree','Masteral degree','Doctorate degree','High School','Elementary');
-$lang['product_condition'] =  array('New', 'New other (see details)','Manufacturer refurbished','Used','For parts or not working');
+$lang['product_condition'] =  array('New', 'Slightly Used', 'New other (see details)','Manufacturer refurbished','Used','For parts or not working');
 
 #Rating Criteria
 $lang['rating']= array('Item quality', 'Communication', 'Shipment time');

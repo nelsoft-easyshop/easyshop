@@ -40,13 +40,20 @@ module.exports = function (grunt) {
                         ['web/assets/css/main-style.css', 
                         'web/assets/css/bootstrap.css',
                         'web/assets/css/bootstrap-mods.css'],
+                     'web/assets/css/min-easyshop.header-alt2.css':
+                        ['web/assets/css/normalize.min.css',
+                        'web/assets/css/simple-header-css.css',
+                        'web/assets/css/footer-css.css',
+                        'web/assets/css/bootstrap.css'
+                        ],
                     'web/assets/css/min-easyshop.header-primary.css':
                         ['web/assets/css/main-style.css',
                          'web/assets/css/normalize.min.css',
                          'web/assets/css/header-css.css',
                          'web/assets/css/bootstrap.css',
                          'web/assets/css/responsive_css.css',
-                         'web/assets/css/new-homepage.css'],
+                         'web/assets/css/new-homepage.css',
+                         'web/assets/css/footer-css.css'],
                     'web/assets/css/min-easyshop.vendor-banner.css':
                         ['web/assets/css/chosen.min.css', 
                         'web/assets/css/jquery.Jcrop.min.css'],
@@ -183,7 +190,9 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
                         ['web/assets/css/bootstrap.css',
                          'web/assets/css/qr-code-css.css',
-                         'web/assets/css/qr-code-print.css']
+                         'web/assets/css/qr-code-print.css'],
+                    'web/assets/css/min-easyshop.bug-report.css':
+                        ['web/assets/css/bootstrap.css']
                 }
             },
         },
@@ -341,6 +350,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/chosen.jquery.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
+                             'web/assets/js/src/vendor/jstree.js',
                              'web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/dashboard.js',
                              'web/assets/js/src/dashboard-myaccount.js',
@@ -444,9 +454,12 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.estudyantrepreneur-promo.js':
                         ['web/assets/js/src/vendor/jquery-1.9.1.js',
-                            'web/assets/js/src/promo/estudyantrepreneur.js',
-                            'web/assets/js/src/plugins.js',
-                            'web/assets/js/src/vendor/promo/christmas-promo.js']
+                        'web/assets/js/src/promo/estudyantrepreneur.js',
+                        'web/assets/js/src/plugins.js',
+                        'web/assets/js/src/vendor/promo/christmas-promo.js'],
+                     
+                    'web/assets/js/min/easyshop.bug_report.js':
+                        ['web/assets/js/src/bug-report.js']
                 }
             }
         }

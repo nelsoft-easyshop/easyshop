@@ -8,6 +8,14 @@ header {
     height: auto;
 }
 
+#main-nav .menu {
+    margin: 0 !important;
+}
+
+#main-nav .menu a:hover {
+    text-decoration: none;
+}
+
 .search-container {
     margin: 0 8px 0 85px;
 }
@@ -841,6 +849,7 @@ header {
 
 #top-links li a:hover{
     color:#4370cc;
+    text-decoration: none;
 }
 #top-links li i {
     font-size: 16px;
@@ -854,6 +863,7 @@ header {
 
 .header-link a:hover {
     color:#d5d5d5;
+    text-decoration: none;
 }
 
 .login-profile-con {

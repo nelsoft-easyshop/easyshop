@@ -321,9 +321,9 @@ class Payment extends MY_Controller{
             
             // Load view
             $this->load->spark('decorator');  
-            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/payment/payment_review_responsive' ,$data);  
-            $this->load->view('templates/footer');  
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
         }
         else{
            redirect('/cart/', 'refresh'); 
@@ -1134,9 +1134,9 @@ class Payment extends MY_Controller{
         $this->session->unset_userdata('payment_status');
 
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/payment/payment_response_responsive' ,$response);
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
    }
 
 
@@ -1474,23 +1474,28 @@ class Payment extends MY_Controller{
         $itemArray = $carts['choosen_items'];
         $qtySuccess = 0;
 
-        foreach ($itemArray as $value) {
+        foreach ($itemArray as $key => $value) {
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
             $productInventory = $productManager->getProductInventory($product, false, true, $memberId);
 
-            $maxqty = $productInventory[$itemId]['quantity'];
-            $qty = $value['qty'];
-            $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
-            $subtotal = $finalPromoPrice * $qty;
+            if(isset($productInventory[$itemId])){
+                $maxqty = $productInventory[$itemId]['quantity'];
+                $qty = $value['qty'];
+                $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
+                $subtotal = $finalPromoPrice * $qty;
 
-            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
-            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
-            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
+                $itemArray[$value['rowid']]['maxqty'] = $maxqty;
+                $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+                $itemArray[$value['rowid']]['subtotal'] = $subtotal;
 
-            if($maxqty >= $qty){
-                $qtySuccess++;
+                if($maxqty >= $qty){
+                    $qtySuccess++;
+                }
+            }
+            else{
+                unset($itemArray[$key]);
             }
         }
         $this->session->set_userdata('choosen_items', $itemArray);

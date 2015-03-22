@@ -244,6 +244,10 @@
     margin-bottom: 25px;
 }
 
+.mrgn-bttm-45 {
+    margin-bottom: 45px;
+}
+
 /**** width ****/
 .width-300 {
     width: 300px;
@@ -465,19 +469,6 @@ input[type="checkbox"] {
 }
 
 /*** header ***/
-
-header {
-    color: #fff;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    display: block;
-    background-color: #003e91;
-    height: 32px;
-    line-height: 32px;
-    z-index: 10000;
-}
-
 .top_links_right_con2 {
     display: none;
 }
@@ -866,6 +857,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 .sell_steps ul {
     list-style: none;
+    padding: 0;
 }
 
 .sell_steps ul li {
@@ -917,9 +909,9 @@ div.sell_steps4 ul li:nth-child(4) a {
     height: 35px;
     line-height: 35px;
     margin: 0 -4px;
-    min-width: 12em;
+    min-width: 10em;
     vertical-align: middle;
-    width: 85%;
+    width: 80%;
     text-align: center;
 }
 
@@ -930,9 +922,9 @@ div.sell_steps4 ul li:nth-child(4) a {
     height: 35px;
     line-height: 35px;
     margin: 0 -4px;
-    min-width: 12em;
+    min-width: 10em;
     vertical-align: middle;
-    width: 85%;
+    width: 80%;
     text-align: center;
 }
 
@@ -1195,7 +1187,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .add_category_submit {
-    margin:30px 0 32px;
+    padding:44px 0;
     text-align: center;
 }
 
@@ -2174,6 +2166,10 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     width: 100%;
 }
 
+.img-social-media-con a {
+    padding: 0 5px;
+}
+
 .img-social-media-con img {
     width: 100%;
 }
@@ -2448,6 +2444,36 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     min-height: 10em;
 }
 
+.captcha-image-container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.captcha-image-container img {
+    max-width: 150px;
+    width: 100%;
+}
+
+.captcha-container .glyphicon-refresh {
+    background-color: #fff;
+    border: 1px solid #cecece;
+    color: #565656;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    font-size: 18px;
+    line-height: 34px;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.captcha-container .glyphicon-refresh:hover {
+    background-color: #585a59;
+    color: #fff;
+}
+
 .feedback-img-con {
     border:2px dashed #cecece;
     display: table-cell;
@@ -2465,10 +2491,19 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     vertical-align: middle;
 }
 
-.send-btn-con input[type="submit"] {
+.send-btn-con .btn-default-4 {
     font-weight: bold;
-    min-width: 200px;
+    max-width: 300px;
     text-transform: uppercase;
+    width: 100%;
+}
+
+.feedback-loader-container {
+    padding: 15px 0 10px;
+}
+
+#bug-report h5 {
+    margin: 0;
 }
 
 /****** email verification css ******/
@@ -2745,7 +2780,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     }
 }
 
-@media screen and (max-width: 56em) { /*** 848px ****/
+@media screen and (max-width: 991px) { 
     span.steps_txt_active {
         width: 89%;
     }
@@ -2879,9 +2914,14 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 @media only screen and (max-width : 30em) { /**** 480px ***/
     /*** report a problem ***/
-        .feedback-img-wrapper + input[type="file"] {
-        width: 87px;
+    .feedback-img-wrapper + input[type="file"] {
+        width: 82px;
     }
+
+    .send-btn-con .btn-default-4 {
+        max-width: none;
+    }
+
     .img_sell {
         display: inline-block;
         vertical-align: middle;

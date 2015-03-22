@@ -6,8 +6,12 @@
             <li class="bc-arrow"><i class="fa fa-angle-right"></i>Store Setup</li>
         </ul>
     </div>
+      
+    <div id="category-tree-reference" style="display:none;">
+        <ul>
+        </ul>
+    </div>
 
-    
     <div class="div-tab-inner">
     
         <div class="div-store-setup category-setup-loading" style="text-align:center">
@@ -21,6 +25,7 @@
             <div class="div-store-setup">
                 <p class="panel-setup-title">CATEGORIES</p>
                 <div id="div-store-content-edit" class="div-store-content concealable">
+                                 
                     <div class="current-store-cat">
                         <div class="form-horizontal">
                         <div class="form-group">
@@ -45,10 +50,12 @@
                     <div class="edit-store-cat form-horizontal">
                     <div class="form-group">
                             <label class="col-sm-3 control-label">Reorder List : </label>
-                            <div class="col-sm-5 col-with-radio">
-                                <ul class="category_sort list new-store-category-draggable ui-sortable">
-
-                                </ul>
+                            <div class="col-sm-6 col-with-radio">
+                                
+                                <div id="edit-category-tree">
+                                </div>
+                                
+                                
                                 <p class="note-category">Drag the category items to reorder</p>
                                 <br/>
                                 <button class="btn btn-setting-save-btn" id="category-order-save">
@@ -116,14 +123,14 @@
                         </div>
                         <div class="form-group">
                                 <label class="col-sm-3 control-label">Current Categories : </label>
-                                <div class="col-sm-9 col-with-radio">
-                                    <ul class="list-unstyled list-currect-categories" id="delete-list-categories">                                        
-
-                                    </ul>
+                                <div class="col-sm-6 col-with-radio">
+                                    <div id="delete-category-tree">
+                                    </div>
+                                    
                                     <div class="current-btn-delete">
                                         <br/>   
                                         <button class="btn btn-setting-cancel-btn" id="btn-edit-delete-categories">
-                                        Delete
+                                            Delete
                                         </button>
                                     </div>
                                     <br/>
@@ -163,6 +170,14 @@
                 <label class="col-sm-3">Category Name : </label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control category-name"  placeholder="Type the category name here" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3">Parent Category : </label>
+                <div class="col-md-9">
+                    <select class="parent-category-dropdown form-control category-name">
+                        <option value="0">None</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -242,6 +257,14 @@
                     <input type="hidden" class="hidden-category-id" value="0"/>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-md-3">Parent Category : </label>
+                <div class="col-md-9">
+                    <select class="form-control category-name parent-category-dropdown" placeholder="Type the category name here">
+                        <option value="0">None</option>
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label>Add items to this category : </label>
@@ -251,7 +274,6 @@
                     <a href="javascript:void(0)" class="alert-link error-message" style="border:none;"></a>
                 </div>
             </div>
-
         </div>
  
         <div class="drag-drop-container">
