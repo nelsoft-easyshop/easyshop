@@ -7753,3 +7753,19 @@ div.sold_prod_container {
 }
 
 
+.margin-left-15{
+    margin-left: 15px;
+}
+
+.terms-return-table th{
+    font-weight:bold;
+}
+
+.terms-return-table table, .terms-return-table th ,.terms-return-table td{
+    border: 1px solid black;
+}
+
+.terms-return-table td, .terms-return-table th{
+    padding: 5px;
+}
+
