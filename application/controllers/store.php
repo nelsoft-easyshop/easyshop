@@ -87,11 +87,11 @@ class Store extends MY_Controller
                     $searchCategoryWrapper = new \EasyShop\Category\CategoryWrapper();
                     $searchCategoryWrapper->setCategoryName('Search Result');
                     $searchCategoryWrapper->setSortOrder(0);
-                    $productView['categoryProducts'][0]['category'] = $searchCategoryWrapper;
-                    $productView['categoryProducts'][0]['products'] = $searchProduct;
-                    $productView['categoryProducts'][0]['non_categorized_count'] = $count;
-                    $productView['categoryProducts'][0]['json_subcat'] = "{}";
-                    $productView['categoryProducts'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
+                    $productView['categoryProducts']['search']['category'] = $searchCategoryWrapper;
+                    $productView['categoryProducts']['search']['products'] = $searchProduct;
+                    $productView['categoryProducts']['search']['non_categorized_count'] = $count;
+                    $productView['categoryProducts']['search']['json_subcat'] = "{}";
+                    $productView['categoryProducts']['search']['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
@@ -106,7 +106,7 @@ class Store extends MY_Controller
                             'pagination' => $pagination,
                         )
                     );
-                    $productView['categoryProducts'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+                    $productView['categoryProducts']['search']['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
                 }
 
                 //HEADER DATA
@@ -134,17 +134,6 @@ class Store extends MY_Controller
                 $EsVendorSubscribe = $this->serviceContainer['entity_manager']
                                           ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
-
-                if(empty($viewData['categoryProducts']) === false){
-                    if(isset($productView['isSearching'])){
-                        $viewData['categoryProducts'][0]['isActive'] = true;
-                    }
-                    else{
-                        reset($viewData['categoryProducts']);
-                        $firstCategoryId = key($viewData['categoryProducts']);
-                        $viewData['categoryProducts'][$firstCategoryId]['isActive'] = true;
-                    }
-                }
              
                 $this->load->spark('decorator');
                 $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
