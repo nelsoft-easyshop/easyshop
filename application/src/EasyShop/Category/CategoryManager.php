@@ -665,7 +665,7 @@ class CategoryManager
     {   
         $indexedCategoryData = [];
         foreach($categoryWrappers as $categoryWrapper){
-            $indexedCategoryData[$categoryWrapper->getMemberCategoryId()] = $categoryWrapper;
+            $indexedCategoryData[$categoryWrapper->getId()] = $categoryWrapper;
         }
 
         $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
@@ -682,7 +682,7 @@ class CategoryManager
                 if(empty($children) === false){
                     $indexedChildrenData = [];
                     foreach($children as $childWrapper){
-                        $indexedChildrenData[$childWrapper->getMemberCategoryId()] = $childWrapper;
+                        $indexedChildrenData[$childWrapper->getId()] = $childWrapper;
                     }        
                     $childrenCategoryObject = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                                        ->getCustomCategoriesObject($memberId, array_keys($indexedChildrenData));

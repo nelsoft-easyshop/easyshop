@@ -111,16 +111,6 @@ class CategoryWrapper
     }
     
     /**
-     * Get the member category 
-     *
-     * @return integer
-     */
-    public function getMemberCategoryId()
-    {
-        return $this->memberCategoryId;
-    }
-    
-    /**
      * Add a child category
      *
      * @param CategoryWrapper $child
@@ -190,16 +180,7 @@ class CategoryWrapper
     {
         $this->nonMemberCategoryId = $categoryId;
     }
-    
-    /**
-     * Get the EsCat Category Id
-     *
-     * @return integer
-     */
-    public function getNonMemberCategoryId()
-    {
-        return $this->nonMemberCategoryId;
-    }
+
     
     /**
      * Checks if a certain ID has already been appended to the children array
