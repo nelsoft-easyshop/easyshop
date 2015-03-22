@@ -10,142 +10,68 @@
     <center>
         <?php echo $deals_banner; ?>
     </center>
-    <div class="cd_product_container" id="peak_hour_sale">
-        <div class='product_list'>
-            <?php if(isset($peak_hour_items)) : ?>
-                <?php foreach($peak_hour_items as $item): ?>
-                    <?php if($item['is_promote'] == 1 && $item['promo_type'] == 3): ?>
-                        <div class="cd_product">	
 
-                            <?php if($item['is_sold_out'] || !$item['can_purchase'] ): ?>
-                                <a href="javascript:void(0)" style='cursor: default;' class="cd_link_con">
-                            <?php else: ?>
-                                <a href="<?= '/item/'.$item['slug'];?>" class="cd_link_con">
-                            <?php endif; ?>
-                        
-                        
-                                <?PHP $Md_start =  date('M d', strtotime($item['startdate'])); ?>
-                                <?PHP $Md_second_start = date('M d', strtotime("-7 day",strtotime($item['startdate'])))?>
-                    
-                                <div class="product_buy_con prod_date <?PHP echo ($item['can_purchase'] || strtotime(date('M d'))===strtotime($Md_start) )  ?'':'disabled'; ?>">
-                                    <span>
-                                        <p><?php echo date('d',strtotime($Md_second_start)) . " and " . $Md_start; ?></p>
-                                    </span>
-                                    
-                                    </div>
-                                    <div class="product_buy_con">
-                                        <span><span class="orange_btn3 <?php echo $item['is_sold_out']||(!$item['start_promo'])?'disabled':'enabled';?>">BUY NOW</span></span>
-                                    </div>
+    <div class="clear"></div>
+    
+    <div id="easytreats" class="deals-pages-easytreats">
+        <?php foreach($products as $product): ?>
 
-
-                                    <?php if($item['is_sold_out']): ?>
-                                        <div class="cd_soldout">
-                                            <p>SOLDOUT</p>
-                                        </div>
-                                    <?php endif; ?>
-
-
-                                    <div>
-
-                                        <?php if(isset($item['percentage']) && $item['percentage'] > 0):?>
-                                            <span class="cd_slide_discount">
-                                                <span><?php echo number_format($item['percentage'],0,'.',',');?>%<br>OFF</span>
-                                            </span>
-                                        <?php endif; ?>
-
-                                    </div>
-
-                                    <span class="cd_prod_img_con">
-                                        <img src="<?php echo getAssetsDomain(); ?><?= $item['path'].'categoryview/'.$item['file']; ?>">
-                                    </span>
-
-                                    <h3>
-                                        <?php echo  es_string_limit(html_escape($item['name']), 54, '...');?>
-                                    </h3>
-                    
-                                    <div class="price-cnt">
-                                        <div class="price">PHP <?php echo number_format($item['price'],2,'.',',');?></div>
-                                        <?php if(isset($item['percentage']) && $item['percentage'] > 0): ?>
-                                            <div class="discount_price">PHP <?php echo number_format($item['original_price'],2,'.',',');?></div>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="cd_condition">
-                                        <b>Condition: </b> <span style='font-weight: 10px;'><?= ($item['is_free_shipping'])? es_string_limit(html_escape($item['condition']),15) : html_escape($item['condition']);?></span>
-                                        <?PHP if($item['is_free_shipping']): ?>
-                                            <span style="float:right;"><span class="span_bg img_free_shipping"></span>
-                                        <?PHP endif; ?>	
-                                    </div>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-    </div>
-
-
-
-    <div id="easytreats">
-        <?php foreach($items as $item): ?>
             <div class="cd_product">
 
-                <?php if($item['is_sold_out'] || !	$item['can_purchase']): ?>
+                <?php if($product->getIsSoldOut()): ?>
                     <a href="javascript:void(0)" style='cursor: default;' class="cd_link_con">
                 <?php else: ?>
-                    <a href="<?= '/item/'.$item['slug'];?>" class="cd_link_con">
+                    <a href="<?= '/item/'.$product->getSlug();?>" class="cd_link_con">
                 <?php endif; ?>
-                
-                            
-                    <?php if(intval($item['is_promote']) === 1): ?>
+
+                    <?php if(intval($product->getIsPromote()) === 1): ?>
                         
                         <div class="product_buy_con">
-                            <span><span class="orange_btn3 <?php echo $item['is_sold_out']||(!$item['start_promo'])?'disabled':'enabled';?>">BUY NOW</span></span>
+                            <span><span class="orange_btn3 <?php echo $product->getIsSoldOut() || !$product->getStartPromo() ? 'disabled' : 'enabled' ;?>">BUY NOW</span></span>
                         </div>
 
                     <?php else: ?>
                         <div class="product_buy_con">
-                            <span><span class="orange_btn3 <?php echo $item['is_sold_out']?'disabled':'enabled';?>">BUY NOW</span></span>
+                            <span><span class="orange_btn3 <?php echo $product->getIsSoldOut() ?'disabled':'enabled';?>">BUY NOW</span></span>
                         </div>
                     <?php endif; ?>
 
-                    <?php if($item['is_sold_out']): ?>
+                    <?php if($product->getIsSoldOut()): ?>
                         <div class="cd_soldout">
                             <p>SOLDOUT</p>
                         </div>
                     <?php endif; ?>
 
-
                     <div>
-
-                        <?php if(isset($item['percentage']) && $item['percentage'] > 0):?>
+                        <?php if($product->getDiscountPercentage()  > 0):?>
                             <span class="cd_slide_discount">
-                                <span><?php echo number_format($item['percentage'],0,'.',',');?>%<br>OFF</span>
+                                <span><?php echo number_format($product->getDiscountPercentage(),0,'.',',');?>%<br>OFF</span>
                             </span>
                         <?php endif; ?>
-                        
                     </div>
 
                     <span class="cd_prod_img_con">
-                        <img src="<?php echo getAssetsDomain(); ?><?= $item['path'].'categoryview/'.$item['file']; ?>">
+                        <img src="<?php echo getAssetsDomain().$product->directory .'categoryview/'. $product->imageFileName; ?>">
                     </span>
 
                     <h3>
-                        <?php echo  es_string_limit(html_escape($item['name']), 54, '...');?>
+                        <?php echo  es_string_limit(html_escape($product->getName()), 54, '...');?>
                     </h3>
                             
                     <div class="price-cnt">
-                        <div class="price">PHP <?php echo number_format($item['price'],2,'.',',');?></div>
-                        <?php if(isset($item['percentage']) && $item['percentage'] > 0): ?>
-                            <div class="discount_price">PHP <?php echo number_format($item['original_price'],2,'.',',');?></div>
+                        <div class="price">PHP <?php echo number_format($product->getFinalPrice(),2,'.',',');?></div>
+                        <?php if($product->getDiscountPercentage() > 0): ?>
+                            <div class="discount_price">PHP <?php echo number_format($product->getOriginalPrice(),2,'.',',');?></div>
                         <?php endif; ?>
                     </div>
                                 
                                 
                     <div class="cd_condition">
-                        <b>Condition: </b> <span style='font-weight: 10px;'><?= ($item['is_free_shipping'])? es_string_limit(html_escape($item['condition']),15) : html_escape($item['condition']);?></span>
-                        <?PHP if($item['is_free_shipping']): ?>
+                        <b>Condition: </b> <span style='font-weight: 10px;'>
+                        <?php echo $product->getIsFreeShipping() ? es_string_limit(html_escape($product->getCondition()),15) : html_escape($product->getCondition());?></span>
+                        <?php if($product->getIsFreeShipping()): ?>
                             <span style="float:right;"><span class="span_bg img_free_shipping"></span>
-                        <?PHP endif; ?>	
+                        <?php endif; ?>	
                     </div>
                         
                 </a>

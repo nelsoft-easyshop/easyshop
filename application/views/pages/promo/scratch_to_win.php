@@ -53,7 +53,7 @@
     <?PHP else : ?>
     <h2 class="head-cngrts">CONGRATULATIONS!</h2>
     <div class="scratch-congrats">
-        <span id="checker" data_id="<?=$product['id_product']?>" data_name="<?=$product['product']?>"
+        <span id="checker" data_id="<?=$product['id_product']?>" data_name="<?= html_escape($product['product']); ?>"
                 data_price="<?=$product['price']?>" data_code="<?=$code;?>" run_js="<?=$user->getFullName() ? TRUE : FALSE ?>">
         </span>
         <div class="claim-bg">
@@ -61,7 +61,7 @@
                 <img src="<?php echo getAssetsDomain(); ?><?=$product['product_image_path']?>">
             </div>
             <div class="claim-details">
-                <p>To claim your prize,  <?=$user->getFullName() ?'': '<span id="complete">complete the <a href="javascript:void(0)" id="register">registration</a> form and </span>'?>visit
+                <p>To claim your prize,  <?= html_escape($user->getFullName()) ?'': '<span id="complete">complete the <a href="javascript:void(0)" id="register">registration</a> form and </span>'?>visit
                     Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
                     Malate, Manila
                     Don't forget to print this page and bring the
