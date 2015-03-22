@@ -84,9 +84,11 @@ class Store extends MY_Controller
                     $search = $searchProductService->getProductBySearch($parameter);
                     $searchProduct = $search['collection'];
                     $count = $search['count'];
-
-                    $productView['categoryProducts'][0]['name'] ='Search Result';
-                    $productView['categoryProducts'][0]['products'] = $searchProduct; 
+                    $searchCategoryWrapper = new \EasyShop\Category\CategoryWrapper();
+                    $searchCategoryWrapper->setCategoryName('Search Result');
+                    $searchCategoryWrapper->setSortOrder(0);
+                    $productView['categoryProducts'][0]['category'] = $searchCategoryWrapper;
+                    $productView['categoryProducts'][0]['products'] = $searchProduct;
                     $productView['categoryProducts'][0]['non_categorized_count'] = $count;
                     $productView['categoryProducts'][0]['json_subcat'] = "{}";
                     $productView['categoryProducts'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
@@ -95,13 +97,13 @@ class Store extends MY_Controller
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
                         ,'isHyperLink' => false
                     );
-                    $productView['categoryProducts'][0]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+                    $pagination = $this->load->view('pagination/default', $paginationData, true);
 
                     $view = array(
                         'arrCat' => array(
                             'products'=>$searchProduct,
                             'page' => 1,
-                            'pagination' => $productView['categoryProducts'][0]['pagination'],
+                            'pagination' => $pagination,
                         )
                     );
                     $productView['categoryProducts'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
