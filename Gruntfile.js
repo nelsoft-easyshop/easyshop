@@ -179,7 +179,8 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.dashboard-primary.css':
                         ['web/assets/css/contact.css', 
                          'web/assets/css/chosen.min.css', 
-                         'web/assets/css/new-dashboard.css'],
+                         'web/assets/css/new-dashboard.css',
+                         'web/assets/css/jstree/style.css'],
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
                         ['web/assets/css/bootstrap.css',
                          'web/assets/css/qr-code-css.css',
