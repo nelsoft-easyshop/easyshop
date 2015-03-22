@@ -153,7 +153,7 @@ class EsMemberCatRepository extends EntityRepository
      * @param integer $parentCategoryId
      * @return integer
      */
-    public function getHighestSortOrder($memberId, $parentCategoryId = 0)
+    public function getHighestSortOrder($memberId, $parentCategoryId = \EasyShop\Entities\EsMemberCat::PARENT)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
