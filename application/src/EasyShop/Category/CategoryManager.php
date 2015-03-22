@@ -451,11 +451,8 @@ class CategoryManager
         ]);
         
         if ($form->isValid()) {
-            $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                            ->isCustomCategoryNameAvailable($categoryName,$memberId);
-            
-            $esMemberCategoryRepository =  $this->em->getRepository("EasyShop\Entities\EsMemberCat"); 
-            
+            $esMemberCategoryRepository =  $this->em->getRepository("EasyShop\Entities\EsMemberCat");
+            $isCategoryNameAvailable = $esMemberCategoryRepository->isCustomCategoryNameAvailable($categoryName,$memberId);
             $parentMemberCategory = true;
             if($parentCategoryId !== EsMemberCat::PARENT){
                 $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
