@@ -742,18 +742,23 @@ class CategoryManager
                 }
                 $deletedCategoryIds[] = $childCategory->getIdMemcat();
             }
+        }        
+        try{
+            $this->em->flush();
+        }
+        catch(Exception $e){
+            return false;
         }
         $nonChildCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                  ->getCustomCategoriesObject($memberId, $customCategoryIds);
-    
+                                   ->getCustomCategoriesObject($memberId, $customCategoryIds);
         foreach($nonChildCategories as $category){
             $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                      ->getNumberOfChildren($category->getIdMemcat());
             if($numberOfChildren === 0){
                 $category->setIsDelete(EsMemberCat::IS_DELETE);
                 $category->setlastModifiedDate(date_create());
+                $deletedCategoryIds[] = $category->getIdMemcat();
             }
-            $deletedCategoryIds[] = $category->getIdMemcat();
         }
         
         try{    
