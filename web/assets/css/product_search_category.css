@@ -1,3 +1,6 @@
+.deals-pages-easytreats{
+    margin: 50px 60px 60px 60px;
+}
   
 #main_search_container{
   padding-top: 45px;
@@ -892,7 +895,8 @@ Advanced Search Filters
 }
 
 #easytreats .cd_product{
-     display: inline-block !important;
+    display: inline-block !important;
+    float: none !important;
 }
 
 #peak_hour_sale .cd_product {

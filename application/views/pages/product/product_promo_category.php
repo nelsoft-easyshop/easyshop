@@ -11,9 +11,11 @@
         <?php echo $deals_banner; ?>
     </center>
 
-    <div id="easytreats">
+    <div class="clear"></div>
+    
+    <div id="easytreats" class="deals-pages-easytreats">
         <?php foreach($products as $product): ?>
-        
+
             <div class="cd_product">
 
                 <?php if($product->getIsSoldOut()): ?>
