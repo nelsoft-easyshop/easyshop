@@ -281,11 +281,11 @@ class CategoryManager
             else{
                 if($isCustom){
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
+                                                   ->getAllCustomCategoryProducts($memberId, $categoryIdFilters, $condition, $orderBy);
                 }
                 else{
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getAllDefaultCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
+                                                   ->getAllDefaultCategorizedProducts($memberId, $categoryIdFilters, $condition, $orderBy);
                 }
             }
 

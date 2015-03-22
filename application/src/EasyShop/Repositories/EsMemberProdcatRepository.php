@@ -126,12 +126,12 @@ class EsMemberProdcatRepository extends EntityRepository
      *  Get all custom categorized product ids
      *
      *  @param integer $memberId
-     *  @param array $memcatId
+     *  @param integer[] $memcatIds
      *  @param string $condition
      *
      *  @return array - array of product ids
      */
-    public function getAllCustomCategoryProducts($memberId, $memcatId, $condition, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ])
+    public function getAllCustomCategoryProducts($memberId, $memcatIds, $condition, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ])
     {
         $productIds = [];
         
@@ -162,7 +162,7 @@ class EsMemberProdcatRepository extends EntityRepository
                 JOIN pc.memcat mc
                 JOIN mc.member m
                 JOIN pc.product p
-                WHERE mc.idMemcat = :cat_id
+                WHERE mc.idMemcat IN (:cat_id)
                     AND m.idMember = :member_id
                     AND p.isDelete = 0
                     AND p.isDraft = 0";
@@ -172,7 +172,7 @@ class EsMemberProdcatRepository extends EntityRepository
         $dql .= "ORDER BY ".$orderByString;
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
-                    ->setParameter('cat_id', $memcatId);
+                    ->setParameter('cat_id', $memcatIds);
         if($condition !== "") {
             $query->setParameter("condition", $condition);
         }                    
