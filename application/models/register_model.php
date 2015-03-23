@@ -110,10 +110,10 @@ class Register_model extends CI_Model
         $reservedKeywords = $this->config->item('reserved');
         $isRestricted = false;
         foreach($reservedKeywords as $keyword){
-            if(strpos(strtolower($username), $keyword) !== false){
+            if( preg_match( '/' . $keyword . '/i' , $username ) ){
                 $isRestricted = true;
                 break;
-            }
+            }           
         }
 
         $query = $this->xmlmap->getFilenameID('sql/users', 'getUsernameOrSlug');

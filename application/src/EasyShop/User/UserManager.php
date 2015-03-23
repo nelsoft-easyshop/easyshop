@@ -884,10 +884,10 @@ class UserManager
         $reservedKeywords = $this->configLoader->getItem('reserved');
         $isRestricted = false;
         foreach($reservedKeywords as $keyword){
-            if(strpos(strtolower($string), $keyword) !== false){
+            if( preg_match( '/' . $keyword . '/i' , $string ) ){
                 $isRestricted = true;
                 break;
-            }
+            }    
         }
         return $isRestricted;
     }
