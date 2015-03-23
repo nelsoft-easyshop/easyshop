@@ -298,5 +298,40 @@ class ProductShippingLocationManager
         return false;
     }
 
+    /**
+     * Get product item shipping fee
+     * @param  integer $itemId
+     * @param  integer $regionId
+     * @param  integer $cityId
+     * @param  integer $islandId
+     * @return float
+     */
+    public function getProductItemShippingFee($itemId, $regionId, $cityId, $islandId)
+    {
+        $itemLocations = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                              ->findBy([
+                                'productItem' => $itemId,
+                              ]);
+
+        $locationArray = [];
+        foreach ($itemLocations as $location) {
+            $locationId = $location->getShipping()->getLocation()->getIdLocation();
+            $locationArray[$locationId] = $location->getShipping()->getPrice();
+        }
+
+        if(array_key_exists($regionId, $locationArray)){
+            return (float)$locationArray[$regionId];
+        }
+        elseif (array_key_exists($cityId, $locationArray)) {
+            return (float)$locationArray[$cityId];
+        }
+        elseif (array_key_exists($islandId, $locationArray)) {
+            return (float)$locationArray[$islandId];
+        }
+        else{
+            return 0;
+        }
+    }
+
 }
 
