@@ -84,6 +84,13 @@ class PesoPayGateWay extends AbstractGateway
         $txnid = $this->generateReferenceNumber($memberId);  
         $this->setParameter('amount', $grandTotal);
 
+        if($grandTotal < 50.00){
+            return [
+                'error' => true,
+                'message' => 'We only accept payments of at least PHP 50.00 in total value.'
+            ];
+        }
+
         $return = $this->persistPayment(
             $grandTotal, 
             $memberId, 

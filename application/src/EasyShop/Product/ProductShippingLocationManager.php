@@ -3,6 +3,8 @@
 namespace EasyShop\Product;
 
 use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+
 /**
  * Product Shipping Location Manager Class
  *
@@ -317,7 +319,7 @@ class ProductShippingLocationManager
         foreach ($itemLocations as $location) {
             $locationId = $location->getShipping()->getLocation()->getIdLocation();
             $locationArray[$locationId] = $location->getShipping()->getPrice();
-        }
+        } 
 
         /**
          * Return the shipping fee from the most specific location
@@ -330,6 +332,9 @@ class ProductShippingLocationManager
         }
         elseif (array_key_exists($islandId, $locationArray)) {
             return (float)$locationArray[$islandId];
+        }
+        elseif (array_key_exists(EsLocationLookup::PHILIPPINES_LOCATION_ID, $locationArray)) {
+            return (float)$locationArray[EsLocationLookup::PHILIPPINES_LOCATION_ID];
         }
         else{
             return null;
