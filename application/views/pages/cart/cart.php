@@ -76,18 +76,39 @@
                                     <i class="fa fa-times fa-lg cart-item-remove"></i>
                                 </td>
                                 <td>
-                                    <div class="cart-item-thumbnail" style="background: url(assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;"></div>
+                                    <div class="cart-item-thumbnail" >
+                                        <img class="cart-item-thumbnail-img" src="assets/images/products/apple-p.jpg">
+                                    </div>
+                                    <center>
+                                        <span class="remove-mobile cart-item-remove">
+                                            Remove
+                                        </span>
+                                    </center>
                                 </td>
                                 <td>
                                     <a href="#" class="cart-item-name">
                                         IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
                                     </a>
                                     <div class="cart-item-attribute-container">
-                                        <div class="cart-item-attribute">
+                                        <div class="cart-item-attribute col-md-12 col-xs-6">
                                             <b>Color : </b>Black
                                         </div>
-                                        <div class="cart-item-attribute">
+                                        <div class="cart-item-attribute col-md-12 col-xs-6">
                                             <b>Color : </b>Black
+                                        </div>
+                                    </div>
+                                    <div class="mobile-price-quantity">
+                                        <div class="cart-item-attribute">
+                                            <b>Price : </b><span class="cart-price-mobile">&#8369; 42,000.00</span>
+                                        </div>
+                                        <div class="cart-item-attribute">
+                                            <b>Quantity : </b>
+                                            <select class="form-es-control input-sm">
+                                                <option>1</option>
+                                            </select>
+                                        </div>
+                                        <div class="cart-item-attribute">
+                                            <span class="cart-total-item-price">&#8369; 42,000.00</span>
                                         </div>
                                     </div>
                                 </td>
@@ -109,18 +130,39 @@
                                     <i class="fa fa-times fa-lg cart-item-remove"></i>
                                 </td>
                                 <td>
-                                    <div class="cart-item-thumbnail" style="background: url(assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;"></div>
+                                    <div class="cart-item-thumbnail" >
+                                        <img class="cart-item-thumbnail-img" src="assets/images/products/apple-p.jpg">
+                                    </div>
+                                    <center>
+                                        <span class="remove-mobile cart-item-remove">
+                                            Remove
+                                        </span>
+                                    </center>
                                 </td>
                                 <td>
                                     <a href="#" class="cart-item-name">
                                         IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
                                     </a>
                                     <div class="cart-item-attribute-container">
-                                        <div class="cart-item-attribute">
+                                        <div class="cart-item-attribute col-md-12 col-xs-6">
                                             <b>Color : </b>Black
                                         </div>
-                                        <div class="cart-item-attribute">
+                                        <div class="cart-item-attribute col-md-12 col-xs-6">
                                             <b>Color : </b>Black
+                                        </div>
+                                    </div>
+                                    <div class="mobile-price-quantity">
+                                        <div class="cart-item-attribute">
+                                            <b>Price : </b><span class="cart-price-mobile">&#8369; 42,000.00</span>
+                                        </div>
+                                        <div class="cart-item-attribute">
+                                            <b>Quantity : </b>
+                                            <select class="form-es-control input-sm">
+                                                <option>1</option>
+                                            </select>
+                                        </div>
+                                        <div class="cart-item-attribute">
+                                            <span class="cart-total-item-price">&#8369; 42,000.00</span>
                                         </div>
                                     </div>
                                 </td>
@@ -148,8 +190,10 @@
             <div class="col-md-12">
                 <div class="mid-button-container">
                     <center>
-                        <a href="#" class="btn btn-es-white btn-lg btn-mid btn-mid-left"><i class="fa fa-angle-left fa-lg"></i>Continue Shopping</a>
-                        <a href="#" class="btn btn-es-white btn-lg btn-mid btn-mid-right">Update My Cart<i class="fa fa-refresh fa-lg"></i></a>
+                        <div class="mid-button-background">
+                            <a href="#" class="btn btn-es-white btn-lg btn-mid btn-mid-left"><i class="fa fa-angle-left fa-lg"></i>Continue Shopping</a>
+                            <a href="#" class="btn btn-es-white btn-lg btn-mid btn-mid-right">Update My Cart<i class="fa fa-refresh fa-lg"></i></a>
+                        </div>
                     </center>
                     <div class="mid-button-divider"></div>
                 </div>
@@ -160,6 +204,7 @@
         <!--Start of trio bottom boxes-->
         <div class="row">
             <!--Start of shipping calculator-->
+            <!-- Temporarily removed
             <div class="col-md-4">
                 <div class="transaction-container bg-gray">
                     <p class="transaction-container-title">Calculate Shipping</p>
@@ -191,36 +236,38 @@
                     </div>
                 </div>
             </div>
+            -->
             <!--End of shipping calculator-->
 
             <!--Start of points-->
-            <div class="col-md-4">
+            <div class="col-md-7">
                 <div class="transaction-container bg-gray">
-                    <p class="transaction-container-title">Use Your EasyShop Points</p>
+                    <p class="transaction-container-title">Use Your EasyPoints</p>
                     <p class="transaction-container-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nominis ipso dividendo tollatur stultus instituit ornamenta. 
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane.
                         <br/>
                         <b>How to Use</b>
                         <ol class="how-to-list">
                             <li>Conversam albam porro corporis porro definitiones dixisset monet vivendi.</li>
-                            <li>Integris corrumpit. Cernimus reiciendis.</li>
+                            <li>Pulcherrimum concertationesque utens vitam nonne miseram tenent versuum innumerabiles. </li>
+                            <li>Iudicio nivem reperietur plurimum. Huius mollitia intercapedo beata optime graecos numquidnam. Declinationem fortunae quiete.</li>
                             <li>10points = &#8369; 1.00</li>
                         </ol>
                     </p>
                     <div class="form-group">
-                        <label for="shipping-total">Your Current Points</label>
-                        <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly placeholder="234.00"/>
+                        <label for="shipping-total">Your Current EasyPoints : 234.00</label>
+                        <input type="text" id="shipping-total" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-es-green btn-sm">Use Your Points</button>
+                        <button class="btn btn-es-green btn-sm">Deduct Points</button>
                     </div>
                 </div>
             </div>
             <!--End of points-->
 
             <!--Start of summary-->
-            <div class="col-md-4">
-                <div class="transaction-container bg-gray">
+            <div class="col-md-5">
+                <div class="transaction-container bg-gray min-height-435">
                     <p class="transaction-container-title">Summary</p>
                     <table class="transaction-summary-table" width="100%">
                         <thead>
@@ -235,7 +282,31 @@
                             </tr>
                             <tr>
                                 <td>Shipping Fee</td>
-                                <td>&#8369; 400.00</td>
+                                <td>
+                                    &#8369; 400.00
+                                    <small class="calculate-shipping-label">
+                                        <i class="fa fa-plus"></i> Calculate Shipping
+                                    </small>
+                                    <div class="shipping-calculator-container">
+                                        <div class="form-group">
+                                            <select id="shipping-city" class="form-es-control form-es-control-block input-sm">
+                                                <option>-Select City Here-</option>
+                                                <option>Manila</option>
+                                                <option>Quaezon City</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <select id="shipping-state" class="form-es-control form-es-control-block input-sm">
+                                                <option>-Select State Here-</option>
+                                                <option>NCR</option>
+                                                <option>Region 3</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn-es-green btn-sm input-sm">Update Totals</button>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             <tr class="border-bottom-1">
                                 <td>Points to Deduct</td>
