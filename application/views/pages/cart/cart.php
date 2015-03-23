@@ -40,116 +40,87 @@
         </div>
         <!--End of transaction breadcrumb-->
 
-        <!--Start of empty cart display-->
-        <!--<div class="cart-empty">
-            <span>Your cart is currently empty.</span>
-            <br/>
-            <a href="#" class="btn btn-es-white btn-lg">Return to Shop</a>
-        </div>-->
-        <!--End of empty cart display-->
-
-
-        <!--Start of transaction cart items-->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="transaction-container bg-white">
-                    <table class="cart-table" width="100%">
-                        <thead>
-                            <tr>
-                                <th colspan="3" width="50%">
-                                    Item List
-                                </th>
-                                <th width="15%">
-                                    Price
-                                </th>
-                                <th width="15%" align="center">
-                                    Quantity
-                                </th>
-                                <th width="20%">
-                                    Total
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td valign="middle">
-                                    <i class="fa fa-times fa-lg cart-item-remove"></i>
-                                </td>
-                                <td>
-                                    <div class="cart-item-thumbnail" style="background: url(assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;"></div>
-                                </td>
-                                <td>
-                                    <a href="#" class="cart-item-name">
-                                        IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
-                                    </a>
-                                    <div class="cart-item-attribute-container">
-                                        <div class="cart-item-attribute">
-                                            <b>Color : </b>Black
-                                        </div>
-                                        <div class="cart-item-attribute">
-                                            <b>Color : </b>Black
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    &#8369; 42,000.00
-                                </td>
-                                <td>
-                                    <select class="form-es-control input-sm">
-                                        <option>1</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    &#8369; 42,000.00
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <td valign="middle">
-                                    <i class="fa fa-times fa-lg cart-item-remove"></i>
-                                </td>
-                                <td>
-                                    <div class="cart-item-thumbnail" style="background: url(assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;"></div>
-                                </td>
-                                <td>
-                                    <a href="#" class="cart-item-name">
-                                        IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
-                                    </a>
-                                    <div class="cart-item-attribute-container">
-                                        <div class="cart-item-attribute">
-                                            <b>Color : </b>Black
-                                        </div>
-                                        <div class="cart-item-attribute">
-                                            <b>Color : </b>Black
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    &#8369; 42,000.00
-                                </td>
-                                <td>
-                                    <select class="form-es-control input-sm">
-                                        <option>1</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    &#8369; 42,000.00
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <?php if($isCartEmpty): ?>
+            <!--Start of empty cart display-->
+            <div class="cart-empty">
+                <span>Your cart is currently empty.</span>
+                <br/>
+                <a href="/" class="btn btn-es-white btn-lg">Return to Shop</a>
+            </div>
+            <!--End of empty cart display-->
+        <?php else: ?>
+            <!--Start of transaction cart items-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="transaction-container bg-white">
+                        <table class="cart-table" width="100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" width="50%">
+                                        Item List
+                                    </th>
+                                    <th width="15%">
+                                        Price
+                                    </th>
+                                    <th width="15%" align="center">
+                                        Quantity
+                                    </th>
+                                    <th width="20%">
+                                        Total
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($cart_items as $item): ?>
+                                    <tr>
+                                        <td valign="middle">
+                                            <i class="fa fa-times fa-lg cart-item-remove"></i>
+                                        </td>
+                                        <td>
+                                            <div class="cart-item-thumbnail" style="background: url(<?=getAssetsDomain(); ?><?=$item['imagePath']; ?>categoryview/<?=$item['imageFile']; ?>) center no-repeat; background-size: cover;"></div>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="cart-item-name">
+                                                <?=html_escape($item['name']);?>
+                                            </a>
+                                            <div class="cart-item-attribute-container">
+                                                <?php foreach ($item['options'] as $optionKey => $value):?>
+                                                    <?php $optionValue = explode('~', $value)[0]; ?>
+                                                    <div class="cart-item-attribute">
+                                                        <b><?=html_escape($optionKey);?> : </b><?=html_escape($optionValue);?>
+                                                    </div>
+                                                <?php endforeach; ?> 
+                                            </div>
+                                        </td>
+                                        <td>
+                                            &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                        </td>
+                                        <td>
+                                            <select class="form-es-control input-sm">
+                                                <?php for ($i = 1; $i <= $item['maxqty']; $i++): ?>
+                                                    <option><?=$i?></option>
+                                                <?php endfor; ?>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            &#8369; <?=number_format(bcmul($item['subtotal'], $item['qty'], 4), 2, '.', ',');?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!--End of cart items-->
-
+            <!--End of cart items-->
+        <?php endif; ?>
         <!--Start of middle buttons-->
         <div class="row">
             <div class="col-md-12">
                 <div class="mid-button-container">
                     <center>
-                        <a href="#" class="btn btn-es-white btn-lg btn-mid btn-mid-left"><i class="fa fa-angle-left fa-lg"></i>Continue Shopping</a>
-                        <a href="#" class="btn btn-es-white btn-lg btn-mid btn-mid-right">Update My Cart<i class="fa fa-refresh fa-lg"></i></a>
+                        <a href="<?=$continue_url;?>" class="btn btn-es-white btn-lg btn-mid btn-mid-left"><i class="fa fa-angle-left fa-lg"></i>Continue Shopping</a>
+                        <a href="/cart" class="btn btn-es-white btn-lg btn-mid btn-mid-right">Update My Cart<i class="fa fa-refresh fa-lg"></i></a>
                     </center>
                     <div class="mid-button-divider"></div>
                 </div>
@@ -167,23 +138,31 @@
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nominis ipso dividendo tollatur stultus instituit ornamenta. 
                     </p>
                     <div class="form-group">
-                        <label for="shipping-city">City</label>
-                        <select id="shipping-city" class="form-es-control form-es-control-block">
-                            <option>-Select City Here-</option>
-                            <option>Manila</option>
-                            <option>Quaezon City</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label for="shipping-state">State/Region</label>
-                        <select id="shipping-state" class="form-es-control form-es-control-block">
-                            <option>-Select City Here-</option>
-                            <option>NCR</option>
-                            <option>Region 3</option>
+                        <select id="shipping-state" class="stateregionselect form-es-control form-es-control-block">
+                            <option>--- Select State ---</option> 
+                            <?php foreach($locations['stateRegionLookup'] as $srkey => $stateregion):?>
+                                <option class="echo" value="<?=$srkey?>">
+                                    <?=$stateregion?>
+                                </option>
+                            <?php endforeach;?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-es-green btn-sm">Calculate</button>
+                        <label for="shipping-city">City</label>
+                        <select id="shipping-city" class="cityselect form-es-control form-es-control-block">
+                            <option>--- Select City ---</option> 
+                            <?php foreach($locations['cityLookup'] as $parentkey => $arr):?>
+                                <?php foreach($arr as $lockey => $city):?>
+                                    <option class="echo" value="<?=$lockey?>" data-parent="<?=$parentkey?>">
+                                        <?=$city?>
+                                    </option>
+                                <?php endforeach;?>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-es-green btn-sm calculate-shipping">Calculate</button>
                     </div>
                     <div class="form-group">
                         <label for="shipping-total">Total Shipping Fee</label>
@@ -209,7 +188,7 @@
                     </p>
                     <div class="form-group">
                         <label for="shipping-total">Your Current Points</label>
-                        <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly placeholder="234.00"/>
+                        <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly placeholder="<?=$userPoints;?>"/>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-es-green btn-sm">Use Your Points</button>
@@ -231,7 +210,7 @@
                         <tbody>
                             <tr>
                                 <td>Cart Subtotal</td>
-                                <td>&#8369; 84,000.00</td>
+                                <td>&#8369; <?=$totalAmount;?></td>
                             </tr>
                             <tr>
                                 <td>Shipping Fee</td>
@@ -239,7 +218,7 @@
                             </tr>
                             <tr class="border-bottom-1">
                                 <td>Points to Deduct</td>
-                                <td>&mdash; &#8369; 200.00</td>
+                                <td>&mdash; &#8369; 0</td>
                             </tr>
                             <tr>
                                 <td>Total Price</td>
@@ -286,5 +265,9 @@
     </div>
 </div>
 
+
+<script type='text/javascript'>
+    var jsonCity = <?=json_encode($locations['cityLookup']);?>;
+</script>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>"></script>

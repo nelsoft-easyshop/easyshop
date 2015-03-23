@@ -1,7 +1,8 @@
 <?php
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 
 class Cart extends MY_Controller
 {
@@ -15,10 +16,14 @@ class Cart extends MY_Controller
     
     /**
      * The cart object
-     * 
+     *
      * @var EasyShop\Cart\CartInterface
      */
     private $cartImplementation;
+
+    private $pointTracker;
+
+    private $em;
     
     /**
      * Product Manager instance
@@ -32,6 +37,8 @@ class Cart extends MY_Controller
         parent::__construct();
         $this->cartManager = $this->serviceContainer['cart_manager'];
         $this->productManager = $this->serviceContainer['product_manager'];
+        $this->pointTracker = $this->serviceContainer['point_tracker'];
+        $this->em = $this->serviceContainer['entity_manager'];
         $this->cartImplementation = $this->cartManager->getCartObject();
     }
 
@@ -44,8 +51,10 @@ class Cart extends MY_Controller
     {
         if ($this->session->userdata('member_id')) {
             $memberId = $this->session->userdata('member_id');
-            $cartContents = $this->cartManager->getValidatedCartContents($memberId);
+            $cartContents = $this->cartManager->getValidatedCartContents($memberId); 
             $totalAmount = $this->cartImplementation->getTotalPrice();
+            $locations = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                  ->getLocationLookup();
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
                 "title" => "Cart | Easyshop.ph",
@@ -54,20 +63,23 @@ class Cart extends MY_Controller
             $referer =  $this->serviceContainer['http_request']
                              ->headers->get('referer');
             $continueUrl = $referer;
-            if(strpos($referer, '/item/') === false){
+            if (strpos($referer, '/item/') === false) {
                 $continueUrl = '/product/categories_all';
             }
             $bodyData = [
                 'continue_url' => $continueUrl,
                 'cart_items' => $cartContents,
-                'total' => $totalAmount,
+                'totalAmount' => $totalAmount,
+                'userPoints' => $this->pointTracker->getUserPoint($memberId),
+                'isCartEmpty' => $this->cartImplementation->getSize() === 0,
+                'locations' => $locations
             ];
 
-            $this->load->spark('decorator');  
+            $this->load->spark('decorator');
             $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/cart/cart');
-            $this->load->view('templates/footer_primary',  $this->decorator->decorate('footer', 'view', $headerData));
-        } 
+            $this->load->view('pages/cart/cart', $bodyData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view', $headerData));
+        }
         else {
             redirect('/login', 'refresh');
         }
@@ -86,32 +98,30 @@ class Cart extends MY_Controller
         
         $isLoggedIn = $this->session->userdata('usersession') ? true : false;
         
-        $product = $this->serviceContainer['entity_manager']
-                        ->find('EasyShop\Entities\EsProduct', $productId);
+        $product = $this->em->find('EasyShop\Entities\EsProduct', $productId);
         
-        if($this->input->post('express')){
-            if($product->getIsPromote()){
+        if ($this->input->post('express')) {
+            if ($product->getIsPromote()) {
                 print json_encode(['isSuccessful' => false, 'isLoggedIn' => $isLoggedIn]);
                 exit();
             }
             $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
             $options = array();
-            foreach($defaultAttributes as $attribute){
+            foreach ($defaultAttributes as $attribute) {
                 $options[strtolower($attribute["attr_name"])] = $attribute["attr_value"]."~".$attribute["attr_price"];
             }
             $quantity = 1;
         }
-        else{
+        else {
             $options = $this->input->post('options') ? $this->input->post('options') : array();
             $quantity = $this->input->post('quantity');
         }
 
         $isSuccesful = false;
-        if($product){
+        if ($product) {
             $seller = $product->getMember();
-            $member = $this->serviceContainer['entity_manager']
-                           ->find('EasyShop\Entities\EsMember', $memberId);
-            if($member && $seller->getIdMember() !== (int)$memberId && $member->getIsEmailVerify()){
+            $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
+            if ($member && $seller->getIdMember() !== (int)$memberId && $member->getIsEmailVerify()) {
                 $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
             }
         }
@@ -168,7 +178,7 @@ class Cart extends MY_Controller
      */
     public function doRemoveSelected()
     {
-        if( $this->session->userdata('member_id') ) {
+        if ($this->session->userdata('member_id')) {
             $itemList = $this->session->userdata['choosen_items'];
             $removeRowId = $this->input->post('rowid');
 
@@ -182,5 +192,33 @@ class Cart extends MY_Controller
 
             print json_encode(['isSuccessful' => true]);
         }
+    }
+
+    /**
+     * Get cart total shipping fee 
+     * @return float
+     */
+    public function getCartTotalShippingFee()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $cityLocation = (int)$this->input->post('city_id');
+        $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                       ->getParentLocation($cityLocation); 
+        $regionLocation = $region->getIdLocation(); 
+        $islandId = $region->getParent()->getParent()->getIdLocation(); 
+        $cartContents = $this->cartManager->getValidatedCartContents($memberId);
+        $shippingFee = 0;
+        foreach ($cartContents as $item) {
+            $additionalFee = $this->serviceContainer['product_shipping_location_manager']
+                                   ->getProductItemShippingFee(
+                                        $item['product_itemID'], 
+                                        $cityLocation, 
+                                        $regionLocation, 
+                                        $islandId
+                                    );
+            $shippingFee = bcadd($additionalFee, $shippingFee, 4);
+        }
+
+        echo $shippingFee; 
     }
 }
