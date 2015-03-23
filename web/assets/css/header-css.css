@@ -8,6 +8,14 @@ header {
     height: auto;
 }
 
+#main-nav .menu {
+    margin: 0 !important;
+}
+
+#main-nav .menu a:hover {
+    text-decoration: none;
+}
+
 .search-container {
     margin: 0 8px 0 85px;
 }
@@ -222,12 +230,12 @@ header {
 .sticky-nav-fixed .header-text-container {
     display: inline-block;
     font-size: 12px;
-    margin-left: 22px;
+    margin-left: 15px;
     margin-top: 2px;
 }
 
 .sticky-nav-fixed .header-text-container .header-seller-name {
-    max-width: 130px;
+    max-width: 128px;
 }
 
 .sticky-nav-fixed .header-text-container .new-user-nav-dropdown .default-nav-dropdown {
@@ -236,6 +244,7 @@ header {
 }
 
 .sticky-nav-fixed .header-link .user-login-box {
+    font-weight: bold;
     line-height: 28px;
     padding: 2px;
 }
@@ -840,6 +849,7 @@ header {
 
 #top-links li a:hover{
     color:#4370cc;
+    text-decoration: none;
 }
 #top-links li i {
     font-size: 16px;
@@ -853,6 +863,7 @@ header {
 
 .header-link a:hover {
     color:#d5d5d5;
+    text-decoration: none;
 }
 
 .login-profile-con {

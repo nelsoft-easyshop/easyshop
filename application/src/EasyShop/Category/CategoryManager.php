@@ -224,7 +224,7 @@ class CategoryManager
      *  non categorized products are returned.
      *
      *  @param integer $memberId
-     *  @param integer[] $arrCatId 
+     *  @param integer[] $categoryIdFilters 
      *  @param boolean $isCustom
      *  @param integer $productLimit
      *  @param integer $page
@@ -235,13 +235,9 @@ class CategoryManager
      *
      *  @return array - filter count of products and array of product objects
      */
-    public function getProductsWithinCategory($memberId, $arrCatId, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ self::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ] , $condition = "", $lprice = "", $uprice ="")
+    public function getProductsWithinCategory($memberId, $categoryIdFilters, $isCustom = false , $productLimit = 12, $page = 0, $orderBy = [ self::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ] , $condition = "", $lprice = "", $uprice ="")
     {
-        $getAllNonCategorized = false;
-        if(empty($arrCatId)){
-            $getAllNonCategorized = true;
-        }
-
+        $getAllNonCategorized = empty($categoryIdFilters) && $isCustom;
         $categoryProducts = [];
         $currentPage = (int) $page <= 0 ? 0 : $page-1;
         $offset = (int) $page <= 0 ? 0 : ($page-1) * $productLimit;
@@ -264,15 +260,15 @@ class CategoryManager
             else{
                 if($isCustom){
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getPagedCustomCategoryProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
+                                                   ->getPagedCustomCategoryProducts($memberId, $categoryIdFilters, $productLimit, $offset, $orderBy);
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                             ->countCustomCategoryProducts($memberId, $arrCatId);                            
+                                             ->countCustomCategoryProducts($memberId, $categoryIdFilters);                            
                 }
                 else{
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getDefaultCategorizedProducts($memberId, $arrCatId, $productLimit, $offset, $orderBy);
+                                                   ->getDefaultCategorizedProducts($memberId, $categoryIdFilters, $productLimit, $offset, $orderBy);
                     $productCount = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                             ->countDefaultCategorizedProducts($memberId, $arrCatId);    
+                                             ->countDefaultCategorizedProducts($memberId, $categoryIdFilters);    
                 }
             }
             $isFiltered = false;    
@@ -285,11 +281,11 @@ class CategoryManager
             else{
                 if($isCustom){
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat")
-                                                   ->getAllCustomCategoryProducts($memberId, $arrCatId, $condition, $orderBy);
+                                                   ->getAllCustomCategoryProducts($memberId, $categoryIdFilters, $condition, $orderBy);
                 }
                 else{
                     $categoryProductIds = $this->em->getRepository("EasyShop\Entities\EsProduct")
-                                                   ->getAllDefaultCategorizedProducts($memberId, $arrCatId, $condition, $orderBy);
+                                                   ->getAllDefaultCategorizedProducts($memberId, $categoryIdFilters, $condition, $orderBy);
                 }
             }
 
@@ -352,11 +348,9 @@ class CategoryManager
      */
     public function getUserCategories($memberId)
     {
-        $vendorCategories = [];
-        
+        $categoryWrappers = [];
         $numberOfAllCustomCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                             ->getNumberOfCustomCategories($memberId, true);  
-        
         if($numberOfAllCustomCategories === 0){
             $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
                                             ->getNestedSetCategoryCount();
@@ -368,52 +362,64 @@ class CategoryManager
                 $rawVendorCategories = $this->em->getRepository('EasyShop\Entities\EsCat')
                                             ->getUserCategoriesUsingNestedSet($memberId);
             }    
-            
+            $childrenIds = [];
             foreach( $rawVendorCategories as $rawVendorCategory ){
                 $parentId = (int)$rawVendorCategory['parent_cat'];
                 $categoryName = $rawVendorCategory['p_cat_name'];
-                $index = 'default-'.$parentId;
-                $isParentArrayNotAvailable = !isset($vendorCategories[$index]);
-                $isParentRoot = $parentId === EsCat::ROOT_CATEGORY_ID;
+                $isParentArrayNotAvailable = !isset($categoryWrappers[$parentId]);
                 if($isParentArrayNotAvailable){
                     $sortOrder = 0;
-                    if($isParentRoot){
+                    if($parentId === EsCat::ROOT_CATEGORY_ID){
                         $categoryName = 'Others';
                         $sortOrder = 1;
                     }
-                    $vendorCategories[$index]['sortOrder'] = $sortOrder;
-                    $vendorCategories[$index]['name'] = $categoryName;
-                    $vendorCategories[$index]['child_cat'] = [ $parentId ];
-                    $vendorCategories[$index]['products'] = [];
-                    $vendorCategories[$index]['categoryId'] = $parentId;
-                    $vendorCategories[$index]['memberCategoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;       
-                    $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
-                }              
-                if(!in_array($rawVendorCategory['cat_id'], $vendorCategories[$index]['child_cat'])){
-                    $vendorCategories[$index]['child_cat'][] = $rawVendorCategory['cat_id'];
+                    $categoryWrapper = new CategoryWrapper();
+                    $categoryWrapper->setIsCustom(false);
+                    $categoryWrapper->setCategoryName($categoryName);
+                    $categoryWrapper->setnonMemberCategoryId($parentId);
+                    $categoryWrapper->setSortOrder($sortOrder);
+                    $categoryWrappers[$parentId] = $categoryWrapper;
+                }
+                if(!$categoryWrappers[$parentId]->isChildAvailable($rawVendorCategory['cat_id']) &&
+                   (int) $rawVendorCategory['cat_id'] !== $parentId
+                ){
+                    $childCategoryWrapper = new CategoryWrapper();
+                    $childCategoryWrapper->setIsCustom(false);
+                    $childCategoryWrapper->setnonMemberCategoryId($rawVendorCategory['cat_id']);
+                    $categoryWrappers[$parentId]->addChild($childCategoryWrapper);
                 }
             }   
         }
         else{
             $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                     ->getCustomCategoriesArray($memberId);    
+                                     ->getTopLevelCustomCategories($memberId);    
             foreach( $memberCategories as $memberCategory ){
-                $index = 'custom-'.$memberCategory['id_memcat'];
-                $vendorCategories[$index]['name'] = $memberCategory['cat_name'];
-                $vendorCategories[$index]['child_cat'] = [ $memberCategory['id_memcat'] ];
-                $vendorCategories[$index]['products'] = [];
-                $vendorCategories[$index]['categoryId'] = self::NON_EXISTENT_CATEGORYID_PLACEHOLDER;
-                $vendorCategories[$index]['memberCategoryId'] = $memberCategory['id_memcat']; 
-                $vendorCategories[$index]['sortOrder'] = $memberCategory['sort_order'];
-                $vendorCategories[$index]['cat_type'] = self::CATEGORY_NONSEARCH_TYPE;
+                $categoryWrapper = new CategoryWrapper();
+                $categoryWrapper->setCategoryName($memberCategory['cat_name']);
+                $categoryWrapper->setMemberCategoryId($memberCategory['id_memcat']);
+                $categoryWrapper->setSortOrder($memberCategory['sort_order']);
+                $childrenData = explode('|', $memberCategory['childList']);
+                
+                foreach($childrenData as $childData){
+                    if(empty($childData)){
+                        continue;
+                    }
+                    $parsedData = explode("~", $childData, 3);
+                    $childCategoryWrapper = new CategoryWrapper();
+                    $childCategoryWrapper->setMemberCategoryId($parsedData[0]);
+                    $childCategoryWrapper->setCategoryName($parsedData[1]);
+                    $childCategoryWrapper->setSortOrder($parsedData[2]);
+                    $categoryWrapper->addChild($childCategoryWrapper);
+                }
+                $categoryWrappers[$memberCategory['id_memcat']] = $categoryWrapper; 
             }                      
         }
 
-        $this->sortUtility->stableUasort($vendorCategories, function($sortArgumentA, $sortArgumentB) {
-            return $sortArgumentA['sortOrder'] - $sortArgumentB['sortOrder'];
+        $this->sortUtility->stableUasort($categoryWrappers, function($sortArgumentA, $sortArgumentB) {
+            return $sortArgumentA->getSortOrder() - $sortArgumentB->getSortOrder();
         });
-        
-        return $vendorCategories;
+
+        return $categoryWrappers;
     }
 
 
@@ -422,11 +428,12 @@ class CategoryManager
      *
      *  @param string $categoryName
      *  @param integer $memberId
-     *  @param inetger[] $productIds
+     *  @param integer[] $productIds
+     *  @param integer $parentCategoryId
      *
      *  @return array
      */
-    public function createCustomCategory($categoryName, $memberId, $productIds)
+    public function createCustomCategory($categoryName, $memberId, $productIds, $parentCategoryId = EsMemberCat::PARENT)
     {
         $errorMessage = "";
         $actionResult = false;
@@ -443,25 +450,37 @@ class CategoryManager
         ]);
         
         if ($form->isValid()) {
-            $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                            ->isCustomCategoryNameAvailable($categoryName,$memberId);
+            $esMemberCategoryRepository =  $this->em->getRepository("EasyShop\Entities\EsMemberCat");
+            $isCategoryNameAvailable = $esMemberCategoryRepository->isCustomCategoryNameAvailable($categoryName,$memberId);
+            $parentMemberCategory = true;
+            if($parentCategoryId !== EsMemberCat::PARENT){
+                $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
+                                            'member' => $memberId,
+                                            'idMemcat' => $parentCategoryId,
+                                            'parentId' => EsMemberCat::PARENT,
+                                        ]);
+            }
+
             if(!$isCategoryNameAvailable) {
                 $errorMessage = "Category name already exists";
+            }
+            else if($parentMemberCategory === null){
+                $errorMessage = "Category cannot be added under selected parent category";
             }
             else{
                 try {
                     $esProductRepo = $this->em->getRepository("EasyShop\Entities\EsProduct");
-                    $esMemberCategoryRepository =  $this->em->getRepository("EasyShop\Entities\EsMemberCat");
                     $datetimeToday = date_create();
                     $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
-                    $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId);
+                    $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId, $parentCategoryId);
                     $higestSortOrder++;
                     $memberCategory = new EsMemberCat();
                     $memberCategory->setCatName($categoryName)
                                    ->setMember($member)
                                    ->setCreatedDate($datetimeToday)
                                    ->setSortOrder($higestSortOrder)
-                                   ->setlastModifiedDate($datetimeToday);
+                                   ->setlastModifiedDate($datetimeToday)
+                                   ->setParentId($parentCategoryId);
                     $this->em->persist($memberCategory);
                     $productSortOrder = 0;
                     foreach ($productIds as $productId) {
@@ -485,7 +504,7 @@ class CategoryManager
                     $newCategoryId = $memberCategory->getIdMemcat();
                     $actionResult = true;
                 }
-                catch(Exception $e) {
+                catch(\Exception $e) {
                     $errorMessage = "Database Error";
                 }
             }
@@ -509,11 +528,14 @@ class CategoryManager
      * @param string $categoryName
      * @param integer[] $productIds
      * @param integer $memberId
+     * @param integer $parentCategoryId
      * 
      * @return mixed
      */
-    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId)
+    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId, $parentCategoryId = EsMemberCat::PARENT)
     {
+        $memberCategoryId = (int)$memberCategoryId;
+        $parentCategoyId = (int)$parentCategoryId;
         $esMemberProdcatRepo = $this->em->getRepository("EasyShop\Entities\EsMemberProdcat");
         $esMemberCatRepo = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
         $esProductRepo = $this->em->getRepository("EasyShop\Entities\EsProduct");
@@ -535,46 +557,85 @@ class CategoryManager
         if ($form->isValid()) {
             $formData = $form->getData();
             $categoryName = $formData['name'];
+            $esMemberCategoryRepository = $this->em->getRepository('EasyShop\Entities\EsMemberCat');
             try{
-                $isCategoryNameAvailable = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                                ->isCustomCategoryNameAvailable($categoryName, $memberId, $memberCategoryId);
-                if($isCategoryNameAvailable) {
-                    $memberCategory = $esMemberCatRepo->findBy(["idMemcat" => $memberCategoryId, "member" => $memberId]);
-                    if($memberCategory) {
-                        $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memberCategoryId]);                
-                        foreach ($memberCategoryProducts as $memberCategoryProduct) {
-                            $this->em->remove($memberCategoryProduct);
-                        }
+                $isCategoryNameAvailable = $esMemberCategoryRepository->isCustomCategoryNameAvailable($categoryName, $memberId, $memberCategoryId);
+                $parentMemberCategory = true;
+                if($parentCategoryId !== EsMemberCat::PARENT){
+                    $parentMemberCategory = null;
+                    if($parentCategoryId !== $memberCategoryId){
+                        $parentMemberCategory = $esMemberCategoryRepository->findOneBy([
+                                                                                'member' => $memberId,
+                                                                                'idMemcat' => $parentCategoryId,
+                                                                                'parentId' => EsMemberCat::PARENT,
+                                                                            ]);
                     }
-                    $datetimeToday = date_create();
-                    $memberCategory = $esMemberCatRepo->find($memberCategoryId);
-                    $memberCategory->setCatName($categoryName);
-                    $memberCategory->setlastModifiedDate($datetimeToday);
-                    $productSortOrder = 0;
-                    foreach ($productIds as $productId) {
-                        $product =  $esProductRepo->findOneBy([
-                                        "member" => $memberId,
-                                        "idProduct" => $productId,
-                                        "isDelete" => EsProduct::ACTIVE,
-                                        "isDraft" => EsProduct::ACTIVE
-                                    ]);
-
-                        if($product) {
-                            $memberProductCategory = new EsMemberProdcat();
-                            $memberProductCategory->setMemcat($memberCategory);
-                            $memberProductCategory->setProduct($product);
-                            $memberProductCategory->setCreatedDate($datetimeToday);
-                            $memberProductCategory->setSortOrder($productSortOrder);
-                            $productSortOrder++;
-                            $this->em->persist($memberProductCategory);
-                        }
-                    }
-                    $this->em->flush();
-                    $actionResult = true;
                 }
-                else {
+     
+                if(!$isCategoryNameAvailable){
                     $errorMessage = "Category name already exists";
-                }   
+                }
+                else if($parentMemberCategory === null){
+                    $errorMessage = "Category cannot be added under selected parent category";
+                }
+                else{
+                    $memberCategory = $esMemberCatRepo->findOneBy([
+                                        "idMemcat" => $memberCategoryId,
+                                        "member" => $memberId
+                                    ]);
+                                    
+                    if($memberCategory){
+                        $isParentModified = $memberCategory->getParentId() !== $parentCategoryId;
+                        $isUpdateAllowed = true;
+                        if($isParentModified){
+                            $numberOfChildren = $esMemberCatRepo->getNumberOfChildren($memberCategoryId);
+                            $isUpdateAllowed = $numberOfChildren === 0;
+                        }
+                        
+                        if(!$isUpdateAllowed){
+                            $errorMessage = "Only a maximum of two levels are permitted in the category structure.";
+                        }
+                        else{          
+                            $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memberCategoryId]);                
+                            foreach ($memberCategoryProducts as $memberCategoryProduct) {
+                                $this->em->remove($memberCategoryProduct);
+                            }
+                            $datetimeToday = date_create();
+                            $memberCategory->setCatName($categoryName);
+                            $memberCategory->setlastModifiedDate($datetimeToday);                    
+                            if($isParentModified){
+                                $higestSortOrder = $esMemberCategoryRepository->getHighestSortOrder($memberId, $parentCategoryId);
+                                $higestSortOrder++;
+                                $memberCategory->setParentId($parentCategoryId);
+                                $memberCategory->setSortOrder($higestSortOrder);
+                            }
+                            $productSortOrder = 0;
+                            foreach ($productIds as $productId) {
+                                $product =  $esProductRepo->findOneBy([
+                                                "member" => $memberId,
+                                                "idProduct" => $productId,
+                                                "isDelete" => EsProduct::ACTIVE,
+                                                "isDraft" => EsProduct::ACTIVE
+                                            ]);
+
+                                if($product) {
+                                    $memberProductCategory = new EsMemberProdcat();
+                                    $memberProductCategory->setMemcat($memberCategory);
+                                    $memberProductCategory->setProduct($product);
+                                    $memberProductCategory->setCreatedDate($datetimeToday);
+                                    $memberProductCategory->setSortOrder($productSortOrder);
+                                    $productSortOrder++;
+                                    $this->em->persist($memberProductCategory);
+                                }
+                            }
+                            $this->em->flush();
+                            $actionResult = true;
+                        }
+                    }
+                    else{
+                        $errorMessage = "Category not found";
+                    }               
+                }
             }
             catch(Exception $e) {
                 $errorMessage = "Database Error";
@@ -591,33 +652,118 @@ class CategoryManager
     }
 
     /**
-     * Updates is_delete field to '1' of a custom category
+     * Update the category tree structure
      *
-     * @param integer[[ $customCategoryIds
+     * @param integer $memberId
+     * @param EasyShop\Category\CategoryWrapper[] $categoryWrappers
+     * @return mixed
+     */
+    public function updateCategoryTree($memberId, array $categoryWrappers)
+    {   
+        $indexedCategoryData = [];
+        foreach($categoryWrappers as $categoryWrapper){
+            $indexedCategoryData[$categoryWrapper->getId()] = $categoryWrapper;
+        }
+
+        $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getCustomCategoriesObject($memberId, array_keys($indexedCategoryData));
+        $datetimeToday = date_create(date("Y-m-d H:i:s"));
+        foreach($memberCategories as $memberCategory){
+            $memberCategoryId = $memberCategory->getIdMemcat(); 
+            if( isset($indexedCategoryData[$memberCategoryId]) ){ 
+                $inputCategoryData = $indexedCategoryData[$memberCategoryId];
+                $memberCategory->setSortOrder($inputCategoryData->getSortOrder());
+                $memberCategory->setlastModifiedDate($datetimeToday);
+                $memberCategory->setParentId(\EasyShop\Entities\EsMemberCat::PARENT);
+                $children = $inputCategoryData->getChildren();
+                if(empty($children) === false){
+                    $indexedChildrenData = [];
+                    foreach($children as $childWrapper){
+                        $indexedChildrenData[$childWrapper->getId()] = $childWrapper;
+                    }        
+                    $childrenCategoryObject = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                                       ->getCustomCategoriesObject($memberId, array_keys($indexedChildrenData));
+                    foreach($childrenCategoryObject as $childObject){
+                        $childMemberCategoryId = $childObject->getIdMemcat();
+                        if(isset($indexedChildrenData[$childMemberCategoryId])){
+                            $isNotSameAsParent = (int)$childMemberCategoryId !== (int)$memberCategoryId;
+                            $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                                              ->getNumberOfChildren($childMemberCategoryId);
+                            if($isNotSameAsParent && $numberOfChildren === 0){
+                                $childInputCategoryData = $indexedChildrenData[$childMemberCategoryId];
+                                $childObject->setSortOrder($childInputCategoryData->getSortOrder());
+                                $childObject->setlastModifiedDate($datetimeToday);
+                                $childObject->setParentId($memberCategoryId);
+                            }
+                        }
+                    }
+                }  
+            }
+        }
+        
+        $isSuccess = true;
+        try{
+            $this->em->flush();
+        }
+        catch(\Exception $e){
+            $isSuccess = false;
+        }
+        
+        return $isSuccess;
+    }
+
+    /**
+     * Updates is_delete field to '1' of a custom category
+     * Returns the IDs of the affected categories
+     *
+     * @param integer[] $customCategoryIds
      * @param integer $memberId
      * 
-     * @return boolean
+     * @return integer[]
      */
     public function deleteUserCustomCategory($customCategoryIds, $memberId)
     {
-        try{
-            foreach ($customCategoryIds as $categoryId) {
-                if($categoryId !== 0){
-                    $memberCat = $this->em
-                                      ->getRepository("EasyShop\Entities\EsMemberCat")
-                                      ->findOneBy([
-                                            "idMemcat" => $categoryId,
-                                            "member" => $memberId,
-                                            "isDelete" => EsMemberCat::ACTIVE,
-                                        ]); 
-                    if($memberCat) {
-                        $memberCat->setIsDelete(EsMemberCat::IS_DELETE);
-                        $memberCat->setlastModifiedDate(date_create());
-                    }
+        /**
+         * Delete child categories first to prevent categories from being orphaned
+         */
+        $deletedCategoryIds = [];
+        $childCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                ->getCustomCategoriesObject($memberId, $customCategoryIds, true);
+        
+        foreach($childCategories as $childCategory){
+            $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getNumberOfChildren($childCategory->getIdMemcat());
+            if($numberOfChildren === 0){
+                $childCategory->setIsDelete(EsMemberCat::IS_DELETE);
+                $childCategory->setlastModifiedDate(date_create());
+                $key = array_search($childCategory->getIdMemcat(), $customCategoryIds); 
+                if($key !== false){
+                    unset($customCategoryIds[$key]);
                 }
-            }                   
+                $deletedCategoryIds[] = $childCategory->getIdMemcat();
+            }
+        }        
+        try{
             $this->em->flush();
-            return true;
+        }
+        catch(Exception $e){
+            return false;
+        }
+        $nonChildCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                   ->getCustomCategoriesObject($memberId, $customCategoryIds);
+        foreach($nonChildCategories as $category){
+            $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                     ->getNumberOfChildren($category->getIdMemcat());
+            if($numberOfChildren === 0){
+                $category->setIsDelete(EsMemberCat::IS_DELETE);
+                $category->setlastModifiedDate(date_create());
+                $deletedCategoryIds[] = $category->getIdMemcat();
+            }
+        }
+        
+        try{    
+            $this->em->flush();
+            return $deletedCategoryIds;
         }
         catch(Exception $e) {
             return false;
@@ -665,16 +811,17 @@ class CategoryManager
         $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
         foreach($allUserCategories as $category){
             $datetimeToday = date_create(date("Y-m-d H:i:s"));
-            $categoryName = $this->stringUtility->removeSpecialCharsExceptSpace($category['name']);
+            $categoryName = $this->stringUtility->removeSpecialCharsExceptSpace($category->getCategoryName());
             $newMemberCategory = new \EasyShop\Entities\EsMemberCat();
             $newMemberCategory->setMember($member);
             $newMemberCategory->setCatName($categoryName);
-            $newMemberCategory->setSortOrder($category['sortOrder']);
+            $newMemberCategory->setSortOrder($category->getSortOrder());
             $newMemberCategory->setCreatedDate($datetimeToday);
             $newMemberCategory->setlastModifiedDate($datetimeToday);
             $this->em->persist($newMemberCategory); 
 
-            $childCategories = $category['child_cat'];
+            $childCategories = $category->getChildrenAsArray();
+            $childCategories[] = $category->getId();
             $productIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                    ->getDefaultCategorizedProducts($memberId, $childCategories, PHP_INT_MAX);
             $products = $this->em->getRepository('EasyShop\Entities\EsProduct')

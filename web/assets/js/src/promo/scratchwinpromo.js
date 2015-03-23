@@ -33,7 +33,7 @@
                         $('#claim_item').attr('data-code', codeValue);
                         $(".claim-details h3").html(escapeHtml(data.product));
                         $(".claim-details .prod-description").html(escapeHtml(data.brief));
-                        $("#prod_image img").attr('src', data.product_image_path);
+                        $("#prod_image img").attr('src', config.assetsDomain + data.product_image_path);
                         if (!data.logged_in) {
                             $('#scratch-win-claim').slideDown();
                             $('#scratch-win-claim-link').attr('href', '/promo/ScratchCard/claimScratchCardPrize/claim/' + code.val().trim());

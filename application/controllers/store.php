@@ -50,12 +50,7 @@ class Store extends MY_Controller
                 
         $vendorSlug = $this->uri->segment(1);
         $memberEntity = $em->getRepository("EasyShop\Entities\EsMember")
-                           ->findOneBy([
-                                'slug' => $vendorSlug, 
-                                'isActive' => true,
-                                'isBanned' => false,
-                            ]);
-
+                           ->getActiveMemberWithSlug($vendorSlug);                
         if( !empty($memberEntity) ){
             $pageSection = $this->uri->segment(2);
             if($pageSection === 'about'){
@@ -77,11 +72,11 @@ class Store extends MY_Controller
                 
                 $getUserProduct = $this->getInitialCategoryProductsByMemberId($bannerData['arrVendorDetails']['id_member']);
 
-                $productView['categoryProducts'] = $getUserProduct['parentCategory'];
+                $productView['categoryProducts'] = $getUserProduct;
                 
                 if($this->input->get() && !$bannerData['hasNoItems']){
 
-                    $productView['isSearching'] = TRUE;
+                    $productView['isSearching'] = true;
                     $parameter = $this->input->get();
                     $parameter['seller'] = "seller:".$memberEntity->getUsername();
                     $parameter['limit'] = $this->vendorProdPerPage;
@@ -89,27 +84,29 @@ class Store extends MY_Controller
                     $search = $searchProductService->getProductBySearch($parameter);
                     $searchProduct = $search['collection'];
                     $count = $search['count'];
-
-                    $productView['categoryProducts'][0]['name'] ='Search Result';
-                    $productView['categoryProducts'][0]['products'] = $searchProduct; 
-                    $productView['categoryProducts'][0]['non_categorized_count'] = $count;
-                    $productView['categoryProducts'][0]['json_subcat'] = "{}";
-                    $productView['categoryProducts'][0]['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
+                    $searchCategoryWrapper = new \EasyShop\Category\CategoryWrapper();
+                    $searchCategoryWrapper->setCategoryName('Search Result');
+                    $searchCategoryWrapper->setSortOrder(0);
+                    $productView['categoryProducts']['search']['category'] = $searchCategoryWrapper;
+                    $productView['categoryProducts']['search']['products'] = $searchProduct;
+                    $productView['categoryProducts']['search']['non_categorized_count'] = $count;
+                    $productView['categoryProducts']['search']['json_subcat'] = "{}";
+                    $productView['categoryProducts']['search']['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
 
                     $paginationData = array(
                         'lastPage' => ceil($count/$this->vendorProdPerPage)
                         ,'isHyperLink' => false
                     );
-                    $productView['categoryProducts'][0]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
+                    $pagination = $this->load->view('pagination/default', $paginationData, true);
 
                     $view = array(
                         'arrCat' => array(
                             'products'=>$searchProduct,
                             'page' => 1,
-                            'pagination' => $productView['categoryProducts'][0]['pagination'],
+                            'pagination' => $pagination,
                         )
                     );
-                    $productView['categoryProducts'][0]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+                    $productView['categoryProducts']['search']['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
                 }
 
                 //HEADER DATA
@@ -136,19 +133,7 @@ class Store extends MY_Controller
                 // count the followers 
                 $EsVendorSubscribe = $this->serviceContainer['entity_manager']
                                           ->getRepository('EasyShop\Entities\EsVendorSubscribe'); 
-        
                 $data["followerCount"] = $EsVendorSubscribe->getFollowers($bannerData['arrVendorDetails']['id_member'])['count'];
-
-                if(empty($viewData['categoryProducts']) === false){
-                    if(isset($productView['isSearching'])){
-                        $viewData['categoryProducts'][0]['isActive'] = true;
-                    }
-                    else{
-                        reset($viewData['categoryProducts']);
-                        $firstCategoryId = key($viewData['categoryProducts']);
-                        $viewData['categoryProducts'][$firstCategoryId]['isActive'] = true;
-                    }
-                }
              
                 $this->load->spark('decorator');
                 $this->load->view('templates/header_alt',  array_merge($this->decorator->decorate('header', 'view', $headerData),$bannerData) );
@@ -286,7 +271,7 @@ class Store extends MY_Controller
 
         $bannerData['storeColorScheme'] = $this->serviceContainer['entity_manager']
                                                ->getRepository('EasyShop\Entities\EsMember')
-                                               ->findOneBy(['slug' => $sellerslug])
+                                               ->getActiveMemberWithSlug($sellerslug)
                                                ->getStoreColor();
         
         $followerData['followerCount'] = $bannerData["followerCount"];
@@ -432,52 +417,68 @@ class Store extends MY_Controller
 
         $parentCategories = $categoryManager->getUserCategories($memberId);
 
-        $categoryProductCount = [];
-
-        foreach( $parentCategories as $idCat => $categoryProperties ){ 
-
-            $categoryIdCollection = $categoryProperties['child_cat'];
-            $isCustom = false;
-            if( (int)$categoryProperties['memberCategoryId'] !== 0 ){
-                $categoryIdCollection = [$categoryProperties['memberCategoryId']];
-                $isCustom = true;
+        $totalCountNonCategorizedProducts = $em->getRepository('EasyShop\Entities\EsProduct')
+                                               ->getCountNonCategorizedProducts($memberId);
+        if($totalCountNonCategorizedProducts > 0){
+            $nonCategorizedCategory = new \EasyShop\Category\categoryWrapper();
+            $nonCategorizedCategory->setCategoryName('Uncategorized');
+            $nonCategorizedCategory->setSortOrder(PHP_INT_MAX);
+            $parentCategories['custom-noncategorized'] = $nonCategorizedCategory;
+        }
+        /**
+         * Append the data for the 2nd level categories
+         */
+        foreach( $parentCategories as $categoryProperties ){
+            $children = $categoryProperties->getChildren();
+            if(!empty($children)){
+                foreach($children as $child){
+                    $child->setIsHidden(true);
+                    $parentCategories[] = $child;
+                }
             }
+        }
+
+        $categoryData = [];        
+        foreach( $parentCategories as $key => $categoryWrapper ){ 
+
+            $categoryIdCollection = $categoryWrapper->getChildrenAsArray();
+            if($key !== 'custom-noncategorized'){
+                $categoryIdCollection[] = $categoryWrapper->getId();
+            }
+            
+            $isCustom = $categoryWrapper->getIsCustom();
             $result = $categoryManager->getProductsWithinCategory(
                                             $memberId, 
                                             $categoryIdCollection, 
                                             $isCustom, 
                                             $prodLimit
                                         );
-            if( (int)$result['filtered_product_count'] === 0 && 
-                (int)$categoryProperties['cat_type'] === CategoryManager::CATEGORY_NONSEARCH_TYPE 
-            ){
-                unset($parentCategories[$idCat]);
+            if( (int)$result['filtered_product_count'] === 0){
+                unset($parentCategories[$key]);
                 continue;
             }
 
-            $parentCategories[$idCat]['products'] = $result['products'];
-            $parentCategories[$idCat]['non_categorized_count'] = $result['filtered_product_count']; 
-            $parentCategories[$idCat]['json_subcat'] = json_encode($categoryProperties['child_cat'], JSON_FORCE_OBJECT);
-            $categoryProductCount[$idCat] = count($result['products']);
+            $categoryData[$key]['category'] = $categoryWrapper;
+            $categoryData[$key]['products'] = $result['products'];
+            $categoryData[$key]['non_categorized_count'] = $result['filtered_product_count'];
+            $categoryData[$key]['json_subcat'] = json_encode($categoryIdCollection, JSON_FORCE_OBJECT);
+            $categoryData[$key]['cat_type'] = CategoryManager::CATEGORY_NONSEARCH_TYPE;
             $paginationData = [
                 'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage),
                 'isHyperLink' => false,
             ];
-            $parentCategories[$idCat]['pagination'] = $this->load->view('pagination/default', $paginationData, true);
-
+            $pagination = $this->load->view('pagination/default', $paginationData, true);
             $view = [
                 'arrCat' => [
-                    'products'=>$result['products'],
+                    'products' => $result['products'],
                     'page' => 1,
-                    'pagination' => $parentCategories[$idCat]['pagination'],
+                    'pagination' => $pagination,
                 ]
             ];
-
-            $parentCategories[$idCat]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+            $categoryData[$key]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);          
         }    
-        $returnData['parentCategory'] = $parentCategories;
- 
-        return $returnData;
+
+        return $categoryData;
     }
 
 
@@ -492,8 +493,9 @@ class Store extends MY_Controller
         $limit = $this->feedbackPerPage;
         $this->lang->load('resources');
 
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                           ->findOneBy(['slug' => $sellerslug]);                                
+        $member = $this->serviceContainer['entity_manager']
+                       ->getRepository('EasyShop\Entities\EsMember')
+                       ->getActiveMemberWithSlug($sellerslug);                                
 
         $idMember = $member->getIdMember();
         $memberUsername = $member->getUsername();
@@ -507,7 +509,7 @@ class Store extends MY_Controller
                                    );
                       
         $feedbacks  = $this->serviceContainer['user_manager']
-                         ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);                                             
+                           ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['otherspost_buyer'])/$limit),
                                                                    'isHyperLink' => false), true);
         $subViewData = [
@@ -539,7 +541,7 @@ class Store extends MY_Controller
         $feedbackTabsMobile['asSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);
 
         $feedbacks  = $this->serviceContainer['user_manager']
-                         ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);                                             
+                           ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_SELLER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_seller'])/$limit),
                                                                    'isHyperLink' => false), true);
         $subViewData = [
@@ -555,7 +557,7 @@ class Store extends MY_Controller
         $feedbackTabsMobile['forOthersAsSeller'] = $this->load->view('/partials/feedback-mobileview', $subViewData, true);    
                                                                 
         $feedbacks  = $this->serviceContainer['user_manager']
-                         ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);                                             
+                           ->getFormattedFeedbacks($idMember, EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER, $limit);                                             
         $pagination = $this->load->view('/pagination/default', array('lastPage' => ceil(count($allFeedbacks['youpost_buyer'])/$limit),
                                                                    'isHyperLink' => false), true);
         $subViewData = [
@@ -780,8 +782,9 @@ class Store extends MY_Controller
         $bannerData['isLoggedIn'] = $this->session->userdata('usersession');
         
         // assign header_vendor data
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                                   ->findOneBy(['slug' => $sellerslug]);                                  
+        $member = $this->serviceContainer['entity_manager']
+                       ->getRepository('EasyShop\Entities\EsMember')
+                       ->getActiveMemberWithSlug($sellerslug);                         
         $bannerData['storeColorScheme'] = $member->getStoreColor();
         $bannerData['vendorLink'] = "contact";
         $userDetails = $this->userDetails($sellerslug, 'contact',  $bannerData['stateRegionLookup'], $bannerData['cityLookup']);
@@ -863,9 +866,9 @@ class Store extends MY_Controller
         $viewerId = intval($this->session->userdata('member_id'));
         $um = $this->serviceContainer['user_manager'];
         
-        $member = $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsMember')
-                                               ->findOneBy(['slug' => $sellerslug]);
-
+        $member = $this->serviceContainer['entity_manager']
+                       ->getRepository('EasyShop\Entities\EsMember')
+                       ->getActiveMemberWithSlug($sellerslug);    
         $data['validatedStoreName'] = $data['storeName'] = $member->getStoreName();
         $data['validatedContactNo'] = $data['contactNo'] = $member->getContactno() === "" ? '' : '0' . $member->getContactno();
         $data['validatedWebsite'] = $data['website'] = $member->getWebsite();

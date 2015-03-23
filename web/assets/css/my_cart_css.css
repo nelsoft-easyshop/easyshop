@@ -509,7 +509,8 @@ a.delete:hover .del {
     height: 24px;
     list-style: none;
     margin-top: 20px;
-    width: 580px;
+    padding-left: 0;
+    width: 610px;
 }
 
 .payment_options_tabs li {

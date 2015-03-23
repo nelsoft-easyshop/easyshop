@@ -119,36 +119,6 @@
     padding: 10px 0;
 }
 
-#thumblist li {
-    width: 92px;
-}
-
-#thumblist li a {
-    width: 92px;
-}
-
-.carousel-nav-btn-wrapper {
-    width: 92px;
-}
-
-.jcarousel-control-prev {
-    background-position: -2px -418px;
-    width: 46px;
-}
-
-.jcarousel-control-prev:hover {
-    background-position: -86px -418px;
-}
-
-.jcarousel-control-next {
-    background-position: -41px -418px;
-    width: 39px;
-}
-
-.jcarousel-control-next:hover {
-    background-position: -125px -418px;
-}
-
 .prod-quantity-container {
     padding-top: 0;
 }

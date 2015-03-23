@@ -55,5 +55,18 @@
     .a-tab:hover {
         color: #<?php echo html_escape($colorHexadecimal); ?> !important;
     }
+
+    .list-category > li > a.active,
+    .list-sub-category > li > a.active,
+    .list-category > li > a:hover,
+    .list-sub-category > li > a:hover {
+        color: #<?php echo html_escape($colorHexadecimal); ?> !important;
+    }
     
+    .tab_categories:active,
+    .tab_categories:visited,
+    .tab_categories:focus{
+        color: #<?php echo html_escape($colorHexadecimal); ?> !important;
+    }
 </style>
+

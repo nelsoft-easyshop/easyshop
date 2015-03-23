@@ -27,16 +27,33 @@
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">    
                                     <?php $isFirst = true; ?>
-                                    <?php foreach( $categoryProducts as $catId => $arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
-                                            <li>
-                                                <span style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
-                                                </span> 
+                                    <?php foreach( $categoryProducts as $categoryId => $categoryData ):?>
+                                        <?php $categoryWrapper = $categoryData['category']; ?>
+                                        <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
+                                        <?php if($categoryWrapper->getIsHidden()): ?>
+                                            <?php continue; ?>
+                                        <?php endif; ?>
+                                        <li>
+                                            <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories simplemodal-close">
                                                 <span class='catText'>
-                                                    <?php echo html_escape($arrCat['name']);?>
-                                                </span>
-                                            </li>
-                                        </a>
+                                                    <?php echo html_escape($categoryWrapper->getCategoryName());?>
+                                                </span> 
+                                            <?php $children = $categoryWrapper->getChildren(); ?>
+                                            <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>
+                                                <i class="fa fa-caret-down fa-lg pull-right"></i>
+                                            </a>
+                                                <ul class="list-sub-category">
+                                                <?php foreach($children as $child): ?>
+                                                    <li>
+                                                        <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-<?php echo $child->getId(); ?>" >
+                                                            <?php echo html_escape($child->getCategoryName()); ?> 
+                                                        </a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                            </a>
+                                        </li>
                                         <?php $isFirst = false; ?>
                                     <?php endforeach;?>
                                 </ul>
@@ -102,22 +119,24 @@
 
                 <div class="vendor-select-con">
                     <select class="sort_select form-select-default color-default pull-right">
-                        <option value="0">Default Sorting</option>
-                        <option value="1">Popularity</option>
-                        <option value="2">Most Recent</option>
-                        <option value="3">Hot</option>
+                        <option value="0" class="order-by-default">Default Sorting</option>
+                        <option value="1" class="order-by-popularity">Popularity</option>
+                        <option value="2" class="order-by-lastmodified">Most Recent</option>
+                        <option value="3" class="order-by-hotness">Hot</option>
                     </select>
                     <div class="clear"></div>
                 </div>
                 <?php $isFirst = true; ?>
                 <?php foreach($categoryProducts as $catId => $categoryData):?>
+                    <?php $categoryWrapper = $categoryData['category']; ?>
+                    <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
                     <div class="view row row-items grid category-products <?php echo $isFirst ? 'active' : ''; ?>" 
-                        id="def-<?php echo html_escape($catId); ?>"
+                        id="def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>"
                         data-catId='<?php echo html_escape($categoryData['json_subcat']);?>' 
-                        data-group="<?php echo html_escape($catId); ?>" 
-                        data-productcount="<?= html_escape($categoryData['non_categorized_count']) ?>"
+                        data-group="<?php echo $categoryWrapper->getId(); ?>" 
+                        data-productcount="<?php echo $categoryData['non_categorized_count'] ?>"
                         data-catType="<?php echo html_escape($categoryData['cat_type']); ?>"
-                        data-isCustom="<?php echo json_encode(isset($categoryData['memberCategoryId']) && (int)$categoryData['memberCategoryId'] !== 0); ?>"
+                        data-isCustom="<?php echo json_encode($categoryWrapper->getIsCustom()); ?>"
                         style = "<?php echo $isFirst ? '' : 'display:none;'; ?>"
                     >                    
                         <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
@@ -156,13 +175,15 @@
         <div class="panel-body border-0 no-padding">
             <ul class="list-unstyled list-category">
                 <?php $isFirst = true; ?>
-                <?php foreach( $categoryProducts as $catId=>$arrCat ):?>
-                    <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
+                <?php foreach( $categoryProducts as $categoryData ):?>
+                    <?php $categoryWrapper = $categoryData['category']; ?>
+                    <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
+                    <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId()?>" class="color-default tab_categories simplemodal-close">
                         <li>
                             <span  style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
                             </span>  
                             <span class='catText'>
-                                <?php echo html_escape($arrCat['name']);?>
+                                <?php echo html_escape($categoryWrapper->getCategoryName());?>
                             </span>
                         </li>
                     </a>
@@ -178,12 +199,13 @@
 </div>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
     <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript'></script>
     <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.scrollTo.js" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+    <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_vendor_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
+

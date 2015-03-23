@@ -54,6 +54,7 @@
         <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/footer-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
     <?php else: ?>
         <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.header-primary.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php endif; ?>
@@ -125,13 +126,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     <div class="clear"></div>
                                 </div>
                             <?php else: ?>
-                                <div class="header-link-login user-login-box">
+                                <a href="/login" class="header-link-login user-login-box">
                                     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg" alt="login">
                                     <span>
-                                        <a href="/login">login</a>&nbsp;or&nbsp;
-                                        <a href="/register">create an account</a>
+                                        login &nbsp;or&nbsp; create an account
                                     </span>
-                                </div>
+                                </a>
                             <?php endif; ?>
                         </div>
                     </div><!-- End .pull-right -->
@@ -413,13 +413,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                 <div class="clear"></div>
                                             </div>
                                         <?php else: ?> 
-                                            <div class="header-link">
+                                            <a href="/login" class="header-link">
                                                 <div class="user-login-box">
                                                     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg" alt="login">
-                                                    <a href="/login">login</a>&nbsp;or&nbsp;
-                                                    <a href="/register">create an account</a>
+                                                    login &nbsp;or&nbsp; create an account
                                                 </div>
-                                            </div>
+                                            </a>
                                         <?php endif; ?>
                                         </div>
                                     </div>

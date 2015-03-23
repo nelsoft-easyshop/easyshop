@@ -8,7 +8,7 @@
 <?php endif; ?>
 
 
-<div class="res_wrapper">
+<div class="container">
     <div class="seller_product_content">
 
         <div class="inner_seller_product_content">
@@ -63,8 +63,8 @@
         <?php echo form_close();?>
 
 
-<div class="old-page-container step4_section mrgn-top-35">
-    <div class="seller_product_content">
+<div class="container mrgn-top-35">
+    <div class="seller_product_content step4_section">
         <div class="">
             <div class="step4_header">
                 <h5>Product Delivery</h5>
@@ -156,8 +156,8 @@
 </div>
 
         <div class="mrgn-top-30">
-            <div>
-                <div class="old-page-container step4_section">
+            <div class="container">
+                <div class="step4_section">
                     <div class="step4_header col-xs-12">
                         <h5>Product Preview</h5>
                     </div>
@@ -172,8 +172,8 @@
 <div class="container">
     <div class="seller_product_content">
         <div class="row">
-            <div class="col-sx-12 col-sm-12 col-md-12 text-center">
-                <div class="pd-tb-20">
+            <div class="col-sx-12 text-center">
+                <div class="pd-tb-45">
                     <a href="/sell/step1" target="_blank" class="orange_btn3 vrtcl-mid">Sell another Item</a>
                     <a href="/item/<?=$product->getSlug();?>" target="_blank" class="btn btn-default">View Product</a>
                 </div>

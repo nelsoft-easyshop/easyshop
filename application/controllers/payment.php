@@ -379,7 +379,7 @@ class Payment extends MY_Controller{
                                               ->getMaxPoint((int)$memberId);
             
             // Load view
-            $this->load->spark('decorator');  
+            $this->load->spark('decorator');
             $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/payment/payment-review');  
             $this->load->view('templates/footer_primary');  
@@ -859,23 +859,14 @@ class Payment extends MY_Controller{
             $this->setPromoItemsToPayment($this->input->post('promo_type'));
         }
 
-        if(!$this->session->userdata('member_id') 
-            || !$this->input->post('paymentToken') 
+        if(!$this->session->userdata('member_id')  
             || !$this->session->userdata('choosen_items')){
             redirect('/', 'refresh');
         }
-
-        $lastDigit = substr($this->input->post('paymentToken'), -1);
+ 
         $qtysuccess = $this->resetPriceAndQty();
-        $status = PaymentService::STATUS_FAIL;
-        if($lastDigit == 2) {
-            $paymentType = EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT;
-            $textType = 'directbankdeposit';
-        }
-        else{
-            $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
-            $textType = 'cashondelivery';
-        }
+        $status = PaymentService::STATUS_FAIL; 
+        $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY; 
 
         $member_id =  $this->session->userdata('member_id');
         $itemList =  $this->session->userdata('choosen_items');
@@ -892,7 +883,7 @@ class Payment extends MY_Controller{
         }
 
         $this->__generateFlash($txnid,$message,$status);
-        redirect('/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
+        redirect('/payment/success/cashondelivery?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh');
     }
 
     /**
@@ -1192,9 +1183,9 @@ class Payment extends MY_Controller{
         $this->session->unset_userdata('payment_status');
 
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/payment/payment_response_responsive' ,$response);
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
    }
 
 
@@ -1532,23 +1523,28 @@ class Payment extends MY_Controller{
         $itemArray = $carts['choosen_items'];
         $qtySuccess = 0;
 
-        foreach ($itemArray as $value) {
+        foreach ($itemArray as $key => $value) {
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
             $productInventory = $productManager->getProductInventory($product, false, true, $memberId);
 
-            $maxqty = $productInventory[$itemId]['quantity'];
-            $qty = $value['qty'];
-            $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
-            $subtotal = $finalPromoPrice * $qty;
+            if(isset($productInventory[$itemId])){
+                $maxqty = $productInventory[$itemId]['quantity'];
+                $qty = $value['qty'];
+                $finalPromoPrice = $product->getFinalPrice() + $value['additional_fee'];
+                $subtotal = $finalPromoPrice * $qty;
 
-            $itemArray[$value['rowid']]['maxqty'] = $maxqty;
-            $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
-            $itemArray[$value['rowid']]['subtotal'] = $subtotal;
+                $itemArray[$value['rowid']]['maxqty'] = $maxqty;
+                $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
+                $itemArray[$value['rowid']]['subtotal'] = $subtotal;
 
-            if($maxqty >= $qty){
-                $qtySuccess++;
+                if($maxqty >= $qty){
+                    $qtySuccess++;
+                }
+            }
+            else{
+                unset($itemArray[$key]);
             }
         }
         $this->session->set_userdata('choosen_items', $itemArray);
