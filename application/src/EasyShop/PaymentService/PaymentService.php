@@ -178,6 +178,13 @@ class PaymentService
     private $transactionManager;
 
     /**
+     * Product Shipping Location Manager
+     *
+     * @var EasyShop\Product\ProductShippingLocationManager
+     */
+    private $productShippingManager;
+
+    /**
      * Constructor
      * 
      */
@@ -195,7 +202,8 @@ class PaymentService
                                 $languageLoader,
                                 $messageManager,
                                 $dragonPaySoapClient,
-                                $transactionManager)
+                                $transactionManager,
+                                $productShippingManager)
     {
         $this->em = $em;
         $this->request = $request;
@@ -212,6 +220,7 @@ class PaymentService
         $this->messageManager = $messageManager;
         $this->dragonPaySoapClient = $dragonPaySoapClient;
         $this->transactionManager = $transactionManager;
+        $this->productShippingManager = $productShippingManager;
     }
 
 
@@ -274,17 +283,14 @@ class PaymentService
             $sellerId = $value['member_id'];
             $productId = $value['id'];
             $orderQuantity = $value['qty'];
-            $price = $value['price'];
-            $tax_amt = 0;
+            $price = $value['price']; 
             $promoItemCount = ($value['is_promote'] == 1) ? $promoItemCount += 1 : $promoItemCount += 0;
             $productItem =  $value['product_itemID'];
             
-            $details = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
-                            ->getShippingDetailsByLocation($productId,$productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
-
-            $shipping_amt = (isset($details[0]['price'])) ? $details[0]['price'] : 0 ;
-            
-            $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
+            $shipping_amt = $this->em->productShippingManager
+                            ->getProductItemShippingFee($productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
+            $shipping_amt = $shipping_amt !== null ? $shipping_amt : 0 ;
+            $otherFee = $shipping_amt * $orderQuantity;
             $totalAdditionalFee += $otherFee;
             $total =  $value['subtotal'] + $otherFee;
             $optionCount = count($value['options']);

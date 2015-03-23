@@ -473,7 +473,8 @@ class Kernel
                 $container['language_loader'],
                 $container['message_manager'],
                 $container['dragonpay_soap_client'],
-                $container['transaction_manager']
+                $container['transaction_manager'],
+                $container['product_shipping_location_manager']
             );
         };
 
