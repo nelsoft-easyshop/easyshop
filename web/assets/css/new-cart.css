@@ -476,6 +476,10 @@ ol.how-to-list li{
 /*----------------------------------*/
 /*----------Modal styles------------*/
 /*----------------------------------*/
+.modal{
+    z-index: 999999;
+}
+
 .remove-item-modal{
     display: none;
 }
@@ -485,6 +489,15 @@ ol.how-to-list li{
     border-radius: 4px;
     max-width:600px; 
     width: 90% !important;
+}
+
+.my-modal-title{
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 10px 0px;
+  margin-top: 30px;
 }
 
 .my-modal .simplemodal-wrap{
@@ -524,6 +537,12 @@ ol.how-to-list li{
     padding: 20px;
 }
 
+.shipping-calculator-modal .form-group{
+    padding: 0px 20px;
+}
+.shipping-calculator-modal .my-modal-content p{
+    padding: 5px 20px;
+}
 @media screen and (max-width: 750px) {
     .cart-item-thumbnail{
         width: 60px;
