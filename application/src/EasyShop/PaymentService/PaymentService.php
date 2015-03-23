@@ -170,7 +170,7 @@ class PaymentService
      *
      * @var EasyShop\Product\ProductShippingLocationManager
      */
-    private $productShippingManager
+    private $productShippingManager;
 
     /**
      * Constructor
