@@ -465,7 +465,8 @@ class Kernel
                 $container['social_media_manager'],
                 $container['language_loader'],
                 $container['message_manager'],
-                $container['dragonpay_soap_client']
+                $container['dragonpay_soap_client'],
+                $container['product_shipping_location_manager']
             );
         };
 
