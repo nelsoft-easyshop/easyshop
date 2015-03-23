@@ -1,3 +1,4 @@
+<link type="text/css" href='/assets/css/boostrap-modal.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
@@ -356,6 +357,39 @@
         </center>
     </div>
 </div>
-
+<div class="my-modal-content shipping-calculator-modal" style="display: none;">
+    <h3 class="my-modal-title">
+        Shipping calculator
+    </h3>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane. 
+    </p>
+    <div class="form-group">
+        <label for="shipping-city">City</label>
+        <select id="shipping-city" class="form-es-control form-es-control-block">
+            <option>-Select City Here-</option>
+            <option>Manila</option>
+            <option>Quaezon City</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="shipping-state">State/Region</label>
+        <select id="shipping-state" class="form-es-control form-es-control-block">
+            <option>-Select City Here-</option>
+            <option>NCR</option>
+            <option>Region 3</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="shipping-total">Total Shipping Fee</label>
+        <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly />
+    </div>
+    <div class="my-modal-footer">
+        <center>
+            <button class="btn btn-es-green">Calculate</button>
+            <button class="btn btn-es-white simplemodal-close">Cancel</button>
+        </center>
+    </div>
+</div>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>"></script>

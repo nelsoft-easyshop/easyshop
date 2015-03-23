@@ -53,13 +53,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fname">First Name <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" id="fname" class="form-es-control form-es-control-block" />
+                                <input type="text" id="fname" class="form-es-control form-es-control-block" readonly/>
                              </div>
                         </div>
                          <div class="col-md-6">
                             <div class="form-group">
                                 <label for="lname">Last Name <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" id="lname" class="form-es-control form-es-control-block" />
+                                <input type="text" id="lname" class="form-es-control form-es-control-block" readonly />
                              </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="contact">Contact Number <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" id="contact" class="form-es-control form-es-control-block" />
+                                <input type="text" id="contact" class="form-es-control form-es-control-block" readonly />
                              </div>
                         </div>
                     </div>
@@ -75,7 +75,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="fullAddress">Full Address <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" id="fullAddress" class="form-es-control form-es-control-block" />
+                                <input type="text" id="fullAddress" class="form-es-control form-es-control-block" readonly/>
                              </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="state">State/Region <abbr class="required" title="required">*</abbr></label>
-                                <select id="state" class="form-es-control form-es-control-block">
+                                <select id="state" class="form-es-control form-es-control-block" disabled>
                                     <option>NCR</option>
                                 </select>
                              </div>
@@ -93,8 +93,9 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="city">City <abbr class="required" title="required">*</abbr></label>
-                                <select id="city" class="form-es-control form-es-control-block">
+                                <select id="city" class="form-es-control form-es-control-block" disabled>
                                     <option>Manila</option>
+                                    <option>Quezon City</option>
                                 </select>
                             </div>
                         </div>
@@ -103,7 +104,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="landmark">Nearest Landmark </label>
-                                <input type="text" id="landmark" class="form-es-control form-es-control-block" />
+                                <input type="text" id="landmark" class="form-es-control form-es-control-block"/>
                             </div>
                         </div>
                     </div>
@@ -115,6 +116,24 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group div-change-shipping-btn">
+                               <button class="btn btn-es-green input-sm">
+                                    Change Shipping Address
+                                </button>
+                            </div>
+                            <div class="form-group div-save-shipping-btn btn-sm">
+                                <button class="btn btn-es-green">
+                                    Save Changes
+                                </button>
+                                <button class="btn btn-es-white input-sm">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
             <!--End of shipping details-->
