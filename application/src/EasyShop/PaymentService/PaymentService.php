@@ -274,7 +274,7 @@ class PaymentService
             $productItem =  $value['product_itemID'];
             
             $shipping_amt = $this->productShippingManager
-                                 ->getShippingDetailsByLocation($productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
+                                 ->getProductItemShippingFee($productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
 
             $shipping_amt = $shipping_amt !== null ? $shipping_amt : 0;
             $otherFee = $shipping_amt * $orderQuantity;
