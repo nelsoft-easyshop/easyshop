@@ -220,7 +220,9 @@ class MobileProductUpload extends MY_Controller
                     'condition' => $condition, 
                 ]; 
 
-                if($isCod === false && $isFreeShippingNationwide === false){
+                if($isCod === false 
+                    && $isFreeShippingNationwide === false 
+                    && count($shippingInfo) === 0){
                     $isMeetUp = true;
                 }
 
