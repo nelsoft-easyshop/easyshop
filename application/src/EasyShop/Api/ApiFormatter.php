@@ -451,6 +451,11 @@ class ApiFormatter
                 $cartContent = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
                                                                              $options, 
                                                                              $mobileCartContent->quantity)['itemData'];
+
+                if($mobileCartContent->quantity > $cartContent['maxqty']){
+                    $errorMessage[] = "Quantity Not Available";
+                }
+
                 $itemList[$cartContent['product_itemID']] = [
                     'rowid' => $product->getIdProduct(),
                     'id' =>  $product->getIdProduct(),
