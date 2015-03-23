@@ -228,7 +228,7 @@ class MobileProductUpload extends MY_Controller
                 }
 
                 $validate = $this->productUploadManager->validateUploadRequest($validData);
-                if($quantity <= 0){
+                if($quantity > 0){
                     if($validate['isSuccess']){
                         if(is_null($bankDetails) === false && isset($bankDetails['billing_info'])){
                             $billingInfoId = $bankDetails['billing_info'];
