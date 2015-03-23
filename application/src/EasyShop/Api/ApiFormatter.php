@@ -441,13 +441,11 @@ class ApiFormatter
             if($product){
                 $errorMessage = [];
 
-                if($product->getMember()->getIdMember() !== (int) $memberId){
-                    $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+                if($product->getMember()->getIdMember() === (int) $memberId){
+                    $errorMessage[] = "This is your own item!"; 
                 }
                 else{
-                    if($product->getMember()->getIdMember() === (int) $memberId){
-                        $errorMessage[] = "This is your own item!";
-                    } 
+                    $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
                 }
 
                 $cartContent = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 

@@ -39,10 +39,6 @@ a{
     border-right: solid #e7e7e7 1px;
 }
 
-.left_attribute{
-    width: 210px !important;
-}
-
 .filters{
     width: 781px !important;
     margin-left: 65px !important;
@@ -99,10 +95,6 @@ a{
 }    
 .select-sort-by{
     padding: 5px !important;
-}
-
-#product_content{
-    width: 781px !important;
 }
 
 .product{

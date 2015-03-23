@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-primary.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>
 
+<link type="text/css" href='/assets/css/jstree/style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+
 <section class="section-dashboard ">
     <div class="container container-dashboard">
         <div class="row-fluid">
@@ -134,6 +136,7 @@
     <script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jstree.js'></script>
     <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script> 

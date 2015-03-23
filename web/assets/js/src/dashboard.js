@@ -1932,13 +1932,21 @@
         var errorContainer = $('#store-category-error');
         errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-        var categoryDraggableList =  $('.new-store-category-draggable li');
+
         var categoryOrderData = [];
-        var order = 0;
-        var categoryOrderData = $.map(categoryDraggableList, function(el, order) {
-            var $el = $(el);
-            return {order: order++, categoryid: $el.data('categoryid'), name: $el.data('categoryname')}
+        var treedata = $('#edit-category-tree').jstree(true).get_json('#');
+        var topLevelOrder = 0;
+        var categoryOrderData = $.map(treedata, function(element, topLevelOrder) {
+            var categoryId = element.li_attr['data-categoryid'];
+            var children = element.children;
+            var childOrder = 0;
+            var childrenData = $.map(children, function(element, topLevelOrder) {
+                var childCategoryId = element.li_attr['data-categoryid'];
+                return {order: childOrder++, categoryid: childCategoryId, children: []}
+            });
+            return {order: topLevelOrder++, categoryid: categoryId, children: childrenData }
         });
+
         $.ajax({
             type: "post",
             url: '/memberpage/updateStoreCategoryOrder',
@@ -1959,35 +1967,149 @@
     
     function createCategoryList(categoryData)
     {       
-            if(categoryData.length === 0){
-                $('.div-store-content.concealable').hide();
-                $('.no-category-display').show();
-                return false;
+        if(categoryData.length === 0){
+            $('.div-store-content.concealable').hide();
+            $('.no-category-display').show();
+            return false;
+        }
+        /**
+         * Build reference tree 
+         */
+        var $referenceTreeList = $('#category-tree-reference ul');
+        $referenceTreeList.html('');
+        var referenceTreeList = [];
+        $.each(categoryData, function(index, category) {
+            var escapedName = escapeHtml(category.categoryName);
+            var categoryIdentifier = parseInt(category.memberCategoryId, 10);
+            var referenceTreeHtml = '<li data-categoryid="'+categoryIdentifier + '">'+escapedName;
+            if(category.children.length > 0){
+                referenceTreeHtml += '<ul>';
+                $.each(category.children, function(index, child){
+                    var childCategoryIdentifier = parseInt(child.memberCategoryId, 10);
+                    var childEscapedName = escapeHtml(child.categoryName);
+                    referenceTreeHtml += '<li data-categoryid="'+childCategoryIdentifier + '">'+childEscapedName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
+                });
+                referenceTreeHtml += '</ul>';
             }
-        
-            var categoryViewList = [];
-            var categoryDraggableList = [];
-            var categoryDeleteList = [];
-            $.each(categoryData, function(index, category) {
-                var escapedName = escapeHtml(category.name);
-                var categoryIdentifier = parseInt(category.memberCategoryId, 10);
-                var html =  '<div class="div-cat" data-categoryId="'+categoryIdentifier+'">'+escapedName+'</div>';
-                categoryViewList.push(html);
-                html = '<li data-categoryid="'+escapeHtml(categoryIdentifier)+'" data-categoryname="'+escapedName+'"><i class="fa fa-sort"></i>'+escapedName+'<i class="icon-edit modal-category-edit pull-right edit-category"></i></li>';
-                categoryDraggableList.push(html);
-                html = '<li class="checkbox"><label><input data-categoryid="'+escapeHtml(categoryIdentifier) + '" type="checkbox" class="checkBox">'+escapedName+'</label></li>';
-                categoryDeleteList.push(html);
-            });
+            referenceTreeHtml += '<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
+            referenceTreeList.push(referenceTreeHtml);
+        });
 
-            $('.store-category-view').html('');
-            $('.new-store-category-draggable').html('');
-            $('.store-category-view').append( categoryViewList.join('') );
-            $('.new-store-category-draggable').append( categoryDraggableList.join('') );
-            $('.new-store-category-draggable').sortable();
-            $('#delete-list-categories').html('');
-            $('#delete-list-categories').append( categoryDeleteList.join('') );
+        $referenceTreeList.html();
+        $referenceTreeList.append(referenceTreeList.join(''));
+        populateCategoryTrees($referenceTreeList);
+    }
+    
+    function populateCategoryTrees($referenceTreeList)
+    {
+        var $parentSelect = $('.parent-category-dropdown');
+        var $categoryView = $('.store-category-view');
+        var $deletableCategoryList = $('#delete-category-tree ul');
+        var $draggableCategoryList = $('#edit-category-tree ul');
+        var $listElements = $('#category-tree-reference>ul');
+        var listElementsHtml = '<ul>' + $listElements.get(0).innerHTML + '</ul>';
+        initializeEditTree(listElementsHtml);
+        initializeDeleteTree(listElementsHtml);
+        var categoryViewList = [];
+        var parentCategoryDroddownList = [];
+        var children = $listElements.children('li').clone();
+        children.find('ul').remove();
+        children.find('span').remove();
+        parentCategoryDroddownList.push('<option value="0">None</option>');
+        $.each(children, function(index,listItem){
+            var categoryIdentifier = parseInt(listItem.getAttribute('data-categoryid'), 10);
+            var escapedName = listItem.innerHTML;
+            var viewHtml = '<div class="div-cat" data-categoryid="'+categoryIdentifier+'">'+escapedName+'</div>';
+            var parentDropdownHtml = '<option value="'+categoryIdentifier+'">'+escapedName+'</option>';
+            categoryViewList.push(viewHtml);
+            parentCategoryDroddownList.push(parentDropdownHtml);
+        });
+        $categoryView.html('');
+        $parentSelect.html('');
+        $categoryView.append( categoryViewList.join('') );
+        $parentSelect.append(parentCategoryDroddownList.join(''));
+    }
+    
+    function initializeEditTree(data)
+    {       
+        $('#edit-category-tree').jstree('destroy');
+        if(typeof data === 'undefined'){
+            $('#edit-category-tree').jstree({
+                "core": {
+                    "check_callback":true
+                },
+                "types" : {
+                    "#" : {
+                        "max_depth" : 2
+                    },
+                },
+                "plugins" : [
+                    "dnd", "types"
+                ],
+            });
+        }
+        else{
+         
+            $('#edit-category-tree').jstree({
+                "core": {
+                    "check_callback":true,
+                    "data": data
+                },
+                "types" : {
+                    "#" : {
+                        "max_depth" : 2
+                    },
+                },
+                "plugins" : [
+                    "dnd", "types"
+                ],
+            });
+        }
+    }
+    
+    function initializeDeleteTree(data)
+    {
+        $('#delete-category-tree').jstree('destroy');
+        if(typeof data === 'undefined'){
+            $('#delete-category-tree').on('check_node.jstree', function (e, data) {
+                data.instance.open_all(data.node, 300);
+            })
+            .jstree({
+                "checkbox" : {
+                    "keep_selected_style" : false,
+                    "cascade" : "down", 
+                    "three_state" : false ,
+                    "tie_selection" : false
+                },
+                "plugins" : [
+                    "checkbox"
+                ],
+            });
+        }
+        else{
+            $('#delete-category-tree').on('check_node.jstree', function (e, data) {
+                data.instance.open_all(data.node, 300);
+            })
+            .jstree({
+                "core": {
+                    "data": data
+                },
+                "checkbox" : {
+                    "keep_selected_style" : false,
+                    "cascade" : "down", 
+                    "three_state" : false ,
+                     "tie_selection" : false
+                },
+                "plugins" : [
+                    "checkbox"
+                ],
+            });
+        }
     }
 
+    
+   
+    
     $('#store-color-save').on('click', function(){
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var selectedList = $('.color-li.selected');
@@ -2015,7 +2137,7 @@
 
     $('#setup').on('click','.printQrCode', function() {
         var url = $(this).data("url");
-        window.location.replace(url);
+        window.open(url, '_blank'); 
     });
 
     $(".add-bank-account").click(function() {
@@ -2388,22 +2510,24 @@
         $( "#delete-products" ).trigger( "click" );
     });
 
+
     $( "#btn-edit-delete-categories" ).click(function() {
-        
-        var checkedBoxes = $("#delete-list-categories input[type='checkbox']:checked");
         var categoryIds = [];
-        $.each(checkedBoxes, function(key, checkbox){
-            categoryIds.push(checkbox.getAttribute("data-categoryid"));
-        }); 
+        var $deleteTree = $("#delete-category-tree");
+        var selectedTreeNodes = $deleteTree.jstree("get_checked");
+        var $treeReference = $('#category-tree-reference');
+        $.each(selectedTreeNodes, function(index, nodeId){
+            var categoryId = parseInt($deleteTree.find('#'+nodeId+'').data('categoryid'), 10);
+            categoryIds.push(categoryId);
+        });
         if($.isEmptyObject(categoryIds)){
             return false;
         }
-        
         var isConfirmed = confirm('Are you sure you want to delete the selected categories?');
+
         if(isConfirmed){
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var csrfname = $("meta[name='csrf-name']").attr('content');   
-           
             $.ajax({
                 type: "POST",
                 url: '/memberpage/deleteCustomCategory',
@@ -2411,14 +2535,14 @@
                 success: function(data){ 
                     var response = $.parseJSON(data);
                     if(response){
-                        $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();                             
-                        var numberOfCategories = $('.store-category-view .div-cat:visible').length;
+                        $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();   
+                        var $categoryTreeReference = $('#category-tree-reference');
                         $.each(categoryIds, function(key, categoryId){
-                            $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').fadeOut();
-                            $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]').fadeOut();
-                            $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('li.checkbox').fadeOut();
-                            numberOfCategories--;
+                            $categoryTreeReference.find('li[data-categoryid="'+categoryId+'"]').remove();
                         });
+                        populateCategoryTrees();
+                        
+                        var numberOfCategories = $categoryTreeReference.find('li').length;
                         if(numberOfCategories === 0){
                             $('#no-category-display-edit').show();
                             $('#div-store-content-edit').hide();
@@ -2436,6 +2560,7 @@
     
     var browserWidth;
     var modalCategoryModalWidth;
+    var modalCategoryModalSmWidth;
     var modalCategoryModalWidthMobile;
     var widthOfDragabbleItem = 70;
     var mobileViewPortWidthLimit = 769;
@@ -2445,6 +2570,7 @@
         browserWidth = $(window).width();
         browserHeight = $(window).outerHeight();
         modalCategoryModalWidth = browserWidth * 0.6;
+        modalCategoryModalSmWidth = browserWidth * 0.5;
         modalCategoryModalWidthMobile = browserWidth * 0.95;
         $(".overlay-for-waiting-modal, .overlay-loader-container-main, .overlay-loader-container").css("height", browserHeight+"px").css("width", browserWidth+"px");
     });
@@ -2464,8 +2590,16 @@
      
     $(".category-setup-ajax").on('click','.edit-category', function(){
         $(".overlay-for-waiting-modal").css("display", "block");
-        var categoryIdString = $(this).parent('li').data('categoryid');
+        var $listItem = $(this).closest('li');
+        var parentCategoryId = 0;
+        var $parentListItem = $listItem.parentsUntil("#edit-category-tree", "li");
+        if($parentListItem.length > 0){
+            parentCategoryId = $parentListItem.data('categoryid');
+        }
+        var categoryIdString = $listItem.data('categoryid');
         var categoryId = parseInt(categoryIdString,10);
+        var numberOfchildren = $('#category-tree-reference li[data-categoryid="'+categoryId+'"] ul>li').length;
+        
         $.ajax({
             type: "GET",
             url: '/memberpage/getCustomCategory',
@@ -2477,7 +2611,14 @@
                     clonedDiv.find('.category-name').val(escapeHtml(response.categoryName));
                     clonedDiv.find('.hidden-category-id').val(response.categoryId);
                     clonedDiv.find('.category-items .product-list').html('');
-
+                    var dropdown = clonedDiv.find('.parent-category-dropdown');
+                    dropdown.find('option[value="'+categoryId+'"]').hide();
+                    if(parentCategoryId > 0){
+                        dropdown.val(parentCategoryId);
+                    } 
+                    if(numberOfchildren > 0){
+                        dropdown.prop('disabled', true);
+                    }
                     appendCategoryProductList(clonedDiv.find('.category-items') , response.products)
                     retrieveAllProductList(clonedDiv, 1);
                 }            
@@ -2573,18 +2714,20 @@
         var $modalDiv = $btn.closest('.edit-category-modal');
         var categoryId = $modalDiv.find('.hidden-category-id').val();
         var categoryName = $modalDiv.find('.category-name').val();
-        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
+        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
+        var newParentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
         var currentCategoryProductsIds = [];
         $.each($currentCategoryProductList, function(key, $itemNameDiv){
             currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
         });
-
+        
         $.ajax({
             type: "POST",
             url: '/memberpage/editCustomCategory',
             data: {
                 categoryId:categoryId, 
                 categoryName: categoryName, 
+                parentCategory: newParentCategory,
                 productIds: JSON.stringify(currentCategoryProductsIds),
                 csrfname: csrftoken
             },
@@ -2592,22 +2735,40 @@
                 var jsonData = $.parseJSON(data);
                 if(jsonData.result){
                     var escapedCategoryName = escapeHtml(categoryName);
-                    $('.store-category-view .div-cat[data-categoryId="'+categoryId+'"]').html(escapedCategoryName);
-                    var draggableListItem = $('.new-store-category-draggable li[data-categoryid="'+categoryId+'"]');
-                    draggableListItem.attr('data-categoryname', escapedCategoryName);
-                    var html = '<i class="fa fa-sort"></i>'+
-                                   escapedCategoryName+
-                               '<i class="icon-edit modal-category-edit pull-right edit-category"></i>';
-                    draggableListItem.html(html);
-                    var deleteCheckBoxLabel = $('#delete-list-categories input[data-categoryid="'+categoryId+'"]').closest('label');
-                    html = '<input data-categoryid="'+categoryId+'" type="checkbox" class="checkBox">'+escapedCategoryName;
-                    deleteCheckBoxLabel.html(html);
+                    var previousParentCategory = 0;
+                    var $parentListItem = $('#category-tree-reference li[data-categoryid="'+categoryId+'"]').parentsUntil("#category-tree-reference", "li");
+                    if($parentListItem.length > 0){
+                        previousParentCategory = parseInt($parentListItem.data('categoryid'),10);
+                    }
+                    if(newParentCategory !== previousParentCategory){
+                        $('#category-tree-reference li[data-categoryId="'+categoryId+'"]').remove();
+                        var parent = $('#category-tree-reference>ul');
+                        var childHtml = '<li data-categoryid="'+categoryId+'">'+escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
+                        if(newParentCategory !== 0){
+                            var parent = $('#category-tree-reference li[data-categoryId="'+newParentCategory+'"]');
+                            if(parent.find('ul').length > 0){
+                                parent = parent.find('ul');
+                            }
+                            else{
+                                childHtml = '<ul>'+childHtml+'</ul>';
+                            }
+                        }
+                        parent.append(childHtml);
+                    }
+                    else{
+                        var categoryListItemToUpdate = $('#category-tree-reference li[data-categoryid="'+categoryId+'"]');
+                        var children = categoryListItemToUpdate.find('ul');
+                        var childrenHtml = '';
+                        if(children.length > 0){
+                            childrenHtml = '<ul>'+children[0].innerHTML+'</ul>';
+                        }
+                        categoryListItemToUpdate.html(escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span>'+childrenHtml);                        
+                    }
+                    populateCategoryTrees();
                     $modalDiv.find('.simplemodal-close').click();
                 }
                 else{
                     var errorDiv = $modalDiv.find('.customized-category-error');
-                    var me = $(".my-category-modal").outerHeight();
-                    var mo = me + 30;
                     errorDiv.fadeIn().delay(5000).fadeOut();
                     errorDiv.find('.error-message').html('Sorry, please fix the following errors: ' + escapeHtml(jsonData.errorMessage));
                 }
@@ -2623,7 +2784,8 @@
         var csrfname = $("meta[name='csrf-name']").attr('content');   
         var $modalDiv = $btn.closest('.add-category-modal');
         var categoryName = $modalDiv.find('.category-name').val();
-        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
+        var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
+        var parentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
         var currentCategoryProductsIds = [];
         $.each($currentCategoryProductList, function(key, $itemNameDiv){
             currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
@@ -2634,6 +2796,7 @@
             url: '/memberpage/addCustomCategory',
             data: {
                 categoryName: categoryName, 
+                parentCategory: parentCategory,
                 productIds: JSON.stringify(currentCategoryProductsIds),
                 csrfname: csrftoken
             },
@@ -2642,21 +2805,21 @@
                 if(jsonData.result){
                     var escapedCategoryName = escapeHtml(categoryName);
                     var memberCategoryId = jsonData.newCategoryId;
-                    var html = '<div class="div-cat" data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'</div>';
-                    $('.store-category-view').append(html);
-                    var draggableUnorderList = $('.new-store-category-draggable');
-                    var html = '<li data-categoryid="'+memberCategoryId+'" data-categoryname="'+escapedCategoryName+'">'+
-                                    '<i class="fa fa-sort"></i>'+
-                                        escapedCategoryName +
-                                    '<i class="icon-edit modal-category-edit pull-right edit-category"></i>' +
-                                '</li>';
-                    draggableUnorderList.append(html);
-                    var deleteCheckBoxList = $('#delete-list-categories');
-                    html = '<li class="checkbox"><label>' +
-                                '<input data-categoryid="'+memberCategoryId+'" type="checkbox" class="checkBox"/>' +
-                                escapedCategoryName +
-                            '</label><li>';
-                    deleteCheckBoxList.append(html);
+                    var $referenceTreeList = $('#category-tree-reference>ul');
+                    var newListElement = '<li data-categoryid="'+memberCategoryId+'">'+escapedCategoryName+'<span class="icon-edit modal-category-edit pull-right edit-category"></span></li>';
+                
+                    if(parentCategory === 0){
+                        $referenceTreeList.append(newListElement);
+                    }
+                    else{
+                        var $editTreeParent = $referenceTreeList.find('li[data-categoryid="'+parentCategory+'"]');
+                        if($editTreeParent.find('ul').length === 0){
+                            $editTreeParent.append('<ul></ul>')
+                        }
+                        $editTreeParent.find('ul').append(newListElement);
+                    }
+                    populateCategoryTrees();
+
                     $modalDiv.find('.simplemodal-close').click();
                     $('.add-store-cat-message').fadeIn().delay(5000).fadeOut();
                     $('#no-category-display-edit').hide();
@@ -2824,7 +2987,7 @@
         var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
         if(browserWidth <= mobileViewPortWidthLimit){
             $(".my-category-modal").css("width", modalCategoryModalWidthMobile+"px").css("height","auto").css("bottom","auto").css("top","15px");
-            $(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
+            //$(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
         }
         else{
             $(".my-category-modal").css("width", modalCategoryModalWidth+"px").css("height","auto").css("bottom","auto").css("top","15px");
@@ -2838,17 +3001,18 @@
         $(".overlay-for-waiting-modal").css("display", "none");
     }
 
+    var modalDeleteHeight =  $(".delete-confirmation-modal").outerHeight();
     $(window).on("load resize",function(){
+        var modalDeleteHeight =  $(".delete-confirmation-modal").outerHeight();
         if(browserWidth <= mobileViewPortWidthLimit){
             $(".my-category-modal").css("width", modalCategoryModalWidthMobile+"px").css("height","auto").css("bottom","auto").css("top","15px");
-            $(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
+            $(".my-category-modal-sm").css("width", "95%").css("height",modalDeleteHeight+"px");
         }
         else if (browserWidth > mobileViewPortWidthLimit){
             $(".my-category-modal").css("width", modalCategoryModalWidth+"px").css("height","auto").css("bottom","auto").css("top","15px");
-            $(".category-items-holder .ui-sortable").css("width", "100%");
+            $(".my-category-modal-sm").css("width", modalCategoryModalSmWidth+"px").css("height",modalDeleteHeight+"px");
         }
     });
-   
 
 }(jQuery));
 

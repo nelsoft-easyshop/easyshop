@@ -178,8 +178,7 @@
 .error-claim{
     width: 57% !important;
     left: 20% !important;
-    margin-top: 2%;
-    margin-bottom: 2%;
+    margin: 2% auto;
 }
 .promo-gallery-data{
     width: 32%;

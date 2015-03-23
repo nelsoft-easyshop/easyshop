@@ -648,7 +648,11 @@ class Kernel
                 'host' =>  $nodejsConfig['HOST'],
                 'port' => $nodejsConfig['REDIS_PORT'],
             ]);
-        };
+        }; 
+       
+        $container['captcha_builder'] = function ($c) {
+            return new \Gregwar\Captcha\CaptchaBuilder();
+        }; 
 
         /* Register services END */
         $this->serviceContainer = $container;

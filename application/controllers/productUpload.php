@@ -2,6 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsProductItem as EsProductItem;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
@@ -103,9 +104,9 @@ class productUpload extends MY_Controller
                 'renderSearchbar' => false, 
             ];
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step1_view',$data_item);
-            $this->load->view('templates/footer'); 
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
         else{
             $headerData = [
@@ -241,9 +242,9 @@ class productUpload extends MY_Controller
             }
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step2_view',$response);
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }else{
             redirect('/sell/step1/', 'refresh');
         }
@@ -435,9 +436,9 @@ class productUpload extends MY_Controller
             'renderSearchbar' => false, 
         ]; 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
+        $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));  
         $this->load->view('pages/product/product_upload_step2_view',$response);
-        $this->load->view('templates/footer');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
 
     /**
@@ -756,6 +757,10 @@ class productUpload extends MY_Controller
                 if(count($arraynameoffiles) <= 0){ 
                     die('{"e":"0","d":"Please select at least one photo for your listing."}');
                 }
+
+                if(strlen(trim($product_title)) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){ 
+                    die('{"e":"0","d":"Product name must be atleast '.EsProduct::MINIMUM_PRODUCT_NAME_LEN.' characters!"}');
+                }
             }
 
             $removeThisPictures = json_decode($this->input->post('removeThisPictures')); 
@@ -959,6 +964,10 @@ class productUpload extends MY_Controller
 
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
+            }
+
+            if(strlen(trim($product_title)) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){ 
+                die('{"e":"0","d":"Product name must be atleast '.EsProduct::MINIMUM_PRODUCT_NAME_LEN.' characters!"}');
             }
         }
         else{
@@ -1335,9 +1344,9 @@ class productUpload extends MY_Controller
             ]; 
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_preview',$preview_data);
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
     }
 
@@ -1409,9 +1418,9 @@ class productUpload extends MY_Controller
             ]; 
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step3_view',$data);
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
         else{
             redirect('/sell/step1/', 'refresh');
@@ -1643,9 +1652,9 @@ class productUpload extends MY_Controller
             ];
 
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
         else{
             redirect('sell/step1', 'refresh');
