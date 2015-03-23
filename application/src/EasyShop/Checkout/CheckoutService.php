@@ -90,11 +90,13 @@ class CheckoutService
             $shipmentFee = 0;
             $isAvailableInLocation = false;
             if($address){
-                $city = $address->getCity();
-                $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')->getParentLocation($city);
-                $majorIsland = $region->getParent()->getParent();
+                $city = $address->getCity()->getIdLocation();
+                $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                               ->getParentLocation($city);
+                $regionId = $region->getIdLocation(); 
+                $majorIsland = $region->getParent()->getParent()->getIdLocation();
                 $shipmentFee = $this->shippingLocationManager
-                                    ->getProductItemShippingFee($itemId, $city, $region, $majorIsland);
+                                    ->getProductItemShippingFee($itemId, $city, $regionId, $majorIsland);
 
                 if($shipmentFee !== null){
                     $isAvailableInLocation = true;
