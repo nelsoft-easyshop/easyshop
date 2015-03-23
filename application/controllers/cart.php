@@ -209,13 +209,14 @@ class Cart extends MY_Controller
         $cartContents = $this->cartManager->getValidatedCartContents($memberId);
         $shippingFee = 0;
         foreach ($cartContents as $item) {
-            $additionalFee = $this->serviceContainer['product_shipping_location_manager']
-                                   ->getProductItemShippingFee(
-                                        $item['product_itemID'], 
-                                        $cityLocation, 
-                                        $regionLocation, 
-                                        $islandId
-                                    );
+            $shippingFee = $this->serviceContainer['product_shipping_location_manager']
+                                ->getProductItemShippingFee(
+                                    $item['product_itemID'], 
+                                    $cityLocation, 
+                                    $regionLocation, 
+                                    $islandId
+                                );
+            $additionalFee = $shippingFee !== null ? $shippingFee : 0;
             $shippingFee = bcadd($additionalFee, $shippingFee, 4);
         }
 

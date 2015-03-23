@@ -143,19 +143,20 @@ class ApiFormatter
         $formattedProductAttributes = $productAttributes;
         // get product specification
         $productSpecification = [] ; $productCombinationAttributes = []; 
+		$listArray = [];
         foreach ($formattedProductAttributes as $key => $productOption) {
             $newArrayOption = []; 
 
             for ($i=0; $i < count($productOption) ; $i++) {
                 $type = ($formattedProductAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
                 $newKey = $type.'_'.$formattedProductAttributes[$key][$i]['attr_id'];
-                $newArrayOption[] = [
-                                'value' => $productOption[$i]['attr_value'],
-                                'price'=> $productOption[$i]['attr_price'],
-                                'img_id'=> $productImages[0]['id'],
-                                'name'=> $productOption[$i]['attr_name'],
-                                'id'=> $newKey
-                            ]; 
+                $newArrayOption[] = $listArray[$newKey] = [
+					'value' => $productOption[$i]['attr_value'],
+					'price'=> $productOption[$i]['attr_price'],
+					'img_id'=> $productImages[0]['id'],
+					'name'=> $productOption[$i]['attr_name'],
+					'id'=> $newKey
+				]; 
             }
 
             if(count($productOption)>1){
@@ -198,19 +199,15 @@ class ApiFormatter
 
         $productQuantity = [];
         foreach ($temporaryArray as $key => $valuex) { 
-            $newCombinationKey = [];
-            $totalPrice = 0;
+            $newCombinationKey = []; 
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
                 $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b');
-                $newCombinationKey[] = $type.'_'.$valuex['product_attribute_ids'][$i]['id'];
-                if(isset($productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']])){
-                    $totalPrice += $productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']];
-                }
+                $newCombinationKey[] = $type.'_'.$valuex['product_attribute_ids'][$i]['id']; 
             }
 
             unset($temporaryArray[$key]['product_attribute_ids']);
             $temporaryArray[$key]['id'] = $key;
-            $temporaryArray[$key]['price'] = number_format($totalPrice + $product->getFinalPrice(), 2,'.','');
+            $temporaryArray[$key]['price'] = number_format($product->getFinalPrice(), 2,'.','');
             if($newCombinationKey[0] === "a_0"){
                 if(empty($productAttributes) === false){
                     $allCombination = $this->collectionHelper
@@ -234,6 +231,15 @@ class ApiFormatter
             $temporaryArray[$key]['combinationId'] = $newCombinationKey;
             $productQuantity[] = $temporaryArray[$key];
         }
+
+		foreach($productQuantity as $keyQuantity => $valueQuantity){
+			$additionalPrice = 0;
+			$original_price = $productQuantity[$keyQuantity]['price'];
+			foreach($valueQuantity['combinationId'] as $cid){ 
+				$additionalPrice += isset($listArray[$cid]) ? $listArray[$cid]['price'] : 0;
+			}
+			$productQuantity[$keyQuantity]['price'] = number_format(bcadd($original_price, $additionalPrice , 4), 2,'.','');
+		}
 
         $recentReview = $this->reviewProductService->getProductReview($productId);
 

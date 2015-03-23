@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 use EasyShop\Entities\EsDeviceToken as EsDeviceToken;
 use EasyShop\Entities\EsApiType as EsApiType;
-use EasyShop\Entities\OauthClients as OauthClients;
+use EasyShop\Entities\OauthClients as OauthClients; 
 
 class Notification extends MY_Controller 
 {
@@ -15,7 +15,7 @@ class Notification extends MY_Controller
 
         //Load service 
         $this->em = $this->serviceContainer['entity_manager'];
-    }
+    } 
 
     /**
      * URL to request add device token 
@@ -35,7 +35,7 @@ class Notification extends MY_Controller
             if($jwt){
                 $oauthClients = $this->em->getRepository('EasyShop\Entities\OauthClients')
                                          ->find($clientId);
-                $jwtObject = $jwtContainer->decode($jwt, $oauthClients->getClientSecret());
+                $jwtObject = $jwtContainer->decode($jwt, $oauthClients->getClientSecret(), false);
                 if($jwtObject
                     && $oauthClients
                     && isset($jwtObject->api_type) 

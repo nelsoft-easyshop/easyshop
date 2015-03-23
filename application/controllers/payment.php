@@ -124,11 +124,12 @@ class Payment extends MY_Controller{
 
             if($city > 0){  
                 $details = $this->payment_model->getShippingDetails($productId,$itemId,$city,$region,$majorIsland);
-
-                if(count($details) >= 1){
+                $shippingFee = $this->serviceContainer['product_shipping_location_manager']
+                                    ->getProductItemShippingFee($itemId, $city, $region, $majorIsland);
+                if($shippingFee !== null){
                     $successCount++;
                     $availability = "Available";
-                    $itemArray[$value['rowid']]['shipping_fee'] = $details[0]['price'];
+                    $itemArray[$value['rowid']]['shipping_fee'] = $shippingFee;
                 } 
 
                 if(count($details) > 0){
@@ -1413,13 +1414,13 @@ class Payment extends MY_Controller{
             $sellerId = $value['member_id'];
             $productId = $value['id'];
             $orderQuantity = $value['qty'];
-            $price = $value['price'];
-            $tax_amt = 0;
+            $price = $value['price']; 
             $isPromote = ($value['is_promote'] == 1) ? $isPromote += 1 : $isPromote += 0;
-            $productItem =  $value['product_itemID'];
-            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-            $shipping_amt = (isset($details[0]['price'])) ? $details[0]['price'] : 0 ;
-            $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
+            $productItem =  $value['product_itemID']; 
+            $shippingFee = $this->serviceContainer['product_shipping_location_manager']
+                                ->getProductItemShippingFee($productItem, $city, $region, $majorIsland);
+            $shippingFee = $shippingFee !== null ? $shippingFee : 0;
+            $otherFee = $shippingFee * $orderQuantity;
             $othersumfee += $otherFee;
             $total =  $value['subtotal'] + $otherFee;
             $optionCount = count($value['options']);

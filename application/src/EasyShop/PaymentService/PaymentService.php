@@ -171,6 +171,7 @@ class PaymentService
     public $dragonPaySoapClient;
 
     /**
+<<<<<<< HEAD
      * Transaction Manager
      *
      * @var EasyShop\Transaction\TransactionManager
@@ -182,7 +183,7 @@ class PaymentService
      *
      * @var EasyShop\Product\ProductShippingLocationManager
      */
-    private $productShippingManager;
+    private $productShippingManager; 
 
     /**
      * Constructor
@@ -218,8 +219,8 @@ class PaymentService
         $this->socialMediaManager = $socialMediaManager;
         $this->languageLoader = $languageLoader;
         $this->messageManager = $messageManager;
-        $this->dragonPaySoapClient = $dragonPaySoapClient;
-        $this->transactionManager = $transactionManager;
+        $this->dragonPaySoapClient = $dragonPaySoapClient; 
+        $this->transactionManager = $transactionManager; 
         $this->productShippingManager = $productShippingManager;
     }
 
@@ -286,7 +287,6 @@ class PaymentService
             $price = $value['price']; 
             $promoItemCount = ($value['is_promote'] == 1) ? $promoItemCount += 1 : $promoItemCount += 0;
             $productItem =  $value['product_itemID'];
-            
             $shipping_amt = $this->em->productShippingManager
                             ->getProductItemShippingFee($productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
             $shipping_amt = $shipping_amt !== null ? $shipping_amt : 0 ;
@@ -302,7 +302,7 @@ class PaymentService
 
             $optionString = ($optionCount <= 0) ? '0[]0[]0' : substr($optionString,3); 
             $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem."{+}".$optionCount."{+}".$optionString;
-            $itemList[$key]['otherFee'] = $otherFee;
+            $itemList[$key]['otherFee'] = $otherFee; 
             $sellerDetails = $this->em->getRepository('EasyShop\Entities\EsMember')
                                         ->find($sellerId);
             $itemList[$key]['seller_username'] = $sellerDetails->getUsername();

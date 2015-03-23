@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * Workaround for managing non-CI packages
  *
@@ -472,8 +470,8 @@ class Kernel
                 $container['social_media_manager'],
                 $container['language_loader'],
                 $container['message_manager'],
-                $container['dragonpay_soap_client'],
-                $container['transaction_manager'],
+                $container['dragonpay_soap_client'], 
+                $container['transaction_manager'], 
                 $container['product_shipping_location_manager']
             );
         };
@@ -567,14 +565,15 @@ class Kernel
         };
 
         $container['assets_uploader'] = function($c) use ($container){
-            $uploadLibrary = new CI_Upload();
+            $uploadLibrary = new MY_Upload();
             $imageLibrary = new MY_Image_lib();
             return new \EasyShop\Upload\AssetsUploader( $container["entity_manager"], 
                                                         $container["aws_uploader"],
                                                         $container["config_loader"],
                                                         $uploadLibrary,
                                                         $imageLibrary,
-                                                        ENVIRONMENT);
+                                                        ENVIRONMENT, 
+                                                        $container['image_utility']);
         };
         
         $container["image_utility"] = function($c) use ($container){
@@ -641,9 +640,19 @@ class Kernel
             return $sphinxClient;
         };
 
+        // Product Upload Manager
+        $container['product_upload_manager'] = function ($c) use ($container) {
+            return new \EasyShop\Product\ProductUploadManager(
+                            $container['entity_manager'],
+                            $container['product_manager'],
+                            $container['string_utility'],
+                            $container['language_loader']
+                        );
+        };
+
         $container['json_web_token'] = function ($c) {
             return new \JWT();
-        };
+        }; 
         
         $nodejsConfig = require_once(APPPATH . "config/param/nodejs.php");
         $container['redis_client'] = function ($c) use ($nodejsConfig) {
@@ -652,11 +661,11 @@ class Kernel
                 'host' =>  $nodejsConfig['HOST'],
                 'port' => $nodejsConfig['REDIS_PORT'],
             ]);
-        };
+        }; 
        
         $container['captcha_builder'] = function ($c) {
             return new \Gregwar\Captcha\CaptchaBuilder();
-        };
+        }; 
 
         /* Register services END */
         $this->serviceContainer = $container;
