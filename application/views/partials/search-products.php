@@ -31,14 +31,15 @@
                     <img src="<?=$secondaryImage;?>" class="search-item-image-secondary" />
                     <?php endif; ?>
 
-                    <?php if($percentage > 0):?>
-                    <span class="discount-circle-2"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
-                    <?php endif;?>
                     
-                    <?php if($isProductNew): ?>
-                    <span class="new-circle-2">NEW</span>
-                    <?php endif; ?>
                 </div>
+                <?php if($percentage > 0):?>
+                <span class="discount-circle-2"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
+                <?php endif;?>
+                
+                <?php if($isProductNew): ?>
+                <span class="new-circle-2">NEW</span>
+                <?php endif; ?>
             </a>
             <div class="search-item-meta">
                 <a href="/item/<?=$productSlug;?>" class="search-item-name" <?php if(strlen($productName)>18): ?>rel="tooltiplist" data-toggle="tooltip" data-placement="top" title="<?php echo $productName; ?>"<?php endif;?>>
