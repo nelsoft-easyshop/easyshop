@@ -17,6 +17,11 @@ class Notification extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
     }
 
+    public function test()
+    {
+        
+    }
+
     /**
      * URL to request add device token 
      * for push notification in mobile.

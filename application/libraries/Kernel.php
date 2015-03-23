@@ -640,6 +640,10 @@ class Kernel
         $container['json_web_token'] = function ($c) {
             return new \JWT();
         };
+
+        $container['aes_encrytion'] = function ($c) {
+            return new \GibberishAES();
+        };
         
         $nodejsConfig = require_once(APPPATH . "config/param/nodejs.php");
         $container['redis_client'] = function ($c) use ($nodejsConfig) {
