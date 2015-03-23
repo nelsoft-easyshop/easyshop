@@ -6,7 +6,6 @@ if (!defined('BASEPATH'))
 use EasyShop\Entities\EsDeviceToken as EsDeviceToken;
 use EasyShop\Entities\EsApiType as EsApiType;
 use EasyShop\Entities\OauthClients as OauthClients; 
-use GibberishAES\GibberishAES as GibberishAES;
 
 class Notification extends MY_Controller 
 {
@@ -16,19 +15,7 @@ class Notification extends MY_Controller
 
         //Load service 
         $this->em = $this->serviceContainer['entity_manager'];
-    }
-
-    public function test()
-    {   
-        GibberishAES::size(256);
-        $pass = "testpass";
-        $encrypted_string = "BB/gLGcWTre2eiTo4zJ0rIxMnXtIrTj+esZu1DV6Z6JpDw9E9F+GfcWyiWuWxQVl4aXsdRZ/kxwX";
-        // This is the result after decryption of the previously encrypted string.
-        // $decrypted_string == $string (should be).
-        $decrypted_string = GibberishAES::dec($encrypted_string, $pass);
- 
-        echo $decrypted_string; 
-    }
+    } 
 
     /**
      * URL to request add device token 
