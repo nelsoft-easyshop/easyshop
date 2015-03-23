@@ -81,10 +81,11 @@ class CheckoutService
             $itemId = $value['product_itemID'];
             $quantity = $value['qty'];
             $product = $this->productManager->getProductDetails($productId);
-            $address = $addressRepo->findOneBy([
-                            'idMember' => $member->getIdMember(),
-                            'type' => EsAddress::TYPE_DELIVERY,
-                        ]);
+            $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                ->findOneBy([
+                                    'idMember' => $member->getIdMember(),
+                                    'type' => EsAddress::TYPE_DELIVERY,
+                                ]);
 
             $shipmentFee = 0;
             $isAvailableInLocation = false;
