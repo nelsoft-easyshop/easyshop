@@ -171,7 +171,6 @@ class PaymentService
     public $dragonPaySoapClient;
 
     /**
-<<<<<<< HEAD
      * Transaction Manager
      *
      * @var EasyShop\Transaction\TransactionManager
@@ -183,7 +182,7 @@ class PaymentService
      *
      * @var EasyShop\Product\ProductShippingLocationManager
      */
-    private $productShippingManager; 
+    private $productShippingManager;
 
     /**
      * Constructor
