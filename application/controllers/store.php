@@ -429,11 +429,13 @@ class Store extends MY_Controller
          * Append the data for the 2nd level categories
          */
         foreach( $parentCategories as $categoryProperties ){
-            $children = $categoryProperties->getChildren();
-            if(!empty($children)){
-                foreach($children as $child){
-                    $child->setIsHidden(true);
-                    $parentCategories[] = $child;
+            if($categoryProperties->getIsCustom()){
+                $children = $categoryProperties->getChildren();
+                if(!empty($children)){
+                    foreach($children as $child){
+                        $child->setIsHidden(true);
+                        $parentCategories[] = $child;
+                    }
                 }
             }
         }
