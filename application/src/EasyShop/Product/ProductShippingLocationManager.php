@@ -319,6 +319,9 @@ class ProductShippingLocationManager
             $locationArray[$locationId] = $location->getShipping()->getPrice();
         }
 
+        /**
+         * Return the shipping fee from the most specific location
+         */
         if(array_key_exists($regionId, $locationArray)){
             return (float)$locationArray[$regionId];
         }
@@ -329,7 +332,7 @@ class ProductShippingLocationManager
             return (float)$locationArray[$islandId];
         }
         else{
-            return 0;
+            return null;
         }
     }
 
