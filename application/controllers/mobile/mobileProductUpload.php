@@ -185,7 +185,7 @@ class MobileProductUpload extends MY_Controller
             if($tempId === (string) $this->member->getTempId()){
                 $productTitle = trim($this->input->post('title'));
                 $productDescription = trim($this->input->post('description'));
-                $categoryId = trim($this->input->post('category'));
+                $categoryId = (int) trim($this->input->post('category'));
                 $price = (float) trim(str_replace(',', '', $this->input->post('price')));
                 $discount = (float) trim($this->input->post('discount'));
                 $isCod = strtolower(trim($this->input->post('isCod'))) === "true";
@@ -217,7 +217,8 @@ class MobileProductUpload extends MY_Controller
                     'productPrice' => $price,
                     'productDescription' => $productDescription,
                     'images' => $images, 
-                    'condition' => $condition, 
+                    'condition' => $condition,
+                    'category' => $categoryId
                 ]; 
 
                 if($isCod === false 
