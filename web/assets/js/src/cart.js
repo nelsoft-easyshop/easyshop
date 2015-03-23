@@ -1,16 +1,24 @@
 (function ($) {
+
 	$(window).on("load resize",function(){
+		var browserWidth = $(window).width();
+		var heightOfModal = $(".simplemodal-wrap").outerHeight();
 		
+		$('.circle-breadcrumb').animate({ background:'#000000' }, 3000);
+
 		$(".cart-item-remove").click(function(){
 			$(".remove-item-modal").modal();
-			var heightOfRemoveItemModal = $("remove-item-modal").outerHeight();
 			$(".remove-item-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
-			$(".my-modal").css("height", heightOfRemoveItemModal+"px");
+			$(".my-modal").css("height", heightOfModal+"px");
 		});
 
 		$(".calculate-shipping-label").click(function(){
-			$(".shipping-calculator-container").slideToggle("fast");
-			$(this).toggleClass("toggleShippingIcon");
+			$(".shipping-calculator-modal").modal({
+				containerCss:{
+					height: heightOfShippingModal
+				}
+			});
+			$(".shipping-calculator-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
 		});
 
 		$(".payment-label").click(function(){
@@ -21,5 +29,6 @@
 			$(".btn-payment-button").text("Pay Via "+paymentName);
 		});
 
+		
 	});
 })(jQuery);
