@@ -123,7 +123,8 @@ class Payment extends MY_Controller{
                 if(count($details) >= 1){
                     $successCount++;
                     $availability = "Available";
-                    $itemArray[$value['rowid']]['shipping_fee'] = $details[0]['price'];
+                    $itemArray[$value['rowid']]['shipping_fee'] = $this->serviceContainer['product_shipping_location_manager']
+                                                                       ->getProductItemShippingFee($itemId, $city, $region, $majorIsland);
                 } 
 
                 if(count($details) > 0){
@@ -1346,9 +1347,9 @@ class Payment extends MY_Controller{
             $price = $value['price'];
             $tax_amt = 0;
             $isPromote = ($value['is_promote'] == 1) ? $isPromote += 1 : $isPromote += 0;
-            $productItem =  $value['product_itemID'];
-            $details = $this->payment_model->getShippingDetails($productId,$productItem,$city,$region,$majorIsland);
-            $shipping_amt = (isset($details[0]['price'])) ? $details[0]['price'] : 0 ;
+            $productItem =  $value['product_itemID']; 
+            $shipping_amt = $this->serviceContainer['product_shipping_location_manager']
+                                 ->getProductItemShippingFee($productItem, $city, $region, $majorIsland);
             $otherFee = ($tax_amt + $shipping_amt) * $orderQuantity;
             $othersumfee += $otherFee;
             $total =  $value['subtotal'] + $otherFee;
