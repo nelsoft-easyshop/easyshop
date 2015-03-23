@@ -1336,27 +1336,35 @@ class EsProductRepository extends EntityRepository
             return 0;
         }
     
-        $categorizedProductIds = $this->getCategorizedProductIds($memberId);
-        $queryBuilder = $this->em->createQueryBuilder();
-
-        $count = $queryBuilder->select('count(p.idProduct)')
-                                ->from('EasyShop\Entities\EsProduct','p') 
-                                ->where('p.isDelete = :productDeleteFlag')
-                                ->andWhere('p.isDraft = :productDraftFlag')
-                                ->andWhere('p.member = :memberId');
+        $categorizedProductIds = $this->getCategorizedProductIds($memberId);        
+        $queryBuilder = $this->em->createQueryBuilder(); 
+        $rawSql = "
+            SELECT 
+                count(es_product.id_product) as productCount
+            FROM
+                es_product
+            WHERE
+                es_product.is_delete = ? AND 
+                es_product.is_draft = ? AND
+                es_product.member_id = ?
+        ";
                                 
         if(!empty($categorizedProductIds)){
-            $queryBuilder->andWhere( 
-                            $queryBuilder->expr()->notIn('p.idProduct', $categorizedProductIds)
-                        );
+            $qmarks = implode(',', array_fill(0, count($categorizedProductIds), '?'));
+            $rawSql = $rawSql." AND es_product.id_product NOT IN (".$qmarks.")";
         }
-                                
-        $count = $queryBuilder->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE)
-                              ->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE)
-                              ->setParameter('memberId', $memberId)        
-                              ->getQuery()
-                              ->getSingleScalarResult();
-            
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('productCount', 'productCount');
+        $query = $this->em->createNativeQuery($rawSql, $rsm);                
+        $query->setParameter(1, \EasyShop\Entities\EsProduct::ACTIVE)
+              ->setParameter(2, \EasyShop\Entities\EsProduct::ACTIVE)
+              ->setParameter(3, $memberId);
+    
+        $startIndex = 4;
+        foreach ($categorizedProductIds as $index => $categoryProductId){
+            $query->setParameter(($index+$startIndex), $categoryProductId); 
+        }
+        $count = $query->execute()[0]['productCount'];
         return (int) $count;
     }
     
