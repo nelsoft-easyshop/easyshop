@@ -1,3 +1,4 @@
+<link type="text/css" href='/assets/css/boostrap-modal.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
@@ -90,6 +91,22 @@
                                                         <b><?=html_escape($optionKey);?> : </b><?=html_escape($optionValue);?>
                                                     </div>
                                                 <?php endforeach; ?> 
+                                            </div> 
+                                            <div class="mobile-price-quantity">
+                                                <div class="cart-item-attribute">
+                                                    <b>Price : </b><span class="cart-price-mobile">&#8369; <?=number_format($item['subtotal'], 2, '.', ',');?></span>
+                                                </div>
+                                                <div class="cart-item-attribute">
+                                                    <b>Quantity : </b>
+                                                    <select class="form-es-control input-sm">
+                                                        <?php for ($i = 1; $i <= $item['maxqty']; $i++): ?>
+                                                            <option><?=$i?></option>
+                                                        <?php endfor; ?>
+                                                    </select>
+                                                </div>
+                                                <div class="cart-item-attribute">
+                                                    <span class="cart-total-item-price">&#8369; <?=number_format(bcmul($item['subtotal'], $item['qty'], 4), 2, '.', ',');?></span>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
@@ -118,9 +135,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="mid-button-container">
-                    <center>
-                        <a href="<?=$continue_url;?>" class="btn btn-es-white btn-lg btn-mid btn-mid-left"><i class="fa fa-angle-left fa-lg"></i>Continue Shopping</a>
-                        <a href="/cart" class="btn btn-es-white btn-lg btn-mid btn-mid-right">Update My Cart<i class="fa fa-refresh fa-lg"></i></a>
+                    <center> 
+                        <div class="mid-button-background">
+                            <a href="<?=$continue_url;?>" class="btn btn-es-white btn-lg btn-mid btn-mid-left"><i class="fa fa-angle-left fa-lg"></i>Continue Shopping</a>
+                            <a href="/cart" class="btn btn-es-white btn-lg btn-mid btn-mid-right">Update My Cart<i class="fa fa-refresh fa-lg"></i></a>
+                        </div> 
                     </center>
                     <div class="mid-button-divider"></div>
                 </div>
@@ -131,6 +150,7 @@
         <!--Start of trio bottom boxes-->
         <div class="row">
             <!--Start of shipping calculator-->
+            <!-- Temporarily removed
             <div class="col-md-4">
                 <div class="transaction-container bg-gray">
                     <p class="transaction-container-title">Calculate Shipping</p>
@@ -170,36 +190,40 @@
                     </div>
                 </div>
             </div>
+            -->
             <!--End of shipping calculator-->
 
             <!--Start of points-->
-            <div class="col-md-4">
+            <div class="col-md-7">
                 <div class="transaction-container bg-gray">
-                    <p class="transaction-container-title">Use Your EasyShop Points</p>
+                    <p class="transaction-container-title">Use Your EasyPoints</p>
                     <p class="transaction-container-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nominis ipso dividendo tollatur stultus instituit ornamenta. 
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane.
                         <br/>
                         <b>How to Use</b>
                         <ol class="how-to-list">
                             <li>Conversam albam porro corporis porro definitiones dixisset monet vivendi.</li>
-                            <li>Integris corrumpit. Cernimus reiciendis.</li>
+                            <li>Pulcherrimum concertationesque utens vitam nonne miseram tenent versuum innumerabiles. </li>
+                            <li>Iudicio nivem reperietur plurimum. Huius mollitia intercapedo beata optime graecos numquidnam. Declinationem fortunae quiete.</li>
                             <li>10points = &#8369; 1.00</li>
                         </ol>
                     </p>
                     <div class="form-group">
-                        <label for="shipping-total">Your Current Points</label>
-                        <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly placeholder="<?=$userPoints;?>"/>
+
+                        <label for="points-total">Your Current EasyPoints : <?=$userPoints;?></label>
+                        <input type="text" id="points-total" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
+ 
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-es-green btn-sm">Use Your Points</button>
+                        <button class="btn btn-es-green btn-sm">Deduct Points</button>
                     </div>
                 </div>
             </div>
             <!--End of points-->
 
             <!--Start of summary-->
-            <div class="col-md-4">
-                <div class="transaction-container bg-gray">
+            <div class="col-md-5">
+                <div class="transaction-container bg-gray min-height-435">
                     <p class="transaction-container-title">Summary</p>
                     <table class="transaction-summary-table" width="100%">
                         <thead>
@@ -214,7 +238,12 @@
                             </tr>
                             <tr>
                                 <td>Shipping Fee</td>
-                                <td>&#8369; 400.00</td>
+                                <td>
+                                    &#8369; <?=number_format($totalShippingFee, 2, '.', ',')?>
+                                    <small class="calculate-shipping-label">
+                                        <i class="fa fa-plus"></i> Calculate Shipping
+                                    </small>
+                                </td>
                             </tr>
                             <tr class="border-bottom-1">
                                 <td>Points to Deduct</td>
@@ -263,11 +292,53 @@
             <button class="btn btn-es-white simplemodal-close">Cancel</button>
         </center>
     </div>
-</div>
+</div> 
 
+<div class="my-modal-content shipping-calculator-modal" style="display: none;">
+    <h3 class="my-modal-title">
+        Shipping calculator
+    </h3>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane. 
+    </p>
+    <div class="form-group">
+        <label for="shipping-city">State/Region</label> 
+        <select id="shipping-state" class="stateregionselect form-es-control form-es-control-block">
+            <option>--- Select State ---</option> 
+            <?php foreach($locations['stateRegionLookup'] as $srkey => $stateregion):?>
+                <option class="echo" value="<?=$srkey?>">
+                    <?=$stateregion?>
+                </option>
+            <?php endforeach;?>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="shipping-state">City</label>
+        <select id="shipping-city" class="cityselect form-es-control form-es-control-block">
+            <option>--- Select City ---</option> 
+            <?php foreach($locations['cityLookup'] as $parentkey => $arr):?>
+                <?php foreach($arr as $lockey => $city):?>
+                    <option class="echo" value="<?=$lockey?>" data-parent="<?=$parentkey?>">
+                        <?=$city?>
+                    </option>
+                <?php endforeach;?>
+            <?php endforeach;?>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="shipping-total">Total Shipping Fee</label>
+        <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly />
+    </div>
+    <div class="my-modal-footer">
+        <center>
+            <button class="btn btn-es-green calculate-shipping">Calculate</button>
+            <button class="btn btn-es-white simplemodal-close">Cancel</button>
+        </center>
+    </div>
+</div>
 
 <script type='text/javascript'>
     var jsonCity = <?=json_encode($locations['cityLookup']);?>;
-</script>
+</script> 
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>"></script>

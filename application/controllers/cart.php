@@ -53,6 +53,8 @@ class Cart extends MY_Controller
             $memberId = $this->session->userdata('member_id');
             $cartContents = $this->cartManager->getValidatedCartContents($memberId); 
             $totalAmount = $this->cartImplementation->getTotalPrice();
+            $cityAddress = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                    ->getShippingAddress($memberId);
             $locations = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                   ->getLocationLookup();
             $headerData = [
@@ -72,7 +74,8 @@ class Cart extends MY_Controller
                 'totalAmount' => $totalAmount,
                 'userPoints' => $this->pointTracker->getUserPoint($memberId),
                 'isCartEmpty' => $this->cartImplementation->getSize() === 0,
-                'locations' => $locations
+                'locations' => $locations,
+                'totalShippingFee' => $this->__getCartShippingFee($cityAddress ,$memberId)
             ];
 
             $this->load->spark('decorator');
@@ -156,6 +159,7 @@ class Cart extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $isSuccessful = $this->cartManager->changeItemQuantity($cartId, $quantity);
 
+
         if ($isSuccessful) {
             $cartItem = $this->cartManager->getValidatedCartContents($memberId)[$cartId];
             $itemSubtotal = ($cartItem['price']) * $cartItem['qty'];
@@ -164,7 +168,8 @@ class Cart extends MY_Controller
                 'itemSubtotal' => number_format($itemSubtotal, 2, '.', ','),
                 'cartTotal' => $this->cartImplementation->getTotalPrice(),
                 'qty' =>  $cartItem['qty'],
-                'maxqty' => $cartItem['maxqty']);
+                'maxqty' => $cartItem['maxqty']
+            );
         }
         $result['isSuccessful'] = $isSuccessful;
 
@@ -201,7 +206,14 @@ class Cart extends MY_Controller
     public function getCartTotalShippingFee()
     {
         $memberId = $this->session->userdata('member_id');
-        $cityLocation = (int)$this->input->post('city_id');
+        $cityLocation = (int)$this->input->post('city_id'); 
+
+        echo $this->__getCartShippingFee($cityLocation, $memberId); 
+    }
+
+    private function __getCartShippingFee($cityLocation, $memberId)
+    {
+        $cityLocation = (int)$cityLocation;
         $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                        ->getParentLocation($cityLocation); 
         $regionLocation = $region->getIdLocation(); 
@@ -220,6 +232,6 @@ class Cart extends MY_Controller
             $shippingFee = bcadd($additionalFee, $shippingFee, 4);
         }
 
-        echo $shippingFee; 
+        return $shippingFee; 
     }
 }
