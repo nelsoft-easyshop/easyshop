@@ -1379,54 +1379,35 @@ class EsProductRepository extends EntityRepository
         $em = $this->_em;
         $rsm = new ResultSetMapping();
 
-        $rsm->addScalarResult('categoryId', 'categoryId');
+        $rsm->addScalarResult('idProduct', 'idProduct');
         $query = $em->createNativeQuery("
             SELECT
-                es_member_cat.id_memcat as categoryId
-            FROM
-                es_member_cat
-            WHERE
-                es_member_cat.is_delete = :memberCategoryActiveFlag AND
-                es_member_cat.member_id = :memberId;
-        ", $rsm);
-        $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
-        $query->setParameter('memberId', $memberId);
-        $results = $query->execute();
-        $categoryIds = [];
-        foreach($results as $result){
-            $categoryIds[] = $result['categoryId'];
-        }        
-
-        $finalRsm = new ResultSetMapping();
-        $finalRsm->addScalarResult('productId', 'productId');
-        $rawSql = "
-            SELECT
-                es_member_prodcat.product_id as productId
+                es_member_prodcat.product_id as idProduct
             FROM
                 es_member_prodcat
             INNER JOIN
+                es_member_cat ON
+                es_member_prodcat.memcat_id = es_member_cat.id_memcat AND 
+                es_member_cat.is_delete = :memberCategoryActiveFlag AND
+                es_member_cat.member_id = :memberId
+            INNER JOIN
                 es_product ON
-                es_product.is_delete = ? AND 
-                es_product.is_draft = ? AND
+                es_product.is_delete = :productDeleteFlag AND 
+                es_product.is_draft = :productDraftFlag AND
                 es_product.id_product = es_member_prodcat.product_id
-            ";
-        $qmarks = implode(',', array_fill(0, count($categoryIds), '?'));
-        $rawSql = $rawSql." WHERE es_member_prodcat.memcat_id IN (".$qmarks.")";
-    
-        $finalQuery = $em->createNativeQuery($rawSql, $finalRsm);
-        $finalQuery->setParameter(1, \EasyShop\Entities\EsProduct::ACTIVE);
-        $finalQuery->setParameter(2, \EasyShop\Entities\EsProduct::ACTIVE);
-        $startIndex = 3;
-        foreach ($categoryIds as $index => $categoryId){
-            $finalQuery->setParameter(($index + $startIndex), $categoryId); 
-        }
-        
-        $results = $finalQuery->execute();
+            GROUP BY 
+                es_member_prodcat.product_id;
+        ", $rsm);
+        $query->setParameter('memberCategoryActiveFlag', \EasyShop\Entities\EsMemberCat::ACTIVE);
+        $query->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE);
+        $query->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE);
+        $query->setParameter('memberId', $memberId);
+        $results = $query->execute();
         $productIds = [];
         foreach($results as $result){
-            $productIds[] = $result['productId'];
+            $productIds[] = $result['idProduct'];
         }        
-
+        
         return $productIds;
     }
     
