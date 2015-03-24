@@ -3,6 +3,7 @@
 namespace EasyShop\Checkout;
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsAddress as EsAddress;
 /**
  * Checkout Service Class
  *
@@ -80,19 +81,32 @@ class CheckoutService
             $itemId = $value['product_itemID'];
             $quantity = $value['qty'];
             $product = $this->productManager->getProductDetails($productId);
-            $shippingDetails = $this->shippingLocationManager
-                                    ->getProductShippingLocations($productId, $itemId, $member);
-            $isAvailableInLocation = false;
+            $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                ->findOneBy([
+                                    'idMember' => $member->getIdMember(),
+                                    'type' => EsAddress::TYPE_DELIVERY,
+                                ]);
+
             $shipmentFee = 0;
-            if($shippingDetails && count($shippingDetails) >= 1){ 
-                $isAvailableInLocation = true; 
-                $shipmentFee = $shippingDetails[0]['price'];
+            $isAvailableInLocation = false;
+            if($address){
+                $city = $address->getCity()->getIdLocation();
+                $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                               ->getParentLocation($city);
+                $regionId = $region->getIdLocation(); 
+                $majorIsland = $region->getParent()->getParent()->getIdLocation();
+                $shipmentFee = $this->shippingLocationManager
+                                    ->getProductItemShippingFee($itemId, $city, $regionId, $majorIsland);
+
+                if($shipmentFee !== null){
+                    $isAvailableInLocation = true;
+                }
             }
 
             $cartContent[$key]['canPurchaseWithOther'] = $this->canPurchaseWithOtherProduct($product);
             $cartContent[$key]['hasNoPuchaseLimitRestriction'] = $this->isPurchaseLimitReach($product, $member->getIdMember());
             $cartContent[$key]['isQuantityAvailable'] = $this->canPurchaseDesiredQuantity($product, $itemId, $quantity);
-            $cartContent[$key]['shippingFee'] = $shipmentFee;
+            $cartContent[$key]['shippingFee'] = $shipmentFee !== null ? $shipmentFee : 0;
             $cartContent[$key]['isAvailableInLocation'] = $isAvailableInLocation;
             $this->applyPaymentTypAvailable($cartContent[$key], $product);
         }
