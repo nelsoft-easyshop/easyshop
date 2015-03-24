@@ -484,7 +484,13 @@ class ApiFormatter
             if(isset($itemList[$data['product_itemID']])) {
                 unset($itemList[$data['product_itemID']]);
             }
-        }  
+        }
+
+        foreach ($itemList as $key => $item) {
+            if(empty($item['error_message'])){
+                $itemList[$key]['error_message'][] = "This item is unavailable.";
+            }
+        }
 
         if(!$includeUnavailable){
             return $this->formatCart($cartData);
