@@ -166,7 +166,7 @@
                             <tr>
                                 <td colspan="4">
                                     <div class="alert alert-es-danger" align="left" style="margin-bottom: 0px;">
-                                        This item is not available in your location. See the item location availability <a href="#" class="alert-link">here</a> or <a href="#" class="alert-link">remove</a> this item from your cart checkout to proceed.
+                                        This item is not available in your location. See the item location availability <a href="#" class="alert-link available-location-trigger">here</a> or <a href="#" class="alert-link">remove</a> this item from your cart checkout to proceed.
                                     </div>
                                 </td>
                             </tr>
@@ -338,6 +338,27 @@
         
     </div>    
 </div>
-
+<div class="my-modal-content available-location-modal" style="display: none;">
+    <h3 class="my-modal-title">
+        Available Location
+    </h3>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane. 
+    </p>
+    <div class="form-group">
+        <label for="shipping-city">This item is available in the following locations:</label>
+        <select id="shipping-city" class="form-es-control form-es-control-block">
+            <option>-Select Location Here-</option>
+            <option>Manila</option>
+            <option>Quaezon City</option>
+        </select>
+    </div>
+    <div class="my-modal-footer">
+        <center>
+            <button class="btn btn-es-green">Update</button>
+            <button class="btn btn-es-white simplemodal-close">Cancel</button>
+        </center>
+    </div>
+</div>
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
 <script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
