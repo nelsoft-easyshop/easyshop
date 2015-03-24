@@ -61,12 +61,6 @@ class IP_Filter
                 redirect('/'.$splashPageUrl);  
             }
         }
-
-        $this->CI->config->load('ipwhitelist', true);
-        $ipWhitelist = $this->CI->config->item('ip','ipwhitelist');
-        if(strtolower(ENVIRONMENT) === 'staging' && !in_array($clientIP,$ipWhitelist)){
-            show_error('You are not allowed to access this page', 400);
-        }
     }
 
 }
