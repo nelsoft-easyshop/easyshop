@@ -456,6 +456,10 @@ class ApiFormatter
                     $errorMessage[] = "Quantity Not Available";
                 }
 
+                if($product->getMember()->getIsEmailVerify() === false){
+                    $errorMessage[] = "Please verify your email.";
+                }
+
                 $itemList[$cartContent['product_itemID']] = [
                     'rowid' => $product->getIdProduct(),
                     'id' =>  $product->getIdProduct(),
