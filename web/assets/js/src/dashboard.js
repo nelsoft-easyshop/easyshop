@@ -3014,6 +3014,15 @@
         }
     });
 
+
+$(".easy-point-content").niceScroll({
+    cursorborder: "3px solid #e2e2e2",
+    touchbehavior: true,
+    autohidemode: false,
+    enablekeyboard: true,
+    smoothscroll: true,
+});
+
 }(jQuery));
 
 
