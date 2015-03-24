@@ -1515,6 +1515,7 @@
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
                         alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                        txResponseBtn.closest('.trans-btn-wrapper').find('.shipment-detail-button').remove()
                         msg = "<h3>ORDER CANCELED</h3> <br> Transaction has been moved to completed tab.";
                     }
                     else if (txResponseBtn.hasClass('tx_cod')) {
