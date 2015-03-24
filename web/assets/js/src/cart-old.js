@@ -32,20 +32,7 @@ function proceedPayment(obj){
         alert("You must select at least one item to proceed with your payment");
     }
     else {
-        $.ajax({
-            async: true,
-            url: "/payment/cart_items",
-            type: "POST",
-            dataType: "json",
-            data: {itm: data1, csrfname: csrftoken},
-            success: function (data) {
-                if (data == true) {
-                    window.location.replace("/payment/review");
-                } else {
-                    alert(data, 'Remove these items from your cart to proceed with your checkout.');
-                }
-            }
-        });
+        window.location.replace("/payment/review");
     }
 }
 
