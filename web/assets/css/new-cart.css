@@ -556,7 +556,8 @@ ol.how-to-list li{
     padding: 20px;
 }
 
-.shipping-calculator-modal .form-group{
+.shipping-calculator-modal .form-group,
+.available-location-modal .form-group{
     padding: 0px 20px;
 }
 .shipping-calculator-modal .my-modal-content p{
