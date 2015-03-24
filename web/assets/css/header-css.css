@@ -194,7 +194,7 @@ header {
 }
 
 .sticky-nav-fixed #main-nav-container {
-    background-color: rgba(255,255,255,0.95);
+    background-color: rgba(255,255,255,0);
 }
 
 .sticky-nav-logo-con {
