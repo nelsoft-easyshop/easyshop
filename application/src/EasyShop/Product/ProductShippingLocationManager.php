@@ -269,12 +269,12 @@ class ProductShippingLocationManager
     /**
      * Get product item shipping fee
      * @param  integer $itemId
-     * @param  integer $regionId
      * @param  integer $cityId
+     * @param  integer $regionId
      * @param  integer $islandId
      * @return float
      */
-    public function getProductItemShippingFee($itemId, $regionId, $cityId, $islandId)
+    public function getProductItemShippingFee($itemId, $cityId, $regionId, $islandId)
     {
         $itemLocations = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                               ->findBy([
@@ -290,11 +290,11 @@ class ProductShippingLocationManager
         /**
          * Return the shipping fee from the most specific location
          */
-        if(array_key_exists($regionId, $locationArray)){
-            return (float)$locationArray[$regionId];
-        }
-        elseif (array_key_exists($cityId, $locationArray)) {
+        if (array_key_exists($cityId, $locationArray)) {
             return (float)$locationArray[$cityId];
+        }
+        elseif(array_key_exists($regionId, $locationArray)){
+            return (float)$locationArray[$regionId];
         }
         elseif (array_key_exists($islandId, $locationArray)) {
             return (float)$locationArray[$islandId];

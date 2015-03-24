@@ -40,94 +40,111 @@
         </div>
         <!--End of transaction breadcrumb-->
 
-        
         <div class="row">
             <!--Start of shipping details-->
+            <?=form_open('', ['class' => 'addressForm','id' => 'addressForm','name' => 'addressForm']); ?>
             <div class="col-md-7">
+                <input type="hidden" id="currentLat" value="<?=html_escape($address['lat']); ?>" />
+                <input type="hidden" id="currentLang" value="<?=html_escape($address['lng']); ?>" />
+
                 <div class="transaction-container bg-white">
                     <p class="transaction-container-title">Shipping Details</p>
                      <p class="transaction-container-text">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Interrogari re pervenias videmus quando suspicor, ponit fugiat leguntur cupiditatibus usque intus careat disputatione, sint audivi affirmatis indoctis secutus,
                     </p>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="fname">First Name <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" id="fname" class="form-es-control form-es-control-block" readonly/>
-                             </div>
-                        </div>
-                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="lname">Last Name <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" id="lname" class="form-es-control form-es-control-block" readonly />
-                             </div>
+                        <div class="col-md-12">
+                            <div class="alert alert-es-danger alert-dismissible" style="display:none" role="alert" id="delivery-address-error">
+                                Please fix the errors in the delivery address you have provided.
+                            </div>
+                            
+                            <div class="alert alert-es-success" style="display:none" role="alert" id="delivery-address-success">
+                                Delivery address updated successfully.
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="contact">Contact Number <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" id="contact" class="form-es-control form-es-control-block" readonly />
-                             </div>
+                                <label for="fname">Consignee Name <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" value="<?=html_escape($address['consignee']); ?>" id="fname" class="form-es-control form-es-control-block" readonly/>
+                                <span class="error-span error-consignee"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="mobile">Mobile Number <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" value="0<?=html_escape($address['mobile']); ?>" id="mobile" class="form-es-control form-es-control-block" readonly />
+                                <span class="error-span error-mobile_number"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="telephone">Telephone Number <abbr class="required" title="required">*</abbr></label>
+                                <input type="text" value="<?=html_escape($address['telephone']); ?>" id="telephone" class="form-es-control form-es-control-block" readonly />
+                                <span class="error-span error-telephone_number"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="fullAddress">Full Address <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" id="fullAddress" class="form-es-control form-es-control-block" readonly/>
-                             </div>
+                                <input type="text" value="<?=html_escape($address['address']); ?>" id="fullAddress" class="form-es-control form-es-control-block" readonly/>
+                                <span class="error-span error-street_address"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="state">State/Region <abbr class="required" title="required">*</abbr></label>
-                                <select id="state" class="form-es-control form-es-control-block" disabled>
-                                    <option>NCR</option>
+                                <label for="shipping-state">State/Region <abbr class="required" title="required">*</abbr></label>
+                                <select id="shipping-state" class="stateregionselect form-es-control form-es-control-block" disabled>
+                                    <option value="0">--- Select State ---</option> 
+                                    <?php foreach($locations['stateRegionLookup'] as $srkey => $stateregion):?>
+                                        <option class="echo" value="<?=$srkey?>" <?=(int)$stateRegion !== (int)$srkey ?: 'selected';?> >
+                                            <?=$stateregion?> 
+                                        </option>
+                                    <?php endforeach;?>
                                 </select>
-                             </div>
+                                <span class="error-span error-region"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="city">City <abbr class="required" title="required">*</abbr></label>
-                                <select id="city" class="form-es-control form-es-control-block" disabled>
-                                    <option>Manila</option>
-                                    <option>Quezon City</option>
+                                <label for="shipping-city">City <abbr class="required" title="required">*</abbr></label>
+                                <select id="shipping-city" class="cityselect form-es-control form-es-control-block" disabled>
+                                    <option value="0">--- Select City ---</option> 
+                                    <?php foreach($locations['cityLookup'] as $parentkey => $arr):?>
+                                        <?php foreach($arr as $lockey => $city):?>
+                                            <option class="echo" value="<?=$lockey?>" data-parent="<?=$parentkey?>" <?=(int)$city !== (int)$lockey ?: 'selected';?>>
+                                                <?=$city?>
+                                            </option>
+                                        <?php endforeach;?>
+                                    <?php endforeach;?>
                                 </select>
+                                <span class="error-span error-city"></span>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="landmark">Nearest Landmark </label>
-                                <input type="text" id="landmark" class="form-es-control form-es-control-block"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="notes">Order Notes/Comments </label>
-                                <textarea id="notes" rows="10" class="form-es-control form-es-control-block"></textarea>
-                            </div>
-                        </div>
-                    </div>
+                    </div> 
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group div-change-shipping-btn">
-                               <button class="btn btn-es-green btn-sm btn-change-shipping">
+                               <button type="button" class="btn btn-es-green btn-sm btn-change-shipping">
                                     Change Shipping Address
                                 </button>
                             </div>
                             <div class="form-group div-save-shipping-btn" style="display: none;">
-                                <button class="btn btn-es-green btn-sm  btn-save-changes">
+                                <button type="button" class="btn btn-es-green btn-sm  btn-save-changes">
                                     Save Changes
                                 </button>
-                                <button class="btn btn-es-white btn-sm  btn-change-shipping-cancel">
+                                <button type="button" class="btn btn-es-white btn-sm  btn-change-shipping-cancel">
                                     Cancel
                                 </button>
                             </div>
@@ -136,6 +153,7 @@
                     
                 </div>
             </div>
+            <?=form_close();?>
             <!--End of shipping details-->
 
             <!--Start of order summary-->
@@ -153,30 +171,16 @@
                         </thead>
                         
                         <tbody>
-                            <tr class="checkout-item">
-                                <td>
-                                    IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
-                                </td>
-                                <td>1</td>
-                                <td>&#8369; 42,000.00</td>
-                                <td>&#8369; 42,000.00</td>
-                            </tr>
-                             <tr class="checkout-item">
-                                <td>
-                                    Tailored Short
-                                </td>
-                                <td>1</td>
-                                <td>&#8369; 200.00</td>
-                                <td>&#8369; 200.00</td>
-                            </tr>
-                            <tr class="checkout-item">
-                                <td>
-                                    Long Sleeves Shirt
-                                </td>
-                                <td>1</td>
-                                <td>&#8369; 400.00</td>
-                                <td>&#8369; 400.00</td>
-                            </tr>
+                            <?php foreach ($cartData as $item): ?>
+                                <tr class="checkout-item">
+                                    <td>
+                                        <?=html_escape($item['name']);?>
+                                    </td>
+                                    <td><?=$item['qty'];?></td>
+                                    <td>&#8369; <?=number_format($item['subtotal'], 2, '.', ',');?></td>
+                                    <td>&#8369; 42,000.00</td>
+                                </tr> 
+                            <?php endforeach; ?>
                         </tbody>
                         <tfoot>
                             <tr>
@@ -260,6 +264,40 @@
                         </div>
                         <div class="payment-method-desc" style="display:none">
                             Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                            <br/>
+                            <br/>
+                            <!--Display this table if one or more item is not available for COD-->
+                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                            <table  class="transaction-summary-table transaction-checkout-order" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="60%">
+                                            Product
+                                        </th>
+                                        <th width="20%">
+                                            Quantity
+                                        </th>
+                                        <th width="20%">
+                                            Price
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="checkout-item">
+                                        <td>
+                                            IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
+                                            <br/>
+                                            <small>Go to your <a href="#">Cart</a> and Remove this Item</small>
+                                        </td>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td>
+                                            &#8369; 42,000.00
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
@@ -323,9 +361,11 @@
             </div>
             <!--End of order summary-->
         </div>
-        
-    </div>    
+    </div>
 </div>
 
+<script type='text/javascript'>
+    var jsonCity = <?=json_encode($locations['cityLookup']);?>;
+</script> 
 <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+<script src="/assets/js/src/new-payment.js?ver=<?php echo ES_FILE_VERSION ?>"></script>

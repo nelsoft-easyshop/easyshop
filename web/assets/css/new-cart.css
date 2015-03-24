@@ -456,6 +456,10 @@ ol.how-to-list li{
     margin-top: -11px;
 }
 
+.error-span {
+    color : #FF0000;
+}
+
 /*----------------------------------*/
 /*------Order Complete styles-------*/
 /*----------------------------------*/

@@ -336,19 +336,6 @@ class PaymentService
         $condition = true;
         $itemArray = $carts['choosen_items'];
         $availableItemCount = 0;
-        $totalPointsAllowable = "0.00";
-
-        foreach ($itemArray as $key => $value) { 
-            $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $value['price']), $value['qty']);
-        }
-
-        if(intval($totalPointsAllowable) === 0){
-            $totalPointsAllowable = "1.00";
-            $pointsAllocated = "0.00";
-        }
-        else{
-            $pointsAllocated = intval($pointsAllocated) <= intval($totalPointsAllowable) ? $pointsAllocated : $totalPointsAllowable;
-        }
 
         foreach($itemArray as $key => $value){
 
@@ -357,8 +344,6 @@ class PaymentService
 
             $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                      ->find($productId);
-
-            $pointDeductable = bcmul($pointsAllocated, bcdiv($value['price'], $totalPointsAllowable, 10), 10);
 
             /* Get actual price, apply any promo calculation */
             $this->promoManager->hydratePromoData($productArray);
@@ -373,8 +358,7 @@ class PaymentService
             /** NEW PRICE **/
             $promoPrice = $productArray->getFinalPrice(); 
             $additionalPrice = $value['additional_fee'];
-            $finalPromoPrice = $promoPrice + $additionalPrice;
-            // $finalPromoPrice = round(floatval(bcsub($finalPromoPrice, $pointDeductable, 10)));
+            $finalPromoPrice = $promoPrice + $additionalPrice; 
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
             $subtotal = $finalPromoPrice * $qty;
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;

@@ -6,6 +6,7 @@ if (!defined('BASEPATH'))
 use \Curl\Curl as Curl;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
 
 
@@ -281,15 +282,42 @@ class Payment extends MY_Controller{
     {
         if($memberId = $this->session->userdata('member_id')){
             $paymentService = $this->serviceContainer['payment_service'];
+            $checkoutService = $this->serviceContainer['checkout_service'];
+            $cartManager = $this->serviceContainer['cart_manager'];
+            $cartImplementation = $cartManager->getCartObject();
 
-           $headerData = [
-                "memberId" => $memberId,
-                'title' => 'Payment Review | Easyshop.ph',
-            ];
-            $this->load->spark('decorator');
-            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/payment/payment-review');  
-            $this->load->view('templates/footer_primary');
+            $esMemberRepository = $this->em->getRepository("EasyShop\Entities\EsMember");
+            $esAddressRepository = $this->em->getRepository("EasyShop\Entities\EsAddress");
+            $user = $esMemberRepository->find($memberId);
+
+            if($user){
+                if($cartImplementation->getSize() > 0){
+                    $cart['choosen_items'] = $cartManager->getValidatedCartContents($memberId);
+                    $usedPoints = $this->input->post('points') ? $this->input->post('points') : 0;
+
+                    // $this->__checkReservedPoints($memberId);
+                    $headerData = [
+                        "memberId" => $memberId,
+                        'title' => 'Payment Review | Easyshop.ph',
+                    ];
+                    $bodyData = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
+                    $bodyData['locations'] = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                                      ->getLocationLookup();
+                    $bodyData['shippingFee'] = $cartManager->getCartShippingFee($bodyData['stateRegion'], $memberId);
+                    $bodyData['cartData'] = $paymentService->validateCartData($cart)['itemArray'];
+
+                    $this->load->spark('decorator');
+                    $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+                    $this->load->view('pages/payment/payment-review', $bodyData);
+                    $this->load->view('templates/footer_primary');
+                }
+                else{
+                    redirect('/cart', 'refresh');
+                }
+            }
+            else{
+                redirect('/', 'refresh');
+            }
         }
         else{
             redirect('/', 'refresh');

@@ -75,7 +75,7 @@ class Cart extends MY_Controller
                 'userPoints' => $this->pointTracker->getUserPoint($memberId),
                 'isCartEmpty' => $this->cartImplementation->getSize() === 0,
                 'locations' => $locations,
-                'totalShippingFee' => $this->__getCartShippingFee($cityAddress ,$memberId)
+                'totalShippingFee' => $this->cartManager->getCartShippingFee($cityAddress ,$memberId)
             ];
 
             $this->load->spark('decorator');
@@ -208,30 +208,6 @@ class Cart extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $cityLocation = (int)$this->input->post('city_id'); 
 
-        echo $this->__getCartShippingFee($cityLocation, $memberId); 
-    }
-
-    private function __getCartShippingFee($cityLocation, $memberId)
-    {
-        $cityLocation = (int)$cityLocation;
-        $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                       ->getParentLocation($cityLocation); 
-        $regionLocation = $region->getIdLocation(); 
-        $islandId = $region->getParent()->getParent()->getIdLocation(); 
-        $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-        $shippingFee = 0;
-        foreach ($cartContents as $item) {
-            $shippingFee = $this->serviceContainer['product_shipping_location_manager']
-                                ->getProductItemShippingFee(
-                                    $item['product_itemID'], 
-                                    $cityLocation, 
-                                    $regionLocation, 
-                                    $islandId
-                                );
-            $additionalFee = $shippingFee !== null ? $shippingFee : 0;
-            $shippingFee = bcadd($additionalFee, $shippingFee, 4);
-        }
-
-        return $shippingFee; 
+        echo $this->cartManager->getCartShippingFee($cityLocation, $memberId); 
     }
 }
