@@ -75,6 +75,20 @@ ol.how-to-list li{
     font-size: 13px;
 }
 
+.transaction-checkout-order .alert,
+.alert.alert-checkout{
+    margin-bottom: 0px;
+    text-transform: none;
+    font-size: 11px;
+    font-weight: normal;
+    padding: 5px 10px;
+}
+
+.transaction-checkout-order .alert-link,
+.alert.alert-checkout .alert-link{
+    text-decoration: underline;
+}
+
 .cart-table > thead > tr{
     border-collapse: collapse;
     border-bottom: solid #e2e2e2 2px;
@@ -264,7 +278,7 @@ ol.how-to-list li{
 }
 
 .border-bottom-0{
-    border-bottom: 0px;
+    border-bottom: 0px !important;
 }
 
 .shipping-calculator-container{
