@@ -143,7 +143,7 @@ class ApiFormatter
         $formattedProductAttributes = $productAttributes;
         // get product specification
         $productSpecification = [] ; $productCombinationAttributes = []; 
-		$listArray = [];
+        $listArray = [];
         foreach ($formattedProductAttributes as $key => $productOption) {
             $newArrayOption = []; 
 
@@ -151,12 +151,12 @@ class ApiFormatter
                 $type = ($formattedProductAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
                 $newKey = $type.'_'.$formattedProductAttributes[$key][$i]['attr_id'];
                 $newArrayOption[] = $listArray[$newKey] = [
-					'value' => $productOption[$i]['attr_value'],
-					'price'=> $productOption[$i]['attr_price'],
-					'img_id'=> $productImages[0]['id'],
-					'name'=> $productOption[$i]['attr_name'],
-					'id'=> $newKey
-				]; 
+                    'value' => $productOption[$i]['attr_value'],
+                    'price'=> $productOption[$i]['attr_price'],
+                    'img_id'=> $productImages[0]['id'],
+                    'name'=> $productOption[$i]['attr_name'],
+                    'id'=> $newKey
+                ]; 
             }
 
             if(count($productOption)>1){
@@ -232,14 +232,14 @@ class ApiFormatter
             $productQuantity[] = $temporaryArray[$key];
         }
 
-		foreach($productQuantity as $keyQuantity => $valueQuantity){
-			$additionalPrice = 0;
-			$original_price = $productQuantity[$keyQuantity]['price'];
-			foreach($valueQuantity['combinationId'] as $cid){ 
-				$additionalPrice += isset($listArray[$cid]) ? $listArray[$cid]['price'] : 0;
-			}
-			$productQuantity[$keyQuantity]['price'] = number_format(bcadd($original_price, $additionalPrice , 4), 2,'.','');
-		}
+        foreach($productQuantity as $keyQuantity => $valueQuantity){
+            $additionalPrice = 0;
+            $original_price = $productQuantity[$keyQuantity]['price'];
+            foreach($valueQuantity['combinationId'] as $cid){ 
+                $additionalPrice += isset($listArray[$cid]) ? $listArray[$cid]['price'] : 0;
+            }
+            $productQuantity[$keyQuantity]['price'] = number_format(bcadd($original_price, $additionalPrice , 4), 2,'.','');
+        }
 
         $recentReview = $this->reviewProductService->getProductReview($productId);
 

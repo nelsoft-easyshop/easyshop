@@ -344,7 +344,7 @@ class MobileProductUpload extends MY_Controller
                                             $this->productUploadManager->addShippingInfo(
                                                 $product, 
                                                 $productCombination->getIdProductItem(),
-                                                trim($info['location_id']),
+                                                (int) trim($info['location_id']),
                                                 trim(str_replace(',', '', $info['price']))
                                             );
                                         }
