@@ -438,6 +438,9 @@ class ApiFormatter
             }
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
+
+            $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($memberId);
             if($product){
                 $errorMessage = [];
 
@@ -456,7 +459,7 @@ class ApiFormatter
                     $errorMessage[] = "Quantity Not Available";
                 }
 
-                if($product->getMember()->getIsEmailVerify() === false){
+                if((bool)$member->getIsEmailVerify() === false){
                     $errorMessage[] = "Please verify your email.";
                 }
 
