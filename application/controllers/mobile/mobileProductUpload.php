@@ -84,7 +84,8 @@ class MobileProductUpload extends MY_Controller
 
             $bankAccounts = $this->em->getRepository("EasyShop\Entities\EsBillingInfo")
                                      ->findBy([
-                                         "member"=>$this->member->getIdMember()
+                                         'member' => $this->member,
+                                         'isDelete' => false,
                                      ]);
 
             foreach ($bankAccounts as $account) {
