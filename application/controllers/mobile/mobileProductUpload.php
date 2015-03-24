@@ -141,8 +141,9 @@ class MobileProductUpload extends MY_Controller
                     $fileNames[] = $tempId.'_'.$memberId.'_'.$fullDate.$currentImageCount.'.'.$fileExtension;
                     $currentImageCount++; 
                 }
-                $assetsUploader->uploadProductImage($fileNames, $tempDirectory);
-                $isSuccess = true;
+                $uploadResponse = $assetsUploader->uploadProductImage($fileNames, $tempDirectory);
+                $isSuccess = $uploadResponse['isSuccess'];
+                $errorMessage = $uploadResponse['errorMessage'];
             }
             else{
                 $errorMessage = "No image selected.";
