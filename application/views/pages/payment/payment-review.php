@@ -119,15 +119,15 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group div-change-shipping-btn">
-                               <button class="btn btn-es-green input-sm">
+                               <button class="btn btn-es-green btn-sm btn-change-shipping">
                                     Change Shipping Address
                                 </button>
                             </div>
-                            <div class="form-group div-save-shipping-btn btn-sm">
-                                <button class="btn btn-es-green">
+                            <div class="form-group div-save-shipping-btn" style="display: none;">
+                                <button class="btn btn-es-green btn-sm  btn-save-changes">
                                     Save Changes
                                 </button>
-                                <button class="btn btn-es-white input-sm">
+                                <button class="btn btn-es-white btn-sm  btn-change-shipping-cancel">
                                     Cancel
                                 </button>
                             </div>

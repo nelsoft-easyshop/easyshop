@@ -1183,9 +1183,9 @@ class Payment extends MY_Controller{
         $this->session->unset_userdata('payment_msg');
         $this->session->unset_userdata('payment_status');
 
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/payment/payment_response_responsive' ,$response);
+        $this->load->spark('decorator');
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/payment/payment-response'); 
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
    }
 

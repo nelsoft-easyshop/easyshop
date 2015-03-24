@@ -1,4 +1,5 @@
-(function ($) { 
+
+(function ($) {
 
     var ERROR_MESSAGE = "Something went wrong. Please try again later.";
     var heightOfModal = 0;
@@ -25,8 +26,23 @@
             $(this).parents(".payment-method-container").find(".payment-method-desc").slideDown();      
             $(".btn-payment-button").text("Pay Via "+paymentName);
         });
-    }); 
+    });
 
+    $(".btn-change-shipping").click(function(){
+        $(".div-change-shipping-btn").slideToggle("fast");
+        $(".div-save-shipping-btn").slideToggle("fast");
+        $("#fname, #lname, #contact, #fullAddress").removeAttr("readonly");
+        $("#city, #state").removeAttr("disabled");
+    });
+
+    $(".btn-change-shipping-cancel").click(function(){
+        $(".div-change-shipping-btn").slideToggle("fast");
+        $(".div-save-shipping-btn").slideToggle("fast");
+        $("#fname, #lname, #contact, #fullAddress").attr("readonly", "true");
+        $("#city, #state").attr("disabled", "true");
+        $("#fname, #lname, #contact, #fullAddress").prop("readonly", "true");
+        $("#city, #state").prop("disabled", "true");
+    });
 
     // shipping fee section
     var cityFilter = function(stateregionselect,cityselect){
@@ -176,7 +192,7 @@
     // summary computation
     var $maxPoints = parseInt($("#points-total").data('totalpoints'));
     var $shippingFee = parseFloat($("#summary-shipping").data('totalshipping'));
-    var $cartSubtotal = parseFloat($("#summary-cart-total").data('cartprice'));
+    var $cartSubtotal = $("#summary-cart-total").data('cartprice');
     var $usedPoints = 0;
     $('.btn-deduct-points').on('click', function(){
         var $pointHolder = $("#points-total"); 
@@ -192,7 +208,7 @@
         var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
 
         $summaryContainer.find('#summary-points').html($usedPoints);
-        $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal.toFixed(2)));
+        $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
         $summaryContainer.find('#summary-cart-total').html(replaceNumberWithCommas($cartTotalPrice.toFixed(2)));
     }
 
@@ -200,7 +216,8 @@
     {
         return string.replace(/\,/g,"");
     }
+
 })(jQuery);
 
 
-        
+         
