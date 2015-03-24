@@ -71,7 +71,7 @@ class Cart extends MY_Controller
             $bodyData = [
                 'continue_url' => $continueUrl,
                 'cart_items' => $cartContents,
-                'totalAmount' => $totalAmount,
+                'totalAmount' => str_replace( ',', '', $totalAmount ),
                 'userPoints' => $this->pointTracker->getUserPoint($memberId),
                 'isCartEmpty' => $this->cartImplementation->getSize() === 0,
                 'locations' => $locations,
@@ -144,7 +144,7 @@ class Cart extends MY_Controller
         $isRemoveSuccesful = $this->cartManager->removeItem($memberId, $rowId);
         
         $response = [
-            'isSuccess' => $isRemoveSuccesful,
+            'isSuccessful' => $isRemoveSuccesful,
             'totalPrice' => $this->cartImplementation->getTotalPrice(),
             'numberOfItems' => $this->cartImplementation->getSize(true),
         ];

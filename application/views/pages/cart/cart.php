@@ -73,9 +73,11 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($cart_items as $item): ?>
-                                    <tr>
+                                    <tr class="row-<?=html_escape($item['rowid']);?>">
                                         <td valign="middle">
-                                            <i class="fa fa-times fa-lg cart-item-remove"></i>
+                                            <i class="fa fa-times fa-lg cart-item-remove"
+                                                data-name="<?=html_escape($item['name']);?>"
+                                                data-rowid="<?=html_escape($item['rowid']);?>"></i>
                                         </td>
                                         <td>
                                             <div class="cart-item-thumbnail" style="background: url(<?=getAssetsDomain(); ?><?=$item['imagePath']; ?>categoryview/<?=$item['imageFile']; ?>) center no-repeat; background-size: cover;"></div>
@@ -94,33 +96,50 @@
                                             </div> 
                                             <div class="mobile-price-quantity">
                                                 <div class="cart-item-attribute">
-                                                    <b>Price : </b><span class="cart-price-mobile">&#8369; <?=number_format($item['subtotal'], 2, '.', ',');?></span>
+                                                    <b>Price : </b>
+                                                    <span class="cart-price-mobile">
+                                                        &#8369;
+                                                        <span class="cart-item-price">
+                                                            <?=number_format($item['price'], 2, '.', ',');?>
+                                                        </span>
+                                                    </span>
                                                 </div>
                                                 <div class="cart-item-attribute">
                                                     <b>Quantity : </b>
-                                                    <select class="form-es-control input-sm">
+                                                    <select class="form-es-control input-sm item-quantity" data-rowid="<?=html_escape($item['rowid']);?>">
                                                         <?php for ($i = 1; $i <= $item['maxqty']; $i++): ?>
-                                                            <option><?=$i?></option>
+                                                            <option value="<?=$i?>" <?= (int) $item['qty'] !== (int) $i ?:'selected' ?>><?=$i?></option>
                                                         <?php endfor; ?>
                                                     </select>
                                                 </div>
                                                 <div class="cart-item-attribute">
-                                                    <span class="cart-total-item-price">&#8369; <?=number_format(bcmul($item['subtotal'], $item['qty'], 4), 2, '.', ',');?></span>
+                                                    <span class="cart-total-item-price">
+                                                        &#8369;
+                                                        <span class="cart-item-subtotal">
+                                                            <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                                        </span>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                            &#8369; 
+                                            <span class="cart-item-price">
+                                                <?=number_format($item['price'], 2, '.', ',');?>
+                                            </span>
                                         </td>
                                         <td>
-                                            <select class="form-es-control input-sm">
+                                            <select class="form-es-control input-sm item-quantity" data-rowid="<?=html_escape($item['rowid']);?>">
                                                 <?php for ($i = 1; $i <= $item['maxqty']; $i++): ?>
-                                                    <option><?=$i?></option>
+                                                    <option value="<?=$i?>" <?= (int) $item['qty'] !== (int) $i ?:'selected' ?>><?=$i?></option>
                                                 <?php endfor; ?>
                                             </select>
                                         </td>
                                         <td>
-                                            &#8369; <?=number_format(bcmul($item['subtotal'], $item['qty'], 4), 2, '.', ',');?>
+                                            &#8369; 
+                                            <span class="cart-item-subtotal">
+                                                <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                            </span>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -211,11 +230,11 @@
                     <div class="form-group">
 
                         <label for="points-total">Your Current EasyPoints : <?=$userPoints;?></label>
-                        <input type="text" id="points-total" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
+                        <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
  
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-es-green btn-sm">Deduct Points</button>
+                        <button class="btn btn-es-green btn-sm btn-deduct-points">Deduct Points</button>
                     </div>
                 </div>
             </div>
@@ -223,7 +242,7 @@
 
             <!--Start of summary-->
             <div class="col-md-5">
-                <div class="transaction-container bg-gray min-height-435">
+                <div class="transaction-container bg-gray min-height-435 summary-container">
                     <p class="transaction-container-title">Summary</p>
                     <table class="transaction-summary-table" width="100%">
                         <thead>
@@ -234,12 +253,19 @@
                         <tbody>
                             <tr>
                                 <td>Cart Subtotal</td>
-                                <td>&#8369; <?=$totalAmount;?></td>
+                                <td>&#8369; 
+                                    <span id="summary-cart-subtotal" data-cartprice="<?=number_format($totalAmount, 2, '.', ''); ?>">
+                                        <?=number_format($totalAmount, 2, '.', ','); ?>
+                                    </span>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Shipping Fee</td>
                                 <td>
-                                    &#8369; <?=number_format($totalShippingFee, 2, '.', ',')?>
+                                    &#8369; 
+                                    <span id="summary-shipping" data-totalshipping="<?=number_format($totalShippingFee, 2, '.', ''); ?>">
+                                        <?=number_format($totalShippingFee, 2, '.', ','); ?>
+                                    </span>
                                     <small class="calculate-shipping-label">
                                         <i class="fa fa-plus"></i> Calculate Shipping
                                     </small>
@@ -247,15 +273,23 @@
                             </tr>
                             <tr class="border-bottom-1">
                                 <td>Points to Deduct</td>
-                                <td>&mdash; &#8369; 0</td>
+                                <td>&mdash; &#8369; <span id="summary-points">0</span></td>
                             </tr>
                             <tr>
                                 <td>Total Price</td>
-                                <td>&#8369; 86,000.00</td>
+                                <td>
+                                    &#8369;
+                                    <span id="summary-cart-total" data-cartprice="<?=number_format(bcadd($totalAmount, $totalShippingFee, 4), 2, '.', ''); ?>" >
+                                        <?=number_format(bcadd($totalAmount, $totalShippingFee, 4), 2, '.', ','); ?>
+                                    </span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                    <button class="btn btn-es-green btn-lg btn-block">Proceed to checkout</button>
+                    <?=form_open('payment/review', ['class' => 'reviewForm','id' => 'reviewForm','name' => 'reviewForm']); ?>
+                        <input type="hidden" id="used-points" name="used_points"  value="0" />
+                        <button class="btn btn-es-green btn-lg btn-block">Proceed to checkout</button>
+                    <?=form_close();?>
                     <table class="transaction-summary-table payment-method" width="100%">
                         <thead>
                             <tr>
@@ -284,11 +318,11 @@
 </div>
 <div class="my-modal-content remove-item-modal">
     <p>
-        Are you sure you want to remove <span class="remove-item-name">IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER</span> from your shopping cart?
+        Are you sure you want to remove <span class="remove-item-name"></span> from your shopping cart?
     </p>
     <div class="my-modal-footer">
         <center>
-            <button class="btn btn-es-green">Remove</button>
+            <button class="btn btn-es-green remove-item">Remove</button>
             <button class="btn btn-es-white simplemodal-close">Cancel</button>
         </center>
     </div>
