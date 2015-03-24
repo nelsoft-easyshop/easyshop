@@ -12,6 +12,7 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
 class Payment extends MY_Controller{
 
     private $paymentConfig;
+    private $em;
 
     function __construct() {
         parent::__construct();
@@ -33,39 +34,14 @@ class Payment extends MY_Controller{
         $this->paymentConfig = strtolower(ENVIRONMENT) === 'production'
                                ? $this->config->item('production', 'payment')
                                : $this->config->item('testing', 'payment');
+
+        $this->em = $this->serviceContainer['entity_manager'];
     }
 
     public $PayMentDragonPay = 2;
     public $PayMentCashOnDelivery = 3;
     public $PayMentPesoPayCC = 4;
     public $PayMentDirectBankDeposit = 5;
-
-    function cart_items()
-    {
-        $res = true;
-        if(!$this->session->userdata('member_id')){
-            redirect('/', 'refresh');
-        };
-        $unchecked = $this->input->post('itm');
-        $carts = $this->cart->contents();
-        for($x=0;$x < sizeof($unchecked);$x++):
-            unset($carts[$unchecked[$x]]);
-        endfor;
-        //$this->session->unset_userdata('cart_contents');
-        $cart_contentss=array('choosen_items'=>$carts);
-        $this->session->set_userdata($cart_contentss);
-        //save cart to es_member -> userdata
-        $cart_items = serialize($this->session->userdata('cart_contents'));
-        $id = $this->session->userdata('member_id');
-        $this->cart_model->save_cartitems($cart_items,$id);
-
-        $promo_allow = $this->cart_model->isCartCheckoutPromoAllow($cart_contentss['choosen_items']);
-        if(!$promo_allow){
-            $res = "Some items in your cart can only be purchased individually.";
-        }
-        echo json_encode($res);
-        exit();
-    }
 
     /**
      * Get items in cart depending on the promo type
@@ -300,11 +276,30 @@ class Payment extends MY_Controller{
             }
         } 
     }
+
+    public function newReview()
+    {
+        if($memberId = $this->session->userdata('member_id')){
+            $paymentService = $this->serviceContainer['payment_service'];
+
+           $headerData = [
+                "memberId" => $memberId,
+                'title' => 'Payment Review | Easyshop.ph',
+            ];
+            $this->load->spark('decorator');
+            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('pages/payment/payment-review');  
+            $this->load->view('templates/footer_primary');
+        }
+        else{
+            redirect('/', 'refresh');
+        }
+    }
     
     /**
      * Render payment review
      */
-    public function review()
+    public function old_review()
     {
         if(!$this->session->userdata('member_id') 
            || !$this->session->userdata('choosen_items')){
