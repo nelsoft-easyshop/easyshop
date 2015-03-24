@@ -72,7 +72,7 @@
                                                 <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER): ?>
                                                     <span class="trans-status-pending status-class">Item Received</span>
                                                 <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::RETURNED_BUYER): ?>
-                                                    <span class="trans-status-pending status-class">Seller canceled order</span>
+                                                    <span class="trans-status-pending status-class">Order Canceled</span>
                                                 <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::CASH_ON_DELIVERY): ?>
                                                     <span class="trans-status-pending status-class">Cash on Delivery</span>
                                                 <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED): ?>
