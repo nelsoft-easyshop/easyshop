@@ -1515,6 +1515,7 @@
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
                         alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                        txResponseBtn.closest('.trans-btn-wrapper').find('.shipment-detail-button').remove()
                         msg = "<h3>ORDER CANCELED</h3> <br> Transaction has been moved to completed tab.";
                     }
                     else if (txResponseBtn.hasClass('tx_cod')) {
@@ -2598,8 +2599,9 @@
         }
         var categoryIdString = $listItem.data('categoryid');
         var categoryId = parseInt(categoryIdString,10);
-        var numberOfchildren = $('#category-tree-reference li[data-categoryid="'+categoryId+'"] ul>li').length;
-        
+        $("#edit-category-tree").jstree("open_node", $('li[data-categoryid="'+categoryId+'"]'));
+        var numberOfchildren = $('#edit-category-tree li[data-categoryid="'+categoryId+'"] ul>li').length;
+
         $.ajax({
             type: "GET",
             url: '/memberpage/getCustomCategory',

@@ -725,7 +725,7 @@
                                                                             <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 State/Region : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" align="left" style="padding-right: 10px; word-break: break-all;">
+                                                                            <td valign="top" width="50%" align="left" style="padding-right: 10px; word-break: break-word;">
                                                                                 {stateregion} 
                                                                             </td>
                                                                         </tr>
@@ -733,7 +733,7 @@
                                                                             <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 City : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                            <td valign="top" width="50%" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
                                                                                 {city} 
                                                                             </td>
                                                                         </tr>
@@ -741,7 +741,7 @@
                                                                             <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Street Address : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                            <td valign="top" width="50%" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
                                                                                 {address}
                                                                             </td>
                                                                         </tr>
@@ -879,11 +879,11 @@
                                         <td valign="top" width="100%">
 
                                             <!-- start content left --> 
-                                            <table width="270" border="0" cellspacing="0" cellpadding="0" align="left" style="padding-left:50px;">
+                                            <table width="230" border="0" cellspacing="0" cellpadding="0" align="left" style="padding-left:50px;">
 
                                                 <tr>
                                                     <td valign="middle" align="center">
-                                                        <table width="270" border="0" cellspacing="0" cellpadding="0" align="left">
+                                                        <table width="230" border="0" cellspacing="0" cellpadding="0" align="left">
                                                             <tr>
                                                                 <td width="70">
                                                                     <img src="{primaryImage}" width="60" height="60" style="width: 60px; height: 60px; border: solid #e2e2e2 1px; text-align: center;">
@@ -942,7 +942,7 @@
 
 
                                             <!-- start content right --> 
-                                            <table width="270" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width-text">
+                                            <table width="300" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width-text">
                                                  <tr>
                                                     <td valign="top">
                                                         <table border="0" cellspacing="0" cellpadding="0" align="left" width="100%">
@@ -1007,7 +1007,7 @@
                                                                             <td valign="bottom" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
                                                                                 {payment_method_name} Charge : 
                                                                             </td>
-                                                                            <td valign="bottom" width="50%" align="right" style="padding-right: 40px; font-size: 13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                            <td valign="bottom" width="50%" align="right" style="padding-right: 40px; font-size: 13px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
                                                                                 &#8369; {payment_method_charge}
                                                                             </td>
                                                                         </tr>
