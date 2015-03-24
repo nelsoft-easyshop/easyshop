@@ -13,10 +13,19 @@
 		$(".calculate-shipping-label").click(function(){
 			$(".shipping-calculator-modal").modal({
 				containerCss:{
-					height: heightOfShippingModal
+					height: heightOfModal
 				}
 			});
 			$(".shipping-calculator-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
+		});
+		
+		$(".available-location-trigger").click(function(){
+			$(".available-location-modal").modal({
+				containerCss:{
+					height: heightOfModal
+				}
+			});
+			$(".available-location-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
 		});
 	});
 
