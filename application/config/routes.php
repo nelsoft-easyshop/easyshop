@@ -107,6 +107,7 @@
     
     #UNIVERSAL PAYMENT
     $route['(?i)pay/pay'] = 'payment/pay';
+    $route['(?i)payment/review'] = 'payment/newReview';
 
     #RETURN PAYMENT DRAGON PAY (GATEWAY)
     $route['(?i)pay/returnDragonPay'] = 'payment/returnDragonPay';  # la roberto
