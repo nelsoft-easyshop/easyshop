@@ -123,7 +123,7 @@ class CheckoutService
     {
         $promoConfig = $this->promoManager->getPromoConfig($product->getPromoType());
 
-        if((int)$product->getIsPromote() === 1 && (int)$product->getStartPromo() === 1){
+        if((bool)$product->getIsPromote() && (bool)$product->getStartPromo()){
             return $promoConfig['cart_solo_restriction'];
         }
 
