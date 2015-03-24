@@ -68,6 +68,7 @@
                             <div class="form-group">
                                 <label for="contact">Contact Number <abbr class="required" title="required">*</abbr></label>
                                 <input type="text" id="contact" class="form-es-control form-es-control-block" readonly />
+                                <span class="error">Invalid number format</span>
                              </div>
                         </div>
                     </div>
@@ -153,13 +154,21 @@
                         </thead>
                         
                         <tbody>
-                            <tr class="checkout-item">
+                            <!--Add border-bottom-0 class if item is not available to buyer's location-->
+                            <tr class="checkout-item border-bottom-0">
                                 <td>
                                     IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
                                 </td>
                                 <td>1</td>
                                 <td>&#8369; 42,000.00</td>
                                 <td>&#8369; 42,000.00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <div class="alert alert-es-danger" align="left" style="margin-bottom: 0px;">
+                                        This item is not available in your location. See the item location availability <a href="#" class="alert-link">here</a> or <a href="#" class="alert-link">remove</a> this item from your cart checkout to proceed.
+                                    </div>
+                                </td>
                             </tr>
                              <tr class="checkout-item">
                                 <td>
@@ -215,6 +224,9 @@
                         </thead>
                     </table>
                     -->
+                    <div class="alert alert-es-danger alert-checkout" align="left" style="margin-bottom: 0px;">
+                        <b>NOTE :</b> One or more of your item(s) is unavailable in your location.
+                    </div>
                     <div class="payment-method-container">
                         <div class="radio">
                             <input type="radio" name="payment-method" id="credit" class="payment-label" value="">
