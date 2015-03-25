@@ -682,12 +682,6 @@
         display: none !important;
     }
 
-    #header:after {
-        display: list-item;
-        list-style-image: url(../images/img_logo.png) !important;
-        list-style-position: inside;
-    }
-
     #prod_image,
     .claim-details {
         display:inline-block;
