@@ -244,6 +244,7 @@
                     </div>
                     <div class="form-group">
                         <button class="btn btn-es-green btn-sm">Use Points</button>
+                        <button class="btn btn-es-white btn-sm">Reset</button>
                     </div>
                 </div>
             </div>
