@@ -979,8 +979,6 @@
         colorList.append(newCheckIcon);
     });
     
-
-    
     $( "#btn-edit-store-cat" ).click(function() {
       $( ".current-store-cat" ).slideToggle( "fast" );
       $( ".edit-store-cat" ).slideToggle( "fast" );
@@ -989,6 +987,7 @@
     $( "#cancel-edit-store-cat" ).click(function() {
         $('#store-category-error').hide();
         $( "#btn-edit-store-cat" ).trigger( "click" );
+        $('#edit-category-tree').jstree(true).refresh();
     });
 
     $( "#btn-edit-store-cat-new" ).click(function() {
