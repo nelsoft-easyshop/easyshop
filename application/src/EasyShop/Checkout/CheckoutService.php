@@ -283,6 +283,11 @@ class CheckoutService
         return $paymentType;
     }
 
+    /**
+     * Get all payment type avaialable
+     * @param  mixed $cartData [description]
+     * @return mixed
+     */
     public function getPaymentTypeAvailable($cartData)
     {
         $configPromo = $this->configLoader->getItem('promo','Promo');
@@ -296,6 +301,11 @@ class CheckoutService
         return $paymentType;
     }
 
+    /**
+     * Get all possible error during checkout
+     * @param  mixed $cartData
+     * @return mixed
+     */
     public function getCheckoutError($cartData)
     {   
         $errorMessage = [];
