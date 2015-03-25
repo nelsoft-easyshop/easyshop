@@ -201,7 +201,21 @@ body{
 
 .label-comment{
     text-align: left !important;
-    padding-left: 3px;
+}
+
+.form-horizontal .control-label{
+    text-align: left;
+}
+
+
+.div-write-review-container .col-md-2,
+.div-write-review-container .col-md-10{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.col-comment-review{
+    padding-left: 5px !important;
 }
 
 .input-reply{
@@ -320,6 +334,7 @@ body{
     font-size: 15px;
     margin: 0px;
     margin-top: 5px;
+    word-break: break-all;
 }
 
 .p-date-review{
@@ -340,7 +355,7 @@ body{
 
 .input-textarea-write{
     display: block;
-    width: 100%;
+    width: 200%;
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
@@ -348,12 +363,8 @@ body{
     background-color: #fff;
     border-radius: 4px;
     border: solid #e2e2e2 1px;
-    margin-left: -36px;
     resize: none;
-}
-
-.error-label-textarea{
-    margin-left: -35px;
+    margin-bottom: 10px;
 }
 
 .input-textarea-write:focus{
@@ -1009,10 +1020,6 @@ body{
         margin-left: 0px;
     }
 
-    .input-textarea-write{
-        margin-left: 9px;
-    }
-    
     .error-label-textarea {
         margin-left: 10px;
     }
@@ -1219,6 +1226,19 @@ body{
     }
     
     .btn-reply{
+        width: 100%;
+    }
+
+    .div-write-review-container .col-md-2,
+    .div-write-review-container .col-md-10,
+    .div-write-review-container .col-md-5{
+        padding-left: 0px !important;
+        padding-right: 0px;
+    }
+}
+
+@media only screen and (max-width: 990px) {
+    .input-textarea-write{
         width: 100%;
     }
 }
