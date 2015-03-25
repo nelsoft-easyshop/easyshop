@@ -184,7 +184,7 @@
                                     <tr>
                                         <td colspan="4">
                                             <div class="alert alert-es-danger" align="left" style="margin-bottom: 0px;">
-                                                This item is not available in your location. See the item location availability <a href="#" class="alert-link available-location-trigger">here</a> or <a href="#" class="alert-link">remove</a> this item from your cart checkout to proceed.
+                                                This item is not available in your location. See the item location availability <a href="javascript:void(0)" data-itemid="<?=$item['product_itemID']; ?>" class="alert-link available-location-trigger">here</a> or <a href="javascript:void(0);" data-rowid="<?=$item['rowid']; ?>" class="alert-link remove-item">remove</a> this item from your cart checkout to proceed.
                                             </div>
                                         </td>
                                     </tr>
@@ -559,12 +559,9 @@
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane. 
     </p>
     <div class="form-group">
-        <label for="shipping-city">This item is available in the following locations:</label>
-        <select id="shipping-city" class="form-es-control form-es-control-block">
-            <option>-Select Location Here-</option>
-            <option>Manila</option>
-            <option>Quaezon City</option>
-        </select>
+        <label for="shipping-city">This item is available in the following locations:</label> 
+        <!-- append select -->
+        <select class="form-es-control form-es-control-block location-container"></select>
     </div>
     <div class="my-modal-footer">
         <center>

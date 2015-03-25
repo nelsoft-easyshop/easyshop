@@ -13,6 +13,7 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
 class Payment extends MY_Controller{
 
     private $paymentConfig;
+
     private $em;
 
     function __construct() {
@@ -20,8 +21,7 @@ class Payment extends MY_Controller{
         $this->load->library('session');
         $this->load->library('cart');
         $this->load->library('paypal');
-        $this->load->library('dragonpay');
-        $this->load->library('paypal'); 
+        $this->load->library('dragonpay'); 
         $this->load->library('xmlmap'); 
         $this->load->model('cart_model');
         $this->load->model('user_model');
@@ -37,31 +37,6 @@ class Payment extends MY_Controller{
                                : $this->config->item('testing', 'payment');
 
         $this->em = $this->serviceContainer['entity_manager'];
-    }
-
-    public $PayMentDragonPay = 2;
-    public $PayMentCashOnDelivery = 3;
-    public $PayMentPesoPayCC = 4;
-    public $PayMentDirectBankDeposit = 5;
-
-    /**
-     * Get items in cart depending on the promo type
-     * and push data to choosen_items
-     *
-     * @param $promoType
-     */
-    private function setPromoItemsToPayment($promoType)
-    {
-        $cartContent = $this->cart->contents();
-
-        $item = array();
-        foreach ($cartContent as $key => $value) {
-            if($value['promo_type'] == $promoType){
-                $item[$key] = $cartContent[$key];
-            }
-        }
-        $cart_contentss=array('choosen_items'=> $item);
-        $this->session->set_userdata($cart_contentss);
     }
 
     /**
@@ -278,6 +253,47 @@ class Payment extends MY_Controller{
         } 
     }
 
+    /**
+     * Get available shipping location on individual product item
+     * @return json
+     */
+    public function getProductLocation()
+    {
+        $itemId = (int) $this->input->post('itemId');
+        $markup = "";
+        $errorMessage = "";
+        $isSuccess = false;
+        $bodyData['locationAvailable'] = [];
+        $productItem = $this->em->getRepository('EasyShop\Entities\EsProductItem')
+                                ->find($itemId);
+        if($productItem){
+            $bodyData['selectLocation'] = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                                   ->getLocation();
+            $itemLocations = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                      ->findBy(['productItem' => $productItem]);
+            foreach ($itemLocations as $location) {
+                $bodyData['locationAvailable'][] = $location->getShipping()->getLocation()->getIdLocation();
+            }
+            $markup = $this->load->view('partials/payment-item-location', $bodyData, true);
+            $isSuccess = true;
+        }
+        else{
+            $errorMessage = "Product not exist!";
+        }
+
+        $responseArray = [
+            'view' => $markup,
+            'isSuccessful' => $isSuccess,
+            'errorMessage' => $errorMessage,
+        ];
+
+        echo json_encode($responseArray);
+    }
+
+    /**
+     * Render review page view
+     * @return view
+     */
     public function review()
     {
         if($memberId = $this->session->userdata('member_id')){
@@ -290,7 +306,6 @@ class Payment extends MY_Controller{
             $esMemberRepository = $this->em->getRepository("EasyShop\Entities\EsMember");
             $esAddressRepository = $this->em->getRepository("EasyShop\Entities\EsAddress");
             $member = $esMemberRepository->find($memberId);
-
             if($member){
                 if($cartImplementation->getSize() > 0){
                     $cart['choosen_items'] = $checkoutService->includeCartItemValidation($member);
@@ -725,10 +740,7 @@ class Payment extends MY_Controller{
             $v_order_id = $return['v_order_id'];
             $invoice = $return['invoice_no'];
             $status = PaymentService::STATUS_SUCCESS;
-            $message = ($paymentType == $this->PayMentDirectBankDeposit) 
-                            ? 'Your payment has been completed through Direct Bank Deposit.' 
-                            : 'Your payment has been completed through Cash on Delivery.';
-
+            $message = 'Your payment has been completed through Cash on Delivery.';
             foreach ($itemList as $key => $value) {
                 $itemComplete = $this->payment_model->deductQuantity($value['id'],$value['product_itemID'],$value['qty']);
                 $this->product_model->update_soldout_status($value['id']);
@@ -1106,22 +1118,6 @@ class Payment extends MY_Controller{
             );
     }
 
-    public function getLocation()
-    {
-        $id = $this->input->post('sid');
-        $itemId = $this->input->post('iid');
-        $itemName = $this->input->post('name');
-        $data = array( 
-            'shipment_information' => $this->product_model->getShipmentInformation($id),
-            'shiploc' => $this->product_model->getLocation(),
-            'item_id' => $itemId,
-            'item_name' => $itemName
-            );
-
-        $data = json_encode($this->load->view('pages/payment/payment_review_popout',$data,TRUE));  
-        echo $data;
-    }
-
     private function lockItem($ids = [], $orderId, $action = 'insert')
     {
         foreach ($ids as $key => $value) {
@@ -1273,13 +1269,6 @@ class Payment extends MY_Controller{
         }
 
         $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated, $memberId);
-
-        if($paymentMethodString === 'CashOnDelivery'){
-            if($this->input->post('promo_type') !== false ){
-                $this->setPromoItemsToPayment($this->input->post('promo_type'));
-            }
-        }
-
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));

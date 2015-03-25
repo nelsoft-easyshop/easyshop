@@ -25,7 +25,11 @@
     });
 
     $(".available-location-trigger").click(function(){
+        var $itemId = $(this).data('itemid');
         $(".available-location-modal").modal({
+            onShow : function() {  
+                getProductLocation($itemId);
+            },
             containerCss:{
                 height: heightOfModal
             }
@@ -343,4 +347,54 @@
             validateRedTextBox('.privacy-check');
         }
     });
+
+    // remove cart item
+    $(".remove-item").click(function(){
+        var $this = $(this);
+        var $cartRowId = $this.data('rowid');
+        var $currentRequest = $.ajax({
+            type: "POST",
+            url: '/cart/doRemoveItem',
+            dataType: "json",
+            data:{
+                id:$cartRowId, 
+                csrfname:$csrftoken
+            },
+            success: function(jsonResponse) {
+                if(jsonResponse.isSuccessful){
+                    location.reload();
+                } 
+            },
+            error: function (request, status, error) {
+                alert('Something went wrong. Please try again later'); 
+            } 
+        });
+    });
+
+    // get city availables
+    function getProductLocation($itemId)
+    {
+        console.log($itemId);
+        var $currentRequest = $.ajax({
+            type: "POST",
+            url: '/payment/getProductLocation',
+            dataType: "json",
+            data:{
+                itemId:$itemId, 
+                csrfname:$csrftoken
+            },
+            success: function(jsonResponse) {
+                if(jsonResponse.isSuccessful){
+                    $(".location-container").replaceWith(jsonResponse.view);
+                }
+                else{
+                    alert(jsonResponse.errorMessage);
+                }
+            },
+            error: function (request, status, error) {
+                alert('Something went wrong. Please try again later'); 
+            } 
+        });
+    }
+
 })(jQuery);
