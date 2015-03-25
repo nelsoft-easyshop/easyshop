@@ -17,7 +17,7 @@ header {
 }
 
 .search-container {
-    margin: 0 8px 0 85px;
+    margin: 0 0 0 85px;
 }
 
 .col-md-80p {
@@ -871,6 +871,7 @@ header {
     display: inline-block;
     height: 16px;
     margin-right: 6px;
+    margin-bottom: 4px;
     overflow: hidden;
     position: relative;
     text-align: center;
@@ -910,7 +911,6 @@ header {
 
 .default-nav-dropdown-arrow {
     display: inline-block;
-    float: right;
     height: 25px;
     overflow: hidden;
     position: relative;
@@ -1046,7 +1046,7 @@ header {
 
 @media (min-width: 991px) {
     .search-container {
-        width: 47%;
+        width: 50%;
     }
     .top-header-right .top-msg-con,
     .sticky-nav-fixed .header-text-container .top-msg-con {
@@ -1057,7 +1057,7 @@ header {
 /* Large desktop */
 @media (min-width: 1200px) {
     .search-container {
-        width: 57%;
+        width: 59%;
     }
 
     .title {
