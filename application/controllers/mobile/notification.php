@@ -26,7 +26,7 @@ class Notification extends MY_Controller
         header('Content-type: application/json');
         $jwtContainer = $this->serviceContainer['json_web_token'];
         $configLoader = $this->serviceContainer['config_loader'];
-        $mcrypt = $this->serviceContainer['mcrypt'];
+        $mcryptContainer = $this->serviceContainer['mcrypt'];
 
         $jwt = trim($this->input->post('jwt'));
         $mcrypt = trim($this->input->post('mcrypt'));
@@ -44,9 +44,9 @@ class Notification extends MY_Controller
             }
             elseif($mcrypt){
                 $mcryptConfig =  $configLoader->getItem('mcrypt');
-                $mcrypt->setKey($mcryptConfig['16byte_key']);
-                $mcrypt->setIv($mcryptConfig['16byte_iv']);
-                $decryptString = $mcrypt->decrypt($mcrypt);
+                $mcryptContainer->setKey($mcryptConfig['16byte_key']);
+                $mcryptContainer->setIv($mcryptConfig['16byte_iv']);
+                $decryptString = json_decode($mcryptContainer->decrypt($mcrypt));
             }
 
             if($oauthClients
