@@ -286,8 +286,8 @@ class PaymentService
             $price = $value['price']; 
             $promoItemCount = ($value['is_promote'] == 1) ? $promoItemCount += 1 : $promoItemCount += 0;
             $productItem =  $value['product_itemID'];
-            $shipping_amt = $this->em->productShippingManager
-                            ->getProductItemShippingFee($productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
+            $shipping_amt = $this->productShippingManager
+                                 ->getProductItemShippingFee($productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
             $shipping_amt = $shipping_amt !== null ? $shipping_amt : 0 ;
             $otherFee = $shipping_amt * $orderQuantity;
             $totalAdditionalFee += $otherFee;
