@@ -979,8 +979,6 @@
         colorList.append(newCheckIcon);
     });
     
-
-    
     $( "#btn-edit-store-cat" ).click(function() {
       $( ".current-store-cat" ).slideToggle( "fast" );
       $( ".edit-store-cat" ).slideToggle( "fast" );
