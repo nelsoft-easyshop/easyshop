@@ -311,7 +311,7 @@ class Payment extends MY_Controller{
                     $cart['choosen_items'] = $checkoutService->includeCartItemValidation($member);
                     $postPoints = $this->input->post('used_points') ? (int) $this->input->post('used_points') : 0;
                     $userMaxPoints = $pointTracker->getUserPoint($memberId); 
-                    // $this->__checkReservedPoints($memberId);
+                    $this->__checkReservedPoints($memberId);
                     $headerData = [
                         "memberId" => $memberId,
                         'title' => 'Payment Review | Easyshop.ph',

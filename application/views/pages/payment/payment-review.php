@@ -84,7 +84,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="telephone">Telephone Number <abbr class="required" title="required">*</abbr></label>
+                                <label for="telephone">Telephone Number </label>
                                 <input type="text" value="<?=isset($address['telephone']) ? html_escape($address['telephone']) : ''; ?>" id="telephone" class="form-es-control form-es-control-block" readonly />
                                 <span class="error-span error-telephone_number error"></span>
                             </div>
