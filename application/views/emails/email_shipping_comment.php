@@ -652,7 +652,7 @@
                                                                             <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
                                                                                 Transaction # : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" valign="top" align="left" style="">
+                                                                            <td valign="top" width="50%" valign="top" align="left" style="word-break:break-all;">
                                                                                 {invoice}
                                                                             </td>
                                                                         </tr>
@@ -712,7 +712,7 @@
                                                                             <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Courier : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" valign="top" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                            <td valign="top" width="50%" valign="top" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
                                                                                 {courier}
                                                                             </td>
                                                                         </tr>

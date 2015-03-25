@@ -892,6 +892,7 @@ class Memberpage extends MY_Controller
             }
         }
 
+<<<<<<< HEAD
         $orderProductEntity = $this->esOrderProductRepo
                                    ->findOneBy([
                                        "order" => $data['transaction_num'],
@@ -899,6 +900,8 @@ class Memberpage extends MY_Controller
                                    ]);
         $serverResponse['isTransactionComplete'] = $orderProductEntity ? false : true;
 
+=======
+>>>>>>> dev
         echo json_encode($serverResponse);
     }
 

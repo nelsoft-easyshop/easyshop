@@ -979,8 +979,6 @@
         colorList.append(newCheckIcon);
     });
     
-
-    
     $( "#btn-edit-store-cat" ).click(function() {
       $( ".current-store-cat" ).slideToggle( "fast" );
       $( ".edit-store-cat" ).slideToggle( "fast" );
@@ -989,6 +987,7 @@
     $( "#cancel-edit-store-cat" ).click(function() {
         $('#store-category-error').hide();
         $( "#btn-edit-store-cat" ).trigger( "click" );
+        $('#edit-category-tree').jstree(true).refresh();
     });
 
     $( "#btn-edit-store-cat-new" ).click(function() {
@@ -1515,20 +1514,15 @@
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
                         alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
+                        txResponseBtn.closest('.trans-btn-wrapper').find('.shipment-detail-button').remove()
                         msg = "<h3>ORDER CANCELED</h3> <br> Transaction has been moved to completed tab.";
                     }
                     else if (txResponseBtn.hasClass('tx_cod')) {
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    if (serverResponse.isTransactionComplete === true) {
-                        $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
-                        $('.wipeOut').fadeOut(5000);
-                    }
-                    else {
-                        txResponseBtn.parent().parent().find('.rejectForm').remove();
-                        txResponseBtn.parent().remove();
-                    }
+                    $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                    $('.wipeOut').fadeOut(5000);
                 }
                 txResponseBtn.addClass('enabled');
             }
@@ -2598,8 +2592,9 @@
         }
         var categoryIdString = $listItem.data('categoryid');
         var categoryId = parseInt(categoryIdString,10);
-        var numberOfchildren = $('#category-tree-reference li[data-categoryid="'+categoryId+'"] ul>li').length;
-        
+        $("#edit-category-tree").jstree("open_node", $('li[data-categoryid="'+categoryId+'"]'));
+        var numberOfchildren = $('#edit-category-tree li[data-categoryid="'+categoryId+'"] ul>li').length;
+
         $.ajax({
             type: "GET",
             url: '/memberpage/getCustomCategory',

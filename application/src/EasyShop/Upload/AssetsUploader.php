@@ -118,7 +118,6 @@ class AssetsUploader
         ];
         $this->userBannerDimensions['width'] = $userImageDimensions['bannersize'][0];
         $this->userBannerDimensions['height'] = $userImageDimensions['bannersize'][1];
-        
 
         $this->productImageDimensions = $this->configLoader->getItem('image_dimensions')['productImagesSizes']; 
     }
@@ -395,7 +394,8 @@ class AssetsUploader
      *        ]
      * @return mixed
      */
-    public function uploadProductImage($fileNames, $pathDirectory, $fieldName = "userfile", $cropData = []){
+    public function uploadProductImage($fileNames, $pathDirectory, $fieldName = "userfile", $cropData = [])
+    {
         $fileSuperGlobal = $_FILES;
         $isSuccess = false;
         $errorMessage = "";
@@ -431,11 +431,18 @@ class AssetsUploader
 
                         if(empty($coordinate) === false && isset($cropData[$i])){
                             $coordinate = $cropData[$i];
-                            $this->imageUtility->imageCrop($pathDirectory.$file, 
+                            $this->imageUtility->imageCrop($originalImage, 
                                                      $coordinate[0], 
                                                      $coordinate[1], 
                                                      $coordinate[2], 
                                                      $coordinate[3]);
+                        }
+
+                        if( $uploadData['image_width'] > self::MAX_IMAGE_HEIGHT 
+                            || $uploadData['image_height'] > self::MAX_IMAGE_WIDTH ){ 
+                            $this->imageUtility->imageResize($originalImage,
+                                                             $originalImage,
+                                                             $dimensions['max']);
                         }
 
                         $this->imageUtility->imageResize($originalImage, 
@@ -449,15 +456,6 @@ class AssetsUploader
                         $this->imageUtility->imageResize($categoryImage, 
                                                    $thumbnailImage,
                                                    $dimensions["thumbnail"]);
-
-                        if( $uploadData['image_width'] > self::MAX_IMAGE_HEIGHT 
-                            || $uploadData['image_height'] > self::MAX_IMAGE_WIDTH ){
-                            $config['width'] = self::MAX_IMAGE_HEIGHT;
-                            $config['height'] = self::MAX_IMAGE_WIDTH;
-                            $this->imageLibrary->initialize($config);  
-                            $this->imageLibrary->resize(); 
-                            $this->imageLibrary->clear();
-                        }
 
                         $finalFileNames[] = $file;
                     }

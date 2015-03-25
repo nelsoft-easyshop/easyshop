@@ -68,18 +68,17 @@
                     <table width="100%">
                         <tr>
                             <td width="20%" class="td-list-image" style="">
-                                <div style="position: relative; height: 199px; width: 100%;">
-                                    
-                
-                                <img src="<?php echo getAssetsDomain().$productImagePath; ?>" class="grid-image-primary <?php if($secondaryImagePath !== null): ?>grid-image-has-secondary <?php endif; ?>" >
-                                <?php if($secondaryImagePath !== null): ?>
-                                    <img src="<?php echo getAssetsDomain().$secondaryImagePath; ?>" class="grid-image-secondary" >
-                                <?php endif; ?>     
+                                <div class="image-container">
+                                    <div class="div-item">
+                                        <img src="<?php echo getAssetsDomain().$productImagePath; ?>" class="grid-image-primary <?php if($secondaryImagePath !== null): ?>grid-image-has-secondary <?php endif; ?>" >
+                                        <?php if($secondaryImagePath !== null): ?>
+                                            <img src="<?php echo getAssetsDomain().$secondaryImagePath; ?>" class="grid-image-secondary" >
+                                        <?php endif; ?>
 
-
-                                     <?php if($percentage && $percentage > 0):?>
-                                        <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
-                                    <?php endif;?>
+                                        <?php if($percentage && $percentage > 0):?>
+                                        <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
+                                        <?php endif; ?>
+                                    </div>          
                                 </div>
                             </td>
                             <td width="55%" class="td-list-item-info">
@@ -118,9 +117,13 @@
                                 </div>
                             </td>
                             <td width="25%" class="td-list-price">
-                                <p class="p-list-price"> P <?php echo $productPrice?> </p>
+                                <?php
+                                     $priceFontStyle = strlen((string)$productPrice) > 11 ? "font-size:15px !important;" : "";
+                                     $discountFontStyle = strlen((string)$originalPrice) > 11 ? "font-size:13px !important;" : "";
+                                 ?>
+                                <p class="p-list-price" style="<?php echo $priceFontStyle; ?>"> P <?php echo $productPrice?> </p>
                                 <div class="clear"></div>
-                                <p class="p-list-discount">
+                                <p class="p-list-discount" style="<?php echo $discountFontStyle; ?>">
                                     <s><?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s>
                                 </p>
                                 <a class="btn btn-default-1" target="_blank" href="/item/<?=$productSlug; ?>" >

@@ -2,6 +2,7 @@
 
 namespace EasyShop\Product;
 
+use EasyShop\Entities\EsCat as EsCat;
 use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Entities\EsProductImage as EsProductImage;
 use EasyShop\Entities\EsStyle as EsStyle;
@@ -289,6 +290,7 @@ class ProductUploadManager
         $images = isset($data['images']) ? $data['images'] : [];
         $pictureToRemove = isset($data['pictureToRemove']) ? $data['pictureToRemove'] : []; 
         $combination = isset($data['combination']) ? $data['combination'] : [];
+        $categoryId = isset($data['category']) ? $data['category'] : null;
 
         if(strlen($productName) <= 0 
             || strlen($productPrice) <= 0 
@@ -299,7 +301,20 @@ class ProductUploadManager
 
             $returnArray['message'] = "Fill (*) All Required Fields Properly!";
             return $returnArray;
+        } 
+
+        if($categoryId !== null && $categoryId !== EsCat::ROOT_CATEGORY_ID){
+            $category = $this->em->find("EasyShop\Entities\EsCat", $categoryId);
+            if($category === false){
+                $returnArray['message'] = "Please select valid category!"; 
+                return $returnArray;
+            }
         }
+        else{
+            $returnArray['message'] = "Please select valid category!"; 
+            return $returnArray;
+        }
+        
 
         if(strlen($productName) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){
             $returnArray['message'] = "Product name must be atleast ".EsProduct::MINIMUM_PRODUCT_NAME_LEN." characters!";
@@ -340,3 +355,4 @@ class ProductUploadManager
     }
 
 }
+

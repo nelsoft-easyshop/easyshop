@@ -55,6 +55,16 @@ class MobileProductUpload extends MY_Controller
         
         $oauthToken = $this->oauthServer->getAccessTokenData(OAuth2\Request::createFromGlobals());
         $this->member = $this->em->getRepository('EasyShop\Entities\EsMember')->find($oauthToken['user_id']);
+        
+        if(!(bool)$this->member->getIsEmailVerify()){
+            $returnArray = [
+                'isSuccess' => false,
+                'errorMessage' => "Please verify your email address.",
+            ];
+
+            echo json_encode($returnArray, JSON_PRETTY_PRINT);
+            die;
+        }
     }
 
     /**
@@ -65,42 +75,36 @@ class MobileProductUpload extends MY_Controller
     {
         $temporaryId = "";
         $date = date("Ymd");
-        $isSuccess = false;
+        $isSuccess = true;
         $bankArray = [];
         $memberId = $this->member->getIdMember();
         $errorMessage = "";
- 
-        if((bool)$this->member->getIsEmailVerify()){
-            $temporaryId = $this->productUploadManager->requestUploadToken($this->member->getIdMember());
-            $tempDirectory =  'assets/temp_product/'. $temporaryId.'_'.$memberId.'_'.$date.'/'; 
-            mkdir($tempDirectory, 0777, true);
-            mkdir($tempDirectory.'categoryview/', 0777, true);
-            mkdir($tempDirectory.'small/', 0777, true);
-            mkdir($tempDirectory.'thumbnail/', 0777, true);
-            mkdir($tempDirectory.'other/', 0777, true);
-            mkdir($tempDirectory.'other/categoryview/', 0777, true);
-            mkdir($tempDirectory.'other/small/', 0777, true);
-            mkdir($tempDirectory.'other/thumbnail/', 0777, true);
+        $temporaryId = $this->productUploadManager->requestUploadToken($this->member->getIdMember());
+        $tempDirectory =  'assets/temp_product/'. $temporaryId.'_'.$memberId.'_'.$date.'/'; 
+        mkdir($tempDirectory, 0777, true);
+        mkdir($tempDirectory.'categoryview/', 0777, true);
+        mkdir($tempDirectory.'small/', 0777, true);
+        mkdir($tempDirectory.'thumbnail/', 0777, true);
+        mkdir($tempDirectory.'other/', 0777, true);
+        mkdir($tempDirectory.'other/categoryview/', 0777, true);
+        mkdir($tempDirectory.'other/small/', 0777, true);
+        mkdir($tempDirectory.'other/thumbnail/', 0777, true);
 
-            $bankAccounts = $this->em->getRepository("EasyShop\Entities\EsBillingInfo")
-                                     ->findBy([
-                                         "member"=>$this->member->getIdMember()
-                                     ]);
+        $bankAccounts = $this->em->getRepository("EasyShop\Entities\EsBillingInfo")
+                                 ->findBy([
+                                     'member' => $this->member,
+                                     'isDelete' => false,
+                                 ]);
 
-            foreach ($bankAccounts as $account) {
-                $bankArray[] = [
-                    'billing_id' => $account->getIdBillingInfo(),
-                    'account_name' => $account->getBankAccountName(),
-                    'account_number' => $account->getBankAccountNumber(),
-                    'bank_id' => $account->getBankId(),
-                ];
-            }
-
-            $isSuccess = true;
-        }
-        else{
-            $errorMessage = "Please verify your email address.";
-        }
+        foreach ($bankAccounts as $account) {
+            $bankArray[] = [
+                'billing_id' => $account->getIdBillingInfo(),
+                'account_name' => $account->getBankAccountName(),
+                'account_number' => $account->getBankAccountNumber(),
+                'bank_id' => $account->getBankId(),
+            ];
+        } 
+   
 
         $returnArray = [
             'upload_token' => $temporaryId,
@@ -109,7 +113,7 @@ class MobileProductUpload extends MY_Controller
             'errorMessage' => $errorMessage,
         ];
 
-        echo json_encode($returnArray);
+        echo json_encode($returnArray, JSON_PRETTY_PRINT);
     }
 
     /**
@@ -125,33 +129,29 @@ class MobileProductUpload extends MY_Controller
         $tempId = (string) trim($this->input->post('upload_token')); 
         $isSuccess = false;
         $errorMessage = "";
-
-        if((bool)$this->member->getIsEmailVerify()){
-            if($tempId === (string) $this->member->getTempId()){
-                if(isset($_FILES['userfile'])){   
-                    $memberId = $this->member->getIdMember();
-                    $date = date("Ymd"); 
-                    $fullDate = date("YmdGis");
-                    $tempDirectory =  'assets/temp_product/'. $tempId.'_'.$memberId.'_'.$date.'/'; 
-                    foreach ($_FILES['userfile']['name'] as $key => $value) {
-                        $fileExtension = strtolower(end(explode('.', $_FILES['userfile']['name'][$key]))); 
-                        $fileNames[] = $tempId.'_'.$memberId.'_'.$fullDate.$currentImageCount.'.'.$fileExtension;
-                        $currentImageCount++; 
-                    }
-                    $assetsUploader->uploadProductImage($fileNames, $tempDirectory);
-                    $isSuccess = true;
+ 
+        if($tempId === (string) $this->member->getTempId()){
+            if(isset($_FILES['userfile'])){   
+                $memberId = $this->member->getIdMember();
+                $date = date("Ymd"); 
+                $fullDate = date("YmdGis");
+                $tempDirectory =  'assets/temp_product/'. $tempId.'_'.$memberId.'_'.$date.'/'; 
+                foreach ($_FILES['userfile']['name'] as $key => $value) {
+                    $fileExtension = strtolower(end(explode('.', $_FILES['userfile']['name'][$key]))); 
+                    $fileNames[] = $tempId.'_'.$memberId.'_'.$fullDate.$currentImageCount.'.'.$fileExtension;
+                    $currentImageCount++; 
                 }
-                else{
-                    $errorMessage = "No image selected.";
-                }
+                $uploadResponse = $assetsUploader->uploadProductImage($fileNames, $tempDirectory);
+                $isSuccess = $uploadResponse['isSuccess'];
+                $errorMessage = $uploadResponse['errorMessage'];
             }
-            else{ 
-                $errorMessage = "Invalid Request. Upload token did not match.";
+            else{
+                $errorMessage = "No image selected.";
             }
         }
-        else{
-            $errorMessage = "Please verify your email address.";
-        }
+        else{ 
+            $errorMessage = "Invalid Request. Upload token did not match.";
+        } 
 
         $imageUpload = [
             'isSuccess' => $isSuccess,
@@ -159,6 +159,7 @@ class MobileProductUpload extends MY_Controller
             'errorMessage' => $errorMessage,
             'pictureCount' => $currentImageCount
         ];
+
  
         echo json_encode($imageUpload, JSON_PRETTY_PRINT);
     }
@@ -179,56 +180,55 @@ class MobileProductUpload extends MY_Controller
         $shippingInfo = [];
         $memberId = $this->member->getIdMember();
         $billingInfoId = EsBillingInfo::DEFAULT_BILLING_ID;
+        $tempId = (string) trim($this->input->post('upload_token')); 
+        if($tempId === (string) $this->member->getTempId()){
+            $productTitle = trim($this->input->post('title'));
+            $productDescription = trim($this->input->post('description'));
+            $categoryId = (int) trim($this->input->post('category'));
+            $price = (float) trim(str_replace(',', '', $this->input->post('price')));
+            $discount = (float) trim($this->input->post('discount'));
+            $isCod = strtolower(trim($this->input->post('isCod'))) === "true";
+            $isMeetUp = strtolower(trim($this->input->post('isMeetUp'))) === "true";
+            $quantity = (int) trim($this->input->post('quantity'));
+            $imageArray = json_decode(trim($this->input->post('images')), true);
+            $shippingArray = json_decode(trim($this->input->post('shippingInfo')), true);
+            $attributeArray = json_decode(trim($this->input->post('attributes')), true);
+            $condition = trim($this->input->post('condition'));
+            $bankDetails = json_decode(trim($this->input->post('bankDetails')), true);
+            $isFreeShippingNationwide = strtolower(trim($this->input->post('isFreeShippingNationwide'))) === "true";
 
-        if((bool)$this->member->getIsEmailVerify()){
-            $tempId = (string) trim($this->input->post('upload_token')); 
-            if($tempId === (string) $this->member->getTempId()){
-                $productTitle = trim($this->input->post('title'));
-                $productDescription = trim($this->input->post('description'));
-                $categoryId = trim($this->input->post('category'));
-                $price = (float) trim(str_replace(',', '', $this->input->post('price')));
-                $discount = (float) trim($this->input->post('discount'));
-                $isCod = strtolower(trim($this->input->post('isCod'))) === "true";
-                $isMeetUp = strtolower(trim($this->input->post('isMeetUp'))) === "true";
-                $quantity = (int) trim($this->input->post('quantity'));
-                $imageArray = json_decode(trim($this->input->post('images')), true);
-                $shippingArray = json_decode(trim($this->input->post('shippingInfo')), true);
-                $attributeArray = json_decode(trim($this->input->post('attributes')), true);
-                $condition = trim($this->input->post('condition'));
-                $bankDetails = json_decode(trim($this->input->post('bankDetails')), true);
-                $isFreeShippingNationwide = strtolower(trim($this->input->post('isFreeShippingNationwide'))) === "true";
+            if(is_null($imageArray) === false
+               && isset($imageArray[0])){
+                $images = $imageArray; 
+            }
 
-                if(is_null($imageArray) === false
-                   && isset($imageArray[0])){
-                    $images = $imageArray; 
-                }
+            if(is_null($attributeArray) === false ){
+                $attributes = $attributeArray; 
+            }
 
-                if(is_null($attributeArray) === false ){
-                    $attributes = $attributeArray; 
-                }
+            if(is_null($shippingArray) === false
+               && isset($shippingArray[0])){
+                $shippingInfo = $shippingArray;
+            }
 
-                if(is_null($shippingArray) === false
-                   && isset($shippingArray[0])){
-                    $shippingInfo = $shippingArray;
-                }
+            $validData = [
+                'productName' => $productTitle,
+                'productPrice' => $price,
+                'productDescription' => $productDescription,
+                'images' => $images, 
+                'condition' => $condition,
+                'category' => $categoryId
+            ]; 
 
-                $validData = [
-                    'productName' => $productTitle,
-                    'productPrice' => $price,
-                    'productDescription' => $productDescription,
-                    'images' => $images, 
-                    'condition' => $condition, 
-                ]; 
+            if($isCod === false 
+                && $isFreeShippingNationwide === false 
+                && count($shippingInfo) === 0){
+                $isMeetUp = true;
+            }
 
-                if($isCod === false 
-                    && $isFreeShippingNationwide === false 
-                    && count($shippingInfo) === 0){
-                    $isMeetUp = true;
-                }
-
-                $validate = $this->productUploadManager->validateUploadRequest($validData);
+            $validate = $this->productUploadManager->validateUploadRequest($validData);
+            if($quantity > 0){
                 if($validate['isSuccess']){
-
                     if(is_null($bankDetails) === false && isset($bankDetails['billing_info'])){
                         $billingInfoId = $bankDetails['billing_info'];
                         $accountName = $bankDetails['account_name'];
@@ -237,6 +237,7 @@ class MobileProductUpload extends MY_Controller
                         $bankInfo = $esBillingInfoRepo->findOneBy([
                                                             'idBillingInfo' => $billingInfoId,
                                                             'member' => $memberId,
+                                                            'isDelete' => false,
                                                         ]);
 
                         if($bankInfo){
@@ -344,7 +345,7 @@ class MobileProductUpload extends MY_Controller
                                             $this->productUploadManager->addShippingInfo(
                                                 $product, 
                                                 $productCombination->getIdProductItem(),
-                                                trim($info['location_id']),
+                                                (int) trim($info['location_id']),
                                                 trim(str_replace(',', '', $info['price']))
                                             );
                                         }
@@ -373,19 +374,19 @@ class MobileProductUpload extends MY_Controller
                 }
                 else{
                     $errorMessage = $validate['message'];
-                } 
+                }
             }
             else{
-                $errorMessage = "Invalid Request. Upload token did not match.";
+                $errorMessage = "0 Quantity is not available.";
             }
-        } 
-        else{
-            $errorMessage = "Please verify your email address.";
         }
+        else{
+            $errorMessage = "Invalid Request. Upload token did not match.";
+        } 
 
         $returnArray = [
             'isSuccess' => $isSuccess,
-            'message' => $errorMessage,
+            'errorMessage' => $errorMessage,
         ];
 
         echo json_encode($returnArray, JSON_PRETTY_PRINT);

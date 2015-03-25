@@ -143,7 +143,7 @@ class ApiFormatter
         $formattedProductAttributes = $productAttributes;
         // get product specification
         $productSpecification = [] ; $productCombinationAttributes = []; 
-		$listArray = [];
+        $listArray = [];
         foreach ($formattedProductAttributes as $key => $productOption) {
             $newArrayOption = []; 
 
@@ -151,12 +151,12 @@ class ApiFormatter
                 $type = ($formattedProductAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
                 $newKey = $type.'_'.$formattedProductAttributes[$key][$i]['attr_id'];
                 $newArrayOption[] = $listArray[$newKey] = [
-					'value' => $productOption[$i]['attr_value'],
-					'price'=> $productOption[$i]['attr_price'],
-					'img_id'=> $productImages[0]['id'],
-					'name'=> $productOption[$i]['attr_name'],
-					'id'=> $newKey
-				]; 
+                    'value' => $productOption[$i]['attr_value'],
+                    'price'=> $productOption[$i]['attr_price'],
+                    'img_id'=> $productImages[0]['id'],
+                    'name'=> $productOption[$i]['attr_name'],
+                    'id'=> $newKey
+                ]; 
             }
 
             if(count($productOption)>1){
@@ -232,14 +232,14 @@ class ApiFormatter
             $productQuantity[] = $temporaryArray[$key];
         }
 
-		foreach($productQuantity as $keyQuantity => $valueQuantity){
-			$additionalPrice = 0;
-			$original_price = $productQuantity[$keyQuantity]['price'];
-			foreach($valueQuantity['combinationId'] as $cid){ 
-				$additionalPrice += isset($listArray[$cid]) ? $listArray[$cid]['price'] : 0;
-			}
-			$productQuantity[$keyQuantity]['price'] = number_format(bcadd($original_price, $additionalPrice , 4), 2,'.','');
-		}
+        foreach($productQuantity as $keyQuantity => $valueQuantity){
+            $additionalPrice = 0;
+            $original_price = $productQuantity[$keyQuantity]['price'];
+            foreach($valueQuantity['combinationId'] as $cid){ 
+                $additionalPrice += isset($listArray[$cid]) ? $listArray[$cid]['price'] : 0;
+            }
+            $productQuantity[$keyQuantity]['price'] = number_format(bcadd($original_price, $additionalPrice , 4), 2,'.','');
+        }
 
         $recentReview = $this->reviewProductService->getProductReview($productId);
 
@@ -438,6 +438,9 @@ class ApiFormatter
             }
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
+
+            $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($memberId);
             if($product){
                 $errorMessage = [];
 
@@ -451,6 +454,15 @@ class ApiFormatter
                 $cartContent = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
                                                                              $options, 
                                                                              $mobileCartContent->quantity)['itemData'];
+
+                if($mobileCartContent->quantity > $cartContent['maxqty']){
+                    $errorMessage[] = "Quantity Not Available";
+                }
+
+                if((bool)$member->getIsEmailVerify() === false){
+                    $errorMessage[] = "Please verify your email.";
+                }
+
                 $itemList[$cartContent['product_itemID']] = [
                     'rowid' => $product->getIdProduct(),
                     'id' =>  $product->getIdProduct(),
@@ -472,7 +484,13 @@ class ApiFormatter
             if(isset($itemList[$data['product_itemID']])) {
                 unset($itemList[$data['product_itemID']]);
             }
-        }  
+        }
+
+        foreach ($itemList as $key => $item) {
+            if(empty($item['error_message'])){
+                $itemList[$key]['error_message'][] = "This item is unavailable.";
+            }
+        }
 
         if(!$includeUnavailable){
             return $this->formatCart($cartData);
