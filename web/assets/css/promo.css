@@ -1,3 +1,8 @@
+#main_search_container {
+    padding-bottom: 45px;
+    padding-top: 45px;
+}
+
 .scratch-win-form span,
 .scratch-win-form input,
 .scratch-win-form button,
@@ -136,12 +141,12 @@
     background-color: #00a388;
     border-radius: 4px;
     color: #fff;
+    display: block;
     font-size: 19px;
     font-weight: bold;
     margin: 20px auto;
     max-width: 200px;
     padding: 2% 8%;
-    position: relative;
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition:    all 0.3s ease-in-out;
     -o-transition:      all 0.3s ease-in-out;
@@ -223,7 +228,7 @@
  }
 
 .shop-now-img {
-    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0);
+    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0) !important;
     display: inline-block;
     height: 20px;
     width: 24px;
@@ -546,7 +551,7 @@
     text-decoration: none;
  }
 .shop-now-img {
-    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0);
+    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0) !important;
     display: inline-block;
     height: 20px;
     width: 24px;
@@ -628,12 +633,42 @@
 }
 
 @media print {
-    header {
+    #header {
         background-color: #4e83ef !important;
-        height: 10px !important;
-        margin-bottom: 30px !important;
+        height: 5px !important;
+        margin-bottom: 20px !important;
         width: 100% !important;
         -webkit-print-color-adjust: exact;
+    }
+
+    #header-top, 
+    .header-inner-right,
+    .persistent-header-wrapper,
+    .footer-primary,
+    .footer-bottom-content,
+    .logo > span,
+    .logo > a[href]:after {
+        display: none;
+    }
+
+    .logo > a[href]:after {
+        display: none;
+    }
+
+    #main_search_container {
+        margin-top: 30px !important;
+    }
+
+    .claim-bg {
+        height: 213px !important;
+    }
+
+    .res-copyright {
+        border-top: 3px solid #ff893b !important;
+        font-size: 14px;
+        margin-top: 30px;
+        padding-top: 10px;
+        text-align: center;
     }
 
     footer,
@@ -645,12 +680,6 @@
     .header-galore33 a[href]:after,
     .notification_container {
         display: none !important;
-    }
-
-    .logo span {
-        display: list-item;
-        list-style-image: url(../images/img_logo.png);
-        list-style-position: inside;
     }
 
     #prod_image,
