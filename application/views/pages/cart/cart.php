@@ -279,7 +279,7 @@
                                 <td>Total Price</td>
                                 <td>
                                     &#8369;
-                                    <span id="summary-cart-total" data-cartprice="<?=number_format(bcadd($totalAmount, $totalShippingFee, 4), 2, '.', ''); ?>" >
+                                    <span id="summary-cart-total" data-cartprice="<?=number_format($totalAmount, 2, '.', ''); ?>" >
                                         <?=number_format(bcadd($totalAmount, $totalShippingFee, 4), 2, '.', ','); ?>
                                     </span>
                                 </td>

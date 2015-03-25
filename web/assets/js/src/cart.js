@@ -5,8 +5,7 @@
     var heightOfModal = 0;
     var $csrftoken = $("meta[name='csrf-token']").attr('content');
 
-    $(window).on("load resize",function(){
-        var browserWidth = $(window).width();
+    $(window).on("load resize",function(){ 
         heightOfModal = $(".simplemodal-wrap").outerHeight();
 
         $(".calculate-shipping-label").click(function(){
@@ -173,6 +172,15 @@
         var $pointHolder = $("#points-total"); 
         $usedPoints = $pointHolder.val().trim() === "" ? 0 : parseInt($pointHolder.val().trim());
         $usedPoints = isNaN($usedPoints) ? 0 : parseInt($usedPoints);
+
+        if($usedPoints > $maxPoints){
+            $usedPoints = 0;
+            validateRedTextBox("#points-total");
+        }
+        else{
+            validateWhiteTextBox("#points-total");
+        }
+
         $("#used-points").val($usedPoints);
         computePrices();
     });
@@ -191,7 +199,6 @@
     {
         return string.replace(/\,/g,"");
     }
-
 })(jQuery);
 
 

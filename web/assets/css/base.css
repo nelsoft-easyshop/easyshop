@@ -60,3 +60,9 @@ textarea.form-es-control{
 	color: #fff;
 	background: #006655;
 }
+
+.form-group .error{
+	display: block;
+	color: #a94442;
+	font-size: 11px;
+}
