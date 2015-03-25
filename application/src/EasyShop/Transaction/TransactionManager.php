@@ -457,4 +457,21 @@ class TransactionManager
 
         return false;
     }
+
+    /**
+     * Get total transaction shipping fee
+     * @param  EasyShop\Entites\EsOrder $order
+     * @return float()
+     */
+    public function getTransactionShippingFee($order)
+    {
+        $totalShippingFee = 0;
+        $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                  ->findBy(['order' => $order]);
+        foreach ($orderProducts as $product) {
+            $totalShippingFee = bcadd($totalShippingFee, $product->getHandlingFee(), 4);
+        }
+
+        return $totalShippingFee;
+    }
 }

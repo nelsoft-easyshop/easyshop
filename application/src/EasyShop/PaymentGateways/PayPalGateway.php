@@ -165,7 +165,7 @@ class PayPalGateway extends AbstractGateway
         if($validatedCart['itemCount'] !== $productCount){
             return [
                 'e' => false,
-                'd' => 'One of the items in your cart is unavailable.'
+                'd' => 'Item quantity not available.'
             ];
         }
 
@@ -345,7 +345,7 @@ class PayPalGateway extends AbstractGateway
 
         if(array_key_exists('token',$getItems) && array_key_exists('PayerID',$getItems)){
             $payerid = $getItems['PayerID'];
-            $token = $getItems['token']; ;
+            $token = $response['txnid'] = $getItems['token']; ;
             $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                ->findOneBy([
                                     'transactionId' => $token,

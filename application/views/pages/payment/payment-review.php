@@ -223,7 +223,7 @@
                                 <td>
                                     Subtotal
                                 </td>
-                                <td colspan="3">&#8369; 45,000.00</td>
+                                <td colspan="3">&#8369; <?=number_format($cartAmount, 2, '.', ','); ?></td>
                             </tr>
                             <tr>
                                 <td>
@@ -241,7 +241,7 @@
                                 <td >
                                     Order Total
                                 </td>
-                                <td  colspan="3" class="checkout-order-total">&#8369; 50,760.00</td>
+                                <td  colspan="3" class="checkout-order-total">&#8369; <?=number_format($grandTotal, 2, '.', ',')?></td>
                             </tr>
                         </foot>
                     </table>
@@ -260,7 +260,7 @@
                         <?php if(isset($paymentType['cdb'])): ?>
                             <div class="payment-method-container">
                                 <div class="radio">
-                                    <input type="radio" name="payment-method" id="credit" class="payment-label" value="">
+                                    <input type="radio" name="payment-method" id="credit" class="payment-label" checked="" value="paypalcdb">
                                     <label class="payment-label payment-name" for="credit">
                                         Credit Card or Debit Card <img src="/assets/images/payment-methods/img-payment-credit.png" class="payment-method-img"/>
                                     </label>
@@ -293,7 +293,7 @@
                                                             <td>
                                                                 <?=html_escape($item['name']);?>
                                                                 <br/>
-                                                                <small>Go to your <a href="#">Cart</a> and Remove this Item</small>
+                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
                                                             </td>
                                                             <td>
                                                                 <?=html_escape($item['qty']);?>
@@ -314,7 +314,7 @@
                         <?php if(isset($paymentType['paypal'])): ?>
                             <div class="payment-method-container">
                                 <div class="radio">
-                                    <input type="radio" name="payment-method" id="paypal" class="payment-label" value="">
+                                    <input type="radio" name="payment-method" id="paypal" class="payment-label" value="paypal">
                                     <label class="payment-label payment-name" for="paypal">
                                         PayPal Account <img src="/assets/images/payment-methods/img-payment-paypal.png" class="payment-method-img"/>
                                     </label>
@@ -347,7 +347,7 @@
                                                             <td>
                                                                 <?=html_escape($item['name']);?>
                                                                 <br/>
-                                                                <small>Go to your <a href="#">Cart</a> and Remove this Item</small>
+                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
                                                             </td>
                                                             <td>
                                                                 <?=html_escape($item['qty']);?>
@@ -368,7 +368,7 @@
                         <?php if(isset($paymentType['dragonpay'])): ?>
                             <div class="payment-method-container">
                                 <div class="radio">
-                                    <input type="radio" id="dragonpay" name="payment-method" class="payment-label" value="">
+                                    <input type="radio" id="dragonpay" name="payment-method" class="payment-label" value="dragonpay">
                                     <label class="payment-label payment-name" for="dragonpay">
                                         Dragonpay <img src="/assets/images/payment-methods/img-payment-dragonpay.png" class="payment-method-img"/>
                                     </label>
@@ -401,7 +401,7 @@
                                                             <td>
                                                                 <?=html_escape($item['name']);?>
                                                                 <br/>
-                                                                <small>Go to your <a href="#">Cart</a> and Remove this Item</small>
+                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
                                                             </td>
                                                             <td>
                                                                 <?=html_escape($item['qty']);?>
@@ -422,7 +422,7 @@
                         <?php if(isset($paymentType['pesopaycdb'])): ?>
                             <div class="payment-method-container">
                                 <div class="radio">
-                                    <input type="radio" id="pesopay"name="payment-method" class="payment-label" value="">
+                                    <input type="radio" id="pesopay" name="payment-method" class="payment-label" value="pesopay">
                                     <label class="payment-label payment-name" for="pesopay">
                                         PesoPay <img src="/assets/images/payment-methods/img-payment-pesopay.png" class="payment-method-img"/>
                                     </label>
@@ -455,7 +455,7 @@
                                                             <td>
                                                                 <?=html_escape($item['name']);?>
                                                                 <br/>
-                                                                <small>Go to your <a href="#">Cart</a> and Remove this Item</small>
+                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
                                                             </td>
                                                             <td>
                                                                 <?=html_escape($item['qty']);?>
@@ -476,7 +476,7 @@
                         <?php if(isset($paymentType['cod'])): ?>
                             <div class="payment-method-container">
                                 <div class="radio">
-                                    <input type="radio" id="cod" name="payment-method" class="payment-label" value="">
+                                    <input type="radio" id="cod" name="payment-method" class="payment-label" value="cod">
                                     <label class="payment-label payment-name" for="cod">
                                         Cash on Delivery
                                     </label>
@@ -508,7 +508,7 @@
                                                             <td>
                                                                 <?=html_escape($item['name']);?>
                                                                 <br/>
-                                                                <small>Go to your <a href="#">Cart</a> and Remove this Item</small>
+                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
                                                             </td>
                                                             <td>
                                                                 <?=html_escape($item['qty']);?>
@@ -528,12 +528,12 @@
                         <br/>
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox" value="">
+                                <input type="checkbox" class="privacy-check" checked="">
                                 I acknowledge I have read and understood <a href="#">Easyshop.ph's  Privacy Policy</a>.
                             </label>
                         </div>
                         <br/>
-                        <button class="btn btn-es-green btn-lg btn-block btn-payment-button">
+                        <button class="btn btn-es-green btn-lg btn-block btn-payment-button" type="button" data-points="<?=$usedPoints?>">
                             Pay Via Credit Card or Debit Card
                         </button>
                     <?php else: ?> 
@@ -571,6 +571,8 @@
         </center>
     </div>
 </div>
+
+<div id="pesopaycdb"></div>
 
 <script type='text/javascript'>
     var jsonCity = <?=json_encode($locations['cityLookup']);?>;
