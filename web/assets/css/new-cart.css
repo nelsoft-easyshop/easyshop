@@ -5,13 +5,25 @@
     color: #565656;
 }
 
-
 .required{
     display: inline-block !important;
 }
 
 .bg-gray{
     background: #f7f7f7;
+}
+
+.link-blue{
+    display: inline-block;
+    color: #4370cc;
+    margin-top: 10px;
+    border-bottom: dotted #4370cc 1px;
+    font-size: 11px;
+}
+
+.link-blue:hover{
+    color: #ff893a;
+    border-bottom: dotted #ff893a 1px;
 }
 
 .transaction-container{
@@ -23,8 +35,8 @@
     margin-bottom: 20px;
 }
 
-.min-height-435{
-    min-height: 435px;
+.min-height-459{
+    min-height: 459px;
 }
 
 .transaction-container .form-group{

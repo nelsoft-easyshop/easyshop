@@ -536,6 +536,7 @@
                         <button class="btn btn-es-green btn-lg btn-block btn-payment-button" type="button" data-points="<?=$usedPoints?>">
                             Pay Via Credit Card or Debit Card
                         </button>
+                        <center><a href="/cart" class="link-blue">Go back to cart</a></center>
                     <?php else: ?> 
                         <?php foreach ($checkoutError['errorMessage'] as $error): ?>
                         <div class="alert alert-es-danger alert-checkout" align="left" style="margin-bottom: 0px;">

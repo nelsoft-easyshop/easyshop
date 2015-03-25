@@ -150,22 +150,6 @@
             </div>
             <!--End of cart items-->
         <?php endif; ?>
-        <!--Start of middle buttons-->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="mid-button-container">
-                    <center> 
-                        <div class="mid-button-background">
-                            <a href="<?=$continue_url;?>" class="btn btn-es-white btn-lg btn-mid btn-mid-left"><i class="fa fa-angle-left fa-lg"></i>Continue Shopping</a>
-                            <a href="/cart" class="btn btn-es-white btn-lg btn-mid btn-mid-right">Update My Cart<i class="fa fa-refresh fa-lg"></i></a>
-                        </div> 
-                    </center>
-                    <div class="mid-button-divider"></div>
-                </div>
-            </div>
-        </div>
-        <!--End of middle buttons-->
-
         <!--Start of trio bottom boxes-->
         <div class="row">
             <!--Start of shipping calculator-->
@@ -214,7 +198,7 @@
 
             <!--Start of points-->
             <div class="col-md-7">
-                <div class="transaction-container bg-gray">
+                <div class="transaction-container bg-gray min-height-459">
                     <p class="transaction-container-title">Use Your EasyPoints</p>
                     <p class="transaction-container-text">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane.
@@ -234,7 +218,8 @@
  
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-es-green btn-sm btn-deduct-points">Deduct Points</button>
+                        <button class="btn btn-es-green btn-sm btn-deduct-points">Use Points</button>
+                        <button class="btn btn-es-white btn-sm">Reset</button>
                     </div>
                 </div>
             </div>
@@ -285,11 +270,7 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
-                    <?=form_open('payment/review', ['class' => 'reviewForm','id' => 'reviewForm','name' => 'reviewForm']); ?>
-                        <input type="hidden" id="used-points" name="used_points"  value="0" />
-                        <button class="btn btn-es-green btn-lg btn-block">Proceed to checkout</button>
-                    <?=form_close();?>
+                    </table> 
                     <table class="transaction-summary-table payment-method" width="100%">
                         <thead>
                             <tr>
@@ -308,6 +289,12 @@
                             </tr>
                         </tbody>
                     </table>
+                    <br/>
+                    <?=form_open('payment/review', ['class' => 'reviewForm','id' => 'reviewForm','name' => 'reviewForm']); ?>
+                        <input type="hidden" id="used-points" name="used_points"  value="0" />
+                        <button class="btn btn-es-green btn-lg btn-block">Proceed to checkout</button>
+                    <?=form_close();?> 
+                    <center><a href="/" class="link-blue">Continue shopping</a></center>
                 </div>
             </div>
             <!--End of summary-->
@@ -364,8 +351,9 @@
         <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly />
     </div>
     <div class="my-modal-footer">
-        <center>
+        <center> 
             <button class="btn btn-es-green calculate-shipping">Calculate</button>
+            <button class="btn btn-es-green" disabled>Update Totals</button> 
             <button class="btn btn-es-white simplemodal-close">Cancel</button>
         </center>
     </div>
