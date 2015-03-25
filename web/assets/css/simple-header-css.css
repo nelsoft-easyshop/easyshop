@@ -40,8 +40,8 @@ header {
 }
 
 .header-user-msge {
-    position: absolute;
     left: -5px;
+    position: absolute !important;
     top: -5px;
 }
 

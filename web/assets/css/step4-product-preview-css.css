@@ -131,6 +131,10 @@
     margin-bottom: 25px;
 }
 
+.prod-payment-img-container img {
+    margin-left: 3%;
+}
+
 @media (min-width: 991px) {
     .prod-add-to-cart-btn {
         background-position: 16% center;
