@@ -1,7 +1,9 @@
 ﻿
 /****************** Global Upload product style ****************/
 /**************************************************************/
-
+a:focus {
+    outline: none !important;
+}
 /*** error product ***/
 .alert_content {
     border:1px solid #d63a02;
