@@ -1542,7 +1542,7 @@ body{
 }
 
 .ie9 .prod-select-con {
-    background: #fff;
+    background: #fff none;
     position: relative;
 }
 
@@ -1645,10 +1645,13 @@ body{
     width: 100%;
 }
 
+.ie9 .prod-add-to-cart-btn {
+    background-image: url(../images/sprites/shopping-cart.png);
+}
+
 .prod-add-to-cart-btn {
     background-repeat: no-repeat;
     background-color: #F17F36;
-    background-image: url(../images/sprites/shopping-cart.png);
     background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#FEB483), to(#F17F36));
     background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #FEB483, #F17F36);
     background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #FEB483, #F17F36);
