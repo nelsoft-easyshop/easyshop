@@ -725,7 +725,7 @@ class CategoryManager
     {
         /**
          * Delete child categories first to prevent categories from being orphaned
-         */
+         */         
         $deletedCategoryIds = [];
         $childCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
                                 ->getCustomCategoriesObject($memberId, $customCategoryIds, true);
@@ -749,15 +749,18 @@ class CategoryManager
         catch(Exception $e){
             return false;
         }
-        $nonChildCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                   ->getCustomCategoriesObject($memberId, $customCategoryIds);
-        foreach($nonChildCategories as $category){
-            $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                     ->getNumberOfChildren($category->getIdMemcat());
-            if($numberOfChildren === 0){
-                $category->setIsDelete(EsMemberCat::IS_DELETE);
-                $category->setlastModifiedDate(date_create());
-                $deletedCategoryIds[] = $category->getIdMemcat();
+        
+        if(!empty($customCategoryIds)){
+            $nonChildCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                    ->getCustomCategoriesObject($memberId, $customCategoryIds);
+            foreach($nonChildCategories as $category){
+                $numberOfChildren = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                        ->getNumberOfChildren($category->getIdMemcat());
+                if($numberOfChildren === 0){
+                    $category->setIsDelete(EsMemberCat::IS_DELETE);
+                    $category->setlastModifiedDate(date_create());
+                    $deletedCategoryIds[] = $category->getIdMemcat();
+                }
             }
         }
         
