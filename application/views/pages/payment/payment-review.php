@@ -331,6 +331,7 @@
                     <button class="btn btn-es-green btn-lg btn-block btn-payment-button">
                         Pay Via Credit Card or Debit Card
                     </button>
+                    <center><a href="#" class="link-blue">Go back to cart</a></center>
                 </div>
             </div>
             <!--End of order summary-->
