@@ -58,10 +58,10 @@
                                 </p>
                                 <div class="div-meta-description">
                                     <div class="row">
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <span class="strong-label">Sold Item(s) : </span> <?=$product->soldCount; ?>
                                         </div>
-                                        <div class="col-xs-8 col-stock">
+                                        <div class="col-md-8 col-stock">
                                             <span class="strong-label">Available Stock(s) : </span> <span class="stock-number"> <?=$product->availableStock; ?></span>
                                         </div>
                                     </div>
