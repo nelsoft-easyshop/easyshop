@@ -185,23 +185,6 @@
             </div>
         </div>
         <!--End of cart items-->
-
-        <!--Start of middle buttons-->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="mid-button-container">
-                    <center>
-                        <div class="mid-button-background">
-                            <a href="#" class="btn btn-es-white btn-lg btn-mid btn-mid-left"><i class="fa fa-angle-left fa-lg"></i>Continue Shopping</a>
-                            <a href="#" class="btn btn-es-white btn-lg btn-mid btn-mid-right">Update My Cart<i class="fa fa-refresh fa-lg"></i></a>
-                        </div>
-                    </center>
-                    <div class="mid-button-divider"></div>
-                </div>
-            </div>
-        </div>
-        <!--End of middle buttons-->
-
         <!--Start of trio bottom boxes-->
         <div class="row">
             <!--Start of shipping calculator-->
@@ -242,7 +225,7 @@
 
             <!--Start of points-->
             <div class="col-md-7">
-                <div class="transaction-container bg-gray">
+                <div class="transaction-container bg-gray min-height-459">
                     <p class="transaction-container-title">Use Your EasyPoints</p>
                     <p class="transaction-container-text">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane.
@@ -260,7 +243,7 @@
                         <input type="text" id="shipping-total" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-es-green btn-sm">Deduct Points</button>
+                        <button class="btn btn-es-green btn-sm">Use Points</button>
                     </div>
                 </div>
             </div>
@@ -319,7 +302,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <button class="btn btn-es-green btn-lg btn-block">Proceed to checkout</button>
                     <table class="transaction-summary-table payment-method" width="100%">
                         <thead>
                             <tr>
@@ -338,6 +320,9 @@
                             </tr>
                         </tbody>
                     </table>
+                    <br/>
+                    <button class="btn btn-es-green btn-lg btn-block">Proceed to checkout</button>
+                    <center><a href="#" class="link-blue">Continue shopping</a></center>
                 </div>
             </div>
             <!--End of summary-->
@@ -387,6 +372,7 @@
     <div class="my-modal-footer">
         <center>
             <button class="btn btn-es-green">Calculate</button>
+            <button class="btn btn-es-green" disabled>Update Totals</button>
             <button class="btn btn-es-white simplemodal-close">Cancel</button>
         </center>
     </div>
