@@ -639,6 +639,10 @@ class Kernel
         $container['json_web_token'] = function ($c) {
             return new \JWT();
         }; 
+
+        $container['mcrypt'] = function ($c) {
+            return new \MCrypt\MCrypt();
+        }; 
         
         $nodejsConfig = require_once(APPPATH . "config/param/nodejs.php");
         $container['redis_client'] = function ($c) use ($nodejsConfig) {
