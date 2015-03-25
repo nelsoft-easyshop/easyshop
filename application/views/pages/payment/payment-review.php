@@ -44,8 +44,8 @@
             <!--Start of shipping details-->
             <?=form_open('', ['class' => 'addressForm','id' => 'addressForm','name' => 'addressForm']); ?>
             <div class="col-md-7">
-                <input type="hidden" id="currentLat" value="<?=html_escape($address['lat']); ?>" />
-                <input type="hidden" id="currentLang" value="<?=html_escape($address['lng']); ?>" />
+                <input type="hidden" id="currentLat" value="<?=isset($address['lat'])?html_escape($address['lat']):''; ?>" />
+                <input type="hidden" id="currentLang" value="<?=isset($address['lng'])?html_escape($address['lng']):''; ?>" />
 
                 <div class="transaction-container bg-white">
                     <p class="transaction-container-title">Shipping Details</p>
@@ -67,7 +67,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="fname">Consignee Name <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" value="<?=html_escape($address['consignee']); ?>" id="fname" class="form-es-control form-es-control-block" readonly/>
+                                <input type="text" value="<?=isset($address['consignee']) ? html_escape($address['consignee']) : ''; ?>" id="fname" class="form-es-control form-es-control-block" readonly/>
                                 <span class="error-span error-consignee error"></span>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="mobile">Mobile Number <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" value="0<?=html_escape($address['mobile']); ?>" id="mobile" class="form-es-control form-es-control-block" readonly />
+                                <input type="text" value="<?=isset($address['mobile']) ? '0'.html_escape($address['mobile']) : ''; ?>" id="mobile" class="form-es-control form-es-control-block" readonly />
                                 <span class="error-span error-mobile_number error"></span>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="telephone">Telephone Number <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" value="<?=html_escape($address['telephone']); ?>" id="telephone" class="form-es-control form-es-control-block" readonly />
+                                <input type="text" value="<?=isset($address['telephone']) ? html_escape($address['telephone']) : ''; ?>" id="telephone" class="form-es-control form-es-control-block" readonly />
                                 <span class="error-span error-telephone_number error"></span>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="fullAddress">Full Address <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" value="<?=html_escape($address['address']); ?>" id="fullAddress" class="form-es-control form-es-control-block" readonly/>
+                                <input type="text" value="<?=isset($address['address']) ? html_escape($address['address']) : ''; ?>" id="fullAddress" class="form-es-control form-es-control-block" readonly/>
                                 <span class="error-span error-street_address error"></span>
                             </div>
                         </div>

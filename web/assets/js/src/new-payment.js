@@ -77,7 +77,7 @@
     });
 
     $(".btn-save-changes").click(function(){
-
+        $(".error").empty();
         var $consigneeName = $("#fname").val();
         var $fullAddress = $("#fullAddress").val();
         var $telephone = $("#telephone").val();

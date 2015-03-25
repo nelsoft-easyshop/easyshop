@@ -117,9 +117,15 @@ class ValidationRules
                     ),
                     'city' => array(
                                 new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a city.",
+                                                    ]),
                     ),
                     'region' => array(
                                 new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a state region.",
+                                                    ]),
                     ),
                 ),
             'user_shipping_address' => array(
@@ -128,9 +134,15 @@ class ValidationRules
                     ),
                     'city' => array(
                                 new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a city.",
+                                                    ]),
                     ),
                     'region' => array(
                                 new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a state region.",
+                                                    ]),
                     ),
                     'mobile_number' => array(
                                 new Assert\NotBlank(),

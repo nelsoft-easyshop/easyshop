@@ -11,7 +11,10 @@ class EsAddressRepository extends EntityRepository
     {
         $address = $this->_em->getRepository('EasyShop\Entities\EsAddress')
                         ->findOneBy(['idMember' => $memberId, 'type' => '1']);
-        return $address->getStateregion()->getIdLocation();
+        if($address){
+            return $address->getStateregion()->getIdLocation();
+        }
+        return false;
     }
 
     /**

@@ -4,6 +4,8 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
+use EasyShop\Entities\EsAddress as EsAddress;
+
 class Cart extends MY_Controller
 {
 
@@ -49,19 +51,20 @@ class Cart extends MY_Controller
      */
     public function index()
     {
+        $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         if ($this->session->userdata('member_id')) {
             $memberId = $this->session->userdata('member_id');
             $cartContents = $this->cartManager->getValidatedCartContents($memberId); 
             $totalAmount = $this->cartImplementation->getTotalPrice();
-            $cityAddress = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                                    ->getShippingAddress($memberId);
+            $cityAddress = $esAddressRepository->getShippingAddress($memberId);
             $locations = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                   ->getLocationLookup();
+            $address = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
                 "title" => "Cart | Easyshop.ph",
             ];
-            
+
             $referer =  $this->serviceContainer['http_request']
                              ->headers->get('referer');
             $continueUrl = $referer;
@@ -69,6 +72,7 @@ class Cart extends MY_Controller
                 $continueUrl = '/product/categories_all';
             }
             $bodyData = [
+                'userAddress' => $address,
                 'continue_url' => $continueUrl,
                 'cart_items' => $cartContents,
                 'totalAmount' => str_replace( ',', '', $totalAmount ),
@@ -207,7 +211,13 @@ class Cart extends MY_Controller
     {
         $memberId = $this->session->userdata('member_id');
         $cityLocation = (int)$this->input->post('city_id'); 
+        $shippingFee = $this->cartManager->getCartShippingFee($cityLocation, $memberId, true);
 
-        echo $this->cartManager->getCartShippingFee($cityLocation, $memberId); 
+        if($shippingFee){
+            echo number_format($shippingFee, 2, '.', '');
+        }
+        else{
+            echo "Some product not avaialable in location";
+        }
     }
 }

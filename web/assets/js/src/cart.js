@@ -28,6 +28,9 @@
                 $('.cityselect').append('<option value="'+k+'">'+v+'</option>'); 
             });
         }
+        else{
+            $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
+        }
     }
 
     $('.stateregionselect').on('change', function(){
@@ -38,29 +41,93 @@
 
     $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
     $('.stateregionselect').trigger('change');
-
+    $(".update-shipping").prop("disabled", "true").attr("disabled", "true");
     $('.calculate-shipping').on('click', function(){
         var $cityId = $("#shipping-state").val();
+        var $updateLocationButton = $(".update-shipping");
+        $updateLocationButton.prop("disabled", "true");
+        $updateLocationButton.attr("disabled", "true"); 
+
+        if(parseInt($cityId) != 0){
+            var $currentRequest = $.ajax({
+                type: "POST",
+                url: '/cart/getCartTotalShippingFee',
+                data:{
+                    city_id:$cityId, 
+                    csrfname:$csrftoken
+                },
+                beforeSend : function(){
+                    if($currentRequest != null) {
+                        $currentRequest.abort();
+                    }
+                },
+                success: function(response) {
+                    if(isNaN(response)){
+                        validateRedTextBox("#shipping-total");
+                    }
+                    else{
+                        validateWhiteTextBox("#shipping-total");
+                        $updateLocationButton.removeAttr("disabled");  
+                    }
+                    $("#shipping-total").val(response);
+                },
+                error: function (request, status, error) {
+                    alert(ERROR_MESSAGE);
+                } 
+            });
+        }
+    });
+
+    $('.update-shipping').on('click', function(){
+        var $errorCount = 0;
+        if($("#shipping-city").val() == 0){
+            $errorCount++;
+        }
+        if($("#shipping-state").val() == 0){
+            $errorCount++;
+        }
+
+        if($errorCount === 0){
+            updateAddress();
+        }
+    });
+
+    function updateAddress()
+    {
+        var $consigneeName = $("#fname").val();
+        var $fullAddress = $("#fullAddress").val();
+        var $telephone = $("#telephone").val();
+        var $mobile = $("#mobile").val();
+        var $shippingCity = $("#shipping-city").val();
+        var $shippingRegion = $("#shipping-state").val();
+        var $currentLat = $("#currentLat").val();
+        var $currentLang = $("#currentLang").val();
         var $currentRequest = $.ajax({
             type: "POST",
-            url: '/cart/getCartTotalShippingFee',
+            url: '/memberpage/edit_consignee_address',
+            dataType: "json",
             data:{
-                city_id:$cityId, 
-                csrfname:$csrftoken
+                csrfname: $csrftoken,
+                c_address: $fullAddress,
+                c_stateregion: $shippingRegion,
+                c_city: $shippingCity,
+                consignee: $consigneeName,
+                c_mobile: $mobile,
+                c_telephone: $telephone,
+                temp_lat: $currentLat,
+                temp_lng: $currentLang,
+                c_deliver_address_btn: true,
             },
-            beforeSend : function(){
-                if($currentRequest != null) {
-                    $currentRequest.abort();
-                }
+            success: function(jsonResponse) {
+                if(jsonResponse.isSuccessful){ 
+                    location.reload();
+                } 
             },
-            success: function(response) {
-                $("#shipping-total").val(parseFloat(response).toFixed(2)); 
-            },
-            error: function (request, status, error) {
-                alert(ERROR_MESSAGE);
+            error: function (request, status, error) { 
+                alert('Someting went wrong try again later.');
             } 
         });
-    });
+    }
 
     // cart item manipulation
     var $cartRowId = null;
@@ -181,6 +248,13 @@
             validateWhiteTextBox("#points-total");
         }
 
+        $("#used-points").val($usedPoints);
+        computePrices();
+    });
+
+    $('.btn-reset-points').on('click', function(){
+        $usedPoints = 0;
+        $("#points-total").val("");
         $("#used-points").val($usedPoints);
         computePrices();
     });

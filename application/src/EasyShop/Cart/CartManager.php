@@ -411,28 +411,37 @@ class CartManager
      * @param  integer $memberId 
      * @return float
      */
-    public function getCartShippingFee($cityLocation, $memberId)
+    public function getCartShippingFee($cityLocation, $memberId, $validate = false)
     {
         $cityLocation = (int)$cityLocation;
-        $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
-                       ->getParentLocation($cityLocation); 
-        $regionLocation = $region->getIdLocation(); 
-        $islandId = $region->getParent()->getParent()->getIdLocation(); 
-        $cartContents = $this->getValidatedCartContents($memberId);
-        $totalFee = 0;
-        foreach ($cartContents as $item) {
-            $shippingFee = $this->shippingLocationManager
-                                ->getProductItemShippingFee(
-                                    $item['product_itemID'], 
-                                    $cityLocation, 
-                                    $regionLocation, 
-                                    $islandId
-                                );
-            $additionalFee = $shippingFee !== null ? $shippingFee : 0;
-            $totalFee = bcadd($additionalFee, $totalFee, 4);
+        if($cityLocation){
+            $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                           ->getParentLocation($cityLocation); 
+            $regionLocation = $region->getIdLocation(); 
+            $islandId = $region->getParent()->getParent()->getIdLocation(); 
+            $cartContents = $this->getValidatedCartContents($memberId);
+            $totalFee = 0;
+            foreach ($cartContents as $item) {
+                $shippingFee = $this->shippingLocationManager
+                                    ->getProductItemShippingFee(
+                                        $item['product_itemID'], 
+                                        $cityLocation, 
+                                        $regionLocation, 
+                                        $islandId
+                                    );
+
+                if($validate && $shippingFee === null){
+                    return false;
+                }
+
+                $additionalFee = $shippingFee !== null ? $shippingFee : 0;
+                $totalFee = bcadd($additionalFee, $totalFee, 4);
+            }
+
+            return $totalFee; 
         }
 
-        return $totalFee; 
+        return false;
     }
 
 

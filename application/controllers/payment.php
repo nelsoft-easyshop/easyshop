@@ -302,11 +302,21 @@ class Payment extends MY_Controller{
                         'title' => 'Payment Review | Easyshop.ph',
                     ];
                     $bodyData = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
+                    if($bodyData){
+                        $bodyData['shippingFee'] = $cartManager->getCartShippingFee($bodyData['stateRegion'], $memberId);
+                    }
+                    else{
+                        $bodyData = [
+                            'address' => [],
+                            'stateRegion' => 0,
+                            'city' => 0,
+                            'shippingFee' => 0,
+                        ];
+                    }
                     $bodyData['locations'] = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                                       ->getLocationLookup();
 
                     $bodyData['cartAmount'] = str_replace( ',', '', $cartImplementation->getTotalPrice());
-                    $bodyData['shippingFee'] = $cartManager->getCartShippingFee($bodyData['stateRegion'], $memberId);
                     $bodyData['cartData'] = $paymentService->validateCartData($cart)['itemArray'];
                     $bodyData['paymentType'] = $checkoutService->getPaymentTypeAvailable($bodyData['cartData']);
                     $bodyData['canCheckout'] = $checkoutService->checkoutCanContinue($bodyData['cartData'], false, false);

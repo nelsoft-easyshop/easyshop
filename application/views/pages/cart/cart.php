@@ -83,7 +83,7 @@
                                             <div class="cart-item-thumbnail" style="background: url(<?=getAssetsDomain(); ?><?=$item['imagePath']; ?>categoryview/<?=$item['imageFile']; ?>) center no-repeat; background-size: cover;"></div>
                                         </td>
                                         <td>
-                                            <a href="#" class="cart-item-name">
+                                            <a href="/item/<?=$item['slug'];?>" class="cart-item-name">
                                                 <?=html_escape($item['name']);?>
                                             </a>
                                             <div class="cart-item-attribute-container">
@@ -219,7 +219,7 @@
                     </div>
                     <div class="form-group">
                         <button class="btn btn-es-green btn-sm btn-deduct-points">Use Points</button>
-                        <button class="btn btn-es-white btn-sm">Reset</button>
+                        <button class="btn btn-es-white btn-sm btn-reset-points">Reset</button>
                     </div>
                 </div>
             </div>
@@ -247,13 +247,19 @@
                             <tr>
                                 <td>Shipping Fee</td>
                                 <td>
-                                    &#8369; 
-                                    <span id="summary-shipping" data-totalshipping="<?=number_format($totalShippingFee, 2, '.', ''); ?>">
-                                        <?=number_format($totalShippingFee, 2, '.', ','); ?>
-                                    </span>
-                                    <small class="calculate-shipping-label">
-                                        <i class="fa fa-plus"></i> Calculate Shipping
-                                    </small>
+                                    <?php if($userAddress): ?>
+                                        &#8369; 
+                                        <span id="summary-shipping" data-totalshipping="<?=number_format($totalShippingFee, 2, '.', ''); ?>">
+                                            <?=number_format($totalShippingFee, 2, '.', ','); ?>
+                                        </span>
+                                        <small class="calculate-shipping-label">
+                                            <i class="fa fa-plus"></i> Calculate Shipping
+                                        </small>
+                                    <?php else: ?>
+                                        <small class="calculate-shipping-label">
+                                            No shipping location set.
+                                        </small>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <tr class="border-bottom-1">
@@ -325,7 +331,7 @@
     <div class="form-group">
         <label for="shipping-city">State/Region</label> 
         <select id="shipping-state" class="stateregionselect form-es-control form-es-control-block">
-            <option>--- Select State ---</option> 
+            <option value="0" selected="">--- Select State ---</option> 
             <?php foreach($locations['stateRegionLookup'] as $srkey => $stateregion):?>
                 <option class="echo" value="<?=$srkey?>">
                     <?=$stateregion?>
@@ -336,7 +342,7 @@
     <div class="form-group">
         <label for="shipping-state">City</label>
         <select id="shipping-city" class="cityselect form-es-control form-es-control-block">
-            <option>--- Select City ---</option> 
+            <option value="0" selected="">--- Select City ---</option> 
             <?php foreach($locations['cityLookup'] as $parentkey => $arr):?>
                 <?php foreach($arr as $lockey => $city):?>
                     <option class="echo" value="<?=$lockey?>" data-parent="<?=$parentkey?>">
@@ -353,10 +359,19 @@
     <div class="my-modal-footer">
         <center> 
             <button class="btn btn-es-green calculate-shipping">Calculate</button>
-            <button class="btn btn-es-green" disabled>Update Totals</button> 
-            <button class="btn btn-es-white simplemodal-close">Cancel</button>
+            <button class="btn btn-es-green update-shipping" disabled="disabled" >Save Location</button>  
         </center>
     </div>
+</div>
+<div>
+    <?php if($userAddress): ?>
+        <input type="hidden" id="fname" value="<?=html_escape($userAddress['address']['consignee']); ?>" />
+        <input type="hidden" id="mobile" value="0<?=html_escape($userAddress['address']['mobile']); ?>" />
+        <input type="hidden" id="fullAddress" value="<?=html_escape($userAddress['address']['address']); ?>" />
+        <input type="hidden" id="telephone" value="<?=html_escape($userAddress['address']['telephone']); ?>" />
+        <input type="hidden" id="currentLat" value="<?=html_escape($userAddress['address']['lat']); ?>" />
+        <input type="hidden" id="currentLang" value="<?=html_escape($userAddress['address']['lng']); ?>" />
+    <?php endif; ?>
 </div>
 
 <script type='text/javascript'>
