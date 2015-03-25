@@ -871,6 +871,7 @@ header {
     display: inline-block;
     height: 16px;
     margin-right: 6px;
+    margin-bottom: 4px;
     overflow: hidden;
     position: relative;
     text-align: center;
@@ -910,7 +911,6 @@ header {
 
 .default-nav-dropdown-arrow {
     display: inline-block;
-    float: right;
     height: 25px;
     overflow: hidden;
     position: relative;
