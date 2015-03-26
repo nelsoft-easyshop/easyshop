@@ -61,6 +61,13 @@ class Memberpage extends MY_Controller
      * @var integer
      */
     public $productsPerCategoryPage = 16;
+    
+    /**
+     * Number of Point History Items per page
+     *
+     * @var integer
+     */
+    public $pointHistoryItemsPerPage = 12;
 
     /**
      *  Class Constructor
@@ -138,6 +145,8 @@ class Memberpage extends MY_Controller
             $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
             $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
             $member->validatedStoreName = $member->getStoreName();
+            $totalUserPoint = $this->serviceContainer['point_tracker']
+                                   ->getUserPoint($memberId);
             $dashboardHomeData = [
                 'member' => $member,
                 'avatarImage' => $userAvatarImage,
@@ -159,7 +168,8 @@ class Memberpage extends MY_Controller
                 'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
                 'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount["transactionsCount"],
                 'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
-                'completeSoldTransactionsCount' => $completeSoldTransactionsCount["transactionsCount"]
+                'completeSoldTransactionsCount' => $completeSoldTransactionsCount["transactionsCount"],
+                'totalUserPoint' => $totalUserPoint,
             ];
 
             $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
@@ -2439,6 +2449,33 @@ class Memberpage extends MY_Controller
                                 );
         }
         echo json_encode($response);
+    }
+    
+    /**
+     * GET resource for user point history
+     *
+     * @return json
+     */
+    public function getUserPointHistory()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $page = $this->input->post('page') ? $this->input->post('page') : 1;
+        $page--;
+        $offset = $page * $this->pointHistoryItemsPerPage;
+        $jsonResponse = [];
+        if($memberId){
+            $userPoints = $this->serviceContainer['point_tracker']
+                               ->getUserPointHistory($memberId, $offset, $this->pointHistoryItemsPerPage);
+            foreach($userPoints as $userPoint){
+                $jsonResponse[] = [
+                    'dateAdded' => $userPoint->getDateAdded()->format('jS F Y g:ia'),
+                    'point' => $userPoint->getPoint(),
+                    'typeId' => $userPoint->getType()->getId(),
+                    'typeName' => $userPoint->getType()->getName(),
+                ];
+            }
+        }
+        echo json_encode($jsonResponse);
     }
 
 }
