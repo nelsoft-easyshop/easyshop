@@ -189,5 +189,3 @@ $lang['update_transaction'] = [
         'item_cancel' => 'You cancelled an item with :phrase',
         'completed' => 'You marked a transaction as completed with :phrase',
     ];
-?>
-
