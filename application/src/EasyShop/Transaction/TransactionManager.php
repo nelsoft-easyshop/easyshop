@@ -437,9 +437,9 @@ class TransactionManager
         }
 
         return [
-                "transactionsCount" => count($soldTransactionDetails),
-                "productCount" => $orderProductCount
-            ];
+            "transactionsCount" => count($soldTransactionDetails),
+            "productCount" => $orderProductCount
+        ];
     }
 
     /**
@@ -464,7 +464,6 @@ class TransactionManager
                                                  ->find($orderProductStatus);
                 $this->esOrderProductRepo
                      ->updateOrderProductStatus($esOrderProductStatus, $orderProduct);
-           
             }
 
             $this->em->flush();
