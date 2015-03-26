@@ -10,7 +10,7 @@ body{
 }
 
 .btn.btn-default-1.give-feedback-button {
-    font-size: 11px;
+    font-size: 9px;
 }
 
 .overlay-for-waiting-modal{
@@ -3650,6 +3650,10 @@ label.css-label {
 }
 
 @media screen and (min-width: 480px) {
+    .btn.btn-default-1.give-feedback-button {
+        font-size: 11px;
+    }
+
     .bank-btns-con span,
     .bank-btns-con input {
         max-width: 200px;
