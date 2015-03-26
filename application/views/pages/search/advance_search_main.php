@@ -1,23 +1,20 @@
-
-
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <link rel="stylesheet" href="/assets/css/product_search_category.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
     <link rel="stylesheet" href="/assets/css/product_search_category_responsive.css?ver=<?=ES_FILE_VERSION?>" type="text/css"  media="screen"/> 
     <link rel="stylesheet" href="/assets/css/product_advance_search.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
     <link rel="stylesheet" href="/assets/css/style_new.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/>
-    <link rel="stylesheet" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="screen"/> 
-    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <?php else: ?>
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.advance-search-main.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>
 
 
 
-
+<section class="bg-cl-fff">
 <?php
     $attr = array('id'=>'advsrch', 'autocomplete'=>'off', 'method'=>'get');
     echo form_open('',$attr);
 ?>
+
 <div class="container display-when-desktop" id="main_search_container"> 
     <div class="left_attribute">
         <?php if(isset($subCategory)): ?>
@@ -435,6 +432,8 @@
     <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
     <input type="hidden" id="hidden-loadUrl" value="/advsrch/more?<?=$_SERVER['QUERY_STRING']; ?>" />
 </div>
+
+</section>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/bootstrap.js" type="text/javascript"></script>
