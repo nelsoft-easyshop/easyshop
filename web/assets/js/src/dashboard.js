@@ -2523,6 +2523,7 @@
         if($.isEmptyObject(categoryIds)){
             return false;
         }
+        
         var isConfirmed = confirm('Are you sure you want to delete the selected categories?');
 
         if(isConfirmed){
@@ -2534,10 +2535,10 @@
                 data: {categoryIds:JSON.stringify(categoryIds), csrfname:csrftoken},
                 success: function(data){ 
                     var response = $.parseJSON(data);
-                    if(response){
+                    if(response.isSuccess){
                         $('.delete-dialog-success').fadeIn().delay(5000).fadeOut();   
                         var $categoryTreeReference = $('#category-tree-reference');
-                        $.each(categoryIds, function(key, categoryId){
+                        $.each(response.deletedCategoryIds, function(key, categoryId){
                             $categoryTreeReference.find('li[data-categoryid="'+categoryId+'"]').remove();
                         });
                         populateCategoryTrees();
@@ -2551,7 +2552,9 @@
                         }
                     }
                     else{
-                        $('.delete-dialog-fail').fadeIn().delay(5000).fadeOut();
+                        var $deleteDialog = $('.delete-dialog-fail');
+                        $deleteDialog.find('.message').html(escapeHtml(response.message));
+                        $deleteDialog.fadeIn().delay(5000).fadeOut();
                     }
                 }
             });
