@@ -276,7 +276,7 @@ class CategoryManager
         else{
             if($getAllNonCategorized){
                 $categoryProductIds = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                               ->getNonCategorizedProductIds($memberId, PHP_INT_MAX, 0, $orderBy);
+                                               ->getNonCategorizedProductIds($memberId, PHP_INT_MAX, 0, $orderBy, $condition);
             }
             else{
                 if($isCustom){
