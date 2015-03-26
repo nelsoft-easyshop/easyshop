@@ -168,12 +168,12 @@ class Cart extends MY_Controller
             $cartItem = $this->cartManager->getValidatedCartContents($memberId)[$cartId];
             $itemSubtotal = ($cartItem['price']) * $cartItem['qty'];
 
-            $result = array(
+            $result = [
                 'itemSubtotal' => number_format($itemSubtotal, 2, '.', ','),
                 'cartTotal' => $this->cartImplementation->getTotalPrice(),
                 'qty' =>  $cartItem['qty'],
                 'maxqty' => $cartItem['maxqty']
-            );
+            ];
         }
         $result['isSuccessful'] = $isSuccessful;
 
