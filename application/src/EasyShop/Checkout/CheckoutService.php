@@ -218,7 +218,7 @@ class CheckoutService
      * @param  string $paymentType [description]
      * @return boolean
      */
-    public function checkoutCanContinue($cartData, $paymentType = EsPaymentMethod::PAYMENT_CASHONDELIVERY, $validatePaymentType = true)
+    public function checkoutCanContinue($cartData, $paymentType, $validatePaymentType = true)
     {
         $itemFail = 0;
         $paymentString = "";
