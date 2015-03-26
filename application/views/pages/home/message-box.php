@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/assets/css/basic.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
 <link rel="stylesheet" type="text/css" href="/assets/css/message-box.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
-<div class="message-box">
+<div class="message-box display-none" style="display: none;">
     <div class="row-fluid">
         <div class="col-md-7 col-sm-7 col-xs-10">
             <div class="message-container">
