@@ -3154,7 +3154,6 @@ label.css-label {
     border-radius: 4px;
     display: none;
     margin-top: 53px;
-    overflow: hidden;
     padding-bottom: 18px;
     position: relative;
 }
@@ -3162,14 +3161,11 @@ label.css-label {
 .easy-point-title {
     background-color: #565656;
     border-radius: 4px 4px 0 0;
-    padding: 16px 15px;
-}
-
-.easy-point-title a {
     color: #fff;
     font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
+    padding: 16px 15px;
 }
 
 .easy-point-question {

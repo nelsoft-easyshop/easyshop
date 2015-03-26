@@ -37,8 +37,10 @@
                 
                 <div class="easy-point-container">
                     <div class="easy-point-title">
-                        <a href="#">easy points</a>
-                        <span class="easy-point-question">?</span>
+                        easy points
+                        <a href="/easypoints" target="_blank">
+                            <span class="easy-point-question">?</span>
+                        </a>
                     </div>
                     <div class="current-point-container">
                         <div class="border-bttm">

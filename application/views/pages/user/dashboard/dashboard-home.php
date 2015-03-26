@@ -92,7 +92,7 @@
                             <p>
                                 Easy Points:
                             </p>
-                            <a href="#" class="easy-point-link-mobile">
+                            <a href="/easypoints" target="_blank" class="easy-point-link-mobile">
                                 <span class="current-point-txt">Current Points:</span>
                                 <span class="easy-points-mobile">200</span>
                                 <div class="clear"></div>
