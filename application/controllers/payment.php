@@ -209,53 +209,6 @@ class Payment extends MY_Controller
     }
 
     /**
-     * Check for points reserved per user
-     * @param  integer $memberId
-     */
-    private function __checkReservedPoints($memberId)
-    {
-        $entityManager = $this->serviceContainer['entity_manager'];
-        $transactionManager = $this->serviceContainer['transaction_manager'];
-        $paymentService = $this->serviceContainer['payment_service'];
-
-        $draftPesoPayOrders = $entityManager->getRepository('EasyShop\Entities\EsOrder')
-                                            ->findBy([
-                                                'buyer' => $memberId,
-                                                'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
-                                                'orderStatus' => EsOrderStatus::STATUS_DRAFT,
-                                            ]);
-        $pesopayConfig = $this->paymentConfig['payment_type']['pesopay']['Easyshop'];
-        $curlUrl = $pesopayConfig['api_url']; 
-        $data = [
-            'merchantId' => $pesopayConfig['merchant_id'],
-            'loginId' => $pesopayConfig['merchant_login_api'],
-            'password' => $pesopayConfig['merchant_password_api'],
-            'actionType' =>'Query',
-        ];  
-
-        foreach ($draftPesoPayOrders as $eachOrder) {
-            $transactionId = $eachOrder->getTransactionId();
-            $orderId = $eachOrder->getIdOrder();
-            $curl = new Curl();
-            $data['orderRef'] = trim($transactionId); 
-            $curl->post($curlUrl, $data);
-            $response = json_decode(json_encode((array)$curl->response), true);
-
-            if(isset($response['record']) === false){
-                $transactionManager->voidTransaction($orderId);
-                $paymentService->revertTransactionPoint($orderId);
-            }
-            else{
-                if(isset($response['successcode']) 
-                    && $response['successcode'] !== PaymentService::SUCCESS_CODE){  
-                    $transactionManager->voidTransaction($orderId);
-                    $paymentService->revertTransactionPoint($orderId);
-                }
-            }
-        } 
-    }
-
-    /**
      * Get available shipping location on individual product item
      * @return json
      */
@@ -313,7 +266,7 @@ class Payment extends MY_Controller
                     $cart['choosen_items'] = $checkoutService->includeCartItemValidation($member);
                     $postPoints = $this->input->post('used_points') ? (int) $this->input->post('used_points') : 0;
                     $userMaxPoints = $pointTracker->getUserPoint($memberId); 
-                    $this->__checkReservedPoints($memberId);
+                    $paymentService->checkReservedPoints($memberId);
                     $headerData = [
                         "memberId" => $memberId,
                         'title' => 'Payment Review | Easyshop.ph',

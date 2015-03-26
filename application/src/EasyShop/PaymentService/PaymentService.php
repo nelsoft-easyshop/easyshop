@@ -7,8 +7,8 @@ use EasyShop\Entities\EsOrderShippingAddress;
 use EasyShop\Entities\EsLocationLookup;
 use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsMember;
-use EasyShop\Entities\EsPaymentMethod;
-use EasyShop\Entities\EsOrderStatus;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsOrderHistory;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsProduct;
@@ -185,6 +185,15 @@ class PaymentService
     private $productShippingManager;
 
     /**
+     * Vendor Curl Class
+     *
+     * @var Curl
+     */
+    private $curlService;
+
+    private $paymentConfig;
+
+    /**
      * Constructor
      * 
      */
@@ -203,7 +212,8 @@ class PaymentService
                                 $messageManager,
                                 $dragonPaySoapClient,
                                 $transactionManager,
-                                $productShippingManager)
+                                $productShippingManager,
+                                $curlService)
     {
         $this->em = $em;
         $this->request = $request;
@@ -221,6 +231,14 @@ class PaymentService
         $this->dragonPaySoapClient = $dragonPaySoapClient; 
         $this->transactionManager = $transactionManager; 
         $this->productShippingManager = $productShippingManager;
+        $this->curlService = $curlService;
+
+        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
+            $this->paymentConfig = $this->configLoader->getItem('payment','production'); 
+        }
+        else{ 
+            $this->paymentConfig = $this->configLoader->getItem('payment','testing'); 
+        }
     }
 
 
@@ -450,14 +468,8 @@ class PaymentService
      * @return boolean
      */
     public function isPaymentMethodAcceptPoints($paymentMethodString)
-    {   
-        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
-            $configLoad = $this->configLoader->getItem('payment','production'); 
-        }
-        else{ 
-            $configLoad = $this->configLoader->getItem('payment','testing'); 
-        }
- 
+    {
+        $configLoad = $this->paymentConfig; 
         if(isset($configLoad['payment_type'][strtolower($paymentMethodString)]) 
             && isset($configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'])){  
             return $configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'];
@@ -737,13 +749,7 @@ class PaymentService
      */
     public function checkIpIsValidForPostback($ipAddress, $paymentType)
     {
-        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
-            $configLoad = $this->configLoader->getItem('payment','production'); 
-        }
-        else{ 
-            $configLoad = $this->configLoader->getItem('payment','testing'); 
-        }
-        $config = $configLoad['payment_type']; 
+        $config = $this->paymentConfig['payment_type']; 
         $configPayment = null;
         switch($paymentType){ 
             case EsPaymentMethod::PAYMENT_DRAGONPAY: 
@@ -787,6 +793,48 @@ class PaymentService
         }
 
         return false;
+    }
+
+    /**
+     * Check for points reserved per user
+     * @param  integer $memberId
+     */
+    public function checkReservedPoints($memberId)
+    {
+        $draftPesoPayOrders = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                       ->findBy([
+                                            'buyer' => $memberId,
+                                            'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
+                                            'orderStatus' => EsOrderStatus::STATUS_DRAFT,
+                                       ]);
+        $pesopayConfig = $this->paymentConfig['payment_type']['pesopay']['Easyshop'];
+        $curlUrl = $pesopayConfig['api_url']; 
+        $data = [
+            'merchantId' => $pesopayConfig['merchant_id'],
+            'loginId' => $pesopayConfig['merchant_login_api'],
+            'password' => $pesopayConfig['merchant_password_api'],
+            'actionType' =>'Query',
+        ];  
+
+        foreach ($draftPesoPayOrders as $eachOrder) {
+            $transactionId = $eachOrder->getTransactionId();
+            $orderId = $eachOrder->getIdOrder(); 
+            $data['orderRef'] = trim($transactionId); 
+            $this->curlService->post($curlUrl, $data);
+            $response = json_decode(json_encode((array)$this->curlService->response), true);
+
+            if(isset($response['record']) === false){
+                $this->transactionManager->voidTransaction($orderId);
+                $this->revertTransactionPoint($orderId);
+            }
+            else{
+                if(isset($response['successcode']) 
+                    && $response['successcode'] !== self::SUCCESS_CODE){  
+                    $this->transactionManager->voidTransaction($orderId);
+                    $this->revertTransactionPoint($orderId);
+                }
+            }
+        } 
     }
 
 }
