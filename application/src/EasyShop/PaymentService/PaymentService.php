@@ -514,7 +514,6 @@ class PaymentService
                 $memberId,
                 EsPointType::TYPE_REVERT, 
                 false, 
-                false, 
                 $points
             );
 
