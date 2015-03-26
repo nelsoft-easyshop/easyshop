@@ -95,7 +95,7 @@ class PesoPayGateWay extends AbstractGateway
         if($pesopayTotal < $this->lowestAmount){
             return [
                 'error' => false,
-                'message' => 'We only accept payments of at least PHP 50.00 in total value.'
+                'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
             ];
         }
 
@@ -105,7 +105,7 @@ class PesoPayGateWay extends AbstractGateway
         if($grandTotal < $this->lowestAmount){
             return [
                 'error' => true,
-                'message' => 'We only accept payments of at least PHP 50.00 in total value.'
+                'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
             ];
         }
 

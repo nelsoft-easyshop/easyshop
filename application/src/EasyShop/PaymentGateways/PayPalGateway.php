@@ -223,7 +223,7 @@ class PayPalGateway extends AbstractGateway
         if($thereIsPromote <= 0 && $paypalGrandTotal < $this->lowestAmount){
             return [
                 'e' => false,
-                'd' => 'We only accept payments of at least PHP 50.00 in total value.'
+                'd' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
             ];
         }
         foreach ($itemList as $value) {

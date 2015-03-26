@@ -203,7 +203,7 @@ class DragonPayGateway extends AbstractGateway
         if($dragonpayTotal < $this->lowestAmount){ 
             return [
                 'e' => false,
-                'd' => 'We only accept payments of at least PHP 50.00 in total value.'
+                'd' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
             ];
         }
 
