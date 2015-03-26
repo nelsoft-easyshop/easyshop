@@ -229,7 +229,8 @@ class PayPalGateway extends AbstractGateway
         foreach ($itemList as $value) {
             $value['price'] = round($value['price'], 2);
             $deductPrice = $pointGateway 
-                           ? $pointGateway->getProductDeductPoint($value['price'], $itemOriginalPrice)
+                           ? $pointGateway->
+                           getProductDeductPoint($value['price'], $itemOriginalPrice)
                            : 0;
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
             '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode(bcsub($value['price'], $deductPrice, 2)).
@@ -398,12 +399,16 @@ class PayPalGateway extends AbstractGateway
                             foreach ($itemList as $key => $value) {
                                 $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
                                 $this->paymentService->productManager->updateSoldoutStatus($value['id']);
-                                $data["order_id"] = $value['product_itemID'];
-                                $data["point"] = $pointGateway->getProductDeductPoint(
-                                                    round((float)$value['price'], 2),
-                                                    bcsub($grandTotal, $shippingAmt, 2)
-                                                );
-                                $pointArray[] = $data;
+                                if($pointGateway){
+                                    $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                                               ->findOneBy(['productItemId' => $value['product_itemID']]);
+                                    $data["order_id"] = $esOrderProduct->getIdOrderProduct();
+                                    $data["point"] = $pointGateway->getProductDeductPoint(
+                                                        round((float)$value['price'], 2),
+                                                        bcsub($grandTotal, $shippingAmt, 2)
+                                                    );
+                                    $pointArray[] = $data;
+                                }
                             }
 
                             $flag = (string) $httpParsedResponseAr['PAYMENTSTATUS'] === 'Pending';
