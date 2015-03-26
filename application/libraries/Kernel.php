@@ -362,8 +362,9 @@ class Kernel
             $em = $container['entity_manager'];
             $userManager = $container['user_manager'];
             $productManager = $container['product_manager'];
+            $pointTracker = $container['point_tracker'];
 
-            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
+            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager, $pointTracker);
         };
         
         $container['image_utility'] = function ($c) use ($container){
