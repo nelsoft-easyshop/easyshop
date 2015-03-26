@@ -43,7 +43,7 @@ class FeedbackTransactionService
      * @param  integer                   $feedbackKind
      * @param  EasyShop\Entites\EsOrder  $order
      * @param  integer                   $rating1
-     * @param  integer]                  $rating2
+     * @param  integer                   $rating2
      * @param  integer                   $rating3
      * @return EasyShop\Entites\EsMemberFeedback
      */

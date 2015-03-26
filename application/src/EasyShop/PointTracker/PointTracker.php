@@ -69,7 +69,7 @@ class PointTracker
         }
         else{
             if($percentage > 0){
-                $addPoints = ($points->getPoint() / 100) * $percentage;
+                $addPoints = bcmul($points->getPoint(), bcdiv($percentage, 100, 4), 4);
             }
             else{
                 $addPoints = $points->getPoint();
