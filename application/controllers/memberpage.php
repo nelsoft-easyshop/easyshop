@@ -880,13 +880,6 @@ class Memberpage extends MY_Controller
             }
         }
 
-        $orderProductEntity = $this->esOrderProductRepo
-                                   ->findOneBy([
-                                       "order" => $data['transaction_num'],
-                                       "status" => EsOrderProductStatus::ON_GOING
-                                   ]);
-        $serverResponse['isTransactionComplete'] = $orderProductEntity ? false : true;
-
         echo json_encode($serverResponse);
     }
 
