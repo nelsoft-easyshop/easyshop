@@ -1,0 +1,93 @@
+/* Container */
+.my-modal {
+    background-color:#fff;
+    border-radius: 4px;
+    /*height:290px !important;*/
+    /*height: auto !important;*/
+    min-height: 403px !important;
+    max-width:700px; 
+    width: 90% !important;
+    background: #fdfcfa url("../images/message-box-background.jpg") center no-repeat;
+}
+
+.my-modal a.modalCloseImg {
+    background:url(../images/img-close.png) no-repeat; 
+    width:25px; 
+    height:29px; 
+    display:inline; 
+    z-index:3200; 
+    position:absolute; 
+    top:8px; 
+    right:10px; 
+    cursor:pointer;
+}
+
+.message-box{
+    display: none;
+}
+
+.message-title{
+    font-size: 24px;
+    color: #565656;
+    margin-top: -15px;
+}
+
+.divider{
+    display: inline-block;
+    width: 30%;
+    height: 1px;
+    border-top: solid #e2e2e2 2px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.message-container{
+    display: table-cell;
+    vertical-align: middle;
+    padding: 10px;
+    padding-left:20px;
+}
+
+.message-text{
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.link-text{
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #ff893b;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.link-text .fa{
+    top: -1px;
+    display: inline-block;
+    position: relative;
+    right: -3px;
+}
+
+.display-none{
+    display: none !important;
+}
+
+@media screen and (max-width: 500px) {
+    .message-title{
+        font-size: 17px;
+        color: #565656;
+        font-weight: bold;
+        margin-top: 0px;
+    }
+    .my-modal{
+        background-size:120%;
+        background-position: left 70% bottom;
+        min-height: 90% !important;
+    }
+
+    .message-container{
+        padding-left: 10px;
+    }
+
+}

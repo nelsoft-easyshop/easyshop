@@ -52,6 +52,9 @@ class Home extends MY_Controller
             //$this->memberFeatureRestrictManager->addMemberToFeature($memberId, \EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT);
         }
 
+        
+        $data['messageboxHtml'] = $this->load->view('pages/home/reminder', [], true);
+        
         $this->load->spark('decorator');  
         $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/home/home_primary', $data);
