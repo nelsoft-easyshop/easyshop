@@ -123,14 +123,18 @@
             </div>
             <div class="col-md-12 col-lg-7">
                 <p class="attr-title txt-shipment">Shipment Fee:</p>
-                    <?php if(!$isFreeShippingNationwide): ?>
-                    <div class="prod-select-con ui-form-control shipment-select">
-                        <select class="shiploc" id="shipment_locations" disabled="">
-                            <option>Select Location</option>
-                        </select>
-                    </div>
+                    <?php if(count($shippingLocation) === 0 && (bool) $product->getIsMeetup()): ?> 
+                        <span class="default">NOT AVAILABLE</span>
                     <?php else: ?>
-                    <span class="default">FREE SHIPPING NATIONWIDE</span> 
+                        <?php if(!$isFreeShippingNationwide): ?>
+                        <div class="prod-select-con ui-form-control shipment-select">
+                            <select class="shiploc" id="shipment_locations" disabled="">
+                                <option>Select Location</option>
+                            </select>
+                        </div>
+                        <?php else: ?>
+                        <span class="default">FREE SHIPPING NATIONWIDE</span> 
+                        <?php endif; ?>
                     <?php endif; ?>
             </div>
             <div class="clear"></div>
@@ -147,8 +151,16 @@
                 </div>
             </div>
             <div class="col-md-7" align="center">
-                <input type="button" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
-                <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
+                <?php if(count($shippingLocation) === 0 && (bool)$product->getIsMeetup()): ?>
+                    <a class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
+                    <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
+                <?php elseif($product->getPromoType() == \EasyShop\Entities\EsPromoType::BUY_AT_ZERO && (bool) $product->getStartPromo() ): ?>
+                    <input type="button" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now disabled" >
+                    <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span> 
+                <?php else: ?>
+                    <input type="button" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                    <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
+                <?php endif; ?>
             </div>
         </div>
         <div class="clear"></div>
