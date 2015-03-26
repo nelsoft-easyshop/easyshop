@@ -94,7 +94,7 @@
                             </p>
                             <a href="#" class="easy-point-link-mobile">
                                 <span class="current-point-txt">Current Points:</span>
-                                <span class="easy-points-mobile">200</span>
+                                <span class="easy-points-mobile"><?php echo $totalUserPoint ?></span>
                                 <div class="clear"></div>
                             </a>
                         </div>

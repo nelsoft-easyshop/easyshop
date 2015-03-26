@@ -3009,15 +3009,41 @@
         }
     });
 
-
-$(".easy-point-content").niceScroll({
-    cursorborder: "3px solid #e2e2e2",
-    touchbehavior: true,
-    autohidemode: false,
-    enablekeyboard: true,
-    smoothscroll: true,
-});
-
+    
+    $(document).ready(function(){
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getUserPointHistory',
+            success: function(data){ 
+                if(data){
+                    var $jsonResponse = $.parseJSON(data);
+                    var html = "";
+                    $.each($jsonResponse, function(index, value){
+                        html += '<li>' +
+                                    '<div class="small-bullet-container">' +
+                                        '<span class="small-bullet"></span>' +
+                                    '</div>' +
+                                    '<div class="easy-content-container">' +
+                                        '<span class="easy-content">'+ value.dateAdded + ' ' + value.typeName + '</span>' + 
+                                        '<span class="easy-point">'+ value.point +'</span>' +
+                                    '</div>' +
+                                    '<div class="clear"></div>' +
+                                '</li>';
+                    });
+                    var $pointHistoryContainer =  $('.easy-point-content');
+                    $pointHistoryContainer.append(html);
+                    $pointHistoryContainer.niceScroll({
+                        cursorborder: "3px solid #e2e2e2",
+                        touchbehavior: true,
+                        autohidemode: false,
+                        enablekeyboard: true,
+                        smoothscroll: true,
+                    });
+                }
+            }
+        });
+    });
+    
 }(jQuery));
 
 
