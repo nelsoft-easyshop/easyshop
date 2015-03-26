@@ -33,7 +33,12 @@ class Version20150310191736 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql("
-            TRUNCATE `es_point_type`;
+            DELETE FROM `es_point_type` WHERE `id`='6';
+            DELETE FROM `es_point_type` WHERE `id`='5';
+            DELETE FROM `es_point_type` WHERE `id`='4';
+            DELETE FROM `es_point_type` WHERE `id`='3';
+            DELETE FROM `es_point_type` WHERE `id`='2';
+            DELETE FROM `es_point_type` WHERE `id`='1';
         ");
     }
 }
