@@ -344,6 +344,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jstree.js',
                              'web/assets/js/src/vendor/pwstrength.js',
+                             'web/assets/js/src/vendor/jquery.nicescroll.min.js',
                              'web/assets/js/src/dashboard.js',
                              'web/assets/js/src/dashboard-myaccount.js',
                              'web/assets/js/src/dashboard-express-edit.js'],

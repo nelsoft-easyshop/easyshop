@@ -370,6 +370,25 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
 
+    /**
+     * Renders terms and conditions page
+     *
+     * @return View
+     */
+    public function easypoints()
+    {
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Easy Points | Easyshop.ph',
+            'metadescription' => "Read Easyshop.ph's Easy Points",
+        ];
+
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/web/easy-point');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+    }
+
 }
 
 /* End of file home.php */

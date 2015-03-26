@@ -34,6 +34,134 @@
                         </ul>
                     </div>
                 </ul>
+                
+                <div class="easy-point-container">
+                    <div class="easy-point-title">
+                        easy points
+                        <a href="/easypoints" target="_blank">
+                            <span class="easy-point-question">?</span>
+                        </a>
+                    </div>
+                    <div class="current-point-container">
+                        <div class="border-bttm">
+                            <span class="current-point-title">Current points</span>
+                            <span class="current-points">200</span>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <ul class="easy-point-content">
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">lorem ipsum dolor sit Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                        <li>
+                            <div class="small-bullet-container">
+                                <span class="small-bullet"></span>
+                            </div>
+                            <div class="easy-content-container">
+                                <span class="easy-content">Uploaded 4 new items</span>
+                                <span class="easy-point">20</span>
+                            </div>
+                            <div class="clear"></div>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="mobile-dashboard-menu">
                 <div class="row-fluid row-menu-mobile-res">
@@ -138,9 +266,10 @@
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jstree.js'></script>
     <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.nicescroll.min.js?ver=<?=ES_FILE_VERSION?>"></script> 
     <script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script> 
-    <script type='text/javascript' src="/assets/js/src/dashboard-express-edit.js?ver=<?=ES_FILE_VERSION?>"></script> 
+    <script type='text/javascript' src="/assets/js/src/dashboard-express-edit.js?ver=<?=ES_FILE_VERSION?>"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.dashboard-primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
