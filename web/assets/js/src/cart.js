@@ -24,8 +24,8 @@
         cityselect.find('option.echo').remove();
         if(stateregionID in jsonCity){ 
             $('.cityselect').empty();
-            $.each(jsonCity[stateregionID], function(k,v){
-                $('.cityselect').append('<option value="'+k+'">'+v+'</option>'); 
+            $.each(jsonCity[stateregionID], function(key, value){
+                $('.cityselect').append('<option value="'+escapeHtml(key)+'">'+escapeHtml(value)+'</option>'); 
             });
         }
         else{
@@ -34,9 +34,10 @@
     }
 
     $('.stateregionselect').on('change', function(){
-        var cityselect = $(this).parent('div').siblings('div').find('select.cityselect');
+        var $this = $(this);
+        var cityselect = $this.parent('div').siblings('div').find('select.cityselect');
         cityselect.val(0);
-        cityFilter( $(this), cityselect );
+        cityFilter( $this, cityselect );
     });
 
     $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
@@ -229,7 +230,6 @@
         }
     }
 
-
     // summary computation
     var $maxPoints = parseInt($("#points-total").data('totalpoints'));
     var $shippingFee = parseFloat($("#summary-shipping").data('totalshipping'));
@@ -237,7 +237,8 @@
     var $usedPoints = 0;
     $('.btn-deduct-points').on('click', function(){
         var $pointHolder = $("#points-total"); 
-        $usedPoints = $pointHolder.val().trim() === "" ? 0 : parseInt($pointHolder.val().trim());
+        var $pointValue = $pointHolder.val().trim();
+        $usedPoints = $pointValue === "" ? 0 : parseInt($pointValue);
         $usedPoints = isNaN($usedPoints) ? 0 : parseInt($usedPoints);
 
         if($usedPoints > $maxPoints){
@@ -275,5 +276,3 @@
     }
 })(jQuery);
 
-
-         

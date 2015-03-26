@@ -117,7 +117,7 @@
                 else{
                     $("#delivery-address-error").show();
                     $.each(jsonResponse.errors, function(index, value) { 
-                        $(".error-"+index).html(value[0]);
+                        $(".error-"+index).html(escapeHtml(value[0]));
                     });
                 }
             },
@@ -135,8 +135,8 @@
         cityselect.find('option.echo').remove();
         if(stateregionID in jsonCity){ 
             $('.cityselect').empty();
-            $.each(jsonCity[stateregionID], function(k,v){
-                $('.cityselect').append('<option value="'+k+'">'+v+'</option>'); 
+            $.each(jsonCity[stateregionID], function(key, value){
+                $('.cityselect').append('<option value="'+escapeHtml(key)+'">'+escapeHtml(value)+'</option>'); 
             });
         }
     }
@@ -388,7 +388,7 @@
                     $(".location-container").replaceWith(jsonResponse.view);
                 }
                 else{
-                    alert(jsonResponse.errorMessage);
+                    alert(escapeHtml(jsonResponse.errorMessage));
                 }
             },
             error: function (request, status, error) {
