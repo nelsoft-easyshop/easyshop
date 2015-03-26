@@ -184,7 +184,8 @@ module.exports = function (grunt) {
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
                     'web/assets/css/min-easyshop.dashboard-primary.css':
-                        ['web/assets/css/contact.css', 
+                        ['web/assets/css/jstree/style.css',
+                         'web/assets/css/contact.css',
                          'web/assets/css/chosen.min.css', 
                          'web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
