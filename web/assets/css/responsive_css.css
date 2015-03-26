@@ -911,7 +911,7 @@ div.sell_steps4 ul li:nth-child(4) a {
     margin: 0 -4px;
     min-width: 10em;
     vertical-align: middle;
-    width: 80%;
+    width: 88%;
     text-align: center;
 }
 
@@ -924,7 +924,7 @@ div.sell_steps4 ul li:nth-child(4) a {
     margin: 0 -4px;
     min-width: 10em;
     vertical-align: middle;
-    width: 80%;
+    width: 88%;
     text-align: center;
 }
 
@@ -993,6 +993,7 @@ div.sell_steps4 ul li:nth-child(4) a {
 
 #cat_search_drop_content ul {
     list-style: none;
+    padding: 0;
 }
 #cat_search_drop_content ul li {
     border-bottom: 1px dotted #cecece;
@@ -1162,16 +1163,18 @@ div.sell_steps4 ul li:nth-child(4) a {
     height: 30px;
     line-height: 30px;
     overflow: hidden;
-    text-overflow: ellipsis;    
+    text-overflow: ellipsis;
 }
 
 .custom_category_link .icon-add {
-    background-color: #666666;
+    background-color: #fff;
+    color: #565656;
+    font-size: 19px;
     vertical-align: bottom;
 }
 
 .category_list_container div:hover .custom_category_link .icon-add {
-    background-color: #aa5e00;  
+    background-color: #fff;
 }
 
 .add-cat-con {
@@ -1389,7 +1392,13 @@ div.sell_steps4 ul li:nth-child(4) a {
 }
 
 .mce-widget.mce-label {
-    width: 95px !important;
+    width: auto !important;
+}
+
+#mce_61 {
+    margin-top: 20px;
+    padding: 20px 10px;
+    position: initial;
 }
 
 .mid_inner_con_list > div {
@@ -1419,6 +1428,10 @@ div.sell_steps4 ul li:nth-child(4) a {
     position: absolute;
     width: 48%;
     z-index: 1;
+}
+
+.brand_sch_drop_content ul {
+    padding: 0;
 }
 
 .lnkClearFirst,
@@ -2539,6 +2552,13 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
     #search-container > .typeahead {
         width: 65.5% !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .steps_txt_active,
+    .steps_txt {
+        width: 90%;
     }
 }
 

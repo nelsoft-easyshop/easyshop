@@ -2,8 +2,6 @@
     "require": {
         "pimple/pimple": "~2.1@dev",
         "swiftmailer/swiftmailer" : "@stable",
-        "cboden/Ratchet": "0.3.*",
-        "react/zmq": "0.2.*",
         "aferrandini/phpqrcode": "1.0.1",
         "doctrine/orm": "2.4.*",
         "doctrine/migrations": "dev-master",
@@ -24,8 +22,9 @@
         "php-curl-class/php-curl-class": "~2.1",
         "neutron/sphinxsearch-api": "dev-master",
         "firebase/php-jwt": "dev-master",
-        "predis/predis": "1.1.*@dev",
-        "gregwar/captcha-bundle": "dev-master"
+        "predis/predis": "1.1.*@dev", 
+        "gregwar/captcha-bundle": "dev-master",
+        "ryanannatuvasquez/android-php-encrypt-decrypt": "dev-master"
     },
     "repositories": [
         {

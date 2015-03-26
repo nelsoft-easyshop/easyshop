@@ -644,11 +644,11 @@
                                         <td valign="top" width="100%">
 
                                             <!-- start content left --> 
-                                            <table width="270" border="0" cellspacing="0" cellpadding="0" align="left" style="padding-left:50px;">
+                                            <table width="230" border="0" cellspacing="0" cellpadding="0" align="left" style="padding-left:50px;">
 
                                                 <tr>
                                                     <td valign="middle" align="center">
-                                                        <table width="270" border="0" cellspacing="0" cellpadding="0" align="left">
+                                                        <table width="230" border="0" cellspacing="0" cellpadding="0" align="left">
                                                             <tr>
                                                                 <td width="70">
                                                                     <img src="{primaryImage}" width="60" height="60" style="width: 60px; height: 60px; border: solid #e2e2e2 1px; text-align: center;">
@@ -708,7 +708,7 @@
 
 
                                             <!-- start content right --> 
-                                            <table width="270" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width-text">
+                                            <table width="300" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width-text">
                                                  <tr>
                                                     <td valign="top">
                                                         <table border="0" cellspacing="0" cellpadding="0" align="left" width="100%">
@@ -727,7 +727,7 @@
                                                                             <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Payment Method : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
                                                                                 {payment_method_name}
                                                                             </td>
                                                                         </tr>

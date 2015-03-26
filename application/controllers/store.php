@@ -420,7 +420,7 @@ class Store extends MY_Controller
         $totalCountNonCategorizedProducts = $em->getRepository('EasyShop\Entities\EsProduct')
                                                ->getCountNonCategorizedProducts($memberId);
         if($totalCountNonCategorizedProducts > 0){
-            $nonCategorizedCategory = new \EasyShop\Category\categoryWrapper();
+            $nonCategorizedCategory = new \EasyShop\Category\CategoryWrapper();
             $nonCategorizedCategory->setCategoryName('Uncategorized');
             $nonCategorizedCategory->setSortOrder(PHP_INT_MAX);
             $parentCategories['custom-noncategorized'] = $nonCategorizedCategory;
@@ -434,7 +434,8 @@ class Store extends MY_Controller
                 if(!empty($children)){
                     foreach($children as $child){
                         $child->setIsHidden(true);
-                        $parentCategories[] = $child;
+                        $childId = (int)$child->getId();
+                        $parentCategories[$childId] = $child;
                     }
                 }
             }

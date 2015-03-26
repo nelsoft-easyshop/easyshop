@@ -61,7 +61,6 @@ class IP_Filter
                 redirect('/'.$splashPageUrl);  
             }
         }
-    
     }
 
 }

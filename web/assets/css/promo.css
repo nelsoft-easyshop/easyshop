@@ -1,3 +1,12 @@
+#main_search_container {
+    padding-bottom: 45px;
+    padding-top: 45px;
+}
+
+.btn {
+    border: none;
+}
+
 .scratch-win-form span,
 .scratch-win-form input,
 .scratch-win-form button,
@@ -33,7 +42,8 @@
     width: 35%;
 }
 .scratch-win-error p{
-    width: 65%;
+    text-align: center;
+    width: 100%;
 }
 .scratch-win-error h2{
     width: 8%;
@@ -42,7 +52,10 @@
     display: none;
 }
 .scratch-win-form span{
-    width: 15%;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px !important;
+    text-align: center;
 }
 .scratch-win-form{
     width: 100%;
@@ -63,27 +76,15 @@
     padding: 20px;
     text-align: center;
 }
-.scratch-win-form .instructions h3
-{
+.scratch-win-form .instructions h3 {
     margin: 2% auto;
-    max-width: 980px;
-    position: relative;
-    width: 83%;
 }
-.scratch-win-form .instructions ol{
-    margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 79%;
-}
+
 .scratch-win-form .instructions p{
     margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 83%;
 }
 .scratch-win-form .instructions ol > li {
-    padding: 1%;
+    padding: 1% 0;
 }
 
 #prod_image > img{
@@ -136,12 +137,12 @@
     background-color: #00a388;
     border-radius: 4px;
     color: #fff;
+    display: block;
     font-size: 19px;
     font-weight: bold;
     margin: 20px auto;
     max-width: 200px;
     padding: 2% 8%;
-    position: relative;
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition:    all 0.3s ease-in-out;
     -o-transition:      all 0.3s ease-in-out;
@@ -162,18 +163,21 @@
     width: 100%;
 }
 #promo-prizes-tbl > th , td {
-    border: 1px solid;
+    border: 1px solid #e2e2e2;
     margin-left: 5%;
+    padding: 8px;
     text-align: center;
     width: 45%;
 }
 #promo-prizes-tbl th {
-    border: 1px solid;
-    padding-left: 2%;
+    background-color: #f4f4f4;
+    border: 1px solid #e2e2e2;
+    padding: 8px;
     text-align: center;
 }
-.tbl-red{
-    background-color: rgba(170, 0, 0, 0.71);
+#promo-prizes-tbl th.tbl-red{
+    background-color: #565656;
+    color: #fff;
 }
 .error-claim{
     width: 57% !important;
@@ -223,7 +227,7 @@
  }
 
 .shop-now-img {
-    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0);
+    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0) !important;
     display: inline-block;
     height: 20px;
     width: 24px;
@@ -362,7 +366,7 @@
     width: 65%;
 }
 .scratch-win-error h2{
-    width: 8%;
+    text-align: center;
 }
 .scratch-win-error{
     display: none;
@@ -389,27 +393,12 @@
     padding: 20px;
     text-align: center;
 }
-.scratch-win-form .instructions h3
-{
+.scratch-win-form .instructions h3 {
     margin: 2% auto;
-    max-width: 980px;
-    position: relative;
-    width: 83%;
 }
-.scratch-win-form .instructions ol{
-    margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 79%;
-}
-.scratch-win-form .instructions p{
-    margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 83%;
-}
+
 .scratch-win-form .instructions ol > li {
-    padding: 1%;
+    padding: 1% 0;
 }
 
 #prod_image > img{
@@ -546,7 +535,7 @@
     text-decoration: none;
  }
 .shop-now-img {
-    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0);
+    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0) !important;
     display: inline-block;
     height: 20px;
     width: 24px;
@@ -628,12 +617,42 @@
 }
 
 @media print {
-    header {
+    #header {
         background-color: #4e83ef !important;
-        height: 10px !important;
-        margin-bottom: 30px !important;
+        height: 5px !important;
+        margin-bottom: 20px !important;
         width: 100% !important;
         -webkit-print-color-adjust: exact;
+    }
+
+    #header-top, 
+    .header-inner-right,
+    .persistent-header-wrapper,
+    .footer-primary,
+    .footer-bottom-content,
+    .logo > span,
+    .logo > a[href]:after {
+        display: none;
+    }
+
+    .logo > a[href]:after {
+        display: none;
+    }
+
+    #main_search_container {
+        margin-top: 30px !important;
+    }
+
+    .claim-bg {
+        height: 213px !important;
+    }
+
+    .res-copyright {
+        border-top: 3px solid #ff893b !important;
+        font-size: 14px;
+        margin-top: 30px;
+        padding-top: 10px;
+        text-align: center;
     }
 
     footer,
@@ -645,12 +664,6 @@
     .header-galore33 a[href]:after,
     .notification_container {
         display: none !important;
-    }
-
-    .logo span {
-        display: list-item;
-        list-style-image: url(../images/img_logo.png);
-        list-style-position: inside;
     }
 
     #prod_image,

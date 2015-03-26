@@ -9,6 +9,10 @@ body{
     border: none;
 }
 
+.btn.btn-default-1.give-feedback-button {
+    font-size: 9px;
+}
+
 .overlay-for-waiting-modal{
     position: fixed;
     top: 0;
@@ -47,7 +51,7 @@ body{
 }
 
 .my-modal-footer .btn.btn-default-3{
-    font-weight: 900;
+    font-weight: bold;
     font-size: 11px;
     border-radius: 6px;
     padding-top: 8px;
@@ -57,7 +61,7 @@ body{
 }
 
 .my-modal-footer .btn.btn-default-1{
-    font-weight: 900;
+    font-weight: bold;
     font-size: 11px;
     border-radius: 6px;
     padding-top: 8px;
@@ -289,7 +293,7 @@ a{
 
 .p-username{
     font-size: 22px;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .p-username > .icon-profile{
@@ -345,7 +349,7 @@ a{
 
 .p-stat-title{
     font-size: 15px;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .div-stats-numbers{
@@ -388,14 +392,14 @@ a{
     margin: 0px;
     color: #565656;
     font-size: 14px;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .p-stat-total{
     margin: 0px;
     color: #ff6237;
     font-size: 24px;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .div-feedback-stat{
@@ -448,7 +452,7 @@ a{
 .submenu-ul > a.selected > li{
     border-bottom: solid #ff893a 3px;
     color: #ff893a;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .circle-total{
@@ -565,7 +569,7 @@ a{
 }
 
 .item-list-name{
-    font-weight: 900;
+    font-weight: bold;
     font-size: 17px;
     margin:2px;
 }
@@ -579,7 +583,7 @@ a{
 }
 
 .item-amount{
-    font-weight: 900;
+    font-weight: bold;
     font-size: 17px;
     margin: 2px;
 }
@@ -604,7 +608,7 @@ a{
 }
 
 .strong-label{
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .td-label-desc{
@@ -639,7 +643,7 @@ a{
     border: solid #565656 2px;
     background: #fff;
     text-transform: uppercase;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 11px;
     border-radius: 6px;
     padding-top: 9px;
@@ -662,7 +666,7 @@ a{
     background-color: #00a388;
     color: #fff;
     text-transform: uppercase;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 11px;
     border-radius: 6px;
     padding-top: 9px;
@@ -735,7 +739,7 @@ a{
 }
 
 .out-stock-text{
-    font-weight: 900;
+    font-weight: bold;
     color: #fe6136;
 }
 
@@ -748,14 +752,14 @@ a{
     margin-top: 10px;
     font-size: 12px;
     width: 42px;
-    font-weight: 900;
+    font-weight: bold;
     z-index: 3;
     position: relative;
 }
 
 .no-items{
     text-align: center;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 32px;
     color: #c6c6c6;
 }
@@ -774,7 +778,7 @@ a{
 
 .form-horizontal .control-label{
     text-align: left;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
 }
 
@@ -830,7 +834,7 @@ a{
     background: #ff893a;
     color: #fff;
     text-transform: uppercase;
-    font-weight: 900;
+    font-weight: bold;
     border: none;
     border-radius: 4px;
 }
@@ -841,7 +845,7 @@ a{
 }
 
 .panel-dashboard-title{
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
     text-transform: uppercase;
     margin-bottom: 30px;
@@ -925,7 +929,7 @@ a{
 }
 
 .lbl-checkbox{
-    font-weight: 900;
+    font-weight: bold;
     cursor: pointer;
 }
 
@@ -943,7 +947,7 @@ a{
 
 .map-container{
     display: none;
-    font-weight: 900;
+    font-weight: bold;
     padding-top: 10px;
     font-size: 14px;
     color: #ff893a;
@@ -995,7 +999,7 @@ a{
 .panel-setting-title,
 .panel-setup-title
 {
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
     text-transform: uppercase;
     margin-bottom: 15px;
@@ -1007,7 +1011,7 @@ a{
     background-color: #00a388;
     color: #fff;
     text-transform: uppercase;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 11px;
     border-radius: 6px;
     padding-top: 9px;
@@ -1026,7 +1030,7 @@ a{
     background-color: #ff893a;
     color: #fff;
     text-transform: uppercase;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 11px;
     border-radius: 6px;
     padding-top: 8px;
@@ -1046,7 +1050,7 @@ a{
     background-color: #fff;
     color: #565656;
     text-transform: uppercase;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 11px;
     border-radius: 6px;
     padding-top: 8px;
@@ -1114,7 +1118,7 @@ a{
     background: #fff;
     border: solid #24d177 3px;
     border-radius: 5px;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 16px;
     color: #24d177;
     padding: 10px 30px;
@@ -1167,7 +1171,7 @@ a{
 
 .p-orange{
     color: #ff893a;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
 }
 
@@ -1183,7 +1187,7 @@ a{
 }
 
 .password-label-strength > b{
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .col-item-message{
@@ -1225,7 +1229,7 @@ a{
 
 .table-total-sales  >thead  > tr > th{
     vertical-align: middle;
-    font-weight: 900;
+    font-weight: bold;
     text-align: center;
     color: #fff; 
     font-size: 13px;
@@ -1296,7 +1300,7 @@ a{
 }
 
 .credit-date-label{
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .current-color-choice,
@@ -1306,7 +1310,7 @@ a{
     border-radius: 4px;
     padding: 8px 10px;
     text-align: center;
-    font-weight: 900;
+    font-weight: bold;
     color: #fff;
     text-transform: uppercase;
     margin-top: 0px;
@@ -1339,7 +1343,7 @@ a{
     color: #fff;
     padding: 5px;
     color: #fff;
-    font-weight: 900;
+    font-weight: bold;
     text-transform: uppercase;
     font-size: 15px;
     cursor: pointer;
@@ -1781,12 +1785,12 @@ i.jstree-icon.jstree-checkbox{
 }
 
 .feedback-cat-title{
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
     display: inline-block;
     color: #fff;
     padding: 5px 10px;
-    margin-top: -25px;
+    top: -25px;
     position: relative;
 }
 
@@ -2044,7 +2048,7 @@ i.jstree-icon.jstree-checkbox{
 }
 
 .panel-activate > .panel-heading{
-    font-weight: 900;
+    font-weight: bold;
     font-size: 15px;
     color: #565656;
     text-transform: uppercase;
@@ -2073,7 +2077,7 @@ i.jstree-icon.jstree-checkbox{
 
 #activated-message a{
     color: #ff893a;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .activated-container{
@@ -2088,14 +2092,14 @@ i.jstree-icon.jstree-checkbox{
 #activated-modal > .deactivate-modal-title {
     font-size: 20px;
     padding: 16px 20px;
-    font-weight: 900;
+    font-weight: bold;
     border-bottom: solid #e2e2e2 1px;
 }
 
 .activated-container h2{
     padding: 14px 20px;
     font-size: 18px;
-    font-weight: 900;
+    font-weight: bold;
     color: #565656;
 }
 
@@ -2106,7 +2110,7 @@ i.jstree-icon.jstree-checkbox{
 
 .loading-text{
     font-size: 15px;
-    font-weight: 900;
+    font-weight: bold;
     color: #ff893a;
 }
 
@@ -2128,7 +2132,7 @@ i.jstree-icon.jstree-checkbox{
 .btn-loadmore {
     background-color: #e2e2e2;
     border: none;
-    font-weight: 900;
+    font-weight: bold;
     font-size: 16px;
     height: 42px;
     line-height: 32px;
@@ -2184,7 +2188,7 @@ i.jstree-icon.jstree-checkbox{
 .transaction-tabs ul li a.selected {
     border-bottom: 4px solid #fe893a;
     color: #fe893a;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .sales-title-total,
@@ -2250,7 +2254,7 @@ i.jstree-icon.jstree-checkbox{
 .feedback-for-seller .trans-title,
 .feedback-for-buyer .trans-title{
     font-size: 16px;
-    font-weight: 900;
+    font-weight: bold;
     padding-right: 18px;
 }
 
@@ -2391,7 +2395,7 @@ label.css-label {
 
 .transaction-right-content button,
 .transaction-right-content input {
-    font-weight: 900;
+    font-weight: bold;
     text-transform: uppercase;
     width: 100%;
 }
@@ -2473,7 +2477,7 @@ label.css-label {
 
 .transac-item-consignee-name {
     display: inline-block;
-    font-weight: 900;
+    font-weight: bold;
     max-width: 130px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2653,7 +2657,7 @@ label.css-label {
 .feedback-btns .btn,
 .shipping-btns .btn {
     font-size: 15px;
-    font-weight: 900;
+    font-weight: bold;
     padding: 8px 12px;
     max-width: 136px;
     width: 45%;
@@ -2671,7 +2675,7 @@ label.css-label {
 /***** payment account css ******/
 .add-bank-account {
     border: none;
-    font-weight: 900;
+    font-weight: bold;
     max-width: 300px;
     padding: 9px;
     text-transform: uppercase;
@@ -2697,12 +2701,12 @@ label.css-label {
 
 .select-bank strong {
     font-size: 15px;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .bank-btns-con span,
 .bank-btns-con input {
-    font-weight: 900;
+    font-weight: bold;
     text-transform: uppercase;
     width: 100%;
 }
@@ -2729,7 +2733,7 @@ label.css-label {
 
 .bank-account-item-btns .btn-default-3 {
     border:none;
-    font-weight: 900;
+    font-weight: bold;
     padding: 9px;
     width: 100%;
 }
@@ -2745,7 +2749,7 @@ label.css-label {
 
 .bank-label {
     font-size: 13px;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .bank-account-item-btns .default-account {
@@ -2753,7 +2757,7 @@ label.css-label {
     border: 1px solid #00a388;
     color:#fff;
     cursor: default;
-    font-weight: 900;
+    font-weight: bold;
     width: 100%;
 }
 
@@ -2766,7 +2770,7 @@ label.css-label {
     border: none;
     border-bottom: 2px solid #565656;
     color:#fff;
-    font-weight: 900;
+    font-weight: bold;
     width: 100%;
 }
 
@@ -3403,7 +3407,7 @@ label.css-label {
         display: block;
         width: 100%;
         font-size:14px;
-        font-weight: 900;
+        font-weight: bold;
         text-transform: uppercase;
     }
     
@@ -3413,7 +3417,7 @@ label.css-label {
         display: block;
         width: 100%;
         font-size:14px;
-        font-weight: 900;
+        font-weight: bold;
         text-transform: uppercase;
     }
     
@@ -3526,7 +3530,7 @@ label.css-label {
         left: 0px;
         top: 2px;
         text-align: center;
-        font-weight: 900;
+        font-weight: bold;
         color: #fff;
         width: 100%;
     }
@@ -3835,6 +3839,10 @@ label.css-label {
 }
 
 @media screen and (min-width: 480px) {
+    .btn.btn-default-1.give-feedback-button {
+        font-size: 11px;
+    }
+
     .bank-btns-con span,
     .bank-btns-con input {
         max-width: 200px;
@@ -3928,6 +3936,10 @@ label.css-label {
 }
 
 @media (min-width: 1200px) {
+    .btn.btn-default-1.give-feedback-button {
+        font-size: 13px;
+    }
+
     .express-edit-wrapper {
         max-width: 1120px;
     }
