@@ -823,16 +823,11 @@ class PaymentService
             $this->curlService->post($curlUrl, $data);
             $response = json_decode(json_encode((array)$this->curlService->response), true);
 
-            if(isset($response['record']) === false){
+            if(isset($response['record']) === false &&
+                (isset($response['successcode']) 
+                && $response['successcode'] !== PaymentService::SUCCESS_CODE)){
                 $this->transactionManager->voidTransaction($orderId);
                 $this->revertTransactionPoint($orderId);
-            }
-            else{
-                if(isset($response['successcode']) 
-                    && $response['successcode'] !== self::SUCCESS_CODE){  
-                    $this->transactionManager->voidTransaction($orderId);
-                    $this->revertTransactionPoint($orderId);
-                }
             }
         } 
     }
