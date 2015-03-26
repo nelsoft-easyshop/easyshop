@@ -35,8 +35,6 @@ class PaymentService
 
     const STATUS_PENDING = 'p';
 
-    const PAYMENT_MAX_ALLOWABLE_POINTS = 0;
-
     const SUCCESS_CODE = 0;
 
     /**
