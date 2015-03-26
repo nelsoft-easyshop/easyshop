@@ -719,10 +719,15 @@ class CategoryManager
      * @param integer[] $customCategoryIds
      * @param integer $memberId
      * 
-     * @return integer[]
+     * @return mixed
      */
     public function deleteUserCustomCategory($customCategoryIds, $memberId)
     {
+        $response = [
+            'isSuccess' => false,
+            'message' => '',
+            'deletedCategoryIds' => [],
+        ];
         /**
          * Delete child categories first to prevent categories from being orphaned
          */         
@@ -742,12 +747,17 @@ class CategoryManager
                 }
                 $deletedCategoryIds[] = $childCategory->getIdMemcat();
             }
+            else{
+                $response['message'] = 'Deletion of categories with active children is not allowed.';
+                return $response;
+            }
         }        
         try{
             $this->em->flush();
         }
         catch(Exception $e){
-            return false;
+            $response['message'] = 'An error was encountered. Please try again later.';
+            return $response;
         }
         
         if(!empty($customCategoryIds)){
@@ -761,15 +771,23 @@ class CategoryManager
                     $category->setlastModifiedDate(date_create());
                     $deletedCategoryIds[] = $category->getIdMemcat();
                 }
+                else{
+                    $response['message'] = 'Deletion of categories with active children is not allowed.';
+                    return $response;
+                }
             }
         }
         
         try{    
             $this->em->flush();
-            return $deletedCategoryIds;
+            $response['isSuccess'] = true;
+            $response['deletedCategoryIds'] = $deletedCategoryIds;
+            return $response;
+            return ;
         }
         catch(Exception $e) {
-            return false;
+            $response['message'] = 'An error was encountered. Please try again later.';
+            return $response;
         }
     }
     
