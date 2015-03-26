@@ -10,13 +10,15 @@ use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
 
 
-class Payment extends MY_Controller{
+class Payment extends MY_Controller
+{
 
     private $paymentConfig;
 
     private $em;
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->library('session');
         $this->load->library('cart');
@@ -216,12 +218,12 @@ class Payment extends MY_Controller{
         $transactionManager = $this->serviceContainer['transaction_manager'];
         $paymentService = $this->serviceContainer['payment_service'];
 
-        $orders = $entityManager->getRepository('EasyShop\Entities\EsOrder')
-                                ->findBy([
-                                    'buyer' => $memberId,
-                                    'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
-                                    'orderStatus' => EsOrderStatus::STATUS_DRAFT,
-                                ]);
+        $draftPesoPayOrders = $entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                            ->findBy([
+                                                'buyer' => $memberId,
+                                                'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
+                                                'orderStatus' => EsOrderStatus::STATUS_DRAFT,
+                                            ]);
         $pesopayConfig = $this->paymentConfig['payment_type']['pesopay']['Easyshop'];
         $curlUrl = $pesopayConfig['api_url']; 
         $data = [
@@ -231,7 +233,7 @@ class Payment extends MY_Controller{
             'actionType' =>'Query',
         ];  
 
-        foreach ($orders as $eachOrder) {
+        foreach ($draftPesoPayOrders as $eachOrder) {
             $transactionId = $eachOrder->getTransactionId();
             $orderId = $eachOrder->getIdOrder();
             $curl = new Curl();
