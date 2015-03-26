@@ -1,5 +1,10 @@
-<link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.payment.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 <div class="transaction-wrapper">
     <div class="container">
@@ -175,9 +180,6 @@
             </div>
             <!--End of order summary-->
         </div>
-        
-    </div>    
+    </div>
 </div>
 
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>"></script>

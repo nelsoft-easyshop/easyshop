@@ -1,6 +1,11 @@
-<link type="text/css" href='/assets/css/boostrap-modal.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-<link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <link type="text/css" href='/assets/css/boostrap-modal.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/base.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php else: ?>
+    <link type="text/css" href='/assets/css/min-easyshop.cart.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+<?php endif; ?>
 
 <div class="transaction-wrapper">
     <div class="container">
@@ -152,50 +157,6 @@
         <?php endif; ?>
         <!--Start of trio bottom boxes-->
         <div class="row">
-            <!--Start of shipping calculator-->
-            <!-- Temporarily removed
-            <div class="col-md-4">
-                <div class="transaction-container bg-gray">
-                    <p class="transaction-container-title">Calculate Shipping</p>
-                    <p class="transaction-container-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nominis ipso dividendo tollatur stultus instituit ornamenta. 
-                    </p>
-                    <div class="form-group">
-                        <label for="shipping-state">State/Region</label>
-                        <select id="shipping-state" class="stateregionselect form-es-control form-es-control-block">
-                            <option>--- Select State ---</option> 
-                            <?php foreach($locations['stateRegionLookup'] as $srkey => $stateregion):?>
-                                <option class="echo" value="<?=$srkey?>">
-                                    <?=$stateregion?>
-                                </option>
-                            <?php endforeach;?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="shipping-city">City</label>
-                        <select id="shipping-city" class="cityselect form-es-control form-es-control-block">
-                            <option>--- Select City ---</option> 
-                            <?php foreach($locations['cityLookup'] as $parentkey => $arr):?>
-                                <?php foreach($arr as $lockey => $city):?>
-                                    <option class="echo" value="<?=$lockey?>" data-parent="<?=$parentkey?>">
-                                        <?=$city?>
-                                    </option>
-                                <?php endforeach;?>
-                            <?php endforeach;?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-es-green btn-sm calculate-shipping">Calculate</button>
-                    </div>
-                    <div class="form-group">
-                        <label for="shipping-total">Total Shipping Fee</label>
-                        <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly />
-                    </div>
-                </div>
-            </div>
-            -->
-            <!--End of shipping calculator-->
-
             <!--Start of points-->
             <div class="col-md-7">
                 <div class="transaction-container bg-gray min-height-459">
@@ -286,11 +247,11 @@
                         <tbody>
                             <tr class="payment-method-tr">
                                 <td class="payment-method-td">
-                                    <img src="/assets/images/img-visa.png" class="img-payment-method" alt="VISA"/>
-                                    <img src="/assets/images/img-paypal.png" class="img-payment-method" alt="PayPal"/>
-                                    <img src="/assets/images/img-mastercard.png" class="img-payment-method" alt="MasterCard"/>
-                                    <img src="/assets/images/img-dragonpay.png" class="img-payment-method" alt="Dragonpay"/>
-                                    <img src="/assets/images/img-cod.png" class="img-payment-method" alt="COD"/>
+                                    <img src="<?=getAssetsDomain()?>assets/images/img-visa.png" class="img-payment-method" alt="VISA"/>
+                                    <img src="<?=getAssetsDomain()?>assets/images/img-paypal.png" class="img-payment-method" alt="PayPal"/>
+                                    <img src="<?=getAssetsDomain()?>assets/images/img-mastercard.png" class="img-payment-method" alt="MasterCard"/>
+                                    <img src="<?=getAssetsDomain()?>assets/images/img-dragonpay.png" class="img-payment-method" alt="Dragonpay"/>
+                                    <img src="<?=getAssetsDomain()?>assets/images/img-cod.png" class="img-payment-method" alt="COD"/>
                                 </td>
                             </tr>
                         </tbody>
@@ -377,5 +338,12 @@
 <script type='text/javascript'>
     var jsonCity = <?=json_encode($locations['cityLookup']);?>;
 </script> 
-<script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
-<script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>' type='text/javascript' ></script>
+    <script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.cart.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+
+
