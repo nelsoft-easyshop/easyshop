@@ -434,7 +434,8 @@ class Store extends MY_Controller
                 if(!empty($children)){
                     foreach($children as $child){
                         $child->setIsHidden(true);
-                        $parentCategories[] = $child;
+                        $childId = (int)$child->getId();
+                        $parentCategories[$childId] = $child;
                     }
                 }
             }

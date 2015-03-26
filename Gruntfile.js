@@ -129,9 +129,7 @@ module.exports = function (grunt) {
                         ['web/assets/css/product_search_category.css', 
                          'web/assets/css/product_search_category_responsive.css', 
                          'web/assets/css/product_advance_search.css', 
-                         'web/assets/css/style_new.css', 
-                         'web/assets/css/bootstrap.css', 
-                         'web/assets/css/bootstrap-mods.css'],
+                         'web/assets/css/style_new.css'],
                     'web/assets/css/min-easyshop.product-search-new.css':
                         ['web/assets/css/product-search-new.css'],
                     'web/assets/css/min-easyshop.product-search-by-searchbox.css':
@@ -166,16 +164,12 @@ module.exports = function (grunt) {
                          'web/assets/css/new-login.css'],
                     'web/assets/css/min-easyshop.vendorview.css':
                         ['web/assets/css/vendorview.css'],
-                    'web/assets/css/min-easyshop.how-to.css':
-                        ['web/assets/css/style.css',
-                         'web/assets/css/bootstrap.css',
-                         'web/assets/css/responsive_css.css',
-                         'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.dashboard-personal-info.css':
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
                     'web/assets/css/min-easyshop.dashboard-primary.css':
-                        ['web/assets/css/contact.css', 
+                        ['web/assets/css/jstree/style.css',
+                         'web/assets/css/contact.css',
                          'web/assets/css/chosen.min.css', 
                          'web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
@@ -194,7 +188,10 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.payment-receipt.css':
                         ['web/assets/css/bootstrap.css',
                          'web/assets/css/new-cart.css',
-                         'web/assets/css/payment-receipt.css']
+                         'web/assets/css/payment-receipt.css'],
+                    'web/assets/css/min-easyshop.home-reminder.css':
+                        ['web/assets/css/basic.css',
+                         'web/assets/css/message-box.css']
                 }
             },
         },
@@ -459,7 +456,11 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.payment-review':
                         ['web/assets/js/src/vendor/jquery.simplemodal.js',
-                         'web/assets/js/src/new-payment.js']
+                         'web/assets/js/src/new-payment.js'],
+
+                    'web/assets/js/min/easyshop.home-reminder.js':
+                        ['web/assets/js/src/vendor/jquery.simplemodal.js',
+                         'web/assets/js/src/message-box.js']
                 }
             }
         }
