@@ -20,7 +20,6 @@ use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
-use EasyShop\Entities\EsPointType as EsPointType;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use Easyshop\Upload\AssetsUploader as AssetsUploader;
 use EasyShop\Product\ProductManager as ProductManager;
@@ -78,7 +77,7 @@ class Memberpage extends MY_Controller
         $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
-        $this->accountManager = $this->serviceContainer['account_manager'];        
+        $this->accountManager = $this->serviceContainer['account_manager'];
         $this->em = $this->serviceContainer['entity_manager'];
         $this->categoryManager = $this->serviceContainer['category_manager'];
         $this->transactionManager = $this->serviceContainer['transaction_manager'];
@@ -729,6 +728,7 @@ class Memberpage extends MY_Controller
             'error' => 'Failed to validate form'
         ];
 
+        $hasNotif = false;
         $data['transaction_num'] = $this->input->post('transaction_num');
         $data['invoice_num'] = $this->input->post('invoice_num');
         $data['member_id'] = $this->session->userdata('member_id');
@@ -795,8 +795,7 @@ class Memberpage extends MY_Controller
                         else{
                             $parseData['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
                         }
-                        
-                        $hasNotif = false;
+
                         if (
                             (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
                             (int) $data['status'] === (int) EsOrderProductStatus::RETURNED_BUYER ||
@@ -822,20 +821,6 @@ class Memberpage extends MY_Controller
                                 break;
                         }
                     }
-                }
-
-                /**
-                 * Add user point if a transaction is completed
-                 */
-                if($getTransaction 
-                   && $getTransaction->getOrderStatus()->getOrderStatus() === EsOrderStatus::STATUS_COMPLETED
-                   && $data['status'] === EsOrderProductStatus::FORWARD_SELLER
-                   && $getTransaction->getPaymentMethod()->getIdPaymentMethod() !== EsPaymentMethod::PAYMENT_CASHONDELIVERY){
-                    $this->serviceContainer['point_tracker']
-                         ->addUserPoint($data['member_id'],
-                                        EsPointType::TYPE_PURCHASE, 
-                                        true, 
-                                        $getTransaction->getTotal());
                 }
 
                 if($hasNotif){
