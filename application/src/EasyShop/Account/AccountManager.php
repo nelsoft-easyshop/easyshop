@@ -369,7 +369,7 @@ class AccountManager
                                                                         ->getHydratedMember($validatedUsername, $asArray);
                     
                     $loggedCount = $this->em->getRepository('EasyShop\Entities\EsPointHistory')
-                                            ->countUserPointActivity($member->getIdMember());
+                                            ->countUserPointActivity($member->getIdMember(), EsPointType::TYPE_LOGIN, date("Y-m-d"));
 
                     if($loggedCount <= 0){
                         $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_LOGIN);

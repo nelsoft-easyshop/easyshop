@@ -21,7 +21,7 @@ class EsPointHistoryRepository extends EntityRepository
         }
 
         if($date !== null){
-            $query->andWhere('date_format(ph.dateAdded, "%Y-%m-%d") = :date_added')
+            $query->andWhere('date(ph.dateAdded) = :date_added')
                   ->setParameter('date_added', $date);
         }
 
