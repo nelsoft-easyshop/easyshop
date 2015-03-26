@@ -179,7 +179,7 @@ class PayPalGateway extends AbstractGateway
                            ->find(intval($memberId));
 
         // get address Id
-        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+        $stateRegionId = $this->em->getRepository('EasyShop\Entities\EsAddress')
                             ->getAddressStateRegionId((int)$memberId);
 
         $name = $shippingAddress->getConsignee();
@@ -190,14 +190,14 @@ class PayPalGateway extends AbstractGateway
         $regionDesc = $shippingAddress->getStateregion()->getLocation();
 
         // Compute shipping fee
-        $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
+        $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$stateRegionId);
 
-        $shipping_amt = round(floatval($prepareData['othersumfee']),2);
-        $itemTotalPrice = round(floatval($prepareData['totalPrice']),2) - $shipping_amt;
+        $shipping_amt = round((float)$prepareData['othersumfee'], 2);
+        $itemOriginalPrice = $itemTotalPrice = bcsub(round((float)$prepareData['totalPrice'], 2), $shipping_amt, 2);
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
-        $grandTotal = $paypalGrandTotal = $itemTotalPrice + $shipping_amt; 
+        $grandTotal = $paypalGrandTotal = bcadd($itemTotalPrice, $shipping_amt, 2); 
         $thereIsPromote = $prepareData['thereIsPromote'];
         $this->setParameter('amount', $grandTotal);
 
@@ -209,7 +209,7 @@ class PayPalGateway extends AbstractGateway
                     'd' => $checkPointValid['message']
                 ];
             } 
-            $paypalGrandTotal = $grandTotal - $pointGateway->getParameter('amount');
+            $paypalGrandTotal = bcsub($grandTotal, $pointGateway->getParameter('amount'), 2);
             $itemTotalPrice -= $pointGateway->getParameter('amount');
         }
 
@@ -219,15 +219,13 @@ class PayPalGateway extends AbstractGateway
                 'd' => 'We only accept payments of at least PHP 50.00 in total value.'
             ];
         }
-
-        foreach ($itemList as $key => $value) {
-            $value['price'] = round(floatval($value['price']), 2); 
+        foreach ($itemList as $value) {
+            $value['price'] = round($value['price'], 2);
             $deductPrice = $pointGateway 
-                           ? $pointGateway->getProductDeductPoint($value['price'], $grandTotal)
-                           : 0; 
-
+                           ? $pointGateway->getProductDeductPoint($value['price'], $itemOriginalPrice)
+                           : 0;
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
-            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price'] - $deductPrice).
+            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode(bcsub($value['price'], $deductPrice, 2)).
             '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
             '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
             '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
@@ -384,9 +382,16 @@ class PayPalGateway extends AbstractGateway
 
                         if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])){
 
+                            $pointArray = [];
                             foreach ($itemList as $key => $value) {
                                 $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
                                 $this->paymentService->productManager->updateSoldoutStatus($value['id']);
+                                $data["order_id"] = $value['product_itemID'];
+                                $data["point"] = $pointGateway->getProductDeductPoint(
+                                                    round((float)$value['price'], 2),
+                                                    $grandTotal
+                                                );
+                                $pointArray[] = $data;
                             }
 
                             $flag = (string) $httpParsedResponseAr['PAYMENTSTATUS'] === 'Pending';
@@ -406,18 +411,6 @@ class PayPalGateway extends AbstractGateway
 
                                 // get points per item product in order.
                                 if($pointGateway){ 
-                                    $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                                                              ->findBy(['order' => $orderId]);
-                                    $pointArray = [];
-                                    foreach ($orderProducts as $product) {
-                                        $data["order_id"] = $product->getIdOrderProduct();
-                                        $data["point"] = $pointGateway->getProductDeductPoint(
-                                                            $product->getTotal(),
-                                                            $grandTotal
-                                                        );
-                                        $pointArray[] = $data;
-                                    }
-
                                     $pointGateway->setParameter('memberId', $memberId);
                                     $pointGateway->setParameter('itemArray', $pointArray);
                                     $pointGateway->pay();
