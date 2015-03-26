@@ -4,6 +4,8 @@ namespace EasyShop\Transaction;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsPointType as EsPointType;
+
 class TransactionManager
 {
     /**
@@ -25,18 +27,25 @@ class TransactionManager
     private $productManager;
 
     /**
+     * Product manager instance
+     * @var \EasyShop\PointTracker\PointTracker
+     */
+    private $pointTracker;
+
+    /**
      * Load Dependencies
      * @param $em
      * @param $userManager
      * @param $productManager
      */
-    public function __construct ($em, $userManager, $productManager)
+    public function __construct ($em, $userManager, $productManager, $pointTracker)
     {
         $this->em = $em;
         $this->userManager = $userManager;
         $this->productManager = $productManager;
         $this->esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
         $this->esOrderRepo = $this->em->getRepository('EasyShop\Entities\EsOrder');
+        $this->pointTracker = $pointTracker;
     }
 
     /**
@@ -133,7 +142,6 @@ class TransactionManager
             'o_message' => 'Product Order entry not found!'
         ];
         $getOrderProduct = $this->getOrderProductByStatus($status, $orderProductId, $orderId, $invoiceNumber, $memberId);
-
         if ( isset($getOrderProduct['orderProductId']) ) {
             $esOrderProduct = $this->esOrderProductRepo
                                    ->findOneBy([
@@ -141,6 +149,14 @@ class TransactionManager
                                        'order' => $orderId
                                    ]);
             $esOrderProductStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')->find($status);
+
+            /**
+             * Add user point if a transaction is completed
+             */
+            if($status === EsOrderProductStatus::FORWARD_SELLER){
+                $this->pointTracker->addUserPoint($memberId, EsPointType::TYPE_PURCHASE, $esOrderProduct->getTotal());
+            }
+
             $this->esOrderProductRepo->updateOrderProductStatus($esOrderProductStatus, $esOrderProduct);
             $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($esOrderProduct, $esOrderProductStatus, $getOrderProduct['historyLog']);
 

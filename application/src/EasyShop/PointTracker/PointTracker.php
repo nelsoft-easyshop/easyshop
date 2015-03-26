@@ -42,7 +42,7 @@ class PointTracker
      *
      * @return boolean
      */
-    public function addUserPoint($userId, $actionId, $isPercentage = false, $price = 0, $customPoints = 0)
+    public function addUserPoint($userId, $actionId, $percentage = 0, $customPoints = 0)
     {
         // Get Point Type object
         $points = $this->em->getRepository('EasyShop\Entities\EsPointType')
@@ -60,10 +60,6 @@ class PointTracker
             return false;
         }
 
-        if($isPercentage && $price <= 0){
-            return false;
-        }
-
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
                               ->findOneBy(['member' => $userId]);
@@ -72,8 +68,8 @@ class PointTracker
             $addPoints = $customPoints;
         }
         else{
-            if($isPercentage){
-                $addPoints = ($points->getPoint() / 100) * $price;
+            if($percentage > 0){
+                $addPoints = ($points->getPoint() / 100) * $percentage;
             }
             else{
                 $addPoints = $points->getPoint();
