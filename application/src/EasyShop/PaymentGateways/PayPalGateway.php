@@ -28,7 +28,7 @@ class PayPalGateway extends AbstractGateway
     private $PayPalApiSignature;
     private $returnUrl;
     private $cancelUrl;
-
+    private $lowestAmount;
 
     /**
      * Constructor
@@ -50,6 +50,7 @@ class PayPalGateway extends AbstractGateway
         $this->PayPalApiUsername      = $config['api_username']; 
         $this->PayPalApiPassword      = $config['api_password']; 
         $this->PayPalApiSignature     = $config['api_signature'];
+        $this->lowestAmount = $config['lowest_amount'];
         $this->returnUrl = isset($params['returnUrl']) ? $params['returnUrl'] : base_url().'pay/postBackPayPal';
         $this->cancelUrl = isset($params['cancelUrl']) ? $params['cancelUrl'] : base_url().'payment/review';
     }
@@ -193,7 +194,13 @@ class PayPalGateway extends AbstractGateway
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$stateRegionId);
 
         $shipping_amt = round((float)$prepareData['othersumfee'], 2);
-        $itemOriginalPrice = $itemTotalPrice = bcsub(round((float)$prepareData['totalPrice'], 2), $shipping_amt, 2);
+        if($shipping_amt > $prepareData['totalPrice']){
+            $itemTotalPrice = bcsub($shipping_amt, round((float)$prepareData['totalPrice'], 2), 2);
+        }
+        else{
+            $itemTotalPrice = bcsub(round((float)$prepareData['totalPrice'], 2), $shipping_amt, 2);
+        }
+        $itemOriginalPrice = $itemTotalPrice;
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
@@ -213,7 +220,7 @@ class PayPalGateway extends AbstractGateway
             $itemTotalPrice -= $pointGateway->getParameter('amount');
         }
 
-        if($thereIsPromote <= 0 && $paypalGrandTotal < 50.00){
+        if($thereIsPromote <= 0 && $paypalGrandTotal < $this->lowestAmount){
             return [
                 'e' => false,
                 'd' => 'We only accept payments of at least PHP 50.00 in total value.'
@@ -356,11 +363,16 @@ class PayPalGateway extends AbstractGateway
             // Compute shipping fee
             $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
 
+            $shippingAmt = round((float)$prepareData['othersumfee'], 2);
             $itemList = $prepareData['newItemList'];
             $grandTotal = $prepareData['totalPrice'];
             $productstring = $prepareData['productstring']; 
             $toBeLocked = $prepareData['toBeLocked'];
             $lockCountExist = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->getLockCount($orderId);
+
+            if($pointGateway){
+                $grandTotal = bcsub($grandTotal, $pointGateway->getParameter('amount'), 2);
+            }
 
             if($lockCountExist >= 1){
                 $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
@@ -389,7 +401,7 @@ class PayPalGateway extends AbstractGateway
                                 $data["order_id"] = $value['product_itemID'];
                                 $data["point"] = $pointGateway->getProductDeductPoint(
                                                     round((float)$value['price'], 2),
-                                                    $grandTotal
+                                                    bcsub($grandTotal, $shippingAmt, 2)
                                                 );
                                 $pointArray[] = $data;
                             }

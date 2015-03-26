@@ -24,6 +24,7 @@ class DragonPayGateway extends AbstractGateway
     private $merchantPwd;
     private $redirectUrl;
     private $client;
+    private $lowestAmount;
 
     private $errorCodes = [
         '000' => 'SUCCESS',
@@ -62,6 +63,7 @@ class DragonPayGateway extends AbstractGateway
         $this->merchantId = $config['merchant_id'];
         $this->merchantPwd = $config['merchant_password']; 
         $this->client = $this->paymentService->dragonPaySoapClient;
+        $this->lowestAmount = $config['lowest_amount'];
     }
 
     /**
@@ -198,7 +200,7 @@ class DragonPayGateway extends AbstractGateway
             $dragonpayTotal = $grandTotal - $pointGateway->getParameter('amount'); 
         }
 
-        if($dragonpayTotal < 50.00){ 
+        if($dragonpayTotal < $this->lowestAmount){ 
             return [
                 'e' => false,
                 'd' => 'We only accept payments of at least PHP 50.00 in total value.'

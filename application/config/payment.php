@@ -16,7 +16,8 @@ $config = [
                         'ip_address' => [
                             '166.78.8.218',
                             '180.232.69.52',
-                        ] 
+                        ],
+                        'lowest_amount' => 50.00
                     ],
                     'Easydeal' => [
                         'return_url' => 'https://staging.easydeal.ph/payment/dragonPayReturn',
@@ -30,6 +31,7 @@ $config = [
                         'api_username' => 'easyseller_api1.yahoo.com',
                         'api_password' => '1396000698',
                         'api_signature' => 'AFcWxV21C7fd0v3bYYYRCpSSRl31Au1bGvwwVcv0garAliLq12YWfivG',
+                        'lowest_amount' => 50.00
                     ]
                 ],
                 'pesopay' => [
@@ -48,7 +50,8 @@ $config = [
                                 '58.64.198.68',
                                 '58.64.198.94'
                             ],
-                        ]
+                        ],
+                        'lowest_amount' => 50.00
                     ]
                 ]
             ]
@@ -69,7 +72,8 @@ $config = [
                             '119.81.11.114',
                             '119.81.11.115',
                             '180.232.69.52',
-                        ]
+                        ],
+                        'lowest_amount' => 50.00
                     ],
                     'Easydeal' => [
                         'return_url' => 'https://www.easydeal.ph/payment/dragonPayReturn',
@@ -83,6 +87,7 @@ $config = [
                         'api_username' => 'admin_api1.easyshop.ph',
                         'api_password' => 'GDWFS6D9ACFG45E7',
                         'api_signature' => 'AFcWxV21C7fd0v3bYYYRCpSSRl31Adro7yAfl2NInYAAVfFFipJ-QQhT',
+                        'lowest_amount' => 50.00
                     ]
                 ],
                 'pesopay' => [
@@ -101,7 +106,8 @@ $config = [
                                 '203.105.16.160',
                                 '203.105.16.191'
                             ],
-                        ]
+                        ],
+                        'lowest_amount' => 50.00
                     ]
                 ]
             ]

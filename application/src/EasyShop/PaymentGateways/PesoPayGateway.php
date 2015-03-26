@@ -19,6 +19,7 @@ class PesoPayGateWay extends AbstractGateway
 {
     private $merchantId;
     private $redirectUrl;
+    private $lowestAmount;
 
     /**
      * Constructor
@@ -37,6 +38,7 @@ class PesoPayGateWay extends AbstractGateway
         $config = $configLoad['payment_type']['pesopay']['Easyshop'];
         $this->merchantId = $config['merchant_id'];
         $this->redirectUrl = $config['redirect_url'];
+        $this->lowestAmount = $config['lowest_amount'];
     }
 
     /**
@@ -90,7 +92,7 @@ class PesoPayGateWay extends AbstractGateway
             $pesopayTotal = $grandTotal - $pointGateway->getParameter('amount'); 
         }
 
-        if($pesopayTotal < 50.00){
+        if($pesopayTotal < $this->lowestAmount){
             return [
                 'error' => false,
                 'message' => 'We only accept payments of at least PHP 50.00 in total value.'
@@ -100,7 +102,7 @@ class PesoPayGateWay extends AbstractGateway
         $txnid = $this->generateReferenceNumber($memberId);  
         $this->setParameter('amount', $grandTotal);
 
-        if($grandTotal < 50.00){
+        if($grandTotal < $this->lowestAmount){
             return [
                 'error' => true,
                 'message' => 'We only accept payments of at least PHP 50.00 in total value.'
