@@ -294,17 +294,17 @@ class DragonPayGateway extends AbstractGateway
             $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
             $this->setParameter('paymentType', $paymentType);
 
-            $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                ->findOneBy([
                                     'transactionId' => $txnId,
                                     'paymentMethod' => $paymentType
                                 ]);
 
-            $invoice = $return->getInvoiceNo();
-            $orderId = $return->getIdOrder();
-            $memberId = $return->getBuyer()->getIdMember();
-            $itemList = json_decode($return->getDataResponse(), true);
-            $postBackCount = $return->getPostbackcount();
+            $invoice = $order->getInvoiceNo();
+            $orderId = $order->getIdOrder();
+            $memberId = $order->getBuyer()->getIdMember();
+            $itemList = json_decode($order->getDataResponse(), true);
+            $postBackCount = $order->getPostbackcount();
 
             // get address Id
             $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
@@ -372,9 +372,9 @@ class DragonPayGateway extends AbstractGateway
         $message = $params['message'];
 
         if(strtolower($status) === PaymentService::STATUS_PENDING || strtolower($status) === PaymentService::STATUS_SUCCESS){
-            $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                ->findOneBy(['transactionId' => $txnId, 'paymentMethod' => $paymentType]);
-            $orderId = $return->getIdOrder();
+            $orderId = $order->getIdOrder();
             $response['status'] = PaymentService::STATUS_SUCCESS;
             $response['message'] = 'Your payment has been completed through Dragon Pay. '.urldecode($message);
         }
