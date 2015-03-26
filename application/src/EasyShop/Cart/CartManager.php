@@ -434,7 +434,7 @@ class CartManager
                     return false;
                 }
 
-                $additionalFee = $shippingFee !== null ? $shippingFee : 0;
+                $additionalFee = $shippingFee !== null ? bcmul($shippingFee, $item['qty'], 4) : 0;
                 $totalFee = bcadd($additionalFee, $totalFee, 4);
             }
 
