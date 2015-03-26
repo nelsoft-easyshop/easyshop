@@ -1309,43 +1309,51 @@ class Payment extends MY_Controller
                       ->getRepository('EasyShop\Entities\EsOrder')
                       ->findOneBy(["transactionId" => $paypalToken]);
         
-        $transactionPoints = $paymentService->getTransactionPoints($order);
+        if($order){
+            $transactionPoints = $paymentService->getTransactionPoints($order);
+            if((int) $transactionPoints > 0 ){
+                $paymentMethods = [
+                    "PaypalGateway" => [
+                        "method" => "PayPal",
+                        "getArray" => $this->input->get()
+                    ],
+                    "PointGateway" => [
+                        "method" => "Point", 
+                        "amount" => $transactionPoints, 
+                        "pointtype" => "purchase"
+                    ]
+                ];
+            }
+            else{
+                $paymentMethods = [
+                    "PaypalGateway" => [
+                        "method" => "PayPal", 
+                        "getArray" => $this->input->get()
+                    ]
+                ];
+            }
 
-        if($order && (int) $transactionPoints > 0 ){
-            $paymentMethods = [
-                "PaypalGateway" => [
-                    "method" => "PayPal",
-                    "getArray" => $this->input->get()
-                ],
-                "PointGateway" => [
-                    "method" => "Point", 
-                    "amount" => $transactionPoints, 
-                    "pointtype" => "purchase"
-                ]
+            // Validate Cart Data
+            $cartData = json_decode($order->getDataResponse(), true);
+            $validatedCart = [
+                'itemArray' => $cartData,
+                'itemCount' => count($cartData),
             ];
+            $this->session->set_userdata('choosen_items', $cartData);
+            $response = $paymentService->postBack($paymentMethods, $validatedCart, $memberId, null);
+            $message = $response['message'];
+            $status = $response['status'];
+            $txnid = $response['txnid'];
+            if($status === PaymentService::STATUS_SUCCESS){
+                $this->removeItemFromCart();
+            }
+            $this->__generateFlash($txnid, $message, $status);
+            redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
         }
         else{
-            $paymentMethods = [
-                "PaypalGateway" => [
-                    "method" => "PayPal", 
-                    "getArray" => $this->input->get()
-                ]
-            ];
+            show_404();
         }
 
-        // Validate Cart Data
-        $validatedCart = $paymentService->validateCartData($carts, $transactionPoints, $memberId);
-        $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
-        
-        $response = $paymentService->postBack($paymentMethods, $validatedCart, $memberId, null);
-        $message = $response['message'];
-        $status = $response['status'];
-        $txnid = $response['txnid'];
-        if($status === PaymentService::STATUS_SUCCESS){
-            $this->removeItemFromCart();
-        }
-        $this->__generateFlash($txnid, $message, $status);
-        redirect('/payment/success/paypal?txnid='.$txnid.'&msg='.$message.'&status='.$status, 'refresh'); 
     }
 
     /**
