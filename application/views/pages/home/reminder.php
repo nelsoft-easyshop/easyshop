@@ -33,3 +33,4 @@
 <?php else: ?>
     <script src="/assets/js/min/easyshop.home-reminder.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
+
