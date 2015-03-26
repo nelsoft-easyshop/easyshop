@@ -184,7 +184,10 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
                         ['web/assets/css/bootstrap.css',
                          'web/assets/css/qr-code-css.css',
-                         'web/assets/css/qr-code-print.css']
+                         'web/assets/css/qr-code-print.css'],
+                    'web/assets/css/min-easyshop.home-reminder.css':
+                        ['web/assets/css/basic.css',
+                         'web/assets/css/message-box.css']
                 }
             },
         },
@@ -451,7 +454,11 @@ module.exports = function (grunt) {
                         'web/assets/js/src/vendor/promo/christmas-promo.js'],
                      
                     'web/assets/js/min/easyshop.bug_report.js':
-                        ['web/assets/js/src/bug-report.js']
+                        ['web/assets/js/src/bug-report.js'],
+                    
+                    'web/assets/js/min/easyshop.home-reminder.js':
+                        ['web/assets/js/src/vendor/jquery.simplemodal.js',
+                         'web/assets/js/src/message-box.js']
                 }
             }
         }

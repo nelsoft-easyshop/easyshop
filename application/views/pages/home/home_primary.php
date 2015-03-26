@@ -49,6 +49,10 @@
         include("featured-brands.php");
     ?>
 </section>
+
+
+<?php echo $messageboxHtml; ?>
+
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/jquery.bxslider1.min.js" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/owl.carousel.min.js" type="text/javascript"></script>
