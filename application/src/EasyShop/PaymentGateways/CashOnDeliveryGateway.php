@@ -53,7 +53,7 @@ class CashOnDeliveryGateway extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                            ->getShippingAddress(intval($memberId));
+                            ->getAddressStateRegionId((int)$memberId);
 
         // Compute shipping fee
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));

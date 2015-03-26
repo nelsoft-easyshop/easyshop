@@ -69,7 +69,7 @@ class PesoPayGateWay extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                            ->getShippingAddress((int)$memberId);
+                            ->getAddressStateRegionId((int)$memberId);
 
         // Compute shipping fee
         $pointSpent = $pointGateway ? $pointGateway->getParameter('amount') : "0";
@@ -233,7 +233,7 @@ class PesoPayGateWay extends AbstractGateway
 
             // get address Id
             $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                                ->getShippingAddress((int)$memberId);
+                                ->getAddressStateRegionId((int)$memberId);
 
             // Compute shipping fee
             $prepareData = $this->paymentService

@@ -180,7 +180,7 @@ class PayPalGateway extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                            ->getShippingAddress(intval($memberId));
+                            ->getAddressStateRegionId((int)$memberId);
 
         $name = $shippingAddress->getConsignee();
         $street = $shippingAddress->getAddress();
@@ -341,7 +341,7 @@ class PayPalGateway extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                            ->getShippingAddress((int)$memberId);
+                            ->getAddressStateRegionId((int)$memberId);
 
         if(array_key_exists('token',$getItems) && array_key_exists('PayerID',$getItems)){
             $payerid = $getItems['PayerID'];

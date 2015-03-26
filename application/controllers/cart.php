@@ -53,13 +53,13 @@ class Cart extends MY_Controller
     {
         $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         if ($this->session->userdata('member_id')) {
-            $memberId = $this->session->userdata('member_id');
+            $memberId = (int) $this->session->userdata('member_id');
             $cartContents = $this->cartManager->getValidatedCartContents($memberId); 
             $totalAmount = $this->cartImplementation->getTotalPrice();
-            $cityAddress = $esAddressRepository->getShippingAddress($memberId);
             $locations = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                   ->getLocationLookup();
-            $address = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
+            $userAddress = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
+
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
                 "title" => "Cart | Easyshop.ph",
@@ -72,14 +72,14 @@ class Cart extends MY_Controller
                 $continueUrl = '/product/categories_all';
             }
             $bodyData = [
-                'userAddress' => $address,
+                'userAddress' => $userAddress,
                 'continue_url' => $continueUrl,
                 'cart_items' => $cartContents,
                 'totalAmount' => str_replace( ',', '', $totalAmount ),
                 'userPoints' => $this->pointTracker->getUserPoint($memberId),
                 'isCartEmpty' => $this->cartImplementation->getSize() === 0,
                 'locations' => $locations,
-                'totalShippingFee' => $this->cartManager->getCartShippingFee($cityAddress ,$memberId)
+                'totalShippingFee' => $this->cartManager->getCartShippingFee($userAddress['stateRegion'] ,$memberId)
             ];
 
             $this->load->spark('decorator');
