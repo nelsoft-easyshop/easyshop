@@ -1614,6 +1614,8 @@ class productUpload extends MY_Controller
             $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                                 ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
+            $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                         ->getShippingDetailsByProductId($productId);
 
             $paymentMethod = $this->config->item('Promo')[0]['payment_method']; 
 
@@ -1621,16 +1623,16 @@ class productUpload extends MY_Controller
                 $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method']; 
             }
 
-
             $productPreviewData = [
-                        'product' => $product,
-                        'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
-                        'productImages' => $productImages,
-                        'avatarImage' => $avatarImage,
-                        'isFreeShippingNationwide' => $isFreeShippingNationwide,
-                        'productAttributes' => $productAttributes,
-                        'paymentMethod' => $paymentMethod,
-                    ];
+                'product' => $product,
+                'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
+                'productImages' => $productImages,
+                'avatarImage' => $avatarImage,
+                'isFreeShippingNationwide' => $isFreeShippingNationwide,
+                'productAttributes' => $productAttributes,
+                'paymentMethod' => $paymentMethod,
+                'shippingLocation' => $shippingLocation,
+            ];
 
             $shippingDetails = $productShippingManager->getProductShippingSummary($productId);
             $shippingAttribute = $productShippingManager->getShippingAttribute($productId);
@@ -1651,9 +1653,9 @@ class productUpload extends MY_Controller
                 'renderSearchbar' => false, 
             ];
 
-            $this->load->spark('decorator');    
+            $this->load->spark('decorator');
             $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
+            $this->load->view('pages/product/product_upload_step4_view', $mainViewData);
             $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
         else{
