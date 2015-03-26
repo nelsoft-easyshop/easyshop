@@ -63,6 +63,7 @@ class Kernel
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         $config->addCustomStringFunction('BINARY', 'EasyShop\Doctrine\Query\MySql\Binary');
         $config->addCustomStringFunction('FIELD', 'EasyShop\Doctrine\Query\MySql\Field');
+        $config->addCustomStringFunction('DATE', 'EasyShop\Doctrine\Query\MySql\Date');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
