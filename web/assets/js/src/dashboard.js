@@ -757,7 +757,7 @@
     var isAjaxRequestForProduct = function($page, $textInput, $filterInput, $requestType, $container)
     {
         if($container == "deleted-product-container"){
-            if($("#hidden-deleted-container-" + $filterInput + " > #page-"+$page).length > 0){
+            if($("#hidden-deleted-container-" + $filterInput + " > #page-"+$page).length > 0 && $textInput.trim() == ""){
                 $('#'+$container).html($("#hidden-deleted-container-" + $filterInput + " > #page-"+$page).html());
             }
             else{
@@ -765,7 +765,7 @@
             }
         }
         else if($container == "drafted-product-container"){
-            if($("#hidden-drafted-container-" + $filterInput + " > #page-"+$page).length > 0){ 
+            if($("#hidden-drafted-container-" + $filterInput + " > #page-"+$page).length > 0 && $textInput.trim() == ""){ 
                 $('#'+$container).html($("#hidden-drafted-container-" + $filterInput + " > #page-"+$page).html());
             }
             else{
@@ -773,7 +773,7 @@
             }
         }
         else{
-            if($("#hidden-active-container-" + $filterInput + " > #page-"+$page).length > 0){
+            if($("#hidden-active-container-" + $filterInput + " > #page-"+$page).length > 0 && $textInput.trim() == ""){
                 $('#'+$container).html($("#hidden-active-container-" + $filterInput + " > #page-"+$page).html());
             }
             else{
