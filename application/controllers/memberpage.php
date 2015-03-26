@@ -824,6 +824,9 @@ class Memberpage extends MY_Controller
                     }
                 }
 
+                /**
+                 * Add user point if a transaction is completed
+                 */
                 if($getTransaction 
                    && $getTransaction->getOrderStatus()->getOrderStatus() === EsOrderStatus::STATUS_COMPLETED
                    && $data['status'] === EsOrderProductStatus::FORWARD_SELLER
