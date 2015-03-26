@@ -338,8 +338,9 @@
                                     <label class="<?php echo (in_array($attrkey,$shiparr['attr']) && $shipping_summary['has_shippingsummary']) || !$shipping_summary['has_shippingsummary'] ? 'active':'' ?>">
                                         <input class="shipattr" type="checkbox" name="shipattr[<?php echo $sgCounter?>][]" value="<?php echo $attrkey?>" <?php echo (in_array($attrkey,$shiparr['attr']) && $shipping_summary['has_shippingsummary']) || !$shipping_summary['has_shippingsummary'] ? 'checked':'' ?> >
                                         <?php foreach($temp as $keyAttr => $pattr):?>
-                                        <span style="margin-right: 3px; <?=count($temp) - 1 === $keyAttr ? 'border-right:none' : '' ;?>"><?php echo $pattr['name'] . ' : ' . $pattr['value']?></span>
-                                        <?php endforeach;?>
+                                            <?php $borderStyle = count($temp) - 1 === $keyAttr ? 'border-right:none'  : ''; ?>
+                                            <span style="<?=$borderStyle ?>"><?=html_escape($pattr['name']) . ' : ' . html_escape($pattr['value']);?></span>
+                                        <?php endforeach; ?>
                                     </label>
                                     <br/>
                                 </div>
