@@ -476,7 +476,7 @@ class TransactionManager
     /**
      * Get total transaction shipping fee
      * @param  EasyShop\Entites\EsOrder $order
-     * @return float()
+     * @return string
      */
     public function getTransactionShippingFee($order)
     {
