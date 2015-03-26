@@ -1253,22 +1253,23 @@ class EsProductRepository extends EntityRepository
     /**
      * Get product ids that do not belong to any member category
      *
-     * @param integer $memberId
-     * @param integer $limit
-     * @param integer $offset
-     * @param mixed $orderBy
+     * @param  integer $memberId
+     * @param  integer $limit
+     * @param  integer $offset
+     * @param  mixed   $orderBy
+     * @param  string  $condition
      * @return integer[]
      */
-    public function getNonCategorizedProductIds($memberId, $limit = 12, $offset = 0, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT => 'DESC' ])
+    public function getNonCategorizedProductIds($memberId, $limit = 12, $offset = 0, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT => 'DESC' ], $condition = "")
     {
         $this->em =  $this->_em;
         
         $numberOfAllCustomCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                            ->getNumberOfCustomCategories($memberId, true);  
+                                            ->getNumberOfCustomCategories($memberId, true);
         if($numberOfAllCustomCategories === 0){
             return [];
         }
-        
+
         $orderByDirections = [
             'ASC' => 'ASC', 
             'DESC' => 'DESC',
@@ -1276,15 +1277,14 @@ class EsProductRepository extends EntityRepository
         $orderByFields = [
             CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT =>  [ 'clickcount' ], 
             CategoryManager::ORDER_PRODUCTS_BY_LASTCHANGE => [ 'lastmodifieddate' ],
-            CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'is_hot' , 'clickcount' ],
+            CategoryManager::ORDER_PRODUCTS_BY_HOTNESS => [ 'isHot' , 'clickcount' ],
         ];
-     
+
         $orderByField = isset($orderByFields[key($orderBy)]) ? 
                         $orderByFields[key($orderBy)] : $orderByFields[CategoryManager::ORDER_PRODUCTS_BY_CLICKCOUNT];
         $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
                             $orderByDirections[reset($orderBy)] : $orderByDirections['DESC'];
 
-                            
         $categorizedProductIds = $this->getCategorizedProductIds($memberId);
         $queryBuilder = $this->em->createQueryBuilder();
 
@@ -1293,22 +1293,26 @@ class EsProductRepository extends EntityRepository
                             ->where('p.isDelete = :productDeleteFlag')
                             ->andWhere('p.isDraft = :productDraftFlag')
                             ->andWhere('p.member = :memberId');
-        
-                                        
-        if(!empty($categorizedProductIds)){
+
+        if(empty($categorizedProductIds) === false){
             $queryBuilder->andWhere( 
                             $queryBuilder->expr()->notIn('p.idProduct', $categorizedProductIds)
                         );
         }
-   
+
+        if($condition !== ""){
+            $queryBuilder->andWhere('p.condition = :condition')
+                         ->setParameter('condition', $condition);
+        }
+
         $queryBuilder->setParameter('productDeleteFlag', \EasyShop\Entities\EsProduct::ACTIVE)
                      ->setParameter('productDraftFlag', \EasyShop\Entities\EsProduct::ACTIVE)
                      ->setParameter('memberId', $memberId);
         
         foreach($orderByField as $field){
-            $queryBuilder->orderBy('p.'.$field, $orderByDirection);
+            $queryBuilder->addOrderBy('p.'.$field, $orderByDirection);
         }
-        $queryBuilder->orderBy('p.idProduct', 'DESC')
+        $queryBuilder->addOrderBy('p.idProduct', 'DESC')
                      ->setFirstResult( $offset )
                      ->setMaxResults( $limit );
         $results = $queryBuilder->getQuery()
@@ -1316,11 +1320,11 @@ class EsProductRepository extends EntityRepository
         $productIds = [];
         foreach($results as $result){
             $productIds[] = $result['idProduct'];
-        }        
-        
+        }
+
         return $productIds;
     }
-    
+
     /**
      * Get number of products that do not belong to any member category
      *
