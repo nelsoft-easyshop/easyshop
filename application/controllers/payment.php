@@ -801,11 +801,13 @@ class Payment extends MY_Controller{
         $transactionManager = $this->serviceContainer['transaction_manager'];
 
         $itemGoogleAnalytics = [];
-        $txnId = (string)$this->session->userdata('payment_txnid'); 
-        $message = (string)$this->session->userdata('payment_msg');
-        $status = (string)$this->session->userdata('payment_status');
 
-        if($txnId !== "" && $memberId = $this->session->userdata('member_id')){
+        if($this->session->userdata('payment_txnid')
+            && $this->session->userdata('member_id')){
+            $txnId = (string)$this->session->userdata('payment_txnid'); 
+            $message = (string)$this->session->userdata('payment_msg');
+            $status = (string)$this->session->userdata('payment_status');
+            $memberId = (int)$this->session->userdata('member_id');
             $isPaymentSuccess = strtolower($status) === PaymentService::STATUS_SUCCESS; 
             $order = $entityManager->getRepository('EasyShop\Entities\EsOrder')
                                    ->findOneBy(['transactionId' => $txnId]);
@@ -851,6 +853,42 @@ class Payment extends MY_Controller{
             else{
                 show_404();
             }
+        }
+        else{
+            show_404();
+        }
+   }
+
+   /**
+    * Generate receipt for transaction
+    * @return view
+    */
+   public function generateReceipt()
+   {
+        $entityManager = $this->serviceContainer['entity_manager'];
+        $paymentService = $this->serviceContainer['payment_service'];
+        $transactionManager = $this->serviceContainer['transaction_manager'];
+
+        $transactionId = $this->input->get('txnId');
+        $order = $entityManager->getRepository('EasyShop\Entities\EsOrder')
+                               ->findOneBy(['transactionId' => $transactionId]);
+
+        if($order){
+            $shippingAddress = $entityManager->getRepository('EasyShop\Entities\EsOrderShippingAddress')
+                                             ->find($order->getShippingAddressId());
+            $orderProducts = $entityManager->getRepository('EasyShop\Entities\EsOrderProduct')
+                                           ->findBy(['order' => $order]);
+            $transactionShippingFee = $transactionManager->getTransactionShippingFee($order);
+
+            $orderData = [
+                'order' => $order,  
+                'shippingAddress' => $shippingAddress, 
+                'orderProducts' => $orderProducts,
+                'transactionPoints' => $paymentService->getTransactionPoints($order),
+                'transactionShippingFee' => $transactionShippingFee,
+            ];
+
+            $this->load->view("pages/payment/payment-receipt", $orderData);
         }
         else{
             show_404();
@@ -1290,10 +1328,10 @@ class Payment extends MY_Controller{
             $message = $response['message'];
             $status = $response['status'];  
             $textType = $response['textType'];
+            $this->__generateFlash($txnid,$message,$status);
             if($status === PaymentService::STATUS_SUCCESS){
                 $this->removeItemFromCart();
             }
-            $this->__generateFlash($txnid,$message,$status);
             echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status;
         }
     }

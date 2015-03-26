@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="/assets/css/payment-receipt.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="print">
 </head>
 
-<body onload="window.print();window.location.replace('/me')">
+<body>
 <section class="wrapper">
     <div class="container text-center">
         <div class="row">
@@ -32,23 +32,23 @@
                         <tbody>
                             <tr>
                                 <td>Reference Number : </td>
-                                <td>PPY-1412170857-2</td>
+                                <td><?=$order->getTransactionId(); ?></td>
                             </tr>
                             <tr>
                                 <td>Invoice Number : </td>
-                                <td>2-2-1412170857</td>
+                                <td><?=$order->getInvoiceNo(); ?></td>
                             </tr>
                             <tr>
                                 <td>Payment Method : </td>
-                                <td>PayPal</td>
+                                <td><?=$order->getPaymentMethod()->getName(); ?></td>
                             </tr>
                             <tr>
                                 <td>Total Amount : </td>
-                                <td>&#8369; 50,760.00</td>
+                                <td>&#8369; <?=number_format($order->getTotal(), 2, '.', ',')?></td>
                             </tr>
                             <tr>
                                 <td>Transaction Date : </td>
-                                <td>2014-12-17 15:16:58</td>
+                                <td><?=$order->getDateadded()->format('Y-m-d h:i a'); ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -58,24 +58,24 @@
                         <tbody>
                             <tr>
                                 <td>Consignee Name : </td>
-                                <td>Juan Dela Cruz</td>
+                                <td><?=html_escape($shippingAddress->getConsignee());?></td>
                             </tr>
                             <tr>
-                                <td>Contact Number : </td>
-                                <td>PayPal</td>
+                                <td>Mobile Number : </td>
+                                <td>0<?=html_escape($shippingAddress->getMobile());?></td>
+                            </tr>
+                            <tr>
+                                <td>Telephone Number : </td>
+                                <td><?=html_escape($shippingAddress->getTelephone());?></td>
                             </tr>
                             <tr>
                                 <td>Full Address : </td>
-                                <td>123 Taft Ave., Ermita, Manila</td>
+                                <td><?=html_escape($shippingAddress->getAddress());?></td>
                             </tr>
                             <tr>
                                 <td>City and State : </td>
-                                <td>Manila, NCR</td>
-                            </tr>
-                            <tr>
-                                <td>Near Landmark : </td>
-                                <td>Near LRT 1 Quirino Station Southbound</td>
-                            </tr>
+                                <td><?=html_escape($shippingAddress->getStateregion()->getLocation());?>, <?=html_escape($shippingAddress->getCity()->getLocation());?></td>
+                            </tr> 
                         </tbody>
                     </table>
                 </div>
@@ -95,57 +95,42 @@
                                 <th width="20%">Price</th>
                             </tr>
                         </thead>
-                        
                         <tbody>
-                            <tr class="checkout-item">
-                                <td>
-                                    IPHONE 6 BLACK 64GB WITH 2 YEARS WARRANTY FROM MAC CENTER
-                                </td>
-                                <td>1</td>
-                                <td>&#8369; 42,000.00</td>
-                                <td>&#8369; 42,000.00</td>
-                            </tr>
-                             <tr class="checkout-item">
-                                <td>
-                                    Tailored Short
-                                </td>
-                                <td>1</td>
-                                <td>&#8369; 200.00</td>
-                                <td>&#8369; 200.00</td>
-                            </tr>
-                            <tr class="checkout-item">
-                                <td>
-                                    Long Sleeves Shirt
-                                </td>
-                                <td>1</td>
-                                <td>&#8369; 400.00</td>
-                                <td>&#8369; 400.00</td>
-                            </tr>
+                            <?php foreach ($orderProducts as $product): ?>
+                                <tr class="checkout-item">
+                                    <td>
+                                        <?=html_escape($product->getProduct()->getName());?>
+                                    </td>
+                                    <td><?=$product->getOrderQuantity();?></td>
+                                    <td>&#8369; <?=number_format($product->getHandlingFee(), 2, '.', ',')?></td>
+                                    <td>&#8369; <?=number_format($product->getTotal(), 2, '.', ',')?></td>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td>
                                     Subtotal
                                 </td>
-                                <td colspan="3">&#8369; 45,000.00</td>
+                                <td colspan="3">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionShippingFee), 2, '.', ',')?></td>
                             </tr>
                             <tr>
                                 <td>
                                     Total Shipping Fee
                                 </td>
-                                <td colspan="3">&#8369; 6,000.00</td>
+                                <td colspan="3">&#8369; <?=number_format($transactionShippingFee, 2, '.', ',')?></td>
                             </tr>
                             <tr class="border-bottom-1">
                                 <td>
                                     Points Deduction
                                 </td>
-                                <td colspan="3">&mdash; &#8369; 240.00</td>
+                                <td colspan="3">&mdash; &#8369; <?=$transactionPoints; ?></td>
                             </tr>
-                            <tr class="border-bottom-0">
+                            <tr>
                                 <td>
                                     Order Total
                                 </td>
-                                <td  colspan="3" class="checkout-order-total">&#8369; 50,760.00</td>
+                                <td  colspan="3" class="checkout-order-total">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints), 2, '.', ',')?></td>
                             </tr>
                         </foot>
                     </table>
@@ -161,7 +146,7 @@
 
         <div class="row">
             <div class="col-xs-12 mrgn-tb-100 qr-es-logo">
-                <img src="/assets/images/qrcode-images/easyshop-logo.jpg" alt="Easyshop.ph">
+                <img src="<?=getAssetsDomain(); ?>assets/images/qrcode-images/easyshop-logo.jpg" alt="Easyshop.ph">
             </div>
         </div>
     </div>
@@ -170,5 +155,11 @@
         <div class="border-2"></div>
     </div>
 </section>
+<script type="text/javascript">
+    window.onload = function () {
+        window.print();
+        setTimeout(function(){window.close();}, 1);
+    }
+</script>
 </body>
 </html>

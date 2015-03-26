@@ -164,7 +164,7 @@
                             You have made a successful purchase on Easyshop.ph. An e-mail has been sent to you and the people from whom you purchased regarding the status of your transaction.You may view your pending transactions by clicking <a href="/me?tab=ongoing">here</a>
                         </p>
                         <p class="transaction-container-text-small">
-                            If you want to print this page as an additional reference, click <a href="#">here</a>.
+                            If you want to print this page as an additional reference, click <a href="/payment/generateReceipt?txnId=<?=$order->getTransactionId(); ?>" target="_blank">here</a>.
                         </p>
                     <?php endif; ?>
                     <br/>
