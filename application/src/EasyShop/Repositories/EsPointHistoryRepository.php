@@ -7,6 +7,13 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class EsPointHistoryRepository extends EntityRepository
 {
+    /**
+     * Count user point activity based on type and date
+     * @param  integer     $memberId
+     * @param  integer     $pointType
+     * @param  date(Y-m-d) $date
+     * @return integer
+     */
     public function countUserPointActivity($memberId, $pointType = null, $date = null)
     {
         $query =  $this->_em->createQueryBuilder()
@@ -30,3 +37,4 @@ class EsPointHistoryRepository extends EntityRepository
         return isset($resultCount['total_count']) ? $resultCount['total_count'] : 0;
     }
 }
+
