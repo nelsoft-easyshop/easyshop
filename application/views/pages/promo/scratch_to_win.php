@@ -2,13 +2,11 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <link rel="stylesheet" href="/assets/css/jquery.bxslider.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
     <link rel="stylesheet" href="/assets/css/promo.css?ver=<?= ES_FILE_VERSION ?>" type="text/css" media="all"/>
-    <link type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" media="all"/>
-    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
 <?php else: ?>
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.scratch-to-win.css?ver=<?=ES_FILE_VERSION?>' media='all'/>
 <?php endif; ?>
 
-
+<section class="bg-cl-fff">
 <div class="clear"></div>
 <?PHP if (isset($product)) : ?>
 <div class="container mrgn-top-40" id="main_search_container">
@@ -268,6 +266,7 @@
     </div>
 </div>
 </div>
+</section>
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
         <script src="/assets/js/src/vendor/jquery.simplemodal.js" type="text/javascript"></script>

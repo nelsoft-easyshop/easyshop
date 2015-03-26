@@ -3,6 +3,10 @@
     padding-top: 45px;
 }
 
+.btn {
+    border: none;
+}
+
 .scratch-win-form span,
 .scratch-win-form input,
 .scratch-win-form button,
@@ -38,7 +42,8 @@
     width: 35%;
 }
 .scratch-win-error p{
-    width: 65%;
+    text-align: center;
+    width: 100%;
 }
 .scratch-win-error h2{
     width: 8%;
@@ -47,7 +52,10 @@
     display: none;
 }
 .scratch-win-form span{
-    width: 15%;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px !important;
+    text-align: center;
 }
 .scratch-win-form{
     width: 100%;
@@ -68,27 +76,15 @@
     padding: 20px;
     text-align: center;
 }
-.scratch-win-form .instructions h3
-{
+.scratch-win-form .instructions h3 {
     margin: 2% auto;
-    max-width: 980px;
-    position: relative;
-    width: 83%;
 }
-.scratch-win-form .instructions ol{
-    margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 79%;
-}
+
 .scratch-win-form .instructions p{
     margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 83%;
 }
 .scratch-win-form .instructions ol > li {
-    padding: 1%;
+    padding: 1% 0;
 }
 
 #prod_image > img{
@@ -167,18 +163,21 @@
     width: 100%;
 }
 #promo-prizes-tbl > th , td {
-    border: 1px solid;
+    border: 1px solid #e2e2e2;
     margin-left: 5%;
+    padding: 8px;
     text-align: center;
     width: 45%;
 }
 #promo-prizes-tbl th {
-    border: 1px solid;
-    padding-left: 2%;
+    background-color: #f4f4f4;
+    border: 1px solid #e2e2e2;
+    padding: 8px;
     text-align: center;
 }
-.tbl-red{
-    background-color: rgba(170, 0, 0, 0.71);
+#promo-prizes-tbl th.tbl-red{
+    background-color: #565656;
+    color: #fff;
 }
 .error-claim{
     width: 57% !important;
@@ -367,7 +366,7 @@
     width: 65%;
 }
 .scratch-win-error h2{
-    width: 8%;
+    text-align: center;
 }
 .scratch-win-error{
     display: none;
@@ -394,27 +393,12 @@
     padding: 20px;
     text-align: center;
 }
-.scratch-win-form .instructions h3
-{
+.scratch-win-form .instructions h3 {
     margin: 2% auto;
-    max-width: 980px;
-    position: relative;
-    width: 83%;
 }
-.scratch-win-form .instructions ol{
-    margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 79%;
-}
-.scratch-win-form .instructions p{
-    margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 83%;
-}
+
 .scratch-win-form .instructions ol > li {
-    padding: 1%;
+    padding: 1% 0;
 }
 
 #prod_image > img{

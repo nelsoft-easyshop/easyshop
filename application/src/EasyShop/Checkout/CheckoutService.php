@@ -90,7 +90,7 @@ class CheckoutService
             $shipmentFee = 0;
             $isAvailableInLocation = false;
             if($address){
-                $city = $address->getCity()->getIdLocation();
+                $city = $address->getCity()->getParent()->getIdLocation();
                 $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                ->getParentLocation($city);
                 $regionId = $region->getIdLocation(); 

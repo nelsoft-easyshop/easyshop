@@ -372,7 +372,7 @@ class ApiFormatter
                         $formattedCartContents[$rowId]['error_message'] = $errorMessage;
                     }
 
-                    $formattedCartContents[$rowId]['shippingFee'] = $cartItem['shippingFee'];
+                    $formattedCartContents[$rowId]['shippingFee'] = bcmul($cartItem['shippingFee'], $cartItem['qty'], 4);
                 }
                 $formattedCartContents[$rowId]['isAvailable'] = empty($formattedCartContents[$rowId]['error_message']);
 
