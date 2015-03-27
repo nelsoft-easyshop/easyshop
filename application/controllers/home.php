@@ -229,6 +229,26 @@ class Home extends MY_Controller
         $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/how-to-sell', $bodyData);
     }
+    /**
+     * Renders how-to-page buyer
+     *
+     * @return View
+     */
+    public function guide_buyer()
+    {
+        $this->load->view('pages/web/buyer.html');
+    }
+    
+    
+    /**
+     * Renders how-to-page seller
+     *
+     * @return View
+     */
+    public function guide_seller()
+    {
+        $this->load->view('pages/web/seller.html');
+    }
         
     /**
      *  Handles bug report form
