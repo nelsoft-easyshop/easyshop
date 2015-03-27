@@ -362,7 +362,7 @@ class PaymentService
             $promoPrice = $productArray->getFinalPrice(); 
             $additionalPrice = $value['additional_fee'];
             $finalPromoPrice = $promoPrice + $additionalPrice;
-            $finalPromoPrice = round(floatval(bcsub($finalPromoPrice, $pointDeductable, 10)));
+            $finalPromoPrice = round(floatval(bcsub($finalPromoPrice, $pointDeductable, 10)), 2);
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
             $subtotal = $finalPromoPrice * $qty;
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
