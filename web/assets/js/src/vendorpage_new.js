@@ -135,16 +135,16 @@ function ReplaceNumberWithCommas(thisnumber){
         var condition = $(this).closest("ul").find('#filter-condition').val();
         var lprice = $.trim($(this).closest("ul").find('#filter-lprice').val());
         lprice = lprice.replace(new RegExp(",", "g"), '');
-        lprice = parseFloat(lprice).toFixed(2);
+        lprice = parseFloat(lprice);
         var uprice = $.trim($(this).closest("ul").find('#filter-uprice').val());
         uprice = uprice.replace(new RegExp(",", "g"), '');
-        uprice = parseFloat(uprice).toFixed(2);
+        uprice = parseFloat(uprice); 
         memconf.condition = condition;
         memconf.lprice = !isNaN(lprice) ? lprice : "";
         memconf.uprice = !isNaN(uprice) ? uprice : "";
         memconf.countfiltered = memconf.uprice !== "" || memconf.lprice !== "" || memconf.condition !== "" ? 1 : 0;
 
-         if(isNaN(lprice) && !isNaN(uprice)){ 
+        if(isNaN(lprice) && !isNaN(uprice)){ 
             validateRedTextBox('#filter-lprice');
             return false;
         }

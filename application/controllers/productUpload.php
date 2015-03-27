@@ -744,14 +744,16 @@ class productUpload extends MY_Controller
 
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
-            || strlen(trim($product_price)) == 0 
-            || $product_price <= 0 
+            || strlen(trim($product_price)) == 0  
             || strlen(trim($product_description)) == 0) && $isNotSavingAsDraft){
 
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');      
         }
-        else{
-            
+        else{ 
+            if((int) $product_price <= 0 ){
+                die('{"e":"0","d":"Invalid price. Price must be greater than 0."}');
+            }
+
             $arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
             $arraynameoffiles = (count($arraynameoffiles) > 0) ? $arraynameoffiles : array();
             if($isNotSavingAsDraft){
@@ -983,11 +985,14 @@ class productUpload extends MY_Controller
         
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
-            || strlen(trim($product_price)) == 0 
-            || $product_price <= 0 
+            || strlen(trim($product_price)) == 0  
             || strlen(trim($product_description)) == 0) && $isNotSavingAsDraft){
 
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');
+        }
+
+        if((int) $product_price <= 0 ){
+            die('{"e":"0","d":"Invalid price. Price must be greater than 0."}');
         }
 
         foreach($itemQuantity as $keyid => $value){

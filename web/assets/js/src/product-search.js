@@ -469,8 +469,8 @@
         } 
     }); 
 
-    $(document).ready(function(){
-        if(window.location.hash) {
+    $(document).ready(function(){ 
+        if(window.location.hash || location.href.indexOf("#") != -1) {
             var hash = window.location.hash.substring(1);
             $('.page-link[href="#'+hash+'"]').trigger('click'); 
         } 

@@ -304,6 +304,9 @@ class TransactionManager
             case EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT:
                 $parseData['payment_method_name'] = "Bank Deposit";
                 break;
+            case EsPaymentMethod::PAYMENT_PESOPAYCC:
+                $parseData['payment_method_name'] = "Pesopay Credit Card/ Debit Card";
+                break;
         }
 
         foreach( $row as $r){
