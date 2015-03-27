@@ -94,7 +94,7 @@ class CheckoutService
                 $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                ->getParentLocation($city);
                 $regionId = $region->getIdLocation(); 
-                $majorIsland = $region->getParent()->getParent()->getIdLocation();
+                $majorIsland = $region->getParent()->getIdLocation();
                 $shipmentFee = $this->shippingLocationManager
                                     ->getProductItemShippingFee($itemId, $city, $regionId, $majorIsland);
 
@@ -179,7 +179,7 @@ class CheckoutService
         if($paymentMethod['all']){
             $cartProduct['dragonpay'] = true;
             $cartProduct['paypal'] = true; 
-            $cartProduct['cash_delivery'] = true;
+            $cartProduct['cash_delivery'] = $product->getIsCod();
             $cartProduct['pesopaycdb'] = true;
             $cartProduct['directbank'] = true;
         }
