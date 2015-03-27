@@ -2087,7 +2087,11 @@ h3 > b{
         padding: 10px;
         height: 100px;
     }
-    
+
+    .home-item-img-container{
+        height: 100px;
+    }
+
     .image-handler{
         height: 100px;
     }

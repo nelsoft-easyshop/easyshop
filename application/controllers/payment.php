@@ -1473,8 +1473,8 @@ class Payment extends MY_Controller
 
             $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
 
+            $params = $this->input->post();
             $params['txnId'] = $this->input->post('Ref'); 
-            $params['successCode'] = $this->input->post('successcode'); 
             $paymentService->postBack($paymentMethods, null, null, $params);
         }
         else{

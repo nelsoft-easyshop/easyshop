@@ -101,8 +101,8 @@ class CheckoutService
                 $city = $address->getCity()->getParent()->getIdLocation();
                 $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                ->getParentLocation($city);
-                $regionId = $region->getIdLocation();  
-                $majorIsland = $region->getParent()->getParent()->getIdLocation();
+                $regionId = $region->getIdLocation(); 
+                $majorIsland = $region->getParent()->getIdLocation();
                 $shipmentFee = $this->shippingLocationManager
                                     ->getProductItemShippingFee($itemId, $city, $regionId, $majorIsland);
 
@@ -147,7 +147,7 @@ class CheckoutService
      */
     public function canPurchaseDesiredQuantity($product, $itemId, $quantity)
     {
-        $quantityData = $this->productManager->getProductInventory($product, false, true);
+        $quantityData = $this->productManager->getProductInventory($product);
 
         if(isset($quantityData[$itemId]['quantity'])){
             return $quantityData[$itemId]['quantity'] > 0
