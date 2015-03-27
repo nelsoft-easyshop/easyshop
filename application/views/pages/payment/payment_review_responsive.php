@@ -8,7 +8,7 @@
 <?php endif; ?>
 
 <div class="container font-roboto">  
-    <h2 class="checkout_title">Payment</h2>
+    <h2 class="checkout_title">Payment <span class="pull-right"><a href="/cart">Go back to cart</a></span></h2>
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default no-border" style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;">
