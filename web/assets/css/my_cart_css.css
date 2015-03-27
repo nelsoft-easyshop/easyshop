@@ -67,6 +67,13 @@
 	border-bottom: 1px solid #ebe9e9;
 }
 
+.checkout_title span a{
+	font-size: 14px;
+	margin-top: 16px;
+	display: inline-block;
+	color: #ff893b;
+}
+
 .my_cart_header,
 .my_cart_total {
 	background-color: #ebe9e9;
