@@ -169,10 +169,7 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.vendorview.css':
                         ['web/assets/css/vendorview.css'],
                     'web/assets/css/min-easyshop.how-to.css':
-                        ['web/assets/css/style.css',
-                         'web/assets/css/bootstrap.css',
-                         'web/assets/css/responsive_css.css',
-                         'web/assets/css/bootstrap-mods.css'],
+                        ['web/assets/css/how-to-page.css'],
                     'web/assets/css/min-easyshop.dashboard-personal-info.css':
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
@@ -447,7 +444,14 @@ module.exports = function (grunt) {
                         ['web/assets/js/src/vendor/jquery-1.9.1.js',
                             'web/assets/js/src/promo/estudyantrepreneur.js',
                             'web/assets/js/src/plugins.js',
-                            'web/assets/js/src/vendor/promo/christmas-promo.js']
+                            'web/assets/js/src/vendor/promo/christmas-promo.js'],
+                            
+                    'web/assets/js/min/easyshop.how-to.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                         'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
+                         'web/assets/js/src/how-to-page-plugins.js',
+                         'web/assets/js/src/how-to-page.js']
+
                 }
             }
         }

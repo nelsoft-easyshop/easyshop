@@ -9,9 +9,13 @@
         <title>Buyer Transaction</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link type="text/css" href="/assets/css/how-to-page.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
         
-        <script type="text/javascript" src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <link type="text/css" href="/assets/css/how-to-page.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+        <?php else: ?>
+            <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.how-to.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+        <?php endif; ?>
+       
         <script type="text/javascript">
 
           var _gaq = _gaq || [];
@@ -403,9 +407,14 @@
 
         <div id="fb-root"></div>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script type="text/javascript" src="/assets/js/src/how-to-page-plugins.js"></script>
-        <script type="text/javascript" src="/assets/js/src/how-to-page.js"></script>
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
+            <script type="text/javascript" src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
+            <script type="text/javascript" src="/assets/js/src/how-to-page-plugins.js"></script>
+            <script type="text/javascript" src="/assets/js/src/how-to-page.js"></script>
+        <?php else: ?>
+            <script src="/assets/js/min/easyshop.how-to.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+        <?php endif; ?>
 
     </body>
 </html>
