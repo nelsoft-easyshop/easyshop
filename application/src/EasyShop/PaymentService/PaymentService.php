@@ -173,7 +173,7 @@ class PaymentService
      *
      * @var EasyShop\Transaction\TransactionManager
      */
-    private $transactionManager;
+    public $transactionManager;
 
     /**
      * Product Shipping Location Manager
@@ -187,7 +187,7 @@ class PaymentService
      *
      * @var Curl
      */
-    private $curlService;
+    public $curlService;
 
     private $paymentConfig;
 
@@ -434,6 +434,11 @@ class PaymentService
     public function getPointGateway()
     {
         return $this->pointGateway;
+    }
+
+    public function getPrimaryGateway()
+    {
+        return $this->primaryGateway;
     }
 
     /**
@@ -792,43 +797,5 @@ class PaymentService
 
         return false;
     }
-
-    /**
-     * Check for points reserved per user
-     * @param  integer $memberId
-     */
-    public function checkReservedPoints($memberId)
-    {
-        $draftPesoPayOrders = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                       ->findBy([
-                                            'buyer' => $memberId,
-                                            'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
-                                            'orderStatus' => EsOrderStatus::STATUS_DRAFT,
-                                       ]);
-        $pesopayConfig = $this->paymentConfig['payment_type']['pesopay']['Easyshop'];
-        $curlUrl = $pesopayConfig['api_url']; 
-        $data = [
-            'merchantId' => $pesopayConfig['merchant_id'],
-            'loginId' => $pesopayConfig['merchant_login_api'],
-            'password' => $pesopayConfig['merchant_password_api'],
-            'actionType' =>'Query',
-        ];  
-
-        foreach ($draftPesoPayOrders as $eachOrder) {
-            $transactionId = $eachOrder->getTransactionId();
-            $orderId = $eachOrder->getIdOrder(); 
-            $data['orderRef'] = trim($transactionId); 
-            $this->curlService->post($curlUrl, $data);
-            $response = json_decode(json_encode((array)$this->curlService->response), true);
-
-            if(isset($response['record']) === false &&
-                (isset($response['successcode']) 
-                && $response['successcode'] !== PaymentService::SUCCESS_CODE)){
-                $this->transactionManager->voidTransaction($orderId);
-                $this->revertTransactionPoint($orderId);
-            }
-        } 
-    }
-
 }
 
