@@ -145,6 +145,8 @@
     $route['(?i)guide/sell'] = 'home/guide_sell';
     $route['(?i)report'] = 'home/bugReport';
     $route['(?i)subscribe'] = 'register/subscribe';
+    $route['(?i)guide/buyer'] = 'home/guide_buyer';
+    $route['(?i)guide/seller'] = 'home/guide_seller';
 
     #WEBSERVICE
     $route['homewebservice'] = 'webservice/homewebservice';
