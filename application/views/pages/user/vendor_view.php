@@ -183,20 +183,45 @@
     <h1>Categories</h1>
     <div id="category-list" class="panel-collapse collapse in">
         <div class="panel-body border-0 no-padding">
-            <ul class="list-unstyled list-category">
+            <ul class="list-unstyled list-category">    
                 <?php $isFirst = true; ?>
-                <?php foreach( $categoryProducts as $categoryData ):?>
+                <?php foreach( $categoryProducts as $categoryId => $categoryData ):?>
                     <?php $categoryWrapper = $categoryData['category']; ?>
                     <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
-                    <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId()?>" class="color-default tab_categories simplemodal-close">
-                        <li>
-                            <span  style="display: <?php echo $isFirst ? '' : 'none';  ?>" class="fa fa-caret-right active-category selected-marker">
-                            </span>  
+                    <?php if($categoryWrapper->getIsHidden()): ?>
+                        <?php continue; ?>
+                    <?php endif; ?>
+                    <li>
+                        <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>simplemodal-close<?php endif;?>">
                             <span class='catText'>
                                 <?php echo html_escape($categoryWrapper->getCategoryName());?>
-                            </span>
-                        </li>
-                    </a>
+                            </span> 
+                        <?php $children = $categoryWrapper->getChildren(); ?>
+                        <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>
+                            <?php 
+                                /**
+                                 * If child has no products remove it from the children array
+                                 */
+                            ?>
+                            <?php foreach($children as $key => $child): ?>
+                                <?php if(!in_array((int)$child->getId(), array_keys($categoryProducts))): ?>
+                                    <?php unset($children[$key]); ?>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                            <i class="fa fa-caret-down fa-lg pull-right"></i>
+                        </a>
+                            <ul class="list-sub-category">
+                            <?php foreach($children as $child): ?>
+                                <li>
+                                    <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-<?php echo $child->getId(); ?>" >
+                                        <?php echo html_escape($child->getCategoryName()); ?> 
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                        </a>
+                    </li>
                     <?php $isFirst = false; ?>
                 <?php endforeach;?>
             </ul>
