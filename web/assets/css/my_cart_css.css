@@ -74,6 +74,10 @@
 	color: #ff893b;
 }
 
+.checkout_title span a:hover{
+	text-decoration: none;
+}
+
 .my_cart_header,
 .my_cart_total {
 	background-color: #ebe9e9;
