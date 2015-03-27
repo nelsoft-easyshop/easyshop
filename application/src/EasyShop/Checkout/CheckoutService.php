@@ -139,7 +139,7 @@ class CheckoutService
      */
     public function canPurchaseDesiredQuantity($product, $itemId, $quantity)
     {
-        $quantityData = $this->productManager->getProductInventory($product, false, true);
+        $quantityData = $this->productManager->getProductInventory($product);
 
         if(isset($quantityData[$itemId]['quantity'])){
             return $quantityData[$itemId]['quantity'] > 0

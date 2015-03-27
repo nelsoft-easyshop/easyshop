@@ -173,7 +173,7 @@ class ApiFormatter
             }
         }
 
-        $temporaryArray = $this->productManager->getProductInventory($product, false, true);
+        $temporaryArray = $this->productManager->getProductInventory($product);
         $productQuantity = [];
         foreach ($temporaryArray as $key => $valuex) {
             unset($temporaryArray[$key]['attr_lookuplist_item_id']);
