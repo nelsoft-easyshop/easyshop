@@ -222,9 +222,9 @@ function get_discPrice() {
     var discounted = act_price * (prcnt/100);
     var tempval = Math.abs(parseFloat(act_price - discounted));
     var discountPrice = replaceNumberWithCommas(tempval.toFixed(2));
-    var finalDiscountPrice = isNaN(discountPrice) ? parseFloat(act_price) : discountPrice;
-    $("#discountedP").val(finalDiscountPrice.toFixed(2));
-    $( "span#discounted_price_con" ).text( finalDiscountPrice.toFixed(2) );
+    var finalDiscountPrice = isNaN(discountPrice) ? parseFloat(act_price).toFixed(2) : discountPrice;
+    $("#discountedP").val(finalDiscountPrice);
+    $( "span#discounted_price_con" ).text( finalDiscountPrice );
 }
 
 function zebraCombination()
@@ -620,8 +620,12 @@ function processAttributes()
 
         if(discountPrice > basePrice){
             alert("Discounted price cannot be greater than base price.");
-            $this.val("0.00");
-            validateRedTextBox("#discountedP");
+            $this.val('');
+            $("#slider_val").val("0%");
+            $rangeSlider.ionRangeSlider("update", {
+                from: 0
+            }); 
+            $( "span#discounted_price_con" ).text( basePrice.toFixed(2) ); 
 
             return false;
         } 
