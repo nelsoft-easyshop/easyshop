@@ -184,51 +184,7 @@ class Home extends MY_Controller
         $this->load->view('pages/web/contact');
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
-    
-    
-      
-    /**
-     * Renders how-to-buy infographic
-     *
-     * @return View
-     */
-    public function guide_buy()
-    {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'How to buy | Easyshop.ph',
-            'metadescription' => 'Learn how to purchase at Easyshop.ph',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData['facebook'] = $socialMediaLinks["facebook"];
-        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/how-to-buy', $bodyData);
-    }
-    
-    
-    /**
-     * Renders how-to-sell infographic
-     *
-     * @return View
-     */
-    public function guide_sell()
-    {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'How to sell | Easyshop.ph',
-            'metadescription' => 'Learn how to sell your items at Easyshop.ph',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData['facebook'] = $socialMediaLinks["facebook"];
-        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/how-to-sell', $bodyData);
-    }
+
     /**
      * Renders how-to-page buyer
      *
@@ -236,9 +192,8 @@ class Home extends MY_Controller
      */
     public function guide_buyer()
     {
-        $this->load->view('pages/web/buyer.html');
+        $this->load->view('pages/web/how-to-buy');
     }
-    
     
     /**
      * Renders how-to-page seller
@@ -247,7 +202,7 @@ class Home extends MY_Controller
      */
     public function guide_seller()
     {
-        $this->load->view('pages/web/seller.html');
+        $this->load->view('pages/web/how-to-sell');
     }
         
     /**
