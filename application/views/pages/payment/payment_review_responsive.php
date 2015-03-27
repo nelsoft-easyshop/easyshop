@@ -198,7 +198,6 @@
                                         No Items in Cart Can't Proceed.
                                     <?php else: ?> 
                                         <?php if($paypalsuccess): ?>
-                                            <br/> <br/>
                                             <p class="chck_privacy">
                                                 <input type="checkbox" checked class="chk_paypal">
                                                 <label for='chk_paypal2'> 
@@ -210,7 +209,6 @@
                                                     </span>
                                                 </a>.
                                             </p>
-                                            <br><br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="2"  class="paypal">
                                                     <img src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left" style="margin-right:7px;">
@@ -279,11 +277,9 @@
                                         What is PayPal?
                                     </a><br />
                                     <?php if(count($cat_item) <= 0): ?>
-                                        <br /> <br />
                                         There are no items in the cart.
                                     <?php else: ?> 
                                         <?php if($paypalsuccess): ?>
-                                            <br /> <br />
                                             <p class="chck_privacy">
                                                 <input type="checkbox" checked class="chk_paypal">
                                                 <label for='chk_paypal1'> 
@@ -295,7 +291,6 @@
                                                     </span>
                                                 </a>.
                                             </p>
-                                            <br><br/>
                                             <div class="paypal_button">
                                                 <a style="cursor:pointer" data-type="1"  class="paypal">
                                                     <img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypal Checkout" align="left" style="margin-right:7px;">
@@ -349,22 +344,21 @@
                             <?php if($key == 'dragonpay'): ?>
                                 <div id="dragonpay" class="payment_inner_content">
                                     <?php if($dragonpaysuccess): ?>
-                                           <img src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px; width:100%; height: auto;">
-                                           <br><br><br>
+                                           <img src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="float:none; width:100%;">
+                                           
                                             <p class="chck_privacy">
                                                 <input type="checkbox" checked class="chk_dp" name='chk_dp'>
                                                 <label for='chk_dp'>I acknowledge I have read and understood Easyshop.ph's </label>
                                                 <a href="/policy" target='_blank'>
-                                                    <span style='border-bottom:1px dotted'> Privacy Policy </span>
+                                                    <span style='border-bottom:1px dotted;'> Privacy Policy </span>
                                                 </a>.
                                             </p>
-                                            <br>
                                             <input type="button" class="btnDp orange_btn3" value="Pay via DRAGON PAY">
-                                            <br><br>
-                                            <span style="font-size: 12px;font-style: italic;">
+                                            
+                                            <p class="notify" style="font-style: italic;">
                                                 <b>Note:</b>
                                                 Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.
-                                            </span>
+                                            </p>
                                     <?php else: ?>
                                         <span>
                                             <strong>
@@ -420,7 +414,7 @@
                                                 <a href="/policy" target='_blank'>
                                                     <span style='border-bottom:1px dotted'> Privacy Policy </span>
                                                 </a>.
-                                            </p><br>
+                                            </p>
                                             <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery">  
                                         <?=form_close();?>
                                         <p class="notify">You will be notified regarding your order status via email or sms.</p>
@@ -485,8 +479,6 @@
                                                 </span>
                                             </a>.
                                         </p>
-                                        <br />
-                                        <br />
                                         <input type="button" class="pesopaycdb pesopaycdb_btn orange_btn3" value="Pay via Credit or Debit Card">
                                         <p class="notify">You will be notified regarding your order status via email or sms.</p>
                                     <?php else: ?>
@@ -592,7 +584,7 @@
                                                                     Privacy Policy 
                                                                 </span>
                                                             </a>.
-                                                        </p><br>
+                                                        </p>
                                                         <div class="paypal_button">
                                                             <a style="cursor:pointer" data-type="2"  class="paypal">
                                                                 <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/paypal_checkout_button.png" alt="Paypal Credit/Debit Card Checkout" align="left">
@@ -668,7 +660,7 @@
                                                                     Privacy Policy 
                                                                 </span>
                                                             </a>.
-                                                        </p><br> 
+                                                        </p>
                                                         <div class="paypal_button">
                                                             <a style="cursor:pointer" data-type="1" class="paypal">
                                                             <img class="img-responsive" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" alt="Paypal Checkout" align="left" style="margin-right:7px;">
@@ -726,8 +718,8 @@
                                         <?php if($key == 'dragonpay'): ?>
                                             <div id="dragonpay_mobile">
                                                 <?php if($dragonpaysuccess): ?>
-                                                    <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;">
-                                                    <br><br><br>
+                                                    <img class="img-responsive" src="<?php echo getAssetsDomain(); ?>assets/images/dp-icons.png" alt="Dragon Pay Icons" align="left" style="margin-right:7px;float:none;">
+                                                    
                                                     <p class="chck_privacy" style="font-size: 12px;">
                                                         <input type="checkbox" checked class="chk_dp" name='chk_dp'>
                                                         I acknowledge I have read and understood Easyshop.ph's 
@@ -738,9 +730,8 @@
                                                         </a>.
                                                     </p>
                                                     <input type="button" style='width: 153px;' class="btnDp orange_btn3" value="Pay via DRAGON PAY">
-                                                    <br>
-                                                    <br>
-                                                    <span style="font-size: 10px; font-style: italic;"><b>Note:</b> Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.</span>
+                                                    
+                                                    <p class="notify" style="font-style: italic;font-size:10px;"><b>Note:</b> Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.</p>
                                                 <?php else: ?>
                                                     <span style="font-size: 10px;"><strong>NOTE: one or more of your chosen items are not available for Dragonpay payment.</strong></span>
                                                     <table width="100%" class="table font-12">
@@ -796,7 +787,6 @@
                                                                 </span>
                                                             </a>.
                                                         </p>
-                                                        <br>
                                                         <input type="button" class="payment_cod orange_btn3" value="Pay via Cash On Delivery">     
                                                     <?=form_close();?>
                                                     <p class="notify" style="font-size: 10px;">You will be notified regarding your order status via email or sms.</p>
@@ -854,8 +844,7 @@
                                                         <a href="/policy" target='_blank'> 
                                                             <span style='border-bottom:1px dotted'> Privacy Policy </span>
                                                         </a>.
-                                                    </p> 
-                                                    <br /> 
+                                                    </p>  
                                                     <input type="button" class="pesopaycdb_mobile pesopaycdb_btn orange_btn3" value="Pay via Credit or Debit Card">
                                                     <p class="notify">
                                                         You will be notified regarding your order status via email or sms.

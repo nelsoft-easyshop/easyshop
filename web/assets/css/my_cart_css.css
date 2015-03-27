@@ -744,17 +744,21 @@ p.cod_desc {
 }
 
 p.notify {
-	padding-top: 5px;
+	margin: 0;
+	padding: 15px 0;
 }
 
 p.chck_privacy {
-	display: inline-block;
+	display: block;
+	margin: 0;
+	padding: 15px 0;
 }
 
 .btnDp.orange_btn3,
 .payment_dbd.orange_btn3,
-.payment_cod.orange_btn3 {
-    border: medium none;
+.payment_cod.orange_btn3,
+.pesopaycdb_btn {
+    border: none;
     cursor: pointer;
     margin-top: 20px;
 }
