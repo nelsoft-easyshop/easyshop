@@ -251,16 +251,6 @@
                         </foot>
                     </table>
                     <br/>
-                     <!--<table class="transaction-summary-table transaction-checkout-order" width="100%">
-                        <thead>
-                            <tr class="border-bottom-1">
-                                <th>How would you like to pay?</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </thead>
-                    </table>
-                    -->
-
                     <?php if($canCheckout): ?>
                         <?php if(isset($paymentType['cdb'])): ?>
                             <div class="payment-method-container">
