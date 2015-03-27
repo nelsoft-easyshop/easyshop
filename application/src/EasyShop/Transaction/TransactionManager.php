@@ -142,7 +142,7 @@ class TransactionManager
             'o_message' => 'Product Order entry not found!'
         ];
         $getOrderProduct = $this->getOrderProductByStatus($status, $orderProductId, $orderId, $invoiceNumber, $memberId);
-        if ( isset($getOrderProduct['orderProductId']) ) {
+        if ( isset($getOrderProduct['orderProductId']) && $getOrderProduct['orderProductId'] ) {
             $esOrderProduct = $this->esOrderProductRepo
                                    ->findOneBy([
                                        'idOrderProduct' => $orderProductId,
