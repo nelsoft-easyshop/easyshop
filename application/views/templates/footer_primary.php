@@ -4,7 +4,7 @@
                     <a href="">About Us</a>
                     <a href="">Contact Us</a>
                 </div>
-                <div class="row-fluid">
+                <div class="row row-fluid">
                     <div class="col-md-6 footer-top-con">
                         <div class="row">
                             <div class="col-md-6 col-xs-6">
@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col-md-6 text-left footer-payment-opt">
                         <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa.png" alt="Visa">
-                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-paypal.png" alt="Paypal">
+                        <img src="<?php echo getAssetsDomain(); ?>assets/images/img-pesopay.png" alt="Peso Pay">
                         <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard.png" alt="Mastercard">
                         <img src="<?php echo getAssetsDomain(); ?>assets/images/img-dragonpay.png" alt="Dragon Pay">
                         <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod.png" alt="COD">
