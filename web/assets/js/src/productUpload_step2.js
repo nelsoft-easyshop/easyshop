@@ -212,19 +212,19 @@ function get_discPrice() {
     if (prcnt >= 100) {
         prcnt = 99;
     }
-    if (act_price == 0 || act_price == null ) {
+    if (act_price == 0 || act_price == null || isNaN(act_price)) {
         validateRedTextBox("#prod_price");
+        $("#prod_price").val("");
         act_price = 0;
     }
-
     $("#slider_val").val("");
     $("#slider_val").val(prcnt+"%");
-    discounted = act_price * (prcnt/100);
-    var v = parseFloat(act_price - discounted);
-    tempval = Math.abs(v);
-    disc_price = replaceNumberWithCommas(tempval.toFixed(2));
-    $("#discountedP").val(disc_price);
-    $( "span#discounted_price_con" ).text( disc_price );
+    var discounted = act_price * (prcnt/100);
+    var tempval = Math.abs(parseFloat(act_price - discounted));
+    var discountPrice = replaceNumberWithCommas(tempval.toFixed(2));
+    var finalDiscountPrice = isNaN(discountPrice) ? parseFloat(act_price) : discountPrice;
+    $("#discountedP").val(finalDiscountPrice.toFixed(2));
+    $( "span#discounted_price_con" ).text( finalDiscountPrice.toFixed(2) );
 }
 
 function zebraCombination()
