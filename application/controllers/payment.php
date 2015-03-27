@@ -798,10 +798,6 @@ class Payment extends MY_Controller
                     'title' => 'Payment Complete | Easyshop.ph',
                 ];
 
-                $this->session->unset_userdata('payment_txnid');
-                $this->session->unset_userdata('payment_msg');
-                $this->session->unset_userdata('payment_status');
-
                 $this->load->spark('decorator');
                 $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
                 $this->load->view('pages/payment/payment-response', $bodyData); 
