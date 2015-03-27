@@ -455,8 +455,13 @@ class ApiFormatter
                                                                              $options, 
                                                                              $mobileCartContent->quantity)['itemData'];
 
-                if($mobileCartContent->quantity > $cartContent['maxqty']){
-                    $errorMessage[] = "Quantity Not Available";
+                if($cartContent){
+                    if($mobileCartContent->quantity > $cartContent['maxqty']){
+                        $errorMessage[] = "Quantity Not Available";
+                    }
+                }
+                else{
+                    $errorMessage[] = "Item not available.";
                 }
 
                 if((bool)$member->getIsEmailVerify() === false){
