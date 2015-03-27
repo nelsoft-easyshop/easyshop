@@ -58,7 +58,7 @@
         else{
             $errorCount++;
             validateRedTextBox('.base-price');
-            showError("Invalid price. Product price cannot be less than 0.");
+            showError("Invalid price. Product price must be equal or greater than P1.");
         }
 
         if($productName.length > 0){
