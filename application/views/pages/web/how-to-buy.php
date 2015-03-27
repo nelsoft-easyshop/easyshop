@@ -24,7 +24,6 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
           })();
 
-
         </script>
     </head>
     <body class="animated fadeIn">
@@ -350,8 +349,9 @@
                     <div class="span12">
                         <h1>Enjoy shopping the easiest way</h1>
                         <h4>So what are you waiting for?</h4>
-                        
-                        <button class="btn btn-signup mb0" type="submit">SIGN UP FOR FREE</button>
+                        <a href="/register">
+                            <button class="btn btn-signup mb0" type="submit">SIGN UP FOR FREE</button>
+                        </a>
                     </div>
                 </div>
             </div>
