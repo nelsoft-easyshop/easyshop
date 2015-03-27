@@ -402,7 +402,7 @@ class PayPalGateway extends AbstractGateway
                                 if($pointGateway){
                                     $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
                                                                ->findOneBy(['productItemId' => $value['product_itemID']]);
-                                    $data["order_id"] = $esOrderProduct->getIdOrderProduct();
+                                    $data["order_product_id"] = $esOrderProduct->getIdOrderProduct();
                                     $data["point"] = $pointGateway->getProductDeductPoint(
                                                         round((float)$value['price'], 2),
                                                         bcsub($grandTotal, $shippingAmt, 2)

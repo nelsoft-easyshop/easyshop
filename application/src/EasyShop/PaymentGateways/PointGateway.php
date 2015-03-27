@@ -53,7 +53,7 @@ class PointGateway extends AbstractGateway
             $pointSpent = intval($pointSpent) <= intval($maxPointAllowable) ? $pointSpent : $maxPointAllowable;
 
             foreach ($itemArray as $item) {
-                $data["order_product_id"] = $item['order_id'];
+                $data["order_product_id"] = $item['order_product_id'];
                 $data["points"] = $this->getProductDeductPoint($item['point'], $maxPointAllowable);
                 $pointBreakdown[] = $data;
             }
