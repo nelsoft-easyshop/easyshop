@@ -39,17 +39,17 @@
                                                     <?php echo html_escape($categoryWrapper->getCategoryName());?>
                                                 </span> 
                                             <?php $children = $categoryWrapper->getChildren(); ?>
+                                            <?php 
+                                                /**
+                                                 * If child has no products remove it from the children array
+                                                 */
+                                            ?>
+                                            <?php foreach($children as $key => $child): ?>
+                                                <?php if(!in_array((int)$child->getId(), array_keys($categoryProducts))): ?>
+                                                    <?php unset($children[$key]); ?>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
                                             <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>
-                                                <?php 
-                                                    /**
-                                                     * If child has no products remove it from the children array
-                                                     */
-                                                ?>
-                                                <?php foreach($children as $key => $child): ?>
-                                                    <?php if(!in_array((int)$child->getId(), array_keys($categoryProducts))): ?>
-                                                        <?php unset($children[$key]); ?>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
                                                 <i class="fa fa-caret-down fa-lg pull-right"></i>
                                             </a>
                                                 <ul class="list-sub-category">
@@ -197,17 +197,17 @@
                                 <?php echo html_escape($categoryWrapper->getCategoryName());?>
                             </span> 
                         <?php $children = $categoryWrapper->getChildren(); ?>
+                        <?php 
+                            /**
+                             * If child has no products remove it from the children array
+                             */
+                        ?>
+                        <?php foreach($children as $key => $child): ?>
+                            <?php if(!in_array((int)$child->getId(), array_keys($categoryProducts))): ?>
+                                <?php unset($children[$key]); ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                         <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>
-                            <?php 
-                                /**
-                                 * If child has no products remove it from the children array
-                                 */
-                            ?>
-                            <?php foreach($children as $key => $child): ?>
-                                <?php if(!in_array((int)$child->getId(), array_keys($categoryProducts))): ?>
-                                    <?php unset($children[$key]); ?>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
                             <i class="fa fa-caret-down fa-lg pull-right"></i>
                         </a>
                             <ul class="list-sub-category">
