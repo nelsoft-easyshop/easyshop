@@ -41,6 +41,9 @@
                         <a href="/easypoints" target="_blank">
                             <span class="easy-point-question">?</span>
                         </a>
+                        <p class="easy-point-tooltip">
+                            Whats this?
+                        </p>
                     </div>
                     <div class="current-point-container">
                         <div class="border-bttm">
@@ -159,6 +162,9 @@
                                 <span class="easy-point">20</span>
                             </div>
                             <div class="clear"></div>
+                        </li>
+                        <li class="easy-point-loading">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-sm.gif">
                         </li>
                     </ul>
                 </div>

@@ -3183,6 +3183,45 @@ label.css-label {
     width: 28px;
 }
 
+.easy-point-title a:hover + .easy-point-tooltip {
+    display: block;
+    top: -31px;
+}
+
+.easy-point-tooltip {
+    background-color: #e2e2e2;
+    border-radius: 4px;
+    color: #565656;
+    display: none;
+    font-size: 12px;
+    padding: 5px;
+    position: absolute;
+    right: -13px;
+    text-transform: none;
+    top: 0;
+    z-index: 3;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.easy-point-tooltip:after {
+    border-style: solid;
+    border-width: 7px 7px 0;
+    border-color: #e2e2e2 transparent transparent transparent;
+    bottom: -7px;
+    content: "";
+    height: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    width: 0;
+    -webkit-transform:rotate(360deg);
+}
+
 .current-point-container {
     padding: 3px 15px;
 }
@@ -3220,7 +3259,7 @@ label.css-label {
     position: relative;
 }
 
-.easy-point-container ul li:last-child {
+.easy-point-container ul li:nth-last-child(2) {
     padding-bottom: 0;
 }
 
@@ -3260,7 +3299,7 @@ label.css-label {
     width: 2px;
 }
 
-.easy-point-container ul li:last-child .small-bullet:after,
+.easy-point-container ul li:nth-last-child(2) .small-bullet:after,
 .easy-point-container ul li:first-child .small-bullet:before {
     display: none;
 }
@@ -3329,6 +3368,11 @@ label.css-label {
     font-size: 16px;
     font-weight: bold;
     float: right;
+}
+
+.easy-point-loading {
+    padding: 18px 0;
+    text-align: center;
 }
 
 @media only screen and (max-width: 991px){
