@@ -119,9 +119,18 @@
     width: 100%;
 }
 
+.footer-payment-opt img {
+    max-width: 48px;
+    width: 100%;
+}
+
 @media (min-width: 360px) {
     .app-img-con a {
         max-width: 130px;
+    }
+
+    .footer-payment-opt img {
+        max-width: 53px;
     }
 }
 
