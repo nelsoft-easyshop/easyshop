@@ -220,11 +220,24 @@ class MobileProductUpload extends MY_Controller
                 'category' => $categoryId
             ]; 
 
+             //check first if shipping array has philippine location id 
+            $hasPhilippines = false;
+            foreach ($shippingInfo as $key => $info) {
+                if($info['location_id'] === EsLocationLookup::PHILIPPINES_LOCATION_ID){
+                    $hasPhilippines = true;
+                    break;
+                }
+                if(trim($info['price']) === ""){
+                    unset($shippingInfo[$key]);
+                }
+            }
+
             if($isCod === false 
                 && $isFreeShippingNationwide === false 
                 && count($shippingInfo) === 0){
                 $isMeetUp = true;
             }
+
 
             $validate = $this->productUploadManager->validateUploadRequest($validData);
             if($quantity > 0){
@@ -323,15 +336,6 @@ class MobileProductUpload extends MY_Controller
                             }
                             else{
                                 if(count($shippingInfo) > 0){
-                                    //check first if shipping array has philippine location id 
-                                    $hasPhilippines = false;
-                                    foreach ($shippingInfo as $info) {
-                                        if($info['location_id'] === EsLocationLookup::PHILIPPINES_LOCATION_ID){
-                                            $hasPhilippines = true;
-                                            break;
-                                        }
-                                    }
-
                                     if($hasPhilippines){ 
                                         $this->productUploadManager->addShippingInfo(
                                             $product, 
@@ -350,14 +354,6 @@ class MobileProductUpload extends MY_Controller
                                             );
                                         }
                                     }
-                                }
-                                else{ 
-                                    $this->productUploadManager->addShippingInfo(
-                                        $product, 
-                                        $productCombination->getIdProductItem(),
-                                        EsLocationLookup::PHILIPPINES_LOCATION_ID,
-                                        0
-                                    );
                                 }
                             }
                         }

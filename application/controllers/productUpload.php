@@ -684,7 +684,8 @@ class productUpload extends MY_Controller
         $attributes = json_decode($this->input->post('attributes'),true);
         $data = $this->input->post('data');
         $cat_id = $this->input->post('id');
-        $otherCategory = $stringUtility->removeNonUTF($this->input->post('otherCategory'));
+        $postCategory= $stringUtility->removeSpecialCharsExceptSpace($this->input->post('otherCategory'));
+        $otherCategory = trim($stringUtility->removeNonUTF($postCategory));
         $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
         $brand_valid = false;
         $otherBrand = '';
@@ -934,7 +935,8 @@ class productUpload extends MY_Controller
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
         $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
-        $otherCategory = html_escape($stringUtility->removeNonUTF($this->input->post('otherCategory'))); 
+        $postCategory= $stringUtility->removeSpecialCharsExceptSpace($this->input->post('otherCategory'));
+        $otherCategory = trim($stringUtility->removeNonUTF($postCategory));
         $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
         $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
         $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
