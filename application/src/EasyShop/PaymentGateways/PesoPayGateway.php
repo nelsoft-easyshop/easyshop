@@ -174,7 +174,7 @@ class PesoPayGateWay extends AbstractGateway
             $this->em->persist($paymentRecord);
             $this->em->flush(); 
 
-            $secureHash = $this->generateSecureHash($txnid, $grandTotal);
+            $secureHash = $this->generateSecureHash($txnid, $pesopayTotal);
 
             return [
                 'error' => false,
