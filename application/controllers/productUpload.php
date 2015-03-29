@@ -684,7 +684,8 @@ class productUpload extends MY_Controller
         $attributes = json_decode($this->input->post('attributes'),true);
         $data = $this->input->post('data');
         $cat_id = $this->input->post('id');
-        $otherCategory = $stringUtility->removeNonUTF($this->input->post('otherCategory'));
+        $postCategory= $stringUtility->removeSpecialCharsExceptSpace($this->input->post('otherCategory'));
+        $otherCategory = trim($stringUtility->removeNonUTF($postCategory));
         $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
         $brand_valid = false;
         $otherBrand = '';
@@ -743,14 +744,16 @@ class productUpload extends MY_Controller
 
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
-            || strlen(trim($product_price)) == 0 
-            || $product_price <= 0 
+            || strlen(trim($product_price)) == 0  
             || strlen(trim($product_description)) == 0) && $isNotSavingAsDraft){
 
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');      
         }
-        else{
-            
+        else{ 
+            if((int) $product_price <= 0 ){
+                die('{"e":"0","d":"Invalid price. Price must be greater than 0."}');
+            }
+
             $arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
             $arraynameoffiles = (count($arraynameoffiles) > 0) ? $arraynameoffiles : array();
             if($isNotSavingAsDraft){
@@ -934,7 +937,8 @@ class productUpload extends MY_Controller
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
         $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
-        $otherCategory = html_escape($stringUtility->removeNonUTF($this->input->post('otherCategory'))); 
+        $postCategory= $stringUtility->removeSpecialCharsExceptSpace($this->input->post('otherCategory'));
+        $otherCategory = trim($stringUtility->removeNonUTF($postCategory));
         $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
         $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
         $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
@@ -981,11 +985,14 @@ class productUpload extends MY_Controller
         
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
-            || strlen(trim($product_price)) == 0 
-            || $product_price <= 0 
+            || strlen(trim($product_price)) == 0  
             || strlen(trim($product_description)) == 0) && $isNotSavingAsDraft){
 
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');
+        }
+
+        if((int) $product_price <= 0 ){
+            die('{"e":"0","d":"Invalid price. Price must be greater than 0."}');
         }
 
         foreach($itemQuantity as $keyid => $value){

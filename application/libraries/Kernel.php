@@ -63,6 +63,7 @@ class Kernel
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         $config->addCustomStringFunction('BINARY', 'EasyShop\Doctrine\Query\MySql\Binary');
         $config->addCustomStringFunction('FIELD', 'EasyShop\Doctrine\Query\MySql\Field');
+        $config->addCustomStringFunction('DATE', 'EasyShop\Doctrine\Query\MySql\Date');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
@@ -177,22 +178,27 @@ class Kernel
             $encrypter = new \CI_Encrypt();
             $configLoader = $container['config_loader'];
             $languageLoader = $container['language_loader'];
-            $hashUtitility = $container['hash_utility'];
+            $hashUtitility = $container['hash_utility']; 
+            $pointTracker = $container['point_tracker'];
             $socialMediaManager = $container['social_media_manager'];
-            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
-                                                        $userManager, 
-                                                        $formFactory, 
-                                                        $formValidation, 
-                                                        $formErrorHelper,
-                                                        $stringHelper,
-                                                        $httpRequest,
-                                                        $emailNotification,
-                                                        $parser,$encrypter,
-                                                        $configLoader,
-                                                        $languageLoader,
-                                                        $hashUtitility,
-                                                        $socialMediaManager
-                                                        );        
+
+            return new \EasyShop\Account\AccountManager(
+                $em,
+                $brcyptEncoder, 
+                $userManager, 
+                $formFactory, 
+                $formValidation, 
+                $formErrorHelper,
+                $stringHelper,
+                $httpRequest,
+                $emailNotification,
+                $parser,$encrypter,
+                $configLoader,
+                $languageLoader,
+                $hashUtitility,
+                $pointTracker,
+                $socialMediaManager
+            ); 
         };
 
         $container['message_manager'] = function ($c) use ($container) {
@@ -295,7 +301,13 @@ class Kernel
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
             $cart = new \EasyShop\Cart\CodeigniterCart($container['entity_manager']);
-            return new \EasyShop\Cart\CartManager($container['entity_manager'], $cart, $productManager, $promoManager);
+            return new \EasyShop\Cart\CartManager(
+                $container['entity_manager'], 
+                $cart, 
+                $productManager, 
+                $promoManager,
+                $container['product_shipping_location_manager']
+            );
         };
 
         // Search product
@@ -350,8 +362,9 @@ class Kernel
             $em = $container['entity_manager'];
             $userManager = $container['user_manager'];
             $productManager = $container['product_manager'];
+            $pointTracker = $container['point_tracker'];
 
-            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
+            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager, $pointTracker);
         };
         
         $container['image_utility'] = function ($c) use ($container){
@@ -465,8 +478,10 @@ class Kernel
                 $container['social_media_manager'],
                 $container['language_loader'],
                 $container['message_manager'],
-                $container['dragonpay_soap_client'],
-                $container['product_shipping_location_manager']
+                $container['dragonpay_soap_client'], 
+                $container['transaction_manager'], 
+                $container['product_shipping_location_manager'],
+                new \Curl\Curl()
             );
         };
 
@@ -583,6 +598,14 @@ class Kernel
                             );
         };
 
+        // Feedback Transaction
+        $container['feedback_transaction_service'] = function ($c) use ($container) {
+            return new \EasyShop\Review\FeedbackTransactionService(
+                $container['entity_manager'],
+                $container['point_tracker']
+            );
+        };
+
         // Product Shipping Manager
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(
@@ -616,7 +639,8 @@ class Kernel
                             $container['promo_manager'],
                             $container['cart_manager'],
                             $container['payment_service'],
-                            $container['product_shipping_location_manager']
+                            $container['product_shipping_location_manager'],
+                            $container['config_loader']
                         );
         };
         

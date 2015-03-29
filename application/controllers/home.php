@@ -52,6 +52,9 @@ class Home extends MY_Controller
             //$this->memberFeatureRestrictManager->addMemberToFeature($memberId, \EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT);
         }
 
+        
+        $data['messageboxHtml'] = $this->load->view('pages/home/reminder', [], true);
+        
         $this->load->spark('decorator');  
         $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/home/home_primary', $data);
@@ -181,50 +184,25 @@ class Home extends MY_Controller
         $this->load->view('pages/web/contact');
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
-    
-    
-      
+
     /**
-     * Renders how-to-buy infographic
+     * Renders how-to-page buyer
      *
      * @return View
      */
-    public function guide_buy()
+    public function guide_buyer()
     {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'How to buy | Easyshop.ph',
-            'metadescription' => 'Learn how to purchase at Easyshop.ph',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData['facebook'] = $socialMediaLinks["facebook"];
-        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/how-to-buy', $bodyData);
+        $this->load->view('pages/web/how-to-buy');
     }
     
-    
     /**
-     * Renders how-to-sell infographic
+     * Renders how-to-page seller
      *
      * @return View
      */
-    public function guide_sell()
+    public function guide_seller()
     {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'How to sell | Easyshop.ph',
-            'metadescription' => 'Learn how to sell your items at Easyshop.ph',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData['facebook'] = $socialMediaLinks["facebook"];
-        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/how-to-sell', $bodyData);
+        $this->load->view('pages/web/how-to-sell');
     }
         
     /**

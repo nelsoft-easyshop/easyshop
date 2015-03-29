@@ -43,6 +43,7 @@ class CashOnDeliveryGateway extends AbstractGateway
         
         // Point Gateway
         $pointGateway = $this->paymentService->getPointGateway();
+
         $response['paymentType'] = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
         $response['textType'] = 'cashondelivery';
         $response['message'] = 'Your payment has been completed through Cash on Delivery.';
@@ -52,7 +53,7 @@ class CashOnDeliveryGateway extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                            ->getShippingAddress(intval($memberId));
+                            ->getAddressStateRegionId((int)$memberId);
 
         // Compute shipping fee
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
@@ -62,6 +63,14 @@ class CashOnDeliveryGateway extends AbstractGateway
         $itemList = $prepareData['newItemList']; 
         $txnid = $this->generateReferenceNumber($memberId);
         $response['txnid'] = $txnid;
+
+        if($pointGateway){
+            $checkPointValid = $pointGateway->isPointValid($memberId);
+            if(!$checkPointValid['valid']){
+                $response['message'] = $checkPointValid['message'];
+                return $response;
+            }
+        }
 
         if($validatedCart['itemCount'] === $productCount){
             $return = $this->persistPayment(
@@ -78,7 +87,7 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $response['message'] = $return['o_message'];
             }
             else{
-                $response['orderId'] = $v_order_id = $return['v_order_id'];
+                $response['orderId'] = $orderId = $return['v_order_id'];
                 $response['invoice'] = $invoice = $return['invoice_no'];
                 $response['status'] = PaymentService::STATUS_SUCCESS;
 
@@ -88,18 +97,8 @@ class CashOnDeliveryGateway extends AbstractGateway
                 }
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                  ->find($v_order_id);
-
-                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                          ->find($this->getParameter('paymentType'));
-
-                $paymentRecord = new EsPaymentGateway();
-                $paymentRecord->setAmount($this->getParameter('amount'));
-                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-                $paymentRecord->setOrder($order);
-                $paymentRecord->setPaymentMethod($paymentMethod);
-                
-                $this->em->persist($paymentRecord);
+                                  ->find($orderId);
+                $deductAmount = "0.00";
 
                 if($pointGateway !== null){
                     $pointGateway->setParameter('memberId', $memberId);
@@ -108,16 +107,28 @@ class CashOnDeliveryGateway extends AbstractGateway
                     $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                               ->find($pointGateway->getParameter('paymentType'));
 
-                    $trueAmount = $pointGateway->pay();
+                    $deductAmount = $pointGateway->pay();
 
                     $pointRecord = new EsPaymentGateway();
-                    $pointRecord->setAmount($trueAmount);
+                    $pointRecord->setAmount($deductAmount);
                     $pointRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
                     $pointRecord->setOrder($order);
                     $pointRecord->setPaymentMethod($paymentMethod);
-
                     $this->em->persist($pointRecord);   
                 }
+
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                                          ->find($this->getParameter('paymentType'));
+
+                $paymentRecord = new EsPaymentGateway();
+                $paymentRecord->setAmount(bcsub($this->getParameter('amount'), $deductAmount));
+                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentRecord->setOrder($order);
+                $paymentRecord->setPaymentMethod($paymentMethod);
+                $this->em->persist($paymentRecord);
+
+                $this->paymentService->sendPaymentNotification($orderId);
+
                 $this->em->flush();
             }
         }

@@ -19,7 +19,8 @@ use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsAddress as EsAddress;
-use EasyShop\Entities\EsOrderStatus;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use Easyshop\Upload\AssetsUploader as AssetsUploader;
 use EasyShop\Product\ProductManager as ProductManager;
 
@@ -83,7 +84,7 @@ class Memberpage extends MY_Controller
         $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
-        $this->accountManager = $this->serviceContainer['account_manager'];        
+        $this->accountManager = $this->serviceContainer['account_manager'];
         $this->em = $this->serviceContainer['entity_manager'];
         $this->categoryManager = $this->serviceContainer['category_manager'];
         $this->transactionManager = $this->serviceContainer['transaction_manager'];
@@ -696,16 +697,8 @@ class Memberpage extends MY_Controller
                     $member = $this->esMemberRepo->find($data['uid']);
                     $forMember = $this->esMemberRepo->find($data['for_memberid']);
                     $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
-                    $doesFeedbackExists = $this->esMemberFeedbackRepo
-                                            ->findOneBy([
-                                                'member' => $member,
-                                                'forMemberid' => $forMember,
-                                                'feedbKind' => $data['feedb_kind'],
-                                                'order' => $order
-                                            ]);
-                    if (! (bool) $doesFeedbackExists) {
-                        $result = $this->esMemberFeedbackRepo
-                                    ->addFeedback(
+                    $result = $this->serviceContainer['feedback_transaction_service']
+                                   ->createTransactionFeedback(
                                         $member,
                                         $forMember,
                                         $data['feedb_msg'],
@@ -714,9 +707,8 @@ class Memberpage extends MY_Controller
                                         $data['rating1'],
                                         $data['rating2'],
                                         $data['rating3']
-                                    );
-                        $response['isSuccess'] = (bool)$result;
-                    }
+                                  );
+                    $response['isSuccess'] = (bool)$result;
                 }
             }
             else{
@@ -746,6 +738,7 @@ class Memberpage extends MY_Controller
             'error' => 'Failed to validate form'
         ];
 
+        $hasNotif = false;
         $data['transaction_num'] = $this->input->post('transaction_num');
         $data['invoice_num'] = $this->input->post('invoice_num');
         $data['member_id'] = $this->session->userdata('member_id');
@@ -755,6 +748,13 @@ class Memberpage extends MY_Controller
 
         $this->config->load('email', true);
         $imageArray = $this->config->config['images'];
+
+        $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                     ->findOneBy([
+                                        'idOrder' => $data['transaction_num'],
+                                        'invoiceNo' => $data['invoice_num'],
+                                        'buyer' => $data['member_id']
+                                     ]);
 
         /**
          *  DEFAULT RESPONSE HANDLER
@@ -805,8 +805,7 @@ class Memberpage extends MY_Controller
                         else{
                             $parseData['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
                         }
-                        
-                        $hasNotif = false;
+
                         if (
                             (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
                             (int) $data['status'] === (int) EsOrderProductStatus::RETURNED_BUYER ||
@@ -854,13 +853,6 @@ class Memberpage extends MY_Controller
         else if ( $this->input->post('dragonpay') ) {
             $this->load->library('dragonpay');
 
-            $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                                  ->findOneBy([
-                                                      'idOrder' => $data['transaction_num'],
-                                                      'invoiceNo' => $data['invoice_num'],
-                                                      'buyer' => $data['member_id']
-                                                  ]);
-
             if ( (int) count($getTransaction) === 1) {
                 $dragonpayResult = $this->dragonpay->getStatus($getTransaction->getTransactionId());
 
@@ -880,13 +872,6 @@ class Memberpage extends MY_Controller
              */
         }
         else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
-            $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                       ->findOneBy([
-                                           'idOrder' => $data['transaction_num'],
-                                            'invoiceNo' => $data['invoice_num'],
-                                            'buyer' => $data['member_id']
-                                       ]);
-
             if ( (int) count($getTransaction) === 1 ) {
                 $postData = [
                     'order_id' => $data['transaction_num'],

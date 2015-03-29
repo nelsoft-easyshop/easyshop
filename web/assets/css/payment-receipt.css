@@ -1,0 +1,74 @@
+@page { 
+    size: landscape; 
+    margin-left: 0.5cm;
+    margin-right: 0.5cm;
+    margin-top: 1in;
+    margin-top: 1in;
+}
+
+.body{
+    margin: 1mm 1mm 1mm 1mm;
+}
+
+.transaction-container{
+    border: 0px;
+    text-align: left;
+    padding: 0px;
+    font-size: 11px;
+}
+
+.transaction-bill-table > tbody > tr > td{
+    font-size: 11px !important;
+}
+
+.bg-gray{
+    background: #f7f7f7 !important;
+
+    -webkit-print-color-adjust: exact !important; 
+}
+.transaction-container.bg-white{
+    padding: 10px;
+    border: solid #e2e2e2 1px !important;
+    -webkit-print-color-adjust: exact !important; 
+}
+
+.transaction-container.bg-gray{
+    padding: 10px;
+    border: solid #e2e2e2 1px !important;
+    -webkit-print-color-adjust: exact !important; 
+}
+
+.transaction-checkout-order > tbody > tr.checkout-item > td{
+    border-color: #e2e2e2 !important;
+    -webkit-print-color-adjust: exact !important; 
+}
+
+.hide-border-bottom {
+    height: 10px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.border-1 {
+    bottom: 0;
+    border-bottom: 10px solid #ff893b;
+    position: absolute;
+    width: 100%;
+}
+
+.border-2 {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    border-bottom: 10px solid #4e77d1;
+    right: -67%;
+    width: 100%;
+}
+
+p.lead,
+.title-border-bottom-2,
+.transaction-container-title{
+    font-size: 12px;
+}

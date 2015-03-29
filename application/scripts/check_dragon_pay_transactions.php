@@ -1,5 +1,11 @@
 <?php
 
+include_once  __DIR__.'/bootstrap.php';
+
+$CI =& get_instance();
+
+$paymentService = $CI->kernel->serviceContainer['payment_service'];
+
 require_once(dirname(__FILE__).'/../libraries/dragonpay.php');
 
 $currentDate = date('Y-m-d');
@@ -17,6 +23,7 @@ $sql = "
 SELECT 
     transaction_id AS txnid 
     , dateadded  
+    , id_order
 FROM 
     es_order 
 WHERE 
@@ -45,6 +52,7 @@ foreach ($dbh->query($sql) as $row) {
     $counter++;
     $txnid = $row['txnid'];
     $dataAdded = $row['dateadded']; 
+    $orderId = $row['id_order'];
 
     $additionalExpiration = 0;
     for ($i = 1; $i <= 5; $i++) { 
@@ -77,6 +85,8 @@ foreach ($dbh->query($sql) as $row) {
             $statementStoredProc->bindParam(":transaction_id", $txnid);
             $statementStoredProc->execute(); 
             $newStatus = $dragonPay->getStatus($txnid); 
+
+            $paymentService->revertTransactionPoint($orderId);
         }
         else{
             $newStatus = $status;

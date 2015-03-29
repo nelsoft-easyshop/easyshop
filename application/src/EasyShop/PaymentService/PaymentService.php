@@ -7,8 +7,8 @@ use EasyShop\Entities\EsOrderShippingAddress;
 use EasyShop\Entities\EsLocationLookup;
 use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsMember;
-use EasyShop\Entities\EsPaymentMethod;
-use EasyShop\Entities\EsOrderStatus;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsOrderHistory;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsProduct;
@@ -20,6 +20,7 @@ use EasyShop\Entities\EsOrderProductAttr;
 use EasyShop\Entities\EsOrderProductHistory;
 use EasyShop\Entities\EsPaymentGateway;
 use EasyShop\Entities\EsPoint;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 /**
  * Payment Service Class
@@ -33,6 +34,8 @@ class PaymentService
     const STATUS_SUCCESS = 's';
 
     const STATUS_PENDING = 'p';
+
+    const SUCCESS_CODE = 0;
 
     /**
      * Gateway path
@@ -166,11 +169,27 @@ class PaymentService
     public $dragonPaySoapClient;
 
     /**
-     * Product Shipping Manager
+     * Transaction Manager
+     *
+     * @var EasyShop\Transaction\TransactionManager
+     */
+    public $transactionManager;
+
+    /**
+     * Product Shipping Location Manager
      *
      * @var EasyShop\Product\ProductShippingLocationManager
      */
     private $productShippingManager;
+
+    /**
+     * Vendor Curl Class
+     *
+     * @var Curl
+     */
+    public $curlService;
+
+    private $paymentConfig;
 
     /**
      * Constructor
@@ -190,7 +209,9 @@ class PaymentService
                                 $languageLoader,
                                 $messageManager,
                                 $dragonPaySoapClient,
-                                $productShippingManager)
+                                $transactionManager,
+                                $productShippingManager,
+                                $curlService)
     {
         $this->em = $em;
         $this->request = $request;
@@ -205,8 +226,17 @@ class PaymentService
         $this->socialMediaManager = $socialMediaManager;
         $this->languageLoader = $languageLoader;
         $this->messageManager = $messageManager;
-        $this->dragonPaySoapClient = $dragonPaySoapClient;
+        $this->dragonPaySoapClient = $dragonPaySoapClient; 
+        $this->transactionManager = $transactionManager; 
         $this->productShippingManager = $productShippingManager;
+        $this->curlService = $curlService;
+
+        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
+            $this->paymentConfig = $this->configLoader->getItem('payment','production'); 
+        }
+        else{ 
+            $this->paymentConfig = $this->configLoader->getItem('payment','testing'); 
+        }
     }
 
 
@@ -272,11 +302,9 @@ class PaymentService
             $price = $value['price']; 
             $promoItemCount = ($value['is_promote'] == 1) ? $promoItemCount += 1 : $promoItemCount += 0;
             $productItem =  $value['product_itemID'];
-            
             $shipping_amt = $this->productShippingManager
                                  ->getProductItemShippingFee($productItem, $city, $region->getIdLocation(), $majorIsland->getIdLocation());
-
-            $shipping_amt = $shipping_amt !== null ? $shipping_amt : 0;
+            $shipping_amt = $shipping_amt !== null ? $shipping_amt : 0 ;
             $otherFee = $shipping_amt * $orderQuantity;
             $totalAdditionalFee += $otherFee;
             $total =  $value['subtotal'] + $otherFee;
@@ -289,7 +317,7 @@ class PaymentService
 
             $optionString = ($optionCount <= 0) ? '0[]0[]0' : substr($optionString,3); 
             $productstring .= '<||>'.$sellerId."{+}".$productId."{+}".$orderQuantity."{+}".$price."{+}".$otherFee."{+}".$total."{+}".$productItem."{+}".$optionCount."{+}".$optionString;
-            $itemList[$key]['otherFee'] = $otherFee;
+            $itemList[$key]['otherFee'] = $otherFee; 
             $sellerDetails = $this->em->getRepository('EasyShop\Entities\EsMember')
                                         ->find($sellerId);
             $itemList[$key]['seller_username'] = $sellerDetails->getUsername();
@@ -313,30 +341,17 @@ class PaymentService
     /**
      * Validate Cart Data (resetPriceAndQty)
      * 
-     * @param mixed $carts User Session data
-     * @param bool $condition Used for lock-related processing
+     * @param mixed  $carts User Session data
+     * @param string $pointsAllocated point allocated
+     * @param bool   $excludeMemberId
      *
      * @return mixed
      */
-    function validateCartData($carts, $pointsAllocated = "0.00", $excludeMemberId = 0)
+    public function validateCartData($carts, $pointsAllocated = "0.00", $excludeMemberId = 0)
     {
         $condition = true;
         $itemArray = $carts['choosen_items'];
         $availableItemCount = 0;
-        $totalPointsAllowable = "0.00";
-
-        foreach ($itemArray as $key => $value) {
-            $prod = $this->em->getRepository('EasyShop\Entities\EsProduct')->find(intval($value['id']));
-            $totalPointsAllowable = bcmul(bcadd($totalPointsAllowable, $prod->getMaxAllowablePoint()), $value['qty']);
-        }
-
-        if(intval($totalPointsAllowable) === 0){
-            $totalPointsAllowable = "1.00";
-            $pointsAllocated = "0.00";
-        }
-        else{
-            $pointsAllocated = intval($pointsAllocated) <= intval($totalPointsAllowable) ? $pointsAllocated : $totalPointsAllowable;
-        }
 
         foreach($itemArray as $key => $value){
 
@@ -344,9 +359,7 @@ class PaymentService
             $itemId = $value['product_itemID'];
 
             $productArray = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                            ->find($productId);
-
-            $pointDeductable = bcmul($pointsAllocated, bcdiv($productArray->getMaxAllowablePoint(), $totalPointsAllowable, 10), 10);
+                                     ->find($productId);
 
             /* Get actual price, apply any promo calculation */
             $this->promoManager->hydratePromoData($productArray);
@@ -361,8 +374,7 @@ class PaymentService
             /** NEW PRICE **/
             $promoPrice = $productArray->getFinalPrice(); 
             $additionalPrice = $value['additional_fee'];
-            $finalPromoPrice = $promoPrice + $additionalPrice;
-            $finalPromoPrice = round(floatval(bcsub($finalPromoPrice, $pointDeductable, 10)));
+            $finalPromoPrice = $promoPrice + $additionalPrice; 
             $itemArray[$value['rowid']]['price'] = $finalPromoPrice;
             $subtotal = $finalPromoPrice * $qty;
             $itemArray[$value['rowid']]['subtotal'] = $subtotal;
@@ -424,6 +436,11 @@ class PaymentService
         return $this->pointGateway;
     }
 
+    public function getPrimaryGateway()
+    {
+        return $this->primaryGateway;
+    }
+
     /**
      * Get payment method type per user
      * @param  integer $memberId
@@ -446,6 +463,79 @@ class PaymentService
         }
 
         return $paymentArray;
+    }
+
+    /**
+     * Check if payment method is accepts points deduction
+     * @param  string  $paymentMethodString
+     * @return boolean
+     */
+    public function isPaymentMethodAcceptPoints($paymentMethodString)
+    {
+        $configLoad = $this->paymentConfig; 
+        if(isset($configLoad['payment_type'][strtolower($paymentMethodString)]) 
+            && isset($configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'])){  
+            return $configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Get order points spent in transaction
+     * @param  mixed $orderArgument
+     * @return integer
+     */
+    public function getTransactionPoints($orderArgument)
+    {
+        if(is_numeric($orderArgument)){
+            $orderId = $orderArgument;
+        }
+        else if(is_object($orderArgument)){
+            $orderId = $orderArgument->getIdOrder();
+        }
+        else{
+            return 0;
+        }
+
+        $orderPoints = $this->em->getRepository('EasyShop\Entities\EsPaymentGateway')
+                                ->findOneBy([
+                                    'order' => $orderId,
+                                    'paymentMethod' => EsPaymentMethod::PAYMENT_POINTS
+                                ]);
+
+        if($orderPoints){
+            return (float) $orderPoints->getAmount();
+        }
+        else{
+            return 0;
+        }
+    }
+
+    /**
+     * Revert point transaction
+     * @param  integer $orderId
+     * @return boolean
+     */
+    public function revertTransactionPoint($orderId)
+    {
+        $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                          ->find($orderId);
+
+        if($order){
+            $points = $this->getTransactionPoints($order);
+            $memberId = $order->getBuyer()->getIdMember();
+            $this->pointTracker->addUserPoint(
+                $memberId,
+                EsPointType::TYPE_REVERT, 
+                false, 
+                $points
+            );
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -662,13 +752,7 @@ class PaymentService
      */
     public function checkIpIsValidForPostback($ipAddress, $paymentType)
     {
-        if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
-            $configLoad = $this->configLoader->getItem('payment','production'); 
-        }
-        else{ 
-            $configLoad = $this->configLoader->getItem('payment','testing'); 
-        }
-        $config = $configLoad['payment_type']; 
+        $config = $this->paymentConfig['payment_type']; 
         $configPayment = null;
         switch($paymentType){ 
             case EsPaymentMethod::PAYMENT_DRAGONPAY: 
@@ -713,6 +797,5 @@ class PaymentService
 
         return false;
     }
-
 }
 
