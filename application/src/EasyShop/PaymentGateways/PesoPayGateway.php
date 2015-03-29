@@ -242,100 +242,6 @@ class PesoPayGateWay extends AbstractGateway
                                'paymentMethod' => $paymentType
                            ]);
 
-<<<<<<< HEAD
-        if($order){
-            $orderId = $order->getIdOrder();
-            $memberId = $order->getBuyer()->getIdMember();
-            $itemList = json_decode($order->getDataResponse(), true);
-            $postBackCount = $order->getPostbackcount();
-
-            // get address Id
-            $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                                ->getAddressStateRegionId((int)$memberId);
-
-            // Compute shipping fee
-            $prepareData = $this->paymentService
-                                ->computeFeeAndParseData(
-                                    $itemList,
-                                    (int)$address
-                                );
-            $itemList = $prepareData['newItemList'];
-            $toBeLocked = $prepareData['toBeLocked'];
-            $successCode = (int)trim($successCode);
-            if($successCode === PaymentService::SUCCESS_CODE){ 
-                foreach ($itemList as $item){
-                    $itemComplete = $this->paymentService
-                                         ->productManager
-                                         ->deductProductQuantity(
-                                             $item['id'],
-                                             $item['product_itemID'],
-                                             $item['qty']
-                                         );
-                    $this->paymentService->productManager
-                                         ->updateSoldoutStatus($item['id']);
-                }
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($orderId, $toBeLocked); 
-                $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                     ->updatePaymentIfComplete(
-                                            $orderId,
-                                            json_encode($itemList),
-                                            $txnId,
-                                            $paymentType,
-                                            EsOrderStatus::STATUS_PAID
-                                        );
-                $this->paymentService->sendPaymentNotification($orderId);
-            }
-            else{
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($orderId, $toBeLocked);
-                $orderHistory = [
-                    'order_id' => $orderId,
-                    'order_status' => EsOrderStatus::STATUS_VOID,
-                    'comment' => 'Pesopay transaction failed: ' . $message
-                ];
-                $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
-                         ->addOrderHistory($orderHistory);
-
-                $this->paymentService->transactionManager->voidTransaction($orderId);
-                $this->paymentService->revertTransactionPoint($orderId);
-            }
-        }
-    }
-
-    /**
-     * Check for points reserved per user
-     * @param  integer $memberId
-     */
-    public function checkReservedPoints($memberId)
-    {
-        $draftPesoPayOrders = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                       ->findBy([
-                                            'buyer' => $memberId,
-                                            'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
-                                            'orderStatus' => EsOrderStatus::STATUS_DRAFT,
-                                       ]);
-        $curlUrl = $this->config['api_url']; 
-        $data = [
-            'merchantId' => $this->config['merchant_id'],
-            'loginId' => $this->config['merchant_login_api'],
-            'password' => $this->config['merchant_password_api'],
-            'actionType' =>'Query',
-        ];  
-        echo count($draftPesoPayOrders);
-
-        foreach ($draftPesoPayOrders as $eachOrder) {
-            $transactionId = $eachOrder->getTransactionId();
-            $orderId = $eachOrder->getIdOrder(); 
-            $data['orderRef'] = trim($transactionId); 
-            $this->paymentService->curlService->post($curlUrl, $data);
-            $response = json_decode(json_encode((array)$this->paymentService->curlService->response), true);
-            if(isset($response['record']) === false ||
-                (isset($response['successcode']) 
-                && $response['successcode'] !== PaymentService::SUCCESS_CODE)){
-                $this->paymentService->transactionManager->voidTransaction($orderId);
-                $this->paymentService->revertTransactionPoint($orderId);
-=======
         if($this->validateSecureHash($params)){
             if($order){
                 $orderId = $order->getIdOrder();
@@ -391,7 +297,41 @@ class PesoPayGateWay extends AbstractGateway
                     $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                              ->addOrderHistory($orderHistory);
                 }
->>>>>>> dev
+            }
+        }
+    }
+
+    /**
+     * Check for points reserved per user
+     * @param  integer $memberId
+     */
+    public function checkReservedPoints($memberId)
+    {
+        $draftPesoPayOrders = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                       ->findBy([
+                                            'buyer' => $memberId,
+                                            'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
+                                            'orderStatus' => EsOrderStatus::STATUS_DRAFT,
+                                       ]);
+        $curlUrl = $this->config['api_url']; 
+        $data = [
+            'merchantId' => $this->config['merchant_id'],
+            'loginId' => $this->config['merchant_login_api'],
+            'password' => $this->config['merchant_password_api'],
+            'actionType' =>'Query',
+        ];  
+
+        foreach ($draftPesoPayOrders as $eachOrder) {
+            $transactionId = $eachOrder->getTransactionId();
+            $orderId = $eachOrder->getIdOrder(); 
+            $data['orderRef'] = trim($transactionId); 
+            $this->paymentService->curlService->post($curlUrl, $data);
+            $response = json_decode(json_encode((array)$this->paymentService->curlService->response), true);
+            if(isset($response['record']) === false ||
+                (isset($response['successcode']) 
+                && $response['successcode'] !== PaymentService::SUCCESS_CODE)){
+                $this->paymentService->transactionManager->voidTransaction($orderId);
+                $this->paymentService->revertTransactionPoint($orderId);
             }
         }
     }
