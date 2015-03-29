@@ -3012,6 +3012,77 @@
         }
     });
 
+    
+    $(document).ready(function(){
+        
+        getUserPoints();
+        
+        $('.easy-point-content').on('scroll', function(){
+            var div = $(this)[0];
+            if(div.scrollTop + div.clientHeight >= div.scrollHeight){
+                getUserPoints();
+            }
+        });
+    });
+    
+    
+    var userPointPage = 1;
+    var isUserPointComplete = false;
+    var isUserPointQueryOnGoing = false;
+    function getUserPoints(foo)
+    {
+        if(isUserPointComplete || isUserPointQueryOnGoing){
+            return false;
+        }
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getUserPointHistory',
+            data: {page:userPointPage},
+            beforeSend: function (xhr){
+                isUserPointQueryOnGoing = true;
+                $('.point-loader').show();
+            },
+            complete: function (xhr) {
+                isUserPointQueryOnGoing = false;
+                $('.point-loader').fadeOut();
+            },
+            success: function(data){ 
+                if(data){
+                    var $jsonResponse = $.parseJSON(data);
+                    if($.isEmptyObject($jsonResponse)){
+                        isUserPointComplete = true;
+                        return false;
+                    }
+                    var html = "";
+                    userPointPage++;
+                    $.each($jsonResponse, function(index, value){
+                        html += '<li>' +
+                                    '<div class="small-bullet-container">' +
+                                        '<span class="small-bullet"></span>' +
+                                    '</div>' +
+                                    '<div class="easy-content-container">' +
+                                        '<span class="easy-content">'+ value.dateAdded + ' ' + value.typeName + '</span>' + 
+                                        '<span class="easy-point">'+ value.point +'</span>' +
+                                    '</div>' +
+                                    '<div class="clear"></div>' +
+                                '</li>';
+                    });
+                    var $pointHistoryContainer =  $('.easy-point-content');
+                    $pointHistoryContainer.hide()
+                                        .append(html)
+                                        .fadeIn();
+                    $pointHistoryContainer.niceScroll({
+                        cursorborder: "3px solid #e2e2e2",
+                        touchbehavior: true,
+                        autohidemode: false,
+                        enablekeyboard: true,
+                        smoothscroll: true,
+                    });
+                }
+            }
+        });
+    }
+
 }(jQuery));
 
 

@@ -36,5 +36,30 @@ class EsPointHistoryRepository extends EntityRepository
 
         return isset($resultCount['total_count']) ? $resultCount['total_count'] : 0;
     }
+    
+    /**
+     * Returns all data inside Point History Table
+     *
+     * @param integer $userId
+     * @param integer $offset
+     * @param integer $limit
+     * @param boolean $asArray
+     * @return EasyShop\Entities\EsPointHistory[]
+     */
+    public function getUserPointHistory($userId, $offset = 0, $limit = 12)
+    {
+        $queryBuilder = $this->_em->createQueryBuilder();
+        $query = $queryBuilder->select('ph')
+                            ->from('EasyShop\Entities\EsPointHistory','ph') 
+                            ->where('ph.member = :memberId')
+                            ->setParameter('memberId', $userId)
+                            ->setFirstResult( $offset )
+                            ->setMaxResults( $limit )
+                            ->orderBy('ph.dateAdded', 'DESC')
+                            ->getQuery();
+        $result = $query->getResult();
+              
+        return $result;
+    }
 }
 

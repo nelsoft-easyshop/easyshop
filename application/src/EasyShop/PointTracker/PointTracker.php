@@ -199,16 +199,5 @@ class PointTracker
         return $user === null? false : $user->getPoint();
     }        
 
-
-    /**
-     * Returns all data inside Point History Table
-     *
-     * @return mixed
-     */
-    public function getPointHistory()
-    {
-        return $this->em->getRepository('EasyShop\Entities\EsPointHistory')
-                            ->findAll();
-    }
 }
 
