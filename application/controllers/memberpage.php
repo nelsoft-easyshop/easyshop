@@ -68,7 +68,7 @@ class Memberpage extends MY_Controller
      *
      * @var integer
      */
-    public $pointHistoryItemsPerPage = 12;
+    public $pointHistoryItemsPerPage = 10;
 
     /**
      *  Class Constructor
@@ -2444,7 +2444,7 @@ class Memberpage extends MY_Controller
     public function getUserPointHistory()
     {
         $memberId = $this->session->userdata('member_id');
-        $page = $this->input->post('page') ? $this->input->post('page') : 1;
+        $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
         $page--;
         $offset = $page * $this->pointHistoryItemsPerPage;
         $jsonResponse = [];
