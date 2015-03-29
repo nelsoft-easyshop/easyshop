@@ -2449,7 +2449,8 @@ class Memberpage extends MY_Controller
         $offset = $page * $this->pointHistoryItemsPerPage;
         $jsonResponse = [];
         if($memberId){
-            $userPoints = $this->serviceContainer['point_tracker']
+            $userPoints = $this->serviceContainer['entity_manager']
+                               ->getRepository('EasyShop\Entities\EsPointHistory')
                                ->getUserPointHistory($memberId, $offset, $this->pointHistoryItemsPerPage);
             foreach($userPoints as $userPoint){
                 $jsonResponse[] = [

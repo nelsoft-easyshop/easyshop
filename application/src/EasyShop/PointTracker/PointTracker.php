@@ -199,28 +199,5 @@ class PointTracker
         return $user === null? false : $user->getPoint();
     }        
 
-    /**
-     * Returns all data inside Point History Table
-     *
-     * @param integer $userId
-     * @param integer $offset
-     * @param integer $limit
-     * @param boolean $asArray
-     * @return EasyShop\Entities\EsPointHistory[]
-     */
-    public function getUserPointHistory($userId, $offset = 0, $limit = 12)
-    {
-        $queryBuilder = $this->em->createQueryBuilder();
-        $query = $queryBuilder->select('ph')
-                            ->from('EasyShop\Entities\EsPointHistory','ph') 
-                            ->where('ph.member = :memberId')
-                            ->setParameter('memberId', $userId)
-                            ->setFirstResult( $offset )
-                            ->setMaxResults( $limit )
-                            ->getQuery();
-        $result = $query->getResult();
-              
-        return $result;
-    }
 }
 
