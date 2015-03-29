@@ -54,6 +54,9 @@
                     </div>
                     <ul class="easy-point-content">
                     </ul>
+                    <div class="text-center point-loader">
+                        <img src="<?php getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
+                    </div>
                 </div>
             </div>
             <div class="mobile-dashboard-menu">

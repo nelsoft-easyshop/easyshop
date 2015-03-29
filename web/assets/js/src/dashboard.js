@@ -3034,7 +3034,9 @@
                                 '</li>';
                     });
                     var $pointHistoryContainer =  $('.easy-point-content');
-                    $pointHistoryContainer.append(html);
+                    $pointHistoryContainer.hide()
+                                          .append(html)
+                                          .fadeIn();
                     $pointHistoryContainer.niceScroll({
                         cursorborder: "3px solid #e2e2e2",
                         touchbehavior: true,
@@ -3042,6 +3044,7 @@
                         enablekeyboard: true,
                         smoothscroll: true,
                     });
+                    $('.point-loader').fadeOut();
                 }
             }
         });
