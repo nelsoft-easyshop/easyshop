@@ -696,21 +696,20 @@ class Store extends MY_Controller
                     $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_SELLER;
                 }
                 if($feedbackType !== false){
-                    $feedback = new EasyShop\Entities\EsMemberFeedback();
-                    $feedback->setMember($reviewer);
-                    $feedback->setForMemberid($reviewee);
-                    $feedback->setOrder($orderToReview);
-                    $feedback->setFeedbMsg($message);
-                    $feedback->setDateadded(new DateTime('now'));
-                    $feedback->setRating1($rating1);
-                    $feedback->setRating2($rating2);
-                    $feedback->setRating3($rating3);
-                    $feedback->setFeedbKind($feedbackType);
-                    $em->persist($feedback);
-                    $em->flush();
+                    $this->serviceContainer['feedback_transaction_service']
+                         ->createTransactionFeedback(
+                            $reviewer,
+                            $reviewee,
+                            $message,
+                            $feedbackType,
+                            $orderToReview,
+                            $rating1,
+                            $rating2,
+                            $rating3
+                         );
                 }
             }
-            redirect('/'.$reviewee->getSlug().'/about');
+            redirect('/'.$reviewee->getSlug().'/about'); 
         }
         redirect('/');
     }

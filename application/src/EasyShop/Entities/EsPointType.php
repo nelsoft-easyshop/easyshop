@@ -54,6 +54,16 @@ class EsPointType
      * @var integer
      */
     const TYPE_PURCHASE = 4;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_TRANSACTION_FEEDBACK = 5;
+    
+    /**
+     * @var integer
+     */
+    const TYPE_REVERT = 6;
 
 
     /**

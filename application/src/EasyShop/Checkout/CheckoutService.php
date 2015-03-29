@@ -54,10 +54,17 @@ class CheckoutService
     private $shippingLocationManager;
 
     /**
+     * Config Loader
+     *
+     * @var EasyShop\Config\ConfigLoader
+     */
+    private $configLoader;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em, $productManager, $promoManager, $cartManager, $paymentService, $shippingLocationManager)
+    public function __construct($em, $productManager, $promoManager, $cartManager, $paymentService, $shippingLocationManager, $configLoader)
     {
         $this->em = $em;
         $this->productManager = $productManager;
@@ -65,6 +72,7 @@ class CheckoutService
         $this->cartManager = $cartManager;
         $this->paymentService = $paymentService;
         $this->shippingLocationManager = $shippingLocationManager;
+        $this->configLoader = $configLoader;
     }
 
     /**
@@ -123,7 +131,7 @@ class CheckoutService
     {
         $promoConfig = $this->promoManager->getPromoConfig($product->getPromoType());
 
-        if((int)$product->getIsPromote() === 1 && (int)$product->getStartPromo() === 1){
+        if((bool)$product->getIsPromote() && (bool)$product->getStartPromo()){
             return $promoConfig['cart_solo_restriction'];
         }
 
@@ -210,7 +218,7 @@ class CheckoutService
      * @param  string $paymentType [description]
      * @return boolean
      */
-    public function checkoutCanContinue($cartData, $paymentType)
+    public function checkoutCanContinue($cartData, $paymentType, $validatePaymentType = true)
     {
         $itemFail = 0;
         $paymentString = "";
@@ -231,14 +239,24 @@ class CheckoutService
         }
 
         foreach ($cartData as $item) { 
-            if( !isset($item[$paymentString]) 
-                || !$item[$paymentString]
-                || !$item['canPurchaseWithOther']
-                || !$item['hasNoPuchaseLimitRestriction']
-                || !$item['isQuantityAvailable']
-                || !$item['isAvailableInLocation'] ){
-                $itemFail++;
-            } 
+            if($validatePaymentType){
+                if( !isset($item[$paymentString]) 
+                    || !$item[$paymentString]
+                    || !$item['canPurchaseWithOther']
+                    || !$item['hasNoPuchaseLimitRestriction']
+                    || !$item['isQuantityAvailable']
+                    || !$item['isAvailableInLocation'] ){
+                    $itemFail++;
+                }
+            }
+            else{
+                if( !$item['canPurchaseWithOther']
+                    || !$item['hasNoPuchaseLimitRestriction']
+                    || !$item['isQuantityAvailable']
+                    || !$item['isAvailableInLocation'] ){
+                    $itemFail++;
+                }
+            }
         }
 
         return $itemFail === 0 && count($cartData) !== 0;
@@ -263,6 +281,69 @@ class CheckoutService
         }
 
         return $paymentType;
+    }
+
+    /**
+     * Get all payment type avaialable
+     * @param  mixed $cartData [description]
+     * @return mixed
+     */
+    public function getPaymentTypeAvailable($cartData)
+    {
+        $configPromo = $this->configLoader->getItem('promo','Promo');
+       
+        $paymentType = $configPromo[0]['payment_method'];
+     
+        foreach ($cartData as $item) { 
+            $paymentType = array_intersect ( $paymentType , $configPromo[$item['promo_type']]['payment_method']);
+        }
+
+        return $paymentType;
+    }
+
+    /**
+     * Get all possible error during checkout
+     * @param  mixed $cartData
+     * @return mixed
+     */
+    public function getCheckoutError($cartData)
+    {   
+        $errorMessage = [];
+        $paymentTypeError = [];
+        foreach ($cartData as $item) {
+            if( !$item['canPurchaseWithOther'] ){
+                $errorMessage[] = "One of your items can only be purchased  individually.";
+            }
+            if( !$item['hasNoPuchaseLimitRestriction'] ){
+                $errorMessage[] = "You have exceeded your purchase limit for a promo of an item in your cart.";
+            }
+            if( !$item['isQuantityAvailable'] ){
+                $errorMessage[] = "The availability of one of your items is less than your desired quantity. 
+                                    Someone may have purchased the item before you can complete your payment. 
+                                    Check the availability of your item and try again.";
+            }
+            if( !$item['isAvailableInLocation'] ){
+                $errorMessage[] = "One or more of your item(s) is unavailable in your location.";
+            }
+
+            if(!$item['dragonpay']){
+                $paymentTypeError[] = EsPaymentMethod::PAYMENT_DRAGONPAY;
+            }
+            if(!$item['paypal']){
+                $paymentTypeError[] = EsPaymentMethod::PAYMENT_PAYPAL;
+            }
+            if(!$item['cash_delivery']){
+                $paymentTypeError[] = EsPaymentMethod::PAYMENT_CASHONDELIVERY;
+            }
+            if(!$item['pesopaycdb']){
+                $paymentTypeError[] = EsPaymentMethod::PAYMENT_PESOPAYCC;
+            }
+        }
+
+        return [
+            'errorMessage' => array_unique($errorMessage),
+            'paymentTypeError' => array_unique($paymentTypeError),
+        ];
     }
 }
 

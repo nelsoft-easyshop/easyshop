@@ -8,6 +8,7 @@ use EasyShop\Entities\EsVerifcode as EsVerifcode;
 use Easyshop\Entities\EsMember;
 use Easyshop\Entities\EsStoreColor as EsStoreColor;
 use EasyShop\Entities\EsBanType as EsBanType;
+use EasyShop\Entities\EsPointType as EsPointType;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
@@ -132,6 +133,13 @@ class AccountManager
     private $socialMediaManager;
     
     /**
+     * Point Tracker
+     *
+     * @var EasyShop\PointTracker\PointTracker
+     */
+    private $pointTracker;
+    
+    /**
      * Intialize dependencies
      *
      */
@@ -149,6 +157,7 @@ class AccountManager
                                 $configLoader,
                                 $languageLoader,
                                 $hashUtility,
+                                $pointTracker,
                                 $socialMediaManager)
     {
         $this->em = $em;
@@ -164,8 +173,9 @@ class AccountManager
         $this->encrypter = $encrypter;
         $this->configLoader = $configLoader;
         $this->languageLoader = $languageLoader;
-        $this->hashUtility = $hashUtility;
-        $this->socialMediaManager = $socialMediaManager;
+        $this->hashUtility = $hashUtility; 
+        $this->pointTracker = $pointTracker; 
+        $this->socialMediaManager = $socialMediaManager; 
     }
 
     /**
@@ -356,8 +366,15 @@ class AccountManager
                     $member->setLoginCount($member->getLoginCount() + 1);
                     $this->em->flush(); 
                     $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                                        ->getHydratedMember($validatedUsername, $asArray);                    
-                }                                                                    
+                                                                        ->getHydratedMember($validatedUsername, $asArray);
+                    
+                    $loggedCount = $this->em->getRepository('EasyShop\Entities\EsPointHistory')
+                                            ->countUserPointActivity($member->getIdMember(), EsPointType::TYPE_LOGIN, date("Y-m-d"));
+
+                    if($loggedCount <= 0){
+                        $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_LOGIN);
+                    }
+                }
             }
         }
 
@@ -426,6 +443,8 @@ class AccountManager
             
             $this->em->persist($member);
             $this->em->flush();
+
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_REGISTER);
         }
 
         return ['errors' => $this->formErrorHelper->getFormErrors($form),
