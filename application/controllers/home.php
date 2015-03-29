@@ -349,7 +349,7 @@ class Home extends MY_Controller
     }
 
     /**
-     * Renders terms and conditions page
+     * Renders easypoint infographic
      *
      * @return View
      */
