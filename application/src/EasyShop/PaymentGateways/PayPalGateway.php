@@ -194,12 +194,7 @@ class PayPalGateway extends AbstractGateway
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$stateRegionId);
 
         $shipping_amt = round((float)$prepareData['othersumfee'], 2);
-        if($shipping_amt > $prepareData['totalPrice']){
-            $itemTotalPrice = bcsub($shipping_amt, round((float)$prepareData['totalPrice'], 2), 2);
-        }
-        else{
-            $itemTotalPrice = bcsub(round((float)$prepareData['totalPrice'], 2), $shipping_amt, 2);
-        }
+        $itemTotalPrice = bcsub(round((float)$prepareData['totalPrice'], 2), $shipping_amt, 2);
         $itemOriginalPrice = $itemTotalPrice;
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];

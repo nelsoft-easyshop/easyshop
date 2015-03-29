@@ -141,8 +141,8 @@
     $route['(?i)terms'] = 'home/terms';
     $route['(?i)faq'] = 'home/faq';
     $route['(?i)contact'] = 'home/contact';
-    $route['(?i)guide/buy'] = 'home/guide_buy';
-    $route['(?i)guide/sell'] = 'home/guide_sell';
+    $route['(?i)guide/buy'] = 'home/guide_buyer';
+    $route['(?i)guide/sell'] = 'home/guide_seller';
     $route['(?i)report'] = 'home/bugReport';
     $route['(?i)subscribe'] = 'register/subscribe';
 

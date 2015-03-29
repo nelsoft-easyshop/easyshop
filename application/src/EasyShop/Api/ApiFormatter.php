@@ -173,32 +173,12 @@ class ApiFormatter
             }
         }
 
-        // get product quantity
-        $productInventory = $esProductRepo->getProductInventoryDetail($productId);
-
-        $temporaryArray = [];
-        foreach ($productInventory as $key => $value) {
-             if(!array_key_exists($value['id_product_item'],$temporaryArray)){
-                $temporaryArray[$value['id_product_item']] = [
-                                                        'quantity' => $value['quantity'],
-                                                        'product_attribute_ids' => [
-                                                                        [
-                                                                'id' => $value['product_attr_id'],
-                                                                'is_other' => $value['is_other'],
-                                                            ]
-                                                        ],
-                                                    ];
-             }
-             else{ 
-                $temporaryArray[$value['id_product_item']]['product_attribute_ids'][] = [
-                                                                                'id' => $value['product_attr_id'],
-                                                                                'is_other' => $value['is_other'],
-                                                                            ];
-             }
-        }
-
+        $temporaryArray = $this->productManager->getProductInventory($product);
         $productQuantity = [];
-        foreach ($temporaryArray as $key => $valuex) { 
+        foreach ($temporaryArray as $key => $valuex) {
+            unset($temporaryArray[$key]['attr_lookuplist_item_id']);
+            unset($temporaryArray[$key]['attr_name']);
+            unset($temporaryArray[$key]['is_default']);
             $newCombinationKey = []; 
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
                 $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b');
@@ -455,8 +435,13 @@ class ApiFormatter
                                                                              $options, 
                                                                              $mobileCartContent->quantity)['itemData'];
 
-                if($mobileCartContent->quantity > $cartContent['maxqty']){
-                    $errorMessage[] = "Quantity Not Available";
+                if($cartContent){
+                    if($mobileCartContent->quantity > $cartContent['maxqty']){
+                        $errorMessage[] = "Quantity Not Available";
+                    }
+                }
+                else{
+                    $errorMessage[] = "Item not available.";
                 }
 
                 if((bool)$member->getIsEmailVerify() === false){

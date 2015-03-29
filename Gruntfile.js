@@ -164,6 +164,8 @@ module.exports = function (grunt) {
                          'web/assets/css/new-login.css'],
                     'web/assets/css/min-easyshop.vendorview.css':
                         ['web/assets/css/vendorview.css'],
+                    'web/assets/css/min-easyshop.how-to.css':
+                        ['web/assets/css/how-to-page.css'],
                     'web/assets/css/min-easyshop.dashboard-personal-info.css':
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
@@ -460,7 +462,13 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.home-reminder.js':
                         ['web/assets/js/src/vendor/jquery.simplemodal.js',
-                         'web/assets/js/src/message-box.js']
+                         'web/assets/js/src/message-box.js'],
+                     
+                    'web/assets/js/min/easyshop.how-to.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                         'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
+                         'web/assets/js/src/how-to-page-plugins.js',
+                         'web/assets/js/src/how-to-page.js']
                 }
             }
         }
