@@ -37,8 +37,13 @@
                 
                 <div class="easy-point-container">
                     <div class="easy-point-title">
-                        <a href="#">easy points</a>
-                        <span class="easy-point-question">?</span>
+                        easy points
+                        <a href="/easypoints" target="_blank">
+                            <span class="easy-point-question">?</span>
+                        </a>
+                        <p class="easy-point-tooltip">
+                            Whats this?
+                        </p>
                     </div>
                     <div class="current-point-container">
                         <div class="border-bttm">
@@ -48,7 +53,6 @@
                         </div>
                     </div>
                     <ul class="easy-point-content">
-                      
                     </ul>
                 </div>
             </div>
