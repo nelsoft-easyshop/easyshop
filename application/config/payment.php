@@ -36,14 +36,11 @@ $config = [
                 ],
                 'pesopay' => [
                     'Easyshop' => [
-<<<<<<< HEAD
                         'points' => true,
                         'api_url' => 'https://test.pesopay.com/b2cDemo/eng/merchant/api/orderApi.jsp',
-=======
                         'currency_code' => '608',
                         'payment_type' => 'N',
                         'secure_hash' => '1JQ6vd9qatkqoA9gRJpyKeMpl2Nu6cmm',
->>>>>>> dev
                         'redirect_url' => 'https://test.pesopay.com/b2cDemo/eng/payment/payForm.jsp',
                         'merchant_id' => '18061489',
                         'merchant_login_api' => 'apiuser',
@@ -98,12 +95,9 @@ $config = [
                 ],
                 'pesopay' => [
                     'Easyshop' => [
-<<<<<<< HEAD
                         'points' => true,
                         'api_url' => 'https://www.pesopay.com/b2c2/eng/merchant/api/orderApi.jsp',
-=======
                         'secure_hash' => '1JQ6vd9qatkqoA9gRJpyKeMpl2Nu6cmm',
->>>>>>> dev
                         'redirect_url' => 'https://www.pesopay.com/b2c2/eng/payment/payForm.jsp',
                         'merchant_id' => '18139485',
                         'merchant_login_api' => 'EasyshopPH1',
