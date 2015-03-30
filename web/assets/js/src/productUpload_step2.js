@@ -1398,7 +1398,6 @@ var universalExtension = ".jpeg";
                 }
                 if(badIE == true){ 
                     if(d.err != '1'){
-                        console.log(arrayUpload);
                         $.each( arrayUpload, function( key, value ) {
                             $('#previewList'+value + ' > span > img').attr("src",'/'+tempDirectory+'/categoryview/'+d.imageName); 
                             $('#previewList'+value + ' > .loadingfiles').remove();
