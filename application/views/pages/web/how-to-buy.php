@@ -44,13 +44,13 @@
 
                     <div class="nav-collapse collapse" id="navigation">
                         <ul class="nav">
-                            <li><a href="/guide/sell">How to Sell</a></li>
+                            <li><a href="/how-to-sell">How to Sell</a></li>
                             <li class="logo">
                                 <a href="/">
                                     <img src="<?php echo getAssetsDomain(); ?>assets/images/how-to-page/logo.png" alt="Online Shopping">
                                 </a>
                             </li>
-                            <li class="active"><a href="/guide/buy">How to Buy</a></li>
+                            <li class="active"><a href="/how-to-buy">How to Buy</a></li>
                         </ul>
                     </div>
                 </div>
