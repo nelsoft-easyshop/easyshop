@@ -179,8 +179,8 @@
  
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-es-green btn-sm btn-deduct-points">Use Points</button>
-                        <button class="btn btn-es-white btn-sm btn-reset-points">Reset</button>
+                        <button class="btn btn-es-green btn-sm btn-deduct-points" <?=$isCartEmpty ? 'disabled' : ''; ?>>Use Points</button>
+                        <button class="btn btn-es-white btn-sm btn-reset-points" <?=$isCartEmpty ? 'disabled' : ''; ?>>Reset</button>
                     </div>
                 </div>
             </div>
@@ -259,7 +259,7 @@
                     <br/>
                     <?=form_open('payment/review', ['class' => 'reviewForm','id' => 'reviewForm','name' => 'reviewForm']); ?>
                         <input type="hidden" id="used-points" name="used_points"  value="0" />
-                        <button class="btn btn-es-green btn-lg btn-block">Proceed to checkout</button>
+                        <button class="btn btn-es-green btn-lg btn-block" <?=$isCartEmpty ? 'disabled' : ''; ?>>Proceed to checkout</button>
                     <?=form_close();?> 
                     <center><a href="/" class="link-blue">Continue shopping</a></center>
                 </div>
