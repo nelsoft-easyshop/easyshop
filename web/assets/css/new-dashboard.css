@@ -3263,7 +3263,7 @@ label.css-label {
     position: relative;
 }
 
-.easy-point-container ul li:nth-last-child(2) {
+.easy-point-container ul li:last-child {
     padding-bottom: 0;
 }
 
@@ -3303,7 +3303,7 @@ label.css-label {
     width: 2px;
 }
 
-.easy-point-container ul li:nth-last-child(2) .small-bullet:after,
+.easy-point-container ul li:last-child .small-bullet:after,
 .easy-point-container ul li:first-child .small-bullet:before {
     display: none;
 }
@@ -3374,9 +3374,8 @@ label.css-label {
     float: right;
 }
 
-.easy-point-loading {
-    padding: 18px 0;
-    text-align: center;
+.point-loader {
+    padding-top: 18px;
 }
 
 @media only screen and (max-width: 991px){
