@@ -386,7 +386,7 @@ class PesoPayGateWay extends AbstractGateway
      */
     public function getExternalCharge()
     {
-        $transactionFee = bcadd("6.00", bcmul("0.005", $this->getParameter('amount'), 4), 4);
+        $transactionFee = bcadd("6.00", bcmul("0.0375", $this->getParameter('amount'), 4), 4);
         $vat = bcmul($transactionFee, "0.12", 4);
 
         return bcadd($transactionFee, $vat, 4);
