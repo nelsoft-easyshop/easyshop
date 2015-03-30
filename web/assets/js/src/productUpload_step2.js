@@ -220,9 +220,8 @@ function get_discPrice() {
     $("#slider_val").val("");
     $("#slider_val").val(prcnt+"%");
     var discounted = act_price * (prcnt/100);
-    var tempval = Math.abs(parseFloat(act_price - discounted));
-    var discountPrice = replaceNumberWithCommas(tempval.toFixed(2));
-    var finalDiscountPrice = isNaN(discountPrice) ? parseFloat(act_price).toFixed(2) : discountPrice;
+    var discountPrice = Math.abs(parseFloat(act_price - discounted)); 
+    var finalDiscountPrice = replaceNumberWithCommas(discountPrice.toFixed(2));
     $("#discountedP").val(finalDiscountPrice);
     $( "span#discounted_price_con" ).text( finalDiscountPrice );
 }
