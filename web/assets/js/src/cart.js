@@ -182,7 +182,11 @@
                     if(jsonResponse.isSuccessful){
                         $(".row-"+$cartRowId).remove();
                         $cartSubtotal = removeCommas(jsonResponse.totalPrice);
+                        $shippingFee = parseFloat(jsonResponse.totalShippingFee);
                         computePrices();
+                        if(jsonResponse.numberOfItems <= 0){
+                            location.reload();
+                        }
                     }
                     $cartRowId = null;
                     $currentModal.close()
@@ -273,6 +277,7 @@
         var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
 
         $summaryContainer.find('#summary-points').html($usedPoints);
+        $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
         $summaryContainer.find('#summary-cart-total').html(replaceNumberWithCommas($cartTotalPrice.toFixed(2)));
     }
