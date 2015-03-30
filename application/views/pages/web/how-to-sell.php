@@ -478,10 +478,10 @@
 
             <section class="footer_links">
                 <ul>
-                    <li><a href="https://www.easyshop.ph/">Visit Site</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
-                    <li><a href="https://www.easyshop.ph/terms">Terms &amp; Conditions</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
-                    <li><a href="https://www.easyshop.ph/policy">Privacy Policy</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
-                    <li><a href="https://www.easyshop.ph/contact">Contact</a></li>
+                    <li><a href="/">Visit Site</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
+                    <li><a href="/terms">Terms &amp; Conditions</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
+                    <li><a href="/policy">Privacy Policy</a>&nbsp;&nbsp;.&nbsp;&nbsp;</li>
+                    <li><a href="/contact">Contact</a></li>
                 </ul>
             </section>
 
