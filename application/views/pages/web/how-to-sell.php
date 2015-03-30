@@ -218,7 +218,7 @@
                         <div class="row-fluid load-animate">
                             <div class="span6 padding-top-50 padding-left-70">
                                 <h1>Payment Gateways</h1>
-                                <p>Each of our Payment Gateways guaranteed to be safe and secure.</p>
+                                <p>Each of our Payment Gateways is guaranteed to be safe and secure.</p>
                                 <p><em>For more details, please click <a href="https://www.easyshop.ph/terms">HERE</a> to read EasyShop.ph’s Terms & Conditions carefully.</em></p>
 
                                 <div class="margin-block clearfix"></div>
