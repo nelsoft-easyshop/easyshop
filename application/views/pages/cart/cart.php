@@ -318,8 +318,7 @@
         <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly />
     </div>
     <div class="my-modal-footer">
-        <center> 
-            <button class="btn btn-es-green calculate-shipping">Calculate</button>
+        <center>
             <button class="btn btn-es-green update-shipping" disabled="disabled" >Save Location</button>  
         </center>
     </div>
