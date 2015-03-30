@@ -11,8 +11,8 @@
                                 <h1>Help Center</h1>
                                 <ul>
                                     <li><a href="/register">Registration</a></li>
-                                    <li><a href="/guide/buy">How to Shop</a></li>
-                                    <li><a href="/guide/sell">How to Sell</a></li>
+                                    <li><a href="/how-to-buy">How to Shop</a></li>
+                                    <li><a href="/how-to-sell">How to Sell</a></li>
                                     <li><a href="/faq">FAQ</a></li>
                                     <li><a href="/report">Report a Problem</a></li>
                                 </ul>
