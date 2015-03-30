@@ -44,7 +44,7 @@
                                     Brief Description: <?=html_escape($product->getBrief()); ?>
                                     <br>
                                 <?php endif; ?>
-                                <?php if($product->getBrand()->getName() !== ""): ?>
+                                <?php if($product->getBrand()->getName() !== "" && $product->getBrand()->getIdBrand() !== \EasyShop\Entities\EsBrand::CUSTOM_CATEGORY_ID): ?>
                                     Brand: <?=html_escape($product->getBrand()->getName()); ?>
                                     <br>
                                 <?php endif; ?>
