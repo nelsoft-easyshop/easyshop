@@ -31,7 +31,7 @@
                         <p class="p-detail-title">Product Detail</p>
                         <div class="p-html-description">
                             <div class="external-links-container">
-                                <?=$productDetails; ?>
+                                <?=nl2br($productDetails); ?>
                                 <?php foreach ($additionalInformation as $value): ?>
                                     <?=$value; ?>
                                     <br>
