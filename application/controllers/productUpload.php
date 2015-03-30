@@ -752,7 +752,7 @@ class productUpload extends MY_Controller
         }
         else{ 
             if((int) $product_price <= 0 || (int) $discountedPrice <= 0){
-                die('{"e":"0","d":"Invalid price. Price must be greater than 0."}');
+                die('{"e":"0","d":"Invalid price. Price must be equal or greater than P1."}');
             }
 
             $arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 

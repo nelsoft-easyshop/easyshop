@@ -32,6 +32,7 @@ header {
 .login-content a {
     color: #fff;
     font-weight: 900;
+    line-height: 32px;
 }
 
 .login-content a:hover {
