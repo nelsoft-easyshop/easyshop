@@ -55,7 +55,7 @@
                 <div class="transaction-container bg-white">
                     <p class="transaction-container-title">Shipping Details</p>
                      <p class="transaction-container-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Interrogari re pervenias videmus quando suspicor, ponit fugiat leguntur cupiditatibus usque intus careat disputatione, sint audivi affirmatis indoctis secutus,
+                        Please carefully review your shipping details to avoid delays in the delivery of your item(s). Including a landmark also helps the courier in locating your address quickly.
                     </p>
                     <div class="row">
                         <div class="col-md-12">
@@ -177,7 +177,7 @@
                         
                         <tbody> 
                             <?php foreach ($cartData as $item): ?>
-                                <tr class="checkout-item border-bottom-0">
+                                <tr class="checkout-item <?php if($item['isAvailableInLocation'] === false): ?>border-bottom-0<?php endif;?>">
                                     <td>
                                         <?=html_escape($item['name']);?>
                                     </td>
