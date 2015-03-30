@@ -646,73 +646,29 @@ class Memberpage extends MY_Controller
             'isSuccess' => false,
             'error' => '',
         ];
-        if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
-            $data = [
-                'uid' => $this->session->userdata('member_id'),
-                'for_memberid' => $this->input->post('for_memberid'),
-                'feedb_msg' => $this->input->post('feedback-field'),
-                'feedb_kind' => $this->input->post('feedb_kind'),
-                'order_id' => $this->input->post('order_id'),
-                'rating1' => $this->input->post('rating1'),
-                'rating2' => $this->input->post('rating2'),
-                'rating3' => $this->input->post('rating3')
-            ];
-
-            if ( !(bool) $data['feedb_kind']) {
-                $transacData = [
-                    'buyer' => $data['uid'],
-                    'seller' => $data['for_memberid'],
-                    'order_id' => $data['order_id']
-                ];
-            }
-            else if ( (bool) $data['feedb_kind']) {
-                $transacData = [
-                    'buyer' => $data['for_memberid'],
-                    'seller' => $data['uid'],
-                    'order_id' => $data['order_id']
-                ];
-            }
-            
-            $formValidation = $this->serviceContainer['form_validation'];
-            $formFactory = $this->serviceContainer['form_factory'];
-            $formErrorHelper = $this->serviceContainer['form_error_helper'];
-            $rules = $formValidation->getRules('user_feedback');
-            $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                                     ->setMethod('POST');                    
-           
-            $formBuild->add('message', 'text', ['constraints' => $rules['message']]);
-            $formBuild->add('rating1', 'text', ['constraints' => $rules['rating']]);
-            $formBuild->add('rating2', 'text', ['constraints' => $rules['rating']]);
-            $formBuild->add('rating3', 'text', ['constraints' => $rules['rating']]);
-            $formData["message"] =  $data['feedb_msg'];
-            $formData["rating1"] =  $data['rating1'];
-            $formData["rating2"] =  $data['rating2'];
-            $formData["rating3"] =  $data['rating3'];
-            $form = $formBuild->getForm();
-            $form->submit($formData); 
-
-            if($form->isValid()){
-                $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
-                if ($doesTransactionExists) {
-                    $member = $this->esMemberRepo->find($data['uid']);
-                    $forMember = $this->esMemberRepo->find($data['for_memberid']);
-                    $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
-                    $result = $this->serviceContainer['feedback_transaction_service']
-                                   ->createTransactionFeedback(
-                                        $member,
-                                        $forMember,
-                                        $data['feedb_msg'],
-                                        $data['feedb_kind'],
-                                        $order,
-                                        $data['rating1'],
-                                        $data['rating2'],
-                                        $data['rating3']
-                                  );
-                    $response['isSuccess'] = (bool)$result;
-                }
+        if($this->input->post('order_id') 
+            && $this->input->post('feedback-field') 
+            && $this->form_validation->run('add_feedback_transaction')){
+            $member = $this->esMemberRepo->find($this->session->userdata('member_id'));
+            $forMember = $this->esMemberRepo->find($this->input->post('for_memberid'));
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                              ->find($this->input->post('order_id'));
+                
+            if($member && $forMember && $order){
+                $response = $this->serviceContainer['feedback_transaction_service']
+                                 ->createTransactionFeedback(
+                                    $member,
+                                    $forMember,
+                                    $this->input->post('feedback-field'),
+                                    $this->input->post('feedb_kind'),
+                                    $order,
+                                    $this->input->post('rating1'),
+                                    $this->input->post('rating2'),
+                                    $this->input->post('rating3')
+                                );
             }
             else{
-                $response['error'] = reset($formErrorHelper->getFormErrors($form))[0];
+                $response['error'] = 'Writing feedback not available.';
             }
         }
         else{

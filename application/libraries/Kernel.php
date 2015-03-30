@@ -602,7 +602,11 @@ class Kernel
         $container['feedback_transaction_service'] = function ($c) use ($container) {
             return new \EasyShop\Review\FeedbackTransactionService(
                 $container['entity_manager'],
-                $container['point_tracker']
+                $container['point_tracker'],
+                $container['form_validation'],
+                $container['form_factory'],
+                $container['form_error_helper'],
+                $container['transaction_manager']
             );
         };
 

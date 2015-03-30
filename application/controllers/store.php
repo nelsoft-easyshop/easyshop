@@ -669,46 +669,26 @@ class Store extends MY_Controller
         $message = $this->input->post('feedback-message');
                 
         if($reviewer && $reviewee && $orderToReview && strlen($message) > 0 && $areAllRatingsSet){
-        
-            $formValidation = $this->serviceContainer['form_validation'];
-            $formFactory = $this->serviceContainer['form_factory'];
-            $formErrorHelper = $this->serviceContainer['form_error_helper'];
-            $rules = $formValidation->getRules('user_feedback');
-            $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                                     ->setMethod('POST');                    
-            $formBuild->add('message', 'text', ['constraints' => $rules['message']]);
-            $formBuild->add('rating1', 'text', ['constraints' => $rules['rating']]);
-            $formBuild->add('rating2', 'text', ['constraints' => $rules['rating']]);
-            $formBuild->add('rating3', 'text', ['constraints' => $rules['rating']]);
-            $formData["message"] =  $message;
-            $formData["rating1"] =  $rating1;
-            $formData["rating2"] =  $rating2;
-            $formData["rating3"] =  $rating3;
-            $form = $formBuild->getForm();
-            $form->submit($formData); 
-
-            if($form->isValid()){
-                $feedbackType = false;
-                if($reviewer->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
-                    $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_BUYER;
-                }
-                else if($reviewee->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
-                    $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_SELLER;
-                }
-                if($feedbackType !== false){
-                    $this->serviceContainer['feedback_transaction_service']
-                         ->createTransactionFeedback(
-                            $reviewer,
-                            $reviewee,
-                            $message,
-                            $feedbackType,
-                            $orderToReview,
-                            $rating1,
-                            $rating2,
-                            $rating3
-                         );
-                }
+            $feedbackType = false;
+            if($reviewer->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
+                $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_BUYER;
             }
+            else if($reviewee->getIdMember() === $orderToReview->getBuyer()->getIdMember()){
+                $feedbackType = EasyShop\Entities\EsMemberFeedback::REVIEWER_AS_SELLER;
+            }
+            if($feedbackType !== false){
+                $this->serviceContainer['feedback_transaction_service']
+                     ->createTransactionFeedback(
+                        $reviewer,
+                        $reviewee,
+                        $message,
+                        $feedbackType,
+                        $orderToReview,
+                        $rating1,
+                        $rating2,
+                        $rating3
+                     );
+            } 
             redirect('/'.$reviewee->getSlug().'/about'); 
         }
         redirect('/');
