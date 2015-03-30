@@ -186,48 +186,40 @@ class Home extends MY_Controller
     }
     
     
-      
     /**
-     * Renders how-to-buy infographic
-     *
-     * @return View
+     * Redirect old how-to-page buyer to new page: SEO purposes
      */
-    public function guide_buy()
+    public function guide_buyer_old()
     {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'How to buy | Easyshop.ph',
-            'metadescription' => 'Learn how to purchase at Easyshop.ph',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData['facebook'] = $socialMediaLinks["facebook"];
-        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/how-to-buy', $bodyData);
+        redirect('/how-to-buy', 'location', 301);
     }
     
-    
     /**
-     * Renders how-to-sell infographic
+     * Redirect old how-to-page seller to new page: SEO purposes
+     */
+    public function guide_seller_old()
+    {
+        redirect('/how-to-sell', 'location', 301);
+    }
+
+    /**
+     * Renders how-to-page buyer
      *
      * @return View
      */
-    public function guide_sell()
+    public function guide_buyer()
     {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'How to sell | Easyshop.ph',
-            'metadescription' => 'Learn how to sell your items at Easyshop.ph',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData['facebook'] = $socialMediaLinks["facebook"];
-        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/how-to-sell', $bodyData);
+        $this->load->view('pages/web/how-to-buy');
+    }
+    
+    /**
+     * Renders how-to-page seller
+     *
+     * @return View
+     */
+    public function guide_seller()
+    {
+        $this->load->view('pages/web/how-to-sell');
     }
         
     /**

@@ -108,10 +108,10 @@
             <?php endif; ?>       
         <?php endforeach; ?>
 
-        <div class="step3_header_title res_wrapper">
+        <div class="container step3_header_title">
             <h2 class="f24">Optional</h2>
         </div>
-        <div class="res_wrapper">
+        <div class="container">
             <div class="paid_section_container table-bordered">
                 <div class="col-xs-12 bg-cl-e5e5e5">
                     <h5>How am I going to be paid</h5> 
@@ -337,11 +337,11 @@
                                 <div class="attr_cont_css">
                                     <label class="<?php echo (in_array($attrkey,$shiparr['attr']) && $shipping_summary['has_shippingsummary']) || !$shipping_summary['has_shippingsummary'] ? 'active':'' ?>">
                                         <input class="shipattr" type="checkbox" name="shipattr[<?php echo $sgCounter?>][]" value="<?php echo $attrkey?>" <?php echo (in_array($attrkey,$shiparr['attr']) && $shipping_summary['has_shippingsummary']) || !$shipping_summary['has_shippingsummary'] ? 'checked':'' ?> >
-                                        
-                                            <?php foreach($temp as $pattr):?>
-                                            <span style="margin-right: 3px;"><?php echo $pattr['name'] . ' : ' . $pattr['value']?></span>
-                                            <?php endforeach;?>
-                                        </label>
+                                        <?php foreach($temp as $keyAttr => $pattr):?>
+                                            <?php $borderStyle = count($temp) - 1 === $keyAttr ? 'border-right:none'  : ''; ?>
+                                            <span style="<?=$borderStyle ?>"><?=html_escape($pattr['name']) . ' : ' . html_escape($pattr['value']);?></span>
+                                        <?php endforeach; ?>
+                                    </label>
                                     <br/>
                                 </div>
                                 <?php endforeach;?>

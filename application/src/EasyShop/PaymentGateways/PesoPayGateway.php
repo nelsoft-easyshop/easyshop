@@ -19,6 +19,9 @@ class PesoPayGateWay extends AbstractGateway
 {
     private $merchantId;
     private $redirectUrl;
+    private $secureHash;
+    private $payType;
+    private $currencyCode;
 
     const SUCCESS_CODE = 0;
 
@@ -39,6 +42,9 @@ class PesoPayGateWay extends AbstractGateway
         $config = $configLoad['payment_type']['pesopay']['Easyshop'];
         $this->merchantId = $config['merchant_id'];
         $this->redirectUrl = $config['redirect_url'];
+        $this->secureHash = $config['secure_hash'];
+        $this->payType = $config['payment_type'];
+        $this->currencyCode = $config['currency_code'];
     }
 
     /**
@@ -146,6 +152,8 @@ class PesoPayGateWay extends AbstractGateway
                 $this->em->flush();
             }
 
+            $secureHash = $this->generateSecureHash($txnid, $grandTotal);
+
             return [
                 'error' => false,
                 'message' => '',
@@ -153,6 +161,9 @@ class PesoPayGateWay extends AbstractGateway
                 'amount' => $grandTotal,
                 'orderRef' => $txnid,
                 'redirectUrl' => $this->redirectUrl,
+                'secureHash' => $secureHash,
+                'currCode' => $this->currencyCode,
+                'payType' => $this->payType,
             ];
         }
     }
@@ -199,7 +210,7 @@ class PesoPayGateWay extends AbstractGateway
     public function postBackMethod($params)
     {
         $txnId = $params['txnId'];
-        $successCode = $params['successCode'];
+        $successCode = $params['successcode'];
         $paymentType = EsPaymentMethod::PAYMENT_PESOPAYCC;
         $this->setParameter('paymentType', $paymentType);
 
@@ -209,61 +220,107 @@ class PesoPayGateWay extends AbstractGateway
                                'paymentMethod' => $paymentType
                            ]);
 
-        if($order){
-            $orderId = $order->getIdOrder();
-            $memberId = $order->getBuyer()->getIdMember();
-            $itemList = json_decode($order->getDataResponse(), true);
-            $postBackCount = $order->getPostbackcount();
+        if($this->validateSecureHash($params)){
+            if($order){
+                $orderId = $order->getIdOrder();
+                $memberId = $order->getBuyer()->getIdMember();
+                $itemList = json_decode($order->getDataResponse(), true);
+                $postBackCount = $order->getPostbackcount();
 
-            // get address Id
-            $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                                ->getShippingAddress((int)$memberId);
+                // get address Id
+                $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                                    ->getShippingAddress((int)$memberId);
 
-            // Compute shipping fee
-            $prepareData = $this->paymentService
-                                ->computeFeeAndParseData(
-                                    $itemList,
-                                    (int)$address
-                                );
-            $itemList = $prepareData['newItemList'];
-            $toBeLocked = $prepareData['toBeLocked'];
-            $successCode = (int)trim($successCode);
-            if($successCode === self::SUCCESS_CODE){ 
-                foreach ($itemList as $item){
-                    $itemComplete = $this->paymentService
-                                         ->productManager
-                                         ->deductProductQuantity(
-                                             $item['id'],
-                                             $item['product_itemID'],
-                                             $item['qty']
-                                         );
-                    $this->paymentService->productManager
-                                         ->updateSoldoutStatus($item['id']);
+                // Compute shipping fee
+                $prepareData = $this->paymentService
+                                    ->computeFeeAndParseData(
+                                        $itemList,
+                                        (int)$address
+                                    );
+                $itemList = $prepareData['newItemList'];
+                $toBeLocked = $prepareData['toBeLocked'];
+                $successCode = (int)trim($successCode);
+                if($successCode === self::SUCCESS_CODE){ 
+                    foreach ($itemList as $item){
+                        $itemComplete = $this->paymentService
+                                             ->productManager
+                                             ->deductProductQuantity(
+                                                 $item['id'],
+                                                 $item['product_itemID'],
+                                                 $item['qty']
+                                             );
+                        $this->paymentService->productManager
+                                             ->updateSoldoutStatus($item['id']);
+                    }
+                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                             ->deleteLockItem($orderId, $toBeLocked); 
+                    $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                         ->updatePaymentIfComplete(
+                                                $orderId,
+                                                json_encode($itemList),
+                                                $txnId,
+                                                $paymentType,
+                                                EsOrderStatus::STATUS_PAID
+                                            );
+                    $this->paymentService->sendPaymentNotification($orderId);
                 }
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($orderId, $toBeLocked); 
-                $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                     ->updatePaymentIfComplete(
-                                            $orderId,
-                                            json_encode($itemList),
-                                            $txnId,
-                                            $paymentType,
-                                            EsOrderStatus::STATUS_PAID
-                                        );
-                $this->paymentService->sendPaymentNotification($orderId);
-            }
-            else{
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($orderId, $toBeLocked);
-                $orderHistory = [
-                    'order_id' => $orderId,
-                    'order_status' => EsOrderStatus::STATUS_VOID,
-                    'comment' => 'Pesopay transaction failed: ' . $message
-                ];
-                $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
-                         ->addOrderHistory($orderHistory);
+                else{
+                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                             ->deleteLockItem($orderId, $toBeLocked);
+                    $orderHistory = [
+                        'order_id' => $orderId,
+                        'order_status' => EsOrderStatus::STATUS_VOID,
+                        'comment' => 'Pesopay transaction failed: ' . $message
+                    ];
+                    $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
+                             ->addOrderHistory($orderHistory);
+                }
             }
         }
+    }
+
+    /**
+     * Validate secure hash passed by pesopay
+     * @param  mixed $parameters
+     * @return boolean
+     */
+    private function validateSecureHash($parameters)
+    {
+        $dataCollection = [
+            $parameters['src'],
+            $parameters['prc'],
+            $parameters['successcode'],
+            $parameters['Ref'],
+            $parameters['PayRef'],
+            $parameters['Cur'],
+            $parameters['Amt'],
+            $parameters['payerAuth'],
+            $this->secureHash
+        ];
+
+        $generatedHash = (string) sha1(implode('|', $dataCollection));
+
+        return (string) $parameters['secureHash'] === $generatedHash;
+    }
+
+    /**
+     * generate secure hash
+     * @param  string  $referenceNumber 
+     * @param  integer $amount 
+     * @return string
+     */
+    private function generateSecureHash($referenceNumber, $amount)
+    {
+        $dataCollection = [
+            $this->merchantId,
+            $referenceNumber,
+            $this->currencyCode,
+            $amount,
+            $this->payType,
+            $this->secureHash,
+        ];
+
+        return sha1(implode('|', $dataCollection));
     }
 
     /**
@@ -272,7 +329,7 @@ class PesoPayGateWay extends AbstractGateway
      */
     public function getExternalCharge()
     {
-        $transactionFee = bcadd("6.00", bcmul("0.005", $this->getParameter('amount'), 4), 4);
+        $transactionFee = bcadd("6.00", bcmul("0.0375", $this->getParameter('amount'), 4), 4);
         $vat = bcmul($transactionFee, "0.12", 4);
 
         return bcadd($transactionFee, $vat, 4);

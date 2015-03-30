@@ -31,11 +31,26 @@
                         <p class="p-detail-title">Product Detail</p>
                         <div class="p-html-description">
                             <div class="external-links-container">
-                                <?=$productDetails; ?>
+                                <?=nl2br($productDetails); ?>
                                 <?php foreach ($additionalInformation as $value): ?>
-                                    <?=$value; ?>
+                                    <?=html_escape($value); ?>
                                     <br>
                                 <?php endforeach; ?>
+                                <?php if($product->getCondition() !== ""): ?>
+                                    Condition: <?=html_escape($product->getCondition()); ?>
+                                    <br>
+                                <?php endif; ?>
+                                <?php if($product->getBrief() !== ""): ?>
+                                    Brief Description: <?=html_escape($product->getBrief()); ?>
+                                    <br>
+                                <?php endif; ?>
+                                <?php if($product->getBrand()->getName() !== ""): ?>
+                                    Brand: <?=html_escape($product->getBrand()->getName()); ?>
+                                    <br>
+                                <?php endif; ?>
+                                <?php if($product->getSku() !== ""): ?>
+                                    SKU: <?=html_escape($product->getSku()); ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="clear"></div>

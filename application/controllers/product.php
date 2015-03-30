@@ -279,7 +279,8 @@ class product extends MY_Controller
                     'productAttributes' => $productAttributes,
                     'productReview' => $productReviews,
                     'canReview' => $canReview,
-                    'additionalInformation' => $additionalInformation
+                    'additionalInformation' => $additionalInformation,
+                    'product' => $product,
                 ];
                 $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
                 $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);

@@ -2304,6 +2304,12 @@
     });
     
     $('.payment-account-container').on('click', '.delete-account-btn', function(){
+        
+        var isConfirmed = confirm('Are you sure you would like to delete this payment account?');
+        if(isConfirmed === false){
+            return false;
+        }
+        
         var button = $(this);
         var paymentAccountId = button.parent().siblings('.payment-account-id').val();
         var csrftoken = $("meta[name='csrf-token']").attr('content'); 
