@@ -111,7 +111,7 @@
                                 <select id="shipping-state" class="stateregionselect form-es-control form-es-control-block" disabled>
                                     <option value="0">--- Select State ---</option> 
                                     <?php foreach($locations['stateRegionLookup'] as $srkey => $stateregion):?>
-                                        <option class="echo" value="<?=$srkey?>" <?=(int)$stateRegion !== (int)$srkey ?: 'selected';?> >
+                                        <option class="echo" value="<?=$srkey?>" <?=(int)$stateRegion === (int)$srkey ? 'selected' : '';?> >
                                             <?=$stateregion?> 
                                         </option>
                                     <?php endforeach;?>
@@ -128,7 +128,7 @@
                                     <option value="0">--- Select City ---</option> 
                                     <?php foreach($locations['cityLookup'] as $parentkey => $arr):?>
                                         <?php foreach($arr as $lockey => $city):?>
-                                            <option class="echo" value="<?=$lockey?>" data-parent="<?=$parentkey?>" <?=(int)$city !== (int)$lockey ?: 'selected';?>>
+                                            <option class="echo" value="<?=$lockey?>" data-parent="<?=$parentkey?>" <?=(int)$city === (int)$lockey ? 'selected' : '';?>>
                                                 <?=$city?>
                                             </option>
                                         <?php endforeach;?>
