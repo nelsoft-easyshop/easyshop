@@ -9,7 +9,7 @@
         <title>Easyshop.ph | How to Sell</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
             <link type="text/css" href="/assets/css/how-to-page.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
         <?php else: ?>
