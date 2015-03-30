@@ -9,7 +9,7 @@
         <title>Easyshop.ph | How to Sell</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
             <link type="text/css" href="/assets/css/how-to-page.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
         <?php else: ?>
@@ -44,13 +44,13 @@
 
                     <div class="nav-collapse collapse" id="navigation">
                         <ul class="nav">
-                            <li class="active"><a href="guide/sell">How to Sell</a></li>
+                            <li class="active"><a href="how-to-sell">How to Sell</a></li>
                             <li class="logo">
                                 <a href="/">
                                     <img src="<?php echo getAssetsDomain(); ?>assets/images/how-to-page/logo.png" alt="Online Shopping">
                                 </a>
                             </li>
-                            <li><a href="/guide/buy">How to Buy</a></li>
+                            <li><a href="/how-to-buy">How to Buy</a></li>
                         </ul>
                     </div>
                 </div>

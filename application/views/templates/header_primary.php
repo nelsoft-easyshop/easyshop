@@ -82,8 +82,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <div class="col-xs-6 col-sm-6 col-md-6 top-header-left">
                     <ul id="top-links" class="clearfix">
                         <li><a href="/sell/step1" title="Sell an item"><i class="icon-item"></i><span class="hide-for-xs">sell an item</span></a></li>
-                        <li><a href="/guide/sell" title="Learn how to sell your items"><i class="icon-how-to-sell"></i><span class="hide-for-xs">how to sell</span></a></li>
-                        <li><a href="/guide/buy" title="Learn how to make a purchase"><i class="icon-how-to-shop"></i><span class="hide-for-xs">how to shop</span></a></li>
+                        <li><a href="/how-to-sell" title="Learn how to sell your items"><i class="icon-how-to-sell"></i><span class="hide-for-xs">how to sell</span></a></li>
+                        <li><a href="/how-to-buy" title="Learn how to make a purchase"><i class="icon-how-to-shop"></i><span class="hide-for-xs">how to shop</span></a></li>
                     </ul>
                 </div><!-- End .header-top-left -->
                 <div class="col-xs-6 col-sm-6 col-md-6 top-header-right">

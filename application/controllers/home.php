@@ -184,6 +184,23 @@ class Home extends MY_Controller
         $this->load->view('pages/web/contact');
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
+    
+    
+    /**
+     * Redirect old how-to-page buyer to new page: SEO purposes
+     */
+    public function guide_buyer_old()
+    {
+        redirect('/how-to-buy', 'location', 301);
+    }
+    
+    /**
+     * Redirect old how-to-page seller to new page: SEO purposes
+     */
+    public function guide_seller_old()
+    {
+        redirect('/how-to-sell', 'location', 301);
+    }
 
     /**
      * Renders how-to-page buyer
