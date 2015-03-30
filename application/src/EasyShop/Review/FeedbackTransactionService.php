@@ -3,6 +3,7 @@
 namespace EasyShop\Review;
 
 use EasyShop\Entities\EsPointType as EsPointType;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 
 /**
  * Search Product Class
@@ -10,7 +11,6 @@ use EasyShop\Entities\EsPointType as EsPointType;
  */
 class FeedbackTransactionService
 {
-
     /**
      * Entity Manager instance
      *
@@ -49,14 +49,16 @@ class FeedbackTransactionService
 
     /**
      * Constructor. Retrieves Entity Manager instance
-     * 
+     *
      */
-    public function __construct($em, 
-                                $pointTracker, 
-                                $formValidation,
-                                $formFactory,
-                                $formErrorHelper,
-                                $transactionManager)
+    public function __construct(
+        $em,
+        $pointTracker,
+        $formValidation,
+        $formFactory,
+        $formErrorHelper,
+        $transactionManager
+    )
     {
         $this->em = $em;
         $this->pointTracker = $pointTracker;
@@ -78,27 +80,29 @@ class FeedbackTransactionService
      * @param  integer                   $rating3
      * @return EasyShop\Entites\EsMemberFeedback
      */
-    public function createTransactionFeedback($member,
-                                              $forMember, 
-                                              $feedbackMessage, 
-                                              $feedbackKind, 
-                                              $order, 
-                                              $rating1, 
-                                              $rating2, 
-                                              $rating3)
+    public function createTransactionFeedback(
+        $member,
+        $forMember,
+        $feedbackMessage,
+        $feedbackKind,
+        $order,
+        $rating1,
+        $rating2,
+        $rating3
+    )
     {
         $message = "";
         $isSuccess = false;
         $esMemberFeedbackRepo = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback');
 
-        if ( !(bool) $feedbackKind) {
+        if (!(bool)$feedbackKind) {
             $transacData = [
                 'buyer' => $member->getIdMember(),
                 'seller' => $forMember->getIdMember(),
                 'order_id' => $order->getIdOrder()
             ];
         }
-        else if ( (bool) $feedbackKind) {
+        else if ((bool)$feedbackKind) {
             $transacData = [
                 'buyer' => $forMember->getIdMember(),
                 'seller' => $member->getIdMember(),
@@ -119,7 +123,7 @@ class FeedbackTransactionService
         $formData["rating3"] = $rating3;
         $form = $formBuild->getForm();
         $form->submit($formData);
-        if($form->isValid()){
+        if ($form->isValid()) {
             $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
             if ($doesTransactionExists) {
                 $doesFeedbackExists = $esMemberFeedbackRepo->findOneBy([
@@ -129,32 +133,34 @@ class FeedbackTransactionService
                     'order' => $order
                 ]);
 
-                if($doesFeedbackExists === null){
+                if ($doesFeedbackExists === null) {
                     $newFeedback = $esMemberFeedbackRepo->addFeedback(
                         $member,
-                        $forMember, 
-                        $feedbackMessage, 
-                        $feedbackKind, 
-                        $order, 
-                        $rating1, 
-                        $rating2, 
+                        $forMember,
+                        $feedbackMessage,
+                        $feedbackKind,
+                        $order,
+                        $rating1,
+                        $rating2,
                         $rating3
                     );
 
-                    $this->pointTracker
-                         ->addUserPoint($member->getIdMember(), EsPointType::TYPE_TRANSACTION_FEEDBACK);
+                    if ($order->getPaymentMethod()->getIdPaymentMethod() !== EsPaymentMethod::PAYMENT_CASHONDELIVERY) {
+                        $this->pointTracker
+                             ->addUserPoint($member->getIdMember(), EsPointType::TYPE_TRANSACTION_FEEDBACK);
+                    }
 
                     $isSuccess = true;
                 }
-                else{
+                else {
                     $message = "You already write feedback to this order.";
                 }
             }
-            else{
+            else {
                 $message = "Transaction not exist";
             }
         }
-        else{
+        else {
             $message = reset($this->formErrorHelper->getFormErrors($form))[0];
         }
 
@@ -163,7 +169,4 @@ class FeedbackTransactionService
             'error' => $message,
         ];
     }
-
- 
 }
-
