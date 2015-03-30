@@ -27,25 +27,32 @@ $(function(){
     });
 
     $('#tabs').tabs();
-    
-    $('#delivery').on('click',function(){
-        var freeShippingBtn = $('#set_free_shipping');
-        var shippingDetailsBtn = $('#set_shipping_details');
-        
-        if($(this).is(':checked')){
-            $('#delivery_options').slideDown();
-            $('#prod_delivery_cost').val('free');
-        }else{
+
+    $(".radio-select").on('click',function(){
+        var $this = $(this);
+        var $value = $this.val();
+        var $freeShippingBtn = $('#set_free_shipping');
+        var $shippingDetailsBtn = $('#set_shipping_details');
+
+        if($value == "meetup"){ 
             $('#delivery_options').slideUp();
             $('#prod_delivery_cost').val('off');
+            $('#shipping_div').hide();
+            $freeShippingBtn.addClass('active');
+            $shippingDetailsBtn.removeClass('active');
         }
-
-        if(!freeShippingBtn.hasClass('active')){
-            freeShippingBtn.addClass('active');
-        }
-        shippingDetailsBtn.removeClass('active');
-        $('#shipping_div').hide();
-    });
+        else{
+            $('#delivery_options').slideDown();
+            $('#prod_delivery_cost').val('free');
+            if(!$freeShippingBtn.hasClass('active')){
+                $freeShippingBtn.addClass('active');
+            }
+            else{
+                $shippingDetailsBtn.removeClass('active');
+                $('#shipping_div').hide();
+            }
+        } 
+    }); 
     
     $('.delivery_cost').on('click',function(){
         var shippingDiv = $('#shipping_div');
