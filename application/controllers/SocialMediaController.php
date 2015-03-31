@@ -379,64 +379,6 @@ class SocialMediaController extends MY_Controller
     }
 
     /**
-     * Render page to ask for email address
-     *
-     */
-    public function askEmail()
-    {
-        
-        $hashUtility = $this->serviceContainer['hash_utility'];
-        $inputHash = $this->input->get('h');
-        $getData = $hashUtility->decode($inputHash);
-        
-        if( $getData['socialMediaUsername'] && $getData['socialMediaProvider'] ){
-            $socialMediaProvider = $this->entityManager
-                                        ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
-                                        ->find($getData['socialMediaProvider']);
-            if($socialMediaProvider){
-                $headerData = [
-                    "memberId" => $this->session->userdata('member_id'),
-                    'title' => 'Your Online Shopping Store in the Philippines | Easyshop.ph',
-                ];
-                $data = [
-                    'name' => $getData['socialMediaUsername'],
-                    'hash' => $inputHash,
-                ];
-                $this->load->spark('decorator');    
-                $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
-                $this->load->view('pages/user/social-media-ask-email', $data);
-                $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
-            }
-            else{
-                redirect('/login');
-            }
-        }
-        else{
-            redirect('/login');
-        }       
-    }
-    
-    /**
-     * Register user with hash
-     *
-     */
-    public function registerSocialMediaAccountWithEmail()
-    {
-        if($this->input->post('email') && $this->input->post('hash')){
-            $email = $this->input->post('email');
-            $hash = $this->input->post('hash');
-            $member = $this->serviceContainer['entity_manager']
-                           ->getRepository('EasyShop\Entities\EsMember')
-                           ->findOneBy(['email' => $email]);
-            if($member === null){
-                redirect('/SocialMediaController/askEmail?h=' . $hash.'&error=true', 'refresh');
-            }
-            
-        }
-    }
-    
-    
-    /**
      * Check if email exists
      * @param email
      * @return boolean
