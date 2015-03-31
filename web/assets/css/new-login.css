@@ -22,6 +22,33 @@ strong > a{
     color: #ff893a;
 }
 
+.ask-email-section{
+    height: 220px;
+}
+
+.email-error-dialog-container{
+    float: none;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.margin-top-50{
+    margin-top: 50px;
+}
+
+
+.margin-top-10{
+    margin-top: 10px;
+}
+
+.margin-bottom-10{
+    margin-bottom: 10px;
+}
+
+.email-label{
+    cursor: pointer;
+}
+
 #basic-modal-content,
 #basic-modal-content-proceed,
 #basic-modal-content-back{
