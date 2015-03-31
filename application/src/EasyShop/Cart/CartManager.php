@@ -418,7 +418,7 @@ class CartManager
             $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                            ->getParentLocation($cityLocation); 
             $regionLocation = $region->getIdLocation(); 
-            $islandId = $region->getParent()->getParent()->getIdLocation(); 
+            $islandId = $region->getParent()->getIdLocation(); 
             $cartContents = $this->getValidatedCartContents($memberId);
             $totalFee = 0;
             foreach ($cartContents as $item) {
