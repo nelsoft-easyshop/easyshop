@@ -172,21 +172,34 @@ class SearchProduct
      * @param  integer $minPrice 
      * @param  integer $maxPrice
      * @param  array   $productIds
+     * @param  string  $sortType
      * @return array
      */
-    public function filterProductByPrice($minPrice = 0,$maxPrice = 0,$productIds = [])
+    public function filterProductByPrice($minPrice = 0,$maxPrice = 0,$productIds = [], $sortType = "")
     {
         $promoManager = $this->promoManager;
         $minPrice = (is_numeric($minPrice)) ? $minPrice : 0;
         $maxPrice = (is_numeric($maxPrice)) ? $maxPrice : PHP_INT_MAX;
-        $productIdsReturn = []; 
+        $productIdsReturn = [];
+        $productIdsWithPrice = [];
 
         foreach ($productIds as $productId) {
             $promoPrice = $promoManager->hydratePromoDataExpress($productId);
             $price = round(floatval($promoPrice),2);
             if($price >= $minPrice && $price <= $maxPrice){ 
                 $productIdsReturn[] = $productId;
+                $productIdsWithPrice[$productId] = $price;
             } 
+        }
+
+        if($sortType !== ""){
+            if(strtoupper($sortType) === "DESC"){
+                arsort($productIdsWithPrice);
+            }
+            else{ 
+                asort($productIdsWithPrice);
+            }
+            $productIdsReturn = array_keys($productIdsWithPrice);
         }
 
         return $productIdsReturn; 
@@ -351,8 +364,19 @@ class SearchProduct
         $productIds = $originalOrder = $queryString?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
         $productIds = $queryString && empty($productIds) ? [] : $productIds;
         $originalOrder = $sortBy ? $sortOrder : $originalOrder;
+        $finalizedProductIds = $productIds;
+        if($startPrice || $endPrice || strtolower($sortBy) === "price"){
+            $sortType = "";
+            if(strtolower($sortBy) === "price"){
+                $sortType = "ASC";
+                if(isset($parameters['sorttype']) && strtoupper($parameters['sorttype']) === "DESC"){
+                    $sortType = "DESC";
+                }
+            }
+            $finalizedProductIds = $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds, $sortType);
+            $originalOrder = strtolower($sortBy) === "price" ? $finalizedProductIds : $originalOrder;
+        }
 
-        $finalizedProductIds =  ($startPrice || $endPrice) ? $searchProductService->filterProductByPrice($startPrice, $endPrice, $productIds) : $productIds;
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
         $finalizedProductIds = $this->sortResultByTopic($finalizedProductIds,$queryString);
         $totalCount = count($finalizedProductIds);
