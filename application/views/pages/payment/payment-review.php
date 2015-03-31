@@ -524,7 +524,7 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" class="privacy-check" checked="">
-                                I acknowledge I have read and understood <a href="#">Easyshop.ph's  Privacy Policy</a>.
+                                I acknowledge I have read and understood <a href="/policy" target="_blank">Easyshop.ph's  Privacy Policy</a>.
                             </label>
                         </div>
                         <br/>
