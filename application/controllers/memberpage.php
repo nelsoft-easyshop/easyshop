@@ -606,8 +606,8 @@ class Memberpage extends MY_Controller
     {
 
         if($this->input->post('c_deliver_address_btn')) {
-            $userMgr = $this->serviceContainer['user_manager'];
-            $result = $userMgr->setAddress(
+            $userManager = $this->serviceContainer['user_manager'];
+            $result = $userManager->setAddress(
                     $this->input->post('c_address'),
                     $this->input->post('c_stateregion'),
                     $this->input->post('c_city'),

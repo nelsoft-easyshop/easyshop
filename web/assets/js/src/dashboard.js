@@ -122,10 +122,10 @@
                     var telephone = serverResponse.address ? ( serverResponse.address.telephone !== '' ? serverResponse.address.telephone : '' ) : '';
                     var consignee = serverResponse.address ? ( serverResponse.address.consignee !== '' ? serverResponse.address.consignee : '' ) : '';
                     var consigneeAddress = serverResponse.address ? ( serverResponse.address.address !== '' ? serverResponse.address.address : '' ) : '';
-                    $("#consigneeName").val(escapeHtml(consignee));
-                    $("#consigneeMobile").val(escapeHtml(mobile));
-                    $("#consigneeLandLine").val(escapeHtml(telephone));
-                    $("#deliveryAddress").val(escapeHtml(consigneeAddress));
+                    $("#consigneeName").val(consignee);
+                    $("#consigneeMobile").val(mobile);
+                    $("#consigneeLandLine").val(telephone);
+                    $("#deliveryAddress").val(consigneeAddress);
                     var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                     var stateRegionDropDown = $("#deliver_stateregion");
                     var dropDownTemplate = "";
