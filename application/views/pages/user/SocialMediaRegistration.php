@@ -63,7 +63,9 @@
                             <button class="btn btn-block btn-orange-lg proceed">
                                 PROCEED
                             </button>
-                            <img src="<?php echo getAssetsDomain()?>assets/images/es-loader-3-sm.gif" style="display: none;">
+                            <center>
+                                <img src="<?php echo getAssetsDomain()?>assets/images/es-loader-3-sm.gif" style="display: none;">
+                            </center>
                         </div>
                     </div>
                     <div class="col-md-2 col-divider">
