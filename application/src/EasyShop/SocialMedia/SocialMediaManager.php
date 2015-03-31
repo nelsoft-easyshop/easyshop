@@ -238,7 +238,7 @@ class SocialMediaManager
         ]);
         if ($form->isValid()) {
             $defaultStoreColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
-                                           ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
+                                          ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
             $banType = $this->em->getRepository('EasyShop\Entities\EsBanType')
                                 ->find(EsBanType::NOT_BANNED);
             $member = new EsMember();

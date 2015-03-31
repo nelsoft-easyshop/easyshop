@@ -32,8 +32,7 @@ class SocialMediaController extends MY_Controller
         }
 
         $facebookType = \EasyShop\Entities\EsSocialMediaProvider::FACEBOOK;
-        $facebookData = $this->socialMediaManager->getAccount($facebookType);
-        
+        $facebookData = $this->socialMediaManager->getAccount($facebookType);        
         if($facebookData ){    
             $facebookEmail = $facebookData->getProperty('email');
             if ($facebookEmail) {
@@ -58,7 +57,7 @@ class SocialMediaController extends MY_Controller
                 else if (!$esMember && $isAccountMerged === false) {
                     $facebookUsername = $this->stringUtility->cleanString(strtolower($facebookData->getFirstName()));
                     $facebookFullname = $facebookData->getName();
-                    $gender =  $facebookData->getProperty('gender') === 'male' ? 'M' : 'F';
+                    $gender =  strtolower($facebookData->getProperty('gender')) === 'male' ? 'M' : 'F';
                     $facebookId = $facebookData->getId();
                     $data = serialize([
                         'socialMediaProvider' => $facebookType,
@@ -77,7 +76,7 @@ class SocialMediaController extends MY_Controller
                  * For users with no email address (registered using contact no)
                  */
                 $authenticationResult = $this->socialMediaManager
-                                              ->authenticateAccount($facebookData->getId(), $facebookType, null);
+                                             ->authenticateAccount($facebookData->getId(), $facebookType, null);
                 $esMember = $authenticationResult['getMember'];
                 $isAccountMerged = $authenticationResult['isAccountMerged'];
                 if($isAccountMerged !== false){
@@ -87,7 +86,7 @@ class SocialMediaController extends MY_Controller
                 else{
                     $facebookUsername = $this->stringUtility->cleanString(strtolower($facebookData->getFirstName()));
                     $facebookFullname = $facebookData->getName();
-                    $gender =  $facebookData->getProperty('gender') === 'male' ? 'M' : 'F';
+                    $gender =  strtolower($facebookData->getProperty('gender')) === 'male' ? 'M' : 'F';
                     $facebookId = $facebookData->getId();;
                     $data = serialize([
                         'socialMediaProvider' => $facebookType,
@@ -365,7 +364,7 @@ class SocialMediaController extends MY_Controller
                                                     true,
                                                     $this->input->post('id'),
                                                     $socialMediaProvider
-                                                );                     
+                                                );
             if (empty($result['errors']) && $result['member']) {
                 $this->login($result['member']);
                 $jsonResult['isSuccessful'] = true;
