@@ -72,7 +72,6 @@ jQuery(function ($) {
                     });
                 }
                 else{
-                
                     if(typeof jsonData.errors.username !== 'undefined'){
                         $(".username-denied").show()
                         $(".username-accepted").hide();
@@ -176,7 +175,5 @@ jQuery(function ($) {
         return regex.test(email);
     }
     
-    
-
-
 });
+
