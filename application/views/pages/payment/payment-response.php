@@ -173,9 +173,9 @@
                         </p>
                     <?php endif; ?>
                     <br/>
-                    <button class="btn btn-es-green btn-lg btn-block">
+                    <a href="/" class="btn btn-es-green btn-lg btn-block">
                         Continue Shopping
-                    </button>
+                    </a>
                 </div>
             </div>
             <!--End of order summary-->
