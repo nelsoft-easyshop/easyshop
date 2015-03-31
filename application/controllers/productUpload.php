@@ -1237,7 +1237,12 @@ class productUpload extends MY_Controller
                         }
                     }
                     if($resultDetail){
-                        $serverResponse['shipping_preference'] = $this->product_model->getShippingPreference($member_id);
+                        $preferences = $this->product_model->getShippingPreference($member_id)['name'];
+                        end($preferences);
+                        $arrayKey = key($preferences);
+                        $serverResponse['shipping_preference']['name'] = [
+                            $arrayKey => $preferences[$arrayKey]
+                        ]; 
                     }
                 }
             }
