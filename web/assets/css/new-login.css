@@ -384,6 +384,12 @@ strong > a{
     padding-right: 0px;
 }
 
+label.col-md-2 span{
+    margin-top: 7px;
+    display: block;
+    text-align: right;
+}
+
 .submit-email-form, .submit-password-form {
     background-color: #ff893a;
     border: none;
@@ -391,18 +397,27 @@ strong > a{
     color: #fff;
     float: none !important;
     font-weight: bold;
-    height: auto;
     text-transform: uppercase;
+    border: solid #ff893a 2px;
+}
+
+.submit-email-form{
+    margin-right: 5px;
 }
 
 .submit-email-form:hover ,
-.submit-password-form:hover {
+.submit-password-form:hover,
+.submit-email-form:active ,
+.submit-password-form:active,
+.submit-email-form:focus ,
+.submit-password-form:focus {
     background-color: #ff6237;
- }
+    color: #fff;
+    border: solid #ff6237 2px;
+}
 
 .identify-email-container{
     min-height: 330px;
-    text-align: center
 }
 
 
