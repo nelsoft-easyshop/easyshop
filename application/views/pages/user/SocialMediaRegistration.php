@@ -10,14 +10,12 @@
 <section class="section-login">
     <div class="container">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                Update your account
-            </div>
             <div class="panel-body div-merge-container">
+                <p class="panel-title-merge">Update your account</p>
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="merge-message" align="center">
-                            <i class="glyphicon glyphicon-exclamation-sign"></i> <strong>Hi <a href="javascript:void(0);"><?= html_escape($username)?></a>, welcome to EasyShop.ph! Choose a username to begin using your social media account now. <br/>If you already have an EasyShop account, you can also choose to merge these two for your convenience. </strong> 
+                        <h5 class="merge-message">
+                            Hi <a href="javascript:void(0);"><?= html_escape($username)?></a>, welcome to EasyShop.ph! Choose a username to begin using your social media account now.  If you already have an EasyShop account, you can also choose to merge these two for your convenience.
                         </h5>
                     </div>
                 </div>
@@ -28,11 +26,9 @@
                             <input type="text" class="form-control input-merge" placeholder="New username" id="txt-username"/>
                             <div class="div-validation-container auto-height">
                                 <p class="span-validation-ok username-accepted" style="display: none">
-                                    <i class="glyphicon glyphicon-ok-sign"></i>
                                     Username is available
                                 </p>
                                  <p class="span-validation-error username-denied" style="display: none">
-                                     <i class="glyphicon glyphicon-remove-sign"></i>
                                      Username is not available
                                  </p>
                                 <div class="username-restrictions">
@@ -48,26 +44,26 @@
                             </div>
                             
                             <?php if(trim($email) === ''): ?>
-                            <div class="input-group margin-bottom-10">
+                            <br/>
+                            <div class="form-group">
+                                <label class="control-label">Type in your email address</label>
                                 <input type="text" name="email" class="form-control register-new-email" placeholder="email@sample.com" aria-describedby="basic-addon2">
-                                <span class="input-group-addon email-label" id="basic-addon2" data-toggle="tooltip" data-placement="right" title="Your social media account does have an associated email address">Email Address</span>
-                            </div>
-                            <div class="div-validation-container auto-height">
-                                <p class="span-validation-ok register-new-email-accepted" style="display:none;">
-                                    <i class="glyphicon glyphicon-ok-sign"></i>
-                                    Email is available
-                                </p>
-                                <p class="span-validation-error register-new-email-denied" style="display:none;">
-                                    <i class="glyphicon glyphicon-remove-sign"></i>
-                                    Email is not available
-                                </p>
+                                <span class="merge-email-note">Your social media account does have an associated email address</span>
+                                <div class="div-validation-container auto-height">
+                                    <p class="span-validation-ok register-new-email-accepted" style="display:none;">
+                                        Email is available
+                                    </p>
+                                    <p class="span-validation-error register-new-email-denied" style="display:none;">
+                                        Email is not available
+                                    </p>
+                                </div>
                              </div>
                             <?php endif; ?>
-
+                            <br/>
                             <button class="btn btn-block btn-orange-lg proceed">
                                 PROCEED
                             </button>
-                            <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif" style="display: none">
+                            <img src="<?php echo getAssetsDomain()?>assets/images/es-loader-3-sm.gif" style="display: none;">
                         </div>
                     </div>
                     <div class="col-md-2 col-divider">
@@ -76,7 +72,7 @@
                         <div class="border-hr">
                         </div>
                         <div class="border-or">
-                            OR
+                            <span>OR</span>
                         </div>
                     </div>
                     <div class="col-md-5">
@@ -91,16 +87,16 @@
                                 </div>
                                 <div class="col-md-5 col-check-2">
                                     <button class="btn btn-default-3 btn-block check-availability" id="check-availability">Check Availability</button>
-                                    <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif" id="img-check-availability" style="display: none">
+                                    <center>
+                                        <img src="<?php echo getAssetsDomain()?>assets/images/es-loader-3-sm.gif" id="img-check-availability" style="display: none;  margin-top: 7px;">
+                                    </center>
                                 </div>
                             </div>
                             <div class="div-validation-container">
                                 <p class="span-validation-ok email-accepted" style="display: none">
-                                    <i class="glyphicon glyphicon-ok-sign"></i>
                                     E-mail address found
                                 </p>
                                  <p class="span-validation-error email-denied" style="display: none">
-                                     <i class="glyphicon glyphicon-remove-sign"></i>
                                      E-mail address not found
                                  </p>
                             </div>
@@ -144,7 +140,9 @@
                             <button class="btn btn-block btn-orange-lg send-request">
                                 SEND REQUEST
                             </button>
-                            <img src="<?php echo getAssetsDomain()?>assets/images/orange_loader.gif" id="img-send-request" style="display: none">
+                            <center>
+                                <img src="<?php echo getAssetsDomain()?>assets/images/es-loader-3-sm.gif" id="img-send-request" style="display: none;">
+                            </center>
                         </div>
                     </div>
                 </div>
