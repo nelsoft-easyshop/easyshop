@@ -37,14 +37,7 @@ class CheckoutService
      *
      * @var EasyShop\Cart\CartManager
      */
-    private $cartManager;
-
-    /**
-     * Payment Service Class
-     *
-     * @var EasyShop\PaymentService\PaymentService
-     */
-    private $paymentService;
+    private $cartManager; 
 
     /**
      * Cart Manager Class
@@ -64,13 +57,12 @@ class CheckoutService
      * Constructor. Retrieves Entity Manager instance
      * 
      */
-    public function __construct($em, $productManager, $promoManager, $cartManager, $paymentService, $shippingLocationManager, $configLoader)
+    public function __construct($em, $productManager, $promoManager, $cartManager, $shippingLocationManager, $configLoader)
     {
         $this->em = $em;
         $this->productManager = $productManager;
         $this->promoManager = $promoManager;
-        $this->cartManager = $cartManager;
-        $this->paymentService = $paymentService;
+        $this->cartManager = $cartManager; 
         $this->shippingLocationManager = $shippingLocationManager;
         $this->configLoader = $configLoader;
     }
@@ -176,7 +168,7 @@ class CheckoutService
     public function applyPaymentTypAvailable(&$cartProduct, $product)
     {   
         $memberId = $cartProduct['member_id'];
-        $paymentMethod = $this->paymentService->getUserPaymentMethod($memberId);
+        $paymentMethod = $this->getUserPaymentMethod($memberId);
 
         $cartProduct['dragonpay'] = false;
         $cartProduct['paypal'] = false; 
@@ -344,6 +336,30 @@ class CheckoutService
             'errorMessage' => array_unique($errorMessage),
             'paymentTypeError' => array_unique($paymentTypeError),
         ];
+    }
+
+    /**
+     * Get payment method type per user
+     * @param  integer $memberId
+     * @return mixed
+     */
+    public function getUserPaymentMethod($memberId)
+    {
+        $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethodUser')
+                                  ->findBy(['member'=>$memberId]);
+        
+        $paymentArray = [];
+        $paymentArray['all'] = false;
+        if($paymentMethod){
+            foreach ($paymentMethod as $key => $value) {
+                $paymentArray['payment_method'][] = $value->getPaymentMethod()->getIdPaymentMethod();
+            }
+        }
+        else{
+            $paymentArray['all'] = true;
+        }
+
+        return $paymentArray;
     }
 }
 

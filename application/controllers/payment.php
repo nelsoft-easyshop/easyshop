@@ -88,8 +88,8 @@ class Payment extends MY_Controller
 
                 if(count($details) > 0){
 
-                    $paymentService = $this->serviceContainer['payment_service'];
-                    $paymentMethod = $paymentService->getUserPaymentMethod($value['member_id']);
+                    $checkoutService = $this->serviceContainer['checkout_service'];
+                    $paymentMethod = $checkoutService->getUserPaymentMethod($value['member_id']);
 
                     $itemArray[$value['rowid']]['dragonpay'] = FALSE;
                     $itemArray[$value['rowid']]['paypal'] = FALSE; 

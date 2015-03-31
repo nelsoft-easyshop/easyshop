@@ -641,8 +641,7 @@ class Kernel
                             $container['entity_manager'],
                             $container['product_manager'],
                             $container['promo_manager'],
-                            $container['cart_manager'],
-                            $container['payment_service'],
+                            $container['cart_manager'], 
                             $container['product_shipping_location_manager'],
                             $container['config_loader']
                         );
