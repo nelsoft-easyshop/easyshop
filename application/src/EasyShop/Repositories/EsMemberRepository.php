@@ -103,26 +103,29 @@ class EsMemberRepository extends EntityRepository
      */
     public function getUserWithStoreNameOrUsername($name, $excludeMemberId = null)
     {
-        $em = $this->_em;
+        if((string) trim($name) !== ""){
+            $em = $this->_em;
+            $qb = $em->createQueryBuilder();
+            $qb->select('em')
+                ->from('EasyShop\Entities\EsMember','em')
+                ->where('em.storeName = :storeName')
+                ->orWhere('em.username = :userName');
 
-        $qb = $em->createQueryBuilder();
-        $qb->select('em')
-            ->from('EasyShop\Entities\EsMember','em')
-            ->where('em.storeName = :storeName')
-            ->orWhere('em.username = :userName');
+            if($excludeMemberId !== null){
+                $qb->andWhere('em.idMember != :memberId')
+                   ->setParameter('memberId',$excludeMemberId);
+            }
+          
+            $query = $qb->setParameter('storeName',$name)
+                        ->setParameter('userName',$name)
+                        ->setMaxResults(1)
+                        ->getQuery();
+            $result = $query->getResult();
 
-        if($excludeMemberId !== null){
-            $qb->andWhere('em.idMember != :memberId')
-               ->setParameter('memberId',$excludeMemberId);
+            return $result ? $result[0] : null;
         }
-      
-        $query = $qb->setParameter('storeName',$name)
-                    ->setParameter('userName',$name)
-                    ->setMaxResults(1)
-                    ->getQuery();
-        $result = $query->getResult();
 
-        return $result ? $result[0] : null;
+        return null;
     }
     
     
