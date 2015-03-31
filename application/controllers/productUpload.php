@@ -1451,14 +1451,15 @@ class productUpload extends MY_Controller
 
         $memberId = $this->session->userdata('member_id');
         $deliveryOption = $this->input->post('delivery_option') 
-                          ? $this->input->post('delivery_option') : [];
+                          ? (string) trim($this->input->post('delivery_option')) 
+                          : "meetup";
         $shipWithinDays = trim($this->input->post('ship_within')) !== ""
                           ? trim($this->input->post('ship_within'))
                           : null;
         $productId = (int) $this->input->post('prod_h_id');
-        $isAllowCod = $this->input->post('allow_cod') ? true : false;
-        $isMeetup = in_array("meetup", $deliveryOption);
-        $isDelivery = in_array("delivery", $deliveryOption);
+        $isAllowCod = (bool) $this->input->post('allow_cod'); 
+        $isMeetup = $deliveryOption === "meetup";
+        $isDelivery = $isMeetup === false;
         $deliveryCost = trim($this->input->post('prod_delivery_cost'));
         $shipPrice = $this->input->post('shipprice');
         $shipLoc = $this->input->post('shiploc');
@@ -1478,79 +1479,87 @@ class productUpload extends MY_Controller
                        ]);
             if($product){
                 if($isMeetup || $isDelivery){
-
                     $defaultPaymentAccount = $esBillingInfoRepo->getDefaultAccount($memberId);
                     $billingId = $defaultPaymentAccount ? $defaultPaymentAccount->getIdBillingInfo() : 0;                    
                     $productShippingManager->deleteProductShippingInfo($productId);
                     $isCanContinue = true;
-                    if($isDelivery){
-                        $productItems = $esProductItemRepo->findBy(['product' => $productId]);
-                        foreach ($productItems as $item) {
-                            $productItemIds[] = $item->getIdProductItem();
-                        }
-
-                        if( $deliveryCost === "free" ){
-                            $location = $esLookupRepo->find(EsLocationLookup::PHILIPPINES_LOCATION_ID);
-                            foreach( $productItemIds as $itemIds ){
-                                $shippingHead = new EsProductShippingHead();
-                                $shippingHead->setLocation($location);
-                                $shippingHead->setPrice(0);
-                                $shippingHead->setProduct($product);
-                                $this->em->persist($shippingHead);
-
-                                $productItem = $esProductItemRepo->find($itemIds);
-
-                                $shippingDetails = new EsProductShippingDetail();
-                                $shippingDetails->setShipping($shippingHead);
-                                $shippingDetails->setProductItem($productItem);
-                                $this->em->persist($shippingDetails);
+                    if($isMeetup === false){
+                        if($isDelivery){
+                            $productItems = $esProductItemRepo->findBy(['product' => $productId]);
+                            foreach ($productItems as $item) {
+                                $productItemIds[] = $item->getIdProductItem();
                             }
-                            $this->em->flush();
-                        }
-                        elseif($deliveryCost === "details"){
-                            foreach( $shipAttr  as $attr){
-                                foreach( $attr as $itemId){
-                                    if( !(in_array((int)$itemId,$postProductIds)) ){
-                                        $postProductIds[] = $itemId;
+
+                            if( $deliveryCost === "free" ){
+                                $location = $esLookupRepo->find(EsLocationLookup::PHILIPPINES_LOCATION_ID);
+                                foreach( $productItemIds as $itemIds ){
+                                    $shippingHead = new EsProductShippingHead();
+                                    $shippingHead->setLocation($location);
+                                    $shippingHead->setPrice(0);
+                                    $shippingHead->setProduct($product);
+                                    $this->em->persist($shippingHead);
+
+                                    $productItem = $esProductItemRepo->find($itemIds);
+
+                                    $shippingDetails = new EsProductShippingDetail();
+                                    $shippingDetails->setShipping($shippingHead);
+                                    $shippingDetails->setProductItem($productItem);
+                                    $this->em->persist($shippingDetails);
+                                }
+                                $this->em->flush();
+                            }
+                            elseif($deliveryCost === "details"){
+                                foreach( $shipAttr  as $attr){
+                                    foreach( $attr as $itemId){
+                                        if( !(in_array((int)$itemId,$postProductIds)) ){
+                                            $postProductIds[] = $itemId;
+                                        }
                                     }
                                 }
-                            }
 
-                            $difference = array_diff($postProductIds,$productItemIds);
-                            if(empty($difference) === true){
-                                foreach( $shipPrice as $groupkey => $pricegroup ){
-                                    foreach( $pricegroup as $inputkey => $price ){
-                                        $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
-                                        if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
-                                            if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
-                                                if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
-                                                    foreach( $shipAttr[$groupkey] as $attrCombinationId){
-                                                        $productItem = $esProductItemRepo->find($attrCombinationId);
-                                                        foreach( $shipLoc[$groupkey][$inputkey] as $locationId ){
-                                                            $location = $esLookupRepo->find($locationId);
-                                                            $shippingHead = new EsProductShippingHead();
-                                                            $shippingHead->setLocation($location);
-                                                            $shippingHead->setPrice($priceValue);
-                                                            $shippingHead->setProduct($product);
-                                                            $this->em->persist($shippingHead);
+                                $difference = array_diff($postProductIds,$productItemIds);
+                                if(empty($difference) === true){
+                                    foreach( $shipPrice as $groupkey => $pricegroup ){
+                                        foreach( $pricegroup as $inputkey => $price ){
+                                            $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
+                                            if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
+                                                if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
+                                                    if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
+                                                        foreach( $shipAttr[$groupkey] as $attrCombinationId){
+                                                            $productItem = $esProductItemRepo->find($attrCombinationId);
+                                                            foreach( $shipLoc[$groupkey][$inputkey] as $locationId ){
+                                                                $location = $esLookupRepo->find($locationId);
+                                                                $shippingHead = new EsProductShippingHead();
+                                                                $shippingHead->setLocation($location);
+                                                                $shippingHead->setPrice($priceValue);
+                                                                $shippingHead->setProduct($product);
+                                                                $this->em->persist($shippingHead);
 
-                                                            $shippingDetails = new EsProductShippingDetail();
-                                                            $shippingDetails->setShipping($shippingHead);
-                                                            $shippingDetails->setProductItem($productItem);
-                                                            $this->em->persist($shippingDetails);
+                                                                $shippingDetails = new EsProductShippingDetail();
+                                                                $shippingDetails->setShipping($shippingHead);
+                                                                $shippingDetails->setProductItem($productItem);
+                                                                $this->em->persist($shippingDetails);
+                                                            }
                                                         }
+                                                        $this->em->flush();
                                                     }
-                                                    $this->em->flush();
                                                 }
                                             }
-                                        }
-                                        else{
-                                            throw new Exception("Price Invalid."); 
+                                            else{
+                                                throw new Exception("Price Invalid."); 
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                        else{
+                            $isAllowCod = false;
+                            $isMeetup = true;
+                        }
+                    }
+                    else{
+                        $isAllowCod = false;
                     }
 
                     if($isCanContinue){
