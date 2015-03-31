@@ -189,6 +189,12 @@ class PaymentService
      */
     public $curlService;
 
+    /**
+     * Checkout service
+     * @var EasyShop\Checkout\CheckoutService
+     */
+    public $checkOutService;
+
     private $paymentConfig;
 
     /**
@@ -211,7 +217,8 @@ class PaymentService
                                 $dragonPaySoapClient,
                                 $transactionManager,
                                 $productShippingManager,
-                                $curlService)
+                                $curlService,
+                                $checkOutService)
     {
         $this->em = $em;
         $this->request = $request;
@@ -230,6 +237,7 @@ class PaymentService
         $this->transactionManager = $transactionManager; 
         $this->productShippingManager = $productShippingManager;
         $this->curlService = $curlService;
+        $this->checkOutService = $checkOutService;
 
         if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
             $this->paymentConfig = $this->configLoader->getItem('payment','production'); 
