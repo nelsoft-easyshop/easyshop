@@ -95,7 +95,7 @@ class PesoPayGateWay extends AbstractGateway
             $checkPointValid = $pointGateway->isPointValid($memberId);
             if(!$checkPointValid['valid']){ 
                 return [
-                    'error' => false,
+                    'error' => true,
                     'message' => $checkPointValid['message']
                 ];
             } 
@@ -104,8 +104,15 @@ class PesoPayGateWay extends AbstractGateway
 
         if($pesopayTotal < $this->lowestAmount){
             return [
-                'error' => false,
+                'error' => true,
                 'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
+            ];
+        }
+
+        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $paymentType) === false){ 
+            return [
+                'error' => true,
+                'message' => "Payment is not available using Pesopay.",
             ];
         }
 

@@ -88,8 +88,8 @@ class Payment extends MY_Controller
 
                 if(count($details) > 0){
 
-                    $paymentService = $this->serviceContainer['payment_service'];
-                    $paymentMethod = $paymentService->getUserPaymentMethod($value['member_id']);
+                    $checkoutService = $this->serviceContainer['checkout_service'];
+                    $paymentMethod = $checkoutService->getUserPaymentMethod($value['member_id']);
 
                     $itemArray[$value['rowid']]['dragonpay'] = FALSE;
                     $itemArray[$value['rowid']]['paypal'] = FALSE; 
@@ -1277,15 +1277,20 @@ class Payment extends MY_Controller
             echo json_encode($responseArray);
         }
         else{
-            $txnid = $response['txnid'];
-            $message = $response['message'];
-            $status = $response['status'];  
-            $textType = $response['textType'];
-            $this->__generateFlash($txnid,$message,$status);
-            if($status === PaymentService::STATUS_SUCCESS){
+            $responseArray = [
+                'error' => $response['error'],
+                'message' => $response['message'],
+                'url' => ''
+            ];
+            if($response['error'] === false){
+                $this->__generateFlash($response['txnid'], $response['message'], $response['status']);
                 $this->removeItemFromCart();
+                $responseArray['url'] = '/payment/success/'.$response['textType'].
+                                        '?txnid='.$response['txnid'].
+                                        '&msg='.$response['message'].
+                                        '&status='.$response['status'];
             }
-            echo '/payment/success/'.$textType.'?txnid='.$txnid.'&msg='.$message.'&status='.$status;
+            echo json_encode($responseArray);
         }
     }
 

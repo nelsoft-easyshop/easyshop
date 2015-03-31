@@ -170,6 +170,13 @@ class PayPalGateway extends AbstractGateway
             ];
         }
 
+        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $paymentType) === false){
+            return [
+                'e' => false,
+                'd' => "Payment is not available using Paypal.",
+            ];
+        }
+
         $shippingAddress = $this->em->getRepository('EasyShop\Entities\EsAddress')
                                 ->findOneBy([
                                     'idMember'=>$memberId, 
