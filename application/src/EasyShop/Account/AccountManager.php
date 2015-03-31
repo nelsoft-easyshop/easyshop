@@ -365,15 +365,13 @@ class AccountManager
                     $member->setLastLoginIp($this->httpRequest->getClientIp());
                     $member->setLoginCount($member->getLoginCount() + 1);
                     $this->em->flush(); 
-                    $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                                        ->getHydratedMember($validatedUsername, $asArray);
-                    
                     $loggedCount = $this->em->getRepository('EasyShop\Entities\EsPointHistory')
                                             ->countUserPointActivity($member->getIdMember(), EsPointType::TYPE_LOGIN, date("Y-m-d"));
-
                     if($loggedCount <= 0){
                         $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_LOGIN);
                     }
+                    $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                                        ->getHydratedMember($validatedUsername, $asArray);
                 }
             }
         }

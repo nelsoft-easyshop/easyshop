@@ -695,6 +695,7 @@ class productUpload extends MY_Controller
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
+        $discountedPrice = bcsub($product_price, bcmul($product_price, bcdiv($product_discount, 100, 4), 4));
         $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
         $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
         $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
@@ -750,8 +751,8 @@ class productUpload extends MY_Controller
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');      
         }
         else{ 
-            if((int) $product_price <= 0 ){
-                die('{"e":"0","d":"Invalid price. Price must be greater than 0."}');
+            if((int) $product_price <= 0 || (int) $discountedPrice <= 0){
+                die('{"e":"0","d":"Invalid price. Price must be equal or greater than P1."}');
             }
 
             $arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
@@ -936,6 +937,7 @@ class productUpload extends MY_Controller
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
+        $discountedPrice = bcsub($product_price, bcmul($product_price, bcdiv($product_discount, 100, 4), 4));
         $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
         $postCategory= $stringUtility->removeSpecialCharsExceptSpace($this->input->post('otherCategory'));
         $otherCategory = trim($stringUtility->removeNonUTF($postCategory));
@@ -991,7 +993,7 @@ class productUpload extends MY_Controller
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');
         }
 
-        if((int) $product_price <= 0 ){
+        if((int) $product_price <= 0  || (int) $discountedPrice <= 0){
             die('{"e":"0","d":"Invalid price. Price must be greater than 0."}');
         }
 

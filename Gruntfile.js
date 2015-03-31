@@ -457,7 +457,7 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.bug_report.js':
                         ['web/assets/js/src/bug-report.js'],
 
-                    'web/assets/js/min/easyshop.payment-review':
+                    'web/assets/js/min/easyshop.payment-review.js':
                         ['web/assets/js/src/vendor/jquery.simplemodal.js',
                          'web/assets/js/src/new-payment.js'],
 

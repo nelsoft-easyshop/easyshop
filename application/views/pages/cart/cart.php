@@ -86,8 +86,15 @@
                                         </td>
                                         <td>
                                             <div class="cart-item-thumbnail" style="background: url(<?=getAssetsDomain(); ?><?=$item['imagePath']; ?>categoryview/<?=$item['imageFile']; ?>) center no-repeat; background-size: cover;"></div>
+                                            <center>
+                                                <span class="remove-mobile cart-item-remove"
+                                                data-name="<?=html_escape($item['name']);?>"
+                                                data-rowid="<?=html_escape($item['rowid']);?>">
+                                                    Remove
+                                                </span>
+                                            </center>
                                         </td>
-                                        <td>
+                                        <td class="td-item-name">
                                             <a href="/item/<?=$item['slug'];?>" class="cart-item-name">
                                                 <?=html_escape($item['name']);?>
                                             </a>
@@ -154,7 +161,7 @@
                 </div>
             </div>
             <!--End of cart items-->
-        <?php endif; ?>
+        <?php endif; ?> 
         <?php if($isCartEmpty === false): ?>
             <!--Start of trio bottom boxes-->
             <div class="row">
@@ -163,15 +170,17 @@
                     <div class="transaction-container bg-gray min-height-459">
                         <p class="transaction-container-title">Use Your EasyPoints</p>
                         <p class="transaction-container-text">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane.
+                            Please follow the guidelines below on how to use your EasyPoints when making a purchase. You can also follow EasyShop's Facebook page to be updated of how you can earn more points while shopping on our website.
                             <br/>
                             <b>How to Use</b>
                             <ol class="how-to-list">
-                                <li>Conversam albam porro corporis porro definitiones dixisset monet vivendi.</li>
-                                <li>Pulcherrimum concertationesque utens vitam nonne miseram tenent versuum innumerabiles. </li>
-                                <li>Iudicio nivem reperietur plurimum. Huius mollitia intercapedo beata optime graecos numquidnam. Declinationem fortunae quiete.</li>
-                                <li>10points = &#8369; 1.00</li>
+                                <li>You can use your EasyPoints in paying for any item on EasyShop: <br/> <b>1 Point = 1 Peso</b></li>
+                                <li>Just enter the desired number of points you wish to use, click on the 'APPLY' button and it will automatically be deducted from your total purchase.</li>
+                                <li>Buyers will earn 1% of the item's total price. Your points will only be credited to your account after the transaction has been completed, e.g. if a Buyer/Seller decides to cancel the transaction no points will be earned.</li>
+                                <li>You can earn an additional 20 points when you leave a feedback for your completed transactions.</li>
+                                <li>Cash-on-Delivery transactions are excluded from earning any EasyPoints.</li>
                             </ol>
+                            <i>Use "RESET" for the button when resetting the applied points.</i>
                         </p>
                         <div class="form-group">
 

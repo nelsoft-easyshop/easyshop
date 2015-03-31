@@ -126,7 +126,10 @@
                             <div class="row-fluid">
                                 <div class="span12 padding-top-70 padding-left-30 padding-right-30">
                                     <h1 class="align-center">Confirmation of Your Deposit</h1>
-                                    <p class="align-center"><strong>EasyShop</strong> will only release your money to the seller once you've received your item.</p>
+                                    <p class="align-center"><strong>EasyShop</strong> 
+                                        will treat your payment as a deposit and will only release your money to 
+                                        the seller once you've received your item.
+                                    </p>
                                 </div>
                             </div>
                             <div class="row-fluid">
