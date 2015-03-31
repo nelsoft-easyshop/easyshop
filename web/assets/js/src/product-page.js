@@ -316,6 +316,7 @@
         var $this = $(this);
         var $imageid = $this.children('option:selected').data('imageid');
         var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
+        var $originalBasePrice = parseFloat($("#originalBasePrice").val()); 
         var $arraySelected = [];
         var $indexImage;
         var $owl;
@@ -328,7 +329,8 @@
                 $thisSelect = $(this);
                 var $selectValue = $thisSelect.val();
                 var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
-                $baseFinalPrice += $additionalPrice; 
+                $baseFinalPrice += $additionalPrice;
+                $originalBasePrice += $additionalPrice;
             });
 
             checkCombination($arraySelected);
@@ -340,6 +342,7 @@
                 var $selectValue = $thisSelect.val();
                 var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
                 $baseFinalPrice += $additionalPrice;
+                $originalBasePrice += $additionalPrice;
                 $arraySelected.push($selectValue);
             });
 
@@ -349,6 +352,7 @@
 
         }
         $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
+        $(".base-price").html("P"+commaSeparateNumber($originalBasePrice.toFixed(2)));
 
         if($imageid > 0){
             $owl = $("#mobile-product-gallery").data('owlCarousel');
@@ -366,7 +370,8 @@
             }
         });
     });
-    
+    $(".attribute-control").trigger("change");
+
     // add to cart
     $(document).on('click', '#send.enabled', function(){
         var $button = $(this);
