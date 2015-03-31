@@ -246,23 +246,19 @@
             <div class="col-xs-12 pd-bttm-15">
                 <div class="step3_shipping_option_meetup sh1">
                     <span>
-                        <input class="delivery_option" type="checkbox" id="meetup" name="delivery_option[]" value="meetup" <?php echo (int)$product['is_meetup']===1 ? 'checked':''?> > <label for="meetup">Meet Up</label>
+                        <input class="delivery_option radio-select" type="radio" id="meetup" name="delivery_option" value="meetup" <?php echo (bool)$product['is_meetup'] || $shipping_summary['is_delivery'] === false ? 'checked':''?> > <label for="meetup">Meet Up</label>
                     </span>
                     <span>
-                        <input class="delivery_option" type="checkbox" id="delivery" name="delivery_option[]" value="delivery" <?php echo $shipping_summary['is_delivery'] ? 'checked' : ''?>> <label for="delivery">For Delivery</label>
+                        <input class="delivery_option radio-select" type="radio" id="delivery" name="delivery_option" value="delivery" <?php echo $shipping_summary['is_delivery'] ? 'checked' : ''?>> <label for="delivery">For Delivery</label>
                     </span>
-                    <span>
-                        <input class="delivery_option" type="checkbox" id="allow_cod" name="allow_cod" <?php echo (bool)$product['is_cod'] ? 'checked' : ''; ?>><label for="allow_cod">Cash-on-Delivery</label>
-                    </span>
-                    
-                    
                 </div>
                 <div id="delivery_options" class="sh2" style="display: <?php echo $shipping_summary['is_delivery'] ? '' : 'none'?> ">
-                        
+                    <div class="pd-bttm-15">
+                        <input class="delivery_option" type="checkbox" id="allow_cod" name="allow_cod" <?php echo (bool)$product['is_cod'] ? 'checked' : ''; ?>> <label for="allow_cod">Cash-on-Delivery</label>
+                    </div>
                     <div class="pd-bttm-15">
                         Ships within: <input type="text" class="shipping-days form-control" name="ship_within" size=3 value="<?=$product['ships_within_days']; ?>" id="ship-within" onkeypress="return isNumberKey(event)" /> Days
-                    </div> 
-
+                    </div>
                     <div class="pd-bottom-20 delivery-btn-con">
                         <div class="delivery_cost gbtn1 btn-block-2 <?php echo $shipping_summary['is_freeshipping'] ? 'active':''?>" id="set_free_shipping">Free Shipping
                         </div>
@@ -398,8 +394,7 @@
             </div>
             <div class="clear"></div>
             <!--CLOSE id=SHIPPING DIV-->
-        
-    </div>	
+    </div>
     </div>
     <!-- CLOSE step3_shipping_options-->
 
@@ -416,7 +411,7 @@
             <input type="hidden" name="is_edit" value="true">
         <?php endif;?>
     </div>
-    <?php echo form_close();?>	
+    <?php echo form_close();?>
 
     <?php 
         $attr = array('id'=>'finish_upload_form');
