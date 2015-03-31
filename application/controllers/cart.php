@@ -77,7 +77,7 @@ class Cart extends MY_Controller
                 'cart_items' => $cartContents,
                 'totalAmount' => str_replace( ',', '', $totalAmount ),
                 'userPoints' => $this->pointTracker->getUserPoint($memberId),
-                'isCartEmpty' => $this->cartImplementation->getSize() === null,
+                'isCartEmpty' => $this->cartImplementation->getSize() === 0,
                 'locations' => $locations,
                 'totalShippingFee' => $this->cartManager->getCartShippingFee($userAddress['stateRegion'] ,$memberId)
             ];
