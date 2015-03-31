@@ -173,6 +173,13 @@ class DragonPayGateway extends AbstractGateway
             ];
         }
 
+        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $paymentType) === false){
+            return [
+                'e' => false,
+                'm' => "Payment is not available using DragonPay.",
+            ];
+        }
+
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find((int)$memberId);
 

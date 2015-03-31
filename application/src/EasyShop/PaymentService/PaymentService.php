@@ -189,6 +189,12 @@ class PaymentService
      */
     public $curlService;
 
+    /**
+     * Checkout service
+     * @var EasyShop\Checkout\CheckoutService
+     */
+    public $checkOutService;
+
     private $paymentConfig;
 
     /**
@@ -211,7 +217,8 @@ class PaymentService
                                 $dragonPaySoapClient,
                                 $transactionManager,
                                 $productShippingManager,
-                                $curlService)
+                                $curlService,
+                                $checkOutService)
     {
         $this->em = $em;
         $this->request = $request;
@@ -230,6 +237,7 @@ class PaymentService
         $this->transactionManager = $transactionManager; 
         $this->productShippingManager = $productShippingManager;
         $this->curlService = $curlService;
+        $this->checkOutService = $checkOutService;
 
         if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){ 
             $this->paymentConfig = $this->configLoader->getItem('payment','production'); 
@@ -439,30 +447,6 @@ class PaymentService
     public function getPrimaryGateway()
     {
         return $this->primaryGateway;
-    }
-
-    /**
-     * Get payment method type per user
-     * @param  integer $memberId
-     * @return mixed
-     */
-    public function getUserPaymentMethod($memberId)
-    {
-        $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethodUser')
-                                            ->findBy(['member'=>$memberId]);
-        
-        $paymentArray = [];
-        $paymentArray['all'] = false;
-        if($paymentMethod){
-            foreach ($paymentMethod as $key => $value) {
-                $paymentArray['payment_method'][] = $value->getPaymentMethod()->getIdPaymentMethod();
-            }
-        }
-        else{
-            $paymentArray['all'] = true;
-        }
-
-        return $paymentArray;
     }
 
     /**

@@ -261,10 +261,16 @@
         $.ajax({
             url: "/pay/pay",
             type: 'POST',
-            dataType: 'html',
+            dataType: 'json',
             data: "csrfname="+$csrftoken+"&paymentMethods="+$paymentMethod,
             success: function(jsonResponse){
-                window.location.replace(jsonResponse);
+                if(jsonResponse.error === false){
+                    window.location.replace(jsonResponse.url);
+                }
+                else{
+                    alert(jsonResponse.message);
+                    enableButton();
+                }
             },
             error: function(err){
                 alert('Something went wrong. Please try again later'); 
@@ -374,7 +380,6 @@
     // get city availables
     function getProductLocation($itemId)
     {
-        console.log($itemId);
         var $currentRequest = $.ajax({
             type: "POST",
             url: '/payment/getProductLocation',

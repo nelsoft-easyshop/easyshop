@@ -40,7 +40,7 @@ class CashOnDeliveryGateway extends AbstractGateway
     {
         // Set status response
         $response['status'] = PaymentService::STATUS_FAIL;
-        
+        $response['error'] = true;
         // Point Gateway
         $pointGateway = $this->paymentService->getPointGateway();
 
@@ -72,6 +72,11 @@ class CashOnDeliveryGateway extends AbstractGateway
             }
         }
 
+        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $response['paymentType']) === false){
+            $response['message'] = "Payment is not available using Cash on Delivery.";
+            return $response;
+        }
+
         if($validatedCart['itemCount'] === $productCount){
             $return = $this->persistPayment(
                 $grandTotal, 
@@ -90,6 +95,7 @@ class CashOnDeliveryGateway extends AbstractGateway
                 $response['orderId'] = $orderId = $return['v_order_id'];
                 $response['invoice'] = $invoice = $return['invoice_no'];
                 $response['status'] = PaymentService::STATUS_SUCCESS;
+                $response['error'] = false;
 
                 foreach ($itemList as $key => $value) {  
                     $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
