@@ -143,19 +143,20 @@ class ApiFormatter
         $formattedProductAttributes = $productAttributes;
         // get product specification
         $productSpecification = [] ; $productCombinationAttributes = []; 
+        $listArray = [];
         foreach ($formattedProductAttributes as $key => $productOption) {
             $newArrayOption = []; 
 
             for ($i=0; $i < count($productOption) ; $i++) {
                 $type = ($formattedProductAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
                 $newKey = $type.'_'.$formattedProductAttributes[$key][$i]['attr_id'];
-                $newArrayOption[] = [
-                                'value' => $productOption[$i]['attr_value'],
-                                'price'=> $productOption[$i]['attr_price'],
-                                'img_id'=> $productImages[0]['id'],
-                                'name'=> $productOption[$i]['attr_name'],
-                                'id'=> $newKey
-                            ]; 
+                $newArrayOption[] = $listArray[$newKey] = [
+                    'value' => $productOption[$i]['attr_value'],
+                    'price'=> $productOption[$i]['attr_price'],
+                    'img_id'=> $productImages[0]['id'],
+                    'name'=> $productOption[$i]['attr_name'],
+                    'id'=> $newKey
+                ]; 
             }
 
             if(count($productOption)>1){
@@ -172,45 +173,21 @@ class ApiFormatter
             }
         }
 
-        // get product quantity
-        $productInventory = $esProductRepo->getProductInventoryDetail($productId);
-
-        $temporaryArray = [];
-        foreach ($productInventory as $key => $value) {
-             if(!array_key_exists($value['id_product_item'],$temporaryArray)){
-                $temporaryArray[$value['id_product_item']] = [
-                                                        'quantity' => $value['quantity'],
-                                                        'product_attribute_ids' => [
-                                                                        [
-                                                                'id' => $value['product_attr_id'],
-                                                                'is_other' => $value['is_other'],
-                                                            ]
-                                                        ],
-                                                    ];
-             }
-             else{ 
-                $temporaryArray[$value['id_product_item']]['product_attribute_ids'][] = [
-                                                                                'id' => $value['product_attr_id'],
-                                                                                'is_other' => $value['is_other'],
-                                                                            ];
-             }
-        }
-
+        $temporaryArray = $this->productManager->getProductInventory($product);
         $productQuantity = [];
-        foreach ($temporaryArray as $key => $valuex) { 
-            $newCombinationKey = [];
-            $totalPrice = 0;
+        foreach ($temporaryArray as $key => $valuex) {
+            unset($temporaryArray[$key]['attr_lookuplist_item_id']);
+            unset($temporaryArray[$key]['attr_name']);
+            unset($temporaryArray[$key]['is_default']);
+            $newCombinationKey = []; 
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
                 $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b');
-                $newCombinationKey[] = $type.'_'.$valuex['product_attribute_ids'][$i]['id'];
-                if(isset($productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']])){
-                    $totalPrice += $productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']];
-                }
+                $newCombinationKey[] = $type.'_'.$valuex['product_attribute_ids'][$i]['id']; 
             }
 
             unset($temporaryArray[$key]['product_attribute_ids']);
             $temporaryArray[$key]['id'] = $key;
-            $temporaryArray[$key]['price'] = number_format($totalPrice + $product->getFinalPrice(), 2,'.','');
+            $temporaryArray[$key]['price'] = number_format($product->getFinalPrice(), 2,'.','');
             if($newCombinationKey[0] === "a_0"){
                 if(empty($productAttributes) === false){
                     $allCombination = $this->collectionHelper
@@ -233,6 +210,15 @@ class ApiFormatter
 
             $temporaryArray[$key]['combinationId'] = $newCombinationKey;
             $productQuantity[] = $temporaryArray[$key];
+        }
+
+        foreach($productQuantity as $keyQuantity => $valueQuantity){
+            $additionalPrice = 0;
+            $original_price = $productQuantity[$keyQuantity]['price'];
+            foreach($valueQuantity['combinationId'] as $cid){ 
+                $additionalPrice += isset($listArray[$cid]) ? $listArray[$cid]['price'] : 0;
+            }
+            $productQuantity[$keyQuantity]['price'] = number_format(bcadd($original_price, $additionalPrice , 4), 2,'.','');
         }
 
         $recentReview = $this->reviewProductService->getProductReview($productId);
@@ -366,7 +352,7 @@ class ApiFormatter
                         $formattedCartContents[$rowId]['error_message'] = $errorMessage;
                     }
 
-                    $formattedCartContents[$rowId]['shippingFee'] = $cartItem['shippingFee'];
+                    $formattedCartContents[$rowId]['shippingFee'] = bcmul($cartItem['shippingFee'], $cartItem['qty'], 4);
                 }
                 $formattedCartContents[$rowId]['isAvailable'] = empty($formattedCartContents[$rowId]['error_message']);
 
@@ -432,6 +418,9 @@ class ApiFormatter
             }
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
+
+            $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($memberId);
             if($product){
                 $errorMessage = [];
 
@@ -445,6 +434,20 @@ class ApiFormatter
                 $cartContent = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
                                                                              $options, 
                                                                              $mobileCartContent->quantity)['itemData'];
+
+                if($cartContent){
+                    if($mobileCartContent->quantity > $cartContent['maxqty']){
+                        $errorMessage[] = "Quantity Not Available";
+                    }
+                }
+                else{
+                    $errorMessage[] = "Item not available.";
+                }
+
+                if((bool)$member->getIsEmailVerify() === false){
+                    $errorMessage[] = "Please verify your email.";
+                }
+
                 $itemList[$cartContent['product_itemID']] = [
                     'rowid' => $product->getIdProduct(),
                     'id' =>  $product->getIdProduct(),
@@ -466,7 +469,13 @@ class ApiFormatter
             if(isset($itemList[$data['product_itemID']])) {
                 unset($itemList[$data['product_itemID']]);
             }
-        }  
+        }
+
+        foreach ($itemList as $key => $item) {
+            if(empty($item['error_message'])){
+                $itemList[$key]['error_message'][] = "This item is unavailable.";
+            }
+        }
 
         if(!$includeUnavailable){
             return $this->formatCart($cartData);

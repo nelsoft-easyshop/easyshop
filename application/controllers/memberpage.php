@@ -606,8 +606,8 @@ class Memberpage extends MY_Controller
     {
 
         if($this->input->post('c_deliver_address_btn')) {
-            $userMgr = $this->serviceContainer['user_manager'];
-            $result = $userMgr->setAddress(
+            $userManager = $this->serviceContainer['user_manager'];
+            $result = $userManager->setAddress(
                     $this->input->post('c_address'),
                     $this->input->post('c_stateregion'),
                     $this->input->post('c_city'),
@@ -894,15 +894,6 @@ class Memberpage extends MY_Controller
                 $serverRespone['error'] = 'Transaction does not exist.';
             }
         }
-
-        $orderEntity = $this->em->find("EasyShop\Entities\EsOrder", $data['transaction_num']);
-        $orderProductStatusEntity = $this->em->find("EasyShop\Entities\EsOrderProductStatus", EsOrderProductStatus::ON_GOING);
-        $orderProductEntity = $this->esOrderProductRepo
-                                   ->findOneBy([
-                                       "order" => $orderEntity,
-                                       "status" => $orderProductStatusEntity
-                                   ]);
-        $serverResponse['isTransactionComplete'] = $orderProductEntity ? false : true;
 
         echo json_encode($serverResponse);
     }

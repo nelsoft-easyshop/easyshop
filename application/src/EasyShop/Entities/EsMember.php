@@ -284,6 +284,13 @@ class EsMember
      * })
      */
     private $banType = '0';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="temp_id", type="string", length=45, nullable=false)
+     */
+    private $tempId = '';
     
     /**
      *
@@ -1241,4 +1248,24 @@ class EsMember
         return $this->banType;
     }    
 
+    /**
+     * Get tempId
+     *
+     * @return integer 
+     */
+    public function getTempId()
+    {
+        return $this->tempId;
+    }
+
+    /**
+     * Set tempId
+     *
+     * @param string $tempId
+     * @return EsMember
+     */
+    public function setTempId($tempId)
+    {
+        $this->tempId = $tempId; 
+    }
 }

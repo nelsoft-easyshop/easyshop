@@ -122,10 +122,10 @@
                     var telephone = serverResponse.address ? ( serverResponse.address.telephone !== '' ? serverResponse.address.telephone : '' ) : '';
                     var consignee = serverResponse.address ? ( serverResponse.address.consignee !== '' ? serverResponse.address.consignee : '' ) : '';
                     var consigneeAddress = serverResponse.address ? ( serverResponse.address.address !== '' ? serverResponse.address.address : '' ) : '';
-                    $("#consigneeName").val(escapeHtml(consignee));
-                    $("#consigneeMobile").val(escapeHtml(mobile));
-                    $("#consigneeLandLine").val(escapeHtml(telephone));
-                    $("#deliveryAddress").val(escapeHtml(consigneeAddress));
+                    $("#consigneeName").val(consignee);
+                    $("#consigneeMobile").val(mobile);
+                    $("#consigneeLandLine").val(telephone);
+                    $("#deliveryAddress").val(consigneeAddress);
                     var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                     var stateRegionDropDown = $("#deliver_stateregion");
                     var dropDownTemplate = "";
@@ -1521,14 +1521,8 @@
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    if (serverResponse.isTransactionComplete === true) {
-                        $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
-                        $('.wipeOut').fadeOut(5000);
-                    }
-                    else {
-                        txResponseBtn.parent().parent().find('.rejectForm').remove();
-                        txResponseBtn.parent().remove();
-                    }
+                    $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                    $('.wipeOut').fadeOut(5000);
                 }
                 txResponseBtn.addClass('enabled');
             }

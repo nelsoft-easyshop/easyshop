@@ -35,6 +35,8 @@ class EsStyle
      */
     private $value = '';
 
+    const DEFAULT_STYLE_ID = 1;
+
 
 
     /**
