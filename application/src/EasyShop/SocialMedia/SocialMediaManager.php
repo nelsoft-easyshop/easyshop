@@ -73,6 +73,13 @@ class SocialMediaManager
     private $formFactory;
     
     /**
+     * Form error helper
+     *
+     */
+    private $formErrorHelper;
+    
+    
+    /**
      * Class constructor. Loads dependencies.
      *
      * @param Facebook\FacebookRedirectLoginHelper $fbRedirectLoginHelper
@@ -81,10 +88,19 @@ class SocialMediaManager
      * @param EasyShop\User\UserManager $userManager
      * @param EasyShop\Core\ConfigLoader $configLoader
      * @param EasyShop\Utility\StringUtility
-     * @param EasShop\\EasyShop\FormValidation\ValidationRules
+     * @param EasyShop\FormValidation\ValidationRules
      * @param Symfony\Component\Form\Forms
+     * @param EasyShop\FormValidation\FormHelpers\FormErrorHelper
      */
-    public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader, $stringUtility, $formValidation, $formFactory)
+    public function __construct($fbRedirectLoginHelper, 
+                                $googleClient, 
+                                $em, 
+                                $userManager, 
+                                $configLoader,
+                                $stringUtility, 
+                                $formValidation, 
+                                $formFactory, 
+                                $formErrorHelper)
     {
         $this->fbRedirectLoginHelper = $fbRedirectLoginHelper;
         $this->googleClient = $googleClient;
@@ -94,6 +110,7 @@ class SocialMediaManager
         $this->stringUtility = $stringUtility;
         $this->formValidation = $formValidation;
         $this->formFactory = $formFactory;
+        $this->formErrorHelper = $formErrorHelper;
     }
 
     /**
@@ -185,7 +202,7 @@ class SocialMediaManager
         }
         $response = [
             'getMember' => $getMember,
-            'doesAccountMerged' => (bool) $socialMediaAccount
+            'isAccountMerged' => (bool) $socialMediaAccount
         ];
 
         return $response;
@@ -210,9 +227,15 @@ class SocialMediaManager
         $form = $this->formFactory->createBuilder('form', null, ['csrf_protection' => false])
                      ->setMethod('POST')
                      ->add('username', 'text', ['constraints' => $rules['username']])
+                     ->add('gender', 'text', ['constraints' => $rules['gender']])
+                     ->add('email', 'text', ['constraints' => $rules['email']])
                      ->getForm();
-
-        $form->submit([ 'username' => $username]);
+                     
+        $form->submit([ 
+            'username' => $username,
+            'gender' => $gender,
+            'email' => $email,
+        ]);
         if ($form->isValid()) {
             $defaultStoreColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
                                            ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
@@ -239,7 +262,12 @@ class SocialMediaManager
             $member = $this->mergeAccount($member, $oAuthId, $oAuthProvider);
         }
 
-        return $member;
+        $response = [
+            'member' => $member,
+            'errors' => $this->formErrorHelper->getFormErrors($form),
+        ];
+
+        return $response;
     }
 
     /**

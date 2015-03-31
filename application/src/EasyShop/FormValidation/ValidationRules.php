@@ -95,7 +95,12 @@ class ValidationRules
                                 new Assert\Email(),
                                 new CustomAssert\IsEmailUnique(),
                     ),
-                    
+                    'gender' => array(
+                                new Assert\NotBlank(),
+                                new Assert\Regex([
+                                    'pattern' => '/^M|F$/',
+                                ]),
+                    ),
                 ),
             'subscribe' => array(
                     'email' => array(
