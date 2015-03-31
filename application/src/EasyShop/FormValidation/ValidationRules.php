@@ -125,6 +125,7 @@ class ValidationRules
             'user_shipping_address' => array(
                     'consignee' => array(
                                 new Assert\NotBlank(),
+                                new CustomAssert\IsAlphanumericSpace(),
                     ),
                     'city' => array(
                                 new Assert\NotBlank(),
