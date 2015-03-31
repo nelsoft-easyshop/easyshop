@@ -221,6 +221,9 @@
             $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
         }
         });
+        setTimeout(function(){
+            $(".easy-point-content").getNiceScroll().resize();
+        }, 1000);
     });
 
     $( "#my-account-menu-trigger" ).click(function() {
@@ -244,6 +247,9 @@
                 $( ".f-a" ).css("border-radius", "0px");
             } 
         });
+        setTimeout(function(){
+            $(".easy-point-content").getNiceScroll().resize();
+        }, 1000);
     });
 
     $( "#info-item-1" ).click(function() {
