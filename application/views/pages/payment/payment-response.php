@@ -74,7 +74,7 @@
                             </tr>
                             <tr>
                                 <td>Total Amount : </td>
-                                <td>&#8369; <?=number_format($order->getTotal(), 2, '.', ',')?></td>
+                                <td>&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints), 2, '.', ',')?></td>
                             </tr>
                             <tr>
                                 <td>Transaction Date : </td>
@@ -154,7 +154,7 @@
                                 <td>
                                     Points Deduction
                                 </td>
-                                <td colspan="3">&mdash; &#8369; <?=$transactionPoints; ?></td>
+                                <td colspan="3">&mdash; &#8369; <?=number_format($transactionPoints, 2, '.', ',')?></td>
                             </tr>
                             <tr>
                                 <td>

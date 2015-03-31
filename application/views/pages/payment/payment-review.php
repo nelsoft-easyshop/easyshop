@@ -240,7 +240,7 @@
                                 <td>
                                     Points Deduction
                                 </td>
-                                <td colspan="3">&mdash; &#8369; <?=$usedPoints; ?></td>
+                                <td colspan="3">&mdash; &#8369; <?=number_format($usedPoints, 2, '.', ','); ?></td>
                             </tr>
                             <tr>
                                 <td >
