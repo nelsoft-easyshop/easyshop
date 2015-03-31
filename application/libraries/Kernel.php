@@ -481,7 +481,8 @@ class Kernel
                 $container['dragonpay_soap_client'], 
                 $container['transaction_manager'], 
                 $container['product_shipping_location_manager'],
-                new \Curl\Curl()
+                new \Curl\Curl(),
+                $container['checkout_service']
             );
         };
 
