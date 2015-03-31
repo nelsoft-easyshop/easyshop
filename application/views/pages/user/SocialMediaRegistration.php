@@ -46,6 +46,24 @@
                                     </ul>
                                 </div>
                             </div>
+                            
+                            <?php if(trim($email) === ''): ?>
+                            <div class="input-group margin-bottom-10">
+                                <input type="text" name="email" class="form-control register-new-email" placeholder="email@sample.com" aria-describedby="basic-addon2">
+                                <span class="input-group-addon email-label" id="basic-addon2" data-toggle="tooltip" data-placement="right" title="Your social media account does have an associated email address">Email Address</span>
+                            </div>
+                            <div class="div-validation-container auto-height">
+                                <p class="span-validation-ok register-new-email-accepted" style="display:none;">
+                                    <i class="glyphicon glyphicon-ok-sign"></i>
+                                    Email is available
+                                </p>
+                                <p class="span-validation-error register-new-email-denied" style="display:none;">
+                                    <i class="glyphicon glyphicon-remove-sign"></i>
+                                    Email is not available
+                                </p>
+                             </div>
+                            <?php endif; ?>
+
                             <button class="btn btn-block btn-orange-lg proceed">
                                 PROCEED
                             </button>

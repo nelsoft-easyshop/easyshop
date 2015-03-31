@@ -421,6 +421,7 @@ class Kernel
             $stringUtility = $container['string_utility'];
             $formValidation = $container['form_validation'];
             $formFactory = $container['form_factory'];
+            $formErrorHelper = $container['form_error_helper'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
                 $fbRedirectLoginHelper,
                 $googleClient,
@@ -429,7 +430,8 @@ class Kernel
                 $configLoader,
                 $stringUtility,
                 $formValidation,
-                $formFactory
+                $formFactory,
+                $formErrorHelper
             );
         };
         // Category Manager

@@ -1,42 +1,64 @@
 
 jQuery(function ($) {
+    
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var provider = $("#data-container").attr('data-provider');
     var id = $("#data-container").attr('data-id');
     var fname = $("#data-container").attr('data-fname');
     var gender = $("#data-container").attr('data-gender');
     var email = $("#data-container").attr('data-email');
+    var hasNoEmail = email === '';
+    
+    $('.register-new-email').on('keyup', function(){
+        $(".register-new-email-denied").hide();
+    });
+    
+    $('#txt-username').on('keyup', function(){
+        $(".username-denied").hide();
+    });
+    
     $('.proceed').on('click', function (e) {
+    
+        var emailForPost = email;
+        if(hasNoEmail){
+            emailForPost = $('.register-new-email').val();
+        }
+        
         var username = $("#txt-username").val().trim();
+        var hasClientSideError = false;
         if (username === "") {
             $(".username-denied").show();
             $(".username-accepted").hide();
+            hasClientSideError = true;
+        }
+        if(hasNoEmail){
+            if(isValidEmail(emailForPost) === false || emailForPost === ""){
+                $(".register-new-email-denied").show();
+                $(".register-new-email-accepted").hide();
+                hasClientSideError = true;
+            }
+        }
+        if(hasClientSideError){
             return false;
         }
+        
         $.ajax({
             dataType : "json",
             type: "post",
             url : "/SocialMediaController/registerSocialMediaAccount",
-            data : {csrfname : csrftoken, username:username, provider:provider, id:id, fname:fname, gender:gender, email:email},
+            data : {csrfname : csrftoken, username:username, provider:provider, id:id, fname:fname, gender:gender, email:emailForPost},
             beforeSend : function () {
                 $(".form-merge-2 img").show();
                 $(".proceed").hide();
             },
-            success : function (data) {
+            success : function (jsonData) {
                 $(".form-merge-2 img").hide();
                 $(".proceed").show();
-                if (data == false) {
-                    $(".username-denied").show();
-                    $(".username-accepted").hide();
-                    $(".username-restrictions").hide();
-                }
-                else if (data == 'Invalid Username') {
-                    $(".username-restrictions").show();
-                    $(".username-denied").hide();
-                    $(".username-accepted").hide();
-                } else {
+                if(jsonData.isSuccessful){
                     $(".username-accepted").show();
+                    $(".register-new-email-accepted").show();
                     $(".username-denied").hide();
+                    $(".register-new-email-denied").hide();
                     $(".username-restrictions").hide();
                     $('.modal-message').modal({
                         onShow : function () {
@@ -49,7 +71,24 @@ jQuery(function ($) {
                         }
                     });
                 }
-                return false;
+                else{
+                    if(typeof jsonData.errors.username !== 'undefined'){
+                        $(".username-denied").show()
+                        $(".username-accepted").hide();
+                    }
+                    else{
+                        $(".username-denied").hide()
+                        $(".username-accepted").show();
+                    }
+                    if(typeof jsonData.errors.email !== 'undefined'){
+                        $(".register-new-email-denied").show();
+                        $(".register-new-email-accepted").hide();
+                    }
+                    else{
+                        $(".register-new-email-denied").hide();
+                        $(".register-new-email-accepted").show(); 
+                    }
+                }
             }
         });
     });
@@ -130,4 +169,11 @@ jQuery(function ($) {
             }
         });
     });
+    
+    function isValidEmail(email){
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+    
 });
+
