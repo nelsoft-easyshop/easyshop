@@ -242,15 +242,15 @@
     }
 
     // summary computation
-    var $maxPoints = parseInt($("#points-total").data('totalpoints'));
+    var $maxPoints = parseFloat($("#points-total").data('totalpoints'));
     var $shippingFee = parseFloat($("#summary-shipping").data('totalshipping'));
     var $cartSubtotal = $("#summary-cart-total").data('cartprice');
     var $usedPoints = 0;
     $('.btn-deduct-points').on('click', function(){
         var $pointHolder = $("#points-total"); 
         var $pointValue = $pointHolder.val().trim();
-        $usedPoints = $pointValue === "" ? 0 : parseInt($pointValue);
-        $usedPoints = isNaN($usedPoints) ? 0 : parseInt($usedPoints);
+        $usedPoints = $pointValue === "" ? 0 : parseFloat($pointValue);
+        $usedPoints = isNaN($usedPoints) ? 0 : parseFloat($usedPoints);
 
         if($usedPoints > $maxPoints){
             $usedPoints = 0;
@@ -276,7 +276,7 @@
         var $summaryContainer = $(".summary-container"); 
         var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
 
-        $summaryContainer.find('#summary-points').html($usedPoints);
+        $summaryContainer.find('#summary-points').html(replaceNumberWithCommas($usedPoints.toFixed(2)));
         $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
         $summaryContainer.find('#summary-cart-total').html(replaceNumberWithCommas($cartTotalPrice.toFixed(2)));
