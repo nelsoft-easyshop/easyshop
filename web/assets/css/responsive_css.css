@@ -1395,10 +1395,29 @@ div.sell_steps4 ul li:nth-child(4) a {
     width: auto !important;
 }
 
-#mce_61 {
-    margin-top: 20px;
-    padding: 20px 10px;
-    position: initial;
+body .mce-abs-layout-item.mce-formitem {
+    height: auto;
+    padding: 3px 15px;
+    position: static;
+}
+
+.mce-container-body.mce-abs-layout {
+    height: auto;
+}
+
+.mce-container[aria-label*="properties"] .mce-abs-layout-item.mce-formitem {
+    float: left;
+    width: 45% !important;
+}
+
+.mce-container[aria-label*="properties"] .mce-window-head + div,
+.mce-container[aria-label*="Insert link"] .mce-window-head + div {
+    margin-top: 15px;
+}
+
+.mce-widget.mce-label.mce-autoscroll.mce-first.mce-last.mce-abs-layout-item {
+    padding: 15px;
+    position: static;
 }
 
 .mid_inner_con_list > div {
