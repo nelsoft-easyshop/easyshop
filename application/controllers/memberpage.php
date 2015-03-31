@@ -170,7 +170,7 @@ class Memberpage extends MY_Controller
                 'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount["transactionsCount"],
                 'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
                 'completeSoldTransactionsCount' => $completeSoldTransactionsCount["transactionsCount"],
-                'totalUserPoint' => $totalUserPoint,
+                'totalUserPoint' => $totalUserPoint ? $totalUserPoint : 0,
             ];
 
             $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
