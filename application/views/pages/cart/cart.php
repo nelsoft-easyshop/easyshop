@@ -155,120 +155,121 @@
             </div>
             <!--End of cart items-->
         <?php endif; ?>
-        <!--Start of trio bottom boxes-->
-        <div class="row">
-            <!--Start of points-->
-            <div class="col-md-7">
-                <div class="transaction-container bg-gray min-height-459">
-                    <p class="transaction-container-title">Use Your EasyPoints</p>
-                    <p class="transaction-container-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane.
-                        <br/>
-                        <b>How to Use</b>
-                        <ol class="how-to-list">
-                            <li>Conversam albam porro corporis porro definitiones dixisset monet vivendi.</li>
-                            <li>Pulcherrimum concertationesque utens vitam nonne miseram tenent versuum innumerabiles. </li>
-                            <li>Iudicio nivem reperietur plurimum. Huius mollitia intercapedo beata optime graecos numquidnam. Declinationem fortunae quiete.</li>
-                            <li>10points = &#8369; 1.00</li>
-                        </ol>
-                    </p>
-                    <div class="form-group">
+        <?php if($isCartEmpty === false): ?>
+            <!--Start of trio bottom boxes-->
+            <div class="row">
+                <!--Start of points-->
+                <div class="col-md-7">
+                    <div class="transaction-container bg-gray min-height-459">
+                        <p class="transaction-container-title">Use Your EasyPoints</p>
+                        <p class="transaction-container-text">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane.
+                            <br/>
+                            <b>How to Use</b>
+                            <ol class="how-to-list">
+                                <li>Conversam albam porro corporis porro definitiones dixisset monet vivendi.</li>
+                                <li>Pulcherrimum concertationesque utens vitam nonne miseram tenent versuum innumerabiles. </li>
+                                <li>Iudicio nivem reperietur plurimum. Huius mollitia intercapedo beata optime graecos numquidnam. Declinationem fortunae quiete.</li>
+                                <li>10points = &#8369; 1.00</li>
+                            </ol>
+                        </p>
+                        <div class="form-group">
 
-                        <label for="points-total">Your Current EasyPoints : <?=$userPoints;?></label>
-                        <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
- 
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-es-green btn-sm btn-deduct-points" <?=$isCartEmpty ? 'disabled' : ''; ?>>Use Points</button>
-                        <button class="btn btn-es-white btn-sm btn-reset-points" <?=$isCartEmpty ? 'disabled' : ''; ?>>Reset</button>
+                            <label for="points-total">Your Current EasyPoints : <?=$userPoints;?></label>
+                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
+     
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-es-green btn-sm btn-deduct-points" <?=$isCartEmpty ? 'disabled' : ''; ?>>Use Points</button>
+                            <button class="btn btn-es-white btn-sm btn-reset-points" <?=$isCartEmpty ? 'disabled' : ''; ?>>Reset</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!--End of points-->
+                <!--End of points-->
 
-            <!--Start of summary-->
-            <div class="col-md-5">
-                <div class="transaction-container bg-gray min-height-435 summary-container">
-                    <p class="transaction-container-title">Summary</p>
-                    <table class="transaction-summary-table" width="100%">
-                        <thead>
-                            <tr>
-                                <th colspan="2">Cart Totals</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Cart Subtotal</td>
-                                <td>&#8369; 
-                                    <span id="summary-cart-subtotal" data-cartprice="<?=number_format($totalAmount, 2, '.', ''); ?>">
-                                        <?=number_format($totalAmount, 2, '.', ','); ?>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Shipping Fee</td>
-                                <td>
-                                    <?php if($userAddress): ?>
-                                        &#8369; 
-                                        <span id="summary-shipping" data-totalshipping="<?=number_format($totalShippingFee, 2, '.', ''); ?>">
-                                            <?=number_format($totalShippingFee, 2, '.', ','); ?>
+                <!--Start of summary-->
+                <div class="col-md-5">
+                    <div class="transaction-container bg-gray min-height-435 summary-container">
+                        <p class="transaction-container-title">Summary</p>
+                        <table class="transaction-summary-table" width="100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Cart Totals</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Cart Subtotal</td>
+                                    <td>&#8369; 
+                                        <span id="summary-cart-subtotal" data-cartprice="<?=number_format($totalAmount, 2, '.', ''); ?>">
+                                            <?=number_format($totalAmount, 2, '.', ','); ?>
                                         </span>
-                                        <small class="calculate-shipping-label">
-                                            <i class="fa fa-plus"></i> Calculate Shipping
-                                        </small>
-                                    <?php else: ?>
-                                        <small class="calculate-shipping-label">
-                                            No shipping location set.
-                                        </small>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                            <tr class="border-bottom-1">
-                                <td>Points to Deduct</td>
-                                <td>&mdash; &#8369; <span id="summary-points">0</span></td>
-                            </tr>
-                            <tr>
-                                <td>Total Price</td>
-                                <td>
-                                    &#8369;
-                                    <span id="summary-cart-total" data-cartprice="<?=number_format($totalAmount, 2, '.', ''); ?>" >
-                                        <?=number_format(bcadd($totalAmount, $totalShippingFee, 4), 2, '.', ','); ?>
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> 
-                    <table class="transaction-summary-table payment-method" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Payment Methods</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="payment-method-tr">
-                                <td class="payment-method-td">
-                                    <img src="<?=getAssetsDomain()?>assets/images/img-visa.png" class="img-payment-method" alt="VISA"/>
-                                    <img src="<?=getAssetsDomain()?>assets/images/img-paypal.png" class="img-payment-method" alt="PayPal"/>
-                                    <img src="<?=getAssetsDomain()?>assets/images/img-mastercard.png" class="img-payment-method" alt="MasterCard"/>
-                                    <img src="<?=getAssetsDomain()?>assets/images/img-dragonpay.png" class="img-payment-method" alt="Dragonpay"/>
-                                    <img src="<?=getAssetsDomain()?>assets/images/img-cod.png" class="img-payment-method" alt="COD"/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br/>
-                    <?=form_open('payment/review', ['class' => 'reviewForm','id' => 'reviewForm','name' => 'reviewForm']); ?>
-                        <input type="hidden" id="used-points" name="used_points"  value="0" />
-                        <button class="btn btn-es-green btn-lg btn-block" <?=$isCartEmpty ? 'disabled' : ''; ?>>Proceed to checkout</button>
-                    <?=form_close();?> 
-                    <center><a href="/" class="link-blue">Continue shopping</a></center>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Shipping Fee</td>
+                                    <td>
+                                        <?php if($userAddress): ?>
+                                            &#8369; 
+                                            <span id="summary-shipping" data-totalshipping="<?=number_format($totalShippingFee, 2, '.', ''); ?>">
+                                                <?=number_format($totalShippingFee, 2, '.', ','); ?>
+                                            </span>
+                                            <small class="calculate-shipping-label">
+                                                <i class="fa fa-plus"></i> Calculate Shipping
+                                            </small>
+                                        <?php else: ?>
+                                            <small class="calculate-shipping-label">
+                                                No shipping location set.
+                                            </small>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                <tr class="border-bottom-1">
+                                    <td>Points to Deduct</td>
+                                    <td>&mdash; &#8369; <span id="summary-points">0</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Price</td>
+                                    <td>
+                                        &#8369;
+                                        <span id="summary-cart-total" data-cartprice="<?=number_format($totalAmount, 2, '.', ''); ?>" >
+                                            <?=number_format(bcadd($totalAmount, $totalShippingFee, 4), 2, '.', ','); ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table> 
+                        <table class="transaction-summary-table payment-method" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Payment Methods</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="payment-method-tr">
+                                    <td class="payment-method-td">
+                                        <img src="<?=getAssetsDomain()?>assets/images/img-visa.png" class="img-payment-method" alt="VISA"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/img-paypal.png" class="img-payment-method" alt="PayPal"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/img-mastercard.png" class="img-payment-method" alt="MasterCard"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/img-dragonpay.png" class="img-payment-method" alt="Dragonpay"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/img-cod.png" class="img-payment-method" alt="COD"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <?=form_open('payment/review', ['class' => 'reviewForm','id' => 'reviewForm','name' => 'reviewForm']); ?>
+                            <input type="hidden" id="used-points" name="used_points"  value="0" />
+                            <button class="btn btn-es-green btn-lg btn-block" <?=$isCartEmpty ? 'disabled' : ''; ?>>Proceed to checkout</button>
+                        <?=form_close();?> 
+                        <center><a href="/" class="link-blue">Continue shopping</a></center>
+                    </div>
                 </div>
+                <!--End of summary-->
             </div>
-            <!--End of summary-->
-        </div>
-        <!--End of trio bottom boxes-->
-        
-    </div>    
+            <!--End of trio bottom boxes-->
+        <?php endif; ?>
+    </div>
 </div>
 <div class="my-modal-content remove-item-modal">
     <p>
