@@ -143,14 +143,17 @@ class Cart extends MY_Controller
      */
     public function doRemoveItem()
     {
+        $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         $memberId =  $this->session->userdata('member_id');
         $rowId = $this->input->post('id');
         $isRemoveSuccesful = $this->cartManager->removeItem($memberId, $rowId);
+        $userAddress = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
         
         $response = [
             'isSuccessful' => $isRemoveSuccesful,
             'totalPrice' => $this->cartImplementation->getTotalPrice(),
             'numberOfItems' => $this->cartImplementation->getSize(true),
+            'totalShippingFee' => $this->cartManager->getCartShippingFee($userAddress['stateRegion'] ,$memberId)
         ];
 
         echo json_encode($response);

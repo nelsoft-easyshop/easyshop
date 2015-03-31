@@ -24,6 +24,7 @@
         cityselect.find('option.echo').remove();
         if(stateregionID in jsonCity){ 
             $('.cityselect').empty();
+            $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
             $.each(jsonCity[stateregionID], function(key, value){
                 $('.cityselect').append('<option value="'+escapeHtml(key)+'">'+escapeHtml(value)+'</option>'); 
             });
@@ -35,15 +36,17 @@
 
     $('.stateregionselect').on('change', function(){
         var $this = $(this);
+        var $updateLocationButton = $(".update-shipping");
         var cityselect = $this.parent('div').siblings('div').find('select.cityselect');
         cityselect.val(0);
         cityFilter( $this, cityselect );
+        $updateLocationButton.prop("disabled", "true");
+        $updateLocationButton.attr("disabled", "true");
+        $("#shipping-total").val("Please select city");
+        validateWhiteTextBox("#shipping-total");
     });
 
-    $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
-    $('.stateregionselect').trigger('change');
-    $(".update-shipping").prop("disabled", "true").attr("disabled", "true");
-    $('.calculate-shipping').on('click', function(){
+    $('.cityselect').on('change', function(){
         var $cityId = $("#shipping-state").val();
         var $updateLocationButton = $(".update-shipping");
         $updateLocationButton.prop("disabled", "true");
@@ -78,6 +81,10 @@
             });
         }
     });
+
+    $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
+    $('.stateregionselect').trigger('change');
+    $(".update-shipping").prop("disabled", "true").attr("disabled", "true");
 
     $('.update-shipping').on('click', function(){
         var $errorCount = 0;
@@ -175,7 +182,11 @@
                     if(jsonResponse.isSuccessful){
                         $(".row-"+$cartRowId).remove();
                         $cartSubtotal = removeCommas(jsonResponse.totalPrice);
+                        $shippingFee = parseFloat(jsonResponse.totalShippingFee);
                         computePrices();
+                        if(jsonResponse.numberOfItems <= 0){
+                            location.reload();
+                        }
                     }
                     $cartRowId = null;
                     $currentModal.close()
@@ -266,6 +277,7 @@
         var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
 
         $summaryContainer.find('#summary-points').html($usedPoints);
+        $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
         $summaryContainer.find('#summary-cart-total').html(replaceNumberWithCommas($cartTotalPrice.toFixed(2)));
     }
