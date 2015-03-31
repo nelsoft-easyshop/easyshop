@@ -63,6 +63,11 @@ textarea {
     outline:none;
 }
 
+.form-control:focus{
+    box-shadow: none !important;
+    border-color: #565656!important;
+}
+
 .loader-upload{
     position: fixed;
     background: #fff;
