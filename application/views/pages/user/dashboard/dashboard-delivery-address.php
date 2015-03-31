@@ -19,7 +19,7 @@
                 <input type="hidden" name="c_country" value="">
                 <?php echo form_open('',array('id'=>'deliverAddressForm','class' => 'form-horizontal', 'role' => 'form'));?>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-11 col-alert">
                             <div class="alert alert-es-danger alert-dismissible" style="display:none" role="alert" id="delivery-address-error">
                                 Please fix the errors in the delivery address you have provided.
                             </div>

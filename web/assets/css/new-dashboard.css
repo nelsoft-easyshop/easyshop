@@ -20,6 +20,7 @@ body{
     z-index: 9999999;
     display: none;
 }
+
 .overlay-loader-container-main{
     opacity: 0.5;
     background-color: rgba(221,221,221,0.80);
@@ -2497,6 +2498,10 @@ label.css-label {
     width: 0;
 }
 
+.col-alert{
+    padding-right: 0px;
+}
+
 .view-delivery-lnk {
     color: #4370cb;
     cursor: pointer;
@@ -3378,9 +3383,13 @@ label.css-label {
     padding-top: 18px;
 }
 
-@media only screen and (max-width: 991px){
+@media only screen and (max-width: 991px){ 
     .no-items{
         font-size: 15px;
+    }
+
+    .col-alert{
+        padding-right: 15px;
     }
     
     .section-dashboard{
