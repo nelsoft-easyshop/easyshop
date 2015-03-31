@@ -396,4 +396,28 @@ class SocialMediaController extends MY_Controller
         }
         echo json_encode($result);
     }
+
+    public function temp()
+    {
+
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => ' Shopping made easy | Easyshop.ph',
+            'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
+        ];
+        
+        $userData = [
+            'social_media_type'=> 'BAH',
+            'social_media_id'=> 'bah',
+            'username'=> 'black',
+            'fullname'=> 'sheep',
+            'gender'=> 'M',
+            'email'=> '',
+        ];
+        
+        $this->load->spark('decorator');    
+        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/user/SocialMediaRegistration', $userData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+    }
 }
