@@ -159,6 +159,10 @@ ol.how-to-list li{
     position: relative;
 }
 
+.td-item-name{
+    width: 38%;
+}
+
 .cart-item-thumbnail-img{
     max-width: 100%;
     height: auto;
@@ -315,11 +319,11 @@ ol.how-to-list li{
 }
 
 .img-payment-method{
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     border-radius: 5px;
     display: inline-block;
-    margin-right: 1px;
+    margin-right: 4px;
 }
 
 .transaction-breadcrumb-container{
@@ -402,6 +406,9 @@ ol.how-to-list li{
     font-size: 23px;
 }
 
+.btn-deduct-points{
+    margin-right: 5px;
+}
 /*----------------------------------*/
 /*---------Chekout styles-----------*/
 /*----------------------------------*/
@@ -570,6 +577,12 @@ ol.how-to-list li{
     border-top: solid #e2e2e2 1px;
     margin-top: 10px;
     padding: 20px;
+}
+
+@-moz-document url-prefix() {
+    .my-modal-footer{
+        margin-bottom: 30px;
+    }
 }
 
 .shipping-calculator-modal .form-group,
