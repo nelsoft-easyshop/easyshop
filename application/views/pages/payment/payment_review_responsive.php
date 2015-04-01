@@ -163,8 +163,7 @@
                          && $promoteSuccess['solo_restriction']
                          && $paymentMethodSuccess): ?>
                     <div>
-                        <p class="fl_pay"><strong>How would you like to pay?</strong></p>
-                        <?php $paymentType = []; ?>
+                        <p class="fl_pay"><strong>How would you like to pay?</strong></p> 
                         <ul class="idTabs payment_options_tabs">
                             <?php foreach($paymentType as $key => $value):?>
                                 <li><a href="#<?=$key;?>"><?=$value;?></a></li> 
