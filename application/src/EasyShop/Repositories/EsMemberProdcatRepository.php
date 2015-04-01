@@ -222,20 +222,25 @@ class EsMemberProdcatRepository extends EntityRepository
     /**
      * Get Multiple member products by ID
      *
-     * @param integer[] $memberProductIds
+     * @param integer[] $productIds
+     * @param integer $memberCategoryId
      * @return EasyShop\Entities\EsMemberProdcat
      */
-    public function getMemberProductsByIds($memberProductIds)
+    public function getMemberProductsByProductIds($productIds, $memberCategoryId = null)
     {
         $memberProducts = [];
-        if(empty($memberProductIds) === false){
+        if(empty($productIds) === false){
             $em = $this->_em;
             $qb = $em->createQueryBuilder();
             $qb->select('mp')
-               ->from('EsMemberProdcat', 'mp')
-               ->where($qb->expr()->in('mp.idMemcat', $memberProductIds))
-               ->getQuery();
-            $memberProducts = $qb->getResult();
+               ->from('EasyShop\Entities\EsMemberProdcat', 'mp')
+               ->where($qb->expr()->in('mp.product', $productIds));
+            if($memberCategoryId !== null){
+                $qb->andWhere('mp.memcat = :memberCategoryId');
+                $qb->setParameter('memberCategoryId', $memberCategoryId);
+            }
+            $query = $qb->getQuery();
+            $memberProducts = $query->getResult();
         }
         return $memberProducts;
     }

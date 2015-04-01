@@ -608,9 +608,9 @@ class CategoryManager
                             }
                             $productSortOrder = 0;
 
-                            $memberCategoryProductsForDelete = $esMemberProdcatRepo->getMemberProductsByIds($deletedProductIds); 
+                            $memberCategoryProductsForDelete = $esMemberProdcatRepo->getMemberProductsByProductIds($deletedProductIds, $memberCategoryId); 
                             foreach ($memberCategoryProductsForDelete as $memberCategoryProductTForDelete) {
-                                $this->em->remove($memberCategoryProductsForDelete);
+                                $this->em->remove($memberCategoryProductTForDelete);
                             }
  
                             foreach ($addedProductIds as $productId) {
