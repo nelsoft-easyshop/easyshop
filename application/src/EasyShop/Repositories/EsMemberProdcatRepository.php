@@ -227,14 +227,17 @@ class EsMemberProdcatRepository extends EntityRepository
      */
     public function getMemberProductsByIds($memberProductIds)
     {
-        $em = $this->_em;
-        $qb = $em->createQueryBuilder();
-        $qb->select('mp')
-           ->from('EsMemberProdcat', 'mp')
-           ->where($qb->expr()->in('mp.idMemcat', $memberProductIds)
-           ->getQuery();
-           
-        return $qb->getResult();
+        $memberProducts = [];
+        if(empty($memberProductIds) === false){
+            $em = $this->_em;
+            $qb = $em->createQueryBuilder();
+            $qb->select('mp')
+               ->from('EsMemberProdcat', 'mp')
+               ->where($qb->expr()->in('mp.idMemcat', $memberProductIds))
+               ->getQuery();
+            $memberProducts = $qb->getResult();
+        }
+        return $memberProducts;
     }
     
 }
