@@ -93,15 +93,18 @@ class PointGateway extends AbstractGateway
      * @param  integer $memberId
      * @return mixed
      */
-    public function isPointValid($memberId)
+    public function isPointValid($memberId, $totalPrice)
     {   
         $pointAmount = $this->getParameter('amount');
         $returnValue['valid'] = false;
         if($this->pointTracker->getUserPoint($memberId) < $pointAmount){
             $returnValue['message'] = "You have insufficient points.";
         }
-        elseif((int) $pointAmount > self::MAX_POINT_ALLOWED){
+        elseif((float) $pointAmount > self::MAX_POINT_ALLOWED){
             $returnValue['message'] = "We only accept ".self::MAX_POINT_ALLOWED." points per transaction.";
+        }
+        elseif ((float) $pointAmount > $totalPrice) {
+            $returnValue['message'] = "Points cannot be greater than total price.";
         }
         else{
             $returnValue['valid'] = true;

@@ -211,7 +211,7 @@ class PayPalGateway extends AbstractGateway
         $this->setParameter('amount', $grandTotal);
 
         if($pointGateway){
-            $checkPointValid = $pointGateway->isPointValid($memberId);
+            $checkPointValid = $pointGateway->isPointValid($memberId, $grandTotal);
             if(!$checkPointValid['valid']){ 
                 return [
                     'e' => false,

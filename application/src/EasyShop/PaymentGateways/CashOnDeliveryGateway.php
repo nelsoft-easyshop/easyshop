@@ -65,7 +65,7 @@ class CashOnDeliveryGateway extends AbstractGateway
         $response['txnid'] = $txnid;
 
         if($pointGateway){
-            $checkPointValid = $pointGateway->isPointValid($memberId);
+            $checkPointValid = $pointGateway->isPointValid($memberId, $grandTotal);
             if(!$checkPointValid['valid']){
                 $response['message'] = $checkPointValid['message'];
                 return $response;
