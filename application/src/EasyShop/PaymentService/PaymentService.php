@@ -509,12 +509,14 @@ class PaymentService
         if($order){
             $points = $this->getTransactionPoints($order);
             $memberId = $order->getBuyer()->getIdMember();
-            $this->pointTracker->addUserPoint(
-                $memberId,
-                EsPointType::TYPE_REVERT, 
-                false, 
-                $points
-            );
+            if((int)$points > 0){
+                $this->pointTracker->addUserPoint(
+                    $memberId,
+                    EsPointType::TYPE_REVERT, 
+                    false, 
+                    $points
+                );
+            }
 
             return true;
         }
