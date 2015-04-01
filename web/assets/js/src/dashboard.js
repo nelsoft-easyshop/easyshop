@@ -2921,7 +2921,9 @@
         });
         var $categoryProductList = $itemsDiv.find('.product-list');
         $categoryProductList.append(listHtmlCollection);
-        if($itemsDiv.hasClass('category-product-list')){
+      
+        if($categoryProductList.hasClass('category-product-list')){
+
             $allLoadedProductInput = $itemsDiv.find('.all-loaded-products-ids');
             var currentProductIds = $.parseJSON($allLoadedProductInput.val());
             var newProductIds = $.merge(currentProductIds, loadedProductIds);
