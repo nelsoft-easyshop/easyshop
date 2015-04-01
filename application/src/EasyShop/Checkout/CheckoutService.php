@@ -276,7 +276,7 @@ class CheckoutService
     }
 
     /**
-     * Get all payment type avaialable
+     * Get all payment type available
      * @param  mixed $cartData [description]
      * @return mixed
      */
