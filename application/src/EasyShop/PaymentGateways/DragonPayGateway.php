@@ -95,18 +95,15 @@ class DragonPayGateway extends AbstractGateway
 
         if(strlen($token) <= 3){
             return [
-                'e' => false,
-                'm' => $errorCodes[$token],
-                'c' => $token,
+                'error' => true,
+                'message' => $errorCodes[$token],
             ];
         }
         else{
             return [
-                'e' => true,
-                'm' => "SUCCESS",
-                'c' => $token,
-                'tid' => $txnId,
-                'u' => $this->redirectUrl.'?tokenid='.$token.'&mode=7',
+                'error' => false,
+                'message' => "SUCCESS",
+                'url' => $this->redirectUrl.'?tokenid='.$token.'&mode=7',
             ];
         }
     }
@@ -168,15 +165,15 @@ class DragonPayGateway extends AbstractGateway
 
         if($validatedCart['itemCount'] !== $productCount){
             return [
-                'e' => false,
-                'm' => "Item quantity not available.",
+                'error' => true,
+                'message' => "Item quantity not available.",
             ];
         }
 
         if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $paymentType) === false){
             return [
-                'e' => false,
-                'm' => "Payment is not available using DragonPay.",
+                'error' => true,
+                'message' => "Payment is not available using DragonPay.",
             ];
         }
 
@@ -200,8 +197,8 @@ class DragonPayGateway extends AbstractGateway
             $checkPointValid = $pointGateway->isPointValid($memberId);
             if(!$checkPointValid['valid']){ 
                 return [
-                    'e' => false,
-                    'd' => $checkPointValid['message']
+                    'error' => true,
+                    'message' => $checkPointValid['message']
                 ];
             } 
             $dragonpayTotal = $grandTotal - $pointGateway->getParameter('amount'); 
@@ -209,8 +206,8 @@ class DragonPayGateway extends AbstractGateway
 
         if($dragonpayTotal < $this->lowestAmount){ 
             return [
-                'e' => false,
-                'd' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
+                'error' => true,
+                'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
             ];
         }
 
@@ -230,8 +227,8 @@ class DragonPayGateway extends AbstractGateway
 
         if($return['o_success'] <= 0){ 
             return [
-                'e' => false,
-                'm' => $return['o_message'],
+                'error' => true,
+                'message' => $return['o_message'],
             ];
         }
         else{ 
