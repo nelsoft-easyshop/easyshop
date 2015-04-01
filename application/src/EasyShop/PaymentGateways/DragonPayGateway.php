@@ -194,7 +194,7 @@ class DragonPayGateway extends AbstractGateway
         $name = $prepareData['productName'];
 
         if($pointGateway){
-            $checkPointValid = $pointGateway->isPointValid($memberId);
+            $checkPointValid = $pointGateway->isPointValid($memberId, $grandTotal);
             if(!$checkPointValid['valid']){ 
                 return [
                     'error' => true,

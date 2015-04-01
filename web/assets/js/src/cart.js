@@ -248,11 +248,16 @@
     var $usedPoints = 0;
     $('.btn-deduct-points').on('click', function(){
         var $pointHolder = $("#points-total"); 
-        var $pointValue = $pointHolder.val().trim();
+        var $pointValue = Math.abs($pointHolder.val().trim());
+        var $cartTotalPrice = parseFloat($cartSubtotal) + parseFloat($shippingFee);
         $usedPoints = $pointValue === "" ? 0 : parseFloat($pointValue);
         $usedPoints = isNaN($usedPoints) ? 0 : parseFloat($usedPoints);
 
         if($usedPoints > $maxPoints){
+            $usedPoints = 0;
+            validateRedTextBox("#points-total");
+        }
+        else if($usedPoints > $cartTotalPrice){
             $usedPoints = 0;
             validateRedTextBox("#points-total");
         }

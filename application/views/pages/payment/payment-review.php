@@ -238,7 +238,7 @@
                             </tr>
                             <tr class="border-bottom-1">
                                 <td>
-                                    Points Deduction
+                                    Easy Points
                                 </td>
                                 <td colspan="3">&mdash; &#8369; <?=number_format($usedPoints, 2, '.', ','); ?></td>
                             </tr>
