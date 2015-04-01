@@ -526,13 +526,14 @@ class CategoryManager
      * 
      * @param integer $memberCategoryId
      * @param string $categoryName
-     * @param integer[] $productIds
      * @param integer $memberId
      * @param integer $parentCategoryId
+     * @param integer[] $addedProductIds
+     * @param integer[] $deletedProductIds
      * 
      * @return mixed
      */
-    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId, $parentCategoryId = EsMemberCat::PARENT)
+    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $memberId, $parentCategoryId = EsMemberCat::PARENT, $addedProductIds = [], $deletedProductIds = [])
     {
         $memberCategoryId = (int)$memberCategoryId;
         $parentCategoyId = (int)$parentCategoryId;
@@ -596,10 +597,6 @@ class CategoryManager
                             $errorMessage = "Only a maximum of two levels are permitted in the category structure.";
                         }
                         else{          
-                            $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memberCategoryId]);                
-                            foreach ($memberCategoryProducts as $memberCategoryProduct) {
-                                $this->em->remove($memberCategoryProduct);
-                            }
                             $datetimeToday = date_create();
                             $memberCategory->setCatName($categoryName);
                             $memberCategory->setlastModifiedDate($datetimeToday);                    
@@ -610,7 +607,13 @@ class CategoryManager
                                 $memberCategory->setSortOrder($higestSortOrder);
                             }
                             $productSortOrder = 0;
-                            foreach ($productIds as $productId) {
+
+                            $memberCategoryProductsForDelete = $esMemberProdcatRepo->getMemberProductsByProductIds($deletedProductIds, $memberCategoryId); 
+                            foreach ($memberCategoryProductsForDelete as $memberCategoryProductTForDelete) {
+                                $this->em->remove($memberCategoryProductTForDelete);
+                            }
+ 
+                            foreach ($addedProductIds as $productId) {
                                 $product =  $esProductRepo->findOneBy([
                                                 "member" => $memberId,
                                                 "idProduct" => $productId,

@@ -2720,11 +2720,14 @@
         var categoryName = $modalDiv.find('.category-name').val();
         var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
         var newParentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
-        var currentCategoryProductsIds = [];
-        $.each($currentCategoryProductList, function(key, $itemNameDiv){
-            currentCategoryProductsIds.push($itemNameDiv.getAttribute('data-id'));
+        var allLoadedProductIds = $.parseJSON($modalDiv.find('.all-loaded-products-ids').val());
+        var productIdsInEditableList = [];
+        $.each($currentCategoryProductList, function(key, itemNameDiv){
+            productIdsInEditableList.push(parseInt(itemNameDiv.getAttribute('data-id'), 10));      
         });
-        
+        var addedProductIds = $(productIdsInEditableList).not(allLoadedProductIds).get();
+        var deletedProductIds = $(allLoadedProductIds).not(productIdsInEditableList).get();
+
         $.ajax({
             type: "POST",
             url: '/memberpage/editCustomCategory',
@@ -2732,7 +2735,8 @@
                 categoryId:categoryId, 
                 categoryName: categoryName, 
                 parentCategory: newParentCategory,
-                productIds: JSON.stringify(currentCategoryProductsIds),
+                addedProductIds: JSON.stringify(addedProductIds),
+                deletedProductIds: JSON.stringify(deletedProductIds),
                 csrfname: csrftoken
             },
             success: function(data){ 
@@ -2778,10 +2782,8 @@
                 }
             }
         });
-
     });
-    
-    
+
      $(document.body).on('click', '.save-new-category', function(){
         var $btn = $(this);
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -2905,6 +2907,7 @@
     function appendCategoryProductList($itemsDiv, products)
     {
         var listHtmlCollection = [];
+        var loadedProductIds = [];
         $.each(products, function(key, product){
             var image  = config.assetsDomain+product.imageDirectory+'thumbnail/'+product.imageFilename;
             var listHtml = ' <li class="ui-widget-content ui-corner-tr"> ' +
@@ -2913,9 +2916,14 @@
                                 '<div class="category-item-name" data-id="'+product.id+'">'+escapeHtml(product.productName)+'</div>'+
                             '</li>';
             listHtmlCollection.push(listHtml);
+            loadedProductIds.push(product.id)
         });
         var $categoryProductList = $itemsDiv.find('.product-list');
         $categoryProductList.append(listHtmlCollection);
+        $allLoadedProductInput = $itemsDiv.find('.all-loaded-products-ids');
+        var currentProductIds = $.parseJSON($allLoadedProductInput.val());
+        var newProductIds = $.merge(currentProductIds, loadedProductIds);
+        $allLoadedProductInput.val(JSON.stringify(newProductIds));
     }
 
     
