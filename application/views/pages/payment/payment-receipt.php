@@ -151,7 +151,7 @@
 
         <div class="row">
             <div class="col-xs-12 mrgn-tb-100 qr-es-logo">
-                <img src="<?=getAssetsDomain(); ?>assets/images/qrcode-images/easyshop-logo.jpg" alt="Easyshop.ph">
+                <img src="<?=getAssetsDomain(); ?>assets/images/qrcode-images/easyshop-logo.jpg" alt="Easyshop.ph" width="200">
             </div>
         </div>
     </div>
