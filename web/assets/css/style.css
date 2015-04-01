@@ -578,12 +578,13 @@ input[type="button"] {
 /***** Scroll Up style ****/
 #scrollUp {
   background:#cecece url(../images/img_scroll_up_arrow.png) center 10px no-repeat;
-  color: #494949;
   bottom: 70px;
+  color: #494949;
   font-size: 12px;
-  right: 20px;
   padding:35px 5px 5px 5px;
+  right: 20px;
   width: 65px;
+  z-index: 999 !important;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;

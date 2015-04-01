@@ -301,7 +301,7 @@
                                 <br/>
                                 Loading more items...
                             </div>
-                            
+                            <input type="hidden" class="all-loaded-products-ids" value="<?php echo json_encode([]); ?>" />
                         </div>
                     </div>
                 </div>  
