@@ -69,6 +69,7 @@
         $("#save-edit").css("display","inline");
         $("#editIconOpen").css("display","none");
         $(".text-contact").css("display","none");
+        $(".external-links-container").css("display","none");
 
         $( "#regionSelect" ).change();
         $( "#storeNameRow" ).show();
@@ -87,7 +88,7 @@
         $("#save-edit").css("display","none");
         $("#editIconOpen").css("display","inline");
         $(".text-contact").css("display","block");
-
+        $(".external-links-container").css("display","block");
         // hide all fields that are empty
         if($( "p#validatedStoreName" ).html() == ""){
             $( "#storeNameRow" ).hide();
