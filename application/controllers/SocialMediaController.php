@@ -189,11 +189,6 @@ class SocialMediaController extends MY_Controller
         $userData->setLastLoginIp($this->serviceContainer['http_request']->getClientIp());
         $userData->setFailedLoginCount(0);
 
-        $session = $this->entityManager->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
-        $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
-        $authenticatedSession->setMember($user)
-                                ->setSession($session);
-        $this->entityManager->persist($authenticatedSession);
         $this->entityManager->flush();
     }
 
