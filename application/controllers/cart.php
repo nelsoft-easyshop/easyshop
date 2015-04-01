@@ -220,7 +220,7 @@ class Cart extends MY_Controller
             echo number_format($shippingFee, 2, '.', '');
         }
         else{
-            echo "Some product not avaialable in location";
+            echo "Some product not available in location";
         }
     }
 }
