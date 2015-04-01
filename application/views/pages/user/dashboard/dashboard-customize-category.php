@@ -302,6 +302,9 @@
                                 Loading more items...
                             </div>
                             
+                            <ul class="presearch-category-product-list" style="display:none;">
+                            </ul>
+                            
                         </div>
                     </div>
                 </div>  

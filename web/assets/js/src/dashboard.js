@@ -2677,7 +2677,13 @@
 
             if($itemListDiv.hasClass('category-items')){
                 url = '/memberpage/getCustomCategory';
-                data = 'categoryId='+categoryId+'&page='+page+'&searchString='+searchString;
+                data = 'categoryId='+categoryId+'&page='+page+'&searchString='+searchString;   
+                /**
+                 * Record product list before searching in a separate unordered list 
+                 */
+                var preSearchProductList = $itemListDiv.find('.presearch-category-product-list');
+                preSearchProductList.html('');
+                preSearchProductList.append( $categoryProductList.children());
             }
             else if($itemListDiv.hasClass('all-items')){
                 var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
@@ -2718,6 +2724,7 @@
         var $modalDiv = $btn.closest('.edit-category-modal');
         var categoryId = $modalDiv.find('.hidden-category-id').val();
         var categoryName = $modalDiv.find('.category-name').val();
+
         var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
         var newParentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
         var currentCategoryProductsIds = [];
