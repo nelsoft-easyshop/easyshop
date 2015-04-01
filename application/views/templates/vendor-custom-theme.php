@@ -64,7 +64,6 @@
     }
     
     .tab_categories:active,
-    .tab_categories:visited,
     .tab_categories:focus{
         color: #<?php echo html_escape($colorHexadecimal); ?> !important;
     }
