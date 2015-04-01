@@ -233,14 +233,14 @@
             dataType: "json",
             data: "csrfname="+$csrftoken+"&paymentMethods="+$paymentMethod, 
             success: function(jsonResponse) {
-                if(jsonResponse.e){ 
-                    window.location.replace(jsonResponse.u);
-                }
-                else{ 
-                    if(jsonResponse.m == 'Item quantity not available.'){
+                if(jsonResponse.error){ 
+                    if(jsonResponse.message == 'Item quantity not available.'){
                         location.reload();
                     }
-                    alert(escapeHtml(jsonResponse.m));
+                    alert(escapeHtml(jsonResponse.message));
+                }
+                else{ 
+                    window.location.replace(jsonResponse.url);
                 }
                 enableButton();
             },
