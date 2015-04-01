@@ -360,18 +360,11 @@ class AccountManager
                     ];
                     $member = null;    
                 }
-                else {
-                    $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
-                    $member->setLastLoginIp($this->httpRequest->getClientIp());
-                    $member->setLoginCount($member->getLoginCount() + 1);
-                    $this->em->flush(); 
-                    $loggedCount = $this->em->getRepository('EasyShop\Entities\EsPointHistory')
-                                            ->countUserPointActivity($member->getIdMember(), EsPointType::TYPE_LOGIN, date("Y-m-d"));
-                    if($loggedCount <= 0){
-                        $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_LOGIN);
-                    }
-                    $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                                        ->getHydratedMember($validatedUsername, $asArray);
+                else { 
+                    $member = !$asArray 
+                              ? $this->updateUserLoginDetails($member)
+                              : $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                   ->getHydratedMember($validatedUsername, $asArray);
                 }
             }
         }
@@ -380,7 +373,30 @@ class AccountManager
             'errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
             'member' => $member
         ];
-    
+    }
+
+    /**
+     * Update user login details
+     * @param  EasyShop\Entities\EsMember $member
+     * @return EasyShop\Entities\EsMember
+     */
+    public function updateUserLoginDetails($member)
+    {
+        $newUserSession = $this->generateUsersessionId($member->getIdMember()); 
+
+        $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
+        $member->setLastLoginIp($this->httpRequest->getClientIp());
+        $member->setLoginCount(bcadd($member->getLoginCount(), 1));
+        $member->setFailedLoginCount(0);
+        $member->setUsersession($newUserSession);
+        $this->em->flush();
+        $loggedCount = $this->em->getRepository('EasyShop\Entities\EsPointHistory')
+                                ->countUserPointActivity($member->getIdMember(), EsPointType::TYPE_LOGIN, date("Y-m-d"));
+        if($loggedCount <= 0){
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_LOGIN);
+        }
+
+        return $member;
     }
     
     /**
