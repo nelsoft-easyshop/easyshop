@@ -341,7 +341,7 @@ class DragonPayGateway extends AbstractGateway
                     $this->paymentService->sendPaymentNotification($orderId, true, false);
                 }
 
-                if($orderStatus === PaymentService::STATUS_SUCCESS){
+                if(strtolower($status) === PaymentService::STATUS_SUCCESS){
                     $this->paymentService->sendPaymentNotification($orderId, false, true);
                 }
             }
