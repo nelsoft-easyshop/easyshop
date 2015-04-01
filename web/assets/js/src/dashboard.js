@@ -2651,7 +2651,7 @@
         });
     });
     
-     
+    
     $(document.body).on('keypress', '.search-category', function(event){
         if ( event.which == 13 ) {
             event.preventDefault();
@@ -2677,7 +2677,7 @@
 
             if($itemListDiv.hasClass('category-items')){
                 url = '/memberpage/getCustomCategory';
-                data = 'categoryId='+categoryId+'&page='+page+'&searchString='+searchString;
+                data = 'categoryId='+categoryId+'&page='+page+'&searchString='+searchString; 
             }
             else if($itemListDiv.hasClass('all-items')){
                 var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');  
@@ -2718,6 +2718,7 @@
         var $modalDiv = $btn.closest('.edit-category-modal');
         var categoryId = $modalDiv.find('.hidden-category-id').val();
         var categoryName = $modalDiv.find('.category-name').val();
+
         var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
         var newParentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
         var allLoadedProductIds = $.parseJSON($modalDiv.find('.all-loaded-products-ids').val());
@@ -2920,10 +2921,12 @@
         });
         var $categoryProductList = $itemsDiv.find('.product-list');
         $categoryProductList.append(listHtmlCollection);
-        $allLoadedProductInput = $itemsDiv.find('.all-loaded-products-ids');
-        var currentProductIds = $.parseJSON($allLoadedProductInput.val());
-        var newProductIds = $.merge(currentProductIds, loadedProductIds);
-        $allLoadedProductInput.val(JSON.stringify(newProductIds));
+        if($itemsDiv.hasClass('category-product-list')){
+            $allLoadedProductInput = $itemsDiv.find('.all-loaded-products-ids');
+            var currentProductIds = $.parseJSON($allLoadedProductInput.val());
+            var newProductIds = $.merge(currentProductIds, loadedProductIds);
+            $allLoadedProductInput.val(JSON.stringify(newProductIds));
+        }
     }
 
     
