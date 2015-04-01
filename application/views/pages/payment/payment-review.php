@@ -124,15 +124,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="shipping-city">City <abbr class="required" title="required">*</abbr></label>
-                                <select id="shipping-city" class="cityselect form-es-control form-es-control-block" disabled>
+                                <select id="shipping-city" class="cityselect form-es-control form-es-control-block" data-usercity="<?=$city; ?>" disabled>
                                     <option value="0">--- Select City ---</option> 
-                                    <?php foreach($locations['cityLookup'] as $parentkey => $arr):?>
-                                        <?php foreach($arr as $lockey => $city):?>
-                                            <option class="echo" value="<?=$lockey?>" data-parent="<?=$parentkey?>" <?=(int)$city === (int)$lockey ? 'selected' : '';?>>
-                                                <?=$city?>
-                                            </option>
-                                        <?php endforeach;?>
-                                    <?php endforeach;?>
                                 </select>
                                 <span class="error-span error-city error"></span>
                             </div>

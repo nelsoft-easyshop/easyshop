@@ -3,6 +3,7 @@
     var $csrftoken = $("meta[name='csrf-token']").attr('content');
     var heightOfModal = 0;
     var $selectedMethod = "paypalcdb";
+    var $cityselect = $('.cityselect');
 
     $(window).on("load resize",function(){ 
         heightOfModal = $(".simplemodal-wrap").outerHeight();
@@ -78,6 +79,7 @@
         disableTextBox();
         $(".addressForm")[0].reset();
         $('.stateregionselect').trigger('change');
+        $cityselect.val($cityselect.data('usercity'));
     });
 
     $(".btn-save-changes").click(function(){
@@ -147,8 +149,9 @@
         cityFilter( $(this), cityselect );
     });
 
-    $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
+    $cityselect.empty().append('<option value="0">--- Select City ---</option>');
     $('.stateregionselect').trigger('change');
+    $cityselect.val($cityselect.data('usercity'));
 
     // payment request 
     function submitPaypal($pointAllocated, $payType)
