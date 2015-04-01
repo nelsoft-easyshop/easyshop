@@ -231,7 +231,9 @@ function ReplaceNumberWithCommas(thisnumber){
 
                 CatDiv.find('[rel=tooltiplist]').tooltip({
                     placement : 'top'
-                });            
+                });
+                
+                fluidDialog();
             }
         });
     }
