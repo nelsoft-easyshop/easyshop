@@ -219,4 +219,22 @@ class EsMemberProdcatRepository extends EntityRepository
         return (int)$maxSortOrder;
     }
     
+    /**
+     * Get Multiple member products by ID
+     *
+     * @param integer[] $memberProductIds
+     * @return EasyShop\Entities\EsMemberProdcat
+     */
+    public function getMemberProductsByIds($memberProductIds)
+    {
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        $qb->select('mp')
+           ->from('EsMemberProdcat', 'mp')
+           ->where($qb->expr()->in('mp.idMemcat', $memberProductIds)
+           ->getQuery();
+           
+        return $qb->getResult();
+    }
+    
 }
