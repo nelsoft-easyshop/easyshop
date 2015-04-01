@@ -905,7 +905,7 @@
                         <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: You have exceeded your purchase limit for a promo of an item in your cart.</span>
                     <?php elseif (!$paymentMethodSuccess): ?>
                         <br/>
-                        <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: Cannot proceed payment. One of your item is not available for checkout.</span>
+                        <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: Can't proceed to payment. One of your items is not available for checkout.</span>
                     <?php else:?>
                         <br/>
                         <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>
