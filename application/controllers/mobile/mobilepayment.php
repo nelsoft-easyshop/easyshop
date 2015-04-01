@@ -124,7 +124,7 @@ class mobilePayment extends MY_Controller
         ];
 
         if(empty($cartData) === false && $canContinue){
-            $validatedCart = $paymentService->validateCartData(['choosen_items' => $cartData],
+            $validatedCart = $paymentService->validateCartData(['choosen_items' => $validCart],
                                                                "0.00", 
                                                                $memberId); 
             $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId);
