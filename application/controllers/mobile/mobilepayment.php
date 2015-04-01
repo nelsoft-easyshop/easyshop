@@ -205,14 +205,14 @@ class mobilePayment extends MY_Controller
                     ];
 
                     $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId); 
-                    if((bool)$response['e']){
-                        $requestUrl = $response['d'];
-                        $isSuccess = true;
-                    }
-                    else{
-                        $message = $response['d'];
+                    if((bool)$response['error']){
+                        $message = $response['message'];
                         $returnUrl = "";
                         $cancelUrl = ""; 
+                    }
+                    else{
+                        $requestUrl = $response['url'];
+                        $isSuccess = true;
                     }
                 }
                 elseif($postPaymentType === "dragonpay") { 

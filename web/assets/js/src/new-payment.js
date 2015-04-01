@@ -186,14 +186,14 @@
                 $('.paypal_button').hide();
             },
             success: function(jsonResponse) {
-                if (jsonResponse.e) { 
-                    window.location.replace(jsonResponse.d);
-                }
-                else{
-                    alert(escapeHtml(jsonResponse.d));
-                    if(jsonResponse.d == 'Item quantity not available.'){
+                if (jsonResponse.error) { 
+                    alert(escapeHtml(jsonResponse.message));
+                    if(jsonResponse.message == 'Item quantity not available.'){
                         location.reload();
                     }
+                }
+                else{
+                    window.location.replace(jsonResponse.url);
                 }
                 enableButton();
             }, 
