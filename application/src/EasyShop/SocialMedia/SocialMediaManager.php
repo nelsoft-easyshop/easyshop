@@ -83,8 +83,7 @@ class SocialMediaManager
      * Point tracker 
      */
     private $pointTracker;
-    
-    
+
     /**
      * Class constructor. Loads dependencies.
      *

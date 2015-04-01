@@ -360,9 +360,10 @@ class AccountManager
                     ];
                     $member = null;    
                 }
-                else { 
+                else {
+                    $member = $this->updateUserLoginDetails($member);
                     $member = !$asArray 
-                              ? $this->updateUserLoginDetails($member)
+                              ? $member
                               : $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                                                    ->getHydratedMember($validatedUsername, $asArray);
                 }
