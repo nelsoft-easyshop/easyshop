@@ -91,6 +91,7 @@ class PointGateway extends AbstractGateway
     /**
      * Check if point request is valid
      * @param  integer $memberId
+     * @param  float   $totalPrice
      * @return mixed
      */
     public function isPointValid($memberId, $totalPrice)
