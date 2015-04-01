@@ -304,9 +304,9 @@ class Payment extends MY_Controller{
             $data['codsuccess'] = ($codCount == $itemCount ? true : false);
             $data['paypalsuccess'] = ($paypalCount == $itemCount ? true : false);
             $data['dragonpaysuccess'] = ($dragonpayCount == $itemCount ? true : false);
-            $data['pesopaysucess'] = ($pesoPayCount == $itemCount ? true : false);
+            $data['pesopaysuccess'] = ($pesoPayCount == $itemCount ? true : false);
             $data['directbanksuccess'] = ($directBankCount == $itemCount ? true : false);
- 
+            $data['paymentMethodSuccess'] = count($paymentType) > 0;
 
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
