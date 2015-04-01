@@ -14,11 +14,11 @@
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='all'/>
-        <link rel="stylesheet" href="/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="all">
-        <link rel="stylesheet" href="/assets/css/payment-receipt.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="print">
+        <link rel="stylesheet" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>'type="text/css" media='all'/>
+        <link rel="stylesheet" href="/assets/css/new-cart.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="all"/>
+        <link rel="stylesheet" href="/assets/css/payment-receipt.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="all"/>
     <?php else: ?>
-        <link type="text/css" href='/assets/css/min-easyshop.payment-receipt.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href='/assets/css/min-easyshop.payment-receipt.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='all'/>
     <?php endif; ?>
 
 </head>
