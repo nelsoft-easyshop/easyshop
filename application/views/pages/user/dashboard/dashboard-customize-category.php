@@ -285,10 +285,6 @@
                                 <div class="col-md-5">
                                     <span class="category-panel-title">My Category</span>
                                 </div>
-                                <div class="col-md-7">
-                                    <input type="text" class="search-category" placeholder="Search product from list...">
-                                    <input type="hidden" class="isSearching" value="false">
-                                </div>
                             </div>
                         </div>
                         <div class="category-items-holder my-category-container category-items" data-page="1" data-isComplete="false" data-isProcessing="false">
@@ -301,7 +297,7 @@
                                 <br/>
                                 Loading more items...
                             </div>
-                            
+                            <input type="hidden" class="all-loaded-products-ids" value="<?php echo json_encode([]); ?>" />
                         </div>
                     </div>
                 </div>  
