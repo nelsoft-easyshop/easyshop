@@ -92,7 +92,7 @@ class PesoPayGateWay extends AbstractGateway
         $toBeLocked = $prepareData['toBeLocked']; 
 
         if($pointGateway){
-            $checkPointValid = $pointGateway->isPointValid($memberId);
+            $checkPointValid = $pointGateway->isPointValid($memberId, $grandTotal);
             if(!$checkPointValid['valid']){ 
                 return [
                     'error' => true,

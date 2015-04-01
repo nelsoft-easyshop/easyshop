@@ -657,6 +657,8 @@ class UserManager
         $formFactory = $this->formFactory;
         $rules = $formValidation->getRules('user_shipping_address'); 
         $data['isSuccessful'] = false;
+        $lat = trim($lat) === "" ? EsAddress::DEFAULT_LAT : trim($lat);
+        $lng = trim($lng) === "" ? EsAddress::DEFAULT_LNG : trim($lng);
         if(intval($type)===EsAddress::TYPE_DELIVERY){
             $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                                 ->setMethod('POST')
