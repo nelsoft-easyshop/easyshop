@@ -106,7 +106,7 @@ class PointGateway extends AbstractGateway
         elseif ((float) $pointAmount > $totalPrice) {
             $returnValue['message'] = "Points cannot be greater than total price.";
         }
-        elseif ((float) $pointAmount < 0) {
+        elseif ((int) $pointAmount < 0) {
             $returnValue['message'] = "Points cannot be negative.";
         }
         else{
