@@ -2406,16 +2406,24 @@ class Memberpage extends MY_Controller
             $memberCategoryId = $this->input->post("categoryId");
             $categoryName = $this->input->post("categoryName") ? 
                             trim($this->input->post("categoryName")) : '';
-            $productIds =    $this->input->post("productIds") ? 
-                            json_decode($this->input->post("productIds")) 
-                            : [];
+            $deletedProductIds = [];
+            $addedProductIds = [];
+
+            if($this->input->post("deletedProductIds") ){
+                $deletedProductIds = json_decode($this->input->post("deletedProductIds"));
+            }
+            if($this->input->post("addedProductIds") ){
+                $addedProductIds = json_decode($this->input->post("addedProductIds"));
+            }
+            
             $parentCategoryId = (int)$this->input->post("parentCategory");
             $result = $this->categoryManager->editUserCustomCategoryProducts(
                         $memberCategoryId,
                         $categoryName,
-                        $productIds,
                         $memberId,
-                        $parentCategoryId
+                        $parentCategoryId,
+                        $addedProductIds,
+                        $deletedProductIds
                     );
         }
         echo json_encode($result);
