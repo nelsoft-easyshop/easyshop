@@ -158,22 +158,22 @@ class PayPalGateway extends AbstractGateway
 
         if($productCount <= 0){
             return [
-                'e' => false,
-                'd' => 'There are not items in your cart.'
+                'error' => true,
+                'message' => 'There are not items in your cart.'
             ];
         }
 
         if($validatedCart['itemCount'] !== $productCount){
             return [
-                'e' => false,
-                'd' => 'Item quantity not available.'
+                'error' => true,
+                'message' => 'Item quantity not available.'
             ];
         }
 
         if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $paymentType) === false){
             return [
-                'e' => false,
-                'd' => "Payment is not available using Paypal.",
+                'error' => true,
+                'message' => "Payment is not available using Paypal.",
             ];
         }
 
@@ -214,8 +214,8 @@ class PayPalGateway extends AbstractGateway
             $checkPointValid = $pointGateway->isPointValid($memberId);
             if(!$checkPointValid['valid']){ 
                 return [
-                    'e' => false,
-                    'd' => $checkPointValid['message']
+                    'error' => true,
+                    'message' => $checkPointValid['message']
                 ];
             } 
             $paypalGrandTotal = bcsub($grandTotal, $pointGateway->getParameter('amount'), 2);
@@ -224,8 +224,8 @@ class PayPalGateway extends AbstractGateway
 
         if($thereIsPromote <= 0 && $paypalGrandTotal < $this->lowestAmount){
             return [
-                'e' => false,
-                'd' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
+                'error' => true,
+                'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
             ];
         }
         foreach ($itemList as $value) {
@@ -311,21 +311,22 @@ class PayPalGateway extends AbstractGateway
                 $this->em->persist($paymentRecord);
                 $this->em->flush();
                 return [
-                    'e' => true,
-                    'd' => $paypalurl
+                    'error' => false,
+                    'message' => "",
+                    'url' => $paypalurl,
                 ]; 
             }
             else{ 
                 return [
-                    'e' => false,
-                    'd' => $return['o_message']
+                    'error' => true,
+                    'message' => $return['o_message']
                 ]; 
             } 
         }
         else{
             return [
-                'e' => false,
-                'd' => urldecode($httpParsedResponseAr["L_LONGMESSAGE0"])
+                'error' => true,
+                'message' => urldecode($httpParsedResponseAr["L_LONGMESSAGE0"])
             ];
         }
     }
