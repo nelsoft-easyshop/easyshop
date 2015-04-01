@@ -78,6 +78,7 @@
         disableTextBox();
         $(".addressForm")[0].reset();
         $('.stateregionselect').trigger('change');
+        $('.cityselect').val($('.cityselect').data('usercity'));
     });
 
     $(".btn-save-changes").click(function(){
@@ -149,6 +150,7 @@
 
     $('.cityselect').empty().append('<option value="0">--- Select City ---</option>');
     $('.stateregionselect').trigger('change');
+    $('.cityselect').val($('.cityselect').data('usercity'));
 
     // payment request 
     function submitPaypal($pointAllocated, $payType)
