@@ -69,9 +69,11 @@
                                             <?PHP endif;?>
                                         <?PHP endif; ?>
                                     <?PHP else : ?>
-                                        <?PHP if ( (int) $boughtTransactionDetails['idPaymentMethod'] === 2) : ?>
+                                        <?PHP if ( (int) $boughtTransactionDetails['idPaymentMethod'] === \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY) : ?>
                                             <span class="trans-status-pending status-class">CONFIRM DRAGONPAY PAYMENT</span>
-                                        <?PHP elseif (intval($boughtTransactionDetails['idPaymentMethod']) === 1 && intval($boughtTransactionDetails['isFlag']) === 1) : ?>
+                                        <?PHP elseif (intval($boughtTransactionDetails['idPaymentMethod']) === \EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC): ?>
+                                            <span class="trans-status-pending status-class">PESOPAY - PENDING</span>
+                                        <?PHP elseif (intval($boughtTransactionDetails['idPaymentMethod']) === \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($boughtTransactionDetails['isFlag']) === 1) : ?>
                                             <span class="trans-status-pending status-class">ON HOLD</span>
                                         <?PHP endif; ?>
                                     <?PHP endif; ?>
