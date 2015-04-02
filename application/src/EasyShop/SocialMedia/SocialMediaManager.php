@@ -9,6 +9,7 @@ use EasyShop\Entities\EsSocialMediaProvider;
 use EasyShop\Entities\EsStoreColor;
 use Facebook\FacebookSession;
 use EasyShop\Entities\EsBanType as EsBanType;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 class SocialMediaManager
 {
@@ -77,8 +78,12 @@ class SocialMediaManager
      *
      */
     private $formErrorHelper;
-    
-    
+
+    /**
+     * Point tracker 
+     */
+    private $pointTracker;
+
     /**
      * Class constructor. Loads dependencies.
      *
@@ -100,7 +105,8 @@ class SocialMediaManager
                                 $stringUtility, 
                                 $formValidation, 
                                 $formFactory, 
-                                $formErrorHelper)
+                                $formErrorHelper,
+                                $pointTracker)
     {
         $this->fbRedirectLoginHelper = $fbRedirectLoginHelper;
         $this->googleClient = $googleClient;
@@ -111,6 +117,7 @@ class SocialMediaManager
         $this->formValidation = $formValidation;
         $this->formFactory = $formFactory;
         $this->formErrorHelper = $formErrorHelper;
+        $this->pointTracker = $pointTracker;
     }
 
     /**
@@ -260,6 +267,7 @@ class SocialMediaManager
 
             $this->userManager->generateUserSlug($member->getIdMember());
             $member = $this->mergeAccount($member, $oAuthId, $oAuthProvider);
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_REGISTER);
         }
 
         $response = [

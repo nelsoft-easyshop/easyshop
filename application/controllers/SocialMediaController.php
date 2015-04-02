@@ -181,20 +181,8 @@ class SocialMediaController extends MY_Controller
         $this->session->set_userdata('member_id', $userData->getIdMember());
         $this->session->set_userdata('usersession', $session);
         $this->session->set_userdata('cart_contents', $cartData);
-        
-        $loginCount = $userData->getLoginCount();
-        $userData->setLoginCount(intval($loginCount) + 1);
-        $userData->setUsersession($session);
-        $userData->setLastLoginDatetime(new DateTime('now'));
-        $userData->setLastLoginIp($this->serviceContainer['http_request']->getClientIp());
-        $userData->setFailedLoginCount(0);
 
-        $session = $this->entityManager->find('\EasyShop\Entities\CiSessions', ['sessionId' => $this->session->userdata('session_id')]);
-        $authenticatedSession = new \EasyShop\Entities\EsAuthenticatedSession();
-        $authenticatedSession->setMember($user)
-                                ->setSession($session);
-        $this->entityManager->persist($authenticatedSession);
-        $this->entityManager->flush();
+        $this->serviceContainer['account_manager']->updateUserLoginDetails($user);
     }
 
     /**
