@@ -102,6 +102,7 @@
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-info" ).addClass( "selectedM" );
     });
+    
     var isDeliveryAddressLoaded = false;
     $( ".delivery-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
@@ -116,8 +117,25 @@
                 type: "get",
                 url: '/memberpage/getDeliveryAddress',
                 success: function(data){ 
-                    var serverResponse = jQuery.parseJSON(data);
-                    jsonCity = jQuery.parseJSON(serverResponse.cities);
+                    var serverResponse = $.parseJSON(data);
+                    /**
+                     * Turn cityLookupObject into an array and sort alphabetically 
+                     */
+                    var cityLookupObject = $.parseJSON(serverResponse.cities);
+                    var cityLookupArray = [];
+                    $.each(cityLookupObject, function(parentId, cityList) {
+                        var cityArray = [];
+                        $.each(cityList, function(cityId, city) {
+                            cityArray.push({'id': cityId, 'name': city});
+                        });
+                        cityArray.sort(function(a,b) {
+                            var cityNameA = a.name.toLowerCase();
+                            var cityNameB = b.name.toLowerCase();
+                            return cityNameA < cityNameB ? -1 : cityNameA > cityNameB ? 1 : 0;
+                        });
+                        cityLookupArray[parentId] = cityArray;
+                    });  
+                    jsonCity = cityLookupArray;
                     var mobile = serverResponse.address ? ( serverResponse.address.mobile !== '' ? '0'+serverResponse.address.mobile : '' ) : '';
                     var telephone = serverResponse.address ? ( serverResponse.address.telephone !== '' ? serverResponse.address.telephone : '' ) : '';
                     var consignee = serverResponse.address ? ( serverResponse.address.consignee !== '' ? serverResponse.address.consignee : '' ) : '';
@@ -129,17 +147,32 @@
                     var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                     var stateRegionDropDown = $("#deliver_stateregion");
                     var dropDownTemplate = "";
+
+                    /**
+                     * Turn stateRegion object into an array and sort alphabetically 
+                     */
+                    var stateRegionArray = [];
                     $.each(serverResponse.stateRegionLists, function(index, stateRegion) {
-                        dropDownTemplate += '<option class="echo" value="'+index+'">' + stateRegion + '</option>';
+                        stateRegionArray.push({'id': index, 'name': stateRegion});
                     });  
+                    stateRegionArray.sort(function(a,b) {
+                        var stateNameA = a.name.toLowerCase();
+                        var stateNameB = b.name.toLowerCase();
+                        return stateNameA < stateNameB ? -1 : stateNameA > stateNameB ? 1 : 0;
+                    });
+                    $.each(stateRegionArray, function(index, stateRegion) {
+                        dropDownTemplate += '<option class="echo" value="'+stateRegion.id+'">' + stateRegion.name + '</option>';
+                    });  
+                    
                     stateRegionDropDown.append(dropDownTemplate);                         
                     stateRegionDropDown.val(consigneeStateRegion);
                     var cityDropDown = $("#delivery_city");
                     dropDownTemplate = "";
-                    if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '' && serverResponse.consigneeCityLookup !== null) {
-                        $.each(serverResponse.consigneeCityLookup, function(index, cityList) { 
-                            dropDownTemplate += '<option class="echo" value="'+index+'">' + cityList + '</option>';                        
-                        }); 
+                    if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '') {
+                        var deliveryStateRegionId = parseInt(serverResponse.consigneeStateRegionId, 10);
+                        $.each(cityLookupArray[deliveryStateRegionId], function(index, city){
+                            dropDownTemplate += '<option class="echo" value="'+city.id+'">' + city.name + '</option>';
+                        });
                         cityDropDown.append(dropDownTemplate);                                                
                     }
                     cityDropDown.val(serverResponse.consigneeCityId);
@@ -161,6 +194,7 @@
         }
         isDeliveryAddressLoaded = true;
     });
+    
     
     $( ".payment-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
