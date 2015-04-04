@@ -1955,12 +1955,9 @@ class Memberpage extends MY_Controller
             $address = $esAddressRepo->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);       
             $stateregionID =  ($address["address"] !== null && (int) $address["stateRegion"] !== 0 ) ? $address["stateRegion"] : 0;
             $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
-
-            $consigneeCityLookup = ($stateregionID !== 0) ? $locationLookup["cityLookup"][$stateregionID] : null;
             $response = [
                 "address" => $address["address"],
                 "cities" =>  $locationLookup["json_city"],
-                "consigneeCityLookup" =>  $consigneeCityLookup,
                 "cityLookup" =>  $locationLookup["cityLookup"],
                 "stateRegionLists" => $locationLookup["stateRegionLookup"],
                 "countryId" =>  EsLocationLookup::PHILIPPINES_LOCATION_ID,
