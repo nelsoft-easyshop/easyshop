@@ -43,6 +43,9 @@ function ReplaceNumberWithCommas(thisnumber){
         if(isSearching){
             $('.tab_categories[data-link="#def-search"]').click(); 
         }
+        else{
+            $('.tab_categories').first().click(); 
+        }
         
     });
 
