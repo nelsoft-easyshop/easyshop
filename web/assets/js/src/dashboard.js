@@ -2655,6 +2655,13 @@
                 $('.allItems').prepend(listItem.fadeIn());
             }
         });
+        
+        var $listContainer = listItem.closest('.category-items-holder');
+        var listContainer = $listContainer[0];
+        var isContainerScrollable = listContainer.scrollHeight > listContainer.clientHeight;
+        if(isContainerScrollable === false){
+           loadMoreCategoryProducts($listContainer, true); 
+        }
     });
     
     
@@ -2938,15 +2945,15 @@
     }
 
     
-    function loadMoreCategoryProducts($div)
+    function loadMoreCategoryProducts($div, isScrollIgnore)
     {    
+        isScrollIgnore = typeof isScrollIgnore === 'undefined' ? false : isScrollIgnore;
         var isComplete = $div.attr('data-isComplete');
         if($.parseJSON(isComplete)){
             return false;
         }
-        
         var div = $div[0];
-        if(div.scrollTop + div.clientHeight >= div.scrollHeight){
+        if(isScrollIgnore === true || div.scrollTop + div.clientHeight >= div.scrollHeight){
             
             $modalDiv = $div.closest('.category-modal');            
             var categoryId = $modalDiv.find('.hidden-category-id').val();
