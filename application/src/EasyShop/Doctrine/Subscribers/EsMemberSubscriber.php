@@ -117,15 +117,11 @@ class EsMemberSubscriber implements EventSubscriber
             if(count($this->changeSet) > 0){
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
-                $unparsedPhrase = $this->languageLoader
-                                       ->getLine($activityType->getActivityPhrase());
-                $phrase = $this->activityManager
-                               ->constructActivityPhrase($this->changeSet,
-                                                         $unparsedPhrase,
-                                                         'EsMember');
-                if($phrase !== ""){
+                $activity = new \EasyShop\Activity\ActivityTypeInformationUpdate();
+                $jsonString = $activity->constructJSON($this->changeSet);  
+                if($jsonString !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $entity);
+                       ->createAcitivityLog($activityType, $jsonString, $entity);
                 }
            }
         }

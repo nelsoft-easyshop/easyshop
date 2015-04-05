@@ -7,13 +7,6 @@
 <?php endif; ?>
 
 <div class="div-tab">
-    <div class="dashboard-breadcrumb">
-        <ul>
-            <li>Dashboard</li>
-            <li class="bc-arrow"><i class="fa fa-angle-right"></i>My Account</li>
-            <li class="bc-arrow"><i class="fa fa-angle-right"></i>Personal Information</li>
-        </ul>
-    </div>
     <div class="div-tab-inner">
         <div class="div-personal-info">
             <p class="panel-dashboard-title">Personal Information</p>

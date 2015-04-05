@@ -24,9 +24,9 @@ class EsActivityHistory
     /**
      * @var string
      *
-     * @ORM\Column(name="activity_string", type="text", nullable=true)
+     * @ORM\Column(name="json_data", type="text", nullable=true)
      */
-    private $activityString;
+    private $jsonData;
 
     /**
      * @var \DateTime
@@ -66,26 +66,26 @@ class EsActivityHistory
     }
 
     /**
-     * Set activityString
+     * Set json data
      *
-     * @param string $activityString
+     * @param string $jsonData
      * @return EsActivityHistory
      */
-    public function setActivityString($activityString)
+    public function setJsonData($jsonData)
     {
-        $this->activityString = $activityString;
+        $this->jsonData = $jsonData;
 
         return $this;
     }
 
     /**
-     * Get activityString
+     * Get jsonData
      *
      * @return string 
      */
-    public function getActivityString()
+    public function getJsonData()
     {
-        return $this->activityString;
+        return $this->jsonData;
     }
 
     /**
