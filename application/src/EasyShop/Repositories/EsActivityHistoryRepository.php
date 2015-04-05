@@ -11,16 +11,16 @@ class EsActivityHistoryRepository extends EntityRepository
     /**
      * Create and insert log in to table
      * @param  integer $activityType
-     * @param  string  $activityString
+     * @param  string  $jsonData
      * @param  \EasyShop\Entities\EsMember $member
      * @return \EasyShop\Entities\EsActivityHistory
      */
-    public function createAcitivityLog($activityType, $activityString, $member)
+    public function createAcitivityLog($activityType, $jsonData, $member)
     {   
         $this->em =  $this->_em;
         $activity = new EsActivityHistory();
         $activity->setActivityType($activityType);
-        $activity->setActivityString($activityString);
+        $activity->setJsonData($jsonData);
         $activity->setMember($member);
         $activity->setActivityDatetime(date_create(date("Y-m-d H:i:s")));
         $this->em->persist($activity);
