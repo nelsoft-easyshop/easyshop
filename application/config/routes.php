@@ -38,41 +38,6 @@
 |
 */
 
-require_once __DIR__ . '/../src/EasyShop/Core/Configuration/Configuration.php';
-$configService = new EasyShop\Core\Configuration\Configuration();
-
-$enable_splash = false;
-$bypass_IP = '124.104.99.90';
-
-if($configService->isConfigFileExists()){
-    $serverConfig = $configService->getConfigValue();
-    if(isset($serverConfig['maintenance_on'])){
-        $enable_splash = $serverConfig['maintenance_on'];
-    }
-    if(isset($serverConfig['maintenance_bypass_ip'])){
-        $bypass_IP = $serverConfig['maintenance_bypass_ip'];
-    }
-}
-
-
-$headers = apache_request_headers();
-if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])){
-    $clientIP = ($_SERVER["HTTP_CF_CONNECTING_IP"]);
-}
-else if(isset($headers['X-Forwarded-For'])){
-    $clientIP = $headers['X-Forwarded-For'];
-}
-else{
-    $clientIP = $_SERVER['REMOTE_ADDR'];
-}
-
-
-if ($enable_splash && ($bypass_IP !== $clientIP)){
-    $route['default_controller'] = "home/splash";
-    $route['404_override'] = 'home/splash';
-    $route['(:any)'] = "home/splash";   
-}
-else {
     $route['default_controller'] = "home";
     $route['404_override'] = 'store/userprofile';
     
@@ -117,6 +82,9 @@ else {
     $route['(?i)me/sales/next'] = 'memberpage/salesMemberPagePaginate';
     $route['(?i)me/sales'] = 'memberpage/requestSalesPage';
     $route['(?i)vendor/(:any)'] = 'store/oldUserProfile/$1';
+
+    $route['(?i)me/product/expressedit-request'] = 'product/requestProductExpressEdit';
+    $route['(?i)me/product/expressedit-update'] = 'product/updateProductExpressEdit';
 
     $route['(?i)printbuytransactions'] = 'memberpage/printBuyTransactions'; # inon
     $route['(?i)printselltransactions'] = 'memberpage/printSellTransactions'; # inon
@@ -163,18 +131,23 @@ else {
     $route['(?i)ScratchAndWin'] = 'promo/ScratchCard/scratchCardPromo';
     $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
     $route['(?i)Estudyantrepreneur'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromo';
-
+    $route['(?i)EstudyantrepreneurSuccess'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoSuccess';
     #MESSAGES
     $route['(?i)messages'] = '/MessageController/messages';
 
+    $route['(?i)register'] = '/login';
+    $route['(?i)redirect'] = '/home/redirect';
     $route['(?i)policy'] = 'home/policy';
     $route['(?i)terms'] = 'home/terms';
     $route['(?i)faq'] = 'home/faq';
     $route['(?i)contact'] = 'home/contact';
-    $route['(?i)guide/buy'] = 'home/guide_buy';
-    $route['(?i)guide/sell'] = 'home/guide_sell';
+    $route['(?i)guide/buy'] = 'home/guide_buyer_old';
+    $route['(?i)guide/sell'] = 'home/guide_seller_old';
+    $route['(?i)how-to-buy'] = 'home/guide_buyer';
+    $route['(?i)how-to-sell'] = 'home/guide_seller';
     $route['(?i)report'] = 'home/bugReport';
     $route['(?i)subscribe'] = 'register/subscribe';
+    $route['(?i)easypoints'] = 'home/easypoints';
 
     #WEBSERVICE
     $route['homewebservice'] = 'webservice/homewebservice';
@@ -186,10 +159,23 @@ else {
     #MOBILE
     $route['mobile/payment-type'] = 'mobile/mobilepayment/getPaymentMethod';
     $route['mobile/payment/review'] = 'mobile/mobilepayment/reviewPayment';
+    $route['mobile/payment/pay/request'] = 'mobile/mobilepayment/paymentRequestToken';
+    $route['mobile/payment/pay/cod'] = 'mobile/mobilepayment/paymentCashOnDelivery';
+    $route['mobile/payment/pay/paypal'] = 'mobile/mobilepayment/paymentPaypalPersist';
+
+    $route['mobile/product/upload/add-image'] = 'mobile/mobileProductUpload/uploadImage';
+    $route['mobile/product/upload/request-token'] = 'mobile/mobileProductUpload/requestUploadToken';
+    $route['mobile/product/upload/process'] = 'mobile/mobileProductUpload/processUpload';
+
+    $route['mobile/resources/category-list'] = 'mobile/resources/getCategories';
+    $route['mobile/resources/location-shipping'] = 'mobile/resources/getLocationForShipping';
+    $route['mobile/resources/location-address'] = 'mobile/resources/getLocationForAddress';
+
+    $route['mobile/add-device-token'] = 'mobile/notification/addDeviceToken';
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
-}
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

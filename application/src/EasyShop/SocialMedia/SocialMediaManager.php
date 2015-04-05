@@ -5,16 +5,19 @@ namespace Easyshop\SocialMedia;
 use \DateTime;
 use EasyShop\Entities\EsMember;
 use EasyShop\Entities\EsMemberMerge;
+use EasyShop\Entities\EsSocialMediaProvider;
 use EasyShop\Entities\EsStoreColor;
 use Facebook\FacebookSession;
+use EasyShop\Entities\EsBanType as EsBanType;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 class SocialMediaManager
 {
 
     const FACEBOOK = 1;
-    
+
     const GOOGLE = 2;
-    
+
     /**
      * Entity Manager instance
      *
@@ -71,6 +74,17 @@ class SocialMediaManager
     private $formFactory;
     
     /**
+     * Form error helper
+     *
+     */
+    private $formErrorHelper;
+
+    /**
+     * Point tracker 
+     */
+    private $pointTracker;
+
+    /**
      * Class constructor. Loads dependencies.
      *
      * @param Facebook\FacebookRedirectLoginHelper $fbRedirectLoginHelper
@@ -79,10 +93,20 @@ class SocialMediaManager
      * @param EasyShop\User\UserManager $userManager
      * @param EasyShop\Core\ConfigLoader $configLoader
      * @param EasyShop\Utility\StringUtility
-     * @param EasShop\\EasyShop\FormValidation\ValidationRules
+     * @param EasyShop\FormValidation\ValidationRules
      * @param Symfony\Component\Form\Forms
+     * @param EasyShop\FormValidation\FormHelpers\FormErrorHelper
      */
-    public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader, $stringUtility, $formValidation, $formFactory)
+    public function __construct($fbRedirectLoginHelper, 
+                                $googleClient, 
+                                $em, 
+                                $userManager, 
+                                $configLoader,
+                                $stringUtility, 
+                                $formValidation, 
+                                $formFactory, 
+                                $formErrorHelper,
+                                $pointTracker)
     {
         $this->fbRedirectLoginHelper = $fbRedirectLoginHelper;
         $this->googleClient = $googleClient;
@@ -92,6 +116,8 @@ class SocialMediaManager
         $this->stringUtility = $stringUtility;
         $this->formValidation = $formValidation;
         $this->formFactory = $formFactory;
+        $this->formErrorHelper = $formErrorHelper;
+        $this->pointTracker = $pointTracker;
     }
 
     /**
@@ -105,10 +131,10 @@ class SocialMediaManager
     public function getLoginUrl($account, $scope = array())
     {
         switch ($account) {
-            case self::FACEBOOK :
+            case EsSocialMediaProvider::FACEBOOK :
                 $loginUrl = $this->fbRedirectLoginHelper->getLoginUrl($scope);
                 break;
-            case self::GOOGLE :
+            case EsSocialMediaProvider::GOOGLE :
                 $this->googleClient->setScopes($scope);
                 $loginUrl = $this->googleClient->createAuthUrl();
         }
@@ -133,7 +159,7 @@ class SocialMediaManager
     {
         $oauthConfig = $this->configLoader->getItem('oauth');
         switch ($account) {
-            case self::FACEBOOK :
+            case EsSocialMediaProvider::FACEBOOK :
                 session_start();
                 $facebookConfig = $oauthConfig['facebook']['key'];
                 FacebookSession::setDefaultApplication($facebookConfig['appId'], $facebookConfig['secret']);
@@ -142,7 +168,7 @@ class SocialMediaManager
                             $session, 'GET', '/me'
                         ))->execute()->getGraphObject(\Facebook\GraphUser::className());
                 break;
-            case self::GOOGLE :
+            case EsSocialMediaProvider::GOOGLE :
                 $googleData = new \Google_Service_Oauth2($this->googleClient);
                 $userProfile = $googleData->userinfo->get();
                 break;
@@ -183,7 +209,7 @@ class SocialMediaManager
         }
         $response = [
             'getMember' => $getMember,
-            'doesAccountMerged' => (bool) $socialMediaAccount
+            'isAccountMerged' => (bool) $socialMediaAccount
         ];
 
         return $response;
@@ -208,12 +234,20 @@ class SocialMediaManager
         $form = $this->formFactory->createBuilder('form', null, ['csrf_protection' => false])
                      ->setMethod('POST')
                      ->add('username', 'text', ['constraints' => $rules['username']])
+                     ->add('gender', 'text', ['constraints' => $rules['gender']])
+                     ->add('email', 'text', ['constraints' => $rules['email']])
                      ->getForm();
-
-        $form->submit([ 'username' => $username]);
+                     
+        $form->submit([ 
+            'username' => $username,
+            'gender' => $gender,
+            'email' => $email,
+        ]);
         if ($form->isValid()) {
             $defaultStoreColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
-                                           ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
+                                          ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
+            $banType = $this->em->getRepository('EasyShop\Entities\EsBanType')
+                                ->find(EsBanType::NOT_BANNED);
             $member = new EsMember();
             $member->setUsername($username);
             $member->setFullname($fullname);
@@ -227,14 +261,21 @@ class SocialMediaManager
             $member->setLastFailedLoginDatetime(new DateTime('now'));
             $member->setSlug('');
             $member->setStoreColor($defaultStoreColor);
+            $member->setBanType($banType);
             $this->em->persist($member);
             $this->em->flush();
 
             $this->userManager->generateUserSlug($member->getIdMember());
             $member = $this->mergeAccount($member, $oAuthId, $oAuthProvider);
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_REGISTER);
         }
 
-        return $member;
+        $response = [
+            'member' => $member,
+            'errors' => $this->formErrorHelper->getFormErrors($form),
+        ];
+
+        return $response;
     }
 
     /**
@@ -446,26 +487,6 @@ class SocialMediaManager
                 ->getQuery();
             $query->execute();
         }
-    }
-
-    /**
-     * Returns the facebook type constant
-     *
-     * @return integer
-     */
-    public function getFacebookTypeConstant()
-    {
-        return self::FACEBOOK;
-    }
-    
-    /**
-     * Returns the google type constant
-     *
-     * @return integer
-     */
-    public function getGoogleTypeConstant()
-    {
-        return self::GOOGLE;
     }
 
     /**

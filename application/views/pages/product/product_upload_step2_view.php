@@ -4,18 +4,20 @@
     <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
     <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap.css" />
-    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>
-    <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>  
+    <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/jquery.cropper.css">
 <?php else: ?>
     <link type="text/css" href='/assets/css/min-easyshop.upload-step2.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
+    <link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.min.css" type="text/css" media="screen" />
 
 
 <script type="text/javascript">
     var af = new Array();
 </script>
 <!--  END OF simple slider-->
-<div class="res_wrapper">
+<div class="container">
 
     <div class="clear"></div>
 
@@ -72,6 +74,7 @@
                 <input type="hidden" class="filescnttxt" name="filescnttxt">
                 <input type="hidden" class="afstart" id="afstart" name="afstart">
                 <input type="hidden" class="coordinates" id="coordinates" name="coordinates">
+                <input type="hidden" class="imageCollections" id="imageCollections" name="imageCollections">
                 <div id="inputList" class="inputList"></div>
             </form> 
 
@@ -84,7 +87,7 @@
             );
             echo form_open('productUpload/uploadimageOther', $attr);
             ?>
-                <input type="hidden" class="coordinatesOther" id="coordinatesOther" name="coordinates">
+                <input type="hidden" class="imageCollectionsOther" id="imageCollectionsOther" name="imageCollections">
                 <input type="file" class="attr-image-input" accept="image/*" style="left: -9999px;position: absolute;z-index: -1900;" name="attr-image-input" >
             </form> 
 
@@ -267,7 +270,7 @@
                                     <div class="discounted_price_container">
                                         <strong>Discounted Price:</strong> &#8369;
                                         <span id="discounted_price_con">
-                                            <?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',''):'0.00';?>
+                                            <?php echo (isset($product_details['price']))?number_format($product_details['price'], 2, '.', ','):'0.00';?>
                                         </span>
                                     </div>
 
@@ -433,7 +436,7 @@
                                                     <?php foreach ($itemQuantity as $keyq => $valueq): ?>
                                                         <div class="div-combination zebra-div combination<?=$cmbcounter;?>" data-itemId="<?=$keyq;?>">
                                                             <div class="col-xs-2 col-sm-1 col-md-1 div1">
-                                                                <input type="text"  size="3" value="<?=$valueq['quantity']; ?>" class="qty ui-form-control"  onkeypress="return isNumberKey(event)">
+                                                                <input type="text"  size="3" value="<?=$valueq['quantity']; ?>" maxlength="4" class="qty ui-form-control"  onkeypress="return isNumberKey(event)">
                                                             </div>
                                                             <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                                                 <?php foreach ($eachAttribute as $key => $value): ?>
@@ -460,7 +463,7 @@
                                         <div class="container-select-control-panel-option clear bg-color">
                                             <div class="select-control-panel-option">
                                                 <div class="col-xs-2 col-sm-1 col-md-1 div1">
-                                                    <input type="text" name="allQuantity" value="<?=(isset($noCombinationQuantity))?$noCombinationQuantity:'1'; ?>" size="3"  onkeypress="return isNumberKey(event)" class="qty ui-form-control">
+                                                    <input type="text" name="allQuantity" value="<?=(isset($noCombinationQuantity))?$noCombinationQuantity:'1'; ?>" size="3" maxlength="4" onkeypress="return isNumberKey(event)" class="qty ui-form-control">
                                                 </div>           
                                                 <div class="col-xs-7 col-sm-9 col-md-9 div2">
                                                     <?php if(isset($eachAttribute) && count($eachAttribute) > 0):?> 
@@ -521,12 +524,18 @@
                 </div>
             </div>
             <div style="display:none" id="crop-image-main" class="simplemodal-container">
+                <div class="imageContainer"> 
                     <img src="" id="imageTag">
-                    <input type='hidden' name='x' value='0' readonly size="7" id='image_x'>
-                    <input type='hidden' name='y' value='0' readonly size="7"  id='image_y'>
-                    <input type='hidden' name='h' value='0' readonly size="7"  id='image_h'>
-                    <input type='hidden' name='w' value='0' readonly size="7"  id='image_w'>
+                </div><br /> 
+                <center>
+                    <a class="zoomIn" title="Zoom In" href="javascript:void(0)"><i class="fa fa-search-plus fa-2x"></i></a>
+                    <a class="rotateLeft" title="Rotate Left" href="javascript:void(0)"><i class="fa fa-undo fa-2x"></i></a>
+                    <a class="refresh" title="Refresh" href="javascript:void(0)"><i class="fa fa-refresh fa-2x"></i></a>
+                    <a class="rotateRight" title="Rotate Right" href="javascript:void(0)"><i class="fa fa-repeat fa-2x"></i></a>
+                    <a class="zoomOut" title="Zoom Out" href="javascript:void(0)"><i class="fa fa-search-minus fa-2x"></i></a>
+                </center>
             </div>
+            
         </div>
     </div>
 </div>
@@ -543,13 +552,13 @@
     var isEdit =  '<?=(isset($is_edit)) ? "1" : "0" ?>';
     var maxImageSize = parseInt('<?=$maxImageSize; ?>');
 </script>
-<link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
 <script src="/assets/tinymce/tinymce.min.js" type="text/javascript"></script>
 
-<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?> 
+    <script src="/assets/js/src/vendor/jquery.cropper.js"></script> 
     <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
-    <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script>
-    <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript' ></script>
+    <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script> 
     <script src="/assets/js/src/vendor/jquery.simplemodal.js" type='text/javascript' ></script>
     <script src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript" ></script> 
     <script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
@@ -569,30 +578,9 @@
     #simplemodal-container {
         width: 60%;
     }
-    .ui-dialog-title {
-        display: inline-block;
-        font-size: 18px;
-        font-weight: bold;
-        padding-bottom: 8px;
-        width: 475px;
-    }
-    .ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only {
-        background-color: #f18200;
-        border: medium none;
-        border-radius: 3px;
-        color: #ffffff;
-        cursor: pointer;
-        margin: 5px;
-        min-width: 70px;
-        padding: 8px;
-        transition: all 0.3s ease-in-out 0s;
-    }
     label.errorTxt{
         color:red;
         font-size: 12px;
         margin-left: 5px;
-    }
-    .ui-dialog-titlebar-close:before {
-        line-height: 18px;
     }
 </style>

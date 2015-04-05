@@ -13,8 +13,11 @@
     var csrfname = $("meta[name='csrf-name']").attr('content');  
 
     /********************* DEACTIVATE ACCOUNT **************************/
+    
+    $("#deactivateAccountForm").submit(function(e) {
+        e.preventDefault();
+    }).validate({
 
-     $("#deactivateAccountForm").validate({
          rules: {
             deactivatePassword: {
                 required: true,
@@ -22,7 +25,6 @@
             deactivateUserName: {
                 required: true,
                 },                
-
          },
          messages:{
             deactivatePassword:{
@@ -35,8 +37,7 @@
             error.appendTo(element.parent());
                       
          },
-         submitHandler: function(form, event){
-            event.preventDefault();
+         submitHandler: function(form){
             var password = $("#deactivatePassword").val();
             var username = $("#deactivateUsername").val();
             var actionGroupChangePass = $('#deactivateActionPanel');    
@@ -147,6 +148,19 @@
 
         }
      });
+     
+     
+    $('#changePassForm input[name="password"]').keyup(function(){
+        var $this = $(this);
+        var $confirmPasswordInput = $('#changePassForm input[name="confirmPassword"]');
+        if($this.val() === ''){
+            $confirmPasswordInput.val('');
+            $confirmPasswordInput.prop('disabled', true);
+        }
+        else{
+            $confirmPasswordInput.prop('disabled', false);
+        }
+    });
 
     /**************** GOOGLE MAPS ******************************/
 
@@ -457,9 +471,9 @@
         optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
         cityselect.find('option.echo').remove();
         if(stateregionID in jsonCity){
-            jQuery.each(jsonCity[stateregionID], function(k,v){
+            jQuery.each(jsonCity[stateregionID], function(key,city){
                 //optionclone.attr('value', k).html(v).show();
-                optionclone.attr('value', k).html(v).css('display', 'block');
+                optionclone.attr('value', city.id).html(city.name).css('display', 'block');
                 cityselect.append(optionclone.clone());
             });
         }

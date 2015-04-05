@@ -33,7 +33,6 @@
                     var html = '<ul>';
                     var data_content, data_id, cnt;
                     var delim_img = ' <img src = "/assets/images/img_bullet2.jpg"/> ';
-                    console.log(obj.length);
                     if((obj.length)>0){
                         jQuery.each(obj,function(){
                             data_content = '';
@@ -132,8 +131,6 @@
 
     function editCategory(ids,customCategory)
     {
-        console.log(ids);
-        console.log(typeof(ids));
         var obj = JSON.parse(ids);
         var other_cat_name = escapeHtml(customCategory); 
         if(obj.length > 0){
@@ -199,12 +196,11 @@
     });
 
     $(document).on('change focusout','.customCategory',function () {
-        var selector = $(this);
-        var value = escapeHtml(selector.val());
+        var selector = $(this); 
         var catId = selector.data('catid');
         var level = selector.data('level');
-        console.log(value);
-        if(selector.val().trim() == "" || selector == "undefined"){
+        var value = escapeHtml(selector.val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ' ').trim());
+        if(value == "" || selector == "undefined"){
             $(this).replaceWith('<a class="custom_category_link pd-13-12 display-ib" data-level="'+level+'" data-catid="'+catId+'" >Add Category <span class="span_bg icon-add border-rad-90"></span></a>');
         }
         else{
@@ -212,7 +208,7 @@
             $('#cr_div_container').empty(); 
             $('#first_text').empty().append('<a href="javascript:void(0)" class="selected_category_link" data-level="01">Main Category</a>');
             $('#cl_div_container').append('<div class="border-rad-tl-bl-3 pd-13-12 cat_sel1"><a class="selected_category_link" data-catid="'+catId+'" data-name="'+value+'"   href="javascript:void(0)">'+value+'</a></div>').find('.cat_sel1').addClass('selected_category cat_arrw').removeClass('cat_sel1').siblings().removeClass('selected_category');
-            $(this).replaceWith('<a class="custom_category_link">'+selector.val()+'</a>');  
+            $(this).replaceWith('<a class="custom_category_link">'+value+'</a>');  
             $(".add_category_submit").append('<input type="hidden" name="hidden_attribute" value="'+catId+'" class="hidden_attribute"><input class="proceed_form" id="proceed_form" type="submit" value="Proceed with '+value+'">');    
             $(".add_category_submit").append('<input type="hidden" name="othernamecategory" value="'+value+'" />');           
         }

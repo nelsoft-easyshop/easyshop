@@ -27,25 +27,32 @@ $(function(){
     });
 
     $('#tabs').tabs();
-    
-    $('#delivery').on('click',function(){
-        var freeShippingBtn = $('#set_free_shipping');
-        var shippingDetailsBtn = $('#set_shipping_details');
-        
-        if($(this).is(':checked')){
-            $('#delivery_options').slideDown();
-            $('#prod_delivery_cost').val('free');
-        }else{
+
+    $(".radio-select").on('click',function(){
+        var $this = $(this);
+        var $value = $this.val();
+        var $freeShippingBtn = $('#set_free_shipping');
+        var $shippingDetailsBtn = $('#set_shipping_details');
+
+        if($value == "meetup"){ 
             $('#delivery_options').slideUp();
             $('#prod_delivery_cost').val('off');
+            $('#shipping_div').hide();
+            $freeShippingBtn.addClass('active');
+            $shippingDetailsBtn.removeClass('active');
         }
-
-        if(!freeShippingBtn.hasClass('active')){
-            freeShippingBtn.addClass('active');
-        }
-        shippingDetailsBtn.removeClass('active');
-        $('#shipping_div').hide();
-    });
+        else{
+            $('#delivery_options').slideDown();
+            $('#prod_delivery_cost').val('free');
+            if(!$freeShippingBtn.hasClass('active')){
+                $freeShippingBtn.addClass('active');
+            }
+            else{
+                $shippingDetailsBtn.removeClass('active');
+                $('#shipping_div').hide();
+            }
+        } 
+    }); 
     
     $('.delivery_cost').on('click',function(){
         var shippingDiv = $('#shipping_div');
@@ -81,8 +88,9 @@ $(function(){
         newPrice = parseFloat(newPrice).toFixed(2);
         
         if( $.isNumeric(newPrice) && newPrice >= 0 && !newPrice.match(/[a-zA-Z\+]/) ){
-            $(this).val( ReplaceNumberWithCommas(newPrice) );
-        }else{
+            $(this).val( newPrice );
+        }
+        else{
             $(this).val('');
         }
     }).on('keyup','input.shipprice',function(e){
@@ -91,8 +99,9 @@ $(function(){
         newPrice = parseFloat(newPrice).toFixed(2);
         
         if( (e.keyCode == 13 || e.which == 13) && $.isNumeric(newPrice) && newPrice >= 0 && !newPrice.match(/[a-zA-Z\+]/) ){
-            $(this).val( ReplaceNumberWithCommas(newPrice) );
-        }else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
+            $(this).val( newPrice );
+        }
+        else if ( (e.keyCode == 13 || e.which == 13) && !$.isNumeric(newPrice) ) {
             $(this).val('');
         }
     });
@@ -199,11 +208,11 @@ $(document).ready(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         jQuery.ajax({
             type: "POST",
-            url: '/memberpage/billing_info_u', 
-            data: "bi_id="+account.billing_id+"&bi_payment_type"+"=Bank&bi_acct_name="+account.account_name+"&bi_acct_no="+account.account_no+"&bi_bank="+account.bank_list+"&"+csrfname+"="+csrftoken, 
+            url: '/memberpage/updatePaymentAccount', 
+            data: "payment-account-id="+account.billing_id+"&account-name="+account.account_name+"&account-number="+account.account_no+"&bank-id="+account.bank_list+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
-                var obj = JSON.parse(response);
-                if((parseInt(obj.e,10) == 1) && (obj.d=='success')){
+                var jsonResponse = JSON.parse(response);
+                if(jsonResponse.isSuccessful){
                     selected.data('bankid',account.bank_list);
                     selected.data('acctname',account.account_name);
                     selected.data('acctno',account.account_no);
@@ -216,12 +225,9 @@ $(document).ready(function(){
                     $('.deposit_edit').show();
                     $('.deposit_update').hide();
                     $('.deposit_cancel').hide();
-                    
-                    
-                }else if((parseInt(obj.e,10) == 0) && (obj.d=='duplicate')){
-                    alert('You are already using this account number.');
                 }else{
-                    alert('We are having a problem right now. Refresh the page to try again.');
+                    var error = jsonResponse.errors[0];
+                    alert(escapeHtml(error));
                 }
             }
         });
@@ -231,7 +237,7 @@ $(document).ready(function(){
         var account_name = $('#deposit_acct_name').val();
         var bank_name = $('#bank_name').val();
         var account_no = $('#deposit_acct_no').val();
-        var bank_list = $('#bank_list').val();
+        var bankId = $('#bank_list').val();
         var valid = true;
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
@@ -243,7 +249,7 @@ $(document).ready(function(){
             validateRedTextBox('#deposit_acct_no');
             valid = false;
         }
-        if(parseInt(bank_list,10) === 0){
+        if(parseInt(bankId,10) === 0){
             validateRedTextBox('#bank_list');
             valid = false;
         }
@@ -253,20 +259,18 @@ $(document).ready(function(){
         
         jQuery.ajax({
             type: "POST",
-            url: '/memberpage/billing_info', 
-            data: "express=true&bi_payment_type=Bank&bi_bank="+bank_list+"&bi_acct_no="+account_no+"&bi_acct_name="+account_name+"&"+csrfname+"="+csrftoken, 
+            url: '/memberpage/createPaymentAccount', 
+            data: "account-bank-id="+bankId+"&account-name="+account_name+"&account-number="+account_no+"&"+csrfname+"="+csrftoken, 
             success: function(response) {
-                var obj = JSON.parse(response);
-                if((parseInt(obj.e,10) == 0)&&(obj.d=='duplicate')){
-                    alert('You are already using this account number');					
-                }else if((parseInt(obj.e,10) == 1)&&(obj.d=='success')){
+                var jsonResponse = JSON.parse(response);
+                if(jsonResponse.isSuccessful){
                     var new_option = $(document.createElement( "option" ));
                     new_option.data('bankname',bank_name);
-                    new_option.data('bankid',bank_list);
+                    new_option.data('bankid',bankId);
                     new_option.data('acctname',account_name);
                     new_option.data('acctno',account_no);
                     new_option.text('Bank: '+bank_name+' - '+ account_name);
-                    var new_id = parseInt(obj.id,10);
+                    var new_id = parseInt(jsonResponse.newId,10);
                     new_option.val(new_id);
                     new_option.insertBefore($('#deposit_info').find(':selected'));
                     $('#deposit_info').find(':selected').prop('selected', false);
@@ -279,9 +283,10 @@ $(document).ready(function(){
                     $('.deposit_save').hide();
                     $('.deposit_update').hide();
                     $('.deposit_cancel').hide();
-                    
-                }else{
-                    alert('Something went wrong. Pleasy try again later.');
+                }
+                else{
+                    var error = jsonResponse.errors[0];
+                    alert(escapeHtml(error)); 
                 }
             }
         });
@@ -364,21 +369,7 @@ $(document).ready(function(){
 |
 */
 $(function(){
-    $('#cod_btn').on('click',function(){
-        var codinput = $('#allow_cod');
-        var buttonLabel = $(this).find('span.button-label');
-        
-        if($(this).hasClass('active')){
-            $(this).removeClass('active');
-            buttonLabel.text('Allow Cash on Delivery');
-            codinput.val("off");
-        }else{
-            $(this).addClass('active');
-            buttonLabel.text('Cash on Delivery');
-            codinput.val("on");
-        }
-    });
-
+    
     // Add new price and location fields
     $('#shipping_div').on('click', '.new_shipping_input', function(){
         var datagroup = $(this).parent().siblings('div.data_group');
@@ -470,11 +461,9 @@ $(function(){
                         return value != loc;
                     });
                 });
-            });		
+            });
         }
         $(this).closest('div.shipping_group').remove();
-        
-        console.log(checkData);
         
     });
     
@@ -510,9 +499,7 @@ $(function(){
             
         }
         
-        // $(this).parent().remove();
         divInput.remove();
-        console.log(checkData);
     });
     
     // On change handler for select location
@@ -579,8 +566,6 @@ $(function(){
                 });
             }
         }
-        
-        console.log(checkData);
     });
     
     // On change handler for checkbox
@@ -627,11 +612,7 @@ $(function(){
             }
             thisCheckbox.parent('label').removeClass('active');
         }
-        
-        
-        console.log(checkData);
     });
-    console.log(checkData);
 });
 
 
@@ -647,6 +628,20 @@ $(function(){
         var shippingGroup = $('#shipping_div div.shipping_group');
         var inputGroup = $('#shipping_div div.shipping_input');
         
+        var paymentAccountSelectBox = $('#deposit_info');
+        if(paymentAccountSelectBox.length > 0){
+            var paymentAccountId = paymentAccountSelectBox.find('option').length;
+            if(paymentAccountId <= 1){
+                var isProceedPaymentAccount = confirm("We can't send your money if your bank details are empty, are you sure you want to proceed without entering your bank details?");
+                if(!isProceedPaymentAccount){
+                    $('html, body').animate({
+                        scrollTop:$('#bank_details').offset().top
+                    }, 1500);
+                    return false;
+                }
+            }
+        }
+
         // Check for "Meetup" or "Delivery"
         var checkedDeliveryOption = form.find('input.delivery_option:checked');
         if( checkedDeliveryOption.length <= 0){
@@ -857,13 +852,14 @@ $(function(){
                 i++;
             });
         }
-        console.log(checkData);
     }); 
     
     /*
      *	Add shipping preferences
      */
     $('#shipping_div').on('click','.add_ship_preference', function(){
+        var $thisButton = $(this);
+        var $closesSelect = $thisButton.closest('.shipping_group').find('.shipping_preference');
         var isIncomplete = false;
         var preferenceData = {};
         var preferenceName = "";
@@ -871,7 +867,7 @@ $(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         
         // Get location vs price details for first attr array, since data is same for all attr arrays
-        var inputDiv = $(this).parent().siblings('div.data_group').children('div.shipping_input');
+        var inputDiv = $thisButton.parent().siblings('div.data_group').children('div.shipping_input');
         
         inputDiv.each(function(){
             var priceField = $(this).find('input.shipprice');
@@ -902,12 +898,14 @@ $(function(){
         
         if( !isIncomplete ){
             $('#dialog_preference_name').dialog({
-                height: 180,
+                height: 'auto',
+                width: 'auto',
                 autoOpen: false,
                 title: "Enter Preference name",
                 modal: true,
                 closeOnEscape: false,
                 draggable: false,
+                fluid: true,
                 buttons:[
                     {
                         text: "Ok",
@@ -927,7 +925,7 @@ $(function(){
                                     $('button.ui-button').attr('disabled',false);
                                     
                                     try{
-                                        var obj = jQuery.parseJSON(data);	
+                                        var obj = jQuery.parseJSON(data);
                                     }
                                     catch(e){
                                         alert('An error was encountered while processing your data. Please try again later.');
@@ -936,20 +934,17 @@ $(function(){
                                     }
                                     
                                     if( obj['result'] === 'success' ){
-                                        // Recreate shippingpreference variable data
                                         shippingPreference = obj['shipping_preference'];
-                                        //Create new list for shipping preferences
                                         var prefSelect = $('select.shipping_preference');
-                                        
                                         prefSelect.each(function(){
                                             var thisSelect = $(this);
-                                            thisSelect.children('option:not(:first)').remove();
-                                            // Create new preference display contents
-                                            $.each(shippingPreference['name'], function(headId,name){
-                                                thisSelect.append('<option value="'+headId+'">'+name+'</option>');
+                                            $.each(shippingPreference['name'], function(headId, name){
+                                                thisSelect.append('<option value="'+escapeHtml(headId)+'">'+escapeHtml(name)+'</option>');
                                             });
                                         });
-                                    }else{
+                                        $closesSelect.children('option:last').attr("selected","selected");
+                                    }
+                                    else{
                                         alert(obj['error']);
                                     }
                                     thisdialog.dialog("close");
@@ -990,7 +985,7 @@ $(function(){
         if (r==true){
             $.post('/productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
                 try{
-                    var obj = jQuery.parseJSON(data);	
+                    var obj = jQuery.parseJSON(data);
                 }
                 catch(e){
                     alert('An error was encountered while processing your data. Please try again later.');
@@ -998,11 +993,10 @@ $(function(){
                     return false;
                 }
                 
-                if( obj['result'] === 'success' ){				
+                if( obj['result'] === 'success' ){
                     // Check each select and hide delete button when headId is selected (then is removed)
                     allSelect.each(function(){
                         selectedVal = parseInt($(this).val());
-                        console.log(selectedVal);
                         if( selectedVal === headId ){
                             $(this).siblings('.delete_ship_pref').hide();
                         }
@@ -1045,35 +1039,6 @@ function chosenSelectedTrimmer(selectObj){
         $(this).text(newtext);
     });
 }
-
-/**
-* Function to handle display of Price Value
-**/
-function ReplaceNumberWithCommas(thisnumber){
-    //Seperates the components of the number
-    var n = thisnumber.toString().split(".");
-    //Comma-fies the first part
-    n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    //Combines the two sections
-    return n.join(".");
-}
-
-function validateRedTextBox(idclass)
-{
-  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-    "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-    "box-shadow": "0px 0px 2px 2px #FF0000"}).addClass('my_err');
-} 
-
-function validateWhiteTextBox(idclass)
-{/*
-  $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-    "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-    "box-shadow": "0px 0px 2px 2px #FFFFFF"}).removeClass('my_err');*/
-    $(idclass).css({"-webkit-box-shadow": "none",
-        "-moz-box-shadow": "none",
-        "box-shadow": "none"}).removeClass('my_err');
-};
 
 /**
  * Check if the event keycode is number key

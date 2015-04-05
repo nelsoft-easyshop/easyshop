@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * Workaround for managing non-CI packages
  *
@@ -63,6 +61,9 @@ class Kernel
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
         $config->setProxyDir(APPPATH . '/src/EasyShop/Doctrine/Proxies');
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
+        $config->addCustomStringFunction('BINARY', 'EasyShop\Doctrine\Query\MySql\Binary');
+        $config->addCustomStringFunction('FIELD', 'EasyShop\Doctrine\Query\MySql\Field');
+        $config->addCustomStringFunction('DATE', 'EasyShop\Doctrine\Query\MySql\Date');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
@@ -123,18 +124,6 @@ class Kernel
             return $em;
         };
 
-        // ZeroMQ pusher
-        $container['user_pusher'] = function ($c) {
-            $wsConfig = require APPPATH . '/config/param/websocket.php';
-            $context = new \ZMQContext();
-            $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'my pusher');
-            $socket->connect($wsConfig['pushUrl']);
-            
-            // keeps from blocking when unable to send
-            $socket->setSockOpt(ZMQ::SOCKOPT_LINGER, 50);
-            
-            return new EasyShop\WebSocket\Pusher\UserPusher($socket, $c['entity_manager']);
-        };
 
         //Configuration Setter
         $container['local_configuration'] = function ($c) {
@@ -189,27 +178,46 @@ class Kernel
             $encrypter = new \CI_Encrypt();
             $configLoader = $container['config_loader'];
             $languageLoader = $container['language_loader'];
-            $hashUtitility = $container['hash_utility'];
-            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
-                                                        $userManager, 
-                                                        $formFactory, 
-                                                        $formValidation, 
-                                                        $formErrorHelper,
-                                                        $stringHelper,
-                                                        $httpRequest,
-                                                        $emailNotification,
-                                                        $parser,$encrypter,
-                                                        $configLoader,
-                                                        $languageLoader,
-                                                        $hashUtitility
-                                                        );        
+            $hashUtitility = $container['hash_utility']; 
+            $pointTracker = $container['point_tracker'];
+            $socialMediaManager = $container['social_media_manager'];
+
+            return new \EasyShop\Account\AccountManager(
+                $em,
+                $brcyptEncoder, 
+                $userManager, 
+                $formFactory, 
+                $formValidation, 
+                $formErrorHelper,
+                $stringHelper,
+                $httpRequest,
+                $emailNotification,
+                $parser,$encrypter,
+                $configLoader,
+                $languageLoader,
+                $hashUtitility,
+                $pointTracker,
+                $socialMediaManager
+            ); 
         };
 
-        $jsServerConfig = require APPPATH . 'config/param/js_config.php';
-        $container['message_manager'] = function ($c) use ($container, $jsServerConfig) {
+        $container['message_manager'] = function ($c) use ($container) {
             $em = $container['entity_manager'];
-            $localConfig = $container['local_configuration'];
-            return new \EasyShop\Message\MessageManager($em, $localConfig, $jsServerConfig);
+            $configLoader = $container['config_loader'];
+            $languageLoader = $container['language_loader'];
+            $socialMediaManager = $container['social_media_manager'];
+            $emailService = $container['email_notification'];
+            $parser = new \CI_Parser();
+            $redisClient = $container['redis_client'];
+            $localConfiguration = $container['local_configuration'];
+            return new \EasyShop\Message\MessageManager($em, 
+                                                        $configLoader,
+                                                        $languageLoader,
+                                                        $socialMediaManager,
+                                                        $emailService, 
+                                                        $parser,
+                                                        $redisClient,
+                                                        $localConfiguration);
         };
 
         // Paths
@@ -293,7 +301,13 @@ class Kernel
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
             $cart = new \EasyShop\Cart\CodeigniterCart($container['entity_manager']);
-            return new \EasyShop\Cart\CartManager($container['entity_manager'], $cart, $productManager, $promoManager);
+            return new \EasyShop\Cart\CartManager(
+                $container['entity_manager'], 
+                $cart, 
+                $productManager, 
+                $promoManager,
+                $container['product_shipping_location_manager']
+            );
         };
 
         // Search product
@@ -348,8 +362,9 @@ class Kernel
             $em = $container['entity_manager'];
             $userManager = $container['user_manager'];
             $productManager = $container['product_manager'];
+            $pointTracker = $container['point_tracker'];
 
-            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
+            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager, $pointTracker);
         };
         
         $container['image_utility'] = function ($c) use ($container){
@@ -406,6 +421,8 @@ class Kernel
             $stringUtility = $container['string_utility'];
             $formValidation = $container['form_validation'];
             $formFactory = $container['form_factory'];
+            $formErrorHelper = $container['form_error_helper'];
+            $pointTracker = $container['point_tracker'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
                 $fbRedirectLoginHelper,
                 $googleClient,
@@ -414,7 +431,9 @@ class Kernel
                 $configLoader,
                 $stringUtility,
                 $formValidation,
-                $formFactory
+                $formFactory,
+                $formErrorHelper,
+                $pointTracker
             );
         };
         // Category Manager
@@ -423,7 +442,22 @@ class Kernel
             $configLoader = $container['config_loader'];
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
-            return new \EasyShop\Category\CategoryManager($configLoader,$em, $productManager, $promoManager, $container['sort_utility']);
+            $sortUtility = $container['sort_utility'];
+            $stringUtility = $container['string_utility'];
+            $formFactory = $container['form_factory'];
+            $formValidation = $container['form_validation'];
+            $formErrorHelper = $container['form_error_helper'];
+            return new \EasyShop\Category\CategoryManager(
+                            $configLoader,
+                            $em, 
+                            $productManager, 
+                            $promoManager, 
+                            $sortUtility,
+                            $stringUtility,
+                            $formFactory,
+                            $formValidation,
+                            $formErrorHelper
+                        );
         };
         
         $container['config_loader'] = function ($c) {
@@ -435,12 +469,25 @@ class Kernel
         // Payment Service
         $container['payment_service'] = function ($c) use ($container) {
             return new \EasyShop\PaymentService\PaymentService(
-                            $container['entity_manager'],
-                            $container['http_request'],
-                            $container['point_tracker'],
-                            $container['promo_manager'],
-                            $container['product_manager']
-                            );
+                $container['entity_manager'],
+                $container['http_request'],
+                $container['point_tracker'],
+                $container['promo_manager'],
+                $container['product_manager'],
+                $container['email_notification'],
+                $container['mobile_notification'],
+                new \CI_Parser(),
+                $container['config_loader'],
+                $container['xml_resource'],
+                $container['social_media_manager'],
+                $container['language_loader'],
+                $container['message_manager'],
+                $container['dragonpay_soap_client'], 
+                $container['transaction_manager'], 
+                $container['product_shipping_location_manager'],
+                new \Curl\Curl(),
+                $container['checkout_service']
+            );
         };
 
 
@@ -469,16 +516,19 @@ class Kernel
         };
 
         // NUSoap Client
-        $container['nusoap_client'] = function ($c) {
+        $container['dragonpay_soap_client'] = function ($c) use ($container) {
             $url = '';
             if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
-            // LIVE
-                $url = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+                // LIVE
+                $configLoad = $container['config_loader']->getItem('payment','production');  
             }
             else{
-            // SANDBOX
-                $url = 'http://test.dragonpay.ph/DragonPayWebService/MerchantService.asmx?wsdl';
+                // SANDBOX
+                $configLoad = $container['config_loader']->getItem('payment','testing');  
             }
+
+            $url = $configLoad['payment_type']['dragonpay']['Easyshop']['webservice_url'];
+
             return new \nusoap_client($url,true);
         };
 
@@ -507,11 +557,16 @@ class Kernel
         // Notification Services
         $emailConfig = require(APPPATH . "config/email_swiftmailer.php");
         $smsConfig = require(APPPATH . "config/sms.php");
-        $container['email_notification'] = function($c) use ($emailConfig){
-            return new \EasyShop\Notifications\EmailNotification($emailConfig);
+        $container['email_notification'] = function($c) use ($container ,$emailConfig){
+            return new \EasyShop\Notifications\EmailNotification(
+                $container['entity_manager'],
+                $emailConfig
+            );
         };
-        $container['mobile_notification'] = function($c) use ($smsConfig){
-            return new \EasyShop\Notifications\MobileNotification($smsConfig);
+        $container['mobile_notification'] = function($c) use ($smsConfig, $container){
+            $em = $container['entity_manager']; 
+
+            return new \EasyShop\Notifications\MobileNotification($em,$smsConfig);
         };
 
         $awsConfig = require_once(APPPATH . "config/param/aws.php");
@@ -524,14 +579,15 @@ class Kernel
         };
 
         $container['assets_uploader'] = function($c) use ($container){
-            $uploadLibrary = new CI_Upload();
+            $uploadLibrary = new MY_Upload();
             $imageLibrary = new MY_Image_lib();
             return new \EasyShop\Upload\AssetsUploader( $container["entity_manager"], 
                                                         $container["aws_uploader"],
                                                         $container["config_loader"],
                                                         $uploadLibrary,
                                                         $imageLibrary,
-                                                        ENVIRONMENT);
+                                                        ENVIRONMENT, 
+                                                        $container['image_utility']);
         };
         
         $container["image_utility"] = function($c) use ($container){
@@ -547,11 +603,30 @@ class Kernel
                             );
         };
 
+        // Feedback Transaction
+        $container['feedback_transaction_service'] = function ($c) use ($container) {
+            return new \EasyShop\Review\FeedbackTransactionService(
+                $container['entity_manager'],
+                $container['point_tracker'],
+                $container['form_validation'],
+                $container['form_factory'],
+                $container['form_error_helper'],
+                $container['transaction_manager']
+            );
+        };
+
         // Product Shipping Manager
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(
-                            $container['entity_manager']
-                        );
+                $container['entity_manager']
+            );
+        };
+
+        // Member Feature Restrict Manager
+        $container['member_feature_restrict_manager'] = function ($c) use ($container) {
+            return new \EasyShop\MemberFeatureRestrict\MemberFeatureRestrictManager(
+                $container['entity_manager']
+            );
         };
 
         $container['language_loader'] = function ($c) {
@@ -571,8 +646,9 @@ class Kernel
                             $container['entity_manager'],
                             $container['product_manager'],
                             $container['promo_manager'],
-                            $container['cart_manager'],
-                            $container['payment_service']
+                            $container['cart_manager'], 
+                            $container['product_shipping_location_manager'],
+                            $container['config_loader']
                         );
         };
         
@@ -582,6 +658,36 @@ class Kernel
             return $sphinxClient;
         };
 
+        // Product Upload Manager
+        $container['product_upload_manager'] = function ($c) use ($container) {
+            return new \EasyShop\Product\ProductUploadManager(
+                            $container['entity_manager'],
+                            $container['product_manager'],
+                            $container['string_utility'],
+                            $container['language_loader']
+                        );
+        };
+
+        $container['json_web_token'] = function ($c) {
+            return new \JWT();
+        }; 
+
+        $container['mcrypt'] = function ($c) {
+            return new \MCrypt\MCrypt();
+        }; 
+        
+        $nodejsConfig = require_once(APPPATH . "config/param/nodejs.php");
+        $container['redis_client'] = function ($c) use ($nodejsConfig) {
+            return new \Predis\Client([
+                'scheme' => 'tcp',
+                'host' =>  $nodejsConfig['HOST'],
+                'port' => $nodejsConfig['REDIS_PORT'],
+            ]);
+        }; 
+       
+        $container['captcha_builder'] = function ($c) {
+            return new \Gregwar\Captcha\CaptchaBuilder();
+        }; 
 
         /* Register services END */
         $this->serviceContainer = $container;

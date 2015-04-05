@@ -14,6 +14,8 @@ use EasyShop\Entities\EsPointType as EsPointType;
  */
 class PointGateway extends AbstractGateway
 {
+    const MAX_POINT_ALLOWED = PHP_INT_MAX;
+
     /**
      * Constructor
      * 
@@ -51,8 +53,8 @@ class PointGateway extends AbstractGateway
             $pointSpent = intval($pointSpent) <= intval($maxPointAllowable) ? $pointSpent : $maxPointAllowable;
 
             foreach ($itemArray as $item) {
-                $data["order_product_id"] = $item['order_id'];
-                $data["points"] = round(floatval(bcmul($pointSpent, bcdiv($item['point'], $maxPointAllowable, 10), 10)));
+                $data["order_product_id"] = $item['order_product_id'];
+                $data["points"] = $this->getProductDeductPoint($item['point'], $maxPointAllowable);
                 $pointBreakdown[] = $data;
             }
 
@@ -66,11 +68,53 @@ class PointGateway extends AbstractGateway
                 );
 
             // update history data field
-            $historyObj->setData($jsonData);
+            if($historyObj){
+                $historyObj->setData($jsonData);
+            }
             $this->em->flush();
         }
         
         return $pointSpent;
+    }
+
+    /**
+     * Get point distribution in product
+     * @param  float $productPrice
+     * @param  float $total
+     * @return float
+     */
+    public function getProductDeductPoint($productPrice, $total)
+    {
+        return (float)bcmul($this->getParameter('amount'), bcdiv($productPrice, $total, 4), 4);
+    }
+
+    /**
+     * Check if point request is valid
+     * @param  integer $memberId
+     * @param  float   $totalPrice
+     * @return mixed
+     */
+    public function isPointValid($memberId, $totalPrice)
+    {   
+        $pointAmount = $this->getParameter('amount');
+        $returnValue['valid'] = false;
+        if($this->pointTracker->getUserPoint($memberId) < $pointAmount){
+            $returnValue['message'] = "You have insufficient points.";
+        }
+        elseif((float) $pointAmount > self::MAX_POINT_ALLOWED){
+            $returnValue['message'] = "We only accept ".self::MAX_POINT_ALLOWED." points per transaction.";
+        }
+        elseif ((float) $pointAmount > $totalPrice) {
+            $returnValue['message'] = "Points cannot be greater than total price.";
+        }
+        elseif ((int) $pointAmount < 0) {
+            $returnValue['message'] = "Points cannot be negative.";
+        }
+        else{
+            $returnValue['valid'] = true;
+        }
+
+        return $returnValue;
     }
 
     // Dummy functions to adhere to abstract gateway

@@ -2,6 +2,9 @@
 
 namespace EasyShop\Product;
 
+use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
+
 /**
  * Product Shipping Location Manager Class
  *
@@ -263,6 +266,47 @@ class ProductShippingLocationManager
             $this->em->remove($head);
         }
         $this->em->flush();
+    }
+
+    /**
+     * Get product item shipping fee
+     * @param  integer $itemId
+     * @param  integer $cityId
+     * @param  integer $regionId
+     * @param  integer $islandId
+     * @return float
+     */
+    public function getProductItemShippingFee($itemId, $cityId, $regionId, $islandId)
+    {
+        $itemLocations = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                              ->findBy([
+                                'productItem' => $itemId,
+                              ]);
+
+        $locationArray = [];
+        foreach ($itemLocations as $location) {
+            $locationId = $location->getShipping()->getLocation()->getIdLocation();
+            $locationArray[$locationId] = $location->getShipping()->getPrice();
+        } 
+
+        /**
+         * Return the shipping fee from the most specific location
+         */
+        if (array_key_exists($cityId, $locationArray)) {
+            return (float)$locationArray[$cityId];
+        }
+        elseif(array_key_exists($regionId, $locationArray)){
+            return (float)$locationArray[$regionId];
+        }
+        elseif (array_key_exists($islandId, $locationArray)) {
+            return (float)$locationArray[$islandId];
+        }
+        elseif (array_key_exists(EsLocationLookup::PHILIPPINES_LOCATION_ID, $locationArray)) {
+            return (float)$locationArray[EsLocationLookup::PHILIPPINES_LOCATION_ID];
+        }
+        else{
+            return null;
+        }
     }
 
 }

@@ -27,13 +27,17 @@ class MY_Exceptions extends CI_Exceptions {
                 'memberId' => $CI->session->userdata('member_id'),
                 'title' => 'Page not found | Easyshop.ph',
             ];
-
             $CI->load->spark('decorator');    
             $CI->load->view('templates/header_primary',  $CI->decorator->decorate('header', 'view', $headerData));
             $CI->load->view('pages/general_error');
             $CI->load->view('templates/footer_primary', $CI->decorator->decorate('footer', 'view'));  
 
-            echo $CI->output->get_output();
+            /**
+             * Manually call CSRF Hook
+             */
+            $csrfHook = new CSRF_Protection();
+            $csrfHook->generate_token();
+            $csrfHook->inject_tokens();
             exit;
         } 
         else {

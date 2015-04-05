@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="pd-lr-20 edit-profile-container">
-                    <input type="text" id="storeNameTxt" maxlength="50" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($arrVendorDetails['store_name']); ?>" data-origval="<?=html_escape($arrVendorDetails['store_name']); ?>" placeholder="Seller Name">
+                    <input type="text" id="storeNameTxt" maxlength="60" class="form-control mrgn-bttm-8 seller-name" value="<?=html_escape($arrVendorDetails['store_name']); ?>" data-origval="<?=html_escape($arrVendorDetails['store_name']); ?>" placeholder="Store Name">
                     <input type="text" id="mobileNumberTxt" maxlength="11" class="form-control mrgn-bttm-8" placeholder="Contact No." value="<?= html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : ""); ?>" data-origval="<?= html_escape(strlen($arrVendorDetails['contactno']) > 0 ? $arrVendorDetails['contactno'] : ''); ?>">
                     <div class="mrgn-bttm-8 edit-vendor-location">
 
@@ -159,7 +159,7 @@
                     <?php if($isEditable): ?>
                     <div class="vendor-profile-btn edit-profile-btn edit-banner-profile">
                         <a href="javascript:void(0)" id="banner-cancel-changes" class="btn btn-default-1 btn-edit-profile-info-banner btn-cancel-me-wide">Cancel</a>
-                        <a href="javascript:void(0)" id="banner-save-changes"class="btn btn-default-3 btn-edit-profile-info-banner">Save Changes</a>
+                        <a href="javascript:void(0)" id="banner-save-changes" class="btn btn-default-3 btn-edit-profile-info-banner clickable">Save Changes</a>
                     </div>
                     <?php endif; ?>
                 </div>

@@ -11,7 +11,6 @@ html, body {
 .qr-code-wrapper {
     margin-top: 50px;
     position: relative;
-    overflow: hidden;
 }
 
 .border-1 {
@@ -43,8 +42,9 @@ html, body {
 }
 
 .qr-code-main img {
-    max-width: 800px;
-    width: 70%;
+    max-width: 600px;
+    padding: 30px 0;
+    width: 60%;
 }
 
 .qr-code-p {
@@ -61,4 +61,12 @@ html, body {
 .qr-es-logo img {
     max-width: 400px;
     width: 30%;
+}
+
+.hide-border-bottom {
+    height: 10px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
 }

@@ -84,25 +84,36 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
     });
 
     // Search button click
-    $(document).on('click','.submitSearch',function() {
-        var searchType = $(this).closest(".search-form").find('.search-type').val();
-        var action =  (searchType == 1) ? "/" + $('#vendor-slug').val() : "/search/search.html";
-        $(this).closest(".search-form").attr("action",action);
+    $(document).on('click','.submitSearch',function() { 
         $(this).closest(".search-form").submit();
     });
+
+    $(document).on('submit','form.search-form',function(){
+        var searchType = $(this).find('.search-type').val();
+        var action =  (searchType == 1) ? "/" + $('#vendor-slug').val() : "/search/search.html";
+        $(this).attr("action",action);
+    });
    
-    $(document).on('click','#banner-save-changes',function() {
+    $(document).on('click','#banner-save-changes.clickable',function() {
+        
+        var button = $(this);
+        button.removeClass('clickable');
         
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var csrfname = $("meta[name='csrf-name']").attr('content');
  
-        // get all variables
         var storName = $("#storeNameTxt").val();
-        var mobileNumber = $("#mobileNumberTxt").val();
+        var mobileNumber = $("#mobileNumberTxt").val(); 
         var stateRegion = $(".stateregionselect").val();
         var city = $('.cityselect').val();
         var stateRegionSelected = $(".stateregionselect option:selected").html();
         var citySelected = $(".cityselect option:selected").html();
+
+        stateRegion = (stateRegion === null) ? 0 : stateRegion;
+        city = (city === null) ? 0 : city;
+        stateRegionSelected = (typeof stateRegionSelected === "undefined") ? $('.stateregionselect option[value="0"]') : stateRegionSelected;
+        citySelected = (typeof citySelected === "undefined") ? $('.cityselect option[value="0"]') : citySelected;
+
         changeSlug = jQuery.ajax({
             type: "POST",
             dataType: "JSON",
@@ -174,11 +185,13 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 else{
                     // Display error
                     var errString = "";
-                    $.each(data.error, function(k,v){
-                        errString = errString + v + "<br>";
+                    $.each(data.error, function(key,errorMessage){
+                        errString = errorMessage;
+                        return false;
                     });
-                    alert(errString);
+                    alert(escapeHtml(errString));
                 }
+                button.addClass('clickable');
             } 
         });
     });
@@ -488,7 +501,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     sibling.show();
                 }
                 else{
-                    alert(obj.error);
+                    alert(escapeHtml(obj.error));
                 }
             });
         }
@@ -591,19 +604,5 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
 
 function proceedPayment(obj)
 {
-    var csrftoken = $("meta[name='csrf-token']").attr('content');
-    $.ajax({
-        async: true,
-        url: "/payment/cart_items",
-        type: "POST",
-        dataType: "json",
-        data: {csrfname: csrftoken},
-        success: function (data) {
-            if (data == true) {
-                window.location.replace("/payment/review");
-            } else {
-                alert(data, 'Remove these items from your cart to proceed with your checkout.');
-            }
-        }
-    });
+    window.location.replace("/payment/review");
 }

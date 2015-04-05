@@ -6,15 +6,6 @@ if (!defined('BASEPATH')){
  
 class Home extends MY_Controller 
 {
- 
-    /**
-     * Number of feeds item per page
-     *
-     * @var integer
-     */
-    public $feedsProdPerPage = 7;
-    
-    
     /**
      * Load class dependencies
      *
@@ -22,6 +13,10 @@ class Home extends MY_Controller
     public function __construct() 
     {
         parent::__construct();
+        $this->productManager = $this->serviceContainer['product_manager'];
+        $this->userManager = $this->serviceContainer['user_manager'];
+        $this->em = $this->serviceContainer['entity_manager'];
+        $this->memberFeatureRestrictManager = $this->serviceContainer['member_feature_restrict_manager'];
     }
 
     /**
@@ -30,7 +25,7 @@ class Home extends MY_Controller
      * @return View
      */
     public function index() 
-    {  
+    {      
         $view = $this->input->get('view') ? $this->input->get('view') : null;
         $memberId = $this->session->userdata('member_id');
         $headerData = [
@@ -39,32 +34,31 @@ class Home extends MY_Controller
             'metadescription' => 'Enjoy the benefits of one-stop shopping at the comforts of your own home.',
             'relCanonical' => base_url(),
         ];
-        
-        if( $memberId && $view !== 'basic'){
-            $bodyData = $this->getFeed();   
-            $bodyData['category_navigation'] = $this->load->view('templates/category_navigation', [
-                                                                    'cat_items' =>  $this->getcat()
-                                                                ], true );                                   
-            $this->load->spark('decorator');  
-            $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));  
-            $this->load->view("templates/home_layout/layoutF",$bodyData);
-            $this->load->view('templates/footer', ['minborder' => true]);
 
+        $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
+        $sliderSection = $homeContent['slider']; 
+        $homeContent['slider'] = [];
+        foreach($sliderSection as $slide){
+            $sliderView = $this->load->view($slide['template'], $slide, true);
+            $homeContent['slider'][] = $sliderView;
         }
-        else{
-            $homeContent = $this->serviceContainer['xml_cms']->getHomeData();
-            $sliderSection = $homeContent['slider']; 
-            $homeContent['slider'] = [];
-            foreach($sliderSection as $slide){
-                $sliderView = $this->load->view($slide['template'],$slide, true);
-                $homeContent['slider'][] = $sliderView;
-            }
-            $data['homeContent'] = $homeContent; 
-            $this->load->spark('decorator');  
-            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/home/home_primary', $data);
-            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+        $data['homeContent'] = $homeContent; 
+
+        if ($memberId) {
+            $data['featuredCategorySection'] = $this->serviceContainer['xml_cms']->getFeaturedProducts($memberId);
+            /**
+             * Uncomment to activate real time char restriction
+             */
+            //$this->memberFeatureRestrictManager->addMemberToFeature($memberId, \EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT);
         }
+
+        
+        $data['messageboxHtml'] = $this->load->view('pages/home/reminder', [], true);
+        
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/home/home_primary', $data);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
 
     }
     
@@ -81,9 +75,9 @@ class Home extends MY_Controller
             'title' => 'Under Construction | Easyshop.ph'
         ];
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/underconstruction_view');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
 
 
@@ -126,9 +120,9 @@ class Home extends MY_Controller
             'metadescription' => "Read Easyshop.ph's Privacy Policy",
         ];
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/policy');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
   
     /**
@@ -145,9 +139,9 @@ class Home extends MY_Controller
         ];
 
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/terms');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
     
     
@@ -165,9 +159,9 @@ class Home extends MY_Controller
         ];
     
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/faq');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
      
     }
     
@@ -186,178 +180,48 @@ class Home extends MY_Controller
         ];
         
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/web/contact');
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
     
     
-      
     /**
-     * Renders how-to-buy infographic
+     * Redirect old how-to-page buyer to new page: SEO purposes
+     */
+    public function guide_buyer_old()
+    {
+        redirect('/how-to-buy', 'location', 301);
+    }
+    
+    /**
+     * Redirect old how-to-page seller to new page: SEO purposes
+     */
+    public function guide_seller_old()
+    {
+        redirect('/how-to-sell', 'location', 301);
+    }
+
+    /**
+     * Renders how-to-page buyer
      *
      * @return View
      */
-    public function guide_buy()
+    public function guide_buyer()
     {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'How to buy | Easyshop.ph',
-            'metadescription' => 'Learn how to purchase at Easyshop.ph',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData['facebook'] = $socialMediaLinks["facebook"];
-        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/how-to-buy', $bodyData);
+        $this->load->view('pages/web/how-to-buy');
     }
     
-    
     /**
-     * Renders how-to-sell infographic
+     * Renders how-to-page seller
      *
      * @return View
      */
-    public function guide_sell()
+    public function guide_seller()
     {
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'How to sell | Easyshop.ph',
-            'metadescription' => 'Learn how to sell your items at Easyshop.ph',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData['facebook'] = $socialMediaLinks["facebook"];
-        $bodyData['twitter'] = $socialMediaLinks["twitter"];    
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/web/how-to-sell', $bodyData);
+        $this->load->view('pages/web/how-to-sell');
     }
-    
-    
-  
-
-    /**
-     *  Fetch information to be display in feeds page
-     *
-     *  @return array
-     */
-    private function getFeed()
-    {
-        $this->load->library('xmlmap');
-        $this->load->model('product_model');
-        $this->load->model('user_model');
-        $xmlResourceService = $this->serviceContainer['xml_resource'];
-        $xmlfile =  $xmlResourceService->getContentXMLfile();
-
-        $perPage = $this->feedsProdPerPage;
-        $memberId = $this->session->userdata('member_id');
-        $userdata = $this->user_model->getUserById($memberId);
-
-        $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
-        $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
         
-        array_push($partnersId, $easyshopId);
-        $prodId = ($this->input->post('ids')) ? $this->input->post('ids') : 0; 
-        $followedSellers = $this->user_model->getFollowing($memberId);
-        
-        $this->load->config('protected_category', TRUE);
-        $categoryId = $this->config->item('promo', 'protected_category');
-
-        $data = array(
-            'featured_prod' => $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage),
-            'new_prod' => $this->product_model->getNewProducts($perPage),
-            'easytreats_prod' => $this->product_model->getProductsByCategory($categoryId,array(),0,"<",0,$perPage, " lastmodifieddate DESC , "),
-            'followed_users' =>  $followedSellers,
-            'banners' => $this->product_model->getStaticBannerFeed($xmlfile),
-            'promo_items' => $this->product_model->getStaticProductFeed('promo', $xmlfile),
-            'popular_items' => $this->product_model->getStaticProductFeed('popular', $xmlfile),
-            'featured_product' => $this->product_model->getStaticProductFeed('featured', $xmlfile),
-            'isCollapseCategories' => count($followedSellers) > 2,
-            'userslug' => $userdata['slug'],
-            'maxDisplayableSellers' => 7
-        );
-
-        #Assemble featured product ID array for exclusion on LOAD MORE request
-        $fpID = array();
-        foreach( $data['featured_prod'] as $fp ){
-            if( !in_array($fp['id_product'],$fpID) ){
-                $fpID[] = $fp['id_product'];
-            }
-        }
-        
-        $data['fpID'] = json_encode($fpID);
-        
-        return $data;
-    }
-    
-    /**
-     *  Used by AJAX Requests to fetch for products in Feeds page
-     *
-     *  @return JSON
-     */
-    public function getMoreFeeds()
-    {
-        $this->load->library('xmlmap');
-        $this->load->model('product_model');
-        if( $this->input->post("feed_page") && $this->input->post("feed_set") ){
-            $perPage = $this->feedsProdPerPage;
-            $memberId = $this->session->userdata('member_id');
-            
-            $page = ((int)$this->input->post("feed_page") + 1) * $perPage - $perPage;
-            $productFeedSet = (int)$this->input->post("feed_set");
-
-            switch( (int)$productFeedSet ){
-                case 1: #Featured Tab
-
-                    $xmlResourceService = $this->serviceContainer['xml_resource'];
-                    $xmlfile =  $xmlResourceService->getContentXMLfile();
-
-                    $easyshopId = trim($this->xmlmap->getFilenameID($xmlfile,'easyshop-member-id'));
-                    $partnersId = explode(',',trim($this->xmlmap->getFilenameID($xmlfile,'partners-member-id')));
-
-                    array_push($partnersId, $easyshopId);
-                    $prodIdRaw = ($this->input->post('ids')) ? json_decode($this->input->post('ids')) : array(0); 
-                    $prodId = implode(",",$prodIdRaw);
-                    
-                    $products = $this->product_model->getFeaturedProductFeed($memberId,$partnersId,$prodId,$perPage,$page);
-                    
-                    #Assemble featured product ID array for exclusion on LOAD MORE request
-                    $fpID = array();
-                    foreach( $products as $fp ){
-                        if( !in_array($fp['id_product'],$fpID) ){
-                            $fpID[] = $fp['id_product'];
-                        }
-                    }
-                    
-                    $prodIDArray = array_merge($prodIdRaw,$fpID);
-                    $data['fpID'] = json_encode($prodIDArray);
-                    
-                    break;
-                case 2: #New Products Tab
-                    $products = $this->product_model->getNewProducts($perPage,$page);
-                    break;
-                case 3: #EasyTreats Products Tab
-                    $this->load->config('protected_category', TRUE);
-                    $categoryId = $this->config->item('promo', 'protected_category');
-                    $products = $this->product_model->getProductsByCategory($categoryId,array(),0,"<",$page,$perPage);
-                    break;
-                default:
-                    $data['error'] = "Unable to load prouct list.";
-                    echo json_encode($data);
-                    exit();
-                    break;
-            }
-            
-            $temp['products'] = $products;
-            $data['view'] = $this->load->view("templates/home_layout/layoutF_products",$temp,true);
-            
-            echo json_encode($data);
-        }
-    }
-    
     /**
      *  Handles bug report form
      *
@@ -371,32 +235,46 @@ class Home extends MY_Controller
         $twig = $this->serviceContainer['twig'];
 
         $rules = $formValidation->getRules('bug_report');
-
         $form = $formFactory->createBuilder()
                             ->setMethod('POST')
                             ->add('title', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['title']))
                             ->add('description', 'textarea', array('required' => false, 'label' => false, 'constraints' => $rules['description']))
                             ->add('file', 'file', array('label' => false, 'required' => false, 'constraints' => $rules['image']))
+                            ->add('captcha', 'text', array('required' => false, 'label' => false, 'constraints' => $rules['captcha']))
                             ->add('submit', 'submit', array('label' => 'SEND'))
                             ->getForm();
 
         $emptyForm = clone $form;
-
+        $captchaBuilder = $this->serviceContainer['captcha_builder'];
         $form->handleRequest($request);
 
+        $captchaMessage = '';
         if ($form->isValid()) {
-            $bugReporter = $this->serviceContainer['bug_reporter'];
-            $bugReporter->createReport($form->getData());
-            $isValid = true;
-            $form = $emptyForm;
+            $formData = $form->getData();
+            $captchaInput = $formData['captcha'];
+            unset($formData['captcha']);
+            if($captchaInput === $this->session->userdata('bugreport_captcha_phrase')) {
+                $bugReporter = $this->serviceContainer['bug_reporter'];
+                $bugReporter->createReport($formData);
+                $isValid = true;
+                $form = $emptyForm;
+            }
+            else {
+                $captchaMessage = '* Characters do not match';
+            }
         }
-        
-        $formData =  $twig->render('pages/web/report-a-problem.html.twig', array(
+   
+        $captchaBuilder->build();
+        $this->session->set_userdata('bugreport_captcha_phrase', $captchaBuilder->getPhrase());
+        $formData =  $twig->render('pages/web/report-a-problem.html.twig', [
             'form' => $form->createView(), 
             'ES_FILE_VERSION' => ES_FILE_VERSION,
             'assetsDomain' => getAssetsDomain(),
-            'isValid' => $isValid
-            ));
+            'isValid' => $isValid,
+            'captchaImage' => $captchaBuilder->inline(),
+            'captchaMessage' => $captchaMessage, 
+            'appEnvironment' => strtolower(ENVIRONMENT),
+        ]);
 
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
@@ -405,11 +283,106 @@ class Home extends MY_Controller
         ];
 
         $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
         $this->output->append_output($formData); 
-        $this->load->view('templates/footer_full', $this->decorator->decorate('footer', 'view'));        
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));        
+    }
+    
+    /**
+     * Refresh capctha image
+     */
+    public function refreshBugReportCaptcha()
+    {
+        if($this->input->post()){
+            $captchaBuilder = $this->serviceContainer['captcha_builder'];
+            $captchaBuilder->build();
+            $image = $captchaBuilder->inline();
+            $this->session->set_userdata('bugreport_captcha_phrase', $captchaBuilder->getPhrase());
+            echo "<img src='".$image."'/>";
+        }
+        else{
+            show_404();
+        }
+    }
+    
+    /**
+     * Renders the category product section view
+     *
+     */
+    public function getCategorySectionProducts()
+    {
+        $productSlugs = json_decode($this->input->post('productSlugs'));
+        $productSlugs = $productSlugs ? $productSlugs : [];
+        if(!is_array($productSlugs)){
+            $productSlugs = [ $productSlugs ];
+        }
+        
+        $productCounter = 0;
+        $data['productSections'] = [];
+        foreach($productSlugs as $productSlug){
+            $product = $this->serviceContainer['entity_manager']
+                            ->getRepository('EasyShop\Entities\EsProduct')
+                            ->findOneBy(['slug' => $productSlug]);
+            if($product){
+                if($this->productManager->isProductActive($product)){
+                    $data['productSections'][$productCounter]['product'] =  $this->serviceContainer['product_manager']->getProductDetails($product);
+                    $secondaryImage =  $this->serviceContainer['entity_manager']->getRepository('EasyShop\Entities\EsProductImage')
+                                            ->getSecondaryImage($product->getIdProduct());
+                    $data['productSections'][$productCounter]['productSecondaryImage'] = $secondaryImage;
+                    $data['productSections'][$productCounter]['userimage'] =   $this->serviceContainer['user_manager']->getUserImage($product->getMember()->getIdMember());
+                    $productCounter++;
+                }
+            }
+        }
+
+        echo json_encode($this->load->view('partials/home-productlist', $data, true));
     }
 
+    /**
+     * Retrieves the redirect page for external links
+     */
+    public function redirect()
+    {
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Redirect | Easyshop.ph',
+            'metadescription' => '',
+            'relCanonical' => '',
+        ];
+
+        if (!$this->input->get('url')) {
+            redirect('/', 'refresh');
+        }
+
+        $urlData = $this->serviceContainer['url_utility']->parseExternalUrl(trim($this->input->get('url')));
+        if($urlData['targetString'] === '_self'){
+            redirect($urlData['url']);
+        }
+        
+        $this->load->spark('decorator');
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/web/redirect', $urlData);
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+    }
+
+    /**
+     * Renders easypoint infographic
+     *
+     * @return View
+     */
+    public function easypoints()
+    {
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Easy Points | Easyshop.ph',
+            'metadescription' => "Read Easyshop.ph's Easy Points",
+        ];
+
+        $this->load->spark('decorator');  
+        $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/web/easy-point');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+    }
 
 }
 

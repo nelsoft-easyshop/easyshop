@@ -158,7 +158,10 @@ class ProductManager
                                             ->getShippingTotalPrice($productId);
 
         $product->setSoldPrice($soldPrice);
-        $product->setIsFreeShipping(0 === bccomp(floatval($totalShippingFee),0));
+        $product->setIsFreeShipping(
+            0 === bccomp(floatval($totalShippingFee),0) 
+            && $this->isListingOnly($product) === false
+        );
         $product->setIsNew($this->isProductNew($product));
         $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
                                            ->getDefaultImage($product->getIdProduct()));
@@ -788,7 +791,7 @@ class ProductManager
         $additionalInformation = [];
         foreach ($productAttributes as $headKey => $headValue) {
             if(count($headValue) === 1){
-                $additionalInformation[] = html_escape(ucfirst($headValue[0]['attr_name'])) .' : '. html_escape(ucfirst($headValue[0]['attr_value']));
+                $additionalInformation[] = ucfirst($headValue[0]['attr_name']) .' : '. ucfirst($headValue[0]['attr_value']);
                 if((int)$headValue[0]['datatype_id'] !== \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE && $headValue[0]['type'] === "specific"){
                     unset($productAttributes[$headKey]);
                 }
@@ -796,7 +799,7 @@ class ProductManager
             else{
                 foreach ($headValue as $key => $value) {
                     if((int)$value['datatype_id'] !== \EasyShop\Entities\EsDatatype::CHECKBOX_DATA_TYPE && $value['type'] === "specific" ){
-                        $additionalInformation[] = html_escape(ucfirst($value['attr_name'])) .' : '. html_escape(ucfirst($value['attr_value']));
+                        $additionalInformation[] = ucfirst($value['attr_name']) .' : '. ucfirst($value['attr_value']);
                         unset($productAttributes[$headKey][$key]);
                     }
                     if(empty($productAttributes[$headKey])){
@@ -826,5 +829,130 @@ class ProductManager
 
         return false;
     }
+
+    /**
+     * Determines if a product is active or not
+     *
+     * @param EasyShop\Entities\EsProduct
+     * @return boolean
+     */
+    public function isProductActive($product)
+    {
+        if(!$product){
+            return false;
+        }
+
+        $member = $product->getMember();
+
+        $isNotDeleted = (int)$product->getIsDelete() === \EasyShop\Entities\EsProduct::ACTIVE;
+        $isNotDrafted = !$product->getIsDraft();
+        $isMemberNotBanned = !$member->getIsBanned();
+        $isMemberActive = $member->getIsActive();
+        
+        return $isNotDeleted && $isNotDrafted && $isMemberNotBanned && $isMemberActive;
+    }
+    
+
+    /**
+     * Get random products from different users
+     *
+     * @param integer[] $memberIdArray
+     * @param integer $limit
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getRandomProductsFromUsers($memberIdArray, $limit = 10)
+    {
+        if(is_int($memberIdArray)){
+            $memberIdArray = [ $memberIdArray ];
+        }
+        
+        $numberOfMembers = count($memberIdArray);
+        if($numberOfMembers === 0){
+            return [];
+        }
+        
+        $productFromEachSeller = $limit/$numberOfMembers;
+        $productFromEachSeller = ceil($productFromEachSeller);
+        $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
+
+        $productResults = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                               ->getRandomProductsFromUsers($memberIdArray, $productFromEachSeller);
+
+        $productIds = [];
+        $memberIdsWithProducts = [];
+        
+        foreach($productResults as $result){
+            $productIds[] = $result['id_product'];
+            if(!in_array($result['member_id'], $memberIdsWithProducts)){
+                $memberIdsWithProducts[] = $result['member_id'];
+            }
+        }
+
+        $numberOfFoundProducts = count($productResults);
+        if($numberOfFoundProducts < $limit){
+            $numberOfProductsToFill =  $limit - $numberOfFoundProducts;
+            $numberOfMembersWithProducts =  count($memberIdsWithProducts) ;
+            if($numberOfMembersWithProducts > 0){
+                $productFromEachSeller = $numberOfProductsToFill/$numberOfMembersWithProducts;
+                $productFromEachSeller = ceil($productFromEachSeller);
+                $productFromEachSeller = $productFromEachSeller < 1 ? 1 : $productFromEachSeller;
+                $fillerProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                       ->getRandomProductsFromUsers($memberIdsWithProducts, $productFromEachSeller, $productIds);
+                foreach($fillerProducts as $fillerProduct){
+                    $productIds[] = $fillerProduct['id_product'];
+                }
+            } 
+        }
+        
+        if(count($productIds) > $limit){
+            shuffle($productIds);
+            $productIds = array_splice($productIds, 0, $limit);
+           
+        }
+
+        $products = []; 
+        if(!empty($productIds)){
+            $qb = $this->em->createQueryBuilder();
+            $products = $qb->select('p')
+                        ->from('EasyShop\Entities\EsProduct','p') 
+                        ->where($qb->expr()->in('p.idProduct', $productIds) ) 
+                        ->getQuery()
+                        ->getResult();
+        }
+
+        return $products;
+    }
+
+    /**
+     * Updates Product Status
+     * 
+     * @param int $memberId
+     * @param int $productStatus
+     * @param int $desiredStatus
+     * 
+     * @return bool
+     */
+    public function updateUserProductStatus($memberId, $productStatus, $desiredStatus)
+    {
+        $products = $this->em
+                         ->getRepository('EasyShop\Entities\EsProduct')
+                         ->findBy([
+                                "member" => $memberId,
+                                "isDelete" => $productStatus,
+                                "isDraft" => !EsProduct::DRAFT
+                            ]);
+        try{
+            foreach ($products as $value) {
+               $value->setIsDelete($desiredStatus);
+            }
+            $this->em->flush();
+            return true;
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
+    }
+
 }
 

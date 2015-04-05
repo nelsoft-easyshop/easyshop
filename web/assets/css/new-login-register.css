@@ -1,0 +1,654 @@
+﻿body, html, div, blockquote, img, label, p, h1, h2, h3, h4, h5, h6, pre, ul, ol,  
+li, dl, dt, dd, form, a, fieldset, input, th, td, textarea  {  
+    margin: 0; 
+    padding: 0; 
+    border: 0; 
+    outline: none;  
+} 
+
+html, body {
+    background: url(../images/login-bg.jpg) no-repeat fixed center center !important;
+    color: #444645;
+}
+
+.clear {
+    clear: both;
+}
+
+.padding-reset {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.padding-right-reset {
+    padding-right: 0;
+}
+
+.login-lnk {
+    color: #00a388;
+}
+
+.login-lnk2 {
+    color: #444645;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.login-logo {
+    text-align: center;
+}
+
+.login-logo img {
+    max-width: 338px;
+    width: 80%;
+}
+
+.login-loading-content {
+    padding: 50px 0;
+}
+
+.new-login-register-content {
+    background: rgba(255,255,255,0.93);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    max-width: 840px;
+    width: 100%;
+
+    -webkit-box-shadow: 0px 0px 15px 10px rgba(50, 50, 50, 0.45);
+    -moz-box-shadow:    0px 0px 15px 10px rgba(50, 50, 50, 0.45);
+    box-shadow:         0px 0px 15px 10px rgba(50, 50, 50, 0.45);
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.idTabs {
+    border-top: 1px solid #00a388;
+    border-bottom: 1px solid #00a388;
+    display: inline-block;
+    margin-bottom: 35px;
+    width: 100%;
+}
+
+.idtabs-tab {
+    float: left;
+    position: relative;
+    text-align: center;
+    width: 50%;
+}
+
+.idtabs-tab a {
+    color: #00a388;
+    display: block;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.idtabs-tab a:hover {
+    color: #444645;
+    text-decoration: none;
+}
+
+.idtabs-tab .selected {
+    background-color: #00a388;
+    color: #fff;
+}
+
+.idtabs-tab .tab-down-arrow {
+    opacity: 0;
+}
+
+.idtabs-tab .selected .tab-down-arrow {
+    border-style: solid;
+    border-width: 11px 12.5px 0 12.5px;
+    border-color: #00a388 transparent transparent transparent;
+    bottom: -12px;
+    height: 0;
+    left: 0;
+    margin: auto;
+    opacity: 1;
+    position: absolute;
+    right: 0;
+    width: 0;
+    -webkit-transform:rotate(360deg);
+    -webkit-transition: opacity 0.4s ease-in-out;
+    -moz-transition:    opacity 0.4s ease-in-out;
+    -o-transition:      opacity 0.4s ease-in-out;
+     transition:        opacity 0.4s ease-in-out;
+}
+
+#login h1,
+#create-account h1 {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.login-left-content form > div {
+    margin-bottom: 15px;
+}
+
+.login-left-content form .row .ui-form-control,
+.login-right-content fieldset .row .ui-form-control {
+    background-color: rgba(255,255,255,0.7);
+    height: 38px;
+    width: 100%;
+}
+
+.login-left-content form .row .col-sm-4,
+.login-right-content fieldset .row .col-sm-5 {
+    height: 28px;
+    line-height: 28px;
+}
+
+.login-left-content form .row span {
+    font-size: 12px;
+}
+
+.login-left-content input[type="checkbox"] {
+    margin: 0;
+    vertical-align: top;
+}
+
+.login-left-content .btn.btn-default-3,
+.login-right-content .btn.btn-default-3.create-account-btn {
+    border-bottom: 0;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 6px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.login-left-content .btn.btn-default-3:hover {
+    border-bottom: 0;
+}
+
+.btn.facebook-btn,
+.btn.google-btn {
+    margin-bottom: 15px;
+}
+
+.btn.facebook-btn {
+    background-color: #0f66aa;
+    color: #fff;
+    padding: 0;
+    width: 100%;
+}
+
+.btn.facebook-btn:hover {
+    background-color: #0c5690;
+}
+
+.btn.google-btn {
+    background-color: #df4a32;
+    color: #fff;
+    padding: 0;
+    width: 100%;
+}
+
+.btn.google-btn:hover {
+    background-color: #c8422c;
+}
+
+.facebook-btn .text-center,
+.btn.google-btn .text-center {
+    font-size: 14px;
+    font-weight: bold;
+    padding-top: 4px;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.error-deactivated {
+    border: 1px solid #cecece;
+    border-radius: 4px;
+    display: block;
+    padding: 6px;
+}
+
+.error-deactivated a {
+    background-color: #00a388;
+    border-radius: 4px;
+    color: #fff;
+    display: inline-block;
+    font-weight: bold;
+    padding: 6px;
+    margin: 4px;
+}
+
+.error-deactivated a:hover {
+    background-color: #00896e;
+    color: #fff;
+}
+
+.open-create-account {
+    cursor: pointer;
+}
+
+/** =========================== **/
+
+#create-account .md-hide-content {
+    display: none;
+}
+
+.why-create-content {
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+.why-create-content img {
+    margin-right: 15px;
+    max-width: 55px;
+    width: 100%;
+}
+
+.why-create-content > span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.why-create-content strong {
+    color: #ff893b;
+}
+
+#create-account .login-right-content .ui-form-control {
+    width: 100%;
+}
+
+.login-right-content fieldset .row {
+    margin-bottom: 15px;
+}
+
+.input-error,
+.error.red {
+    background-color: #ffcece;
+    border-left: 5px solid #ef4444;
+    border-top: 1px solid #fa7b7b;
+    border-right: 1px solid #fa7b7b;
+    border-bottom: 1px solid #fa7b7b;
+    border-radius: 4px;
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+    padding: 6px;
+    text-align: left;
+    width: 100%;
+}
+
+.input-success {
+    background-color: #d0f2c4;
+    border-left: 5px solid #95de7c;
+    border-top: 1px solid #a6e391;
+    border-right: 1px solid #a6e391;
+    border-bottom: 1px solid #a6e391;
+    border-radius: 4px;
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+    padding: 6px;
+    text-align: left;
+    width: 100%;
+}
+
+.reg2_password .progress {
+    margin: 5px 0;
+}
+
+.pass-container {
+    width: auto !important;
+}
+
+.pass-bar {
+    border-radius: 4px;
+    height: 8px;
+    margin-top: 5px;
+    opacity: 0.75;
+}
+
+.pass-hint {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.why-create-mobileview {
+    display: none;
+    margin-top: 30px;
+}
+
+.show-why-create-mobileview {
+    border-top: 1px solid #cacbc8;
+    color: #ff893b;
+    cursor: pointer;
+    display: block;
+    font-weight: bold;
+    margin-top: 20px;
+    padding-top: 30px;
+    text-align: center;
+}
+
+.terms_con {
+    padding-bottom: 20px;
+}
+
+.terms_and_conditions {
+    color: #00a388;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#terms-section {
+    display: none;
+}
+
+.terms-overlay-bg {
+    background-color: rgba(0,0,0,0.85);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.terms-header {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.terms-and-condition {
+    background-color: #fff;
+    border-radius: 4px;
+    bottom: 0;
+    height: 390px;
+    left: 0;
+    margin: auto;
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    -webkit-box-shadow: 0px 0px 20px 10px rgba(50, 50, 50, 0.26);
+    -moz-box-shadow:    0px 0px 20px 10px rgba(50, 50, 50, 0.26);
+    box-shadow:         0px 0px 20px 10px rgba(50, 50, 50, 0.26);
+    z-index: 2;
+}
+
+.terms-and-condition h1 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.terms-and-condition h3 {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 15px 0 8px;
+}
+
+.terms-and-condition ul {
+    list-style: disc;
+    padding-left: 30px;
+}
+
+.terms-content {
+    height: 300px;
+    overflow-y: scroll;
+    padding: 0 20px;
+    text-align: justify;
+}
+
+.close-term {
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.login-throttle{
+    text-align:center;
+}
+.login-throttle h1{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+.login-throttle-message{
+    font-size:14px;
+    font-weight: bold;
+}
+.login-throttle-border{
+    padding-bottom: 30px;
+    padding-left: 35px;
+    padding-right: 35px;
+}
+.help-me-locate-account-btn{
+    border: solid #565656 2px;
+    background: #fff;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-size: 11px;
+    border-radius: 6px;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    color: #565656;
+}
+.help-me-locate-account-btn:hover{
+    background: #565656;
+    color: #fff;
+}
+.throttle-btn-container{
+    margin-top:25px;
+}
+
+#sendReactivationLink{
+    cursor: pointer; 
+}
+
+@media (min-width: 280px) {
+    .new-login-register-content,
+    .terms-and-condition {
+        max-width: 280px;
+    }
+
+    .login-logo {
+        padding: 30px 0;
+    }
+
+    .login-logo img {
+        max-width: 190px;
+    }
+
+    .idtabs-tab a {
+        font-size: 11px;
+        padding: 16px 0;
+    }
+
+    .login-left-content,
+    .login-right-content {
+        padding: 0 25px 25px;
+    }
+
+    #login h1,
+    #create-account h1 {
+        text-align: center;
+    }
+
+    .why-create-content > span {
+        width: 67%;
+    }
+}
+
+@media (min-width: 320px) {
+    .new-login-register-content,
+    .terms-and-condition {
+        max-width: 300px;
+    }
+
+    .idtabs-tab a {
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 360px) {
+    .new-login-register-content,
+    .terms-and-condition {
+        max-width: 340px;
+    }
+
+    .why-create-content > span {
+        width: 72%;
+    }
+}
+
+@media (min-width: 480px) {
+    .new-login-register-content,
+    .terms-and-condition {
+        max-width: 440px;
+    }
+
+    .idtabs-tab a {
+        padding: 18px 0;
+    }
+
+    .why-create-content > span {
+        width: 72%;
+    }
+
+    .idtabs-tab a {
+        font-size: 14px;
+    }
+
+    .login-left-content,
+    .login-right-content {
+        padding: 0 35px 25px;
+    }
+}
+
+@media (min-width: 640px) {
+    .login-logo img {
+        max-width: 230px;
+        width: 100%;
+    }
+
+    .login-left-content,
+    .login-right-content {
+        padding: 0 90px 25px;
+    }
+
+    .new-login-register-content,
+    .terms-and-condition {
+        max-width: 540px;
+    }
+
+    .login-logo {
+        padding: 30px 0;
+    }
+}
+
+@media (min-width: 767px) {
+    .new-login-register-content,
+    .terms-and-condition {
+        max-width: 640px;
+    }
+}
+
+@media (min-width: 800px) {
+    .login-left-content,
+    .login-right-content {
+        padding: 0 25px 25px;
+    }
+
+    .new-login-register-content,
+    .terms-and-condition {
+        max-width: 740px;
+    }
+
+    .login-left-content,
+    .login-right-content {
+        float: left;
+        width: 50%;
+    }
+
+    .login-left-content form > div {
+        padding-right: 25px;
+    }
+
+    .login-left-border {
+        border-right: 1px solid #cecece;
+        margin-right: -25px;
+    }
+
+    #login h1 {
+        text-align: left;
+    }
+
+    .login-left-content form .row {
+        margin-right: 0;
+    }
+
+    .login-left-content form .row .col-sm-4,
+    .login-right-content fieldset .row .col-sm-5 {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    #create-account .md-hide-content {
+        display: block;
+    }
+
+    .why-create-mobile {
+        display: none;
+    }
+}
+
+@media (min-width: 980px) {
+    .idtabs-tab a {
+        padding: 20px 0;
+    }
+
+    .why-create-content img {
+        max-width: 60px;
+    }
+
+    .login-right-content form .reg2_confirmpassword label.col-sm-5 {
+        line-height: 18px;
+    }
+}
+
+@media (max-width: 800px) {
+    .login-left-content form .padding-reset {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .padding-right-reset {
+        padding-right: 15px;
+    }
+}
+
+@media (max-width: 799px) {
+    .why-create-mobile.show {
+        display: block;
+    }
+}
+
+@media (max-width: 640px) {
+    .keepmeloggedin-cotent span:nth-child(1) {
+        padding-bottom: 12px;
+    }
+}

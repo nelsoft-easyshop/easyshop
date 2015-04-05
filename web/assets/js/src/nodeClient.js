@@ -1,41 +1,39 @@
 (function ($) {
-    
+
     $(document).ready(function () {
-        
-        var $chatClient = $('#chatClientInfo');
-        var $isLoggedIn = $('[name="is-logged-in"]');
+ 
+            var $chatConfig = $('#chatServerConfig');
+            var $isLoggedIn = $('[name="is-logged-in"]');
+            var isChatAllowed = $.parseJSON($('#listOfFeatureWithRestriction').data('real-time-chat'));
 
-        if ($.parseJSON($isLoggedIn.val())) {
+            if ($.parseJSON($isLoggedIn.val())) {
 
-            var socket = io.connect( 'https://' + $chatClient.data('host') + ':' + $chatClient.data('port'));
-     
-            var setAccountOnline = function(storeName) {
-                socket.emit('set account online', storeName);
-            };
+                if(config.isSocketioEnabled && isChatAllowed){
 
-            var setAccountOffline = function(storeName) {
-                socket.emit('set account offline', storeName, function(data) {});
-            };
-       
-            /* Register events */
-            socket.on('send message', function( data ) {
-                updateMessageCountIcons();
-            });
+                    var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
+                
+                    var setAccountOnline = function() {
+                        socket.emit('set account online');
+                    };
 
-            /* Register events */
-            socket.on('message opened', function( data ) {
-                updateMessageCountIcons();
-            });
+                    var setAccountOffline = function() {
+                        socket.emit('set account offline');
+                    };
+
+                    socket.on('send message', function( data ) {
+                        updateMessageCountIcons();
+                    });
+
+                    socket.on('message opened', function( data ) {
+                        updateMessageCountIcons();
+                    });
+
+                    setAccountOnline();
             
-            setAccountOnline($chatClient.data('store-name'));
-
-            $('.logoutClient').on('click', function(e) {
-                e.preventDefault();
-                setAccountOffline($chatClient.data('store-name'));
-                window.location.replace('/login/logout');
-            });
-        }
+                }
+            }
 
     });
+  
   
 })(jQuery);

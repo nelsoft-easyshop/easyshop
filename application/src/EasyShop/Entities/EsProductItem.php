@@ -38,7 +38,7 @@ class EsProductItem
      */
     private $product;
 
-
+    const MAX_QUANTITY = 9999;
 
     /**
      * Get idProductItem

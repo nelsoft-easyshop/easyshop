@@ -45,7 +45,8 @@
         <div class="clear"></div>
         
         <div class="div-store-setup payment-account-loading" style="text-align:center">
-            <img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG.gif"/>
+            <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif"/>
+            <br/><br/>
             <p class="loading-text">Loading your payment accounts...</p>
         </div>
 

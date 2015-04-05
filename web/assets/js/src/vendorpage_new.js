@@ -1,21 +1,6 @@
-
-var memconf = {
-    ajaxStat : null,
-    csrftoken: $("meta[name='csrf-token']").attr('content'),
-    csrfname: $("meta[name='csrf-name']").attr('content'),
-    vid: $('#vid').val(),
-    vname: $('#vname').val(),
-    order: 1,
-    orderBy: 1,
-    condition: "",
-    lprice: "",
-    uprice: "",
-    countfiltered: 0
-};
-
 /**
-* Function to handle display of Price Value
-**/
+ * Function to handle display of Price Value
+ */
 function ReplaceNumberWithCommas(thisnumber){
     //Seperates the components of the number
     var n = thisnumber.toString().split(".");
@@ -25,14 +10,54 @@ function ReplaceNumberWithCommas(thisnumber){
     return n.join(".");
 }
 
-/**
- *  Behavioral functions
- */
 (function ($) {
+    
+    var ORDER_DIRECTION_DESC = 1;
+    var ORDER_DIRECTION_ASC = 2;
+    var ORDER_PRODUCTS_BY_SORTORDER = parseInt($('.order-by-default').val(), 10);
+    var ORDER_PRODUCTS_BY_CLICKCOUNT =  parseInt($('.order-by-popularity').val(), 10);
+    var ORDER_PRODUCTS_BY_LASTCHANGE  = parseInt($('.order-by-lastmodified').val(), 10);
+    var ORDER_PRODUCTS_BY_HOTNESS = parseInt($('.order-by-hotness').val(), 10);
+    
+    var memconf = {
+        ajaxStat : null,
+        csrftoken: $("meta[name='csrf-token']").attr('content'),
+        csrfname: $("meta[name='csrf-name']").attr('content'),
+        vid: $('#vid').val(),
+        vname: $('#vname').val(),
+        order: 1,
+        orderBy: 0,
+        condition: "",
+        lprice: "",
+        uprice: "",
+        countfiltered: 0
+    };
+    
+    $(document).ready(function(){
+        memconf.orderBy =  parseInt($('.sort_select').val(), 10);
+        if(memconf.orderBy === ORDER_PRODUCTS_BY_SORTORDER){
+            memconf.order = ORDER_DIRECTION_ASC;
+        }
+        
+        var isSearching = $('#def-search').length > 0;
+        if(isSearching){
+            $('.tab_categories[data-link="#def-search"]').click(); 
+        }
+        else{
+            $('.tab_categories').first().click(); 
+        }
+        
+    });
 
+    /**
+     *  Behavioral functions
+     */
     $('.sort_select').on('change',function(){
-        memconf.orderBy = $(this).val();
-        var group = $(this).data('group');
+        memconf.order = ORDER_DIRECTION_DESC;
+        memconf.orderBy =  parseInt($(this).val(), 10);
+        if(memconf.orderBy === ORDER_PRODUCTS_BY_SORTORDER){
+            memconf.order = ORDER_DIRECTION_ASC;
+        }
         var catDiv = $('.category-products.active');
         $('.product-paging').remove();
         ItemListAjax(catDiv,1);
@@ -48,9 +73,6 @@ function ReplaceNumberWithCommas(thisnumber){
         var catDiv = $(this).closest('div.category-products');
         var pageDiv = catDiv.find('.product-paging[data-page="'+page+'"]');
         var paginationContainer = catDiv.find('.pagination-container');
-
-        // $(this).siblings('.individual').removeClass('active');
-        // $(this).addClass('active');
 
         if(pageDiv.length === 1){
             var lastPage = $(this).parent('ul').attr('data-lastpage');
@@ -69,27 +91,31 @@ function ReplaceNumberWithCommas(thisnumber){
     });
 
     $(document).on('click', ".tab_categories", function(e){
+        var $this = $(this);
         var divId = $(this).attr('data-link');
-        var pagingDiv = $(divId).find('.product-paging');
-        var productCount = parseInt($(divId).attr('data-productcount'));
-
+        var $div = $(divId);
+        var pagingDiv = $div.find('.product-paging');
+        var productCount = parseInt($div.attr('data-productcount'));
+   
         $('.category-products').removeClass('active').hide();
-        $(divId).addClass('active').show();
+        $div.addClass('active').show();
 
         $('.tab_categories').find('.selected-marker').hide();
 
-        var htmlText = $(this).find('.catText').text();
+        var htmlText = $this.find('.catText').text();
         $( ".catText" ).each(function(index) {
-            if(htmlText === $(this).text()) {
-                $(this).closest("li").find(".selected-marker").show();
+            if(htmlText === $this.text()) {
+                $this.closest("li").find(".selected-marker").show();
             }
         });
 
         if(pagingDiv.length === 0 && productCount !== 0){
-            ItemListAjax($(divId), 1);
+            ItemListAjax($div, 1);
         }
         $('html,body').scrollTo(450); 
     });
+
+    $(".list-category").find("a[data-link='#def-0']").click();
 
     $(document).on('change',".price-field",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
@@ -104,123 +130,118 @@ function ReplaceNumberWithCommas(thisnumber){
         }
     });
 
-})(jQuery);
-
-/**
- *  Filter Button function
- */
-(function ($){
-
+    /**
+    *  Filter Button function
+    */
     $('#filter-btn').on('click', function(){
         var activeCategoryProductsDiv = $('.category-products.active');
         var condition = $(this).closest("ul").find('#filter-condition').val();
         var lprice = $.trim($(this).closest("ul").find('#filter-lprice').val());
         lprice = lprice.replace(new RegExp(",", "g"), '');
-        lprice = parseFloat(lprice).toFixed(2);
+        lprice = parseFloat(lprice);
         var uprice = $.trim($(this).closest("ul").find('#filter-uprice').val());
         uprice = uprice.replace(new RegExp(",", "g"), '');
-        uprice = parseFloat(uprice).toFixed(2);
+        uprice = parseFloat(uprice); 
         memconf.condition = condition;
         memconf.lprice = !isNaN(lprice) ? lprice : "";
         memconf.uprice = !isNaN(uprice) ? uprice : "";
         memconf.countfiltered = memconf.uprice !== "" || memconf.lprice !== "" || memconf.condition !== "" ? 1 : 0;
 
+        if(isNaN(lprice) && !isNaN(uprice)){ 
+            validateRedTextBox('#filter-lprice');
+            return false;
+        }
+        else if(!isNaN(lprice) && isNaN(uprice)){
+            validateRedTextBox('#filter-uprice'); 
+            return false;
+        }
+        else if(lprice > uprice){ 
+            validateRedTextBox("#filter-lprice,#filter-uprice");  
+            return false;
+        }
+        validateWhiteTextBox("#filter-lprice,#filter-uprice");  
+
         $('.product-paging').remove();
         ItemListAjax(activeCategoryProductsDiv,1);
     });
 
-})(jQuery);
-
-
-
-var validateRedTextBox = function(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FF0000",
-                "-moz-box-shadow": "0px 0px 2px 2px #FF0000",
-                "box-shadow": "0px 0px 2px 2px #FF0000"});
-    $(idclass).focus();
-} 
-
-var validateWhiteTextBox = function(idclass)
-{
-    $(idclass).css({"-webkit-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "-moz-box-shadow": "0px 0px 2px 2px #FFFFFF",
-                "box-shadow": "0px 0px 2px 2px #FFFFFF"});
-}
-
-var removeParam = function(key, sourceURL)
-{
-    var rtn = sourceURL.split("?")[0],
-    param,
-    params_arr = [],
-    queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
-    if (queryString !== "") {
-        params_arr = queryString.split("&");
-        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
-            param = params_arr[i].split("=")[0];
-            if (param === key) {
-                params_arr.splice(i, 1);
+    var removeParam = function(key, sourceURL)
+    {
+        var rtn = sourceURL.split("?")[0],
+        param,
+        params_arr = [],
+        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+        if (queryString !== "") {
+            params_arr = queryString.split("&");
+            for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+                param = params_arr[i].split("=")[0];
+                if (param === key) {
+                    params_arr.splice(i, 1);
+                }
             }
+            rtn = rtn + "?" + params_arr.join("&");
+            return rtn;
         }
-        rtn = rtn + "?" + params_arr.join("&");
-        return rtn;
+        return sourceURL;
     }
-    return sourceURL;
-}
 
-function ItemListAjax(CatDiv,page)
-{
-    var catId = CatDiv.attr("data-catId");
-    var catType = CatDiv.attr("data-catType");
-    var loadingDiv = CatDiv.find('div.loading_div');
-    var productPage = CatDiv.find('.product-paging');
-    var currentQueryString = $("#queryString").val();
-    var paginationContainer = CatDiv.find('.pagination-container');
-
-    memconf.ajaxStat = jQuery.ajax({
-        type: "GET",
-        url: '/store/vendorLoadProducts',
-        data: "vendorId="+memconf.vid+"&vendorName="+memconf.vname+"&catId="+catId+"&catType="+catType+
-            "&page="+page+"&orderby="+memconf.orderBy+"&order="+memconf.order+"&queryString="+currentQueryString+"&condition="+memconf.condition+"&lowerPrice="+memconf.lprice+"&upperPrice="+memconf.uprice+
-            "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken,
-        beforeSend: function(){
-            loadingDiv.show();
-            productPage.hide();
-
-            if(memconf.ajaxStat != null){
-                memconf.ajaxStat.abort();
-            }
-        },
-        success: function(data){
-            memconf.ajaxStat = null;
-            loadingDiv.hide();
-            try{
-                var obj = jQuery.parseJSON(data);
-            }
-            catch(e){
-                alert('Failed to retrieve user product list.');
-                return false;
-            }
-
-            if(productPage.length > 0){
-                CatDiv.find('.product-paging:last').after(obj.htmlData);
-            }
-            else{
-                CatDiv.find('.loading_div').after(obj.htmlData);
-            }
-
-            $(paginationContainer).children('center').html(obj.paginationData);
-
-            CatDiv.find('[rel=tooltiplist]').tooltip({
-                placement : 'top'
-            });            
+    function ItemListAjax(CatDiv,page)
+    {
+        if(CatDiv.length < 1){
+            return false;
         }
-    });
-}
+        var catId = CatDiv.attr("data-catId");
+        var catType = CatDiv.attr("data-catType");
+        var loadingDiv = CatDiv.find('div.loading_div');
+        var productPage = CatDiv.find('.product-paging');
+        var currentQueryString = $("#queryString").val();
+        var paginationContainer = CatDiv.find('.pagination-container');
+        var isCustom = CatDiv.attr("data-isCustom");
 
-/********* DESIGNER ************/
+        memconf.ajaxStat = jQuery.ajax({
+            type: "GET",
+            url: '/store/vendorLoadProducts',
+            data: "vendorId="+memconf.vid+"&vendorName="+memconf.vname+"&catId="+catId+"&catType="+catType+
+                "&page="+page+"&orderby="+memconf.orderBy+"&order="+memconf.order+"&queryString="+currentQueryString+"&condition="+memconf.condition+"&lowerPrice="+memconf.lprice+"&upperPrice="+memconf.uprice+
+                "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken+"&isCustom="+isCustom,
+            beforeSend: function(){
+                loadingDiv.show();
+                productPage.hide();
 
-(function ($) {
+                if(memconf.ajaxStat != null){
+                    memconf.ajaxStat.abort();
+                }
+            },
+            success: function(data){
+                memconf.ajaxStat = null;
+                loadingDiv.hide();
+                try{
+                    var obj = jQuery.parseJSON(data);
+                }
+                catch(e){
+                    alert('Failed to retrieve user product list.');
+                    return false;
+                }
+
+                if(productPage.length > 0){
+                    CatDiv.find('.product-paging:last').after(obj.htmlData);
+                }
+                else{
+                    CatDiv.find('.loading_div').after(obj.htmlData);
+                }
+
+                $(paginationContainer).children('center').html(obj.paginationData);
+
+                CatDiv.find('[rel=tooltiplist]').tooltip({
+                    placement : 'top'
+                });
+                
+                fluidDialog();
+            }
+        });
+    }
+
+    /********* DESIGNER ************/
      $.scrollUp({
         scrollName: 'scrollUp', // Element ID
         scrollDistance: 300, // Distance from top/bottom before showing element (px)
@@ -341,4 +362,21 @@ function ItemListAjax(CatDiv,page)
     // Bind event listener
     $window.resize(checkWidthVendor);
     
+    $(document).ready(function(){
+        $(".list-category > li > a").click(function(){
+            var $this = $(this);
+            var subCatContainer = $this.parents("li").find(".list-sub-category");
+            $(".list-sub-category").slideUp("fast");
+            $(".list-category > li > a > .fa").removeClass("toggleIcon");
+
+            if(subCatContainer.is(":visible")){
+                subCatContainer.slideUp("fast");
+                $this.find(".fa").removeClass("toggleIcon");
+            }else{
+                $this.parents("li").find(".list-sub-category").slideToggle("fast").toggleClass("toggle");
+                $this.find(".fa").toggleClass("toggleIcon");
+            }
+             
+        });
+    });
 })(jQuery);

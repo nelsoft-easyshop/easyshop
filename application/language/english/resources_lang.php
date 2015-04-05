@@ -7,7 +7,7 @@ $lang['registration3_complete_previous'] = "Kindly complete the previous pages."
 $lang['registration3_invalid_confirmation'] = "Invalid confirmation code.";
 
 $lang['schoollevel_option'] = array('Please Select', 'Undergraduate degree','Masteral degree','Doctorate degree','High School','Elementary');
-$lang['product_condition'] =  array('New', 'New other (see details)','Manufacturer refurbished','Used','For parts or not working');
+$lang['product_condition'] =  array('New', 'Slightly Used', 'New other (see details)','Manufacturer refurbished','Used','For parts or not working');
 
 #Rating Criteria
 $lang['rating']= array('Item quality', 'Communication', 'Shipment time');
@@ -33,17 +33,23 @@ $lang['notification_subject_seller'] = "Easyshop.ph - Sold Item Transaction Deta
 #Purchase Notification - Email Payment Method Guidelines
 $lang['payment_paypal_buyer'] = "Easyshop.ph has received your payment and has notified the seller(s) of the items you have purchased to 
 ship your items at the soonest possible time. You may view and manage your orders through your transactions 
-page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
+page by going to your page at <a href='".base_url()."me'>".base_url()."me</a> and by clicking on on-going transactions. 
+<br><br>
+Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
+
+$lang['payment_pesopay_buyer'] = "Easyshop.ph has received your payment and has notified the seller(s) of the items you have purchased to 
+ship your items at the soonest possible time. You may view and manage your orders through your transactions 
+page by going to your page at <a href='".base_url()."me'>".base_url()."me</a> and by clicking on on-going transactions. 
 <br><br>
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
 
 $lang['payment_cod_buyer'] = "Easyshop.ph has notified the seller(s) of the items you have purchased to ship your items at the soonest possible time.
-You may view and manage your orders through your transactions page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
+You may view and manage your orders through your transactions page by going to your page at <a href='".base_url()."me'>".base_url()."me</a> and by clicking on on-going transactions. 
 <br><br>
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
 
 $lang['payment_dp_buyer'] = "Please follow Dragonpay's instructions regarding the necessary steps you need to accomplish to complete your purchase.
-Once confirmed, you may view and manage your orders through your transactions page by going to your page at <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions. 
+Once confirmed, you may view and manage your orders through your transactions page by going to your page at <a href='".base_url()."me'>".base_url()."me</a> and by clicking on on-going transactions. 
 We will also notify the seller(s) of the items you have purchased to ship your items at the soonest possible time.
 <br><br>
 Thank you and we hope you continue to use Easyshop.ph, where shopping is made easy.";
@@ -66,7 +72,7 @@ the bank account listed below to complete the purchase of your items.
     </tr>
 </table>
 <br>
-Once complete, you will need to enter the deposit details at your transaction page by going to <a href='https://easyshop.ph/me'>https://easyshop.ph/me</a> and by clicking on on-going transactions.
+Once complete, you will need to enter the deposit details at your transaction page by going to <a href='".base_url()."me'>".base_url()."me</a> and by clicking on on-going transactions.
 Look for your transaction,click on Enter Deposit Details and fill in the necessary information.
 <br>
 We will notify the seller(s) of the items you have purchased to ship your items at the soonest possible time once you have
@@ -183,5 +189,3 @@ $lang['update_transaction'] = [
         'item_cancel' => 'You cancelled an item with :phrase',
         'completed' => 'You marked a transaction as completed with :phrase',
     ];
-?>
-

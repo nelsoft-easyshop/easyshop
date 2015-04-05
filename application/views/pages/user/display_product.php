@@ -24,25 +24,11 @@
                         <a class="color-default" target="_blank" href="/item/<?=$productSlug; ?>">
                             <div class="div-item">
                             
-                            
+                                <img src="<?php echo getAssetsDomain().$productImagePath; ?>" class="grid-image-primary <?php if($secondaryImagePath !== null): ?>grid-image-has-secondary <?php endif; ?>" >
                                 <?php if($secondaryImagePath !== null): ?>
-                                <span class="span-img-wrapper" style="background: url(<?php echo getAssetsDomain().$secondaryImagePath;?>) center no-repeat; background-cover: cover;">
-                                    <center>
-                                        <div class="span-img-container">
-                                        </div>
-                                    </center>
-                                
-                                </span>
+                                    <img src="<?php echo getAssetsDomain().$secondaryImagePath; ?>" class="grid-image-secondary" >
                                 <?php endif; ?>
-                                
-                
-                                
-                                <div class="<?php echo $secondaryImagePath ? 'image-hover-none' : ''; ?> main-image" style="background: url(<?php echo getAssetsDomain().$productImagePath; ?>) no-repeat center; background-size: cover;">
-                                    <center>
-                                        <div class="span-img-container">
-                                        </div>
-                                    </center>
-                                </div>
+
                                 <?php if($percentage && $percentage > 0):?>
                                 <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
                                 <?php endif; ?>
@@ -82,28 +68,17 @@
                     <table width="100%">
                         <tr>
                             <td width="20%" class="td-list-image" style="">
-                                <div style="position: relative; height: 100%; width: 100%;">
-                                
-                                    <?php if($secondaryImagePath !== null): ?>
-                                        <div style="background: url(<?php echo getAssetsDomain().$secondaryImagePath;?>) center no-repeat; background-size: cover; width: 100%; height:100%;">
-                                            <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
-                                                <div class="span-space">
-                                                    
-                                                </div>
-                                            </a>
-                                        </div>
-                                    <?php endif; ?>
-              
-                                    <div class="<?php echo $secondaryImagePath ? 'main-image-list image-hover-none ' : ''; ?>" style="background: url(<?php echo getAssetsDomain().$productImagePath; ?>) center no-repeat; background-size: cover;">
-                                        <a target="_blank" href="<?php echo '/item/' . $productSlug?>">
-                                            <div class="span-space">
-                                            
-                                            </div>
-                                        </a>
-                                    </div>
-                                     <?php if($percentage && $percentage > 0):?>
-                                        <span class="span-discount-pin-list"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
-                                    <?php endif;?>
+                                <div class="image-container">
+                                    <div class="div-item">
+                                        <img src="<?php echo getAssetsDomain().$productImagePath; ?>" class="grid-image-primary <?php if($secondaryImagePath !== null): ?>grid-image-has-secondary <?php endif; ?>" >
+                                        <?php if($secondaryImagePath !== null): ?>
+                                            <img src="<?php echo getAssetsDomain().$secondaryImagePath; ?>" class="grid-image-secondary" >
+                                        <?php endif; ?>
+
+                                        <?php if($percentage && $percentage > 0):?>
+                                        <span class="grid-span-discount-pin"><?PHP echo number_format($percentage,0,'.',',');?>%</span>
+                                        <?php endif; ?>
+                                    </div>          
                                 </div>
                             </td>
                             <td width="55%" class="td-list-item-info">
@@ -142,9 +117,13 @@
                                 </div>
                             </td>
                             <td width="25%" class="td-list-price">
-                                <p class="p-list-price"> P <?php echo $productPrice?> </p>
+                                <?php
+                                     $priceFontStyle = strlen((string)$productPrice) > 11 ? "font-size:15px !important;" : "";
+                                     $discountFontStyle = strlen((string)$originalPrice) > 11 ? "font-size:13px !important;" : "";
+                                 ?>
+                                <p class="p-list-price" style="<?php echo $priceFontStyle; ?>"> P <?php echo $productPrice?> </p>
                                 <div class="clear"></div>
-                                <p class="p-list-discount">
+                                <p class="p-list-discount" style="<?php echo $discountFontStyle; ?>">
                                     <s><?php if($percentage && $percentage > 0):?> P <?=$originalPrice?>   <?php endif;?> </s>
                                 </p>
                                 <a class="btn btn-default-1" target="_blank" href="/item/<?=$productSlug; ?>" >
@@ -165,7 +144,6 @@
                 </div>
             <?php endforeach;?>
         </div>
-        <!-- <?php echo $arrCat['pagination']?> -->
             <div class="clear"></div>
              
             <center>

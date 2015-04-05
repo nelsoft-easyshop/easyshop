@@ -131,8 +131,9 @@
     });
 
     $('.btn-filter-price').click(function() { 
-        var price1 = parseFloat($('#filter-from-price').val().replace(/,/g , ""));
-        var price2 = parseFloat($('#filter-to-price').val().replace(/,/g , "")); 
+        var tableParent = $(this).closest('table');
+        var price1 = parseFloat(tableParent.find('#filter-from-price').val().replace(/,/g , ""));
+        var price2 = parseFloat(tableParent.find('#filter-to-price').val().replace(/,/g , "")); 
 
         currentUrl = removeParam("startprice", currentUrl);
         currentUrl = removeParam("endprice", currentUrl); 
@@ -400,7 +401,18 @@
     });
 
     $(document).on('click',".page-link",function () {
-        var currentPageNumber = parseInt($(this).html().trim()); 
+        var currentPageNumber;
+
+        if($(this).hasClass('next')){
+            currentPageNumber = parseInt($(".nav li.active > a").text().trim()) + 1;
+        }
+        else if($(this).hasClass('prev')){
+            currentPageNumber = parseInt($(".nav li.active > a").text().trim()) - 1;
+        }
+        else{
+            currentPageNumber = parseInt($(this).html().trim());
+        }
+
         var afterPage = currentPageNumber + 1; 
         var requestPage = currentPageNumber - 1; 
         var mainElement = $('.search-results-container > #page-'+ currentPageNumber);
@@ -408,7 +420,6 @@
         $('.individual').removeClass('active');
         $('.individual[data-page="'+currentPageNumber+'"]').addClass('active');
         $('#simplePagination').pagination('selectPage', currentPageNumber);
-
         if(isNaN(currentPageNumber) === false){ 
             appendString = '<div class="row loading-row" id="page-'+currentPageNumber+'">\
                 <div class="loading-bar-container">\
@@ -458,8 +469,8 @@
         } 
     }); 
 
-    $(document).ready(function(){
-        if(window.location.hash) {
+    $(document).ready(function(){ 
+        if(window.location.hash || location.href.indexOf("#") != -1) {
             var hash = window.location.hash.substring(1);
             $('.page-link[href="#'+hash+'"]').trigger('click'); 
         } 
@@ -587,7 +598,6 @@
     }
          
     $window.on('load resize', function() {
-        
         var widthOff = $(window).width();
         var heightHead = 200;
         var heightBanners = $(".search-parallax-container").outerHeight();
@@ -605,9 +615,16 @@
             $("#scrollUp").trigger("click");
             $(".panel-filter-search-cont").addClass("container-filter").removeAttr("style");
             $.stickysidebarscroll(".container-filter",{offset: {top: offsetTopData, bottom: 100}});
-
         }
+
+
+        
     });
+
+    $(document).find('[rel=tooltiplist]').tooltip({
+        placement : 'top'
+    });
+
 }(jQuery));
 
 

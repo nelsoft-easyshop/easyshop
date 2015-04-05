@@ -6,7 +6,6 @@
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.vendorview.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>
 
-
 <div class="clear"></div>
 <section class="bg-product-section color-default"><br>
 <div class="container bg-product-section">
@@ -23,22 +22,49 @@
                                 </a>
                             </h4>
                         </div>
+
                         <div id="category-list" class="panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
-                                <ul class="list-unstyled list-category">
-                                    <?php foreach( $customCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
-                                            <li>
-                                                <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
-                                            </li>
-                                        </a>
-                                    <?php endforeach;?>
-                                    <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                                        <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
-                                            <li>
-                                                <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
-                                            </li>
-                                        </a>
+                                <ul class="list-unstyled list-category">    
+                                    <?php $isFirst = true; ?>
+                                    <?php foreach( $categoryProducts as $categoryId => $categoryData ):?>
+                                        <?php $categoryWrapper = $categoryData['category']; ?>
+                                        <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
+                                        <?php if($categoryWrapper->getIsHidden()): ?>
+                                            <?php continue; ?>
+                                        <?php endif; ?>
+                                        <li>
+                                            <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories simplemodal-close">
+                                                <span class='catText'>
+                                                    <?php echo html_escape($categoryWrapper->getCategoryName());?>
+                                                </span> 
+                                            <?php $children = $categoryWrapper->getChildren(); ?>
+                                            <?php 
+                                                /**
+                                                 * If child has no products remove it from the children array
+                                                 */
+                                            ?>
+                                            <?php foreach($children as $key => $child): ?>
+                                                <?php if(!in_array((int)$child->getId(), array_keys($categoryProducts))): ?>
+                                                    <?php unset($children[$key]); ?>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                            <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>
+                                                <i class="fa fa-caret-down fa-lg pull-right"></i>
+                                            </a>
+                                                <ul class="list-sub-category">
+                                                <?php foreach($children as $child): ?>
+                                                    <li>
+                                                        <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-<?php echo $child->getId(); ?>" >
+                                                            <?php echo html_escape($child->getCategoryName()); ?> 
+                                                        </a>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                            </a>
+                                        </li>
+                                        <?php $isFirst = false; ?>
                                     <?php endforeach;?>
                                 </ul>
                             </div>
@@ -99,58 +125,38 @@
 
                 <input type="hidden" id="vid" value="<?php echo $arrVendorDetails['id_member']?>">
                 <input type="hidden" id="vname" value="<?php echo $arrVendorDetails['username']?>">
-                <input type="hidden" id="queryString" value='<?=json_encode($this->input->get()); ?>' />
+                <input type="hidden" id="queryString" value='<?=html_escape(json_encode($this->input->get())); ?>' />
 
                 <div class="vendor-select-con">
-                    <select data-group="<?php echo $catId?>" class="sort_select form-select-default color-default pull-right">
-                        <option value="2">Default Sorting</option>
-                        <option value="1">Popularity</option>
-                        <option value="3">Hot</option>
+                    <select class="sort_select form-select-default color-default pull-right">
+                        <option value="0" class="order-by-default">Default Sorting</option>
+                        <option value="1" class="order-by-popularity">Popularity</option>
+                        <option value="2" class="order-by-lastmodified">Most Recent</option>
+                        <option value="3" class="order-by-hotness">Hot</option>
                     </select>
                     <div class="clear"></div>
                 </div>
-
-                <?php foreach($customCatProd as $catId => $arrCat):?>
-
-                <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" 
-                    id="cus-<?php echo $catId?>" data-catId='<?php echo $arrCat['json_subcat']?>' 
-                    style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" 
-                    data-productcount="<?=$arrCat['non_categorized_count']?>"
-                    data-catType="<?php echo $arrCat['cat_type']?>"
-                >
-                    <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
-
-                    <?php if((string)$arrCat['non_categorized_count'] === "0"): ?>
-                        <span>No items available for this category.</span>
-                    <?php else:?>
-                        <?=$arrCat['product_html_data'];?>
-                        <div class="clear"></div>
-                        <div id="paginationDiv-<?php echo $catId?>" class="pagination-container">
-                            <center>
-                                <?php echo $arrCat['pagination']?>
-                            </center>
-                        </div>
-                   <?php endif;?>
-                </div>
-                <?php endforeach;?>
-
-                <?php foreach($defaultCatProd as $catId => $arrCat):?>
-
-                    <div class="view row row-items grid category-products <?php echo $arrCat['isActive'] ? 'active' : ''?>" 
-                        id="def-<?php echo $catId?>"
-                        data-catId='<?php echo $arrCat['json_subcat']?>' 
-                        style="display:<?php echo $arrCat['isActive'] ? '' : 'none'?>" 
-                        data-group="<?php echo $catId?>" 
-                        data-productcount="<?=$arrCat['non_categorized_count']?>"
-                        data-catType="<?php echo $arrCat['cat_type']?>"
-                    >
+                <?php $isFirst = true; ?>
+                <?php foreach($categoryProducts as $catId => $categoryData):?>
+                    <?php $categoryWrapper = $categoryData['category']; ?>
+                    <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
+                    <div class="view row row-items grid category-products <?php echo $isFirst ? 'active' : ''; ?>" 
+                        id="def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>"
+                        data-catId='<?php echo html_escape($categoryData['json_subcat']);?>' 
+                        data-group="<?php echo $categoryWrapper->getId(); ?>" 
+                        data-productcount="<?php echo $categoryData['non_categorized_count'] ?>"
+                        data-catType="<?php echo html_escape($categoryData['cat_type']); ?>"
+                        data-isCustom="<?php echo json_encode($categoryWrapper->getIsCustom()); ?>"
+                        style = "<?php echo $isFirst ? '' : 'display:none;'; ?>"
+                    >                    
                         <div class="loading_div" style="text-align:center;display:none;"><img src="<?php echo getAssetsDomain()?>assets/images/loading/preloader-grayBG.gif"></div>
-                        <?php if($arrCat['non_categorized_count'] === 0): ?>
+                        <?php if($categoryData['non_categorized_count'] === 0): ?>
                             <span>No items available for this category.</span>
                         <?php else:?>
-                            <?=$arrCat['product_html_data'];?>
+                            <?=$categoryData['product_html_data'];?>
                         <?php endif;?>
                     </div>
+                    <?php $isFirst = false; ?>
                 <?php endforeach;?>
             </div>
         </div>
@@ -177,20 +183,46 @@
     <h1>Categories</h1>
     <div id="category-list" class="panel-collapse collapse in">
         <div class="panel-body border-0 no-padding">
-            <ul class="list-unstyled list-category">
-                <?php foreach( $customCatProd as $catId=>$arrCat ):?>
-                    <a href="javascript: void(0)" data-link="#cus-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
-                        <li>
-                            <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
-                        </li>
-                    </a>
-                <?php endforeach;?>
-                <?php foreach( $defaultCatProd as $catId=>$arrCat ):?>
-                    <a href="javascript: void(0)" data-link="#def-<?php echo $catId?>" class="color-default tab_categories simplemodal-close">
-                        <li>
-                            <span style="display: <?php echo html_escape($arrCat['isActive']) ? '' : 'none'?>" class="fa fa-caret-right active-category selected-marker"></span>  <span class='catText'><?php echo $arrCat['name']?></span>
-                        </li>
-                    </a>
+            <ul class="list-unstyled list-category">    
+                <?php $isFirst = true; ?>
+                <?php foreach( $categoryProducts as $categoryId => $categoryData ):?>
+                    <?php $categoryWrapper = $categoryData['category']; ?>
+                    <?php $isSearch = $categoryData['cat_type'] === \EasyShop\Category\CategoryManager::CATEGORY_SEARCH_TYPE; ?>
+                    <?php if($categoryWrapper->getIsHidden()): ?>
+                        <?php continue; ?>
+                    <?php endif; ?>
+                    <li>
+                        <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>simplemodal-close<?php endif;?>">
+                            <span class='catText'>
+                                <?php echo html_escape($categoryWrapper->getCategoryName());?>
+                            </span> 
+                        <?php $children = $categoryWrapper->getChildren(); ?>
+                        <?php 
+                            /**
+                             * If child has no products remove it from the children array
+                             */
+                        ?>
+                        <?php foreach($children as $key => $child): ?>
+                            <?php if(!in_array((int)$child->getId(), array_keys($categoryProducts))): ?>
+                                <?php unset($children[$key]); ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                        <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>
+                            <i class="fa fa-caret-down fa-lg pull-right"></i>
+                        </a>
+                            <ul class="list-sub-category">
+                            <?php foreach($children as $child): ?>
+                                <li>
+                                    <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-<?php echo $child->getId(); ?>" >
+                                        <?php echo html_escape($child->getCategoryName()); ?> 
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                        </a>
+                    </li>
+                    <?php $isFirst = false; ?>
                 <?php endforeach;?>
             </ul>
         </div>
@@ -202,12 +234,13 @@
 </div>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript"></script>
     <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript'></script>
     <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.scrollTo.js" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+    <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_vendor_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
+

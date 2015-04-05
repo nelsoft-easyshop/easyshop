@@ -30,11 +30,29 @@
                     <div class="div-detail-container ">
                         <p class="p-detail-title">Product Detail</p>
                         <div class="p-html-description">
-                            <?=$productDetails; ?>
-                            <?php foreach ($additionalInformation as $value): ?>
-                                <?=$value; ?>
+                            <div class="external-links-container">
+                                <?=nl2br($productDetails); ?>
                                 <br>
-                            <?php endforeach; ?>
+                                <?php foreach ($additionalInformation as $value): ?>
+                                    <?=html_escape($value); ?>
+                                    <br>
+                                <?php endforeach; ?>
+                                <?php if($product->getCondition() !== ""): ?>
+                                    Condition: <?=html_escape($product->getCondition()); ?>
+                                    <br>
+                                <?php endif; ?>
+                                <?php if($product->getBrief() !== ""): ?>
+                                    Brief Description: <?=html_escape($product->getBrief()); ?>
+                                    <br>
+                                <?php endif; ?>
+                                <?php if($product->getBrand()->getName() !== "" && $product->getBrand()->getIdBrand() !== \EasyShop\Entities\EsBrand::CUSTOM_CATEGORY_ID): ?>
+                                    Brand: <?=html_escape($product->getBrand()->getName()); ?>
+                                    <br>
+                                <?php endif; ?>
+                                <?php if($product->getSku() !== ""): ?>
+                                    SKU: <?=html_escape($product->getSku()); ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                         <div class="clear"></div>
                     </div>
@@ -97,7 +115,7 @@
                                                         </p>
                                                         <div class="clear"></div>
                                                         <p class="p-review-content">
-                                                            <?=html_escape($value['review']);?>
+                                                            <?=nl2br(html_escape($value['review']));?>
                                                         </p>
 
                                                         <?php if($canReview): ?>
@@ -172,7 +190,7 @@
                                                                     </div> 
                                                                     <div class="clear"></div>
                                                                     <p class="p-review-content">
-                                                                        <?=html_escape($valueReply['review']);?>
+                                                                        <?=nl2br(html_escape($valueReply['review']));?>
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -192,24 +210,22 @@
                                 <div class="col-md-12">
                                     <p class="p-reply-title">Write a Review</p>
                                     <div class="div-write-review-container">
-                                        
-                                        <div class="row">
-                                            <div class="col-md-5">  
+                                            <div class="col-md-6">
                                                 <form class="form-horizontal" role="form">
                                                     <div class="form-group">
-                                                        <label for="subject" class="col-xs-3 control-label label-subject">Subject: </label>
-                                                        <div class="col-xs-9">
+                                                        <label for="subject" class="col-xs-2 control-label label-subject">Subject: </label>
+                                                        <div class="col-xs-10">
                                                             <input type="text" id="review-title" class="input-reply" id="subject" autocomplete="off">
                                                             <span id="error-review-title" class="error-label">Please provide a review subject</span>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="col-md-5">
+                                            <div class="col-md-6">
                                                 <form class="form-horizontal" role="form">
                                                     <div class="form-group">
-                                                        <label for="subject" class="col-xs-3 control-label" class="label-rate">Rating: </label>
-                                                        <div class="col-xs-9" style="vertical-align: middle;">
+                                                        <label for="subject" class="col-xs-2 control-label" class="label-rate">Rating: </label>
+                                                        <div class="col-xs-10" style="vertical-align: middle;">
                                                             <div class="span-star-container">
                                                                 <i data-count="1" class="fa fa-star fa-star-rate js-rate"></i>
                                                                 <i data-count="2"  class="fa fa-star fa-star-rate js-rate"></i>
@@ -222,29 +238,24 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                        </div>
-                                        <div class="clear"></div>
-                                        <div class="row">
-                                            <div class="col-md-10">  
-                                                <form class="form-horizontal" role="form">
-                                                    <div class="form-group">
-                                                        <label for="subject" class="col-md-2 control-label label-comment" style="text-align: left !important; margin-left: 10px;">Comment: </label>
-                                                        <div class="col-md-10" style="margin-left: -10px;">
-                                                            <textarea id="review-comment" class="input-textarea-write " rows="7"></textarea>
-                                                            <span id="error-review-nessage" class="error-label error-label-textarea" >Please provide a review message</span>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                        <div class="clear"></div>  
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="subject" class="col-md-2 control-label label-comment" style="padding-right: 15px;">Comment: </label>
+                                                <div class="col-md-10 col-comment-review col-xs-12">
+                                                    <textarea id="review-comment" class="input-textarea-write " rows="7"></textarea>
+                                                    <span id="error-review-nessage" class="error-label error-label-textarea" >Please provide a review message</span>
+                                                </div>
                                             </div>
+                                            
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-10" align="center">
+                                        <div class="form-group">
+                                            <div class="col-md-12" align="center">
                                                 <button id="submitReview" class="btn-reply">
                                                     Submit
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         <?php endif; ?>

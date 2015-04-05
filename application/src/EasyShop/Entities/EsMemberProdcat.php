@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * EsMemberProdcat
  *
  * @ORM\Table(name="es_member_prodcat", indexes={@ORM\Index(name="fk_es_member_prodcat_1_idx", columns={"memcat_id"}), @ORM\Index(name="fk_es_member_prodcat_2_idx", columns={"product_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="EasyShop\Repositories\EsMemberProdcatRepository")
  */
 class EsMemberProdcat
 {
@@ -48,7 +48,12 @@ class EsMemberProdcat
      */
     private $product;
 
-
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sort_order", type="integer", nullable=false)
+     */
+    private $sortOrder = '0';
 
     /**
      * Get idMemprod
@@ -128,4 +133,28 @@ class EsMemberProdcat
     {
         return $this->product;
     }
+    
+        
+    /**
+     * Set sortOrder
+     *
+     * @param integer $sortOrder
+     * @return EsMemberCat
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+        return $this;
+    }
+    
+    /**
+     * Get sortOrder
+     *
+     * @return integer 
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
+
 }

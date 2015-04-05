@@ -12,6 +12,7 @@ class CMS
 
     const NODE_TYPE_PRODUCT = "product";
 
+
     /**
      * The xml resource getter
      *
@@ -161,11 +162,8 @@ class CMS
         <categorySlug>'.$value.'</categorySlug>
         <sub>
             <text>Default</text>
-            <target>/</target>
+            <productSlugs> </productSlugs>
         </sub>
-        <productPanel>
-            <slug>kj-star-wireless-mobile-phone-monopod</slug>
-        </productPanel>            
     </categorySection>'; 
         }   
         if($nodeName == "otherCategories") {
@@ -177,9 +175,16 @@ class CMS
              $string = '
         <sub>
             <text>'.$value.'</text>
-            <target>'.$target.'</target>
+            <productSlugs> </productSlugs>            
         </sub>'; 
         }           
+
+        if($nodeName=="productPanel") {
+             $string = '
+                <productPanel>
+             <slug>'.$value.'</slug>
+        </productPanel>'; 
+        }
 
         if($nodeName == "adsSection") {
              $string = '
@@ -244,19 +249,18 @@ class CMS
         }        
         if($nodeName == "productPanelNew" ) {
             $string = '
-        <productPanel>
-            <slug>'.$value.'</slug>
-        </productPanel>'; 
+            <productSlugs>'.$value.'</productSlugs>'; 
         }
         if($nodeName == "mainSlide") {
 
- $string = '<mainSlide> 
+        $string = '
+        <mainSlide> 
         <value>'.$value.'</value> 
         <type>image</type>
         <imagemap>
-            <coordinate>'.$coordinate.'</coordinate>
-            <target>'.$target.'</target>
+            <target>'.$coordinate.'</target>
         </imagemap>
+        <actionType>'.$target.'</actionType>
     </mainSlide>';   
 
         }
@@ -347,10 +351,11 @@ $string = '<typeNode>
      *  @param string $file
      *  @param string $nodeName
      *  @param int $index
-     *  @param int $productindex  
+     *  @param int $subIndex  
+     *  @param int $subPanelIndex  
      *  @return boolean
      */
-    public function removeXmlNode($file,$nodeName,$index = null, $subIndex = null) 
+    public function removeXmlNode($file,$nodeName,$index = null, $subIndex = null, $subPanelIndex = null) 
     {
 
         if($nodeName == "tempHomeSlider"){
@@ -394,7 +399,7 @@ $string = '<typeNode>
             else {
                     return false;
             }
-        }    
+        }
         else if($nodeName == "newArrival"){
             $referred = "/map/menu/newArrivals/arrival[".$index."]"; 
 
@@ -454,24 +459,42 @@ $string = '<typeNode>
             }
         }
         else if($nodeName == "categoryProductPanel") {
+            $subPanelIndex = (int) $subPanelIndex === 0 ? 1 : $subPanelIndex + 1;
+            $referred = "//categorySection[$index]/sub[$subIndex]/productSlugs[$subPanelIndex]";
+            $xml = new \SimpleXMLElement(file_get_contents($file) );            
+            $result = current($xml->xpath($referred));
 
-            $referred = "/map/categorySection[".$index."]/productPanel[".$subIndex."]"; 
+            $dom = dom_import_simplexml($result[0]);
+
+            $dom->parentNode->removeChild($dom);
+
+            return $xml->asXml($file);
+    
+        }        
+        else if($nodeName == "subCategorySection") {
+            $referred = "/map/categorySection[".$index."]"."/sub[".$subIndex."]"; 
 
             $doc = new \SimpleXMLElement(file_get_contents($file));
             if($target = current($doc->xpath($referred))) {
                 $dom = dom_import_simplexml($target);
 
                 $dom->parentNode->removeChild($dom);
-                if($doc->asXml($file)) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
+                return $doc->asXml($file);
             }
             else {
                     return false;
-            }        
+            }
+        }           
+        else if($nodeName == "boxContent") {
+
+            $referred = "/map/section[".$index."]/boxContent[".$subIndex."]"; 
+            $doc = new \SimpleXMLElement(file_get_contents($file));
+            if($target = current($doc->xpath($referred))) {
+                $dom = dom_import_simplexml($target);
+                $dom->parentNode->removeChild($dom);
+                return $doc->asXml($file);
+            }
+
         }        
         else if($nodeName == "categorySection") {
 
@@ -835,7 +858,11 @@ $string = '<typeNode>
         foreach($xmlContent['menu']['topProducts']['product'] as $productSlug){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $productSlug]);
-            array_push($homePageData['menu']['topProducts'], $product);
+            if($product){
+                if($this->productManager->isProductActive($product)){
+                    $homePageData['menu']['topProducts'][] = $product;
+                }
+            }                    
         }
         
         if(!is_array($xmlContent['menu']['topSellers']['seller'])){
@@ -889,9 +916,9 @@ $string = '<typeNode>
     {
         $homeXmlFile = (!$isTemporaryFile) ? $this->xmlResourceGetter->getHomeXMLfile() : $this->xmlResourceGetter->getTempHomeXMLfile();
         $xmlContent = $this->xmlResourceGetter->getXMlContent($homeXmlFile);
-        
+
         $homePageData['categorySection'] = [];
-        
+
         if(isset($xmlContent['categorySection']['categorySlug'])){
             $temporary = $xmlContent['categorySection'];
             $xmlContent['categorySection'] = array();
@@ -901,7 +928,7 @@ $string = '<typeNode>
         $xmlContent['categorySection']  = !isset($xmlContent['categorySection']) ? [] : $xmlContent['categorySection'];
         foreach($xmlContent['categorySection'] as $categorySection){
             $sectionData['category'] = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                                    ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
+                                                ->findOneBy(['slug' => $categorySection['categorySlug']]);                                     
            
             if(!isset($categorySection["sub"])){
                 $categorySection["sub"] = [];
@@ -911,32 +938,50 @@ $string = '<typeNode>
                 $subTemporary = $categorySection['sub'];
                 $categorySection['sub'] = [ $subTemporary ];
             }   
-            $sectionData['subHeaders'] = $categorySection['sub'];
             
-            if(isset($categorySection['productPanel']['slug'])){
-                $productPanelTemporary = $categorySection['productPanel'];
-                $categorySection['productPanel'] = [ $productPanelTemporary ];
-            }   
-
             $sectionData['products'] = [];
-            if(!isset($categorySection['productPanel'])){
-                $categorySection['productPanel'] = array();
+            $sectionData['subHeaders'] = [];
+
+            $isFirstRun = true;
+            foreach ($categorySection['sub'] as $index => $subHeaderSection) {
+            
+                $subHeaderSection['text'] = (is_array($subHeaderSection['text']) && empty($subHeaderSection['text'])) ? '' : $subHeaderSection['text'];
+                
+                if (!isset($subHeaderSection['productSlugs']) || !$subHeaderSection['productSlugs']) {
+                    $subHeaderSection['productSlugs'] = [];
+                }  
+                $sectionData['subHeaders'][$index] = $subHeaderSection;
+                
+                if(!$isFirstRun){
+                    continue;
+                }
+
+                if(!is_array($subHeaderSection['productSlugs'] )){
+                    $subHeaderSection['productSlugs'] = [ $subHeaderSection['productSlugs'] ];
+                }
+
+                foreach ($subHeaderSection['productSlugs'] as $idx => $xmlProductData) {
+                    $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                        ->findOneBy(['slug' => $xmlProductData]);
+                    if ($product) {
+                        if($this->productManager->isProductActive($product)){
+                            $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
+                            $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                        ->getSecondaryImage($product->getIdProduct());
+                            $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
+                            $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());
+                        }
+                    }
+                }
+                
+                $isFirstRun = false;
             }
 
-            foreach($categorySection['productPanel'] as $idx => $xmlProductData){
-                $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                    ->findOneBy(['slug' => $xmlProductData['slug']]);
-                if($product){
-                    $sectionData['products'][$idx]['product'] =  $this->productManager->getProductDetails($product);
-                    $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                ->getSecondaryImage($product->getIdProduct());
-                    $sectionData['products'][$idx]['productSecondaryImage'] = $secondaryImage;
-                    $sectionData['products'][$idx]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
-                }
-            }
-            array_push($homePageData['categorySection'], $sectionData);
+            $homePageData['categorySection'][] = $sectionData;
         }
+
         
+
         $homePageData['adSection'] = isset($xmlContent['adSection']['ad']) ? $xmlContent['adSection']['ad'] : [];
        
         if(isset($homePageData['adSection']['img'])){
@@ -944,9 +989,11 @@ $string = '<typeNode>
             $homePageData['adSection'] = [ $temporaryAdSection ] ;
         }
 
-        $sliderTemplates = array();
-        foreach($xmlContent['sliderTemplate']['template'] as $template){
-            array_push($sliderTemplates, $template['templateName']);
+        $sliderTemplates = [];
+        if (isset($xmlContent['sliderTemplate']['template'])) {
+            foreach($xmlContent['sliderTemplate']['template'] as $template){
+                $sliderTemplates[] = $template['templateName'];
+            }
         }
 
         $homePageData['slider'] = isset($xmlContent['sliderSection']['slide']) ? $xmlContent['sliderSection']['slide'] : [];     
@@ -997,10 +1044,12 @@ $string = '<typeNode>
             $productData = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                     ->findOneBy(['slug' => $productSlug, 'member' => $featuredSellerId]);
             if($productData){
-                $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
-                $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                                  ->getSecondaryImage($productData->getIdProduct());
-                $featuredVendor['product'][$key]['secondaryProductImage'] = $secondaryProductImage;                     
+                if($this->productManager->isProductActive($productData)){
+                    $featuredVendor['product'][$key]['product'] = $this->productManager->getProductDetails($productData);
+                    $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                    ->getSecondaryImage($productData->getIdProduct());
+                    $featuredVendor['product'][$key]['secondaryProductImage'] = $secondaryProductImage;    
+                }
             }
         }
         $homePageData['seller'] = $featuredVendor;
@@ -1067,8 +1116,23 @@ $string = '<typeNode>
         ]; 
 
         $productSections[] = $sectionImages;
+
+
+        if(!isset($pageContent['section'][0])){
+            $temp = $pageContent['section'];
+            $pageContent['section'] = [];
+            $pageContent['section'][] = $temp;
+        }
+
         foreach ($pageContent['section'] as $value) {
             $productArray = []; 
+
+            if(!isset($value['boxContent'][0])){
+                $temp = $value['boxContent'];
+                $value['boxContent'] = [];
+                $value['boxContent'][] = $temp;
+            }
+
             foreach ($value['boxContent'] as $valueLevel2) {
 
                 $slug = isset($valueLevel2['value']) ? $valueLevel2['value'] : ""; 
@@ -1088,7 +1152,7 @@ $string = '<typeNode>
                         $product = $this->productManager->getProductDetails($product->getIdProduct());
 
                         $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                          ->getDefaultImage($product->getIdProduct());
+                                                 ->getDefaultImage($product->getIdProduct());
             
                         $directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
                         $imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
@@ -1181,6 +1245,7 @@ $string = '<typeNode>
     {  
         $categoryXmlFile = $this->xmlResourceGetter->getCategoryXmlFile();
         $categoryXmlObjects = $this->xmlResourceGetter->getXMlContent($categoryXmlFile, $categorySlug, 'category'); 
+
         $categoryXmlArray = json_decode(json_encode((array) $categoryXmlObjects), 1);
 
         if(isset($categoryXmlArray[0])  && $categoryXmlArray[0] === false){
@@ -1213,6 +1278,76 @@ $string = '<typeNode>
         }
         
         return $categoryXmlArray;
+    }
+    
+    /**
+     * Retrieves the featured products
+     *
+     * @param integer $memberId
+     * @return EasyShop\Entities\EsProduct[]
+     */
+    public function getFeaturedProducts($memberId)
+    {
+        $followedSellerIds = [];
+        $miscellaneousXmlFile = $this->xmlResourceGetter->getMiscellaneousXmlFile();
+        
+        $usersBeingFollowed = $this->em->getRepository('\EasyShop\Entities\EsVendorSubscribe')
+                                       ->getUserFollowing($memberId);
+        foreach($usersBeingFollowed['following'] as $userBeingFollowed){
+            $followedSellerIds[] = $userBeingFollowed->getVendor()->getIdMember();
+          
+        }
+        
+        $easyshopId = trim($this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile, 'easyshop-member-id', 'select'));
+        $easyshopId = empty($easyshopId) ? [] :  [ $easyshopId ];
+        $partnerIds = trim($this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile, 'partners-member-id', 'select'));
+        $partnerIds = empty($partnerIds) ? [] : explode(',', $partnerIds);
+        $followedSellerIds = array_merge($followedSellerIds, $easyshopId);
+        $followedSellerIds = array_merge($followedSellerIds, $partnerIds);
+        $followedSellerIds = array_map('intval', $followedSellerIds);
+        $followedSellerIds = array_unique($followedSellerIds);
+
+        $products = $this->productManager->getRandomProductsFromUsers($followedSellerIds, 10);
+
+        $featuredProductSlugs = [];        
+        foreach($products as $index => $product){
+            if(!$this->productManager->isProductActive($product)){
+                continue;
+            }
+            $featuredProductSection['products'][$index]['product'] =  $this->productManager->getProductDetails($product);
+            $secondaryImage =  $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                        ->getSecondaryImage($product->getIdProduct());
+            $featuredProductSection['products'][$index]['productSecondaryImage'] = $secondaryImage;
+            $featuredProductSection['products'][$index]['userimage'] =  $this->userManager->getUserImage($product->getMember()->getIdMember());  
+            $featuredProductSlugs[] = $product->getSlug();
+        }
+
+        $featuredProductSection['subHeaders'] = [];
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $featuredProductSlugs,
+            'text' => 'Followed Sellers',
+        ];
+
+        $miscellaneousFileContents = $this->xmlResourceGetter->getXMlContent($miscellaneousXmlFile); 
+        $promoProductSlugs = [];
+        foreach($miscellaneousFileContents['feedPromoItems']['product'] as $promoProduct){
+            $promoProductSlugs[] = $promoProduct['slug']; 
+        }
+
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $promoProductSlugs,
+            'text' => 'Promos',
+        ];
+
+        $newProductSlugs = $this->em->getRepository('\EasyShop\Entities\EsProduct')
+                                    ->getNewestProductSlugs();
+
+        $featuredProductSection['subHeaders'][] = [
+            'productSlugs' => $newProductSlugs,
+            'text' => 'New Products',
+        ];
+
+        return $featuredProductSection;
     }
 
 }

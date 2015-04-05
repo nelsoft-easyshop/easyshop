@@ -9,6 +9,12 @@
     $(document).ready(function(){
         
         var minimumPasswordLength = parseInt($('#min-length-password').val());
+
+        $.validator.addMethod("passwordAlphanumeric", function(value, element) {
+            var isPassed =  /[a-zA-Z]/i.test(value) && /\d/i.test(value) && !/\s/i.test(value);
+            return this.optional(element) || isPassed;
+        }, "Must only contain alphanumeric characters with no spaces");
+        
         
         $('#password').on('keyup', function(){
             var $this = $(this);
@@ -25,11 +31,10 @@
             rules: {               
                 password: {
                     required: true,
-                    minlength: 6
+                    minlength: 6,
+                    passwordAlphanumeric: true
                 },
                 confirmpassword: {
-                    required: true,
-                    minlength: 6,
                     equalTo: '#password'
                 }
             },
@@ -46,6 +51,14 @@
             bootstrap3: true,
         };
         $('#password').pwstrength(options);
+        
+        
+        $('#password').on('blur', function(){
+            var $this = $(this);
+            if($this.hasClass('error')){
+                $('.progress-bar').css('width', '0');
+            }
+        });
     
     });
     

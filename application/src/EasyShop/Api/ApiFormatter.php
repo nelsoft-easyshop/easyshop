@@ -3,6 +3,7 @@
 namespace EasyShop\Api;
 
 use EasyShop\Entities\EsProductImage as EsProductImage;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
  
 class ApiFormatter
 {
@@ -87,9 +88,9 @@ class ApiFormatter
                 'description' => $this->stringUtility->purifyHTML($product->getDescription()),
                 'brand' => $product->getBrand()->getName(),
                 'condition' => $product->getCondition(),
-                'discount' => $product->getDiscountPercentage(),
-                'price' => floatval($product->getFinalPrice()),
-                'original_price' => floatval($product->getOriginalPrice()),
+                'discount' => number_format($product->getDiscountPercentage(), 0, '.', ''),
+                'price' => number_format($product->getFinalPrice(), 2, '.', ''),
+                'original_price' => number_format($product->getOriginalPrice(), 2, '.', ''),
                 'isFreeShipping' => $product->getIsFreeShipping(),
             ];
 
@@ -142,19 +143,20 @@ class ApiFormatter
         $formattedProductAttributes = $productAttributes;
         // get product specification
         $productSpecification = [] ; $productCombinationAttributes = []; 
+        $listArray = [];
         foreach ($formattedProductAttributes as $key => $productOption) {
             $newArrayOption = []; 
 
             for ($i=0; $i < count($productOption) ; $i++) {
                 $type = ($formattedProductAttributes[$key][$i]['type'] == 'specific' ? 'a' : 'b');
                 $newKey = $type.'_'.$formattedProductAttributes[$key][$i]['attr_id'];
-                $newArrayOption[] = [
-                                'value' => $productOption[$i]['attr_value'],
-                                'price'=> $productOption[$i]['attr_price'],
-                                'img_id'=> $productImages[0]['id'],
-                                'name'=> $productOption[$i]['attr_name'],
-                                'id'=> $newKey
-                            ]; 
+                $newArrayOption[] = $listArray[$newKey] = [
+                    'value' => $productOption[$i]['attr_value'],
+                    'price'=> $productOption[$i]['attr_price'],
+                    'img_id'=> $productImages[0]['id'],
+                    'name'=> $productOption[$i]['attr_name'],
+                    'id'=> $newKey
+                ]; 
             }
 
             if(count($productOption)>1){
@@ -171,45 +173,21 @@ class ApiFormatter
             }
         }
 
-        // get product quantity
-        $productInventory = $esProductRepo->getProductInventoryDetail($productId);
-
-        $temporaryArray = [];
-        foreach ($productInventory as $key => $value) {
-             if(!array_key_exists($value['id_product_item'],$temporaryArray)){
-                $temporaryArray[$value['id_product_item']] = [
-                                                        'quantity' => $value['quantity'],
-                                                        'product_attribute_ids' => [
-                                                                        [
-                                                                'id' => $value['product_attr_id'],
-                                                                'is_other' => $value['is_other'],
-                                                            ]
-                                                        ],
-                                                    ];
-             }
-             else{ 
-                $temporaryArray[$value['id_product_item']]['product_attribute_ids'][] = [
-                                                                                'id' => $value['product_attr_id'],
-                                                                                'is_other' => $value['is_other'],
-                                                                            ];
-             }
-        }
-
+        $temporaryArray = $this->productManager->getProductInventory($product);
         $productQuantity = [];
-        foreach ($temporaryArray as $key => $valuex) { 
-            $newCombinationKey = [];
-            $totalPrice = 0;
+        foreach ($temporaryArray as $key => $valuex) {
+            unset($temporaryArray[$key]['attr_lookuplist_item_id']);
+            unset($temporaryArray[$key]['attr_name']);
+            unset($temporaryArray[$key]['is_default']);
+            $newCombinationKey = []; 
             for ($i=0; $i < count($valuex['product_attribute_ids']); $i++) { 
                 $type = ($valuex['product_attribute_ids'][$i]['is_other'] == '0' ? 'a' : 'b');
-                $newCombinationKey[] = $type.'_'.$valuex['product_attribute_ids'][$i]['id'];
-                if(isset($productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']])){
-                    $totalPrice += $productAttributesPrice[$valuex['product_attribute_ids'][$i]['id']];
-                }
+                $newCombinationKey[] = $type.'_'.$valuex['product_attribute_ids'][$i]['id']; 
             }
 
             unset($temporaryArray[$key]['product_attribute_ids']);
             $temporaryArray[$key]['id'] = $key;
-            $temporaryArray[$key]['price'] = floatval(number_format($totalPrice + $product->getFinalPrice(), 2,'.',''));
+            $temporaryArray[$key]['price'] = number_format($product->getFinalPrice(), 2,'.','');
             if($newCombinationKey[0] === "a_0"){
                 if(empty($productAttributes) === false){
                     $allCombination = $this->collectionHelper
@@ -234,10 +212,41 @@ class ApiFormatter
             $productQuantity[] = $temporaryArray[$key];
         }
 
+        foreach($productQuantity as $keyQuantity => $valueQuantity){
+            $additionalPrice = 0;
+            $original_price = $productQuantity[$keyQuantity]['price'];
+            foreach($valueQuantity['combinationId'] as $cid){ 
+                $additionalPrice += isset($listArray[$cid]) ? $listArray[$cid]['price'] : 0;
+            }
+            $productQuantity[$keyQuantity]['price'] = number_format(bcadd($original_price, $additionalPrice , 4), 2,'.','');
+        }
+
         $recentReview = $this->reviewProductService->getProductReview($productId);
+
+        
+        $shipmentDetails = [];
+        $shipmentPriceArray = [];
+        $isFreeShippingNationwide = $this->productManager->isFreeShippingNationwide($productId);
+        $shipmentDetails = [
+            'min' => 0,
+            'max' => 0
+        ];
+        if(!$isFreeShippingNationwide){
+            $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                        ->getShippingDetailsByProductId($productId);
+            foreach ($shippingDetails as $key => $value) {
+                $shipmentPriceArray[] = $value['price']; 
+            }
+
+            $shipmentDetails = [
+                'min' => empty($shipmentPriceArray) ? 0 : min($shipmentPriceArray),
+                'max' => empty($shipmentPriceArray) ? 0 : max($shipmentPriceArray)
+            ];
+        } 
 
         return [
             'productDetails' => $productDetails,
+            'productShipmentFee' => $shipmentDetails,
             'productImages' => $productImages,
             'sellerDetails' => $sellerDetails,
             'productCombinationAttributes' => $productCombinationAttributes,
@@ -249,15 +258,16 @@ class ApiFormatter
 
     /**
      * Format cart array to display on mobile api
-     * @param  array   $cartData 
-     * @param  boolean $forPayment
-     * @param  string  $paymentType
-     * @return array
+     * @param  mixed   $cartData
+     * @param  boolean $includeValidation
+     * @param  string  $paymentTypeString
+     * @return mixed
      */
-    public function formatCart($cartData, $forPayment = false, $paymentType = "")
+    public function formatCart($cartData, $includeValidation = false, $paymentTypeString = "")
     { 
         $formattedCartContents = [];
-        $finalCart = [];
+        $finalCart = []; 
+
         foreach($cartData as $rowId => $cartItem){
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['idProduct' => $cartItem['id']]);
@@ -300,42 +310,51 @@ class ApiFormatter
                 }
 
                 $formattedCartContents[$rowId] = [
-                    'rowid' => $cartItem['rowid'],
+                    'rowid' => isset($cartItem['rowid']) ? $cartItem['rowid'] : $rowId ,
                     'productId' =>  $cartItem['id'],
                     'productItemId' => $cartItem['product_itemID'], 
                     'slug' => $cartItem['slug'],
                     'name' => utf8_encode($cartItem['name']),
-                    'quantity' => $cartItem['qty'], 
-                    'originalPrice' => $cartItem['original_price'],
-                    'finalPrice' => $cartItem['price'],  
-                    'isAvailable' => isset($cartItem['isAvailable']) ? $cartItem['isAvailable'] : "true",  
-                    'mapAttributes' => $mappedAttributes
+                    'quantity' => $cartItem['qty'],  
+                    'isAvailable' => false,
+                    'shippingFee' => 0,
+                    'mapAttributes' => $mappedAttributes,
+                    'error_message' => isset($cartItem['error_message']) ? $cartItem['error_message'] : [],
                 ];
 
-                if($forPayment){
-                    $formattedCartContents[$rowId]['error_message'] = [];
-                    if(!isset($cartItem[$paymentType]) || !$cartItem[$paymentType]){
-                        $formattedCartContents[$rowId]['error_message'][] = "Not Available for selected payment type";
+                if($includeValidation){
+                    $errorMessage = [];
+
+                    if(!isset($cartItem[$paymentTypeString]) || !$cartItem[$paymentTypeString]){
+                        $errorMessage[] = "Not Available for selected payment type";
                     }
 
-                    if(!$cartItem['hasNoSoloRestriction']){
-                        $formattedCartContents[$rowId]['error_message'][] = "This item can only be purchased individually.";
+                    if(!$cartItem['canPurchaseWithOther']){
+                        $errorMessage[] = "This item can only be purchased individually.";
                     }
 
                     if(!$cartItem['hasNoPuchaseLimitRestriction']){
-                        $formattedCartContents[$rowId]['error_message'][] = "You have exceeded your purchase limit for a promo for this item.";
+                        $errorMessage[] = "You have exceeded your purchase limit for a promo for this item.";
                     }
 
                     if(!$cartItem['isAvailableInLocation']){
-                        $formattedCartContents[$rowId]['error_message'][] = "This item is not available in your location.";
+                        $errorMessage[] = "This item is not available in your location.";
                     }
 
                     if(!$cartItem['isQuantityAvailable']){
-                        $formattedCartContents[$rowId]['error_message'][] = "The availability of this items is less than your desired quantity.";
+                        $errorMessage[] = "The availability of this items is less than your desired quantity.";
                     }
 
-                    $formattedCartContents[$rowId]['isAvailable'] = empty($formattedCartContents[$rowId]['error_message']);
+                    if(isset($formattedCartContents[$rowId]['error_message'])){
+                        $formattedCartContents[$rowId]['error_message'] = array_merge($formattedCartContents[$rowId]['error_message'], $errorMessage);
+                    }
+                    else{
+                        $formattedCartContents[$rowId]['error_message'] = $errorMessage;
+                    }
+
+                    $formattedCartContents[$rowId]['shippingFee'] = bcmul($cartItem['shippingFee'], $cartItem['qty'], 4);
                 }
+                $formattedCartContents[$rowId]['isAvailable'] = empty($formattedCartContents[$rowId]['error_message']);
 
                 $format = $this->formatItem($cartItem['id']);
                 $finalCart[] = array_merge($formattedCartContents[$rowId],$format);
@@ -343,7 +362,7 @@ class ApiFormatter
         } 
 
         return $finalCart;
-    }
+    } 
 
     /**
      * Format display item array 
@@ -368,9 +387,9 @@ class ApiFormatter
             'name' => utf8_encode($product->getName()), 
             'slug' => $product->getSlug(),
             'condition' => $product->getCondition(),
-            'discount' => floatval($product->getDiscountPercentage()),
-            'price' => floatval($product->getFinalPrice()),
-            'original_price' => floatval($product->getOriginalPrice()),
+            'discount' => number_format($product->getDiscountPercentage(), 0, '.', ''),
+            'price' => number_format($product->getFinalPrice(), 2, '.', ''),
+            'original_price' => number_format($product->getOriginalPrice(), 2, '.', ''),
             'product_image' => $imageDirectory.'categoryview/'.$imageFileName,
             'isFreeShipping' => $product->getIsFreeShipping(),
         ];
@@ -378,32 +397,168 @@ class ApiFormatter
 
     /**
      * Update Cart data and format cart item array
-     * @param  array $mobileCartContents
-     * @param  integer $memberId
-     * @return array
+     * @param  mixed    $mobileCartContents 
+     * @param  integer  $memberId 
+     * @param  boolean  $includeUnavailable
+     * @return mixed
      */
-    public function updateCart($mobileCartContents, $memberId)
+    public function updateCart($mobileCartContents, $memberId, $includeUnavailable = true)
     {
+        $unavailableItem = [];
+        $itemList = [];  
         $this->cartImplementation->destroy();
         foreach($mobileCartContents as $mobileCartContent){
-
             $options = [];
             foreach($mobileCartContent->mapAttributes as $attribute => $attributeArray){
-                if(intval($attributeArray->isSelected) === 1 || strtolower($attributeArray->isSelected) === "true"){
+                if( (is_bool($attributeArray->isSelected) && (bool)$attributeArray->isSelected) 
+                     || is_string($attributeArray->isSelected) && strtolower($attributeArray->isSelected) === "true"){
                     $options[trim($attributeArray->name, "'")] = $attributeArray->value.'~'.$attributeArray->price;
                 }
                
             }
             $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                 ->findOneBy(['slug' => $mobileCartContent->slug]);
+
+            $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($memberId);
             if($product){
-                $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+                $errorMessage = [];
+
+                if($product->getMember()->getIdMember() === (int) $memberId){
+                    $errorMessage[] = "This is your own item!"; 
+                }
+                else{
+                    $this->cartManager->addItem($product->getIdProduct(), $mobileCartContent->quantity, $options);
+                }
+
+                $cartContent = $this->cartManager->validateSingleCartContent($product->getIdProduct(), 
+                                                                             $options, 
+                                                                             $mobileCartContent->quantity)['itemData'];
+
+                if($cartContent){
+                    if($mobileCartContent->quantity > $cartContent['maxqty']){
+                        $errorMessage[] = "Quantity Not Available";
+                    }
+                }
+                else{
+                    $errorMessage[] = "Item not available.";
+                }
+
+                if((bool)$member->getIsEmailVerify() === false){
+                    $errorMessage[] = "Please verify your email.";
+                }
+
+                $itemList[$cartContent['product_itemID']] = [
+                    'rowid' => $product->getIdProduct(),
+                    'id' =>  $product->getIdProduct(),
+                    'product_itemID' => $cartContent['product_itemID'], 
+                    'slug' => $product->getSlug(),
+                    'name' => utf8_encode($product->getName()),
+                    'qty' => $mobileCartContent->quantity, 
+                    'original_price' => $product->getPrice(),
+                    'price' => $product->getPrice(),
+                    'options' => isset($cartContent['options']) ? $cartContent['options'] : [],
+                    'error_message' => $errorMessage,
+                ];
             }
         }
         $this->cartImplementation->persist($memberId);
         $cartData = $this->cartManager->getValidatedCartContents($memberId);
 
-        return $cartData;
+        foreach ($cartData as $data) {
+            if(isset($itemList[$data['product_itemID']])) {
+                unset($itemList[$data['product_itemID']]);
+            }
+        }
+
+        foreach ($itemList as $key => $item) {
+            if(empty($item['error_message'])){
+                $itemList[$key]['error_message'][] = "This item is unavailable.";
+            }
+        }
+
+        if(!$includeUnavailable){
+            return $this->formatCart($cartData);
+        }
+
+        return [
+            'availableItems' => $this->formatCart($cartData),
+            'unavailableItems' => $this->formatCart($itemList), 
+            'canContinue' => count($itemList) ===  0,
+        ];
+    }
+
+    /**
+     * Format location for shipping list
+     * @return array
+     */
+    public function formatLocationForShipping()
+    {
+        $location = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                             ->getLocation();
+
+        $formedArray = [];
+        foreach ($location['area'] as $majorIsland => $region) {
+            $regionArray = [];
+            foreach ($region as $regionKey => $province) {
+                $provinceArray = [];
+                foreach ($province as $key => $value) {
+                    $provinceArray[] = [
+                        'name' => $value,
+                        'location_id' => $key,
+                        'children' => [],
+                    ];
+                }
+                $regionArray[] = [
+                    'name' => $regionKey,
+                    'location_id' => $location['regionkey'][$regionKey],
+                    'children' => $provinceArray,
+                ];
+            }
+
+            $array = [
+                'name' => $majorIsland,
+                'location_id' => $location['islandkey'][$majorIsland],
+                'children' => $regionArray,
+            ];
+            $formedArray[] = $array;
+        }
+
+        return [
+            'name' => 'Philippines',
+            'location_id' => EsLocationLookup::PHILIPPINES_LOCATION_ID,
+            'children' => $formedArray,
+        ];
+    }
+
+    /**
+     * Format location for address list
+     * @return array
+     */
+    public function formatLocationForAddress()
+    {
+        $esLocationLookupRepository = $this->em->getRepository('EasyShop\Entities\EsLocationLookup');
+        $data['available_selection'] = $esLocationLookupRepository->getLocationLookup(); 
+        $modifiedArray = [];
+        $modifiedArray[0]['countryId'] = $data['available_selection']['countryId'];
+        $modifiedArray[0]['coutryName'] = $data['available_selection']['countryName']; 
+        $counter = 0;
+        
+        foreach ($data['available_selection']['stateRegionLookup'] as $key => $value) {
+            $modifiedArray[0]['regions'][$counter]['regionId'] = $key; 
+            $modifiedArray[0]['regions'][$counter]['regionName'] = $value;
+            $arrayCity = [];
+            $cityCounter = 0;
+            foreach ($data['available_selection']['cityLookup'][$key] as $keyCity => $valueCity) {
+                $arrayCity[$cityCounter]['cityId'] = $keyCity; 
+                $arrayCity[$cityCounter]['cityName'] = $valueCity;
+                $cityCounter++;
+            }
+            $modifiedArray[0]['regions'][$counter]['cities'] = $arrayCity;
+            $counter++;
+        }
+
+        return $modifiedArray;
     }
 }
- 
+

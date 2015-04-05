@@ -32,35 +32,59 @@ class Login extends MY_Controller
      */
     public function index() 
     {
+        if ($this->session->userdata('usersession')) {
+            redirect('/');
+        }
+        $url = $this->session->userdata('uri_string');
+        $isPromo = strpos($url, 'ScratchCard') !== false;
+
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Login | Easyshop.ph',
+            'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
             'metadescription' => 'Sign-in at Easyshop.ph to start your buying and selling experience.',
             'relCanonical' => base_url().'login',
             'renderSearchbar' => false,
         ];
-        $bodyData['url'] = $this->session->userdata('uri_string');
+        $this->load->config('officeoperation', true);
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
         $facebookScope = $this->config->item('facebook', 'oauth');
         $googleScope = $this->config->item('google', 'oauth');
-        $bodyData['facebook_login_url'] = $this->socialMediaManager
-                                                ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::FACEBOOK, 
-                                                              $facebookScope['permission_to_access']);
-        $bodyData['google_login_url'] = $this->socialMediaManager
-                                             ->getLoginUrl(EasyShop\SocialMedia\SocialMediaManager::GOOGLE,
-                                                           $googleScope['permission_to_access']);
+        $daysInWeek = $this->config->item('dayRange', 'officeoperation');
+        $firstDayOfWeek = date('D', strtotime("Sunday + ".$daysInWeek[0]." days"));
+        $lastDayOfWeek = date('D', strtotime("Sunday + ".$daysInWeek[1]." days"));
+        $hoursInDay = $this->config->item('hourRange', 'officeoperation');
+
+        $bodyData = [
+            'redirect_url' => $url,
+            'is_promo' => $isPromo,
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+            'facebook_login_url' =>$this->socialMediaManager
+                                        ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK,
+                                            $facebookScope['permission_to_access']),
+            'google_login_url' => $this->socialMediaManager
+                                       ->getLoginUrl(\EasyShop\Entities\EsSocialMediaProvider::GOOGLE,
+                                           $googleScope['permission_to_access']),
+            'officeContactNo' => $this->config->item('contactno', 'officeoperation'),
+            'dayRange' => $firstDayOfWeek.' to '.$lastDayOfWeek,
+            'hourRange' => date('h:i A', strtotime($hoursInDay[0])).' to '.date('h:i A', strtotime($hoursInDay[1])),
+        ];
         $loginData = [];
 
-        if($this->input->post('login_form')){
-            if($this->form_validation->run('login_form')){
+        if ($this->input->post('login_form')) {
+
+            if ($this->form_validation->run('login_form')) {
                 $uname = $this->input->post('login_username');
                 $pass = $this->input->post('login_password');
                 $loginData = $this->login($uname, $pass);
             }
-            if(isset($loginData['o_success']) && $loginData['o_success'] >= 1){
+
+            if (isset($loginData['o_success']) && $loginData['o_success'] >= 1) {
                 redirect('/');
             }
-            else{
-                if(array_key_exists('timeoutLeft', $loginData) && $loginData['timeoutLeft'] >= 1){
+            else {
+                if (array_key_exists('timeoutLeft', $loginData) && $loginData['timeoutLeft'] >= 1) {
                     $bodyData['loginFail'] = true;
                     $bodyData['timeoutLeft'] = $loginData['timeoutLeft'];
                 }
@@ -69,13 +93,10 @@ class Login extends MY_Controller
         
         $bodyData = array_merge($bodyData, $loginData);
 
-        $this->load->spark('decorator');  
-        $this->load->view('templates/header', $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/user/login_view',$bodyData);
-        $this->load->view('templates/footer');
+        $this->load->spark('decorator');
+        $this->load->view('pages/user/register', array_merge($this->decorator->decorate('header', 'view', $headerData), $bodyData));
       }
 
-      
     /**
      * Authenticates if the user is able to login succesfully or not
      *
@@ -151,7 +172,19 @@ class Login extends MY_Controller
                                      ->setSession($session);
                 $em->persist($authenticatedSession);
                 $em->flush();
-         
+                
+                $jwtData = [
+                    "iss" => base_url(),
+                    "aud" => base_url(),
+                    "iat" => time(),
+                    'sub' => $user->getIdMember(),
+                    'storename' => $user->getStorename(),
+                ];
+                $jwtSecret = $this->serviceContainer['message_manager']
+                                  ->getWebTokenSecret();
+                $jwtToken = $this->serviceContainer['json_web_token']
+                                 ->encode($jwtData, $jwtSecret);
+                $this->session->set_userdata('jwtToken', $jwtToken);
             }
             else{ 
                 $this->throttleService->logFailedAttempt($uname);

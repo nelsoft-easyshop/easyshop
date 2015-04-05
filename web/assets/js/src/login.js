@@ -7,11 +7,19 @@
     
     
     $(document).ready(function(){
-        if($("#loginFail").val() != '' && parseInt($("#timeoutLeft").val()) > 0){
-            $("p#lockoutDuration").html("Timeout Remaining: " + $("#timeoutLeft").val());
-            $("#failed-login").show();
-            $("#login-form").hide();
-        }
+        
+        $('#tab-login , #tab-create').on('click', function(){
+            $('.login-throttle').hide();
+        });
+        
+        $('#login-try-again').on('click', function(){
+            $('#login_username').val('');
+            $('#login_password').val('');
+            $('.login-throttle').hide();
+            $('#login').fadeIn();
+            $('#passw_error').hide();
+        });
+        
     });
     
     
@@ -28,7 +36,11 @@
             type: 'post',
             data: {username:username, password:password, csrfname : csrftoken},
             url: "/memberpage/sendDeactivateNotification",
+            beforeSend: function(){
+                $('.login-btn').val('Please wait...');
+            },
             success: function(data) {
+                $('.login-btn').val('Login');
                 $('#login')[0].disabled = false;                        
                 var obj = jQuery.parseJSON(data);   
                 $('#loading_img_activate').hide();
@@ -43,7 +55,7 @@
                     $("#login_error").html(obj);
                 }                
 
-            },
+            }
         });         
     });        
     
@@ -60,10 +72,10 @@
             },
             messages: {
                 login_username: {
-                    required: 'Username is required.'
+                    required: '<span class="input-error">Username is required.</span>'
                 },
                 login_password: {
-                    required: 'Password is required.'
+                    required: '<span class="input-error">Password is required.</span>'
                 }
             },
             errorElement: "span",
@@ -77,59 +89,78 @@
             },
             submitHandler: function (form) {
                 $('#loading_img').show();
-                $('#login').hide();
+                $('#login').show();
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
                     url: "/login/authenticate",
                     data: $(form).serializeArray(),
-                    success:function(data){
+                    beforeSend: function(){
+                        $('.login-btn').val('Please wait...');
+                    },
+                    success:function(data){                        
+                        $('.login-btn').val('Login');
                         if(data.timeoutLeft >= 1){
-                            $("p#lockoutDuration").html("Timeout Remaining: " + data.timeoutLeft);
-                            $("#failed-login").show();
-                            $("#login-form").hide();
+                            $('#login').hide();
+                            $('.login-throttle').fadeIn();
+                            $('#login-timeout').html(data.timeoutLeft);
                         }
                         else{
+                            var $loginErrorContainer = $("#login_error");
                             if(data.o_success <= 0){
-                                $("#login_error").empty();
+                                $loginErrorContainer.empty();
                                 if(data['o_message'] === 'Account Banned'){
-                                    var alertMessage = data['errors'][0]['message'] + "Thank you for your patience.";
-                                    alert(escapeHtml(alertMessage));
+                                    var officeHours = $('#office_hours').val();
+                                    var officeContactno = $('#office_contactno').val();
+                                    var message = data['errors'][0]['message'];
+                                    var messageSpan =  document.createElement("span");
+                                    var newContent = document.createTextNode(message); 
+                                    messageSpan.appendChild(newContent);
+                                    $loginErrorContainer.append(messageSpan);
+                                    var linebreak = document.createElement("br");
+                                    $loginErrorContainer.append(linebreak);
+                                    linebreak = document.createElement("br");
+                                    $loginErrorContainer.append(linebreak);
+                                    message = "Contact our Customer Service Support for further details: " + officeHours + " " +  officeContactno;
+                                    newContent = document.createTextNode(escapeHtml(message)); 
+                                    messageSpan =  document.createElement("span");
+                                    messageSpan.appendChild(newContent);
+                                    $loginErrorContainer.append(messageSpan);
                                 }
                                 else if(data["o_message"] == "Account Deactivated") {
                                     $("#deactivatedAccountPrompt").css("display","block");
                                     $("#deactivatedAccountPrompt").find("a").attr("data-id",data["errors"][0]["id"]);
                                 }
                                 else {
-                                    $("#login_error").html(data["o_message"] );
+                                    $loginErrorContainer.html(data["o_message"] );
                                 }
                                 $('#loading_img').hide();
                                 $('#login').show();
                             }
                             else{
                                 $('.error_cont').text('');
-                                $('#login_error').text('');
+                                $loginErrorContainer.text('');
                                 $('#loading_img').hide();
-                                $('#login').val('Redirecting...');
                                 $('#login')[0].disabled = true;
                                 $('#login').show();
+                                $('.login-btn').val('Redirecting...');
 
-                                var url = $('#redirect_url').val();
+                                var url = $('.referrer').val();      
                                 var first_uri_segment = url.substring(0, url.indexOf('/'));
                                 var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
 
                                 if( typeof vendorSubscriptionUri !== "undefined" ){
                                     window.location = '/' + vendorSubscriptionUri;
                                 }
-                                else if (first_uri_segment == 'promo') {
+                                else if (first_uri_segment === 'promo') {
                                     var code = url.split("/");
                                     window.location = '/' + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
                                 }
                                 else{
-                                    if((url == 'sell/step1')||(first_uri_segment == 'item')|| (url == 'cart')){
+                                    if((url === 'sell/step1')||(first_uri_segment === 'item')|| (url === 'cart')){
                                         window.location = '/' + url;
                                     }
-                                    else if(first_uri_segment == 'cart'){
+                                    else if(first_uri_segment === 'cart'){
                                         window.location = '/' + first_uri_segment;
                                     }
                                     else{
@@ -140,9 +171,10 @@
                         }
                     },
                     error: function(xhr, error) {
-                        $('#loading_img').hide();
+                        $('.login-btn').val('Login');
                         $('#login').show();
-                        alert('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');
+                        var $loginErrorContainer = $("#login_error");
+                        $loginErrorContainer.html('Ooops, we are currently experiencing a problem. Please refresh the page and try again.');
                     }            
                 });
                 return false;
@@ -162,6 +194,47 @@
         }
     });
     
-    
+    var $window = $(window);
+    $window.on('load resize', function() {
+
+        setTimeout(function(){
+            $(".login-loading-content").hide();
+            $(".login-hide-content").fadeIn();
+            
+            var pathName = window.location.pathname.substring(1);
+            if (pathName === "login") {
+                $('#tab-login').trigger('click');
+            }
+            else if (pathName === "register") {
+                $('#tab-create').trigger('click');
+                $("#login").hide();
+            }
+
+        }, 300);
+
+        setTimeout(function(){
+            var windowsHeight = $(window).height();
+            var logincontainer = $(".new-login-register-content").outerHeight();
+            var loginHeight = (windowsHeight - logincontainer)/2;
+
+            if (logincontainer <= windowsHeight) {
+                $(".new-login-register-content").animate({
+                    'margin-top': loginHeight,
+                    'margin-bottom' : '20px'
+                }, 300);
+            }
+            else {
+                $(".new-login-register-content").css({
+                    'margin-top' : '20px',
+                    'margin-bottom' : '20px'
+                });
+            }
+        }, 1000);
+    });
+
+    $(".login-hide-content").hide();
+
+    $('#password').pwstrength();
+
 })(jQuery);
 

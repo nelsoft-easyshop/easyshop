@@ -1,40 +1,65 @@
 var express = require('express');
 var https = require('https');
+var redis = require("redis");
 var app = express();
+var socketioJwt = require('socketio-jwt');
 
 require('./config').configureExpress(app);
 
-var PORT = app.get('PORT');
-var HOST = app.get('HOST');
+var NODE_PORT = app.get('NODE_PORT');
+var NODE_HOST = app.get('NODE_HOST');
+var JWT_SECRET = app.get('JWT_SECRET');
+var CHAT_CHANNEL_NAME = app.get('REDIS_CHANNEL_NAME');
+var REDIS_PORT = app.get('REDIS_PORT');
+var REDIS_HOST = app.get('REDIS_HOST');
 var https_options = {
     key: app.get('KEY'),
     cert: app.get('CERT')
 };
 
-var server = https.createServer(https_options, app).listen(PORT, HOST);
-console.log('HTTPS Server listening on %s:%s', HOST, PORT);
+var server = https.createServer(https_options, app).listen(NODE_PORT, NODE_HOST);
+
+console.log('HTTPS Server listening on %s:%s', NODE_HOST, NODE_PORT);
 io = require('socket.io').listen(server);
 
-io.sockets.on( 'connection', function(client) {
-    
-    client.on('set account online', function(storename) {
-        client.join(storename);
-    });
+io.set('authorization',socketioJwt.authorize({
+    secret: JWT_SECRET,
+    handshake: true
+}));
 
-    client.on('set account offline', function(storename) {
-        client.leave(storename);
-    });
+var clientSubscribe = redis.createClient(REDIS_PORT, REDIS_HOST, {});
+clientSubscribe.subscribe(CHAT_CHANNEL_NAME);
 
-    client.on('send message', function(data) {
+var messageHandler = function(channel, jsonString){
+    var data = JSON.parse(jsonString);
+    if(data.event === 'message-opened' && data.reader){
+        io.to(data.reader).emit('message opened');
+    }
+    else if(data.event === 'message-sent' && data.recipient && data.message){
         io.to(data.recipient).emit('send message', {
             recipient: data.recipient,
             message: data.message
         });
+    }
+};
+
+clientSubscribe.on("message", messageHandler);
+
+io.sockets.on( 'connection', function(socket) {
+
+    socket.on('set account online', function() {
+       var storename = socket.client.request.decoded_token.storename; 
+       socket.join(storename);
     });
-    
-    client.on('message opened', function(storename) {
-        io.to(storename).emit('message opened');
+
+    /**
+     * This function need not be called as socketio's rooms always tear down 
+     * any disconnected socket by itself
+     */
+    socket.on('set account offline', function() {
+        var storename = socket.client.request.decoded_token.storename; 
+        socket.leave(storename);
     });
-    
+
 
 });

@@ -201,7 +201,21 @@ body{
 
 .label-comment{
     text-align: left !important;
-    padding-left: 3px;
+}
+
+.form-horizontal .control-label{
+    text-align: left;
+}
+
+
+.div-write-review-container .col-md-2,
+.div-write-review-container .col-md-10{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.col-comment-review{
+    padding-left: 5px !important;
 }
 
 .input-reply{
@@ -320,6 +334,7 @@ body{
     font-size: 15px;
     margin: 0px;
     margin-top: 5px;
+    word-break: break-all;
 }
 
 .p-date-review{
@@ -340,7 +355,7 @@ body{
 
 .input-textarea-write{
     display: block;
-    width: 100%;
+    width: 200%;
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
@@ -348,12 +363,8 @@ body{
     background-color: #fff;
     border-radius: 4px;
     border: solid #e2e2e2 1px;
-    margin-left: -36px;
     resize: none;
-}
-
-.error-label-textarea{
-    margin-left: -35px;
+    margin-bottom: 10px;
 }
 
 .input-textarea-write:focus{
@@ -478,10 +489,47 @@ body{
 
 .div-rec-product-image{
     width: 100% !important;
-    height: 228px;
+    height: 275px;
     background: #fff;
     margin-bottom: 10px;
     display: block !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-rec-primary{
+    max-width: 100%;
+    max-height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.div-rec-product-image:hover .image-rec-has-secondary{
+    opacity: 0;
+}
+
+.image-rec-secondary{
+    max-width: 100%;
+    max-height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+    z-index: 1;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.div-rec-product-image:hover .image-rec-secondary{
+    opacity: 1;
 }
 
 .span-me{
@@ -640,30 +688,32 @@ body{
     position: absolute;
     left: 11px;
     top: 13px;
-    width: 65px;
-    height: 65px;
+    width: 50px;
+    height: 50px;
     text-align: center;
     border-radius: 50%;
     background:#ff6138;
     color: #fff;
     font-weight: 900;
-    padding: 22.5px 0;
-    font-size: 15px;
+    padding: 15.5px 0;
+    font-size: 13px;
+    z-index: 3;
 }
 
 .span-circle-discount{
     position: absolute;
     right: 11px;
     top: 13px;
-    width: 65px;
-    height: 65px;
+    width: 50px;
+    height: 50px;
     text-align: center;
     border-radius: 50%;
     background: #00a388;
     color: #fff;
     font-weight: 900;
-    padding: 22.5px 0;
-    font-size: 15px;
+    padding: 15.5px 0;
+    font-size: 13px;
+    z-index: 3;
 }
 
 .div-rec-title{
@@ -834,7 +884,14 @@ body{
 .p-html-description img {
     display: block;
     height: auto;
-    max-width: 1200px !important;
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+.step4_section .p-html-description img {
+    display: block;
+    height: auto;
+    max-width: 100% !important;
 }
 
 .div-banner-container{
@@ -963,10 +1020,6 @@ body{
         margin-left: 0px;
     }
 
-    .input-textarea-write{
-        margin-left: 9px;
-    }
-    
     .error-label-textarea {
         margin-left: 10px;
     }
@@ -1175,6 +1228,19 @@ body{
     .btn-reply{
         width: 100%;
     }
+
+    .div-write-review-container .col-md-2,
+    .div-write-review-container .col-md-10,
+    .div-write-review-container .col-md-5{
+        padding-left: 0px !important;
+        padding-right: 0px;
+    }
+}
+
+@media only screen and (max-width: 990px) {
+    .input-textarea-write{
+        width: 100%;
+    }
 }
 /* =============================================
 -----------------  Breadcrumb -----------------
@@ -1233,10 +1299,12 @@ body{
     margin-top: 30px;
     text-transform: uppercase;
     font-weight: normal;
+    word-wrap: break-word;
 }
 
-.product-name-seller a{
+.product-name-seller a {
     color: #868686;
+    word-wrap: break-word;
 }
 
 .product-profile-photo {
@@ -1495,7 +1563,7 @@ body{
 }
 
 .ie9 .prod-select-con {
-    background: #fff;
+    background: #fff none;
     position: relative;
 }
 
@@ -1555,7 +1623,7 @@ body{
 }
 
 .shipment-select select {
-    padding-right: 50px;
+    padding-right: 60px;
 }
 
 .ie9 .shipment-select select {
@@ -1598,15 +1666,20 @@ body{
     width: 100%;
 }
 
+.ie9 .prod-add-to-cart-btn {
+    background-image: url(../images/sprites/shopping-cart.png);
+}
+
 .prod-add-to-cart-btn {
     background-repeat: no-repeat;
-    background-color: #FEB483; 
+    background-color: #F17F36;
+    background-image: url(../images/sprites/shopping-cart.png);
     background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#FEB483), to(#F17F36));
     background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #FEB483, #F17F36);
     background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #FEB483, #F17F36);
     background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #FEB483, #F17F36);
     background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #FEB483, #F17F36);
-    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #FEB483, #F17F36);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#FEB483, endColorstr=#F17F36);
+    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #FEB483, #F17F36);
     border-top-color: #7D99CA;
     border-right-color: #7D99CA;
     border-bottom-color: #A55824;
@@ -1634,7 +1707,7 @@ body{
     background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #fe9550, #e46310);
     background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #fe9550, #e46310);
     background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #fe9550, #e46310);
-    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #fe9550, #e46310);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#fe9550, endColorstr=#e46310);
+    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #fe9550, #e46310);
     border-top-color: #fd771e;
     border-right-color: #fd771e;
     border-bottom-color: #80451d;
@@ -1644,23 +1717,26 @@ body{
 }
 
 .disabled{
-   background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#bfbfbf), to(#606060));
-    background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#6bfbfbf, endColorstr=#606060);
-    border-bottom-color: #606060;
-    opacity: 0.5;
-}
-
-.disabled:hover{
+    background-color: #606060;
+    background-image: url(../images/sprites/shopping-cart.png);
     background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#bfbfbf), to(#606060));
     background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #bfbfbf, #606060);
     background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #bfbfbf, #606060);
     background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #bfbfbf, #606060);
     background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #bfbfbf, #606060);
-    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#6bfbfbf, endColorstr=#606060);
+    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);
+    border-bottom-color: #606060;
+    opacity: 0.5;
+}
+
+.disabled:hover{
+    background-color: #606060;
+    background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#bfbfbf), to(#606060));
+    background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #bfbfbf, #606060);
+    background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #bfbfbf, #606060);
+    background-image: url(../images/sprites/shopping-cart.png), -ms-linear-gradient(top, #bfbfbf, #606060);
+    background-image: url(../images/sprites/shopping-cart.png), -o-linear-gradient(top, #bfbfbf, #606060);
+    background-image: url(../images/sprites/shopping-cart.png), linear-gradient(to bottom, #bfbfbf, #606060);
     border-bottom-color: #606060;
 }
 
@@ -1896,11 +1972,6 @@ body{
     .facebook-lnk .fb_iframe_widget {
         left: 34px;
     }
-
-    .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-        width: 97% !important;
-        max-height: 210px !important;
-    }
 }
 
 
@@ -1936,10 +2007,6 @@ body{
 
     .footer-secondary .footer-ac {
         display: none;
-    }
-
-    .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-        width: 50% !important;
     }
 }
 
@@ -2174,13 +2241,6 @@ body{
     .prod-share-container .ui-form-control.share-googleplus {
         background-color: #e46145;
     }
-}
-
-@media screen and (max-width : 1200px) {
-    .shipment-select select {
-        padding-right: 46px;
-    }
-
 }
 
 @media (min-width: 991px) and (max-width: 1200px) {

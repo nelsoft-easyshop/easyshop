@@ -3,15 +3,24 @@
 namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
-use EasyShop\Entities\EsAddress; 
+use EasyShop\Entities\EsAddress as EsAddress; 
 
 class EsAddressRepository extends EntityRepository
-{
-    public function getShippingAddress($memberId)
+{   
+    /**
+     * Return state region id of address
+     * @param  integer $memberId [description]
+     * @param  integer $type     [description]
+     * @return integer
+     */
+    public function getAddressStateRegionId($memberId, $type = EsAddress::TYPE_DELIVERY)
     {
         $address = $this->_em->getRepository('EasyShop\Entities\EsAddress')
                         ->findOneBy(['idMember' => $memberId, 'type' => '1']);
-        return $address->getStateregion()->getIdLocation();
+        if($address){
+            return $address->getStateregion()->getIdLocation();
+        }
+        return false;
     }
 
     /**

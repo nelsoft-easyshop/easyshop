@@ -148,13 +148,13 @@
 
         $(document).bind('ready scroll resize', function() {
             var docScroll = $(document).scrollTop();
-            if ((docScroll >= 180) && (browserWidth > 991)) {
+            if ((docScroll >= 160) && (browserWidth > 991)) {
                 if (!$('.sticky-header-nav').hasClass('sticky-nav-fixed')) {
                     $('.sticky-header-nav').addClass('sticky-nav-fixed').css({
                         top: '-155px'
                     }).stop().animate({
                         top: 0
-                    }, 200); 
+                    }, 600); 
                     $('.autocomplete-suggestions').hide();
                 }
 
@@ -202,8 +202,10 @@
                         }
                     });
                 },
-                onSelect: function(term){
+                onSelect: function(term){ 
+                    $('#primary-search2').val(term);
                     $('#primary-search').addClass('selectedClass');
+                    $("#nav-searchbar1").submit();
                 }
             }) 
             .focus(function() {
@@ -277,7 +279,9 @@
                     });
                 },
                 onSelect: function(term){
+                    $('#primary-search').val(term);
                     $('#primary-search2').addClass('selectedClass');
+                    $("#nav-searchbar2").submit();
                 }
             })
             .focusout(function() {
@@ -329,19 +333,5 @@
 
 function proceedPayment(obj)
 {
-    var csrftoken = $("meta[name='csrf-token']").attr('content');
-    $.ajax({
-        async: true,
-        url: "/payment/cart_items",
-        type: "POST",
-        dataType: "json",
-        data: {csrfname: csrftoken},
-        success: function (data) {
-            if (data == true) {
-                window.location.replace("/payment/review");
-            } else {
-                alert(data, 'Remove these items from your cart to proceed with your checkout.');
-            }
-        }
-    });
+    window.location.replace("/payment/review");
 }

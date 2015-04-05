@@ -103,8 +103,9 @@
         </div>
         
         <div class="div-store-setup store-setup-loading" style="text-align:center">
-            <img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG.gif"/>
-            <p class="loading-text">Loading your theme and category list...</p>
+            <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif"/>
+            <br/><br/>
+            <p class="loading-text">Loading your theme</p>
         </div>
         
         
@@ -174,65 +175,6 @@
                 </p>
             </div>
         </div>
-        <div class="div-store-setup store-setup-ajax" style="display:none">
-            <p class="panel-setup-title">CATEGORIES</p>
-            <div class="div-store-content">
-                <div class="current-store-cat">
-                    <div class="form-horizontal">
-                       <div class="form-group">
-                            <label class="col-sm-3 control-label">Current Order : </label>
-                            <div class="col-sm-9 col-with-radio">
-
-                                <div class="store-category-view">
-                                </div>
-                                
-                                <div>
-                                    <br/>   
-                                    <button class="btn btn-setting-edit-btn" id="btn-edit-store-cat">
-                                    <i class="icon-edit"></i> Edit
-                                    </button>
-                                </div>
-                                
-                                
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="edit-store-cat form-horizontal">
-                   <div class="form-group">
-                        <label class="col-sm-3 control-label">Reorder List : </label>
-                        <div class="col-sm-5 col-with-radio">
-                            <ul class="category_sort list store-category-draggable">
-                            </ul> 
-                            <p class="note-category">Drag the category items to reorder</p>
-                            <button class="btn btn-setting-save-btn" id="category-order-save">
-                               Save Changes
-                            </button>
-                            <button class="btn btn-setting-cancel-btn" id="cancel-edit-store-cat">
-                               Cancel
-                            </button>
-                            <br/>
-                        </div>
-                    </div>
-                    <div class="alert alert-danger" id="store-category-error" role="alert" style="display:none">
-                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        We cannot update you categories right now. Try again later.
-                    </div>
-                </div>
-                <p class="p-note-setting">
-                    Arrange the order of the categories in your store page based on your preference. The first category will always appear first
-                    when someone views your store.
-                </p>
-            </div>
-            <!-- Display this markup if there are no available categories
-            <br/>
-            <div class="jumbotron no-items">
-                <i class="icon-category"></i> No available category
-            </div>
-            -->
-        </div>
-        
     </div>
 </div>
 

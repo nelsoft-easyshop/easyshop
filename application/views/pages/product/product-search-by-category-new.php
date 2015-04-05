@@ -7,7 +7,10 @@
 <?php endif; ?>
 
 <div class="loader">
-    <img src="/assets/images/loading/preloader-whiteBG.gif"/>
+    <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3.gif"/>
+    <br/>
+    <br/>
+    <span>Loading items...</span>
 </div>
 
 <section class="breadcrumbs-bg">
@@ -78,9 +81,9 @@
                     <div class="right-shade">
                     </div>
                     <div class="container">
-                        <div class="slider1 <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
+                        <ul class="slider1 <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
                             <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
-                                <div class="slide">
+                                <li class="slide">
                                     
                                     <?php if(trim($bottomBanner['target']['url']) !== ''): ?>
                                           <a href="<?php echo html_escape($bottomBanner['target']['url']); ?>" target="<?php echo $bottomBanner['target']['targetString']; ?>">
@@ -91,15 +94,16 @@
                                     <?php if(trim($bottomBanner['target']['url']) !== ''): ?>
                                           </a>
                                     <?php endif; ?>
-                                </div>
+                                </li>
                             <?php endforeach; ?>
-                        </div>
+                        </ul>
                         <div class="clear"></div>
                     </div>
-                </center>   
+                </center>
+            </center>
             <?php endif; ?>
-            </div>
-        </section>
+        </div>
+    </section>
     <?php endif; ?>
 
     <section id="parallax-2" class="bg-search-section color-default">
@@ -189,13 +193,13 @@
                                         </li>
                                         <?php foreach ($attributes as $attrName => $attrListValue):?>
                                         <li class="meo">
-                                            <p class="p-filter-name">By <?=html_escape($attrName); ?></p>
+                                            <p class="p-filter-name">By <?=html_escape(ucfirst(strtolower($attrName))); ?></p>
                                             <ul class="list-unstyled">
                                                 <?php foreach ($attrListValue as $value):?>
                                                     <li class="checkbox">
                                                         <label>
                                                             <input type="checkbox" <?=(isset($getParameter[strtolower($attrName)]) && strpos($getParameter[strtolower($attrName)],strtolower($value)) !== false)?'checked':'';?> class="checkBox cbx" data-head="<?= html_escape(strtolower($attrName));?>" data-value="<?= html_escape(strtolower($value)); ?>" >
-                                                            <?= html_escape(ucfirst($value));?>
+                                                            <?= html_escape(strtoupper($value));?>
                                                         </label>
                                                     </li>
                                                 <?php endforeach; ?>

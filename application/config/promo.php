@@ -11,6 +11,7 @@ $config = [
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => '',
             'is_buyable_outside_promo' => true,
@@ -28,6 +29,7 @@ $config = [
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
                 'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'countdown',
             'is_buyable_outside_promo' => false,
@@ -87,7 +89,8 @@ $config = [
                 'cdb'=>'Credit or Debit Card',
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
-                'cod'=>'Cash on Delivery'
+                'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'fixeddiscount',
             'is_buyable_outside_promo' => true,
@@ -104,7 +107,8 @@ $config = [
                 'cdb'=>'Credit or Debit Card',
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
-                'cod'=>'Cash on Delivery'
+                'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => '',
             'is_buyable_outside_promo' => false,
@@ -116,8 +120,8 @@ $config = [
                     'purchase_limit' => 2
                 ],
                 1 => [
-                    'start' => '07:00:00',
-                    'end' => '23:59:59',
+                    'start' => '12:00:00',
+                    'end' => '16:59:59',
                     'purchase_limit' => 15
                 ]
             ],
@@ -132,7 +136,8 @@ $config = [
                 'cdb'=>'Credit or Debit Card',
                 'paypal'=>'Paypal',
                 'dragonpay'=>'Dragon Pay',
-                'cod'=>'Cash on Delivery'
+                'cod'=>'Cash on Delivery',
+                'pesopaycdb' => 'Peso Pay'
             ],
             'banner' => 'generic',
             'is_buyable_outside_promo' => true,
@@ -194,20 +199,20 @@ $config = [
             'option' => [
                 'first_round' =>
                     [
-                        'start' => '2015-02-23 00:00:00',
-                        'end' => '2015-03-06 23:59:59',
+                        'start' => '2015-03-18 11:00:00',
+                        'end' => '2015-03-18 13:00:00',
                         'limit' => PHP_INT_MAX
                     ],
                 'second_round' =>
                     [
-                        'start' => '2015-03-07 00:00:00',
-                        'end' => '2015-04-07 23:59:59',
+                        'start' => '2015-03-18 13:30:00',
+                        'end' => '2015-03-18 14:00:00',
                         'limit' => 3
                     ],
-                'final_round' =>
+                'inter_school_round' =>
                     [
-                        'start' => '2015-06-08 00:00:00',
-                        'end' => '2015-07-08 23:59:59',
+                        'start' => '2015-03-18 14:30:00',
+                        'end' => '2015-03-18 15:30:00',
                         'limit' => 1
                     ],
             ],

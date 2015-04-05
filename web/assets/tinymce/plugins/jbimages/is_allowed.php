@@ -26,7 +26,7 @@
 
 function is_allowed()
 {
-	return TRUE;
+	return FALSE;
 }
 
 ?>

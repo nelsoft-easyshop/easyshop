@@ -15,16 +15,24 @@
 
 /* Overlay */
 #simplemodal-overlay {
-	background-color:rgba(0,0,0,0.60);
+	background-color:#000;
+	opacity: .7 !important;
+    filter: Alpha(Opacity=70);
+	z-index: 99999 !important;
 }
 
 /* Container */
 #simplemodal-container {
+	background-color:#fff;
 	border-radius: 4px;
 	/*height:290px !important;*/
 	height: auto !important;
-	width:600px; 
-	background-color:#fff;
+	max-width:600px; 
+	width: 90% !important;
+}
+
+.simplemodal-container {
+	z-index: 99999 !important;
 }
 
 #simplemodal-container code {

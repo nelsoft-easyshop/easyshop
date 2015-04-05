@@ -58,45 +58,77 @@ class EsMemberRepository extends EntityRepository
      *
      *  @param string $storeName
      *  @param integer $excludeMemberId
-     *  @return boolean
+     *  @return EasyShop\Entities\EsMember
      */
     public function getUserWithStoreName($storeName, $excludeMemberId = null)
     {
         $em = $this->_em;
 
-        $rsm = new ResultSetMapping();
-        $rsm->addEntityResult('EasyShop\Entities\EsMember','m');
-        $rsm->addFieldResult('m','id_member','idMember');
-        $rsm->addFieldResult('m','username','username');
-        $rsm->addFieldResult('m','store_name','storeName');
+        $qb = $em->createQueryBuilder();
+        $qb->select('em')
+            ->from('EasyShop\Entities\EsMember','em')
+            ->where($qb->expr()->orX(
+                $qb->expr()->eq('em.storeName', 'BINARY(:storeName)'),
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->isNull('em.storeName'),
+                        $qb->expr()->eq('em.storeName',':emptyString')
+                    ),
+                    $qb->expr()->eq('em.username', 'BINARY(:storeName)')
+                )
+        ));
 
-        $sql =  '
-            SELECT 
-                id_member, 
-                store_name, 
-                username
-            FROM 
-                es_member
-            WHERE 
-                (store_name = :storeName OR  (username = :userName AND store_name IS NULL))
-        ';
-        
         if($excludeMemberId !== null){
-            $sql .= ' AND id_member != :memberId';
+            $qb->andWhere('em.idMember != :memberId')
+               ->setParameter('memberId',$excludeMemberId);
         }
- 
-        $query = $em->createNativeQuery($sql, $rsm);
+      
+        $emptyString = "";
+        $query = $qb->setParameter('storeName',$storeName)
+                    ->setParameter('emptyString',$emptyString)
+                    ->setMaxResults(1)
+                    ->getQuery();
+        $result = $query->getResult();
 
-        $query->setParameter('storeName',$storeName);
-        $query->setParameter('userName',$storeName);
-        
-        if($excludeMemberId !== null){
-            $query->setParameter('memberId',$excludeMemberId);
+        return $result ? $result[0] : null;
+    }   
+
+    
+    /**
+     *  Fetch entries in es_member with storename or username
+     *
+     *  @param string $name
+     *  @param integer $excludeMemberId
+     *  @return EasyShop\Entities\EsMember
+     */
+    public function getUserWithStoreNameOrUsername($name, $excludeMemberId = null)
+    {
+        if((string) trim($name) !== ""){
+            $em = $this->_em;
+            $qb = $em->createQueryBuilder();
+            $qb->select('em')
+                ->from('EasyShop\Entities\EsMember','em')
+                ->where('em.storeName = :storeName')
+                ->orWhere('em.username = :userName');
+
+            if($excludeMemberId !== null){
+                $qb->andWhere('em.idMember != :memberId')
+                   ->setParameter('memberId',$excludeMemberId);
+            }
+          
+            $query = $qb->setParameter('storeName',$name)
+                        ->setParameter('userName',$name)
+                        ->setMaxResults(1)
+                        ->getQuery();
+            $result = $query->getResult();
+
+            return $result ? $result[0] : null;
         }
 
-        return $query->getResult();
+        return null;
     }
-
+    
+    
     /**
      *  Fetch member entity using $mobileNum
      */
@@ -157,7 +189,9 @@ class EsMemberRepository extends EntityRepository
     }
 
     /**
-     *  Fetch vendor details
+     * Fetch active vendor details
+     *
+     * @param string $vendorSlug
      */
     public function getVendorDetails($vendorSlug)
     {
@@ -202,12 +236,17 @@ class EsMemberRepository extends EntityRepository
             LEFT JOIN es_location_lookup l1 ON a.stateregion =  l1.id_location
             LEFT JOIN es_location_lookup l2 ON a.city = l2.id_location
             LEFT JOIN es_location_lookup l3 ON a.country = l3.id_location
-            WHERE m.slug=:vendorslug
+            WHERE 
+                m.slug=:vendorslug AND 
+                m.is_active = :active AND 
+                m.is_banned = :notBanned
             LIMIT 1
         ";
 
         $query = $em->createNativeQuery($sql, $rsm)
-            ->setParameter('vendorslug', $vendorSlug);
+                    ->setParameter('vendorslug', $vendorSlug)
+                    ->setParameter('active', EsMember::DEFAULT_ACTIVE)
+                    ->setParameter('notBanned', EsMember::NOT_BANNED);
 
         $queryResult = $query->getResult();
 
@@ -314,6 +353,46 @@ class EsMemberRepository extends EntityRepository
         }
         $member->setLastmodifieddate(new \DateTime('now'));
         $em->flush();
-    }            
+    }
+
+    /**
+     * Find member by username with case sensitive rule
+     * @param  string $username [description]
+     * @return EasyShop\Entities\EsMember
+     */
+    public function findOneByUsernameCase($username)
+    {
+        $em = $this->_em;
+        $dql = "
+            SELECT m
+            FROM EasyShop\Entities\EsMember m
+            WHERE m.username = BINARY(:username)
+        ";
+        $query = $em->createQuery($dql)
+                    ->setParameter('username', $username)
+                    ->setMaxResults(1);
+
+        $member = $query->getResult();
+        $member = isset($member[0]) ? $member[0] : $member;
+
+        return $member;
+    }
+    
+    /**
+     * Get active member by slug
+     *
+     * @param string $slug
+     * @areturn EasyShop\Entities\EsMember
+     */
+    public function getActiveMemberWithSlug($slug)
+    {
+        $member = $this->_em->getRepository('EasyShop\Entities\EsMember')
+                            ->findOneBy([
+                                'slug' => $slug,
+                                'isActive' => true,
+                                'isBanned' => false,
+                            ]);     
+        return $member;
+    }
 
 }

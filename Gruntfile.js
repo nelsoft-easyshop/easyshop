@@ -10,12 +10,14 @@ module.exports = function (grunt) {
                 files: {
                     'js/src/vendor/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
-                    'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js'
+                    'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js',
+                    'js/src/vendor/jquery.cropper.js': 'cropper/dist/cropper.js'
                 }
             },
             stylesheets: {
                 files: {
-                    'css/bootstrap.css': 'bootstrap/dist/css/bootstrap.css'
+                    'css/bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
+                    'css/jquery.cropper.css': 'cropper/dist/cropper.min.css'
                 }
             },
         },
@@ -37,23 +39,24 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.header-alt.css':
                         ['web/assets/css/main-style.css', 
                         'web/assets/css/bootstrap.css',
-                        'web/assets/css/easy-icons/easy-icons.css',
-                        'web/assets/css/bootstrap-mods.css',
-                        'web/assets/css/font-awesome/css/font-awesome.min.css'],
+                        'web/assets/css/bootstrap-mods.css'],
+                     'web/assets/css/min-easyshop.header-alt2.css':
+                        ['web/assets/css/normalize.min.css',
+                        'web/assets/css/simple-header-css.css',
+                        'web/assets/css/footer-css.css',
+                        'web/assets/css/bootstrap.css'
+                        ],
                     'web/assets/css/min-easyshop.header-primary.css':
                         ['web/assets/css/main-style.css',
                          'web/assets/css/normalize.min.css',
                          'web/assets/css/header-css.css',
                          'web/assets/css/bootstrap.css',
                          'web/assets/css/responsive_css.css',
-                         'web/assets/css/new-homepage.css'],
+                         'web/assets/css/new-homepage.css',
+                         'web/assets/css/footer-css.css'],
                     'web/assets/css/min-easyshop.vendor-banner.css':
                         ['web/assets/css/chosen.min.css', 
                         'web/assets/css/jquery.Jcrop.min.css'],
-                    'web/assets/css/min-easyshop.cart.css':
-                        ['web/assets/css/bootstrap.css',
-                        'web/assets/css/my_cart_css.css', 
-                        'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.home-primary.css':
                         ['web/assets/css/jquery.bxslider2.css',
                         'web/assets/css/new-homepage.css', 
@@ -61,12 +64,7 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.global-includes.css':
                         ['web/assets/css/style.css',
                         'web/assets/css/responsive_css.css', 
-                        'web/assets/css/basic.css.css'],
-                    'web/assets/css/min-easyshop.payment.css':
-                        ['web/assets/css/bootstrap.css',
-                        'web/assets/css/my_cart_css.css', 
-                        'web/assets/css/payment_review.css',
-                        'web/assets/css/bootstrap-mods.css'],
+                        'web/assets/css/basic.css'],
                     'web/assets/css/min-easyshop.product-promo-category.css':
                         ['web/assets/css/product_search_category.css',
                         'web/assets/css/style_new.css', 
@@ -89,8 +87,9 @@ module.exports = function (grunt) {
                         'web/assets/css/ion.rangeSlider.css', 
                         'web/assets/css/ion.rangeSlider.skinFlat.css',
                         'web/assets/css/bootstrap.css',
-                        'web/assets/css/bootstrap-mods.css',
-                        'web/assets/css/jquery.Jcrop.min.css'], 
+                        'web/assets/css/bootstrap-mods.css', 
+                        'web/assets/css/jquery.cropper.css',
+                        'web/assets/css/chosenwtihcreate.min.css'], 
                      
                     'web/assets/css/min-easyshop.upload-step3.css':
                         ['web/assets/css/bootstrap.css',
@@ -130,9 +129,7 @@ module.exports = function (grunt) {
                         ['web/assets/css/product_search_category.css', 
                          'web/assets/css/product_search_category_responsive.css', 
                          'web/assets/css/product_advance_search.css', 
-                         'web/assets/css/style_new.css', 
-                         'web/assets/css/bootstrap.css', 
-                         'web/assets/css/bootstrap-mods.css'],
+                         'web/assets/css/style_new.css'],
                     'web/assets/css/min-easyshop.product-search-new.css':
                         ['web/assets/css/product-search-new.css'],
                     'web/assets/css/min-easyshop.product-search-by-searchbox.css':
@@ -152,11 +149,11 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.member-account-activate.css':
                         ['web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.register.css':
-                        ['web/assets/css/landingpage/style_v2.css',
-                         'web/assets/css/landingpage/jquery.bxslider.css',
-                         'web/assets/css/landingpage/responsive-nav.css',
+                        ['web/assets/css/bootstrap.css',
+                         'web/assets/css/new-login-register.css',
                          'web/assets/css/basic.css',
-                         'web/assets/css/jquery-ui.css'],
+                         'web/assets/css/responsive_css.css',
+                         'web/assets/css/main-style.css'],
                     'web/assets/css/min-easyshop.register-success.css':
                         ['web/assets/css/landingpage/bootstrap.css',
                          'web/assets/css/landingpage/bootstrap-responsive.css',
@@ -168,23 +165,35 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.vendorview.css':
                         ['web/assets/css/vendorview.css'],
                     'web/assets/css/min-easyshop.how-to.css':
-                        ['web/assets/css/style.css',
-                         'web/assets/css/bootstrap.css',
-                         'web/assets/css/responsive_css.css',
-                         'web/assets/css/bootstrap-mods.css'],
+                        ['web/assets/css/how-to-page.css'],
                     'web/assets/css/min-easyshop.dashboard-personal-info.css':
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
                     'web/assets/css/min-easyshop.dashboard-primary.css':
-                        ['web/assets/css/contact.css',
-                         'web/assets/css/main-style.css',
-                         'web/assets/css/chosen.min.css',
-                         'web/assets/css/new-homepage.css',
+                        ['web/assets/css/jstree/style.css',
+                         'web/assets/css/contact.css',
+                         'web/assets/css/chosen.min.css', 
                          'web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
                         ['web/assets/css/bootstrap.css',
                          'web/assets/css/qr-code-css.css',
-                         'web/assets/css/qr-code-print.css']
+                         'web/assets/css/qr-code-print.css'],
+                    'web/assets/css/min-easyshop.bug-report.css':
+                        ['web/assets/css/bootstrap.css'],
+                    'web/assets/css/min-easyshop.cart.css':
+                        ['web/assets/css/boostrap-modal.css',
+                         'web/assets/css/base.css',
+                         'web/assets/css/new-cart.css'],
+                    'web/assets/css/min-easyshop.payment.css':
+                        ['web/assets/css/base.css',
+                         'web/assets/css/new-cart.css'],
+                    'web/assets/css/min-easyshop.payment-receipt.css':
+                        ['web/assets/css/bootstrap.css',
+                         'web/assets/css/new-cart.css',
+                         'web/assets/css/payment-receipt.css'],
+                    'web/assets/css/min-easyshop.home-reminder.css':
+                        ['web/assets/css/basic.css',
+                         'web/assets/css/message-box.css']
                 }
             },
         },
@@ -195,13 +204,6 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery.scrollUp.min.js',
                              'web/assets/js/src/vendor/jquery.auto-complete.js',
                              'web/assets/js/src/header.js'],
-
-                    'web/assets/js/min/easyshop.footer_full.js': 
-                            ['web/assets/js/src/ws.js'],
-
-                    'web/assets/js/min/easyshop.footer.js': 
-                            ['web/assets/js/src/ws.js'],
-
                     'web/assets/js/min/easyshop.header_alt.js': 
                             ['web/assets/js/src/vendor/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.auto-complete.js',
@@ -244,9 +246,8 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/usercontact.js',
                              'web/assets/js/src/vendor/jquery.numeric.js'],
 
-                    'web/assets/js/min/easyshop.cart-responsive.js':
-                            ['web/assets/js/src/vendor/numeral.min.js',
-                             'web/assets/js/src/vendor/jquery.simplemodal.js',
+                    'web/assets/js/min/easyshop.cart.js':
+                            ['web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/cart.js'],
 
                     'web/assets/js/min/easyshop.home_primary.js':
@@ -256,12 +257,6 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.inbox_view.js':
                             ['web/assets/js/src/messaging.js'],
-
-                    'web/assets/js/min/easyshop.payment_review_responsive.js':
-                            ['web/assets/js/src/vendor/jquery.idTabs.min.js',
-                             'web/assets/js/src/payment.js',
-                             'web/assets/js/src/vendor/bootstrap.js',
-                             'web/assets/js/src/vendor/jquery.numeric.js'],
 
                     'web/assets/js/min/easyshop.product_image_gallery.js':
                             ['web/assets/js/src/vendor/jquery.jcarousel.min.js',
@@ -285,12 +280,12 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.product_upload_step2_view.js':
                             ['web/assets/js/src/vendor/ion.rangeSlider.min.js',
-                             'web/assets/js/src/vendor/chosenwithcreate.jquery.min.js',
-                             'web/assets/js/src/vendor/jquery.Jcrop.min.js',
+                             'web/assets/js/src/vendor/chosenwithcreate.jquery.min.js', 
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/productUpload_step2.js',
                              'web/assets/tinymce/plugins/jbimages/js/jquery.form.js',
-                             'web/assets/js/src/vendor/jquery.validate.js'],
+                             'web/assets/js/src/vendor/jquery.validate.js', 
+                             'web/assets/js/src/vendor/jquery.cropper.js'],
 
                     'web/assets/js/min/easyshop.product_upload_step3_view.js':
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
@@ -313,7 +308,7 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.christmas-promo.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/plugins.js',
-                             'web/assets/js/src/christmas-promo.js',
+                             'web/assets/js/src/promo/christmas-promo.js',
                              'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                              'web/assets/js/src/vendor/jquery.plugin.min.js',
                              'web/assets/js/src/vendor/jquery.countdown.min.js',
@@ -323,7 +318,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.plugin.min.js',
-                             'web/assets/js/src/scratchwinpromo.js'],
+                             'web/assets/js/src/promo/scratchwinpromo.js'],
 
                     'web/assets/js/min/easyshop.advance_search_main.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
@@ -340,6 +335,7 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.dashboard-primary.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/jquery.ui.touch-punch.min.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
                              'web/assets/js/src/vendor/jquery.raty.min.js',
                              'web/assets/js/src/vendor/image.js',
@@ -348,9 +344,12 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/chosen.jquery.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
+                             'web/assets/js/src/vendor/jstree.js',
                              'web/assets/js/src/vendor/pwstrength.js',
+                             'web/assets/js/src/vendor/jquery.nicescroll.min.js',
                              'web/assets/js/src/dashboard.js',
-                             'web/assets/js/src/dashboard-myaccount.js'],
+                             'web/assets/js/src/dashboard-myaccount.js',
+                             'web/assets/js/src/dashboard-express-edit.js'],
 
                     'web/assets/js/min/easyshop.product_search_by_searchbox.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
@@ -399,27 +398,27 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.user_register.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                             'web/assets/js/src/vendor/jquery.cookie.js',
+                             'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/vendor/jquery.bxslider.min.js',
-                             'web/assets/js/src/vendor/mootools-core-1.4.5-full-compat.js',
-                             'web/assets/js/src/vendor/password_meter.js',
-                             'web/assets/js/src/landingpage-responsive-nav.js',
-                             'web/assets/js/src/landingpage.js'],
-
+                             'web/assets/js/src/vendor/pwstrength.js',
+                             'web/assets/js/src/universal.js',
+                             'web/assets/js/src/register.js',
+                             'web/assets/js/src/login.js'],
                     'web/assets/js/min/easyshop.user_register_subscribe_success.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/landingpage-bootstrap.min.js'],
 
                     'web/assets/js/min/easyshop.user_vendor_view.js':
-                            ['web/assets/js/src/vendorpage_new.js',
-                             'web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.Jcrop.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.scrollTo.js',
-                             'web/assets/js/src/vendor/chosen.jquery.min.js'],
+                             'web/assets/js/src/vendor/chosen.jquery.min.js',
+                             'web/assets/js/src/vendorpage_new.js'],
 
                     'web/assets/js/min/easyshop.product-search-by-category-new.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
@@ -448,6 +447,29 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/socket.io.js',
                              'web/assets/js/src/nodeClient.js',
                              'web/assets/js/src/universal.js'],
+
+                    'web/assets/js/min/easyshop.estudyantrepreneur-promo.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                        'web/assets/js/src/promo/estudyantrepreneur.js',
+                        'web/assets/js/src/plugins.js',
+                        'web/assets/js/src/vendor/promo/christmas-promo.js'],
+                     
+                    'web/assets/js/min/easyshop.bug_report.js':
+                        ['web/assets/js/src/bug-report.js'],
+
+                    'web/assets/js/min/easyshop.payment-review.js':
+                        ['web/assets/js/src/vendor/jquery.simplemodal.js',
+                         'web/assets/js/src/new-payment.js'],
+
+                    'web/assets/js/min/easyshop.home-reminder.js':
+                        ['web/assets/js/src/vendor/jquery.simplemodal.js',
+                         'web/assets/js/src/message-box.js'],
+                     
+                    'web/assets/js/min/easyshop.how-to.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                         'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
+                         'web/assets/js/src/how-to-page-plugins.js',
+                         'web/assets/js/src/how-to-page.js']
                 }
             }
         }

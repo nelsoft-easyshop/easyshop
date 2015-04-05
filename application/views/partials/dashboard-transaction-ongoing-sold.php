@@ -1,7 +1,7 @@
 <div class="transaction-item">
 <?PHP if (count($transaction) !== 0) : ?>
     <?PHP foreach($transaction as $key => $soldTransactionDetails) : ?>
-    <div class="item-list-panel">
+    <div class="item-list-panel <?='invoiceno-' . $soldTransactionDetails['invoiceNo'] ?>">
         <div class="transac-title">
             <?PHP if (intval($soldTransactionDetails['orderStatus']) != (int) \EasyShop\Entities\EsOrderStatus::STATUS_DRAFT && !$soldTransactionDetails['isFlag'] ) : ?>
                 <div><span class="strong-label">Transaction No. : </span> <?=$soldTransactionDetails['invoiceNo'] ?></div>
@@ -18,11 +18,12 @@
             <?PHP endif; ?>
         </div>
         <?PHP foreach($soldTransactionDetails['product'] as $productKey => $product) : ?>
-        <div class="pd-top-15">
+        <div class="pd-top-15 item-list-products">
             <div class="col-xs-12 col-sm-9 padding-reset trans-left-panel pd-top-10">
                     <div class="pd-bottom-20">
                         <div class="col-xs-3 col-sm-4 padding-reset">
-                            <div class="div-product-image" style="background: url(<?php echo getAssetsDomain().'.'.$product['productImagePath']?>) center center no-repeat; background-cover: cover; background-size: 150%;">
+                            <div class="div-product-image" >
+                                <img src="<?php echo getAssetsDomain().$product['productImagePath']?>" class="image-primary">
                             </div>
                         </div>
                         <div class="col-xs-9 col-sm-8 padding-reset">
@@ -57,7 +58,8 @@
                                             <?PHP if (intval($product['isReject']) === 1) : ?>
                                                 <span class="trans-status-pending status-class">ITEM REJECTED</span>
                                             <?PHP else : ?>
-                                                <?PHP if (intval($product['idOrderProductStatus']) === (int) \EasyShop\Entities\EsOrderProductStatus::ON_GOING) : ?>
+                                                <?PHP $orderProductStatus = intval($product['idOrderProductStatus']); ?>
+                                                <?PHP if ($orderProductStatus === (int) \EasyShop\Entities\EsOrderProductStatus::ON_GOING) : ?>
                                                     <?PHP if( intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY ) : ?>
                                                         <span class="trans-status-cod status-class">Cash on Delivery</span>
                                                     <?PHP else:?>
@@ -67,8 +69,16 @@
                                                             <span class="trans-status-pending status-class">Easyshop received payment.</span>
                                                         <?PHP endif;?>
                                                     <?PHP endif;?>
-                                                <?PHP else : ?>
-                                                    <span class="trans-status-pending status-class"><?=$soldTransactionDetails['paymentMethod']?></span>
+                                                <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::FORWARD_SELLER): ?>
+                                                    <span class="trans-status-pending status-class">Item Received</span>
+                                                <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::RETURNED_BUYER): ?>
+                                                    <span class="trans-status-pending status-class">Order Canceled</span>
+                                                <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::CASH_ON_DELIVERY): ?>
+                                                    <span class="trans-status-pending status-class">Cash on Delivery</span>
+                                                <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::PAID_FORWARDED): ?>
+                                                    <span class="trans-status-pending status-class">Paid</span>
+                                                <?PHP elseif ($orderProductStatus === (int)\EasyShop\Entities\EsOrderProductStatus::PAID_RETURNED): ?>
+                                                    <span class="trans-status-pending status-class">Payment Refunded</span>
                                                 <?PHP endif; ?>
                                             <?PHP endif; ?>
                                         <?PHP else : ?>
@@ -165,32 +175,32 @@
                                     </div>
                                     <div class="col-xs-12 pd-bttm-10"></div>
                                     <div class="col-xs-12 shipping-details-con">
-                                        <div class="col-md-4">
+                                        <div class="col-sm-4 col-md-4">
                                             Shipped by:
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-sm-8 col-md-8">
                                             <input type="text" class="ui-form-control" name="courier" value="<?=html_escape($product['courier'])?>" >
                                         </div>
                                         <div class="col-xs-12 pd-bttm-10"></div>
-                                        <div class="col-md-4">
+                                        <div class="col-sm-4 col-md-4">
                                             Tracking Number:
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-sm-8 col-md-8">
                                             <input type="text" class="ui-form-control" name="tracking_num" value="<?=html_escape($product['trackingNum']);?>" >
                                         </div>
                                         <div class="col-xs-12 pd-bttm-10"></div>
-                                        <div class="col-md-4">
+                                        <div class="col-sm-4 col-md-4">
                                             Delivery Date:
                                         </div>
-                                        <div class="col-md-8">
-                                            <input type="text" class="ui-form-control modal_date" name="delivery_date" value="<?=$product['deliveryDate'] ? date_format($product['deliveryDate'], 'Y-M-d') : '' ?>" >
+                                        <div class="col-sm-8 col-md-8">
+                                            <input type="text" class="ui-form-control modal_date dp-delivery-date" name="delivery_date" value="<?=$product['deliveryDate'] ? date_format($product['deliveryDate'], 'Y-M-d') : '' ?>" >
                                         </div>
                                         <div class="col-xs-12 pd-bttm-10"></div>
-                                        <div class="col-md-4">
+                                        <div class="col-sm-4 col-md-4">
                                             Expected Date of Arrival:
                                         </div>
-                                        <div class="col-md-8">
-                                            <input type="text" class="ui-form-control modal_date" name="expected_date" value="<?=$product['expectedDate'] ? date_format($product['expectedDate'], 'Y-M-d') : '' ?>" >
+                                        <div class="col-sm-8 col-md-8">
+                                            <input type="text" class="ui-form-control modal_date dp-expected-date" name="expected_date" value="<?=$product['expectedDate'] ? date_format($product['expectedDate'], 'Y-M-d') : '' ?>" >
                                         </div>
                                         <div class="col-xs-12">
                                             <textarea name="comment" placeholder="Write your comment..." data-value="<?=html_escape($product['shipping_comment']); ?>" ><?=html_escape($product['shipping_comment'])?></textarea>
@@ -241,6 +251,7 @@
                          </div>
                         <?PHP endif; ?>
                         <?PHP if ( (int) $soldTransactionDetails['forMemberId'] === 0 ) : ?>
+                            <div class="trans-btn-wrapper">
                                 <button class="btn btn-default-1 give-feedback-button">
                                     <span class="img-give-feedback"></span>give feedback
                                 </button>
@@ -268,7 +279,7 @@
                                         </div>
                                         <span class="raty-error"></span>
                                         <div>
-                                            <textarea rows="4" cols="50" name="feedback-field" placeholder="Write your message..."></textarea>
+                                            <textarea rows="4" cols="50" maxlength="1024" name="feedback-field" placeholder="Write your message..."></textarea>
                                             <span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
                                         </div>
                                     </div>
@@ -278,6 +289,7 @@
                                     </div>
                                     <?php echo form_close();?>
                                 </div>
+                            </div>
                         <?PHP endif; ?>
                     <?PHP endif; ?>
                 </div>

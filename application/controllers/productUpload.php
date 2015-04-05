@@ -2,9 +2,12 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
+use EasyShop\Entities\EsProduct as EsProduct;
+use EasyShop\Entities\EsProductItem as EsProductItem;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsProductShippingHead as EsProductShippingHead;
 use EasyShop\Entities\EsProductShippingDetail as EsProductShippingDetail;
+use Easyshop\Upload\AssetsUploader as AssetsUploader;
 
 class productUpload extends MY_Controller 
 {
@@ -101,9 +104,9 @@ class productUpload extends MY_Controller
                 'renderSearchbar' => false, 
             ];
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step1_view',$data_item);
-            $this->load->view('templates/footer'); 
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
         else{
             $headerData = [
@@ -239,9 +242,9 @@ class productUpload extends MY_Controller
             }
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData)); 
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData)); 
             $this->load->view('pages/product/product_upload_step2_view',$response);
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }else{
             redirect('/sell/step1/', 'refresh');
         }
@@ -433,9 +436,86 @@ class productUpload extends MY_Controller
             'renderSearchbar' => false, 
         ]; 
         $this->load->spark('decorator');    
-        $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));  
+        $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));  
         $this->load->view('pages/product/product_upload_step2_view',$response);
-        $this->load->view('templates/footer');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
+    }
+
+    /**
+     *  Upload image for attributes of the product
+     *  
+     *  @return JSON
+     */
+    public function fallBackUploadimage()
+    {
+        $imageUtility = $this->serviceContainer['image_utility'];
+        $assetsUploader = $this->serviceContainer["assets_uploader"]; 
+        $this->config->load('image_dimensions', true);
+        $imageDimensions = $this->config->config['image_dimensions'];
+        $tempDirectory = $this->session->userdata('tempDirectory');  
+        $pathDirectory = $tempDirectory;
+        $tempId = $this->session->userdata('tempId');
+        $member_id = $this->session->userdata('member_id');
+        if($this->input->post('pictureName')){
+            $filename = trim($this->input->post('pictureName'));
+            $inputFile = "files";
+            $filenameArray = [$filename];
+
+            if($_FILES[$inputFile]['error'][0] !== UPLOAD_ERR_OK
+                || $_FILES[$inputFile]['size'][0] >= $this->maxFileSizeInMb){
+                die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px","err":"1"}');
+            }
+        }
+        else{
+            $filenameArray = $filename = trim($this->input->post('pictureNameOther'));
+            $inputFile = "attr-image-input";
+            $pathDirectory = $tempDirectory.'/other/';
+
+            if($_FILES[$inputFile]['error'] !== UPLOAD_ERR_OK
+                || $_FILES[$inputFile]['size'] >= $this->maxFileSizeInMb){
+                die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px","err":"1"}');
+            }
+        }
+
+        if (strpos($filename, $tempId."_".$member_id) === false) {
+            die('{"result":"false","msg":"Invalid filename. Please try again later.","err":"1"}');
+        } 
+
+        if (!file_exists ($pathDirectory)){
+            mkdir($pathDirectory, 0777, true);
+        }
+
+        $this->upload->initialize([
+            "upload_path" => $pathDirectory,
+            "overwrite" => false,
+            "file_name"=> $filenameArray,
+            "encrypt_name" => false,
+            "remove_spaces" => true,
+            "allowed_types" => AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES,
+            "max_size" => AssetsUploader::MAX_ALLOWABLE_SIZE_KB,
+            "max_width" => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+            "max_height" => AssetsUploader::MAX_ALLOWABLE_DIMENSION_PX,
+            "xss_clean" => false
+        ]); 
+
+        if ($this->upload->do_multi_upload($inputFile)){
+            $imageUtility->imageResize($pathDirectory.$filename, 
+                                       $pathDirectory."small/".$filename,
+                                       $imageDimensions["productImagesSizes"]["small"]);
+
+            $imageUtility->imageResize($pathDirectory."small/".$filename, 
+                                       $pathDirectory."categoryview/".$filename,
+                                       $imageDimensions["productImagesSizes"]["categoryview"]);
+
+            $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
+                                       $pathDirectory."thumbnail/".$filename,
+                                       $imageDimensions["productImagesSizes"]["thumbnail"]);
+
+            die('{"result":"ok","imageName":"'.$filename.'","err":"0"}'); 
+        }
+        else{
+            die('{"result":"false","msg":"'.$this->upload->display_errors().'","err":"1"}');
+        }
     }
 
     /**
@@ -448,121 +528,79 @@ class productUpload extends MY_Controller
     {  
         $imageUtility = $this->serviceContainer['image_utility'];
         $pathDirectory = $this->session->userdata('tempDirectory');
-        $filescnttxt = $this->input->post('filescnttxt');
-        $afstart = $this->input->post('afstart');
-        
-        $afstartArray = json_decode($afstart); 
+        $tempId = $this->session->userdata('tempId');
+        $member_id = $this->session->userdata('member_id');
+        $filescnttxt = $this->input->post('filescnttxt'); 
+        $imageCollections = json_decode($this->input->post('imageCollections'));
+        $afstartArray = json_decode(trim($this->input->post('afstart'))); 
         $filenames_ar = [];
-        $coordinates = json_decode($this->input->post('coordinates')); 
-        $text = "";
-        $isCroppable = !empty($coordinates);
-        $error = 0;
-        $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
+        $text = ""; 
+        $error = 0; 
 
         $this->config->load('image_dimensions', true);
-        $imageDimensions = $this->config->config['image_dimensions'];
-
-        foreach($_FILES['files']['name'] as $key => $value ) {
-
-            $file_ext = explode('.', $value);
-            $file_ext = strtolower(end($file_ext)); 
+        $imageDimensions = $this->config->config['image_dimensions']; 
+        $assetsUploader = $this->serviceContainer["assets_uploader"]; 
+        foreach($_FILES['files']['name'] as $key => $value ) { 
             $filenames_ar[$key] = $afstartArray[$key];
-
-            if(!in_array(strtolower($file_ext),$allowed)){
-                unset($_FILES['files']['name'][$key]);
-                unset($_FILES['files']['type'][$key]);
-                unset($_FILES['files']['tmp_name'][$key]);
-                unset($_FILES['files']['error'][$key]);
-                unset($_FILES['files']['size'][$key]);
-                unset($filenames_ar[$key]); 
-                unset($coordinates[$key]); 
+            if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb
+               || $_FILES['files']['error'][$key] !== UPLOAD_ERR_OK
+               || !$assetsUploader->checkValidFileType($_FILES['files']['tmp_name'][$key])
+               || !$assetsUploader->checkValidFileDimension($_FILES['files']['tmp_name'][$key])){
+                unset($filenames_ar[$key]);
             }
 
-            if(isset($_FILES['files']['name'][$key])){
-                if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb){
-                    unset($_FILES['files']['name'][$key]);
-                    unset($_FILES['files']['type'][$key]);
-                    unset($_FILES['files']['tmp_name'][$key]);
-                    unset($_FILES['files']['error'][$key]);
-                    unset($_FILES['files']['size'][$key]);
-                    unset($filenames_ar[$key]); 
-                    unset($coordinates[$key]); 
+            if(isset($filenames_ar[$key])){
+                if (strpos($filenames_ar[$key], $tempId."_".$member_id) === false) {
+                   $return = [
+                        'msg' => "Invalid filename. Please try again later.", 
+                        'fcnt' => $filescnttxt,
+                        'err' => 1
+                    ];
+
+                    die(json_encode($return));
                 }
             }
         }
- 
-        $_FILES['files']['name'] = array_values($_FILES['files']['name']);
-        $_FILES['files']['type'] = array_values($_FILES['files']['type']);
-        $_FILES['files']['tmp_name'] = array_values($_FILES['files']['tmp_name']);
-        $_FILES['files']['error'] = array_values($_FILES['files']['error']);
-        $_FILES['files']['size'] = array_values($_FILES['files']['size']);
-        $filenames_ar = array_values($filenames_ar); 
-        $coordinates = array_values($coordinates);
 
+        $filenames_ar = array_values($filenames_ar);  
         if(count($filenames_ar) <= 0){
             $return = [
-                'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb", 
+                'msg' => "Please select valid image type.\nAllowed type: .PNG,.JPEG,.GIF\nAllowed max size: 5mb. Allowed max dimension 5000px", 
                 'fcnt' => $filescnttxt,
                 'err' => 1
             ];
 
             die(json_encode($return));
         }
-        
 
         if (!file_exists ($pathDirectory)){
             mkdir($pathDirectory, 0777, true);
         }
-
-        $this->upload->initialize(array( 
-            "upload_path" => $pathDirectory,
-            "overwrite" => FALSE,
-            "file_name"=> $filenames_ar,
-            "encrypt_name" => FALSE,
-            "remove_spaces" => TRUE,
-            "allowed_types" => "jpg|jpeg|png|gif",
-            "max_size" => $this->max_file_size_mb * 1024,
-            "xss_clean" => FALSE
-            )
-        );
-        
-        if($this->upload->do_multi_upload('files')){
-            $file_data = $this->upload->get_multi_upload_data();
-            for ($i=0; $i < sizeof($filenames_ar); $i++) {
-                if($isCroppable){
-                    $coordinate = explode(',', $coordinates[$i]);
-                    $imageUtility->imageCrop($pathDirectory.$filenames_ar[$i], $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
-                }
-
-                $imageUtility->imageResize($pathDirectory.$filenames_ar[$i], 
-                                           $pathDirectory."small/".$filenames_ar[$i],
+        foreach ($imageCollections as $key => $base64String) { 
+            $img = str_replace('data:image/jpeg;base64,', '', $base64String);
+            $fileNameArray = explode(".", $filenames_ar[$key]);
+            array_pop($fileNameArray);
+            $filename = implode(".", $fileNameArray).".jpeg";
+            $tempFilePath = $pathDirectory.$filename;
+            $imageData = base64_decode($img);
+ 
+            if((bool)getimagesizefromstring($imageData) 
+                && $assetsUploader->checkValidFileType($base64String)){
+                file_put_contents($tempFilePath, $imageData);
+                $imageUtility->imageResize($pathDirectory.$filename, 
+                                           $pathDirectory."small/".$filename,
                                            $imageDimensions["productImagesSizes"]["small"]);
 
-                $imageUtility->imageResize($pathDirectory."small/".$filenames_ar[$i], 
-                                           $pathDirectory."categoryview/".$filenames_ar[$i],
+                $imageUtility->imageResize($pathDirectory."small/".$filename, 
+                                           $pathDirectory."categoryview/".$filename,
                                            $imageDimensions["productImagesSizes"]["categoryview"]);
 
-                $imageUtility->imageResize($pathDirectory."categoryview/".$filenames_ar[$i], 
-                                           $pathDirectory."thumbnail/".$filenames_ar[$i],
+                $imageUtility->imageResize($pathDirectory."categoryview/".$filename, 
+                                           $pathDirectory."thumbnail/".$filename,
                                            $imageDimensions["productImagesSizes"]["thumbnail"]);
+            }
+        }
 
-                //If user uploaded image is too large, resize and overwrite original image
-                if(isset($file_data[$i])){
-                    if(($file_data[$i]['image_width'] > $this->img_dimension['usersize'][0]) || ($file_data[$i]['image_height'] > $this->img_dimension['usersize'][1])){
-                        $imageUtility->imageResize($pathDirectory.$file_data[$i]['file_name'], 
-                                                   $pathDirectory.$file_data[$i]['file_name'],
-                                                   $imageDimensions["productImagesSizes"]["usersize"]);
-                    }
-                }
-            }
-        }
-        else{
-            $text = $this->upload->display_errors();
-            if($text == '<p>The uploaded file exceeds the maximum allowed size in your PHP configuration file.</p>'){
-                $text ='File is too large. Please select another image';
-            }
-            $error = 1;
-        }
         $return = [
             'msg' => $text, 
             'fcnt' => $filescnttxt,
@@ -582,45 +620,39 @@ class productUpload extends MY_Controller
         $imageUtility = $this->serviceContainer['image_utility'];
         $this->config->load('image_dimensions', true);
         $imageDimensions = $this->config->config['image_dimensions'];
+        $tempDirectory = $this->session->userdata('tempDirectory'); 
+        $filename = trim($this->input->post('pictureNameOther'));
+        $tempId = $this->session->userdata('tempId');
+        $member_id = $this->session->userdata('member_id');
+        $imageCollections = json_decode($this->input->post('imageCollections'))[0];
+        $assetsUploader = $this->serviceContainer["assets_uploader"]; 
+        $fileNameArray = explode('.', $filename); 
+        array_pop($fileNameArray);
+        $filename = implode(".", $fileNameArray).".jpeg";
 
-        $temp_product_id = $this->session->userdata('tempId');
-        $tempDirectory = $this->session->userdata('tempDirectory');
-        $memberId =  $this->session->userdata('member_id');
-        $filename =  $this->input->post('pictureName');
-        $coordinates =  $this->input->post('coordinates');
-        $isCroppable = !empty($coordinates);
-        $date = date("Ymd");
-        $allowed =  array('gif','png' ,'jpg','jpeg'); // available format only for image
-        $fileExtension = explode('.', $filename);
-        $fileExtension = strtolower(end($fileExtension));
-
-        if(!in_array(strtolower($fileExtension),$allowed)){
-            die('{"result":"false","msg":"Invalid file type. Please choose another image."}');
+        if(!$assetsUploader->checkValidFileType($_FILES['attr-image-input']['tmp_name'])
+            || !$assetsUploader->checkValidFileDimension($_FILES['attr-image-input']['tmp_name'])
+            || $_FILES['attr-image-input']['error'] !== UPLOAD_ERR_OK
+            || $_FILES['attr-image-input']['size'] >= $this->maxFileSizeInMb){
+            die('{"result":"false","msg":"Please select valid image type. Allowed type: .PNG,.JPEG,.GIF Allowed max size: 5mb. Allowed max dimension 5000px"}');
         }
+
+        if (strpos($filename, $tempId."_".$member_id) === false) { 
+            die('{"result":"false","msg":"Invalid filename. Please try again later."}');
+        } 
 
         $pathDirectory = $tempDirectory.'/other/';
 
         if (!file_exists ($pathDirectory)){
             mkdir($pathDirectory, 0777, true);
-        }
+        } 
 
-        $this->upload->initialize(array( 
-            "upload_path" => $pathDirectory,
-            "overwrite" => FALSE,
-            "file_name"=> $filename,
-            "encrypt_name" => FALSE,
-            "remove_spaces" => TRUE,
-            "allowed_types" => "jpg|jpeg|png|gif",
-            "max_size" => $this->max_file_size_mb * 1024,
-            "xss_clean" => FALSE
-            )); 
-
-        if ($this->upload->do_multi_upload('attr-image-input')){ 
-            if($isCroppable){
-                $coordinate = explode(',', $coordinates);
-                $imageUtility->imageCrop($pathDirectory.$filename, $coordinate[0], $coordinate[1], $coordinate[2], $coordinate[3]);
-            }
-
+        $img = str_replace('data:image/jpeg;base64,', '', $imageCollections);
+        $tempFilePath = $pathDirectory.$filename;
+        $imageFile = base64_decode($img);
+        if($assetsUploader->checkValidFileType($imageCollections) 
+            && (bool)getimagesizefromstring($imageFile)){
+            file_put_contents($tempFilePath, $imageFile);
             $imageUtility->imageResize($pathDirectory.$filename, 
                                        $pathDirectory."small/".$filename,
                                        $imageDimensions["productImagesSizes"]["small"]);
@@ -633,10 +665,7 @@ class productUpload extends MY_Controller
                                        $pathDirectory."thumbnail/".$filename,
                                        $imageDimensions["productImagesSizes"]["thumbnail"]);
 
-            die('{"result":"ok"}');
-        }
-        else{
-            die('{"result":"false","msg":"'.$this->upload->display_errors().'"}');
+            echo '{"result":"ok","imageName":"'.$filename.'"}';
         }
     }
 
@@ -655,7 +684,8 @@ class productUpload extends MY_Controller
         $attributes = json_decode($this->input->post('attributes'),true);
         $data = $this->input->post('data');
         $cat_id = $this->input->post('id');
-        $otherCategory = $stringUtility->removeNonUTF($this->input->post('otherCategory'));
+        $postCategory= $stringUtility->removeSpecialCharsExceptSpace($this->input->post('otherCategory'));
+        $otherCategory = trim($stringUtility->removeNonUTF($postCategory));
         $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
         $brand_valid = false;
         $otherBrand = '';
@@ -665,6 +695,7 @@ class productUpload extends MY_Controller
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
+        $discountedPrice = bcsub($product_price, bcmul($product_price, bcdiv($product_discount, 100, 4), 4));
         $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
         $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
         $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
@@ -714,19 +745,25 @@ class productUpload extends MY_Controller
 
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
-            || strlen(trim($product_price)) == 0 
-            || $product_price <= 0 
+            || strlen(trim($product_price)) == 0  
             || strlen(trim($product_description)) == 0) && $isNotSavingAsDraft){
 
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');      
         }
-        else{
-            
+        else{ 
+            if((int) $product_price <= 0 || (int) $discountedPrice <= 0){
+                die('{"e":"0","d":"Invalid price. Price must be equal or greater than P1."}');
+            }
+
             $arraynameoffiles = json_decode($this->input->post('arraynameoffiles')); 
             $arraynameoffiles = (count($arraynameoffiles) > 0) ? $arraynameoffiles : array();
             if($isNotSavingAsDraft){
                 if(count($arraynameoffiles) <= 0){ 
                     die('{"e":"0","d":"Please select at least one photo for your listing."}');
+                }
+
+                if(strlen(trim($product_title)) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){ 
+                    die('{"e":"0","d":"Product name must be atleast '.EsProduct::MINIMUM_PRODUCT_NAME_LEN.' characters!"}');
                 }
             }
 
@@ -846,11 +883,17 @@ class productUpload extends MY_Controller
 
                 #saving combination
                 if(count($combination) <= 0){
-                    $idProductItem = $this->product_model->addNewCombination($product_id,$this->input->post('allQuantity'));
+                    $allQuantity = (int) $this->input->post('allQuantity') > EsProductItem::MAX_QUANTITY 
+                                   ? EsProductItem::MAX_QUANTITY
+                                   : (int) $this->input->post('allQuantity');
+                    $idProductItem = $this->product_model->addNewCombination($product_id, $allQuantity);
                 }
                 else{
                     foreach ($combination as $key => $value) {
-                        $idProductItem = $this->product_model->addNewCombination($product_id,$value['quantity']);
+                        $combQuantity = (int) $value['quantity'] > EsProductItem::MAX_QUANTITY
+                                        ? EsProductItem::MAX_QUANTITY
+                                        : (int) $value['quantity'];
+                        $idProductItem = $this->product_model->addNewCombination($product_id, $combQuantity);
                         foreach ($value['data'] as $keydata => $valuedata) {
                             $productAttributeId = $this->product_model->selectProductAttributeOther($keydata,$valuedata,$product_id);
                             $this->product_model->addNewCombinationAttribute($idProductItem,$productAttributeId,1);
@@ -894,8 +937,10 @@ class productUpload extends MY_Controller
         $product_price = ($this->input->post('prod_price') == "")? '0' : str_replace(',', '', $this->input->post('prod_price'));
         $product_discount = ($this->input->post('discount'))?floatval($this->input->post('discount')):0;
         $product_discount = ($product_discount <= 100)?$product_discount:100;
+        $discountedPrice = bcsub($product_price, bcmul($product_price, bcdiv($product_discount, 100, 4), 4));
         $product_condition = $stringUtility->removeNonUTF($this->input->post('prod_condition'));
-        $otherCategory = html_escape($stringUtility->removeNonUTF($this->input->post('otherCategory'))); 
+        $postCategory= $stringUtility->removeSpecialCharsExceptSpace($this->input->post('otherCategory'));
+        $otherCategory = trim($stringUtility->removeNonUTF($postCategory));
         $sku = trim($stringUtility->removeNonUTF($this->input->post('prod_sku')));
         $brand_id =  $stringUtility->removeNonUTF($this->input->post('prod_brand')); 
         $keyword = trim($stringUtility->removeNonUTF($this->input->post('prod_keyword')));
@@ -926,6 +971,10 @@ class productUpload extends MY_Controller
             if(count($currentCombination) !== count(array_unique($currentCombination))){
                 die('{"e":"0","d":"Same combination is not allowed!"}');
             }
+
+            if(strlen(trim($product_title)) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){ 
+                die('{"e":"0","d":"Product name must be atleast '.EsProduct::MINIMUM_PRODUCT_NAME_LEN.' characters!"}');
+            }
         }
         else{
             $product_condition = $this->lang->line('product_condition')[0];
@@ -938,11 +987,14 @@ class productUpload extends MY_Controller
         
         if((strlen(trim($product_title)) == 0 
             || $product_title == "" 
-            || strlen(trim($product_price)) == 0 
-            || $product_price <= 0 
+            || strlen(trim($product_price)) == 0  
             || strlen(trim($product_description)) == 0) && $isNotSavingAsDraft){
 
             die('{"e":"0","d":"Fill (*) All Required Fields Properly!"}');
+        }
+
+        if((int) $product_price <= 0  || (int) $discountedPrice <= 0){
+            die('{"e":"0","d":"Invalid price. Price must be greater than 0."}');
         }
 
         foreach($itemQuantity as $keyid => $value){
@@ -1108,7 +1160,10 @@ class productUpload extends MY_Controller
 
             #saving combination
             if(count($combination) <= 0){
-                $idProductItem = $this->product_model->addNewCombination($product_id,$this->input->post('allQuantity'));
+                $allQuantity = (int) $this->input->post('allQuantity') > EsProductItem::MAX_QUANTITY 
+                               ? EsProductItem::MAX_QUANTITY
+                               : (int) $this->input->post('allQuantity');
+                $idProductItem = $this->product_model->addNewCombination($product_id, $allQuantity);
                 if(isset($noCombination) && count($combination) <= 0){
                     foreach ($retainShippingDetails as $key => $value) {
                         foreach ($value as $key2 => $value2) {
@@ -1120,7 +1175,10 @@ class productUpload extends MY_Controller
             }
             else{
                 foreach ($combination as $key => $value) { 
-                    $idProductItem = $this->product_model->addNewCombination($product_id,$value['quantity']);
+                    $combQuantity = (int) $value['quantity'] > EsProductItem::MAX_QUANTITY
+                                    ? EsProductItem::MAX_QUANTITY
+                                    : (int) $value['quantity'];
+                    $idProductItem = $this->product_model->addNewCombination($product_id, $combQuantity);
                     if(count($retainShippingDetails) > 0){
                         if (array_key_exists($key,$retainShippingDetails)){
                             foreach ($retainShippingDetails[$key] as $key => $valueShip) {
@@ -1151,31 +1209,46 @@ class productUpload extends MY_Controller
         
         if( $this->input->post('data') && $this->input->post('name') ){
             $preferenceData = $this->input->post('data');
-            $preferenceName = $this->input->post('name');
-            
+            $preferenceName = trim($this->input->post('name'));
             $member_id = $this->session->userdata('member_id');
             
-            // Insert name vs memid in shipping pref head
-            // Returns last id inserted on success, false on failure
-            $resultHead = $this->product_model->storeShippingPreferenceHead($member_id, $preferenceName);
-            
-            $serverResponse['result'] = $resultHead ? 'success' : 'fail';
-            $serverResponse['error'] = $resultHead ? '' : 'Failed to store preference head.';
-            
-            // if success, enter shipping details
-            if($resultHead){
-                foreach($preferenceData as $loc=>$price){
-                    $resultDetail = $this->product_model->storeShippingPreferenceDetail($resultHead, $loc, $price);
-                    
-                    if(!$resultDetail){
-                        $serverResponse['result'] = 'fail';
-                        $serverResponse['error'] = 'Failed to insert preference. Data stored may be incomplete.';
-                        break;
+            $preferenceCount = $this->em->getRepository('EasyShop\Entities\EsProductShippingPreferenceHead')
+                                        ->findBy([
+                                            'title' => $preferenceName,
+                                            'member' => $member_id,
+                                        ]);
+            if(count($preferenceCount) <= 0){
+                // Insert name vs memid in shipping pref head
+                // Returns last id inserted on success, false on failure
+                $resultHead = $this->product_model->storeShippingPreferenceHead($member_id, $preferenceName);
+                
+                $serverResponse['result'] = $resultHead ? 'success' : 'fail';
+                $serverResponse['error'] = $resultHead ? '' : 'Failed to store preference head.';
+                
+                // if success, enter shipping details
+                if($resultHead){
+                    foreach($preferenceData as $loc=>$price){
+                        $resultDetail = $this->product_model->storeShippingPreferenceDetail($resultHead, $loc, $price);
+                        
+                        if(!$resultDetail){
+                            $serverResponse['result'] = 'fail';
+                            $serverResponse['error'] = 'Failed to insert preference. Data stored may be incomplete.';
+                            break;
+                        }
+                    }
+                    if($resultDetail){
+                        $preferences = $this->product_model->getShippingPreference($member_id)['name'];
+                        end($preferences);
+                        $arrayKey = key($preferences);
+                        $serverResponse['shipping_preference']['name'] = [
+                            $arrayKey => $preferences[$arrayKey]
+                        ]; 
                     }
                 }
-                if($resultDetail){
-                    $serverResponse['shipping_preference'] = $this->product_model->getShippingPreference($member_id);
-                }
+            }
+            else{
+                $serverResponse['result'] = 'fail';
+                $serverResponse['error'] = 'Preference name already exist!';
             }
         }
         echo json_encode($serverResponse, JSON_FORCE_OBJECT);
@@ -1285,9 +1358,9 @@ class productUpload extends MY_Controller
             ]; 
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_preview',$preview_data);
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
     }
 
@@ -1359,9 +1432,9 @@ class productUpload extends MY_Controller
             ]; 
             
             $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/product/product_upload_step3_view',$data);
-            $this->load->view('templates/footer');
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
         else{
             redirect('/sell/step1/', 'refresh');
@@ -1383,15 +1456,15 @@ class productUpload extends MY_Controller
 
         $memberId = $this->session->userdata('member_id');
         $deliveryOption = $this->input->post('delivery_option') 
-                          ? $this->input->post('delivery_option') : [];
+                          ? (string) trim($this->input->post('delivery_option')) 
+                          : "meetup";
         $shipWithinDays = trim($this->input->post('ship_within')) !== ""
                           ? trim($this->input->post('ship_within'))
                           : null;
         $productId = (int) $this->input->post('prod_h_id');
-        $billingId = (int) $this->input->post('billing_info_id');
-        $isAllowCod = trim(strtolower($this->input->post('allow_cod'))) === "on";
-        $isMeetup = in_array("meetup", $deliveryOption);
-        $isDelivery = in_array("delivery", $deliveryOption);
+        $isAllowCod = (bool) $this->input->post('allow_cod'); 
+        $isMeetup = $deliveryOption === "meetup";
+        $isDelivery = $isMeetup === false;
         $deliveryCost = trim($this->input->post('prod_delivery_cost'));
         $shipPrice = $this->input->post('shipprice');
         $shipLoc = $this->input->post('shiploc');
@@ -1411,85 +1484,87 @@ class productUpload extends MY_Controller
                        ]);
             if($product){
                 if($isMeetup || $isDelivery){
-                    if($billingId !== 0){
-                        $bankInfo = $esBillingInfoRepo->findOneBy([
-                                        'idBillingInfo' => $billingId,
-                                        'member' => $memberId,
-                                    ]);
-                        if(!$bankInfo){
-                            throw new Exception("Billing ID mismatch.");
-                        }
-                    }
+                    $defaultPaymentAccount = $esBillingInfoRepo->getDefaultAccount($memberId);
+                    $billingId = $defaultPaymentAccount ? $defaultPaymentAccount->getIdBillingInfo() : 0;                    
                     $productShippingManager->deleteProductShippingInfo($productId);
                     $isCanContinue = true;
-                    if($isDelivery){
-                        $productItems = $esProductItemRepo->findBy(['product' => $productId]);
-                        foreach ($productItems as $item) {
-                            $productItemIds[] = $item->getIdProductItem();
-                        }
-
-                        if( $deliveryCost === "free" ){
-                            $location = $esLookupRepo->find(EsLocationLookup::PHILIPPINES_LOCATION_ID);
-                            foreach( $productItemIds as $itemIds ){
-                                $shippingHead = new EsProductShippingHead();
-                                $shippingHead->setLocation($location);
-                                $shippingHead->setPrice(0);
-                                $shippingHead->setProduct($product);
-                                $this->em->persist($shippingHead);
-
-                                $productItem = $esProductItemRepo->find($itemIds);
-
-                                $shippingDetails = new EsProductShippingDetail();
-                                $shippingDetails->setShipping($shippingHead);
-                                $shippingDetails->setProductItem($productItem);
-                                $this->em->persist($shippingDetails);
+                    if($isMeetup === false){
+                        if($isDelivery){
+                            $productItems = $esProductItemRepo->findBy(['product' => $productId]);
+                            foreach ($productItems as $item) {
+                                $productItemIds[] = $item->getIdProductItem();
                             }
-                            $this->em->flush();
-                        }
-                        elseif($deliveryCost === "details"){
-                            foreach( $shipAttr  as $attr){
-                                foreach( $attr as $itemId){
-                                    if( !(in_array((int)$itemId,$postProductIds)) ){
-                                        $postProductIds[] = $itemId;
+
+                            if( $deliveryCost === "free" ){
+                                $location = $esLookupRepo->find(EsLocationLookup::PHILIPPINES_LOCATION_ID);
+                                foreach( $productItemIds as $itemIds ){
+                                    $shippingHead = new EsProductShippingHead();
+                                    $shippingHead->setLocation($location);
+                                    $shippingHead->setPrice(0);
+                                    $shippingHead->setProduct($product);
+                                    $this->em->persist($shippingHead);
+
+                                    $productItem = $esProductItemRepo->find($itemIds);
+
+                                    $shippingDetails = new EsProductShippingDetail();
+                                    $shippingDetails->setShipping($shippingHead);
+                                    $shippingDetails->setProductItem($productItem);
+                                    $this->em->persist($shippingDetails);
+                                }
+                                $this->em->flush();
+                            }
+                            elseif($deliveryCost === "details"){
+                                foreach( $shipAttr  as $attr){
+                                    foreach( $attr as $itemId){
+                                        if( !(in_array((int)$itemId,$postProductIds)) ){
+                                            $postProductIds[] = $itemId;
+                                        }
                                     }
                                 }
-                            }
 
-                            $difference = array_diff($postProductIds,$productItemIds);
-                            if(empty($difference) === true){
-                                foreach( $shipPrice as $groupkey => $pricegroup ){
-                                    foreach( $pricegroup as $inputkey => $price ){
-                                        $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
-                                        if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
-                                            if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
-                                                if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
-                                                    foreach( $shipAttr[$groupkey] as $attrCombinationId){
-                                                        $productItem = $esProductItemRepo->find($attrCombinationId);
-                                                        foreach( $shipLoc[$groupkey][$inputkey] as $locationId ){
-                                                            $location = $esLookupRepo->find($locationId);
-                                                            $shippingHead = new EsProductShippingHead();
-                                                            $shippingHead->setLocation($location);
-                                                            $shippingHead->setPrice($priceValue);
-                                                            $shippingHead->setProduct($product);
-                                                            $this->em->persist($shippingHead);
+                                $difference = array_diff($postProductIds,$productItemIds);
+                                if(empty($difference) === true){
+                                    foreach( $shipPrice as $groupkey => $pricegroup ){
+                                        foreach( $pricegroup as $inputkey => $price ){
+                                            $priceValue = $price !== "" ? str_replace(',', '', $price) : 0;
+                                            if( is_numeric($priceValue) && $priceValue >= 0 && !preg_match('/[a-zA-Z\+]/', $priceValue) ){
+                                                if( isset($shipLoc[$groupkey][$inputkey]) && count($shipLoc[$groupkey][$inputkey]) > 0){
+                                                    if( isset($shipAttr[$groupkey]) && count($shipAttr[$groupkey]) > 0 ){
+                                                        foreach( $shipAttr[$groupkey] as $attrCombinationId){
+                                                            $productItem = $esProductItemRepo->find($attrCombinationId);
+                                                            foreach( $shipLoc[$groupkey][$inputkey] as $locationId ){
+                                                                $location = $esLookupRepo->find($locationId);
+                                                                $shippingHead = new EsProductShippingHead();
+                                                                $shippingHead->setLocation($location);
+                                                                $shippingHead->setPrice($priceValue);
+                                                                $shippingHead->setProduct($product);
+                                                                $this->em->persist($shippingHead);
 
-                                                            $shippingDetails = new EsProductShippingDetail();
-                                                            $shippingDetails->setShipping($shippingHead);
-                                                            $shippingDetails->setProductItem($productItem);
-                                                            $this->em->persist($shippingDetails);
+                                                                $shippingDetails = new EsProductShippingDetail();
+                                                                $shippingDetails->setShipping($shippingHead);
+                                                                $shippingDetails->setProductItem($productItem);
+                                                                $this->em->persist($shippingDetails);
+                                                            }
                                                         }
+                                                        $this->em->flush();
                                                     }
-                                                    $this->em->flush();
                                                 }
                                             }
-                                        }
-                                        else{
-                                            throw new Exception("Price Invalid."); 
+                                            else{
+                                                throw new Exception("Price Invalid."); 
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                        else{
+                            $isAllowCod = false;
+                            $isMeetup = true;
+                        }
+                    }
+                    else{
+                        $isAllowCod = false;
                     }
 
                     if($isCanContinue){
@@ -1499,6 +1574,21 @@ class productUpload extends MY_Controller
                         $product->setShipsWithinDays($shipWithinDays);
                         $product->setLastmodifieddate(date_create(date("Y-m-d H:i:s")));
                         $this->em->flush();
+                        
+                        $numberOfCustomCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                                         ->getNumberOfCustomCategories($memberId, true);
+                        /**
+                         * If there are no memberCategories yet, save default categories as
+                         * new custom categories and then migrate the product to its default
+                         * category
+                         */
+                        if((int)$numberOfCustomCategories === 0){
+                            $this->serviceContainer['category_manager']
+                                 ->migrateUserCategories($memberId);
+                        }
+                        $this->serviceContainer['category_manager']
+                             ->migrateProductToDefaultCustomCategory($product);
+                             
                         $serverResponse['result'] = 'success';
                         $serverResponse['error'] = '';
                     }
@@ -1547,6 +1637,8 @@ class productUpload extends MY_Controller
             $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                                 ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
+            $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
+                                         ->getShippingDetailsByProductId($productId);
 
             $paymentMethod = $this->config->item('Promo')[0]['payment_method']; 
 
@@ -1554,16 +1646,16 @@ class productUpload extends MY_Controller
                 $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method']; 
             }
 
-
             $productPreviewData = [
-                        'product' => $product,
-                        'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
-                        'productImages' => $productImages,
-                        'avatarImage' => $avatarImage,
-                        'isFreeShippingNationwide' => $isFreeShippingNationwide,
-                        'productAttributes' => $productAttributes,
-                        'paymentMethod' => $paymentMethod,
-                    ];
+                'product' => $product,
+                'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
+                'productImages' => $productImages,
+                'avatarImage' => $avatarImage,
+                'isFreeShippingNationwide' => $isFreeShippingNationwide,
+                'productAttributes' => $productAttributes,
+                'paymentMethod' => $paymentMethod,
+                'shippingLocation' => $shippingLocation,
+            ];
 
             $shippingDetails = $productShippingManager->getProductShippingSummary($productId);
             $shippingAttribute = $productShippingManager->getShippingAttribute($productId);
@@ -1584,10 +1676,10 @@ class productUpload extends MY_Controller
                 'renderSearchbar' => false, 
             ];
 
-            $this->load->spark('decorator');    
-            $this->load->view('templates/header',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/product/product_upload_step4_view',$mainViewData);
-            $this->load->view('templates/footer');
+            $this->load->spark('decorator');
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));
+            $this->load->view('pages/product/product_upload_step4_view', $mainViewData);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
         else{
             redirect('sell/step1', 'refresh');

@@ -32,6 +32,7 @@ section {
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 10px;
+    word-wrap:break-word;
 }
 
 .div-contact-container{
@@ -442,9 +443,13 @@ section {
     color: #d4d4d4;
 }
 
+.rating-header{
+    font-size:12px;
+}
+
 .fa-star-rate,.fa-star-rate-static{
     color: #d4d4d4;
-    font-size: 20px;
+    font-size: 18px;
     transition: all 0.5s ease;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -742,5 +747,13 @@ section {
     
     .col-rate-mobile:last-child .span-rate{
         padding-left: 16px !important;
+    }
+
+    .span-rate-c{
+        font-size: 11px;
+    }
+
+    .star-feed{
+        font-size: 16px;
     }
 }

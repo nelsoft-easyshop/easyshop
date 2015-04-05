@@ -657,6 +657,8 @@ class UserManager
         $formFactory = $this->formFactory;
         $rules = $formValidation->getRules('user_shipping_address'); 
         $data['isSuccessful'] = false;
+        $lat = trim($lat) === "" ? EsAddress::DEFAULT_LAT : trim($lat);
+        $lng = trim($lng) === "" ? EsAddress::DEFAULT_LNG : trim($lng);
         if(intval($type)===EsAddress::TYPE_DELIVERY){
             $form = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
                                 ->setMethod('POST')
@@ -848,18 +850,18 @@ class UserManager
      * Updates the user store name
      *
      * @param EasyShop\Entities\EsMember $memberEntity
-     * @param string $storename
+     * @param string $name
      * @param bool $executeFlush
      * @return bool
      */
-    public function updateStorename($memberEntity, $storename, $executeFlush = true)
+    public function updateStorename($memberEntity, $name, $executeFlush = true)
     {
         $isSuccessful = false;
         $usersWithStorename = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                   ->getUserWithStoreName($storename, $memberEntity->getIdMember());
-        $isRestricted = $this->isStringReservered($storename);
-        if(empty($usersWithStorename) && !$isRestricted){
-            $memberEntity->setStorename($storename);
+                                   ->getUserWithStoreNameOrUsername($name, $memberEntity->getIdMember());
+        $isRestricted = $this->isStringReservered($name);
+        if($usersWithStorename === null && !$isRestricted){
+            $memberEntity->setStorename($name);
             $isSuccessful = true;
             if($executeFlush){
                 try{
@@ -884,10 +886,10 @@ class UserManager
         $reservedKeywords = $this->configLoader->getItem('reserved');
         $isRestricted = false;
         foreach($reservedKeywords as $keyword){
-            if(strpos(strtolower($string), $keyword) !== false){
+            if( preg_match( '/' . $keyword . '/i' , $string ) ){
                 $isRestricted = true;
                 break;
-            }
+            }    
         }
         return $isRestricted;
     }

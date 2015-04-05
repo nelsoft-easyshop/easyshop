@@ -14,6 +14,8 @@ class Version20150202103558 extends AbstractMigration
     {
         $this->addSql("
             ALTER TABLE `es_school`
+            DROP FOREIGN KEY `fk_es_school_es_member`;
+            ALTER TABLE `es_school`
             DROP COLUMN `count`,
             DROP COLUMN `level`,
             DROP COLUMN `year`,
@@ -22,7 +24,8 @@ class Version20150202103558 extends AbstractMigration
             CHANGE COLUMN `schoolname` `id_school` INT NOT NULL ,
             ADD COLUMN `name` VARCHAR(45) NULL DEFAULT '' AFTER `id_school`,
             DROP PRIMARY KEY,
-            ADD PRIMARY KEY (`id_school`);
+            ADD PRIMARY KEY (`id_school`),
+            DROP INDEX `UNIQUE PAIR`;
         ");
     }
 

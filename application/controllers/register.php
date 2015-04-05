@@ -12,41 +12,11 @@ class Register extends MY_Controller
         $this->load->model("register_model");
         $this->load->library('encrypt');
         $this->load->library('session');
+        session_start();
+        $this->load->config('oauth', true);
         $this->form_validation->set_error_delimiters('', '');
+        $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
     }
-
-    public function index()
-    {    
-        $url = 'landingpage';
-        $is_promo = false;
-        if (strpos($this->session->userdata('uri_string'), 'ScratchCard') !== false) {
-            $code = trim($this->session->userdata('uri_string'), 'promo/ScratchCard/claimScratchCardPrize/claim/');
-            $url = 'promo/ScratchCard/claimScratchCardPrize/claim/'.$code;
-            $is_promo = true;
-        }
-        else{
-            if($this->session->userdata('usersession')){
-                redirect('/?view=basic');
-            }
-        }
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Easyshop.ph - Welcome to Easyshop.ph',
-            'metadescription' => 'Register now at Easyshop.ph to start your buying and selling experience',
-        ];
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
-        $bodyData = [
-            'redirect_url' => $url,
-            'is_promo' => $is_promo,
-            'facebook' => $socialMediaLinks["facebook"],
-            'twitter' => $socialMediaLinks["twitter"],
-        ];
-      
-        $this->load->spark('decorator');    
-        $this->load->view('pages/user/register',  array_merge($this->decorator->decorate('header', 'view', $headerData), $bodyData));
-    }
-
 
     /**
      *   Registration Handler
@@ -129,14 +99,15 @@ class Register extends MY_Controller
     public function success($action = '')
     {
         $data['title'] = 'Easyshop.ph - Thank You';
-        $referrer = $this->input->post('referrer') ? trim($this->input->post('referrer')) : '';
+
         $socialMediaLinks = $this->serviceContainer['social_media_manager'] 
-                                 ->getSocialMediaLinks();        
-        if(!($referrer)){
+                                 ->getSocialMediaLinks();      
+        if($this->input->post('referrer') === false){
             show_404();
         }
         else{
-            if ($referrer === 'landingpage') {
+            $referrer =  trim($this->input->post('referrer'));
+            if ($referrer === 'registration') {
                 $data['content'] = 'You have successfully registered!';
                 $data['sub_content'] = 'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
 
@@ -160,7 +131,9 @@ class Register extends MY_Controller
         $formFactory = $this->serviceContainer['form_factory'];
         $formErrorHelper = $this->serviceContainer['form_error_helper']; 
         $emailer = $this->serviceContainer['email_notification'];
-
+        $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                 ->getSocialMediaLinks();
+        $this->load->library('parser');
         $form = $formFactory->createBuilder('form', null, array('csrf_protection' => false))
                             ->setMethod('POST')
                             ->add('email', 'text', array('required' => false, 'label' => false, 'constraints' => $rules))
@@ -181,13 +154,18 @@ class Register extends MY_Controller
 
                 $this->config->load('email', true);
                 $imageArray = $this->config->config['images'];
-                $message = $this->load->view('templates/landingpage/lp_subscription_email', array(), true);
-                
+                $parseData = [
+                    'baseUrl' => base_url(),
+                    'facebook' => $socialMediaLinks['facebook'],
+                    'twitter' => $socialMediaLinks['twitter'],
+                ];
+
+                $message = $this->parser->parse('emails/newsletter-subscription' , $parseData, true);
                 $emailer->setRecipient($subscriber->getEmail());
                 $emailer->setSubject($this->lang->line('subscription_subject'));
                 $emailer->setMessage($message, $imageArray);
-                $emailer->sendMail();
-                
+                $emailer->queueMail();
+
                 $data['content'] = 'You have successfully Subscribed!';
             }
             else{

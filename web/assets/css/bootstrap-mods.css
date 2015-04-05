@@ -53,6 +53,11 @@ a:focus {
   width: 100%;
 }
 
+.container.old-page-container {
+  max-width: 980px;
+  width: 100%;
+}
+
 header {
   min-width: inherit !important;
 }
@@ -124,21 +129,6 @@ a.tooltips span {
   font-size: 0.85em;
 }
 
-.ui-dialog-title {
-    margin-right: 3%;
-    vertical-align: middle;
-    width: 90% !important;
-}
-
-.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-    left: 25% !important;
-    width: 50% !important;
-}
-
-.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close {
-    position: absolute;
-}
-
 .alert.ui-dialog-content.ui-widget-content b {
     font-weight: normal;
 }
@@ -202,6 +192,10 @@ a.tooltips span {
         float: none !important;
         text-align: center;
     }
+    .old-page-container .prob_search_box, .prob_search_box {
+        float: none;
+        width: auto;
+    }
 }
 @media only screen and (max-width : 62em) { /*** 992px ***/
   .prod_con_gal {
@@ -228,19 +222,12 @@ a.tooltips span {
         padding-right: 0;
     }
 }
+
 @media only screen and (min-width: 481px) {
   /*** modal ***/
     #simplemodal-container {
         width: 60% !important;
     }
-}
-
-@media only screen and (max-width: 480px) {
-    /*** UI dialog box ***/
-  .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-dialog-buttons.ui-draggable {
-    left: 10% !important;
-    width: 80% !important;
-  }
 }
 
 @media only screen and (max-width : 20em) {

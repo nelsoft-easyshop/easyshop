@@ -35,14 +35,14 @@ class EsVendorSubscribeRepository extends EntityRepository
                  ->setMaxResults($perPage);
         $result = $qbResult->getResult();
 
-        return array(
-                    'count' =>  $totalCount,
-                    'followers' => $result
-                );
+        return [
+            'count' =>  $totalCount,
+            'followers' => $result
+        ];
     }
 
     /**
-     * Get all user following by the specific user
+     * Get all user followed by the specific user
      * @param  integer  $userId
      * @param  integer $offset
      * @param  integer $perPage
@@ -62,10 +62,10 @@ class EsVendorSubscribeRepository extends EntityRepository
                  ->setMaxResults($perPage);
         $result = $qbResult->getResult();
 
-        return array(
-                    'count' =>  $totalCount,
-                    'followers' => $result
-                );
+        return [
+            'count' =>  $totalCount,
+            'following' => $result
+        ];
     }
 
     /**

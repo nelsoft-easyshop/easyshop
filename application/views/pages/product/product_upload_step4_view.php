@@ -7,8 +7,10 @@
     <link  rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.upload-step4.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>
 
+
 <div class="container">
-    <div class="seller_product_content row">
+    <div class="seller_product_content">
+
         <div class="inner_seller_product_content">
             <h2 class="f24">Sell an Item</h2>
                 <div class="sell_steps sell_steps4">
@@ -60,82 +62,44 @@
             <input type="hidden" name="is_edit" value="true">
         <?php echo form_close();?>
 
-<div class="container step4_section mrgn-top-35">
-    <div class="seller_product_content">
-        <div class="row">
-            <div class="step4_header col-xs-12">
-                <h5>How you will be paid</h5>
-            </div>
-            <div class="clear"></div>
-            <div class="step4_content step4_paysel pd-tb-15">
-                <?php if( !empty($productBillingInfo) ):?>
-                <div class="step4_bankdetails col-sx-12 col-sm-7 col-md-7 pd-bttm-15">
-                    <div class="row pd-top-15">
-                        <div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank account name:</strong></div>
-                        <div class="col-xs-9 col-sm-8 col-md-8"><?=html_escape($productBillingInfo['bankAccountName']);?></div>
-                    </div>
-                    <div class="row pd-top-15">
-                        <div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank account number:</strong></div>
-                        <div class="col-xs-9 col-sm-8 col-md-8"><?=html_escape($productBillingInfo['bankAccountNumber']);?></div>
-                    </div>
-                    <div class="row pd-top-15">
-                        <div class="col-xs-3 col-sm-4 col-md-4"><strong>Bank name:</strong></div>
-                        <div class="col-xs-9 col-sm-8 col-md-8"><?=html_escape($productBillingInfo['bankName']);?></div>
-                    </div>
-                </div>
-                <?php else:?>
-                <div class="col-xs-12">
-                    <h4><p>No Bank Details.</p></h4> 
-                </div>
-                <?php endif;?>
-                <?php if( (int)$product->getIsCod() === 1 ):?>
-                <div class="step4-cod col-sx-12 col-sm-5 col-md-5">
-                    <span class="cod-images"></span>
-                    <div class="cod-button">
-                        <span>Cash on Delivery</span>
-                    </div>
-                </div>
-                <?php endif;?>
-                <div class="clear"></div>
-            </div>
-            <div class="clear"></div>
-        </div>
-    </div>
-</div>
 
-<div class="container step4_section mrgn-top-35">
-    <div class="seller_product_content">
-        <div class="row">
-            <div class="step4_header col-xs-12">
+<div class="container mrgn-top-35">
+    <div class="seller_product_content step4_section">
+        <div class="">
+            <div class="step4_header">
                 <h5>Product Delivery</h5>
             </div>
             <div class="clear"></div>
             <div class="step4_content step4_delivery col-xs-12 pd-top-15">
                 <div class="row">
-                    <div class="col-sx-12 col-sm-12 col-md-9">
-                        <div class="row">
-                            <?php if( (int)$product->getIsMeetup() === 1 ):?>
-                                <div class="col-sx-12 col-sm-12 col-md-3 pd-bttm-15">
-                                    <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-                                    <span class="pd-lr-10">For meetup</span>
-                                </div>
-                            <?php endif;?>
-            
-                            <?php if( $shipping_summary['is_delivery'] ):?>
-                                <div class="col-sx-12 col-sm-12 col-md-3">
-                                    <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
-                                    <span class="pd-lr-10">For delivery</span>
-                                </div>
-                            <?php endif; ?>
+                    <?php if( (int)$product->getIsMeetup() === 1 ):?>
+                        <div class="col-xs-12 col-sm-12 col-md-3 pd-bttm-15">
+                            <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                            <span class="pd-lr-10">For meetup</span>
                         </div>
-                    </div>
+                    <?php endif;?>
+    
+                    <?php if( $shipping_summary['is_delivery'] ):?>
+                        <div class="col-xs-12 col-sm-12 col-md-3 pd-bttm-15">
+                            <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                            <span class="pd-lr-10">For delivery</span>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if( (int)$product->getIsCod() === 1 ):?>
+                    
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="ok-btn glyphicon glyphicon-ok pd-8-12"></div> 
+                            <span class="pd-lr-10">Cash-on-Delivery</span>
+                        </div>
+                    
+                    <?php endif;?>
                 </div>
 
                 <?php if( $shipping_summary['is_delivery'] ):?>
                     <div class="clear"></div>
                     <div>
                         <div class="step4_delivery_sub">
-                            <div class="clear"></div>
                             <?php if( $shipping_summary['is_freeshipping'] ):?>
                                 <p>Free shipping</p>
                             <?php elseif( $shipping_summary['has_shippingsummary'] ):?>
@@ -146,11 +110,11 @@
                                         <div class="pd-top-4">
                                             <?php foreach( $garr['location'] as $price=>$locarr ):?>
                                             <div class="row col-sx-mrgn">
-                                                <div class="col-sx-12 col-sm-4 col-md-4">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
                                                     <span>&#8369;</span>
                                                     <div class="delivery-sub-box step4-price"><?=html_escape($price)?></div>
                                                 </div>
-                                                <div class="col-sx-12 col-sm-8 col-md-8">
+                                                <div class="col-xs-12 col-sm-8 col-md-8">
                                                     <span class="display-ib line-height">Locations:</span>
                                                     <div class="delivery-sub-box width-75p">
                                                         <?php foreach($locarr as $locID):?>
@@ -162,8 +126,7 @@
                                             <?php endforeach;?>
                                             <div class="clear"></div>
                                             <div class="step4_attr">
-                                                
-                                                <div class="col-sx-12 col-sm-12 col-md-12">
+                                                <div class="">
                                                     <?php if( !$attr['has_attr'] ):?>
                                                         <p>&bull; All Combinations</p>
                                                     <?php else:?>
@@ -176,6 +139,7 @@
                                                         <?php endforeach; ?>
                                                     <?php endif;?>
                                                 </div>
+                                                <div class="clear"></div>
                                             </div>
                                             <div class="clear"></div>
                                         </div>
@@ -191,12 +155,13 @@
     </div>
 </div>
 
-        <div style="margin-top:3em;">
-            <div>
-                <div class="container step4_section" style="max-height:100%; border:1px solid #CECECE;padding:0 0 16px 0;">
+        <div class="mrgn-top-30">
+            <div class="container">
+                <div class="step4_section">
                     <div class="step4_header col-xs-12">
                         <h5>Product Preview</h5>
                     </div>
+                    <div class="clear"></div>
                     <?=$productView; ?>
                 </div>
             </div>
@@ -207,8 +172,8 @@
 <div class="container">
     <div class="seller_product_content">
         <div class="row">
-            <div class="col-sx-12 col-sm-12 col-md-12 text-center">
-                <div class="pd-tb-20">
+            <div class="col-sx-12 text-center">
+                <div class="pd-tb-45">
                     <a href="/sell/step1" target="_blank" class="orange_btn3 vrtcl-mid">Sell another Item</a>
                     <a href="/item/<?=$product->getSlug();?>" target="_blank" class="btn btn-default">View Product</a>
                 </div>

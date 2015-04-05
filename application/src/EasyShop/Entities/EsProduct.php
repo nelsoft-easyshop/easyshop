@@ -53,7 +53,7 @@ class EsProduct
     /**
      * @var string
      *
-     * @ORM\Column(name="condition", type="string", length=255, nullable=true)
+     * @ORM\Column(name="`condition`", type="string", length=255, nullable=true)
      */
     private $condition = '';
 
@@ -345,6 +345,13 @@ class EsProduct
     /**
      *  @var integer
      *
+     *  isDelete value for deleted items
+     */
+    const DISABLE = 2;
+
+    /**
+     *  @var integer
+     *
      *  isDraft value for drafted items ( item can be restored )
      */
     const DRAFT = 1;
@@ -373,6 +380,7 @@ class EsProduct
     const SEARCH_SORT_HOT = 'HOT';
     const SEARCH_SORT_NAME = 'NAME';
 
+    const MINIMUM_PRODUCT_NAME_LEN = 3; 
 
     /**
      * @var integer

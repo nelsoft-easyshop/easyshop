@@ -1,10 +1,12 @@
-<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?> 
     <link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href="/assets/css/chosen.min.css" rel="stylesheet"  media="screen"/>
+    <link type="text/css" href="/assets/css/chosen.min.css" rel="stylesheet"  media="screen"/> 
     <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php else: ?>
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-primary.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>
+
+<link type="text/css" href='/assets/css/jstree/style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
 <section class="section-dashboard ">
     <div class="container container-dashboard">
@@ -17,7 +19,9 @@
                     <div id="my-store-menu">
                         <ul class="sidebar-submenu">
                             <a href="#transactions"  class="aaa id-transactions-trigger"><li id="transactions-trigger-li"class="f-li ms-f">Transactions</li></a>
-                            <a href="#setup" id="store-setup-tab"><li class="f-li">Store Setup</li></a>
+                            <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
+                            <a href="#customize-category" id="customize-category-tab"><li class="f-li ms-f">Customize Category</li></a>
+                            <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
                         </ul>
                     </div>
                     <a><li id="my-account-menu-trigger" class="ml-li">My Account <i class="a icon-control-down toggle-down pull-right"></i></li></a>
@@ -31,6 +35,30 @@
                         </ul>
                     </div>
                 </ul>
+                
+                <div class="easy-point-container">
+                    <div class="easy-point-title">
+                        easy points
+                        <a href="/easypoints" target="_blank">
+                            <span class="easy-point-question">?</span>
+                        </a>
+                        <p class="easy-point-tooltip">
+                            Whats this?
+                        </p>
+                    </div>
+                    <div class="current-point-container">
+                        <div class="border-bttm">
+                            <span class="current-point-title">Current points</span>
+                            <span class="current-points"><?php echo $totalUserPoint ?></span>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <ul class="easy-point-content">
+                    </ul>
+                    <div class="text-center point-loader">
+                        <img src="<?php getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
+                    </div>
+                </div>
             </div>
             <div class="mobile-dashboard-menu">
                 <div class="row-fluid row-menu-mobile-res">
@@ -50,6 +78,8 @@
                     <ul class="my-store-menu-mobile-ul">
                         <a class="ms-trans dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
                         <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
+                        <a class="ms-customize dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-customize">Customize Category</li></a>
+                        <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
                     </ul>
                 </div>
                 <div class="my-account-menu-mobile-cont">
@@ -74,6 +104,12 @@
                     </div>
                     <div id="setup">
                         <?php include("dashboard-store-setup.php");?>
+                    </div>
+                    <div id="customize-category">
+                        <?php include("dashboard-customize-category.php");?>
+                    </div>
+                    <div id="product-management">
+                        <?php include("dashboard-product-management.php");?>
                     </div>
                     <div id="personal-information">
                         <?php include("dashboard-personal-info.php");?>
@@ -112,7 +148,7 @@
     <?=form_open('/sell/edit/step2', ['id' => 'formEdit']); ?>
         <input type="hidden" id="editTextProductId" name="p_id" value="" />
         <input type="hidden" id="editTextCategoryId" name="hidden_attribute" value="" />
-        <input type="hidden" id="editTextCategoryName" name="othernamecategory" value="" />"
+        <input type="hidden" id="editTextCategoryName" name="othernamecategory" value="" />
     <?=form_close();?> 
 </div>
 
@@ -121,6 +157,7 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.ui.touch-punch.min.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.raty.min.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
@@ -129,9 +166,12 @@
     <script type="text/javascript" src='/assets/js/src/vendor/chosen.jquery.min.js' ></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/jstree.js'></script>
     <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/jquery.nicescroll.min.js?ver=<?=ES_FILE_VERSION?>"></script> 
     <script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
-    <script type='text/javascript'  src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script> 
+    <script type='text/javascript' src="/assets/js/src/dashboard-express-edit.js?ver=<?=ES_FILE_VERSION?>"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.dashboard-primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>

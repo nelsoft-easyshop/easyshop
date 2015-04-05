@@ -44,10 +44,11 @@ if(ENVIRONMENT == 'development'){
     $fileVersion = date('Ymdhis');
 }
 else{
-    $fileVersion = '9.7.0';
+    $fileVersion = '17.1.0';
 }
 define('ES_FILE_VERSION',$fileVersion);
 define('ES_ENABLE_CHRISTMAS_MODS', false);
+define('ES_ENABLE_SOCKETIO', true);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

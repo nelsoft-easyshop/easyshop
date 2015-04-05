@@ -8,6 +8,7 @@ use EasyShop\Entities\EsVerifcode as EsVerifcode;
 use Easyshop\Entities\EsMember;
 use Easyshop\Entities\EsStoreColor as EsStoreColor;
 use EasyShop\Entities\EsBanType as EsBanType;
+use EasyShop\Entities\EsPointType as EsPointType;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
@@ -123,6 +124,21 @@ class AccountManager
      */
     private $hashUtility;
     
+    
+    /**
+     * The social media manager
+     *
+     * @var EasyShop\SociaMedia\SocialMediaManager
+     */
+    private $socialMediaManager;
+    
+    /**
+     * Point Tracker
+     *
+     * @var EasyShop\PointTracker\PointTracker
+     */
+    private $pointTracker;
+    
     /**
      * Intialize dependencies
      *
@@ -140,7 +156,9 @@ class AccountManager
                                 $encrypter,
                                 $configLoader,
                                 $languageLoader,
-                                $hashUtility)
+                                $hashUtility,
+                                $pointTracker,
+                                $socialMediaManager)
     {
         $this->em = $em;
         $this->bcryptEncoder = $bcryptEncoder;
@@ -155,7 +173,9 @@ class AccountManager
         $this->encrypter = $encrypter;
         $this->configLoader = $configLoader;
         $this->languageLoader = $languageLoader;
-        $this->hashUtility = $hashUtility;
+        $this->hashUtility = $hashUtility; 
+        $this->pointTracker = $pointTracker; 
+        $this->socialMediaManager = $socialMediaManager; 
     }
 
     /**
@@ -208,12 +228,16 @@ class AccountManager
             $emailAddress = $member->getEmail();
             $username = $member->getUserName();
             $emailSecretHash = sha1($emailAddress.time());
-
+            $socialMediaLinks = $this->socialMediaManager
+                                     ->getSocialMediaLinks();
             $parseData = [
                 'user' => $username,
                 'hash' => $this->encrypter
-                            ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
-                'site_url' => site_url('register/email_verification')
+                               ->encode($emailAddress.'|'.$username.'|'.$emailSecretHash),
+                'site_url' => site_url('register/email_verification'),
+                'baseUrl' => base_url(),
+                'facebook' => $socialMediaLinks["facebook"],
+                'twitter' => $socialMediaLinks["twitter"],
             ];
             
             if($excludeVerificationLink){
@@ -221,7 +245,7 @@ class AccountManager
             }
             
             $imageArray = $this->configLoader->getItem('email', 'images');  
-            $message = $this->parser->parse('templates/landingpage/lp_reg_email' , $parseData,true);
+            $message = $this->parser->parse('emails/email-verification' , $parseData,true);
             
             $this->emailNotification->setRecipient($emailAddress);
             $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
@@ -230,7 +254,7 @@ class AccountManager
              * Mobile verification can be added here (unused for the time being)
              */
             $mobileCode = $this->hashUtility->generateRandomAlphaNumeric(6);
-            if($this->emailNotification->sendMail()){
+            if($this->emailNotification->queueMail()){
                 if($isNew){
                     $response['isSuccessful'] = $verifcodeRepository->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode) ? true : false;
                 }
@@ -305,7 +329,7 @@ class AccountManager
             }
             else{
                 $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                               ->findOneBy(['username' => $validatedUsername]);
+                               ->findOneByUsernameCase($validatedUsername);
             }
             
             if($member){
@@ -337,13 +361,12 @@ class AccountManager
                     $member = null;    
                 }
                 else {
-                    $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
-                    $member->setLastLoginIp($this->httpRequest->getClientIp());
-                    $member->setLoginCount($member->getLoginCount() + 1);
-                    $this->em->flush(); 
-                    $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                                        ->getHydratedMember($validatedUsername, $asArray);                    
-                }                                                                    
+                    $member = $this->updateUserLoginDetails($member);
+                    $member = !$asArray 
+                              ? $member
+                              : $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                   ->getHydratedMember($validatedUsername, $asArray);
+                }
             }
         }
 
@@ -351,7 +374,30 @@ class AccountManager
             'errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
             'member' => $member
         ];
-    
+    }
+
+    /**
+     * Update user login details
+     * @param  EasyShop\Entities\EsMember $member
+     * @return EasyShop\Entities\EsMember
+     */
+    public function updateUserLoginDetails($member)
+    {
+        $newUserSession = $this->generateUsersessionId($member->getIdMember()); 
+
+        $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
+        $member->setLastLoginIp($this->httpRequest->getClientIp());
+        $member->setLoginCount(bcadd($member->getLoginCount(), 1));
+        $member->setFailedLoginCount(0);
+        $member->setUsersession($newUserSession);
+        $this->em->flush();
+        $loggedCount = $this->em->getRepository('EasyShop\Entities\EsPointHistory')
+                                ->countUserPointActivity($member->getIdMember(), EsPointType::TYPE_LOGIN, date("Y-m-d"));
+        if($loggedCount <= 0){
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_LOGIN);
+        }
+
+        return $member;
     }
     
     /**
@@ -412,6 +458,8 @@ class AccountManager
             
             $this->em->persist($member);
             $this->em->flush();
+
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_REGISTER);
         }
 
         return ['errors' => $this->formErrorHelper->getFormErrors($form),
@@ -608,18 +656,21 @@ class AccountManager
         catch(\Exception $e){
             return false;
         }
-        
+        $socialMediaLinks = $this->socialMediaManager
+                                 ->getSocialMediaLinks();
         $parseData = [
             'username' => $member->getUsername(),
-            'trigger' => $hash,
+            'baseUrl' => base_url(),
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+            'updatePasswordLink' => base_url().'login/updatePassword?confirm='.$hash,
         ];
-        $imageArray = [ "/assets/images/img_logo.png" ];  
-
-        $message = $this->parser->parse('templates/email_forgot_pass' , $parseData,true);
+        $imageArray = $this->configLoader->getItem('email', 'images');  
+        $message = $this->parser->parse('emails/password-reset' , $parseData,true);
         $this->emailNotification->setRecipient($member->getEmail());
         $this->emailNotification->setSubject('Password reset on Easyshop.ph');
         $this->emailNotification->setMessage($message, $imageArray);    
-        return $this->emailNotification->sendMail();
+        return $this->emailNotification->queueMail();
     }
     
     

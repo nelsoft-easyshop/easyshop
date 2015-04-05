@@ -1,6 +1,12 @@
 
+<div id="express-edit-section">
+    <center class="loading-image"><img src="<?php echo getAssetsDomain(); ?>assets/images/loading/preloader-whiteBG-small.gif" alt="Please wait !!!"></center>
+    <div class="express-edit-section-content">
+    </div>
+</div>
+
 <?php foreach ($products as $product): ?>
-<div id="item-list-<?=$product->getIdProduct(); ?>" class="items-list-container">
+<div id="item-list-<?=$product->getIdProduct(); ?>" class="items-list-container item-list-<?=$product->getIdProduct(); ?>">
     <div class="row">
         <div class="col-md-12">
             <div class="item-list-panel">
@@ -8,7 +14,8 @@
                     <tbody>
                         <tr>
                             <td class="td-image-cont" width="20%" >
-                                <div class="div-product-image" style="background: url(<?php echo getAssetsDomain().$product->directory.$product->imageFileName?>) center no-repeat; background-cover: cover; background-size: 90%;">
+                                <div class="div-product-image" >
+                                    <img src="<?php echo getAssetsDomain().$product->directory.$product->imageFileName?>" class="image-primary">
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>
                                     <div class="pin-discount">
                                         <?php echo number_format($product->getDiscountPercentage(),0,'.',',');?>%
@@ -16,7 +23,7 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td class="td-meta-info">
+                            <td class="td-meta-info" >
                                 <p class="item-list-name">
                                     <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT): ?>
                                             <?php if(strlen($product->getName()) > 40): ?>
@@ -39,18 +46,23 @@
                                     <?php endif; ?>
                                 </p>
                                 <p class="item-amount">
+                                    <?php $priceFontStyle = strlen((string)$product->getOriginalPrice()) > 12 ? "font-size:13px;" : ""; ?>
                                     <?php if((float)$product->getDiscountPercentage() > 0):?>
-                                    <span class="item-original-amount">P<?=number_format($product->getOriginalPrice(),2,'.',',');?></span>
+                                        <span class="item-original-amount" style="<?php echo $priceFontStyle; ?>">
+                                            P<?=number_format($product->getOriginalPrice(),2,'.',',');?>
+                                        </span>
                                     <?php endif; ?>
-                                    <span class="item-current-amount">P<?=number_format($product->getFinalPrice(),2,'.',',');?></span></span>
+                                    <span class="item-current-amount" style="<?php echo $priceFontStyle ?>">
+                                        P<?=number_format($product->getFinalPrice(),2,'.',',');?>
+                                    </span>
                                 </p>
                                 <div class="div-meta-description">
                                     <div class="row">
-                                        <div class="col-xs-4">
+                                        <div class="col-md-4">
                                             <span class="strong-label">Sold Item(s) : </span> <?=$product->soldCount; ?>
                                         </div>
-                                        <div class="col-xs-8 col-stock">
-                                            <span class="strong-label">Available Stock(s) : </span> <?=$product->availableStock; ?>
+                                        <div class="col-md-8 col-stock">
+                                            <span class="strong-label">Available Stock(s) : </span> <span class="stock-number"> <?=$product->availableStock; ?></span>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -77,13 +89,18 @@
                                     <div class="row row-action-mobile">
                                         <div class="col-md-12">
                                             <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
-                                            <button class="btn btn-action-edit btn-edit-product"
-                                            data-productid="<?=$product->getIdProduct(); ?>"
-                                            data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
-                                            data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>"
-                                            >
-                                                <i class="icon-edit"></i>edit
-                                            </button>
+                                                <?php if((int)$product->getIsDraft() === EasyShop\Entities\EsProduct::ACTIVE):?>
+                                                    <button class="btn btn-action-edit btn-edit-product" data-slug="<?=$product->getSlug(); ?>">
+                                                        <i class="icon-edit"></i>edit
+                                                    </button>
+                                                <?php else: ?> 
+                                                    <button class="btn btn-action-edit btn-edit-draft-product" 
+                                                        data-productid="<?=$product->getIdProduct(); ?>"
+                                                        data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
+                                                        data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>">
+                                                        <i class="icon-edit"></i>edit
+                                                    </button>
+                                                <?php endif;?> 
                                             <?php else: ?>
                                             <button data-id=<?=$product->getIdProduct(); ?> class="btn btn-action-delete btn-restore">
                                                 <i class="icon-delete"></i>Restore
@@ -106,13 +123,20 @@
                                 </div>
                                 <p>Total Reviews : <?=$product->reviewCount; ?></p>
                                 <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::ACTIVE): ?>
-                                <button class="btn btn-action-edit btn-edit-product"
-                                data-productid="<?=$product->getIdProduct(); ?>"
-                                data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
-                                data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>"
-                                >
-                                    <i class="icon-edit"></i>edit
-                                </button>
+                                    <?php if((int)$product->getIsDraft() === EasyShop\Entities\EsProduct::ACTIVE):?>
+                                        <button class="btn btn-action-edit btn-edit-product" 
+                                            data-slug="<?=$product->getSlug(); ?>"
+                                            data-pid="<?=$product->getIdProduct();?>">
+                                            <i class="icon-edit"></i>edit
+                                        </button>
+                                    <?php else: ?>
+                                        <button class="btn btn-action-edit btn-edit-draft-product" 
+                                            data-productid="<?=$product->getIdProduct(); ?>"
+                                            data-categoryid="<?=$product->getCat()->getIdCat(); ?>"
+                                            data-othercategoryname="<?=html_escape($product->getCatOtherName()); ?>">
+                                            <i class="icon-edit"></i>edit
+                                        </button>
+                                    <?php endif;?>
                                 <?php else: ?>
                                 <button data-id=<?=$product->getIdProduct(); ?> class="btn btn-action-delete btn-restore">
                                     <i class="icon-delete"></i>Restore
