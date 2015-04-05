@@ -52,6 +52,11 @@ class EsProductSubscriber implements EventSubscriber
         if ($event->hasChangedField('lastmodifieddate')) {
             $this->changeSet['lastmodifieddate'] = $entity->getLastmodifieddate();
         }
+        
+        if ($event->hasChangedField('isDelete')) {
+            $this->changeSet['isDelete'] = $entity->getIsDelete();
+        }
+        
     }
 
     /**
@@ -77,27 +82,29 @@ class EsProductSubscriber implements EventSubscriber
             if(count($this->changeSet) > 0){
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::PRODUCT_UPDATE);
-                $phraseArray = $this->languageLoader
-                                    ->getLine($activityType->getActivityPhrase());
-
-                $phraseValue = "";
+                $jsonString = "";
+                $activity = new \EasyShop\Activity\ActivityTypeProductUpdate();     
+                $actionType = null;
                 if ((int)$entity->getIsDelete() === (int)EsProduct::FULL_DELETE) {
-                    $phraseValue = $phraseArray['trash'];
+                    $actionType = \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_FULL_DELETE;
                 }
-                elseif ((int)$entity->getIsDelete() === (int)EsProduct::DELETE) {
-                    $phraseValue = $phraseArray['delete'];
+                else if ((int)$entity->getIsDelete() === (int)EsProduct::DELETE) {
+                    $actionType = \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_SOFT_DELETE;
                 }
-                elseif ((int)$entity->getIsDelete() === (int)EsProduct::ACTIVE
-                        && (int)$entity->getIsDraft() === (int)EsProduct::ACTIVE) { 
-                    $phraseValue = $phraseArray['update'];
+                else if ((int)$entity->getIsDelete() === (int)EsProduct::ACTIVE &&
+                        (int)$entity->getIsDraft() === (int)EsProduct::ACTIVE) { 
+                    $actionType = \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_UPDATE;
+                    if (isset($this->changeSet['isDelete'])) {
+                        $actionType = \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_RESTORE;
+                    }
                 }
-                $phrase = $this->activityManager
-                               ->constructActivityPhrase(['name' => $entity->getName()],
-                                                         $phraseValue,
-                                                         'EsProduct');
-                if($phrase !== ""){
+                if($actionType !== null){
+                    $jsonString = $activity->constructJSON($entity->getIdProduct(), $actionType);
+                }
+                
+                if($jsonString !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $entity->getMember());
+                       ->createAcitivityLog($activityType, $jsonString, $entity->getMember());
                 }
            }
         }
