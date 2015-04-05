@@ -2,19 +2,23 @@
 
 namespace EasyShop\Activity;
 
-class ActivityTypeInformationUpdate implements ActivityTypeInterface
+class ActivityTypeInformationUpdate
 {
     /**
-     * {@inheritdoc}
+     * Build JSON String contract
+     *
+     * @param mixed $changeSet
+     * @return string
      */
     public function constructJSON($changeSet)
     {
         $fields = [];
         foreach($changeSet as $fieldName => $fieldValue){
-            $field = new ActivityField();
-            $field->setNewValue($fieldValue);
-            $field->setFieldName($fieldName);
-            $fields[] = $field->toArray();
+            $field = [
+                'fieldName' => $fieldName,
+                'fieldValue' => $fieldValue,
+            ];
+            $fields[] = $field;
         }
 
         return json_encode($fields);
