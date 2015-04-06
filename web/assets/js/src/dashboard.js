@@ -2694,14 +2694,10 @@
         });
         
         var $listContainer = listItem.closest('.category-items-holder');
-        var listContainer = $listContainer[0];
-        var isContainerScrollable = listContainer.scrollHeight > listContainer.clientHeight;
-        if(isContainerScrollable === false){
-           loadMoreCategoryProducts($listContainer, true); 
-        }
+        checkContainerScrollable($listContainer);
     });
     
-    
+
     $(document.body).on('keypress', '.search-category', function(event){
         if ( event.which == 13 ) {
             event.preventDefault();
@@ -3033,7 +3029,7 @@
             }
         }
     }
-    
+
     function createCustomizedCategoryModal(div)
     {
         div.modal({
@@ -3043,10 +3039,18 @@
         var $allProductList = div.find('.all-product-list');              
         var $categoryProductList = div.find('.category-product-list');
         $categoryProductList.sortable({
-            connectWith: $allProductList
+            connectWith: $allProductList,
+            receive: function( event, ui ) {
+                var $listContainer = $allProductList.closest('.category-items-holder');
+                checkContainerScrollable($listContainer);
+            }
         });                 
         $allProductList.sortable({
-            connectWith: $categoryProductList
+            connectWith: $categoryProductList,
+            receive: function( event, ui ) {
+                var $listContainer = $categoryProductList.closest('.category-items-holder');
+                checkContainerScrollable($listContainer);
+            }
         });
         div.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
         var addContentHeight = div.outerHeight();
@@ -3080,6 +3084,15 @@
             $(".my-category-modal-sm").css("width", modalCategoryModalSmWidth+"px").css("height",modalDeleteHeight+"px");
         }
     });
+    
+    function checkContainerScrollable($categoryItemHolder)
+    {
+        var listContainer = $categoryItemHolder[0];
+        var isContainerScrollable = listContainer.scrollHeight > listContainer.clientHeight;
+        if(isContainerScrollable === false){
+           loadMoreCategoryProducts($categoryItemHolder, true); 
+        }  
+    }
 
     
     $(document).ready(function(){
