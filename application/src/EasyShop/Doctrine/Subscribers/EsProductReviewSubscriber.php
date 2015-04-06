@@ -66,23 +66,23 @@ class EsProductReviewSubscriber implements EventSubscriber
             $member = $entity->getMember();
             $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                ->find(EsActivityType::FEEDBACK_UPDATE);
-            $phraseArray = $this->languageLoader
-                                ->getLine($activityType->getActivityPhrase());
+            $actionType = null;
             if((int)$entity->getPReviewid() !== EsProductReview::PRODUCT_REVIEW_DEFAULT){
-                $unparsedPhrase = $phraseArray['product']['reply'];
+                $actionType = \EasyShop\Activity\ActivityTypeFeedbackUpdate::ACTION_FEEDBACK_PRODUCT_REPLY;
             }
             else{
-                $unparsedPhrase = $phraseArray['product']['review'];
+                $actionType = \EasyShop\Activity\ActivityTypeFeedbackUpdate::ACTION_FEEDBACK_PRODUCT;
             }
 
-            $phrase = $this->activityManager
-                           ->constructActivityPhrase(['name' => $product->getName()],
-                                                     $unparsedPhrase,
-                                                     'EsProduct');
-            if($phrase !== ""){
+            if($actionType !== null){
+                $activity = new \EasyShop\Activity\ActivityTypeFeedbackUpdate();
+                $data = [
+                    'productId' => $product->getIdProduct(),
+                ];
+                $jsonData = $activity->constructJSON($data, $actionType);
                 $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                   ->createAcitivityLog($activityType, $phrase, $member);
-            } 
+                   ->createAcitivityLog($activityType, $jsonData, $member);
+            }
         }
     }
 

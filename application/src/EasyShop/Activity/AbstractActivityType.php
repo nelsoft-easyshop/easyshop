@@ -12,7 +12,7 @@ abstract class AbstractActivityType
      * @param integer $action
      * @return string
      */
-    public function constructJSON($fields, $action)
+    public function constructJSON($fields, $action = null)
     {
         if(is_array($fields) === false){
             throw new \Exception('First parameter must be an array');
@@ -21,6 +21,9 @@ abstract class AbstractActivityType
         $data = [];
         if($this->isUsableAction($action)){
             $data = $fields;
+            if($action !== null){
+                $data['action'] = $action;
+            }
         }
         
         return json_encode($data);
