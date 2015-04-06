@@ -185,7 +185,7 @@
                         <div class="form-group">
 
                             <label for="points-total">Your Current EasyPoints : <?=$userPoints;?></label>
-                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
+                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block"  onkeypress="return isNumberKey(event)" placeholder="Enter the amount of points you want to use"/>
      
                         </div>
                         <div class="form-group">
