@@ -147,7 +147,7 @@
                     var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                     var stateRegionDropDown = $("#deliver_stateregion");
                     var dropDownTemplate = "";
-
+                    
                     /**
                      * Turn stateRegion object into an array and sort alphabetically 
                      */
@@ -163,18 +163,21 @@
                     $.each(stateRegionArray, function(index, stateRegion) {
                         dropDownTemplate += '<option class="echo" value="'+stateRegion.id+'">' + stateRegion.name + '</option>';
                     });  
-                    
+
                     stateRegionDropDown.append(dropDownTemplate);                         
                     stateRegionDropDown.val(consigneeStateRegion);
                     var cityDropDown = $("#delivery_city");
                     dropDownTemplate = "";
                     if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '') {
                         var deliveryStateRegionId = parseInt(serverResponse.consigneeStateRegionId, 10);
-                        $.each(cityLookupArray[deliveryStateRegionId], function(index, city){
-                            dropDownTemplate += '<option class="echo" value="'+city.id+'">' + city.name + '</option>';
-                        });
-                        cityDropDown.append(dropDownTemplate);                                                
+                        if(typeof cityLookupArray[deliveryStateRegionId] !== 'undefined'){
+                            $.each(cityLookupArray[deliveryStateRegionId], function(index, city){
+                                dropDownTemplate += '<option class="echo" value="'+city.id+'">' + city.name + '</option>';
+                            });
+                            cityDropDown.append(dropDownTemplate);  
+                        }
                     }
+                    
                     cityDropDown.val(serverResponse.consigneeCityId);
                     var lat  = (serverResponse.address !== null) ? serverResponse.address.lat : 0;
                     var lng = (serverResponse.address !== null) ? serverResponse.address.lng : 0;
