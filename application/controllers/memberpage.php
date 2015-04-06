@@ -755,6 +755,7 @@ class Memberpage extends MY_Controller
                         $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
                         $imagePath = ltrim($imagePath, '.');
                         if(strtolower(ENVIRONMENT) === 'development'){
+                            $imagePath = $imagePath[0] !== '/' ? '/'.$imagePath : $imagePath;
                             $imageArray[] = $imagePath;
                             $parseData['primaryImage'] = $primaryImage->getFilename();
                         }
