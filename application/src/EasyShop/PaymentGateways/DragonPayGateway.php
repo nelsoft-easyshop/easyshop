@@ -384,7 +384,7 @@ class DragonPayGateway extends AbstractGateway
             $response['status'] = PaymentService::STATUS_SUCCESS;
             $response['message'] = 'Your payment has been completed through Dragon Pay. 
                 Please follow the instructions sent to your email to complete the payment. 
-                Your DragonPay reference number: '. $params['refNo'] .' and EasyShop Transaction ID: '. $response['txnId'] '.';
+                Your DragonPay reference number: '. $params['refNo'] .' and EasyShop Transaction ID: '. $response['txnId'] . '.';
         }
         else{
             $response['status'] = PaymentService::STATUS_FAIL;
