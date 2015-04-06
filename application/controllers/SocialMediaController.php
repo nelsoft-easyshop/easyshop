@@ -343,11 +343,12 @@ class SocialMediaController extends MY_Controller
         $socialMediaProvider = $this->entityManager
                                     ->getRepository('EasyShop\Entities\EsSocialMediaProvider')
                                     ->find($this->input->post('provider'));
+        $gender = $this->input->post('gender') ? $this->input->post('gender') : 'M';
         if ($socialMediaProvider) {
             $result = $this->socialMediaManager->registerAccount(
                                                     $username,
                                                     $this->input->post('fname'),
-                                                    $this->input->post('gender'),
+                                                    $gender,
                                                     $this->input->post('email'),
                                                     true,
                                                     $this->input->post('id'),
