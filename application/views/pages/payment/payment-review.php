@@ -81,7 +81,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="mobile">Mobile Number <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" value="<?=isset($address['mobile']) ? '0'.html_escape($address['mobile']) : ''; ?>" id="mobile" class="form-es-control form-es-control-block" readonly />
+                                <input type="text" value="<?=isset($address['mobile']) ? '0'.html_escape($address['mobile']) : ''; ?>" id="mobile" class="form-es-control form-es-control-block" maxlength="11" onkeypress="return isNumberKey(event , false)" readonly />
                                 <span class="error-span error-mobile_number error"></span>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="telephone">Telephone Number </label>
-                                <input type="text" value="<?=isset($address['telephone']) ? html_escape($address['telephone']) : ''; ?>" id="telephone" class="form-es-control form-es-control-block" readonly />
+                                <input type="text" value="<?=isset($address['telephone']) ? html_escape($address['telephone']) : ''; ?>" id="telephone" class="form-es-control form-es-control-block" readonly onkeypress="return isNumberKey(event, false)" />
                                 <span class="error-span error-telephone_number error"></span>
                             </div>
                         </div>
