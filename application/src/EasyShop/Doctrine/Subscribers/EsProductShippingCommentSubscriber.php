@@ -120,25 +120,24 @@ class EsProductShippingCommentSubscriber implements EventSubscriber
         if ( $entity instanceOf EsProductShippingComment) {
             if(count($this->changeSet) > 0){
                 $member = $entity->getMember();
+                $orderProduct = $entity->getOrderProduct();
+                $orderProductId = $orderProduct->getIdOrderProduct();
+                $orderId = $orderProduct->getOrder()->getIdOrder();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::TRANSACTION_UPDATE);
-                $phraseArray = $this->languageLoader
-                                       ->getLine($activityType->getActivityPhrase());
+                $activity = new \EasyShop\Activity\ActivityTypeTransactionUpdate();   
                 if(isset($this->changeSet['modified'])){
-                    $unparsedPhrase = $phraseArray['edit_ship_detail'];
+                    $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_EDIT_SHIPMENT;
                     unset($this->changeSet['modified']);
                 }
                 else{
-                    $unparsedPhrase = $phraseArray['add_ship_detail'];
+                    $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_ADD_SHIPMENT;
                 }
 
-                $phrase = $this->activityManager
-                               ->constructActivityPhrase($this->changeSet,
-                                                         $unparsedPhrase,
-                                                         'EsProductShippingComment');
-                if($phrase !== ""){
+                if($action !== null){
+                    $jsonData = $activity->constructJSON($orderId, $orderProductId, $action);
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $member);
+                       ->createAcitivityLog($activityType, $jsonData, $member);
                 }
            }
         }
