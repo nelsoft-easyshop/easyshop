@@ -634,10 +634,8 @@ class Kernel
             return new \EasyShop\LanguageLoader\LanguageLoader($languageImplementation);
         };
 
-        $container['activity_manager'] = function ($c) use ($container) { 
-            return new \EasyShop\Activity\ActivityManager(
-                            $container['language_loader']
-                        );
+        $container['activity_manager'] = function ($c) { 
+            return new \EasyShop\Activity\ActivityManager();
         };
 
         // Checkout Service
