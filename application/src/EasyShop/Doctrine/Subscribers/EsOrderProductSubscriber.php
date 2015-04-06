@@ -83,46 +83,41 @@ class EsOrderProductSubscriber implements EventSubscriber
                 $member = null;
                 $status = (int)$entity->getStatus()->getIdOrderProductStatus();
                 $isReject = (int)$entity->getIsReject();
-                $invoiceNo = $entity->getOrder()->getInvoiceNo();
+                $orderProductId = $entity->getIdOrderProduct();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::TRANSACTION_UPDATE);
-                $phraseArray = $this->languageLoader
-                                    ->getLine($activityType->getActivityPhrase());
-
-                $unparsedPhrase = "";
+                $jsonData = "";
+                $action = null;
                 if(isset($this->changeSet['status'])){
                     if($status === EsOrderProductStatus::CASH_ON_DELIVERY){
                         $member = $entity->getSeller();
-                        $unparsedPhrase = $phraseArray['completed'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_COD_COMPLETED;
                     }
                     elseif($status === EsOrderProductStatus::RETURNED_BUYER){
                         $member = $entity->getSeller();
-                        $unparsedPhrase = $phraseArray['item_cancel'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_REFUNDED;
                     }
                     elseif($status === EsOrderProductStatus::FORWARD_SELLER){
                         $member = $entity->getOrder()->getBuyer();
-                        $unparsedPhrase = $phraseArray['item_received'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_RECEIVED;
                     }
                 }
                 elseif(isset($this->changeSet['isReject'])){
                     $member = $entity->getOrder()->getBuyer();
                     if($isReject === EsOrderProductStatus::IS_REJECT_NOT_ACTIVE){
-                        $unparsedPhrase = $phraseArray['item_unreject'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_UNREJECTED;
                     }
                     else{
-                        $unparsedPhrase = $phraseArray['item_reject'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_REJECTED;
                     }
                 }
 
-                if($unparsedPhrase !== ""){
-                    $phrase = $this->activityManager
-                                   ->constructActivityPhrase(['invoiceNo' => $invoiceNo],
-                                                             $unparsedPhrase,
-                                                             'EsOrder');
-
-                    if($phrase !== ""){
+                if($action !== null && $member !== null){
+                    $activity = new \EasyShop\Activity\ActivityTypeTransactionUpdate();   
+                    $jsonString = $activity->constructJSON($orderProductId, $action);
+                    if($jsonString !== ""){
                         $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                           ->createAcitivityLog($activityType, $phrase, $member);
+                           ->createAcitivityLog($activityType, $jsonString, $member);
                     }
                 }
            }
