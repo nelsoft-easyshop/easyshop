@@ -65,6 +65,7 @@ class ActivityTypeTransactionUpdate
     /**
      * Build JSON String contract
      *
+     * @param integer $orderId
      * @param integer $orderProductId
      * @param intgeer $action
      * @return string
