@@ -80,8 +80,11 @@ class EsOrderSubscriber implements EventSubscriber
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::TRANSACTION_UPDATE);
                 $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_BOUGHT;
-                $activity = new \EasyShop\Activity\ActivityTypeTransactionUpdate();   
-                $jsonString = $activity->constructJSON($orderId, null, $action);
+                $activity = new \EasyShop\Activity\ActivityTypeTransactionUpdate();  
+                $data = [
+                    'orderId' => $orderId,
+                ];
+                $jsonString = $activity->constructJSON($data, $action);
                 $em->getRepository('EasyShop\Entities\EsActivityHistory')
                    ->createAcitivityLog($activityType, $jsonString, $member);
 

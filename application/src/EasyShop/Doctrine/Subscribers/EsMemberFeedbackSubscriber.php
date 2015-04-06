@@ -66,18 +66,15 @@ class EsMemberFeedbackSubscriber implements EventSubscriber
             $forMember = $entity->getForMemberid();
             $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                ->find(EsActivityType::FEEDBACK_UPDATE);
-            $unparsedPhrase = $this->languageLoader
-                                   ->getLine($activityType->getActivityPhrase());
- 
-
-            $phrase = $this->activityManager
-                           ->constructActivityPhrase(['storeName' => $forMember->getStoreName()],
-                                                     $unparsedPhrase['user'],
-                                                     'EsMember');
-            if($phrase !== ""){
-                $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                   ->createAcitivityLog($activityType, $phrase, $member);
-            } 
+            $activity = new \EasyShop\Activity\ActivityTypeFeedbackUpdate();
+            $action = \EasyShop\Activity\ActivityTypeFeedbackUpdate::ACTION_FEEDBACK_USER;
+            $data = [
+                'revieweeId' => $forMember->getIdMember(),
+            ];
+            $jsonData = $activity->constructJSON($data, $action);
+            $em->getRepository('EasyShop\Entities\EsActivityHistory')
+               ->createAcitivityLog($activityType, $jsonData, $member);
+       
         }
     }
 

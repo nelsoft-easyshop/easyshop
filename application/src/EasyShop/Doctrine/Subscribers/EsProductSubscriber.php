@@ -99,7 +99,10 @@ class EsProductSubscriber implements EventSubscriber
                     }
                 }
                 if($actionType !== null){
-                    $jsonString = $activity->constructJSON($entity->getIdProduct(), $actionType);
+                    $data = [
+                        'productId' => $entity->getIdProduct(),
+                    ];
+                    $jsonString = $activity->constructJSON($data, $actionType);
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                         ->createAcitivityLog($activityType, $jsonString, $entity->getMember());
                 }

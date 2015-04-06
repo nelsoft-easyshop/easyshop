@@ -2,7 +2,7 @@
 
 namespace EasyShop\Activity;
 
-class ActivityTypeProductUpdate
+class ActivityTypeProductUpdate extends AbstractActivityType
 {
     /**
      * Action constant for product update 
@@ -32,14 +32,14 @@ class ActivityTypeProductUpdate
      */
     const ACTION_PRODUCT_RESTORE = 4;
 
+    
     /**
-     * Build JSON String contract
+     * Return if the action is valid
      *
-     * @param integer $productId
-     * @param intgeer $action
-     * @return string
+     * @param integer $action
+     * @return boolean
      */
-    public function constructJSON($productId, $action)
+    public function isUsableAction($action)
     {
         $actionArray = [
             self::ACTION_PRODUCT_UPDATE,
@@ -47,14 +47,8 @@ class ActivityTypeProductUpdate
             self::ACTION_PRODUCT_FULL_DELETE,
             self::ACTION_PRODUCT_RESTORE,
         ];
-        
-        $data = [];
-        if(in_array($action, $actionArray)){
-            $data['productId'] = $productId;
-            $data['action'] = $action;
-        }
-        
-        return json_encode($data);
+
+        return in_array($action, $actionArray);
     }
 }
 

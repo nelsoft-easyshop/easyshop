@@ -2,26 +2,17 @@
 
 namespace EasyShop\Activity;
 
-class ActivityTypeInformationUpdate
+class ActivityTypeInformationUpdate extends AbstractActivityType
 {
     /**
-     * Build JSON String contract
+     * Return if the action is valid
      *
-     * @param mixed $changeSet
-     * @return string
+     * @param integer $action [dummy argument to conform with super class contract]
+     * @return boolean
      */
-    public function constructJSON($changeSet)
+    public function isUsableAction($action)
     {
-        $fields = [];
-        foreach($changeSet as $fieldName => $fieldValue){
-            $field = [
-                'fieldName' => $fieldName,
-                'fieldValue' => $fieldValue,
-            ];
-            $fields[] = $field;
-        }
-
-        return json_encode($fields);
+        return true;
     }
 }
 

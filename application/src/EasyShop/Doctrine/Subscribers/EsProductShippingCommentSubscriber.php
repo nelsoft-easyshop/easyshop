@@ -135,7 +135,11 @@ class EsProductShippingCommentSubscriber implements EventSubscriber
                 }
 
                 if($action !== null){
-                    $jsonData = $activity->constructJSON($orderId, $orderProductId, $action);
+                    $data = [
+                        'orderId' => $orderId,
+                        'orderProductId' => $orderProductId,
+                    ];
+                    $jsonData = $activity->constructJSON($data, $action);
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                        ->createAcitivityLog($activityType, $jsonData, $member);
                 }
