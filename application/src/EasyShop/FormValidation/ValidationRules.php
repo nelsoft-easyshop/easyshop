@@ -97,9 +97,7 @@ class ValidationRules
                     ),
                     'gender' => array(
                                 new Assert\NotBlank(),
-                                new Assert\Regex([
-                                    'pattern' => '/^M|F$/',
-                                ]),
+                                new CustomAssert\IsValidGender(),
                     ),
                 ),
             'subscribe' => array(
