@@ -7,6 +7,9 @@
 
     $(window).on("load resize",function(){ 
         heightOfModal = $(".simplemodal-wrap").outerHeight();
+        $(".active-left-wing-cart-1").animate({width: "50%"}, 1000);
+        $(".active-breadcrumb-icon").delay(1000).animate({backgroundColor: "#00a388"}, 1000);
+        $(".active-breadcrumb-title").delay(1000).animate({color: "#00a388"}, 1000).css("font-weight", "bold");;
 
         $(".calculate-shipping-label").click(function(){
             $(".shipping-calculator-modal").modal({
