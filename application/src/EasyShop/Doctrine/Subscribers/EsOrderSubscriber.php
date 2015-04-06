@@ -76,18 +76,15 @@ class EsOrderSubscriber implements EventSubscriber
         if ( $entity instanceOf EsOrder) {
             if(count($this->changeSet) > 0){
                 $member = $entity->getBuyer();
-                $invoiceNo = $entity->getInvoiceNo();
+                $orderId = $entity->getIdOrder();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::TRANSACTION_UPDATE);
-                $unparsedPhrase = $this->languageLoader
-                                       ->getLine($activityType->getActivityPhrase());
-                $phrase = $this->activityManager
-                               ->constructActivityPhrase(['invoiceNo' => $invoiceNo],
-                                                         $unparsedPhrase['buy'],
-                                                         'EsOrder');
-                if($phrase !== ""){
+                $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_BOUGHT;
+                $activity = new \EasyShop\Activity\ActivityTypeTransactionUpdate();   
+                $jsonString = $activity->constructJSON($orderId, null, $action);
+                if($jsonString !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $member);
+                        ->createAcitivityLog($activityType, $jsonString, $member);
                 }
            }
         }
