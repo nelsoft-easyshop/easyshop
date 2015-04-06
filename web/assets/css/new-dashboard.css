@@ -1660,13 +1660,13 @@ i.jstree-icon.jstree-checkbox{
 
 .allItemsEdit > li > .icon-move,
 .allItems > li > .icon-move{
-    background: url("/assets/images/icon-add-dark.png") no-repeat center;
+    background: url("/assets/images/icon-add-dark.png") center center no-repeat;
     background-size: 100%;
 }
 
 .customCategoryEdit > li > .icon-move,
 .customCategory > li > .icon-move{
-    background: url("/assets/images/icon-remove-dark.png") no-repeat center;
+    background: url("/assets/images/icon-remove-dark.png") center center no-repeat;
     background-size: 100%;
 }
 
