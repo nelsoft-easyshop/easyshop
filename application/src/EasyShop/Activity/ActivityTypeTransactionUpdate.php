@@ -47,6 +47,20 @@ class ActivityTypeTransactionUpdate
      */
     const ACTION_UNREJECTED = 5;
 
+           
+    /**
+     * Action constant for add shipment detail
+     *
+     * @var integer
+     */
+    const ACTION_ADD_SHIPMENT = 6;
+    
+    /**
+     * Action constant for edit shipment detail
+     *
+     * @var integer
+     */
+    const ACTION_EDIT_SHIPMENT = 7;
 
     /**
      * Build JSON String contract
@@ -63,6 +77,8 @@ class ActivityTypeTransactionUpdate
             self::ACTION_RECEIVED,
             self::ACTION_REJECTED,
             self::ACTION_UNREJECTED,
+            self::ACTION_ADD_SHIPMENT,
+            self::ACTION_EDIT_SHIPMENT,
         ];
         
         $data = [];
