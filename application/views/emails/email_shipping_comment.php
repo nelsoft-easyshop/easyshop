@@ -535,7 +535,7 @@
 
                                                                     <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{buyer}</span>,</p>
 
-                                                                    <span style="color:#ff893b; font-weight: 400;">{seller}</span> has just provided new shipping details for your order of the following products:                                                                    
+                                                                    <span style="color:#ff893b; font-weight: 400;">{seller}</span> has just provided new shipping details for your order. The details can be found below.                                                                  
                                                                 </td>
                                                             </tr>
 
