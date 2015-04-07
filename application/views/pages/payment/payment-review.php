@@ -470,7 +470,7 @@
                                     </label>
                                 </div>
                                 <div class="payment-method-desc" style="display:none">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Superstitione erunt vituperata iactant oderit consuevit propemodum eruditionem, tarentinis.
+                                    You can pay in cash to our courier when you receive the goods at your doorstep. 
                                     <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY, $checkoutError['paymentTypeError'])):?>
                                         <br/>
                                         <br/> 
