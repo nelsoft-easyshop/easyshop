@@ -86,10 +86,12 @@ class ActivityManager
                 $formattedActivityData[] = [
                     'type' => $activtyTypeId,
                     'data' => $activityClass->getFormattedData($activity->getJsonData()),
+                    'activityDate' => $activity->getActivityDatetime()->format('d M Y'),
+                    'activityTime' => $activity->getActivityDatetime()->format('h:i a'),
                 ];
             }  
         }
-        
+
         return $formattedActivityData;
     }
     
