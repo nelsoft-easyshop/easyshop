@@ -539,12 +539,19 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <td>    
-                                                                    <ul>
+                                                                <td>   
+                                                                  <table width="100%">
                                                                     {products}
-                                                                        <li><a href="{productLink}" target="_blank"> {productName} </a></li>
+                                                                    <tr>
+                                                                      <td valign="bottom" width="45"  style="padding-top: 5px; padding-bottom: 5px;"><img src="{primaryImage}" width="40" height="40" style="width: 40px; height: 40px; border: solid #e2e2e2 1px; text-align: center;"></td>
+                                                                      <td valign="bottom" style="padding-top: 5px; padding-bottom: 5px;">
+                                                                        <a href="{productLink}" style="font-size: 15px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:400; text-align:left; ">
+                                                                            {productName}
+                                                                        </a>
+                                                                      </td>
+                                                                    </tr>
                                                                     {/products}
-                                                                    </ul>
+                                                                  </table>
                                                                 </td>
                                                             </tr>
 
