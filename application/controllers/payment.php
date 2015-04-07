@@ -264,7 +264,7 @@ class Payment extends MY_Controller
             if($member){
                 if($cartImplementation->getSize() > 0){
                     $cart['choosen_items'] = $checkoutService->includeCartItemValidation($member);
-                    $postPoints = $this->input->post('used_points') ? (int) $this->input->post('used_points') : 0;
+                    $postPoints = $this->input->post('used_points') ? $this->input->post('used_points') : 0;
                     $userMaxPoints = $pointTracker->getUserPoint($memberId);
                     $paymentService->initializeGateways(["PesoPayGateway" => ["method" => "PesoPay"]]);
                     $pesopayGateway = $paymentService->getPrimaryGateway();
