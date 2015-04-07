@@ -71,6 +71,9 @@ class ActivityTypeProductUpdate extends AbstractActivityType
             $formattedData['imageDirectory'] = $productImage->getDirectory();
             $formattedData['imageFile'] = $productImage->getFilename();
             $formattedData['action'] = $activityData->action;
+            $formattedData['final_price'] = $product->getFinalPrice();
+            $formattedData['original_price'] = $product->getOriginalPrice();
+            $formattedData['discount'] = $product->getDiscountPercentage();
         }
 
         return $formattedData;
