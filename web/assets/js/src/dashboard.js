@@ -3192,6 +3192,25 @@
         });
     }
 
+    $( ".activity-logs-trigger" ).click(function() {
+        getActivityLog(1);
+    });
+
+    function getActivityLog(page)
+    {
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getActivityLog',
+            dataType: "json",
+            data: {page:page},
+            beforeSend: function (xhr){ 
+            }, 
+            success: function(jsonResponse){
+                $("#main-log-container").html(jsonResponse.html);
+            }
+        });
+    }
+
 }(jQuery));
 
 
