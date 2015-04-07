@@ -184,71 +184,122 @@
     </div>-->
 
     <!--Layout for CHECKOUT-->
-   <!--  <div class="log-outer">
-        <div class="row">
-            <div class="col-xs-1 col-icon-container">
-                <div class="log-icon-container">
-                    <center>
-                        <div class="log-icon-circle">
-                            <i class="fa icon-payment "></i>
-                        </div>
-                     </center>
-                </div>
-            </div>
-            <div class="col-xs-11 col-log-container">
-                <div class="log-container">
-                    <div class="row">
-                        <div class="col-xs-9 col-log-meta-cont">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p class="log-title">
-                                        Checked out item(s) through <b>Paypal</b>
-                                    </p>
-                                </div>
-                                <div class="col-md-6">
-                                    <table class="log-meta-table">
-                                        <tr>
-                                            <td class="v-align-top">
-                                                <div class="log-image" style="background: url(<?php echo getAssetsDomain(); ?>assets/images/products/apple-p.jpg) center no-repeat; background-size: cover;"></div>
-                                            </td>
-                                            <td class="v-align-top">
-                                                <div class="log-meta">
-                                                    <a class="log-meta-link-title" href="#">
-                                                        iPhone 6 64GB
-                                                    </a>
-                                                    <div class="log-meta-price">
-                                                        <span class="log-original-price">
-                                                            <s>P 50, 000.00</s>
-                                                        </span>
-                                                        <span class="log-new-price">
-                                                            P 30, 000.00      
-                                                        </span>
-                                                    </div>
-                                                    <div class="">
-                                                            <b>Invoice Number : </b><br/>093248-123-2342
-                                                    </div>
-                                                </div>
-                                            </td>
-                                         </tr>
-                                    </table>
-                                </div>
+    <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::TRANSACTION_UPDATE): ?>
+        <div class="log-outer">
+            <div class="row">
+                <div class="col-xs-1 col-icon-container">
+                    <div class="log-icon-container">
+                        <center>
+                            <div class="log-icon-circle">
+                                <i class="fa icon-payment "></i>
                             </div>
-                        </div>
-                        <div class="col-xs-3 col-date">
-                            <div class="log-date-time">
-                                <span class="log-date">
-                                    09 Feb 2015
-                                </span>
-                                <span class="log-time">
-                                    12:30 PM
-                                </span>
+                         </center>
+                    </div>
+                </div>
+                <?php if($activity['data']['action'] === \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_BOUGHT): ?>
+                    <div class="col-xs-11 col-log-container">
+                        <div class="log-container">
+                            <div class="row">
+                                <div class="col-xs-9 col-log-meta-cont">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="log-title">
+                                                Checked out item(s) through <b><?=$activity['data']['paymentType']; ?></b>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <table class="log-meta-table">
+                                                <tr>
+                                                    <td class="v-align-top">
+                                                        <div class="log-meta"> 
+                                                            <div class="">
+                                                                <b>Invoice Number : </b><br/><?=html_escape($activity['data']['invoiceNumber']);?>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                 </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 col-date">
+                                    <div class="log-date-time">
+                                        <span class="log-date">
+                                            <?=$activity['activityDate']; ?>
+                                        </span>
+                                        <span class="log-time">
+                                            <?=$activity['activityTime']; ?>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php else: ?>
+                    <div class="col-xs-11 col-log-container">
+                        <div class="log-container">
+                            <div class="row">
+                                <div class="col-xs-9 col-log-meta-cont">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="log-title">
+                                                <?php if($activity['data']['action'] === \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_RECEIVED): ?>
+                                                    <b>Received</b> an item
+                                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_REFUNDED): ?>
+                                                    <b>Cancelled</b> an item
+                                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_COD_COMPLETED): ?>
+                                                    Item mark as <b>Completed</b>
+                                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_REJECTED): ?>
+                                                    <b>Rejected</b> an item
+                                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_UNREJECTED): ?>
+                                                    <b>Unrejected</b> an item
+                                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_ADD_SHIPMENT): ?>
+                                                    <b>Add</b> shipment information
+                                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_EDIT_SHIPMENT): ?> 
+                                                    <b>Modify</b> shipment information
+                                                <?php endif; ?>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <table class="log-meta-table">
+                                                <tr>
+                                                    <td class="v-align-top">
+                                                        <div class="log-image" style="background: url(<?php echo getAssetsDomain().$activity['data']['imageDirectory'].'thumbnail/'.$activity['data']['imageFile']; ?>) center no-repeat; background-size: cover;"></div>
+                                                    </td>
+                                                    <td class="v-align-top">
+                                                        <div class="log-meta">
+                                                            <a class="log-meta-link-title" href="/item/<?=$activity['data']['slug']; ?>">
+                                                                <?=html_escape($activity['data']['name']); ?>
+                                                            </a>
+                                                            <div class="log-meta-price"> 
+                                                                <span class="log-new-price">
+                                                                    P <?=number_format($activity['data']['final_price'], 2, '.', ',')?>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                 </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 col-date">
+                                    <div class="log-date-time">
+                                        <span class="log-date">
+                                            <?=$activity['activityDate']; ?>
+                                        </span>
+                                        <span class="log-time">
+                                            <?=$activity['activityTime']; ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
-    </div> --> 
+    <?php endif; ?>
 
     <!--Layout for MODIFIED ITEMS-->
     <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::PRODUCT_UPDATE): ?>
@@ -289,7 +340,7 @@
                                                 </td>
                                                 <td class="v-align-top">
                                                     <div class="log-meta">
-                                                        <a class="log-meta-link-title" href="#">
+                                                        <a class="log-meta-link-title" href="/item/<?=$activity['data']['slug']; ?>">
                                                             <?=html_escape($activity['data']['name']); ?>
                                                         </a>
                                                         <div class="log-meta-price">

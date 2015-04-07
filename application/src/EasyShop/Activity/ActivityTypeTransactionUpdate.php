@@ -35,7 +35,7 @@ class ActivityTypeTransactionUpdate extends AbstractActivityType
      *
      * @var integer
      */
-    const ACTION_BOUGHT = 1;
+    const ACTION_BOUGHT = 0;
 
     /**
      * Action constant for transaction received 
@@ -111,7 +111,16 @@ class ActivityTypeTransactionUpdate extends AbstractActivityType
             $productImage = $product->getDefaultImage();
             $formattedData['imageDirectory'] = $productImage->getDirectory();
             $formattedData['imageFile'] = $productImage->getFilename();
+            $formattedData['final_price'] = $orderProduct->getTotal();
+            $formattedData['imageFile'] = $productImage->getFilename();
             $formattedData['action'] = $activityData->action;
+        }
+        elseif(isset($activityData->orderId)){
+            $order = $this->entityManager->getRepository('EasyShop\Entities\EsOrder')
+                                         ->find($activityData->orderId); 
+            $formattedData['invoiceNumber'] = $order->getInvoiceNo();
+            $formattedData['action'] = $activityData->action;
+            $formattedData['paymentType'] = $order->getPaymentMethod()->getName();
         }
 
         return $formattedData;
