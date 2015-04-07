@@ -134,54 +134,53 @@
     </div>-->
 
     <!--Layout for FOLLOW AND UNFOLLOW activity-->
-    <!-- <div class="log-outer">
-        <div class="row">
-            <div class="col-xs-1 col-icon-container">
-                <div class="log-icon-container">
-                    <center>
-                        <div class="log-icon-circle">
-                            <i class="fa icon-add "></i>
-                        </div>
-                     </center>
+    <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::VENDOR_SUBSCRIPTION): ?>
+        <div class="log-outer">
+            <div class="row">
+                <div class="col-xs-1 col-icon-container">
+                    <div class="log-icon-container">
+                        <center>
+                            <div class="log-icon-circle">
+                                <i class="fa icon-add "></i>
+                            </div>
+                         </center>
+                    </div>
                 </div>
-            </div>
-            <div class="col-xs-11 col-log-container">
-                <div class="log-container">
-                    <div class="row">
-                        <div class="col-xs-9 col-log-meta-cont">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p class="log-title">
-                                        Followed <a href="#">Easyshop.ph</a> and <a href="#">Gadgets Galore</a>
-                                    </p>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="log-followed-user">
-                                        <a href="#">
-                                            <img class="log-image" src="<?php echo getAssetsDomain(); ?>assets/images/ES-logo1.png"/>
-                                        </a>
-                                        <a href="#">
-                                            <img class="log-image" src="<?php echo getAssetsDomain(); ?>assets/images/gadgets-galore-thumbnail.jpg"/>
-                                        </a>
+                <div class="col-xs-11 col-log-container">
+                    <div class="log-container">
+                        <div class="row">
+                            <div class="col-xs-9 col-log-meta-cont">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="log-title">
+                                            <?=html_escape($activity['data']['stringAction']);?> <a href="/<?=$activity['data']['slug'];?>"><?=html_escape($activity['data']['storeName']);?></a>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="log-followed-user">
+                                            <a href="/<?=$activity['data']['slug'];?>">
+                                                <img class="log-image" src="<?php echo getAssetsDomain().'.'.$activity['data']['userImage']; ?>"/>
+                                            </a> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-3 col-date">
-                            <div class="log-date-time">
-                                <span class="log-date">
-                                    09 Feb 2015
-                                </span>
-                                <span class="log-time">
-                                    12:30 PM
-                                </span>
+                            <div class="col-xs-3 col-date">
+                                <div class="log-date-time">
+                                    <span class="log-date">
+                                        <?=$activity['activityDate']; ?>
+                                    </span>
+                                    <span class="log-time">
+                                        <?=$activity['activityTime']; ?>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>-->
+    <?php endif; ?>
 
     <!--Layout for CHECKOUT-->
     <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::TRANSACTION_UPDATE): ?>
@@ -204,7 +203,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <p class="log-title">
-                                                Checked out item(s) through <b><?=$activity['data']['paymentType']; ?></b>
+                                                Checked out item(s) through <b><?=html_escape($activity['data']['paymentType']); ?></b>
                                             </p>
                                         </div>
                                         <div class="col-md-6">
