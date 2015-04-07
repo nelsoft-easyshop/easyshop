@@ -185,6 +185,11 @@
                 <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?> 
                     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod-black.png" alt="Cash on Delivery">
                 <?php endif; ?>
+
+
+                <?php if(isset($paymentMethod['pesopaycdb'])) : ?> 
+                     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-pesopay-black.png" alt="PesoPay Credit/Debit Card">
+                <?php endif; ?>
             </div>
         </div>
         <div class="clear"></div> 
