@@ -860,83 +860,88 @@ class Memberpage extends MY_Controller
             $productIds = explode('-', $orderProductIds[0]);
             $orderProductIds = $productIds;
         }
-        foreach ($orderProductIds as $orderProductId) {
-            if( $this->form_validation->run('addShippingComment') ){
-                $postData = [
-                    'comment' => $this->input->post('comment'),
-                    'order_product' => $orderProductId,
-                    'member_id' => $this->session->userdata('member_id'),
-                    'transact_num' => $this->input->post('transact_num'),
-                    'courier' => $this->input->post('courier'),
-                    'tracking_num' => $this->input->post('tracking_num'),
-                    'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "",
-                    'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
-                ];
+        
+        $commentData = [
+            'comment' => $this->input->post('comment'),
+            'member_id' => $this->session->userdata('member_id'),
+            'transact_num' => $this->input->post('transact_num'),
+            'courier' => $this->input->post('courier'),
+            'tracking_num' => $this->input->post('tracking_num'),
+            'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "",
+            'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
+        ];
+        $memberEntity = $em->find("EasyShop\Entities\EsMember", $commentData['member_id']);
+        $orderEntity = $em->find("EasyShop\Entities\EsOrder", $commentData['transact_num']);
+        $productData = [];
 
-                $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
-                $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
+        if( $this->form_validation->run('addShippingComment') ){
+        
+            foreach ($orderProductIds as $orderProductId) {
+                $commentData['order_product'] = $orderProductId;
                 $orderProductEntity  = $this->esOrderProductRepo
                                             ->findOneBy([
-                                                "idOrderProduct" => $postData['order_product'],
+                                                "idOrderProduct" => $commentData['order_product'],
                                                 "seller" => $memberEntity,
                                                 "order" => $orderEntity
                                             ]);
-                $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
-                                            ->findOneBy([
-                                                "orderProduct" => $orderProductEntity,
-                                                "member" => $memberEntity
-                                            ]);
-                $shippingCommentEntitySize = count($shippingCommentEntity);
 
-                if ( $shippingCommentEntitySize === 1 ) {
-                    $exactShippingComment = $productShippingCommentRepo->getExactShippingComment($postData);
-                }
-
-                if( count($orderProductEntity) === 1 ) {
-                    if ($shippingCommentEntity) {
-                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($shippingCommentEntity, $orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
+                if( $orderProductEntity !== null ) {
+                    $oldShippingComment = $productShippingCommentRepo->findOneBy([
+                                                                            "orderProduct" => $orderProductEntity,
+                                                                            "member" => $memberEntity,
+                                                                        ]);
+                    $isUpdated = false;
+                    if ($oldShippingComment) {
+                        $isUpdated = empty($productShippingCommentRepo->getExactShippingComment($commentData)) === true;
+                        $newShippingComment = $productShippingCommentRepo->updateShippingComment($oldShippingComment, $orderProductEntity, $commentData['comment'], $memberEntity, $commentData['courier'], $commentData['tracking_num'], $commentData['expected_date'], $commentData['delivery_date']);
                     }
                     else {
-                        $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
+                        $newShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $commentData['comment'], $memberEntity, $commentData['courier'], $commentData['tracking_num'], $commentData['expected_date'], $commentData['delivery_date']);
+                        $isUpdated = true;
                     }
-                    $isSuccessful = (bool) $newEsShippingComment;
+                    $isSuccessful = (bool) $newShippingComment;
                     $serverResponse['result'] = $isSuccessful ? 'success' : 'fail';
                     $serverResponse['error'] = $isSuccessful ? '' : 'Failed to insert in database.';
-
-                    if( $isSuccessful && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
-                        $buyerEntity = $orderEntity->getBuyer();
-                        $buyerEmail = $buyerEntity->getEmail();
-                        $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
-                        $this->config->load('email', true);
-                        $imageArray = $this->config->config['images'];
-
-                        $parseData = $postData;
-                        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                                 ->getSocialMediaLinks();
-                        $parseData = array_merge($parseData, [
-                            "seller" => $memberEntity->getUsername(),
-                            "buyer" => $buyerEntity->getUsername(),
-                            "invoice" => $orderEntity->getInvoiceNo(),
-                            "product_name" => $orderProductEntity->getProduct()->getName(),
-                            "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($postData['expected_date'])),
-                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
-                            "facebook" => $socialMediaLinks["facebook"],
-                            "twitter" => $socialMediaLinks["twitter"],
-                            'baseUrl' => base_url(),
-                        ]);
-                        $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
-                        
-                        $emailService->setRecipient($buyerEmail)
-                                     ->setSubject($buyerEmailSubject)
-                                     ->setMessage($buyerEmailMsg, $imageArray)
-                                     ->queueMail();  
+                    
+                    if( $isSuccessful &&  $isUpdated){
+                        $product = $orderProductEntity->getProduct();
+                        $key = $product->getIdProduct();
+                        $productData[$key]['productName'] = $product->getName();
+                        $productData[$key]['productLink'] = base_url().'item/'.$product->getSlug();
                     }
-
-                }
-                else{
-                    $serverResponse['error'] = 'The information you provided may be invalid. Please refresh the page and try again.';
                 }
             }
+            
+            if(empty($productData) === false){
+                $this->config->load('email', true);
+                $buyerEntity = $orderEntity->getBuyer();
+                $buyerEmail = $buyerEntity->getEmail();
+                $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
+                $imageArray = $this->config->config['images'];
+                $parseData = $commentData;
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                         ->getSocialMediaLinks();
+                $parseData = array_merge($parseData, [
+                                "seller" => $memberEntity->getUsername(),
+                                "buyer" => $buyerEntity->getUsername(),
+                                "invoice" => $orderEntity->getInvoiceNo(),
+                                "expected_date" => $commentData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($commentData['expected_date'])),
+                                "delivery_date" => date("Y-M-d", strtotime($commentData['delivery_date'])),
+                                "facebook" => $socialMediaLinks["facebook"],
+                                "twitter" => $socialMediaLinks["twitter"],
+                                'baseUrl' => base_url(),
+                                'products' => $productData,
+                            ]);
+                
+                $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
+                $emailService->setRecipient($buyerEmail)
+                             ->setSubject($buyerEmailSubject)
+                             ->setMessage($buyerEmailMsg, $imageArray)
+                             ->queueMail();  
+            }
+        }
+        else{
+            $serverResponse['error'] = 'The information you provided may be invalid. Please refresh the page and try again.';
         }
         echo json_encode($serverResponse);
     }

@@ -535,7 +535,16 @@
 
                                                                     <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{buyer}</span>,</p>
 
-                                                                    <span style="color:#ff893b; font-weight: 400;">{seller}</span> has just provided new shipping details for your order                                                                    
+                                                                    <span style="color:#ff893b; font-weight: 400;">{seller}</span> has just provided new shipping details for your order of the following products:                                                                    
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>    
+                                                                    <ul>
+                                                                    {products}
+                                                                        <li><a href="{productLink}" target="_blank"> {productName} </a></li>
+                                                                    {/products}
+                                                                    </ul>
                                                                 </td>
                                                             </tr>
 
@@ -654,14 +663,6 @@
                                                                             </td>
                                                                             <td valign="top" width="50%" valign="top" align="left" style="word-break:break-all;">
                                                                                 {invoice}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                Product Name : 
-                                                                            </td>
-                                                                            <td valign="top" width="50%" valign="top" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                {product_name}
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
