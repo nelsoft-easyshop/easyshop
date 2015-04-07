@@ -93,6 +93,10 @@ class Kernel
                 new \EasyShop\Doctrine\Subscribers\EsOrderProductSubscriber()
             );
 
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Subscribers\EsVendorSubscribeHistorySubscriber()
+            );
+
             $em->getEventManager()->addEventListener(
                 [\Doctrine\ORM\Events::postLoad], new \EasyShop\Doctrine\Listeners\ProductImageExistenceListener(ENVIRONMENT)
             );
