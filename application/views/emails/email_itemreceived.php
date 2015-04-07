@@ -535,7 +535,7 @@
 
                                                                     <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{recipient}</span>,</p>
 
-                                                                    <span style="color:#ff893b; font-weight: 400;">{user}</span> has just confirmed the receipt of your product.
+                                                                    <span style="color:#ff893b; font-weight: 400;">{user}</span> has just confirmed the receipt of your product(s).
 
                                                                 </td>
                                                             </tr>
@@ -626,6 +626,8 @@
             <!-- End of title plate --> 
 
             <!-- Start of item --> 
+            {products}
+            
             <tr mc:repeatable="Select" mc:variant="layout-2">
                 <td mc:hideable align="center" valign="top" class="fix-box">
 
@@ -802,6 +804,7 @@
                     <!-- end layout-2 container width 600px -->
                 </td>
             </tr>
+            {/products}
             <!-- End of item  -->
             
             <!-- Start of Social Media Footer -->

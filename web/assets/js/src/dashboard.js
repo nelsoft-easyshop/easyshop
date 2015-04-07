@@ -1564,7 +1564,7 @@
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                    txResponseBtn.closest('.item-list-panel').replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
                     $('.wipeOut').fadeOut(5000);
                 }
                 txResponseBtn.addClass('enabled');
