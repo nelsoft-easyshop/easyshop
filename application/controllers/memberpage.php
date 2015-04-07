@@ -735,8 +735,6 @@ class Memberpage extends MY_Controller
                 $productIds = explode('-', $data['order_product_id'][0]);
                 $data['order_product_id'] = $productIds;
             }
-
-            
             
             if (is_array($data['order_product_id'])) {
                 $socialMediaLinks = $this->serviceContainer['social_media_manager']
@@ -748,8 +746,7 @@ class Memberpage extends MY_Controller
                 $emailRecipient = null;
                 $mobileRecipient = null;
                 foreach ($data['order_product_id'] as $key => $orderProductId) {
-                    #$result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
-                    $result['o_success'] = 1;
+                    $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
                     if( $result['o_success'] >= 1 ) {
 
                         $orderProductParseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
@@ -782,9 +779,7 @@ class Memberpage extends MY_Controller
                         $parseData['recipient'] = $orderProductParseData['recipient'];
                     }
                 }
-
                 if($hasNotif){
-
                     $triggerMember = $this->serviceContainer['entity_manager']
                                           ->getRepository('EasyShop\Entities\EsMember')
                                           ->find($data['member_id']);
@@ -809,14 +804,14 @@ class Memberpage extends MY_Controller
                     
                     if($emailRecipient !== null){
                         $emailService->setRecipient($emailRecipient)
-                                    ->setSubject($emailSubject)
-                                    ->setMessage($emailMsg, $imageArray)
-                                    ->queueMail();   
+                                     ->setSubject($emailSubject)
+                                     ->setMessage($emailMsg, $imageArray)
+                                     ->queueMail();   
                     }
                     if($mobileRecipient !== null){
                         $smsService->setMobile($mobileRecipient)
-                                ->setMessage($smsMsg)
-                                ->queueSMS();
+                                   ->setMessage($smsMsg)
+                                   ->queueSMS();
                     }
                 }
             }
