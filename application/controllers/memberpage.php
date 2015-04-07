@@ -107,7 +107,7 @@ class Memberpage extends MY_Controller
      */
     public function index()
     {
-       $userManager = $this->serviceContainer['user_manager'];
+        $userManager = $this->serviceContainer['user_manager'];
         $productManager = $this->serviceContainer['product_manager'];
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
@@ -2446,7 +2446,23 @@ class Memberpage extends MY_Controller
         $offset = $page * $perPage;
         $activities = $this->serviceContainer['activity_manager']
                            ->getUserActivities($memberId, $perPage, $offset);
-        echo json_encode($activities);
+                           // echo '<pre>';
+                           // print_r($activities);
+                           // exit;
+        $paginationData = [
+            'isHyperLink' => false,
+            'lastPage' => ceil(count($activities) / $perPage),
+        ];
+        $activitiesData = [
+            'activities' => $activities,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $activeProductView = $this->load->view('partials/dashboard-activity-log', $activitiesData, true);
+          
+        $jsonResponse = [
+            'html' => $activeProductView,
+        ];
+        echo json_encode($jsonResponse);
     }
 
 }
