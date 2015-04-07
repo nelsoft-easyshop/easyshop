@@ -298,7 +298,7 @@ class Payment extends MY_Controller
 
                     $this->session->set_userdata('choosen_items', $bodyData['cartData']); 
                     $this->load->spark('decorator');
-                    $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+                    $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
                     $this->load->view('pages/payment/payment-review', $bodyData);
                     $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
                 }
@@ -799,7 +799,7 @@ class Payment extends MY_Controller
                 ];
 
                 $this->load->spark('decorator');
-                $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+                $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
                 $this->load->view('pages/payment/payment-response', $bodyData); 
                 $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
             }
