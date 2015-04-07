@@ -4,6 +4,7 @@ namespace EasyShop\PaymentGateways;
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
@@ -296,6 +297,7 @@ class PesoPayGateWay extends AbstractGateway
                 else{
                     $this->paymentService->transactionManager->voidTransaction($orderId);
                     $this->paymentService->revertTransactionPoint($orderId);
+
                     $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                              ->deleteLockItem($orderId, $toBeLocked);
                     $orderHistory = [
