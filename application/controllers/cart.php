@@ -159,13 +159,18 @@ class Cart extends MY_Controller
         echo json_encode($response);
     }
 
+    /**
+     * Change quantityof cart item.
+     * @return json
+     */
     public function doChangeQuantity()
     {
+        $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         $cartId = $this->input->post("id");
         $quantity = $this->input->post("qty");
         $memberId = $this->session->userdata('member_id');
         $isSuccessful = $this->cartManager->changeItemQuantity($cartId, $quantity);
-
+        $userAddress = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
 
         if ($isSuccessful) {
             $cartItem = $this->cartManager->getValidatedCartContents($memberId)[$cartId];
@@ -175,7 +180,8 @@ class Cart extends MY_Controller
                 'itemSubtotal' => number_format($itemSubtotal, 2, '.', ','),
                 'cartTotal' => $this->cartImplementation->getTotalPrice(),
                 'qty' =>  $cartItem['qty'],
-                'maxqty' => $cartItem['maxqty']
+                'maxqty' => $cartItem['maxqty'],
+                'totalShippingFee' => $this->cartManager->getCartShippingFee($userAddress['stateRegion'] ,$memberId)
             ];
         }
         $result['isSuccessful'] = $isSuccessful;
