@@ -270,7 +270,7 @@ class PesoPayGateWay extends AbstractGateway
                     $orderHistory = [
                         'order_id' => $orderId,
                         'order_status' => EsOrderStatus::STATUS_VOID,
-                        'comment' => 'Pesopay transaction failed: ' . $message
+                        'comment' => 'Pesopay transaction failed: ' . json_encode($params),
                     ];
                     $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                              ->addOrderHistory($orderHistory);
