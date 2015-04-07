@@ -9,6 +9,5 @@
         $(".active-breadcrumb-title").delay(2500).animate({color: "#00a388"}, 1000).css("font-weight", "bold");
     });
 
-    
 })(jQuery);
 

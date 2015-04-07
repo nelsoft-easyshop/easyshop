@@ -460,6 +460,9 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.payment-review.js':
                         ['web/assets/js/src/vendor/jquery.simplemodal.js',
                          'web/assets/js/src/new-payment.js'],
+                     
+                    'web/assets/js/min/easyshop.payment-response.js':
+                        ['web/assets/js/src/payment-response.js'],
 
                     'web/assets/js/min/easyshop.home-reminder.js':
                         ['web/assets/js/src/vendor/jquery.simplemodal.js',

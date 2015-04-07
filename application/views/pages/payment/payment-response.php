@@ -186,5 +186,12 @@
     </div>
 </div>
 
-<script type='text/javascript' src="/assets/js/src/payment-response.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/payment-response.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.payment-response.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+
+
+
 
