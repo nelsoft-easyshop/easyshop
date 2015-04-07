@@ -223,14 +223,14 @@
                                             <span id="summary-shipping" data-totalshipping="<?=number_format($totalShippingFee, 2, '.', ''); ?>">
                                                 <?=number_format($totalShippingFee, 2, '.', ','); ?>
                                             </span>
-                                            <small class="calculate-shipping-label">
-                                                <i class="fa fa-plus"></i> Calculate Shipping
-                                            </small>
                                         <?php else: ?>
-                                            <small class="calculate-shipping-label">
-                                                No shipping location set.
+                                            <small>
+                                                <i>No shipping location set.</i>
                                             </small>
-                                        <?php endif; ?>
+                                        <?php endif; ?> 
+                                        <small class="calculate-shipping-label">
+                                            <i class="fa fa-plus"></i> Calculate Shipping
+                                        </small>
                                     </td>
                                 </tr>
                                 <tr class="border-bottom-1">
@@ -297,7 +297,7 @@
         Shipping calculator
     </h3>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane. 
+        Calculate total shipping cost based on selected location.
     </p>
     <div class="form-group">
         <label for="shipping-city">State/Region</label> 
@@ -328,9 +328,11 @@
         <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly />
     </div>
     <div class="my-modal-footer">
+    <?php if($userAddress): ?>
         <center>
             <button class="btn btn-es-green update-shipping" disabled="disabled" >Save Location</button>  
         </center>
+    <?php endif; ?>
     </div>
 </div>
 <div>
