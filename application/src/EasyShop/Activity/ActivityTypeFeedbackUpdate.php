@@ -80,6 +80,9 @@ class ActivityTypeFeedbackUpdate extends AbstractActivityType
             $formattedData['revieweeImage']  = $this->userManager
                                                     ->getUserImage($activityData->revieweeId, 'small');
             $formattedData['message'] = $activityData->message;
+            $formattedData['rating1'] = $activityData->rating1;
+            $formattedData['rating2'] = $activityData->rating2;
+            $formattedData['rating3'] = $activityData->rating3;
         }
         else if($activityData->action === self::ACTION_FEEDBACK_PRODUCT || $activityData->action === self::ACTION_FEEDBACK_PRODUCT_REPLY ){
             
@@ -91,6 +94,7 @@ class ActivityTypeFeedbackUpdate extends AbstractActivityType
             $formattedData['imageDirectory'] = $productImage->getDirectory();
             $formattedData['imageFile'] = $productImage->getFilename();
             $formattedData['message'] = $activityData->message;
+            $formattedData['rating'] = $activityData->rating;
         }
         $formattedData['action'] = $activityData->action;
      
