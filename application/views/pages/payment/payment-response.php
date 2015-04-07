@@ -25,21 +25,24 @@
                     <div class="breadcrumb-left-wing active-wing"></div>
                     <center>
                         <div class="circle-breadcrumb">
-                            <i class="fa fa-check fa-lg"></i>
+                            <i class="fa icon-payment fa-lg done-icon"></i>
+                            <i class="fa fa-check fa-lg new-icon"></i>
                         </div>
                         <div class="breadcrumb-title">Checkout Details</div>
                     </center>
-                    <div class="breadcrumb-right-wing active-wing"></div>
+                    <div class="breadcrumb-right-wing"></div>
+                    <div class="active-right-wing-cart-1"></div>
                 </div>
-                <div class="col-xs-4 col-trans-breadcrumb active">
-                    <div class="breadcrumb-left-wing active-wing"></div>
+                <div class="col-xs-4 col-trans-breadcrumb">
+                    <div class="breadcrumb-left-wing"></div>
+                    <div class=" active-left-wing-cart-2"></div>
                     <center>
-                        <div class="circle-breadcrumb">
+                        <div class="circle-breadcrumb active-breadcrumb-icon">
                             <i class="fa fa-cube fa-lg"></i>
                         </div>
-                         <div class="breadcrumb-title">Order Complete</div>
+                         <div class="breadcrumb-title active-breadcrumb-title">Order Complete</div>
                     </center>
-                    <div class="breadcrumb-right-wing active-wing"></div>
+                    <div class="breadcrumb-right-wing"></div>
                 </div>
             </div>
         </div>
@@ -182,4 +185,13 @@
         </div>
     </div>
 </div>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/payment-response.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.payment-response.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+
+
+
 
