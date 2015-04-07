@@ -57,6 +57,9 @@ class ActivityManager
         $container[\EasyShop\Entities\EsActivityType::FEEDBACK_UPDATE] = function ($c) use ($entityManager, $userManager, $productManager){
             return new ActivityTypeFeedbackUpdate($entityManager, $userManager, $productManager);
         };
+        $container[\EasyShop\Entities\EsActivityType::VENDOR_SUBSCRIPTION] = function ($c) use ($entityManager, $userManager, $productManager){
+            return new ActivityTypeVendorSubscription($entityManager, $userManager, $productManager);
+        };
 
         $this->container = $container;
     }
