@@ -228,7 +228,8 @@
                     if(jsonResponse.isSuccessful){
                         $container.find('.cart-item-subtotal')
                                   .html(jsonResponse.itemSubtotal);
-                        $cartSubtotal = removeCommas(jsonResponse.cartTotal);
+                        $cartSubtotal = removeCommas(jsonResponse.cartTotal); 
+                        $shippingFee = parseFloat(jsonResponse.totalShippingFee);
                         computePrices();
                     }
                     $cartRowId = null;
@@ -282,7 +283,7 @@
         var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
 
         $summaryContainer.find('#summary-points').html(replaceNumberWithCommas($usedPoints.toFixed(2)));
-        $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee));
+        $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee.toFixed(2)));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
         $summaryContainer.find('#summary-cart-total').html(replaceNumberWithCommas($cartTotalPrice.toFixed(2)));
     }
