@@ -181,6 +181,20 @@ class TransactionManager
                 $this->em->getRepository('EasyShop\Entities\EsOrderHistory')->addOrderHistory($orderHistoryData);
             }
 
+            if($this->isTransactionCompletePerSeller($orderId, $esOrderProduct->getSeller()->getIdMember())){
+                if($esOrderProduct->getOrder()->getPaymentMethod()->getIdPaymentMethod() !== EsPaymentMethod::PAYMENT_CASHONDELIVERY){
+                    $existingFeedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
+                                                  ->findOneBy([
+                                                    'order' => $orderId,
+                                                    'forMemberid' => $esOrderProduct->getSeller()->getIdMember()
+                                                  ]);
+                    if($existingFeedbacks){
+                        $this->pointTracker
+                             ->addUserPoint($memberId, EsPointType::TYPE_TRANSACTION_FEEDBACK);
+                    }
+                }
+            }
+
             $result = [
                 'o_success' => true,
                 'o_message' => 'Product Order entry updated!'
@@ -491,5 +505,28 @@ class TransactionManager
         }
 
         return $totalShippingFee;
+    }
+
+    /**
+     * Check if transaction is complete per seller
+     * @param  integer  $orderId
+     * @param  integer  $memberId
+     * @return boolean
+     */
+    public function isTransactionCompletePerSeller($orderId, $memberId)
+    { 
+        $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                  ->findBy([
+                                    'order' => $orderId,
+                                    'seller' => $memberId,
+                                  ]);
+
+        foreach ($orderProducts as $product) {
+            if($product->getStatus()->getIdOrderProductStatus() !== EsOrderProductStatus::FORWARD_SELLER){
+                return false;
+            }
+        }
+
+        return true;
     }
 }
