@@ -249,7 +249,7 @@ class PesoPayGateWay extends AbstractGateway
                                'paymentMethod' => $paymentType
                            ]);
 
-        if($this->validateSecureHash($params)){
+        if(isset($params['secureHash']) && $this->validateSecureHash($params)){
             if($order){
                 $orderId = $order->getIdOrder();
                 $memberId = $order->getBuyer()->getIdMember();
@@ -294,12 +294,14 @@ class PesoPayGateWay extends AbstractGateway
                     $this->paymentService->sendPaymentNotification($orderId);
                 }
                 else{
+                    $this->paymentService->transactionManager->voidTransaction($orderId);
+                    $this->paymentService->revertTransactionPoint($orderId);
                     $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                              ->deleteLockItem($orderId, $toBeLocked);
                     $orderHistory = [
                         'order_id' => $orderId,
                         'order_status' => EsOrderStatus::STATUS_VOID,
-                        'comment' => 'Pesopay transaction failed: ' . $message
+                        'comment' => 'Pesopay transaction failed: ' . json_encode($params),
                     ];
                     $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                              ->addOrderHistory($orderHistory);
