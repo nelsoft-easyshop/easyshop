@@ -15,19 +15,22 @@
                     <div class="breadcrumb-left-wing active-wing"></div>
                     <center>
                         <div class="circle-breadcrumb">
-                            <i class="fa fa-check fa-lg"></i>
+                            <i class="fa icon-cart fa-lg done-icon"></i>
+                            <i class="fa fa-check fa-lg new-icon"></i>
                         </div>
                         <div class="breadcrumb-title"> Shopping Cart</div>
                     </center>
-                    <div class="breadcrumb-right-wing active-wing"></div>
+                    <div class="breadcrumb-right-wing"></div>
+                    <div class="active-right-wing-cart-1"></div>
                 </div>
-                <div class="col-xs-4 col-trans-breadcrumb active">
-                    <div class="breadcrumb-left-wing active-wing"></div>
+                <div class="col-xs-4 col-trans-breadcrumb">
+                    <div class="breadcrumb-left-wing"></div>
+                    <div class=" active-left-wing-cart-2"></div>
                     <center>
-                        <div class="circle-breadcrumb">
+                        <div class="circle-breadcrumb active-breadcrumb-icon">
                             <i class="fa icon-payment fa-lg"></i>
                         </div>
-                        <div class="breadcrumb-title">Checkout Details</div>
+                        <div class="breadcrumb-title active-breadcrumb-title">Checkout Details</div>
                     </center>
                     <div class="breadcrumb-right-wing"></div>
                 </div>

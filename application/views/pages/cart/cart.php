@@ -12,13 +12,14 @@
         <!--Start of transaction breadcrumb-->
         <div class="transaction-breadcrumb-container">
             <div class="row">
-                <div class="col-xs-4 col-trans-breadcrumb active">
-                    <div class="breadcrumb-left-wing active-wing"></div>
+                <div class="col-xs-4 col-trans-breadcrumb">
+                    <div class="breadcrumb-left-wing"></div>
+                    <div class="active-left-wing-cart-1"></div>
                     <center>
-                        <div class="circle-breadcrumb">
+                        <div class="circle-breadcrumb active-breadcrumb-icon">
                             <i class="fa icon-cart fa-lg"></i>
                         </div>
-                        <div class="breadcrumb-title">Shopping Cart</div>
+                        <div class="breadcrumb-title active-breadcrumb-title">Shopping Cart</div>
                     </center>
                     <div class="breadcrumb-right-wing"></div>
                 </div>
