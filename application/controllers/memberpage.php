@@ -736,32 +736,38 @@ class Memberpage extends MY_Controller
                 $data['order_product_id'] = $productIds;
             }
 
+            
+            
             if (is_array($data['order_product_id'])) {
-                foreach ($data['order_product_id'] as $orderProductId) {
-                    $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                            ->getSocialMediaLinks();
+                $parseData['facebook'] = $socialMediaLinks["facebook"];
+                $parseData['twitter'] = $socialMediaLinks["twitter"];
+                $parseData['baseUrl'] = base_url();
+                $orderProductStatus = $data['status'];
+                $emailRecipient = null;
+                $mobileRecipient = null;
+                foreach ($data['order_product_id'] as $key => $orderProductId) {
+                    #$result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
+                    $result['o_success'] = 1;
                     if( $result['o_success'] >= 1 ) {
-                        $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
-                        $parseData['itemLink'] = base_url().'item/'.$parseData['productSlug'];
-                        $parseData['store_link'] = base_url() . $parseData['user_slug'];
-                        $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
-                        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                                 ->getSocialMediaLinks();
-                        $parseData['facebook'] = $socialMediaLinks["facebook"];
-                        $parseData['twitter'] = $socialMediaLinks["twitter"];
-                        $parseData['baseUrl'] = base_url();
-                        
+
+                        $orderProductParseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
+                        $orderProductParseData['itemLink'] = base_url().'item/'.$orderProductParseData['productSlug'];                        
                         $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                             ->getDefaultImage($parseData['productId']);
+                                             ->getDefaultImage($orderProductParseData['productId']);
                         $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
                         $imagePath = ltrim($imagePath, '.');
                         if(strtolower(ENVIRONMENT) === 'development'){
                             $imagePath = $imagePath[0] !== '/' ? '/'.$imagePath : $imagePath;
                             $imageArray[] = $imagePath;
-                            $parseData['primaryImage'] = $primaryImage->getFilename();
+                            $orderProductParseData['primaryImage'] = $primaryImage->getFilename();
                         }
                         else{
-                            $parseData['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
+                            $orderProductParseData['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
                         }
+                        $emailRecipient = $orderProductParseData['email'];
+                        $mobileRecipient = $orderProductParseData['mobile'];
 
                         if (
                             (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
@@ -770,44 +776,57 @@ class Memberpage extends MY_Controller
                         ) {
                             $hasNotif = true;
                         }
-                        switch ($data['status']) {
-                            case EsOrderProductStatus::FORWARD_SELLER :
-                                $emailSubject = $this->lang->line('notification_forwardtoseller');
-                                $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
-                                $smsMsg = $parseData['user'] . ' has just confirmed receipt of your product from Invoice # : ' . $parseData['invoice_no'];
-                                break;
-                            case EsOrderProductStatus::RETURNED_BUYER :
-                                $emailSubject = $this->lang->line('notification_returntobuyer');
-                                $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
-                                $smsMsg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
-                                break;
-                            case EsOrderProductStatus::CASH_ON_DELIVERY :
-                                $emailSubject = $this->lang->line('notification_forwardtoseller');
-                                $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
-                                $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
-                                break;
-                        }
+   
+                        $parseData['products'][$key] = $orderProductParseData;
+                        $parseData['user'] = $orderProductParseData['user'];
+                        $parseData['recipient'] = $orderProductParseData['recipient'];
                     }
                 }
 
                 if($hasNotif){
-                    $emailService->setRecipient($parseData['email'])
-                                 ->setSubject($emailSubject)
-                                 ->setMessage($emailMsg, $imageArray)
-                                 ->queueMail();       
-                    $smsService->setMobile($parseData['mobile'])
-                               ->setMessage($smsMsg)
-                               ->queueSMS();
+
+                    $triggerMember = $this->serviceContainer['entity_manager']
+                                          ->getRepository('EasyShop\Entities\EsMember')
+                                          ->find($data['member_id']);
+                    
+                    switch ($orderProductStatus) {
+                        case EsOrderProductStatus::FORWARD_SELLER :
+                            $emailSubject = $this->lang->line('notification_forwardtoseller');
+                            $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
+                            $smsMsg = $triggerMember->getStoreName() . ' has just confirmed receipt of your product from Invoice # : ' . $data['invoice_num'];
+                            break;
+                        case EsOrderProductStatus::RETURNED_BUYER :
+                            $emailSubject = $this->lang->line('notification_returntobuyer');
+                            $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
+                            $smsMsg = $triggerMember->getStoreName() . ' has just confirmed to return your payment for a product in Invoice # : ' . $data['invoice_num'];
+                            break;
+                        case EsOrderProductStatus::CASH_ON_DELIVERY :
+                            $emailSubject = $this->lang->line('notification_forwardtoseller');
+                            $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
+                            $smsMsg = $triggerMember->getStoreName() . ' has just completed your CoD transaction with Invoice # : ' . $data['invoice_num'];
+                            break;
+                    }    
+                    
+                    if($emailRecipient !== null){
+                        $emailService->setRecipient($emailRecipient)
+                                    ->setSubject($emailSubject)
+                                    ->setMessage($emailMsg, $imageArray)
+                                    ->queueMail();   
+                    }
+                    if($mobileRecipient !== null){
+                        $smsService->setMobile($mobileRecipient)
+                                ->setMessage($smsMsg)
+                                ->queueSMS();
+                    }
                 }
             }
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
             $serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
-
-        /**
-         *  DRAGONPAY HANDLER
-         */
         }
         else if ( $this->input->post('dragonpay') ) {
+            /**
+             *  DRAGONPAY HANDLER
+             */
             $this->load->library('dragonpay');
 
             if ( (int) count($getTransaction) === 1) {
@@ -824,29 +843,7 @@ class Memberpage extends MY_Controller
             else{
                 $serverResponse['error'] = 'Transaction does not exist.';
             }
-            /**
-             *  BANK DEPOSIT HANDLER
-             */
         }
-        else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
-            if ( (int) count($getTransaction) === 1 ) {
-                $postData = [
-                    'order_id' => $data['transaction_num'],
-                    'bank' => $this->input->post('bank'),
-                    'ref_num' => $this->input->post('ref_num'),
-                    'amount' => preg_replace('/,/', '', $this->input->post('amount')),
-                    'date_deposit' => date("Y-m-d H:i:s", strtotime($this->input->post('date'))),
-                    'comment' => $this->input->post('comment')
-                ];
-                $result = $this->payment_model->addBankDepositDetails($postData);
-                $serverResponse['result'] = $result ? 'success' : 'fail';
-                $serverResponse['error'] = $result ? '' : 'Failed to insert details into database.';
-            }
-            else{
-                $serverRespone['error'] = 'Transaction does not exist.';
-            }
-        }
-
         echo json_encode($serverResponse);
     }
 
