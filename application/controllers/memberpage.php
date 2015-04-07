@@ -892,7 +892,8 @@ class Memberpage extends MY_Controller
                                                                         ]);
                     $isUpdated = false;
                     if ($oldShippingComment) {
-                        $isUpdated = empty($productShippingCommentRepo->getExactShippingComment($commentData)) === true;
+                        $exactShippingComment = $productShippingCommentRepo->getExactShippingComment($commentData);
+                        $isUpdated = empty($exactShippingComment) === true;
                         $newShippingComment = $productShippingCommentRepo->updateShippingComment($oldShippingComment, $orderProductEntity, $commentData['comment'], $memberEntity, $commentData['courier'], $commentData['tracking_num'], $commentData['expected_date'], $commentData['delivery_date']);
                     }
                     else {
