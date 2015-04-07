@@ -13,30 +13,6 @@ class EsAddressSubscriber implements EventSubscriber
     protected $changeSet = [];
 
     /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
-    /**
     * The postPersist event occurs for an entity after the entity has been made persistent.
     *
     * @param LifecycleEventArgs $event
@@ -163,9 +139,8 @@ class EsAddressSubscriber implements EventSubscriber
                              ->find($entity->getIdMember()->getIdMember());   
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
-                $activity = new \EasyShop\Activity\ActivityTypeInformationUpdate();
-                $jsonString = $activity->constructJSON($this->changeSet);            
-                if($jsonString !== ""){
+                $jsonString = \EasyShop\Activity\ActivityTypeInformationUpdate::constructJSON($this->changeSet);      
+                if($jsonString){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                        ->createAcitivityLog($activityType, $jsonString, $member);
                 }

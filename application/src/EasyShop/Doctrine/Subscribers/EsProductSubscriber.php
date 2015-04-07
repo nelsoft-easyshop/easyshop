@@ -13,30 +13,6 @@ class EsProductSubscriber implements EventSubscriber
     protected $changeSet = [];
 
     /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
-    /**
      * The preUpdate event occurs before the database update operations to entity data.
      * 
      * @param  LifecycleEventArgs $event
@@ -83,7 +59,6 @@ class EsProductSubscriber implements EventSubscriber
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::PRODUCT_UPDATE);
                 $jsonString = "";
-                $activity = new \EasyShop\Activity\ActivityTypeProductUpdate();     
                 $actionType = null;
                 if ((int)$entity->getIsDelete() === (int)EsProduct::FULL_DELETE) {
                     $actionType = \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_FULL_DELETE;
@@ -102,7 +77,7 @@ class EsProductSubscriber implements EventSubscriber
                     $data = [
                         'productId' => $entity->getIdProduct(),
                     ];
-                    $jsonString = $activity->constructJSON($data, $actionType);
+                    $jsonString = \EasyShop\Activity\ActivityTypeProductUpdate::constructJSON($data, $actionType);
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                         ->createAcitivityLog($activityType, $jsonString, $entity->getMember());
                 }

@@ -13,30 +13,6 @@ class EsMemberFeedbackSubscriber implements EventSubscriber
     protected $changeSet = [];
 
     /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
-    /**
     * The postPersist event occurs for an entity after the entity has been made persistent.
     *
     * @param LifecycleEventArgs $event
@@ -66,12 +42,15 @@ class EsMemberFeedbackSubscriber implements EventSubscriber
             $forMember = $entity->getForMemberid();
             $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                ->find(EsActivityType::FEEDBACK_UPDATE);
-            $activity = new \EasyShop\Activity\ActivityTypeFeedbackUpdate();
             $action = \EasyShop\Activity\ActivityTypeFeedbackUpdate::ACTION_FEEDBACK_USER;
             $data = [
                 'revieweeId' => $forMember->getIdMember(),
+                'message' => $entity->getFeedbMsg(),
+                'rating1' => $entity->getRating1(),
+                'rating2' => $entity->getRating2(),
+                'rating3' => $entity->getRating3(),
             ];
-            $jsonData = $activity->constructJSON($data, $action);
+            $jsonData = \EasyShop\Activity\ActivityTypeFeedbackUpdate::constructJSON($data, $action);
             $em->getRepository('EasyShop\Entities\EsActivityHistory')
                ->createAcitivityLog($activityType, $jsonData, $member);
        

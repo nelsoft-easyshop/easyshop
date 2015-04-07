@@ -26,4 +26,28 @@ class EsActivityHistoryRepository extends EntityRepository
         $this->em->persist($activity);
         $this->em->flush();
     }
+    
+    /**
+     * Get user activities
+     *
+     * @param integer $memberId
+     * @param integer $limit
+     * @param integer $offset
+     * @return EasyShop\Entities\EsActivityHistory[]
+     */
+    public function getActivities($memberId, $limit, $offset)
+    {
+        $em = $this->_em;
+        $query = $em->createQueryBuilder()
+                        ->select('A') 
+                        ->from('EasyShop\Entities\EsActivityHistory','A')
+                        ->where('A.member = :memberId')
+                        ->setParameter("memberId",$memberId)
+                        ->setFirstResult( $offset )
+                        ->setMaxResults( $limit )
+                        ->getQuery();
+        $activities = $query->getResult();
+
+        return $activities;
+    }
 }

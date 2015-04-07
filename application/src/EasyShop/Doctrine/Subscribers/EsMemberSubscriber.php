@@ -11,31 +11,7 @@ use EasyShop\Entities\EsActivityType as EsActivityType;
 class EsMemberSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
-
-    /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
+    
     /**
      * The preUpdate event occurs before the database update operations to entity data.
      * 
@@ -117,8 +93,7 @@ class EsMemberSubscriber implements EventSubscriber
             if(count($this->changeSet) > 0){
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
-                $activity = new \EasyShop\Activity\ActivityTypeInformationUpdate();
-                $jsonString = $activity->constructJSON($this->changeSet);  
+                $jsonString = \EasyShop\Activity\ActivityTypeInformationUpdate::constructJSON($this->changeSet);
                 if($jsonString !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                        ->createAcitivityLog($activityType, $jsonString, $entity);

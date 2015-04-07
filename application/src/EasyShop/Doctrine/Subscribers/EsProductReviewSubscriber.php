@@ -13,30 +13,6 @@ class EsProductReviewSubscriber implements EventSubscriber
     protected $changeSet = [];
 
     /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
-    /**
     * The postPersist event occurs for an entity after the entity has been made persistent.
     *
     * @param LifecycleEventArgs $event
@@ -75,11 +51,12 @@ class EsProductReviewSubscriber implements EventSubscriber
             }
 
             if($actionType !== null){
-                $activity = new \EasyShop\Activity\ActivityTypeFeedbackUpdate();
                 $data = [
                     'productId' => $product->getIdProduct(),
+                    'message' => $entity->getReview(),
+                    'rating' => $entity->getRating(),
                 ];
-                $jsonData = $activity->constructJSON($data, $actionType);
+                $jsonData = \EasyShop\Activity\ActivityTypeFeedbackUpdate::constructJSON($data, $actionType);
                 $em->getRepository('EasyShop\Entities\EsActivityHistory')
                    ->createAcitivityLog($activityType, $jsonData, $member);
             }

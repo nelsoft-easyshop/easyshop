@@ -12,29 +12,6 @@ class EsProductShippingCommentSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
 
-    /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
 
     /**
     * The postPersist event occurs for an entity after the entity has been made persistent.
@@ -125,7 +102,6 @@ class EsProductShippingCommentSubscriber implements EventSubscriber
                 $orderId = $orderProduct->getOrder()->getIdOrder();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::TRANSACTION_UPDATE);
-                $activity = new \EasyShop\Activity\ActivityTypeTransactionUpdate();   
                 if(isset($this->changeSet['modified'])){
                     $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_EDIT_SHIPMENT;
                     unset($this->changeSet['modified']);
@@ -139,7 +115,7 @@ class EsProductShippingCommentSubscriber implements EventSubscriber
                         'orderId' => $orderId,
                         'orderProductId' => $orderProductId,
                     ];
-                    $jsonData = $activity->constructJSON($data, $action);
+                    $jsonData = \EasyShop\Activity\ActivityTypeTransactionUpdate::constructJSON($data, $action);
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                        ->createAcitivityLog($activityType, $jsonData, $member);
                 }

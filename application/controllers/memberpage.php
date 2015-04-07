@@ -69,6 +69,13 @@ class Memberpage extends MY_Controller
      * @var integer
      */
     public $pointHistoryItemsPerPage = 10;
+    
+    /**
+     * Number of Point History Items per page
+     *
+     * @var integer
+     */
+    public $activityLogPerPage = 10;
 
     /**
      *  Class Constructor
@@ -2423,6 +2430,23 @@ class Memberpage extends MY_Controller
             }
         }
         echo json_encode($jsonResponse);
+    }
+    
+    /**
+     * Get activity logs for user
+     *
+     * @return json
+     */
+    public function getActivityLog()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $perPage = $this->activityLogPerPage;
+        $page = $this->input->get('page') ? $this->input->get('page') : 1;
+        $page--;
+        $offset = $page * $perPage;
+        $activities = $this->serviceContainer['activity_manager']
+                           ->getUserActivities($memberId, $perPage, $offset);
+        echo json_encode($activities);
     }
 
 }

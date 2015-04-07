@@ -5,6 +5,25 @@ namespace EasyShop\Activity;
 class ActivityTypeProductUpdate extends AbstractActivityType
 {
     /**
+     * Product Manager
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
+
+    /**
+     * Constructor
+     *
+     * @param EasyShop\Product\ProductManager $productManager
+     *
+     */
+    public function __construct($productManager)
+    {
+        parent::__construct();
+        $this->productManager  = $productManager;
+    }
+
+    /**
      * Action constant for product update 
      *
      * @var integer
@@ -32,23 +51,29 @@ class ActivityTypeProductUpdate extends AbstractActivityType
      */
     const ACTION_PRODUCT_RESTORE = 4;
 
-    
     /**
-     * Return if the action is valid
+     * Return formatted data for specific activity
      *
-     * @param integer $action
-     * @return boolean
+     * @param string $jsonData
+     * @return mixed
      */
-    public function isUsableAction($action)
+    public function getFormattedData($jsonData)
     {
-        $actionArray = [
-            self::ACTION_PRODUCT_UPDATE,
-            self::ACTION_PRODUCT_SOFT_DELETE,
-            self::ACTION_PRODUCT_FULL_DELETE,
-            self::ACTION_PRODUCT_RESTORE,
-        ];
+        $formattedData = [];
+        $activityData = json_decode($jsonData);
 
-        return in_array($action, $actionArray);
+        if(isset($activityData->productId)){
+            $product = $this->productManager->getProductDetails($activityData->productId);
+            $formattedData['name'] = $product->getName();
+            $formattedData['slug'] = $product->getSlug();
+            $formattedData['productId'] = $activityData->productId;
+            $productImage = $product->getDefaultImage();
+            $formattedData['imageDirectory'] = $productImage->getDirectory();
+            $formattedData['imageFile'] = $productImage->getFilename();
+            $formattedData['action'] = $activityData->action;
+        }
+
+        return $formattedData;
     }
 }
 

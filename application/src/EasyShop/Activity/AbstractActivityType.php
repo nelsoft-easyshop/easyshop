@@ -4,7 +4,16 @@ namespace EasyShop\Activity;
 
 abstract class AbstractActivityType
 {
-    abstract public function isUsableAction($action);
+    abstract public function getFormattedData($jsonData);
+
+    /**
+     * Constructor
+     *
+     */
+    public function __construct()
+    {
+
+    }
 
     /**
      * Construct JSON String
@@ -12,22 +21,19 @@ abstract class AbstractActivityType
      * @param integer $action
      * @return string
      */
-    public function constructJSON($fields, $action = null)
+    public static function constructJSON($fields, $action = null)
     {
         if(is_array($fields) === false){
             throw new \Exception('First parameter must be an array');
         }
-        
-        $data = [];
-        if($this->isUsableAction($action)){
-            $data = $fields;
-            if($action !== null){
-                $data['action'] = $action;
-            }
+
+        $data = $fields;
+        if($action !== null){
+            $data['action'] = $action;
         }
-        
+
         return json_encode($data);
     }
-    
+
 }
 

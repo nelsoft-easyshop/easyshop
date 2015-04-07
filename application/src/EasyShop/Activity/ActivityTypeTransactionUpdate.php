@@ -4,6 +4,32 @@ namespace EasyShop\Activity;
 
 class ActivityTypeTransactionUpdate extends AbstractActivityType
 {    
+
+    /**
+     * Entity Manager instance
+     *
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $entityManager;
+    
+    /**
+     * Product Manager
+     *
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
+
+    /**
+     * Constructor
+     *
+     */
+    public function __construct($entityManager, $productManager)
+    {
+        parent::__construct();
+        $this->entityManager = $entityManager;
+        $this->productManager = $productManager; 
+    }
+
     /**
      * Action constant for new purchase 
      *
@@ -63,25 +89,34 @@ class ActivityTypeTransactionUpdate extends AbstractActivityType
     const ACTION_EDIT_SHIPMENT = 7;
 
     /**
-     * Return if the action is valid
+     * Return formatted data for specific activity
      *
-     * @param integer $action
-     * @return boolean
+     * @param string $jsonData
+     * @return mixed
      */
-    public function isUsableAction($action)
+    public function getFormattedData($jsonData)
     {
-        $actionArray = [
-            self::ACTION_COD_COMPLETED,
-            self::ACTION_REFUNDED,
-            self::ACTION_RECEIVED,
-            self::ACTION_REJECTED,
-            self::ACTION_UNREJECTED,
-            self::ACTION_ADD_SHIPMENT,
-            self::ACTION_EDIT_SHIPMENT,
-        ];
+        $formattedData = [];
+        $activityData = json_decode($jsonData);
 
-        return in_array($action, $actionArray);
+        if(isset($activityData->orderProductId)){
+            $orderProduct = $this->entityManager->getRepository('EasyShop\Entities\EsOrderProduct')
+                                 ->find($activityData->orderProductId);
+            $order = $orderProduct->getOrder();
+            $product = $this->productManager->getProductDetails($orderProduct->getProduct());
+            $formattedData['invoiceNumber'] = $order->getInvoiceNo();            
+            $formattedData['name'] = $product->getName();
+            $formattedData['slug'] = $product->getSlug();
+            $formattedData['productId'] = $product->getIdProduct();
+            $productImage = $product->getDefaultImage();
+            $formattedData['imageDirectory'] = $productImage->getDirectory();
+            $formattedData['imageFile'] = $productImage->getFilename();
+            $formattedData['action'] = $activityData->action;
+        }
+
+        return $formattedData;
     }
+    
 }
 
 
