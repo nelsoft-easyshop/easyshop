@@ -340,4 +340,14 @@
             });
         }
     }
+
+    $(window).on('load resize', function(){
+        setTimeout(function(){
+            var MessageSender = $(".msg_sender");
+            var TableIdWidth = $("#table_id_wrapper").width() - 105;
+
+            MessageSender.css('max-width',TableIdWidth);
+
+        }, 500);
+    });
 })(jQuery);
