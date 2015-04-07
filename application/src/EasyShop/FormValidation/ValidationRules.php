@@ -108,7 +108,9 @@ class ValidationRules
                 ),
             'vendor_contact' => array(
                     'shop_name' => array(
-                                new CustomAssert\IsValidStoreNameOptional(),
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5',
+                                                   'max' => '60']),
                                 new CustomAssert\IsAlphanumericSpace(),
                     ),
                     'contact_number' => array(
@@ -180,7 +182,9 @@ class ValidationRules
                                 new CustomAssert\IsValidGender(),
                     ),   
                     'shop_name' => array(
-                                new CustomAssert\IsValidStoreNameOptional(),
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5',
+                                                   'max' => '60']),
                                 new CustomAssert\IsAlphanumericSpace(),
                     ),                 
             ),
