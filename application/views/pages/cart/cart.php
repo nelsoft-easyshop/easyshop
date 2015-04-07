@@ -257,11 +257,12 @@
                             <tbody>
                                 <tr class="payment-method-tr">
                                     <td class="payment-method-td">
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-visa.png" class="img-payment-method" alt="VISA"/>
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-paypal.png" class="img-payment-method" alt="PayPal"/>
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-mastercard.png" class="img-payment-method" alt="MasterCard"/>
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-dragonpay.png" class="img-payment-method" alt="Dragonpay"/>
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-cod.png" class="img-payment-method" alt="COD"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/visa.png" class="img-payment-method" alt="VISA"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/paypal.png" class="img-payment-method" alt="PayPal"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/master-card.png" class="img-payment-method" alt="MasterCard"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/dragonpay.png" class="img-payment-method" alt="Dragonpay"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/pesopay.png" class="img-payment-method" alt="PesoPay"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/cod.png" class="img-payment-method" alt="COD"/>
                                     </td>
                                 </tr>
                             </tbody>
