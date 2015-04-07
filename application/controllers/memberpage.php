@@ -887,7 +887,8 @@ class Memberpage extends MY_Controller
                                                 "order" => $orderEntity
                                             ]);
                 $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
-                                            ->findOneBy(["orderProduct" => $orderProductEntity,
+                                            ->findOneBy([
+                                                "orderProduct" => $orderProductEntity,
                                                 "member" => $memberEntity
                                             ]);
                 $shippingCommentEntitySize = count($shippingCommentEntity);
@@ -897,18 +898,17 @@ class Memberpage extends MY_Controller
                 }
 
                 if( count($orderProductEntity) === 1 ) {
-                    $esShippingComment = $productShippingCommentRepo->findOneBy(['orderProduct' => $orderProductEntity, 'member' => $memberEntity]);
-                    if ($esShippingComment) {
-                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($esShippingComment, $orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
+                    if ($shippingCommentEntity) {
+                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($shippingCommentEntity, $orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
                     }
                     else {
                         $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
                     }
-                    $isShippingCommentModified = (bool) $newEsShippingComment;
-                    $serverResponse['result'] = $isShippingCommentModified ? 'success' : 'fail';
-                    $serverResponse['error'] = $isShippingCommentModified ? '' : 'Failed to insert in database.';
+                    $isSuccessful = (bool) $newEsShippingComment;
+                    $serverResponse['result'] = $isSuccessful ? 'success' : 'fail';
+                    $serverResponse['error'] = $isSuccessful ? '' : 'Failed to insert in database.';
 
-                    if( $isShippingCommentModified && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
+                    if( $isSuccessful && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
                         $buyerEntity = $orderEntity->getBuyer();
                         $buyerEmail = $buyerEntity->getEmail();
                         $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
@@ -920,8 +920,6 @@ class Memberpage extends MY_Controller
                                                  ->getSocialMediaLinks();
                         $parseData = array_merge($parseData, [
                             "seller" => $memberEntity->getUsername(),
-                            "store_link" => base_url() . $memberEntity->getSlug(),
-                            "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
                             "buyer" => $buyerEntity->getUsername(),
                             "invoice" => $orderEntity->getInvoiceNo(),
                             "product_name" => $orderProductEntity->getProduct()->getName(),
@@ -932,7 +930,7 @@ class Memberpage extends MY_Controller
                             'baseUrl' => base_url(),
                         ]);
                         $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
-
+                        
                         $emailService->setRecipient($buyerEmail)
                                      ->setSubject($buyerEmailSubject)
                                      ->setMessage($buyerEmailMsg, $imageArray)
