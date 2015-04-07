@@ -168,7 +168,7 @@
                                      <span class="free-shipping-tag">
                                         <i class="fa fa-truck fa-lg"></i> FREE 
                                         SHIPPING
-                                        <span class="free-shipping-tag-tail"><span>
+                                        <span class="free-shipping-tag-tail"></span>
                                     </span>
                                 <?php endif; ?>
                             </div>

@@ -1779,6 +1779,7 @@ class Payment extends MY_Controller{
                           ->checkIpIsValidForPostback($ipAddress, EsPaymentMethod::PAYMENT_PESOPAYCC);
 
         if($isValidIp){
+            log_message('error', 'DATA FEED --> '. json_encode($this->input->post()));
             header("Content-Type:text/plain");
             echo 'OK'; // acknowledgemenet
 
@@ -1790,6 +1791,7 @@ class Payment extends MY_Controller{
             $paymentService->postBack($paymentMethods, null, null, $params);
         }
         else{
+            log_message('error', '404 Page Not Found --> PESOPAY DATAFEED');
             show_404();
         }
     }

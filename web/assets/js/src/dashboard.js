@@ -102,6 +102,7 @@
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-info" ).addClass( "selectedM" );
     });
+    
     var isDeliveryAddressLoaded = false;
     $( ".delivery-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
@@ -116,8 +117,25 @@
                 type: "get",
                 url: '/memberpage/getDeliveryAddress',
                 success: function(data){ 
-                    var serverResponse = jQuery.parseJSON(data);
-                    jsonCity = jQuery.parseJSON(serverResponse.cities);
+                    var serverResponse = $.parseJSON(data);
+                    /**
+                     * Turn cityLookupObject into an array and sort alphabetically 
+                     */
+                    var cityLookupObject = $.parseJSON(serverResponse.cities);
+                    var cityLookupArray = [];
+                    $.each(cityLookupObject, function(parentId, cityList) {
+                        var cityArray = [];
+                        $.each(cityList, function(cityId, city) {
+                            cityArray.push({'id': cityId, 'name': city});
+                        });
+                        cityArray.sort(function(a,b) {
+                            var cityNameA = a.name.toLowerCase();
+                            var cityNameB = b.name.toLowerCase();
+                            return cityNameA < cityNameB ? -1 : cityNameA > cityNameB ? 1 : 0;
+                        });
+                        cityLookupArray[parentId] = cityArray;
+                    });  
+                    jsonCity = cityLookupArray;
                     var mobile = serverResponse.address ? ( serverResponse.address.mobile !== '' ? '0'+serverResponse.address.mobile : '' ) : '';
                     var telephone = serverResponse.address ? ( serverResponse.address.telephone !== '' ? serverResponse.address.telephone : '' ) : '';
                     var consignee = serverResponse.address ? ( serverResponse.address.consignee !== '' ? serverResponse.address.consignee : '' ) : '';
@@ -129,19 +147,37 @@
                     var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                     var stateRegionDropDown = $("#deliver_stateregion");
                     var dropDownTemplate = "";
+                    
+                    /**
+                     * Turn stateRegion object into an array and sort alphabetically 
+                     */
+                    var stateRegionArray = [];
                     $.each(serverResponse.stateRegionLists, function(index, stateRegion) {
-                        dropDownTemplate += '<option class="echo" value="'+index+'">' + stateRegion + '</option>';
+                        stateRegionArray.push({'id': index, 'name': stateRegion});
                     });  
+                    stateRegionArray.sort(function(a,b) {
+                        var stateNameA = a.name.toLowerCase();
+                        var stateNameB = b.name.toLowerCase();
+                        return stateNameA < stateNameB ? -1 : stateNameA > stateNameB ? 1 : 0;
+                    });
+                    $.each(stateRegionArray, function(index, stateRegion) {
+                        dropDownTemplate += '<option class="echo" value="'+stateRegion.id+'">' + stateRegion.name + '</option>';
+                    });  
+
                     stateRegionDropDown.append(dropDownTemplate);                         
                     stateRegionDropDown.val(consigneeStateRegion);
                     var cityDropDown = $("#delivery_city");
                     dropDownTemplate = "";
-                    if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '' && serverResponse.consigneeCityLookup !== null) {
-                        $.each(serverResponse.consigneeCityLookup, function(index, cityList) { 
-                            dropDownTemplate += '<option class="echo" value="'+index+'">' + cityList + '</option>';                        
-                        }); 
-                        cityDropDown.append(dropDownTemplate);                                                
+                    if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '') {
+                        var deliveryStateRegionId = parseInt(serverResponse.consigneeStateRegionId, 10);
+                        if(typeof cityLookupArray[deliveryStateRegionId] !== 'undefined'){
+                            $.each(cityLookupArray[deliveryStateRegionId], function(index, city){
+                                dropDownTemplate += '<option class="echo" value="'+city.id+'">' + city.name + '</option>';
+                            });
+                            cityDropDown.append(dropDownTemplate);  
+                        }
                     }
+                    
                     cityDropDown.val(serverResponse.consigneeCityId);
                     var lat  = (serverResponse.address !== null) ? serverResponse.address.lat : 0;
                     var lng = (serverResponse.address !== null) ? serverResponse.address.lng : 0;
@@ -161,6 +197,7 @@
         }
         isDeliveryAddressLoaded = true;
     });
+    
     
     $( ".payment-address-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
@@ -2649,9 +2686,12 @@
                 $('.allItems').prepend(listItem.fadeIn());
             }
         });
+        
+        var $listContainer = listItem.closest('.category-items-holder');
+        checkContainerScrollable($listContainer);
     });
     
-    
+
     $(document.body).on('keypress', '.search-category', function(event){
         if ( event.which == 13 ) {
             event.preventDefault();
@@ -2932,15 +2972,15 @@
     }
 
     
-    function loadMoreCategoryProducts($div)
+    function loadMoreCategoryProducts($div, isScrollIgnore)
     {    
+        isScrollIgnore = typeof isScrollIgnore === 'undefined' ? false : isScrollIgnore;
         var isComplete = $div.attr('data-isComplete');
         if($.parseJSON(isComplete)){
             return false;
         }
-        
         var div = $div[0];
-        if(div.scrollTop + div.clientHeight >= div.scrollHeight){
+        if(isScrollIgnore === true || div.scrollTop + div.clientHeight >= div.scrollHeight){
             
             $modalDiv = $div.closest('.category-modal');            
             var categoryId = $modalDiv.find('.hidden-category-id').val();
@@ -2983,7 +3023,7 @@
             }
         }
     }
-    
+
     function createCustomizedCategoryModal(div)
     {
         div.modal({
@@ -2993,10 +3033,18 @@
         var $allProductList = div.find('.all-product-list');              
         var $categoryProductList = div.find('.category-product-list');
         $categoryProductList.sortable({
-            connectWith: $allProductList
+            connectWith: $allProductList,
+            receive: function( event, ui ) {
+                var $listContainer = $allProductList.closest('.category-items-holder');
+                checkContainerScrollable($listContainer);
+            }
         });                 
         $allProductList.sortable({
-            connectWith: $categoryProductList
+            connectWith: $categoryProductList,
+            receive: function( event, ui ) {
+                var $listContainer = $categoryProductList.closest('.category-items-holder');
+                checkContainerScrollable($listContainer);
+            }
         });
         div.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
         var addContentHeight = div.outerHeight();
@@ -3030,6 +3078,15 @@
             $(".my-category-modal-sm").css("width", modalCategoryModalSmWidth+"px").css("height",modalDeleteHeight+"px");
         }
     });
+    
+    function checkContainerScrollable($categoryItemHolder)
+    {
+        var listContainer = $categoryItemHolder[0];
+        var isContainerScrollable = listContainer.scrollHeight > listContainer.clientHeight;
+        if(isContainerScrollable === false){
+           loadMoreCategoryProducts($categoryItemHolder, true); 
+        }  
+    }
 
 }(jQuery));
 
