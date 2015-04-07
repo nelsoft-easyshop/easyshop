@@ -872,6 +872,8 @@ class Memberpage extends MY_Controller
         ];
         $memberEntity = $em->find("EasyShop\Entities\EsMember", $commentData['member_id']);
         $orderEntity = $em->find("EasyShop\Entities\EsOrder", $commentData['transact_num']);
+        $this->config->load('email', true);
+        $imageArray = $this->config->config['images'];
         $productData = [];
 
         if( $this->form_validation->run('addShippingComment') ){
@@ -906,19 +908,29 @@ class Memberpage extends MY_Controller
                     
                     if( $isSuccessful &&  $isUpdated){
                         $product = $orderProductEntity->getProduct();
-                        $key = $product->getIdProduct();
-                        $productData[$key]['productName'] = $product->getName();
-                        $productData[$key]['productLink'] = base_url().'item/'.$product->getSlug();
+                        $productId = $product->getIdProduct();
+                        $productData[$productId]['productName'] = $product->getName();
+                        $productData[$productId]['productLink'] = base_url().'item/'.$product->getSlug();
+                        $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                             ->getDefaultImage($productId);
+                        $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                        $imagePath = ltrim($imagePath, '.');
+                        if(strtolower(ENVIRONMENT) === 'development'){
+                            $imagePath = $imagePath[0] !== '/' ? '/'.$imagePath : $imagePath;
+                            $imageArray[] = $imagePath;
+                            $productData[$productId]['primaryImage'] = $primaryImage->getFilename();
+                        }
+                        else{
+                            $productData[$productId]['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
+                        }
                     }
                 }
             }
             
             if(empty($productData) === false){
-                $this->config->load('email', true);
                 $buyerEntity = $orderEntity->getBuyer();
                 $buyerEmail = $buyerEntity->getEmail();
                 $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
-                $imageArray = $this->config->config['images'];
                 $parseData = $commentData;
                 $socialMediaLinks = $this->serviceContainer['social_media_manager']
                                          ->getSocialMediaLinks();
