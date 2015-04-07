@@ -284,7 +284,6 @@
     {
         var $summaryContainer = $(".summary-container"); 
         var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
-        console.log($shippingFee);
         $summaryContainer.find('#summary-points').html(replaceNumberWithCommas($usedPoints.toFixed(2)));
         $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee.toFixed(2)));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
