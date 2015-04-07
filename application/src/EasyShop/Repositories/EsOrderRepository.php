@@ -90,7 +90,10 @@ class EsOrderRepository extends EntityRepository
                         $qb->expr()->not(
                             $qb->expr()->andX(
                                 $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
-                                ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                ,$qb->expr()->orX(
+                                    $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                    ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                                )
                             )
                         ),
                         $qb->expr()->in('op.status', $orderProductStatuses)
@@ -104,6 +107,7 @@ class EsOrderRepository extends EntityRepository
                 ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
                 ->setParameter('statusVoid', orderStatus::STATUS_VOID)
                 ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+                ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
                 ->setParameter('transNum', '%' . $transactionNumber . '%')
                 ->setParameter('paymentMethodLists', $paymentMethod)
                 ->setFirstResult($offset)
@@ -161,9 +165,12 @@ class EsOrderRepository extends EntityRepository
                         ->where(
                                 $qb->expr()->andx(
                                     $qb->expr()->not(
-                                        $qb->expr()->andX(
+                                        $qb->expr()->andX( 
                                             $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
-                                            ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                            ,$qb->expr()->orX(
+                                                $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                                ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                                            )
                                         )
                                     ),
                                     $qb->expr()->in('op.status', $orderProductStatuses)
@@ -176,6 +183,7 @@ class EsOrderRepository extends EntityRepository
                         ->setParameter('buyer_id', $uid)
                         ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
                         ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+                        ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
                         ->setParameter('paymentMethodLists', $paymentMethod)
                         ->setParameter('transNum', '%' . $transactionNumber . '%')
                         ->setFirstResult($offset)
@@ -355,8 +363,11 @@ class EsOrderRepository extends EntityRepository
                 $qb->expr()->andX(
                     $qb->expr()->not(
                         $qb->expr()->andX(
-                            $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT'),
-                            $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                            $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
+                            ,$qb->expr()->orX(
+                                $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                            )
                         )
                     ),
                     $qb->expr()->in('op.status', $orderProductStatuses)
@@ -369,6 +380,7 @@ class EsOrderRepository extends EntityRepository
             ->setParameter('buyer_id', $uid)
             ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
             ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+            ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
             ->setParameter('paymentMethodLists', $paymentMethod)
             ->setParameter('transNum', '%' . $transactionNumber . '%')
             ->getQuery();
@@ -447,7 +459,10 @@ class EsOrderRepository extends EntityRepository
                     $qb->expr()->not(
                         $qb->expr()->andX(
                             $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
-                            ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                            ,$qb->expr()->orX(
+                                $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                            )
                         )
                     ),
                     $qb->expr()->in('op.status', $orderProductStatuses)
@@ -461,6 +476,7 @@ class EsOrderRepository extends EntityRepository
             ->setParameter('statusVoid', orderStatus::STATUS_VOID)
             ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
             ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+            ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
             ->setParameter('transNum', '%' . $transactionNumber . '%')
             ->setParameter('paymentMethodLists', $paymentMethod)
             ->getQuery();
