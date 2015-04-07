@@ -72,25 +72,6 @@
                 jQuery(this).addClass('animated fadeInUp');
             }
         });
-  
-        /* Newsletter Form */
-        var newsletter_form = jQuery('.newsletter-form');
-
-        newsletter_form.submit(function() {
-            var form_data = jQuery(this).serialize();
-            var email = jQuery('.newsletter-form input').prop('value');
-            if (validateEmail(email)) {
-            jQuery.post(jQuery(this).attr('action'), form_data, function() {
-                newsletter_form.css({'background' : 'none'});
-                jQuery('.newsletter-fields, .newsletter-validate, .newsletter-form fieldset').fadeOut('fast');
-                jQuery('.newsletter-info').fadeIn('fast');
-            });
-            } 
-            else {
-                jQuery('.newsletter-validate').fadeIn('fast');
-            }
-            return false;
-        });
 
     });
 
@@ -140,11 +121,11 @@
     ]);
 
     /* validate email */ 
-    $('.btn-primary').click(function() {
-
+    $('.btn-primary').click(function(event) {
+        
+        event.preventDefault();
         $(".error").hide();
         var hasError = false;
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
         var emailaddressVal = $("#useremail").val();
 
         if(emailaddressVal == '') {
@@ -152,8 +133,7 @@
             $(".newsletter-validate, .newsletter-info").hide();
             hasError = true;
         }
-
-        else if(!emailReg.test(emailaddressVal)) {
+        else if(isEmailValid(emailaddressVal) === false) {
             $(".newsletter-validate").show();
             $(".newsletter-info-blank, .newsletter-info").hide();
             hasError = true;
@@ -162,13 +142,10 @@
         if(hasError == true) {
             return false;
         }
-
         else {
-
             $('#register').submit();
             $(".newsletter-info").show();
             $(".newsletter-validate, .newsletter-info-blank").hide();
-
             return false;
         }
     });
