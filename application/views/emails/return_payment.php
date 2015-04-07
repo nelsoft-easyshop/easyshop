@@ -623,6 +623,7 @@
             <!-- End of title plate --> 
 
             <!-- Start of item --> 
+            {products}
             <tr mc:repeatable="Select" mc:variant="layout-2">
                 <td mc:hideable align="center" valign="top" class="fix-box">
 
@@ -825,6 +826,7 @@
                     <!-- end layout-2 container width 600px -->
                 </td>
             </tr>
+            {/products}
             <!-- End of item  -->
             
             <!-- Start of Social Media Footer -->
