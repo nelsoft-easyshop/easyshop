@@ -40,6 +40,11 @@ a:focus {
     width: 100%;
 }
 
+.seller_product_content .orange_btn3:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
 .required {
     color: #FF3600;
     font-size: 11px;
