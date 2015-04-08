@@ -8,6 +8,7 @@ use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsPointType as EsPointType; 
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 
 /**
  * Point Gateway Class
@@ -18,7 +19,7 @@ class PointGateway extends AbstractGateway
 {
     const MAX_POINT_ALLOWED = PHP_INT_MAX;
 
-    const MIN_AMOUNT_ALLOWED = 91000;
+    const MIN_AMOUNT_ALLOWED = 1000;
 
     /**
      * Constructor
@@ -42,7 +43,7 @@ class PointGateway extends AbstractGateway
 
         $response['paymentType'] = EsPaymentMethod::PAYMENT_POINTS;
         $response['textType'] = 'easypoints';
-        $response['message'] = 'Your payment has been completed through Cash on Delivery.';
+        $response['message'] = 'Your payment has been completed through Easy Points.';
 
         $this->setParameter('paymentType', $response['paymentType']);
         $productCount = count($validatedCart['itemArray']);
@@ -66,8 +67,8 @@ class PointGateway extends AbstractGateway
             return $response;
         } 
 
-        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $response['paymentType']) === false){
-            $response['message'] = "Payment is not available using Cash on Delivery.";
+        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $response['paymentType'], false) === false){
+            $response['message'] = "Payment is not available using Easy Points.";
             return $response;
         }
 
@@ -218,11 +219,24 @@ class PointGateway extends AbstractGateway
         return $returnValue;
     }
 
-    // Dummy functions to adhere to abstract gateway
-    public function getExternalCharge(){}
-    public function getOrderStatus(){}
-    public function getOrderProductStatus(){}
-    public function generateReferenceNumber($memberId){}
+    public function getExternalCharge(){
+        return 0;
+    }
+
+    public function generateReferenceNumber($memberId)
+    {
+        return 'ESP-'.date('ymdhs').'-'.$memberId;
+    }
+
+    public function getOrderStatus()
+    {
+        return EsOrderStatus::STATUS_PAID;
+    }
+
+    public function getOrderProductStatus()
+    {
+        return EsOrderStatus::STATUS_PAID;
+    }
 }
 
 /*
