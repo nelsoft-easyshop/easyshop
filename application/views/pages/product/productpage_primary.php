@@ -81,23 +81,27 @@
                 </div>
                 <?php endif;?>
                 <div class="clear"></div>
-                <div class="col-md-12 prod-border-bttm"></div>
+                <div class="col-md-12 prod-border-bttm">
+                </div>
 
                 <div class="clear"></div>
+                <?php if(floatval($product->getDiscountPercentage()) > 0):?>
+                    <div class="text-container">
+                        <i>"Discount tag will only apply to the item's base price."</i>
+                    </div>
+                <?php endif; ?>
                 <?php if(count($productAttributes) > 0): ?>
                 <div id="attribute-container">
                     <div class="row pad-top-23">
                         <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
                         <!-- Product attributes here -->
                         <?php foreach ($productAttributes as $head => $headValue): ?>
-                            <div class="col-sm-12 col-md-6 attr-select <?=(count($headValue)  > 1) ? "" : "element-hide";?>">
+                            <div class="col-sm-12 col-md-6 attr-select">
                                 <div class="prod-select-con ui-form-control">
                                     <select class="attribute-control">
-                                        <?php if(count($headValue) > 1): ?>
                                         <option value="0" data-addprice="0" selected=selected>--<?=ucfirst(html_escape($head));?>--</option>
-                                        <?php endif; ?>
                                         <?php foreach ($headValue as $key => $value):?>
-                                            <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?> - Add &#8369;<?=number_format($value['attr_price'], 2, '.', ',')?></option>
+                                            <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?> (Add &#8369;<?=number_format($value['attr_price'], 2, '.', ',')?>)</option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
