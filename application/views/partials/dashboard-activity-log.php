@@ -1,137 +1,110 @@
 
 <?php foreach ($activities as $activity): ?>
 
-
-
     <!--Layout for EDIT PROFILE INFORMATION-->
-    <!--  <div class="log-outer">
-        <div class="row">
-            <div class="col-xs-1 col-icon-container">
-                <div class="log-icon-container">
-                    <center>
-                        <div class="log-icon-circle">
-                            <i class="fa icon-profile "></i>
-                        </div>
-                     </center>
+    <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::INFORMATION_UPDATE 
+            && $activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE): ?>
+        <div class="log-outer">
+            <div class="row">
+                <div class="col-xs-1 col-icon-container">
+                    <div class="log-icon-container">
+                        <center>
+                            <div class="log-icon-circle">
+                                <i class="fa icon-profile "></i>
+                            </div>
+                         </center>
+                    </div>
                 </div>
-            </div>
-            <div class="col-xs-11 col-log-container">
-                <div class="log-container">
-                    <div class="row">
-                        <div class="col-xs-9 col-log-meta-cont">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <p class="log-title">
-                                       Updated store information on vendor page
-                                    </p>
+                <div class="col-xs-11 col-log-container">
+                    <div class="log-container">
+                        <div class="row">
+                            <div class="col-xs-9 col-log-meta-cont">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <p class="log-title">
+                                            Updated store information on vendor page
+                                            <br>
+                                            <?php foreach ($activity['data']['contents'] as $content): ?>
+                                                <b><?=html_escape($content);?></b>
+                                                <br>
+                                            <?php endforeach; ?>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-3 col-date">
-                            <div class="log-date-time">
-                                <span class="log-date">
-                                    09 Feb 2015
-                                </span>
-                                <span class="log-time">
-                                    12:30 PM
-                                </span>
+                            <div class="col-xs-3 col-date">
+                                <div class="log-date-time">
+                                    <span class="log-date">
+                                        <?=$activity['activityDate']; ?>
+                                    </span>
+                                    <span class="log-time">
+                                        <?=$activity['activityTime']; ?>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
+    <?php endif; ?>
 
     <!--Layout for UPDATE COVER PHOTO-->
-    <!-- <div class="log-outer">
-        <div class="row">
-            <div class="col-xs-1 col-icon-container">
-                <div class="log-icon-container">
-                    <center>
-                        <div class="log-icon-circle">
-                            <i class="fa icon-image "></i>
-                        </div>
-                     </center>
+    <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::INFORMATION_UPDATE 
+            && ($activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_BANNER_UPDATE
+                || $activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_AVATAR_UPDATE)): ?>
+        <div class="log-outer">
+            <div class="row">
+                <div class="col-xs-1 col-icon-container">
+                    <div class="log-icon-container">
+                        <center>
+                            <div class="log-icon-circle">
+                                <i class="fa icon-image "></i>
+                            </div>
+                         </center>
+                    </div>
                 </div>
-            </div>
-            <div class="col-xs-11 col-log-container">
-                <div class="log-container">
-                    <div class="row">
-                        <div class="col-xs-9 col-log-meta-cont">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p class="log-title">
-                                       Updated cover photo
-                                    </p>
-                                </div>
-                                <div class="col-md-6">
-                                    <a href="#">
-                                        <img class="log-image-cover" src="<?php echo getAssetsDomain(); ?>assets/user/1_justineduazo/banner.png"/>
-                                    </a>
+                <div class="col-xs-11 col-log-container">
+                    <div class="log-container">
+                        <div class="row">
+                            <div class="col-xs-9 col-log-meta-cont">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="log-title">
+                                            <?php if($activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_BANNER_UPDATE):?>
+                                                Updated cover photo
+                                            <?php else: ?>
+                                                Updated profile photo
+                                            <?php endif; ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="#">
+                                            <?php if($activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_BANNER_UPDATE):?>
+                                                <img class="log-image-cover" src="<?php echo getAssetsDomain().'.'.$activity['data']['userImage']; ?>"/>
+                                            <?php else: ?>
+                                                <img class="log-image" src="<?php echo getAssetsDomain().'.'.$activity['data']['userImage']; ?>"/>
+                                            <?php endif; ?>
+                                        </a> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-xs-3 col-date">
-                            <div class="log-date-time">
-                                <span class="log-date">
-                                    09 Feb 2015
-                                </span>
-                                <span class="log-time">
-                                    12:30 PM
-                                </span>
+                            <div class="col-xs-3 col-date">
+                                <div class="log-date-time">
+                                    <span class="log-date">
+                                        <?=$activity['activityDate']; ?>
+                                    </span>
+                                    <span class="log-time">
+                                        <?=$activity['activityTime']; ?>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
-
-    <!--Layout for UPDATE PROFILE PHOTO-->
-   <!--  <div class="log-outer">
-        <div class="row">
-            <div class="col-xs-1 col-icon-container">
-                <div class="log-icon-container">
-                    <center>
-                        <div class="log-icon-circle">
-                            <i class="fa icon-image "></i>
-                        </div>
-                     </center>
-                </div>
-            </div>
-            <div class="col-xs-11 col-log-container">
-                <div class="log-container">
-                    <div class="row">
-                        <div class="col-xs-9 col-log-meta-cont">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p class="log-title">
-                                       Updated profile photo
-                                    </p>
-                                </div>
-                                <div class="col-md-6">
-                                    <a href="#">
-                                        <img class="log-image" src="<?php echo getAssetsDomain(); ?>assets/images/ES-logo1.png"/>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-3 col-date">
-                            <div class="log-date-time">
-                                <span class="log-date">
-                                    09 Feb 2015
-                                </span>
-                                <span class="log-time">
-                                    12:30 PM
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
+    <?php endif; ?>
 
     <!--Layout for FOLLOW AND UNFOLLOW activity-->
     <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::VENDOR_SUBSCRIPTION): ?>
@@ -494,4 +467,8 @@
         </div>
     <?php endif;?>
 <?php endforeach; ?>
+
+<center>
+    <?=$pagination; ?>
+</center>
 
