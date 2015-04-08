@@ -104,6 +104,7 @@ $lang['notification_forwardtoseller'] = "Easyshop.ph - Item Receipt Confirmation
 #Landing Page
 $lang['subscription_subject'] = "Easyshop.ph - Thank you for subscribing!";
 $lang['registration_subject'] = "Easyshop.ph - Thank you for registering!";
+$lang['reverify_subject'] = "Easyshop.ph - Verify your email address";
 
 #Notification to Seller and Buyer
 $lang['message_to_seller'] = "This is to notify you that you have sold an item(s) through Easyshop.ph. Transaction details can be seen in your transactions page.  This is a system generated message, please do not reply to this message. Should you need any assistance contact us at info@easyshop.ph";
