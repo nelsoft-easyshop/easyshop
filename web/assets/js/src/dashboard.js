@@ -3130,13 +3130,15 @@
             success: function(data){ 
                 if(data){
                     var $jsonResponse = $.parseJSON(data);
-                    if($.isEmptyObject($jsonResponse)){
+                    var userPointList = $jsonResponse.list;
+                    if($.isEmptyObject(userPointList)){
                         isUserPointComplete = true;
                         return false;
                     }
+                    $('.current-points').html($jsonResponse.totalUserPoint);
                     var html = "";
                     userPointPage++;
-                    $.each($jsonResponse, function(index, value){
+                    $.each(userPointList, function(index, value){
                         html += '<li>' +
                                     '<div class="small-bullet-container">' +
                                         '<span class="small-bullet"></span>' +
