@@ -62,14 +62,14 @@
 
     function disableButton()
     {
-        var $paymentButton = $(".btn-payment-button");
+        var $paymentButton = $(".btn-payment-button, .pay-via-easypoints");
         $paymentButton.attr("disabled", "true"); 
         $paymentButton.prop("disabled", "true");
     }
 
     function enableButton()
     {
-        var $paymentButton = $(".btn-payment-button");
+        var $paymentButton = $(".btn-payment-button, .pay-via-easypoints");
         $paymentButton.removeAttr("disabled");  
     }
     enableButton();
@@ -335,9 +335,34 @@
         });
     }
 
-    function submitEasyPoints()
+    function submitEasyPoints($pointAllocated)
     {
-
+        var $paymentMethod = JSON.stringify({ 
+            PointGateway:{
+                method: "Point",
+                amount: $pointAllocated,
+                pointtype: "purchase"
+            }
+        });
+        $.ajax({
+            url: "/pay/pay",
+            type: 'POST',
+            dataType: 'json',
+            data: "csrfname="+$csrftoken+"&paymentMethods="+$paymentMethod,
+            success: function(jsonResponse){
+                if(jsonResponse.error === false){
+                    window.location.replace(jsonResponse.url);
+                }
+                else{
+                    alert(jsonResponse.message);
+                    enableButton();
+                }
+            },
+            error: function(err){
+                alert('Something went wrong. Please try again later'); 
+                enableButton();
+            }
+        });
     }
 
     $(".btn-payment-button").click(function(){
@@ -357,7 +382,13 @@
                 submitPesopay($pointsUsed);
             }
             else if($selectedMethod === "cod"){
-                submitCashOnDelivery();
+                var $confirmation = confirm("Are you sure you want to pay using Easy Points?");
+                if($confirmation){
+                    submitCashOnDelivery();
+                }
+                else{
+                    enableButton();
+                }
             }
             else{
                 submitPaypal($pointsUsed, $cdbPaypalType);
@@ -369,7 +400,14 @@
     });
 
     $(".pay-via-easypoints").click(function(){
-        submitEasyPoints();
+        var $this = $(this);
+        var $pointsUsed = $this.data('points');
+        var $confirmation = confirm("Are you sure you want to pay using Easy Points?");
+
+        if($confirmation){
+            disableButton();
+            submitEasyPoints($pointsUsed);
+        }
     });
 
     // remove cart item
