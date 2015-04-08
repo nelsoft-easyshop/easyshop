@@ -27,7 +27,7 @@
                             <input type="text" class="text-info" id="log-end-date" name="account-name">
                         </td>
                         <td>
-                            <button class="btn btn-default-3">FILTER</button>
+                            <button class="btn btn-default-3 filter-logs">FILTER</button>
                         </td>
                     </tr>
                 </table>
