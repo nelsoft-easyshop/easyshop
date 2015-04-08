@@ -619,6 +619,7 @@ ol.how-to-list li{
     border-top: solid #e2e2e2 1px;
     margin-top: 10px;
     padding: 20px;
+    margin-bottom: 30px;
 }
 
 @-moz-document url-prefix() {

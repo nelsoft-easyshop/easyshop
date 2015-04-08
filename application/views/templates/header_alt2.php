@@ -49,6 +49,7 @@
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <link rel="stylesheet" type="text/css" href='/assets/css/normalize.min.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
+        <link rel="stylesheet" type="text/css" href="/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/simple-header-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/footer-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
