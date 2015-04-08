@@ -3192,24 +3192,37 @@
         });
     }
 
+    // Activity log filter
+    var $logDateFrom = "";
+    var $logDateTo = "";
+
     $("#main-log-container").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page'); 
-        getActivityLog($page);
+        getActivityLog($page, $logDateFrom, $logDateTo);
     });
-
 
     $( ".activity-logs-trigger" ).click(function() {
-        getActivityLog(1);
+        getActivityLog(1, "", "");
     });
 
-    function getActivityLog(page)
+    $("#activityLogTab").on("click", ".filter-logs", function() {
+        $logDateFrom = $("#activityLogTab").find("#log-start-date").val();
+        $logDateTo = $("#activityLogTab").find("#log-end-date").val(); 
+        getActivityLog(1, $logDateFrom, $logDateTo);
+    });
+
+    function getActivityLog($page, $dateFrom, $dateTo)
     {
         $.ajax({
             type: "GET",
             url: '/memberpage/getActivityLog',
             dataType: "json",
-            data: {page:page},
+            data: {
+                page: $page,
+                date_from: $dateFrom,
+                date_to: $dateTo,
+            },
             beforeSend: function (xhr){ 
             }, 
             success: function(jsonResponse){
