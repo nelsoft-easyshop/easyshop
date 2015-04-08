@@ -1698,7 +1698,9 @@
                                 if (jsonResponse.isSuccess) {
                                     alert('Your feedback has been submitted.');
                                     btn.remove();
-                                    refreshEasypoints();
+                                    if(jsonResponse.isPointAdded){
+                                        refreshEasypoints();
+                                    }
                                 }
                                 else {
                                     var errorMessage = "An error was encountered. Please try again later";
