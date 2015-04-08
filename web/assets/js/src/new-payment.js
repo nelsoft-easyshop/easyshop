@@ -335,6 +335,11 @@
         });
     }
 
+    function submitEasyPoints()
+    {
+
+    }
+
     $(".btn-payment-button").click(function(){
         var $this = $(this);
         var $pointsUsed = $this.data('points');
@@ -361,6 +366,10 @@
         else{
             validateRedTextBox('.privacy-check');
         }
+    });
+
+    $(".pay-via-easypoints").click(function(){
+        submitEasyPoints();
     });
 
     // remove cart item
