@@ -145,7 +145,7 @@ class FeedbackTransactionService
                         $rating3
                     );
 
-                    if($this->transactionManager->isTransactionCompletePerSeller($order->getIdOrder(), $forMember->getIdMember())){
+                    if($this->transactionManager->isTransactionCompletePerSeller($order->getIdOrder(), $transacData['seller'])){
                         if ($order->getPaymentMethod()->getIdPaymentMethod() !== EsPaymentMethod::PAYMENT_CASHONDELIVERY) {
                             $this->pointTracker
                                  ->addUserPoint($member->getIdMember(), EsPointType::TYPE_TRANSACTION_FEEDBACK);
