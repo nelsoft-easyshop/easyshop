@@ -1637,8 +1637,7 @@ class productUpload extends MY_Controller
             $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                                 ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
-            $filterAttributes = $productManager->separateAttributesOptions($productAttributes);
-            $additionalInformation = $filterAttributes['additionalInformation'];
+            $filterAttributes = $productManager->separateAttributesOptions($productAttributes); 
             $productAttributes = $filterAttributes['productOptions'];
             $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                          ->getShippingDetailsByProductId($productId);
@@ -1652,7 +1651,6 @@ class productUpload extends MY_Controller
             $productPreviewData = [
                 'product' => $product,
                 'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
-                'additionalInformation' => $additionalInformation,
                 'productImages' => $productImages,
                 'avatarImage' => $avatarImage,
                 'isFreeShippingNationwide' => $isFreeShippingNationwide,
