@@ -34,7 +34,7 @@
                                             <?php continue; ?>
                                         <?php endif; ?>
                                         <li>
-                                            <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories simplemodal-close">
+                                            <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories">
                                                 <span class='catText'>
                                                     <?php echo html_escape($categoryWrapper->getCategoryName());?>
                                                 </span> 
@@ -100,7 +100,7 @@
                                     </li>
                                     <li>
                                         <center>
-                                            <input class="btn-filter simplemodal-close" id="filter-btn" type="button" value="filter"/>
+                                            <input class="btn-filter" id="filter-btn" type="button" value="filter"/>
                                         </center>
                                     </li>
                                 </ul>
