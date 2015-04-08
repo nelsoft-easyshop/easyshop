@@ -158,7 +158,7 @@ class PesoPayGateWay extends AbstractGateway
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                           ->find($pointGateway->getParameter('paymentType'));
 
-                $deductAmount = $pointGateway->pay();
+                $deductAmount = $pointGateway->usePoints();
 
                 $paymentRecord = new EsPaymentGateway();
                 $paymentRecord->setAmount($deductAmount);

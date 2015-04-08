@@ -113,7 +113,7 @@ class CashOnDeliveryGateway extends AbstractGateway
                     $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                               ->find($pointGateway->getParameter('paymentType'));
 
-                    $deductAmount = $pointGateway->pay();
+                    $deductAmount = $pointGateway->usePoints();
 
                     $pointRecord = new EsPaymentGateway();
                     $pointRecord->setAmount($deductAmount);

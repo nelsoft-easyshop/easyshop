@@ -433,7 +433,7 @@ class PayPalGateway extends AbstractGateway
                                 if($pointGateway){ 
                                     $pointGateway->setParameter('memberId', $memberId);
                                     $pointGateway->setParameter('itemArray', $pointArray);
-                                    $pointGateway->pay();
+                                    $pointGateway->usePoints();
                                 }
                                 $this->paymentService->sendPaymentNotification($orderId);
                             }

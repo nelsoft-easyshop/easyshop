@@ -245,7 +245,7 @@ class DragonPayGateway extends AbstractGateway
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                           ->find($pointGateway->getParameter('paymentType'));
 
-                $deductAmount = $pointGateway->pay();
+                $deductAmount = $pointGateway->usePoints();
                 $paymentRecord = new EsPaymentGateway();
                 $paymentRecord->setAmount($deductAmount);
                 $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
