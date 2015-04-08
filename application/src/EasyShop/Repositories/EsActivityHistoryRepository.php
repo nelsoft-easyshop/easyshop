@@ -3,6 +3,7 @@
 namespace EasyShop\Repositories;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 use EasyShop\Entities\EsActivityHistory as EsActivityHistory;
 
@@ -49,5 +50,29 @@ class EsActivityHistoryRepository extends EntityRepository
         $activities = $query->getResult();
 
         return $activities;
+    }
+
+    /**
+     * Count all user activity per member
+     * @param  integer $memberId
+     * @return integer
+     */
+    public function countActivityCount($memberId)
+    {
+        $this->em = $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult('count', 'count');
+
+        $sql = " 
+          SELECT COUNT(*) as count
+          FROM es_activity_history
+          WHERE member_id = :memberId
+        ";
+        
+        $query = $this->em->createNativeQuery($sql, $rsm);
+        $query->setParameter('memberId', $memberId); 
+        $result = $query->getOneOrNullResult();
+
+        return $result['count'];
     }
 }
