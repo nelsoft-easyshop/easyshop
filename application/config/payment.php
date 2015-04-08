@@ -59,7 +59,12 @@ $config = [
                     'Easydeal' => [
                         'postback_url' => 'http://staging.easydeal.ph/payment/postback/pesopay'
                     ]
-                ]
+                ],
+                'point' => [
+                    'Easyshop' => [
+                        'points' => true, 
+                    ]
+                ],
             ]
         ],
         'production' => [
@@ -121,7 +126,12 @@ $config = [
                     'Easydeal' => [
                         'postback_url' => 'https://www.easydeal.ph/payment/postback/pesopay'
                     ]
-                ]
+                ],
+                'point' => [
+                    'Easyshop' => [
+                        'points' => true, 
+                    ]
+                ],
             ]
         ]
     ];
