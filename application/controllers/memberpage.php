@@ -2424,19 +2424,25 @@ class Memberpage extends MY_Controller
         $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
         $page--;
         $offset = $page * $this->pointHistoryItemsPerPage;
-        $jsonResponse = [];
+        $jsonResponse = [
+            'list' => [],
+            'totalPoint' => 0,
+        ];
         if($memberId){
             $userPoints = $this->serviceContainer['entity_manager']
                                ->getRepository('EasyShop\Entities\EsPointHistory')
                                ->getUserPointHistory($memberId, $offset, $this->pointHistoryItemsPerPage);
             foreach($userPoints as $userPoint){
-                $jsonResponse[] = [
+                $jsonResponse['list'][] = [
                     'dateAdded' => $userPoint->getDateAdded()->format('jS F Y g:ia'),
                     'point' => $userPoint->getPoint(),
                     'typeId' => $userPoint->getType()->getId(),
                     'typeName' => $userPoint->getType()->getName(),
                 ];
             }
+            
+            $jsonResponse['totalUserPoint'] = $this->serviceContainer['point_tracker']
+                                                   ->getUserPoint($memberId);
         }
         echo json_encode($jsonResponse);
     }
