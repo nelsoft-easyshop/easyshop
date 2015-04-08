@@ -294,8 +294,9 @@ class Payment extends MY_Controller
                     $bodyData['canCheckout'] = $checkoutService->checkoutCanContinue($bodyData['cartData'], false, false);
                     $bodyData['checkoutError'] = $checkoutService->getCheckoutError($bodyData['cartData']);
                     $bodyData['usedPoints'] = $postPoints > $userMaxPoints ? $userMaxPoints : $postPoints;
-                    $bodyData['grandTotal'] = bcsub(bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4), $bodyData['usedPoints'], 4);
-
+                    $totalAmount = bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4);
+                    $bodyData['grandTotal'] = bcsub($totalAmount, $bodyData['usedPoints'], 4);
+                    $bodyData['payAllViaPoints'] = bccomp($totalAmount, $bodyData['usedPoints'], 4) === 0;
                     $this->session->set_userdata('choosen_items', $bodyData['cartData']); 
                     $this->load->spark('decorator');
                     $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
