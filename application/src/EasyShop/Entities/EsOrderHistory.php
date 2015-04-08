@@ -24,7 +24,7 @@ class EsOrderHistory
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="string", length=150, nullable=false)
+     * @ORM\Column(name="comment", type="text", nullable=false)
      */
     private $comment = '';
 
