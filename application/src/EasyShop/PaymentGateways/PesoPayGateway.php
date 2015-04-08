@@ -295,7 +295,6 @@ class PesoPayGateWay extends AbstractGateway
                     $this->paymentService->sendPaymentNotification($orderId);
                 }
                 else{
-                    $this->paymentService->transactionManager->voidTransaction($orderId);
                     $this->paymentService->revertTransactionPoint($orderId);
 
                     $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
