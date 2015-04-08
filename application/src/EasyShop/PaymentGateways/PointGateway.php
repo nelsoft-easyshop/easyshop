@@ -85,7 +85,7 @@ class PointGateway extends AbstractGateway
      */
     public function getProductDeductPoint($productPrice, $total)
     {
-        return (float)bcmul($this->getParameter('amount'), bcdiv($productPrice, $total, 4), 4);
+        return round(bcmul($this->getParameter('amount'), bcdiv($productPrice, $total, 10), 3), 2);
     }
 
     /**
