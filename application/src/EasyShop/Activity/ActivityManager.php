@@ -79,15 +79,15 @@ class ActivityManager
                            ->getActivities($memberId, $perPage, $offset, $fromDate, $toDate, $sortAscending);
         $formattedActivityData = [];
         foreach($activities as $activity){
-            $activtyTypeId = $activity->getActivityType()->getIdActivityType();
+            $activityTypeId = $activity->getActivityType()->getIdActivityType();
             $activityClass = null;
-            if(isset($this->container[$activtyTypeId])){
-                $activityClass = $this->container[$activtyTypeId];
+            if(isset($this->container[$activityTypeId])){
+                $activityClass = $this->container[$activityTypeId];
             }
             
             if($activityClass !== null){
                 $formattedActivityData[] = [
-                    'type' => $activtyTypeId,
+                    'type' => $activityTypeId,
                     'data' => $activityClass->getFormattedData($activity->getJsonData()),
                     'activityDate' => $activity->getActivityDatetime()->format('d M Y'),
                     'activityTime' => $activity->getActivityDatetime()->format('h:i a'),
