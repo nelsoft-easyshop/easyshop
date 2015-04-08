@@ -200,7 +200,7 @@ class PointGateway extends AbstractGateway
         if($this->pointTracker->getUserPoint($memberId) < $pointAmount){
             $returnValue['message'] = "You have insufficient points.";
         }
-        elseif ((float) $pointAmount < self::MIN_AMOUNT_ALLOWED) {
+        elseif ((float) $totalPrice < self::MIN_AMOUNT_ALLOWED) {
             $returnValue['message'] = "We only accept minimum of ".self::MIN_AMOUNT_ALLOWED." total amount per transaction to accept points.";
         }
         elseif((float) $pointAmount > self::MAX_POINT_ALLOWED){
