@@ -145,7 +145,7 @@ class PointGateway extends AbstractGateway
             $pointBreakdown = [];
 
             foreach ($itemArray as $item) {
-                $maxPointAllowable = bcadd($maxPointAllowable, $item['point']);
+                $maxPointAllowable = bcadd($maxPointAllowable, $item['point'], 2);
             }
 
             // cap points with respect to total points of items
