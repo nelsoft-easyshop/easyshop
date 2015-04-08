@@ -7073,7 +7073,8 @@ div.sold_prod_container {
     font-family: 'Roboto',sans-serif;	
     padding:20px 0px 3px 0px;
     margin-bottom: 15px;
-    width: 270px;
+    max-width: 305px;
+    width: 100%;
 }
 
 .content_wrapper p {
