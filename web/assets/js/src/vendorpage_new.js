@@ -160,6 +160,8 @@ function ReplaceNumberWithCommas(thisnumber){
 
         $('.product-paging').remove();
         ItemListAjax(activeCategoryProductsDiv,1);
+
+        $.modal.close();
     });
 
     var removeParam = function(key, sourceURL)
@@ -232,8 +234,6 @@ function ReplaceNumberWithCommas(thisnumber){
                 CatDiv.find('[rel=tooltiplist]').tooltip({
                     placement : 'top'
                 });
-                
-                fluidDialog();
             }
         });
     }
@@ -373,7 +373,7 @@ function ReplaceNumberWithCommas(thisnumber){
                 $this.parents("li").find(".list-sub-category").slideToggle("fast").toggleClass("toggle");
                 $this.find(".fa").toggleClass("toggleIcon");
             }
-             
+            $.modal.close();
         });
     });
 })(jQuery);
