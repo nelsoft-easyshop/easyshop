@@ -3192,6 +3192,13 @@
         });
     }
 
+    $("#main-log-container").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page'); 
+        getActivityLog($page);
+    });
+
+
     $( ".activity-logs-trigger" ).click(function() {
         getActivityLog(1);
     });
