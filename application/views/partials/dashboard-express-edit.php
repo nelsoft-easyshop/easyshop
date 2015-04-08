@@ -74,7 +74,7 @@
                         <?php foreach ($productCombination as $itemId => $combination): ?>
                             <tr class="combination-row">
                                 <td width="20%">
-                                    <input type="text" value="<?=$combination['quantity'];?>" class="ui-form-control txt-quantity quantity-control" maxlength="4" onkeypress="return isNumberKey(event);">
+                                    <input type="text" value="<?=$combination['quantity'];?>" class="ui-form-control txt-quantity quantity-control" maxlength="4" onkeypress="return isNumberKey(event, false);">
                                     <input type="hidden" value="<?=$itemId;?>" class="item-control">
                                 </td>
                                 <td width="60%" class="prod-item-att-content"> 
