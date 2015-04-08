@@ -17,7 +17,7 @@ class Version20150405155742 extends AbstractMigration
     public function up(Schema $schema)
     {
         $this->addSql("ALTER TABLE `es_activity_history` DROP COLUMN `activity_string`");
-        $this->addSql("ALTER TABLE `es_activity_history` ADD COLUMN `json_data` TEXT DEFAULT ''");
+        $this->addSql("ALTER TABLE `es_activity_history` ADD COLUMN `json_data` TEXT");
     }
 
     /**
