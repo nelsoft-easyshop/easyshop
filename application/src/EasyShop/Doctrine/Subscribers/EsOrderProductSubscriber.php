@@ -14,30 +14,6 @@ class EsOrderProductSubscriber implements EventSubscriber
     protected $changeSet = [];
 
     /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
-    /**
      * The preUpdate event occurs before the database update operations to entity data.
      * 
      * @param  LifecycleEventArgs $event
@@ -83,47 +59,44 @@ class EsOrderProductSubscriber implements EventSubscriber
                 $member = null;
                 $status = (int)$entity->getStatus()->getIdOrderProductStatus();
                 $isReject = (int)$entity->getIsReject();
-                $invoiceNo = $entity->getOrder()->getInvoiceNo();
+                $orderProductId = $entity->getIdOrderProduct();
+                $orderId = $entity->getOrder()->getIdOrder();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::TRANSACTION_UPDATE);
-                $phraseArray = $this->languageLoader
-                                    ->getLine($activityType->getActivityPhrase());
-
-                $unparsedPhrase = "";
+                $jsonData = "";
+                $action = null;
                 if(isset($this->changeSet['status'])){
                     if($status === EsOrderProductStatus::CASH_ON_DELIVERY){
                         $member = $entity->getSeller();
-                        $unparsedPhrase = $phraseArray['completed'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_COD_COMPLETED;
                     }
                     elseif($status === EsOrderProductStatus::RETURNED_BUYER){
                         $member = $entity->getSeller();
-                        $unparsedPhrase = $phraseArray['item_cancel'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_REFUNDED;
                     }
                     elseif($status === EsOrderProductStatus::FORWARD_SELLER){
                         $member = $entity->getOrder()->getBuyer();
-                        $unparsedPhrase = $phraseArray['item_received'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_RECEIVED;
                     }
                 }
                 elseif(isset($this->changeSet['isReject'])){
                     $member = $entity->getOrder()->getBuyer();
                     if($isReject === EsOrderProductStatus::IS_REJECT_NOT_ACTIVE){
-                        $unparsedPhrase = $phraseArray['item_unreject'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_UNREJECTED;
                     }
                     else{
-                        $unparsedPhrase = $phraseArray['item_reject'];
+                        $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_REJECTED;
                     }
                 }
 
-                if($unparsedPhrase !== ""){
-                    $phrase = $this->activityManager
-                                   ->constructActivityPhrase(['invoiceNo' => $invoiceNo],
-                                                             $unparsedPhrase,
-                                                             'EsOrder');
-
-                    if($phrase !== ""){
-                        $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                           ->createAcitivityLog($activityType, $phrase, $member);
-                    }
+                if($action !== null && $member !== null){
+                    $data = [
+                        'orderId' => $orderId,
+                        'orderProductId' => $orderProductId,
+                    ];
+                    $jsonString = \EasyShop\Activity\ActivityTypeTransactionUpdate::constructJSON($data, $action);
+                    $em->getRepository('EasyShop\Entities\EsActivityHistory')
+                       ->createAcitivityLog($activityType, $jsonString, $member);
                 }
            }
         }

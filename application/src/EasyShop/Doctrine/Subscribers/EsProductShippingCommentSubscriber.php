@@ -12,29 +12,6 @@ class EsProductShippingCommentSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
 
-    /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
 
     /**
     * The postPersist event occurs for an entity after the entity has been made persistent.
@@ -120,25 +97,27 @@ class EsProductShippingCommentSubscriber implements EventSubscriber
         if ( $entity instanceOf EsProductShippingComment) {
             if(count($this->changeSet) > 0){
                 $member = $entity->getMember();
+                $orderProduct = $entity->getOrderProduct();
+                $orderProductId = $orderProduct->getIdOrderProduct();
+                $orderId = $orderProduct->getOrder()->getIdOrder();
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::TRANSACTION_UPDATE);
-                $phraseArray = $this->languageLoader
-                                       ->getLine($activityType->getActivityPhrase());
                 if(isset($this->changeSet['modified'])){
-                    $unparsedPhrase = $phraseArray['edit_ship_detail'];
+                    $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_EDIT_SHIPMENT;
                     unset($this->changeSet['modified']);
                 }
                 else{
-                    $unparsedPhrase = $phraseArray['add_ship_detail'];
+                    $action = \EasyShop\Activity\ActivityTypeTransactionUpdate::ACTION_ADD_SHIPMENT;
                 }
 
-                $phrase = $this->activityManager
-                               ->constructActivityPhrase($this->changeSet,
-                                                         $unparsedPhrase,
-                                                         'EsProductShippingComment');
-                if($phrase !== ""){
+                if($action !== null){
+                    $data = [
+                        'orderId' => $orderId,
+                        'orderProductId' => $orderProductId,
+                    ];
+                    $jsonData = \EasyShop\Activity\ActivityTypeTransactionUpdate::constructJSON($data, $action);
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $member);
+                       ->createAcitivityLog($activityType, $jsonData, $member);
                 }
            }
         }

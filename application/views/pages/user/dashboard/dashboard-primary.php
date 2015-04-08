@@ -30,6 +30,7 @@
                             <a href="#personal-information" class="personal-info-trigger"><li class="f-li">Personal Information</li></a>
                             <a href="#delivery-address" class="delivery-address-trigger"><li class="m-li">Delivery Address</li></a>
                             <a href="#payment-account" class="payment-account-trigger" id="payment-account-tab"><li class="m-li m-li2">Payment Account</li></a>
+                            <a href="#activity-logs" class="activity-logs-trigger" ><li class="m-li m-li2">Activity Logs</li></a>
                             <a href="#account-settings" class="settings-trigger"><li class="f-li f-a">Account Settings</li></a>
                         </ul>
                     </div>
@@ -86,6 +87,7 @@
                         <a class="ma-info dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
                         <a class="ma-delivery dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
                         <a class="ma-payment dash-mobile-trigger"><li class="m-menu-payment">Payment Account</li></a>
+                        <a class="ma-activity dash-mobile-trigger"><li class="m-menu-activity">Activity Logs</li></a>
                         <a class="ma-settings dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
                     </ul>
                 </div>
@@ -116,12 +118,16 @@
                         
                         <?php include("dashboard-delivery-address.php");?>
                     </div>
-                    <div id="account-settings">
-                        <?php include("dashboard-account-settings.php");?>
-                    </div>
                     <div id="payment-account">
                         <?php include("dashboard-payment-account.php");?>
                     </div>
+                    <div id="activity-logs">
+                        <?php include("dashboard-activity-logs.php");?>
+                    </div>
+                    <div id="account-settings">
+                        <?php include("dashboard-account-settings.php");?>
+                    </div>
+                    
                 </div>
                 <div class="clear"></div>
             </div>

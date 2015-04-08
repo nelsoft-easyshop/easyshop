@@ -1,12 +1,5 @@
 
 <div class="div-tab">
-    <div class="dashboard-breadcrumb">
-        <ul>
-            <li>Dashboard</li>
-            <li class="bc-arrow"><i class="fa fa-angle-right"></i>My Store</li>
-            <li class="bc-arrow"><i class="fa fa-angle-right"></i>Transactions</li>
-        </ul>
-    </div>
     <div class="div-tab-inner">
         <div class="transaction-tabs">
             <ul class="idTabs">

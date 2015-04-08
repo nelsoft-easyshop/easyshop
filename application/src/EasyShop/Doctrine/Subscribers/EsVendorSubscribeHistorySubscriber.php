@@ -5,10 +5,10 @@ namespace EasyShop\Doctrine\Subscribers;
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventSubscriber as EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use EasyShop\Entities\EsProductReview as EsProductReview;
+use EasyShop\Entities\EsVendorSubscribeHistory as EsVendorSubscribeHistory;
 use EasyShop\Entities\EsActivityType as EsActivityType;
 
-class EsProductReviewSubscriber implements EventSubscriber
+class EsVendorSubscribeHistorySubscriber implements EventSubscriber
 {
     protected $changeSet = [];
 
@@ -22,7 +22,7 @@ class EsProductReviewSubscriber implements EventSubscriber
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
 
-        if ( ! $entity instanceOf EsProductReview ) {
+        if ( ! $entity instanceOf EsVendorSubscribeHistory ) {
             return;
         }
 
@@ -37,26 +37,23 @@ class EsProductReviewSubscriber implements EventSubscriber
     {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
-        if ( $entity instanceOf EsProductReview) { 
-            $product = $entity->getProduct();
+        if ( $entity instanceOf EsVendorSubscribeHistory) {
             $member = $entity->getMember();
             $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
-                               ->find(EsActivityType::FEEDBACK_UPDATE);
-            $actionType = null;
-            if((int)$entity->getPReviewid() !== EsProductReview::PRODUCT_REVIEW_DEFAULT){
-                $actionType = \EasyShop\Activity\ActivityTypeFeedbackUpdate::ACTION_FEEDBACK_PRODUCT_REPLY;
+                               ->find(EsActivityType::VENDOR_SUBSCRIPTION);
+
+            if(strtoupper($entity->getAction()) === 'FOLLOW'){
+                $actionType = \EasyShop\Activity\ActivityTypeVendorSubscription::ACTION_FOLLOW;
             }
             else{
-                $actionType = \EasyShop\Activity\ActivityTypeFeedbackUpdate::ACTION_FEEDBACK_PRODUCT;
+                $actionType = \EasyShop\Activity\ActivityTypeVendorSubscription::ACTION_UNFOLLOW;
             }
 
             if($actionType !== null){
                 $data = [
-                    'productId' => $product->getIdProduct(),
-                    'message' => $entity->getReview(),
-                    'rating' => $entity->getRating(),
+                    'vendor' => $entity->getVendor()->getIdMember(),
                 ];
-                $jsonData = \EasyShop\Activity\ActivityTypeFeedbackUpdate::constructJSON($data, $actionType);
+                $jsonData = \EasyShop\Activity\ActivityTypeVendorSubscription::constructJSON($data, $actionType);
                 $em->getRepository('EasyShop\Entities\EsActivityHistory')
                    ->createAcitivityLog($activityType, $jsonData, $member);
             }

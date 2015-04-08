@@ -3383,7 +3383,219 @@ label.css-label {
     padding-top: 18px;
 }
 
-@media only screen and (max-width: 991px){ 
+
+/** =============== Activity Logs CSS style =============== **/
+.log-sort-filter{
+    margin-bottom: 20px;
+}
+.log-table-filter td{
+    padding: 0px 3px;
+}
+
+.log-table-filter .text-info{
+    width: 100px;
+}
+
+.log-table-filter .btn-default-3{
+    border: 0px;
+    font-weight: bold;
+}
+
+.log-outer{
+    border: solid red 0px;
+    display: block;
+    margin: 0px;
+}
+
+.log-container{
+    display: block;
+    border: solid #e2e2e2 1px;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.log-container p{
+    margin-bottom: 0px;
+}
+.log-image{
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    border-radius: 4px;
+    border: solid #e2e2e2 1px;
+}
+
+.log-image-cover{
+    width: 150px;
+    height: 50px;
+    display: inline-block;
+    border-radius: 4px;
+    border: solid #e2e2e2 1px;
+}
+
+.log-meta{
+    display: inline-block;
+    display: block;
+    margin-left: 10px;
+}
+
+.log-meta-table{
+    margin-bottom: 19px;
+}
+
+.log-meta-table:last-child{
+    margin-bottom: 0px;
+}
+
+.v-align-top{
+    vertical-align: top;
+}
+
+.v-align-middle{
+    vertical-align: middle;
+}
+
+.log-meta-link-title{
+    font-weight: bold;
+    color: #ff893a;
+    display: inline-block;
+}
+
+.log-meta-price{
+    display: block;
+    font-weight: bold;
+}
+
+.log-original-price{
+    color: #9f9f9f;
+}
+
+.log-date-time{
+    color: #9f9f9f;
+}
+
+.log-date, .log-time{
+    display: block;
+}
+
+.log-title a{
+    font-weight: bold;
+    color: #ff893a;
+    display: inline;
+}
+
+.log-followed-user .log-image{
+    margin-right: 5px;
+}
+.log-icon-container{
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+
+}
+.log-icon-circle{
+    background: #00a388;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    color: #fff;
+}
+
+.log-line{
+    border-left: dotted #e2e2e2 2px;
+    width: 2px;
+    height: 100px;
+    position: absolute;
+    left: 37px;
+}
+
+@media only screen and (max-width: 991px){
+    #activityLogTab{
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 30px
+    }
+
+    .col-icon-container{
+        padding: 0px;
+        padding-left: 21px;
+    }
+
+    .col-log-container{
+        padding-left: 2px;
+    }
+
+    .log-feed-rate{
+        display: block;
+    }
+
+    .log-sort-filter{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 700px){
+    .col-icon-container{
+        padding: 0px;
+        padding-left: 5px;
+    }
+
+    .col-log-container{
+        padding-left: 2px;
+    }
+
+    .log-line{
+        left: 22px;
+    }
+}
+
+@media only screen and (max-width: 600px){
+    .log-icon-circle{
+        width: 25px;
+        height: 25px;
+    }
+
+    .col-icon-container{
+        padding-left: 10px;
+    }
+}
+
+@media only screen and (max-width: 400px){
+    .log-icon-circle{
+        width: 20px;
+        height: 20px;
+    }
+
+    .col-icon-container{
+        padding-left: 5px;
+    }
+
+    .col-icon-container .fa{
+        font-size: 8px;
+    }
+
+    .col-icon-container .icon-add{
+        padding-top: 5px;
+    }
+    .log-line{
+        left: 14px;
+    }
+
+    .col-log-meta-cont{
+        padding: 0px;
+    }
+
+    .col-date{
+        padding: 0px;
+        font-size: 11px;
+    }
+}
+
+@media only screen and (max-width: 991px){
     .no-items{
         font-size: 15px;
     }
@@ -3401,6 +3613,7 @@ label.css-label {
         width: 100%;
         text-align: center;
         margin-top: -1px;
+        border-bottom: solid #e2e2e2 1px;
     }
     
     .col-dash-mobile{
@@ -3480,7 +3693,7 @@ label.css-label {
         border-bottom: solid #e2e2e2 1px;
     }
     
-    .m-menu-payment{
+    .m-menu-payment, .m-menu-activity{
         border-bottom: solid #e2e2e2 1px;
     }
     
@@ -3732,7 +3945,7 @@ label.css-label {
     }
     
     .div-tab-inner{
-        padding: 10px;
+        padding: 20px;
     }
     
     .col-action-buttons{

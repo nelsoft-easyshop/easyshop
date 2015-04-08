@@ -69,6 +69,13 @@ class Memberpage extends MY_Controller
      * @var integer
      */
     public $pointHistoryItemsPerPage = 10;
+    
+    /**
+     * Number of Point History Items per page
+     *
+     * @var integer
+     */
+    public $activityLogPerPage = 10;
 
     /**
      *  Class Constructor
@@ -100,7 +107,7 @@ class Memberpage extends MY_Controller
      */
     public function index()
     {
-       $userManager = $this->serviceContainer['user_manager'];
+        $userManager = $this->serviceContainer['user_manager'];
         $productManager = $this->serviceContainer['product_manager'];
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
@@ -2431,6 +2438,43 @@ class Memberpage extends MY_Controller
                 ];
             }
         }
+        echo json_encode($jsonResponse);
+    }
+    
+    /**
+     * Get activity logs for user
+     *
+     * @return json
+     */
+    public function getActivityLog()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $perPage = $this->activityLogPerPage;
+        $page = $this->input->get('page') ? $this->input->get('page') : 1;
+        $fromDate = $this->input->get('date_from') ? date('Y-m-d 00:00:00', strtotime($this->input->get('date_from'))) : null;
+        $toDate = $this->input->get('date_to') ? date('Y-m-d 23:59:59', strtotime($this->input->get('date_to'))) : null;
+        $sortAscending = $this->input->get('sort') && strtolower($this->input->get('sort')) === "oldest";
+        $activityCount = $this->serviceContainer['activity_manager']
+                              ->getTotalActivityCount($memberId, $fromDate, $toDate);
+        $paginationData = [
+            'isHyperLink' => false,
+            'lastPage' => ceil($activityCount / $perPage),
+            'currentPage' => $page
+        ];
+        $page--;
+        $offset = $page * $perPage;
+        $activities = $this->serviceContainer['activity_manager']
+                           ->getUserActivities($memberId, $perPage, $offset, $fromDate, $toDate, $sortAscending);
+
+        $activitiesData = [
+            'activities' => $activities,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $activeProductView = $this->load->view('partials/dashboard-activity-log', $activitiesData, true);
+          
+        $jsonResponse = [
+            'html' => $activeProductView,
+        ];
         echo json_encode($jsonResponse);
     }
 

@@ -69,52 +69,32 @@ class Kernel
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsProductSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsProductSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsMemberSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsMemberSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsAddressSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsAddressSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsProductReviewSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsProductReviewSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsMemberFeedbackSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsMemberFeedbackSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsOrderSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsOrderSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsProductShippingCommentSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsProductShippingCommentSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsOrderProductSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsOrderProductSubscriber()
+            );
+
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Subscribers\EsVendorSubscribeHistorySubscriber()
             );
 
             $em->getEventManager()->addEventListener(
@@ -339,6 +319,16 @@ class Kernel
         $container['promo_manager'] = function ($c) use ($container){
             return new \EasyShop\Promo\PromoManager($container['config_loader'], $container['entity_manager']);
         };
+        
+        //Activity Manager
+        $container['activity_manager'] = function ($c) use ($container){
+            return new \EasyShop\Activity\ActivityManager(
+                $container['product_manager'],
+                $container['user_manager'],
+                $container['entity_manager']
+            );
+        };
+
 
         // Product Manager
         $container['product_manager'] = function ($c) use ($container) {
@@ -633,13 +623,7 @@ class Kernel
             $languageImplementation = new \EasyShop\LanguageLoader\CodeigniterLanguage();
             return new \EasyShop\LanguageLoader\LanguageLoader($languageImplementation);
         };
-
-        $container['activity_manager'] = function ($c) use ($container) { 
-            return new \EasyShop\Activity\ActivityManager(
-                            $container['language_loader']
-                        );
-        };
-
+    
         // Checkout Service
         $container['checkout_service'] = function ($c) use ($container) {
             return new \EasyShop\Checkout\CheckoutService(
