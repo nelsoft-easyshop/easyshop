@@ -36,19 +36,26 @@ class EsActivityHistoryRepository extends EntityRepository
      * @param integer $offset
      * @return EasyShop\Entities\EsActivityHistory[]
      */
-    public function getActivities($memberId, $limit, $offset)
+    public function getActivities($memberId, $limit, $offset, $fromDate, $toDate)
     {
         $em = $this->_em;
         $query = $em->createQueryBuilder()
-                        ->select('A') 
-                        ->from('EasyShop\Entities\EsActivityHistory','A')
-                        ->where('A.member = :memberId')
-                        ->setParameter("memberId",$memberId)
-                        ->setFirstResult( $offset )
-                        ->setMaxResults( $limit )
-                        ->getQuery();
-        $activities = $query->getResult();
+                    ->select('A') 
+                    ->from('EasyShop\Entities\EsActivityHistory','A')
+                    ->where('A.member = :memberId')
+                    ->setParameter("memberId", $memberId);
 
+        if($fromDate !== null && $toDate !== null){
+            $query->andWhere('A.activityDatetime BETWEEN :dateFrom AND :dateTo')
+                  ->setParameter("dateFrom", $fromDate)
+                  ->setParameter("dateTo", $toDate);
+        }
+
+        $activities = $query->setFirstResult( $offset )
+                            ->setMaxResults( $limit )
+                            ->getQuery()
+                            ->getResult();
+ 
         return $activities;
     }
 
@@ -57,7 +64,7 @@ class EsActivityHistoryRepository extends EntityRepository
      * @param  integer $memberId
      * @return integer
      */
-    public function countActivityCount($memberId)
+    public function countActivityCount($memberId, $fromDate, $toDate)
     {
         $this->em = $this->_em;
         $rsm = new ResultSetMapping(); 
@@ -68,9 +75,17 @@ class EsActivityHistoryRepository extends EntityRepository
           FROM es_activity_history
           WHERE member_id = :memberId
         ";
+
+        if($fromDate !== null && $toDate !== null){
+            $sql .= " AND activity_datetime BETWEEN :dateFrom AND :dateTo";
+        }
         
         $query = $this->em->createNativeQuery($sql, $rsm);
-        $query->setParameter('memberId', $memberId); 
+        $query->setParameter('memberId', $memberId);
+        if($fromDate !== null && $toDate !== null){
+            $query->setParameter("dateFrom", $fromDate);
+            $query->setParameter("dateTo", $toDate);
+        }
         $result = $query->getOneOrNullResult();
 
         return $result['count'];

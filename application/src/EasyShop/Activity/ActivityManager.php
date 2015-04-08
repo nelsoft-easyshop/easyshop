@@ -72,11 +72,11 @@ class ActivityManager
      * @param integer $offset
      * @return mixed
      */
-    public function getUserActivities($memberId, $perPage, $offset)
+    public function getUserActivities($memberId, $perPage, $offset, $fromDate, $toDate)
     {
         $activities = $this->entityManager
                            ->getRepository('EasyShop\Entities\EsActivityHistory')
-                           ->getActivities($memberId, $perPage, $offset);
+                           ->getActivities($memberId, $perPage, $offset, $fromDate, $toDate);
         $formattedActivityData = [];
         foreach($activities as $activity){
             $activtyTypeId = $activity->getActivityType()->getIdActivityType();
@@ -103,11 +103,11 @@ class ActivityManager
      * @param  integer $memberId
      * @return integer
      */
-    public function getTotalActivityCount($memberId)
+    public function getTotalActivityCount($memberId, $fromDate, $toDate)
     {
         $activityCount = $this->entityManager
                               ->getRepository('EasyShop\Entities\EsActivityHistory')
-                              ->countActivityCount($memberId);
+                              ->countActivityCount($memberId, $fromDate, $toDate);
 
         return $activityCount;
     }
