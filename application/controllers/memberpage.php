@@ -2442,17 +2442,18 @@ class Memberpage extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $perPage = $this->activityLogPerPage;
         $page = $this->input->get('page') ? $this->input->get('page') : 1;
+        $activityCount = $this->serviceContainer['activity_manager']
+                              ->getTotalActivityCount($memberId);
+        $paginationData = [
+            'isHyperLink' => false,
+            'lastPage' => ceil($activityCount / $perPage),
+            'currentPage' => $page
+        ];
         $page--;
         $offset = $page * $perPage;
         $activities = $this->serviceContainer['activity_manager']
                            ->getUserActivities($memberId, $perPage, $offset);
-                           // echo '<pre>';
-                           // print_r($activities);
-                           // exit;
-        $paginationData = [
-            'isHyperLink' => false,
-            'lastPage' => ceil(count($activities) / $perPage),
-        ];
+
         $activitiesData = [
             'activities' => $activities,
             'pagination' => $this->load->view('pagination/default', $paginationData, true),
