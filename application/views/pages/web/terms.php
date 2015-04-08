@@ -225,7 +225,7 @@
                         As a customer, you have the right to cancel your orders. However, there will be respective charges depending on your payment gateway.
                     </p>
                     <p>
-                        In case of cancellations, EasyShop.ph will have no liability in shouldering the PMC of every transaction. Transactions made on PayPal will be processed by EasyShop.ph provided that you will file a case of refund. A confirmation from our end will be provided and PayPal will refund your payment without any charges subtracted. (PayPal charge: 4.4% + P15 transaction charge; PesoPay charge: 0.50% + P6, exclusive of VAT; Dragonpay charge: P20)
+                        In case of cancellations, EasyShop.ph will have no liability in shouldering the PMC of every transaction. Transactions made on PayPal will be processed by EasyShop.ph provided that you will file a case of refund. A confirmation from our end will be provided and PayPal will refund your payment without any charges subtracted. (PayPal charge: 4.4% + P15 transaction charge; PesoPay charge: 3.75% + P6, exclusive of VAT; Dragonpay charge: P20)
                     </p>
                     <p>
                         For cancelled orders within Metro Manila and nearby provinces below are the refund percentages:
