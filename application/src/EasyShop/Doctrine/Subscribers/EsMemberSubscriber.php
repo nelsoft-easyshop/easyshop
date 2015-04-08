@@ -68,6 +68,14 @@ class EsMemberSubscriber implements EventSubscriber
         if ($event->hasChangedField('website')) {
             $this->changeSet['website'] = $entity->getWebsite();
         }
+
+        if ($event->hasChangedField('lastBannerChanged')) {
+            $this->changeSet['lastBannerChanged'] = $entity->getLastBannerChanged();
+        }
+
+        if ($event->hasChangedField('lastAvatarChanged')) {
+            $this->changeSet['lastAvatarChanged'] = $entity->getLastAvatarChanged();
+        }
     }
 
     /**
@@ -93,7 +101,18 @@ class EsMemberSubscriber implements EventSubscriber
             if(count($this->changeSet) > 0){
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
-                $jsonString = \EasyShop\Activity\ActivityTypeInformationUpdate::constructJSON($this->changeSet);
+                if(isset($this->changeSet['lastAvatarChanged'])){
+                    $this->changeSet['memberId'] = $entity->getIdMember();
+                    $action = \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_AVATAR_UPDATE;
+                }
+                elseif(isset($this->changeSet['lastBannerChanged'])){
+                    $this->changeSet['memberId'] = $entity->getIdMember();
+                    $action = \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_BANNER_UPDATE;
+                }
+                else{
+                    $action = \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE;
+                }
+                $jsonString = \EasyShop\Activity\ActivityTypeInformationUpdate::constructJSON($this->changeSet, $action);
                 if($jsonString !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                        ->createAcitivityLog($activityType, $jsonString, $entity);
