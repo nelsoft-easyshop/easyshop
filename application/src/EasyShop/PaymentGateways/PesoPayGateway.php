@@ -296,7 +296,6 @@ class PesoPayGateWay extends AbstractGateway
                 }
                 else{
                     $this->paymentService->revertTransactionPoint($orderId);
-
                     $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                              ->deleteLockItem($orderId, $toBeLocked);
                     $orderHistory = [
