@@ -266,18 +266,6 @@ class PesoPayGateWay extends AbstractGateway
                     $this->paymentService->sendPaymentNotification($orderId);
                 }
                 else{
-                    // void transaction
-                    $esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
-                    $orderStatus = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')
-                                            ->find(EsOrderStatus::STATUS_VOID);
-                    $order->setOrderStatus($orderStatus);
-
-                    $orderProducts = $esOrderProductRepo->findBy(['order'=> $orderId]);
-                    foreach ($orderProducts as $orderProduct) {
-                        $esOrderProductStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')
-                                                         ->find(EsOrderProductStatus::RETURNED_BUYER);
-                        $esOrderProductRepo->updateOrderProductStatus($esOrderProductStatus, $orderProduct);
-                    }
                     $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                              ->deleteLockItem($orderId, $toBeLocked);
                     $orderHistory = [
