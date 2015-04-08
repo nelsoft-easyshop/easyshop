@@ -240,6 +240,7 @@
     });
 
     $( "#my-store-menu-trigger" ).click(function() {
+    $(".easy-point-content").getNiceScroll().hide();
     $( "#my-account-menu" ).slideUp();
      var attr4 = $("i.a").attr("class");
     if(attr4 == "a icon-control-up toggle-down pull-right"){
@@ -249,27 +250,26 @@
             $( ".f-a" ).css("border-radius", "0px");
         }
         $( "#my-store-menu" ).slideToggle( "slow", function() {
-           
+            $(".easy-point-content").getNiceScroll().show().resize();
             var attr = $("i.m").attr("class");
-        if(attr == "m icon-control-down toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-down toggle-down pull-right").addClass("m icon-control-up toggle-down pull-right");
-        }
-        else if(attr == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-        }
+            if(attr == "m icon-control-down toggle-down pull-right"){
+                $('i.m').removeClass("m icon-control-down toggle-down pull-right").addClass("m icon-control-up toggle-down pull-right");
+            }
+            else if(attr == "m icon-control-up toggle-down pull-right"){
+                $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
+            }
         });
-        setTimeout(function(){
-            $(".easy-point-content").getNiceScroll().resize();
-        }, 1000);
     });
 
     $( "#my-account-menu-trigger" ).click(function() {
+        $(".easy-point-content").getNiceScroll().hide();
         $( "#my-store-menu" ).slideUp();
         var attr3 = $("i.m").attr("class");
         if(attr3 == "m icon-control-up toggle-down pull-right"){
             $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
         }
             $( "#my-account-menu" ).slideToggle( "slow", function() {
+            $(".easy-point-content").getNiceScroll().show().resize();
             var attr = $("i.a").attr("class");
             if(attr == "a icon-control-down toggle-down pull-right"){
                 $('i.a').removeClass("a icon-control-down toggle-down pull-right").addClass("a icon-control-up toggle-down pull-right");
@@ -284,9 +284,6 @@
                 $( ".f-a" ).css("border-radius", "0px");
             } 
         });
-        setTimeout(function(){
-            $(".easy-point-content").getNiceScroll().resize();
-        }, 1000);
     });
 
     $( "#info-item-1" ).click(function() {
