@@ -86,7 +86,9 @@
                                                 data-rowid="<?=html_escape($item['rowid']);?>"></i>
                                         </td>
                                         <td>
-                                            <div class="cart-item-thumbnail" style="background: url(<?=getAssetsDomain(); ?><?=$item['imagePath']; ?>categoryview/<?=$item['imageFile']; ?>) center no-repeat; background-size: cover;"></div>
+                                            <div class="cart-item-thumbnail">
+                                                <img src="<?=getAssetsDomain(); ?><?=$item['imagePath']; ?>categoryview/<?=$item['imageFile']; ?>" class="cart-item-img"/>
+                                            </div>
                                             <center>
                                                 <span class="remove-mobile cart-item-remove"
                                                 data-name="<?=html_escape($item['name']);?>"
