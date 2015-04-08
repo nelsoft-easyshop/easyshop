@@ -4,10 +4,9 @@
             <div class="col-xs-5">
                 <div class="form-search-item">
                    <label>Sort by:</label>
-                    <select class="select-filter-item search-filter">
-                        <option value="default">default sorting</option>
-                        <option value="lastmodified">last modified</option>
-                        <option value="new">new</option>
+                    <select class="select-filter-item log-sort-select">
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option> 
                     </select>
                 </div>
             </div>

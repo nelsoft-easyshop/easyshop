@@ -3195,24 +3195,31 @@
     // Activity log filter
     var $logDateFrom = "";
     var $logDateTo = "";
+    var $defaultLogSort = "new";
 
     $("#main-log-container").on('click',".individual, .extremes",function () {
         var $this = $(this);
         var $page = $this.data('page'); 
-        getActivityLog($page, $logDateFrom, $logDateTo);
+        getActivityLog($page, $logDateFrom, $logDateTo, $defaultLogSort);
     });
 
     $( ".activity-logs-trigger" ).click(function() {
-        getActivityLog(1, "", "");
+        getActivityLog(1, "", "", $defaultLogSort);
     });
 
     $("#activityLogTab").on("click", ".filter-logs", function() {
         $logDateFrom = $("#activityLogTab").find("#log-start-date").val();
         $logDateTo = $("#activityLogTab").find("#log-end-date").val(); 
-        getActivityLog(1, $logDateFrom, $logDateTo);
+        getActivityLog(1, $logDateFrom, $logDateTo, $defaultLogSort);
     });
 
-    function getActivityLog($page, $dateFrom, $dateTo)
+    $("#activityLogTab").on("change", ".log-sort-select", function() {
+        var $this = $(this);
+        $defaultLogSort = $this.val();
+        getActivityLog(1, $logDateFrom, $logDateTo, $defaultLogSort);
+    });
+
+    function getActivityLog($page, $dateFrom, $dateTo, $sort)
     {
         $.ajax({
             type: "GET",
@@ -3222,6 +3229,7 @@
                 page: $page,
                 date_from: $dateFrom,
                 date_to: $dateTo,
+                sort: $sort
             },
             beforeSend: function (xhr){ 
             }, 

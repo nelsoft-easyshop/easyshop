@@ -2444,6 +2444,7 @@ class Memberpage extends MY_Controller
         $page = $this->input->get('page') ? $this->input->get('page') : 1;
         $fromDate = $this->input->get('date_from') ? date('Y-m-d 00:00:00', strtotime($this->input->get('date_from'))) : null;
         $toDate = $this->input->get('date_to') ? date('Y-m-d 23:59:59', strtotime($this->input->get('date_to'))) : null;
+        $sortAscending = $this->input->get('sort') && strtolower($this->input->get('sort')) === "oldest";
         $activityCount = $this->serviceContainer['activity_manager']
                               ->getTotalActivityCount($memberId, $fromDate, $toDate);
         $paginationData = [
@@ -2454,7 +2455,7 @@ class Memberpage extends MY_Controller
         $page--;
         $offset = $page * $perPage;
         $activities = $this->serviceContainer['activity_manager']
-                           ->getUserActivities($memberId, $perPage, $offset, $fromDate, $toDate);
+                           ->getUserActivities($memberId, $perPage, $offset, $fromDate, $toDate, $sortAscending);
 
         $activitiesData = [
             'activities' => $activities,

@@ -38,7 +38,7 @@ class EsActivityHistoryRepository extends EntityRepository
      * @param date    $toDate
      * @return EasyShop\Entities\EsActivityHistory[]
      */
-    public function getActivities($memberId, $limit, $offset, $fromDate = null, $toDate = null)
+    public function getActivities($memberId, $limit, $offset, $fromDate = null, $toDate = null, $sortAscending = false)
     {
         $em = $this->_em;
         $query = $em->createQueryBuilder()
@@ -55,6 +55,7 @@ class EsActivityHistoryRepository extends EntityRepository
 
         $activities = $query->setFirstResult( $offset )
                             ->setMaxResults( $limit )
+                            ->orderBy('A.idActivityHistory', $sortAscending ? "ASC" : "DESC")
                             ->getQuery()
                             ->getResult();
  
