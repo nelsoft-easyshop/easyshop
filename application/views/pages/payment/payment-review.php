@@ -15,19 +15,22 @@
                     <div class="breadcrumb-left-wing active-wing"></div>
                     <center>
                         <div class="circle-breadcrumb">
-                            <i class="fa fa-check fa-lg"></i>
+                            <i class="fa icon-cart fa-lg done-icon"></i>
+                            <i class="fa fa-check fa-lg new-icon"></i>
                         </div>
                         <div class="breadcrumb-title"> Shopping Cart</div>
                     </center>
-                    <div class="breadcrumb-right-wing active-wing"></div>
+                    <div class="breadcrumb-right-wing"></div>
+                    <div class="active-right-wing-cart-1"></div>
                 </div>
-                <div class="col-xs-4 col-trans-breadcrumb active">
-                    <div class="breadcrumb-left-wing active-wing"></div>
+                <div class="col-xs-4 col-trans-breadcrumb">
+                    <div class="breadcrumb-left-wing"></div>
+                    <div class=" active-left-wing-cart-2"></div>
                     <center>
-                        <div class="circle-breadcrumb">
+                        <div class="circle-breadcrumb active-breadcrumb-icon">
                             <i class="fa icon-payment fa-lg"></i>
                         </div>
-                        <div class="breadcrumb-title">Checkout Details</div>
+                        <div class="breadcrumb-title active-breadcrumb-title">Checkout Details</div>
                     </center>
                     <div class="breadcrumb-right-wing"></div>
                 </div>
@@ -81,7 +84,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="mobile">Mobile Number <abbr class="required" title="required">*</abbr></label>
-                                <input type="text" value="<?=isset($address['mobile']) ? '0'.html_escape($address['mobile']) : ''; ?>" id="mobile" class="form-es-control form-es-control-block" readonly />
+                                <input type="text" value="<?=isset($address['mobile']) ? '0'.html_escape($address['mobile']) : ''; ?>" id="mobile" class="form-es-control form-es-control-block" maxlength="11" onkeypress="return isNumberKey(event , false)" readonly />
                                 <span class="error-span error-mobile_number error"></span>
                             </div>
                         </div>
@@ -90,7 +93,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="telephone">Telephone Number </label>
-                                <input type="text" value="<?=isset($address['telephone']) ? html_escape($address['telephone']) : ''; ?>" id="telephone" class="form-es-control form-es-control-block" readonly />
+                                <input type="text" value="<?=isset($address['telephone']) ? html_escape($address['telephone']) : ''; ?>" id="telephone" class="form-es-control form-es-control-block" readonly onkeypress="return isNumberKey(event, false)" />
                                 <span class="error-span error-telephone_number error"></span>
                             </div>
                         </div>
@@ -470,7 +473,7 @@
                                     </label>
                                 </div>
                                 <div class="payment-method-desc" style="display:none">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Superstitione erunt vituperata iactant oderit consuevit propemodum eruditionem, tarentinis.
+                                    You can pay in cash to our courier when you receive the goods at your doorstep. 
                                     <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY, $checkoutError['paymentTypeError'])):?>
                                         <br/>
                                         <br/> 

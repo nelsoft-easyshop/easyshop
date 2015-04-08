@@ -535,7 +535,7 @@
 
                                                                     <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{buyer}</span>,</p>
 
-                                                                    <span style="color:#ff893b; font-weight: 400;">{seller}</span> has just provided new shipping details for your order                                                                    
+                                                                    <span style="color:#ff893b; font-weight: 400;">{seller}</span> has just provided new shipping details for your order. The details can be found below.                                                                  
                                                                 </td>
                                                             </tr>
 
@@ -658,14 +658,6 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                Product Name : 
-                                                                            </td>
-                                                                            <td valign="top" width="50%" valign="top" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
-                                                                                {product_name}
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign="top" width="50%" valign="top" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
                                                                                 Delivery Date : 
                                                                             </td>
                                                                             <td valign="top" width="50%" valign="top" align="left" style=" font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
@@ -693,7 +685,7 @@
                                             <!-- end space width --> 
 
                                             <!-- start content right --> 
-                                            <table width="270" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width-text">
+                                            <table width="300" border="0" cellspacing="0" cellpadding="0" align="right" class="full-width-text">
                                                  <tr>
                                                     <td valign="top">
                                                         <table border="0" cellspacing="0" cellpadding="0" align="left" width="100%">
@@ -762,12 +754,52 @@
                                         <td valign="top">
                                             <!-- start content left --> 
                                             <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" class="full-width-text" style="padding-left:20px;">
-
-
-
                                                 <!-- start text content --> 
                                                 <tr>
-                                                    <td valign="top">
+                                                    <td valign="top" width="47%">
+                                                        <table border="0" cellspacing="0" cellpadding="0" align="left" >
+
+                                                            <!--start space height --> 
+                                                            <tr>
+                                                                <td height="15"></td>
+                                                            </tr>
+                                                            <!--end space height --> 
+
+                                                            <tr>
+                                                                <td valign="top" mc:edit="content (layout-4) TB27" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#a3a2a2; font-weight:300; text-align:left; word-break: break-all;">
+
+                                                                    <p style="margin-bottom: 10px; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color: #555;">Product List: </p>
+
+                                                                     <tr>
+                                                                      <td>   
+                                                                        <table width="100%">
+                                                                          {products}
+                                                                          <tr>
+                                                                            <td valign="bottom" width="45"  style="padding-top: 5px; padding-bottom: 5px;"><img src="{primaryImage}" width="40" height="40" style="width: 40px; height: 40px; border: solid #e2e2e2 1px; text-align: center;"></td>
+                                                                            <td valign="bottom" style="padding-top: 5px; padding-bottom: 5px;">
+                                                                              <a href="{productLink}" style="font-size: 13px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:400; text-align:left; ">
+                                                                                   {productName}
+                                                                              </a>
+                                                                            </td>
+                                                                          </tr>
+                                                                          {/products}
+                                                                        </table>
+                                                                      </td>
+                                                                  </tr>
+                                                                </td>
+                                                            </tr>
+
+                                                            <!--start space height --> 
+                                                            <tr>
+                                                                <td height="20"></td>
+                                                            </tr>
+                                                            <!--end space height --> 
+
+                                                        </table>
+                                                    </td>
+
+
+                                                    <td valign="top" width="50%">
                                                         <table border="0" cellspacing="0" cellpadding="0" align="left">
 
                                                             <!--start space height --> 

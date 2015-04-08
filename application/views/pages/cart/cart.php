@@ -12,13 +12,14 @@
         <!--Start of transaction breadcrumb-->
         <div class="transaction-breadcrumb-container">
             <div class="row">
-                <div class="col-xs-4 col-trans-breadcrumb active">
-                    <div class="breadcrumb-left-wing active-wing"></div>
+                <div class="col-xs-4 col-trans-breadcrumb">
+                    <div class="breadcrumb-left-wing"></div>
+                    <div class="active-left-wing-cart-1"></div>
                     <center>
-                        <div class="circle-breadcrumb">
+                        <div class="circle-breadcrumb active-breadcrumb-icon">
                             <i class="fa icon-cart fa-lg"></i>
                         </div>
-                        <div class="breadcrumb-title">Shopping Cart</div>
+                        <div class="breadcrumb-title active-breadcrumb-title">Shopping Cart</div>
                     </center>
                     <div class="breadcrumb-right-wing"></div>
                 </div>
@@ -185,7 +186,7 @@
                         <div class="form-group">
 
                             <label for="points-total">Your Current EasyPoints : <?=$userPoints;?></label>
-                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block" placeholder="Enter the amount of points you want to use"/>
+                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block"  onkeypress="return isNumberKey(event)" placeholder="Enter the amount of points you want to use"/>
      
                         </div>
                         <div class="form-group">
@@ -223,14 +224,14 @@
                                             <span id="summary-shipping" data-totalshipping="<?=number_format($totalShippingFee, 2, '.', ''); ?>">
                                                 <?=number_format($totalShippingFee, 2, '.', ','); ?>
                                             </span>
-                                            <small class="calculate-shipping-label">
-                                                <i class="fa fa-plus"></i> Calculate Shipping
-                                            </small>
                                         <?php else: ?>
-                                            <small class="calculate-shipping-label">
-                                                No shipping location set.
+                                            <small>
+                                                <i>No shipping location set.</i>
                                             </small>
-                                        <?php endif; ?>
+                                        <?php endif; ?> 
+                                        <small class="calculate-shipping-label">
+                                            <i class="fa fa-plus"></i> Calculate Shipping
+                                        </small>
                                     </td>
                                 </tr>
                                 <tr class="border-bottom-1">
@@ -257,11 +258,12 @@
                             <tbody>
                                 <tr class="payment-method-tr">
                                     <td class="payment-method-td">
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-visa.png" class="img-payment-method" alt="VISA"/>
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-paypal.png" class="img-payment-method" alt="PayPal"/>
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-mastercard.png" class="img-payment-method" alt="MasterCard"/>
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-dragonpay.png" class="img-payment-method" alt="Dragonpay"/>
-                                        <img src="<?=getAssetsDomain()?>assets/images/img-cod.png" class="img-payment-method" alt="COD"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/visa.png" class="img-payment-method" alt="VISA"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/paypal.png" class="img-payment-method" alt="PayPal"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/master-card.png" class="img-payment-method" alt="MasterCard"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/dragonpay.png" class="img-payment-method" alt="Dragonpay"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/pesopay.png" class="img-payment-method" alt="PesoPay"/>
+                                        <img src="<?=getAssetsDomain()?>assets/images/payment-methods/cod.png" class="img-payment-method" alt="COD"/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -297,7 +299,7 @@
         Shipping calculator
     </h3>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane. 
+        Calculate total shipping cost based on selected location.
     </p>
     <div class="form-group">
         <label for="shipping-city">State/Region</label> 
@@ -328,9 +330,11 @@
         <input type="text" id="shipping-total" class="form-es-control form-es-control-block" readOnly />
     </div>
     <div class="my-modal-footer">
+    <?php if($userAddress): ?>
         <center>
             <button class="btn btn-es-green update-shipping" disabled="disabled" >Save Location</button>  
         </center>
+    <?php endif; ?>
     </div>
 </div>
 <div>

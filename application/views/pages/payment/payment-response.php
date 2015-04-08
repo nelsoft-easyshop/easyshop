@@ -25,21 +25,24 @@
                     <div class="breadcrumb-left-wing active-wing"></div>
                     <center>
                         <div class="circle-breadcrumb">
-                            <i class="fa fa-check fa-lg"></i>
+                            <i class="fa icon-payment fa-lg done-icon"></i>
+                            <i class="fa fa-check fa-lg new-icon"></i>
                         </div>
                         <div class="breadcrumb-title">Checkout Details</div>
                     </center>
-                    <div class="breadcrumb-right-wing active-wing"></div>
+                    <div class="breadcrumb-right-wing"></div>
+                    <div class="active-right-wing-cart-1"></div>
                 </div>
-                <div class="col-xs-4 col-trans-breadcrumb active">
-                    <div class="breadcrumb-left-wing active-wing"></div>
+                <div class="col-xs-4 col-trans-breadcrumb">
+                    <div class="breadcrumb-left-wing"></div>
+                    <div class=" active-left-wing-cart-2"></div>
                     <center>
-                        <div class="circle-breadcrumb">
+                        <div class="circle-breadcrumb active-breadcrumb-icon">
                             <i class="fa fa-cube fa-lg"></i>
                         </div>
-                         <div class="breadcrumb-title">Order Complete</div>
+                         <div class="breadcrumb-title active-breadcrumb-title">Order Complete</div>
                     </center>
-                    <div class="breadcrumb-right-wing active-wing"></div>
+                    <div class="breadcrumb-right-wing"></div>
                 </div>
             </div>
         </div>
@@ -74,7 +77,7 @@
                             </tr>
                             <tr>
                                 <td>Total Amount : </td>
-                                <td>&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints), 2, '.', ',')?></td>
+                                <td>&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints, 4), 2, '.', ',')?></td>
                             </tr>
                             <tr>
                                 <td>Transaction Date : </td>
@@ -133,7 +136,7 @@
                                     </td>
                                     <td><?=$product->getOrderQuantity();?></td>
                                     <td>&#8369; <?=number_format($product->getHandlingFee(), 2, '.', ',')?></td>
-                                    <td>&#8369; <?=number_format($product->getTotal(), 2, '.', ',')?></td>
+                                    <td>&#8369; <?=number_format(bcsub($product->getTotal(), $product->getHandlingFee(), 4), 2, '.', ',')?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -142,7 +145,7 @@
                                 <td>
                                     Subtotal
                                 </td>
-                                <td colspan="3">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionShippingFee), 2, '.', ',')?></td>
+                                <td colspan="3">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionShippingFee, 4), 2, '.', ',')?></td>
                             </tr>
                             <tr>
                                 <td>
@@ -160,7 +163,7 @@
                                 <td>
                                     Order Total
                                 </td>
-                                <td  colspan="3" class="checkout-order-total">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints), 2, '.', ',')?></td>
+                                <td  colspan="3" class="checkout-order-total">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints, 4), 2, '.', ',')?></td>
                             </tr>
                         </foot>
                     </table>
@@ -182,4 +185,13 @@
         </div>
     </div>
 </div>
+
+<?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+    <script type='text/javascript' src="/assets/js/src/payment-response.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+<?php else: ?>
+    <script src="/assets/js/min/easyshop.payment-response.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<?php endif; ?>
+
+
+
 

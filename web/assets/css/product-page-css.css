@@ -2082,7 +2082,7 @@ body{
 @media (min-width : 570px) {
     .prod-payment-img-container .attr-title {
         display: inline-block;
-        width: 16%;
+        width: 100%;
     }
     .prod-share-container .attr-title {
         display: inline-block;

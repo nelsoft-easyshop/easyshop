@@ -245,10 +245,10 @@ a{
     position: absolute;
     background: #ffffff;
     -webkit-filter: brightness(100%) !important;
-	-moz-filter: brightness(100%) !important;
-	-o-filter: brightness(100%) !important;
-	-ms-filter: brightness(100%) !important;
-	filter: brightness(100%) !important;
+    -moz-filter: brightness(100%) !important;
+    -o-filter: brightness(100%) !important;
+    -ms-filter: brightness(100%) !important;
+    filter: brightness(100%) !important;
 }
 
 .img-follower-cover{
@@ -261,10 +261,10 @@ a{
     top: 0;
     z-index: 1;
     filter: brightness(50%);
-	-webkit-filter: brightness(50%);
-	-moz-filter: brightness(50%);
-	-o-filter: brightness(50%);
-	-ms-filter: brightness(50%);
+    -webkit-filter: brightness(50%);
+    -moz-filter: brightness(50%);
+    -o-filter: brightness(50%);
+    -ms-filter: brightness(50%);
 }
 
 .cover-overlay{
@@ -1680,7 +1680,7 @@ i.jstree-icon.jstree-checkbox{
 .allItemsEdit { 
     float: left; 
     width: 100%; 
-    min-height: 195px; 
+    min-height: 195px !important; 
 }
 
 .allItems.custom-state-active,

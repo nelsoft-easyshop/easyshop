@@ -7,6 +7,9 @@
 
     $(window).on("load resize",function(){ 
         heightOfModal = $(".simplemodal-wrap").outerHeight();
+        $(".active-left-wing-cart-1").animate({width: "50%"}, 1000);
+        $(".active-breadcrumb-icon").delay(1000).animate({backgroundColor: "#00a388"}, 1000);
+        $(".active-breadcrumb-title").delay(1000).animate({color: "#00a388"}, 1000).css("font-weight", "bold");;
 
         $(".calculate-shipping-label").click(function(){
             $(".shipping-calculator-modal").modal({
@@ -228,7 +231,8 @@
                     if(jsonResponse.isSuccessful){
                         $container.find('.cart-item-subtotal')
                                   .html(jsonResponse.itemSubtotal);
-                        $cartSubtotal = removeCommas(jsonResponse.cartTotal);
+                        $cartSubtotal = removeCommas(jsonResponse.cartTotal); 
+                        $shippingFee = parseFloat(jsonResponse.totalShippingFee);
                         computePrices();
                     }
                     $cartRowId = null;
@@ -243,7 +247,7 @@
 
     // summary computation
     var $maxPoints = parseFloat($("#points-total").data('totalpoints'));
-    var $shippingFee = parseFloat($("#summary-shipping").data('totalshipping'));
+    var $shippingFee = isNaN(parseFloat($("#summary-shipping").data('totalshipping'))) ? 0 : parseFloat($("#summary-shipping").data('totalshipping'));
     var $cartSubtotal = $("#summary-cart-total").data('cartprice');
     var $usedPoints = 0;
     $('.btn-deduct-points').on('click', function(){
@@ -280,9 +284,8 @@
     {
         var $summaryContainer = $(".summary-container"); 
         var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
-
         $summaryContainer.find('#summary-points').html(replaceNumberWithCommas($usedPoints.toFixed(2)));
-        $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee));
+        $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee.toFixed(2)));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
         $summaryContainer.find('#summary-cart-total').html(replaceNumberWithCommas($cartTotalPrice.toFixed(2)));
     }

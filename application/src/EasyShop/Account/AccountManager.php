@@ -194,8 +194,10 @@ class AccountManager
         ];
         
         $verifcodeRepository = $this->em->getRepository('EasyShop\Entities\EsVerifcode');
+        $emailSubject = $this->languageLoader->getLine('registration_subject');
         
         if(!$isNew){
+            $emailSubject = $this->languageLoader->getLine('reverify_subject');
             $verifCode = $verifcodeRepository->findOneBy(['member' => $member]);
             if(!$verifCode){
                 $response['error'] = 'verfication-code-does-not-exist';
@@ -248,7 +250,7 @@ class AccountManager
             $message = $this->parser->parse('emails/email-verification' , $parseData,true);
             
             $this->emailNotification->setRecipient($emailAddress);
-            $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
+            $this->emailNotification->setSubject($emailSubject);
             $this->emailNotification->setMessage($message, $imageArray);
             /**
              * Mobile verification can be added here (unused for the time being)

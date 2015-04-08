@@ -535,7 +535,7 @@
 
                                                                     <p style="margin-top: 20px; margin-bottom: 20px;">Dear <span style="color:#ff893b; font-weight: 400;">{recipient}</span>,</p>
 
-                                                                    <span style="color:#ff893b; font-weight: 400;">{user}</span> has just confirmed the receipt of your product.
+                                                                    <span style="color:#ff893b; font-weight: 400;">{user}</span> has just confirmed the receipt of your product(s).
 
                                                                 </td>
                                                             </tr>
@@ -626,6 +626,8 @@
             <!-- End of title plate --> 
 
             <!-- Start of item --> 
+            {products}
+            
             <tr mc:repeatable="Select" mc:variant="layout-2">
                 <td mc:hideable align="center" valign="top" class="fix-box">
 
@@ -649,11 +651,11 @@
                                                 <tr>
                                                     <td valign="middle" align="center">
                                                         <table width="230" border="0" cellspacing="0" cellpadding="0" align="left">
-                                                            <tr width="70">
-                                                                <td>
+                                                            <tr>
+                                                                <td width="65">
                                                                     <img src="{primaryImage}" width="60" height="60" style="width: 60px; height: 60px; border: solid #e2e2e2 1px; text-align: center;">
                                                                 </td>
-                                                                <td valign="bottom" style="padding-left: 10px;">
+                                                                <td valign="bottom" style="padding-left: 5px;">
                                                                     <a href="{itemLink}" style="font-size: 15px; line-height: 22px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; color:#555555; font-weight:400; text-align:left; ">
                                                                         {product_name}
                                                                     </a>
@@ -726,7 +728,7 @@
                                                                             <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
                                                                                 Payment Method : 
                                                                             </td>
-                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
+                                                                            <td valign="top" width="50%" align="right" style="padding-right: 40px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif;">
                                                                                 {payment_method_name}
                                                                             </td>
                                                                         </tr>
@@ -802,6 +804,7 @@
                     <!-- end layout-2 container width 600px -->
                 </td>
             </tr>
+            {/products}
             <!-- End of item  -->
             
             <!-- Start of Social Media Footer -->

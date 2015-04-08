@@ -163,7 +163,7 @@
                     var consigneeStateRegion = serverResponse.consigneeStateRegionId;
                     var stateRegionDropDown = $("#deliver_stateregion");
                     var dropDownTemplate = "";
-
+                    
                     /**
                      * Turn stateRegion object into an array and sort alphabetically 
                      */
@@ -179,18 +179,21 @@
                     $.each(stateRegionArray, function(index, stateRegion) {
                         dropDownTemplate += '<option class="echo" value="'+stateRegion.id+'">' + stateRegion.name + '</option>';
                     });  
-                    
+
                     stateRegionDropDown.append(dropDownTemplate);                         
                     stateRegionDropDown.val(consigneeStateRegion);
                     var cityDropDown = $("#delivery_city");
                     dropDownTemplate = "";
                     if(serverResponse.consigneeCityId !== '' && serverResponse.consigneeStateRegionId !== '') {
                         var deliveryStateRegionId = parseInt(serverResponse.consigneeStateRegionId, 10);
-                        $.each(cityLookupArray[deliveryStateRegionId], function(index, city){
-                            dropDownTemplate += '<option class="echo" value="'+city.id+'">' + city.name + '</option>';
-                        });
-                        cityDropDown.append(dropDownTemplate);                                                
+                        if(typeof cityLookupArray[deliveryStateRegionId] !== 'undefined'){
+                            $.each(cityLookupArray[deliveryStateRegionId], function(index, city){
+                                dropDownTemplate += '<option class="echo" value="'+city.id+'">' + city.name + '</option>';
+                            });
+                            cityDropDown.append(dropDownTemplate);  
+                        }
                     }
+                    
                     cityDropDown.val(serverResponse.consigneeCityId);
                     var lat  = (serverResponse.address !== null) ? serverResponse.address.lat : 0;
                     var lng = (serverResponse.address !== null) ? serverResponse.address.lng : 0;
@@ -1604,7 +1607,7 @@
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                    txResponseBtn.closest('.item-list-panel').replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
                     $('.wipeOut').fadeOut(5000);
                 }
                 txResponseBtn.addClass('enabled');
@@ -2734,14 +2737,10 @@
         });
         
         var $listContainer = listItem.closest('.category-items-holder');
-        var listContainer = $listContainer[0];
-        var isContainerScrollable = listContainer.scrollHeight > listContainer.clientHeight;
-        if(isContainerScrollable === false){
-           loadMoreCategoryProducts($listContainer, true); 
-        }
+        checkContainerScrollable($listContainer);
     });
     
-    
+
     $(document.body).on('keypress', '.search-category', function(event){
         if ( event.which == 13 ) {
             event.preventDefault();
@@ -3073,7 +3072,7 @@
             }
         }
     }
-    
+
     function createCustomizedCategoryModal(div)
     {
         div.modal({
@@ -3083,10 +3082,18 @@
         var $allProductList = div.find('.all-product-list');              
         var $categoryProductList = div.find('.category-product-list');
         $categoryProductList.sortable({
-            connectWith: $allProductList
+            connectWith: $allProductList,
+            receive: function( event, ui ) {
+                var $listContainer = $allProductList.closest('.category-items-holder');
+                checkContainerScrollable($listContainer);
+            }
         });                 
         $allProductList.sortable({
-            connectWith: $categoryProductList
+            connectWith: $categoryProductList,
+            receive: function( event, ui ) {
+                var $listContainer = $categoryProductList.closest('.category-items-holder');
+                checkContainerScrollable($listContainer);
+            }
         });
         div.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
         var addContentHeight = div.outerHeight();
@@ -3120,6 +3127,15 @@
             $(".my-category-modal-sm").css("width", modalCategoryModalSmWidth+"px").css("height",modalDeleteHeight+"px");
         }
     });
+    
+    function checkContainerScrollable($categoryItemHolder)
+    {
+        var listContainer = $categoryItemHolder[0];
+        var isContainerScrollable = listContainer.scrollHeight > listContainer.clientHeight;
+        if(isContainerScrollable === false){
+           loadMoreCategoryProducts($categoryItemHolder, true); 
+        }  
+    }
 
     
     $(document).ready(function(){

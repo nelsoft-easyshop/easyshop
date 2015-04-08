@@ -460,6 +460,9 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.payment-review.js':
                         ['web/assets/js/src/vendor/jquery.simplemodal.js',
                          'web/assets/js/src/new-payment.js'],
+                     
+                    'web/assets/js/min/easyshop.payment-response.js':
+                        ['web/assets/js/src/payment-response.js'],
 
                     'web/assets/js/min/easyshop.home-reminder.js':
                         ['web/assets/js/src/vendor/jquery.simplemodal.js',
@@ -469,6 +472,7 @@ module.exports = function (grunt) {
                         ['web/assets/js/src/vendor/jquery-1.9.1.js',
                          'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                          'web/assets/js/src/how-to-page-plugins.js',
+                         'web/assets/js/src/universal.js',
                          'web/assets/js/src/how-to-page.js']
                 }
             }
