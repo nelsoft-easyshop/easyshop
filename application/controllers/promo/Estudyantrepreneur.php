@@ -27,6 +27,33 @@ class Estudyantrepreneur extends MY_Controller
                      );
 
         if ($data['showSuccessPage'] || $data['isPromoEnded']) {
+            $this->EstudyantrepreneurPromoStandings();
+        }
+        else {
+            $this->load->view('pages/promo/estudyantrepreneur', $data);
+        }
+
+    }
+
+    /**
+     * Retrieves Estudyantrepreneur Promo standings
+     */
+    public function EstudyantrepreneurPromoStandings()
+    {
+        $data = $this->promoManager
+                     ->callSubclassMethod(
+                         \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                         'getSchoolWithStudentsByRound'
+                     );
+
+        $getCurrentStandings['schools_and_students'] = $this->promoManager
+                                                            ->callSubclassMethod(
+                                                                \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
+                                                                'getStandingsByRound'
+                                                            );
+
+        if ($data['showSuccessPage'] || $data['isPromoEnded']) {
+
             $getCurrentStandings['schools_and_students'] = $this->promoManager
                                                                 ->callSubclassMethod(
                                                                     \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
@@ -36,25 +63,11 @@ class Estudyantrepreneur extends MY_Controller
                                                                         $data['schools_and_students']
                                                                     ]
                                                                 );
-
-            if ($data['previousRound'] === 'first_round') {
-                $getCurrentStandings['successMessage'] = "first round winners";
-            }
-            else if ($data['previousRound'] === 'inter_school_round'){
-                $getCurrentStandings['successMessage'] = "Congratulations to the businesses who made it to the top 3. We wish you the best of luck at the inter-school poll!";
-            }
-            else if ($data['previousRound'] === 'inter_school_round'){
-                $getCurrentStandings['successMessage'] = "success message for the winner";
-            }
-
-            $this->load->view('pages/promo/estudyantrepreneur_congrats', $getCurrentStandings);
-        }
-        else {
-            $this->load->view('pages/promo/estudyantrepreneur', $data);
         }
 
+        $getCurrentStandings['successMessage'] = "Current Standings";
 
-
+        $this->load->view('pages/promo/estudyantrepreneur_congrats', $getCurrentStandings);
     }
 
     /**

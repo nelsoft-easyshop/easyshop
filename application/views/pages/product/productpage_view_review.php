@@ -48,6 +48,9 @@
                                 <?php if($product->getBrand()->getName() !== "" && $product->getBrand()->getIdBrand() !== \EasyShop\Entities\EsBrand::CUSTOM_CATEGORY_ID): ?>
                                     Brand: <?=html_escape($product->getBrand()->getName()); ?>
                                     <br>
+                                <?php elseif ($product->getBrandOtherName() !== ""):?>
+                                    Brand: <?=html_escape($product->getBrandOtherName()); ?>
+                                    <br>
                                 <?php endif; ?>
                                 <?php if($product->getSku() !== ""): ?>
                                     SKU: <?=html_escape($product->getSku()); ?>
