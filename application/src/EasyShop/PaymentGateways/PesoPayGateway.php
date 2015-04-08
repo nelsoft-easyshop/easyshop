@@ -293,18 +293,20 @@ class PesoPayGateWay extends AbstractGateway
                                                 EsOrderStatus::STATUS_PAID
                                             );
                     $this->paymentService->sendPaymentNotification($orderId);
-                }
-                else{
-                    $this->paymentService->revertTransactionPoint($orderId);
-                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                             ->deleteLockItem($orderId, $toBeLocked);
                     $orderHistory = [
                         'order_id' => $orderId,
-                        'order_status' => EsOrderStatus::STATUS_VOID,
-                        'comment' => 'Pesopay transaction failed: ' . json_encode($params),
+                        'order_status' => EsOrderStatus::STATUS_PAID,
+                        'comment' => 'Pesopay Payment confirmed'
                     ];
                     $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                              ->addOrderHistory($orderHistory);
+                }
+                else{
+                    $this->paymentService->revertTransactionPoint($orderId);
+                    $order->setPostbackcount(bcadd($order->getPostbackcount(), 1));
+                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                             ->deleteLockItem($orderId, $toBeLocked); 
+                    $this->em->flush();
                 }
             }
         }
