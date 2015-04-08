@@ -96,14 +96,12 @@
             <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
             <!-- Product attributes here -->
             <?php foreach ($productAttributes as $head => $headValue): ?>
-                <div class="col-sm-12 col-md-6 attr-select <?=(count($headValue)  > 1) ? "" : "element-hide";?>">
+                <div class="col-sm-12 col-md-6 attr-select">
                     <div class="prod-select-con ui-form-control">
                         <select class="attribute-control" disabled="">
-                            <?php if(count($headValue) > 1): ?>
-                            <option value="0" data-addprice="0" selected=selected>--<?=ucfirst($head);?>--</option>
-                            <?php endif; ?>
+                            <option value="0" data-addprice="0" selected=selected>--<?=ucfirst(html_escape($head));?>--</option>
                             <?php foreach ($headValue as $key => $value):?>
-                                <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower($head)?>" data-textvalue="<?=strtolower($value['attr_value']); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=$value['attr_value']; ?></option>
+                                <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -228,10 +226,6 @@
                     <p>
                         <?=$productDescription;?> 
                         <br>
-                        <?php foreach ($additionalInformation as $value): ?>
-                            <?=html_escape($value); ?>
-                            <br>
-                        <?php endforeach; ?>
                         <?php if($product->getCondition() !== ""): ?>
                             Condition: <?=html_escape($product->getCondition()); ?>
                             <br>
