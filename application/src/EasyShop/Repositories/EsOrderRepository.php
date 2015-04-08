@@ -208,15 +208,21 @@ class EsOrderRepository extends EntityRepository
             ->innerJoin('EasyShop\Entities\EsProduct', 'p','WITH','p.idProduct = op.product AND p.promoType = :promoType')
             ->where(
                     $qb->expr()->not(
-                        $qb->expr()->andX(
-                            $qb->expr()->eq('o.orderStatus', '99')
-                            ,$qb->expr()->eq('o.paymentMethod', '1')
+                        $qb->expr()->andX( 
+                            $qb->expr()->eq('o.orderStatus', ':statusDraft')
+                            ,$qb->expr()->orX(
+                                $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                            )
                         )
                     )
                 )
             ->andWhere('o.buyer = :buyer_id') 
             ->setParameter('buyer_id', $buyerId)
             ->setParameter('promoType', $promoType) 
+            ->setParameter('statusDraft', orderStatus::STATUS_DRAFT)
+            ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+            ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
             ->getQuery();
         $result = $qbResult->getResult();
 
