@@ -28,7 +28,7 @@ $(function(){
 
     $('#tabs').tabs();
 
-    $(".radio-select").on('click',function(){
+    $(".radio-select").on('change',function(){
         var $this = $(this);
         var $value = $this.val();
         var $freeShippingBtn = $('#set_free_shipping');
