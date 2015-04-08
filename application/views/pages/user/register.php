@@ -501,11 +501,16 @@
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
     <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/universal.js"></script>
-    <script type='text/javascript' src='/assets/js/src/landingpage.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/register.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_register.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
+
+<!--[if IE 9]>
+    <script type="text/javascript" src="/assets/js/src/register-ie-override.js"></script>
+<![endif]-->
+
 <script>
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 </script>

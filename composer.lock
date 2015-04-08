@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5fc6cb5c3c4d6d9e9f876757d1fa85ab",
+    "hash": "d7bf9700591f2e8f921ac56479dc44ae",
     "packages": [
         {
             "name": "aferrandini/phpqrcode",
@@ -163,55 +163,6 @@
                 "oauth2"
             ],
             "time": "2014-02-27 13:40:40"
-        },
-        {
-            "name": "cboden/ratchet",
-            "version": "v0.3.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ratchetphp/Ratchet.git",
-                "reference": "d36a8699df04354147a4f47845035b1ea8239189"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ratchetphp/Ratchet/zipball/d36a8699df04354147a4f47845035b1ea8239189",
-                "reference": "d36a8699df04354147a4f47845035b1ea8239189",
-                "shasum": ""
-            },
-            "require": {
-                "guzzle/http": "~3.6",
-                "php": ">=5.3.9",
-                "react/socket": "0.3.*|0.4.*",
-                "symfony/http-foundation": "~2.2",
-                "symfony/routing": "~2.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Ratchet": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Chris Boden",
-                    "email": "cboden@gmail.com",
-                    "homepage": "http://res.im",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP WebSocket library",
-            "homepage": "http://socketo.me",
-            "keywords": [
-                "Ratchet",
-                "WebSockets",
-                "server",
-                "sockets"
-            ],
-            "time": "2014-06-08 15:19:45"
         },
         {
             "name": "doctrine/annotations",
@@ -406,7 +357,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "http://jmsyst.com",
+                    "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -695,12 +646,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "b8ed2683bf48cf13c92f80d99cb723ae28efb227"
+                "reference": "65978aa4e9ffca3bb632225ad8c6320077d80d85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/b8ed2683bf48cf13c92f80d99cb723ae28efb227",
-                "reference": "b8ed2683bf48cf13c92f80d99cb723ae28efb227",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/65978aa4e9ffca3bb632225ad8c6320077d80d85",
+                "reference": "65978aa4e9ffca3bb632225ad8c6320077d80d85",
                 "shasum": ""
             },
             "require": {
@@ -745,7 +696,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2015-03-13 10:18:59"
+            "time": "2015-03-23 09:47:20"
         },
         {
             "name": "doctrine/orm",
@@ -869,46 +820,6 @@
                 "security"
             ],
             "time": "2013-10-22 22:59:55"
-        },
-        {
-            "name": "evenement/evenement",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/igorw/evenement.git",
-                "reference": "fa966683e7df3e5dd5929d984a44abfbd6bafe8d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/igorw/evenement/zipball/fa966683e7df3e5dd5929d984a44abfbd6bafe8d",
-                "reference": "fa966683e7df3e5dd5929d984a44abfbd6bafe8d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Evenement": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Igor Wiedler",
-                    "email": "igor@wiedler.ch",
-                    "homepage": "http://wiedler.ch/igor/"
-                }
-            ],
-            "description": "Événement is a very simple event dispatching library for PHP 5.3",
-            "keywords": [
-                "event-dispatcher"
-            ],
-            "time": "2012-05-30 15:01:08"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1483,12 +1394,12 @@
             "version": "v2.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Pimple.git",
+                "url": "https://github.com/silexphp/Pimple.git",
                 "reference": "ea22fb2880faf7b7b0e17c9809c6fe25b071fd76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
                 "reference": "ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
                 "shasum": ""
             },
@@ -1618,179 +1529,34 @@
             "time": "2012-12-21 11:40:51"
         },
         {
-            "name": "react/event-loop",
-            "version": "v0.3.4",
-            "target-dir": "React/EventLoop",
+            "name": "ryanannatuvasquez/android-php-encrypt-decrypt",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/reactphp/event-loop.git",
-                "reference": "235cddfa999a392e7d63dc9bef2e042492608d9f"
+                "url": "https://github.com/ryanannatuvasquez/Android-PHP-Encrypt-Decrypt.git",
+                "reference": "e0b7248bd8e0396498fd1980160084d43b696a3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/235cddfa999a392e7d63dc9bef2e042492608d9f",
-                "reference": "235cddfa999a392e7d63dc9bef2e042492608d9f",
+                "url": "https://api.github.com/repos/ryanannatuvasquez/Android-PHP-Encrypt-Decrypt/zipball/e0b7248bd8e0396498fd1980160084d43b696a3d",
+                "reference": "e0b7248bd8e0396498fd1980160084d43b696a3d",
                 "shasum": ""
             },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "suggest": {
-                "ext-libev": "*",
-                "ext-libevent": ">=0.0.5"
-            },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.3-dev"
-                }
-            },
             "autoload": {
                 "psr-0": {
-                    "React\\EventLoop": ""
+                    "MCrypt": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Event loop abstraction layer that libraries can use for evented I/O.",
-            "keywords": [
-                "event-loop"
-            ],
-            "time": "2013-07-21 02:23:09"
-        },
-        {
-            "name": "react/socket",
-            "version": "v0.3.4",
-            "target-dir": "React/Socket",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/socket.git",
-                "reference": "19bc0c4309243717396022ffb2e59be1cc784327"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket/zipball/19bc0c4309243717396022ffb2e59be1cc784327",
-                "reference": "19bc0c4309243717396022ffb2e59be1cc784327",
-                "shasum": ""
-            },
-            "require": {
-                "evenement/evenement": "1.0.*",
-                "php": ">=5.3.3",
-                "react/event-loop": "0.3.*",
-                "react/stream": "0.3.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.3-dev"
+            "authors": [
+                {
+                    "name": "ryanannatuvasquez",
+                    "email": "ryanannatuvasquez@yahoo.com"
                 }
-            },
-            "autoload": {
-                "psr-0": {
-                    "React\\Socket": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
             ],
-            "description": "Library for building an evented socket server.",
-            "keywords": [
-                "Socket"
-            ],
-            "time": "2014-02-17 22:32:00"
-        },
-        {
-            "name": "react/stream",
-            "version": "v0.3.4",
-            "target-dir": "React/Stream",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/stream.git",
-                "reference": "feef56628afe3fa861f0da5f92c909e029efceac"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/feef56628afe3fa861f0da5f92c909e029efceac",
-                "reference": "feef56628afe3fa861f0da5f92c909e029efceac",
-                "shasum": ""
-            },
-            "require": {
-                "evenement/evenement": "1.0.*",
-                "php": ">=5.3.3"
-            },
-            "suggest": {
-                "react/event-loop": "0.3.*",
-                "react/promise": "~1.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "React\\Stream": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Basic readable and writable stream interfaces that support piping.",
-            "keywords": [
-                "pipe",
-                "stream"
-            ],
-            "time": "2014-02-16 19:48:52"
-        },
-        {
-            "name": "react/zmq",
-            "version": "v0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/zmq.git",
-                "reference": "b69d97f99f2127e27d130d7fe3b2cec2a63b2c4e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/zmq/zipball/b69d97f99f2127e27d130d7fe3b2cec2a63b2c4e",
-                "reference": "b69d97f99f2127e27d130d7fe3b2cec2a63b2c4e",
-                "shasum": ""
-            },
-            "require": {
-                "evenement/evenement": "~1.0",
-                "ext-zmq": "*",
-                "php": ">=5.3.2",
-                "react/event-loop": "0.3.*"
-            },
-            "require-dev": {
-                "ext-pcntl": "*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.2-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "React\\ZMQ": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "ZeroMQ bindings for React.",
-            "keywords": [
-                "zeromq",
-                "zmq"
-            ],
-            "time": "2013-09-18 11:02:06"
+            "description": "Encrypt / Decrypt for PHP",
+            "time": "2015-03-25 02:36:34"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1851,12 +1617,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "7a47189c7667ca69bcaafd19ef8a8941db449a2c"
+                "reference": "75b33bee011b60ad4907064906f257e0c7efd8db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/7a47189c7667ca69bcaafd19ef8a8941db449a2c",
-                "reference": "7a47189c7667ca69bcaafd19ef8a8941db449a2c",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/75b33bee011b60ad4907064906f257e0c7efd8db",
+                "reference": "75b33bee011b60ad4907064906f257e0c7efd8db",
                 "shasum": ""
             },
             "require": {
@@ -1893,7 +1659,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-12 10:28:44"
+            "time": "2015-03-22 16:55:57"
         },
         {
             "name": "symfony/console",
@@ -2191,12 +1957,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "e222853aeb7da9735f8b2735ce6994cf7c536b54"
+                "reference": "3d46f575d8334b10ad05117cfb8964bbace94a4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/e222853aeb7da9735f8b2735ce6994cf7c536b54",
-                "reference": "e222853aeb7da9735f8b2735ce6994cf7c536b54",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/3d46f575d8334b10ad05117cfb8964bbace94a4b",
+                "reference": "3d46f575d8334b10ad05117cfb8964bbace94a4b",
                 "shasum": ""
             },
             "require": {
@@ -2248,7 +2014,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-13 17:37:22"
+            "time": "2015-03-24 17:00:37"
         },
         {
             "name": "symfony/framework-bundle",
@@ -2341,12 +2107,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "d527885e37b55ec0e3dc6f4b70566d0f9b2f2388"
+                "reference": "20b3b619d692c40e9382eb5d4fed426577cc7db0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/d527885e37b55ec0e3dc6f4b70566d0f9b2f2388",
-                "reference": "d527885e37b55ec0e3dc6f4b70566d0f9b2f2388",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/20b3b619d692c40e9382eb5d4fed426577cc7db0",
+                "reference": "20b3b619d692c40e9382eb5d4fed426577cc7db0",
                 "shasum": ""
             },
             "require": {
@@ -2386,7 +2152,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-13 17:37:22"
+            "time": "2015-03-22 16:55:57"
         },
         {
             "name": "symfony/http-kernel",
@@ -2734,12 +2500,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security.git",
-                "reference": "33c79de444fd031ff45425e7007f56677c3ff11f"
+                "reference": "fedc844595d0871c5f17169ab82af83085215684"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Security/zipball/33c79de444fd031ff45425e7007f56677c3ff11f",
-                "reference": "33c79de444fd031ff45425e7007f56677c3ff11f",
+                "url": "https://api.github.com/repos/symfony/Security/zipball/fedc844595d0871c5f17169ab82af83085215684",
+                "reference": "fedc844595d0871c5f17169ab82af83085215684",
                 "shasum": ""
             },
             "require": {
@@ -2802,7 +2568,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-13 17:37:22"
+            "time": "2015-03-24 17:00:37"
         },
         {
             "name": "symfony/security-bundle",
@@ -3042,12 +2808,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge.git",
-                "reference": "4315490bf54152a587f785a428d3afcf0e98a7ec"
+                "reference": "945a1006ea3d37f5ee6f9bdf70398956bd74d4f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/4315490bf54152a587f785a428d3afcf0e98a7ec",
-                "reference": "4315490bf54152a587f785a428d3afcf0e98a7ec",
+                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/945a1006ea3d37f5ee6f9bdf70398956bd74d4f7",
+                "reference": "945a1006ea3d37f5ee6f9bdf70398956bd74d4f7",
                 "shasum": ""
             },
             "require": {
@@ -3110,7 +2876,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "http://symfony.com",
-            "time": "2015-03-13 09:50:03"
+            "time": "2015-03-22 16:55:57"
         },
         {
             "name": "symfony/validator",
@@ -3119,12 +2885,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "90d8a2196635fc8e107510f8575a01ef29d459a2"
+                "reference": "9431392d26ffe3a99f025c43c9a89da505c3349c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/90d8a2196635fc8e107510f8575a01ef29d459a2",
-                "reference": "90d8a2196635fc8e107510f8575a01ef29d459a2",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/9431392d26ffe3a99f025c43c9a89da505c3349c",
+                "reference": "9431392d26ffe3a99f025c43c9a89da505c3349c",
                 "shasum": ""
             },
             "require": {
@@ -3182,7 +2948,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-13 17:37:22"
+            "time": "2015-03-22 16:55:57"
         },
         {
             "name": "symfony/yaml",
@@ -3191,12 +2957,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "0cd8e72071e46e15fc072270ae39ea1b66b10a9d"
+                "reference": "1f2ce08b9e1ebdca0ffad35d5975c19b0f58daad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/0cd8e72071e46e15fc072270ae39ea1b66b10a9d",
-                "reference": "0cd8e72071e46e15fc072270ae39ea1b66b10a9d",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/1f2ce08b9e1ebdca0ffad35d5975c19b0f58daad",
+                "reference": "1f2ce08b9e1ebdca0ffad35d5975c19b0f58daad",
                 "shasum": ""
             },
             "require": {
@@ -3232,7 +2998,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2015-03-12 10:28:44"
+            "time": "2015-03-22 16:55:57"
         },
         {
             "name": "twig/twig",
@@ -3312,7 +3078,8 @@
         "neutron/sphinxsearch-api": 20,
         "firebase/php-jwt": 20,
         "predis/predis": 20,
-        "gregwar/captcha-bundle": 20
+        "gregwar/captcha-bundle": 20,
+        "ryanannatuvasquez/android-php-encrypt-decrypt": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

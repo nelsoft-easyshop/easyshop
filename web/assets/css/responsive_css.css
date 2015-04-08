@@ -1395,10 +1395,29 @@ div.sell_steps4 ul li:nth-child(4) a {
     width: auto !important;
 }
 
-#mce_61 {
-    margin-top: 20px;
-    padding: 20px 10px;
-    position: initial;
+body .mce-abs-layout-item.mce-formitem {
+    height: auto;
+    padding: 3px 15px;
+    position: static;
+}
+
+.mce-container-body.mce-abs-layout {
+    height: auto;
+}
+
+.mce-container[aria-label*="properties"] .mce-abs-layout-item.mce-formitem {
+    float: left;
+    width: 45% !important;
+}
+
+.mce-container[aria-label*="properties"] .mce-window-head + div,
+.mce-container[aria-label*="Insert link"] .mce-window-head + div {
+    margin-top: 15px;
+}
+
+.mce-widget.mce-label.mce-autoscroll.mce-first.mce-last.mce-abs-layout-item {
+    padding: 15px;
+    position: static;
 }
 
 .mid_inner_con_list > div {
@@ -2139,40 +2158,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     color: #494949;
 }
 
-
-/*** Message Page ****/
-/*** mail inbox ***/
-#table_id_filter > label {
-    display: block;
-    font-weight: normal;
-    font-size: 0.75em;
-}
-
-/** modal **/
-#modal-background {
-    background-color: #000;
-    opacity: 0.7;
-}
-
-#modal-container {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    margin:auto;
-    max-width: 50%;
-    min-width: 240px;
-    width: 100%;
-    height: 360px;
-}
-
-#modal-inside-container div:first-child input{
-    height: 30px;
-    margin-left: 0;
-    max-width: 50%;
-    min-width: 190px;
-    width: 100%;
-}
 /**** Inforgraphic page *****/
 .img-info-main {
     max-width: 980px;

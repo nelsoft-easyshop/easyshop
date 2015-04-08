@@ -185,6 +185,11 @@
                 <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?> 
                     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod-black.png" alt="Cash on Delivery">
                 <?php endif; ?>
+
+
+                <?php if(isset($paymentMethod['pesopaycdb'])) : ?> 
+                     <img src="<?php echo getAssetsDomain(); ?>assets/images/img-pesopay-black.png" alt="PesoPay Credit/Debit Card">
+                <?php endif; ?>
             </div>
         </div>
         <div class="clear"></div> 
@@ -220,8 +225,31 @@
         <div class="tab-pane fade in active" id="details">
             <div class="div-detail-container ">
                 <div class="p-html-description external-links-container">
-                    <p>  
+                    <p>
                         <?=$productDescription;?> 
+                        <br>
+                        <?php foreach ($additionalInformation as $value): ?>
+                            <?=html_escape($value); ?>
+                            <br>
+                        <?php endforeach; ?>
+                        <?php if($product->getCondition() !== ""): ?>
+                            Condition: <?=html_escape($product->getCondition()); ?>
+                            <br>
+                        <?php endif; ?>
+                        <?php if($product->getBrief() !== ""): ?>
+                            Brief Description: <?=html_escape($product->getBrief()); ?>
+                            <br>
+                        <?php endif; ?>
+                        <?php if($product->getBrand()->getName() !== "" && $product->getBrand()->getIdBrand() !== \EasyShop\Entities\EsBrand::CUSTOM_CATEGORY_ID): ?>
+                            Brand: <?=html_escape($product->getBrand()->getName()); ?>
+                            <br>
+                        <?php elseif ($product->getBrandOtherName() !== ""):?>
+                            Brand: <?=html_escape($product->getBrandOtherName()); ?>
+                            <br>
+                        <?php endif; ?>
+                        <?php if($product->getSku() !== ""): ?>
+                            SKU: <?=html_escape($product->getSku()); ?>
+                        <?php endif; ?>
                     </p>
                     <div class="clear"></div>
                 </div>

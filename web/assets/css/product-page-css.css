@@ -1302,8 +1302,9 @@ body{
     word-wrap: break-word;
 }
 
-.product-name-seller a{
+.product-name-seller a {
     color: #868686;
+    word-wrap: break-word;
 }
 
 .product-profile-photo {
@@ -1622,7 +1623,7 @@ body{
 }
 
 .shipment-select select {
-    padding-right: 50px;
+    padding-right: 60px;
 }
 
 .ie9 .shipment-select select {
@@ -1672,6 +1673,7 @@ body{
 .prod-add-to-cart-btn {
     background-repeat: no-repeat;
     background-color: #F17F36;
+    background-image: url(../images/sprites/shopping-cart.png);
     background-image: url(../images/sprites/shopping-cart.png), -webkit-gradient(linear, left top, left bottom, from(#FEB483), to(#F17F36));
     background-image: url(../images/sprites/shopping-cart.png), -webkit-linear-gradient(top, #FEB483, #F17F36);
     background-image: url(../images/sprites/shopping-cart.png), -moz-linear-gradient(top, #FEB483, #F17F36);
@@ -2080,7 +2082,7 @@ body{
 @media (min-width : 570px) {
     .prod-payment-img-container .attr-title {
         display: inline-block;
-        width: 16%;
+        width: 100%;
     }
     .prod-share-container .attr-title {
         display: inline-block;
@@ -2239,13 +2241,6 @@ body{
     .prod-share-container .ui-form-control.share-googleplus {
         background-color: #e46145;
     }
-}
-
-@media screen and (max-width : 1200px) {
-    .shipment-select select {
-        padding-right: 46px;
-    }
-
 }
 
 @media (min-width: 991px) and (max-width: 1200px) {

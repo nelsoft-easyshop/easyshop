@@ -582,12 +582,13 @@ input[type="button"] {
 /***** Scroll Up style ****/
 #scrollUp {
   background:#cecece url(../images/img_scroll_up_arrow.png) center 10px no-repeat;
-  color: #494949;
   bottom: 70px;
+  color: #494949;
   font-size: 12px;
-  right: 20px;
   padding:35px 5px 5px 5px;
+  right: 20px;
   width: 65px;
+  z-index: 999 !important;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -6494,86 +6495,16 @@ div.sold_prod_container {
     background-color: #4C4C4C;
 }
 
-#modal-background {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    opacity: .50;
-    -webkit-opacity: .5;
-    -moz-opacity: .5;
-    filter: alpha(opacity=50);
-    z-index: 1000;
-}
-#modal-container {
-    background-color: white;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    font-size: 14px;
-    color: #494949;
-    display: none;
-    height: 355px;
-    left: 45%;
-    margin: -120px 0 0 -160px;
-    padding: 15px;
-    position: fixed;
-    top: 35%;
-    width: 38%;
-    z-index: 1000;
+/*** Message Page ****/
+#table_id_filter > label {
+    display: block;
+    font-weight: normal;
+    font-size: 0.75em;
 }
 
-#modal-inside-container label {
-    font-weight: bold;
-}
-
-#modal-inside-container div{
-    margin-top: 15px;
-}
-#modal-inside-container div:first-child{
-    margin-top: 25px;
-}
-#modal-inside-container div:first-child input{
-    height: 25px;
-    margin-left: 5px;
-    width: 222px;
-}
-#modal-container textarea {
-    height: 145px;
-    margin: 15px 0px;
-    min-width: 230px;
-    width: 100%;
-    -moz-box-sizing: border-box;
-}
-#modal-div-header{
-        background-color: #fff;
-        border-radius: 3px;
-        height: 10.2%;
-}
-#modal-launcher{    
-    border: none;
-    font-weight: bold;
-    max-width: 290px;
-    text-transform: uppercase;
-    width: 100%;
-}
-
-#modal-close {
-    background: url(../images/img-close.png) no-repeat center center;
-    border-radius: 3px;
-    border-style: none;
-    cursor: pointer;
-    float: right;
-    height: 30px;
-    margin: 3px 3px 0 0;
-    text-indent: -99999999px;
-    width: 30px;
-}
 #table_id_wrapper{
     background-color: #F3F3F3;
+    border-radius: 4px;
     padding: 10px;
 }
 
@@ -6581,172 +6512,134 @@ div.sold_prod_container {
     height: 25px;
     width: 96%;
 }
-#modal_send_btn{
-    background-color: #00a388;
-    border-radius: 4px;
-    border-style: none;
-    color: #FFFFFF;
-    cursor: pointer;
-    float: right;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 8px 12px;
-    transition: all 0.3s ease-in-out;
-    text-transform: uppercase;
-    width: 130px;
-}
-
-#modal_send_btn:hover {
-    background-color: #02846f;
-}
-
-#modal-background.active,#modal-content.active {
-    display:block;
-}
-#modal-background img{
-        display: none;
-        margin-left: 466px;
-         padding: 300px;
-}
 
 .msg_container{
-        border: 1px solid #D9D9D9;
-        margin-left: 310px;
-        min-height: 470px;
-        text-align: left;
-        width: 830px;
+    min-height: 470px;
+    text-align: left;
 }
 #msg_field {
+    border: 1px solid #e2e2e2;
     height: 340px;
     overflow-y: scroll;
-    width: 828px;
+    padding: 20px 8px;
+    width: 100%;
 }
 
 .float_left {
     display: inline-block;
     height: auto;
-    margin-bottom: 20px;
-    margin-left: 25px;
-    margin-top: 15px;
+    margin: 10px 0;
+    padding-left: 20px;
     position: relative;
-    width: 50%;
+    width: 100%;
 }
 
-.float_left p{
-    background-color: #e2e2e2;
-    border-radius: 3px;
-    /*bottom: 90px;*/
-    height: auto;
-    left: 60px;
-    min-width: 320px;
-    max-width: 60%;
-    min-height: 45px;
-    padding: 5px;
+.chat-container p {
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0;
+    max-width: 90%;
+    min-height: 40px;
+    padding: 5px 10px;
     position: relative;
-    text-indent: -30px;
-    top: -13px;
-    width: auto;
     word-wrap: break-word;
 }
-.float_left p:after {
+
+.float_right p {
+    background-color: #868686;
+    color: #fff;
+}
+
+.float_left p {
+    background-color: #e2e2e2;
+}
+
+.chat-container p:after {
     content: " ";
-    width: 0px;
-    height: 0px;
     border-style: solid;
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+
+.float_left p:after {
     border-width: 12.5px 12px 12.5px 0;
     border-color: transparent #e2e2e2 transparent transparent;
     left: -10px;
-    position: absolute;
-    top: 13px;
-    width: 0;
-}
-.float_left input{
-    left: -59px;
-    padding: 0;
-    position: relative;
-    top: 15px;
-}
-
-.float_left .msg-date {
-    bottom: -5px;
-    left: 270px;
-    position: absolute;
-}
-/**/
-.chat-container {
-    position: relative;
-}
-.msg-date {
-    bottom: 88px;
-    color: #9a9795;
-    font-size: 10.5px;
-    left: 320px;
-    position: relative;
-    width: 118px;
-}
-.float_right{
-    display: block;
-    height: auto;
-    /*margin-bottom: -75px;*/
-    margin-top: 25px;
-    /*min-height: 120px;*/
-    min-width: 620px;
-    position: relative;
-    width: 780px;
-}
-
-.float_right .chat-img-con {
-/*    left: 580px;*/
-    right: 0px;
-    position: absolute;
-}
-.chat-img-con {
-    border: 1px solid #cecece;
-    display: inline-block;
-    height: 40px;
-    position: relative;
-    width: 40px;
-    float: left;
-}
-.chat-img-con2 {
-    display: table-cell;
-    height: 40px;
-    text-align: center;
-    vertical-align: middle;
-}
-.chat-img-con2 img {
-    height: auto;
-    max-width: 40px;
-    max-height: 40px;
-    width: auto;
-}
-.float_right p{
-    background-color: #e2e2e2;
-    border-radius: 2px;
-    bottom: 32px;
-    height: auto;
-    left: 320px;
-    max-width: 60%;
-    margin-top: 19px;
-    min-height: 45px;
-    padding: 5px;
-    position: relative;
-    text-indent: 10px;
-    width: 50%;
-    word-wrap: break-word;
+    top: 8px;
 }
 
 .float_right p:after {
-    border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #e2e2e2;
-    border-style: solid;
-    border-width: 12.5px 0 12.5px 12px;
-    bottom: 25px;
-    content: " ";
-    height: 0;
-    left: 388px;
-    position: absolute;
+    border-width: 12.5px 0 12px 12.5px ;
+    border-color: transparent  transparent transparent #868686;
+    right: -9px;
     top: 10px;
-    width: 0;
+}
+
+.float_left input{
+    left: -67px;
+    margin: 0 !important;
+    padding: 0;
+    position: absolute;
+    top: 13px;
+}
+
+.chat-container {
+    float: left;
+    margin-left: 14px;
+    position: relative;
+    width: 74%;
+}
+.msg-date {
+    color: #9a9795;
+    display: block;
+    font-size: 10.5px;
+    padding-top: 10px;
+}
+
+.float_right {
+    display: inline-block;
+    height: auto;
+    margin: 10px 0;
+    padding-right: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.float_right .chat-img-con {
+    float: right;
+}
+
+.float_right .chat-container {
+    float: right;
+    margin-left: 0;
+    margin-right: 14px;
+    text-align: right;
+}
+
+.chat-img-con {
+    border: 1px solid #cecece;
+    border-radius: 4px;
+    display: inline-block;
+    float: left;
+    height: 37px;
+    overflow: hidden;
+    position: relative;
+    width: 37px;
+}
+
+.chat-img-con2 {
+    display: table-cell;
+    height: 35px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.chat-img-con2 img {
+    height: auto;
+    max-width: 35px;
+    max-height: 35px;
+    width: auto;
 }
 
 .float_right .msg-date {
@@ -6754,15 +6647,14 @@ div.sold_prod_container {
 }
 
 .float_right input{
-    left: 790px;
-    padding: 0;
-    position: relative;
-    top: 14px;
+    position: absolute;
+    right: -68px;
+    top: 9px;
 }
 /**/
 #msg_textarea{
     display : none;
-    padding: 15px;
+    padding: 15px 0;
     text-align: right;
 }
 #msg_textarea img{
@@ -6771,10 +6663,7 @@ div.sold_prod_container {
     margin-right: -5px;
     padding: 11px;
 }
-.NS{
-    background-color: #E6E0F8;
-    font-weight: bold;
-}
+
 #msg_loader{
     padding: 132px 305px;
 }
@@ -6811,32 +6700,39 @@ div.sold_prod_container {
     margin-right: 10px;
 }
 #head_container {
-    margin: 35px 0px 15px;
+    padding-bottom: 25px;
+    padding-top: 45px;
 }
-#head_container > div{
-    display: inline;
-}
+
 #head_container span{
     float:right;
 }
-#panel_container{
-    float: left;
-    width: 290px;
-    height: 430px;
+
+#head_container span > button {
+    width: auto;
 }
+
+.dataTables_scrollBody {
+    height: auto !important;
+}
+
 #chsn_delete_btn ,#delete_all_btn{
     display:none;
 }
-#chsn_username{
+
+#chsn_username {
     display: inline-block;
-    left: 150px;
-    max-width: 360px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 34px;
+    margin: 0;
+    max-width: 100%;
     overflow: hidden;
-    position: relative;
     text-overflow: ellipsis;
     top: 5px;
     white-space: nowrap;
 }
+
 #table_id_length
 {
     display: none;
@@ -6870,24 +6766,29 @@ div.sold_prod_container {
 .unreadConve{
     display:inline !important;
 }
-.msg_sender{
+.msg_sender {
     display: block;
     font-size: 12px;
     font-weight: bold;
     margin-bottom: 3px;
-    max-width: 160px;
-    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
 .msg_date{
     display: block;
-    margin-top:3px;
-    color:#9A9795;
+    color:#7c807e;
     font-size: 11px;
+    font-weight: normal;
+    margin-top:3px;
 }
+
 .msg_message{
+    color: #7c807e;
     display: block;
-    height: 14px;
-    max-width: 160px;
+    font-weight: normal;
+    max-width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -6913,6 +6814,101 @@ div.sold_prod_container {
     vertical-align: middle;
 }
 
+/** message modal **/
+#modal-background {
+    background-color: #000;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    -webkit-opacity: .7;
+    -moz-opacity: .7;
+    filter: alpha(opacity=70);
+    z-index: 1000;
+}
+
+#modal-container {
+    background-color: #fff;
+    bottom: 0;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    color: #494949;
+    display: none;
+    font-size: 14px;
+    height: 390px;
+    left: 0;
+    margin: auto;
+    max-width: 500px;
+    min-width: 274px;
+    padding: 15px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 90%;
+    z-index: 1000;
+}
+
+#modal-inside-container div:first-child input {
+    width: 100%;
+}
+
+#modal-inside-container label {
+    font-weight: bold;
+}
+
+#modal-container textarea {
+    height: 145px;
+    margin: 15px 0px;
+    width: 100%;
+    -moz-box-sizing: border-box;
+}
+#modal-div-header {
+    background-color: #fff;
+    height: 10.2%;
+}
+
+#modal-launcher {
+    border: none;
+    font-weight: bold;
+    max-width: 372px;
+    padding: 9px 7px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+#modal-close {
+    background: url(../images/img-close.png) no-repeat center center;
+    border-radius: 3px;
+    border-style: none;
+    cursor: pointer;
+    float: right;
+    height: 30px;
+    margin: 3px 3px 0 0;
+    text-indent: -99999999px;
+    width: 30px;
+}
+
+#modal_send_btn {
+    border: none;
+    float: right;
+    font-weight: bold;
+    padding: 8px 12px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+#modal-background.active,#modal-content.active {
+    display:block;
+}
+#modal-background img{
+    display: none;
+    margin-left: 466px;
+    padding: 300px;
+}
 
 /*************** PAYMENT TAB *******************/
 #abi_btn,
@@ -7764,3 +7760,28 @@ div.sold_prod_container {
     padding: 5px;
 }
 
+@media(min-width: 480px) {
+    #modal-container {
+        height: 355px;
+    }
+
+    #modal-inside-container div:first-child input {
+        max-width: 320px;
+    }
+
+    #modal_send_btn {
+        max-width: 130px;
+    }
+}
+
+@media (min-width: 768px){
+    #chsn_username {
+        max-width: 40%;
+    }
+}
+
+@media (max-width: 767px) {
+    .msg-chsn-username {
+        padding-top: 25px;
+    }
+}

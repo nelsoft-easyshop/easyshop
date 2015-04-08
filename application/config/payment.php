@@ -82,7 +82,9 @@ $config = [
                 ],
                 'pesopay' => [
                     'Easyshop' => [
-                        'secure_hash' => '1JQ6vd9qatkqoA9gRJpyKeMpl2Nu6cmm',
+                        'currency_code' => '608',
+                        'payment_type' => 'N',
+                        'secure_hash' => 'TvNiOW6xWOghmbqMeWQ3PAyoHY3lhIbb',
                         'redirect_url' => 'https://www.pesopay.com/b2c2/eng/payment/payForm.jsp',
                         'merchant_id' => '18139485',
                         'ip_address' => [

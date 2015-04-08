@@ -43,6 +43,9 @@
                                 <?php if($product->getBrand()->getName() !== "" && $product->getBrand()->getIdBrand() !== \EasyShop\Entities\EsBrand::CUSTOM_CATEGORY_ID): ?>
                                     Brand: <?=html_escape($product->getBrand()->getName()); ?>
                                     <br>
+                                <?php elseif ($product->getBrandOtherName() !== ""):?>
+                                    Brand: <?=html_escape($product->getBrandOtherName()); ?>
+                                    <br>
                                 <?php endif; ?>
                                 <?php if($product->getSku() !== ""): ?>
                                     SKU: <?=html_escape($product->getSku()); ?>
@@ -83,21 +86,21 @@
                                                     <div class="div-review-content-container">
                                                         <div class="row div-row-user">
                                                             <div class="me">
-                                                            <table>
-                                                                <tr>
-                                                                    <td>
-                                                                        <a href="/<?=$value['reviewer_slug'];?>">
-                                                                            <div class="div-user-image">
-                                                                                <img src="<?php echo getAssetsDomain().'.'.$value['reviewer_avatar']; ?>" class="img-user"/>
-                                                                            </div>
-                                                                        </a>
-                                                                    </td>
-                                                                    <td class="td-user-info">
-                                                                        <a href="/<?=$value['reviewer_slug'];?>"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
-                                                                        <p class="p-date-review"><?=$value['datesubmitted']; ?></p> 
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
+                                                                <table>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <a href="/<?=$value['reviewer_slug'];?>">
+                                                                                <div class="div-user-image">
+                                                                                    <img src="<?php echo getAssetsDomain().'.'.$value['reviewer_avatar']; ?>" class="img-user"/>
+                                                                                </div>
+                                                                            </a>
+                                                                        </td>
+                                                                        <td class="td-user-info">
+                                                                            <a href="/<?=$value['reviewer_slug'];?>"><p class="p-username"><?=html_escape($value['reviewer']);?></p></a>
+                                                                            <p class="p-date-review"><?=$value['datesubmitted']; ?></p> 
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
                                                             </div>
                                                         </div>
                                                         <p class="p-review-title"><?=html_escape($value['title']);?>
@@ -251,6 +254,7 @@
                                                 </button>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         <?php endif; ?>

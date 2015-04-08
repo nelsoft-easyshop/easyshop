@@ -858,6 +858,8 @@ $(function(){
      *	Add shipping preferences
      */
     $('#shipping_div').on('click','.add_ship_preference', function(){
+        var $thisButton = $(this);
+        var $closesSelect = $thisButton.closest('.shipping_group').find('.shipping_preference');
         var isIncomplete = false;
         var preferenceData = {};
         var preferenceName = "";
@@ -865,7 +867,7 @@ $(function(){
         var csrfname = $("meta[name='csrf-name']").attr('content');
         
         // Get location vs price details for first attr array, since data is same for all attr arrays
-        var inputDiv = $(this).parent().siblings('div.data_group').children('div.shipping_input');
+        var inputDiv = $thisButton.parent().siblings('div.data_group').children('div.shipping_input');
         
         inputDiv.each(function(){
             var priceField = $(this).find('input.shipprice');
@@ -923,7 +925,7 @@ $(function(){
                                     $('button.ui-button').attr('disabled',false);
                                     
                                     try{
-                                        var obj = jQuery.parseJSON(data);	
+                                        var obj = jQuery.parseJSON(data);
                                     }
                                     catch(e){
                                         alert('An error was encountered while processing your data. Please try again later.');
@@ -932,20 +934,15 @@ $(function(){
                                     }
                                     
                                     if( obj['result'] === 'success' ){
-                                        // Recreate shippingpreference variable data
                                         shippingPreference = obj['shipping_preference'];
-                                        //Create new list for shipping preferences
                                         var prefSelect = $('select.shipping_preference');
-                                        
                                         prefSelect.each(function(){
                                             var thisSelect = $(this);
-                                            thisSelect.children('option:not(:first)').remove();
-                                            // Create new preference display contents
-                                            $.each(shippingPreference['name'], function(headId,name){
-                                                thisSelect.append('<option value="'+headId+'">'+name+'</option>');
+                                            $.each(shippingPreference['name'], function(headId, name){
+                                                thisSelect.append('<option value="'+escapeHtml(headId)+'">'+escapeHtml(name)+'</option>');
                                             });
                                         });
-                                        prefSelect.children('option:last').attr("selected","selected");
+                                        $closesSelect.children('option:last').attr("selected","selected");
                                     }
                                     else{
                                         alert(obj['error']);
@@ -988,7 +985,7 @@ $(function(){
         if (r==true){
             $.post('/productUpload/step3_deletePreference', {head:headId, csrfname:csrftoken}, function(data){
                 try{
-                    var obj = jQuery.parseJSON(data);	
+                    var obj = jQuery.parseJSON(data);
                 }
                 catch(e){
                     alert('An error was encountered while processing your data. Please try again later.');
@@ -996,7 +993,7 @@ $(function(){
                     return false;
                 }
                 
-                if( obj['result'] === 'success' ){				
+                if( obj['result'] === 'success' ){
                     // Check each select and hide delete button when headId is selected (then is removed)
                     allSelect.each(function(){
                         selectedVal = parseInt($(this).val());

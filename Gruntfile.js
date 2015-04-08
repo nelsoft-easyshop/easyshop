@@ -407,7 +407,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.validate.js',
                              'web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/universal.js',
-                             'web/assets/js/src/landingpage.js',
+                             'web/assets/js/src/register.js',
                              'web/assets/js/src/login.js'],
                     'web/assets/js/min/easyshop.user_register_subscribe_success.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',

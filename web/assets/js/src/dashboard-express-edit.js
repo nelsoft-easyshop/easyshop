@@ -85,7 +85,7 @@
         else{
             $errorCount++;
             validateRedTextBox('.discount-price');
-            showError("Invalid discount price. Range must be less than base price and greater than 0")
+            showError("Invalid discount price. Range must be less than base price and greater than P1.")
         }
 
         if($errorCount > 0){

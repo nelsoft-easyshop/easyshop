@@ -81,9 +81,9 @@
                     <div class="right-shade">
                     </div>
                     <div class="container">
-                        <div class="slider1 <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
+                        <ul class="slider1 <?php if(!isset($categoryHeaderData['top'])&&isset($categoryHeaderData['bottom'])):?>slider-bottom<?php endif; ?> clear" width="100%">
                             <?php foreach($categoryHeaderData['bottom']['image'] as $bottomBanner): ?>
-                                <div class="slide">
+                                <li class="slide">
                                     
                                     <?php if(trim($bottomBanner['target']['url']) !== ''): ?>
                                           <a href="<?php echo html_escape($bottomBanner['target']['url']); ?>" target="<?php echo $bottomBanner['target']['targetString']; ?>">
@@ -94,15 +94,16 @@
                                     <?php if(trim($bottomBanner['target']['url']) !== ''): ?>
                                           </a>
                                     <?php endif; ?>
-                                </div>
+                                </li>
                             <?php endforeach; ?>
-                        </div>
+                        </ul>
                         <div class="clear"></div>
                     </div>
-                </center>   
+                </center>
+            </center>
             <?php endif; ?>
-            </div>
-        </section>
+        </div>
+    </section>
     <?php endif; ?>
 
     <section id="parallax-2" class="bg-search-section color-default">

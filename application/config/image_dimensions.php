@@ -36,6 +36,10 @@ $config = [
                                 60,
                                 80,
                 ],             
+                'max' => [
+                    500,
+                    500
+                ]
 
             ],
             'cmsImagesSizes' =>[

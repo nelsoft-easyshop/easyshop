@@ -1237,7 +1237,12 @@ class productUpload extends MY_Controller
                         }
                     }
                     if($resultDetail){
-                        $serverResponse['shipping_preference'] = $this->product_model->getShippingPreference($member_id);
+                        $preferences = $this->product_model->getShippingPreference($member_id)['name'];
+                        end($preferences);
+                        $arrayKey = key($preferences);
+                        $serverResponse['shipping_preference']['name'] = [
+                            $arrayKey => $preferences[$arrayKey]
+                        ]; 
                     }
                 }
             }
@@ -1632,6 +1637,9 @@ class productUpload extends MY_Controller
             $productAttributeDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                                 ->getProductAttributeDetailByName($productId);
             $productAttributes = $collectionHelper->organizeArray($productAttributeDetails,true,true);
+            $filterAttributes = $productManager->separateAttributesOptions($productAttributes);
+            $additionalInformation = $filterAttributes['additionalInformation'];
+            $productAttributes = $filterAttributes['productOptions'];
             $shippingLocation = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                          ->getShippingDetailsByProductId($productId);
 
@@ -1644,6 +1652,7 @@ class productUpload extends MY_Controller
             $productPreviewData = [
                 'product' => $product,
                 'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
+                'additionalInformation' => $additionalInformation,
                 'productImages' => $productImages,
                 'avatarImage' => $avatarImage,
                 'isFreeShippingNationwide' => $isFreeShippingNationwide,
