@@ -283,7 +283,7 @@
     function computePrices()
     {
         var $summaryContainer = $(".summary-container"); 
-        var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
+        var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseFloat($usedPoints);
         $summaryContainer.find('#summary-points').html(replaceNumberWithCommas($usedPoints.toFixed(2)));
         $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee.toFixed(2)));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
