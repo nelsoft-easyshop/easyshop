@@ -45,8 +45,8 @@ class ActivityManager
         $this->entityManager = $entityManager;
 
         $container = new \Pimple\Container();
-        $container[\EasyShop\Entities\EsActivityType::INFORMATION_UPDATE] = function ($c) {
-            return new ActivityTypeInformationUpdate();
+        $container[\EasyShop\Entities\EsActivityType::INFORMATION_UPDATE] = function ($c) use ($userManager){
+            return new ActivityTypeInformationUpdate($userManager);
         };
         $container[\EasyShop\Entities\EsActivityType::PRODUCT_UPDATE] = function ($c) use ($productManager){
             return new ActivityTypeProductUpdate($productManager);
@@ -96,6 +96,20 @@ class ActivityManager
         }
 
         return $formattedActivityData;
+    }
+
+    /**
+     * Count activity per user
+     * @param  integer $memberId
+     * @return integer
+     */
+    public function getTotalActivityCount($memberId)
+    {
+        $activityCount = $this->entityManager
+                              ->getRepository('EasyShop\Entities\EsActivityHistory')
+                              ->countActivityCount($memberId);
+
+        return $activityCount;
     }
     
     /**
