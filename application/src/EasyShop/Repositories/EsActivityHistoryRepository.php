@@ -34,9 +34,11 @@ class EsActivityHistoryRepository extends EntityRepository
      * @param integer $memberId
      * @param integer $limit
      * @param integer $offset
+     * @param date    $fromDate
+     * @param date    $toDate
      * @return EasyShop\Entities\EsActivityHistory[]
      */
-    public function getActivities($memberId, $limit, $offset, $fromDate, $toDate)
+    public function getActivities($memberId, $limit, $offset, $fromDate = null, $toDate = null)
     {
         $em = $this->_em;
         $query = $em->createQueryBuilder()
@@ -61,10 +63,12 @@ class EsActivityHistoryRepository extends EntityRepository
 
     /**
      * Count all user activity per member
-     * @param  integer $memberId
+     * @param integer $memberId
+     * @param date    $fromDate
+     * @param date    $toDate
      * @return integer
      */
-    public function countActivityCount($memberId, $fromDate, $toDate)
+    public function countActivityCount($memberId, $fromDate = null, $toDate = null)
     {
         $this->em = $this->_em;
         $rsm = new ResultSetMapping(); 
