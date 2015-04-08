@@ -1,8 +1,8 @@
 (function ($) {
 
     $(window).load(function(){
-        $('div.loader').fadeOut("fast");
-        slider = $('.slider1').bxSlider({
+
+        $('.slider1').bxSlider({
             minSlides: 1,
             maxSlides: 3,
             moveSlides: 1,
@@ -10,10 +10,16 @@
             slideMargin: 5,
             speed: 1000,
             pause: 6000,
-            infiniteLoop: true,
+            infiniteLoop: true, 
             pager: false,
         });
-        slider.reloadSlider();
+
+        $('.top-slider').bxSlider({
+            prevText: '<i class="fa fa-angle-left fa-lg"></i>',
+            nextText: '<i class="fa fa-angle-right"></i>'
+        });
+
+        $('div.loader').fadeOut("fast");
     });
    
     $(window).bind('scroll',function(e){
@@ -40,28 +46,6 @@
             "margin-top": (-100+(scrolled2*.6))+'px',
         });
     }
-
-
-        setTimeout(function(){
-            $('.slider1').bxSlider({
-                minSlides: 1,
-                maxSlides: 3,
-                moveSlides: 1,
-                slideWidth: 0,
-                slideMargin: 5,
-                speed: 1000,
-                pause: 6000,
-                infiniteLoop: true, 
-                pager: false,
-            });
-
-            $('.top-slider').bxSlider({
-                prevText: '<i class="fa fa-angle-left fa-lg"></i>',
-                nextText: '<i class="fa fa-angle-right"></i>'
-            });
-            
-        }, 300);
-
 
     var $window = $(window);
     $window.on('load resize', function() {

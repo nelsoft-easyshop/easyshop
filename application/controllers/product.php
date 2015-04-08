@@ -243,7 +243,6 @@ class product extends MY_Controller
                 $productCombinationAvailable = $productManager->getProductCombinationAvailable($productId);
                 $productCombination = $productCombinationAvailable['productCombinationAvailable'];
                 $filterAttributes = $productManager->separateAttributesOptions($productAttributes);
-                $additionalInformation = $filterAttributes['additionalInformation'];
                 $productAttributes = $filterAttributes['productOptions'];
                 $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
                 $needToSelect = $productCombinationAvailable['needToSelect'];
@@ -279,7 +278,6 @@ class product extends MY_Controller
                     'productAttributes' => $productAttributes,
                     'productReview' => $productReviews,
                     'canReview' => $canReview,
-                    'additionalInformation' => $additionalInformation,
                     'product' => $product,
                 ];
                 $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
