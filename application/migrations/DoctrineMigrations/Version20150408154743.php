@@ -19,7 +19,7 @@ class Version20150408154743 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("
             ALTER TABLE `es_order_history` 
-            CHANGE COLUMN `comment` `comment` TEXT NOT NULL DEFAULT '' ;
+            CHANGE COLUMN `comment` `comment` TEXT NULL;
         ");
     }
 
