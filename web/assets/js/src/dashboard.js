@@ -1,6 +1,6 @@
 (function ($) {
     
-    $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
+    $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {        
         var btn = $(this);
         var submitBtn = btn.closest("form");
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -1554,6 +1554,7 @@
                     if (txResponseBtn.hasClass('tx_forward')) {
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                         msg = "<h3>ITEM RECEIVED</h3> <br> Transaction has been moved to completed tab.";
+                        refreshEasypoints();
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
                         alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
@@ -1700,6 +1701,7 @@
                                 if (jsonResponse.isSuccess) {
                                     alert('Your feedback has been submitted.');
                                     btn.remove();
+                                    refreshEasypoints();
                                 }
                                 else {
                                     var errorMessage = "An error was encountered. Please try again later";
@@ -3111,7 +3113,7 @@
     var userPointPage = 1;
     var isUserPointComplete = false;
     var isUserPointQueryOnGoing = false;
-    function getUserPoints(foo)
+    function getUserPoints()
     {
         if(isUserPointComplete || isUserPointQueryOnGoing){
             return false;
@@ -3165,6 +3167,15 @@
         });
     }
 
+    function refreshEasypoints()
+    {
+        userPointPage = 1;
+        isUserPointComplete = false;
+        $('.easy-point-content').html('');
+        getUserPoints();
+    }
+    
+    
 }(jQuery));
 
 
