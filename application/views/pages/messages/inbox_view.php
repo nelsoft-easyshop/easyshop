@@ -26,7 +26,7 @@
                     <tbody>
                     <?PHP foreach($result['messages'] as $key => $row) { ?>
                         <tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "receiver" ? "NS" : "")?>">
-                            <td width="80">
+                            <td width="10%">
                                 <div class="img-wrapper-div">
                                     <span class="img-wrapper-span">
                                     <?php if(reset($row)['status'] == "sender"): ?>

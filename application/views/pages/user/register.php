@@ -263,7 +263,7 @@
                             </div>
                             <div class="row">
                                 <span class="col-xs-12">
-                                    <input type="submit" class="btn btn-default-3 create-account-btn" value="SEND" name="register_form1" id="register_form1_btn" >
+                                    <input type="submit" class="btn btn-default-3 create-account-btn" value="SUBMIT" name="register_form1" id="register_form1_btn" >
                                 </span>
                             </div>
                             <div class="reg2_tc">

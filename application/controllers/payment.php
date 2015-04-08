@@ -1487,15 +1487,14 @@ class Payment extends MY_Controller
             log_message('error', 'DATA FEED --> '. json_encode($this->input->post()));
             header("Content-Type:text/plain");
             echo 'OK'; // acknowledgemenet
-
             if(strtolower($this->input->post('remark')) === "easydeal"){
                 $curlUrl = $paymentConfig['payment_type']['pesopay']['Easydeal']['postback_url'];
                 $curl = new Curl();
                 $curl->post($curlUrl, $params);
             }
             else{
+                $paymentService = $this->serviceContainer['payment_service'];
                 $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
-
                 $params['txnId'] = $this->input->post('Ref'); 
                 $paymentService->postBack($paymentMethods, null, null, $params);
             }
