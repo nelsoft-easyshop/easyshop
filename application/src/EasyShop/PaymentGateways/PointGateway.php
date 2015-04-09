@@ -6,6 +6,7 @@ use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsPointType as EsPointType;
+use EasyShop\Entities\EsOrderPoints as EsOrderPoints;
 
 /**
  * Point Gateway Class
@@ -46,16 +47,21 @@ class PointGateway extends AbstractGateway
             $pointBreakdown = [];
 
             foreach ($itemArray as $item) {
-                $maxPointAllowable = bcadd($maxPointAllowable, $item['point']);
+                $maxPointAllowable = bcadd($maxPointAllowable, $item['point'], 2);
             }
 
             // cap points with respect to total points of items
             $pointSpent = intval($pointSpent) <= intval($maxPointAllowable) ? $pointSpent : $maxPointAllowable;
 
             foreach ($itemArray as $item) {
-                $data["order_product_id"] = $item['order_product_id'];
-                $data["points"] = $this->getProductDeductPoint($item['point'], $maxPointAllowable);
+                $data["order_product_id"] = (int) $item['order_product_id'];
+                $data["points"] = $this->getProductDeductPoint(round($item['point'], 2), $maxPointAllowable);
                 $pointBreakdown[] = $data;
+
+                $orderPoints = new EsOrderPoints();
+                $orderPoints->setPoints($data["points"]);
+                $orderPoints->setOrderProduct($this->em->find('EasyShop\Entities\EsOrderProduct', $data["order_product_id"]));
+                $this->em->persist($orderPoints);
             }
 
             $jsonData = json_encode($pointBreakdown);
@@ -65,7 +71,7 @@ class PointGateway extends AbstractGateway
                 $memberId,
                 $actionId,
                 $pointSpent
-                );
+            );
 
             // update history data field
             if($historyObj){
