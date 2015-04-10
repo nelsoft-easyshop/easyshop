@@ -542,8 +542,8 @@ class PaymentService
         $messageSender = $this->em->find('EasyShop\Entities\EsMember', (int)$sender);
          
         $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                                  ->findBy(['order'=>$orderId]);
-
+                                  ->findBy(['order' => $orderId ]);
+                                                  
         $buyer = $orderProducts[0]->getOrder()->getBuyer();
         $order = $orderProducts[0]->getOrder();
 
@@ -692,6 +692,19 @@ class PaymentService
         }
 
         if($sendBuyer){ 
+        
+            $pointsSpent = $this->getTransactionPoints($orderId);
+            /**
+             * Work around for Codeigniter's templating engine lack of support
+             * for conditionals: use arrays
+             */
+            $dataBuyer['pointsSpent'] = [];
+            $dataBuyer['totalLessPoint'] = [];
+            if($pointsSpent > 0){
+                $dataBuyer['pointSpent'][] = [ 'value' => $pointsSpent ];
+                $dataBuyer['totalLessPoint'][] = [ 'value' => bcsub($order->getTotal(), $pointsSpent, 4) ]; 
+            }
+
             $buyerMsg = $this->parserLibrary->parse('emails/email_purchase_notification_buyer', $dataBuyer, true);
             $buyerSubject = $this->languageLoader->getLine('notification_subject_buyer');
             $buyerSmsMsg = $buyer->getStoreName() . $this->languageLoader->getLine('notification_txtmsg_buyer');
