@@ -313,12 +313,18 @@ class Memberpage extends MY_Controller
             $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : strtoupper($formData['gender']);
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
+            
+            $newDateOfBirth = new DateTime($validDateOfBirth);
+            if($memberEntity->getBirthday()->format('Y-m-d') === $validDateOfBirth){
+                $newDateOfBirth = $memberEntity->getBirthday();
+            }
+
             $um->setUser($memberId)
                ->setMobile($validMobile)
                ->setMemberMisc([
                      'setFullname' => $validFullname
                     , 'setGender' => $validGender
-                    , 'setBirthday' => new DateTime($validDateOfBirth)
+                    , 'setBirthday' => $newDateOfBirth
                     , 'setLastmodifieddate' => new DateTime('now')
                 ]);
 
