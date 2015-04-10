@@ -39,6 +39,13 @@ class EsPoint
     private $member;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="expiration_date", type="datetime", nullable=false)
+     */
+    private $expirationDate = 'CURRENT_TIMESTAMP';
+
+    /**
      * Get id
      *
      * @return integer 
@@ -92,5 +99,28 @@ class EsPoint
     public function getMember()
     {
         return $this->member;
+    }
+
+    /**
+     * Set expirationDate
+     *
+     * @param \DateTime $expirationDate
+     * @return EsMember
+     */
+    public function setExpirationDate($expirationDate)
+    {
+        $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get expirationDate
+     *
+     * @return \DateTime 
+     */
+    public function getExpirationDate()
+    {
+        return $this->expirationDate;
     }
 }
