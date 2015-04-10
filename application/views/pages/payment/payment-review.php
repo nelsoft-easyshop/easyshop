@@ -254,7 +254,7 @@
                                     <div class="radio">
                                         <input type="radio" name="payment-method" id="credit" class="payment-label" checked="" value="paypalcdb">
                                         <label class="payment-label payment-name" for="credit">
-                                            Credit Card or Debit Card <img src="/assets/images/payment-methods/img-payment-credit.png" class="payment-method-img"/>
+                                            Credit Card or Debit Card <img src="<?=getAssetsDomain();?>assets/images/payment-methods/img-payment-credit.png" class="payment-method-img"/>
                                         </label>
                                     </div>
                                     <div class="payment-method-desc">
@@ -308,7 +308,7 @@
                                     <div class="radio">
                                         <input type="radio" name="payment-method" id="paypal" class="payment-label" value="paypal">
                                         <label class="payment-label payment-name" for="paypal">
-                                            PayPal Account <img src="/assets/images/payment-methods/img-payment-paypal.png" class="payment-method-img"/>
+                                            PayPal Account <img src="<?=getAssetsDomain();?>assets/images/payment-methods/img-payment-paypal.png" class="payment-method-img"/>
                                         </label>
                                     </div>
                                     <div class="payment-method-desc" style="display: none;">
@@ -362,7 +362,7 @@
                                     <div class="radio">
                                         <input type="radio" id="dragonpay" name="payment-method" class="payment-label" value="dragonpay">
                                         <label class="payment-label payment-name" for="dragonpay">
-                                            Dragonpay <img src="/assets/images/payment-methods/img-payment-dragonpay.png" class="payment-method-img"/>
+                                            Dragonpay <img src="<?=getAssetsDomain();?>assets/images/payment-methods/img-payment-dragonpay.png" class="payment-method-img"/>
                                         </label>
                                     </div>
                                     <div class="payment-method-desc" style="display:none">
@@ -416,7 +416,7 @@
                                     <div class="radio">
                                         <input type="radio" id="pesopay" name="payment-method" class="payment-label" value="pesopay">
                                         <label class="payment-label payment-name" for="pesopay">
-                                            PesoPay <img src="/assets/images/payment-methods/img-payment-pesopay.png" class="payment-method-img"/>
+                                            PesoPay <img src="<?=getAssetsDomain();?>assets/images/payment-methods/img-payment-pesopay.png" class="payment-method-img"/>
                                         </label>
                                     </div>
                                     <div class="payment-method-desc" style="display:none">
