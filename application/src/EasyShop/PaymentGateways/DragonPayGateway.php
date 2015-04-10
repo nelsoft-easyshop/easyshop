@@ -397,10 +397,7 @@ class DragonPayGateway extends AbstractGateway
 
 
     /**
-     * External Charge for Dragonpay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getExternalCharge()
     {
@@ -408,10 +405,7 @@ class DragonPayGateway extends AbstractGateway
     }
 
     /**
-     * Generate Reference Number for Dragonpay
-     *
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function generateReferenceNumber($memberId)
     {
@@ -419,10 +413,7 @@ class DragonPayGateway extends AbstractGateway
     }
 
     /**
-     * Returns Order Status for Dragonpay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderStatus()
     {
@@ -430,10 +421,7 @@ class DragonPayGateway extends AbstractGateway
     }
 
     /**
-     * Returns Order Product Status for Dragonpay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderProductStatus()
     {

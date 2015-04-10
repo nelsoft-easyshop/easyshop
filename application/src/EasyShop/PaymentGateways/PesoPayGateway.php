@@ -392,8 +392,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * External Charge for Pesopay
-     * @return string
+     * {@inheritdoc}
      */
     public function getExternalCharge()
     {
@@ -404,10 +403,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Generate Reference Number for Pesopay
-     *
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function generateReferenceNumber($memberId)
     {
@@ -415,10 +411,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Returns Order Status for Pesopay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderStatus()
     {
@@ -426,10 +419,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Returns Order Product Status for Pesopay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderProductStatus()
     {
