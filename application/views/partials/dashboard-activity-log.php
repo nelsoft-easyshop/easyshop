@@ -298,7 +298,7 @@
                                             <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_SOFT_DELETE): ?>
                                                 Temporarily Deleted item(s)
                                             <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_FULL_DELETE): ?>
-                                                Peramnently Deleted item(s)
+                                                Permanently Deleted item(s)
                                             <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_RESTORE): ?>
                                                 Restore item(s)
                                             <?php endif; ?>

@@ -65,7 +65,7 @@
         var totalActivityLineHeight = tabHeight - deductActivityLineHeight - totalActivityMarginTop - 30;
          $(".log-line").css("height", totalActivityLineHeight+"px").css("margin-top", totalActivityMarginTop+"px");
 
-        $("#activityLogTab").children(".log-outer").each(function(){
+        $("#activityLogTab").find(".log-outer").each(function(){
             var logContainerHeight = $(this).find(".log-container").outerHeight();
             $(this).find(".log-icon-container").css("height", logContainerHeight+"px");
         });
