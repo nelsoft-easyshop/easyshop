@@ -65,6 +65,11 @@ class EsPointType
      */
     const TYPE_REVERT = 6;
 
+    /**
+     * @var integer
+     */
+    const TYPE_EXPIRED = 7;
+
 
     /**
      * Get id
