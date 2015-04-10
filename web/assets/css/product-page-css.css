@@ -1531,14 +1531,13 @@ body{
 }
 
 .prod-select-con {
-    background: url(../images/sprites/select-dropdown.png) no-repeat right -2px;
     overflow: hidden;
     padding: 0 !important;
     width: 100%;
     margin-bottom: 7px;
 }
 
-.prod-select-con select:focus {
+.prod-select-con:focus {
     border-color: #66afe9;
     outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
@@ -1549,26 +1548,16 @@ body{
     background: transparent;
     border: none;
     cursor: pointer;
-    height: 34px;
+    height: 32px;
     line-height: 30px;
-    padding: 7px 12px;
-    width: 110%;
-    -moz-appearance: none;
+    width: 100%;
     text-indent: 0.01px;
     text-overflow: '';
-}
-
-.prod-select-con select::-ms-expand {
-    display: none;
 }
 
 .ie9 .prod-select-con {
     background: #fff none;
     position: relative;
-}
-
-.ie9 .prod-select-con select {
-    width: 100%;
 }
 
 .prod-availability-container {
@@ -1622,16 +1611,8 @@ body{
     font-weight: bold;
 }
 
-.shipment-select select {
-    padding-right: 60px;
-}
-
-.ie9 .shipment-select select {
-    padding-right: 12px;
-}
-
-.shipment-select select::-ms-expand {
-    display: none;
+.shipment-fee-container {
+    width: 100%;
 }
 
 .shipment-period {
@@ -1656,14 +1637,6 @@ body{
     display: inline-block;
     vertical-align: middle;
     width: 53%;
-}
-
-.prod-quantity-container .quantity-select select {
-    width: 117%;
-}
-
-.ie9 .prod-quantity-container .quantity-select select {
-    width: 100%;
 }
 
 .ie9 .prod-add-to-cart-btn {
