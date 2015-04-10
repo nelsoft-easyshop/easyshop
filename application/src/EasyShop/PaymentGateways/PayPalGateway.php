@@ -7,6 +7,7 @@ use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 
 
 /**
@@ -432,7 +433,7 @@ class PayPalGateway extends AbstractGateway
                                 if($pointGateway){ 
                                     $pointGateway->setParameter('memberId', $memberId);
                                     $pointGateway->setParameter('itemArray', $pointArray);
-                                    $pointGateway->pay();
+                                    $pointGateway->usePoints();
                                 }
                                 $this->paymentService->sendPaymentNotification($orderId);
                             }
@@ -463,21 +464,33 @@ class PayPalGateway extends AbstractGateway
         return $response;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getExternalCharge()
     {
         return ($this->getParameter('amount') * 0.044) + 15; 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function generateReferenceNumber($memberId){}
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderStatus()
     {
         return EsOrderStatus::STATUS_DRAFT;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 

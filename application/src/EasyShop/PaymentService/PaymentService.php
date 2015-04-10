@@ -255,18 +255,20 @@ class PaymentService
      */
     public function initializeGateways($paymentMethods)
     {
-        // Search array for point gateway
-        foreach (array_keys($paymentMethods) as $key) {
-            if(strpos(strtolower($key), 'point') !== false){
-                $this->pointGateway = new \EasyShop\PaymentGateways\PointGateway(
-                    $this->em,
-                    $this->request,
-                    $this->pointTracker,
-                    $this,
-                    $paymentMethods[$key]
-                    );
-                unset($paymentMethods[$key]);
-                break;
+        if(count($paymentMethods) > 1){
+            // Search array for point gateway
+            foreach (array_keys($paymentMethods) as $key) {
+                if(strpos(strtolower($key), 'point') !== false){
+                    $this->pointGateway = new \EasyShop\PaymentGateways\PointGateway(
+                        $this->em,
+                        $this->request,
+                        $this->pointTracker,
+                        $this,
+                        $paymentMethods[$key]
+                        );
+                    unset($paymentMethods[$key]);
+                    break;
+                }
             }
         }
 
@@ -456,7 +458,7 @@ class PaymentService
      */
     public function isPaymentMethodAcceptPoints($paymentMethodString)
     {
-        $configLoad = $this->paymentConfig; 
+        $configLoad = $this->paymentConfig;
         if(isset($configLoad['payment_type'][strtolower($paymentMethodString)]) 
             && isset($configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'])){  
             return $configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'];
@@ -569,6 +571,11 @@ class PaymentService
                 $messageBuyer = $this->languageLoader->getLine('payment_pesopay_buyer');
                 $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
                 $paymentString = "Pesopay Credit/Debit Card";
+                break;
+            case EsPaymentMethod::PAYMENT_POINTS:
+                $messageBuyer = $this->languageLoader->getLine('payment_cod_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_cod_seller');
+                $paymentString = "Easy Points";
                 break;
         }
 

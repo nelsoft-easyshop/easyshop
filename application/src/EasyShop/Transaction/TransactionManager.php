@@ -153,9 +153,9 @@ class TransactionManager
             /**
              * Add user point if a transaction is completed
              */
-            if($status === EsOrderProductStatus::FORWARD_SELLER){
-                $this->pointTracker->addUserPoint($memberId, EsPointType::TYPE_PURCHASE, $esOrderProduct->getTotal());
-            }
+            // if($status === EsOrderProductStatus::FORWARD_SELLER){
+            //     $this->pointTracker->addUserPoint($memberId, EsPointType::TYPE_PURCHASE, $esOrderProduct->getTotal());
+            // }
 
             $this->esOrderProductRepo->updateOrderProductStatus($esOrderProductStatus, $esOrderProduct);
             $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($esOrderProduct, $esOrderProductStatus, $getOrderProduct['historyLog']);

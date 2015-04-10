@@ -5,8 +5,12 @@ namespace EasyShop\PaymentGateways;
 use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsPointType as EsPointType;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsOrderPoints as EsOrderPoints;
+use EasyShop\PaymentService\PaymentService as PaymentService;
 
 /**
  * Point Gateway Class
@@ -16,6 +20,8 @@ use EasyShop\Entities\EsOrderPoints as EsOrderPoints;
 class PointGateway extends AbstractGateway
 {
     const MAX_POINT_ALLOWED = PHP_INT_MAX;
+
+    const MIN_AMOUNT_ALLOWED = 1000;
 
     /**
      * Constructor
@@ -28,10 +34,104 @@ class PointGateway extends AbstractGateway
     }
 
     /**
+     * Pay method for Cash On Delivery Gateway Class
+     * 
+     */
+    public function pay($validatedCart, $memberId)
+    {
+        // Set status response
+        $response['status'] = PaymentService::STATUS_FAIL;
+        $response['error'] = true;
+
+        $response['paymentType'] = EsPaymentMethod::PAYMENT_POINTS;
+        $response['textType'] = 'easypoints';
+        $response['message'] = 'Your payment has been completed through Easy Points.';
+
+        $this->setParameter('paymentType', $response['paymentType']);
+        $productCount = count($validatedCart['itemArray']);
+
+        // get address Id
+        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                            ->getAddressStateRegionId((int)$memberId);
+
+        // Compute shipping fee
+        $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
+        $grandTotal = $prepareData['totalPrice'];
+        $this->setParameter('amount', $grandTotal);
+        $productString = $prepareData['productstring'];
+        $itemList = $prepareData['newItemList']; 
+        $txnid = $this->generateReferenceNumber($memberId);
+        $response['txnid'] = $txnid;
+
+        $checkPointValid = $this->isPointValid($memberId, $grandTotal);
+        if(!$checkPointValid['valid']){
+            $response['message'] = $checkPointValid['message'];
+            return $response;
+        } 
+
+        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $response['paymentType'], false) === false){
+            $response['message'] = "Payment is not available using Easy Points.";
+            return $response;
+        }
+
+        if($validatedCart['itemCount'] === $productCount){
+            $return = $this->persistPayment(
+                $grandTotal, 
+                $memberId, 
+                $productString, 
+                $productCount, 
+                json_encode($itemList),
+                $txnid,
+                $this
+            );
+
+            if($return['o_success'] <= 0){
+                $response['message'] = $return['o_message'];
+            }
+            else{
+                $response['orderId'] = $orderId = $return['v_order_id'];
+                $response['invoice'] = $invoice = $return['invoice_no'];
+                $response['status'] = PaymentService::STATUS_SUCCESS;
+                $response['error'] = false;
+
+                foreach ($itemList as $key => $value) {  
+                    $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                    $this->paymentService->productManager->updateSoldoutStatus($value['id']);
+                }
+
+                $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                  ->find($orderId);
+
+                $this->setParameter('memberId', $memberId);
+                $this->setParameter('itemArray', $return['item_array']);
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                                          ->find($this->getParameter('paymentType'));
+
+                $deductAmount = $this->usePoints();
+
+                $paymentRecord = new EsPaymentGateway();
+                $paymentRecord->setAmount($deductAmount);
+                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentRecord->setOrder($order);
+                $paymentRecord->setPaymentMethod($paymentMethod);
+                $this->em->persist($paymentRecord);
+
+                $this->paymentService->sendPaymentNotification($orderId);
+
+                $this->em->flush();
+            }
+        }
+        else{
+            $response['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
+        }
+        return $response;
+    }
+
+    /**
      * Pay method for Point Gateway Class
      * 
      */
-    public function pay($param1 = null, $param2 = null, $param3 = null)
+    public function usePoints($param1 = null, $param2 = null, $param3 = null)
     {
         $memberId = $this->parameters['memberId'];
         $itemArray = $this->parameters['itemArray'];
@@ -107,6 +207,9 @@ class PointGateway extends AbstractGateway
         if($this->pointTracker->getUserPoint($memberId) < $pointAmount){
             $returnValue['message'] = "You have insufficient points.";
         }
+        elseif ((float) $totalPrice < self::MIN_AMOUNT_ALLOWED) {
+            $returnValue['message'] = "We only accept minimum of ".self::MIN_AMOUNT_ALLOWED." total amount per transaction to accept points.";
+        }
         elseif((float) $pointAmount > self::MAX_POINT_ALLOWED){
             $returnValue['message'] = "We only accept ".self::MAX_POINT_ALLOWED." points per transaction.";
         }
@@ -123,11 +226,36 @@ class PointGateway extends AbstractGateway
         return $returnValue;
     }
 
-    // Dummy functions to adhere to abstract gateway
-    public function getExternalCharge(){}
-    public function getOrderStatus(){}
-    public function getOrderProductStatus(){}
-    public function generateReferenceNumber($memberId){}
+    /**
+     * {@inheritdoc}
+     */
+    public function getExternalCharge(){
+        return 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateReferenceNumber($memberId)
+    {
+        return 'ESP-'.date('ymdhs').'-'.$memberId;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrderStatus()
+    {
+        return EsOrderStatus::STATUS_PAID;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrderProductStatus()
+    {
+        return EsOrderProductStatus::ON_GOING;
+    }
 }
 
 /*

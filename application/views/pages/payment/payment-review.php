@@ -248,285 +248,291 @@
                     </table>
                     <br/>
                     <?php if($canCheckout): ?>
-                        <?php if(isset($paymentType['cdb'])): ?>
-                            <div class="payment-method-container">
-                                <div class="radio">
-                                    <input type="radio" name="payment-method" id="credit" class="payment-label" checked="" value="paypalcdb">
-                                    <label class="payment-label payment-name" for="credit">
-                                        Credit Card or Debit Card <img src="/assets/images/payment-methods/img-payment-credit.png" class="payment-method-img"/>
-                                    </label>
+                        <?php if($payAllViaPoints === false): ?>
+                            <?php if(isset($paymentType['cdb'])): ?>
+                                <div class="payment-method-container">
+                                    <div class="radio">
+                                        <input type="radio" name="payment-method" id="credit" class="payment-label" checked="" value="paypalcdb">
+                                        <label class="payment-label payment-name" for="credit">
+                                            Credit Card or Debit Card <img src="<?=getAssetsDomain();?>assets/images/payment-methods/img-payment-credit.png" class="payment-method-img"/>
+                                        </label>
+                                    </div>
+                                    <div class="payment-method-desc">
+                                        Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                                        
+                                        <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL, $checkoutError['paymentTypeError'])):?>
+                                            <br/>
+                                            <br/> 
+                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <table  class="transaction-summary-table transaction-checkout-order" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="60%">
+                                                            Product
+                                                        </th>
+                                                        <th width="20%">
+                                                            Quantity
+                                                        </th>
+                                                        <th width="20%">
+                                                            Price
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($cartData as $item): ?> 
+                                                        <?php if($item['paypal'] === false): ?>
+                                                            <tr class="checkout-item">
+                                                                <td>
+                                                                    <?=html_escape($item['name']);?>
+                                                                    <br/>
+                                                                    <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
+                                                                </td>
+                                                                <td>
+                                                                    <?=html_escape($item['qty']);?>
+                                                                </td>
+                                                                <td>
+                                                                    &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                                                </td>
+                                                            </tr>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                                <div class="payment-method-desc">
-                                    Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                            <?php endif; ?>
+
+                            <?php if(isset($paymentType['paypal'])): ?>
+                                <div class="payment-method-container">
+                                    <div class="radio">
+                                        <input type="radio" name="payment-method" id="paypal" class="payment-label" value="paypal">
+                                        <label class="payment-label payment-name" for="paypal">
+                                            PayPal Account <img src="<?=getAssetsDomain();?>assets/images/payment-methods/img-payment-paypal.png" class="payment-method-img"/>
+                                        </label>
+                                    </div>
+                                    <div class="payment-method-desc" style="display: none;">
+                                        Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.
+                                        
+                                        <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL, $checkoutError['paymentTypeError'])):?>
+                                            <br/>
+                                            <br/> 
+                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <table  class="transaction-summary-table transaction-checkout-order" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="60%">
+                                                            Product
+                                                        </th>
+                                                        <th width="20%">
+                                                            Quantity
+                                                        </th>
+                                                        <th width="20%">
+                                                            Price
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($cartData as $item): ?> 
+                                                        <?php if($item['paypal'] === false): ?>
+                                                            <tr class="checkout-item">
+                                                                <td>
+                                                                    <?=html_escape($item['name']);?>
+                                                                    <br/>
+                                                                    <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
+                                                                </td>
+                                                                <td>
+                                                                    <?=html_escape($item['qty']);?>
+                                                                </td>
+                                                                <td>
+                                                                    &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                                                </td>
+                                                            </tr>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if(isset($paymentType['dragonpay'])): ?>
+                                <div class="payment-method-container">
+                                    <div class="radio">
+                                        <input type="radio" id="dragonpay" name="payment-method" class="payment-label" value="dragonpay">
+                                        <label class="payment-label payment-name" for="dragonpay">
+                                            Dragonpay <img src="<?=getAssetsDomain();?>assets/images/payment-methods/img-payment-dragonpay.png" class="payment-method-img"/>
+                                        </label>
+                                    </div>
+                                    <div class="payment-method-desc" style="display:none">
+                                        Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.
                                     
-                                    <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL, $checkoutError['paymentTypeError'])):?>
-                                        <br/>
-                                        <br/> 
-                                        <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
-                                        <table  class="transaction-summary-table transaction-checkout-order" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th width="60%">
-                                                        Product
-                                                    </th>
-                                                    <th width="20%">
-                                                        Quantity
-                                                    </th>
-                                                    <th width="20%">
-                                                        Price
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($cartData as $item): ?> 
-                                                    <?php if($item['paypal'] === false): ?>
-                                                        <tr class="checkout-item">
-                                                            <td>
-                                                                <?=html_escape($item['name']);?>
-                                                                <br/>
-                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
-                                                            </td>
-                                                            <td>
-                                                                <?=html_escape($item['qty']);?>
-                                                            </td>
-                                                            <td>
-                                                                &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
-                                    <?php endif; ?>
+                                        <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY, $checkoutError['paymentTypeError'])):?>
+                                            <br/>
+                                            <br/> 
+                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <table  class="transaction-summary-table transaction-checkout-order" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="60%">
+                                                            Product
+                                                        </th>
+                                                        <th width="20%">
+                                                            Quantity
+                                                        </th>
+                                                        <th width="20%">
+                                                            Price
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($cartData as $item): ?> 
+                                                        <?php if($item['dragonpay'] === false): ?>
+                                                            <tr class="checkout-item">
+                                                                <td>
+                                                                    <?=html_escape($item['name']);?>
+                                                                    <br/>
+                                                                    <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
+                                                                </td>
+                                                                <td>
+                                                                    <?=html_escape($item['qty']);?>
+                                                                </td>
+                                                                <td>
+                                                                    &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                                                </td>
+                                                            </tr>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                            </div>
-                        <?php endif; ?>
+                            <?php endif; ?>
 
-                        <?php if(isset($paymentType['paypal'])): ?>
-                            <div class="payment-method-container">
-                                <div class="radio">
-                                    <input type="radio" name="payment-method" id="paypal" class="payment-label" value="paypal">
-                                    <label class="payment-label payment-name" for="paypal">
-                                        PayPal Account <img src="/assets/images/payment-methods/img-payment-paypal.png" class="payment-method-img"/>
-                                    </label>
-                                </div>
-                                <div class="payment-method-desc" style="display: none;">
-                                    Pay using your PayPal account. You will be redirected to the PayPal system to complete the payment.
+                            <?php if(isset($paymentType['pesopaycdb'])): ?>
+                                <div class="payment-method-container">
+                                    <div class="radio">
+                                        <input type="radio" id="pesopay" name="payment-method" class="payment-label" value="pesopay">
+                                        <label class="payment-label payment-name" for="pesopay">
+                                            PesoPay <img src="<?=getAssetsDomain();?>assets/images/payment-methods/img-payment-pesopay.png" class="payment-method-img"/>
+                                        </label>
+                                    </div>
+                                    <div class="payment-method-desc" style="display:none">
+                                        Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
                                     
-                                    <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL, $checkoutError['paymentTypeError'])):?>
-                                        <br/>
-                                        <br/> 
-                                        <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
-                                        <table  class="transaction-summary-table transaction-checkout-order" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th width="60%">
-                                                        Product
-                                                    </th>
-                                                    <th width="20%">
-                                                        Quantity
-                                                    </th>
-                                                    <th width="20%">
-                                                        Price
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($cartData as $item): ?> 
-                                                    <?php if($item['paypal'] === false): ?>
-                                                        <tr class="checkout-item">
-                                                            <td>
-                                                                <?=html_escape($item['name']);?>
-                                                                <br/>
-                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
-                                                            </td>
-                                                            <td>
-                                                                <?=html_escape($item['qty']);?>
-                                                            </td>
-                                                            <td>
-                                                                &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
-                                    <?php endif; ?>
+                                        <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC, $checkoutError['paymentTypeError'])):?>
+                                            <br/>
+                                            <br/> 
+                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <table  class="transaction-summary-table transaction-checkout-order" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="60%">
+                                                            Product
+                                                        </th>
+                                                        <th width="20%">
+                                                            Quantity
+                                                        </th>
+                                                        <th width="20%">
+                                                            Price
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($cartData as $item): ?> 
+                                                        <?php if($item['pesopaycdb'] === false): ?>
+                                                            <tr class="checkout-item">
+                                                                <td>
+                                                                    <?=html_escape($item['name']);?>
+                                                                    <br/>
+                                                                    <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
+                                                                </td>
+                                                                <td>
+                                                                    <?=html_escape($item['qty']);?>
+                                                                </td>
+                                                                <td>
+                                                                    &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                                                </td>
+                                                            </tr>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <?php if(isset($paymentType['dragonpay'])): ?>
-                            <div class="payment-method-container">
-                                <div class="radio">
-                                    <input type="radio" id="dragonpay" name="payment-method" class="payment-label" value="dragonpay">
-                                    <label class="payment-label payment-name" for="dragonpay">
-                                        Dragonpay <img src="/assets/images/payment-methods/img-payment-dragonpay.png" class="payment-method-img"/>
-                                    </label>
-                                </div>
-                                <div class="payment-method-desc" style="display:none">
-                                    Dragonpay is a Philippines-based alternative payments solution company that allows buyers to pay for good or services through direct bank debit or over-the-counter (OTC). Note that BDO mall branches are open on weekends. You may also choose SM or LBC as most branches are open on weekends and holidays.
-                                
-                                    <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY, $checkoutError['paymentTypeError'])):?>
-                                        <br/>
-                                        <br/> 
-                                        <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
-                                        <table  class="transaction-summary-table transaction-checkout-order" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th width="60%">
-                                                        Product
-                                                    </th>
-                                                    <th width="20%">
-                                                        Quantity
-                                                    </th>
-                                                    <th width="20%">
-                                                        Price
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($cartData as $item): ?> 
-                                                    <?php if($item['dragonpay'] === false): ?>
-                                                        <tr class="checkout-item">
-                                                            <td>
-                                                                <?=html_escape($item['name']);?>
-                                                                <br/>
-                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
-                                                            </td>
-                                                            <td>
-                                                                <?=html_escape($item['qty']);?>
-                                                            </td>
-                                                            <td>
-                                                                &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
+                            <?php endif; ?>
 
-                        <?php if(isset($paymentType['pesopaycdb'])): ?>
-                            <div class="payment-method-container">
-                                <div class="radio">
-                                    <input type="radio" id="pesopay" name="payment-method" class="payment-label" value="pesopay">
-                                    <label class="payment-label payment-name" for="pesopay">
-                                        PesoPay <img src="/assets/images/payment-methods/img-payment-pesopay.png" class="payment-method-img"/>
-                                    </label>
-                                </div>
-                                <div class="payment-method-desc" style="display:none">
-                                    Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
-                                
-                                    <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC, $checkoutError['paymentTypeError'])):?>
-                                        <br/>
-                                        <br/> 
-                                        <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
-                                        <table  class="transaction-summary-table transaction-checkout-order" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th width="60%">
-                                                        Product
-                                                    </th>
-                                                    <th width="20%">
-                                                        Quantity
-                                                    </th>
-                                                    <th width="20%">
-                                                        Price
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($cartData as $item): ?> 
-                                                    <?php if($item['pesopaycdb'] === false): ?>
-                                                        <tr class="checkout-item">
-                                                            <td>
-                                                                <?=html_escape($item['name']);?>
-                                                                <br/>
-                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
-                                                            </td>
-                                                            <td>
-                                                                <?=html_escape($item['qty']);?>
-                                                            </td>
-                                                            <td>
-                                                                &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
-                                    <?php endif; ?>
-                                </div>
+                            <?php if(isset($paymentType['cod'])): ?>
+                                <div class="payment-method-container">
+                                    <div class="radio">
+                                        <input type="radio" id="cod" name="payment-method" class="payment-label" value="cod">
+                                        <label class="payment-label payment-name" for="cod">
+                                            Cash on Delivery
+                                        </label>
+                                    </div>
+                                    <div class="payment-method-desc" style="display:none">
+                                        You can pay in cash to our courier when you receive the goods at your doorstep. 
+                                        <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY, $checkoutError['paymentTypeError'])):?>
+                                            <br/>
+                                            <br/> 
+                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <table  class="transaction-summary-table transaction-checkout-order" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="60%">
+                                                            Product
+                                                        </th>
+                                                        <th width="20%">
+                                                            Quantity
+                                                        </th>
+                                                        <th width="20%">
+                                                            Price
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($cartData as $item): ?> 
+                                                        <?php if($item['cash_delivery'] === false): ?>
+                                                            <tr class="checkout-item">
+                                                                <td>
+                                                                    <?=html_escape($item['name']);?>
+                                                                    <br/>
+                                                                    <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
+                                                                </td>
+                                                                <td>
+                                                                    <?=html_escape($item['qty']);?>
+                                                                </td>
+                                                                <td>
+                                                                    &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                                                </td>
+                                                            </tr>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        <?php endif; ?>
+                                    </div>
+                                </div> 
+                            <?php endif; ?>
+                            <br/>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" class="privacy-check" checked="">
+                                    I acknowledge I have read and understood <a href="/policy" target="_blank">Easyshop.ph's  Privacy Policy</a>.
+                                </label>
                             </div>
+                            <br/>
+                            <button class="btn btn-es-green btn-lg btn-block btn-payment-button" type="button" data-points="<?=$usedPoints?>">
+                                Pay Via Credit Card or Debit Card
+                            </button>
+                        <?php else: ?>
+                            <button class="btn btn-es-green btn-lg btn-block pay-via-easypoints" type="button" data-points="<?=$usedPoints?>">
+                                Pay Via Easy Points
+                            </button>
                         <?php endif; ?>
-
-                        <?php if(isset($paymentType['cod'])): ?>
-                            <div class="payment-method-container">
-                                <div class="radio">
-                                    <input type="radio" id="cod" name="payment-method" class="payment-label" value="cod">
-                                    <label class="payment-label payment-name" for="cod">
-                                        Cash on Delivery
-                                    </label>
-                                </div>
-                                <div class="payment-method-desc" style="display:none">
-                                    You can pay in cash to our courier when you receive the goods at your doorstep. 
-                                    <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY, $checkoutError['paymentTypeError'])):?>
-                                        <br/>
-                                        <br/> 
-                                        <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
-                                        <table  class="transaction-summary-table transaction-checkout-order" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th width="60%">
-                                                        Product
-                                                    </th>
-                                                    <th width="20%">
-                                                        Quantity
-                                                    </th>
-                                                    <th width="20%">
-                                                        Price
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php foreach ($cartData as $item): ?> 
-                                                    <?php if($item['cash_delivery'] === false): ?>
-                                                        <tr class="checkout-item">
-                                                            <td>
-                                                                <?=html_escape($item['name']);?>
-                                                                <br/>
-                                                                <small>Go to your <a href="/cart">Cart</a> and Remove this Item</small>
-                                                            </td>
-                                                            <td>
-                                                                <?=html_escape($item['qty']);?>
-                                                            </td>
-                                                            <td>
-                                                                &#8369; <?=number_format($item['subtotal'], 2, '.', ',');?>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
-                                            </tbody>
-                                        </table>
-                                    <?php endif; ?>
-                                </div>
-                            </div> 
-                        <?php endif; ?>
-                        <br/>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" class="privacy-check" checked="">
-                                I acknowledge I have read and understood <a href="/policy" target="_blank">Easyshop.ph's  Privacy Policy</a>.
-                            </label>
-                        </div>
-                        <br/>
-                        <button class="btn btn-es-green btn-lg btn-block btn-payment-button" type="button" data-points="<?=$usedPoints?>">
-                            Pay Via Credit Card or Debit Card
-                        </button>
                     <?php else: ?> 
                         <?php foreach ($checkoutError['errorMessage'] as $error): ?>
                         <div class="alert alert-es-danger alert-checkout" align="left" style="margin-bottom: 0px;">
