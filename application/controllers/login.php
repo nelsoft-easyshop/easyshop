@@ -36,7 +36,11 @@ class Login extends MY_Controller
             redirect('/');
         }
         $url = $this->session->userdata('uri_string');
-        $isPromo = strpos($url, 'ScratchCard') !== false;
+        $isPromo = false;
+
+        if (strpos($url, 'ScratchCard') !== false || strpos($url, 'estudyantrepreneur') !== false ) {
+            $isPromo = true;
+        }
 
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
