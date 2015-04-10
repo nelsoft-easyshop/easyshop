@@ -799,7 +799,7 @@ textarea {
     border-bottom: 3px solid #fff;
     color: #565656;
     display: block;
-    font-size: 1em;
+    font-size: 12px;
     height: 55px;
     line-height: 55px;
     padding: 0 21px;
@@ -2520,6 +2520,12 @@ header {
 
     .persistent-nav-container.sticky-nav-fixed {
         display: none;
+    }
+}
+
+@media (min-width: 480px) {
+    .vendor-nav li a {
+        font-size: 16px;
     }
 }
 
