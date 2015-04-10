@@ -355,14 +355,14 @@ class PayPalGateway extends AbstractGateway
         if(array_key_exists('token',$getItems) && array_key_exists('PayerID',$getItems)){
             $payerid = $getItems['PayerID'];
             $token = $response['txnid'] = $getItems['token']; ;
-            $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                ->findOneBy([
                                     'transactionId' => $token,
                                     'paymentMethod' => $paymentType
                                 ]);
 
-            $response['invoice'] = $invoice = $return->getInvoiceNo();
-            $response['orderId'] = $orderId = $return->getIdOrder();
+            $response['invoice'] = $invoice = $order->getInvoiceNo();
+            $response['orderId'] = $orderId = $order->getIdOrder();
 
             // Compute shipping fee
             $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
@@ -404,7 +404,10 @@ class PayPalGateway extends AbstractGateway
                                 $this->paymentService->productManager->updateSoldoutStatus($value['id']);
                                 if($pointGateway){
                                     $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                                                               ->findOneBy(['productItemId' => $value['product_itemID']]);
+                                                               ->findOneBy([
+                                                                    'productItemId' => $value['product_itemID'],
+                                                                    'order' => $order
+                                                               ]);
                                     $data["order_product_id"] = $esOrderProduct->getIdOrderProduct();
                                     $data["point"] = $pointGateway->getProductDeductPoint(
                                                         round((float)$value['price'], 2),
