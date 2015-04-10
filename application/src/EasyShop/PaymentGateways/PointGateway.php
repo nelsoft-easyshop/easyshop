@@ -9,6 +9,7 @@ use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsPointType as EsPointType; 
 use EasyShop\PaymentService\PaymentService as PaymentService;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 
 /**
  * Point Gateway Class
@@ -219,23 +220,35 @@ class PointGateway extends AbstractGateway
         return $returnValue;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getExternalCharge(){
         return 0;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function generateReferenceNumber($memberId)
     {
         return 'ESP-'.date('ymdhs').'-'.$memberId;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderStatus()
     {
         return EsOrderStatus::STATUS_PAID;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 
