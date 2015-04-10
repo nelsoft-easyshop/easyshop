@@ -7,6 +7,7 @@ use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 
 /**
  * Dragon Pay Gateway Class
@@ -245,7 +246,7 @@ class DragonPayGateway extends AbstractGateway
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                           ->find($pointGateway->getParameter('paymentType'));
 
-                $deductAmount = $pointGateway->pay();
+                $deductAmount = $pointGateway->usePoints();
                 $paymentRecord = new EsPaymentGateway();
                 $paymentRecord->setAmount($deductAmount);
                 $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
@@ -396,10 +397,7 @@ class DragonPayGateway extends AbstractGateway
 
 
     /**
-     * External Charge for Dragonpay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getExternalCharge()
     {
@@ -407,10 +405,7 @@ class DragonPayGateway extends AbstractGateway
     }
 
     /**
-     * Generate Reference Number for Dragonpay
-     *
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function generateReferenceNumber($memberId)
     {
@@ -418,10 +413,7 @@ class DragonPayGateway extends AbstractGateway
     }
 
     /**
-     * Returns Order Status for Dragonpay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderStatus()
     {
@@ -429,14 +421,11 @@ class DragonPayGateway extends AbstractGateway
     }
 
     /**
-     * Returns Order Product Status for Dragonpay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 
