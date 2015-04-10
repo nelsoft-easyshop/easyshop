@@ -382,7 +382,7 @@
                 submitPesopay($pointsUsed);
             }
             else if($selectedMethod === "cod"){
-                var $confirmation = confirm("Are you sure you want to pay using Easy Points?");
+                var $confirmation = confirm("Are you sure you want to pay using Cash on Delivery?");
                 if($confirmation){
                     submitCashOnDelivery();
                 }
