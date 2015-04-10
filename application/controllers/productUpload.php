@@ -32,7 +32,14 @@ class productUpload extends MY_Controller
         $this->img_dimension['categoryview'] = array(220,200);
         $this->img_dimension['thumbnail'] = array(60,80);
 
-        $this->em = $this->serviceContainer['entity_manager']; 
+        $this->em = $this->serviceContainer['entity_manager'];
+
+        $this->output->set_header("HTTP/1.0 200 OK");
+        $this->output->set_header("HTTP/1.1 200 OK");
+        $this->output->set_header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
+        $this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
+        $this->output->set_header("Cache-Control: post-check=0, pre-check=0");
+        $this->output->set_header("Pragma: no-cache");
     }
 
 
@@ -1237,12 +1244,14 @@ class productUpload extends MY_Controller
                         }
                     }
                     if($resultDetail){
-                        $preferences = $this->product_model->getShippingPreference($member_id)['name'];
-                        end($preferences);
-                        $arrayKey = key($preferences);
-                        $serverResponse['shipping_preference']['name'] = [
-                            $arrayKey => $preferences[$arrayKey]
-                        ]; 
+                        $preferences = $this->product_model->getShippingPreference($member_id);
+                        $preferencesName = $preferences['name'];
+                        end($preferencesName);
+                        $arrayKey = key($preferencesName);
+                        $serverResponse['shipping_preference']['new'] = [
+                            $arrayKey => $preferencesName[$arrayKey]
+                        ];
+                        $serverResponse['shipping_preference']['data'] = $preferences;
                     }
                 }
             }
@@ -1283,88 +1292,11 @@ class productUpload extends MY_Controller
     }
 
     /**
-     * Delete draft items
-     *
-     * @return string
+     * Getting all children using search
+     * @return json
      */
-    public function deleteDraft()
+    public function getAllChildren()
     {
-        $productId = $this->input->post('p_id');
-        $memberId =  $this->session->userdata('member_id');
-        $output = $this->product_model->deleteDraft($memberId,$productId);
-        if($output == 0){
-            $data = '{"e":"0","m":"Sorry, something went wrong. Please try again later"}';
-        }else{
-            $data = '{"e":"1","d":"Draft item successfully removed."}';
-        }
-
-        die($data);
-    }
-    
-    public function previewItem(){
-        if($this->input->post('p_id'))
-            $id = $this->input->post('p_id');
-        else
-            redirect('sell/step1', 'refresh'); 
-        #$modal is true unless the string 'false' modal parameter is posted
-        if($this->input->post('modal') == 'false'){
-            $modal = false;
-        }else{
-            $modal = true;
-        }
-        $this->load->model("memberpage_model");
-        $memberId =  $this->session->userdata('member_id');
-        $product_row = $this->product_model->getProductById($id, true);
-
-        if(empty($product_row) || (intval($product_row['sellerid']) !== intval($memberId))){
-            redirect('sell/step1', 'refresh');
-        }
-        $quantities = $this->product_model->getProductQuantity($id);
-        $availability = "varies";
-     
-        foreach($quantities as $qty){
-            if(count($qty['product_attribute_ids'])===1){
-                if(($qty['product_attribute_ids'][0]['id'] == 0)&&($qty['product_attribute_ids'][0]['is_other'] == 0)){
-                    $availability = $qty['quantity'];
-                }
-            }   
-        }
-        
-        $product_options = $this->product_model->getProductAttributes($id, 'NAME');
-        $product_options = $this->product_model->implodeAttributesByName($product_options);
-
-        $preview_data = array(
-            'breadcrumbs' =>  $this->product_model->getParentId($product_row['cat_id']),
-            'product' => $product_row,
-            'billing_info' => $this->memberpage_model->get_billing_info($memberId),
-            'bank_list' =>  $this->memberpage_model->getAllBanks(),
-            'main_categories' => $this->product_model->getFirstLevelNode(TRUE),
-            'product_images' => $this->product_model->getProductImages($id),
-            'product_options' => $product_options,
-            'availability' => $availability,
-            'modal' => $modal,
-        );
-        if($modal){ 
-            $this->load->view('pages/product/product_upload_preview',$preview_data);
-        }
-        else{
-            
-            $headerData = [
-                "memberId" => $this->session->userdata('member_id'),
-                'title' => 'Sell Product | Easyshop.ph',
-                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-                'relCanonical' => '',
-                'renderSearchbar' => false, 
-            ]; 
-            
-            $this->load->spark('decorator');    
-            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/product/product_upload_preview',$preview_data);
-            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
-        }
-    }
-
-    public function getAllChildren(){
         $cat_arr = json_decode($this->input->get('cat_array'));
         $level = 1;
         $prev_cat_name ='';
