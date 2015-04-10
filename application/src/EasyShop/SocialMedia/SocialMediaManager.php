@@ -262,6 +262,9 @@ class SocialMediaManager
             $member->setSlug('');
             $member->setStoreColor($defaultStoreColor);
             $member->setBanType($banType);
+            $member->setLastAvatarChanged(new DateTime('now'));
+            $member->setLastBannerChanged(new DateTime('now'));
+
             $this->em->persist($member);
             $this->em->flush();
 

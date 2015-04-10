@@ -453,11 +453,13 @@ class AccountManager
             $member->setLastLoginDatetime(new DateTime('now'));
             $member->setLastFailedLoginDateTime(new DateTime('now'));
             $member->setBirthday(new DateTime(date('0001-01-01 00:00:00')));
-            $member->setSlug($this->stringUtility->cleanString($username));   
-            $member->setIsEmailVerify($isEmailVerify); 
-            $member->setStoreColor($storeColor);  
+            $member->setSlug($this->stringUtility->cleanString($username));
+            $member->setIsEmailVerify($isEmailVerify);
+            $member->setStoreColor($storeColor);
             $member->setBanType($banType);
-            
+            $member->setLastAvatarChanged(new DateTime('now'));
+            $member->setLastBannerChanged(new DateTime('now'));
+
             $this->em->persist($member);
             $this->em->flush();
 
