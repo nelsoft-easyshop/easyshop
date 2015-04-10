@@ -65,7 +65,7 @@ class EsMemberSubscriber implements EventSubscriber
             $this->changeSet['slug'] = $entity->getSlug();
         }
 
-        if ($event->hasChangedField('website')) {
+        if ($event->hasChangedField('website') && $entity->getWebsite() !== null) {
             $this->changeSet['website'] = $entity->getWebsite();
         }
 
