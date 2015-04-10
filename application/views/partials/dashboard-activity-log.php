@@ -435,7 +435,7 @@
                                                 <tr>
                                                     <td class="v-align-top">
                                                         <a href="/item/<?=$activity['data']['slug']; ?>">
-                                                            <img class="log-image" src="<?php echo getAssetsDomain().$activity['data']['imageDirectory'].'/thumbnail/'.$activity['data']['imageFile']; ?>"/>
+                                                            <img class="log-image" src="<?php echo getAssetsDomain().$activity['data']['imageDirectory'].'thumbnail/'.$activity['data']['imageFile']; ?>"/>
                                                         </a>
                                                     </td>
                                                     <td class="v-align-top">
