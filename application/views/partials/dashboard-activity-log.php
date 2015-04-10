@@ -3,7 +3,8 @@
 
     <!--Layout for EDIT PROFILE INFORMATION-->
     <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::INFORMATION_UPDATE 
-            && $activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE): ?>
+            && $activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE
+            && count($activity['data']['contents']) > 0): ?>
         <div class="log-outer">
             <div class="row">
                 <div class="col-xs-1 col-icon-container">
