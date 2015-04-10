@@ -200,7 +200,7 @@ $config = [
                 'first_round' =>
                     [
                         'start' => '2015-04-10 00:00:00',
-                        'end' => '2015-04-10 14:00:00',
+                        'end' => '2015-04-10 16:00:00',
                         'limit' => PHP_INT_MAX
                     ],
                 'second_round' =>
