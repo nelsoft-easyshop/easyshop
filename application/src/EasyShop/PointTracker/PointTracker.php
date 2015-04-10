@@ -21,6 +21,7 @@ class PointTracker
      */
     private $em;
 
+    const POINT_DAYS_DURATION = 90;
 
     /**
      * Constructor. Retrieves Entity Manager instance
@@ -88,7 +89,9 @@ class PointTracker
 
         if($userPoint !== null){
             // Update existing user    
-            $userPoint->setPoint($userPoint->getPoint() + $addPoints); 
+            $userPoint->setPoint($userPoint->getPoint() + $addPoints);
+            $userPoint->setExpirationDate(date_create(date("Y-m-d H:i:s", strtotime("+".self::POINT_DAYS_DURATION." days"))));
+
             $this->em->flush();
         }
         else{
@@ -96,6 +99,7 @@ class PointTracker
             $userPoint = new EsPoint();
             $userPoint->setPoint($addPoints);
             $userPoint->setMember($user);
+            $userPoint->setExpirationDate(date_create(date("Y-m-d H:i:s", strtotime("+".self::POINT_DAYS_DURATION." days"))));
 
             $this->em->persist($userPoint);
             $this->em->flush();
