@@ -107,20 +107,21 @@ class Cart extends MY_Controller
         
         $product = $this->em->find('EasyShop\Entities\EsProduct', $productId);
         
-        if ($this->input->post('express')) {
-            if ($product->getIsPromote()) {
+
+        if($this->input->post('express')){
+            $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
+            if(empty($defaultAttributes) || $product->getIsPromote()){
                 print json_encode(['isSuccessful' => false, 'isLoggedIn' => $isLoggedIn]);
                 exit();
             }
-            $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
-            $options = array();
-            foreach ($defaultAttributes as $attribute) {
+            $options = [];
+            foreach($defaultAttributes as $attribute){
                 $options[strtolower($attribute["attr_name"])] = $attribute["attr_value"]."~".$attribute["attr_price"];
             }
             $quantity = 1;
         }
-        else {
-            $options = $this->input->post('options') ? $this->input->post('options') : array();
+        else{
+            $options = $this->input->post('options') ? $this->input->post('options') : [];
             $quantity = $this->input->post('quantity');
         }
 
