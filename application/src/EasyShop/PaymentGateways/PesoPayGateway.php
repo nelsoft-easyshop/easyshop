@@ -433,7 +433,7 @@ class PesoPayGateWay extends AbstractGateway
      */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 

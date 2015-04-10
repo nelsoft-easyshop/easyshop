@@ -7,6 +7,7 @@ use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 
 /**
  * Dragon Pay Gateway Class
@@ -436,7 +437,7 @@ class DragonPayGateway extends AbstractGateway
      */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 

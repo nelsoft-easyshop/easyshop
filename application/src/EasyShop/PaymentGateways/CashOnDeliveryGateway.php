@@ -7,6 +7,7 @@ use EasyShop\Entities\EsOrder;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 
 
 /**
@@ -144,24 +145,36 @@ class CashOnDeliveryGateway extends AbstractGateway
         return $response;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getExternalCharge()
     {
         return 0;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function generateReferenceNumber($memberId)
     {
         return 'COD-'.date('ymdhs').'-'.$memberId;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderStatus()
     {
         return EsOrderStatus::STATUS_PAID;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 
 }
