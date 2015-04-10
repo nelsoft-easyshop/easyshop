@@ -295,7 +295,7 @@
                                     <div class="col-md-6">
                                         <p class="log-title">
                                             <?php if($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_UPDATE): ?>
-                                                Edit item information
+                                                Added item into your listing
                                             <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_SOFT_DELETE): ?>
                                                 Temporarily Deleted item(s)
                                             <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_FULL_DELETE): ?>
