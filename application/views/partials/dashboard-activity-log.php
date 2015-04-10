@@ -22,7 +22,7 @@
                                 <div class="row">
                                     <div class="col-md-9">
                                         <p class="log-title">
-                                            Updated store information on vendor page
+                                            Updated Personal Information
                                             <br>
                                             <?php foreach ($activity['data']['contents'] as $content): ?>
                                                 <b><?=html_escape($content);?></b>
