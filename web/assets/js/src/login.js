@@ -156,6 +156,9 @@
                                     var code = url.split("/");
                                     window.location = '/' + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
                                 }
+                                else if (url === 'estudyantrepreneur') {
+                                    window.location = '/' + url;
+                                }
                                 else{
                                     if((url === 'sell/step1')||(first_uri_segment === 'item')|| (url === 'cart')){
                                         window.location = '/' + url;

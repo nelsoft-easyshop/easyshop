@@ -232,8 +232,7 @@ class PayPalGateway extends AbstractGateway
         foreach ($itemList as $value) {
             $value['price'] = round($value['price'], 2);
             $deductPrice = $pointGateway 
-                           ? $pointGateway->
-                           getProductDeductPoint($value['price'], $itemOriginalPrice)
+                           ? $pointGateway->getProductDeductPoint($value['price'], $itemOriginalPrice)
                            : 0;
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
             '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode(bcsub($value['price'], $deductPrice, 2)).

@@ -3598,15 +3598,6 @@ label.css-label {
         padding-left: 0px;
     }
     
-    .submenu-overflow{
-        white-space: nowrap;
-        width: 100%;
-        overflow-y: hidden;
-        overflow-x: scroll;
-        -webkit-overflow-scrolling: touch;
-        height: 71px;
-    }
-    
     .td-desc-item{
         display: none;
     }
@@ -4031,6 +4022,15 @@ label.css-label {
     .bank-account-item-btns .btn-default-1,
     .bank-account-item-btns .btn-default-3 {
         width: 100%;
+    }
+
+    .submenu-overflow{
+        white-space: nowrap;
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        height: 71px;
     }
 }
 

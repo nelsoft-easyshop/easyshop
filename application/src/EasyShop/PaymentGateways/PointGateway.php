@@ -6,10 +6,11 @@ use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
-use EasyShop\Entities\EsPointType as EsPointType; 
-use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\Entities\EsPointType as EsPointType;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
+use EasyShop\Entities\EsOrderPoints as EsOrderPoints;
+use EasyShop\PaymentService\PaymentService as PaymentService;
 
 /**
  * Point Gateway Class
@@ -153,9 +154,14 @@ class PointGateway extends AbstractGateway
             $pointSpent = intval($pointSpent) <= intval($maxPointAllowable) ? $pointSpent : $maxPointAllowable;
 
             foreach ($itemArray as $item) {
-                $data["order_product_id"] = $item['order_product_id'];
-                $data["points"] = $this->getProductDeductPoint($item['point'], $maxPointAllowable);
+                $data["order_product_id"] = (int) $item['order_product_id'];
+                $data["points"] = $this->getProductDeductPoint(round($item['point'], 2), $maxPointAllowable);
                 $pointBreakdown[] = $data;
+
+                $orderPoints = new EsOrderPoints();
+                $orderPoints->setPoints($data["points"]);
+                $orderPoints->setOrderProduct($this->em->find('EasyShop\Entities\EsOrderProduct', $data["order_product_id"]));
+                $this->em->persist($orderPoints);
             }
 
             $jsonData = json_encode($pointBreakdown);
@@ -165,7 +171,7 @@ class PointGateway extends AbstractGateway
                 $memberId,
                 $actionId,
                 $pointSpent
-                );
+            );
 
             // update history data field
             if($historyObj){
@@ -185,7 +191,7 @@ class PointGateway extends AbstractGateway
      */
     public function getProductDeductPoint($productPrice, $total)
     {
-        return (float)bcmul($this->getParameter('amount'), bcdiv($productPrice, $total, 4), 4);
+        return round(bcmul($this->getParameter('amount'), bcdiv($productPrice, $total, 10), 3), 2);
     }
 
     /**

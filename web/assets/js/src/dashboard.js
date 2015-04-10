@@ -1698,7 +1698,9 @@
                                 if (jsonResponse.isSuccess) {
                                     alert('Your feedback has been submitted.');
                                     btn.remove();
-                                    refreshEasypoints();
+                                    if(jsonResponse.isPointAdded){
+                                        refreshEasypoints();
+                                    }
                                 }
                                 else {
                                     var errorMessage = "An error was encountered. Please try again later";
@@ -3130,13 +3132,15 @@
             success: function(data){ 
                 if(data){
                     var $jsonResponse = $.parseJSON(data);
-                    if($.isEmptyObject($jsonResponse)){
+                    var userPointList = $jsonResponse.list;
+                    if($.isEmptyObject(userPointList)){
                         isUserPointComplete = true;
                         return false;
                     }
+                    $('.current-points').html($jsonResponse.totalUserPoint);
                     var html = "";
                     userPointPage++;
-                    $.each($jsonResponse, function(index, value){
+                    $.each(userPointList, function(index, value){
                         html += '<li>' +
                                     '<div class="small-bullet-container">' +
                                         '<span class="small-bullet"></span>' +
