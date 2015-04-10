@@ -716,6 +716,29 @@
                                                                                 {payment_method_name} 
                                                                             </td>
                                                                         </tr>
+                                                                        
+                                                                        {pointSpent}
+                                                                            <tr>
+                                                                                <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                                    Points Spent : 
+                                                                                </td>
+                                                                                <td valign="top" width="50%" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
+                                                                                    {value} 
+                                                                                </td>
+                                                                            </tr> 
+                                                                        {/pointSpent}
+                                                                            
+                                                                        {totalLessPoint}
+                                                                            <tr>
+                                                                                <td valign="top" width="50%" style="color: #555555; font-weight: bold; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-all;">
+                                                                                    Total Amount Paid: 
+                                                                                </td>
+                                                                                <td valign="top" width="50%" align="left" style="padding-right: 10px; font-family:Roboto,Open Sans, Arial,Tahoma, Helvetica, sans-serif; word-break: break-word;">
+                                                                                    &#8369; {value} 
+                                                                                </td>
+                                                                            </tr> 
+                                                                        {/totalLessPoint}
+                                                                        
                                                                     </table>
                                                                 </td>
                                                             </tr>
