@@ -135,11 +135,12 @@ class EsAddressSubscriber implements EventSubscriber
         $entity = $event->getEntity();
         if ( $entity instanceOf EsAddress) {
             if(count($this->changeSet) > 0){
+                $action = \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE;
                 $member = $em->getRepository('EasyShop\Entities\EsMember')
                              ->find($entity->getIdMember()->getIdMember());   
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
-                $jsonString = \EasyShop\Activity\ActivityTypeInformationUpdate::constructJSON($this->changeSet);      
+                $jsonString = \EasyShop\Activity\ActivityTypeInformationUpdate::constructJSON($this->changeSet, $action);      
                 if($jsonString){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
                        ->createAcitivityLog($activityType, $jsonString, $member);
