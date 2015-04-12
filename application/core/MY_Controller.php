@@ -13,25 +13,56 @@ class MY_Controller extends CI_Controller
      */
     protected $serviceContainer;
     
+    
+    /**
+     * Full URLS that are to be ignored in getting the referrer
+     *
+     * @var string[]
+     */
+    private $referrerIgnoredFullurl = [
+        'login',
+        'register',
+        'favicon.ico'
+    ];
+    
+    /**
+     * Partial URLS (first segment) that are to be ignored in getting the referrer
+     *
+     * @var string[]
+     */
+    private $referrerIgnoredFirstSegmentUrls = [
+        'assets',
+    ];
+   
     /**
      * Constructor.
      */
     public function __construct()
     {
         parent::__construct();        
+
+        /**
+         * Store the current url in the session except for certain URLs
+         * This is done to get the referrer of a certain page more effectively.
+         */
         $url = uri_string();
         $firstSegment = $this->uri->segment(1);
-        if($url !== 'login' && $url !== 'register' && $firstSegment !== 'assets'){
+        if( in_array($url, $this->referrerIgnoredFullurl) === false && 
+            in_array($firstSegment, $this->referrerIgnoredFirstSegmentUrls) === false){
             $this->session->set_userdata('uri_string', $url);
         }
 
         if (isset ($this->kernel)) {
-            /* This way service container is more accessible to child classes */
+            /**
+             * This way service container is more accessible to child classes
+             */
             $this->serviceContainer = $this->kernel->serviceContainer;
             $this->load->helper('view_helper');
         }
-        
-        /*  Load custom common functions */
+
+        /**
+         * Load custom common functions
+         */
         $this->load->helper('common_helper');
 
         if(!$this->session->userdata('member_id')){
