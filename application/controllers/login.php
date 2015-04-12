@@ -28,17 +28,15 @@ class Login extends MY_Controller
     
     /**
      * Renders the login page
-     *
      */
     public function index() 
     {
         if ($this->session->userdata('usersession')) {
             redirect('/');
         }
-        $url = $this->session->userdata('uri_string');
+        $redirectUrl = $this->session->userdata('uri_string');
         $isPromo = false;
-
-        if (strpos($url, 'ScratchCard') !== false || strpos($url, 'estudyantrepreneur') !== false ) {
+        if (strpos($redirectUrl, 'ScratchCard') !== false || strpos($redirectUrl, 'estudyantrepreneur') !== false ) {
             $isPromo = true;
         }
 
@@ -60,7 +58,7 @@ class Login extends MY_Controller
         $hoursInDay = $this->config->item('hourRange', 'officeoperation');
 
         $bodyData = [
-            'redirect_url' => $url,
+            'redirect_url' => $redirectUrl,
             'is_promo' => $isPromo,
             'facebook' => $socialMediaLinks["facebook"],
             'twitter' => $socialMediaLinks["twitter"],

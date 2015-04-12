@@ -391,14 +391,9 @@
             var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
             $optionsObject[$attrParent] = $attrName + '~' + $additionalPrice.toFixed(2); 
         });
-        
-        var $isLoggedIn = JSON.parse($('.es-data[name="is-logged-in"]').val());
-        if(!$isLoggedIn){
-            window.location.replace("/login");
-            return false;
-        }
-
-        addToCart($productId, $quantity, $optionsObject);
+        var productSlug = $('#product-slug').val();
+       
+        addToCart($productId, $quantity, $optionsObject, false, productSlug, true);
     });
 
     /**

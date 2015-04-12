@@ -174,12 +174,17 @@
      * @param string[] optionsObject
      * @param boolean isExpress
      * @param string productSlug
+     * @param boolean isNotRedirectOnError
      */
-    function addToCart(productId, quantity, optionsObject, isExpress, productSlug)
+    function addToCart(productId, quantity, optionsObject, isExpress, productSlug, isNotRedirectOnError)
     {
         var ajaxData;
         var csrftoken = $("meta[name='csrf-token']").attr('content'); 
-        if(typeof isExpress === 'undefined'){
+        isExpress = typeof isExpress === 'undefined' || isExpress === null ? false : isExpress;
+        isNotRedirectOnError = typeof isNotRedirectOnError === 'undefined' ||
+                               isNotRedirectOnError === null 
+                               ? false : isNotRedirectOnError;
+        if(isExpress === false){
             ajaxData = {productId:productId,quantity:quantity,options:optionsObject,csrfname:csrftoken};
         }
         else{
@@ -192,21 +197,35 @@
             dataType:"JSON",
             data:ajaxData,
             success:function(result){
+      
                 if(!result.isLoggedIn){
+                    delete ajaxData.csrfname;
+                    if(typeof productSlug !== 'undefined' && productSlug !== null){
+                        ajaxData.slug = productSlug;    
+                    }
+                    $.removeCookie("cartAddData", { path: '/'});
+                    var cartAddString = JSON.stringify(ajaxData);
+                    console.log(cartAddString);
+                    $.cookie('cartAddData', cartAddString, { path: '/'});
                     window.location.replace("/login");
                 }
                 else if(result.isSuccessful){
                     window.location.replace("/cart");
                 }
                 else{
-                    if(typeof productSlug !== 'undefined'){
-                        window.location.replace("/item/"+productSlug);
-                    }
-                    else{
+                    if(isNotRedirectOnError){
                         alert("We cannot process your request at this time. Please try again in a few moment");
                     }
-                }
-                
+                    else{
+                        if(typeof productSlug !== 'undefined' && productSlug !== null){
+                            window.location.replace("/item/"+productSlug);
+                        }
+                        else{
+                            window.location.replace('/');
+                        }
+                        
+                    }
+                }   
             }
         });
     }
