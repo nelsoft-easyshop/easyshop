@@ -38,12 +38,18 @@ class EsOrderPoints
      */
     private $orderProduct;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="unit_points", type="decimal", precision=15, scale=4, nullable=true)
+     */
+    private $unitPoints;
 
 
     /**
      * Get idOrderPoints
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdOrderPoints()
     {
@@ -66,7 +72,7 @@ class EsOrderPoints
     /**
      * Get points
      *
-     * @return string 
+     * @return string
      */
     public function getPoints()
     {
@@ -89,10 +95,33 @@ class EsOrderPoints
     /**
      * Get orderProduct
      *
-     * @return \EasyShop\Entities\EsOrderProduct 
+     * @return \EasyShop\Entities\EsOrderProduct
      */
     public function getOrderProduct()
     {
         return $this->orderProduct;
+    }
+
+    /**
+     * Set unitPoints
+     *
+     * @param string $unitPoints
+     * @return EsOrderPoints
+     */
+    public function setUnitPoints($unitPoints)
+    {
+        $this->unitPoints = $unitPoints;
+
+        return $this;
+    }
+
+    /**
+     * Get unitPoints
+     *
+     * @return string
+     */
+    public function getUnitPoints()
+    {
+        return $this->unitPoints;
     }
 }

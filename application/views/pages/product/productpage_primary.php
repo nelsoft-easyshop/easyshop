@@ -8,6 +8,8 @@
 
 
 <?=$snippetMarkUp;?>
+
+<input type="hidden" id="product-slug" value="<?php echo html_escape($product->getSlug()); ?>">
 <section class="breadcrumbs-bg">
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">

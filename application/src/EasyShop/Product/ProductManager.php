@@ -496,50 +496,42 @@ class ProductManager
      * @param int $productId
      * @return mixed
      */
-    public function getProductDefaultAttribute($productId)
+    public function getProductDefaultAttributes($productId)
     {
+        $response = [
+            'hasStock' => false,
+            'defaultAttributes' => [],
+        ];    
+    
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                            ->find($productId);
-        $defaultAttributes = [];
+                            ->find($productId);                
         if($product){
             $inventoryDetails = $this->getProductInventory($product);
             $defaultInventory = [];
             foreach($inventoryDetails as $inventory){
                 if((int)$inventory['quantity'] > 0){
                     $defaultInventory = $inventory;
+                    $response['hasStock'] = true;
                     break;
                 }
             }
-
             $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                    ->getProductAttributeDetailByName($productId);
-                                   
             if(empty($attributes) === false){
-                if( (int)$defaultInventory['product_attribute_ids'][0]['id'] === 0 &&
-                    (int)$defaultInventory['product_attribute_ids'][0]['is_other'] === 0)
-                {
-                    foreach($attributes as $attribute){
-                        if(!array_key_exists($attribute['attr_name'],$defaultAttributes)){
-                            $defaultAttributes[$attribute['attr_name']] = $attribute;
-                        }
-                    }
-                }
-                else{
-                    foreach($defaultInventory['product_attribute_ids'] as $productAttributeId){
-                        foreach($attributes as $attributeIndex => $attribute){
-                            if((int)$productAttributeId['id'] === (int)$attribute['attr_id'] &&
-                            (int)$productAttributeId['is_other'] === (int)$attribute['is_other']){ 
-                                $defaultAttributes[] = $attribute;
-                                unset($attributes[$attributeIndex]);
-                            } 
-                        }
+                foreach($defaultInventory['product_attribute_ids'] as $productAttributeId){
+                    foreach($attributes as $attributeIndex => $attribute){
+                        if((int)$productAttributeId['id'] === (int)$attribute['attr_id'] &&
+                        (int)$productAttributeId['is_other'] === (int)$attribute['is_other']){ 
+                            $response['defaultAttributes'][] = $attribute;
+                            unset($attributes[$attributeIndex]);
+                        } 
                     }
                 }
             }
            
         }
 
-        return $defaultAttributes;
+        return $response;
     }
     
     /**

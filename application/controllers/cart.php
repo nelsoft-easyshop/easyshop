@@ -109,8 +109,10 @@ class Cart extends MY_Controller
         
 
         if($this->input->post('express')){
-            $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
-            if(empty($defaultAttributes) || $product->getIsPromote()){
+            $defaultAttributeData = $this->productManager->getProductDefaultAttributes($productId);
+            $hasStock = $defaultAttributeData['hasStock'];
+            $defaultAttributes = $defaultAttributeData['defaultAttributes'];
+            if(!$hasStock || $product->getIsPromote()){
                 print json_encode(['isSuccessful' => false, 'isLoggedIn' => $isLoggedIn]);
                 exit();
             }
@@ -124,16 +126,15 @@ class Cart extends MY_Controller
             $options = $this->input->post('options') ? $this->input->post('options') : [];
             $quantity = $this->input->post('quantity');
         }
-
         $isSuccesful = false;
         if ($product) {
             $seller = $product->getMember();
             $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
-            if ($member && $seller->getIdMember() !== (int)$memberId && $member->getIsEmailVerify()) {
+            if($member && $seller->getIdMember() !== (int)$memberId && $member->getIsEmailVerify()){
                 $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
             }
         }
-
+        
         print json_encode(['isSuccessful' => $isSuccesful, 'isLoggedIn' => $isLoggedIn]);
     }
 

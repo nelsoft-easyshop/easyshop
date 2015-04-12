@@ -147,7 +147,7 @@ class PointGateway extends AbstractGateway
             $pointBreakdown = [];
 
             foreach ($itemArray as $item) {
-                $maxPointAllowable = bcadd($maxPointAllowable, $item['point'], 2);
+                $maxPointAllowable = bcadd($maxPointAllowable, $item['item_total_price'], 2);
             }
 
             // cap points with respect to total points of items
@@ -155,12 +155,14 @@ class PointGateway extends AbstractGateway
 
             foreach ($itemArray as $item) {
                 $data["order_product_id"] = (int) $item['order_product_id'];
-                $data["points"] = $this->getProductDeductPoint(round($item['point'], 2), $maxPointAllowable);
+                $data["points"] = $this->getProductDeductPoint(round($item['item_total_price'], 2), $maxPointAllowable);
+                $data["quantity"] = $item["quantity"];
                 $pointBreakdown[] = $data;
 
                 $orderPoints = new EsOrderPoints();
                 $orderPoints->setPoints($data["points"]);
                 $orderPoints->setOrderProduct($this->em->find('EasyShop\Entities\EsOrderProduct', $data["order_product_id"]));
+                $orderPoints->setUnitPoints(bcdiv($data["points"], $data["quantity"], 4));
                 $this->em->persist($orderPoints);
             }
 
