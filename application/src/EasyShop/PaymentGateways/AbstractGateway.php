@@ -353,7 +353,8 @@ abstract class AbstractGateway implements GatewayInterface
                 $this->em->flush();
 
                 $data["order_product_id"] = $orderProduct->getIdOrderProduct();
-                $data["point"] = $details[5];
+                $data["item_total_price"] = $details[5];
+                $data["quantity"] = (int)$details[2];
                 $itemArr[] = $data; 
 
                 if((int)$details[7] > 0){
