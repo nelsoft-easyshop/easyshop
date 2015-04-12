@@ -42,7 +42,7 @@ class EsMemberSubscriber implements EventSubscriber
         }
 
         if ($event->hasChangedField('gender')) {
-            $this->changeSet['gender'] = $entity->getGender() ? "Female" : "Male";
+            $this->changeSet['gender'] = $entity->getGender() === "M" ? "Male" : "Female";
         }
 
         if ($event->hasChangedField('email')) {
@@ -65,7 +65,7 @@ class EsMemberSubscriber implements EventSubscriber
             $this->changeSet['slug'] = $entity->getSlug();
         }
 
-        if ($event->hasChangedField('website')) {
+        if ($event->hasChangedField('website') && $entity->getWebsite() !== null) {
             $this->changeSet['website'] = $entity->getWebsite();
         }
 

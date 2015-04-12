@@ -939,7 +939,7 @@ class Store extends MY_Controller
                 $um->setStoreName($formData['shop_name'])
                     ->setMobile($formData['contact_number'])
                     ->setMemberMisc([
-                        'setWebsite' => $formData['website'], 
+                        'setWebsite' => $formData['website'] === null ? "" : $formData['website'], 
                         'setLastmodifieddate' => date_create(date("Y-m-d H:i:s"))
                     ]);
 

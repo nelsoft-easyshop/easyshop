@@ -3,7 +3,8 @@
 
     <!--Layout for EDIT PROFILE INFORMATION-->
     <?php if($activity['type'] === \EasyShop\Entities\EsActivityType::INFORMATION_UPDATE 
-            && $activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE): ?>
+            && $activity['data']['action'] === \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE
+            && count($activity['data']['contents']) > 0): ?>
         <div class="log-outer">
             <div class="row">
                 <div class="col-xs-1 col-icon-container">
@@ -22,7 +23,7 @@
                                 <div class="row">
                                     <div class="col-md-9">
                                         <p class="log-title">
-                                            Updated store information on vendor page
+                                            Updated Personal Information
                                             <br>
                                             <?php foreach ($activity['data']['contents'] as $content): ?>
                                                 <b><?=html_escape($content);?></b>
@@ -294,7 +295,7 @@
                                     <div class="col-md-6">
                                         <p class="log-title">
                                             <?php if($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_UPDATE): ?>
-                                                Edit item information
+                                                Added item into your listing
                                             <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_SOFT_DELETE): ?>
                                                 Temporarily Deleted item(s)
                                             <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_FULL_DELETE): ?>
@@ -434,7 +435,7 @@
                                                 <tr>
                                                     <td class="v-align-top">
                                                         <a href="/item/<?=$activity['data']['slug']; ?>">
-                                                            <img class="log-image" src="<?php echo getAssetsDomain().$activity['data']['imageDirectory'].'/thumbnail/'.$activity['data']['imageFile']; ?>"/>
+                                                            <img class="log-image" src="<?php echo getAssetsDomain().$activity['data']['imageDirectory'].'thumbnail/'.$activity['data']['imageFile']; ?>"/>
                                                         </a>
                                                     </td>
                                                     <td class="v-align-top">

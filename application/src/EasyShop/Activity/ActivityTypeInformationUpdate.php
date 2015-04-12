@@ -56,6 +56,8 @@ class ActivityTypeInformationUpdate extends AbstractActivityType
         'storeDesc' => 'Store Description',
         'slug' => 'Slug',
         'website' => 'Website',
+        'stateregion' => 'Region',
+        'city' => 'City',
     ];
 
     /**
@@ -84,10 +86,15 @@ class ActivityTypeInformationUpdate extends AbstractActivityType
                     }
                     else{
                         if(strtolower($key) === "contactno"){
-                            $displayContents[] = $this->fieldDefinition[$key] . ' : 0' . $value;
+                            if(trim($value) === ""){
+                                $displayContents[] = $this->fieldDefinition[$key] . ' : Removed';
+                            }else{
+                                $displayContents[] = $this->fieldDefinition[$key] . ' : 0' . $value;
+                            }
                         }
                         else{
-                            $displayContents[] = $this->fieldDefinition[$key] . ' : ' . $value;
+                            $displayValue = trim($value) === "" ? "Removed" : $value;
+                            $displayContents[] = $this->fieldDefinition[$key] . ' : ' . $displayValue;
                         }
                     }
                 }
