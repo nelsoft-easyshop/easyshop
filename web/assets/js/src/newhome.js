@@ -6,24 +6,8 @@
         var $button = $(this);
         var productId = $button.data('productid');
         var slug = $button.data('slug');
-         
-        $.ajax({
-            type: "POST",
-            url: "cart/doAddItem", 
-            dataType: "json",
-            data: "express=true&"+csrfname+"="+csrftoken+"&productId="+productId,
-            success: function(result) {
-                if(!result.isLoggedIn){
-                    window.location.replace("/login");
-                }
-                else if(result.isSuccessful){
-                    window.location.replace("/cart");
-                }
-                else{
-                    window.location.replace("/item/"+slug);
-                }
-            }
-        });
+        
+        addToCart(productId, null, null, true, slug);
     });
     
     $(window).bind('load', function(){
