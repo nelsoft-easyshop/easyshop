@@ -413,7 +413,8 @@ class PayPalGateway extends AbstractGateway
                                                                     'order' => $order
                                                                ]);
                                     $data["order_product_id"] = $esOrderProduct->getIdOrderProduct();
-                                    $data["point"] = $esOrderProduct->getTotal();
+                                    $data["item_total_price"] = $esOrderProduct->getTotal();
+                                    $data["quantity"] = $esOrderProduct->getOrderQuantity();
                                     $pointArray[] = $data;
                                 }
                             }
