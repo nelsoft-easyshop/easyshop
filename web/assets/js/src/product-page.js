@@ -380,8 +380,6 @@
             return false;
         }
 
-        // token
-        var $csrftoken = $("meta[name='csrf-token']").attr('content'); 
         var $productId = $("#productId").val();
         var $quantity = $("#control-quantity").val();
         var $optionsObject = {};
@@ -400,26 +398,7 @@
             return false;
         }
 
-        $.ajax({
-            url: "/cart/doAddItem",
-            type:"POST",
-            dataType:"JSON",
-            data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
-            success:function(data){
-                if(!data.isLoggedIn){
-                    window.location.replace("/login");
-                }
-                else {
-                    if(data.isSuccessful){
-                        window.location.replace("/cart");
-                    }
-                    else{
-                        alert("We cannot process your request at this time. Please try again in a few moment");
-                    }
-                }
-            }
-        });
-
+        addToCart($productId, $quantity, $optionsObject);
     });
 
     /**
@@ -433,23 +412,7 @@
         var productId = $button.data('productid');
         var slug = $button.data('slug');
          
-        $.ajax({
-            type: "POST",
-            url: "/cart/doAddItem", 
-            dataType: "json",
-            data: "express=true&"+csrfname+"="+csrftoken+"&productId="+productId,
-            success: function(result) {
-                if(!result.isLoggedIn){
-                    window.location.replace("/login");
-                }
-                else if(result.isSuccessful){
-                    window.location.replace("/cart");
-                }
-                else{
-                    window.location.replace("/item/"+slug);
-                }
-            }, 
-        });
+        addToCart(productId, null, null, true, slug);
     });
     
     // review product
