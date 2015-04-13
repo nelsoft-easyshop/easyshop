@@ -121,20 +121,11 @@
                                                 </div>
                                                 <div class="cart-item-attribute">
                                                     <b>Quantity : </b>
-                                                    <input 
-                                                        type="number" 
-                                                        min="1" 
-                                                        onkeypress="return isNumberKey(event, false)" 
-                                                        max="<?=$item['maxqty']; ?>" 
-                                                        step="1" 
-                                                        maxlength="4" 
-                                                        required 
-                                                        class="form-es-control input-sm item-quantity" 
-                                                        data-rowid="<?=html_escape($item['rowid']);?>" 
-                                                        value="<?=$item['qty'];?>"><br>
-                                                    <span class="cart-item-attribute">
-                                                        <i>Max Quantity: <?=$item['maxqty']; ?></i>
-                                                    </span>
+                                                    <select class="form-es-control input-sm item-quantity"
+                                                        data-value="<?=$item['qty']; ?>"
+                                                        data-max="<?=$item['maxqty']; ?>" 
+                                                        data-rowid="<?=html_escape($item['rowid']);?>">
+                                                    </select>
                                                 </div>
                                                 <div class="cart-item-attribute">
                                                     <span class="cart-total-item-price">
@@ -153,21 +144,11 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <br>
-                                            <input 
-                                                type="number" 
-                                                min="1" 
-                                                onkeypress="return isNumberKey(event, false)" 
-                                                max="<?=$item['maxqty']; ?>" 
-                                                step="1" 
-                                                maxlength="4" 
-                                                required 
-                                                class="form-es-control input-sm item-quantity" 
-                                                data-rowid="<?=html_escape($item['rowid']);?>" 
-                                                value="<?=$item['qty'];?>"><br>
-                                            <span class="cart-item-attribute">
-                                                <i>Max Quantity: <?=$item['maxqty']; ?></i>
-                                            </span>
+                                            <select class="form-es-control input-sm item-quantity"
+                                                data-value="<?=$item['qty']; ?>"
+                                                data-max="<?=$item['maxqty']; ?>" 
+                                                data-rowid="<?=html_escape($item['rowid']);?>">
+                                            </select>
                                         </td>
                                         <td>
                                             &#8369; 
