@@ -3226,7 +3226,10 @@
 
     $("#main-log-container").on('click',".individual, .extremes",function () {
         var $this = $(this);
-        var $page = $this.data('page'); 
+        var $page = $this.data('page');
+        $('html,body').animate({
+            scrollTop: $('.log-sort-select').offset().top
+        }, 700);
         getActivityLog($page, $logDateFrom, $logDateTo, $defaultLogSort);
     });
 
@@ -3258,8 +3261,6 @@
                 date_to: $dateTo,
                 sort: $sort
             },
-            beforeSend: function (xhr){ 
-            }, 
             success: function(jsonResponse){
                 $("#main-log-container").html(jsonResponse.html);
             }
