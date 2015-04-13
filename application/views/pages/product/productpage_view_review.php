@@ -115,8 +115,8 @@
                                                         <p class="p-review-content">
                                                             <?=nl2br(html_escape($value['review']));?>
                                                         </p>
-
-                                                        <?php if($canReview): ?>
+                                                        <?php $canReplyToReview = in_array($viewerId, $value['participants']); ?>
+                                                        <?php if($canReplyToReview): ?>
                                                         <a href="javascript:void(0)" class="p-reply-text" >
                                                             <p class="pull-right">
                                                                 <span class="text-cancel">Cancel </span>Reply
@@ -125,7 +125,7 @@
                                                         <?php endif; ?>
                                                         <div class="clear"></div>
                                                     </div>
-                                                    <?php if($canReview): ?>
+                                                    <?php if($canReplyToReview): ?>
                                                     <div class="div-reply-container">
                                                         <p class="p-reply-title">Write Reply</p> 
                                                         <div class="clear"></div>
