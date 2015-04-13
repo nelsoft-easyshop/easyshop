@@ -1380,6 +1380,12 @@ class productUpload extends MY_Controller
     */
     public function step4()
     {
+        $allowedExceptionsMessages = [
+            'PRICE_INVALID' => 'Price Invalid.',
+            'INCOMPLETE_DETAILS' => 'Incomplete Details submitted. Please select at least one delivery option.',
+            'INVALID_OPERATION' => 'Invalid operation this is not your product.',
+        ];
+
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct'); 
         $esBillingInfoRepo = $this->em->getRepository('EasyShop\Entities\EsBillingInfo'); 
         $esProductItemRepo = $this->em->getRepository('EasyShop\Entities\EsProductItem'); 
@@ -1483,7 +1489,7 @@ class productUpload extends MY_Controller
                                                 }
                                             }
                                             else{
-                                                throw new Exception("Price Invalid."); 
+                                                throw new Exception($allowedExceptionsMessages['PRICE_INVALID']); 
                                             }
                                         }
                                     }
@@ -1526,16 +1532,19 @@ class productUpload extends MY_Controller
                     }
                 }
                 else{
-                    throw new Exception("Incomplete Details submitted. Please select at least one delivery option.");
+                    throw new Exception($allowedExceptionsMessages['INCOMPLETE_DETAILS']);
                 }
             }
             else{
-                throw new Exception("Invalid operation this is not your product.");
+                throw new Exception($allowedExceptionsMessages['INVALID_OPERATION']);
             } 
         }
         catch (Exception $e) {
-            // you may want to react on the Exception here
-            $serverResponse['error'] = $e->getMessage();
+            $errorMessage = $e->getMessage();
+            if(in_array($errorMessage, $allowedExceptionsMessages) === false){
+                $errorMessage = 'We are encountering a problem right now. Please try again later';
+            }
+            $serverResponse['error'] = $errorMessage;
         }
 
         echo json_encode($serverResponse);
