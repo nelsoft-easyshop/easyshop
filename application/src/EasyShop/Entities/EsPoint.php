@@ -22,9 +22,9 @@ class EsPoint
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="point", type="integer", nullable=false)
+     * @ORM\Column(name="point", type="decimal",  precision=15, scale=4, nullable=false)
      */
     private $point = '0';
 
@@ -58,7 +58,7 @@ class EsPoint
     /**
      * Set point
      *
-     * @param integer $point
+     * @param string $point
      * @return EsPoint
      */
     public function setPoint($point)
@@ -71,7 +71,7 @@ class EsPoint
     /**
      * Get point
      *
-     * @return integer 
+     * @return string 
      */
     public function getPoint()
     {
