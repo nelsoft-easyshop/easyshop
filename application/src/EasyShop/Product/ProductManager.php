@@ -517,14 +517,31 @@ class ProductManager
             }
             $attributes = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                    ->getProductAttributeDetailByName($productId);
+
             if(empty($attributes) === false){
-                foreach($defaultInventory['product_attribute_ids'] as $productAttributeId){
-                    foreach($attributes as $attributeIndex => $attribute){
-                        if((int)$productAttributeId['id'] === (int)$attribute['attr_id'] &&
-                        (int)$productAttributeId['is_other'] === (int)$attribute['is_other']){ 
-                            $response['defaultAttributes'][] = $attribute;
-                            unset($attributes[$attributeIndex]);
-                        } 
+                if( (int)$defaultInventory['product_attribute_ids'][0]['id'] === 0 &&
+                    (int)$defaultInventory['product_attribute_ids'][0]['is_other'] === 0)
+                {   
+                    /**
+                     * Condition for products with no quantity-combination but with
+                     * product attributes. This is the case for products with attributes
+                     * but only has one global quantity value.
+                     */
+                    foreach($attributes as $attribute){
+                        if(!array_key_exists($attribute['attr_name'],$response['defaultAttributes'])){
+                            $response['defaultAttributes'][$attribute['attr_name']] = $attribute;
+                        }
+                    }
+                }
+                else{
+                    foreach($defaultInventory['product_attribute_ids'] as $productAttributeId){
+                        foreach($attributes as $attributeIndex => $attribute){
+                            if((int)$productAttributeId['id'] === (int)$attribute['attr_id'] &&
+                            (int)$productAttributeId['is_other'] === (int)$attribute['is_other']){ 
+                                $response['defaultAttributes'][] = $attribute;
+                                unset($attributes[$attributeIndex]);
+                            } 
+                        }
                     }
                 }
             }
