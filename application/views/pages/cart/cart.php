@@ -121,11 +121,20 @@
                                                 </div>
                                                 <div class="cart-item-attribute">
                                                     <b>Quantity : </b>
-                                                    <select class="form-es-control input-sm item-quantity" data-rowid="<?=html_escape($item['rowid']);?>">
-                                                        <?php for ($i = 1; $i <= $item['maxqty']; $i++): ?>
-                                                            <option value="<?=$i?>" <?= (int) $item['qty'] !== (int) $i ?:'selected' ?>><?=$i?></option>
-                                                        <?php endfor; ?>
-                                                    </select>
+                                                    <input 
+                                                        type="number" 
+                                                        min="1" 
+                                                        onkeypress="return isNumberKey(event, false)" 
+                                                        max="<?=$item['maxqty']; ?>" 
+                                                        step="1" 
+                                                        maxlength="4" 
+                                                        required 
+                                                        class="form-es-control input-sm item-quantity" 
+                                                        data-rowid="<?=html_escape($item['rowid']);?>" 
+                                                        value="<?=$item['qty'];?>"><br>
+                                                    <span class="cart-item-attribute">
+                                                        <i>Max Quantity: <?=$item['maxqty']; ?></i>
+                                                    </span>
                                                 </div>
                                                 <div class="cart-item-attribute">
                                                     <span class="cart-total-item-price">
@@ -144,11 +153,21 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <select class="form-es-control input-sm item-quantity" data-rowid="<?=html_escape($item['rowid']);?>">
-                                                <?php for ($i = 1; $i <= $item['maxqty']; $i++): ?>
-                                                    <option value="<?=$i?>" <?= (int) $item['qty'] !== (int) $i ?:'selected' ?>><?=$i?></option>
-                                                <?php endfor; ?>
-                                            </select>
+                                            <br>
+                                            <input 
+                                                type="number" 
+                                                min="1" 
+                                                onkeypress="return isNumberKey(event, false)" 
+                                                max="<?=$item['maxqty']; ?>" 
+                                                step="1" 
+                                                maxlength="4" 
+                                                required 
+                                                class="form-es-control input-sm item-quantity" 
+                                                data-rowid="<?=html_escape($item['rowid']);?>" 
+                                                value="<?=$item['qty'];?>"><br>
+                                            <span class="cart-item-attribute">
+                                                <i>Max Quantity: <?=$item['maxqty']; ?></i>
+                                            </span>
                                         </td>
                                         <td>
                                             &#8369; 
