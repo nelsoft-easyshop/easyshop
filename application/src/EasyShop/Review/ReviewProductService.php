@@ -58,6 +58,32 @@ class ReviewProductService
 
         return false;
     }
+    
+    /**
+     * Is Reply review allowed
+     *
+     * @param integer $requestorId
+     * @param integer $reviewId
+     * @return boolean
+     */
+    public function isReviewReplyAllowed($requestorId, $reviewId)
+    {
+        $isAllowed = false;
+        $review = $this->em->getRepository('EasyShop\Entities\EsProductReview')
+                       ->find($reviewId);
+        if($review){
+            $requestorId = (int) $requestorId;
+            $reviewerId = $review->getMember()->getIdMember();
+            $sellerId = $review->getProduct()->getMember()->getIdMember();
+            $allowedParticipant = [ 
+                $reviewerId,
+                $sellerId,
+            ];
+            $isAllowed = in_array($requestorId, $allowedParticipant);
+        }
+        return $isAllowed;
+    }
+    
 
    /**
      * Return product review of the given product
@@ -80,6 +106,8 @@ class ReviewProductService
 
             $i = 0;
             foreach ($productReviews as $value) { 
+                $reviewerId = $value->getMember()->getIdMember();
+                $sellerId = $value->getProduct()->getMember()->getIdMember();
                 $recentReviews[$i]['id_review'] = $value->getIdReview();
                 $recentReviews[$i]['title'] = $value->getTitle();
                 $recentReviews[$i]['review'] = $value->getReview();
@@ -87,10 +115,10 @@ class ReviewProductService
                 $recentReviews[$i]['datesubmitted'] = $value->getDatesubmitted()->format('Y-m-d H:i:s');
                 $recentReviews[$i]['reviewer'] = $value->getMember()->getStoreName();
                 $recentReviews[$i]['reviewer_slug'] = $value->getMember()->getSlug();
-                $recentReviews[$i]['reviewer_avatar'] = $this->userManager->getUserImage($value->getMember()->getIdMember());
-
+                $recentReviews[$i]['reviewer_avatar'] = $this->userManager->getUserImage($reviewerId);
                 $recentReviews[$i]['replies'] = [];
                 $recentReviews[$i]['reply_count'] = 0;
+                $recentReviews[$i]['participants'] = [ $reviewerId, $sellerId ];
 
                 foreach($productReviewReplies as $reply){ 
                     if($value->getIdReview() == $reply->getPReviewid()){  
