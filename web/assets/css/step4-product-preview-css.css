@@ -135,12 +135,6 @@
     margin-left: 3%;
 }
 
-@media (min-width: 991px) {
-    .prod-add-to-cart-btn {
-        background-position: 16% center;
-    }
-}
-
 
 @media (min-width: 991px) and (max-width: 1200px) {
     .slideshow a {
