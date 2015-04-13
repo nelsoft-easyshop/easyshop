@@ -156,7 +156,7 @@
                     <input type="button" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now disabled" >
                     <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span> 
                 <?php else: ?>
-                    <input type="button" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                    <input type="button" value="" class="prod-add-to-cart-btn disabled" >
                     <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
                 <?php endif; ?>
             </div>
