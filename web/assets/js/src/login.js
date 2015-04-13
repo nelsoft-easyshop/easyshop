@@ -225,7 +225,7 @@
     
     function redirectToTarget()
     {
-        var referrerUrl = $('.referrer').val();      
+        var referrerUrl = $('.login-referrer').val();      
         var firstUriSegment = referrerUrl.substring(0, referrerUrl.indexOf('/'));
         var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
         var cartCookie = $.cookie('cartAddData');
