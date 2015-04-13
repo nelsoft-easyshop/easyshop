@@ -7,10 +7,6 @@ class Estudyantrepreneur extends MY_Controller
     {
         parent::__construct();
 
-        if (!$this->session->userdata('usersession')) {
-            redirect('/', 'refresh');
-        }
-
         $this->em = $this->serviceContainer['entity_manager'];
         $this->promoManager = $this->serviceContainer['promo_manager'];
     }
@@ -20,6 +16,12 @@ class Estudyantrepreneur extends MY_Controller
      */
     public function EstudyantrepreneurPromo()
     {
+        $isLoggedIn = true;
+
+        if (!$this->session->userdata('usersession')) {
+            $isLoggedIn = false;
+        }
+
         $data = $this->promoManager
                      ->callSubclassMethod(
                         \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,
@@ -30,6 +32,7 @@ class Estudyantrepreneur extends MY_Controller
             $this->EstudyantrepreneurPromoStandings();
         }
         else {
+            $data['isLoggedIn'] = $isLoggedIn;
             $this->load->view('pages/promo/estudyantrepreneur', $data);
         }
 

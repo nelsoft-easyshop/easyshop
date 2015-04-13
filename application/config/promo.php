@@ -191,15 +191,15 @@ $config = [
             'option' => [
                 'first_round' =>
                     [
-                        'start' => '2015-04-08 00:00:00',
-                        'end' => '2015-04-08 14:00:00',
+                        'start' => '2015-04-10 00:00:00',
+                        'end' => '2015-04-10 16:00:00',
                         'limit' => PHP_INT_MAX
                     ],
                 'second_round' =>
                     [
                         'start' => '2020-12-31 00:00:00',
                         'end' => '2020-12-31 23:59:59',
-                        'limit' => 3
+                        'limit' => PHP_INT_MAX
                     ],
                 'inter_school_round' =>
                     [
