@@ -193,7 +193,7 @@ class PointTracker
      *
      * @param id $userId ID of user to be searched
      *
-     * @return bool|int
+     * @return bool|string
      */
     public function getUserPoint($userId)
     {
