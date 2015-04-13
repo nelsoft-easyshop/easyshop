@@ -1550,12 +1550,11 @@ body{
     cursor: pointer;
     height: 32px;
     line-height: 30px;
-    padding: 7px 12px;
+    padding: 7px 0;
     width: 100%;
     text-indent: 0.01px;
     text-overflow: '';
 }
-
 
 .ie9 .prod-select-con {
     background: #fff none;
