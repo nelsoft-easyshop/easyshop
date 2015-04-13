@@ -196,7 +196,7 @@
                             <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
                                 <p class="buy_btn_sub"> This product is for promo use only. </p>
                             <?php else: ?>
-                                <input type="button" id="send" data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                                <input type="button" id="send" data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="" class="prod-add-to-cart-btn disabled" >
                                 <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
                             <?php endif; ?>
                         <?php endif;?>
