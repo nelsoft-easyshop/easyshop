@@ -206,8 +206,17 @@
     $('.item-quantity').on('change', function(){
         var $this = $(this);
         var $quantity = $this.val();
+        var $maxQuantity = parseInt($this.attr('max'));
         $cartRowId = $this.data('rowid');
-        changeItemQuantity($quantity);
+        if($quantity.trim() == "" 
+            || parseInt($quantity) <= 0 
+            || parseInt($quantity) > $maxQuantity){
+            validateRedTextBox(".item-quantity");
+        }
+        else{
+            validateWhiteTextBox(".item-quantity");
+            changeItemQuantity($quantity);
+        }
     });
 
     function changeItemQuantity($quantity)
@@ -217,6 +226,7 @@
             return false;
         }
         else{
+            $quantity = parseInt($quantity);
             var $container = $(".row-"+$cartRowId);
             var $currentRequest = $.ajax({
                 type: "POST",
