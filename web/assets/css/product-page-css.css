@@ -1687,6 +1687,28 @@ body{
     padding-top: 16px;
     width: 100%;
 }
+ 
+#details ul {
+   list-style-type: disc;
+   list-style-position: inside;
+}
+
+#details ol { 
+   list-style-type: decimal;
+   list-style-position: inside;
+}
+
+#details ul ul, #details ol ul {
+   list-style-type: circle;
+   list-style-position: inside;
+   margin-left: 15px;
+}
+
+#details ol ol, #details ul ol {
+   list-style-type: lower-latin;
+   list-style-position: inside;
+   margin-left: 15px; 
+}
 
 .btn-contact-seller {
     background: url(../images/img-prod-cart-contact-bg.png) repeat center center;

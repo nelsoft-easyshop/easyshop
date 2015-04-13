@@ -3180,7 +3180,7 @@
                         isUserPointComplete = true;
                         return false;
                     }
-                    $('.current-points').html($jsonResponse.totalUserPoint);
+                    $('.current-points').html(parseFloat($jsonResponse.totalUserPoint).toFixed(2));
                     var html = "";
                     userPointPage++;
                     $.each(userPointList, function(index, value){
@@ -3190,7 +3190,7 @@
                                     '</div>' +
                                     '<div class="easy-content-container">' +
                                         '<span class="easy-content">'+ value.dateAdded + ' ' + value.typeName + '</span>' + 
-                                        '<span class="easy-point">'+ value.point +'</span>' +
+                                        '<span class="easy-point">'+ parseFloat(value.point).toFixed(2) +'</span>' +
                                     '</div>' +
                                     '<div class="clear"></div>' +
                                 '</li>';

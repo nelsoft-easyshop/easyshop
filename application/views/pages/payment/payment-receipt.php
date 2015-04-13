@@ -49,7 +49,7 @@
                             </tr>
                             <tr>
                                 <td>Total Amount : </td>
-                                <td>&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints), 2, '.', ',')?></td>
+                                <td>&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints, 4), 2, '.', ',')?></td>
                             </tr>
                             <tr>
                                 <td>Transaction Date : </td>
@@ -117,7 +117,7 @@
                                 <td>
                                     Subtotal
                                 </td>
-                                <td colspan="3">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionShippingFee), 2, '.', ',')?></td>
+                                <td colspan="3">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionShippingFee, 4), 2, '.', ',')?></td>
                             </tr>
                             <tr>
                                 <td>
@@ -135,7 +135,7 @@
                                 <td>
                                     Order Total
                                 </td>
-                                <td  colspan="3" class="checkout-order-total">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints), 2, '.', ',')?></td>
+                                <td  colspan="3" class="checkout-order-total">&#8369; <?=number_format(bcsub($order->getTotal(), $transactionPoints, 4), 2, '.', ',')?></td>
                             </tr>
                         </foot>
                     </table>
