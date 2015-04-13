@@ -22,7 +22,7 @@
         }
         else{
             finalDiscountRate = ((basePrice - discountPrice) / basePrice) * 100;
-            $(".discount-rate").val(finalDiscountRate.toFixed(2));
+            $(".discount-rate").val(finalDiscountRate.toFixed(4));
         }
     }
 
