@@ -59,7 +59,8 @@ class NewHomeWebService extends MY_Controller
                                                                               $this->input->get('hash'),
                                                                               true);
             if(!$this->isAuthenticated) {
-                throw new Exception("Unauthorized Request.");
+                echo json_encode( ['error' => 'You are not authorized to make this changes.' ] );
+                exit();
             }            
         }
     }
@@ -899,11 +900,9 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);        
         $action = $this->input->get("action");
         $slug = $this->input->get("slug");
-        if($action == "slug") {
-
+        if($action === "slug") {
             $sellerResult = $this->em->getRepository('EasyShop\Entities\EsMember')
                         ->findBy(['slug' => $slug]);
-
             if($sellerResult) {
                 $map->sellerSection->sellerSlug = $slug;
                 if($map->asXML($this->file)) {
@@ -917,8 +916,14 @@ class NewHomeWebService extends MY_Controller
                         ->set_content_type('application/json')
                         ->set_output($this->usererror);
             }
-
-
+        }
+        else if ($action === "deleteLogo"){
+            $map->sellerSection->sellerLogo = '';
+            if($map->asXML($this->file)) {
+                return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($this->json);
+            } 
         }
         else {
             $filename = date('yhmdhs');
@@ -963,9 +968,7 @@ class NewHomeWebService extends MY_Controller
                 } 
             }
         }
-         
     }
-
 
     /**
      *  Adds slide nodes under sliderSection parent node

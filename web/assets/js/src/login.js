@@ -229,8 +229,6 @@
         var firstUriSegment = referrerUrl.substring(0, referrerUrl.indexOf('/'));
         var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
         var cartCookie = $.cookie('cartAddData');
-        console.log(cartCookie);
-        
         if( typeof vendorSubscriptionUri !== "undefined" ){
             /**
              * Redirect to seller page if seller follow cookie is set 
