@@ -1553,6 +1553,8 @@ h3 > b{
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     text-align:center;
+    z-index: 999;
+
 }
 
 .tooltip-home:after 
