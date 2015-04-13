@@ -272,6 +272,7 @@
         $("#used-points").val($usedPoints);
         computePrices();
     });
+    $('.btn-deduct-points').trigger('click');
 
     $('.btn-reset-points').on('click', function(){
         $usedPoints = 0;
