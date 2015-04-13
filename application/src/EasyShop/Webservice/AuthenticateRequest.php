@@ -69,10 +69,9 @@ class AuthenticateRequest
         if($isAdminRequest) {
             $adminUser = $this->em->getRepository("EasyShop\Entities\EsAdminMember")
                                   ->find($postedData["userid"]);
-
             $this->hash .= $adminUser->getPassword();            
         }
-        
+
         return (sha1($this->hash) === $postedHash);
     }
 
