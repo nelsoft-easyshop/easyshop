@@ -19,7 +19,29 @@
             });
             $(".shipping-calculator-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
         }); 
-    }); 
+    });
+
+    var generateQuantitySelect = function ()
+    {
+        $(".item-quantity").each(function() {
+            var $thisSelect = $(this);
+            var $maxQuantity = $thisSelect.data('max');
+            var $value = $thisSelect.data('value');
+            var $appendString;
+            var $selectedString;
+
+            if($maxQuantity >= 9999){
+                $maxQuantity = 9999
+            }
+            for (var i = 1 ; i <= $maxQuantity; i++) {
+                $appendString += '<option value="'+i+'">'+ i +'</option>';
+            }
+
+            $thisSelect.append($appendString);
+            $thisSelect.val($value);
+        });
+    }
+    generateQuantitySelect();
 
     // shipping fee section
     var cityFilter = function(stateregionselect,cityselect){
@@ -206,7 +228,7 @@
     $('.item-quantity').on('change', function(){
         var $this = $(this);
         var $quantity = $this.val();
-        var $maxQuantity = parseInt($this.attr('max'));
+        var $maxQuantity = parseInt($this.data('max'));
         $cartRowId = $this.data('rowid');
         if($quantity.trim() == "" 
             || parseInt($quantity) <= 0 
