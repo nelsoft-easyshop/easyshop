@@ -102,11 +102,11 @@ class Register extends MY_Controller
 
         $socialMediaLinks = $this->serviceContainer['social_media_manager'] 
                                  ->getSocialMediaLinks();      
-        if($this->input->post('referrer') === false){
+        if($this->input->post('registration_referrer') === false){
             show_404();
         }
         else{
-            $referrer =  trim($this->input->post('referrer'));
+            $referrer =  trim($this->input->post('registration_referrer'));
             if ($referrer === 'registration') {
                 $data['content'] = 'You have successfully registered!';
                 $data['sub_content'] = 'You have successfully registered with Easyshop.ph. Verify your e-mail to begin selling your products online.';
