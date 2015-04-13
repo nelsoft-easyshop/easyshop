@@ -204,6 +204,12 @@ if (defined('ENVIRONMENT')){
         define('APPPATH', BASEPATH.$application_folder.'/');
     }
 
+/**
+ * Load common helper of codeigniter and override each functions
+ * Hack reference: http://stackoverflow.com/questions/15833546/overwrrite-code-igniter-common-php
+ */
+include APPPATH.'core/MY_Common.php';
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE

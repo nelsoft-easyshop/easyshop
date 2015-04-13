@@ -24,7 +24,7 @@
                 </div>
                 <div class="edit-sub-content-column3">
                     <p><strong>Discount Rate</strong></p>
-                    <input type="text" value="<?=html_escape(number_format($product->getDiscount(), 2));?>" class="ui-form-control discount-rate" onkeypress="return isNumberKey(event);">
+                    <input type="text" value="<?=html_escape(number_format($product->getDiscount(), 4));?>" class="ui-form-control discount-rate" onkeypress="return isNumberKey(event);">
                     <span><strong>%</strong></span>
                 </div>
                 <div class="clear"></div>
