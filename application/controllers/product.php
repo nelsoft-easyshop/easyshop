@@ -196,7 +196,7 @@ class product extends MY_Controller
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
         $productEntity = $esProductRepo->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
-        $viewerId =  $this->session->userdata('member_id');
+        $viewerId =  (int) $this->session->userdata('member_id');
     
         $viewer = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($viewerId);
@@ -267,8 +267,6 @@ class product extends MY_Controller
                         show_404();
                     }
                 }
-                
-                
                 $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
                 $productDescription = $stringUtility->purifyHTML($product->getDescription());
                 $productReviews = $reviewProductService->getProductReview($productId);
@@ -279,6 +277,7 @@ class product extends MY_Controller
                     'productReview' => $productReviews,
                     'canReview' => $canReview,
                     'product' => $product,
+                    'viewerId' => $viewerId,
                 ];
                 $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
                 $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
@@ -357,8 +356,16 @@ class product extends MY_Controller
         $isSuccess = FALSE;
         $errorMessage = "";
         if(trim($this->input->post('review'))){
-            $canReview = $reviewProductService->checkIfCanReview($reviewerId,$productId); 
-            if($canReview){
+            $isAllowed = false;
+            if($this->input->post('parent_review')){
+                $reviewId = (int) $this->input->post('parent_review');
+                $isAllowed = $reviewProductService->isReviewReplyAllowed($reviewerId,$reviewId);
+            }
+            else{
+                $isAllowed = $reviewProductService->checkIfCanReview($reviewerId,$productId);
+            }
+
+            if($isAllowed){
                 $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
                 $response['html'] = $this->load->view('partials/review_reply', $reply, true);
                 $isSuccess = $isSuccess = TRUE; 
