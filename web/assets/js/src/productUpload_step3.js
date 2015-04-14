@@ -28,7 +28,7 @@ $(function(){
 
     $('#tabs').tabs();
 
-    $(".radio-select").on('click',function(){
+    $(".radio-select").on('change',function(){
         var $this = $(this);
         var $value = $this.val();
         var $freeShippingBtn = $('#set_free_shipping');
@@ -918,7 +918,6 @@ $(function(){
                                 $('button.ui-button').attr('disabled',true);
                                 namefield.attr('disabled',true);
                                 namefield.siblings('img.loading').show();
-                                
                                 $.post('/productUpload/step3_addPreference',{data:preferenceData, name:preferenceName, csrfname:csrftoken},function(data){
                                     namefield.siblings('img.loading').hide();
                                     namefield.attr('disabled',false);
@@ -932,13 +931,12 @@ $(function(){
                                         window.location.reload(true);
                                         return false;
                                     }
-                                    
-                                    if( obj['result'] === 'success' ){
-                                        shippingPreference = obj['shipping_preference'];
+                                    if( obj['result'] === 'success' ){ 
                                         var prefSelect = $('select.shipping_preference');
+                                        shippingPreference = obj['shipping_preference']['data'];
                                         prefSelect.each(function(){
                                             var thisSelect = $(this);
-                                            $.each(shippingPreference['name'], function(headId, name){
+                                            $.each(obj['shipping_preference']['new'], function(headId, name){
                                                 thisSelect.append('<option value="'+escapeHtml(headId)+'">'+escapeHtml(name)+'</option>');
                                             });
                                         });

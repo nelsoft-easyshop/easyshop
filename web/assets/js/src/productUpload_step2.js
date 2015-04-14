@@ -1540,7 +1540,7 @@ var universalExtension = ".jpeg";
                 $(this).removeClass('active');
             });
 
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,"");
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,filename);
             filescnt++;
         }
     });

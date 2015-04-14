@@ -8,6 +8,8 @@
 
 
 <?=$snippetMarkUp;?>
+
+<input type="hidden" id="product-slug" value="<?php echo html_escape($product->getSlug()); ?>">
 <section class="breadcrumbs-bg">
     <div class="container">
         <div class="default-breadcrumbs-container col-md-12 col-sm-12 col-xs-12">
@@ -81,23 +83,27 @@
                 </div>
                 <?php endif;?>
                 <div class="clear"></div>
-                <div class="col-md-12 prod-border-bttm"></div>
+                <div class="col-md-12 prod-border-bttm">
+                </div>
 
                 <div class="clear"></div>
+                <?php if(floatval($product->getDiscountPercentage()) > 0):?>
+                    <div class="text-container">
+                        <i>"Discount tag will only apply to the item's base price."</i>
+                    </div>
+                <?php endif; ?>
                 <?php if(count($productAttributes) > 0): ?>
                 <div id="attribute-container">
                     <div class="row pad-top-23">
                         <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
                         <!-- Product attributes here -->
                         <?php foreach ($productAttributes as $head => $headValue): ?>
-                            <div class="col-sm-12 col-md-6 attr-select <?=(count($headValue)  > 1) ? "" : "element-hide";?>">
+                            <div class="col-sm-12 col-md-6 attr-select">
                                 <div class="prod-select-con ui-form-control">
                                     <select class="attribute-control">
-                                        <?php if(count($headValue) > 1): ?>
                                         <option value="0" data-addprice="0" selected=selected>--<?=ucfirst(html_escape($head));?>--</option>
-                                        <?php endif; ?>
                                         <?php foreach ($headValue as $key => $value):?>
-                                            <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?></option>
+                                            <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?> (Add &#8369;<?=number_format($value['attr_price'], 2, '.', ',')?>)</option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -190,7 +196,7 @@
                             <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
                                 <p class="buy_btn_sub"> This product is for promo use only. </p>
                             <?php else: ?>
-                                <input type="button" id="send" data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                                <input type="button" id="send" data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="" class="prod-add-to-cart-btn disabled" >
                                 <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
                             <?php endif; ?>
                         <?php endif;?>
@@ -269,6 +275,7 @@
 
 <div id="hidden-values">
     <input id="productCombQuantity" type="hidden" value='<?=$productCombinationQuantity; ?>' />
+    <input id="originalBasePrice" type="hidden" value="<?=$product->getOriginalPrice();?>" />
     <input id="finalBasePrice" type="hidden" value="<?=$product->getFinalPrice();?>" />
     <input id='p_shipment' type='hidden' value='<?=json_encode($shippingInfo);?>'>
     <input id='productId' type='hidden' value='<?=$product->getIdProduct();?>'>

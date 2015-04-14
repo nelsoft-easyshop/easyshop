@@ -132,6 +132,7 @@
     $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
     $route['(?i)Estudyantrepreneur'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromo';
     $route['(?i)EstudyantrepreneurSuccess'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoSuccess';
+    $route['(?i)EstudyantrepreneurStandings'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoStandings';
     #MESSAGES
     $route['(?i)messages'] = '/MessageController/messages';
 

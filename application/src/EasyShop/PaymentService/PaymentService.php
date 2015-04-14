@@ -255,18 +255,20 @@ class PaymentService
      */
     public function initializeGateways($paymentMethods)
     {
-        // Search array for point gateway
-        foreach (array_keys($paymentMethods) as $key) {
-            if(strpos(strtolower($key), 'point') !== false){
-                $this->pointGateway = new \EasyShop\PaymentGateways\PointGateway(
-                    $this->em,
-                    $this->request,
-                    $this->pointTracker,
-                    $this,
-                    $paymentMethods[$key]
-                    );
-                unset($paymentMethods[$key]);
-                break;
+        if(count($paymentMethods) > 1){
+            // Search array for point gateway
+            foreach (array_keys($paymentMethods) as $key) {
+                if(strpos(strtolower($key), 'point') !== false){
+                    $this->pointGateway = new \EasyShop\PaymentGateways\PointGateway(
+                        $this->em,
+                        $this->request,
+                        $this->pointTracker,
+                        $this,
+                        $paymentMethods[$key]
+                        );
+                    unset($paymentMethods[$key]);
+                    break;
+                }
             }
         }
 
@@ -456,7 +458,7 @@ class PaymentService
      */
     public function isPaymentMethodAcceptPoints($paymentMethodString)
     {
-        $configLoad = $this->paymentConfig; 
+        $configLoad = $this->paymentConfig;
         if(isset($configLoad['payment_type'][strtolower($paymentMethodString)]) 
             && isset($configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'])){  
             return $configLoad['payment_type'][strtolower($paymentMethodString)]['Easyshop']['points'];
@@ -540,8 +542,8 @@ class PaymentService
         $messageSender = $this->em->find('EasyShop\Entities\EsMember', (int)$sender);
          
         $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                                  ->findBy(['order'=>$orderId]);
-
+                                  ->findBy(['order' => $orderId ]);
+                                                  
         $buyer = $orderProducts[0]->getOrder()->getBuyer();
         $order = $orderProducts[0]->getOrder();
 
@@ -569,6 +571,11 @@ class PaymentService
                 $messageBuyer = $this->languageLoader->getLine('payment_pesopay_buyer');
                 $messageSeller = $this->languageLoader->getLine('payment_ppdp_seller');
                 $paymentString = "Pesopay Credit/Debit Card";
+                break;
+            case EsPaymentMethod::PAYMENT_POINTS:
+                $messageBuyer = $this->languageLoader->getLine('payment_cod_buyer');
+                $messageSeller = $this->languageLoader->getLine('payment_cod_seller');
+                $paymentString = "Easy Points";
                 break;
         }
 
@@ -685,6 +692,19 @@ class PaymentService
         }
 
         if($sendBuyer){ 
+        
+            $pointsSpent = $this->getTransactionPoints($orderId);
+            /**
+             * Work around for Codeigniter's templating engine lack of support
+             * for conditionals: use arrays
+             */
+            $dataBuyer['pointsSpent'] = [];
+            $dataBuyer['totalLessPoint'] = [];
+            if($pointsSpent > 0){
+                $dataBuyer['pointSpent'][] = [ 'value' => $pointsSpent ];
+                $dataBuyer['totalLessPoint'][] = [ 'value' => bcsub($order->getTotal(), $pointsSpent, 4) ]; 
+            }
+
             $buyerMsg = $this->parserLibrary->parse('emails/email_purchase_notification_buyer', $dataBuyer, true);
             $buyerSubject = $this->languageLoader->getLine('notification_subject_buyer');
             $buyerSmsMsg = $buyer->getStoreName() . $this->languageLoader->getLine('notification_txtmsg_buyer');

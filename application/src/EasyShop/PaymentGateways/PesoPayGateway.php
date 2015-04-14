@@ -158,7 +158,7 @@ class PesoPayGateWay extends AbstractGateway
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                           ->find($pointGateway->getParameter('paymentType'));
 
-                $deductAmount = $pointGateway->pay();
+                $deductAmount = $pointGateway->usePoints();
 
                 $paymentRecord = new EsPaymentGateway();
                 $paymentRecord->setAmount($deductAmount);
@@ -293,20 +293,20 @@ class PesoPayGateWay extends AbstractGateway
                                                 EsOrderStatus::STATUS_PAID
                                             );
                     $this->paymentService->sendPaymentNotification($orderId);
-                }
-                else{
-                    $this->paymentService->transactionManager->voidTransaction($orderId);
-                    $this->paymentService->revertTransactionPoint($orderId);
-
-                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                             ->deleteLockItem($orderId, $toBeLocked);
                     $orderHistory = [
                         'order_id' => $orderId,
-                        'order_status' => EsOrderStatus::STATUS_VOID,
-                        'comment' => 'Pesopay transaction failed: ' . json_encode($params),
+                        'order_status' => EsOrderStatus::STATUS_PAID,
+                        'comment' => 'Pesopay Payment confirmed'
                     ];
                     $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                              ->addOrderHistory($orderHistory);
+                }
+                else{
+                    $this->paymentService->revertTransactionPoint($orderId);
+                    $order->setPostbackcount(bcadd($order->getPostbackcount(), 1));
+                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                             ->deleteLockItem($orderId, $toBeLocked); 
+                    $this->em->flush();
                 }
             }
         }
@@ -392,8 +392,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * External Charge for Pesopay
-     * @return string
+     * {@inheritdoc}
      */
     public function getExternalCharge()
     {
@@ -404,10 +403,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Generate Reference Number for Pesopay
-     *
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function generateReferenceNumber($memberId)
     {
@@ -415,10 +411,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Returns Order Status for Pesopay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderStatus()
     {
@@ -426,14 +419,11 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Returns Order Product Status for Pesopay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 

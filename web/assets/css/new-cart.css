@@ -161,6 +161,20 @@ ol.how-to-list li{
     height: 97px;
     border: solid #e2e2e2 1px;
     position: relative;
+    overflow: hidden;
+}
+
+.cart-item-img{
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
 }
 
 .td-item-name{
@@ -241,6 +255,7 @@ ol.how-to-list li{
 .transaction-summary-table{
     border-collapse: collapse;
     margin: 10px 0px;
+    font-size: 12px;
 }
 
 .transaction-summary-table > thead > tr{
@@ -604,6 +619,7 @@ ol.how-to-list li{
     border-top: solid #e2e2e2 1px;
     margin-top: 10px;
     padding: 20px;
+    margin-bottom: 30px;
 }
 
 @-moz-document url-prefix() {

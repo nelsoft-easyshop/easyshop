@@ -1,6 +1,6 @@
 (function ($) {
     
-    $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
+    $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {        
         var btn = $(this);
         var submitBtn = btn.closest("form");
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -240,6 +240,7 @@
     });
 
     $( "#my-store-menu-trigger" ).click(function() {
+    $(".easy-point-content").getNiceScroll().hide();
     $( "#my-account-menu" ).slideUp();
      var attr4 = $("i.a").attr("class");
     if(attr4 == "a icon-control-up toggle-down pull-right"){
@@ -249,27 +250,26 @@
             $( ".f-a" ).css("border-radius", "0px");
         }
         $( "#my-store-menu" ).slideToggle( "slow", function() {
-           
+            $(".easy-point-content").getNiceScroll().show().resize();
             var attr = $("i.m").attr("class");
-        if(attr == "m icon-control-down toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-down toggle-down pull-right").addClass("m icon-control-up toggle-down pull-right");
-        }
-        else if(attr == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-        }
+            if(attr == "m icon-control-down toggle-down pull-right"){
+                $('i.m').removeClass("m icon-control-down toggle-down pull-right").addClass("m icon-control-up toggle-down pull-right");
+            }
+            else if(attr == "m icon-control-up toggle-down pull-right"){
+                $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
+            }
         });
-        setTimeout(function(){
-            $(".easy-point-content").getNiceScroll().resize();
-        }, 1000);
     });
 
     $( "#my-account-menu-trigger" ).click(function() {
+        $(".easy-point-content").getNiceScroll().hide();
         $( "#my-store-menu" ).slideUp();
         var attr3 = $("i.m").attr("class");
         if(attr3 == "m icon-control-up toggle-down pull-right"){
             $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
         }
             $( "#my-account-menu" ).slideToggle( "slow", function() {
+            $(".easy-point-content").getNiceScroll().show().resize();
             var attr = $("i.a").attr("class");
             if(attr == "a icon-control-down toggle-down pull-right"){
                 $('i.a').removeClass("a icon-control-down toggle-down pull-right").addClass("a icon-control-up toggle-down pull-right");
@@ -284,9 +284,6 @@
                 $( ".f-a" ).css("border-radius", "0px");
             } 
         });
-        setTimeout(function(){
-            $(".easy-point-content").getNiceScroll().resize();
-        }, 1000);
     });
 
     $( "#info-item-1" ).click(function() {
@@ -1554,6 +1551,7 @@
                     if (txResponseBtn.hasClass('tx_forward')) {
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                         msg = "<h3>ITEM RECEIVED</h3> <br> Transaction has been moved to completed tab.";
+                        refreshEasypoints();
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
                         alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
@@ -1700,6 +1698,9 @@
                                 if (jsonResponse.isSuccess) {
                                     alert('Your feedback has been submitted.');
                                     btn.remove();
+                                    if(jsonResponse.isPointAdded){
+                                        refreshEasypoints();
+                                    }
                                 }
                                 else {
                                     var errorMessage = "An error was encountered. Please try again later";
@@ -3111,7 +3112,7 @@
     var userPointPage = 1;
     var isUserPointComplete = false;
     var isUserPointQueryOnGoing = false;
-    function getUserPoints(foo)
+    function getUserPoints()
     {
         if(isUserPointComplete || isUserPointQueryOnGoing){
             return false;
@@ -3131,20 +3132,22 @@
             success: function(data){ 
                 if(data){
                     var $jsonResponse = $.parseJSON(data);
-                    if($.isEmptyObject($jsonResponse)){
+                    var userPointList = $jsonResponse.list;
+                    if($.isEmptyObject(userPointList)){
                         isUserPointComplete = true;
                         return false;
                     }
+                    $('.current-points').html(parseFloat($jsonResponse.totalUserPoint).toFixed(2));
                     var html = "";
                     userPointPage++;
-                    $.each($jsonResponse, function(index, value){
+                    $.each(userPointList, function(index, value){
                         html += '<li>' +
                                     '<div class="small-bullet-container">' +
                                         '<span class="small-bullet"></span>' +
                                     '</div>' +
                                     '<div class="easy-content-container">' +
                                         '<span class="easy-content">'+'<span class="easy-content-date">'+ value.dateAdded + '</span>'+' ' + value.typeName + '</span>' + 
-                                        '<span class="easy-point">'+ value.point +'</span>' +
+                                        '<span class="easy-point">'+ parseFloat(value.point).toFixed(2) +'</span>' +
                                     '</div>' +
                                     '<div class="clear"></div>' +
                                 '</li>';
@@ -3166,6 +3169,15 @@
         });
     }
 
+    function refreshEasypoints()
+    {
+        userPointPage = 1;
+        isUserPointComplete = false;
+        $('.easy-point-content').html('');
+        getUserPoints();
+    }
+    
+    
 }(jQuery));
 
 

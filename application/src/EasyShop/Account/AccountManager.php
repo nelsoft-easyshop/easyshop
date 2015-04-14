@@ -194,13 +194,12 @@ class AccountManager
         ];
         
         $verifcodeRepository = $this->em->getRepository('EasyShop\Entities\EsVerifcode');
-        
+        $emailSubject = $this->languageLoader->getLine('registration_subject');
+        $verifCode = null;
         if(!$isNew){
+            $emailSubject = $this->languageLoader->getLine('reverify_subject');
             $verifCode = $verifcodeRepository->findOneBy(['member' => $member]);
-            if(!$verifCode){
-                $response['error'] = 'verfication-code-does-not-exist';
-            }
-            else{
+            if($verifCode !== null){
                 $emailCount = $verifCode->getEmailCount();
                 $dateNow =  new \DateTime();
                 $dateOfLastRequest = $verifCode->getFpTimestamp();
@@ -248,14 +247,14 @@ class AccountManager
             $message = $this->parser->parse('emails/email-verification' , $parseData,true);
             
             $this->emailNotification->setRecipient($emailAddress);
-            $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
+            $this->emailNotification->setSubject($emailSubject);
             $this->emailNotification->setMessage($message, $imageArray);
             /**
              * Mobile verification can be added here (unused for the time being)
              */
             $mobileCode = $this->hashUtility->generateRandomAlphaNumeric(6);
             if($this->emailNotification->queueMail()){
-                if($isNew){
+                if($verifCode === null){
                     $response['isSuccessful'] = $verifcodeRepository->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode) ? true : false;
                 }
                 else{

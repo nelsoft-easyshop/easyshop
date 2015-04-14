@@ -1555,19 +1555,24 @@ a{
     background-size: 100% !important;
     margin-top: 3px !important;
     margin-right: 5px !important;
+    display: inline-block;
 
 }
 
 i.jstree-icon.jstree-checkbox{
-    background: url(/assets/css/jstree/jstree-checkbox.png) !important;
+    background-image: url(/assets/css/jstree/jstree-checkbox.png) !important;
     background-size: 100% !important;
+    background-position: center;
     cursor: pointer !important;
+    display: inline-block;
 }
 
 .jstree-default.jstree-checkbox-selection .jstree-clicked > .jstree-checkbox, 
 .jstree-default .jstree-checked > .jstree-checkbox{
     background: url(/assets/css/jstree/jstree-checkbox-checked.png) !important;
     background-size: 100% !important;
+    background-position: center;
+    display: inline-block;
 }
 
 .list-currect-categories > li > ul{
@@ -1647,7 +1652,7 @@ i.jstree-icon.jstree-checkbox{
 .icon-move{
     width: 11px;
     height: 11px;
-    
+    display: inline-block;
 }
 
 .custom-left-panel{
@@ -1660,13 +1665,17 @@ i.jstree-icon.jstree-checkbox{
 
 .allItemsEdit > li > .icon-move,
 .allItems > li > .icon-move{
-    background: url("/assets/images/icon-add-dark.png") center center no-repeat;
+    background-image: url("/assets/images/icon-add-dark.png");
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: 100%;
 }
 
 .customCategoryEdit > li > .icon-move,
 .customCategory > li > .icon-move{
-    background: url("/assets/images/icon-remove-dark.png") center center no-repeat;
+    background-image: url("/assets/images/icon-remove-dark.png");
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: 100%;
 }
 
@@ -3592,15 +3601,6 @@ label.css-label {
         padding-left: 0px;
     }
     
-    .submenu-overflow{
-        white-space: nowrap;
-        width: 100%;
-        overflow-y: hidden;
-        overflow-x: scroll;
-        -webkit-overflow-scrolling: touch;
-        height: 71px;
-    }
-    
     .td-desc-item{
         display: none;
     }
@@ -4048,6 +4048,15 @@ label.css-label {
     .bank-account-item-btns .btn-default-1,
     .bank-account-item-btns .btn-default-3 {
         width: 100%;
+    }
+
+    .submenu-overflow{
+        white-space: nowrap;
+        width: 100%;
+        overflow-y: hidden;
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+        height: 71px;
     }
 }
 

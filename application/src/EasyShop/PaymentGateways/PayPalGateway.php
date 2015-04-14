@@ -7,6 +7,7 @@ use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 
 
 /**
@@ -201,12 +202,11 @@ class PayPalGateway extends AbstractGateway
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$stateRegionId);
 
         $shipping_amt = round((float)$prepareData['othersumfee'], 2);
-        $itemTotalPrice = bcsub(round((float)$prepareData['totalPrice'], 2), $shipping_amt, 2);
-        $itemOriginalPrice = $itemTotalPrice;
+        $itemOriginalPrice = bcsub(round((float)$prepareData['totalPrice'], 2), $shipping_amt, 2); 
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
-        $grandTotal = $paypalGrandTotal = bcadd($itemTotalPrice, $shipping_amt, 2); 
+        $grandTotal = bcadd($itemOriginalPrice, $shipping_amt, 2); 
         $thereIsPromote = $prepareData['thereIsPromote'];
         $this->setParameter('amount', $grandTotal);
 
@@ -217,39 +217,42 @@ class PayPalGateway extends AbstractGateway
                     'error' => true,
                     'message' => $checkPointValid['message']
                 ];
-            } 
-            $paypalGrandTotal = bcsub($grandTotal, $pointGateway->getParameter('amount'), 2);
-            $itemTotalPrice -= $pointGateway->getParameter('amount');
+            }
         }
 
+        $itemTotalPrice = "0"; 
+        foreach ($itemList as $value) {
+            $value['price'] = round($value['price'], 2);
+            $deductPrice = $pointGateway 
+                           ? $pointGateway->getProductDeductPoint($value['price'], $itemOriginalPrice)
+                           : 0;
+            $itemPrice = bcsub($value['price'], $deductPrice, 2);
+            $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
+            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($itemPrice).
+            '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
+            '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
+            '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
+            $cnt++;
+
+            $itemTotalPrice = bcadd(bcmul($itemPrice, $value['qty'], 2), $itemTotalPrice, 2);
+        }
+
+        $paypalGrandTotal = bcadd($itemTotalPrice, $shipping_amt, 2);
         if($thereIsPromote <= 0 && $paypalGrandTotal < $this->lowestAmount){
             return [
                 'error' => true,
                 'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
             ];
         }
-        foreach ($itemList as $value) {
-            $value['price'] = round($value['price'], 2);
-            $deductPrice = $pointGateway 
-                           ? $pointGateway->
-                           getProductDeductPoint($value['price'], $itemOriginalPrice)
-                           : 0;
-            $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
-            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode(bcsub($value['price'], $deductPrice, 2)).
-            '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
-            '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
-            '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
-            $cnt++;
-        }
 
-        $padata =   
+        $padata =
         '&RETURNURL='.urlencode($paypalReturnURL).
         '&CANCELURL='.urlencode($paypalCancelURL).
         '&PAYMENTACTION=Sale'. 
         '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode('PHP').
         '&CURRENCYCODE='.urlencode('PHP').
         $dataitem. 
-        '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($itemTotalPrice).   
+        '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($itemTotalPrice).
         '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode($shipping_amt).
         '&PAYMENTREQUEST_0_AMT='.urlencode($paypalGrandTotal).
         '&SOLUTIONTYPE='.urlencode('Sole').
@@ -298,6 +301,7 @@ class PayPalGateway extends AbstractGateway
                     $paymentRecord->setOrder($order);
                     $paymentRecord->setPaymentMethod($paymentMethod);
                     $this->em->persist($paymentRecord);
+                    $this->em->flush();
                 }
 
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
@@ -355,14 +359,14 @@ class PayPalGateway extends AbstractGateway
         if(array_key_exists('token',$getItems) && array_key_exists('PayerID',$getItems)){
             $payerid = $getItems['PayerID'];
             $token = $response['txnid'] = $getItems['token']; ;
-            $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                                ->findOneBy([
                                     'transactionId' => $token,
                                     'paymentMethod' => $paymentType
                                 ]);
 
-            $response['invoice'] = $invoice = $return->getInvoiceNo();
-            $response['orderId'] = $orderId = $return->getIdOrder();
+            $response['invoice'] = $invoice = $order->getInvoiceNo();
+            $response['orderId'] = $orderId = $order->getIdOrder();
 
             // Compute shipping fee
             $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
@@ -404,12 +408,13 @@ class PayPalGateway extends AbstractGateway
                                 $this->paymentService->productManager->updateSoldoutStatus($value['id']);
                                 if($pointGateway){
                                     $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                                                               ->findOneBy(['productItemId' => $value['product_itemID']]);
+                                                               ->findOneBy([
+                                                                    'productItemId' => $value['product_itemID'],
+                                                                    'order' => $order
+                                                               ]);
                                     $data["order_product_id"] = $esOrderProduct->getIdOrderProduct();
-                                    $data["point"] = $pointGateway->getProductDeductPoint(
-                                                        round((float)$value['price'], 2),
-                                                        bcsub($grandTotal, $shippingAmt, 2)
-                                                    );
+                                    $data["item_total_price"] = $esOrderProduct->getTotal();
+                                    $data["quantity"] = $esOrderProduct->getOrderQuantity();
                                     $pointArray[] = $data;
                                 }
                             }
@@ -433,7 +438,7 @@ class PayPalGateway extends AbstractGateway
                                 if($pointGateway){ 
                                     $pointGateway->setParameter('memberId', $memberId);
                                     $pointGateway->setParameter('itemArray', $pointArray);
-                                    $pointGateway->pay();
+                                    $pointGateway->usePoints();
                                 }
                                 $this->paymentService->sendPaymentNotification($orderId);
                             }
@@ -464,21 +469,33 @@ class PayPalGateway extends AbstractGateway
         return $response;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getExternalCharge()
     {
         return ($this->getParameter('amount') * 0.044) + 15; 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function generateReferenceNumber($memberId){}
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderStatus()
     {
         return EsOrderStatus::STATUS_DRAFT;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 

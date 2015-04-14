@@ -294,8 +294,9 @@ class Payment extends MY_Controller
                     $bodyData['canCheckout'] = $checkoutService->checkoutCanContinue($bodyData['cartData'], false, false);
                     $bodyData['checkoutError'] = $checkoutService->getCheckoutError($bodyData['cartData']);
                     $bodyData['usedPoints'] = $postPoints > $userMaxPoints ? $userMaxPoints : $postPoints;
-                    $bodyData['grandTotal'] = bcsub(bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4), $bodyData['usedPoints'], 4);
-
+                    $totalAmount = bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4);
+                    $bodyData['grandTotal'] = bcsub($totalAmount, $bodyData['usedPoints'], 4);
+                    $bodyData['payAllViaPoints'] = bccomp($totalAmount, $bodyData['usedPoints'], 4) === 0;
                     $this->session->set_userdata('choosen_items', $bodyData['cartData']); 
                     $this->load->spark('decorator');
                     $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
@@ -1365,26 +1366,37 @@ class Payment extends MY_Controller
      */
     public function dragonPayReturn()
     {
-        if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
-            redirect('/', 'refresh');
-        }
-        $paymentService = $this->serviceContainer['payment_service'];
-        $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
         $params['txnId'] = trim($this->input->get('txnid'));
         $params['refNo'] = trim($this->input->get('refno'));
         $params['status'] =  trim($this->input->get('status'));
         $params['message'] = trim($this->input->get('message'));
         $params['digest'] = trim($this->input->get('digest'));
+        $params['client'] = trim($this->input->get('param1'));
+        if($params['client'] === "Easyshop"){
+            if(!$this->session->userdata('member_id') || !$this->session->userdata('choosen_items')){
+                redirect('/', 'refresh');
+            }
+            $paymentService = $this->serviceContainer['payment_service'];
+            $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
 
-        $response = $paymentService->returnMethod($paymentMethods, $params);
-        $message = $response['message'];
-        $txnId = $response['txnId'];
-        $status = $response['status'];
-        if($status === PaymentService::STATUS_SUCCESS){
-            $this->removeItemFromCart();
+            $response = $paymentService->returnMethod($paymentMethods, $params);
+            $message = $response['message'];
+            $txnId = $response['txnId'];
+            $status = $response['status'];
+            if($status === PaymentService::STATUS_SUCCESS){
+                $this->removeItemFromCart();
+            }
+            $this->__generateFlash($txnId, $message, $status);
+            redirect('/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
         }
-        $this->__generateFlash($txnId, $message, $status);
-        redirect('/payment/success/dragonpay?txnid='.$txnId.'&msg='.$message.'&status='.$status, 'refresh');
+        elseif($params['client'] === "Easydeal"){
+            $redirectUrl = $this->paymentConfig['payment_type']['dragonpay']['Easydeal']['return_url'];
+            $redirectUrl .= "?txnid=".$params['txnId']."&refno=".$params['refNo']."&status=".$params['status']."&message=".urlencode($params['message'])."&digest=".$params['digest'];
+            redirect($redirectUrl, 'refresh');
+        }
+        else{
+            show_404();
+        }
     }
 
     /**
@@ -1471,17 +1483,22 @@ class Payment extends MY_Controller
         $ipAddress = $this->serviceContainer['http_request']->getClientIp(); 
         $paymentConfig = $this->paymentConfig; 
         $isValidIp = $paymentService->checkIpIsValidForPostback($ipAddress, EsPaymentMethod::PAYMENT_PESOPAYCC);
-
+        $params = $this->input->post();
         if($isValidIp){
             log_message('error', 'DATA FEED --> '. json_encode($this->input->post()));
             header("Content-Type:text/plain");
             echo 'OK'; // acknowledgemenet
-
-            $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
-
-            $params = $this->input->post();
-            $params['txnId'] = $this->input->post('Ref'); 
-            $paymentService->postBack($paymentMethods, null, null, $params);
+            if(strtolower($this->input->post('remark')) === "easydeal"){
+                $curlUrl = $paymentConfig['payment_type']['pesopay']['Easydeal']['postback_url'];
+                $curl = new Curl();
+                $curl->post($curlUrl, $params);
+            }
+            else{
+                $paymentService = $this->serviceContainer['payment_service'];
+                $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
+                $params['txnId'] = $this->input->post('Ref'); 
+                $paymentService->postBack($paymentMethods, null, null, $params);
+            }
         }
         else{
             log_message('error', '404 Page Not Found --> PESOPAY DATAFEED');

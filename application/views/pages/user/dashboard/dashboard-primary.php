@@ -48,7 +48,7 @@
                     <div class="current-point-container">
                         <div class="border-bttm">
                             <span class="current-point-title">Current points</span>
-                            <span class="current-points"><?php echo $totalUserPoint ?></span>
+                            <span class="current-points"><?php echo number_format($totalUserPoint, 2, '.', ',') ?></span>
                             <div class="clear"></div>
                         </div>
                     </div>

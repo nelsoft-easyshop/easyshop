@@ -151,11 +151,17 @@ class TransactionManager
             $esOrderProductStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')->find($status);
 
             /**
-             * Add user point if a transaction is completed
+             * Add user point if a transaction is completed (temporarily disable this function)
              */
-            if($status === EsOrderProductStatus::FORWARD_SELLER){
-                $this->pointTracker->addUserPoint($memberId, EsPointType::TYPE_PURCHASE, $esOrderProduct->getTotal());
-            }
+            // if($status === EsOrderProductStatus::FORWARD_SELLER){
+            //     $pointsDeduct = "0";
+            //     $orderPoints = $this->em->getRepository('EasyShop\Entities\EsOrderPoints')
+            //                             ->findOneBy([ 'orderProduct' => $orderProductId ]);
+            //     if($orderPoints){
+            //         $pointsDeduct = $orderPoints->getPoints();
+            //     }
+            //     $this->pointTracker->addUserPoint($memberId, EsPointType::TYPE_PURCHASE, bcsub($esOrderProduct->getTotal(), $pointsDeduct, 4));
+            // }
 
             $this->esOrderProductRepo->updateOrderProductStatus($esOrderProductStatus, $esOrderProduct);
             $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($esOrderProduct, $esOrderProductStatus, $getOrderProduct['historyLog']);

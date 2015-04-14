@@ -122,6 +122,7 @@ class FeedbackTransactionService
         $formData["rating2"] = $rating2;
         $formData["rating3"] = $rating3;
         $form = $formBuild->getForm();
+        $isPointAdded = false;
         $form->submit($formData);
         if ($form->isValid()) {
             $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
@@ -145,10 +146,13 @@ class FeedbackTransactionService
                         $rating3
                     );
 
-                    if($this->transactionManager->isTransactionCompletePerSeller($order->getIdOrder(), $forMember->getIdMember())){
+                    if($this->transactionManager->isTransactionCompletePerSeller($order->getIdOrder(), $transacData['seller'])){
                         if ($order->getPaymentMethod()->getIdPaymentMethod() !== EsPaymentMethod::PAYMENT_CASHONDELIVERY) {
-                            $this->pointTracker
-                                 ->addUserPoint($member->getIdMember(), EsPointType::TYPE_TRANSACTION_FEEDBACK);
+                            $isPointAdded = $this->pointTracker
+                                                 ->addUserPoint(
+                                                    $member->getIdMember(), 
+                                                    EsPointType::TYPE_TRANSACTION_FEEDBACK
+                                                );
                         }
                     }
 
@@ -169,6 +173,7 @@ class FeedbackTransactionService
         return [
             'isSuccess' => $isSuccess,
             'error' => $message,
+            'isPointAdded' => $isPointAdded,
         ];
     }
 }

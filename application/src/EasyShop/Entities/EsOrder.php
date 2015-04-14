@@ -106,9 +106,9 @@ class EsOrder
     private $net = '0.0000';
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="postbackcount", type="boolean", nullable=true)
+     * @ORM\Column(name="postbackcount", type="integer", nullable=true)
      */
     private $postbackcount = '0';
 

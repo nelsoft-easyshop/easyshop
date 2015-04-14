@@ -6759,21 +6759,23 @@ div.sold_prod_container {
 }
 
 .img-wrapper-div {
-    border: 1px solid #ddd;
-    width: 65px;
-    height: 65px;
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    height: 60px;
+    overflow: hidden;
+    width: 60px;
 }
 .img-wrapper-div img {
     height: auto;
-    max-height: 65px;
-    max-width: 65px;
+    max-height: 60px;
+    max-width: 60px;
     width: auto;
 }
 
 .img-wrapper-span {
     display: table-cell;
-    width: 65px;
-    height: 65px;
+    width: 60px;
+    height: 60px;
     text-align: center;
     vertical-align: middle;
 }
@@ -7035,7 +7037,8 @@ div.sold_prod_container {
     font-family: 'Roboto',sans-serif;	
     padding:20px 0px 3px 0px;
     margin-bottom: 15px;
-    width: 270px;
+    max-width: 305px;
+    width: 100%;
 }
 
 .content_wrapper p {

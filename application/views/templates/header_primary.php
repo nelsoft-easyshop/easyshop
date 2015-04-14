@@ -183,7 +183,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                     <div class="header-cart-item-con">
                                                         <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name'])?></span></a>
                                                         <span>x <?=$cartItemsReversed[$i]['qty']?></span>
-                                                        <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
+                                                        <span class="header-cart-item-price">&#8369; <?=number_format($cartItemsReversed[$i]['price'], 2, '.', ',');?></span>
                                                     </div>
                                                     <div class="clear"></div>
                                                 </div>
@@ -354,7 +354,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                                             <div class="header-cart-item-con">
                                                                 <a href="/item/<?=$cartItemsReversed[$i]['slug']?>"><span><?=html_escape($cartItemsReversed[$i]['name']);?></span></a>
                                                                 <span>x <?=$cartItemsReversed[$i]['qty']?></span>
-                                                                <span class="header-cart-item-price">&#8369; <?=$cartItemsReversed[$i]['price']?></span>
+                                                                <span class="header-cart-item-price">&#8369; <?=number_format($cartItemsReversed[$i]['price'], 2, '.', ',');?></span>
                                                             </div>
                                                             <div class="clear"></div>
                                                         </div>

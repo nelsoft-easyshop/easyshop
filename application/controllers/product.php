@@ -196,7 +196,7 @@ class product extends MY_Controller
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
         $productEntity = $esProductRepo->findOneBy(['slug' => $itemSlug, 'isDraft' => 0, 'isDelete' => 0]); 
-        $viewerId =  $this->session->userdata('member_id');
+        $viewerId =  (int) $this->session->userdata('member_id');
     
         $viewer = $this->em->getRepository('EasyShop\Entities\EsMember')
                            ->find($viewerId);
@@ -243,7 +243,6 @@ class product extends MY_Controller
                 $productCombinationAvailable = $productManager->getProductCombinationAvailable($productId);
                 $productCombination = $productCombinationAvailable['productCombinationAvailable'];
                 $filterAttributes = $productManager->separateAttributesOptions($productAttributes);
-                $additionalInformation = $filterAttributes['additionalInformation'];
                 $productAttributes = $filterAttributes['productOptions'];
                 $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
                 $needToSelect = $productCombinationAvailable['needToSelect'];
@@ -268,8 +267,6 @@ class product extends MY_Controller
                         show_404();
                     }
                 }
-                
-                
                 $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
                 $productDescription = $stringUtility->purifyHTML($product->getDescription());
                 $productReviews = $reviewProductService->getProductReview($productId);
@@ -279,8 +276,8 @@ class product extends MY_Controller
                     'productAttributes' => $productAttributes,
                     'productReview' => $productReviews,
                     'canReview' => $canReview,
-                    'additionalInformation' => $additionalInformation,
                     'product' => $product,
+                    'viewerId' => $viewerId,
                 ];
                 $reviewDetailsView = $this->load->view('pages/product/productpage_view_review', $reviewDetailsData, true); 
                 $recommendProducts = $productManager->getRecommendedProducts($productId,$productManager::RECOMMENDED_PRODUCT_COUNT);
@@ -359,8 +356,16 @@ class product extends MY_Controller
         $isSuccess = FALSE;
         $errorMessage = "";
         if(trim($this->input->post('review'))){
-            $canReview = $reviewProductService->checkIfCanReview($reviewerId,$productId); 
-            if($canReview){
+            $isAllowed = false;
+            if($this->input->post('parent_review')){
+                $reviewId = (int) $this->input->post('parent_review');
+                $isAllowed = $reviewProductService->isReviewReplyAllowed($reviewerId,$reviewId);
+            }
+            else{
+                $isAllowed = $reviewProductService->checkIfCanReview($reviewerId,$productId);
+            }
+
+            if($isAllowed){
                 $reply = $reviewProductService->submitReview($reviewerId,$this->input->post());
                 $response['html'] = $this->load->view('partials/review_reply', $reply, true);
                 $isSuccess = $isSuccess = TRUE; 
@@ -542,23 +547,31 @@ class product extends MY_Controller
             'member' => $memberId,
             'isDraft' => EsProduct::ACTIVE,
             'isDelete' => EsProduct::ACTIVE,
-        ]); 
+        ]);
+ 
+        $arrayErrorMessages = [
+            "PRICE_INVALID" => "Invalid price. Product price cannot be less than 0.",
+            "NAME_INVALID" => "Product name must be atleast ".EsProduct::MINIMUM_PRODUCT_NAME_LEN." characters!",
+            "DISCOUNT_INVALID" => "Invalid discount. Range must be 0 - 99 only.",
+            "REQUEST_INVALID" => "Invalid request.",
+        ];
 
         try {
+
             if((int)$productPrice <= 0){
-                throw new Exception("Invalid price. Product price cannot be less than 0.");
+                throw new Exception($arrayErrorMessages['PRICE_INVALID']);
             }
 
             if(strlen($productName) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){
-                throw new Exception("Product name must be atleast ".EsProduct::MINIMUM_PRODUCT_NAME_LEN." characters!");
+                throw new Exception($arrayErrorMessages['NAME_INVALID']);
             }
 
             if((int)$productDiscount < 0 || (int)$productDiscount > 99){
-                throw new Exception("Invalid discount. Range must be 0 - 99 only."); 
+                throw new Exception($arrayErrorMessages['DISCOUNT_INVALID']); 
             }
 
             if(!$product || strlen($slug) <= 0){
-                throw new Exception("Invalid request."); 
+                throw new Exception($arrayErrorMessages['REQUEST_INVALID']); 
             }
 
             $product->setName($productName);
@@ -634,7 +647,11 @@ class product extends MY_Controller
             $this->em->flush();
         }  
         catch (Exception $e) {
-            $serverResponse['error'] = $e->getMessage();
+            $errorMessage = $e->getMessage();
+            if(in_array($errorMessage, $arrayErrorMessages) === false){
+                $errorMessage = 'We are encountering a problem right now. Please try again later';
+            }
+            $serverResponse['error'] = $errorMessage;
         }
 
         echo json_encode($serverResponse);

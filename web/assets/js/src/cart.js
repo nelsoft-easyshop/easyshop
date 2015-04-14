@@ -19,7 +19,29 @@
             });
             $(".shipping-calculator-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
         }); 
-    }); 
+    });
+
+    var generateQuantitySelect = function ()
+    {
+        $(".item-quantity").each(function() {
+            var $thisSelect = $(this);
+            var $maxQuantity = $thisSelect.data('max');
+            var $value = $thisSelect.data('value');
+            var $appendString;
+            var $selectedString;
+
+            if($maxQuantity >= 9999){
+                $maxQuantity = 9999
+            }
+            for (var i = 1 ; i <= $maxQuantity; i++) {
+                $appendString += '<option value="'+i+'">'+ i +'</option>';
+            }
+
+            $thisSelect.append($appendString);
+            $thisSelect.val($value);
+        });
+    }
+    generateQuantitySelect();
 
     // shipping fee section
     var cityFilter = function(stateregionselect,cityselect){
@@ -206,8 +228,17 @@
     $('.item-quantity').on('change', function(){
         var $this = $(this);
         var $quantity = $this.val();
+        var $maxQuantity = parseInt($this.data('max'));
         $cartRowId = $this.data('rowid');
-        changeItemQuantity($quantity);
+        if($quantity.trim() == "" 
+            || parseInt($quantity) <= 0 
+            || parseInt($quantity) > $maxQuantity){
+            validateRedTextBox(".item-quantity");
+        }
+        else{
+            validateWhiteTextBox(".item-quantity");
+            changeItemQuantity($quantity);
+        }
     });
 
     function changeItemQuantity($quantity)
@@ -217,6 +248,7 @@
             return false;
         }
         else{
+            $quantity = parseInt($quantity);
             var $container = $(".row-"+$cartRowId);
             var $currentRequest = $.ajax({
                 type: "POST",
@@ -272,6 +304,7 @@
         $("#used-points").val($usedPoints);
         computePrices();
     });
+    $('.btn-deduct-points').trigger('click');
 
     $('.btn-reset-points').on('click', function(){
         $usedPoints = 0;
@@ -283,7 +316,7 @@
     function computePrices()
     {
         var $summaryContainer = $(".summary-container"); 
-        var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseInt($usedPoints);
+        var $cartTotalPrice = (parseFloat($cartSubtotal) + parseFloat($shippingFee)) - parseFloat($usedPoints);
         $summaryContainer.find('#summary-points').html(replaceNumberWithCommas($usedPoints.toFixed(2)));
         $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee.toFixed(2)));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));

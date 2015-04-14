@@ -86,7 +86,9 @@
                                                 data-rowid="<?=html_escape($item['rowid']);?>"></i>
                                         </td>
                                         <td>
-                                            <div class="cart-item-thumbnail" style="background: url(<?=getAssetsDomain(); ?><?=$item['imagePath']; ?>categoryview/<?=$item['imageFile']; ?>) center no-repeat; background-size: cover;"></div>
+                                            <div class="cart-item-thumbnail">
+                                                <img src="<?=getAssetsDomain(); ?><?=$item['imagePath']; ?>categoryview/<?=$item['imageFile']; ?>" class="cart-item-img"/>
+                                            </div>
                                             <center>
                                                 <span class="remove-mobile cart-item-remove"
                                                 data-name="<?=html_escape($item['name']);?>"
@@ -119,10 +121,10 @@
                                                 </div>
                                                 <div class="cart-item-attribute">
                                                     <b>Quantity : </b>
-                                                    <select class="form-es-control input-sm item-quantity" data-rowid="<?=html_escape($item['rowid']);?>">
-                                                        <?php for ($i = 1; $i <= $item['maxqty']; $i++): ?>
-                                                            <option value="<?=$i?>" <?= (int) $item['qty'] !== (int) $i ?:'selected' ?>><?=$i?></option>
-                                                        <?php endfor; ?>
+                                                    <select class="form-es-control input-sm item-quantity"
+                                                        data-value="<?=$item['qty']; ?>"
+                                                        data-max="<?=$item['maxqty']; ?>" 
+                                                        data-rowid="<?=html_escape($item['rowid']);?>">
                                                     </select>
                                                 </div>
                                                 <div class="cart-item-attribute">
@@ -142,10 +144,10 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <select class="form-es-control input-sm item-quantity" data-rowid="<?=html_escape($item['rowid']);?>">
-                                                <?php for ($i = 1; $i <= $item['maxqty']; $i++): ?>
-                                                    <option value="<?=$i?>" <?= (int) $item['qty'] !== (int) $i ?:'selected' ?>><?=$i?></option>
-                                                <?php endfor; ?>
+                                            <select class="form-es-control input-sm item-quantity"
+                                                data-value="<?=$item['qty']; ?>"
+                                                data-max="<?=$item['maxqty']; ?>" 
+                                                data-rowid="<?=html_escape($item['rowid']);?>">
                                             </select>
                                         </td>
                                         <td>
