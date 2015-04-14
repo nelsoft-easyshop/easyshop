@@ -50,21 +50,7 @@ class CheckDragonPayTransaction
             $counter++;
             $transactionId = $order['transaction_id'];
             $dataAdded = $order['dateadded'];
-
-            $additionalExpiration = 0;
-            for ($i = 1; $i <= self::EXPIRATION_DAYS; $i++) {
-                $inDate = (int) date('Y-m-d', strtotime($dataAdded.' + '.$i.' days'));
-                $weekend = (int) date('w', strtotime($inDate));
-                
-                if ($weekend === 0 || $weekend === 6) {
-                    $additionalExpiration += 1;
-                }
-                elseif (in_array($inDate, $this->holidays)) {
-                    $additionalExpiration += 1;
-                }
-            }
-            $additionalExpiration += self::EXPIRATION_DAYS;
-            $expiredDate = date('Y-m-d', strtotime($dataAdded.' + '.$additionalExpiration.' days'));
+            $expiredDate = date('Y-m-d', strtotime($dataAdded.' + '.self::EXPIRATION_DAYS.' days'));
             $isPassed = false;
             while (!$isPassed) {
                 $return = $this->moveExpiredDate($expiredDate, $this->holidays);
