@@ -384,6 +384,21 @@ class Home extends MY_Controller
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
 
+    public function widgets()
+    {
+        $this->load->view('pages/widgets/widget-selector');
+    }
+
+    public function widget1()
+    {
+        $this->load->view('pages/widgets/widget-1');
+    }
+
+    public function widget2()
+    {
+        $this->load->view('pages/widgets/widget-2');
+    }
+
 }
 
 /* End of file home.php */
