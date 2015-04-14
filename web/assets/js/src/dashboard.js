@@ -3143,7 +3143,7 @@
                                         '<span class="small-bullet"></span>' +
                                     '</div>' +
                                     '<div class="easy-content-container">' +
-                                        '<span class="easy-content">'+ value.dateAdded + ' ' + value.typeName + '</span>' + 
+                                        '<span class="easy-content">'+'<span class="easy-content-date">'+ value.dateAdded + '</span>'+' ' + value.typeName + '</span>' + 
                                         '<span class="easy-point">'+ value.point +'</span>' +
                                     '</div>' +
                                     '<div class="clear"></div>' +
@@ -3156,6 +3156,7 @@
                     $pointHistoryContainer.niceScroll({
                         cursorborder: "3px solid #e2e2e2",
                         touchbehavior: true,
+                        cursordragontouch: true,
                         autohidemode: false,
                         enablekeyboard: true,
                         smoothscroll: true,

@@ -3291,7 +3291,7 @@ label.css-label {
 .small-bullet:before {
     background-color: #e2e2e2;
     content: "";
-    height: 100px;
+    height: 200px;
     left: 4px;
     position: absolute;
     bottom: 10px;
@@ -3301,7 +3301,7 @@ label.css-label {
 .small-bullet:after {
     background-color: #e2e2e2;
     content: "";
-    height: 100px;
+    height: 200px;
     left: 4px;
     position: absolute;
     top: 10px;
@@ -3322,20 +3322,23 @@ label.css-label {
 }
 
 .easy-content {
-    display: inline-block;
-    max-width: 150px;
-    vertical-align: middle;
-    width: 82%;
+    display: block;
+    width: 100%;
     word-wrap: break-word;
 }
 
 .easy-point {
-    display: inline-block;
+    display: block;
     font-size: 16px;
     font-weight: bold;
+    line-height: 34px;
     text-align: right;
-    vertical-align: middle;
-    width: 15%;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.easy-content-date {
+    display: block;
 }
 
 .ep-border-top {
@@ -3970,16 +3973,16 @@ label.css-label {
         width: 100%;
     }
 
-    .easy-content {
-        max-width: 165px;
-    }
-
     .easy-point-mobile {
         display: none;
     }
 
     .easy-point-container {
         display: block;
+    }
+
+    .easy-point {
+        max-width: 147px;
     }
 }
 
@@ -3994,6 +3997,29 @@ label.css-label {
 
     .prod-att-input-price {
         width: 27%;
+    }
+
+    .easy-content {
+        display: inline-block;
+        max-width: 154px;;
+        padding-right: 8px;
+        vertical-align: middle;
+        width: 82%;
+        word-wrap: break-word;
+    }
+
+    .easy-point {
+        display: inline-block;
+        float: right;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 34px;
+        max-width: 197px;
+        min-width: 35px;
+        text-align: right;
+        vertical-align: middle;
+        width: auto;
+        word-wrap: break-word;
     }
 }
 
