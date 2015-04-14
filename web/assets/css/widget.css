@@ -41,7 +41,7 @@
 }
 
 .es-widget-1{
-    width: 150px;
+    width: 250px;
     height: 360px;
     border: solid #e2e2e2 1px;
     border-radius: 6px;
@@ -190,7 +190,6 @@
     width: 260px;
     height: 260px;
     background: #e2e2e2;
-    border: solid #e2e2e2 1px;
     border-radius: 6px;
     overflow: hidden;
     font-family: 'Helvetica', Calibri, Open-Sans, sans-serif;
