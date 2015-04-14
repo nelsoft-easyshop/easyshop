@@ -386,7 +386,7 @@ class Home extends MY_Controller
 
     public function widgets()
     {
-        $this->load->view('pages/widgets/widgets');
+        $this->load->view('pages/widgets/widget-selector');
     }
 
     public function widget1()
