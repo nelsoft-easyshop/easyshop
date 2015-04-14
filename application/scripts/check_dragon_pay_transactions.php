@@ -9,6 +9,7 @@ $configLoader = $CI->kernel->serviceContainer['config_loader'];
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
+use EasyShop\PaymentService\PaymentService as PaymentService;
 
 class CheckDragonPayTransaction
 {
@@ -37,9 +38,12 @@ class CheckDragonPayTransaction
         $this->soapClient = $dragonPaySoapClient;
         $this->merchantId = $dragpayConfig['merchant_id'];
         $this->merchantPwd = $dragpayConfig['merchant_password'];
-        $this->holidays = $this->setHolidays();
+        $this->holidays = $this->getHolidays();
     }
 
+    /**
+     * Main function to execute checking of dragonpay transactions
+     */
     public function execute()
     {
         echo "\nScanning of data started (".date('M-d-Y h:i:s A').") \n \n";
@@ -59,10 +63,11 @@ class CheckDragonPayTransaction
             }
 
             $status = $this->checkDragonpayOrderStatus($transactionId);
-            if (strtolower($status) === 'p' || strtolower($status) === 'u') {
+            if (strtolower($status) === PaymentService::STATUS_PENDING
+                || strtolower($status) === PaymentService::STATUS_UNPAID) {
                 if ($currentDate >= $expiredDate) {
                     $message =  'VOIDED!';
-                    $voidResult = $this->voidDragonpayOrder($transactionId);
+                    $this->voidDragonpayOrder($transactionId);
                     $this->voidTransaction($transactionId);
                     $newStatus = $this->checkDragonpayOrderStatus($transactionId);
                 }
@@ -71,13 +76,14 @@ class CheckDragonPayTransaction
                     $message = 'NOTHING TO DO';
                 }
             }
-            elseif (strtolower($status) === 'v' || strtolower($status) === 'f') {
+            elseif (strtolower($status) === PaymentService::STATUS_VOID
+                || strtolower($status) === PaymentService::STATUS_FAIL) {
                 $message = 'ALREADY VOIDED!';
-                $voidResult = $this->voidDragonpayOrder($transactionId);
+                $this->voidDragonpayOrder($transactionId);
                 $this->voidTransaction($transactionId);
                 $newStatus = $this->checkDragonpayOrderStatus($transactionId);
             }
-            elseif (strtolower($status) === 's') {
+            elseif (strtolower($status) === PaymentService::STATUS_SUCCESS) {
                 $message = 'UPDATE TRANSACTION!';
                 $newStatus = $status;
                 $this->acceptTransaction($transactionId);
@@ -95,7 +101,10 @@ class CheckDragonPayTransaction
         echo count($orders)." ROWS SCANNED! \n \n";
     }
 
-    private function setHolidays()
+    /**
+     * Get all holidays
+     */
+    private function getHolidays()
     {
         $sqlHolidays = "SELECT * FROM `es_holidaydetails`";
 
@@ -109,6 +118,11 @@ class CheckDragonPayTransaction
         return $holidays;
     }
 
+    /**
+     * Void dragonpay order in dashboard
+     * @param  string $transactionId
+     * @return integer
+     */
     private function voidDragonpayOrder($transactionId)
     {
         $param = [
@@ -121,6 +135,11 @@ class CheckDragonPayTransaction
         return $result['CancelTransactionResult'];
     }
 
+    /**
+     * Check the status of the order in dashboard
+     * @param  string $transactionId [description]
+     * @return string
+     */
     private function checkDragonpayOrderStatus($transactionId)
     {
         $param = [
@@ -133,14 +152,20 @@ class CheckDragonPayTransaction
         return $result['GetTxnStatusResult'];
     }
 
+    /**
+     * Adjust expiration date of the transaction
+     * @param  string $expDate
+     * @param  array  $holidays
+     * @return mixed
+     */
     private function moveExpiredDate($expDate, $holidays)
     {
-        $weekend = (int) date('w', strtotime($expDate));
+        $dayOfTheWeek = (int) date('w', strtotime($expDate));
         $isPassed = false;
-        if ($weekend === 0) {
+        if ($dayOfTheWeek === 0) {
             $expDate = date('Y-m-d', strtotime($expDate.' + 1 day'));
         }
-        elseif ($weekend === 6) {
+        elseif ($dayOfTheWeek === 6) {
             $expDate = date('Y-m-d', strtotime($expDate.' + 2 days'));
         }
 
@@ -157,7 +182,10 @@ class CheckDragonPayTransaction
         ];
     }
 
-
+    /**
+     * Void Order Transaction by given transaction id
+     * @param  string $transactionId
+     */
     private function voidTransaction($transactionId)
     {
         $order = $this->getOrderByTransactionId($transactionId);
@@ -174,11 +202,19 @@ class CheckDragonPayTransaction
         }
     }
 
+    /**
+     * Update order into paid status
+     * @param  string $transactionId
+     */
     private function acceptTransaction($transactionId)
     {
         $this->updateOrderStatus($transactionId, EsOrderStatus::STATUS_PAID);
     }
 
+    /**
+     * Get all order of dragonpay
+     * @return array
+     */
     private function getOrders()
     {
         $selectOrdersQuery = "
@@ -201,6 +237,11 @@ class CheckDragonPayTransaction
         return isset($orders[0]) ? $orders : [];
     }
 
+    /**
+     * Get order using transaction id
+     * @param  string $transactionId
+     * @return array
+     */
     private function getOrderByTransactionId($transactionId)
     {
         $selectOrderQuery = "
@@ -217,6 +258,11 @@ class CheckDragonPayTransaction
         return isset($order[0]) ? $order[0] : false;
     }
 
+    /**
+     * Get all order product in given order
+     * @param  integer $orderId
+     * @return array
+     */
     private function getAllOrderProduct($orderId)
     {
         $selectOrderProductQuery = "
@@ -232,6 +278,11 @@ class CheckDragonPayTransaction
         return $orderProducts;
     }
 
+    /**
+     * Update order status of a given order
+     * @param  string  $transactionId
+     * @param  integer $status
+     */
     private function updateOrderStatus($transactionId, $status)
     {
         $lastDataModified = date('Y-m-d h:i:s');
@@ -253,6 +304,11 @@ class CheckDragonPayTransaction
         $updateOrder->execute();
     }
 
+    /**
+     * Update order product status of a given product
+     * @param  integer $orderProductId
+     * @param  integer $status
+     */
     private function updateOrderProductStatus($orderProductId, $status)
     {
         $updateOrderProductStatus = "
@@ -267,6 +323,11 @@ class CheckDragonPayTransaction
         $updateStatus->execute();
     }
 
+    /**
+     * Revert quantity of the item
+     * @param  integer $itemId
+     * @param  integer $quantity
+     */
     private function revertProductQuantity($itemId, $quantity)
     {
         $updateQuantityQuery = "
