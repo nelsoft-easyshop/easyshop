@@ -1723,10 +1723,6 @@ body{
     transition: all 0.3s ease;
 }
 
-.btn-buy-now{
-    padding-left: 35px !important;
-}
-
 .btn-contact-seller > .icon-message{
     font-size: 17px;
     margin-right: 5px;
