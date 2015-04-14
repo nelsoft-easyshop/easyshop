@@ -547,23 +547,31 @@ class product extends MY_Controller
             'member' => $memberId,
             'isDraft' => EsProduct::ACTIVE,
             'isDelete' => EsProduct::ACTIVE,
-        ]); 
+        ]);
+ 
+        $arrayErrorMessages = [
+            "PRICE_INVALID" => "Invalid price. Product price cannot be less than 0.",
+            "NAME_INVALID" => "Product name must be atleast ".EsProduct::MINIMUM_PRODUCT_NAME_LEN." characters!",
+            "DISCOUNT_INVALID" => "Invalid discount. Range must be 0 - 99 only.",
+            "REQUEST_INVALID" => "Invalid request.",
+        ];
 
         try {
+
             if((int)$productPrice <= 0){
-                throw new Exception("Invalid price. Product price cannot be less than 0.");
+                throw new Exception($arrayErrorMessages['PRICE_INVALID']);
             }
 
             if(strlen($productName) < EsProduct::MINIMUM_PRODUCT_NAME_LEN){
-                throw new Exception("Product name must be atleast ".EsProduct::MINIMUM_PRODUCT_NAME_LEN." characters!");
+                throw new Exception($arrayErrorMessages['NAME_INVALID']);
             }
 
             if((int)$productDiscount < 0 || (int)$productDiscount > 99){
-                throw new Exception("Invalid discount. Range must be 0 - 99 only."); 
+                throw new Exception($arrayErrorMessages['DISCOUNT_INVALID']); 
             }
 
             if(!$product || strlen($slug) <= 0){
-                throw new Exception("Invalid request."); 
+                throw new Exception($arrayErrorMessages['REQUEST_INVALID']); 
             }
 
             $product->setName($productName);
@@ -639,7 +647,11 @@ class product extends MY_Controller
             $this->em->flush();
         }  
         catch (Exception $e) {
-            $serverResponse['error'] = $e->getMessage();
+            $errorMessage = $e->getMessage();
+            if(in_array($errorMessage, $arrayErrorMessages) === false){
+                $errorMessage = 'We are encountering a problem right now. Please try again later';
+            }
+            $serverResponse['error'] = $errorMessage;
         }
 
         echo json_encode($serverResponse);
