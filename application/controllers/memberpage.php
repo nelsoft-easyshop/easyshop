@@ -2404,22 +2404,22 @@ class Memberpage extends MY_Controller
             $categoryName = $this->input->post("categoryName") ? 
                             trim($this->input->post("categoryName")) : '';
             $deletedProductIds = [];
-            $addedProductIds = [];
+            $addData = [];
 
-            if($this->input->post("deletedProductIds") ){
-                $deletedProductIds = json_decode($this->input->post("deletedProductIds"));
+            if($this->input->post("deleteData") ){
+                $deletedProductIds = json_decode($this->input->post("deleteData"));
             }
-            if($this->input->post("addedProductIds") ){
-                $addedProductIds = json_decode($this->input->post("addedProductIds"));
+            if($this->input->post("addData") ){
+                $addData = (array) json_decode($this->input->post("addData"));
+                $addData = json_decode(json_encode($addData),TRUE); 
             }
-            
             $parentCategoryId = (int)$this->input->post("parentCategory");
             $result = $this->categoryManager->editUserCustomCategoryProducts(
                         $memberCategoryId,
                         $categoryName,
                         $memberId,
                         $parentCategoryId,
-                        $addedProductIds,
+                        $addData,
                         $deletedProductIds
                     );
         }

@@ -28,6 +28,13 @@ class EsMemberProdcat
      */
     private $createdDate = 'CURRENT_TIMESTAMP';
 
+        /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastmodifieddate", type="datetime", nullable=false)
+     */
+    private $lastmodifieddate = 'CURRENT_TIMESTAMP';
+
     /**
      * @var \EasyShop\Entities\EsMemberCat
      *
@@ -86,6 +93,29 @@ class EsMemberProdcat
     public function getCreatedDate()
     {
         return $this->createdDate;
+    }
+    
+    /**
+     * Set lastmodifieddate
+     *
+     * @param \DateTime $lastmodifieddate
+     * @return EsMemberProdcat
+     */
+    public function setLastmodifieddate($lastmodifieddate)
+    {
+        $this->lastmodifieddate = $lastmodifieddate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastmodifieddate
+     *
+     * @return \DateTime 
+     */
+    public function getLastmodifieddate()
+    {
+        return $this->lastmodifieddate;
     }
 
     /**

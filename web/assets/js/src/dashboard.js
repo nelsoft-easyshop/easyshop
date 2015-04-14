@@ -2763,12 +2763,40 @@
         var newParentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
         var allLoadedProductIds = $.parseJSON($modalDiv.find('.all-loaded-products-ids').val());
         var productIdsInEditableList = [];
+        
+        var sortOrder = 0;
+        var sortArray = [];
         $.each($currentCategoryProductList, function(key, itemNameDiv){
-            productIdsInEditableList.push(parseInt(itemNameDiv.getAttribute('data-id'), 10));      
+            var productId = parseInt(itemNameDiv.getAttribute('data-id'), 10);
+            sortArray[productId] = sortOrder++;
+            productIdsInEditableList.push(productId);      
         });
+
         var addedProductIds = $(productIdsInEditableList).not(allLoadedProductIds).get();
         var deletedProductIds = $(allLoadedProductIds).not(productIdsInEditableList).get();
-
+        /**
+         * Get product that changed sort order 
+         */
+        var sortedEditableListLessAdded = $(productIdsInEditableList).not(addedProductIds).get();
+        var originalListLessDeleted = $(allLoadedProductIds).not(deletedProductIds).get();
+        var sortedProductIds = [];
+        if(sortedEditableListLessAdded.length === originalListLessDeleted.length){
+            for(i = 0; i < sortedEditableListLessAdded.length; i++){
+                if(sortedEditableListLessAdded[i] !== originalListLessDeleted[i]){
+                    sortedProductIds.push(sortedEditableListLessAdded[i]);
+                }
+            }
+        }
+        
+        var addData = [];
+        $.each(addedProductIds, function(key, productId){
+            addData.push({ productId: productId, order: sortArray[productId] });
+        });
+        var sortData = [];
+        $.each(sortedProductIds, function(key, productId){
+            addData.push({ productId: productId, order: sortArray[productId] });
+            deletedProductIds.push(productId);
+        });
         $.ajax({
             type: "POST",
             url: '/memberpage/editCustomCategory',
@@ -2776,8 +2804,8 @@
                 categoryId:categoryId, 
                 categoryName: categoryName, 
                 parentCategory: newParentCategory,
-                addedProductIds: JSON.stringify(addedProductIds),
-                deletedProductIds: JSON.stringify(deletedProductIds),
+                addData: JSON.stringify(addData),
+                deleteData: JSON.stringify(deletedProductIds),
                 csrfname: csrftoken
             },
             success: function(data){ 
