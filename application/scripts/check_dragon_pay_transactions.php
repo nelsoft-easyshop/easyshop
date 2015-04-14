@@ -1,140 +1,370 @@
 <?php
 
 include_once  __DIR__.'/bootstrap.php';
-require_once(dirname(__FILE__).'/../libraries/dragonpay.php');
 
 $CI =& get_instance();
-$paymentService = $CI->kernel->serviceContainer['payment_service'];
+$dragonPaySoapClient = $CI->kernel->serviceContainer['dragonpay_soap_client'];
+$configLoader = $CI->kernel->serviceContainer['config_loader'];
 
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
+use EasyShop\PaymentService\PaymentService as PaymentService;
 
-$currentDate = date('Y-m-d');
-$holidays = [];
-$counter = 0;
-$dragonPay = new Dragonpay;
+class CheckDragonPayTransaction
+{
+    const EXPIRATION_DAYS = 5;
 
-$configDatabase = require dirname(__FILE__). '/../config/param/database.php';
+    private $connection;
+    private $dragonPaySoapClient;
+    private $merchantId;
+    private $merchantPwd;
+    private $holidays;
 
-$con = mysqli_connect($configDatabase['host'],$configDatabase['user'],$configDatabase['password'],$configDatabase['dbname']);
-$dbh = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
-$dbhUpdate = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
+    /**
+     * Constructor
+     * @param string         $hostName
+     * @param string         $dbUsername
+     * @param string         $dbPassword
+     * @param \nusoap_client $dragonPaySoapClient
+     * @param array          $dragpayConfig
+     */
+    public function __construct(
+        $hostName,
+        $dbUsername,
+        $dbPassword,
+        $dragonPaySoapClient,
+        $dragpayConfig
+    )
+    {
+        $this->connection = new PDO(
+            $hostName,
+            $dbUsername,
+            $dbPassword
+        );
 
-$sql = "
-SELECT 
-    transaction_id AS txnid 
-    , dateadded  
-    , id_order
-FROM 
-    es_order 
-WHERE 
-    `payment_method_id` = 2 
-    AND order_status = 99
-";
+        $this->soapClient = $dragonPaySoapClient;
+        $this->merchantId = $dragpayConfig['merchant_id'];
+        $this->merchantPwd = $dragpayConfig['merchant_password'];
+        $this->holidays = $this->getHolidays();
+    }
 
-$sqlHolidays = "SELECT * FROM `es_holidaydetails`";
+    /**
+     * Main function to execute checking of dragonpay transactions
+     */
+    public function execute()
+    {
+        echo "\nScanning of data started (".date('M-d-Y h:i:s A').") \n \n";
+        $orders = $this->getOrders();
+        $currentDate = date('Y-m-d');
+        $counter = 0;
+        foreach ($orders as $order) {
+            $counter++;
+            $transactionId = $order['transaction_id'];
+            $dataAdded = $order['dateadded'];
+            $expiredDate = date('Y-m-d', strtotime($dataAdded.' + '.self::EXPIRATION_DAYS.' days'));
+            $isPassed = false;
+            while (!$isPassed) {
+                $return = $this->moveExpiredDate($expiredDate, $this->holidays);
+                $isPassed = $return['isPassed'];
+                $expiredDate = $return['expdate'];
+            }
 
-foreach ($dbh->query($sqlHolidays) as $row) {
-    $holidays[] = $row['date_d'];
-}
+            $status = $this->checkDragonpayOrderStatus($transactionId);
+            if (strtolower($status) === PaymentService::STATUS_PENDING
+                || strtolower($status) === PaymentService::STATUS_UNPAID) {
+                if ($currentDate >= $expiredDate) {
+                    $message =  'VOIDED!';
+                    $this->voidDragonpayOrder($transactionId);
+                    $this->voidTransaction($transactionId);
+                    $newStatus = $this->checkDragonpayOrderStatus($transactionId);
+                }
+                else {
+                    $newStatus = $status;
+                    $message = 'NOTHING TO DO';
+                }
+            }
+            elseif (strtolower($status) === PaymentService::STATUS_VOID
+                || strtolower($status) === PaymentService::STATUS_FAIL) {
+                $message = 'ALREADY VOIDED!';
+                $this->voidDragonpayOrder($transactionId);
+                $this->voidTransaction($transactionId);
+                $newStatus = $this->checkDragonpayOrderStatus($transactionId);
+            }
+            elseif (strtolower($status) === PaymentService::STATUS_SUCCESS) {
+                $message = 'UPDATE TRANSACTION!';
+                $newStatus = $status;
+                $this->acceptTransaction($transactionId);
+            }
+            else {
+                $newStatus = $status;
+                $message = 'NOTHING TO DO';
+            }
 
-asort($holidays); 
-array_values($holidays);
-echo PHP_EOL .'Scanning of data started ('.date('M-d-Y h:i:s A').')'.PHP_EOL;
-echo PHP_EOL;
+            echo $counter.') '.$transactionId.' : '.$status.' -> '. $newStatus  .' : ' .$message .  PHP_EOL;
+        }
 
-$sqlVoid = "CALL `es_sp_expiredDragonpayTransaction`(:transaction_id)"; 
-$statementStoredProc = $dbh->prepare($sqlVoid);
-
-$sqlSuccessOrder = "UPDATE es_order set order_status = 0 where transaction_id = :transaction_id"; 
-$statementSuccess = $dbh->prepare($sqlSuccessOrder);
-
-foreach ($dbh->query($sql) as $row) {
-    $counter++;
-    $txnid = $row['txnid'];
-    $dataAdded = $row['dateadded']; 
-    $orderId = $row['id_order'];
-
-    $additionalExpiration = 0;
-    for ($i = 1; $i <= 5; $i++) { 
-        $inDate = (int) date('Y-m-d',strtotime($dataAdded.' + '.$i.' days'));
-        $weekend = (int) date('w',strtotime($inDate));
         
-        if($weekend === 0 || $weekend === 6){
-            $additionalExpiration += 1; 
-        }
-        elseif(in_array($inDate, $holidays)){
-            $additionalExpiration += 1; 
-        }
-    }
-    $additionalExpiration += 5;
-    $expiredDate = date('Y-m-d',strtotime($dataAdded.' + '.$additionalExpiration.' days'));
-    
-    $isPassed = false;
-    while(!$isPassed){
-        $return = moveExpiredDate($expiredDate,$holidays);
-        $isPassed = $return['isPassed'];
-        $expiredDate = $return['expdate'];
+        echo "\nScanning of data ended (".date('M-d-Y h:i:s A').") \n \n";
+        echo count($orders)." ROWS SCANNED! \n \n";
     }
 
-    $status = $dragonPay->getStatus($txnid);
+    /**
+     * Get all holidays
+     */
+    private function getHolidays()
+    {
+        $sqlHolidays = "SELECT * FROM `es_holidaydetails`";
 
-    if(strtolower($status) == 'p' || strtolower($status) == 'u'){
-        if($currentDate >= $expiredDate){
-            $message =  'VOIDED!';
-            $voidResult = $dragonPay->voidTransaction($txnid);
-            $statementStoredProc->bindParam(":transaction_id", $txnid);
-            $statementStoredProc->execute(); 
-            $newStatus = $dragonPay->getStatus($txnid); 
+        foreach ($this->connection->query($sqlHolidays) as $row) {
+            $holidays[] = $row['date_d'];
+        }
 
-            $paymentService->revertTransactionPoint($orderId);
+        asort($holidays);
+        array_values($holidays);
+
+        return $holidays;
+    }
+
+    /**
+     * Void dragonpay order in dashboard
+     * @param  string $transactionId
+     * @return integer
+     */
+    private function voidDragonpayOrder($transactionId)
+    {
+        $param = [
+            'merchantId' => $this->merchantId,
+            'password' => $this->merchantPwd,
+            'merchantTxnId' => $transactionId
+        ];
+        $result = $this->soapClient->call('CancelTransaction', $param);
+
+        return $result['CancelTransactionResult'];
+    }
+
+    /**
+     * Check the status of the order in dashboard
+     * @param  string $transactionId [description]
+     * @return string
+     */
+    private function checkDragonpayOrderStatus($transactionId)
+    {
+        $param = [
+            'merchantId' => $this->merchantId,
+            'password' => $this->merchantPwd,
+            'txnId' => $transactionId
+        ];
+        $result = $this->soapClient->call('GetTxnStatus', $param);
+
+        return $result['GetTxnStatusResult'];
+    }
+
+    /**
+     * Adjust expiration date of the transaction
+     * @param  string $expDate
+     * @param  array  $holidays
+     * @return mixed
+     */
+    private function moveExpiredDate($expDate, $holidays)
+    {
+        $dayOfTheWeek = (int) date('w', strtotime($expDate));
+        $isPassed = false;
+        if ($dayOfTheWeek === 0) {
+            $expDate = date('Y-m-d', strtotime($expDate.' + 1 day'));
         }
-        else{
-            $newStatus = $status;
-            $message = 'NOTHING TO DO';
+        elseif ($dayOfTheWeek === 6) {
+            $expDate = date('Y-m-d', strtotime($expDate.' + 2 days'));
+        }
+
+        if (in_array($expDate, $holidays)) {
+            $expDate = date('Y-m-d', strtotime($expDate.' + 1 day'));
+        }
+        else {
+            $isPassed = true;
+        }
+
+        return [
+            'expdate' => $expDate,
+            'isPassed' => $isPassed
+        ];
+    }
+
+    /**
+     * Void Order Transaction by given transaction id
+     * @param  string $transactionId
+     */
+    private function voidTransaction($transactionId)
+    {
+        $order = $this->getOrderByTransactionId($transactionId);
+        if ($order) {
+            $this->updateOrderStatus($transactionId, EsOrderStatus::STATUS_VOID);
+            $orderProducts = $this->getAllOrderProduct($order['id_order']);
+            foreach ($orderProducts as $orderProduct) {
+                $orderProductId = $orderProduct['id_order_product'];
+                $itemId = $orderProduct['product_item_id'];
+                $revertQuantity = $orderProduct['order_quantity'];
+                $this->revertProductQuantity($itemId, $revertQuantity);
+                $this->updateOrderProductStatus($orderProductId, EsOrderProductStatus::CANCEL);
+            }
         }
     }
-    elseif (strtolower($status) == 'v' || strtolower($status) == 'f') {
-        $message = 'ALREADY VOIDED!';
-        $voidResult = $dragonPay->voidTransaction($txnid);
-        $statementStoredProc->bindParam(":transaction_id", $txnid);
-        $statementStoredProc->execute(); 
-        $newStatus = $dragonPay->getStatus($txnid); 
+
+    /**
+     * Update order into paid status
+     * @param  string $transactionId
+     */
+    private function acceptTransaction($transactionId)
+    {
+        $this->updateOrderStatus($transactionId, EsOrderStatus::STATUS_PAID);
     }
-    elseif (strtolower($status) == 's') {
-        $message = 'UPDATE TRANSACTION!';
-        $newStatus = $dragonPay->getStatus($txnid);
-        $statementSuccess->bindParam(":transaction_id", $txnid);
-        $statementSuccess->execute(); 
+
+    /**
+     * Get all order of dragonpay
+     * @return array
+     */
+    private function getOrders()
+    {
+        $selectOrdersQuery = "
+        SELECT 
+            transaction_id
+            , dateadded
+        FROM 
+            es_order 
+        WHERE 
+            `payment_method_id` = :payment_method_id
+            AND `order_status` = :order_status
+        ";
+
+        $selectOrder = $this->connection->prepare($selectOrdersQuery);
+        $selectOrder->bindValue("payment_method_id", EsPaymentMethod::PAYMENT_DRAGONPAY);
+        $selectOrder->bindValue("order_status", EsOrderStatus::STATUS_DRAFT);
+        $selectOrder->execute();
+        $orders = $selectOrder->fetchAll(PDO::FETCH_ASSOC);
+
+        return isset($orders[0]) ? $orders : [];
     }
-    else{
-      $newStatus = $status;
-      $message = 'NOTHING TO DO';
+
+    /**
+     * Get order using transaction id
+     * @param  string $transactionId
+     * @return array
+     */
+    private function getOrderByTransactionId($transactionId)
+    {
+        $selectOrderQuery = "
+            SELECT  *
+            FROM `es_order` where `transaction_id` = :transaction_id
+            LIMIT 1
+        ";
+
+        $selectOrder = $this->connection->prepare($selectOrderQuery);
+        $selectOrder->bindValue("transaction_id", $transactionId);
+        $selectOrder->execute();
+        $order = $selectOrder->fetchAll(PDO::FETCH_ASSOC);
+
+        return isset($order[0]) ? $order[0] : false;
     }
-    echo $counter.') '.$txnid.' : '.$status.' -> '. $newStatus  .' : ' .$message .  PHP_EOL;   
+
+    /**
+     * Get all order product in given order
+     * @param  integer $orderId
+     * @return array
+     */
+    private function getAllOrderProduct($orderId)
+    {
+        $selectOrderProductQuery = "
+            SELECT  id_order_product, order_quantity, product_item_id
+            FROM `es_order_product` where `order_id` = :order_id
+        ";
+
+        $selectOrderProducts = $this->connection->prepare($selectOrderProductQuery);
+        $selectOrderProducts->bindValue("order_id", $orderId);
+        $selectOrderProducts->execute();
+        $orderProducts = $selectOrderProducts->fetchAll(PDO::FETCH_ASSOC);
+
+        return $orderProducts;
+    }
+
+    /**
+     * Update order status of a given order
+     * @param  string  $transactionId
+     * @param  integer $status
+     */
+    private function updateOrderStatus($transactionId, $status)
+    {
+        $lastDataModified = date('Y-m-d h:i:s');
+        $updateOrderQuery = "
+            UPDATE es_order 
+            SET 
+                order_status = :status,
+                datemodified = :date
+            WHERE
+                transaction_id = :transaction_id
+                AND payment_method_id = :payment_method_id
+        ";
+
+        $updateOrder = $this->connection->prepare($updateOrderQuery);
+        $updateOrder->bindValue("status", $status);
+        $updateOrder->bindValue("date", $lastDataModified);
+        $updateOrder->bindValue("transaction_id", $transactionId);
+        $updateOrder->bindValue("payment_method_id", EsPaymentMethod::PAYMENT_DRAGONPAY);
+        $updateOrder->execute();
+    }
+
+    /**
+     * Update order product status of a given product
+     * @param  integer $orderProductId
+     * @param  integer $status
+     */
+    private function updateOrderProductStatus($orderProductId, $status)
+    {
+        $updateOrderProductStatus = "
+            UPDATE es_order_product
+            SET status = :status
+            WHERE id_order_product = :order_product_id;
+        ";
+
+        $updateStatus = $this->connection->prepare($updateOrderProductStatus);
+        $updateStatus->bindValue("status", $status);
+        $updateStatus->bindValue("order_product_id", $orderProductId);
+        $updateStatus->execute();
+    }
+
+    /**
+     * Revert quantity of the item
+     * @param  integer $itemId
+     * @param  integer $quantity
+     */
+    private function revertProductQuantity($itemId, $quantity)
+    {
+        $updateQuantityQuery = "
+            UPDATE es_product_item
+            SET quantity = quantity + :order_quantity
+            WHERE id_product_item = :item_id;
+        ";
+
+        $updateQuantity = $this->connection->prepare($updateQuantityQuery);
+        $updateQuantity->bindValue("item_id", $itemId);
+        $updateQuantity->bindValue("order_quantity", $quantity);
+        $updateQuantity->execute();
+    }
 }
 
-echo PHP_EOL .'Scanning of data ended ('.date('M-d-Y h:i:s A').')'.PHP_EOL;
-echo PHP_EOL.$counter.' ROWS SCANNED!'.PHP_EOL;
-
-
-function moveExpiredDate($expDate, $holidays){
-    $weekend = (int) date('w',strtotime($expDate));
-    $isPassed = false;
-    if($weekend === 0){
-        $expDate = date('Y-m-d',strtotime($expDate.' + 1 day'));
-    }
-    elseif($weekend === 6){
-        $expDate = date('Y-m-d',strtotime($expDate.' + 2 days'));
-    }
-
-    if (in_array($expDate, $holidays)){
-        $expDate = date('Y-m-d',strtotime($expDate.' + 1 day'));
-    }
-    else{
-        $isPassed = true;
-    }
-
-    return array('expdate' => $expDate, 'isPassed' => $isPassed);
+if (!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production') {
+    $configLoad = $configLoader->getItem('payment', 'production');
 }
+else {
+    $configLoad = $configLoader->getItem('payment', 'testing');
+}
+$config = $configLoad['payment_type']['dragonpay']['Easyshop'];
 
-mysqli_close($con);
-?>
+$dragonpayCheck  = new checkDragonPayTransaction(
+    $CI->db->hostname,
+    $CI->db->username,
+    $CI->db->password,
+    $dragonPaySoapClient,
+    $config
+);
+
+$dragonpayCheck->execute();
