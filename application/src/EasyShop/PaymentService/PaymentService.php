@@ -34,6 +34,10 @@ class PaymentService
 
     const STATUS_PENDING = 'p';
 
+    const STATUS_VOID = 'v';
+
+    const STATUS_UNPAID = 'u';
+
     /**
      * Gateway path
      *
