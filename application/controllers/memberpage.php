@@ -2316,6 +2316,7 @@ class Memberpage extends MY_Controller
         $page--;
         $page = $page >= 0 ? $page : 0;
         $offset = $page * $this->productsPerCategoryPage;
+
         $memberId = $this->session->userdata('member_id');
 
         $excludeIds = [];
@@ -2334,27 +2335,26 @@ class Memberpage extends MY_Controller
                                 $offset, 
                                 $this->productsPerCategoryPage, 
                                 $searchString, 
-                                "p.idProduct"
-                            );    
+                                "p.idProduct",
+                                $excludeIds
+                            );            
         $response['products'] = [];
         foreach($products as $product){
             $productId = $product->getIdProduct();
-            if(in_array($productId, $excludeIds) === false){
-                $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                ->getDefaultImage($productId);
-                $imageFilename = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_FILE;
-                $imageDirectory = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_DIRECTORY;
-                if($image){
-                    $imageFilename = $image->getFilename();
-                    $imageDirectory = $image->getDirectory();
-                }              
-                $response['products'][] = [
-                    'productName' => $product->getName(),
-                    'id' => $productId,
-                    'imageFilename' => $imageFilename,
-                    'imageDirectory' => $imageDirectory,
-                ];
-            }
+            $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                            ->getDefaultImage($productId);
+            $imageFilename = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_FILE;
+            $imageDirectory = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_DIRECTORY;
+            if($image){
+                $imageFilename = $image->getFilename();
+                $imageDirectory = $image->getDirectory();
+            }              
+            $response['products'][] = [
+                'productName' => $product->getName(),
+                'id' => $productId,
+                'imageFilename' => $imageFilename,
+                'imageDirectory' => $imageDirectory,
+            ];
         }
         
         echo json_encode($response);
