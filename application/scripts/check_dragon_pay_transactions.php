@@ -21,6 +21,14 @@ class CheckDragonPayTransaction
     private $merchantPwd;
     private $holidays;
 
+    /**
+     * Constructor
+     * @param string         $hostName
+     * @param string         $dbUsername
+     * @param string         $dbPassword
+     * @param \nusoap_client $dragonPaySoapClient
+     * @param array          $dragpayConfig
+     */
     public function __construct(
         $hostName,
         $dbUsername,
