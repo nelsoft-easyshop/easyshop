@@ -19,7 +19,7 @@ $config = [
                     ],
                     'Easydeal' => [
                         'return_url' => 'https://staging.easydeal.ph/payment/return/dragonpay',
-                        'postback_url' => 'http://staging.easydeal.ph/payment/postback/dragonpay'
+                        'postback_url' => 'https://staging.easydeal.ph/payment/postback/dragonpay'
                     ]
                 ],
                 'paypal' => [
@@ -37,7 +37,7 @@ $config = [
                         'secure_hash' => '1JQ6vd9qatkqoA9gRJpyKeMpl2Nu6cmm',
                         'redirect_url' => 'https://test.pesopay.com/b2cDemo/eng/payment/payForm.jsp',
                         'merchant_id' => '18061489',
-                        'ip_address' => [ 
+                        'ip_address' => [
                             '180.232.69.52',
                         ],
                         'range_ip' => [
@@ -71,8 +71,8 @@ $config = [
                         ]
                     ],
                     'Easydeal' => [
-                        'return_url' => 'https://www.easydeal.ph/payment/return/dragonpay',
-                        'postback_url' => 'https://www.easydeal.ph/payment/postback/dragonpay'
+                        'return_url' => 'https://www.easydeal.ph/payment/dragonPayReturn',
+                        'postback_url' => 'https://www.easydeal.ph/payment/dragonPayPostBack'
                     ]
                 ],
                 'paypal' => [
