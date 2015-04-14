@@ -1439,6 +1439,43 @@ class EsProductRepository extends EntityRepository
                      ->getResult();
         return $result;
     }
+
+    /**
+     * Updates Product Status
+     * 
+     * @param int $memberId
+     * @param int $productStatus
+     * @param int $desiredStatus
+     * 
+     * @return bool
+     */
+    public function updateUserProductsStatus($memberId, $productStatus, $desiredStatus)
+    {
+        if($memberId !== 0){
+            $this->em =  $this->_em;
+            $updateQuery = "
+            UPDATE `es_product`
+            SET 
+                `is_delete` = :newStatus
+            WHERE
+                `member_id` = :memberId
+            AND 
+                `is_delete` = :isDelete
+            AND 
+                `is_draft` = :isDraft;
+            ";
+            $parameters = [
+                'memberId' => $memberId,
+                'isDelete' => $productStatus,
+                'newStatus' => $desiredStatus,
+                'isDraft' => \EasyShop\Entities\EsProduct::ACTIVE
+            ];
+            $this->em->getConnection()->executeUpdate($updateQuery, $parameters);
+            return true;
+        }
+
+        return false;
+    }
     
 }
 
