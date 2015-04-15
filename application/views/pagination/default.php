@@ -5,35 +5,36 @@
      *
      * @var integer
      */
-    $currentPage = isset($currentPage) ? $currentPage : 1;
+    $currentPage = isset($currentPage) ? (int) $currentPage : 1;
     
     /**
      * The last page
      *
      * @var integer
      */
-    $lastPage = isset($lastPage) ? $lastPage : 1;
+    $lastPage = isset($lastPage) ? (int) $lastPage : 1;
 
     /**
-     * number of pages before pagination logic kicks in
+     * The max number of pages after the current page 
+     * Also equals to the number of pages before pagination logic kicks in
      *
      * @var integer
      */
-    $maxPages = isset($maxPages) ? $maxPages : 9;
-
+    $maxPages = isset($maxPages) ? (int) $maxPages : 9;
+    
     /**
-     * Minimum number of pages to the left of the currentPage to maintain
+     * Maximum number of pages to the left of the currentPage to maintain
      *
      * @var integer
      */
-    $pagesBefore = isset($pagesBefore) ? $pagesBefore : 3;
+    $pagesBefore = isset($pagesBefore) ? (int) $pagesBefore : 3;
     
     /**
      * Add hyperlink or not
      *
      * @var bool
      */
-    $isHyperLink = isset($isHyperLink) ? $isHyperLink : true;
+    $isHyperLink = isset($isHyperLink) ? (bool) $isHyperLink : true;
 
     /**
      * The redirect url for hyperlinks
@@ -45,11 +46,10 @@
     $start = $lastPage > $maxPages ? $currentPage-$pagesBefore : 1; 
     $start = $start < 1 ? 1 : $start;
     
-    //$range = ($currentPage - $start);
-    $range = $lastPage - $currentPage -1;
-    $range = $range > $maxPages ? $maxPages : $range;
+    $pagesAfterCurrentPage = $lastPage - $currentPage - 1; 
+    $pagesAfterCurrentPage = $pagesAfterCurrentPage > $maxPages ? $maxPages : $pagesAfterCurrentPage;
 
-    $end = $lastPage > $maxPages ? $currentPage+$range : $lastPage; 
+    $end = $lastPage > $maxPages ? $currentPage + $pagesAfterCurrentPage : $lastPage; 
     $end = $end > $lastPage ? $lastPage : $end ;
 
 ?>

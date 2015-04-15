@@ -1350,6 +1350,30 @@ $string = '<typeNode>
         return $featuredProductSection;
     }
 
+    /**
+     * Get products for widgets
+     * @param  integer $productCount
+     * @return mixed
+     */
+    public function getWidgetProducts($productCount)
+    {
+        $widgetXml = $this->xmlResourceGetter->getWidgetXmlFile();
+        $widgetXmlContent = $this->xmlResourceGetter->getXMlContent($widgetXml);
+        $slugs = $widgetXmlContent['displayProducts']['slug'];
+        shuffle($slugs);
+        $finalSlugs = array_slice($slugs, 0, $productCount);
+
+        $products = [];
+        foreach ($finalSlugs as $slug) {
+            $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                ->findOneBy(['slug' => trim($slug)]);
+            if($product){
+                $products[] = $this->productManager->getProductDetails($product);
+            }
+        }
+
+        return $products;
+    }
 }
 
 

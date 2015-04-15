@@ -189,7 +189,13 @@ module.exports = function (grunt) {
                          'web/assets/css/qr-code-print.css'],
                     'web/assets/css/min-easyshop.home-reminder.css':
                         ['web/assets/css/basic.css',
-                         'web/assets/css/message-box.css']
+                         'web/assets/css/message-box.css'],
+                    'web/assets/css/min-easyshop.widget-selector.css':
+                        ['web/assets/css/how-to-page.css',
+                         'web/assets/css/widget-selector.css'],
+                    'web/assets/css/min-easyshop.widget-page.css':
+                        ['web/assets/css/bootstrap.css',
+                         'web/assets/css/widget.css']
                 }
             },
         },
@@ -420,6 +426,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.scrollTo.js',
                              'web/assets/js/src/vendor/chosen.jquery.min.js',
+                             'web/assets/js/src/easyshop.simplePagination.js',
                              'web/assets/js/src/vendorpage_new.js'],
 
                     'web/assets/js/min/easyshop.product-search-by-category-new.js':
@@ -428,7 +435,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js',
                              'web/assets/js/src/vendor/owl.carousel.min.js',
                              'web/assets/js/src/vendor/jquery.bxslider.min.js',
-                             'web/assets/js/src/vendor/jquery.simplePagination.js',
+                             'web/assets/js/src/easyshop.simplePagination.js',
                              'web/assets/js/src/product-search-by-category.js',
                              'web/assets/js/src/product-search.js'],
 
@@ -436,7 +443,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js', 
-                             'web/assets/js/src/vendor/jquery.simplePagination.js', 
+                             'web/assets/js/src/easyshop.simplePagination.js', 
                              'web/assets/js/src/product-search.js'],
 
                     'web/assets/js/min/easyshop.includes.js':
@@ -466,7 +473,18 @@ module.exports = function (grunt) {
                         ['web/assets/js/src/vendor/jquery-1.9.1.js',
                          'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                          'web/assets/js/src/how-to-page-plugins.js',
-                         'web/assets/js/src/how-to-page.js']
+                         'web/assets/js/src/how-to-page.js'],
+                     
+                    'web/assets/js/min/easyshop.widget-page.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                         'web/assets/js/src/widget.js'],
+                     
+                    'web/assets/js/min/easyshop.widget-selector.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                         'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
+                         'web/assets/js/src/how-to-page-plugins.js',
+                         'web/assets/js/src/how-to-page.js',
+                         'web/assets/js/src/widget.js']
                 }
             }
         }

@@ -59,23 +59,38 @@ function ReplaceNumberWithCommas(thisnumber){
             memconf.order = ORDER_DIRECTION_ASC;
         }
         var catDiv = $('.category-products.active');
+        
+        var $paginationContainer = catDiv.find('.simplePagination');
+        $paginationContainer.pagination('selectPage', 1);
         $('.product-paging').remove();
         ItemListAjax(catDiv,1);
     }); 
 
-    $('.div-products').on('click', '.extremes', function(){
-        var page = $(this).attr('data-page');
-        $(this).siblings('.individual[data-page="'+page+'"]').trigger('click');
-    });
+    
+       
+    $(document).on('click', '.page-link', function(){
+        return false;
+        var $this = $(this);
+        var $pagination = $this.closest('ul.pagination');
+        if($this.hasClass('next')){
+            page = parseInt($pagination.find("li.active > span").text().trim()) + 1;
+        }
+        else if($this.hasClass('prev')){
+            page = parseInt($pagination.fin("li.active > span").text().trim()) - 1;
+        }
+        else{
+            page = parseInt($this.html().trim());
+        }
 
-    $('.div-products').on('click', '.individual', function(){
-        var page = $(this).data('page');
-        var catDiv = $(this).closest('div.category-products');
+        var catDiv = $this.closest('div.category-products');
+
         var pageDiv = catDiv.find('.product-paging[data-page="'+page+'"]');
         var paginationContainer = catDiv.find('.pagination-container');
+   
+        return false;
 
         if(pageDiv.length === 1){
-            var lastPage = $(this).parent('ul').attr('data-lastpage');
+            var lastPage = $this.parent('ul').attr('data-lastpage');
             var previousPage = page - 1 < 1 ? 1 : page - 1;
             var nextPage = page + 1 <= lastPage ? page + 1 : lastPage;
             catDiv.find('.product-paging').hide();
@@ -89,6 +104,9 @@ function ReplaceNumberWithCommas(thisnumber){
         $('html,body').scrollTo(450); 
         
     });
+    
+    
+    
 
     $(document).on('click', ".tab_categories", function(e){
         var $this = $(this);
@@ -162,7 +180,7 @@ function ReplaceNumberWithCommas(thisnumber){
         validateWhiteTextBox("#filter-lprice,#filter-uprice");  
 
         $('.product-paging').remove();
-        ItemListAjax(activeCategoryProductsDiv,1);
+        ItemListAjax(activeCategoryProductsDiv,1, true);
 
         $.modal.close();
     });
@@ -187,8 +205,11 @@ function ReplaceNumberWithCommas(thisnumber){
         return sourceURL;
     }
 
-    function ItemListAjax(CatDiv,page)
+    function ItemListAjax(CatDiv,page, isRequestPagination)
     {
+        isRequestPagination = typeof isRequestPagination !== "undefined" &&
+                              isRequestPagination !== null ? isRequestPagination:
+                              false;
         if(CatDiv.length < 1){
             return false;
         }
@@ -197,7 +218,7 @@ function ReplaceNumberWithCommas(thisnumber){
         var loadingDiv = CatDiv.find('div.loading_div');
         var productPage = CatDiv.find('.product-paging');
         var currentQueryString = $("#queryString").val();
-        var paginationContainer = CatDiv.find('.pagination-container');
+        var paginationContainer = CatDiv.find('.simplePagination');
         var isCustom = CatDiv.attr("data-isCustom");
 
         memconf.ajaxStat = jQuery.ajax({
@@ -205,11 +226,11 @@ function ReplaceNumberWithCommas(thisnumber){
             url: '/store/vendorLoadProducts',
             data: "vendorId="+memconf.vid+"&vendorName="+memconf.vname+"&catId="+catId+"&catType="+catType+
                 "&page="+page+"&orderby="+memconf.orderBy+"&order="+memconf.order+"&queryString="+currentQueryString+"&condition="+memconf.condition+"&lowerPrice="+memconf.lprice+"&upperPrice="+memconf.uprice+
-                "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken+"&isCustom="+isCustom,
+                "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken+"&isCustom="+isCustom+"&hasPagination="+isRequestPagination,
             beforeSend: function(){
                 loadingDiv.show();
                 productPage.hide();
-
+                paginationContainer.hide();
                 if(memconf.ajaxStat != null){
                     memconf.ajaxStat.abort();
                 }
@@ -232,8 +253,14 @@ function ReplaceNumberWithCommas(thisnumber){
                     CatDiv.find('.loading_div').after(obj.htmlData);
                 }
 
-                $(paginationContainer).children('center').html(obj.paginationData);
-
+                if(isRequestPagination && typeof obj.pagination !== 'undefined'){
+                    paginationContainer.pagination('destroy');
+                    paginationContainer.html('');
+                    paginationContainer.html(obj.pagination);
+                    initializePagination(paginationContainer, obj.pageCount);
+                }
+                
+                paginationContainer.show();
                 CatDiv.find('[rel=tooltiplist]').tooltip({
                     placement : 'top'
                 });
@@ -379,4 +406,39 @@ function ReplaceNumberWithCommas(thisnumber){
             $.modal.close();
         });
     });
+    
+    
+    $('.simplePagination').each(function(){
+        var $paginationContainer = $(this);
+        var lastPage = $paginationContainer.find('ul').data('lastpage');
+        initializePagination($paginationContainer, lastPage);
+    });
+
+    function initializePagination($paginationContainer, lastPage)
+    {
+        $paginationContainer.pagination({
+            pages: lastPage, 
+            displayedPages: 9,
+            listStyle: 'pagination pagination-items',
+            hasHref: false,
+            onPageClick: function(page, event){
+                var $catDiv = $paginationContainer.closest('div.category-products');
+                var $pageDiv = $catDiv.find('.product-paging[data-page="'+page+'"]');
+                if($pageDiv.length === 1){
+                    var lastPage = $paginationContainer.find('ul').attr('data-lastpage');
+                    var previousPage = page - 1 < 1 ? 1 : page - 1;
+                    var nextPage = page + 1 <= lastPage ? page + 1 : lastPage;
+                    $catDiv.find('.product-paging').hide();
+                    $pageDiv.show();
+                }
+                else{
+                    ItemListAjax($catDiv,page);
+                }
+                $('html,body').scrollTo(450); 
+            }
+        });
+        
+    }
+    
+    
 })(jQuery);
