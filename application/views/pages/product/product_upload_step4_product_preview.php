@@ -153,8 +153,8 @@
                     <a class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
                     <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
                 <?php elseif($product->getPromoType() == \EasyShop\Entities\EsPromoType::BUY_AT_ZERO && (bool) $product->getStartPromo() ): ?>
-                    <input type="button" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now disabled" >
-                    <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span> 
+                    <input type="button" value="" class="prod-add-to-cart-btn btn-buy-now disabled" >
+                    <span class="span-after-btn" width="100%">Click add to cart to qualify for the promo*</span> 
                 <?php else: ?>
                     <input type="button" value="" class="prod-add-to-cart-btn disabled" >
                     <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
