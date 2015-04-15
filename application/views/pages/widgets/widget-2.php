@@ -28,48 +28,15 @@
             <div class="items-wrapper">
                 <center>
                     <div class="row">
-                        <div class="col-xs-4">
-                            <a href="#">
-                                <div class="item-img-container">
-                                    <img src="/assets/images/products/apple-p.jpg">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-xs-4">
-                            <a href="#">
-                                <div class="item-img-container">
-                                    <img src="/assets/images/products/big-dress1.jpg">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-xs-4">
-                            <a href="#">
-                                <div class="item-img-container">
-                                    <img src="/assets/images/products/big-dress5.jpg">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-xs-4">
-                            <a href="#">
-                                <div class="item-img-container">
-                                    <img src="/assets/images/products/lg-p.jpg">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-xs-4">
-                            <a href="#">
-                                <div class="item-img-container">
-                                    <img src="/assets/images/products/tiffany-p.jpg">
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-xs-4">
-                            <a href="#">
-                                <div class="item-img-container">
-                                    <img src="/assets/images/products/graff-p.jpg">
-                                </div>
-                            </a>
-                        </div>
+                        <?php foreach ($products as $product): ?>
+                            <div class="col-xs-4">
+                                <a href="/item/<?=$product->getSlug();?>" target="_blank">
+                                    <div class="item-img-container">
+                                        <img src="<?=getAssetsDomain().$product->getDefaultImage()->getDirectory().'thumbnail/'.$product->getDefaultImage()->getFilename();?>" />
+                                    </div>
+                                </a>
+                            </div>
+                        <?php endforeach;?>
                     </div>
                 </center>
             </div>
