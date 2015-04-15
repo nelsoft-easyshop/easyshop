@@ -42,7 +42,7 @@
                             </form>
                         </div>
                         <div class="item-container">
-                            <p class="container-title">Popular products</p>
+                            <p class="container-title">Popular items</p>
                             <?php foreach ($products as $product): ?>
                                 <div class="item">
                                     <a href="/item/<?=$product->getSlug();?>" target="_blank">
