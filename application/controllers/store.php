@@ -1148,10 +1148,12 @@ class Store extends MY_Controller
         }
 
         $arrCat = 
-        $parseData = [ 'arrCat' => [
-            'page' => $page,
-            'products' => $products,
-        ]];
+        $parseData = [ 
+            'arrCat' => [
+                'page' => $page,
+                'products' => $products,
+            ],
+        ];
 
         $pageCount = $productCount > 0 ? ceil($productCount/$prodLimit) : 1;
         $serverResponse = [
