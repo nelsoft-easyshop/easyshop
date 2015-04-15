@@ -132,7 +132,21 @@ class Resource
         }
         
         return $xmlfile;
-    }    
+    }
+
+    /**
+     * Return the widget.xml file
+     * @return string
+     */
+    public function getWidgetXmlFile()
+    {
+        $xmlfile = 'page/widget';
+        if ($this->configurationService->isConfigFileExists() && strlen(trim($this->configurationService->getConfigValue('XML_widget'))) > 0) {
+            $xmlfile = $this->configurationService->getConfigValue('XML_widget');
+        }
+
+        return $xmlfile;
+    }
 
 }
 

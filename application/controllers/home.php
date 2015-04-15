@@ -364,7 +364,6 @@ class Home extends MY_Controller
         $this->load->view('pages/web/redirect', $urlData);
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
-
 }
 
 /* End of file home.php */
