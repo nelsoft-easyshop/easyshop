@@ -131,7 +131,7 @@ class EsMemberProdcatRepository extends EntityRepository
      *
      *  @return array - array of product ids
      */
-    public function getAllCustomCategoryProducts($memberId, $memcatIds, $condition, $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ])
+    public function getAllCustomCategoryProducts($memberId, $memcatIds, $condition = "", $orderBy = [ CategoryManager::ORDER_PRODUCTS_BY_SORTORDER => 'ASC' ])
     {
         $productIds = [];
         
@@ -157,7 +157,7 @@ class EsMemberProdcatRepository extends EntityRepository
         $orderByString = rtrim($orderByString, ",");
 
         $em = $this->_em;
-        $dql = "SELECT pc,p
+        $dql = "SELECT p.idProduct
                 FROM EasyShop\Entities\EsMemberProdcat pc
                 JOIN pc.memcat mc
                 JOIN mc.member m
@@ -176,13 +176,12 @@ class EsMemberProdcatRepository extends EntityRepository
         if($condition !== "") {
             $query->setParameter("condition", $condition);
         }                    
-
-        $result = $query->getResult();
-
-        foreach($result as $prod){
-            $productIds[] = $prod->getProduct()->getIdProduct();
+        $productIds = [];
+        $results = $query->getScalarResult();
+        foreach($results as $result){
+            $productIds[] = (int) $result['idProduct'];
         }
-
+        
         return $productIds;
     }
     
@@ -245,4 +244,33 @@ class EsMemberProdcatRepository extends EntityRepository
         return $memberProducts;
     }
     
+    /**
+     * Get category member products by memebr category id
+     *
+     * @param integer $memberCategoryId
+     * @return EasyShop\Entities\EsMemberProdcat
+     */
+    public function getCategoryMemberProducts($memberCategoryId)
+    {
+        $em = $this->_em;
+        $dql = "SELECT 
+                    pc
+                FROM 
+                    EasyShop\Entities\EsMemberProdcat pc
+                JOIN pc.memcat mc
+                JOIN pc.product p
+                WHERE mc.idMemcat IN (:memberCategoryId)
+                    AND p.isDelete = :nonDeleteStatus
+                    AND p.isDraft = :nonDraftStatus
+                ORDER BY
+                    pc.sortOrder ASC, pc.lastmodifieddate DESC";
+        $query = $em->createQuery($dql)
+                    ->setParameter("memberCategoryId", $memberCategoryId)
+                    ->setParameter("nonDeleteStatus", \EasyShop\Entities\EsProduct::ACTIVE)
+                    ->setParameter("nonDraftStatus", \EasyShop\Entities\EsProduct::ACTIVE);
+                    
+        return $query->getResult();
+    }
+    
+
 }

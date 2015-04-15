@@ -933,37 +933,5 @@ class ProductManager
 
         return $products;
     }
-
-    /**
-     * Updates Product Status
-     * 
-     * @param int $memberId
-     * @param int $productStatus
-     * @param int $desiredStatus
-     * 
-     * @return bool
-     */
-    public function updateUserProductStatus($memberId, $productStatus, $desiredStatus)
-    {
-        $products = $this->em
-                         ->getRepository('EasyShop\Entities\EsProduct')
-                         ->findBy([
-                                "member" => $memberId,
-                                "isDelete" => $productStatus,
-                                "isDraft" => !EsProduct::DRAFT
-                            ]);
-        try{
-            foreach ($products as $value) {
-               $value->setIsDelete($desiredStatus);
-            }
-            $this->em->flush();
-            return true;
-        }
-        catch(Exception $e)
-        {
-            return false;
-        }
-    }
-
 }
 
