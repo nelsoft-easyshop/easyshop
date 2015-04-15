@@ -187,8 +187,8 @@
                         </p>
                         <div class="form-group">
 
-                            <label for="points-total">Your Current EasyPoints : <?=$userPoints;?></label>
-                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block" <?=$canUsePoints ? '' : 'readonly'; ?> onkeypress="return isNumberKey(event)" placeholder="Enter the amount of points you want to use"/>
+                            <label for="points-total">Your Current EasyPoints : <?=number_format($userPoints, 2, '.', ',');?></label>
+                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" value="<?=$usedPoints > 0 ? $usedPoints : ''; ?>" class="form-es-control form-es-control-block" <?=$canUsePoints ? '' : 'readonly'; ?> onkeypress="return isNumberKey(event)" placeholder="Enter the amount of points you want to use"/>
      
                         </div>
                         <div class="form-group">
@@ -213,8 +213,8 @@
                                 <tr>
                                     <td>Cart Subtotal</td>
                                     <td>&#8369; 
-                                        <span id="summary-cart-subtotal" data-cartprice="<?=number_format($totalAmount, 2, '.', ''); ?>">
-                                            <?=number_format($totalAmount, 2, '.', ','); ?>
+                                        <span id="summary-cart-subtotal" data-cartprice="<?=number_format($subTotalAmount, 2, '.', ''); ?>">
+                                            <?=number_format($subTotalAmount, 2, '.', ','); ?>
                                         </span>
                                     </td>
                                 </tr>
@@ -244,8 +244,8 @@
                                     <td>Total Price</td>
                                     <td>
                                         &#8369;
-                                        <span id="summary-cart-total" data-cartprice="<?=number_format($totalAmount, 2, '.', ''); ?>" >
-                                            <?=number_format(bcadd($totalAmount, $totalShippingFee, 4), 2, '.', ','); ?>
+                                        <span id="summary-cart-total" >
+                                            <?=number_format($cartTotalAmount, 2, '.', ','); ?>
                                         </span>
                                     </td>
                                 </tr>
