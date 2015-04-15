@@ -7,7 +7,8 @@
             <link type="text/css" href='/assets/css/widget.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
         <?php else: ?>
             <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.widget-page.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-        <?php endif; ?></head>
+        <?php endif; ?>
+    </head>
     <body>
         <div class="es-widget-2">
             <div class="title-bar">
