@@ -15,14 +15,15 @@
     $lastPage = isset($lastPage) ? $lastPage : 1;
 
     /**
-     * number of pages before pagination logic kicks in
+     * The max number of pages after the current page 
+     * Also equals to the number of pages before pagination logic kicks in
      *
      * @var integer
      */
-    $maxPages = isset($maxPages) ? $maxPages : 9;
+    $maxPages = isset($maxPages) ? $maxPages : 8;
 
     /**
-     * Minimum number of pages to the left of the currentPage to maintain
+     * Maximum number of pages to the left of the currentPage to maintain
      *
      * @var integer
      */
