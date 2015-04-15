@@ -197,20 +197,17 @@ $config = [
             'is_buyable_outside_promo' => true,
             'cart_solo_restriction' => false,
             'option' => [
-                'first_round' =>
-                    [
+                'first_round' => [
                         'start' => '2015-04-15 17:00:00',
                         'end' => '2015-06-15 23:59:59',
                         'limit' => PHP_INT_MAX
                     ],
-                'second_round' =>
-                    [
+                'second_round' => [
                         'start' => '2020-12-31 00:00:00',
                         'end' => '2020-12-31 23:59:59',
                         'limit' => PHP_INT_MAX
                     ],
-                'inter_school_round' =>
-                    [
+                'inter_school_round' => [
                         'start' => '2021-12-31 00:00:00',
                         'end' => '2022-12-31 23:59:59',
                         'limit' => 1
