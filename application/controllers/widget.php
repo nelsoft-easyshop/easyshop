@@ -4,8 +4,6 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-use EasyShop\Entities\EsCat as EsCat;
-
 class Widget extends MY_Controller
 {
     const WIDGET_FIRST_TYPE = 1;
@@ -81,9 +79,7 @@ class Widget extends MY_Controller
 
         if($widgetType === self::WIDGET_FIRST_TYPE){
             $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                       ->findBy([
-                                            'parent' => EsCat::ROOT_CATEGORY_ID
-                                        ]);
+                                       ->getParentCategories(8);
             $viewData['categories'] = $this->categoryManager
                                            ->applyProtectedCategory($parentCategory, false);
             return $this->load->view('pages/widgets/widget-1', $viewData, $asVar);
