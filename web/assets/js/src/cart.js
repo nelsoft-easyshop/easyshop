@@ -319,6 +319,7 @@
         $usedPoints = 0;
         $("#points-total").val("");
         $("#used-points").val($usedPoints);
+        validateWhiteTextBox("#points-total");
         computePrices();
     });
 
