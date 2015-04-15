@@ -367,7 +367,7 @@
     <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
     <script src="/assets/js/src/vendor/owl.carousel.min.js"></script>
     <script src="/assets/js/src/vendor/jquery.bxslider.min.js"></script>
-    <script src="/assets/js/src/vendor/jquery.simplePagination.js"></script>
+    <script src="/assets/js/src/easyshop.simplePagination.js"></script>
     <script src="/assets/js/src/product-search-by-category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/src/product-search.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>

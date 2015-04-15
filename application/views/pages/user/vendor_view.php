@@ -155,6 +155,13 @@
                         <?php else:?>
                             <?=$categoryData['product_html_data'];?>
                         <?php endif;?>
+                        
+                        <center>
+                            <div class="simplePagination">
+                                <?=$categoryData['pagination'];?>
+                            </div>
+                        </center>
+                        
                     </div>
                     <?php $isFirst = false; ?>
                 <?php endforeach;?>
@@ -239,6 +246,7 @@
     <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.scrollTo.js" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
+    <script src="/assets/js/src/easyshop.simplePagination.js"></script>
     <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_vendor_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

@@ -1,4 +1,5 @@
     <div class="product-paging" data-page="<?php echo $arrCat['page']?>">
+
         <div class="product-inner-container">
             <?php foreach($arrCat['products'] as $objProduct):?>
             <?php 
@@ -144,11 +145,6 @@
                 </div>
             <?php endforeach;?>
         </div>
-            <div class="clear"></div>
-             
-            <center>
-                <?php echo $arrCat['pagination']?> 
-            </center>
+        <div class="clear"></div>
     </div>
 
-   
