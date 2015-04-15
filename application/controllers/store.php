@@ -1064,6 +1064,7 @@ class Store extends MY_Controller
         $rawOrderBy = intval($this->input->get('orderby'));
         $rawOrder = intval($this->input->get('order'));
         $isCount = intval($this->input->get('count')) === 1;
+        $isRequestPagination = $this->input->get('hasPagination') ? (bool)  $this->input->get('hasPagination')  : false;
         $isCustom = $this->input->get('isCustom') === 'true';
         $condition = $this->input->get('condition') !== "" 
                     && isset($this->lang->line('product_condition')[$this->input->get('condition')]) 
@@ -1161,6 +1162,15 @@ class Store extends MY_Controller
             'isCount' => $isCount,
             'pageCount' => $pageCount,
         ];
+
+        if($isRequestPagination){
+            $paginationData = [
+                'totalPage' => $pageCount,
+                'hasHashtag' => false,
+            ];
+            $pagination = $this->load->view('pagination/search-pagination', $paginationData, true);      
+            $serverResponse['pagination'] = $pagination;
+        }
 
         echo json_encode($serverResponse);
     }
