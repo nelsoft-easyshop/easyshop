@@ -96,7 +96,7 @@ header {
 }
 
 .header-cart-wrapper .header-cart-items-con {
-    font-size: 1em;
+    font-size: 12px;
     border-radius: 4px 0 0 4px;
     height: 34px;
     line-height: 34px;
@@ -793,9 +793,9 @@ header {
 }
 
 .dropdown-cart-menu-container {
-    padding-bottom:8px;
+    margin-left: 19px;
+    padding-bottom: 8px;
     position: relative;
-    margin-left:20px;
 } 
 
 .sr-title {
