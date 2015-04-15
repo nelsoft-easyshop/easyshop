@@ -94,19 +94,19 @@ class Store extends MY_Controller
                     $productView['categoryProducts']['search']['cat_type'] = CategoryManager::CATEGORY_SEARCH_TYPE;
 
                     $paginationData = array(
-                        'lastPage' => ceil($count/$this->vendorProdPerPage)
-                        ,'isHyperLink' => false
+                        'totalPage' => ceil($count/$this->vendorProdPerPage),
+                        'hasHashtag' => false,
                     );
-                    $pagination = $this->load->view('pagination/default', $paginationData, true);
+                    $pagination = $this->load->view('pagination/search-pagination', $paginationData, true);
 
                     $view = array(
                         'arrCat' => array(
                             'products'=>$searchProduct,
                             'page' => 1,
-                            'pagination' => $pagination,
                         )
                     );
                     $productView['categoryProducts']['search']['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);
+                    $productView['categoryProducts']['search']['pagination'] = $pagination;
                 }
 
                 //HEADER DATA
@@ -466,19 +466,20 @@ class Store extends MY_Controller
             $categoryData[$key]['non_categorized_count'] = $result['filtered_product_count'];
             $categoryData[$key]['json_subcat'] = json_encode($categoryIdCollection, JSON_FORCE_OBJECT);
             $categoryData[$key]['cat_type'] = CategoryManager::CATEGORY_NONSEARCH_TYPE;
+
             $paginationData = [
-                'lastPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage),
-                'isHyperLink' => false,
+                'totalPage' => ceil($result['filtered_product_count']/$this->vendorProdPerPage),
+                'hasHashtag' => false,
             ];
-            $pagination = $this->load->view('pagination/default', $paginationData, true);
+            $pagination = $this->load->view('pagination/search-pagination', $paginationData, true);
             $view = [
                 'arrCat' => [
                     'products' => $result['products'],
                     'page' => 1,
-                    'pagination' => $pagination,
                 ]
             ];
             $categoryData[$key]['product_html_data'] = $this->load->view("pages/user/display_product", $view, true);          
+            $categoryData[$key]['pagination'] = $pagination;
         }    
 
         return $categoryData;
@@ -1146,27 +1147,19 @@ class Store extends MY_Controller
                 break;
         }
 
-        $arrCat = array(
+        $arrCat = 
+        $parseData = [ 'arrCat' => [
             'page' => $page,
-            'products' => $products
-        );
-        $parseData = array('arrCat'=>$arrCat);
-        
-        $pageCount = $productCount > 0 ? ceil($productCount/$prodLimit) : 1;
+            'products' => $products,
+        ]];
 
-        $paginationData = [
-            'lastPage' => $pageCount,
-            'isHyperLink' => false,
-            'currentPage' => $page,
-        ];
-        $parseData['arrCat']['pagination'] = $this->load->view("pagination/default", $paginationData, true);
+        $pageCount = $productCount > 0 ? ceil($productCount/$prodLimit) : 1;
         $serverResponse = [
             'htmlData' => $this->load->view("pages/user/display_product", $parseData, true),
             'isCount' => $isCount,
             'pageCount' => $pageCount,
-            'paginationData' => $this->load->view("pagination/default", $paginationData, true),
         ];
-
+        
         echo json_encode($serverResponse);
     }
 
