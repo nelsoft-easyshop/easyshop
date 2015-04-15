@@ -12,52 +12,19 @@
                     <div class="left-wing">
                         <center>
                             <div class="es-logo-container">
-                                <a>
-                                    <img class="es-logo" src="/assets/images/categories/icon-widget/es-logo.png" />
+                                <a href="/">
+                                    <img class="es-logo" src="<?=getAssetsDomain();?>assets/images/categories/icon-widget/es-logo.png" />
                                 </a>
                                 <span class="arrow-es"></span>
                             </div>
                             <ul class="list-unstyled category-list">
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/images/categories/icon-widget/clothing-accessories.png">  
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/images/categories/icon-widget/electronics-gadgets.png">   
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/images/categories/icon-widget/health-beauty.png"> 
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/images/categories/icon-widget/business-industrial.png">   
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/images/categories/icon-widget/food-beverages.png">    
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/images/categories/icon-widget/furniture-home-garden.png"> 
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/images/categories/icon-widget/jewellery-watches.png"> 
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <img src="/assets/images/categories/icon-widget/books-music-movies.png">    
-                                    </a>
-                                </li>
+                                <?php foreach ($categories as $category): ?>
+                                    <li>
+                                        <a href="/category/<?=$category->getSlug();?>">
+                                            <img src="<?=getAssetsDomain();?>assets/images/categories/icon-widget/<?=$category->getSlug();?>.png">
+                                        </a>
+                                    </li>
+                                <?php endforeach;?>
                             </ul>
                         </center>
                     </div>
@@ -65,51 +32,30 @@
                 <div class="col-xs-9">
                     <div class="right-wing">
                         <div class="search-form">
-                            <input type="text" class="search-textfield" placeholder="Search item here"/>
-                            <i class="icon-search"></i>
+                            <form method="get" action="/search/search.html">
+                                <input type="text" class="search-textfield" name="q_str" placeholder="Search item here"/>
+                                <i class="icon-search"></i>
+                            </form>
                         </div>
                         <div class="item-container">
                             <p class="container-title">Popular products</p>
-                            <div class="item">
-                                <a href="#">
-                                    <div class="item-img-container">
-                                        <img src="/assets/images/products/apple-p.jpg" />
-                                    </div>
-                                </a>
-                                <a href="#" class="item-name">IPHONE 6 Plus</a>
-                                <p class="item-price">&#8369; 42, 000</p>
-                            </div>
-                            <div class="item">
-                                <a href="#">
-                                    <div class="item-img-container">
-                                        <img src="/assets/images/products/big-dress1.jpg">
-                                    </div>
-                                </a>
-                                <a href="#" class="item-name">White Dress</a>
-                                <p class="item-price">&#8369; 2, 000</p>
-                            </div>
-                            <div class="item">
-                                <a href="#">
-                                    <div class="item-img-container">
-                                        <img src="/assets/images/products/big-dress5.jpg">
-                                    </div>
-                                </a>
-                                <a href="#" class="item-name">Black Crop Top</a>
-                                <p class="item-price">&#8369; 1, 000</p>
-                            </div>
-                            <div class="item">
-                                <a href="#">
-                                    <div class="item-img-container">
-                                        <img src="/assets/images/products/tiffany-p.jpg">
-                                    </div>
-                                </a>
-                                <a href="#" class="item-name">Earrings</a>
-                                <p class="item-price">&#8369; 12, 000</p>
-                            </div>
+                            <?php foreach ($products as $product): ?>
+                                <div class="item">
+                                    <a href="/item/<?=$product->getSlug();?>">
+                                        <div class="item-img-container">
+                                            <img src="<?=getAssetsDomain().$product->getDefaultImage()->getDirectory().'thumbnail/'.$product->getDefaultImage()->getFilename();?>" />
+                                        </div>
+                                    </a>
+                                    <a href="/item/<?=$product->getSlug();?>" class="item-name">
+                                        <?=html_escape($product->getName());?>
+                                    </a>
+                                    <p class="item-price">&#8369; <?=number_format($product->getFinalPrice(), 2, '.', ',')?></p>
+                                </div>
+                            <?php endforeach;?>
                         </div>
                         <div class="clear"></div>
                         <div class="see-all-container">
-                            <a href="#">See All</a>
+                            <a href="/">See All</a>
                         </div>
                     </div>
                 </div>
