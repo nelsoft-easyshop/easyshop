@@ -56,7 +56,7 @@
             <div class="container load-animate">
                 <div class="text-center dropdown-school-list">
                     <select id="ddown-school">
-                        <option value=""></option>
+                        <option value="" disabled selected >Select your university...</option>
                         <?PHP foreach($schools_and_students as $school => $students) : ?>
                         <option value="<?=html_escape(str_replace(' ', '-', $school))?>" data-students='<?=json_encode(html_escape($students['students']))?>'><?=html_escape($school)?></option>
                         <?PHP endforeach; ?>
