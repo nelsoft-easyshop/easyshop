@@ -481,6 +481,7 @@ module.exports = function (grunt) {
                      
                     'web/assets/js/min/easyshop.widget-selector.js':
                         ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                         'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                          'web/assets/js/src/how-to-page-plugins.js',
                          'web/assets/js/src/how-to-page.js',
                          'web/assets/js/src/widget.js']
