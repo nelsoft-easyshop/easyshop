@@ -289,6 +289,13 @@
         $usedPoints = $pointValue === "" ? 0 : parseFloat($pointValue);
         $usedPoints = isNaN($usedPoints) ? 0 : parseFloat($usedPoints);
 
+        if($usedPoints <= 0){
+            $('.btn-reset-points').hide();
+        }
+        else{
+            $('.btn-reset-points').show();
+        }
+
         if($usedPoints > $maxPoints){
             $usedPoints = 0;
             validateRedTextBox("#points-total");
@@ -307,9 +314,12 @@
     $('.btn-deduct-points').trigger('click');
 
     $('.btn-reset-points').on('click', function(){
+        var $this = $(this);
+        $this.hide();
         $usedPoints = 0;
         $("#points-total").val("");
         $("#used-points").val($usedPoints);
+        validateWhiteTextBox("#points-total");
         computePrices();
     });
 

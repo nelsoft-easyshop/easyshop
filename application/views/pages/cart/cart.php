@@ -188,12 +188,12 @@
                         <div class="form-group">
 
                             <label for="points-total">Your Current EasyPoints : <?=$userPoints;?></label>
-                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block"  onkeypress="return isNumberKey(event)" placeholder="Enter the amount of points you want to use"/>
+                            <input type="text" id="points-total" data-totalpoints="<?=$userPoints;?>" class="form-es-control form-es-control-block" <?=$canUsePoints ? '' : 'readonly'; ?> onkeypress="return isNumberKey(event)" placeholder="Enter the amount of points you want to use"/>
      
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-es-green btn-sm btn-deduct-points" <?=$isCartEmpty ? 'disabled' : ''; ?>>Use Points</button>
-                            <button class="btn btn-es-white btn-sm btn-reset-points" <?=$isCartEmpty ? 'disabled' : ''; ?>>Reset</button>
+                            <button class="btn btn-es-green btn-sm btn-deduct-points" <?=$canUsePoints ? '' : 'disabled'; ?>>Use Points</button>
+                            <button class="btn btn-es-white btn-sm btn-reset-points" <?=$canUsePoints ? '' : 'disabled'; ?>>Reset</button>
                         </div>
                     </div>
                 </div>
