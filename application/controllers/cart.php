@@ -55,7 +55,7 @@ class Cart extends MY_Controller
         $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         if ($this->session->userdata('member_id')) {
             $memberId = (int) $this->session->userdata('member_id');
-            $usedPoints = (int) $this->input->get('points');
+            $usedPoints = (float) $this->input->get('points');
             $userPoints = $this->pointTracker->getUserPoint($memberId);
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
             $subTotalAmount = str_replace(',', '', $this->cartImplementation->getTotalPrice());
