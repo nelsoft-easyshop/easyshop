@@ -55,12 +55,15 @@ class Cart extends MY_Controller
         $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         if ($this->session->userdata('member_id')) {
             $memberId = (int) $this->session->userdata('member_id');
+            $usedPoints = (int) $this->input->get('points');
+            $userPoints = $this->pointTracker->getUserPoint($memberId);
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-            $totalAmount = str_replace(',', '', $this->cartImplementation->getTotalPrice());
+            $subTotalAmount = str_replace(',', '', $this->cartImplementation->getTotalPrice());
             $locations = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                   ->getLocationLookup();
             $userAddress = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
             $totalShippingFee = $this->cartManager->getCartShippingFee($userAddress['stateRegion'], $memberId);
+            $cartTotalAmount = bcadd($subTotalAmount, $totalShippingFee, 4);
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
                 "title" => "Cart | Easyshop.ph",
@@ -76,12 +79,16 @@ class Cart extends MY_Controller
                 'userAddress' => $userAddress,
                 'continue_url' => $continueUrl,
                 'cart_items' => $cartContents,
-                'totalAmount' => $totalAmount,
-                'userPoints' => $this->pointTracker->getUserPoint($memberId),
+                'subTotalAmount' => $subTotalAmount,
+                'userPoints' => $userPoints,
                 'isCartEmpty' => $this->cartImplementation->getSize() === 0,
                 'locations' => $locations,
                 'totalShippingFee' => $totalShippingFee,
-                'canUsePoints' => bcadd($totalAmount, $totalShippingFee, 4) >= PointGateway::MIN_AMOUNT_ALLOWED
+                'cartTotalAmount' => $cartTotalAmount,
+                'canUsePoints' => $cartTotalAmount >= PointGateway::MIN_AMOUNT_ALLOWED,
+                'usedPoints' => $usedPoints > $userPoints || $usedPoints > $cartTotalAmount
+                                ? 0 
+                                : $usedPoints,
             ];
 
             $this->load->spark('decorator');

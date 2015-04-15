@@ -294,11 +294,12 @@ class Payment extends MY_Controller
                     $bodyData['paymentType'] = $checkoutService->getPaymentTypeAvailable($bodyData['cartData']);
                     $bodyData['canCheckout'] = $checkoutService->checkoutCanContinue($bodyData['cartData'], false, false);
                     $bodyData['checkoutError'] = $checkoutService->getCheckoutError($bodyData['cartData']);
-                    $postPoints = bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4) >= PointGateway::MIN_AMOUNT_ALLOWED
+                    $totalAmount = bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4);
+                    $postPoints = $totalAmount >= PointGateway::MIN_AMOUNT_ALLOWED
+                                    || $totalAmount >= $postPoints
                                   ? $postPoints
                                   : 0;
                     $bodyData['usedPoints'] = $postPoints > $userMaxPoints ? $userMaxPoints : $postPoints;
-                    $totalAmount = bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4);
                     $bodyData['grandTotal'] = bcsub($totalAmount, $bodyData['usedPoints'], 4);
                     $bodyData['payAllViaPoints'] = bccomp($totalAmount, $bodyData['usedPoints'], 4) === 0;
                     $this->session->set_userdata('choosen_items', $bodyData['cartData']); 
