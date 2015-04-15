@@ -6,13 +6,15 @@ $CI =& get_instance();
 $dragonPaySoapClient = $CI->kernel->serviceContainer['dragonpay_soap_client'];
 $configLoader = $CI->kernel->serviceContainer['config_loader'];
 $paymentService = $CI->kernel->serviceContainer['payment_service'];
+$emailService = $CI->kernel->serviceContainer['email_notification'];
 
+use EasyShop\Script\ScriptBaseClass as ScriptBaseClass;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\PaymentService\PaymentService as PaymentService;
 
-class CheckDragonPayTransaction
+class CheckDragonPayTransaction extends ScriptBaseClass
 {
     const EXPIRATION_DAYS = 5;
 
@@ -22,15 +24,19 @@ class CheckDragonPayTransaction
     private $merchantPwd;
     private $holidays;
     private $paymentService;
+    private $emailService;
+    private $configLoader;
 
     /**
      * Constructor
-     * @param string                                  $hostName
-     * @param string                                  $dbUsername
-     * @param string                                  $dbPassword
-     * @param \nusoap_client                          $dragonPaySoapClient
-     * @param array                                   $dragpayConfig
-     * @param EasyShop\PaymentService\PaymentService  $paymentService
+     * @param string                                   $hostName
+     * @param string                                   $dbUsername
+     * @param string                                   $dbPassword
+     * @param \nusoap_client                           $dragonPaySoapClient
+     * @param array                                    $dragpayConfig
+     * @param EasyShop\PaymentService\PaymentService   $paymentService
+     * @param EasyShop\Notifications\EmailNotification $emailService
+     * @param EasyShop\ConfigLoader\ConfigLoader       $configLoader
      */
     public function __construct(
         $hostName,
@@ -38,9 +44,13 @@ class CheckDragonPayTransaction
         $dbPassword,
         $dragonPaySoapClient,
         $dragpayConfig,
-        $paymentService
+        $paymentService,
+        $emailService,
+        $configLoader
     )
     {
+        parent::__construct($emailService, $configLoader);
+
         $this->connection = new PDO(
             $hostName,
             $dbUsername,
@@ -371,7 +381,9 @@ $dragonpayCheck  = new checkDragonPayTransaction(
     $CI->db->password,
     $dragonPaySoapClient,
     $config,
-    $paymentService
+    $paymentService,
+    $emailService,
+    $configLoader
 );
 
 $dragonpayCheck->execute();
