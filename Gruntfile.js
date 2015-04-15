@@ -195,7 +195,6 @@ module.exports = function (grunt) {
                          'web/assets/css/widget-selector.css'],
                     'web/assets/css/min-easyshop.widget-page.css':
                         ['web/assets/css/bootstrap.css',
-                         'web/assets/css/easy-icons/easy-icons.css',
                          'web/assets/css/widget.css']
                 }
             },
