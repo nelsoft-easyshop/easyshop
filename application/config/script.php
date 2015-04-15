@@ -3,6 +3,8 @@
 $config = [
     'emailParameter' => [
         'subject' => 'EasyShop Script Error',
-        'recipient' => 'ryanannatuvasquez@easyshop.ph',
+        'recipient' => [
+            'ryanannatuvasquez@easyshop.ph'
+        ],
     ]
 ];
