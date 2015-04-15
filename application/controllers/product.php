@@ -589,7 +589,7 @@ class product extends MY_Controller
                     if($productItem){
                         $soloQuantity = $soloQuantity > EsProductItem::MAX_QUANTITY 
                                         ? EsProductItem::MAX_QUANTITY 
-                                        : $soloQuantity;
+                                        : (int) $soloQuantity;
                         $productItem->setQuantity($soloQuantity);
                     }
                 }
@@ -603,7 +603,7 @@ class product extends MY_Controller
                     if($productItem){
                         $combQuantity = $value['quantity'] > EsProductItem::MAX_QUANTITY 
                                         ? EsProductItem::MAX_QUANTITY 
-                                        : $value['quantity'];
+                                        : (int) $value['quantity'];
                         $productItem->setQuantity($combQuantity);
                     }
                 }
@@ -651,6 +651,7 @@ class product extends MY_Controller
             if(in_array($errorMessage, $arrayErrorMessages) === false){
                 $errorMessage = 'We are encountering a problem right now. Please try again later';
             }
+            $serverResponse['result'] = false;
             $serverResponse['error'] = $errorMessage;
         }
 
