@@ -27,56 +27,50 @@
             </div>
             <div class="items-wrapper">
                 <center>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <a href="#">
-                                        <div class="item-img-container">
-                                            <img src="/assets/images/products/apple-p.jpg">
-                                        </div>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="#">
-                                        <div class="item-img-container">
-                                            <img src="/assets/images/products/big-dress1.jpg">
-                                        </div>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="#">
-                                        <div class="item-img-container">
-                                            <img src="/assets/images/products/big-dress5.jpg">
-                                        </div>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="#">
-                                        <div class="item-img-container">
-                                            <img src="/assets/images/products/lg-p.jpg">
-                                        </div>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="#">
-                                        <div class="item-img-container">
-                                            <img src="/assets/images/products/tiffany-p.jpg">
-                                        </div>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="#">
-                                        <div class="item-img-container">
-                                            <img src="/assets/images/products/graff-p.jpg">
-                                        </div>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <a href="#">
+                                <div class="item-img-container">
+                                    <img src="/assets/images/products/apple-p.jpg">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="#">
+                                <div class="item-img-container">
+                                    <img src="/assets/images/products/big-dress1.jpg">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="#">
+                                <div class="item-img-container">
+                                    <img src="/assets/images/products/big-dress5.jpg">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="#">
+                                <div class="item-img-container">
+                                    <img src="/assets/images/products/lg-p.jpg">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="#">
+                                <div class="item-img-container">
+                                    <img src="/assets/images/products/tiffany-p.jpg">
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xs-4">
+                            <a href="#">
+                                <div class="item-img-container">
+                                    <img src="/assets/images/products/graff-p.jpg">
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </center>
             </div>
         </div>
