@@ -1526,11 +1526,12 @@ class Memberpage extends MY_Controller
                 $productManager = $this->serviceContainer['product_manager'];
                 $isUpdateSuccess = false;
                 if($isActionValid) {
-                    $isUpdateSuccess = $productManager->updateUserProductStatus(
-                                                        $member["member"]->getIdMember(), 
-                                                        $productStatus, 
-                                                        $desiredStatus
-                                                    );
+                    $isUpdateSuccess = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                ->updateUserProductsStatus(
+                                                    $member["member"]->getIdMember(), 
+                                                    $productStatus,
+                                                    $desiredStatus
+                                                );
                 }
                 if(!$isUpdateSuccess) {
                     $resultMessage = "Database Error";
