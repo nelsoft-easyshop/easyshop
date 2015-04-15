@@ -180,7 +180,7 @@ function ReplaceNumberWithCommas(thisnumber){
         validateWhiteTextBox("#filter-lprice,#filter-uprice");  
 
         $('.product-paging').remove();
-        ItemListAjax(activeCategoryProductsDiv,1);
+        ItemListAjax(activeCategoryProductsDiv,1, true);
 
         $.modal.close();
     });
@@ -205,8 +205,11 @@ function ReplaceNumberWithCommas(thisnumber){
         return sourceURL;
     }
 
-    function ItemListAjax(CatDiv,page)
+    function ItemListAjax(CatDiv,page, isRequestPagination)
     {
+        isRequestPagination = typeof isRequestPagination !== "undefined" &&
+                              isRequestPagination !== null ? isRequestPagination:
+                              false;
         if(CatDiv.length < 1){
             return false;
         }
@@ -223,7 +226,7 @@ function ReplaceNumberWithCommas(thisnumber){
             url: '/store/vendorLoadProducts',
             data: "vendorId="+memconf.vid+"&vendorName="+memconf.vname+"&catId="+catId+"&catType="+catType+
                 "&page="+page+"&orderby="+memconf.orderBy+"&order="+memconf.order+"&queryString="+currentQueryString+"&condition="+memconf.condition+"&lowerPrice="+memconf.lprice+"&upperPrice="+memconf.uprice+
-                "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken+"&isCustom="+isCustom,
+                "&count="+memconf.countfiltered+"&"+memconf.csrfname+"="+memconf.csrftoken+"&isCustom="+isCustom+"&hasPagination="+isRequestPagination,
             beforeSend: function(){
                 loadingDiv.show();
                 productPage.hide();
@@ -249,6 +252,14 @@ function ReplaceNumberWithCommas(thisnumber){
                 else{
                     CatDiv.find('.loading_div').after(obj.htmlData);
                 }
+
+                if(isRequestPagination && typeof obj.pagination !== 'undefined'){
+                    paginationContainer.pagination('destroy');
+                    paginationContainer.html('');
+                    paginationContainer.html(obj.pagination);
+                    initializePagination(paginationContainer, obj.pageCount);
+                }
+                
                 paginationContainer.show();
                 CatDiv.find('[rel=tooltiplist]').tooltip({
                     placement : 'top'
@@ -400,8 +411,11 @@ function ReplaceNumberWithCommas(thisnumber){
     $('.simplePagination').each(function(){
         var $paginationContainer = $(this);
         var lastPage = $paginationContainer.find('ul').data('lastpage');
+        initializePagination($paginationContainer, lastPage);
+    });
 
-        
+    function initializePagination($paginationContainer, lastPage)
+    {
         $paginationContainer.pagination({
             pages: lastPage, 
             displayedPages: 9,
@@ -424,7 +438,7 @@ function ReplaceNumberWithCommas(thisnumber){
             }
         });
         
-    });
-
+    }
+    
     
 })(jQuery);
