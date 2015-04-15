@@ -425,6 +425,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.scrollTo.js',
                              'web/assets/js/src/vendor/chosen.jquery.min.js',
+                             'web/assets/js/src/easyshop.simplePagination.js',
                              'web/assets/js/src/vendorpage_new.js'],
 
                     'web/assets/js/min/easyshop.product-search-by-category-new.js':
@@ -433,7 +434,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js',
                              'web/assets/js/src/vendor/owl.carousel.min.js',
                              'web/assets/js/src/vendor/jquery.bxslider.min.js',
-                             'web/assets/js/src/vendor/jquery.simplePagination.js',
+                             'web/assets/js/src/easyshop.simplePagination.js',
                              'web/assets/js/src/product-search-by-category.js',
                              'web/assets/js/src/product-search.js'],
 
@@ -441,7 +442,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js', 
-                             'web/assets/js/src/vendor/jquery.simplePagination.js', 
+                             'web/assets/js/src/easyshop.simplePagination.js', 
                              'web/assets/js/src/product-search.js'],
 
                     'web/assets/js/min/easyshop.includes.js':

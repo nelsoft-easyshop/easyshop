@@ -1919,8 +1919,10 @@ td.td-view.p-view2.color-default{
     margin-left: -10px;
     padding: 0px;
 }
-.pagination-items > li > a > span{
-    color: #565656;
+
+.pagination-items > li > a > span, 
+.pagination-items > li > a {
+    color: #565656 !important;
     
 }
 .pagination-items > .active > a{
