@@ -1435,6 +1435,7 @@ class Payment extends MY_Controller
             elseif($client === "Easydeal"){
                 $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
                 $curl = new Curl();
+                $curl->setOpt(CURLOPT_SSL_VERIFYPEER, strtolower(ENVIRONMENT) === 'production');
                 $curl->post($curlUrl, $this->input->post());
                 header("Content-Type:text/plain");
                 echo 'result=OK'; // acknowledgement
@@ -1495,6 +1496,7 @@ class Payment extends MY_Controller
             if(strtolower($this->input->post('remark')) === "easydeal"){
                 $curlUrl = $paymentConfig['payment_type']['pesopay']['Easydeal']['postback_url'];
                 $curl = new Curl();
+                $curl->setOpt(CURLOPT_SSL_VERIFYPEER, strtolower(ENVIRONMENT) === 'production');
                 $curl->post($curlUrl, $params);
             }
             else{
