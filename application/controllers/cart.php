@@ -5,6 +5,7 @@ if (!defined('BASEPATH')) {
 }
 
 use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\PaymentGateways\PointGateway as PointGateway;
 
 class Cart extends MY_Controller
 {
@@ -54,12 +55,12 @@ class Cart extends MY_Controller
         $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         if ($this->session->userdata('member_id')) {
             $memberId = (int) $this->session->userdata('member_id');
-            $cartContents = $this->cartManager->getValidatedCartContents($memberId); 
-            $totalAmount = $this->cartImplementation->getTotalPrice();
+            $cartContents = $this->cartManager->getValidatedCartContents($memberId);
+            $totalAmount = str_replace(',', '', $this->cartImplementation->getTotalPrice());
             $locations = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
                                   ->getLocationLookup();
             $userAddress = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
-
+            $totalShippingFee = $this->cartManager->getCartShippingFee($userAddress['stateRegion'], $memberId);
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
                 "title" => "Cart | Easyshop.ph",
@@ -75,18 +76,19 @@ class Cart extends MY_Controller
                 'userAddress' => $userAddress,
                 'continue_url' => $continueUrl,
                 'cart_items' => $cartContents,
-                'totalAmount' => str_replace( ',', '', $totalAmount ),
+                'totalAmount' => $totalAmount,
                 'userPoints' => $this->pointTracker->getUserPoint($memberId),
                 'isCartEmpty' => $this->cartImplementation->getSize() === 0,
                 'locations' => $locations,
-                'totalShippingFee' => $this->cartManager->getCartShippingFee($userAddress['stateRegion'] ,$memberId)
+                'totalShippingFee' => $totalShippingFee,
+                'canUsePoints' => bcadd($totalAmount, $totalShippingFee, 4) >= PointGateway::MIN_AMOUNT_ALLOWED
             ];
 
             $this->load->spark('decorator');
             $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('pages/cart/cart', $bodyData);
             $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view', $headerData));
-        } 
+        }
         else {
             redirect('/login', 'refresh');
         }
