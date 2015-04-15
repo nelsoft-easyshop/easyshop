@@ -132,6 +132,7 @@
     $route['(?i)TwelveDaysOfChristmas'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
     $route['(?i)Estudyantrepreneur'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromo';
     $route['(?i)EstudyantrepreneurSuccess'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoSuccess';
+    $route['(?i)EstudyantrepreneurStandings'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoStandings';
     #MESSAGES
     $route['(?i)messages'] = '/MessageController/messages';
 
@@ -161,6 +162,14 @@
     $route['mobile/payment/pay/request'] = 'mobile/mobilepayment/paymentRequestToken';
     $route['mobile/payment/pay/cod'] = 'mobile/mobilepayment/paymentCashOnDelivery';
     $route['mobile/payment/pay/paypal'] = 'mobile/mobilepayment/paymentPaypalPersist';
+
+    $route['mobile/product/upload/add-image'] = 'mobile/mobileProductUpload/uploadImage';
+    $route['mobile/product/upload/request-token'] = 'mobile/mobileProductUpload/requestUploadToken';
+    $route['mobile/product/upload/process'] = 'mobile/mobileProductUpload/processUpload';
+
+    $route['mobile/resources/category-list'] = 'mobile/resources/getCategories';
+    $route['mobile/resources/location-shipping'] = 'mobile/resources/getLocationForShipping';
+    $route['mobile/resources/location-address'] = 'mobile/resources/getLocationForAddress';
 
     $route['mobile/add-device-token'] = 'mobile/notification/addDeviceToken';
 

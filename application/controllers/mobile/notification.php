@@ -5,7 +5,7 @@ if (!defined('BASEPATH'))
 
 use EasyShop\Entities\EsDeviceToken as EsDeviceToken;
 use EasyShop\Entities\EsApiType as EsApiType;
-use EasyShop\Entities\OauthClients as OauthClients;
+use EasyShop\Entities\OauthClients as OauthClients; 
 
 class Notification extends MY_Controller 
 {
@@ -15,7 +15,7 @@ class Notification extends MY_Controller
 
         //Load service 
         $this->em = $this->serviceContainer['entity_manager'];
-    }
+    }  
 
     /**
      * URL to request add device token 
@@ -25,46 +25,57 @@ class Notification extends MY_Controller
     {
         header('Content-type: application/json');
         $jwtContainer = $this->serviceContainer['json_web_token'];
+        $configLoader = $this->serviceContainer['config_loader'];
+        $mcryptContainer = $this->serviceContainer['mcrypt'];
+
         $jwt = trim($this->input->post('jwt'));
+        $mcrypt = trim($this->input->post('mcrypt'));
         $isSuccess = false; 
         $clientId = strtolower(ENVIRONMENT) === 'production'
                     ? OauthClients::PROD_CLIENTID
                     : OauthClients::DEV_CLIENTID;
 
         try {
+            $oauthClients = $this->em->getRepository('EasyShop\Entities\OauthClients')
+                                     ->find($clientId);
+            $decryptString = null;
             if($jwt){
-                $oauthClients = $this->em->getRepository('EasyShop\Entities\OauthClients')
-                                         ->find($clientId);
-                $jwtObject = $jwtContainer->decode($jwt, $oauthClients->getClientSecret());
-                if($jwtObject
-                    && $oauthClients
-                    && isset($jwtObject->api_type) 
-                    && isset($jwtObject->deviceToken) 
-                    && isset($jwtObject->client_id)){
+                $decryptString = $jwtContainer->decode($jwt, $oauthClients->getClientSecret(), true);
+            }
+            elseif($mcrypt){
+                $mcryptConfig =  $configLoader->getItem('mcrypt');
+                $mcryptContainer->setKey($mcryptConfig['16byte_key']);
+                $mcryptContainer->setIv($mcryptConfig['16byte_iv']);
+                $decryptString = json_decode($mcryptContainer->decrypt($mcrypt));
+            }
 
-                    if($jwtObject->client_id === $clientId){
-                        $apiType = $this->em->getRepository('EasyShop\Entities\EsApiType')
-                                            ->findOneBy(['apiType' => $jwtObject->api_type]);
+            if($oauthClients
+                && isset($decryptString->api_type) 
+                && isset($decryptString->deviceToken) 
+                && isset($decryptString->client_id)){
 
-                        if($apiType){
-                            $isTokenSupported = $this->supportDeviceToken($jwtObject->deviceToken, $apiType->getIdApiType());
-                            if($isTokenSupported){
-                                $token = $this->em->getRepository('EasyShop\Entities\EsDeviceToken')
-                                                  ->findOneBy(['deviceToken' => $jwtObject->deviceToken]);
-                                if(!$token){
-                                    $newToken = new EsDeviceToken();
-                                    $newToken->setDeviceToken($jwtObject->deviceToken);
-                                    $newToken->setIsActive(EsDeviceToken::DEFAULT_ACTIVE);
-                                    $newToken->setApiType($apiType);
-                                    $newToken->setDateadded(date_create());
-                                    $this->em->persist($newToken);
-                                    $this->em->flush();
-                                }
-                                $isSuccess = true;
+                if($decryptString->client_id === $clientId){
+                    $apiType = $this->em->getRepository('EasyShop\Entities\EsApiType')
+                                        ->findOneBy(['apiType' => $decryptString->api_type]);
+
+                    if($apiType){
+                        $isTokenSupported = $this->supportDeviceToken($decryptString->deviceToken, $apiType->getIdApiType());
+                        if($isTokenSupported){
+                            $token = $this->em->getRepository('EasyShop\Entities\EsDeviceToken')
+                                              ->findOneBy(['deviceToken' => $decryptString->deviceToken]);
+                            if(!$token){
+                                $newToken = new EsDeviceToken();
+                                $newToken->setDeviceToken($decryptString->deviceToken);
+                                $newToken->setIsActive(EsDeviceToken::DEFAULT_ACTIVE);
+                                $newToken->setApiType($apiType);
+                                $newToken->setDateadded(date_create());
+                                $this->em->persist($newToken);
+                                $this->em->flush();
                             }
+                            $isSuccess = true;
                         }
                     }
-                } 
+                }
             }
         }
         catch (Exception $e) {

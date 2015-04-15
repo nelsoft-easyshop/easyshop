@@ -15,7 +15,7 @@
                 </p>
                 <span class="divider"></span>
                 <p class="message-text">
-                    We encourage everyone to be vigilant in transacting online. For your protection, <b>use only the payment method offered by EasyShop.ph (<!-- PesoPay, -->DragonPay, and Cash on Delivery)</b>. We do not encourage bank to bank transfers or deposits as payment for items bought on the EasyShop.ph website.
+                    We encourage everyone to be vigilant in transacting online. For your protection, <b>use only the payment method offered by EasyShop.ph (PesoPay, DragonPay, and Cash on Delivery)</b>. We do not encourage bank to bank transfers or deposits as payment for items bought on the EasyShop.ph website.
                     <br/><br/>
                     Should you decide to still go with the payment method not specified in the EasyShop.ph website, you can do so at your own risk. Just remember that EasyShop.ph will not be liable for damages incurred by transactions made outside of our system.
                 </p>

@@ -90,32 +90,34 @@ class Cart extends MY_Controller
                         ->find('EasyShop\Entities\EsProduct', $productId);
         
         if($this->input->post('express')){
-            if($product->getIsPromote()){
+            $defaultAttributeData = $this->productManager->getProductDefaultAttributes($productId);
+            $hasStock = $defaultAttributeData['hasStock'];
+            $defaultAttributes = $defaultAttributeData['defaultAttributes'];
+            if(!$hasStock || $product->getIsPromote()){
                 print json_encode(['isSuccessful' => false, 'isLoggedIn' => $isLoggedIn]);
                 exit();
             }
-            $defaultAttributes = $this->productManager->getProductDefaultAttribute($productId);
-            $options = array();
+            $options = [];
             foreach($defaultAttributes as $attribute){
                 $options[strtolower($attribute["attr_name"])] = $attribute["attr_value"]."~".$attribute["attr_price"];
             }
             $quantity = 1;
         }
         else{
-            $options = $this->input->post('options') ? $this->input->post('options') : array();
+            $options = $this->input->post('options') ? $this->input->post('options') : [];
             $quantity = $this->input->post('quantity');
         }
-
         $isSuccesful = false;
         if($product){
             $seller = $product->getMember();
+  
             $member = $this->serviceContainer['entity_manager']
                            ->find('EasyShop\Entities\EsMember', $memberId);
             if($member && $seller->getIdMember() !== (int)$memberId && $member->getIsEmailVerify()){
                 $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
             }
         }
-
+        
         print json_encode(['isSuccessful' => $isSuccesful, 'isLoggedIn' => $isLoggedIn]);
     }
 

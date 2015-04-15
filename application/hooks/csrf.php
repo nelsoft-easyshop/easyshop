@@ -88,7 +88,7 @@ class CSRF_Protection
             $firstUrlSegment = reset($this->CI->uri->segment_array());
             
             if(empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0){
-                show_error('Request was invalid. Selected file was too large. 1001', 400);
+                show_error('Request was invalid. Selected file was too large.', 400);
             }
             else if(in_array($_SERVER['REQUEST_URI'], $csrfConfig['bypassURI'])){
                 return true;

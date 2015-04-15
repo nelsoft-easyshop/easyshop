@@ -74,11 +74,24 @@ $(document).ready(function(){
 
     $('#btn-vote').on('click', function() {
         var $selectedRadio = $('[name="school"]:checked');
-        var schoolName = $selectedRadio.data('school').trim();
+        var $isRadioChecked = $('[name="school"]').is(':checked');
+
+        if (!$isRadioChecked) {
+            alert("Choose School and Student to vote");
+            return false;
+        }
+
+        var schoolName = $selectedRadio.attr('data-school').trim();
         var studentId = parseInt($selectedRadio.val());
 
         if (schoolName === '' || isNaN(studentId) === 0) {
             alert("Choose School and Student to vote");
+            return false;
+        }
+
+        if ($('#is-logged-in').val() === 'false') {
+            alert('Kindly login to join this event');
+            window.location.replace('/login');
             return false;
         }
 
@@ -87,8 +100,5 @@ $(document).ready(function(){
         $('#frm-vote').submit();
 
     });
-
-    //TODO : Check if the user can vote for a specific school, validate school if student <= 3 ? qualified student for nextround : retrieve
-    // Waiting for design.
 
 })(jQuery);

@@ -32,10 +32,6 @@
                         <div class="p-html-description">
                             <div class="external-links-container">
                                 <?=nl2br($productDetails); ?>
-                                <?php foreach ($additionalInformation as $value): ?>
-                                    <?=html_escape($value); ?>
-                                    <br>
-                                <?php endforeach; ?>
                                 <?php if($product->getCondition() !== ""): ?>
                                     Condition: <?=html_escape($product->getCondition()); ?>
                                     <br>
@@ -46,6 +42,9 @@
                                 <?php endif; ?>
                                 <?php if($product->getBrand()->getName() !== "" && $product->getBrand()->getIdBrand() !== \EasyShop\Entities\EsBrand::CUSTOM_CATEGORY_ID): ?>
                                     Brand: <?=html_escape($product->getBrand()->getName()); ?>
+                                    <br>
+                                <?php elseif ($product->getBrandOtherName() !== ""):?>
+                                    Brand: <?=html_escape($product->getBrandOtherName()); ?>
                                     <br>
                                 <?php endif; ?>
                                 <?php if($product->getSku() !== ""): ?>
@@ -116,8 +115,8 @@
                                                         <p class="p-review-content">
                                                             <?=nl2br(html_escape($value['review']));?>
                                                         </p>
-
-                                                        <?php if($canReview): ?>
+                                                        <?php $canReplyToReview = in_array($viewerId, $value['participants']); ?>
+                                                        <?php if($canReplyToReview): ?>
                                                         <a href="javascript:void(0)" class="p-reply-text" >
                                                             <p class="pull-right">
                                                                 <span class="text-cancel">Cancel </span>Reply
@@ -126,7 +125,7 @@
                                                         <?php endif; ?>
                                                         <div class="clear"></div>
                                                     </div>
-                                                    <?php if($canReview): ?>
+                                                    <?php if($canReplyToReview): ?>
                                                     <div class="div-reply-container">
                                                         <p class="p-reply-title">Write Reply</p> 
                                                         <div class="clear"></div>

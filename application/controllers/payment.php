@@ -304,9 +304,9 @@ class Payment extends MY_Controller{
             $data['codsuccess'] = ($codCount == $itemCount ? true : false);
             $data['paypalsuccess'] = ($paypalCount == $itemCount ? true : false);
             $data['dragonpaysuccess'] = ($dragonpayCount == $itemCount ? true : false);
-            $data['pesopaysucess'] = ($pesoPayCount == $itemCount ? true : false);
+            $data['pesopaysuccess'] = ($pesoPayCount == $itemCount ? true : false);
             $data['directbanksuccess'] = ($directBankCount == $itemCount ? true : false);
- 
+            $data['paymentMethodSuccess'] = count($paymentType) > 0;
 
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
@@ -1777,19 +1777,26 @@ class Payment extends MY_Controller{
                          : $this->config->item('testing', 'payment'); 
         $isValidIp = $this->serviceContainer['payment_service']
                           ->checkIpIsValidForPostback($ipAddress, EsPaymentMethod::PAYMENT_PESOPAYCC);
-
+        $params = $this->input->post();
         if($isValidIp){
+            log_message('error', 'DATA FEED --> '. json_encode($this->input->post()));
             header("Content-Type:text/plain");
             echo 'OK'; // acknowledgemenet
+            if(strtolower($this->input->post('remark')) === "easydeal"){
+                $curlUrl = $paymentConfig['payment_type']['pesopay']['Easydeal']['postback_url'];
+                $curl = new Curl();
+                $curl->post($curlUrl, $params);
+            }
+            else{
+                $paymentService = $this->serviceContainer['payment_service'];
+                $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
 
-            $paymentService = $this->serviceContainer['payment_service'];
-            $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
-
-            $params = $this->input->post();
-            $params['txnId'] = $this->input->post('Ref'); 
-            $paymentService->postBack($paymentMethods, null, null, $params);
+                $params['txnId'] = $this->input->post('Ref'); 
+                $paymentService->postBack($paymentMethods, null, null, $params);
+            }
         }
         else{
+            log_message('error', '404 Page Not Found --> PESOPAY DATAFEED');
             show_404();
         }
     }

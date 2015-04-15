@@ -149,18 +149,7 @@
                         <td colspan="2" align="right">
                             <b>Php <?php echo number_format($total + $shipping_fee, 2, '.',','); ?></b>
                         </td>
-                    </tr>
-                    <!--
-                    <tr id ="pointInput" style="display:none">
-                        <td colspan="2">
-                            Point Allocation:
-                        </td>
-                        <td colspan="2" align="right">
-                            <input type="number" id="pointsAllocated" name="pointsAllocated" value="0" min="0" value="0" max="<?php echo $maxPoint; ?>">
-                            <br/> <br/> Max points allowable: <?php echo $maxPoint; ?>
-                        </td>
                     </tr> 
-                    -->
                 </table>
             </div>
         </div>
@@ -171,9 +160,10 @@
                 <?php if($success 
                          && $qtysuccess 
                          && $promoteSuccess['purchase_limit'] 
-                         && $promoteSuccess['solo_restriction']): ?>
+                         && $promoteSuccess['solo_restriction']
+                         && $paymentMethodSuccess): ?>
                     <div>
-                        <p class="fl_pay"><strong>How would you like to pay?</strong></p>
+                        <p class="fl_pay"><strong>How would you like to pay?</strong></p> 
                         <ul class="idTabs payment_options_tabs">
                             <?php foreach($paymentType as $key => $value):?>
                                 <li><a href="#<?=$key;?>"><?=$value;?></a></li> 
@@ -467,7 +457,7 @@
                             <!-- PESOPAY DESKTOP SECTION -->
                             <?php if($key == 'pesopaycdb'): ?>
                                 <div id="pesopaycdb" class="payment_inner_content">
-                                    <?php if($pesopaysucess): ?>
+                                    <?php if($pesopaysuccess): ?>
                                         <p class="chck_privacy">
                                             <input type="checkbox" checked id="chk_ppcdb" name='chk_ppcdb'> 
                                             <label for='chk_ppcdb'>
@@ -534,6 +524,9 @@
                     <?php elseif(!$promoteSuccess['purchase_limit']):?>
                         <br/>
                         <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: You have exceeded your purchase limit for a promo of an item in your cart.</span>
+                     <?php elseif (!$paymentMethodSuccess): ?>
+                        <br/>
+                        <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: Cannot proceed payment. One of your item is not available for checkout.</span>
                     <?php else:?>
                         <br/>
                         <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>
@@ -545,7 +538,8 @@
                 <?php if($success 
                          && $qtysuccess 
                          && $promoteSuccess['purchase_limit'] 
-                         && $promoteSuccess['solo_restriction']): ?>
+                         && $promoteSuccess['solo_restriction']
+                         && $paymentMethodSuccess): ?>
                     <p class="fl_pay"><strong>How would you like to pay?</strong></p>
                     <div class="panel-group" id="accordion">
                         <?php foreach($paymentType as $key => $value):?>
@@ -837,7 +831,7 @@
                                         <!-- PESOPAY MOBILE VERSION -->
                                         <?php if($key == 'pesopaycdb'): ?>
                                             <div id="pesopaycdb_mobile">
-                                                <?php if($pesopaysucess): ?>
+                                                <?php if($pesopaysuccess): ?>
                                                     <p class="chck_privacy" style="font-size: 12px;">
                                                         <input type="checkbox" checked class="checkprivacy pesopay_chk_mobile">
                                                         I acknowledge I have read and understood Easyshop.ph's 
@@ -908,6 +902,9 @@
                     <?php elseif(!$promoteSuccess['purchase_limit']):?>
                         <br/>
                         <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: You have exceeded your purchase limit for a promo of an item in your cart.</span>
+                    <?php elseif (!$paymentMethodSuccess): ?>
+                        <br/>
+                        <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: Can't proceed to payment. One of your items is not available for checkout.</span>
                     <?php else:?>
                         <br/>
                         <span style='padding-top:8px; font-size: 12px; font-weight:bold;color:red'>NOTE: One or more of your item(s) is unavailable in your location. </span>

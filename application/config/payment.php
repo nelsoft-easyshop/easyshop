@@ -18,8 +18,8 @@ $config = [
                         ]
                     ],
                     'Easydeal' => [
-                        'return_url' => 'https://staging.easydeal.ph/payment/dragonPayReturn',
-                        'postback_url' => 'http://staging.easydeal.ph/payment/dragonPayPostBack'
+                        'return_url' => 'https://staging.easydeal.ph/payment/return/dragonpay',
+                        'postback_url' => 'http://staging.easydeal.ph/payment/postback/dragonpay'
                     ]
                 ],
                 'paypal' => [
@@ -46,6 +46,9 @@ $config = [
                                 '58.64.198.94'
                             ],
                         ]
+                    ],
+                    'Easydeal' => [
+                        'postback_url' => 'http://staging.easydeal.ph/payment/postback/pesopay'
                     ]
                 ]
             ]
@@ -68,8 +71,8 @@ $config = [
                         ]
                     ],
                     'Easydeal' => [
-                        'return_url' => 'https://www.easydeal.ph/payment/dragonPayReturn',
-                        'postback_url' => 'https://www.easydeal.ph/payment/dragonPayPostBack'
+                        'return_url' => 'https://www.easydeal.ph/payment/return/dragonpay',
+                        'postback_url' => 'https://www.easydeal.ph/payment/postback/dragonpay'
                     ]
                 ],
                 'paypal' => [
@@ -82,6 +85,8 @@ $config = [
                 ],
                 'pesopay' => [
                     'Easyshop' => [
+                        'currency_code' => '608',
+                        'payment_type' => 'N',
                         'secure_hash' => 'TvNiOW6xWOghmbqMeWQ3PAyoHY3lhIbb',
                         'redirect_url' => 'https://www.pesopay.com/b2c2/eng/payment/payForm.jsp',
                         'merchant_id' => '18139485',
@@ -94,6 +99,9 @@ $config = [
                                 '203.105.16.191'
                             ],
                         ]
+                    ],
+                    'Easydeal' => [
+                        'postback_url' => 'https://www.easydeal.ph/payment/postback/pesopay'
                     ]
                 ]
             ]

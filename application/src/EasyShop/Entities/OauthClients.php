@@ -56,7 +56,7 @@ class OauthClients
      */
     private $userId;
 
-    const PROD_CLIENTID = "j0EHlg4idoNwT7GWltd7VHV52";
+    const PROD_CLIENTID = "mYZbCbZ5Zh6CnTZyYbpxNvcDs";
 
     const DEV_CLIENTID = "mobile";
 

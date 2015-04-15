@@ -511,7 +511,7 @@ function processAttributes()
                 $("#discountedP").val('');
                 $("#slider_val").val("0%");
             }
-            $("#discounted_price_con").text(price.toFixed(2));
+            $("#discounted_price_con").text(replaceNumberWithCommas(price.toFixed(2)));
         }
     });
     
@@ -612,7 +612,7 @@ function processAttributes()
             if(isNaN(basePrice)){
                 basePrice = 0;
             }
-            $( "span#discounted_price_con" ).text( basePrice.toFixed(2) );
+            $( "span#discounted_price_con" ).text( replaceNumberWithCommas(basePrice.toFixed(2)) );
 
             return false;
         } 
@@ -624,7 +624,7 @@ function processAttributes()
             $rangeSlider.ionRangeSlider("update", {
                 from: 0
             }); 
-            $( "span#discounted_price_con" ).text( basePrice.toFixed(2) ); 
+            $( "span#discounted_price_con" ).text( replaceNumberWithCommas(basePrice.toFixed(2)) ); 
 
             return false;
         } 
@@ -636,7 +636,7 @@ function processAttributes()
             $rangeSlider.ionRangeSlider("update", {
                 from: 0
             }); 
-            $( "span#discounted_price_con" ).text( basePrice.toFixed(2) );
+            $( "span#discounted_price_con" ).text( replaceNumberWithCommas(basePrice.toFixed(2)) );
             
             return false;
         }
@@ -1540,7 +1540,7 @@ var universalExtension = ".jpeg";
                 $(this).removeClass('active');
             });
 
-            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,"");
+            startUpload(pictureCount,filescnt,arrayUpload,afstart,imageName,filename);
             filescnt++;
         }
     });

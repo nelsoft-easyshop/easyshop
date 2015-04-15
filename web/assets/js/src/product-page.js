@@ -316,6 +316,7 @@
         var $this = $(this);
         var $imageid = $this.children('option:selected').data('imageid');
         var $baseFinalPrice = parseFloat($("#finalBasePrice").val());
+        var $originalBasePrice = parseFloat($("#originalBasePrice").val()); 
         var $arraySelected = [];
         var $indexImage;
         var $owl;
@@ -328,7 +329,8 @@
                 $thisSelect = $(this);
                 var $selectValue = $thisSelect.val();
                 var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
-                $baseFinalPrice += $additionalPrice; 
+                $baseFinalPrice += $additionalPrice;
+                $originalBasePrice += $additionalPrice;
             });
 
             checkCombination($arraySelected);
@@ -340,6 +342,7 @@
                 var $selectValue = $thisSelect.val();
                 var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
                 $baseFinalPrice += $additionalPrice;
+                $originalBasePrice += $additionalPrice;
                 $arraySelected.push($selectValue);
             });
 
@@ -349,6 +352,7 @@
 
         }
         $(".discounted-price").html("P"+commaSeparateNumber($baseFinalPrice.toFixed(2)));
+        $(".base-price").html("P"+commaSeparateNumber($originalBasePrice.toFixed(2)));
 
         if($imageid > 0){
             $owl = $("#mobile-product-gallery").data('owlCarousel');
@@ -366,7 +370,8 @@
             }
         });
     });
-    
+    $(".attribute-control").trigger("change");
+
     // add to cart
     $(document).on('click', '#send.enabled', function(){
         var $button = $(this);
@@ -375,8 +380,6 @@
             return false;
         }
 
-        // token
-        var $csrftoken = $("meta[name='csrf-token']").attr('content'); 
         var $productId = $("#productId").val();
         var $quantity = $("#control-quantity").val();
         var $optionsObject = {};
@@ -388,33 +391,9 @@
             var $additionalPrice = parseFloat($thisSelect.children('option:selected').data('addprice'));
             $optionsObject[$attrParent] = $attrName + '~' + $additionalPrice.toFixed(2); 
         });
-        
-        var $isLoggedIn = JSON.parse($('.es-data[name="is-logged-in"]').val());
-        if(!$isLoggedIn){
-            window.location.replace("/login");
-            return false;
-        }
-
-        $.ajax({
-            url: "/cart/doAddItem",
-            type:"POST",
-            dataType:"JSON",
-            data:{productId:$productId,quantity:$quantity,options:$optionsObject,csrfname:$csrftoken},
-            success:function(data){
-                if(!data.isLoggedIn){
-                    window.location.replace("/login");
-                }
-                else {
-                    if(data.isSuccessful){
-                        window.location.replace("/cart");
-                    }
-                    else{
-                        alert("We cannot process your request at this time. Please try again in a few moment");
-                    }
-                }
-            }
-        });
-
+        var productSlug = $('#product-slug').val();
+       
+        addToCart($productId, $quantity, $optionsObject, false, productSlug, true);
     });
 
     /**
@@ -428,23 +407,7 @@
         var productId = $button.data('productid');
         var slug = $button.data('slug');
          
-        $.ajax({
-            type: "POST",
-            url: "/cart/doAddItem", 
-            dataType: "json",
-            data: "express=true&"+csrfname+"="+csrftoken+"&productId="+productId,
-            success: function(result) {
-                if(!result.isLoggedIn){
-                    window.location.replace("/login");
-                }
-                else if(result.isSuccessful){
-                    window.location.replace("/cart");
-                }
-                else{
-                    window.location.replace("/item/"+slug);
-                }
-            }, 
-        });
+        addToCart(productId, null, null, true, slug);
     });
     
     // review product

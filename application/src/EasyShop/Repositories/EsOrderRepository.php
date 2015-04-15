@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use EasyShop\Entities\EsOrderProduct;
 use EasyShop\Entities\EsOrder;
-use EasyShop\Entities\EsOrderProductStatus;
+use EasyShop\Entities\EsOrderProductStatus as orderProductStatus;
 use EasyShop\Entities\EsOrderStatus as orderStatus;
 use EasyShop\Entities\EsProduct;
 use EasyShop\Entities\EsPaymentMethod;
@@ -27,7 +27,12 @@ class EsOrderRepository extends EntityRepository
      */
     public function getUserSoldTransactions($userId, $isOngoing = true, $offset = 0, $perPage = 10, $transactionNumber = '', $paymentMethod = '')
     {
-        $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED;
+        $orderProductStatuses = $isOngoing ? [ orderProductStatus::ON_GOING ] : 
+                                    [orderProductStatus::FORWARD_SELLER ,
+                                    orderProductStatus::RETURNED_BUYER ,
+                                    orderProductStatus::CASH_ON_DELIVERY,
+                                    orderProductStatus::PAID_FORWARDED,
+                                    orderProductStatus::PAID_RETURNED];
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
         if (!$paymentMethod || trim($paymentMethod) === 'all') {
             $paymentMethod = $EsPaymentMethodRepository->getPaymentMethods();
@@ -81,15 +86,20 @@ class EsOrderRepository extends EntityRepository
                 ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
                 ->leftJoin('EasyShop\Entities\EsMember', 'memberFeedback', 'with', 'memberFeedback.idMember = feedback.member')
                 ->where(
-                    $qb->expr()->not(
-                        $qb->expr()->andX(
-                            $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
-                            ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
-                        )
+                    $qb->expr()->andX(
+                        $qb->expr()->not(
+                            $qb->expr()->andX(
+                                $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
+                                ,$qb->expr()->orX(
+                                    $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                    ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                                )
+                            )
+                        ),
+                        $qb->expr()->in('op.status', $orderProductStatuses)
                     )
                 )
                 ->andWhere('o.orderStatus != :statusVoid')
-                ->andWhere('o.orderStatus IN (:orderStatus)')
                 ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
                 ->andWhere('o.invoiceNo LIKE :transNum ')
                 ->orderBy('o.idOrder', "desc")
@@ -97,7 +107,7 @@ class EsOrderRepository extends EntityRepository
                 ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
                 ->setParameter('statusVoid', orderStatus::STATUS_VOID)
                 ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
-                ->setParameter('orderStatus', $orderStatus)
+                ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
                 ->setParameter('transNum', '%' . $transactionNumber . '%')
                 ->setParameter('paymentMethodLists', $paymentMethod)
                 ->setFirstResult($offset)
@@ -119,7 +129,13 @@ class EsOrderRepository extends EntityRepository
      */
     public function getUserBoughtTransactions($uid, $isOngoing = true, $offset = 0, $perPage = 10, $transactionNumber ='', $paymentMethod = '')
     {
-        $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED ;
+        $orderProductStatuses = $isOngoing ? [ orderProductStatus::ON_GOING ] : 
+                                    [orderProductStatus::FORWARD_SELLER ,
+                                    orderProductStatus::RETURNED_BUYER ,
+                                    orderProductStatus::CASH_ON_DELIVERY,
+                                    orderProductStatus::PAID_FORWARDED,
+                                    orderProductStatus::PAID_RETURNED];
+
         $qb = $this->_em->createQueryBuilder();
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
         if (!$paymentMethod || trim($paymentMethod) === 'all') {
@@ -147,22 +163,27 @@ class EsOrderRepository extends EntityRepository
                         ->leftJoin('EasyShop\Entities\Esmember', 'sm', 'WITH', 'op.seller = sm.idMember')
                         ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
                         ->where(
-                                $qb->expr()->not(
-                                    $qb->expr()->andX(
-                                        $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
-                                        ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
-                                    )
+                                $qb->expr()->andx(
+                                    $qb->expr()->not(
+                                        $qb->expr()->andX( 
+                                            $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
+                                            ,$qb->expr()->orX(
+                                                $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                                ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                                            )
+                                        )
+                                    ),
+                                    $qb->expr()->in('op.status', $orderProductStatuses)
                                 )
                             )
-                        ->andWhere('o.orderStatus IN(:orderStatus)')
                         ->andWhere('o.buyer = :buyer_id')
                         ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
                         ->andWhere('o.invoiceNo LIKE :transNum ')
                         ->orderBy('o.idOrder', "desc")
                         ->setParameter('buyer_id', $uid)
                         ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
-                        ->setParameter('orderStatus', $orderStatus)
                         ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+                        ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
                         ->setParameter('paymentMethodLists', $paymentMethod)
                         ->setParameter('transNum', '%' . $transactionNumber . '%')
                         ->setFirstResult($offset)
@@ -187,15 +208,21 @@ class EsOrderRepository extends EntityRepository
             ->innerJoin('EasyShop\Entities\EsProduct', 'p','WITH','p.idProduct = op.product AND p.promoType = :promoType')
             ->where(
                     $qb->expr()->not(
-                        $qb->expr()->andX(
-                            $qb->expr()->eq('o.orderStatus', '99')
-                            ,$qb->expr()->eq('o.paymentMethod', '1')
+                        $qb->expr()->andX( 
+                            $qb->expr()->eq('o.orderStatus', ':statusDraft')
+                            ,$qb->expr()->orX(
+                                $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                            )
                         )
                     )
                 )
             ->andWhere('o.buyer = :buyer_id') 
             ->setParameter('buyer_id', $buyerId)
             ->setParameter('promoType', $promoType) 
+            ->setParameter('statusDraft', orderStatus::STATUS_DRAFT)
+            ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+            ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
             ->getQuery();
         $result = $qbResult->getResult();
 
@@ -305,7 +332,13 @@ class EsOrderRepository extends EntityRepository
      */
     public function getAllUserBoughtTransactions($uid, $isOngoing = true, $paymentMethod = '', $transactionNumber ='')
     {
-        $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED ;
+        $orderProductStatuses = $isOngoing ? [ orderProductStatus::ON_GOING ] : 
+                                           [ orderProductStatus::FORWARD_SELLER ,
+                                           orderProductStatus::RETURNED_BUYER ,
+                                           orderProductStatus::CASH_ON_DELIVERY,
+                                           orderProductStatus::PAID_FORWARDED,
+                                           orderProductStatus::PAID_RETURNED ];
+
         $qb = $this->_em->createQueryBuilder();
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
         if (!$paymentMethod || trim($paymentMethod) === 'all') {
@@ -333,22 +366,27 @@ class EsOrderRepository extends EntityRepository
             ->leftJoin('EasyShop\Entities\Esmember', 'sm', 'WITH', 'op.seller = sm.idMember')
             ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
             ->where(
-                $qb->expr()->not(
-                    $qb->expr()->andX(
-                        $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
-                        ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
-                    )
+                $qb->expr()->andX(
+                    $qb->expr()->not(
+                        $qb->expr()->andX(
+                            $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
+                            ,$qb->expr()->orX(
+                                $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                            )
+                        )
+                    ),
+                    $qb->expr()->in('op.status', $orderProductStatuses)
                 )
             )
-            ->andWhere('o.orderStatus IN(:orderStatus)')
             ->andWhere('o.buyer = :buyer_id')
             ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
             ->andWhere('o.invoiceNo LIKE :transNum ')
             ->orderBy('o.idOrder', "desc")
             ->setParameter('buyer_id', $uid)
             ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
-            ->setParameter('orderStatus', $orderStatus)
             ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
+            ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
             ->setParameter('paymentMethodLists', $paymentMethod)
             ->setParameter('transNum', '%' . $transactionNumber . '%')
             ->getQuery();
@@ -366,7 +404,12 @@ class EsOrderRepository extends EntityRepository
      */
     public function getAllUserSoldTransactions($userId, $isOngoing = true, $paymentMethod = '', $transactionNumber)
     {
-        $orderStatus = $isOngoing ? orderStatus::STATUS_PAID . ',' . orderStatus::STATUS_DRAFT : orderStatus::STATUS_COMPLETED;
+        $orderProductStatuses = $isOngoing ? [ orderProductStatus::ON_GOING ] : 
+                                           [ orderProductStatus::FORWARD_SELLER ,
+                                           orderProductStatus::RETURNED_BUYER ,
+                                           orderProductStatus::CASH_ON_DELIVERY,
+                                           orderProductStatus::PAID_FORWARDED,
+                                           orderProductStatus::PAID_RETURNED ];
         $EsPaymentMethodRepository = $this->_em->getRepository('EasyShop\Entities\EsPaymentMethod');
         if (!$paymentMethod || trim($paymentMethod) === 'all') {
             $paymentMethod = $EsPaymentMethodRepository->getPaymentMethods();
@@ -418,22 +461,28 @@ class EsOrderRepository extends EntityRepository
             ->innerJoin('EasyShop\Entities\EsPaymentMethod', 'pm', 'with', 'o.paymentMethod = pm.idPaymentMethod')
             ->leftJoin('EasyShop\Entities\EsMember', 'memberFeedback', 'with', 'memberFeedback.idMember = feedback.member')
             ->where(
-                $qb->expr()->not(
-                    $qb->expr()->andX(
-                        $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
-                        ,$qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
-                    )
+                $qb->expr()->andX(
+                    $qb->expr()->not(
+                        $qb->expr()->andX(
+                            $qb->expr()->eq('o.orderStatus', ':STATUS_DRAFT')
+                            ,$qb->expr()->orX(
+                                $qb->expr()->eq('o.paymentMethod', ':paypalPayMentMethod')
+                                ,$qb->expr()->eq('o.paymentMethod', ':pesopayPayMentMethod')
+                            )
+                        )
+                    ),
+                    $qb->expr()->in('op.status', $orderProductStatuses)
                 )
             )
-            ->andWhere('o.orderStatus != 2')
-            ->andWhere('o.orderStatus IN (:orderStatus)')
+            ->andWhere('o.orderStatus != :statusVoid')
             ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
             ->andWhere('o.invoiceNo LIKE :transNum ')
             ->orderBy('o.idOrder', "desc")
             ->setParameter('sellerId', $userId)
+            ->setParameter('statusVoid', orderStatus::STATUS_VOID)
             ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
             ->setParameter('paypalPayMentMethod', EsPaymentMethod::PAYMENT_PAYPAL)
-            ->setParameter('orderStatus', $orderStatus)
+            ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
             ->setParameter('transNum', '%' . $transactionNumber . '%')
             ->setParameter('paymentMethodLists', $paymentMethod)
             ->getQuery();

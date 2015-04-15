@@ -891,7 +891,8 @@ class EsProductRepository extends EntityRepository
                                     $offset = 0,
                                     $perPage = 10,
                                     $searchString = "",
-                                    $orderByField = "p.idProduct")
+                                    $orderByField = "p.idProduct",
+                                    $excludeProductsIds = [])
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
@@ -906,9 +907,13 @@ class EsProductRepository extends EntityRepository
                      ->andWhere('p.member = :member_id')
                      ->setParameter('member_id', $memberId);
 
-        if($searchString){
+        if($searchString !== ""){
             $queryBuilder->andWhere('p.name LIKE :word')
                          ->setParameter('word', '%'.$searchString.'%');
+        }
+        
+        if(empty($excludeProductsIds) === false){
+            $queryBuilder->andWhere($queryBuilder->expr()->notIn('p.idProduct', $excludeProductsIds));
         }
         $queryBuilder->orderBy($orderByField,"DESC");
         $qbStatement = $queryBuilder->setFirstResult($offset)

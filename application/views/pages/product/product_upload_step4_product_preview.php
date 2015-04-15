@@ -96,14 +96,12 @@
             <div class="col-md-12"><p class="attr-title">Other Attributes</p></div>
             <!-- Product attributes here -->
             <?php foreach ($productAttributes as $head => $headValue): ?>
-                <div class="col-sm-12 col-md-6 attr-select <?=(count($headValue)  > 1) ? "" : "element-hide";?>">
+                <div class="col-sm-12 col-md-6 attr-select">
                     <div class="prod-select-con ui-form-control">
                         <select class="attribute-control" disabled="">
-                            <?php if(count($headValue) > 1): ?>
-                            <option value="0" data-addprice="0" selected=selected>--<?=ucfirst($head);?>--</option>
-                            <?php endif; ?>
+                            <option value="0" data-addprice="0" selected=selected>--<?=ucfirst(html_escape($head));?>--</option>
                             <?php foreach ($headValue as $key => $value):?>
-                                <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower($head)?>" data-textvalue="<?=strtolower($value['attr_value']); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=$value['attr_value']; ?></option>
+                                <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -158,7 +156,7 @@
                     <input type="button" value="Buy Now" class="prod-add-to-cart-btn btn-buy-now disabled" >
                     <span class="span-after-btn" width="100%">Click buy to qualify for the promo*</span> 
                 <?php else: ?>
-                    <input type="button" value="Add to Cart" class="prod-add-to-cart-btn disabled" >
+                    <input type="button" value="" class="prod-add-to-cart-btn disabled" >
                     <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
                 <?php endif; ?>
             </div>
@@ -225,8 +223,27 @@
         <div class="tab-pane fade in active" id="details">
             <div class="div-detail-container ">
                 <div class="p-html-description external-links-container">
-                    <p>  
+                    <p>
                         <?=$productDescription;?> 
+                        <br>
+                        <?php if($product->getCondition() !== ""): ?>
+                            Condition: <?=html_escape($product->getCondition()); ?>
+                            <br>
+                        <?php endif; ?>
+                        <?php if($product->getBrief() !== ""): ?>
+                            Brief Description: <?=html_escape($product->getBrief()); ?>
+                            <br>
+                        <?php endif; ?>
+                        <?php if($product->getBrand()->getName() !== "" && $product->getBrand()->getIdBrand() !== \EasyShop\Entities\EsBrand::CUSTOM_CATEGORY_ID): ?>
+                            Brand: <?=html_escape($product->getBrand()->getName()); ?>
+                            <br>
+                        <?php elseif ($product->getBrandOtherName() !== ""):?>
+                            Brand: <?=html_escape($product->getBrandOtherName()); ?>
+                            <br>
+                        <?php endif; ?>
+                        <?php if($product->getSku() !== ""): ?>
+                            SKU: <?=html_escape($product->getSku()); ?>
+                        <?php endif; ?>
                     </p>
                     <div class="clear"></div>
                 </div>

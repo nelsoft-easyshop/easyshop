@@ -482,8 +482,10 @@
     </div>
 </body>
 
-<?php echo form_open('registration/success', array('id'=>'success_register'));?>
-    <input type="hidden" name="referrer" class="referrer" value="<?= $is_promo ? $redirect_url : 'registration'?>"/>
+<input type="hidden" name="login_referrer" class="login-referrer" value="<?php echo $redirect_url; ?>"/>
+
+<?php echo form_open('registration/success', [' id' => 'success_register' ]);?>
+    <input type="hidden" name="registration_referrer" class="registration-referrer" value="<?php echo $is_promo ? $redirect_url : 'registration'; ?>"/>
 <?php echo form_close();?>
 
 <script type="text/javascript">

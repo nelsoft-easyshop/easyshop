@@ -270,7 +270,7 @@
                                     <div class="discounted_price_container">
                                         <strong>Discounted Price:</strong> &#8369;
                                         <span id="discounted_price_con">
-                                            <?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',''):'0.00';?>
+                                            <?php echo (isset($product_details['price']))?number_format($product_details['price'], 2, '.', ','):'0.00';?>
                                         </span>
                                     </div>
 
@@ -443,7 +443,7 @@
                                                                 <span class="spanSelect<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                     <select disabled id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                         <?php foreach ($value as $key2 => $value2): ?>
-                                                                            <option data-image="<?=$value2['img_path']?>" data-file="<?=$value2['file_path']?>" <?php echo ($valueq['data'][$key] == html_escape($value2['value_name'])) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" value="<?=html_escape($value2['value_name'])?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
+                                                                            <option data-image="<?=$value2['img_path']?>" data-file="<?=$value2['file_path']?>" <?php echo ($valueq['data'][$key] == html_escape($value2['value_name'])) ? 'selected' : ''; ?>  data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" value="<?=html_escape($value2['value_name'])?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.number_format($value2['value_price'], 2, '.', ','); ?></option>
                                                                         <?php endforeach; ?>
                                                                     </select>     
                                                                     <a class="edit-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -471,7 +471,7 @@
                                                         <span class="spanSelect<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                             <select id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>" class="selection width-30p ui-form-control" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>">
                                                                 <?php foreach ($value as $key2 => $value2): ?>
-                                                                <option data-image="<?=$value2['img_path']?>" data-file="<?=$value2['file_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" value="<?=html_escape($value2['value_name'])?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.$value2['value_price']; ?></option>
+                                                                <option data-image="<?=$value2['img_path']?>" data-file="<?=$value2['file_path']?>" data-price="<?=$value2['value_price']?>" data-head="<?=html_escape($key)?>" value="<?=html_escape($value2['value_name'])?>" data-value="<?=html_escape($value2['value_name'])?>"><?=html_escape($value2['value_name']) . ' - &#8369; '.number_format($value2['value_price'], 2, '.', ','); ?></option>
                                                                 <?php endforeach; ?>
                                                             </select>
                                                             <a class="edit-attr" href="javascript:void(0)" data-head="<?=html_escape($key)?>" data-id="<?=str_replace(' ', '', strtolower(html_escape($key)))?>"><span class="glyphicon glyphicon-pencil"></span></a>

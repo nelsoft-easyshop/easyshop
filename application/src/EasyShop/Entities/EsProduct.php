@@ -53,7 +53,7 @@ class EsProduct
     /**
      * @var string
      *
-     * @ORM\Column(name="condition", type="string", length=255, nullable=true)
+     * @ORM\Column(name="`condition`", type="string", length=255, nullable=true)
      */
     private $condition = '';
 
@@ -380,7 +380,7 @@ class EsProduct
     const SEARCH_SORT_HOT = 'HOT';
     const SEARCH_SORT_NAME = 'NAME';
 
-    const MINIMUM_PRODUCT_NAME_LEN = 3;
+    const MINIMUM_PRODUCT_NAME_LEN = 3; 
 
     /**
      * @var integer

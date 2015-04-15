@@ -184,13 +184,10 @@ class AccountManager
         ];
         
         $verifcodeRepository = $this->em->getRepository('EasyShop\Entities\EsVerifcode');
-        
+        $verifCode = null;
         if(!$isNew){
             $verifCode = $verifcodeRepository->findOneBy(['member' => $member]);
-            if(!$verifCode){
-                $response['error'] = 'verfication-code-does-not-exist';
-            }
-            else{
+            if($verifCode !== null){
                 $emailCount = $verifCode->getEmailCount();
                 $dateNow =  new \DateTime();
                 $dateOfLastRequest = $verifCode->getFpTimestamp();
@@ -245,7 +242,7 @@ class AccountManager
              */
             $mobileCode = $this->hashUtility->generateRandomAlphaNumeric(6);
             if($this->emailNotification->queueMail()){
-                if($isNew){
+                if($verifCode === null){
                     $response['isSuccessful'] = $verifcodeRepository->createNewMemberVerifCode($member, $emailSecretHash, $mobileCode) ? true : false;
                 }
                 else{

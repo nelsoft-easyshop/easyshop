@@ -526,13 +526,15 @@ class CategoryManager
      * 
      * @param integer $memberCategoryId
      * @param string $categoryName
-     * @param integer[] $productIds
      * @param integer $memberId
      * @param integer $parentCategoryId
-     * 
+     * @param integer[][] $addDetails Array of: 
+     *                      [ 'productId => 1,
+     *                        'order' => 0, ]
+     * @param integer[] $deletedProductIds
      * @return mixed
      */
-    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $productIds, $memberId, $parentCategoryId = EsMemberCat::PARENT)
+    public function editUserCustomCategoryProducts($memberCategoryId, $categoryName, $memberId, $parentCategoryId = EsMemberCat::PARENT, $addDetails = [], $deletedProductIds = [])
     {
         $memberCategoryId = (int)$memberCategoryId;
         $parentCategoyId = (int)$parentCategoryId;
@@ -596,10 +598,6 @@ class CategoryManager
                             $errorMessage = "Only a maximum of two levels are permitted in the category structure.";
                         }
                         else{          
-                            $memberCategoryProducts = $esMemberProdcatRepo->findBy(["memcat" => $memberCategoryId]);                
-                            foreach ($memberCategoryProducts as $memberCategoryProduct) {
-                                $this->em->remove($memberCategoryProduct);
-                            }
                             $datetimeToday = date_create();
                             $memberCategory->setCatName($categoryName);
                             $memberCategory->setlastModifiedDate($datetimeToday);                    
@@ -609,26 +607,41 @@ class CategoryManager
                                 $memberCategory->setParentId($parentCategoryId);
                                 $memberCategory->setSortOrder($higestSortOrder);
                             }
-                            $productSortOrder = 0;
-                            foreach ($productIds as $productId) {
-                                $product =  $esProductRepo->findOneBy([
-                                                "member" => $memberId,
-                                                "idProduct" => $productId,
-                                                "isDelete" => EsProduct::ACTIVE,
-                                                "isDraft" => EsProduct::ACTIVE
-                                            ]);
-
-                                if($product) {
-                                    $memberProductCategory = new EsMemberProdcat();
-                                    $memberProductCategory->setMemcat($memberCategory);
-                                    $memberProductCategory->setProduct($product);
-                                    $memberProductCategory->setCreatedDate($datetimeToday);
-                                    $memberProductCategory->setSortOrder($productSortOrder);
-                                    $productSortOrder++;
-                                    $this->em->persist($memberProductCategory);
+                            /**
+                             * Delete products in $memberCategoryProductsForDelete
+                             */
+                            $memberCategoryProductsForDelete = $esMemberProdcatRepo->getMemberProductsByProductIds($deletedProductIds, $memberCategoryId); 
+                            foreach ($memberCategoryProductsForDelete as $memberCategoryProductTForDelete) {
+                                $this->em->remove($memberCategoryProductTForDelete);
+                            }
+                            /**
+                             * Add each valid product in $addDetails
+                             */
+                            foreach ($addDetails as $addDetail) {
+                                if(isset($addDetail['productId'])){
+                                    $product =  $esProductRepo->findOneBy([
+                                                    "member" => $memberId,
+                                                    "idProduct" => $addDetail['productId'],
+                                                    "isDelete" => EsProduct::ACTIVE,
+                                                    "isDraft" => EsProduct::ACTIVE
+                                                ]);
+                                    if($product) {
+                                        $order = isset($addDetail['order']) ? (int) $addDetail['order'] : 0;
+                                        $memberProductCategory = new EsMemberProdcat();
+                                        $memberProductCategory->setMemcat($memberCategory);
+                                        $memberProductCategory->setProduct($product);
+                                        $memberProductCategory->setCreatedDate($datetimeToday);
+                                        $memberProductCategory->setLastmodifieddate($datetimeToday);
+                                        $memberProductCategory->setSortOrder($order);
+                                        $this->em->persist($memberProductCategory);
+                                    }
                                 }
                             }
-                            $this->em->flush();
+                            $this->em->flush();   
+                            /**
+                             * Adjust category sort ordering while prioritizing most recently added products
+                             */
+                            $this->adjustCategoryProductOrder($memberCategoryId);
                             $actionResult = true;
                         }
                     }
@@ -950,4 +963,26 @@ class CategoryManager
         return $isSuccessful;
     }
 
+    
+    /**
+     * Adjust category product ordering
+     *
+     * @param integer $memberCategoryId
+     */
+    public function adjustCategoryProductOrder($memberCategoryId)
+    {
+ 
+        $datetimeToday = date_create();
+        $memberProducts = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
+                               ->getCategoryMemberProducts($memberCategoryId);
+        $sortOrder = 0;
+        foreach($memberProducts as $memberProduct){
+            $memberProduct->setSortOrder($sortOrder);
+            $memberProduct->setLastmodifieddate($datetimeToday);
+            $sortOrder++;
+        }
+        $this->em->flush();      
+  
+    }
+    
 } 

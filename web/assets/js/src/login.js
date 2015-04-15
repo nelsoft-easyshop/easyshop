@@ -144,29 +144,8 @@
                                 $('#login')[0].disabled = true;
                                 $('#login').show();
                                 $('.login-btn').val('Redirecting...');
-
-                                var url = $('.referrer').val();      
-                                var first_uri_segment = url.substring(0, url.indexOf('/'));
-                                var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
-
-                                if( typeof vendorSubscriptionUri !== "undefined" ){
-                                    window.location = '/' + vendorSubscriptionUri;
-                                }
-                                else if (first_uri_segment === 'promo') {
-                                    var code = url.split("/");
-                                    window.location = '/' + first_uri_segment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
-                                }
-                                else{
-                                    if((url === 'sell/step1')||(first_uri_segment === 'item')|| (url === 'cart')){
-                                        window.location = '/' + url;
-                                    }
-                                    else if(first_uri_segment === 'cart'){
-                                        window.location = '/' + first_uri_segment;
-                                    }
-                                    else{
-                                        window.location = '/';
-                                    }                            
-                                }
+                                redirectToTarget();
+                        
                             }
                         }
                     },
@@ -235,6 +214,56 @@
     $(".login-hide-content").hide();
 
     $('#password').pwstrength();
+    
+    
+    
+    var urlsToRedirectToReferrer = [
+        'sell/step1',
+        'cart',
+        'estudyantrepreneur',
+    ];
+    
+    function redirectToTarget()
+    {
+        var referrerUrl = $('.login-referrer').val();      
+        var firstUriSegment = referrerUrl.substring(0, referrerUrl.indexOf('/'));
+        var vendorSubscriptionUri = $.cookie('es_vendor_subscribe');
+        var cartCookie = $.cookie('cartAddData');
+        if( typeof vendorSubscriptionUri !== "undefined" ){
+            /**
+             * Redirect to seller page if seller follow cookie is set 
+             */
+            window.location = '/' + vendorSubscriptionUri;
+        }
+        else if (typeof cartCookie !== 'undefined'){
+            $.removeCookie("cartAddData", { path: '/'});
+            var cartAddData = $.parseJSON(cartCookie);
+            var quantity = typeof  cartAddData.quantity === 'undefined' ? null : cartAddData.quantity;
+            var optionsObject = typeof cartAddData.options === 'undefined' ? null : cartAddData.options;
+            var isExpress = typeof cartAddData.express === 'undefined' ? null : cartAddData.express;
+            var slug = typeof cartAddData.slug === 'undefined' ? null : cartAddData.slug;
+            addToCart(cartAddData.productId, quantity, optionsObject, isExpress, slug)
+        }
+        else if (firstUriSegment === 'promo') {
+            /**
+             * Redirect to scratch and win claim page 
+             */
+            var code = referrerUrl.split("/");
+            window.location = '/' + firstUriSegment + '/ScratchCard/claimScratchCardPrize?code=' + code[4];
+        }
+        else if($.inArray(referrerUrl, urlsToRedirectToReferrer) !== -1){
+            /**
+             * Redirect to refrerrerUrl if referreUrl is listed in urlsToRedirectToReferrer
+             */
+            window.location = '/' + referrerUrl;
+        }
+        else{
+            /**
+             *  If no other redirection rule matches redirect to home page 
+             */
+            window.location = '/';
+        }        
+    }
 
 })(jQuery);
 

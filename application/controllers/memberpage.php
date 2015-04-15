@@ -895,15 +895,6 @@ class Memberpage extends MY_Controller
             }
         }
 
-        $orderEntity = $this->em->find("EasyShop\Entities\EsOrder", $data['transaction_num']);
-        $orderProductStatusEntity = $this->em->find("EasyShop\Entities\EsOrderProductStatus", EsOrderProductStatus::ON_GOING);
-        $orderProductEntity = $this->esOrderProductRepo
-                                   ->findOneBy([
-                                       "order" => $orderEntity,
-                                       "status" => $orderProductStatusEntity
-                                   ]);
-        $serverResponse['isTransactionComplete'] = $orderProductEntity ? false : true;
-
         echo json_encode($serverResponse);
     }
 
@@ -1964,12 +1955,9 @@ class Memberpage extends MY_Controller
             $address = $esAddressRepo->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);       
             $stateregionID =  ($address["address"] !== null && (int) $address["stateRegion"] !== 0 ) ? $address["stateRegion"] : 0;
             $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
-
-            $consigneeCityLookup = ($stateregionID !== 0) ? $locationLookup["cityLookup"][$stateregionID] : null;
             $response = [
                 "address" => $address["address"],
                 "cities" =>  $locationLookup["json_city"],
-                "consigneeCityLookup" =>  $consigneeCityLookup,
                 "cityLookup" =>  $locationLookup["cityLookup"],
                 "stateRegionLists" => $locationLookup["stateRegionLookup"],
                 "countryId" =>  EsLocationLookup::PHILIPPINES_LOCATION_ID,
@@ -2328,6 +2316,7 @@ class Memberpage extends MY_Controller
         $page--;
         $page = $page >= 0 ? $page : 0;
         $offset = $page * $this->productsPerCategoryPage;
+
         $memberId = $this->session->userdata('member_id');
 
         $excludeIds = [];
@@ -2346,27 +2335,26 @@ class Memberpage extends MY_Controller
                                 $offset, 
                                 $this->productsPerCategoryPage, 
                                 $searchString, 
-                                "p.idProduct"
-                            );    
+                                "p.idProduct",
+                                $excludeIds
+                            );            
         $response['products'] = [];
         foreach($products as $product){
             $productId = $product->getIdProduct();
-            if(in_array($productId, $excludeIds) === false){
-                $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                ->getDefaultImage($productId);
-                $imageFilename = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_FILE;
-                $imageDirectory = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_DIRECTORY;
-                if($image){
-                    $imageFilename = $image->getFilename();
-                    $imageDirectory = $image->getDirectory();
-                }              
-                $response['products'][] = [
-                    'productName' => $product->getName(),
-                    'id' => $productId,
-                    'imageFilename' => $imageFilename,
-                    'imageDirectory' => $imageDirectory,
-                ];
-            }
+            $image = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                            ->getDefaultImage($productId);
+            $imageFilename = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_FILE;
+            $imageDirectory = EasyShop\Entities\EsProductImage::DEFAULT_IMAGE_DIRECTORY;
+            if($image){
+                $imageFilename = $image->getFilename();
+                $imageDirectory = $image->getDirectory();
+            }              
+            $response['products'][] = [
+                'productName' => $product->getName(),
+                'id' => $productId,
+                'imageFilename' => $imageFilename,
+                'imageDirectory' => $imageDirectory,
+            ];
         }
         
         echo json_encode($response);
@@ -2415,16 +2403,24 @@ class Memberpage extends MY_Controller
             $memberCategoryId = $this->input->post("categoryId");
             $categoryName = $this->input->post("categoryName") ? 
                             trim($this->input->post("categoryName")) : '';
-            $productIds =    $this->input->post("productIds") ? 
-                            json_decode($this->input->post("productIds")) 
-                            : [];
+            $deletedProductIds = [];
+            $addData = [];
+
+            if($this->input->post("deleteData") ){
+                $deletedProductIds = json_decode($this->input->post("deleteData"));
+            }
+            if($this->input->post("addData") ){
+                $addData = (array) json_decode($this->input->post("addData"));
+                $addData = json_decode(json_encode($addData),TRUE); 
+            }
             $parentCategoryId = (int)$this->input->post("parentCategory");
             $result = $this->categoryManager->editUserCustomCategoryProducts(
                         $memberCategoryId,
                         $categoryName,
-                        $productIds,
                         $memberId,
-                        $parentCategoryId
+                        $parentCategoryId,
+                        $addData,
+                        $deletedProductIds
                     );
         }
         echo json_encode($result);
