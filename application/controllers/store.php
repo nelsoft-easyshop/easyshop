@@ -1161,7 +1161,7 @@ class Store extends MY_Controller
             'isCount' => $isCount,
             'pageCount' => $pageCount,
         ];
-        
+
         echo json_encode($serverResponse);
     }
 
