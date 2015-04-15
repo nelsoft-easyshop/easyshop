@@ -66,7 +66,7 @@
                                         <div class="span12">
                                             <div class="embed-code-form">
                                                 <label>Embed Code</label>
-                                                <input type="text" class="form-control input-lg" readonly value="<?=html_escape('<iframe src="'.$firstWidgetLink.'" width="250" height="360" frameborder="0"></iframe>');?>" />
+                                                <input type="text" class="form-control input-lg widget-link-textbox" readonly value="<?=html_escape('<iframe src="'.$firstWidgetLink.'" width="250" height="360" frameborder="0"></iframe>');?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                                     <div class="row-fluid">
                                         <div class="span6">
                                             <div class="iframe-container">
-                                                <iframe src="<?=$secondWidget;?>" width="260" height="260" frameborder="0"></iframe>
+                                                <iframe src="<?=$secondWidgetLink;?>" width="260" height="260" frameborder="0"></iframe>
                                             </div>
                                         </div>
                                         <div class="span6">
@@ -93,7 +93,7 @@
                                         <div class="span12">
                                             <div class="embed-code-form">
                                                 <label>Embed Code</label>
-                                                <input type="text" class="form-control input-lg" readonly value="<?=html_escape('<iframe src="'.$secondWidget.'" width="260" height="260" frameborder="0"></iframe>');?>" />
+                                                <input type="text" class="form-control input-lg widget-link-textbox" readonly value="<?=html_escape('<iframe src="'.$secondWidgetLink.'" width="260" height="260" frameborder="0"></iframe>');?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -149,12 +149,11 @@
         <div id="fb-root"></div>
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
             <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
-            <script type="text/javascript" src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
             <script type="text/javascript" src="/assets/js/src/how-to-page-plugins.js"></script>
-            <script type="text/javascript" src="/assets/js/src/universal.js"></script>
             <script type="text/javascript" src="/assets/js/src/how-to-page.js"></script>
+            <script type="text/javascript" src="/assets/js/src/widget.js"></script>
         <?php else: ?>
-            <script src="/assets/js/min/easyshop.how-to.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/min/easyshop.widget-selector.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <?php endif; ?>
     </body>
 </html>

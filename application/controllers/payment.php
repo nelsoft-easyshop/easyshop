@@ -8,6 +8,7 @@ use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\PaymentGateways\PointGateway as PointGateway;
 
 
 class Payment extends MY_Controller
@@ -293,6 +294,9 @@ class Payment extends MY_Controller
                     $bodyData['paymentType'] = $checkoutService->getPaymentTypeAvailable($bodyData['cartData']);
                     $bodyData['canCheckout'] = $checkoutService->checkoutCanContinue($bodyData['cartData'], false, false);
                     $bodyData['checkoutError'] = $checkoutService->getCheckoutError($bodyData['cartData']);
+                    $postPoints = bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4) >= PointGateway::MIN_AMOUNT_ALLOWED
+                                  ? $postPoints
+                                  : 0;
                     $bodyData['usedPoints'] = $postPoints > $userMaxPoints ? $userMaxPoints : $postPoints;
                     $totalAmount = bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4);
                     $bodyData['grandTotal'] = bcsub($totalAmount, $bodyData['usedPoints'], 4);

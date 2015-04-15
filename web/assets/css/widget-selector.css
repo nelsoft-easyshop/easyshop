@@ -91,6 +91,10 @@ box-shadow: 0px 0px 21px 0px rgba(0,0,0,0.75);
 	display: none;
 }
 
+.widget-link-textbox{
+	cursor: pointer !important;
+}
+
 @media (max-width: 767px){
 	.widget-item-container {
 		padding: 0px;
