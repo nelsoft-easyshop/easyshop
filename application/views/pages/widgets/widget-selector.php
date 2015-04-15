@@ -66,7 +66,7 @@
                                         <div class="span12">
                                             <div class="embed-code-form">
                                                 <label>Embed Code</label>
-                                                <input type="text" class="form-control input-lg" readonly value="<?=html_escape('<iframe src="'.$firstWidgetLink.'" width="250" height="360" frameborder="0"></iframe>');?>" />
+                                                <input type="text" class="form-control input-lg widget-link-textbox" readonly value="<?=html_escape('<iframe src="'.$firstWidgetLink.'" width="250" height="360" frameborder="0"></iframe>');?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                                     <div class="row-fluid">
                                         <div class="span6">
                                             <div class="iframe-container">
-                                                <iframe src="<?=$secondWidget;?>" width="260" height="260" frameborder="0"></iframe>
+                                                <iframe src="<?=$secondWidgetLink;?>" width="260" height="260" frameborder="0"></iframe>
                                             </div>
                                         </div>
                                         <div class="span6">
@@ -93,7 +93,7 @@
                                         <div class="span12">
                                             <div class="embed-code-form">
                                                 <label>Embed Code</label>
-                                                <input type="text" class="form-control input-lg" readonly value="<?=html_escape('<iframe src="'.$secondWidget.'" width="260" height="260" frameborder="0"></iframe>');?>" />
+                                                <input type="text" class="form-control input-lg widget-link-textbox" readonly value="<?=html_escape('<iframe src="'.$secondWidgetLink.'" width="260" height="260" frameborder="0"></iframe>');?>" />
                                             </div>
                                         </div>
                                     </div>
