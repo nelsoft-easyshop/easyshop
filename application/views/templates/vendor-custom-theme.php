@@ -30,7 +30,8 @@
         color: #<?php echo html_escape($colorHexadecimal); ?> !important;
     }
     
-    .pagination-items > li.active > a{
+    .pagination-items > li.active > a,
+    .pagination-items > li.active > span{
         background-color: #<?php echo html_escape($colorHexadecimal); ?> !important;
         border: solid #<?php echo html_escape($colorHexadecimal); ?> 1px !important
     }

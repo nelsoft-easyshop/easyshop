@@ -268,7 +268,7 @@
     <script src="/assets/js/src/vendor/bootstrap.js"></script> 
     <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
-    <script src="/assets/js/src/vendor/jquery.simplePagination.js"></script>
+    <script src="/assets/js/src/easyshop.simplePagination.js"></script>
     <script src="/assets/js/src/product-search.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.product-search-new.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
