@@ -152,8 +152,13 @@
                 c_deliver_address_btn: true,
             },
             success: function(jsonResponse) {
-                if(jsonResponse.isSuccessful){ 
-                    location.reload();
+                if(jsonResponse.isSuccessful){
+                    if($usedPoints > 0){
+                        window.location.href = "/cart?points=" + $usedPoints;
+                    }
+                    else{
+                        location.reload();
+                    }
                 } 
             },
             error: function (request, status, error) { 
@@ -170,7 +175,7 @@
         var $productName = $this.data('name');
         $cartRowId = $this.data('rowid');
 
-        $(".remove-item-name").html($productName);
+        $(".remove-item-name").html(escapeHtml($productName));
         $(".remove-item-modal").modal({
             onShow : function() { 
                 $currentModal = this;
@@ -280,7 +285,7 @@
     // summary computation
     var $maxPoints = parseFloat($("#points-total").data('totalpoints'));
     var $shippingFee = isNaN(parseFloat($("#summary-shipping").data('totalshipping'))) ? 0 : parseFloat($("#summary-shipping").data('totalshipping'));
-    var $cartSubtotal = $("#summary-cart-total").data('cartprice');
+    var $cartSubtotal = $("#summary-cart-subtotal").data('cartprice');
     var $usedPoints = 0;
     $('.btn-deduct-points').on('click', function(){
         var $pointHolder = $("#points-total"); 
