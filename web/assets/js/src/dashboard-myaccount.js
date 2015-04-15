@@ -85,20 +85,23 @@
             currentPassword: {
                 required: true,
                 minlength: 6,
-                maxlength:25
-                },
+                maxlength:25,
+                no_space: true
+            },
             password: {
                 required: true,
                 minlength: 6,
                 maxlength:25,
-                alphanumeric: true
-                },
+                alphanumeric: true,
+                no_space: true
+            },
             confirmPassword: {
                 required: true,
                 minlength: 6,
                 maxlength:25,
-                equalTo: '#password'
-                }
+                equalTo: '#password',
+                no_space: true
+            }
          },
          messages:{
             confirmPassword:{
@@ -160,6 +163,11 @@
         else{
             $confirmPasswordInput.prop('disabled', false);
         }
+    });
+
+    $('input[type="password"]').on('keypress', function(e){
+        var code = e.keyCode || e.which
+        return code != 32;
     });
 
     /**************** GOOGLE MAPS ******************************/
