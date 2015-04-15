@@ -14,16 +14,22 @@ class ScriptBaseClass
      */
     private $configLoader;
 
+    /**
+     * Parser Library
+     */
+    private $parserLibrary;
+
     private $scriptConfig;
 
     /**
      * Constructor
      * @param $emailService
      */
-    public function __construct($emailService, $configLoader)
+    public function __construct($emailService, $configLoader, $parserLibrary)
     {
         $this->emailService = $emailService;
         $this->configLoader = $configLoader;
+        $this->parserLibrary = $parserLibrary;
         $this->scriptConfig = $this->configLoader->getItem('script', 'emailParameter');
         $this->registerErrorHandler();
     }
@@ -45,9 +51,9 @@ class ScriptBaseClass
      * @param  string $file
      * @param  string $line
      */
-    public function errorHandler($code, $message, $file, $line)
+    public function errorHandler($code, $message, $fileName, $lineNumber)
     {
-        $emailBody = $this->constructMessage($code, $message, $file, $line);
+        $emailBody = $this->constructMessage($code, $message, $fileName, $lineNumber);
 
         $this->emailService->setRecipient($this->scriptConfig['recipient'])
                            ->setSubject($this->scriptConfig['subject'])
@@ -73,45 +79,14 @@ class ScriptBaseClass
      * @param  string $file
      * @param  string $line
      */
-    private function constructMessage($code, $message, $file, $line)
+    private function constructMessage($code, $message, $fileName, $lineNumber)
     {
-        $message = "
-            <table>
-                <tr>
-                    <td>
-                        Error Code
-                    </td>
-                    <td>
-                        $code
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Error Message
-                    </td>
-                    <td>
-                        $message
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Line Number
-                    </td>
-                    <td>
-                        $line
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        File Name
-                    </td>
-                    <td>
-                        $file
-                    </td>
-                </tr>
-            </table>
-        ";
-
-        return $message;
+        $errorData = [
+            'code' => $code,
+            'message' => $message,
+            'fileName' => $fileName,
+            'lineNumber' => $lineNumber,
+        ];
+        return $this->parserLibrary->parse('errors/script-error', $errorData, true);
     }
 }

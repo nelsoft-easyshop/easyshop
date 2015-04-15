@@ -7,6 +7,7 @@ $dragonPaySoapClient = $CI->kernel->serviceContainer['dragonpay_soap_client'];
 $configLoader = $CI->kernel->serviceContainer['config_loader'];
 $paymentService = $CI->kernel->serviceContainer['payment_service'];
 $emailService = $CI->kernel->serviceContainer['email_notification'];
+$viewParser = new \CI_Parser();
 
 use EasyShop\Script\ScriptBaseClass as ScriptBaseClass;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
@@ -26,6 +27,7 @@ class CheckDragonPayTransaction extends ScriptBaseClass
     private $paymentService;
     private $emailService;
     private $configLoader;
+    private $viewParser;
 
     /**
      * Constructor
@@ -37,6 +39,7 @@ class CheckDragonPayTransaction extends ScriptBaseClass
      * @param EasyShop\PaymentService\PaymentService   $paymentService
      * @param EasyShop\Notifications\EmailNotification $emailService
      * @param EasyShop\ConfigLoader\ConfigLoader       $configLoader
+     * @param \CI_Parser                               $viewParser
      */
     public function __construct(
         $hostName,
@@ -46,10 +49,11 @@ class CheckDragonPayTransaction extends ScriptBaseClass
         $dragpayConfig,
         $paymentService,
         $emailService,
-        $configLoader
+        $configLoader,
+        $viewParser
     )
     {
-        parent::__construct($emailService, $configLoader);
+        parent::__construct($emailService, $configLoader, $viewParser);
 
         $this->connection = new PDO(
             $hostName,
@@ -383,7 +387,8 @@ $dragonpayCheck  = new checkDragonPayTransaction(
     $config,
     $paymentService,
     $emailService,
-    $configLoader
+    $configLoader,
+    $viewParser
 );
 
 $dragonpayCheck->execute();
