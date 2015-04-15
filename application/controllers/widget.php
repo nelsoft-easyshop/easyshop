@@ -31,25 +31,43 @@ class Widget extends MY_Controller
         $this->categoryManager = $this->serviceContainer['category_manager'];
     }
 
+    /**
+     * Display widget selector page
+     * @return view
+     */
     public function widgets()
     {
         $viewData = [
             'firstWidgetLink' => base_url().'search-widget/1',
-            'secondWidget' => base_url().'search-widget/2',
+            'secondWidgetLink' => base_url().'search-widget/2',
         ];
         $this->load->view('pages/widgets/widget-selector', $viewData);
     }
 
+    /**
+     * Display first widget type
+     * @return view
+     */
     public function widget1()
     {
         $this->generateWidget(self::WIDGET_FIRST_TYPE);
     }
 
+    /**
+     * Display second widget type
+     * @return view
+     */
     public function widget2()
     {
         $this->generateWidget(self::WIDGET_SECOND_TYPE);
     }
 
+    /**
+     * Generate widget pages
+     * @param  integer  $widgetType
+     * @param  boolean  $asVar
+     * @return view
+     */
     private function generateWidget($widgetType, $asVar = false)
     {
         if($widgetType === self::WIDGET_FIRST_TYPE){
