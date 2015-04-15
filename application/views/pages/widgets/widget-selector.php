@@ -149,6 +149,7 @@
         <div id="fb-root"></div>
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
             <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
+            <script type="text/javascript" src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
             <script type="text/javascript" src="/assets/js/src/how-to-page-plugins.js"></script>
             <script type="text/javascript" src="/assets/js/src/how-to-page.js"></script>
             <script type="text/javascript" src="/assets/js/src/widget.js"></script>
