@@ -6,23 +6,17 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Easyshop.ph | How to Buy</title>
+        <title>Easyshop.ph | Widgets</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
-        <link type="text/css" href="/assets/css/how-to-page.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-        <link type="text/css" href="/assets/css/widget-selector.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
-        <script type="text/javascript">
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-33801742-8']);
-            _gaq.push(['_trackPageview']);
 
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-            </script>
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <link type="text/css" href="/assets/css/how-to-page.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+            <link type="text/css" href="/assets/css/widget-selector.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" />
+        <?php else: ?>
+            <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.widget-selector.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <?php endif; ?>
     </head>
     <body class="animated fadeIn">
         <header class="navbar navbar-static-top">
