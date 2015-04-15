@@ -194,7 +194,14 @@ module.exports = function (grunt) {
                          'web/assets/css/payment-receipt.css'],
                     'web/assets/css/min-easyshop.home-reminder.css':
                         ['web/assets/css/basic.css',
-                         'web/assets/css/message-box.css']
+                         'web/assets/css/message-box.css'],
+                    'web/assets/css/min-easyshop.widget-selector.css':
+                        ['web/assets/css/how-to-page.css',
+                         'web/assets/css/widget-selector.css'],
+                    'web/assets/css/min-easyshop.widget-page.css':
+                        ['web/assets/css/bootstrap.css',
+                         'web/assets/css/easy-icons/easy-icons.css',
+                         'web/assets/css/widget.css']
                 }
             },
         },
@@ -474,7 +481,12 @@ module.exports = function (grunt) {
                          'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                          'web/assets/js/src/how-to-page-plugins.js',
                          'web/assets/js/src/universal.js',
-                         'web/assets/js/src/how-to-page.js']
+                         'web/assets/js/src/how-to-page.js'],
+                     
+                    'web/assets/js/min/easyshop.widget-page.js':
+                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                         'web/assets/js/src/widget.js']
+
                 }
             }
         }
