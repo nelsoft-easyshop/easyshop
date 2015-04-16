@@ -47,13 +47,15 @@
                 <div class="container">
                     <div class="me">
                         <div class="row-fluid">
-                            <div class="span6">
+                            <div class="span6  span-desc">
                                 <div class="widget-item-container first">
                                     <div class="row-fluid">
-                                        <div class="span6">
-                                            <div class="iframe-container">
-                                                <iframe src="<?=$firstWidgetLink;?>" width="250" height="360" frameborder="0"></iframe>
-                                            </div>
+                                        <div class="span6 span-iframe">
+                                            <center>
+                                                <div class="iframe-container">
+                                                    <iframe src="<?=$firstWidgetLink;?>" width="250" height="360" scrolling="no" frameborder="0"></iframe>
+                                                </div>
+                                            </center>
                                         </div>
                                         <div class="span6">
                                             <p class="title-widget">Widget Specifications</p>
@@ -66,7 +68,7 @@
                                         <div class="span12">
                                             <div class="embed-code-form">
                                                 <label>Embed Code</label>
-                                                <input type="text" class="form-control input-lg widget-link-textbox" readonly value="<?=html_escape('<iframe src="'.$firstWidgetLink.'" width="250" height="360" frameborder="0"></iframe>');?>" />
+                                                <input type="text" class="form-control input-lg widget-link-textbox" readonly value="<?=html_escape('<iframe src="'.$firstWidgetLink.'" width="250" height="360" scrolling="no" frameborder="0"></iframe>');?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -74,14 +76,16 @@
                             </div>
                             <div class="v-divider"></div>
                             <div class="h-divider"></div>
-                            <div class="span6">
+                            <div class="span6 span-desc">
                                 <div class="widget-item-container second">
                                     <div class="row-fluid">
-                                        <div class="span6">
+                                        <center>
+                                        <div class="span6 span-iframe">
                                             <div class="iframe-container">
-                                                <iframe src="<?=$secondWidgetLink;?>" width="260" height="260" frameborder="0"></iframe>
+                                                <iframe src="<?=$secondWidgetLink;?>" width="260" height="260" scrolling="no" frameborder="0"></iframe>
                                             </div>
                                         </div>
+                                    </center>
                                         <div class="span6">
                                             <p class="title-widget">Widget Specifications</p>
                                             <p class="desc-widget">
@@ -93,7 +97,7 @@
                                         <div class="span12">
                                             <div class="embed-code-form">
                                                 <label>Embed Code</label>
-                                                <input type="text" class="form-control input-lg widget-link-textbox" readonly value="<?=html_escape('<iframe src="'.$secondWidgetLink.'" width="260" height="260" frameborder="0"></iframe>');?>" />
+                                                <input type="text" class="form-control input-lg widget-link-textbox" readonly value="<?=html_escape('<iframe src="'.$secondWidgetLink.'" width="260" height="260" scrolling="no" frameborder="0"></iframe>');?>" />
                                             </div>
                                         </div>
                                     </div>
