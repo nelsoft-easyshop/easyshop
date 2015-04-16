@@ -76,7 +76,6 @@
 
         if(confirm("Are you sure you want to permanently removed this draft entry?")){
             var request = $.ajax({
-                // async: false,
                 type: "POST",
                 url: '/' + action,
                 data: "p_id=" + pid + "&"+csrfname+"=" + csrftoken,
