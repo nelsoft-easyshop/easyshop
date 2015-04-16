@@ -314,18 +314,23 @@ class EsCatRepository extends EntityRepository
      *
      * @return EasyShop\Entities\EsCat[]
      */
-    public function getParentCategories($limit = PHP_INT_MAX)
+    public function getParentCategories($limit = null)
     {
         $em = $this->_em;
-        $parentCategories = $em->createQueryBuilder()
-                                ->select('c') 
-                                ->from('EasyShop\Entities\EsCat','c')
-                                ->where('c.parent = :parentId')
-                                ->andWhere('c.idCat != :parentId')
-                                ->setParameter('parentId', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID )
-                                ->getQuery()
-                                ->setMaxResults($limit)
-                                ->getResult();
+        $queryBuilder = $em->createQueryBuilder();
+        $queryBuilder->select('c')
+                     ->from('EasyShop\Entities\EsCat', 'c')
+                     ->where('c.parent = :parentId')
+                     ->andWhere('c.idCat != :parentId')
+                     ->setParameter('parentId', \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID);
+
+        if ($limit !== null) {
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        $parentCategories = $queryBuilder->getQuery()
+                                         ->getResult();
+
         return $parentCategories;
     }
 
