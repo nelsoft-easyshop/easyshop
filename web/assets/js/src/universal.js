@@ -72,6 +72,7 @@
         var time = null; 
         $.ajax({
             url: '/home/getServerTime', 
+            async: false,
             dataType: 'text', 
             success: function(text) { 
                 time = new Date(text); 
