@@ -10,6 +10,7 @@ class Widget extends MY_Controller
     const WIDGET_FIRST_TYPE_COUNT = 4;
     const WIDGET_SECOND_TYPE = 2;
     const WIDGET_SECOND_TYPE_COUNT = 6;
+    const DEFAULT_CATEGORY_COUNT = 8;
 
     private $productManager;
     private $em;
@@ -68,23 +69,23 @@ class Widget extends MY_Controller
      */
     private function generateWidget($widgetType, $asVar = false)
     {
-        if($widgetType === self::WIDGET_FIRST_TYPE){
+        if ($widgetType === self::WIDGET_FIRST_TYPE) {
             $productCount = self::WIDGET_FIRST_TYPE_COUNT;
         }
-        else{
+        else {
             $productCount = self::WIDGET_SECOND_TYPE_COUNT;
         }
 
         $viewData['products'] = $this->xmlCms->getWidgetProducts($productCount);
 
-        if($widgetType === self::WIDGET_FIRST_TYPE){
+        if ($widgetType === self::WIDGET_FIRST_TYPE) {
             $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
-                                       ->getParentCategories(8);
+                                       ->getParentCategories(self::DEFAULT_CATEGORY_COUNT);
             $viewData['categories'] = $this->categoryManager
                                            ->applyProtectedCategory($parentCategory, false);
             return $this->load->view('pages/widgets/widget-1', $viewData, $asVar);
         }
-        else{
+        else {
             return $this->load->view('pages/widgets/widget-2', $viewData, $asVar);
         }
     }
