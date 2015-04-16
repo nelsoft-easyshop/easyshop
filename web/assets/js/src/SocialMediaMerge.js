@@ -5,7 +5,6 @@ jQuery(function ($) {
         var oauthProvider = $("#dataContainer").attr('data-provider');
         var email = $("#dataContainer").attr('data-email');
         $.ajax({
-            async : false,
             type : "POST",
             dataType : "json",
             url : "/SocialMediaController/SendMergeNotification",

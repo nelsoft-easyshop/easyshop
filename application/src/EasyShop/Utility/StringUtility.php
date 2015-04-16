@@ -19,12 +19,19 @@ class StringUtility
     private $htmlPurifier;
 
     /**
+     * Config Loader Instance
+     * @var EasyShop\ConfigLoader\ConfigLoader
+     */
+    private $configLoader;
+
+    /**
      * Constructor.
      * 
      */
-    public function __construct($htmlPurifier)
+    public function __construct($htmlPurifier, $configLoader)
     {
         $this->htmlPurifier = $htmlPurifier;
+        $this->configLoader = $configLoader;
     }
 
     /**
@@ -81,6 +88,8 @@ class StringUtility
      */
     public function removeNonUTF($string)
     {
+        $foreignChars = $this->configLoader->getItem('foreign_chars');
+        $string = preg_replace(array_keys($foreignChars), array_values($foreignChars), $string);
         $string = mb_convert_encoding($string, 'UTF-8', 'UTF-8');
         $string = preg_replace('/[^(\x20-\x7F)]*/','', $string);
 
