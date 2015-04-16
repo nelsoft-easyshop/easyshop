@@ -141,7 +141,7 @@ class EmailRegisterUser extends ScriptBaseClass
     }
 }
 
-$pointChecker  = new EmailRegisterUser(
+$emailRegisterUser  = new EmailRegisterUser(
     $CI->db->hostname,
     $CI->db->username,
     $CI->db->password,
@@ -150,4 +150,4 @@ $pointChecker  = new EmailRegisterUser(
     $viewParser
 );
 
-$pointChecker->execute();
+$emailRegisterUser->execute();
