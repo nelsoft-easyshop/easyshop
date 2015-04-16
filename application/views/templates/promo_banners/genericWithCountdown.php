@@ -1,5 +1,5 @@
 <?php if($product->getStartPromo()): ?>
-
+    
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -7,6 +7,9 @@
                     <div class="row">
                         <div class="col-xs-12" align="center">
                             <div class="div-inline">
+                            
+                                <span id="clock"></span>
+                            
                                 <div class="circle-promo">
                                     PROMO!
                                 </div>
@@ -49,14 +52,16 @@
     </div>
 
     <div>
-        <input id="endDate" type="hidden" value='<?php echo date('M d,Y H:i:s',strtotime(($product->getStartPromo() == "1" ? $product->getEnddate()->format("Y-m-d h:i:s"): $product->getStartdate()->format("Y-m-d h:i:s")))); ?>' >
-        <input type="hidden" id="dateOfAnnouncement" data-date="<?=isset($externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]) ? $externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]->getDateOfAnnouncement()->format("F d, Y") : ''?>">
+        <input id="endDate" type="hidden" value='<?php echo date('M d,Y H:i:s',strtotime(($product->getStartPromo() == "1" ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")))); ?>' >
+        <input type="hidden" id="dateOfAnnouncement" data-date="<?php echo isset($externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]) ? $externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]->getDateOfAnnouncement()->format("F d, Y") : ''?>">
     </div>
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script> 
+        <script src="/assets/js/src/vendor/jquery.hilios.countdown.js" type="text/javascript"></script> 
+        <script src="/assets/js/src/vendor/moment.min.js" type="text/javascript"></script>
         <script src="/assets/js/src/promo/generic-with-countdown.js" type="text/javascript"></script> 
     <?php else:?>
         <script src="/assets/js/min/easyshop.genericWithCountdown.js" type="text/javascript"></script>
     <?php endif;?>
+    
 <?php endif; ?>
