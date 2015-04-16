@@ -219,6 +219,7 @@ strong > a{
 
 .btn.btn-default-1 {
     font-size: 13px;
+    padding: 8px 7px !important;
     width: auto;
 }
 
@@ -431,6 +432,11 @@ label.col-md-2 span{
 
 .identify-email-bottom-group {
     margin-top: 20px;
+}
+
+.identify-email-container form label {
+    line-height: 32px;
+    margin: 0;
 }
 
 .password-update-label{
