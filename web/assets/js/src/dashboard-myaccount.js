@@ -381,7 +381,7 @@
                         $("#verifiedEmail, #verifyEmail").css("display","none");
                         if(obj.error.mobile) {
                             $("#errorIndicatorMobileNumber").css("display","block");
-                            $("#errorTextMobile").text(obj.error.mobile);
+                            $("#errorTextMobile").text(obj.error.mobile[0]);
                         }
                         if(obj.error.dateofbirth) {
                             $("#errorIndicatorBirthday").css("display","block");
