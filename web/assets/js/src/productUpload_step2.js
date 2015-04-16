@@ -382,7 +382,6 @@ function saveAsDraftProceed(url)
     $('#form_product').ajaxForm({ 
         url: url,
         dataType: "json",
-        async: false,
         beforeSubmit : function(arr, $form, options){
             var combination = processCombination();
             var attributes = processAttributes(); 
