@@ -79,7 +79,7 @@ class EsMemberProdcatRepository extends EntityRepository
         $orderCondition = rtrim($orderCondition, ", ");
 
         $em = $this->_em;
-        $dql = "SELECT pc
+        $dql = "SELECT pc, FIELD(mc.idMemcat, :cat_ids) as HIDDEN field
                 FROM EasyShop\Entities\EsMemberProdcat pc
                 JOIN pc.memcat mc
                 JOIN mc.member m
@@ -95,12 +95,13 @@ class EsMemberProdcatRepository extends EntityRepository
          
         $dql .= " GROUP BY p.idProduct";
          
-        $orderByString = "";
+        $orderByString = " field ASC, ";
         foreach($orderByField as $field){
             $orderByString .= $field." ".$orderByDirection.",";
         }
         $orderByString = $orderByString." p.idProduct DESC";
         $dql .= " ORDER BY " . $orderByString;  
+
         $query = $em->createQuery($dql)
                     ->setParameter('member_id', $memberId)
                     ->setParameter('cat_ids', $memcatIds);
@@ -110,6 +111,7 @@ class EsMemberProdcatRepository extends EntityRepository
             $query->setParameter('queryString', $queryString);
         }
 
+        
         $query->setFirstResult($offset)
               ->setMaxResults($prodLimit);
 
@@ -150,14 +152,14 @@ class EsMemberProdcatRepository extends EntityRepository
         $orderByDirection = isset($orderByDirections[reset($orderBy)]) ? 
                             $orderByDirections[reset($orderBy)] : $orderByDirections['ASC'];
 
-        $orderByString = "";
+        $orderByString = " field ASC, ";
         foreach($orderByField as $field){
             $orderByString .= $field." ".$orderByDirection.",";
         }
         $orderByString = rtrim($orderByString, ",");
 
         $em = $this->_em;
-        $dql = "SELECT p.idProduct
+        $dql = "SELECT p.idProduct, FIELD(mc.idMemcat, :cat_id) as HIDDEN field
                 FROM EasyShop\Entities\EsMemberProdcat pc
                 JOIN pc.memcat mc
                 JOIN mc.member m
