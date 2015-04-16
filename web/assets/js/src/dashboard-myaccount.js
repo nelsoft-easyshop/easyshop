@@ -134,6 +134,9 @@
                     actionGroupChangePass.show();
                     loadingimg.hide();
                     var obj = jQuery.parseJSON(data); 
+                    $("#currentPassword").val('');
+                    $("#password").val('');
+                    $("#confirmPassword").val('');
                     if(obj.result === "success") {      
                        errorContainer.hide();
                        succcessContainer.fadeIn();
