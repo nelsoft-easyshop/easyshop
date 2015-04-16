@@ -108,6 +108,7 @@
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             var max_qty = 1;
             $.ajax({
+                async:false,
                 url: "/cart/doAddItem",
                 type:"POST",
                 dataType:"JSON",
@@ -129,6 +130,7 @@
                 }
             });
             $.ajax({
+                async:false,
                 url: "/payment/payCashOnDelivery",
                 type:"POST",
                 dataType:"JSON",
@@ -141,6 +143,7 @@
                 }
             });
             $.ajax({
+                async:false,
                 url: "/promo/ScratchCard/tieUpMemberToCode",
                 type:"POST",
                 dataType:"JSON",
