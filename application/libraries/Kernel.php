@@ -369,9 +369,13 @@ class Kernel
             return new \EasyShop\CollectionHelper\CollectionHelper();
         };
         
-        $container['string_utility'] = function ($c) {
+        $container['string_utility'] = function ($c) use ($container) {
             $htmlPurifier = new \HTMLPurifier();
-            return new \EasyShop\Utility\StringUtility($htmlPurifier);
+            $configLoader = $container['config_loader'];
+            return new \EasyShop\Utility\StringUtility(
+                $htmlPurifier,
+                $configLoader
+            );
         };
         
         $container['hash_utility'] = function($c) use ($container) {
