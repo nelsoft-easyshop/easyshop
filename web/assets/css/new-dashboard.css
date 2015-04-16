@@ -1561,7 +1561,6 @@ a{
 
 i.jstree-icon.jstree-checkbox{
     background-image: url(/assets/css/jstree/jstree-checkbox.png) !important;
-    background-size: 100% !important;
     background-position: center;
     cursor: pointer !important;
     display: inline-block;
@@ -1570,7 +1569,6 @@ i.jstree-icon.jstree-checkbox{
 .jstree-default.jstree-checkbox-selection .jstree-clicked > .jstree-checkbox, 
 .jstree-default .jstree-checked > .jstree-checkbox{
     background: url(/assets/css/jstree/jstree-checkbox-checked.png) !important;
-    background-size: 100% !important;
     background-position: center;
     display: inline-block;
 }

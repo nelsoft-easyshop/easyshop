@@ -176,9 +176,9 @@
 
     $route['christmas-promo'] = 'promo/TwelveDaysOfChristmas/twelveDaysOfChristmasPromo';
 
-    $route['search-widget'] = 'widget/widgets';
-    $route['search-widget/1'] = 'widget/widget1';
-    $route['search-widget/2'] = 'widget/widget2';
+    $route['easywidget'] = 'widget/widgets';
+    $route['easywidget/1'] = 'widget/widget1';
+    $route['easywidget/2'] = 'widget/widget2';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

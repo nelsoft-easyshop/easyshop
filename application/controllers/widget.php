@@ -37,8 +37,8 @@ class Widget extends MY_Controller
     public function widgets()
     {
         $viewData = [
-            'firstWidgetLink' => base_url().'search-widget/1',
-            'secondWidgetLink' => base_url().'search-widget/2',
+            'firstWidgetLink' => base_url().'easywidget/1',
+            'secondWidgetLink' => base_url().'easywidget/2',
         ];
         $this->load->view('pages/widgets/widget-selector', $viewData);
     }

@@ -553,10 +553,10 @@
         Available Location
     </h3>
     <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Patientiamque totam fatemur, labores, ennius debet suapte aristippi neglexerit maiora benivolentiam credere iustitia, urbane. 
+        The following items are currently unavailable for your location. Please select a new shipping address to proceed with your checkout.
     </p>
     <div class="form-group">
-        <label for="shipping-city">This item is available in the following locations:</label> 
+        <label for="shipping-city">These item are available in the following locations:</label> 
         <!-- append select -->
         <select class="form-es-control form-es-control-block location-container"></select>
     </div>
