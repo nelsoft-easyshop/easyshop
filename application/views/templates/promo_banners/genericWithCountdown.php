@@ -7,9 +7,6 @@
                     <div class="row">
                         <div class="col-xs-12" align="center">
                             <div class="div-inline">
-                            
-                                <span id="clock"></span>
-                            
                                 <div class="circle-promo">
                                     PROMO!
                                 </div>
