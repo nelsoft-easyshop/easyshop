@@ -12,7 +12,7 @@
     <body>
         <div class="es-widget-1">
             <div class="row row-widget">
-                <div class="col-xs-3">
+                <div class="col-xs-3 col-left-wing">
                     <div class="left-wing">
                         <center>
                             <div class="es-logo-container">
@@ -33,7 +33,7 @@
                         </center>
                     </div>
                 </div>
-                <div class="col-xs-9">
+                <div class="col-xs-9 col-right-wing">
                     <div class="right-wing">
                         <div class="search-form">
                             <form method="get" action="/search/search.html" target="_blank">
