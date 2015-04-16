@@ -29,6 +29,10 @@ box-shadow: 0px 0px 21px 0px rgba(0,0,0,0.75);
 	padding-top: 40px;
 }
 
+.span-iframe{
+	width: 260px;
+}
+
 .title-widget{
 	display: block;
 	margin-left: 10px;
@@ -99,6 +103,7 @@ box-shadow: 0px 0px 21px 0px rgba(0,0,0,0.75);
 	.widget-item-container {
 		padding: 0px;
 	}
+
 	.img-widget-desc{
 		margin-top: 0px;
 	}
@@ -122,7 +127,56 @@ box-shadow: 0px 0px 21px 0px rgba(0,0,0,0.75);
 	.v-divider{
 		display: none;
 	}
+
 	.logo-mobile{
 		display: block;
 	}
+
+	.span-iframe{
+		width: 100% !important;
+		text-align: center;
+		margin:auto !important;
+		float: left;
+	}
+
+	.iframe-container{
+		margin: auto !important;
+	}
+}
+
+@media (max-width: 1200px){
+	.span-desc{
+		clear: both;
+		display: block;
+		width: 100% !important;
+	}
+
+	.v-divider{
+		display: none;
+	}
+
+	.h-divider{
+		border-top: solid #fff 1px;
+		width: 90%;
+		height: 2px;
+		margin: auto;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		display: block;
+		clear: both;
+	}
+
+	.iframe-container{
+		min-height: 20px;
+		position: relative;
+		margin: auto;
+	}
+	
+	.span-iframe{
+		width: 260px !important;
+
+	}
+
 }
