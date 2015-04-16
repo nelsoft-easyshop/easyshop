@@ -70,13 +70,16 @@
 
     function serverTime() { 
         var time = null; 
-        $.ajax({url: '/home/getServerTime', 
-            async: false, dataType: 'text', 
+        $.ajax({
+            url: '/home/getServerTime', 
+            dataType: 'text', 
             success: function(text) { 
                 time = new Date(text); 
-            }, error: function(http, message, exc) { 
+            },
+            error: function(http, message, exc) { 
                 time = new Date(); 
-        }}); 
+            }
+        }); 
         return time; 
     }
 

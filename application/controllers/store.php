@@ -444,11 +444,13 @@ class Store extends MY_Controller
         $categoryData = [];        
         foreach( $parentCategories as $key => $categoryWrapper ){ 
 
-            $categoryIdCollection = $categoryWrapper->getChildrenAsArray();
+            $categoryIdCollection = [];
             if($key !== 'custom-noncategorized'){
                 $categoryIdCollection[] = $categoryWrapper->getId();
             }
-            
+            $childrenCategories = $categoryWrapper->getChildrenAsArray();
+            $categoryIdCollection = array_merge($categoryIdCollection, $childrenCategories);
+
             $isCustom = $categoryWrapper->getIsCustom();
             $result = $categoryManager->getProductsWithinCategory(
                                             $memberId, 

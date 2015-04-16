@@ -25,21 +25,23 @@
             <div class="container-title">
                 Popular items
             </div>
-            <div class="items-wrapper">
-                <center>
-                    <div class="row">
-                        <?php foreach ($products as $product): ?>
-                            <div class="col-xs-4">
+            <center>
+                <div class="items-wrapper">
+                    <center>
+                        <div class="row">
+                            <?php foreach ($products as $product): ?>
+                            <div style="float: left;">
                                 <a href="/item/<?=$product->getSlug();?>" target="_blank">
                                     <div class="item-img-container">
                                         <img src="<?=getAssetsDomain().$product->getDefaultImage()->getDirectory().'thumbnail/'.$product->getDefaultImage()->getFilename();?>" />
                                     </div>
                                 </a>
                             </div>
-                        <?php endforeach;?>
-                    </div>
-                </center>
-            </div>
+                            <?php endforeach;?>
+                        </div>
+                    </center>
+                </div>
+             </center>
         </div>
     </body>
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>

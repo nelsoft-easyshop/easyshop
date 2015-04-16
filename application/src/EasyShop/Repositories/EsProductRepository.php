@@ -603,7 +603,8 @@ class EsProductRepository extends EntityRepository
     
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
-        $queryBuilder->select('p')
+        $queryBuilder->select('p,  FIELD(p.cat, :catIds ) as HIDDEN field')
+                     ->setParameter('catIds', $catId)
                      ->from('EasyShop\Entities\EsProduct','p')
                      ->andWhere('p.isDelete = :active')
                      ->andWhere('p.isDraft = :active')
@@ -619,6 +620,7 @@ class EsProductRepository extends EntityRepository
             $queryBuilder->andWhere('p.name LIKE :searchQuery')
                          ->setParameter('searchQuery', $searchQuery);
         }
+        $queryBuilder->orderBy('field', 'ASC');
         foreach($orderByField as $field){
             $queryBuilder->orderBy($field, $orderByDirection);
         }
@@ -678,7 +680,7 @@ class EsProductRepository extends EntityRepository
         $orderCondition = rtrim($orderCondition, ", ");
 
         $dql = "
-            SELECT p.idProduct
+            SELECT p.idProduct, FIELD(p.cat, :catIds ) as HIDDEN field
             FROM EasyShop\Entities\EsProduct p
             WHERE
                 p.member = :member_id
@@ -690,7 +692,7 @@ class EsProductRepository extends EntityRepository
             $dql .= "AND p.condition = :condition";
         }
         
-        $orderByString = "";
+        $orderByString = " field ASC, ";
         foreach($orderByField as $field){
             $orderByString .= $field." ".$orderByDirection.",";
         }
@@ -698,7 +700,8 @@ class EsProductRepository extends EntityRepository
         $dql .= " ORDER BY ". $orderByString;
 
         $query = $em->createQuery($dql)
-                    ->setParameter('member_id', $memberId);
+                    ->setParameter('member_id', $memberId)
+                    ->setParameter('catIds', $catId);
 
         if($condition !== "") {
             $query->setParameter("condition", $condition);
