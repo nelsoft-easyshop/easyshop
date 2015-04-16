@@ -12,17 +12,24 @@
         <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" href="/assets/css/promo-css.css">
         <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript">
 
-          var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', 'UA-33801742-8']);
-          _gaq.push(['_trackPageview']);
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-33801742-8']);
+            _gaq.push(['_trackPageview']);
 
-          (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-          })();
+            (function ($) {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                
+                $(document).ready(function() {
+                    $('html, body').animate({
+                        scrollTop: $(".resultContainer").offset().top
+                    }, 300);
+                });
+            }(jQuery));
 
         </script>
     </head>
@@ -55,7 +62,7 @@
 
         <section class="ty-comment-section">
             <div class="container load-animate">
-                <div class="box">
+                <div class="box resultContainer">
                     <?PHP if ($result['isSuccessful'] === true) : ?>
                     <div id="success">
                         <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
@@ -148,7 +155,6 @@
             </section>
         </footer>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="/assets/js/src/plugins.js"></script>
         <script src="/assets/js/src/promo/christmas-promo.js"></script>
 

@@ -88,34 +88,37 @@
                                 Nominations will be done per school. The Entrepreneurship Department or the department in charge of the Entrepreneurship program will provide at least three (3) student-owned business nominees together with their advisers. To be eligible to receive the EStudyantrepreneur Award, the nominee must be the owner of a small business. There are no category limitations for each business.
                             </li>
                             <li>
+                                A completed nomination form with the adviser’s endorsement letter must be submitted on or before <b>April 5, 2015</b>.
+                            </li>
+                            <li>
                                 All students with existing businesses are encouraged to join as long as their advisers endorse their respective businesses.
                             </li>
                             <li>
-                                Businesses must be registered from 2013 onwards and must be a requirement to complete their undergraduate program.
+                                Businesses must be registered from 2013 onwards.
                             </li>
                             <li>
                                 Winners will be chosen via an online poll on the EasyShop.ph website.
                             </li>
                             <li>
-                                Nomination period for school level starts on <b>February 23, 2015</b>.
+                                Voters should register on the Easyshop.ph website in order to vote for their choice.
                             </li>
                             <li>
-                                There will be three winners for the nomination period.
+                                Voting period starts on <b>April 15, 2015</b>.
                             </li>
                             <li>
-                                In case of a tie, both nominees will qualify in the in-school poll.
+                                Voting period ends on <b>June 15, 2015</b>.
                             </li>
                             <li>
-                                Voting period for the in-school level starts on <b>March 7, 2015</b>.
+                                There will be one winner for the each school and one winner for the EStudyantrepreneur Awards.
                             </li>
                             <li>
-                                There will be one winner for the in-school voting round.
+                                There will only be one round of voting. The business who will receive the highest votes among the nominees in each school will be the winner of the consolation prize. The business who will receive the highest total votes will be proclaimed the 2015 EStudyantrepreneur.
                             </li>
                             <li>
-                                In case of a tie, both winners will qualify for the 2015 EStudyantrepreneur poll.
+                                Voting can only be done once. 1 account = 1 vote.
                             </li>
                             <li>
-                                Voting period for the 2015 EStudyantrepreneur poll will start on <b>April 8, 2015</b>.
+                                There will only be one winner for the each school and one winner for the EStudyantrepreneur Awards.
                             </li>
                             <li>
                                 Awarding will be on <b>June 15, 2015</b>.
