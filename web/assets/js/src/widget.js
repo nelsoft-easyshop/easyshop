@@ -2,6 +2,11 @@
 
     $(window).on("load resize",function(){ 
         var widgetWidth = $(".es-widget-1").outerWidth();
+        var colLeftWingWidth = $(".es-widget-1 .col-left-wing").outerWidth();
+        var colRightWingWidth = widgetWidth - colLeftWingWidth;
+
+        $(".es-widget-1 .col-right-wing").css("width", colRightWingWidth+"px");
+
         if(widgetWidth == 150){
             $(".es-widget-1 .item:nth-child(odd)").css("display", "none");
             $(".es-widget-1 .right-wing").css("padding-left", "32px").css("text-align", "center");
@@ -14,7 +19,8 @@
         }
     });
 
-    $(document).on('focus',".widget-link-textbox",function () {
+    $(document).on('click',".widget-link-textbox",function () {
         $(this).select();
+        alert("Right click and copy or press ctrl + c");
     });
 })(jQuery);
