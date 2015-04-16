@@ -927,6 +927,7 @@ class CategoryManager
                         $newMemberProduct = new \EasyShop\Entities\EsMemberProdcat();
                         $newMemberProduct->setMemcat($memberCategory);
                         $newMemberProduct->setCreatedDate($datetimeToday);
+                        $newMemberProduct->setLastmodifieddate($datetimeToday);
                         $newMemberProduct->setProduct($product);
                         $newMemberProduct->setSortOrder($highestProductSortOrder);
                         $this->em->persist($newMemberProduct);
@@ -947,6 +948,7 @@ class CategoryManager
                     $newMemberProduct = new \EasyShop\Entities\EsMemberProdcat();
                     $newMemberProduct->setMemcat($newMemberCategory);
                     $newMemberProduct->setCreatedDate($datetimeToday);
+                    $newMemberProduct->setLastmodifieddate($datetimeToday);
                     $newMemberProduct->setProduct($product);
                     $newMemberProduct->setSortOrder(0);
                     $this->em->persist($newMemberProduct);
