@@ -11,8 +11,7 @@ class product_search extends MY_Controller {
     
     function __construct()  
     { 
-        parent::__construct(); 
-        $this->load->helper('htmlpurifier');
+        parent::__construct();
         $this->load->model("product_model");
         $this->load->model("search_model");
 
@@ -143,7 +142,7 @@ class product_search extends MY_Controller {
         $searchProductService = $this->serviceContainer['search_product'];
         $categoryManager = $this->serviceContainer['category_manager']; 
 
-        $response['string'] = $this->input->get('q_str') ? trim($this->input->get('q_str')) : "";
+        $response['string'] = $this->input->get('q_str') ? trim(utf8_decode($this->input->get('q_str'))) : "";
         $parameter = $response['getParameter'] = $this->input->get();
         $search = $searchProductService->getProductBySearch($parameter);
 
