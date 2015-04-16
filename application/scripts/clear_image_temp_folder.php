@@ -15,7 +15,7 @@ class ClearImageTempFolder extends ScriptBaseClass
     private $configLoader;
     private $viewParser;
 
-    const HOURS_LAPSED = 3;
+    const MAX_FILE_LIFETIME_HOURS = 3;
 
     /**
      * Constructor
@@ -40,7 +40,7 @@ class ClearImageTempFolder extends ScriptBaseClass
         foreach ($files as $file) {
             $datecreated = date("Y-m-d H:i:s.", filectime($file));
             $now = date("Y-m-d H:i:s");
-            if ((int)round((strtotime($now)) - strtotime($datecreated)) / 3600 >= self::HOURS_LAPSED) {
+            if ((int)round((strtotime($now)) - strtotime($datecreated)) / 3600 >= self::MAX_FILE_LIFETIME_HOURS) {
                 if (is_dir($file)) {
                     $this->deleteDir($file);
                 }
