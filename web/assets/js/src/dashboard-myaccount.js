@@ -85,22 +85,19 @@
             currentPassword: {
                 required: true,
                 minlength: 6,
-                maxlength:25,
-                no_space: true
+                maxlength:25
             },
             password: {
                 required: true,
                 minlength: 6,
                 maxlength:25,
-                alphanumeric: true,
-                no_space: true
+                alphanumeric: true
             },
             confirmPassword: {
                 required: true,
                 minlength: 6,
                 maxlength:25,
-                equalTo: '#password',
-                no_space: true
+                equalTo: '#password'
             }
          },
          messages:{
