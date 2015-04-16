@@ -680,7 +680,7 @@ class EsProductRepository extends EntityRepository
         $orderCondition = rtrim($orderCondition, ", ");
 
         $dql = "
-            SELECT p.idProduct, FIELD(p.cat, :catIds ) as HIDDEN field'
+            SELECT p.idProduct, FIELD(p.cat, :catIds ) as HIDDEN field
             FROM EasyShop\Entities\EsProduct p
             WHERE
                 p.member = :member_id
