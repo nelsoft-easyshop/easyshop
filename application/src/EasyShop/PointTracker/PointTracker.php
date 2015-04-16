@@ -4,6 +4,7 @@ namespace EasyShop\PointTracker;
 
 use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsPoint;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 
 /**
@@ -20,6 +21,7 @@ class PointTracker
      */
     private $em;
 
+    const POINT_DAYS_DURATION = 90;
 
     /**
      * Constructor. Retrieves Entity Manager instance
@@ -34,16 +36,18 @@ class PointTracker
     /**
      * Updates point history and adds point to a user
      *
-     * @param int $userId ID of a user
-     * @param int $actionId ID of an action
+     * @param int   $userId ID of a user
+     * @param int   $actionId ID of an action
+     * @param bool  $isPercentage
+     * @param float $price
      *
      * @return boolean
      */
-    public function addUserPoint($userId, $actionId)
+    public function addUserPoint($userId, $actionId, $percentage = 0, $customPoints = 0)
     {
         // Get Point Type object
         $points = $this->em->getRepository('EasyShop\Entities\EsPointType')
-                                ->find($actionId);
+                           ->find($actionId);
 
         if($points === null){
             return false;
@@ -51,7 +55,7 @@ class PointTracker
 
         // Get Member object
         $user = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                ->find($userId);
+                         ->find($userId);
 
         if($user === null){
             return false;
@@ -59,34 +63,49 @@ class PointTracker
 
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(['member' => $userId]);
+                              ->findOneBy(['member' => $userId]);
+
+        if($points->getId() === EsPointType::TYPE_REVERT){
+            $addPoints = $customPoints;
+        }
+        else{
+            if($percentage > 0){
+                $addPoints = bcmul($points->getPoint(), bcdiv($percentage, 100, 4), 4);
+            }
+            else{
+                $addPoints = $points->getPoint();
+            }
+        }
 
         // Insert to point history
         $pointHistory = new EsPointHistory();
-        $pointHistory->setM($user);
+        $pointHistory->setMember($user);
         $pointHistory->setType($points);
         $pointHistory->setDateAdded(date_create(date("Y-m-d H:i:s")));
-        $pointHistory->setPoint($points->getPoint());
+        $pointHistory->setPoint($addPoints);
 
         $this->em->persist($pointHistory);
         $this->em->flush();
 
         if($userPoint !== null){
             // Update existing user    
-            $userPoint->setPoint($userPoint->getPoint() + $points->getPoint()); 
+            $userPoint->setPoint($userPoint->getPoint() + $addPoints);
+            $userPoint->setExpirationDate(date_create(date("Y-m-d H:i:s", strtotime("+".self::POINT_DAYS_DURATION." days"))));
+
             $this->em->flush();
         }
         else{
             // Insert new user
             $userPoint = new EsPoint();
-            $userPoint->setPoint($points->getPoint());
-            $userPoint->setM($user);
+            $userPoint->setPoint($addPoints);
+            $userPoint->setMember($user);
+            $userPoint->setExpirationDate(date_create(date("Y-m-d H:i:s", strtotime("+".self::POINT_DAYS_DURATION." days"))));
 
             $this->em->persist($userPoint);
             $this->em->flush();
-        }    
+        }
 
-        return true;                
+        return true;
     }
 
 
@@ -105,15 +124,15 @@ class PointTracker
 
         // Get deduct point type instance
         $deduct = $this->em->getRepository('EasyShop\Entities\EsPointType')
-                                ->find($typeId);
+                           ->find($typeId);
 
         // Get Point object
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(['member' => $userId]);
+                              ->findOneBy(['member' => $userId]);
 
         // Get Member object
         $user = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                ->find($userId);
+                         ->find($userId);
 
        
         if($userPoint === null || $userPoint->getPoint() < $points || 
@@ -174,7 +193,7 @@ class PointTracker
      *
      * @param id $userId ID of user to be searched
      *
-     * @return bool|int
+     * @return bool|string
      */
     public function getUserPoint($userId)
     {
@@ -184,15 +203,5 @@ class PointTracker
         return $user === null? false : $user->getPoint();
     }        
 
-
-    /**
-     * Returns all data inside Point History Table
-     *
-     * @return mixed
-     */
-    public function getPointHistory()
-    {
-        return $this->em->getRepository('EasyShop\Entities\EsPointHistory')
-                            ->findAll();
-    }
 }
+

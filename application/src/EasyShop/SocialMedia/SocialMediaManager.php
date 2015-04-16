@@ -9,6 +9,7 @@ use EasyShop\Entities\EsSocialMediaProvider;
 use EasyShop\Entities\EsStoreColor;
 use Facebook\FacebookSession;
 use EasyShop\Entities\EsBanType as EsBanType;
+use EasyShop\Entities\EsPointType as EsPointType;
 
 class SocialMediaManager
 {
@@ -73,6 +74,17 @@ class SocialMediaManager
     private $formFactory;
     
     /**
+     * Form error helper
+     *
+     */
+    private $formErrorHelper;
+
+    /**
+     * Point tracker 
+     */
+    private $pointTracker;
+
+    /**
      * Class constructor. Loads dependencies.
      *
      * @param Facebook\FacebookRedirectLoginHelper $fbRedirectLoginHelper
@@ -81,10 +93,20 @@ class SocialMediaManager
      * @param EasyShop\User\UserManager $userManager
      * @param EasyShop\Core\ConfigLoader $configLoader
      * @param EasyShop\Utility\StringUtility
-     * @param EasShop\\EasyShop\FormValidation\ValidationRules
+     * @param EasyShop\FormValidation\ValidationRules
      * @param Symfony\Component\Form\Forms
+     * @param EasyShop\FormValidation\FormHelpers\FormErrorHelper
      */
-    public function __construct($fbRedirectLoginHelper, $googleClient, $em, $userManager, $configLoader, $stringUtility, $formValidation, $formFactory)
+    public function __construct($fbRedirectLoginHelper, 
+                                $googleClient, 
+                                $em, 
+                                $userManager, 
+                                $configLoader,
+                                $stringUtility, 
+                                $formValidation, 
+                                $formFactory, 
+                                $formErrorHelper,
+                                $pointTracker)
     {
         $this->fbRedirectLoginHelper = $fbRedirectLoginHelper;
         $this->googleClient = $googleClient;
@@ -94,6 +116,8 @@ class SocialMediaManager
         $this->stringUtility = $stringUtility;
         $this->formValidation = $formValidation;
         $this->formFactory = $formFactory;
+        $this->formErrorHelper = $formErrorHelper;
+        $this->pointTracker = $pointTracker;
     }
 
     /**
@@ -185,7 +209,7 @@ class SocialMediaManager
         }
         $response = [
             'getMember' => $getMember,
-            'doesAccountMerged' => (bool) $socialMediaAccount
+            'isAccountMerged' => (bool) $socialMediaAccount
         ];
 
         return $response;
@@ -210,12 +234,18 @@ class SocialMediaManager
         $form = $this->formFactory->createBuilder('form', null, ['csrf_protection' => false])
                      ->setMethod('POST')
                      ->add('username', 'text', ['constraints' => $rules['username']])
+                     ->add('gender', 'text', ['constraints' => $rules['gender']])
+                     ->add('email', 'text', ['constraints' => $rules['email']])
                      ->getForm();
-
-        $form->submit([ 'username' => $username]);
+                     
+        $form->submit([ 
+            'username' => $username,
+            'gender' => $gender,
+            'email' => $email,
+        ]);
         if ($form->isValid()) {
             $defaultStoreColor = $this->em->getRepository('EasyShop\Entities\EsStoreColor')
-                                           ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
+                                          ->findOneBy(['idStoreColor' => EsStoreColor::DEFAULT_COLOR_ID]);
             $banType = $this->em->getRepository('EasyShop\Entities\EsBanType')
                                 ->find(EsBanType::NOT_BANNED);
             $member = new EsMember();
@@ -237,9 +267,15 @@ class SocialMediaManager
 
             $this->userManager->generateUserSlug($member->getIdMember());
             $member = $this->mergeAccount($member, $oAuthId, $oAuthProvider);
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_REGISTER);
         }
 
-        return $member;
+        $response = [
+            'member' => $member,
+            'errors' => $this->formErrorHelper->getFormErrors($form),
+        ];
+
+        return $response;
     }
 
     /**

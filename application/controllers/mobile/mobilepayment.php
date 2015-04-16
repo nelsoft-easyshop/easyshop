@@ -124,7 +124,7 @@ class mobilePayment extends MY_Controller
         ];
 
         if(empty($cartData) === false && $canContinue){
-            $validatedCart = $paymentService->validateCartData(['choosen_items' => $cartData],
+            $validatedCart = $paymentService->validateCartData(['choosen_items' => $validCart],
                                                                "0.00", 
                                                                $memberId); 
             $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId);
@@ -189,7 +189,7 @@ class mobilePayment extends MY_Controller
             $paymentType = $checkoutService->getPaymentTypeByString($postPaymentType);
             $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType);
             if($canContinue){ 
-                $validatedCart = $paymentService->validateCartData(['choosen_items' => $cartData],
+                $validatedCart = $paymentService->validateCartData(['choosen_items' => $validatedCart],
                                                                    "0.00", 
                                                                    $memberId); 
                 if($postPaymentType === "paypal"){
@@ -205,14 +205,14 @@ class mobilePayment extends MY_Controller
                     ];
 
                     $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId); 
-                    if((bool)$response['e']){
-                        $requestUrl = $response['d'];
-                        $isSuccess = true;
-                    }
-                    else{
-                        $message = $response['d'];
+                    if((bool)$response['error']){
+                        $message = $response['message'];
                         $returnUrl = "";
                         $cancelUrl = ""; 
+                    }
+                    else{
+                        $requestUrl = $response['url'];
+                        $isSuccess = true;
                     }
                 }
                 elseif($postPaymentType === "dragonpay") { 
@@ -222,18 +222,18 @@ class mobilePayment extends MY_Controller
                         ]
                     ];
                     $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId);  
-                    if((bool)$response['e']){
-                        $requestUrl = $response['u'];
-                        $returnUrl = $paymentConfig['payment_type']['dragonpay']['Easyshop']['return_url'];
-                        $isSuccess = true;
+                    if((bool)$response['error']){
+                        $message = $response['message'];
                     }
                     else{
-                        $message = $response['m'];
+                        $requestUrl = $response['url'];
+                        $returnUrl = $paymentConfig['payment_type']['dragonpay']['Easyshop']['return_url'];
+                        $isSuccess = true;
                     }
                 }
             }
             else{
-                $message = "One of your items is unavaialable";
+                $message = "One of your items is unavailable";
             }
         }
         else{
@@ -592,7 +592,7 @@ class mobilePayment extends MY_Controller
         if($error > 0){
             $returnArray = [
                 'isSuccess' => false,
-                'message' => 'One of you item is not avaialble in '.$label,
+                'message' => 'One of you item is not available in '.$label,
                 'url' => '',
                 'returnUrl' => '',
                 'cancelUrl' => '',

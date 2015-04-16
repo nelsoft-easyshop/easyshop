@@ -8,6 +8,7 @@ use EasyShop\Entities\EsVerifcode as EsVerifcode;
 use Easyshop\Entities\EsMember;
 use Easyshop\Entities\EsStoreColor as EsStoreColor;
 use EasyShop\Entities\EsBanType as EsBanType;
+use EasyShop\Entities\EsPointType as EsPointType;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Query as Query;
 use Elnur\BlowfishPasswordEncoderBundle\Security\Encoder\BlowfishPasswordEncoder as BlowfishPasswordEncoder;
@@ -132,6 +133,13 @@ class AccountManager
     private $socialMediaManager;
     
     /**
+     * Point Tracker
+     *
+     * @var EasyShop\PointTracker\PointTracker
+     */
+    private $pointTracker;
+    
+    /**
      * Intialize dependencies
      *
      */
@@ -149,6 +157,7 @@ class AccountManager
                                 $configLoader,
                                 $languageLoader,
                                 $hashUtility,
+                                $pointTracker,
                                 $socialMediaManager)
     {
         $this->em = $em;
@@ -164,8 +173,9 @@ class AccountManager
         $this->encrypter = $encrypter;
         $this->configLoader = $configLoader;
         $this->languageLoader = $languageLoader;
-        $this->hashUtility = $hashUtility;
-        $this->socialMediaManager = $socialMediaManager;
+        $this->hashUtility = $hashUtility; 
+        $this->pointTracker = $pointTracker; 
+        $this->socialMediaManager = $socialMediaManager; 
     }
 
     /**
@@ -184,8 +194,10 @@ class AccountManager
         ];
         
         $verifcodeRepository = $this->em->getRepository('EasyShop\Entities\EsVerifcode');
+        $emailSubject = $this->languageLoader->getLine('registration_subject');
         $verifCode = null;
         if(!$isNew){
+            $emailSubject = $this->languageLoader->getLine('reverify_subject');
             $verifCode = $verifcodeRepository->findOneBy(['member' => $member]);
             if($verifCode !== null){
                 $emailCount = $verifCode->getEmailCount();
@@ -235,7 +247,7 @@ class AccountManager
             $message = $this->parser->parse('emails/email-verification' , $parseData,true);
             
             $this->emailNotification->setRecipient($emailAddress);
-            $this->emailNotification->setSubject($this->languageLoader->getLine('registration_subject'));
+            $this->emailNotification->setSubject($emailSubject);
             $this->emailNotification->setMessage($message, $imageArray);
             /**
              * Mobile verification can be added here (unused for the time being)
@@ -348,13 +360,12 @@ class AccountManager
                     $member = null;    
                 }
                 else {
-                    $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
-                    $member->setLastLoginIp($this->httpRequest->getClientIp());
-                    $member->setLoginCount($member->getLoginCount() + 1);
-                    $this->em->flush(); 
-                    $member = !$asArray ? $member :  $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                                                        ->getHydratedMember($validatedUsername, $asArray);                    
-                }                                                                    
+                    $member = $this->updateUserLoginDetails($member);
+                    $member = !$asArray 
+                              ? $member
+                              : $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                                   ->getHydratedMember($validatedUsername, $asArray);
+                }
             }
         }
 
@@ -362,7 +373,30 @@ class AccountManager
             'errors' => array_merge($errors, $this->formErrorHelper->getFormErrors($form)),
             'member' => $member
         ];
-    
+    }
+
+    /**
+     * Update user login details
+     * @param  EasyShop\Entities\EsMember $member
+     * @return EasyShop\Entities\EsMember
+     */
+    public function updateUserLoginDetails($member)
+    {
+        $newUserSession = $this->generateUsersessionId($member->getIdMember()); 
+
+        $member->setLastLoginDatetime(date_create(date("Y-m-d H:i:s")));
+        $member->setLastLoginIp($this->httpRequest->getClientIp());
+        $member->setLoginCount(bcadd($member->getLoginCount(), 1));
+        $member->setFailedLoginCount(0);
+        $member->setUsersession($newUserSession);
+        $this->em->flush();
+        $loggedCount = $this->em->getRepository('EasyShop\Entities\EsPointHistory')
+                                ->countUserPointActivity($member->getIdMember(), EsPointType::TYPE_LOGIN, date("Y-m-d"));
+        if($loggedCount <= 0){
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_LOGIN);
+        }
+
+        return $member;
     }
     
     /**
@@ -423,6 +457,8 @@ class AccountManager
             
             $this->em->persist($member);
             $this->em->flush();
+
+            $this->pointTracker->addUserPoint($member->getIdMember(), EsPointType::TYPE_REGISTER);
         }
 
         return ['errors' => $this->formErrorHelper->getFormErrors($form),

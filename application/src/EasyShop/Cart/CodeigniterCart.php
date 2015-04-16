@@ -74,9 +74,9 @@ class CodeigniterCart implements CartInterface
             $size = 0;
             $cartData = $this->cart->contents();
             foreach($cartData as $cartItem){
-                $size += $cartItem['qty'];     
-                return $size;
+                $size += $cartItem['qty']; 
             }
+            return $size;
         }
         else{
             return sizeof($this->cart->contents());

@@ -5,6 +5,7 @@ namespace EasyShop\Cart;
 use Easyshop\Product\ProductManager as ProductManager;
 use Easyshop\Promo\PromoManager as PromoManager;
 use Easyshop\Cart\CartInterface as CartInterface;
+use EasyShop\Product\ProductShippingLocationManager as ProductShippingLocationManager;
 
 
 /**
@@ -49,6 +50,12 @@ class CartManager
      * @var  mixed
      */
     private $promoConfiguration;
+
+    /**
+     * ProductShippingLocationManager Instance
+     * @var EasyShop\Product\ProductShippingLocationManager
+     */
+    private $shippingLocationManager;
     
     /**
      * Constructor
@@ -58,12 +65,13 @@ class CartManager
      * @param Easyshop\Cart\CartInterface PromoManager
      *
      */
-    public function __construct($em, CartInterface $cart, ProductManager $productManager, PromoManager $promoManager)
+    public function __construct($em, CartInterface $cart, ProductManager $productManager, PromoManager $promoManager, ProductShippingLocationManager $shippingLocationManager)
     {
         $this->productManager = $productManager;
         $this->promoManager = $promoManager;
         $this->cart = $cart;
         $this->em = $em;
+        $this->shippingLocationManager = $shippingLocationManager;
     }
 
     /**
@@ -395,6 +403,45 @@ class CartManager
         }
         return $this->cart->getContents(); 
 
+    }
+
+    /**
+     * Get cart total shipping fee
+     * @param  integer $cityLocation 
+     * @param  integer $memberId 
+     * @return float
+     */
+    public function getCartShippingFee($cityLocation, $memberId, $validate = false)
+    {
+        $cityLocation = (int)$cityLocation;
+        if($cityLocation){
+            $region = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                           ->getParentLocation($cityLocation); 
+            $regionLocation = $region->getIdLocation(); 
+            $islandId = $region->getParent()->getIdLocation(); 
+            $cartContents = $this->getValidatedCartContents($memberId);
+            $totalFee = 0;
+            foreach ($cartContents as $item) {
+                $shippingFee = $this->shippingLocationManager
+                                    ->getProductItemShippingFee(
+                                        $item['product_itemID'], 
+                                        $cityLocation, 
+                                        $regionLocation, 
+                                        $islandId
+                                    );
+
+                if($validate && $shippingFee === null){
+                    return false;
+                }
+
+                $additionalFee = $shippingFee !== null ? bcmul($shippingFee, $item['qty'], 4) : 0;
+                $totalFee = bcadd($additionalFee, $totalFee, 4);
+            }
+
+            return $totalFee; 
+        }
+
+        return false;
     }
 
 

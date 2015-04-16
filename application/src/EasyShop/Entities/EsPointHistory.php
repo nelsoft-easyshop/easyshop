@@ -29,9 +29,9 @@ class EsPointHistory
     private $dateAdded = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="point", type="integer", nullable=false)
+     * @ORM\Column(name="point", type="decimal",  precision=15, scale=4, nullable=false)
      */
     private $point = '0';
 
@@ -100,7 +100,7 @@ class EsPointHistory
     /**
      * Set point
      *
-     * @param integer $point
+     * @param string $point
      * @return EsPointHistory
      */
     public function setPoint($point)
@@ -113,7 +113,7 @@ class EsPointHistory
     /**
      * Get point
      *
-     * @return integer 
+     * @return string 
      */
     public function getPoint()
     {

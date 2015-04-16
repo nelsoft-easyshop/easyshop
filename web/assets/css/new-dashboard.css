@@ -20,6 +20,7 @@ body{
     z-index: 9999999;
     display: none;
 }
+
 .overlay-loader-container-main{
     opacity: 0.5;
     background-color: rgba(221,221,221,0.80);
@@ -244,10 +245,10 @@ a{
     position: absolute;
     background: #ffffff;
     -webkit-filter: brightness(100%) !important;
-	-moz-filter: brightness(100%) !important;
-	-o-filter: brightness(100%) !important;
-	-ms-filter: brightness(100%) !important;
-	filter: brightness(100%) !important;
+    -moz-filter: brightness(100%) !important;
+    -o-filter: brightness(100%) !important;
+    -ms-filter: brightness(100%) !important;
+    filter: brightness(100%) !important;
 }
 
 .img-follower-cover{
@@ -260,10 +261,10 @@ a{
     top: 0;
     z-index: 1;
     filter: brightness(50%);
-	-webkit-filter: brightness(50%);
-	-moz-filter: brightness(50%);
-	-o-filter: brightness(50%);
-	-ms-filter: brightness(50%);
+    -webkit-filter: brightness(50%);
+    -moz-filter: brightness(50%);
+    -o-filter: brightness(50%);
+    -ms-filter: brightness(50%);
 }
 
 .cover-overlay{
@@ -1554,19 +1555,24 @@ a{
     background-size: 100% !important;
     margin-top: 3px !important;
     margin-right: 5px !important;
+    display: inline-block;
 
 }
 
 i.jstree-icon.jstree-checkbox{
-    background: url(/assets/css/jstree/jstree-checkbox.png) !important;
+    background-image: url(/assets/css/jstree/jstree-checkbox.png) !important;
     background-size: 100% !important;
+    background-position: center;
     cursor: pointer !important;
+    display: inline-block;
 }
 
 .jstree-default.jstree-checkbox-selection .jstree-clicked > .jstree-checkbox, 
 .jstree-default .jstree-checked > .jstree-checkbox{
     background: url(/assets/css/jstree/jstree-checkbox-checked.png) !important;
     background-size: 100% !important;
+    background-position: center;
+    display: inline-block;
 }
 
 .list-currect-categories > li > ul{
@@ -1646,7 +1652,7 @@ i.jstree-icon.jstree-checkbox{
 .icon-move{
     width: 11px;
     height: 11px;
-    
+    display: inline-block;
 }
 
 .custom-left-panel{
@@ -1659,13 +1665,17 @@ i.jstree-icon.jstree-checkbox{
 
 .allItemsEdit > li > .icon-move,
 .allItems > li > .icon-move{
-    background: url("/assets/images/icon-add-dark.png") no-repeat center;
+    background-image: url("/assets/images/icon-add-dark.png");
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: 100%;
 }
 
 .customCategoryEdit > li > .icon-move,
 .customCategory > li > .icon-move{
-    background: url("/assets/images/icon-remove-dark.png") no-repeat center;
+    background-image: url("/assets/images/icon-remove-dark.png");
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: 100%;
 }
 
@@ -1679,7 +1689,7 @@ i.jstree-icon.jstree-checkbox{
 .allItemsEdit { 
     float: left; 
     width: 100%; 
-    min-height: 195px; 
+    min-height: 195px !important; 
 }
 
 .allItems.custom-state-active,
@@ -2497,6 +2507,10 @@ label.css-label {
     width: 0;
 }
 
+.col-alert{
+    padding-right: 0px;
+}
+
 .view-delivery-lnk {
     color: #4370cb;
     cursor: pointer;
@@ -3150,9 +3164,244 @@ label.css-label {
     display: none;
 }
 
-@media only screen and (max-width: 991px){
+/** ===================================== **/
+/** ============ EASY POINTS ============ **/
+/** ===================================== **/
+.easy-point-container {
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    display: none;
+    margin-top: 53px;
+    padding-bottom: 18px;
+    position: relative;
+}
+
+.easy-point-title {
+    background-color: #565656;
+    border-radius: 4px 4px 0 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 16px 15px;
+}
+
+.easy-point-question {
+    background-color: #fff;
+    border-radius: 90px;
+    color: #565656;
+    display: block;
+    font-size: 18px;
+    height: 28px;
+    line-height: 28px;
+    position: absolute;
+    right: 15px;
+    text-align: center;
+    top: 12px;
+    width: 28px;
+}
+
+.easy-point-title a:hover + .easy-point-tooltip {
+    display: block;
+    top: -31px;
+}
+
+.easy-point-tooltip {
+    background-color: #e2e2e2;
+    border-radius: 4px;
+    color: #565656;
+    display: none;
+    font-size: 12px;
+    padding: 5px;
+    position: absolute;
+    right: -13px;
+    text-transform: none;
+    top: 0;
+    z-index: 3;
+
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.easy-point-tooltip:after {
+    border-style: solid;
+    border-width: 7px 7px 0;
+    border-color: #e2e2e2 transparent transparent transparent;
+    bottom: -7px;
+    content: "";
+    height: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    width: 0;
+    -webkit-transform:rotate(360deg);
+}
+
+.current-point-container {
+    padding: 3px 15px;
+}
+
+.current-point-title {
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 48px;
+    text-transform: uppercase;
+}
+
+.current-points {
+    color: #ff6237;
+    float: right;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.border-bttm {
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.easy-point-container ul {
+    height: auto;
+    margin-right: 4px;
+    margin-top: 18px;
+    max-height: 400px;
+    padding: 0 15px 15px;
+}
+
+.easy-point-container ul li {
+    overflow: hidden;
+    padding-bottom: 18px;
+    position: relative;
+}
+
+.easy-point-container ul li:last-child {
+    padding-bottom: 0;
+}
+
+.small-bullet-container {
+    display: table-cell;
+    padding-right: 20px;
+    vertical-align: middle;
+}
+
+.small-bullet {
+    background-color: #3aab99;
+    border-radius: 90px;
+    bottom: 0;
+    display: block;
+    height: 10px;
+    position: relative;
+    width: 10px;
+}
+
+.small-bullet:before {
+    background-color: #e2e2e2;
+    content: "";
+    height: 200px;
+    left: 4px;
+    position: absolute;
+    bottom: 10px;
+    width: 2px;
+}
+
+.small-bullet:after {
+    background-color: #e2e2e2;
+    content: "";
+    height: 200px;
+    left: 4px;
+    position: absolute;
+    top: 10px;
+    width: 2px;
+}
+
+.easy-point-container ul li:last-child .small-bullet:after,
+.easy-point-container ul li:first-child .small-bullet:before {
+    display: none;
+}
+
+.easy-content-container {
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    display: table-cell;
+    padding: 8px 10px;
+    width: 90%;
+}
+
+.easy-content {
+    display: block;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.easy-point {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 34px;
+    text-align: right;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.easy-content-date {
+    display: block;
+}
+
+.ep-border-top {
+    border-top: 1px solid #e2e2e2;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.easy-point-mobile {
+    display: block;
+}
+
+.easy-point-mobile p {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.easy-point-link-mobile {
+    background-color: #868686;
+    border-radius: 4px;
+    color: #fff;
+    display: block;
+    padding: 15px;
+}
+
+.easy-point-link-mobile:hover {
+    background-color: #565656;
+    color: #fff;
+}
+
+.current-point-txt {
+    font-size: 14px;
+    font-weight: bold;
+    float: left;
+    line-height: 23px;
+}
+
+.easy-points-mobile {
+    font-size: 16px;
+    font-weight: bold;
+    float: right;
+}
+
+.point-loader {
+    padding-top: 18px;
+}
+
+@media only screen and (max-width: 991px){ 
     .no-items{
         font-size: 15px;
+    }
+
+    .col-alert{
+        padding-right: 15px;
     }
     
     .section-dashboard{
@@ -3723,6 +3972,18 @@ label.css-label {
     .express-edit-btn .btn-default-3 {
         width: 100%;
     }
+
+    .easy-point-mobile {
+        display: none;
+    }
+
+    .easy-point-container {
+        display: block;
+    }
+
+    .easy-point {
+        max-width: 147px;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -3736,6 +3997,29 @@ label.css-label {
 
     .prod-att-input-price {
         width: 27%;
+    }
+
+    .easy-content {
+        display: inline-block;
+        max-width: 154px;;
+        padding-right: 8px;
+        vertical-align: middle;
+        width: 82%;
+        word-wrap: break-word;
+    }
+
+    .easy-point {
+        display: inline-block;
+        float: right;
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 34px;
+        max-width: 197px;
+        min-width: 35px;
+        text-align: right;
+        vertical-align: middle;
+        width: auto;
+        word-wrap: break-word;
     }
 }
 

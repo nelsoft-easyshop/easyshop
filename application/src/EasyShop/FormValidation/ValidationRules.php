@@ -95,7 +95,10 @@ class ValidationRules
                                 new Assert\Email(),
                                 new CustomAssert\IsEmailUnique(),
                     ),
-                    
+                    'gender' => array(
+                                new Assert\NotBlank(),
+                                new CustomAssert\IsValidGender(),
+                    ),
                 ),
             'subscribe' => array(
                     'email' => array(
@@ -105,7 +108,9 @@ class ValidationRules
                 ),
             'vendor_contact' => array(
                     'shop_name' => array(
-                                new CustomAssert\IsValidStoreNameOptional(),
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5',
+                                                   'max' => '60']),
                                 new CustomAssert\IsAlphanumericSpace(),
                     ),
                     'contact_number' => array(
@@ -117,9 +122,15 @@ class ValidationRules
                     ),
                     'city' => array(
                                 new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a city.",
+                                                    ]),
                     ),
                     'region' => array(
                                 new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a state region.",
+                                                    ]),
                     ),
                 ),
             'user_shipping_address' => array(
@@ -129,9 +140,15 @@ class ValidationRules
                     ),
                     'city' => array(
                                 new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a city.",
+                                                    ]),
                     ),
                     'region' => array(
                                 new Assert\NotBlank(),
+                                new Assert\NotEqualTo(['value' => '0',
+                                                       "message" => "Please select a state region.",
+                                                    ]),
                     ),
                     'mobile_number' => array(
                                 new Assert\NotBlank(),
@@ -165,7 +182,9 @@ class ValidationRules
                                 new CustomAssert\IsValidGender(),
                     ),   
                     'shop_name' => array(
-                                new CustomAssert\IsValidStoreNameOptional(),
+                                new Assert\NotBlank(),
+                                new Assert\Length(['min' => '5',
+                                                   'max' => '60']),
                                 new CustomAssert\IsAlphanumericSpace(),
                     ),                 
             ),

@@ -63,6 +63,11 @@ textarea {
     outline:none;
 }
 
+.form-control:focus{
+    box-shadow: none !important;
+    border-color: #565656!important;
+}
+
 .loader-upload{
     position: fixed;
     background: #fff;
@@ -1278,7 +1283,6 @@ td.td-view.p-view2.color-default{
 
 .list-category > li > a{
     padding: 12px 15px;
-    font-weight: 600;
     display: block;
 }
 

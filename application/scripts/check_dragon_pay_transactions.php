@@ -5,6 +5,7 @@ include_once  __DIR__.'/bootstrap.php';
 $CI =& get_instance();
 $dragonPaySoapClient = $CI->kernel->serviceContainer['dragonpay_soap_client'];
 $configLoader = $CI->kernel->serviceContainer['config_loader'];
+$paymentService = $CI->kernel->serviceContainer['payment_service'];
 
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
@@ -20,21 +21,24 @@ class CheckDragonPayTransaction
     private $merchantId;
     private $merchantPwd;
     private $holidays;
+    private $paymentService;
 
     /**
      * Constructor
-     * @param string         $hostName
-     * @param string         $dbUsername
-     * @param string         $dbPassword
-     * @param \nusoap_client $dragonPaySoapClient
-     * @param array          $dragpayConfig
+     * @param string                                  $hostName
+     * @param string                                  $dbUsername
+     * @param string                                  $dbPassword
+     * @param \nusoap_client                          $dragonPaySoapClient
+     * @param array                                   $dragpayConfig
+     * @param EasyShop\PaymentService\PaymentService  $paymentService
      */
     public function __construct(
         $hostName,
         $dbUsername,
         $dbPassword,
         $dragonPaySoapClient,
-        $dragpayConfig
+        $dragpayConfig,
+        $paymentService
     )
     {
         $this->connection = new PDO(
@@ -47,6 +51,7 @@ class CheckDragonPayTransaction
         $this->merchantId = $dragpayConfig['merchant_id'];
         $this->merchantPwd = $dragpayConfig['merchant_password'];
         $this->holidays = $this->getHolidays();
+        $this->paymentService = $paymentService;
     }
 
     /**
@@ -207,6 +212,7 @@ class CheckDragonPayTransaction
                 $this->revertProductQuantity($itemId, $revertQuantity);
                 $this->updateOrderProductStatus($orderProductId, EsOrderProductStatus::CANCEL);
             }
+            $this->paymentService->revertTransactionPoint($order['id_order']);
         }
     }
 
@@ -364,7 +370,8 @@ $dragonpayCheck  = new checkDragonPayTransaction(
     $CI->db->username,
     $CI->db->password,
     $dragonPaySoapClient,
-    $config
+    $config,
+    $paymentService
 );
 
 $dragonpayCheck->execute();

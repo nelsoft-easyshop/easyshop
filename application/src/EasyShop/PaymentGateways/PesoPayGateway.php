@@ -20,6 +20,8 @@ class PesoPayGateWay extends AbstractGateway
 {
     private $merchantId;
     private $redirectUrl;
+    private $lowestAmount;
+    private $config;
     private $secureHash;
     private $payType;
     private $currencyCode;
@@ -40,12 +42,14 @@ class PesoPayGateWay extends AbstractGateway
         else{ 
             $configLoad = $this->paymentService->configLoader->getItem('payment','testing'); 
         }
-        $config = $configLoad['payment_type']['pesopay']['Easyshop'];
-        $this->merchantId = $config['merchant_id'];
-        $this->redirectUrl = $config['redirect_url'];
-        $this->secureHash = $config['secure_hash'];
-        $this->payType = $config['payment_type'];
-        $this->currencyCode = $config['currency_code'];
+
+        $this->config = $configLoad['payment_type']['pesopay']['Easyshop'];
+        $this->merchantId = $this->config['merchant_id'];
+        $this->redirectUrl = $this->config['redirect_url'];
+        $this->lowestAmount = $this->config['lowest_amount'];
+        $this->secureHash = $this->config['secure_hash'];
+        $this->payType = $this->config['payment_type'];
+        $this->currencyCode = $this->config['currency_code'];
     }
 
     /**
@@ -78,23 +82,48 @@ class PesoPayGateWay extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                            ->getShippingAddress((int)$memberId);
+                            ->getAddressStateRegionId((int)$memberId);
 
         // Compute shipping fee
         $pointSpent = $pointGateway ? $pointGateway->getParameter('amount') : "0";
         $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$address);
-        $grandTotal = $prepareData['totalPrice'];
+        $grandTotal = $pesopayTotal = $prepareData['totalPrice'];
         $productString = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked']; 
 
+        if($pointGateway){
+            $checkPointValid = $pointGateway->isPointValid($memberId, $grandTotal);
+            if(!$checkPointValid['valid']){ 
+                return [
+                    'error' => true,
+                    'message' => $checkPointValid['message']
+                ];
+            } 
+            $pesopayTotal = $grandTotal - $pointGateway->getParameter('amount'); 
+        }
+
+        if($pesopayTotal < $this->lowestAmount){
+            return [
+                'error' => true,
+                'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
+            ];
+        }
+
+        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $paymentType) === false){ 
+            return [
+                'error' => true,
+                'message' => "Payment is not available using Pesopay.",
+            ];
+        }
+
         $txnid = $this->generateReferenceNumber($memberId);  
         $this->setParameter('amount', $grandTotal);
 
-        if($grandTotal < 50.00){
+        if($grandTotal < $this->lowestAmount){
             return [
                 'error' => true,
-                'message' => 'We only accept payments of at least PHP 50.00 in total value.'
+                'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
             ];
         }
 
@@ -121,19 +150,7 @@ class PesoPayGateWay extends AbstractGateway
 
             $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                               ->find($orderId);
-
-            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                      ->find($this->getParameter('paymentType'));
-
-            $paymentRecord = new EsPaymentGateway();
-            $paymentRecord->setAmount($this->getParameter('amount'));
-            $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-            $paymentRecord->setOrder($order);
-            $paymentRecord->setPaymentMethod($paymentMethod);
-
-            $this->em->persist($paymentRecord);
-            $this->em->flush(); 
-
+            $deductAmount = "0.00";
             if($pointGateway !== null){
                 $pointGateway->setParameter('memberId', $memberId);
                 $pointGateway->setParameter('itemArray', $return['item_array']);
@@ -141,10 +158,10 @@ class PesoPayGateWay extends AbstractGateway
                 $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
                                           ->find($pointGateway->getParameter('paymentType'));
 
-                $trueAmount = $pointGateway->pay();
+                $deductAmount = $pointGateway->usePoints();
 
                 $paymentRecord = new EsPaymentGateway();
-                $paymentRecord->setAmount($trueAmount);
+                $paymentRecord->setAmount($deductAmount);
                 $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
                 $paymentRecord->setOrder($order);
                 $paymentRecord->setPaymentMethod($paymentMethod);
@@ -153,13 +170,25 @@ class PesoPayGateWay extends AbstractGateway
                 $this->em->flush();
             }
 
-            $secureHash = $this->generateSecureHash($txnid, $grandTotal);
+            $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                                      ->find($this->getParameter('paymentType'));
+
+            $paymentRecord = new EsPaymentGateway();
+            $paymentRecord->setAmount(bcsub($this->getParameter('amount'), $deductAmount));
+            $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+            $paymentRecord->setOrder($order);
+            $paymentRecord->setPaymentMethod($paymentMethod);
+
+            $this->em->persist($paymentRecord);
+            $this->em->flush(); 
+
+            $secureHash = $this->generateSecureHash($txnid, $pesopayTotal);
 
             return [
                 'error' => false,
                 'message' => '',
                 'merchantId' => $this->merchantId,
-                'amount' => $grandTotal,
+                'amount' => $pesopayTotal,
                 'orderRef' => $txnid,
                 'redirectUrl' => $this->redirectUrl,
                 'secureHash' => $secureHash,
@@ -221,7 +250,7 @@ class PesoPayGateWay extends AbstractGateway
                                'paymentMethod' => $paymentType
                            ]);
 
-        if($this->validateSecureHash($params)){
+        if(isset($params['secureHash']) && $this->validateSecureHash($params)){
             if($order){
                 $orderId = $order->getIdOrder();
                 $memberId = $order->getBuyer()->getIdMember();
@@ -230,7 +259,7 @@ class PesoPayGateWay extends AbstractGateway
 
                 // get address Id
                 $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                                    ->getShippingAddress((int)$memberId);
+                                    ->getAddressStateRegionId((int)$memberId);
 
                 // Compute shipping fee
                 $prepareData = $this->paymentService
@@ -273,11 +302,47 @@ class PesoPayGateWay extends AbstractGateway
                              ->addOrderHistory($orderHistory);
                 }
                 else{
+                    $this->paymentService->revertTransactionPoint($orderId);
                     $order->setPostbackcount(bcadd($order->getPostbackcount(), 1));
                     $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
                              ->deleteLockItem($orderId, $toBeLocked); 
                     $this->em->flush();
                 }
+            }
+        }
+    }
+
+    /**
+     * Check for points reserved per user
+     * @param  integer $memberId
+     */
+    public function checkReservedPoints($memberId)
+    {
+        $draftPesoPayOrders = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                       ->findBy([
+                                            'buyer' => $memberId,
+                                            'paymentMethod' => EsPaymentMethod::PAYMENT_PESOPAYCC,
+                                            'orderStatus' => EsOrderStatus::STATUS_DRAFT,
+                                       ]);
+        $curlUrl = $this->config['api_url']; 
+        $data = [
+            'merchantId' => $this->config['merchant_id'],
+            'loginId' => $this->config['merchant_login_api'],
+            'password' => $this->config['merchant_password_api'],
+            'actionType' =>'Query',
+        ];  
+
+        foreach ($draftPesoPayOrders as $eachOrder) {
+            $transactionId = $eachOrder->getTransactionId();
+            $orderId = $eachOrder->getIdOrder(); 
+            $data['orderRef'] = trim($transactionId); 
+            $this->paymentService->curlService->post($curlUrl, $data);
+            $response = json_decode(json_encode((array)$this->paymentService->curlService->response), true);
+            if(isset($response['record']) === false ||
+                (isset($response['successcode']) 
+                && $response['successcode'] !== PaymentService::SUCCESS_CODE)){
+                $this->paymentService->transactionManager->voidTransaction($orderId);
+                $this->paymentService->revertTransactionPoint($orderId);
             }
         }
     }
@@ -327,8 +392,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * External Charge for Pesopay
-     * @return string
+     * {@inheritdoc}
      */
     public function getExternalCharge()
     {
@@ -339,10 +403,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Generate Reference Number for Pesopay
-     *
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function generateReferenceNumber($memberId)
     {
@@ -350,10 +411,7 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Returns Order Status for Pesopay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderStatus()
     {
@@ -361,14 +419,11 @@ class PesoPayGateWay extends AbstractGateway
     }
 
     /**
-     * Returns Order Product Status for Pesopay
-     *
-     * 
-     * @return int
+     * {@inheritdoc}
      */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 

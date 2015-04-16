@@ -5,7 +5,7 @@
 	<input type='hidden' name='currCode' value='<?=$currCode; ?>' >
 	<input type='hidden' name='mpsMode' value='NIL' >
 	<input type='hidden' name='successUrl' value='<?php echo base_url() ?>payment/pesoPayReturnUrl?status=s'>
-	<input type='hidden' name='failUrl' value='<?php echo base_url() ?>payment/pesoPayReturnUrl?status=f&Fref=<?php echo $orderRef; ?>'>
+	<input type='hidden' name='failUrl' value='<?php echo base_url() ?>payment/pesoPayReturnUrl?status=f&Ref=<?php echo $orderRef; ?>'>
 	<input type='hidden' name='cancelUrl'value='<?php echo base_url() ?>payment/review'>
 	<input type='hidden' name='payType' value='<?=$payType; ?>'>
 	<input type='hidden' name='lang' value='E'>

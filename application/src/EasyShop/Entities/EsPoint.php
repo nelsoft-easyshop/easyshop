@@ -22,9 +22,9 @@ class EsPoint
     private $id;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="point", type="integer", nullable=false)
+     * @ORM\Column(name="point", type="decimal",  precision=15, scale=4, nullable=false)
      */
     private $point = '0';
 
@@ -39,12 +39,11 @@ class EsPoint
     private $member;
 
     /**
-     * @var integer
+     * @var \DateTime
      *
-     * @ORM\Column(name="credit_point", type="integer", nullable=true)
+     * @ORM\Column(name="expiration_date", type="datetime", nullable=false)
      */
-    private $creditPoint = '0';
-
+    private $expirationDate = 'CURRENT_TIMESTAMP';
 
     /**
      * Get id
@@ -59,7 +58,7 @@ class EsPoint
     /**
      * Set point
      *
-     * @param integer $point
+     * @param string $point
      * @return EsPoint
      */
     public function setPoint($point)
@@ -72,7 +71,7 @@ class EsPoint
     /**
      * Get point
      *
-     * @return integer 
+     * @return string 
      */
     public function getPoint()
     {
@@ -103,25 +102,25 @@ class EsPoint
     }
 
     /**
-     * Set creditPoint
+     * Set expirationDate
      *
-     * @param integer $creditPoint
-     * @return integer
+     * @param \DateTime $expirationDate
+     * @return EsMember
      */
-    public function setCreditPoint($creditPoint)
+    public function setExpirationDate($expirationDate)
     {
-        $this->creditPoint = $creditPoint;
+        $this->expirationDate = $expirationDate;
 
         return $this;
     }
 
     /**
-     * Get creditPoint
+     * Get expirationDate
      *
-     * @return integer 
+     * @return \DateTime 
      */
-    public function getCreditPoint()
+    public function getExpirationDate()
     {
-        return $this->creditPoint;
+        return $this->expirationDate;
     }
 }
