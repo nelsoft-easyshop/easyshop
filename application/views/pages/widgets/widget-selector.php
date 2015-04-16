@@ -58,9 +58,16 @@
                                             </center>
                                         </div>
                                         <div class="span6">
-                                            <p class="title-widget">Widget Specifications</p>
+                                            <p class="title-widget">EasyWidget A</p>
                                             <p class="desc-widget">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inquam physici recordatione antipatrum delectamur cotidieque, modus longinquitate, putet ait aristotele dividendo vicinum integris maximisque falsis mihi suum, defuit iudicandum delectamur arbitrer interesse proficiscuntur, continent mollis o partitio, sanos confirmare continent spernat, inanitate delectus illaberetur quantus sinit stulti vivere 
+                                                This widget is the envy of all E-commerce widgets. It's simple and yet it delivers a polished look. Other than providing you with a search bar & a preview of our popular items, the icons on its left are links to the main categories on our site.
+                                            </p>
+                                            <br/>
+                                            <p class="title-widget">Minimum Specifications</p>
+                                            <p class="desc-widget">
+                                                <b>Width : </b> 250px
+                                                <br/>
+                                                <b>Height : </b> 360px
                                             </p>
                                         </div>
                                     </div>
@@ -87,9 +94,16 @@
                                         </div>
                                     </center>
                                         <div class="span6">
-                                            <p class="title-widget">Widget Specifications</p>
+                                            <p class="title-widget">EasyWidget B</p>
                                             <p class="desc-widget">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inquam physici recordatione antipatrum delectamur cotidieque, modus longinquitate, putet ait aristotele dividendo vicinum integris maximisque falsis mihi suum, defuit iudicandum delectamur arbitrer interesse proficiscuntur, continent mollis o partitio, sanos confirmare continent spernat, inanitate delectus illaberetur quantus sinit stulti vivere 
+                                                This widget is for the minimalist at heart. A search bar and 6 popular items, what else could you ask for?
+                                            </p>
+                                            <br/>
+                                            <p class="title-widget">Minimum Specifications</p>
+                                            <p class="desc-widget">
+                                                <b>Width : </b> 260px
+                                                <br/>
+                                                <b>Height : </b> 260px
                                             </p>
                                         </div>
                                     </div>
@@ -120,9 +134,11 @@
                         <div class="row-fluid desc-widget-text">
                             <div class="span4"></div>
                             <div class="span8 padding-top-70 padding-left-30 padding-right-30">
-                                <h1 class="align-center">Select your widget</h1>
+                                <h1 class="align-center">Select your easywidget</h1>
                                 <p class="align-center">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inquam physici recordatione antipatrum delectamur cotidieque, modus longinquitate, putet ait aristotele dividendo vicinum integris maximisque falsis mihi suum, defuit iudicandum delectamur arbitrer interesse proficiscuntur, continent mollis o partitio, sanos confirmare c
+                                    The <b>EasyWidget</b> is the quickest way for people to search for an item from EasyShop's database while they're on a third-party website. It's most suited for bloggers with a user-base who loves online shopping. 
+                                    <br/><br/>
+                                    To start using the <b>EasyWidget</b>, pick from the two variants that are available below, copy the code and paste it into your website and it'll work like magic.
                                 </p>
                             </div>
                         </div>
