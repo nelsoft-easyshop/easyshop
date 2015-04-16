@@ -219,6 +219,7 @@ strong > a{
 
 .btn.btn-default-1 {
     font-size: 13px;
+    padding: 8px 7px !important;
     width: auto;
 }
 
@@ -384,12 +385,6 @@ strong > a{
     padding-right: 0px;
 }
 
-label.col-md-2 span{
-    margin-top: 7px;
-    display: block;
-    text-align: right;
-}
-
 .submit-email-form, .submit-password-form {
     background-color: #ff893a;
     border: none;
@@ -445,6 +440,11 @@ label.col-md-2 span{
 
 .nofloat{
     float: none !important; 
+}
+
+.identify-email-container form label {
+    line-height: 32px;
+    margin: 0;
 }
 
 @media only screen and (max-width: 992px) {
