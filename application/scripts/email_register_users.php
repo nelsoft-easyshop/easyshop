@@ -1,99 +1,153 @@
 <?php
 
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
+include_once  __DIR__.'/bootstrap.php';
 
-    echo "Loading swiftmailer...\n";
-    require_once(__DIR__ . '/../../vendor/swiftmailer/swiftmailer/lib/swift_required.php');
-    
+$CI =& get_instance();
+$configLoader = $CI->kernel->serviceContainer['config_loader'];
+$emailService = $CI->kernel->serviceContainer['email_notification'];
+$viewParser = new \CI_Parser();
+
+
+use EasyShop\Script\ScriptBaseClass as ScriptBaseClass;
+
+class EmailRegisterUser extends ScriptBaseClass
+{
+    private $connection;
+    private $emailService;
+    private $dateQuery;
+
     /**
-     * Database params
+     * Constructor
+     * @param string                                   $hostName
+     * @param string                                   $dbUsername
+     * @param string                                   $dbPassword
+     * @param EasyShop\Notifications\EmailNotification $emailService
+     * @param EasyShop\ConfigLoader\ConfigLoader       $configLoader
+     * @param \CI_Parser                               $viewParser
      */
+    public function __construct(
+        $hostName,
+        $dbUsername,
+        $dbPassword,
+        $emailService,
+        $configLoader,
+        $viewParser
+    ) {
+        parent::__construct($emailService, $configLoader, $viewParser);
 
-    $configDatabase = require dirname(__FILE__). '/../config/param/database.php';
-
-
-    /**
-     * Query params
-     * 
-     *	this_date = today
-     *	past_date = yesterday(day - 1)
-     */
-    $configQuery = array(
+        $this->connection = new PDO(
+            $hostName,
+            $dbUsername,
+            $dbPassword
+        );
+        $this->emailService = $emailService;
+        $this->dateQuery = [
             'this_date' => date("Y-m-d H:i:s"),
-            'past_date' => date("Y-m-d H:i:s",strtotime("-7 days"))
-    );
+            'past_date' => date("Y-m-d H:i:s", strtotime("-7 days"))
+        ];
+    }
+
+    public function execute()
+    {
+        $emailData = $this->getEmailData();
+        $this->constructSendMail($emailData);
+    }
 
     /**
-     * Email params
+     * Generate attachment content
+     * @return string
      */
-    $configEmail = array(
-            'username' => 'noreply@easyshop.ph',
-            'password' => '3a5y5h0p_noreply',
-            'from_email' => 'noreply@easyshop.ph',
-            'from_name' => 'Easyshop.ph',
-            'recipients' => [
-                    'samgavinio@easyshop.ph'
-            ]
-    );
+    private function constructAttachment()
+    {
+        $userLists = $this->getUserList();
+        $csvHeader = [
+            'USERNAME',
+            'CONTACT NO',
+            'EMAIL',
+            'NICKNAME',
+            'FULLNAME',
+            'DATE CREATED'
+        ];
+        $csvData = implode(', ', $csvHeader) . PHP_EOL;
+        foreach ($userLists as $user) {
+            $csvData .= implode(', ', $user) . PHP_EOL;
+        }
 
-    echo "Fetching newly registered users between " . $configQuery['past_date'] . " and " . $configQuery['this_date'] . " ...\n"; 
+        return $csvData;
+    }
 
-    $dbh = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
-
-    $sql = "SELECT username, contactno, email, nickname, fullname, datecreated
+    /**
+     * Get all user list
+     * @return array
+     */
+    public function getUserList()
+    {
+        $getUsersQuery = "
+            SELECT username, contactno, email, nickname, fullname, datecreated
             FROM es_member
-            WHERE datecreated BETWEEN :past_date AND :this_date 
-            
+            WHERE datecreated BETWEEN :past_date AND :this_date
+
             UNION
             
             SELECT '','',email,'','',datecreated
             FROM es_subscribe
             WHERE datecreated BETWEEN :past_date AND :this_date 
             
-            ORDER BY datecreated";
+            ORDER BY datecreated
+        ";
 
-    echo "Generating CSV Data... \n";
+        $getUserList = $this->connection->prepare($getUsersQuery);
+        $getUserList->bindValue("past_date", $this->dateQuery['past_date'], PDO::PARAM_STR);
+        $getUserList->bindValue("this_date", $this->dateQuery['this_date'], PDO::PARAM_STR);
+        $getUserList->execute();
+        $userList = $getUserList->fetchAll(PDO::FETCH_ASSOC);
 
-    $prepareStatement = $dbh->prepare($sql);
-    $prepareStatement->bindParam("past_date", $configQuery['past_date'], PDO::PARAM_STR);
-    $prepareStatement->bindParam("this_date", $configQuery['this_date'], PDO::PARAM_STR);
-    $prepareStatement->execute();
-    $rawUserData = $prepareStatement->fetchAll(PDO::FETCH_ASSOC);
-
-    /**	Generate CSV Data	**/
-    $csvData = 'USERNAME,CONTACT NO,EMAIL,NICKNAME,FULLNAME,DATE CREATED' . PHP_EOL;
-
-    foreach( $rawUserData as $userData){
-
-        $csvData .= $userData['username'] . ',' . $userData['contactno'] . ',' . $userData['email'] . ',' . $userData['nickname'] . 
-                        ',' . $userData['fullname'] . ',' . $userData['datecreated'] . PHP_EOL;
-
+        return $userList;
     }
 
-    echo "Preparing email... \n";
-
-    /** SEND EMAIL WITH CSV ATTACHED **/
-    $transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
-                                    ->setUsername($configEmail['username'])
-                                    ->setPassword($configEmail['password']);
-    $mailer = Swift_Mailer::newInstance($transport);
-    $message = Swift_Message::newInstance('New members for Easyshop.ph')
-                            ->setFrom([$configEmail['from_email'] => $configEmail['from_name']])
-                            ->setTo($configEmail['recipients'])
-                            ->setBody('Newly registered members from ' . $configQuery['past_date'] . ' to ' . $configQuery['this_date']);
-
-    $filename = 'registered-'.date("M-j-Y").'.csv';
-    $attachment = Swift_Attachment::newInstance($csvData, $filename, 'application/vnd.ms-excel');  
-    $message->attach($attachment);
-
-    $numSent = $mailer->send($message);
-
-    if(!$numSent){
-            echo "ERROR : Failed to send all emails!\n";
+    /**
+     * Construct and send email
+     * @param  array $emailData
+     */
+    private function constructSendMail($emailData)
+    {
+        $emailResult = $this->emailService
+                            ->setRecipient($emailData['recipient'])
+                            ->setSubject($emailData['subject'])
+                            ->setMessage($emailData['message'])
+                            ->addAttachment(
+                                $this->constructAttachment(),
+                                $emailData['attachment_filename'],
+                                $emailData['attachment_filetype']
+                            )
+                            ->sendMail();
     }
-    else{
-            echo "Successfully sent " . $numSent . "emails!\n";
+
+    /**
+     * Get config email data
+     * @return array
+     */
+    private function getEmailData()
+    {
+        return [
+            'subject' => 'New members for Easyshop.ph',
+            'message' => '',
+            'attachment_filename' => 'registered-'.date("M-j-Y").'.csv',
+            'attachment_filetype' => 'application/vnd.ms-excel',
+            'recipient' => [
+                'samgavinio@easyshop.ph'
+            ]
+        ];
     }
-    
-    
+}
+
+$emailRegisterUser  = new EmailRegisterUser(
+    $CI->db->hostname,
+    $CI->db->username,
+    $CI->db->password,
+    $emailService,
+    $configLoader,
+    $viewParser
+);
+
+$emailRegisterUser->execute();

@@ -23,6 +23,7 @@ class EmailNotification
     private $subject;
     private $msg;
     private $imageArray;
+    private $attachment = null;
 
     /**
      *  Swift Mailer Parameters
@@ -140,6 +141,11 @@ class EmailNotification
             ->setTo($this->recipient)
             ->setBody($msg, 'text/html');
 
+        if($this->attachment !== null){
+            $this->message
+                 ->attach($this->attachment);
+        }
+
         $successCount = $this->mailer->send($this->message, $failedRecipients);
         
         return $successCount;
@@ -184,6 +190,23 @@ class EmailNotification
 
             return true;
         }
+    }
+
+    /**
+     * Add attachment into email
+     * @param string $attachmentData
+     * @param string $fileName
+     * @param string $attachmentType
+     */
+    public function addAttachment($attachmentData, $fileName, $attachmentType)
+    {
+        $this->attachment = \Swift_Attachment::newInstance(
+            $attachmentData,
+            $fileName,
+            $attachmentType
+        );
+
+        return $this;
     }
 
 }
