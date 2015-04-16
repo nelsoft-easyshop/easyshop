@@ -15,6 +15,8 @@ class ClearImageTempFolder extends ScriptBaseClass
     private $configLoader;
     private $viewParser;
 
+    const HOURS_LAPSED = 3;
+
     /**
      * Constructor
      * @param EasyShop\Notifications\EmailNotification $emailService
@@ -38,7 +40,7 @@ class ClearImageTempFolder extends ScriptBaseClass
         foreach ($files as $file) {
             $datecreated = date("Y-m-d H:i:s.", filectime($file));
             $now = date("Y-m-d H:i:s");
-            if ((int)round((strtotime($now)) - strtotime($datecreated)) / 3600 >= 3) {
+            if ((int)round((strtotime($now)) - strtotime($datecreated)) / 3600 >= self::HOURS_LAPSED) {
                 if (is_dir($file)) {
                     $this->deleteDir($file);
                 }
