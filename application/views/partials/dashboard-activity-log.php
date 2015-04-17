@@ -26,7 +26,7 @@
                                             Updated Personal Information
                                             <br>
                                             <?php foreach ($activity['data']['contents'] as $content): ?>
-                                                <b><?=html_escape($content);?></b>
+                                                <b><?=html_escape(es_string_limit($content, 150));?></b>
                                                 <br>
                                             <?php endforeach; ?>
                                         </p>
