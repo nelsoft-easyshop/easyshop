@@ -296,9 +296,16 @@ class Payment extends MY_Controller
                     $bodyData['checkoutError'] = $checkoutService->getCheckoutError($bodyData['cartData']);
                     $totalAmount = bcadd($bodyData['cartAmount'], $bodyData['shippingFee'], 4);
                     $postPoints = $totalAmount >= PointGateway::MIN_AMOUNT_ALLOWED
-                                    || $totalAmount >= $postPoints
                                   ? $postPoints
                                   : 0;
+                    if ($postPoints > $totalAmount) {
+                        if ($userMaxPoints >= $totalAmount) {
+                            $postPoints = $totalAmount;
+                        }
+                        elseif ($totalAmount > $userMaxPoints) {
+                            $postPoints = $userMaxPoints;
+                        }
+                    }
                     $bodyData['usedPoints'] = $postPoints > $userMaxPoints ? $userMaxPoints : $postPoints;
                     $bodyData['grandTotal'] = bcsub($totalAmount, $bodyData['usedPoints'], 4);
                     $bodyData['payAllViaPoints'] = bccomp($totalAmount, $bodyData['usedPoints'], 4) === 0;
