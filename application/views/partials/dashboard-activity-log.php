@@ -26,7 +26,7 @@
                                             Updated Personal Information
                                             <br>
                                             <?php foreach ($activity['data']['contents'] as $content): ?>
-                                                <b><?=html_escape($content);?></b>
+                                                <b><?=html_escape(es_string_limit($content, 150));?></b>
                                                 <br>
                                             <?php endforeach; ?>
                                         </p>
@@ -427,7 +427,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <p class="log-title">
-                                                Posted product feedback to <a href="/item/<?=$activity['data']['slug']; ?>"><?=html_escape($activity['data']['name']); ?></a>
+                                                Write product review to <a href="/item/<?=$activity['data']['slug']; ?>"><?=html_escape($activity['data']['name']); ?></a>
                                             </p>
                                         </div>
                                         <div class="col-md-6">

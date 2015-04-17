@@ -16,6 +16,7 @@ class Register extends MY_Controller
         $this->load->config('oauth', true);
         $this->form_validation->set_error_delimiters('', '');
         $this->socialMediaManager = $this->serviceContainer['social_media_manager'];
+        $this->em = $this->serviceContainer['entity_manager'];
     }
 
     /**
@@ -244,9 +245,10 @@ class Register extends MY_Controller
             'email' => $email,
         ];
 
-        $member_id = $this->register_model->get_memberid($username)['id_member'];
- 
-        if($member_id === 0){
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->findOneBy(['username' => $username]);
+
+        if(!$member){
             $this->load->spark('decorator');    
             $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
             $this->load->view('errors/email-verification');
@@ -254,37 +256,30 @@ class Register extends MY_Controller
             return;
         }
 
+        $member_id = $member->getIdMember();
         $verificationData = $this->register_model->get_verifcode($member_id);
         
         if($email === $verificationData['email'] && 
            $hash === $verificationData['emailcode'] && 
            $username === $verificationData['username'])
         {
-        
             if((bool)$verificationData['is_email_verify']){
                 $bodyData['verificationMessage'] = $this->lang->line('expired_email_verification');
                 $bodyData['isAlreadyVerified']  = true;
-                $this->load->spark('decorator');    
+                $this->load->spark('decorator');
                 $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
                 $this->load->view('pages/user/email-verification-success', $bodyData);
                 $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
-                return;
             }
-
-            $temp = [
-                'is_email_verify' => 1,
-                'member_id' => $member_id
-            ];
-
-            $this->register_model->update_verification_status($temp);
-            
-            $bodyData['verificationMessage'] = $this->lang->line('success_email_verification');
-            $this->load->spark('decorator');    
-            
-            $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/user/email-verification-success', $bodyData);
-            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
-
+            else{
+                $member->setIsEmailVerify(true);
+                $this->em->flush();
+                $bodyData['verificationMessage'] = $this->lang->line('success_email_verification');
+                $this->load->spark('decorator');
+                $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+                $this->load->view('pages/user/email-verification-success', $bodyData);
+                $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+            }
         }
         else{
             $this->load->spark('decorator');    

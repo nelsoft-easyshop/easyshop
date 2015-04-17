@@ -56,8 +56,15 @@ class ActivityTypeInformationUpdate extends AbstractActivityType
         'storeDesc' => 'Store Description',
         'slug' => 'Slug',
         'website' => 'Website',
-        'stateregion' => 'Region',
-        'city' => 'City',
+        'stateregion' => 'Store Address Region',
+        'city' => 'Store Address City',
+        'delivery_stateregion' => 'Delivery Address Region',
+        'delivery_city' => 'Delivery Address City',
+        'delivery_country' => 'Delivery Address Country',
+        'delivery_address' => 'Delivery Address',
+        'delivery_telephone' => 'Delivery Telephone Number',
+        'delivery_mobile' => 'Delivery Mobile Number',
+        'delivery_consignee' => 'Delivery Consignee Name',
     ];
 
     /**
