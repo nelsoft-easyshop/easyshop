@@ -65,7 +65,7 @@ class EmailQueueSender extends ScriptBaseClass
             $emailResult = $this->constructSendMail($mailData);
             if($emailResult){
                 echo "\033[0;32m[SENT]\033[0m\n";
-                $numSent += $emailResult;
+                $numSent++;
                 $status = $this->emailConfig['status']['sent'];
             }
             else{
@@ -108,7 +108,7 @@ class EmailQueueSender extends ScriptBaseClass
     /**
      * construct message and send emal
      * @param  mixed $emailData
-     * @return integer
+     * @return boolean
      */
     private function constructSendMail($emailData)
     {
