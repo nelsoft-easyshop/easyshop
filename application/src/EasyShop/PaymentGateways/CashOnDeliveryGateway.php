@@ -73,6 +73,11 @@ class CashOnDeliveryGateway extends AbstractGateway
             }
         }
 
+        if((int) $grandTotal < 0){
+            $response['message'] = "Negative total value not available.";
+            return $response;
+        }
+
         if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $response['paymentType']) === false){
             $response['message'] = "Payment is not available using Cash on Delivery.";
             return $response;
