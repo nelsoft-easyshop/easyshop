@@ -1499,6 +1499,7 @@ class Memberpage extends MY_Controller
                                             true);  
         $actionResult = false;
         $resultMessage = "";
+        $numberOfUpdatedProducts = 0;
         if ($member['member']) {
             if($this->session->userdata('member_id') && ($member["member"]->getIdMember() !== $this->session->userdata('member_id'))) {
                 $resultMessage = 'Invalid Username/Password';
@@ -1526,15 +1527,15 @@ class Memberpage extends MY_Controller
                 $productManager = $this->serviceContainer['product_manager'];
                 $isUpdateSuccess = false;
                 if($isActionValid) {
-                    $isUpdateSuccess = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                                ->updateUserProductsStatus(
-                                                    $member["member"]->getIdMember(), 
-                                                    $productStatus,
-                                                    $desiredStatus
-                                                );
+                    $numberOfUpdatedProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                                    ->updateUserProductsStatus(
+                                                        $member["member"]->getIdMember(), 
+                                                        $productStatus,
+                                                        $desiredStatus
+                                                    );
                 }
-                if(!$isUpdateSuccess) {
-                    $resultMessage = "Database Error";
+                if($numberOfUpdatedProducts === 0) {
+                    $resultMessage = "No products to update";
                     $actionResult = false;
                 }
             }
@@ -1545,7 +1546,8 @@ class Memberpage extends MY_Controller
 
         $result = [
             "result" => $actionResult,
-            "message" => $resultMessage
+            "message" => $resultMessage,
+            'updatedProductCounter' => $numberOfUpdatedProducts,
         ];
 
         echo json_encode($result); 
