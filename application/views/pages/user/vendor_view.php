@@ -23,7 +23,7 @@
                             </h4>
                         </div>
 
-                        <div class="category-list panel-collapse collapse in">
+                        <div id="category-list-desktop-view" class="category-list panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">    
                                     <?php $isFirst = true; ?>

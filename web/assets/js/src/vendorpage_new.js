@@ -342,7 +342,7 @@ function ReplaceNumberWithCommas(thisnumber){
         $( "#filter-list1" ).clone(true).appendTo( ".filter-modal" );
 
         $( "#toggle-cat" ).click(function() {
-          $( "#category-list" ).slideToggle( "slow" );
+          $( "#category-list-desktop-view" ).slideToggle( "slow" );
         });
         $( "#toggle-filter" ).click(function() {
           $( "#filter-list1" ).slideToggle( "slow" );
