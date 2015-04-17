@@ -2,87 +2,148 @@
 
 include_once  __DIR__.'/bootstrap.php';
 
-echo "\nLoading Instance...";
-
 $CI =& get_instance();
+$configLoader = $CI->kernel->serviceContainer['config_loader'];
+$emailService = $CI->kernel->serviceContainer['email_notification'];
+$viewParser = new \CI_Parser();
+$smsService = $CI->kernel->serviceContainer['mobile_notification'];
 
+use EasyShop\Script\ScriptBaseClass as ScriptBaseClass;
 use EasyShop\Entities\EsQueueStatus as EsQueueStatus;
 use EasyShop\Entities\EsQueueType as EsQueueType;
 
-$CI->load->config('sms', true);
-$configSms = $CI->config->item('sms');
+class SmsQueueSender extends ScriptBaseClass
+{
+    private $connection;
+    private $smsConfig;
+    private $smsService;
 
-echo "\t\033[0;32m[OK]\033[0m\n";
-$dbh = new PDO($CI->db->hostname, $CI->db->username , $CI->db->password); 
+    /**
+     * Constructor
+     * @param string                                   $hostName
+     * @param string                                   $dbUsername
+     * @param string                                   $dbPassword
+     * @param EasyShop\Notifications\EmailNotification $emailService
+     * @param EasyShop\ConfigLoader\ConfigLoader       $configLoader
+     * @param \CI_Parser                               $viewParser
+     */
+    public function __construct(
+        $hostName,
+        $dbUsername,
+        $dbPassword,
+        $emailService,
+        $configLoader,
+        $viewParser,
+        $smsService
+    ) {
+        parent::__construct($emailService, $configLoader, $viewParser);
 
-$queueType = EsQueueType::TYPE_MOBILE;
-$queueStatus = EsQueueStatus::QUEUED;
+        $this->connection = new PDO(
+            $hostName,
+            $dbUsername,
+            $dbPassword
+        );
 
-echo "\nFetching Queued...";
-$sql = "SELECT id_queue, data, type, date_created, date_executed, status
+        $this->smsConfig = $configLoader->getItem('sms');
+        $this->smsService = $smsService;
+    }
+
+    /**
+     * execute script
+     */
+    public function execute()
+    {
+        $queuedSMS = $this->getQueuedSMS();
+        $numSuccess = 0;
+        $numFailed = 0;
+        echo "\nFetched " . count($queuedSMS) . " queued sms!\n\n";
+        foreach ($queuedSMS as $sms) {
+             echo "Sending SMS - Queue id: " . $sms['id_queue'] . "...";
+
+            $smsData = json_decode($sms['data'], true);
+            $sendSMS = $this->smsService->setMobile($smsData['number'])
+                                        ->setMessage($smsData['message'])
+                                        ->sendSMS();
+            if ($sendSMS) {
+                $decodeSms = json_decode($sendSMS, true);
+                if (strtolower($decodeSms['status']) === "success") {
+                    $numSuccess++;
+                    echo "\t\033[0;32m[SENT]\033[0m\n";
+                    $smsStatus = EsQueueStatus::SENT;
+                }
+                else {
+                    $numFailed++;
+                    echo "\t\033[0;31m[FAILED]\033[0m\n";
+                    $smsStatus = EsQueueStatus::FAILED;
+                }
+            }
+            else {
+                $numFailed++;
+                echo "\t\033[0;31m[FAILED]\033[0m\n";
+                $smsStatus = EsQueueStatus::FAILED;
+            }
+
+            $this->updateSMSStatus($sms['id_queue'], $smsStatus);
+        }
+
+        echo "\n\033[0;32mSending Done.\033[0m\n";
+        echo "\nSuccess: " . $numSuccess . "\n";
+        echo "Failed: " . $numFailed . "\n";
+        echo "Total: " . count($queuedSMS) . " SMS\n\n";
+    }
+
+    /**
+     * Get all queued sms
+     * @return array
+     */
+    private function getQueuedSMS()
+    {
+        $selectQueuedSmsQuery = "
+        SELECT id_queue, data, type, date_created, date_executed, status
         FROM es_queue
         WHERE type = :queue 
             AND status = :status";
- 
-$queueDbh = $dbh->prepare($sql);
-$queueDbh->bindParam("queue", $queueType, PDO::PARAM_INT);
-$queueDbh->bindParam("status", $queueStatus, PDO::PARAM_INT);
-$queueDbh->execute();
-$rawData = $queueDbh->fetchAll(PDO::FETCH_ASSOC);
-$smsCount = count($rawData);
-$numSuccess = 0;
-$numFailed = 0;
 
-echo "\t\033[0;32m[OK]\033[0m\n";
+        $selectQueuedSMS = $this->connection->prepare($selectQueuedSmsQuery);
+        $selectQueuedSMS->bindValue("queue", EsQueueType::TYPE_MOBILE, PDO::PARAM_INT);
+        $selectQueuedSMS->bindValue("status", EsQueueStatus::QUEUED, PDO::PARAM_INT);
+        $selectQueuedSMS->execute();
+        $queuedSMS = $selectQueuedSMS->fetchAll(PDO::FETCH_ASSOC);
 
-if($smsCount <= 0){
-    echo "No SMS queued. \n\n";
-}
-else{
-    echo "Fetched " . $smsCount . " queued sms!\n\n";
-    foreach($rawData as $data){
-        $smsData = json_decode($data['data'], true);
-
-        if( preg_match('/^(8|9)[0-9]{9}$/', $smsData['number']) ){
-
-            echo "Sending SMS - Queue id: " . $data['id_queue'] . "...";
-
-            $outbound_endpoint = $configSms['outbound_endpoint'];
-            $smsParam_string = http_build_query($smsData);
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $outbound_endpoint);
-            curl_setopt($ch,CURLOPT_POST, count($smsData));
-            curl_setopt($ch,CURLOPT_POSTFIELDS, $smsParam_string);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $output = json_decode(curl_exec($ch), true);
-            curl_close($ch);
-
-            if(strtolower($output['status']) === "success"){ 
-                $numSuccess++;
-                echo "\t\033[0;32m[SENT]\033[0m\n";
-                $status = EsQueueStatus::SENT;
-            }
-            else{
-                $numFailed++;
-                echo "\t\033[0;31m[FAILED]\033[0m\n";
-                $status = EsQueueStatus::FAILED;
-            }
-
-            $exec_date = date("Y-m-d H:i:s");
-            $updateSql = "UPDATE es_queue SET `status` = :status, `date_executed` = :exec_date WHERE `id_queue` = :queue_id";
-            $dbhUpdate = new PDO($CI->db->hostname, $CI->db->username , $CI->db->password); 
-            $queueUpdate = $dbhUpdate->prepare($updateSql);
-            $queueUpdate->bindParam("status", $status, PDO::PARAM_INT);
-            $queueUpdate->bindParam("exec_date", $exec_date);
-            $queueUpdate->bindParam("queue_id", $data['id_queue'], PDO::PARAM_INT);
-            $queueUpdate->execute();
-        }
+        return $queuedSMS;
     }
 
-    echo "\n\033[0;32mSending Done.\033[0m\n";
-    echo "\nSuccess: " . $numSuccess . "\n";
-    echo "Failed: " . $numFailed . "\n";
-    echo "Total: " . $smsCount . " SMS\n\n";
+    /**
+     * Update sms queue status
+     * @param  integer $queueId
+     * @param  integer $status
+     */
+    private function updateSMSStatus($queueId, $status)
+    {
+        $executeDate = date("Y-m-d H:i:s");
+        $updateQuery = "
+            UPDATE es_queue 
+            SET 
+                `status` = :status,
+                `date_executed` = :exec_date 
+            WHERE 
+                `id_queue` = :queue_id";
+        $queueUpdate = $this->connection->prepare($updateQuery);
+        $queueUpdate->bindValue("status", $status, PDO::PARAM_INT);
+        $queueUpdate->bindValue("exec_date", $executeDate);
+        $queueUpdate->bindValue("queue_id", $queueId, PDO::PARAM_INT);
+        $queueUpdate->execute();
+    }
 }
 
+$smsQueueSender = new SmsQueueSender(
+    $CI->db->hostname,
+    $CI->db->username,
+    $CI->db->password,
+    $emailService,
+    $configLoader,
+    $viewParser,
+    $smsService
+);
+
+$smsQueueSender->execute();
