@@ -43,10 +43,6 @@ function ReplaceNumberWithCommas(thisnumber){
         if(isSearching){
             $('.tab_categories[data-link="#def-search"]').click(); 
         }
-        else{
-            $('.tab_categories').first().click(); 
-        }
-        
     });
 
     /**
@@ -110,8 +106,10 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $(document).on('click', ".tab_categories", function(e){
         var $this = $(this);
-        var divId = $(this).attr('data-link');
+        var divId = $this.attr('data-link');
         var $div = $(divId);
+        $('.tab_categories.active').removeClass('active');
+        $('.tab_categories[data-link="'+divId+'"]').addClass('active');
         var pagingDiv = $div.find('.product-paging');
         var productCount = parseInt($div.attr('data-productcount'));
    
@@ -132,8 +130,6 @@ function ReplaceNumberWithCommas(thisnumber){
         }
         $('html,body').scrollTo(450); 
     });
-
-    $(".list-category").find("a[data-link='#def-0']").click();
 
     $(document).on('change',".price-field",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
