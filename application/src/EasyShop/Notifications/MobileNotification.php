@@ -107,6 +107,8 @@ class MobileNotification
             
             return $output;
         }
+
+        return false;
     }
 
     /**
