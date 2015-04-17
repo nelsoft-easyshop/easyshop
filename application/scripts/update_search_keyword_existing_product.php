@@ -61,6 +61,10 @@ class UpdateSearchKeyword extends ScriptBaseClass
         echo PHP_EOL.count($productds).' ROWS AFFECTED!'.PHP_EOL;
     }
 
+    /**
+     * Get all products
+     * @return array
+     */
     private function getAllProducts()
     {
         $getProductsQuery = "
