@@ -299,12 +299,7 @@ class Payment extends MY_Controller
                                   ? $postPoints
                                   : 0;
                     if ($postPoints > $totalAmount) {
-                        if ($userMaxPoints >= $totalAmount) {
-                            $postPoints = $totalAmount;
-                        }
-                        elseif ($totalAmount > $userMaxPoints) {
-                            $postPoints = $userMaxPoints;
-                        }
+                        $postPoints = $totalAmount;
                     }
                     $bodyData['usedPoints'] = $postPoints > $userMaxPoints ? $userMaxPoints : $postPoints;
                     $bodyData['grandTotal'] = bcsub($totalAmount, $bodyData['usedPoints'], 4);
