@@ -427,7 +427,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <p class="log-title">
-                                                Posted product feedback to <a href="/item/<?=$activity['data']['slug']; ?>"><?=html_escape($activity['data']['name']); ?></a>
+                                                Write product review to <a href="/item/<?=$activity['data']['slug']; ?>"><?=html_escape($activity['data']['name']); ?></a>
                                             </p>
                                         </div>
                                         <div class="col-md-6">
