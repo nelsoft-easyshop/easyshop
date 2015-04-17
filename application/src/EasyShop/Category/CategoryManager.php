@@ -868,6 +868,7 @@ class CategoryManager
                 $memberCategoryProduct->setProduct($product);
                 $memberCategoryProduct->setCreatedDate($datetimeToday);
                 $memberCategoryProduct->setSortOrder($productSortOrder);
+                $memberCategoryProduct->setLastmodifieddate($datetimeToday);
                 $productSortOrder++;
                 $this->em->persist($memberCategoryProduct);
             } 
