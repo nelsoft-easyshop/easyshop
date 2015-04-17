@@ -399,7 +399,6 @@ function ReplaceNumberWithCommas(thisnumber){
                 $this.parents("li").find(".list-sub-category").slideToggle("fast").toggleClass("toggle");
                 $this.find(".fa").toggleClass("toggleIcon");
             }
-            $.modal.close();
         });
     });
     

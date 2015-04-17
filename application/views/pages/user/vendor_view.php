@@ -199,11 +199,11 @@
                         <?php continue; ?>
                     <?php endif; ?>
                     <li>
-                        <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>simplemodal-close<?php endif;?>">
+                        <?php $children = $categoryWrapper->getChildren(); ?>
+                        <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php if($categoryWrapper->getIsCustom() === false  ||  ($categoryWrapper->getIsCustom() && empty($children)) ): ?>simplemodal-close<?php endif;?>">
                             <span class='catText'>
                                 <?php echo html_escape($categoryWrapper->getCategoryName());?>
                             </span> 
-                        <?php $children = $categoryWrapper->getChildren(); ?>
                         <?php 
                             /**
                              * If child has no products remove it from the children array
