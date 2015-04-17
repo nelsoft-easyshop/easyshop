@@ -17,7 +17,7 @@
         nearestHour.setHours(nearestHour.getHours() + 1);
         nearestHour.setMinutes(0);
         nearestHour.setSeconds(0);
-        var msToNextHour = nearestHour - currenTime;
+        var msToNextHour = nearestHour.getTime() - currenTime.getTime();
         
         setTimeout(function(){ 
            window.location.reload();
