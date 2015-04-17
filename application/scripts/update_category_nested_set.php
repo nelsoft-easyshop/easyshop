@@ -96,14 +96,9 @@ class UpdateCategoryNestedSet extends ScriptBaseClass
         $position = array_search(EsCat::ROOT_CATEGORY_ID, $categoriesGroupedByParent[EsCat::ROOT_CATEGORY_ID]);
         unset($categoriesGroupedByParent[EsCat::ROOT_CATEGORY_ID][$position]);
 
-        try {
-            $nestedSetTranformer = new TreeTransformer($categoriesGroupedByParent);
-            $nestedSetTranformer->traverse(EsCat::ROOT_CATEGORY_ID);
-            $pdoData = $nestedSetTranformer->getPDOdata();
-        }
-        catch (Exception $e) {
-            exit($e->getMessage());
-        }
+        $nestedSetTranformer = new TreeTransformer($categoriesGroupedByParent);
+        $nestedSetTranformer->traverse(EsCat::ROOT_CATEGORY_ID);
+        $pdoData = $nestedSetTranformer->getPDOdata();
 
         $this->createTempTable();
 
@@ -112,9 +107,6 @@ class UpdateCategoryNestedSet extends ScriptBaseClass
             $parameter =  $pdoData['bindParameters'][$count];
             $index = $count + 1;
             $preparedStatement->bindValue($index, $parameter, PDO::PARAM_INT);
-        }
-        if (!$preparedStatement->execute()) {
-            print_r($preparedStatement->errorInfo());
         }
 
         $temporaryNestedSet = $this->selectAllTempTableData();
@@ -136,9 +128,6 @@ class UpdateCategoryNestedSet extends ScriptBaseClass
             $parameter = $bindParamaters[$count];
             $index = $count + 1;
             $finalInsertstatement->bindValue($index, $parameter, PDO::PARAM_INT);
-        }
-        if (!$finalInsertstatement->execute()) {
-            print_r($finalInsertstatement->errorInfo());
         }
 
         $this->dropTempTable();
