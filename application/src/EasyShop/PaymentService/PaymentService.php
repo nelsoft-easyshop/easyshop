@@ -591,7 +591,7 @@ class PaymentService
             'dateadded' => $order->getDateadded()->format('Y-m-d'),
             'buyer_name' => $buyer->getUserName(),
             'buyer_slug' => $buyer->getSlug(),  
-            'totalprice' => $order->getTotal(),
+            'totalprice' => number_format($order->getTotal(), 2, '.', ','),
             'invoice_no' => $order->getInvoiceNo(), 
             'buyer_store' => $buyer->getStoreName(),
             'facebook' => $socialMediaLinks["facebook"],
@@ -703,11 +703,11 @@ class PaymentService
              * Work around for Codeigniter's templating engine lack of support
              * for conditionals: use arrays
              */
-            $dataBuyer['pointsSpent'] = [];
+            $dataBuyer['pointSpent'] = [];
             $dataBuyer['totalLessPoint'] = [];
             if($pointsSpent > 0){
-                $dataBuyer['pointSpent'][] = [ 'value' => $pointsSpent ];
-                $dataBuyer['totalLessPoint'][] = [ 'value' => bcsub($order->getTotal(), $pointsSpent, 4) ]; 
+                $dataBuyer['pointSpent'][] = [ 'value' => number_format($pointsSpent, 2, '.', ',') ];
+                $dataBuyer['totalLessPoint'][] = [ 'value' => number_format(bcsub($order->getTotal(), $pointsSpent, 4),2,'.',',') ]; 
             }
 
             $buyerMsg = $this->parserLibrary->parse('emails/email_purchase_notification_buyer', $dataBuyer, true);
