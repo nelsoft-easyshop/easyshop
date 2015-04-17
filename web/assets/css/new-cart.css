@@ -198,6 +198,10 @@ ol.how-to-list li{
     font-weight: bold;
 }
 
+.item-quantity{
+    width: 50%;
+}
+
 .mobile-price-quantity{
     display: none;
 }

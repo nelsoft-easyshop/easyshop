@@ -348,6 +348,7 @@
         <input type="hidden" id="currentLat" value="<?=html_escape($userAddress['address']['lat']); ?>" />
         <input type="hidden" id="currentLang" value="<?=html_escape($userAddress['address']['lng']); ?>" />
     <?php endif; ?>
+    <input type="hidden" id="min-amount-allowed" value="<?=EasyShop\PaymentGateways\PointGateway::MIN_AMOUNT_ALLOWED; ?>">
 </div>
 
 <script type='text/javascript'>
