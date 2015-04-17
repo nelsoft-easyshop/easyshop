@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <head>
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
             <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
@@ -30,7 +31,7 @@
                     <center>
                         <div class="row">
                             <?php foreach ($products as $product): ?>
-                            <div style="float: left;">
+                            <div class="item">
                                 <a href="/item/<?=$product->getSlug();?>" target="_blank">
                                     <div class="item-img-container">
                                         <img src="<?=getAssetsDomain().$product->getDefaultImage()->getDirectory().'thumbnail/'.$product->getDefaultImage()->getFilename();?>" />
