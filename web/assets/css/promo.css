@@ -82,7 +82,7 @@
 .claim-bg{
     background-color: #f5f5f5 !important;
     padding: 15px;
-    margin: 0 auto;
+    margin: 0 auto !important;
     max-width: 850px;
     width: 100%;
     -webkit-print-color-adjust:exact;
@@ -121,7 +121,9 @@
 }
 
 #scratch-win-claim-link:hover,
-.promo-print:hover {
+.promo-print:hover,
+#scratch-win-claim-link:focus,
+.promo-print:focus {
     background-color: #02846f;
     color: #fff;
     text-decoration: none;
@@ -325,7 +327,7 @@
     margin-right: 15px;
 }
 
-@media (min-width: 991) {
+@media (min-width: 991px) {
     .head-cngrts {
         font-size: 24px;
     }
@@ -410,7 +412,7 @@
     .claim-details {
         float: left;
         padding: 0 15px;
-        width: 50%;
+        width: 55% !important;
     }
 
     .claim-details p {

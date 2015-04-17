@@ -9,7 +9,7 @@
 <section class="bg-cl-fff">
 <div class="clear"></div>
 <?PHP if (isset($product)) : ?>
-<div class="container mrgn-top-40" id="main_search_container">
+<div class="container" id="main_search_container">
     <?PHP if (isset($product['can_purchase']) && $product['can_purchase'] === FALSE) : ?>
     <div class="scratch-congrats">
         <h2 class="head-cngrts">SORRY</h2>
