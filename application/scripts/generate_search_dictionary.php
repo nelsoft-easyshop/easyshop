@@ -47,6 +47,9 @@ class GenerateSearchDictionary extends ScriptBaseClass
         $this->dictionary->initialize();
     }
 
+    /**
+     * Execute script
+     */
     public function execute()
     {
         $activeProducts = $this->getActiveProducts();
@@ -78,6 +81,10 @@ class GenerateSearchDictionary extends ScriptBaseClass
         echo "Dictionary updated \n\n";
     }
 
+    /**
+     * Get all active products
+     * @return array
+     */
     private function getActiveProducts()
     {
         $getActiveProductsQuery = "
@@ -102,6 +109,10 @@ class GenerateSearchDictionary extends ScriptBaseClass
         return $activeProducts;
     }
 
+    /**
+     * Get all products with brand
+     * @return array
+     */
     private function getProductsWithBrand()
     {
         $getProductBrandQuery = "
@@ -135,6 +146,9 @@ class GenerateSearchDictionary extends ScriptBaseClass
         return $productBrand;
     }
 
+    /**
+     * Delete all data in es_keywords table
+     */
     private function deleteAllKeywords()
     {
         $deleteQuery = "DELETE FROM es_keywords WHERE 1";
@@ -142,6 +156,9 @@ class GenerateSearchDictionary extends ScriptBaseClass
         $deleteKeywords->execute();
     }
 
+    /**
+     * Insert all generated keywords in es_keywords table
+     */
     private function insertGeneratedKeywords()
     {
         $wordList =  $this->dictionary->getDictionary() ;
@@ -175,37 +192,37 @@ class Dictionary
     const WORD_MIN_LENGTH = 2;
 
     /**
-     * Minimum occurences for word to enter the dictionary (DEV)
+     * Minimum occurrences for word to enter the dictionary (DEV)
      *
      * @var integer
      */
     const DEV_MIN_OCCURENCES = 3;
-    
+
     /**
-     * Minimum occurences for word to enter the dictionary (PROD)
+     * Minimum occurrences for word to enter the dictionary (PROD)
      *
      * @var integer
      */
     const PROD_MIN_OCCURENCES = 20;
-        
+
     /**
-     * Dictionrary array
+     * Dictionary array
      *
      * @var string[]
      */
     private $dictionary;
 
     /**
-     * Minimum occurences for word to enter the dictionary
-     * Depends on the environement
+     * Minimum occurrences for word to enter the dictionary
+     * Depends on the environment
      *
      * @var integer
      */
     private $occurencesMinimum;
-    
+
     /**
-     * Minimum occurences for word to enter the dictionary
-     * Depends on the environement
+     * Minimum occurrences for word to enter the dictionary
+     * Depends on the environment
      *
      * @var integer
      */
@@ -221,7 +238,7 @@ class Dictionary
     }
     
     /**
-     * Gets the occrences limit
+     * Gets the occurrences limit
      *
      * @var integer
      */
@@ -262,7 +279,7 @@ class Dictionary
     }
     
     /**
-     * Retuns the dictionary array
+     * Returns the dictionary array
      *
      * @return string[]
      */
