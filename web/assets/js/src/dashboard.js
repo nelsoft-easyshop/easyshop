@@ -8,7 +8,6 @@
         var username = submitBtn.find("#usernameField");
         var password = submitBtn.find("#passwordField");
         var action = btn.data("action");
-
         var errorPrompt = submitBtn.find("#errorPrompt");
         var successPrompt = submitBtn.find("#successPrompt");
         var loader = submitBtn.find("#actionLoader");
@@ -41,6 +40,53 @@
                     }
                     username.val("");
                     password.val("");
+
+                    $deletedItemsHeader = $("#button-deleted-item");
+                    if(!$deletedItemsHeader.hasClass('can-request')){
+                        $deletedItemsHeader.addClass('can-request');
+                    }
+                    $activeItemsHeader = $("#button-active-item");
+                    if(!$activeItemsHeader.hasClass('can-request')){
+                        $activeItemsHeader.addClass('can-request');
+                    }
+                    /**
+                     * Update counters in products listing 
+                     */
+                    var deletedCounterCircle = $('#button-deleted-item .circle-total');
+                    var activeCounterCircle = $('#button-active-item .circle-total');
+                    var numberOfDeleted = parseInt( deletedCounterCircle.html(), 10);
+                    var numberOfActive = parseInt( activeCounterCircle.html(), 10);
+                    var numberOfUpdatedProducts = parseInt(obj.updatedProductCounter);
+                    var $containerEmptiedSection = null;
+                    var $containerPopulatedSection = null;
+                    switch(action){
+                        case 'restore':
+                            numberOfActive += numberOfUpdatedProducts;
+                            numberOfDeleted -= numberOfUpdatedProducts;
+                            $containerEmptiedSection = $('#deleted-items');
+                            $containerPopulatedSection = $('#active-items');
+                            break;
+                        case 'disable':
+                            numberOfActive -= numberOfUpdatedProducts;
+                            numberOfDeleted += numberOfUpdatedProducts;
+                            $containerEmptiedSection = $('#active-items');
+                            $containerPopulatedSection = $('#deleted-items');
+                            break;
+                        case 'delete':
+                            numberOfDeleted -= numberOfUpdatedProducts;
+                            $containerEmptiedSection = $('#deleted-items');
+                            break;
+                    }
+                    deletedCounterCircle.html(numberOfDeleted);
+                    activeCounterCircle.html(numberOfActive);
+                    if($containerEmptiedSection !== null){
+                        $containerEmptiedSection.find('.no-items').show();
+                        $containerEmptiedSection.find('.with-items').hide();
+                    }
+                    if($containerPopulatedSection !== null){
+                        $containerPopulatedSection.find('.no-items').hide();
+                        $containerPopulatedSection.find('.with-items').show();
+                    }
                 },
                 error: function(data) {
                     activateButtons.show();
