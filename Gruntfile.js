@@ -232,19 +232,16 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.countdown.js':
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
                              'web/assets/js/src/vendor/jquery.hilios.countdown.js',
-                             'web/assets/js/src/vendor/moment.min.js',
                              'web/assets/js/src/promo/countdown-sale.js'],
 
                     'web/assets/js/min/easyshop.fixeddiscount.js':
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
                              'web/assets/js/src/vendor/jquery.hilios.countdown.js',
-                             'web/assets/js/src/vendor/moment.min.js',
                              'web/assets/js/src/promo/fixed-discount.js'],
 
                     'web/assets/js/min/easyshop.genericWithCountdown.js':
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
                              'web/assets/js/src/vendor/jquery.hilios.countdown.js',
-                             'web/assets/js/src/vendor/moment.min.js',
                              'web/assets/js/src/promo/generic-with-countdown.js'],
 
                     'web/assets/js/min/easyshop.partial_sliderpreview.js':
