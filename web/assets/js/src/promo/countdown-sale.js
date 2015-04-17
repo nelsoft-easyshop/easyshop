@@ -11,6 +11,18 @@
         }).on('finish.countdown', function(event) {
             window.location.reload();
         });
+        
+        var currenTime = new Date();
+        var nearestHour = new Date();
+        nearestHour.setHours(nearestHour.getHours() + 1);
+        nearestHour.setMinutes(0);
+        nearestHour.setSeconds(0);
+        var msToNextHour = nearestHour - currenTime;
+        
+        setTimeout(function(){ 
+           window.location.reload();
+        }, msToNextHour);
+        
     });
 
 })(jQuery);
