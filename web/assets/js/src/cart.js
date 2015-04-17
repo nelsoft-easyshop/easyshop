@@ -2,6 +2,7 @@
 (function ($) {
 
     var ERROR_MESSAGE = "Something went wrong. Please try again later.";
+    var MIN_AMOUNT_ALLOWED = $("#min-amount-allowed").val();
     var heightOfModal = 0;
     var $csrftoken = $("meta[name='csrf-token']").attr('content');
 
@@ -213,6 +214,7 @@
                         $(".row-"+$cartRowId).remove();
                         $cartSubtotal = removeCommas(jsonResponse.totalPrice);
                         $shippingFee = parseFloat(jsonResponse.totalShippingFee);
+                        checkPointsAvailability();
                         computePrices();
                         if(jsonResponse.numberOfItems <= 0){
                             location.reload();
@@ -270,6 +272,7 @@
                                   .html(jsonResponse.itemSubtotal);
                         $cartSubtotal = removeCommas(jsonResponse.cartTotal); 
                         $shippingFee = parseFloat(jsonResponse.totalShippingFee);
+                        checkPointsAvailability();
                         computePrices();
                     }
                     $cartRowId = null;
@@ -328,6 +331,17 @@
         computePrices();
     });
 
+    function checkPointsAvailability()
+    {
+        var $cartTotalPrice = parseFloat($cartSubtotal) + parseFloat($shippingFee)
+        if($cartTotalPrice >= MIN_AMOUNT_ALLOWED){
+            enablePoints();
+        }
+        else{
+            disablePoints();
+        }
+    }
+
     function computePrices()
     {
         var $summaryContainer = $(".summary-container"); 
@@ -336,6 +350,24 @@
         $summaryContainer.find('#summary-shipping').html(replaceNumberWithCommas($shippingFee.toFixed(2)));
         $summaryContainer.find('#summary-cart-subtotal').html(replaceNumberWithCommas($cartSubtotal));
         $summaryContainer.find('#summary-cart-total').html(replaceNumberWithCommas($cartTotalPrice.toFixed(2)));
+    }
+
+    function disablePoints()
+    {
+        $usedPoints = 0;
+        $('.btn-reset-points').trigger("click");
+        $("#points-total, .btn-deduct-points")
+            .attr("disabled", "true")
+            .prop("disabled", "true")
+            .attr("readonly", "true")
+            .prop("readonly", "true");
+    }
+
+    function enablePoints()
+    {
+        $("#points-total, .btn-deduct-points")
+            .removeAttr("disabled")
+            .removeAttr("readonly");
     }
 
     function removeCommas(string)
