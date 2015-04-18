@@ -63,26 +63,22 @@
         <section class="ty-comment-section">
             <div class="container load-animate">
                 <div class="box resultContainer">
-                    <?PHP if ($result['isSuccessful'] === true) : ?>
-                    <div id="success">
+                    <div id="<?php echo  $result['isSuccessful'] === true ? 'success' : 'failed' ?>">
                         <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
-                            <h3><b>THANK YOU FOR VOTING!</b></h3>
-                            <p class="text-align-justify">
-                                We have already counted your vote.
-                            </p>
-                            <br>
-                            <h3>See below for the current standings:</h3>
-                        </div>
-                    </div>
-                    <?PHP else : ?>
-                    <div id="failed">
-                        <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
-                            <h3><b><?=$result['errorMsg'] ?></b></h3>
-<!--                            --><?PHP //if (count($currentStandings['students']) !== 0) : ?>
-<!--                                <h3>See below for the current standings:</h3>-->
-<!--                            --><?PHP //endif; ?>
-                            <br>
-                            <br>
+                            <?php if($result['isSuccessful'] === true): ?>
+                                <h3>
+                                    <b>THANK YOU FOR VOTING!</b>
+                                </h3>
+                                <p class="text-align-justify">
+                                    We have already counted your vote.
+                                </p>
+                            <?php else: ?>  
+                                <h3>
+                                    <b><?php echo $result['errorMsg']; ?></b>
+                                </h3>
+                            <?php endif; ?>
+                            <br/>
+                            <br/>
                             <p class="text-align-justify">
                                 To know your current standing, you may email or call:
                             </p>
@@ -95,30 +91,13 @@
                             </p>
                         </div>
                     </div>
-                    <?PHP endif; ?>
                 </div>
             </div>
         </section>
 
         <section class="current-stats-section">
             <div class="container load-animate">
-<!--                --><?PHP //if (count($currentStandings['students']) !== 0) : ?>
-<!--                <div class="box">-->
-<!--                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">-->
-<!--                        <h3>CURRENT STATS</h3>-->
-<!--                        <ul>-->
-<!--                        --><?PHP //foreach ($currentStandings['students'] as $student) : ?>
-<!--                            <li>-->
-<!--                               <span class="school-name">-->
-<!--                                    --><?//=html_escape($student['student'])?>
-<!--                                </span>-->
-<!--                                <span class="school-percentage">--><?//=number_format($student['currentPercentage'])?><!--%</span>-->
-<!--                            </li>-->
-<!--                        --><?PHP //endforeach; ?>
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                --><?PHP //endif; ?>
+                <!-- standings container -->
             </div>
         </section>
 
