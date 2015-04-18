@@ -122,7 +122,7 @@ class Estudyantrepreneur extends MY_Controller
         ];
 
         if ($isUserAlreadyVoted) {
-            $result['errorMsg'] = 'Sorry, but you can only vote once per round. Please check back on the <a href="/Estudyantrepreneur#mechanics">mechanics</a> for the next round of voting.';
+            $result['errorMsg'] = 'Sorry, but you can only vote once. Please check back on the <a href="/Estudyantrepreneur#mechanics">mechanics</a> for more info.';
         }
         elseif ($studentEntity) {
             $isVoteStudentSuccessful = $this->promoManager
