@@ -78,9 +78,21 @@
                     <div id="failed">
                         <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
                             <h3><b><?=$result['errorMsg'] ?></b></h3>
-                            <?PHP if (count($currentStandings['students']) !== 0) : ?>
-                                <h3>See below for the current standings:</h3>
-                            <?PHP endif; ?>
+<!--                            --><?PHP //if (count($currentStandings['students']) !== 0) : ?>
+<!--                                <h3>See below for the current standings:</h3>-->
+<!--                            --><?PHP //endif; ?>
+                            <br>
+                            <br>
+                            <p class="text-align-justify">
+                                To know your current standing, you may email or call:
+                            </p>
+                            <br>
+                            <p class="text-align-justify">
+                                Kevin Dela Cruz - kevin.delacruz@easyshop.ph / 09152718002
+                            </p>
+                            <p class="text-align-justify">
+                                Anthony Romero - anthony.romero@easyshop.ph / 09434937320
+                            </p>
                         </div>
                     </div>
                     <?PHP endif; ?>
@@ -90,23 +102,23 @@
 
         <section class="current-stats-section">
             <div class="container load-animate">
-                <?PHP if (count($currentStandings['students']) !== 0) : ?>
-                <div class="box">
-                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">
-                        <h3>CURRENT STATS</h3>
-                        <ul>
-                        <?PHP foreach ($currentStandings['students'] as $student) : ?>
-                            <li>
-                               <span class="school-name">
-                                    <?=html_escape($student['student'])?>
-                                </span>
-                                <span class="school-percentage"><?=number_format($student['currentPercentage'])?>%</span>
-                            </li>
-                        <?PHP endforeach; ?>
-                        </ul>
-                    </div>
-                </div>
-                <?PHP endif; ?>
+<!--                --><?PHP //if (count($currentStandings['students']) !== 0) : ?>
+<!--                <div class="box">-->
+<!--                    <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30">-->
+<!--                        <h3>CURRENT STATS</h3>-->
+<!--                        <ul>-->
+<!--                        --><?PHP //foreach ($currentStandings['students'] as $student) : ?>
+<!--                            <li>-->
+<!--                               <span class="school-name">-->
+<!--                                    --><?//=html_escape($student['student'])?>
+<!--                                </span>-->
+<!--                                <span class="school-percentage">--><?//=number_format($student['currentPercentage'])?><!--%</span>-->
+<!--                            </li>-->
+<!--                        --><?PHP //endforeach; ?>
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                --><?PHP //endif; ?>
             </div>
         </section>
 
