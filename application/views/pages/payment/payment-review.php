@@ -232,12 +232,14 @@
                                 </td>
                                 <td colspan="3"><?=$canCheckout ? "&#8369; ". number_format($shippingFee, 2, '.', ',') : "N/A" ; ?></td>
                             </tr>
+                            <?php if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                             <tr class="border-bottom-1">
                                 <td>
                                     Easy Points
                                 </td>
                                 <td colspan="3">&mdash; &#8369; <?=number_format($usedPoints, 2, '.', ','); ?></td>
                             </tr>
+                            <?php endif; ?>
                             <tr>
                                 <td >
                                     Order Total

@@ -153,12 +153,14 @@
                                 </td>
                                 <td colspan="3">&#8369; <?=number_format($transactionShippingFee, 2, '.', ',')?></td>
                             </tr>
+                            <?php if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                             <tr class="border-bottom-1">
                                 <td>
                                     Easy Points
                                 </td>
                                 <td colspan="3">&mdash; &#8369; <?=number_format($transactionPoints, 2, '.', ',')?></td>
                             </tr>
+                            <?php endif; ?>
                             <tr>
                                 <td>
                                     Order Total
