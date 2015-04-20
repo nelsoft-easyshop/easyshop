@@ -23,7 +23,7 @@
                             </h4>
                         </div>
 
-                        <div id="category-list" class="panel-collapse collapse in">
+                        <div id="category-list-desktop-view" class="category-list panel-collapse collapse in">
                             <div class="panel-body border-0 no-padding">
                                 <ul class="list-unstyled list-category">    
                                     <?php $isFirst = true; ?>
@@ -34,7 +34,7 @@
                                             <?php continue; ?>
                                         <?php endif; ?>
                                         <li>
-                                            <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories">
+                                            <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php echo $isFirst ? 'active' : ''; ?> ">
                                                 <span class='catText'>
                                                     <?php echo html_escape($categoryWrapper->getCategoryName());?>
                                                 </span> 
@@ -188,7 +188,7 @@
 <!-- here-->
 <div class="categories-modal">
     <h1>Categories</h1>
-    <div id="category-list" class="panel-collapse collapse in">
+    <div class="category-list panel-collapse collapse in">
         <div class="panel-body border-0 no-padding">
             <ul class="list-unstyled list-category">    
                 <?php $isFirst = true; ?>
@@ -199,11 +199,11 @@
                         <?php continue; ?>
                     <?php endif; ?>
                     <li>
-                        <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php if($categoryWrapper->getIsCustom() && empty($children) === false): ?>simplemodal-close<?php endif;?>">
+                        <?php $children = $categoryWrapper->getChildren(); ?>
+                        <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php if($categoryWrapper->getIsCustom() === false  ||  ($categoryWrapper->getIsCustom() && empty($children)) ): ?>simplemodal-close<?php endif;?>">
                             <span class='catText'>
                                 <?php echo html_escape($categoryWrapper->getCategoryName());?>
                             </span> 
-                        <?php $children = $categoryWrapper->getChildren(); ?>
                         <?php 
                             /**
                              * If child has no products remove it from the children array

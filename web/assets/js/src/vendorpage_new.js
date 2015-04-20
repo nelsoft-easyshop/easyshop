@@ -43,10 +43,6 @@ function ReplaceNumberWithCommas(thisnumber){
         if(isSearching){
             $('.tab_categories[data-link="#def-search"]').click(); 
         }
-        else{
-            $('.tab_categories').first().click(); 
-        }
-        
     });
 
     /**
@@ -110,8 +106,10 @@ function ReplaceNumberWithCommas(thisnumber){
 
     $(document).on('click', ".tab_categories", function(e){
         var $this = $(this);
-        var divId = $(this).attr('data-link');
+        var divId = $this.attr('data-link');
         var $div = $(divId);
+        $('.tab_categories.active').removeClass('active');
+        $('.tab_categories[data-link="'+divId+'"]').addClass('active');
         var pagingDiv = $div.find('.product-paging');
         var productCount = parseInt($div.attr('data-productcount'));
    
@@ -132,8 +130,6 @@ function ReplaceNumberWithCommas(thisnumber){
         }
         $('html,body').scrollTo(450); 
     });
-
-    $(".list-category").find("a[data-link='#def-0']").click();
 
     $(document).on('change',".price-field",function () {
         var priceval = this.value.replace(new RegExp(",", "g"), '');
@@ -346,7 +342,7 @@ function ReplaceNumberWithCommas(thisnumber){
         $( "#filter-list1" ).clone(true).appendTo( ".filter-modal" );
 
         $( "#toggle-cat" ).click(function() {
-          $( "#category-list" ).slideToggle( "slow" );
+          $( "#category-list-desktop-view" ).slideToggle( "slow" );
         });
         $( "#toggle-filter" ).click(function() {
           $( "#filter-list1" ).slideToggle( "slow" );
@@ -403,7 +399,6 @@ function ReplaceNumberWithCommas(thisnumber){
                 $this.parents("li").find(".list-sub-category").slideToggle("fast").toggleClass("toggle");
                 $this.find(".fa").toggleClass("toggleIcon");
             }
-            $.modal.close();
         });
     });
     
@@ -416,11 +411,20 @@ function ReplaceNumberWithCommas(thisnumber){
 
     function initializePagination($paginationContainer, lastPage)
     {
+        var previousButtonText = 'Prev';
+        var nextButtonText = 'Next';
+        if(parseInt(lastPage, 10) === 1){
+            previousButtonText = '';
+            nextButtonText = '';
+        }
+
         $paginationContainer.pagination({
             pages: lastPage, 
             displayedPages: 9,
             listStyle: 'pagination pagination-items',
             hasHref: false,
+            prevText: previousButtonText,
+            nextText: nextButtonText,
             onPageClick: function(page, event){
                 var $catDiv = $paginationContainer.closest('div.category-products');
                 var $pageDiv = $catDiv.find('.product-paging[data-page="'+page+'"]');

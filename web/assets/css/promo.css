@@ -11,12 +11,7 @@
 .scratch-win-form input,
 .scratch-win-form button,
 .scratch-win-error h2,
-.scratch-win-error p,
-#scratch-win-claim h2,
-#scratch-win-claim,
-.scratch-congrats,
-.head-cngrts,
-.promo-gallery{
+.scratch-win-error p {
     display: block;
     float: none !important;
     width: 40%;
@@ -24,22 +19,19 @@
     position: relative;
     margin-top: 1% !important;
 }
-.scratch-congrats,.promo-gallery{
-    width: 80%;
-}
-.head-cngrts{
+
+.head-cngrts {
+    font-size: 22px;
     text-align: center;
-    padding-bottom: 1%;
+    padding-bottom: 10px;
 }
-#scratch-win-claim{
-    width: 60%;
-}
+
 .margin-top-10{
     margin: 5% auto 0 !important;
 }
 #scratch-win-claim h2{
-    padding: 1% 0 3% 0;
-    width: 35%;
+    padding: 15px 0;
+    text-align: center;
 }
 .scratch-win-error p{
     text-align: center;
@@ -87,76 +79,58 @@
     padding: 1% 0;
 }
 
-#prod_image > img{
-    display: inline-block;
-    height: 211px;
-    width: 211px;
-}
-
-#prod_image{
-    background-color: #fff;
-    display: inline-block;
-    margin-right: 10px;
-    text-align: center;
-    vertical-align: top;
-    width: 30%;
-}
-
 .claim-bg{
     background-color: #f5f5f5 !important;
-    height: 241px;
     padding: 15px;
+    margin: 0 auto !important;
+    max-width: 850px;
     width: 100%;
     -webkit-print-color-adjust:exact;
 }
 
-.claim-details{
-    display: inline-block;
+#prod_image {
     text-align: center;
-    vertical-align: top;
-    width: 60%;
+}
+
+#prod_image > img{
+    max-width: 263px;
+    width: 100%;
+}
+
+.claim-details {
+    text-align: center;
 }
 
 .claim-details p{
     font-size: 12px;
 }
-#scratch-win-claim-link{
-    background-color: #3dc6b2;
-    color: #ffffff;
-    font-size: 19px;
-    font-weight: bold;
-    height: 15px;
-    left: 18%;
-    padding: 4% 10%;
-    position: relative;
-    top: 30px;
-    width: 20%;
-}
 
+#scratch-win-claim-link,
 .promo-print {
-    background-color: #00a388;
+    background-color: #3dc6b2;
     border-radius: 4px;
     color: #fff;
-    display: block;
-    font-size: 19px;
-    font-weight: bold;
-    margin: 20px auto;
-    max-width: 200px;
-    padding: 2% 8%;
+    display: inline-block;
+    font-size: 18px;
+    padding: 10px 30px;
+    text-align: center;
     -webkit-transition: all 0.3s ease-in-out;
     -moz-transition:    all 0.3s ease-in-out;
     -o-transition:      all 0.3s ease-in-out;
      transition:        all 0.3s ease-in-out;
 }
 
-.promo-print:hover {
-    color: #fff;
+#scratch-win-claim-link:hover,
+.promo-print:hover,
+#scratch-win-claim-link:focus,
+.promo-print:focus {
     background-color: #02846f;
+    color: #fff;
     text-decoration: none;
 }
 
 .scratchAndWinBanner {
-    background:url("../images/Scratch_and_win_baner.jpg") no-repeat scroll center top / 100% 100% #ffffff;
+    background:#fff url(../images/Scratch_and_win_baner.jpg) no-repeat center center;
     height: 180px;
     margin-top: 2%;
     position: relative;
@@ -184,23 +158,31 @@
     left: 20% !important;
     margin: 2% auto;
 }
-.promo-gallery-data{
-    width: 32%;
+
+.promo-gallery {
+    margin: 0 auto;
+    max-width: 850px;
+}
+
+.promo-gallery-row {
+    text-align: center;
+}
+
+.promo-gallery-data {
+    border: 1px solid #e7e7e7;
     display: inline-block;
     height: auto;
-    margin-top: 1.3%;
-    border:1px solid #e7e7e7;
     margin-left: 5px;
+    margin-top: 1.3%;
+    min-width: 270px;
+    width: 32%;
 }
-.promo-img{
-    width: 100%;
-    padding: 16%;
-}
+
 .promo-gallery-data p,.promo-gallery-data span{
     font-weight: bold;
-    margin-left: 8%;
     height: 48px;
     margin-bottom: 0px;
+    padding: 0 10px;
 }
 .promo-gallery-data span{
     color: #f90000;
@@ -218,9 +200,26 @@
     text-indent: 4px;
     width: 50%;
 }
-.img-container{
-    height: 250px;
+
+.img-main-container {
+    display: table;
+    text-align: center;
+    width: 100%;
 }
+
+.img-container{
+    display: table-cell;
+    height: 250px;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.promo-img {
+    max-height: 200px;
+    max-width: 240px;
+}
+
 .promo-gallery-data a:hover{
     color:#f90000;
     text-decoration: none;
@@ -293,12 +292,14 @@
     padding: 7px;
     -webkit-print-color-adjust:exact;
 }
+
 .header-galore33 a{
     color: #fff !important;
     font-weight: bold;
-    padding: 2%;
+    padding: 0 10px;
     text-decoration: none;
 }
+
 .header-galore33 a:hover{
     color: #ffffff;
     text-decoration: none;
@@ -326,299 +327,174 @@
     margin-right: 15px;
 }
 
+@media (min-width: 991px) {
+    .head-cngrts {
+        font-size: 24px;
+    }
+}
+
 
 @media print {
-   .scratch-win-form span,
-.scratch-win-form input,
-.scratch-win-form button,
-.scratch-win-error h2,
-.scratch-win-error p,
-#scratch-win-claim h2,
-#scratch-win-claim,
-.scratch-congrats,
-.head-cngrts,
-.promo-gallery{
-    display: block;
-    float: none !important;
-    width: 40%;
-    margin: 0 auto !important;
-    position: relative;
-    margin-top: 1% !important;
-}
-.scratch-congrats,.promo-gallery{
-    width: 80%;
-}
-.head-cngrts{
-    text-align: center;
-    padding-bottom: 1%;
-}
-#scratch-win-claim{
-    width: 60%;
-}
-.margin-top-10{
-    margin: 5% auto 0 !important;
-}
-#scratch-win-claim h2{
-    padding: 1% 0 3% 0;
-    width: 35%;
-}
-.scratch-win-error p{
-    width: 65%;
-}
-.scratch-win-error h2{
-    text-align: center;
-}
-.scratch-win-error{
-    display: none;
-}
-.scratch-win-form span{
-    width: 15%;
-}
-.scratch-win-form{
-    width: 100%;
-}
-.promo-wrapper{
-    margin: 0 auto;
-    max-width: 980px;
-    position: relative;
-    width: 100%;
-}
-.easy-treats.banner{
-    margin:100%;
-}
-.bottom-border{
-    border-bottom: 1px solid #D9D9D9;
-    font-size: 12px;
-    margin-top: 5px;
-    padding: 20px;
-    text-align: center;
-}
-.scratch-win-form .instructions h3 {
-    margin: 2% auto;
-}
+    .scratch-win-form span,
+    .scratch-win-form input,
+    .scratch-win-form button,
+    .scratch-win-error h2,
+    .scratch-win-error p {
+        display: block;
+        float: none !important;
+        width: 40%;
+        margin: 0 auto !important;
+        position: relative;
+        margin-top: 1% !important;
+    }
 
-.scratch-win-form .instructions ol > li {
-    padding: 1% 0;
-}
+    .margin-top-10 {
+        margin: 5% auto 0 !important;
+    }
 
-#prod_image > img{
-    height: 211px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 211px;
-}
-#prod_image{
-    background-color: #fff;
-    display: inline-block;
-    margin-right: 10px;
-    text-align: center;
-    vertical-align: top;
-    width: 30%;
-}
-.claim-bg{
-    background-color: #f5f5f5 !important;
-    height: 241px;
-    padding: 15px;
-    width: 100%;
-    -webkit-print-color-adjust:exact;
-}
-.claim-details{
-    display: inline-block;
-    text-align: center;
-    vertical-align: top;
-    width: 60%;
-}
-.claim-details p{
-    font-size: 12px;
-}
-#scratch-win-claim-link{
-    background-color: #3dc6b2;
-    color: #ffffff;
-    font-size: 19px;
-    font-weight: bold;
-    height: 15px;
-    left: 18%;
-    padding: 4% 10%;
-    position: relative;
-    top: 30px;
-    width: 20%;
-}
-.promo-print {
-    background-color: #00a388;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 19px;
-    font-weight: bold;
-    margin: 20px auto;
-    max-width: 200px;
-    padding: 2% 8%;
-    position: relative;
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition:    all 0.3s ease-in-out;
-    -o-transition:      all 0.3s ease-in-out;
-     transition:        all 0.3s ease-in-out;
-}
+    #scratch-win-claim h2 {
+        padding: 25px 0;
+    }
 
-.promo-print:hover {
-    color: #fff;
-    background-color: #02846f;
-    text-decoration: none;
-}
+    .scratch-win-form span {
+        width: 15%;
+    }
 
-.scratchAndWinBanner {
-    background:url("../images/Scratch_and_win_baner.jpg") no-repeat scroll center top / 100% 100% #ffffff;
-    height: 180px;
-    margin-top: 2%;
-    position: relative;
-    width: 100%;
-}
-#promo-prizes-tbl > th , td {
-    border: 1px solid;
-    margin-left: 5%;
-    text-align: center;
-    width: 45%;
-}
-#promo-prizes-tbl th {
-    border: 1px solid;
-    padding-left: 2%;
-    text-align: center;
-}
-.tbl-red{
-    background-color: rgba(170, 0, 0, 0.71);
-}
-.error-claim{
-    width: 57% !important;
-    left: 20% !important;
-    margin-top: 2%;
-    margin-bottom: 2%;
-}
-.promo-gallery-data{
-    width: 32%;
-    display: inline-block;
-    height: auto;
-    margin-top: 1.3%;
-    border:1px solid #e7e7e7;
-    margin-left: 5px;
-}
-.promo-img{
-    width: 100%;
-    padding: 16%;
-}
-.promo-gallery-data p,.promo-gallery-data span{
-    font-weight: bold;
-    margin-left: 8%;
-    height: 48px;
-    margin-bottom: 0px;
-}
-.promo-gallery-data span{
-    color: #f90000;
-    font-size: 16px;
-}
-.promo-gallery-data a{
-    border: 2px solid #8b8b8b;
-    border-radius: 6px;
-    color: black;
-    display: block;
-    font-size: 11px;
-    margin: 5% 25%;
-    padding: 4%;
-    text-decoration: none;
-    text-indent: 4px;
-    width: 50%;
-}
-.img-container{
-    height: 250px;
-}
-.promo-gallery-data a:hover{
-    color:#f90000;
-    text-decoration: none;
- }
-.shop-now-img {
-    background: url("../images/global_sprite.png") repeat scroll -47px -258px rgba(0, 0, 0, 0) !important;
-    display: inline-block;
-    height: 20px;
-    width: 24px;
-}
-.promo-gallery-header{
-    background: url("../images/promo/header.png") repeat scroll rgba(0, 0, 0, 0);
-    padding: 6%;
-}
-.promo-gallery-header-container{
-    margin-left: 10%;
-    width: 74%;
-}
-.left {
-    margin-left: 1.4%;
-}
-#div-promo-modal{
-    display: none;
-    text-align:center;
-}
-#div-promo-modal h1 {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    margin-top: 40px;
-    text-align: center;
-}
-.div-promo-modal-container {
-    border-bottom: 1px solid #cecece;
-    height: 55px;
-    margin-bottom: 5px;
-    margin-top: 50px;
-}
-.div-promo-modal-container input{
-    width: 60%;
-    margin: 0px auto;
-    display:inline;
-}
-#div-promo-modal span {
-    background-color: #fff;
-    color: #565656;
-    display: inline-block;
-    margin-right: 14px;
-    padding: 6px 12px;
-    width: 136px;
-}
-#div-promo-modal button {
-    background-color: #00a388;
-    border-bottom: 2px solid #007c67;
-    border-radius: 4px;
-    color: #fff;
-    display: inline-block;
-    font-weight: bold;
-    height: auto;
-    line-height: 23px;
-    margin: 0;
-    width: 136px;
-}
-.btn.btn-default-1 {
-    border: 2px solid #565656;
-    background-color: #fff;
-    color: #565656;
-}
-.btn.btn-default-1:hover {
-    background-color: #585a59;
-    color: #fff;
-}
+    .scratch-win-form {
+        width: 100%;
+    }
 
-.prod-description{
-    white-space: nowrap;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+    .promo-wrapper {
+        margin: 0 auto;
+        max-width: 980px;
+        position: relative;
+        width: 100%;
+    }
 
-.label-fullname{
-    font-size: 14px;
-    font-weight: bold;
-    margin-right: 15px;
-}
+    .bottom-border {
+        border-bottom: 1px solid #D9D9D9;
+        font-size: 12px;
+        margin-top: 5px;
+        padding: 20px;
+        text-align: center;
+    }
 
-@media print {
+    .scratch-win-form .instructions h3 {
+        margin: 2% auto;
+    }
+
+    .scratch-win-form .instructions ol > li {
+        padding: 1% 0;
+    }
+
+    #prod_image > img{
+        max-width: 200px;
+        width: 100%;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+    #prod_image{
+        float: left;
+        padding: 0 15px;
+        width: 25%;
+    }
+
+    .claim-bg {
+        background-color: #f5f5f5 !important;
+        padding: 15px;
+        width: 820px;
+        -webkit-print-color-adjust:exact;
+    }
+
+    .claim-details {
+        float: left;
+        padding: 0 15px;
+        width: 55% !important;
+    }
+
+    .claim-details p {
+        font-size: 12px;
+    }
+
+    #promo-prizes-tbl > th , td {
+        border: 1px solid;
+        margin-left: 5%;
+        text-align: center;
+        width: 45%;
+    }
+
+    #promo-prizes-tbl th {
+        border: 1px solid;
+        padding-left: 2%;
+        text-align: center;
+    }
+
+    .tbl-red {
+        background-color: rgba(170, 0, 0, 0.71);
+    }
+
+    .error-claim {
+        width: 57% !important;
+        left: 20% !important;
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+
+    .promo-gallery-row {
+        text-align: center;
+    }
+
+    .promo-gallery-data {
+        border: 1px solid #e7e7e7;
+        display: inline-block;
+        height: auto;
+        margin-top: 1.3%;
+        min-width: auto;
+        width: 30%;
+    }
+
+    .promo-gallery-data p,.promo-gallery-data span {
+        font-weight: bold;
+        height: 48px;
+        margin-bottom: 0px;
+    }
+
+    .promo-gallery-data span {
+        color: #f90000;
+        font-size: 16px;
+    }
+
+    .promo-gallery-data a {
+        border: 2px solid #8b8b8b;
+        border-radius: 6px;
+        color: black;
+        display: block;
+        font-size: 11px;
+        margin: 5% 25%;
+        padding: 4%;
+        text-decoration: none;
+        text-indent: 4px;
+        width: 80%;
+    }
+
+    .promo-gallery-data a:hover {
+        color:#f90000;
+        text-decoration: none;
+     }
+
+    .prod-description{
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+/** fixes **/   
     #header {
-        background-color: #4e83ef !important;
+        border-top:5px solid #4e83ef !important;
         height: 5px !important;
         margin-bottom: 20px !important;
         width: 100% !important;
@@ -631,20 +507,23 @@
     .footer-primary,
     .footer-bottom-content,
     .logo > span,
-    .logo > a[href]:after {
+    .logo > a[href]:after,
+    #scrollUp {
         display: none;
     }
 
     .logo > a[href]:after {
         display: none;
+    }
+
+    .logo > a {
+        display: block !important;
+         margin-top: 10px !important;
     }
 
     #main_search_container {
-        margin-top: 30px !important;
-    }
-
-    .claim-bg {
-        height: 213px !important;
+        margin-top: 0px !important;
+        padding: 0 !important;
     }
 
     .res-copyright {
@@ -665,42 +544,20 @@
     .notification_container {
         display: none !important;
     }
-
-    #prod_image,
-    .claim-details {
-        display:inline-block;
-    }
     
-    .scratch-congrats  {
+    .scratch-congrats {
         background-color: #F5F5F5 !important;
-        width: 210mm;
-    }
-    
-    #prod_image {
-        padding-right: 10mm;
-        vertical-align: top;
-        width: 60mm;
-    }
-
-    .claim-details {
-        margin-top: 10px;
-        padding: 10px 10px 10px 20px;
-        vertical-align: top;
-        width: 120mm;
+        margin: 0 auto;
+        width: 850px;
     }
 
     .promo-img {
-        height: 100px !important;
-        padding: 0 !important;
-        width: 150px !important;
-    }
-
-    .img-container {
-        height: 150px !important;
+        max-width: 150px !important;
+        width: 100%;
     }
 
     .promo-gallery-data p, .promo-gallery-data span {
-        font-size: 8pt;
+        font-size: 8px;
         height: auto;
     }
 
@@ -709,12 +566,16 @@
     }
     
     .img-container {
-        height: 150px !important;
+        display: table-cell !important;
+        height: 200px !important;
+        text-align: center;
+        vertical-align: middle !important;
+        width: 289px !important;
     }
 
     .promo-gallery-data a {
-        margin: 8px 0 !important;
-        width: 98% !important;
+        margin: 8px auto !important;
+        text-align: center !important;
     }
 
     .promo-gallery-data a[href]:after {
@@ -722,6 +583,12 @@
     }
 
     .header-galore33 {
-        margin-top: 10px !important; 
+        margin-top: 10px !important;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .header-galore33 a {
+        color: white !important;
     }
 }

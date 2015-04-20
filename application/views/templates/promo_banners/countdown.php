@@ -55,13 +55,18 @@
         </div>
     </div>
     <div>
-        <?PHP $timeFormat = strtotime($product->getStartPromo() ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")) ?>
-        <input id="endDate" type="hidden" value='<?=date('M d,Y H:i:s', $timeFormat)?>' >
+        
+
+        <?php $targetDate = $product->getStartPromo() ? $product->getEnddate() : $product->getStartdate(); ?>
+        <?php $remainingTime = $targetDate->getTimestamp() - time(); ?>
+        
+        <input id="remainingTime" type="hidden" value='<?php echo $remainingTime?>'/>s
+
     </div>
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
+        <script src="/assets/js/src/vendor/jquery.hilios.countdown.js" type="text/javascript"></script> 
         <script src="/assets/js/src/promo/countdown-sale.js" type="text/javascript"></script>
     <?php else:?>
         <script src="/assets/js/min/easyshop.countdown.js" type="text/javascript"></script>

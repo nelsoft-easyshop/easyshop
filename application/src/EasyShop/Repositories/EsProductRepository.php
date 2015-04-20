@@ -1455,7 +1455,7 @@ class EsProductRepository extends EntityRepository
      * @param int $productStatus
      * @param int $desiredStatus
      * 
-     * @return bool
+     * @return integer number of updted products
      */
     public function updateUserProductsStatus($memberId, $productStatus, $desiredStatus)
     {
@@ -1478,11 +1478,10 @@ class EsProductRepository extends EntityRepository
                 'newStatus' => $desiredStatus,
                 'isDraft' => \EasyShop\Entities\EsProduct::ACTIVE
             ];
-            $this->em->getConnection()->executeUpdate($updateQuery, $parameters);
-            return true;
+            return $this->em->getConnection()->executeUpdate($updateQuery, $parameters);
         }
 
-        return false;
+        return 0;
     }
     
 }

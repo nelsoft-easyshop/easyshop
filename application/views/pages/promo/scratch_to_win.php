@@ -9,7 +9,7 @@
 <section class="bg-cl-fff">
 <div class="clear"></div>
 <?PHP if (isset($product)) : ?>
-<div class="container mrgn-top-40" id="main_search_container">
+<div class="container" id="main_search_container">
     <?PHP if (isset($product['can_purchase']) && $product['can_purchase'] === FALSE) : ?>
     <div class="scratch-congrats">
         <h2 class="head-cngrts">SORRY</h2>
@@ -55,19 +55,22 @@
                 data_price="<?=$product['price']?>" data_code="<?=$code;?>" run_js="<?=$user->getFullName() ? TRUE : FALSE ?>">
         </span>
         <div class="claim-bg">
-            <div id="prod_image">
-                <img src="<?php echo getAssetsDomain(); ?><?=$product['product_image_path']?>">
-            </div>
-            <div class="claim-details">
-                <p>To claim your prize,  <?= html_escape($user->getFullName()) ?'': '<span id="complete">complete the <a href="javascript:void(0)" id="register">registration</a> form and </span>'?>visit
-                    Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
-                    Malate, Manila
-                    Don't forget to print this page and bring the
-                    winning scratch card and two (2) valid ID's
-                    You may claim your prize until March 1, 2015.
-                    Contact us for more information: (02) 353-0062 or (02)353-8337.
-                </p>
-                <a class="promo-print" href="javascript:void(0)" onClick="window.print()">PRINT</a>
+            <div class="row">
+                <div id="prod_image" class="col-xs-12 col-sm-4">
+                    <img src="<?php echo getAssetsDomain(); ?><?=$product['product_image_path']?>">
+                </div>
+                <div class="claim-details col-xs-12 col-sm-8">
+                    <p>To claim your prize,  <?= html_escape($user->getFullName()) ?'': '<span id="complete">complete the <a href="javascript:void(0)" id="register">registration</a> form and </span>'?>visit
+                        Easyshop.ph's office at 8th flr. Marc 2000 Tower, 1973 Taft Avenue,
+                        Malate, Manila
+                        Don't forget to print this page and bring the
+                        winning scratch card and two (2) valid ID's
+                        You may claim your prize until March 1, 2015.
+                        Contact us for more information: (02) 353-0062 or (02)353-8337.
+                    </p>
+                    <a class="promo-print" href="javascript:void(0)" onClick="window.print()">PRINT</a>
+                </div>
+                <div class="clear"></div>
             </div>
             <div id="div-promo-modal">
                 <div class="div-promo-modal-container form-group">
@@ -89,13 +92,15 @@
         <div class="promo-gallery-row">
             <?PHP foreach($gadgets_galore as $product) : ?>
             <div class="promo-gallery-data">
-                <div class="img-container">
-                    <img class="promo-img" src="<?php echo getAssetsDomain().$product['product_image_path']?>">
+                <div class="img-main-container">
+                    <div class="img-container">
+                        <img class="promo-img" src="<?php echo getAssetsDomain().$product['product_image_path']?>">
+                    </div>
                 </div>
                 <p><?=html_escape($product['product_name'])?></p>
                 <span>Php <?= number_format($product['price'], 2, '.', ',')?></span>
                 <br>
-                <a href="/item/<?=html_escape($product['slug'])?>"><img class="shop-now-img"> &nbsp; SHOP NOW</a>
+                <a href="/item/<?=html_escape($product['slug'])?>"><img src="<?php echo getAssetsDomain()?>assets/images/img_cart2.jpg"> &nbsp; SHOP NOW</a>
             </div>
             <?PHP endforeach; ?>
         </div>
@@ -247,13 +252,13 @@
                     Feel free to contact us for more information: (02)353-0062 or (02)353-8337.
                 </p>
             </div>
-            <div id="scratch-win-claim">
+            <div id="scratch-win-claim" class="container">
                 <h2>Congratulations!</h2>
-                <div class="claim-bg">
-                    <div id="prod_image">
+                <div class="claim-bg row">
+                    <div id="prod_image" class="col-sm-12 col-md-4">
                         <img src="<?php echo getAssetsDomain() ?>">
                     </div>
-                    <div class="claim-details">
+                    <div class="claim-details col-sm-12 col-md-8">
                         <h3></h3>
                         <p class="prod-description">
                         </p>
