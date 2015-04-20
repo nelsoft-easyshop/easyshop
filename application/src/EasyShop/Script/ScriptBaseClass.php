@@ -2,7 +2,7 @@
 
 namespace EasyShop\Script;
 
-class ScriptBaseClass
+abstract class ScriptBaseClass
 {
     /**
      * Email notification instance
@@ -25,13 +25,13 @@ class ScriptBaseClass
      * Constructor
      * @param $emailService
      */
-    public function __construct($emailService, $configLoader, $parserLibrary)
+    protected function __construct($emailService, $configLoader, $parserLibrary)
     {
         $this->emailService = $emailService;
         $this->configLoader = $configLoader;
         $this->parserLibrary = $parserLibrary;
         $this->scriptConfig = $this->configLoader->getItem('script', 'emailParameter');
-        $this->registerErrorHandler();
+        self::registerErrorHandler();
     }
 
     /**
@@ -87,6 +87,12 @@ class ScriptBaseClass
             'fileName' => $fileName,
             'lineNumber' => $lineNumber,
         ];
+
         return $this->parserLibrary->parse('errors/script-error', $errorData, true);
     }
+
+    /**
+     * Execute the script
+     */
+    abstract public function execute();
 }
