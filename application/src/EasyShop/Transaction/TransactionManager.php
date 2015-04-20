@@ -338,6 +338,7 @@ class TransactionManager
                 break;
             case EsPaymentMethod::PAYMENT_PESOPAYCC:
                 $parseData['payment_method_name'] = "Pesopay Credit Card/ Debit Card";
+                break;
             case EsPaymentMethod::PAYMENT_POINTS:
                 $parseData['payment_method_name'] = "Easypoints";
                 break;
