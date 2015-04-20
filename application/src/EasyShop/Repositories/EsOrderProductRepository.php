@@ -105,7 +105,8 @@ class EsOrderProductRepository extends EntityRepository
                                         tbl_op.handlingFee as handling_fee,tbl_psc.comment as shipping_comment, tbl_psc.courier, tbl_psc.trackingNum, tbl_psc.deliveryDate,
                                         tbl_psc.expectedDate, tbl_psc.datemodified, tbl_op.isReject, tbl_pi.productImagePath, tbl_opa.attrName,
                                         tbl_opa.attrValue, tbl_m.idMember as seller_id, tbl_m.username as seller, COALESCE(tbl_m_recipient.idMember, 0) as forMemberId,
-                                        tbl_m.slug as sellerSlug, COALESCE(NULLIF(tbl_m.storeName, ''), tbl_m.username) as sellerStoreName
+                                        tbl_m.slug as sellerSlug, COALESCE(NULLIF(tbl_m.storeName, ''), tbl_m.username) as sellerStoreName,
+                                        COALESCE(tbl_orderPoint.points, 0) as easyPoint
                                     ")
                                     ->from('EasyShop\Entities\EsOrderProduct', 'tbl_op')
                                     ->innerJoin('EasyShop\Entities\EsProduct', 'tbl_p', 'WITH', 'tbl_p.idProduct = tbl_op.product')
@@ -116,6 +117,7 @@ class EsOrderProductRepository extends EntityRepository
                                     ->leftJoin('EasyShop\Entities\EsMemberFeedback', 'tbl_mf', 'WITH', 'tbl_mf.order = tbl_op.order AND tbl_mf.forMemberid = tbl_op.seller')
                                     ->leftJoin('EasyShop\Entities\EsOrderProductStatus', 'tbl_ops', 'WITH', 'tbl_ops.idOrderProductStatus = tbl_op.status')
                                     ->leftJoin('EasyShop\Entities\EsMember', 'tbl_m_recipient', 'WITH', 'tbl_mf.forMemberid = tbl_m_recipient.idMember')
+                                    ->leftJoin('EasyShop\Entities\EsOrderPoints', 'tbl_orderPoint', 'WITH', 'tbl_orderPoint.orderProduct = tbl_op.idOrderProduct')
                                     ->where('tbl_op.order = :orderId')
                                     ->setParameter('orderId', $orderId)
                                     ->orderBy('tbl_op.idOrderProduct', 'ASC')
