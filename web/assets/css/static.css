@@ -23,7 +23,7 @@
 	margin-bottom: 20px;
 }
 .tab-head-container{
-	 width: 1072px;
+	width: 100%;
 	border-bottom: solid #e2e2e2 1px;
 }
 .tab-head-container li{
@@ -104,7 +104,12 @@ ol{
 	}
 }
 
-@media (max-width: 990px){
+
+@media (max-width: 1200px){
+	.tab-head-container{
+		width: 1000px;
+	}
+
 	.tab-head-wrapper{
 		overflow-x: scroll;
 	}
