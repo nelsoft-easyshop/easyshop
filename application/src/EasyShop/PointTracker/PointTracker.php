@@ -6,7 +6,6 @@ use EasyShop\Entities\EsPointHistory;
 use EasyShop\Entities\EsPoint;
 use EasyShop\Entities\EsPointType as EsPointType;
 
-
 /**
  * Point Tracker Class
  *
@@ -23,15 +22,16 @@ class PointTracker
 
     const POINT_DAYS_DURATION = 90;
 
+    const POINT_ENABLED = false;
+
     /**
      * Constructor. Retrieves Entity Manager instance
-     * 
+     *
      */
     public function __construct($em)
     {
         $this->em = $em;
     }
-
 
     /**
      * Updates point history and adds point to a user
@@ -49,7 +49,7 @@ class PointTracker
         $points = $this->em->getRepository('EasyShop\Entities\EsPointType')
                            ->find($actionId);
 
-        if($points === null){
+        if ($points === null) {
             return false;
         }
 
@@ -57,7 +57,7 @@ class PointTracker
         $user = $this->em->getRepository('EasyShop\Entities\EsMember')
                          ->find($userId);
 
-        if($user === null){
+        if ($user === null) {
             return false;
         }
 
@@ -65,14 +65,14 @@ class PointTracker
         $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
                               ->findOneBy(['member' => $userId]);
 
-        if($points->getId() === EsPointType::TYPE_REVERT){
+        if ($points->getId() === EsPointType::TYPE_REVERT) {
             $addPoints = $customPoints;
         }
-        else{
-            if($percentage > 0){
+        else {
+            if ($percentage > 0) {
                 $addPoints = bcmul($points->getPoint(), bcdiv($percentage, 100, 4), 4);
             }
-            else{
+            else {
                 $addPoints = $points->getPoint();
             }
         }
@@ -87,14 +87,14 @@ class PointTracker
         $this->em->persist($pointHistory);
         $this->em->flush();
 
-        if($userPoint !== null){
-            // Update existing user    
+        if ($userPoint !== null) {
+            // Update existing user
             $userPoint->setPoint($userPoint->getPoint() + $addPoints);
             $userPoint->setExpirationDate(date_create(date("Y-m-d H:i:s", strtotime("+".self::POINT_DAYS_DURATION." days"))));
 
             $this->em->flush();
         }
-        else{
+        else {
             // Insert new user
             $userPoint = new EsPoint();
             $userPoint->setPoint($addPoints);
@@ -135,11 +135,11 @@ class PointTracker
                          ->find($userId);
 
        
-        if($userPoint === null || $userPoint->getPoint() < $points || 
-            $deduct === null || $user === null){
+        if ($userPoint === null || $userPoint->getPoint() < $points ||
+            $deduct === null || $user === null) {
             return false;
         }
-        else{
+        else {
             $userPoint->setPoint($userPoint->getPoint() - $points);
 
             // Update points history table
@@ -201,7 +201,5 @@ class PointTracker
                             ->findOneBy(['member' => $userId]);
 
         return $user === null? false : $user->getPoint();
-    }        
-
+    }
 }
-
