@@ -282,8 +282,6 @@
                     <div class="log-icon-container">
                         <center>
                             <div class="log-icon-circle">
-                                
-
                                 <?php if($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_UPDATE): ?>
                                     <i class="fa icon-upload-item "></i>
                                 <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_SOFT_DELETE): ?>
