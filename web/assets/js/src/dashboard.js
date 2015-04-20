@@ -101,21 +101,7 @@
 
     });
 
-    $(window).on("load resize scroll", function(){
-        var tabHeight = $("#activityLogTab").outerHeight();
-        var lastLogContainerHeight = $(".log-container").last().outerHeight();
-        var firstLogContainerHeight = $(".log-container").first().outerHeight();
-        var deductActivityLineHeight = lastLogContainerHeight/2;
-        
-        var totalActivityMarginTop = firstLogContainerHeight/2;
-        var totalActivityLineHeight = tabHeight - deductActivityLineHeight - totalActivityMarginTop - 30;
-         $(".log-line").css("height", totalActivityLineHeight+"px").css("margin-top", totalActivityMarginTop+"px");
-
-        $("#activityLogTab").find(".log-outer").each(function(){
-            var logContainerHeight = $(this).find(".log-container").outerHeight();
-            $(this).find(".log-icon-container").css("height", logContainerHeight+"px");
-        });
-    });
+   
 
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
@@ -275,6 +261,7 @@
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-activity" ).addClass( "selectedM" );
+
     });
     
     $( ".settings-trigger" ).click(function() {
@@ -3312,6 +3299,8 @@
         getActivityLog(1, "", "", $defaultLogSort);
     });
 
+  
+
     $("#activityLogTab").on("click", ".filter-logs", function() {
         $logDateFrom = $("#activityLogTab").find("#log-start-date").val();
         $logDateTo = $("#activityLogTab").find("#log-end-date").val(); 
@@ -3338,9 +3327,25 @@
             },
             success: function(jsonResponse){
                 $("#main-log-container").html(jsonResponse.html);
+                var tabHeight = $("#activityLogTab").outerHeight();
+                var lastLogContainerHeight = $(".log-container").last().outerHeight();
+                var firstLogContainerHeight = $(".log-container").first().outerHeight();
+                var deductActivityLineHeight = lastLogContainerHeight/2;
+                
+                var totalActivityMarginTop = firstLogContainerHeight/2;
+                var totalActivityLineHeight = tabHeight - deductActivityLineHeight - totalActivityMarginTop - 30;
+                 $(".log-line").css("height", totalActivityLineHeight+"px").css("margin-top", totalActivityMarginTop+"px");
+
+                $("#activityLogTab").find(".log-outer").each(function(){
+                    var logContainerHeight = $(this).find(".log-container").outerHeight();
+                    $(this).find(".log-icon-container").css("height", logContainerHeight+"px");
+                });
             }
         });
     }
+
+    $(window).on("load resize", function(){
+        var metaInfoTdWidth = $(".td-meta-info").width();
+        $(".item-list-name a").css("overflow","hidden").css("text-overflow","ellipsis").css("white-space", "nowrap").css("max-width", metaInfoTdWidth+"px");
+    });
 }(jQuery));
-
-
