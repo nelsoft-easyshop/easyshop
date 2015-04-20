@@ -3254,7 +3254,7 @@
                         isUserPointComplete = true;
                         return false;
                     }
-                    $('.current-points').html(parseFloat($jsonResponse.totalUserPoint).toFixed(2));
+                    $('.current-points').html(replaceNumberWithCommas(parseFloat($jsonResponse.totalUserPoint).toFixed(2)));
                     var html = "";
                     userPointPage++;
                     $.each(userPointList, function(index, value){
