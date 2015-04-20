@@ -1,116 +1,116 @@
 .static-wrapper{
-	background: #fff;
-	color: #565656;
-	padding: 30px 0px;
-	font-family: Helvetica, 'Open-Sans';
+    background: #fff;
+    color: #565656;
+    padding: 30px 0px;
+    font-family: Helvetica, 'Open-Sans';
 }
 
 .section-title{
-	font-weight: bold;
-	font-size: 15px;
-	text-transform: uppercase;
-	margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 15px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
 }
 
 .section-title-desc{
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .section-title-tab{
-	font-weight: bold;
-	font-size: 11px;
-	text-transform: uppercase;
-	margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
 }
 .tab-head-container{
-	width: 100%;
-	border-bottom: solid #e2e2e2 1px;
+    width: 100%;
+    border-bottom: solid #e2e2e2 1px;
 }
 .tab-head-container li{
-	margin-right: 29px;
-	padding: 0px;
+    margin-right: 29px;
+    padding: 0px;
 }
 
 .tab-head-container a{
-	color: #4370cc;
-	cursor: pointer;
-	display: inline-block;
+    color: #4370cc;
+    cursor: pointer;
+    display: inline-block;
 }
 
 .tab-head-container a.active{
-	color: #565656;
-	font-size: 13px;
-	border: solid #e2e2e2 1px;
-	border-bottom: solid #fff 1px;
-	padding: 5px 10px;
-	margin-bottom: -1px;
-	background: #fff;
-	border-radius: 4px 4px 0px 0px;
+    color: #565656;
+    font-size: 13px;
+    border: solid #e2e2e2 1px;
+    border-bottom: solid #fff 1px;
+    padding: 5px 10px;
+    margin-bottom: -1px;
+    background: #fff;
+    border-radius: 4px 4px 0px 0px;
 }
 
 .tab-container{
-	display: none;
+    display: none;
 }
 
 .static-container{
-	border: solid #e2e2e2 1px;
-	border-radius: 4px;
-	display: block;
-	min-height: 30px;
-	width: 100%;
-	padding: 30px 30px;
+    border: solid #e2e2e2 1px;
+    border-radius: 4px;
+    display: block;
+    min-height: 30px;
+    width: 100%;
+    padding: 30px 30px;
 }
 
 .accordion-head{
-	display: block;
-	border-top: solid #e2e2e2 1px;
-	padding: 15px 5px;
-	font-size: 14px;
-	color: #999;
-	cursor: pointer;
+    display: block;
+    border-top: solid #e2e2e2 1px;
+    padding: 15px 5px;
+    font-size: 14px;
+    color: #999;
+    cursor: pointer;
 }
 
 .accordion-head .fa{
-	display: inline-block;
-	margin-right: 10px;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 .toggled.accordion-head{
-	background-color: #f9f9f9;
-	border-top: 3px solid #DDD;
-	border-bottom: 1px solid #e2e2e2;
-	color: #565656;
-	font-weight: bold;
+    background-color: #f9f9f9;
+    border-top: 3px solid #DDD;
+    border-bottom: 1px solid #e2e2e2;
+    color: #565656;
+    font-weight: bold;
 }
 
 .toggled.accordion-head .fa:before{
-	content: "\f068";
+    content: "\f068";
 }
 
 .accordion-body{
-	padding: 15px 33px;
-	font-size: 12px;
-	line-height: 27px;
-	display: none;
+    padding: 15px 33px;
+    font-size: 12px;
+    line-height: 27px;
+    display: none;
 }
 
 ol{
-	list-style-type: decimal;
+    list-style-type: decimal;
 }
 
 @media (max-width: 400px){
-	.static-container{
-		padding: 20px 10px;
-	}
+    .static-container{
+        padding: 20px 10px;
+    }
 }
 
 
 @media (max-width: 1200px){
-	.tab-head-container{
-		width: 1000px;
-	}
+    .tab-head-container{
+        width: 1000px;
+    }
 
-	.tab-head-wrapper{
-		overflow-x: scroll;
-	}
+    .tab-head-wrapper{
+        overflow-x: scroll;
+    }
 }
