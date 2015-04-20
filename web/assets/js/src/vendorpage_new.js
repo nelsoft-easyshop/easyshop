@@ -411,11 +411,20 @@ function ReplaceNumberWithCommas(thisnumber){
 
     function initializePagination($paginationContainer, lastPage)
     {
+        var previousButtonText = 'Prev';
+        var nextButtonText = 'Next';
+        if(parseInt(lastPage, 10) === 1){
+            previousButtonText = '';
+            nextButtonText = '';
+        }
+
         $paginationContainer.pagination({
             pages: lastPage, 
             displayedPages: 9,
             listStyle: 'pagination pagination-items',
             hasHref: false,
+            prevText: previousButtonText,
+            nextText: nextButtonText,
             onPageClick: function(page, event){
                 var $catDiv = $paginationContainer.closest('div.category-products');
                 var $pageDiv = $catDiv.find('.product-paging[data-page="'+page+'"]');
