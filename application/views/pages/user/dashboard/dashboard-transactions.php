@@ -34,6 +34,7 @@
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
+                                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_POINTS?>">Easypoint</option>
                                 </select>
                             </div>
                             <div class="clear"></div>
@@ -72,6 +73,7 @@
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
+                                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_POINTS?>">Easypoint</option>
                                 </select>
                             </div>
                             <div class="clear"></div>
@@ -114,6 +116,7 @@
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
+                                <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_POINTS?>">Easypoint</option>
                             </select>
                         </div>
                         <div class="clear"></div>
@@ -152,6 +155,7 @@
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
+                                <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_POINTS?>">Easypoint</option>
                             </select>
                         </div>
                         <div class="clear"></div>
