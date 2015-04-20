@@ -1386,9 +1386,6 @@ var universalExtension = ".jpeg";
                     });
                 }
                 else{
-                    if(errorValues != ""){
-                        alert("The following files cannot be upload: " ,errorValues);
-                    }
                     $.each( imageCollection, function( key, value ) {
                         $('#previewList'+value.picture_count + ' > span > img')
                             .attr("src",'/'+tempDirectory+'/categoryview/'+value.image_name);
