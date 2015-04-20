@@ -282,7 +282,17 @@
                     <div class="log-icon-container">
                         <center>
                             <div class="log-icon-circle">
-                                <i class="fa icon-delete "></i>
+                                
+
+                                <?php if($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_UPDATE): ?>
+                                    <i class="fa icon-upload-item "></i>
+                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_SOFT_DELETE): ?>
+                                    <i class="fa icon-delete "></i>
+                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_FULL_DELETE): ?>
+                                    <i class="fa icon-delete "></i>
+                                <?php elseif($activity['data']['action'] === \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_RESTORE): ?>
+                                    <i class="fa fa-refresh "></i>
+                                <?php endif; ?>
                             </div>
                          </center>
                     </div>
