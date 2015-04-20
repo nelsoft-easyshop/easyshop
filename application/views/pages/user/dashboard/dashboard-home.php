@@ -94,7 +94,7 @@
                             </p>
                             <a href="/easypoints" target="_blank" class="easy-point-link-mobile">
                                 <span class="current-point-txt">Current Points:</span>
-                                <span class="easy-points-mobile"><?php echo $totalUserPoint ?></span>
+                                <span class="easy-points-mobile"><?php echo number_format($totalUserPoint, 2, '.', ',') ?></span>
                                 <div class="clear"></div>
                             </a>
                         </div>
