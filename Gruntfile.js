@@ -13,7 +13,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js',
                     'js/src/vendor/jquery.cropper.js': 'cropper/dist/cropper.js',
                     // migrating files
-                    'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js'
+                    'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js',
+                    'js/src/vendor/bower_components/ion.rangeSlider.js': 'ionrangeslider/js/ion.rangeSlider.js'
                 }
             },
             stylesheets: {
@@ -21,7 +22,9 @@ module.exports = function (grunt) {
                     'css/bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
                     'css/jquery.cropper.css': 'cropper/dist/cropper.min.css',
                     // migrating files
-                    'css/vendor/bower_components/chosen.min.css': 'chosen/chosen.min.css'
+                    'css/vendor/bower_components/chosen.min.css': 'chosen/chosen.min.css',
+                    'css/vendor/bower_components/ion.rangeSlider.css': 'ionrangeslider/css/ion.rangeSlider.css',
+                    'css/vendor/bower_components/ion.rangeSlider.skinFlat.css': 'ionrangeslider/css/ion.rangeSlider.skinFlat.css'
                 }
             },
         },
@@ -88,13 +91,13 @@ module.exports = function (grunt) {
                         'web/assets/css/bootstrap.css', 
                         'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.upload-step2.css':
-                        ['web/assets/css/sell_item.css',
-                        'web/assets/css/ion.rangeSlider.css', 
-                        'web/assets/css/ion.rangeSlider.skinFlat.css',
-                        'web/assets/css/bootstrap.css',
-                        'web/assets/css/bootstrap-mods.css', 
-                        'web/assets/css/jquery.cropper.css',
-                        'web/assets/css/chosenwtihcreate.min.css'], 
+                        ['web/assets/css/vendor/bower_components/ion.rangeSlider.css', 
+                         'web/assets/css/vendor/bower_components/ion.rangeSlider.skinFlat.css',
+                         'web/assets/css/sell_item.css',
+                         'web/assets/css/bootstrap.css',
+                         'web/assets/css/bootstrap-mods.css', 
+                         'web/assets/css/jquery.cropper.css',
+                         'web/assets/css/chosenwtihcreate.min.css'], 
                      
                     'web/assets/css/min-easyshop.upload-step3.css':
                         ['web/assets/css/bootstrap.css',
@@ -293,7 +296,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.simplemodal.js'],
 
                     'web/assets/js/min/easyshop.product_upload_step2_view.js':
-                            ['web/assets/js/src/vendor/ion.rangeSlider.min.js',
+                            ['web/assets/js/src/vendor/bower_components/ion.rangeSlider.js',
                              'web/assets/js/src/vendor/chosenwithcreate.jquery.min.js', 
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/productUpload_step2.js',
