@@ -13,26 +13,27 @@
                 <ul class=" list-inline list-unstyled section-title-tab tab-head-container">
                     <li>
                         <a src="faq" class="active">
-                            Frequently Asked Questions
+                            <span class="tab-title">Frequently Asked Questions</span> <span class="tab-title-mobile">FAQ</span>
                         </a>
                     </li>
                     <li>
                         <a src="buying-items">
-                            Buying Items On EasyShop.ph
+                            <span class="tab-title">Buying Items On EasyShop.ph</span> <span class="tab-title-mobile">Buying Items</span>
                         </a>
                     </li>
                     <li>
                         <a src="selling-items">
-                            Selling Items On EasyShop.Ph
+                            <span class="tab-title">Selling Items On EasyShop.Ph</span> <span class="tab-title-mobile">Selling Items</span>
                         </a>
                     </li>
                     <li>
                         <a src="fraud-inquiries">
-                            Fraud Inquiries
+                            <span class="tab-title">Fraud Inquiries</span> <span class="tab-title-mobile">Fraud Inquiries</span>
                         </a>
                     </li>
                 </ul>
             </div>
+            <div class="faq-mobile section-title first">Frequently Asked Questions</div>
             <div class="tab-container" id="faq">
                 <p class="section-title-desc">
                     Need help in using EasyShop.ph&#63; 
@@ -134,7 +135,7 @@
                 </div>
             </div>
             
-
+            <div class="faq-mobile section-title">Buying items on easyshop.ph</div>
             <div class="tab-container" id="buying-items">
                 <p class="section-title-desc">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis.
@@ -242,6 +243,7 @@
                 </div>
             </div>
 
+            <div class="faq-mobile section-title">Selling items on easyshop.ph</div>
             <div class="tab-container" id="selling-items">
                 <p class="section-title-desc">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis.
@@ -320,6 +322,7 @@
                 </div>
             </div>
 
+            <div class="faq-mobile section-title">Fraud inquiries</div>
             <div class="tab-container" id="fraud-inquiries">
                 <p class="section-title-desc">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis.

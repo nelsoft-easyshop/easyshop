@@ -11,12 +11,16 @@
     margin-bottom: 15px;
 }
 
+.faq-mobile.section-title{
+    display: none;
+}
+
 .section-title-desc{
     margin-bottom: 20px;
 }
 
 .section-title-tab{
-    font-size: 11px;
+    font-size: 12px;
     text-transform: uppercase;
     margin-bottom: 20px;
 }
@@ -31,7 +35,7 @@
 }
 
 .tab-head-container a{
-    color: #80A3EA;
+    color: #4370CC;
     cursor: pointer;
     display: inline-block;
 }
@@ -41,7 +45,7 @@
     font-size: 13px;
     border: solid #e2e2e2 1px;
     border-bottom: solid #fff 1px;
-    padding: 5px 10px;
+    padding: 9px 15px;
     margin-bottom: -1px;
     background: #fff;
     border-radius: 4px 4px 0px 0px;
@@ -80,7 +84,6 @@
     border-top: 3px solid #DDD;
     border-bottom: 1px solid #e2e2e2;
     color: #565656;
-    font-weight: bold;
 }
 
 .toggled.accordion-head .fa:before{
@@ -94,23 +97,81 @@
     display: none;
 }
 
+.tab-title-mobile{
+    display: none;
+}
+
 ol{
     list-style-type: decimal;
+}
+
+
+@media (max-width: 1200px){
+    .tab-head-container li{
+        margin-right: 15px;
+    }
+
+    .section-title-tab{
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 1000px){
+    .tab-title{
+        display: none;
+    }
+
+    .tab-title-mobile{
+        display: inline-block;
+        font-size: 12px;
+    }
+
+    .tab-head-container li{
+        margin-right: 11px;
+    }
 }
 
 @media (max-width: 400px){
     .static-container{
         padding: 20px 10px;
     }
-}
 
-
-@media (max-width: 1200px){
-    .tab-head-container{
-        width: 1000px;
+    .tab-title-mobile{
+        display: inline-block;
+        font-size: 10px;
     }
 
-    .tab-head-wrapper{
-        overflow-x: scroll;
+    .tab-head-container li {
+      margin-right: 10px;
+    }
+
+    .tab-head-container a.active{
+        padding: 5px 9px;
+    }
+
+    .tab-head-container{
+        display: none;
+    }
+
+    .tab-container{
+        display: block !important;
+    }
+
+    .faq-mobile.section-title{
+        display: block !important;
+        margin-top: 20px;
+    }
+
+    .faq-mobile.section-title.first{
+        margin-top: 0px;
+    }
+
+    .accordion-head{
+        padding: 10px 5px;
+        font-size: 12px;
+    }
+
+    .accordion-body{
+        padding: 7px 10px;
     }
 }
