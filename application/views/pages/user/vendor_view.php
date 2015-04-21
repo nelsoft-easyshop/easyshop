@@ -245,7 +245,6 @@
     <script src='/assets/js/src/vendor/jquery.Jcrop.min.js' type='text/javascript'></script>
     <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.scrollTo.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/chosen.jquery.min.js" type="text/javascript"></script>
     <script src="/assets/js/src/easyshop.simplePagination.js"></script>
     <script src='/assets/js/src/vendorpage_new.js?ver=<?=ES_FILE_VERSION?>' type="text/javascript"></script>
 <?php else: ?>

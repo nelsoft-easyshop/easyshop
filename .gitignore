@@ -53,6 +53,8 @@ application/logs/*
 /node_modules/
 /web/assets/js/min
 /web/assets/css/min-easyshop.*
+/web/assets/css/vendor/bower_components
+/web/assets/js/src/vendor/bower_components
 
 /sphinx/data/products/*
 !/sphinx/data/products/*.md

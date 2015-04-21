@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
     <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
     <link rel="stylesheet" type="text/css" href='/assets/css/product_upload_tutorial.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
-    <link rel="stylesheet" type="text/css" href="/assets/css/chosen.min.css"  media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/vendor/bower_components/chosen.min.css"  media="screen"/>
 <?php else: ?>
     <link type="text/css" href='/assets/css/min-easyshop.upload-step3.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
@@ -32,7 +32,7 @@
                             <span class="steps_txt">Step 2: Upload Item</span>
                             <span class="span_bg right-arrow-shape"></span>
                         </a>
-                    </li>                   
+                    </li>
                     <li>
                         <span class="span_bg left-arrow-shape ar_active"></span>
                         <span class="steps_txt_active"><span class="f18">Step 3:</span> Shipping Location</span>
@@ -429,7 +429,7 @@
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.jqpagination.min.js'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
-    <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js" ></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/bower_components/chosen.jquery.min.js" ></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.product_upload_step3_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
