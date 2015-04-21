@@ -179,7 +179,7 @@ class ProductManager
      * @param bool $doLockDeduction : If true, locked items will also be deducted from the total availability
      *
      */
-    public function getProductInventory($product, $isVerbose = false, $doLockDeduction = false, $excludeMemberId = 0)
+    public function getProductInventory($product, $isVerbose = false)
     {
         $promoQuantityLimit = $this->promoManager->getPromoQuantityLimit($product);
         $inventoryDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -211,46 +211,22 @@ class ProductManager
                 array_push($data[$inventoryDetail['id_product_item']]['attr_lookuplist_item_id'], $inventoryDetail['attr_lookuplist_item_id']);
                 array_push($data[$inventoryDetail['id_product_item']]['attr_name'], $inventoryDetail['attr_value']);
             }
-
         }
-        
-        $locks = $this->validateProductItemLock($product->getIdProduct(), $excludeMemberId); 
-        if($doLockDeduction){
-            foreach($locks as $lock){
-                if(isset($data[$lock['idProductItem']])){
-                    $data[$lock['idProductItem']]['quantity'] -=  $lock['lock_qty'];
-                    $data[$lock['idProductItem']]['quantity'] = ($data[$lock['idProductItem']]['quantity'] >= 0) ? $data[$lock['idProductItem']]['quantity'] : 0;
-                }
+
+        /**
+         * Reduce lock quantity on original quantity
+         */
+        $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                                     ->getProductItemLockByProductId($product->getIdProduct());
+
+        foreach($productItemLocks as $lock){
+            if(isset($data[$lock['idProductItem']])){
+                $data[$lock['idProductItem']]['quantity'] -=  $lock['lock_qty'];
+                $data[$lock['idProductItem']]['quantity'] = ($data[$lock['idProductItem']]['quantity'] >= 0) ? $data[$lock['idProductItem']]['quantity'] : 0;
             }
         }
 
         return $data;
-    }
-    
-    
-    /**
-     * Checks the productItemLocks that exists for a given product
-     * If lock exceeds its life time, delete it.
-     *
-     * @param integer $productId
-     * @return mixed
-     */
-    public function validateProductItemLock($productId, $excludeMemberId = 0)
-    {
-        $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                                        ->getProductItemLockByProductId($productId, $excludeMemberId);
-        foreach($productItemLocks as $idx => $lock){
-            $elapsedMinutes = round((time() - $lock['timestamp']->getTimestamp())/60);
-            if($elapsedMinutes > $this->lockLifeSpan){
-                $lockEntity =  $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                                        ->find($lock['idItemLock']);
-                $this->em->remove($lockEntity);
-                $this->em->flush();
-                unset($lock[$idx]);
-            }
-        }
-        
-        return $productItemLocks;
     }
 
     /**
