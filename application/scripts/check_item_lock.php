@@ -5,8 +5,6 @@ include_once  __DIR__.'/bootstrap.php';
 $CI =& get_instance();
 $paymentService = $CI->kernel->serviceContainer['payment_service'];
 
-use EasyShop\PaymentGateways\PayPalGateway as PayPalGateway;
-use EasyShop\PaymentGateways\DragonPayGateway as DragonPayGateway;
 use EasyShop\PaymentGateways\PesoPayGateway as PesoPayGateway;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 
@@ -38,12 +36,6 @@ class CheckItemLock
         foreach ($lockCollection as $itemLock) {
             $maxMinute = null;
             switch ($itemLock['payment_method_id']) {
-                case EsPaymentMethod::PAYMENT_PAYPAL:
-                    $maxMinute = PayPalGateway::MAX_LOCK_LIFESPAN;
-                    break;
-                case EsPaymentMethod::PAYMENT_DRAGONPAY:
-                    $maxMinute = DragonPayGateway::MAX_LOCK_LIFESPAN;
-                    break;
                 case EsPaymentMethod::PAYMENT_PESOPAYCC:
                     $maxMinute = PesoPayGateway::MAX_LOCK_LIFESPAN;
                     break;
