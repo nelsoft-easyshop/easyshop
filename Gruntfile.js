@@ -15,7 +15,8 @@ module.exports = function (grunt) {
                     // migrating files
                     'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js',
                     'js/src/vendor/bower_components/ion.rangeSlider.js': 'ionrangeslider/js/ion.rangeSlider.js',
-                    'js/src/vendor/bower_components/jquery.Jcrop.js': 'Jcrop/js/jquery.Jcrop.js'
+                    'js/src/vendor/bower_components/jquery.Jcrop.js': 'Jcrop/js/jquery.Jcrop.js',
+                    'js/src/vendor/bower_components/jquery.auto-complete.js': 'jquery-auto-complete/jquery.auto-complete.js'
                 }
             },
             stylesheets: {
@@ -221,11 +222,11 @@ module.exports = function (grunt) {
                 files: {
                     'web/assets/js/min/easyshop.header_primary.js': 
                             ['web/assets/js/src/vendor/jquery.scrollUp.min.js',
-                             'web/assets/js/src/vendor/jquery.auto-complete.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.auto-complete.js',
                              'web/assets/js/src/header.js'],
                     'web/assets/js/min/easyshop.header_alt.js': 
                             ['web/assets/js/src/vendor/bootstrap.js',
-                             'web/assets/js/src/vendor/jquery.auto-complete.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.auto-complete.js',
                              'web/assets/js/src/header_alt.js'],
 
                     'web/assets/js/min/easyshop.vendor_banner.js':
