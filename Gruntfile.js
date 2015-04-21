@@ -14,7 +14,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/jquery.cropper.js': 'cropper/dist/cropper.js',
                     // migrating files
                     'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js',
-                    'js/src/vendor/bower_components/ion.rangeSlider.js': 'ionrangeslider/js/ion.rangeSlider.js'
+                    'js/src/vendor/bower_components/ion.rangeSlider.js': 'ionrangeslider/js/ion.rangeSlider.js',
+                    'js/src/vendor/bower_components/jquery.Jcrop.js': 'Jcrop/js/jquery.Jcrop.js'
                 }
             },
             stylesheets: {
@@ -24,7 +25,8 @@ module.exports = function (grunt) {
                     // migrating files
                     'css/vendor/bower_components/chosen.min.css': 'chosen/chosen.min.css',
                     'css/vendor/bower_components/ion.rangeSlider.css': 'ionrangeslider/css/ion.rangeSlider.css',
-                    'css/vendor/bower_components/ion.rangeSlider.skinFlat.css': 'ionrangeslider/css/ion.rangeSlider.skinFlat.css'
+                    'css/vendor/bower_components/ion.rangeSlider.skinFlat.css': 'ionrangeslider/css/ion.rangeSlider.skinFlat.css',
+                    'css/vendor/bower_components/jquery.Jcrop.css': 'Jcrop/css/jquery.Jcrop.css'
                 }
             },
         },
@@ -64,7 +66,7 @@ module.exports = function (grunt) {
                          'web/assets/css/footer-css.css'],
                     'web/assets/css/min-easyshop.vendor-banner.css':
                         ['web/assets/css/vendor/bower_components/chosen.min.css', 
-                        'web/assets/css/jquery.Jcrop.min.css'],
+                         'web/assets/css/vendor/bower_components/jquery.Jcrop.css'],
                     'web/assets/css/min-easyshop.home-primary.css':
                         ['web/assets/css/jquery.bxslider2.css',
                         'web/assets/css/new-homepage.css', 
@@ -230,7 +232,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery.easing.min.js',
                              'web/assets/js/src/vendor/jquery.scrollUp.min.js',
                              'web/assets/js/src/vendor/bower_components/chosen.jquery.min.js',
-                             'web/assets/js/src/vendor/jquery.Jcrop.min.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.Jcrop.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/tinymce/plugins/jbimages/js/jquery.form.js',
