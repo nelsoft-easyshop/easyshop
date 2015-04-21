@@ -232,8 +232,6 @@ class DragonPayGateway extends AbstractGateway
         }
         else{ 
             $orderId = $return['v_order_id'];
-            $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($orderId, $toBeLocked); 
-
             $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
                               ->find($orderId);
             $deductAmount = "0.00";
@@ -321,29 +319,23 @@ class DragonPayGateway extends AbstractGateway
             $toBeLocked = $prepareData['toBeLocked'];
 
             if(strtolower($status) === PaymentService::STATUS_PENDING || strtolower($status) === PaymentService::STATUS_SUCCESS){
-                if((int) $postBackCount === 0){
-                    foreach ($itemList as $key => $value) {
-                        $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                        $this->paymentService->productManager->updateSoldoutStatus($value['id']);
-                    }
-                }
                 $orderStatus = strtolower($status) === PaymentService::STATUS_SUCCESS ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
                 $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                     ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnId,$paymentType,$orderStatus);
+                                     ->updatePaymentIfComplete($orderId, json_encode($itemList), $txnId, $paymentType, $orderStatus);
             
                 if((int) $postBackCount === 0){
+                    foreach ($itemList as $value) {
+                        $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'], $value['product_itemID'], $value['qty']);
+                        $this->paymentService->productManager->updateSoldoutStatus($value['id']);
+                    }
                     $this->paymentService->sendPaymentNotification($orderId, true, false);
                 }
 
                 if(strtolower($status) === PaymentService::STATUS_SUCCESS){
-                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                             ->deleteLockItem($orderId, $toBeLocked);
                     $this->paymentService->sendPaymentNotification($orderId, false, true);
                 }
             }
             elseif(strtolower($status) === PaymentService::STATUS_FAIL){
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($orderId, $toBeLocked);
                 $orderHistory = [
                     'order_id' => $orderId,
                     'order_status' => EsOrderStatus::STATUS_VOID,
