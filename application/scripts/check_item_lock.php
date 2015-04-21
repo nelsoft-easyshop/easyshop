@@ -111,9 +111,9 @@ class CheckItemLock
             $deleteLockQuery = "
                 DELETE FROM `es_product_item_lock` WHERE `id_item_lock` = :lock_id
             ";
-            // $deleteLock = self::getConnection()->prepare($deleteLockQuery);
-            // $deleteLock->bindValue("lock_id", $lockId);
-            // $deleteLock->execute();
+            $deleteLock = self::getConnection()->prepare($deleteLockQuery);
+            $deleteLock->bindValue("lock_id", $lockId);
+            $deleteLock->execute();
 
             return true;
         }

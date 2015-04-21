@@ -28,7 +28,7 @@ class PesoPayGateway extends AbstractGateway
 
     const SUCCESS_CODE = 0;
 
-    const MAX_LOCK_LIFESPAN = 1;
+    const MAX_LOCK_LIFESPAN = 10;
 
     /**
      * Constructor
