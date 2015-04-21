@@ -1340,12 +1340,9 @@ class Payment extends MY_Controller
             }
 
             // Validate Cart Data
-            $cartData = json_decode($order->getDataResponse(), true);
-            $validatedCart = [
-                'itemArray' => $cartData,
-                'itemCount' => count($cartData),
-            ];
-            $this->session->set_userdata('choosen_items', $cartData);
+            $userCart = json_decode($order->getDataResponse(), true);
+            $validatedCart = $paymentService->validateCartData(['choosen_items' => $userCart]);
+            $this->session->set_userdata('choosen_items', $validatedCart['itemArray']);
             $response = $paymentService->postBack($paymentMethods, $validatedCart, $memberId, null);
             $message = $response['message'];
             $status = $response['status'];
