@@ -510,17 +510,30 @@ class PaymentService
      */
     public function revertTransactionPoint($orderId)
     {
-        $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                          ->find($orderId);
-
-        if($order){
-            $points = $this->getTransactionPoints($order);
-            $memberId = $order->getBuyer()->getIdMember();
-            if((int)$points > 0){
+        $orderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                 ->findBy([
+                                     'order' => $orderId
+                                 ]);
+        if ($orderProduct) {
+            $points = 0;
+            foreach ($orderProduct as $product) {
+                $orderPoints = $this->em->getRepository('EasyShop\Entities\EsOrderPoints')
+                                        ->findOneBy([
+                                            'orderProduct' => $product
+                                        ]);
+                if ($orderPoints 
+                    && (bool)$orderPoints->getIsRevert() === false) {
+                    $points = bcadd($orderPoints->getPoints(), $points, 4);
+                    $orderPoints->setIsRevert(true);
+                    $this->em->flush();
+                }
+            }
+            $memberId = $orderProduct[0]->getOrder()->getBuyer()->getIdMember();
+            if (bccomp($points, 0, 4) === 1) {
                 $this->pointTracker->addUserPoint(
                     $memberId,
-                    EsPointType::TYPE_REVERT, 
-                    false, 
+                    EsPointType::TYPE_REVERT,
+                    false,
                     $points
                 );
             }

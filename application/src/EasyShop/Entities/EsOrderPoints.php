@@ -45,6 +45,12 @@ class EsOrderPoints
      */
     private $unitPoints;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_revert", type="boolean", nullable=true)
+     */
+    private $isRevert = '0';
 
     /**
      * Get idOrderPoints
@@ -123,5 +129,28 @@ class EsOrderPoints
     public function getUnitPoints()
     {
         return $this->unitPoints;
+    }
+
+    /**
+     * Set isRevert
+     *
+     * @param boolean $isRevert
+     * @return EsOrderPoints
+     */
+    public function setIsRevert($isRevert)
+    {
+        $this->isRevert = $isRevert;
+
+        return $this;
+    }
+
+    /**
+     * Get isRevert
+     *
+     * @return boolean 
+     */
+    public function getIsRevert()
+    {
+        return $this->isRevert;
     }
 }
