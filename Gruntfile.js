@@ -431,7 +431,6 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.user_vendor_view.js':
                             ['web/assets/js/src/vendor/bootstrap.js',
-                             'web/assets/js/src/vendor/jquery.Jcrop.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.scrollTo.js',
                              'web/assets/js/src/easyshop.simplePagination.js',
