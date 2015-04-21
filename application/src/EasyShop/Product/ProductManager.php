@@ -623,35 +623,34 @@ class ProductManager
      */
     public function getProductCombinationAvailable($productId)
     {
-
+        $product = $this->getProductDetails($productId);
+        $productInventoryDetail = $this->getProductInventory($product);
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $productInventory = $esProductRepo->getProductInventoryDetail($productId);
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
         $productCombinationAvailable = [];
-        foreach ($productInventory as $value) {
-            if(!array_key_exists($value['id_product_item'],$productCombinationAvailable)){
-
-                $locationArray = [];
-                foreach ($shippingDetails as $shipKey => $shipValue) {
-                    if((int)$shipValue['product_item_id'] === (int)$value['id_product_item']){
-                        $locationArray[] = [
-                                'location_id' => $shipValue['location_id'],
-                                'price' => $shipValue['price'],
-                            ];
-                    }
+        foreach ($productInventoryDetail as $itemId => $detail) {
+            unset($detail['attr_lookuplist_item_id']);
+            unset($detail['attr_name']);
+            unset($detail['is_default']);
+            $productAttributesId = [];
+            foreach ($detail['product_attribute_ids'] as $attributes) {
+                $productAttributesId[] = $attributes['id'];
+            }
+            $locationArray = [];
+            foreach ($shippingDetails as $shipKey => $shipValue) {
+                if((int)$shipValue['product_item_id'] === (int)$itemId){
+                    $locationArray[] = [
+                            'location_id' => $shipValue['location_id'],
+                            'price' => $shipValue['price'],
+                        ];
                 }
-
-                $productCombinationAvailable[$value['id_product_item']] = [
-                    'quantity' => $value['quantity'],
-                    'product_attribute_ids' => [$value['product_attr_id']],
-                    'location' => $locationArray,
-                ];
             }
-            else{
-                $productCombinationAvailable[$value['id_product_item']]['product_attribute_ids'][] = $value['product_attr_id'];
-            }
+            $detail['product_attribute_ids'] = $productAttributesId;
+            $detail['location'] = $locationArray;
+            $productCombinationAvailable[$itemId] = $detail;
         }
 
         $productAttributeDetails = $esProductRepo->getProductAttributeDetailByName($productId);
@@ -666,8 +665,7 @@ class ProductManager
 
         $noMoreSelection = "";
 
-        if((count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0) 
-            || (count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes))){
+        if(count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes)){
             $noMoreSelection = $productInventory[0]['id_product_item'];
         }
 
