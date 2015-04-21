@@ -68,8 +68,6 @@ class PesoPayGateway extends AbstractGateway
         // paymentType
         $paymentType = EsPaymentMethod::PAYMENT_PESOPAYCC;
         $this->setParameter('paymentType', $paymentType);
-        $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                 ->releaseAllLock($memberId);
         $productCount = count($validatedCart['itemArray']); 
 
         if($validatedCart['itemCount'] !== $productCount){

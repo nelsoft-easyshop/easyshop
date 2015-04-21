@@ -160,9 +160,6 @@ class DragonPayGateway extends AbstractGateway
         // paymentType
         $paymentType = EsPaymentMethod::PAYMENT_DRAGONPAY;
         $this->setParameter('paymentType', $paymentType);
-
-        $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->releaseAllLock($memberId);
-
         $productCount = count($validatedCart['itemArray']); 
 
         if($validatedCart['itemCount'] !== $productCount){
@@ -325,12 +322,10 @@ class DragonPayGateway extends AbstractGateway
 
             if(strtolower($status) === PaymentService::STATUS_PENDING || strtolower($status) === PaymentService::STATUS_SUCCESS){
                 if((int) $postBackCount === 0){
-                    foreach ($itemList as $key => $value) {     
+                    foreach ($itemList as $key => $value) {
                         $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
                         $this->paymentService->productManager->updateSoldoutStatus($value['id']);
                     }
-                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                             ->deleteLockItem($orderId, $toBeLocked); 
                 }
                 $orderStatus = strtolower($status) === PaymentService::STATUS_SUCCESS ? EsOrderStatus::STATUS_PAID : EsOrderStatus::STATUS_DRAFT; 
                 $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
@@ -341,6 +336,8 @@ class DragonPayGateway extends AbstractGateway
                 }
 
                 if(strtolower($status) === PaymentService::STATUS_SUCCESS){
+                    $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                             ->deleteLockItem($orderId, $toBeLocked);
                     $this->paymentService->sendPaymentNotification($orderId, false, true);
                 }
             }
