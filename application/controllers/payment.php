@@ -1255,7 +1255,6 @@ class Payment extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
         $paymentMethodString = (string)reset($paymentMethods)['method'];
-        $pointsAllocated = "0.00";
 
         $isPaymentAcceptPoints = $paymentService->isPaymentMethodAcceptPoints($paymentMethodString);
         if(!$isPaymentAcceptPoints && array_key_exists("PointGateway", $paymentMethods)){
