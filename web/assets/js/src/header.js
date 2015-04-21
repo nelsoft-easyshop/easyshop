@@ -98,26 +98,6 @@
     });
     
 
-    // Sub menu show/hide with hoverIntent plugin
-    if ($.fn.hoverIntent) {
-        $('ul.menu').hoverIntent(function() {
-            $(this).children('ul, .mega-menu').fadeIn(100);
-
-        }, function() {
-            $(this).children('ul, .mega-menu').fadeOut(50);
-        },
-        'li');
-
-    } else {
-
-        $('ul.menu').find('li').mouseover(function() {
-            $(this).children('ul, .mega-menu').css('display','block');
-
-        }).mouseout(function() {
-            $(this).children('ul, .mega-menu').css('display','none');
-        });
-    }
-
 /* =========================================
 ---- Sticky Menu
 =========================================== */
