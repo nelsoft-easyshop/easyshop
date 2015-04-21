@@ -1,5 +1,5 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <link rel="stylesheet" href="/assets/css/chosen.min.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="/assets/css/vendor/bower_components/chosen.min.css" type="text/css" media="screen"/>
     <link type="text/css" href="/assets/css/jquery.Jcrop.min.css" rel="stylesheet" media='screen'/> 
 <?php else: ?>
     <link type="text/css" href='/assets/css/min-easyshop.vendor-banner.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
@@ -207,7 +207,7 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
-    <script type="text/javascript" src="/assets/js/src/vendor/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/bower_components/chosen.jquery.min.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.Jcrop.min.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
