@@ -87,8 +87,8 @@ $config = [
                         'lowest_amount' => 50.00
                     ],
                     'Easydeal' => [
-                        'return_url' => 'https://www.easydeal.ph/payment/dragonPayReturn',
-                        'postback_url' => 'https://www.easydeal.ph/payment/dragonPayPostBack'
+                        'return_url' => 'https://www.easydeal.ph/payment/return/dragonpay',
+                        'postback_url' => 'https://www.easydeal.ph/payment/postback/dragonpay'
                     ]
                 ],
                 'paypal' => [
