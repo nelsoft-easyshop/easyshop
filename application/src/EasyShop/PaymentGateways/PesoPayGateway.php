@@ -16,7 +16,7 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
  * Params needed:
  *      method:"PesoPayCreditCard"
  */
-class PesoPayGateWay extends AbstractGateway
+class PesoPayGateway extends AbstractGateway
 {
     private $merchantId;
     private $redirectUrl;
@@ -27,6 +27,8 @@ class PesoPayGateWay extends AbstractGateway
     private $currencyCode;
 
     const SUCCESS_CODE = 0;
+
+    const MAX_LOCK_LIFESPAN = 1;
 
     /**
      * Constructor

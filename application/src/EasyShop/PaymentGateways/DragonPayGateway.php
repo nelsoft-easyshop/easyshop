@@ -20,6 +20,7 @@ use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
  */
 class DragonPayGateway extends AbstractGateway
 {
+    const MAX_LOCK_LIFESPAN = 10;
 
     private $merchantId; 
     private $merchantPwd;
