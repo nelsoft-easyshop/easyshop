@@ -5,7 +5,7 @@ $config = [
             'payment_type' => [
                 'dragonpay' => [
                     'Easyshop' => [
-                        'points' => false,
+                        'points' => true,
                         'return_url' => 'http://staging.easyshop.ph/payment/dragonPayReturn',
                         'postback_url' => 'http://staging.easyshop.ph/payment/dragonPayPostBack',
                         'mode' => '7',
@@ -26,7 +26,7 @@ $config = [
                 ],
                 'paypal' => [
                     'Easyshop' => [
-                        'points' => false,
+                        'points' => true,
                         'api_mode' => 'sandbox',
                         'api_username' => 'easyseller_api1.yahoo.com',
                         'api_password' => '1396000698',
@@ -36,7 +36,7 @@ $config = [
                 ],
                 'pesopay' => [
                     'Easyshop' => [
-                        'points' => false,
+                        'points' => true,
                         'api_url' => 'https://test.pesopay.com/b2cDemo/eng/merchant/api/orderApi.jsp',
                         'currency_code' => '608',
                         'payment_type' => 'N',
@@ -62,7 +62,7 @@ $config = [
                 ],
                 'point' => [
                     'Easyshop' => [
-                        'points' => false, 
+                        'points' => true, 
                     ]
                 ],
             ]
@@ -71,7 +71,7 @@ $config = [
             'payment_type' => [
                 'dragonpay' => [
                     'Easyshop' => [
-                        'points' => false,
+                        'points' => true,
                         'return_url' => 'https://www.easyshop.ph/payment/dragonPayReturn',
                         'postback_url' => 'https://www.easyshop.ph/payment/dragonPayPostBack',
                         'mode' => '7',
@@ -93,7 +93,7 @@ $config = [
                 ],
                 'paypal' => [
                     'Easyshop' => [
-                        'points' => false,
+                        'points' => true,
                         'api_mode' => '',
                         'api_username' => 'admin_api1.easyshop.ph',
                         'api_password' => 'GDWFS6D9ACFG45E7',
@@ -103,7 +103,7 @@ $config = [
                 ],
                 'pesopay' => [
                     'Easyshop' => [
-                        'points' => false,
+                        'points' => true,
                         'api_url' => 'https://www.pesopay.com/b2c2/eng/merchant/api/orderApi.jsp',
                         'currency_code' => '608',
                         'payment_type' => 'N',
@@ -129,7 +129,7 @@ $config = [
                 ],
                 'point' => [
                     'Easyshop' => [
-                        'points' => false, 
+                        'points' => true, 
                     ]
                 ],
             ]
