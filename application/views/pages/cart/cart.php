@@ -169,6 +169,7 @@
             <!--Start of trio bottom boxes-->
             <div class="row">
                 <!--Start of points-->
+                <?php if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                 <div class="col-md-7">
                     <div class="transaction-container bg-gray min-height-459">
                         <p class="transaction-container-title">Use Your EasyPoints</p>
@@ -197,6 +198,7 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
                 <!--End of points-->
 
                 <!--Start of summary-->
@@ -236,10 +238,12 @@
                                         </small>
                                     </td>
                                 </tr>
+                                <?php if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                                 <tr class="border-bottom-1">
                                     <td>Points to Deduct</td>
                                     <td>&mdash; &#8369; <span id="summary-points">0</span></td>
                                 </tr>
+                                <?php endif; ?>
                                 <tr>
                                     <td>Total Price</td>
                                     <td>
