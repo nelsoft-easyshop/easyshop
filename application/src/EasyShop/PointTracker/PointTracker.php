@@ -42,9 +42,18 @@ class PointTracker
      *
      * @return boolean
      */
-    public function addUserPoint($userId, $actionId, $percentage = 0, $customPoints = 0)
+    public function addUserPoint($userId, $actionId, $percentage = 0, $customPoints = null)
     {
         if(PointGateway::POINT_ENABLED){
+
+            $pointTypeUpdateDate = [
+                EsPointType::TYPE_REGISTER,
+                EsPointType::TYPE_LOGIN,
+                EsPointType::TYPE_SHARE,
+                EsPointType::TYPE_PURCHASE,
+                EsPointType::TYPE_TRANSACTION_FEEDBACK
+            ];
+
             // Get Point Type object
             $points = $this->em->getRepository('EasyShop\Entities\EsPointType')
                                ->find($actionId);
@@ -65,7 +74,7 @@ class PointTracker
             $userPoint = $this->em->getRepository('EasyShop\Entities\EsPoint')
                                   ->findOneBy(['member' => $userId]);
 
-            if ($points->getId() === EsPointType::TYPE_REVERT) {
+            if ($customPoints !== null) {
                 $addPoints = $customPoints;
             }
             else {
@@ -90,8 +99,9 @@ class PointTracker
             if ($userPoint !== null) {
                 // Update existing user
                 $userPoint->setPoint($userPoint->getPoint() + $addPoints);
-                $userPoint->setExpirationDate(date_create(date("Y-m-d H:i:s", strtotime("+".self::POINT_DAYS_DURATION." days"))));
-
+                if (in_array($points->getId(), $pointTypeUpdateDate)) {
+                    $userPoint->setExpirationDate(date_create(date("Y-m-d H:i:s", strtotime("+".self::POINT_DAYS_DURATION." days"))));
+                }
                 $this->em->flush();
             }
             else {
