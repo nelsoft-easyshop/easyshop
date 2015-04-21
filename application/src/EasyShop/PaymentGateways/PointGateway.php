@@ -23,9 +23,11 @@ class PointGateway extends AbstractGateway
 
     const MIN_AMOUNT_ALLOWED = 1000;
 
+    const POINT_ENABLED = true;
+
     /**
      * Constructor
-     * 
+     *
      */
     public function __construct($em, $request, $pointTracker, $paymentService, $params=[])
     {
