@@ -9,7 +9,7 @@
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
     <script type='text/javascript' src="/assets/js/src/landingpage-responsive-nav.js" ></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery.cookie.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.cookie.js"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/socket.io.js"></script>
     <script type='text/javascript' src="/assets/js/src/nodeClient.js"></script>
     <script type='text/javascript' src="/assets/js/src/universal.js"></script>
