@@ -427,7 +427,6 @@
     <script type="text/javascript" src="/assets/js/src/productUpload_step3.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
-    <script type='text/javascript' src='/assets/js/src/vendor/jquery.jqpagination.min.js'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/bower_components/chosen.jquery.min.js" ></script>
 <?php else: ?>

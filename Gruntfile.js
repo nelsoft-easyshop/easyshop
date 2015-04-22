@@ -297,7 +297,6 @@ module.exports = function (grunt) {
                              'web/assets/js/src/productUpload_step3.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
-                             'web/assets/js/src/vendor/jquery.jqpagination.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/bower_components/chosen.jquery.min.js'],
 
