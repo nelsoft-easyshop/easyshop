@@ -25,7 +25,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.countdown.js': 'jquery.countdown/dist/jquery.countdown.js',
                     'js/src/vendor/bower_components/jquery.ui.touch-punch.js': 'jqueryui-touch-punch/jquery.ui.touch-punch.js',
                     'js/src/vendor/bower_components/socket.io.js': 'socket.io-client/socket.io.js',
-                    'js/src/vendor/bower_components/jquery.dataTables.js': 'DataTables/media/js/jquery.dataTables.js'
+                    'js/src/vendor/bower_components/jquery.dataTables.js': 'DataTables/media/js/jquery.dataTables.js',
+                    'js/src/vendor/bower_components/jquery.validate.js': 'jquery-validation/jquery.validate.js'
                 }
             },
             stylesheets: {
@@ -288,7 +289,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/productUpload_step2.js',
                              'web/assets/tinymce/plugins/jbimages/js/jquery.form.js',
-                             'web/assets/js/src/vendor/jquery.validate.js', 
+                             'web/assets/js/src/vendor/bower_components/jquery.validate.js', 
                              'web/assets/js/src/vendor/jquery.cropper.js'],
 
                     'web/assets/js/min/easyshop.product_upload_step3_view.js':
@@ -332,7 +333,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/bower_components/jquery.ui.touch-punch.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.validate.js',
                              'web/assets/js/src/vendor/bower_components/jquery.raty.js',
                              'web/assets/js/src/vendor/image.js',
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
@@ -349,7 +350,7 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.MemberPageAccountActivate.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.validate.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/accountactivation.js'],
 
@@ -378,12 +379,8 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.user_forgotpass_update_password.js':
                             ['web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.validate.js',
                              'web/assets/js/src/forgotpassword.js'],
-
-                    'web/assets/js/min/easyshop.user_login_view.js':
-                            ['web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/login.js'],
 
                     'web/assets/js/min/easyshop.user_register.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
@@ -391,7 +388,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
-                             'web/assets/js/src/vendor/jquery.validate.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.validate.js',
                              'web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/universal.js',
                              'web/assets/js/src/register.js',
