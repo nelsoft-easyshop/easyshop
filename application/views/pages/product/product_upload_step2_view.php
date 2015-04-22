@@ -1,4 +1,4 @@
-
+''
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <link rel="stylesheet" href="/assets/css/vendor/bower_components/ion.rangeSlider.css" />
     <link rel="stylesheet" href="/assets/css/vendor/bower_components/ion.rangeSlider.skinFlat.css" />
@@ -562,7 +562,7 @@
     <script src="/assets/js/src/vendor/jquery.simplemodal.js" type='text/javascript' ></script>
     <script src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript" ></script> 
     <script src="/assets/tinymce/plugins/jbimages/js/jquery.form.js"></script>
-    <script src="/assets/js/src/vendor/jquery.validate.js" type="text/javascript"></script>
+    <script src="/assets/js/src/vendor/bower_components/jquery.validate.js" type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.product_upload_step2_view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>

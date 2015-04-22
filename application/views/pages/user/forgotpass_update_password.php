@@ -92,7 +92,7 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bower_components/jquery.validate.js'></script>
     <script src="/assets/js/src/forgotpassword.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.user_forgotpass_update_password.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
