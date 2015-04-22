@@ -118,13 +118,21 @@ jQuery(function ($) {
             beforeSend : function () {
                 $("#img-send-request").show();
                 $(".send-request").hide();
+                $(".email-already-merged").hide();
+                $(".email-accepted").hide();
+                $(".email-denied").hide();
             },
-            success : function (data) {
+            success : function (jsonData) {
                 $("#img-send-request").hide();
                 $(".send-request").show();
-                if (data == false) {
-                    $(".email-denied").show();
-                    $(".email-accepted").hide();
+                if (jsonData.isSuccessful === false) {
+                    if(jsonData.isMerged){
+                        $(".email-already-merged").show();
+                    }
+                    else{
+                        $(".email-denied").show();
+                    }
+                    $('.send-request').addClass('disabled');
                 }
                 else {
                     $(".email-sent").html("We've just sent a verification message to " + txtEmail + " account's inbox.<br/> Please login to your email account and follow the instructions provided to complete this process.");
