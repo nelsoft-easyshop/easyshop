@@ -18,6 +18,7 @@
     "jquery.countdown": "2.0.4",
     "jqueryui-touch-punch": "*",
     "DataTables": "1.9.4",
-    "jquery-validation": "1.11.1"
+    "jquery-validation": "1.11.1",
+    "pwstrength-bootstrap": "1.2.2"
   }
 }

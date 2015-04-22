@@ -27,6 +27,7 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.dataTables.js': 'DataTables/media/js/jquery.dataTables.js',
                     'js/src/vendor/bower_components/jquery.validate.js': 'jquery-validation/jquery.validate.js',
                     'js/src/vendor/bower_components/jquery.cropper.js': 'cropper/dist/cropper.js',
+                    'js/src/vendor/bower_components/pwstrength.bootstrap.js': 'pwstrength-bootstrap/dist/pwstrength-bootstrap-1.2.2.js'
                 }
             },
             stylesheets: {
@@ -341,7 +342,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/bower_components/jstree.js',
-                             'web/assets/js/src/vendor/pwstrength.js',
+                             'web/assets/js/src/vendor/bower_components/pwstrength.bootstrap.js',
                              'web/assets/js/src/vendor/bower_components/jquery.nicescroll.js',
                              'web/assets/js/src/dashboard.js',
                              'web/assets/js/src/dashboard-myaccount.js',
@@ -376,7 +377,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/forgotpassword.js'],
 
                     'web/assets/js/min/easyshop.user_forgotpass_update_password.js':
-                            ['web/assets/js/src/vendor/pwstrength.js',
+                            ['web/assets/js/src/vendor/bower_components/pwstrength.bootstrap.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/bower_components/jquery.validate.js',
                              'web/assets/js/src/forgotpassword.js'],
@@ -388,7 +389,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/bower_components/jquery.validate.js',
-                             'web/assets/js/src/vendor/pwstrength.js',
+                             'web/assets/js/src/vendor/bower_components/pwstrength.bootstrap.js',
                              'web/assets/js/src/universal.js',
                              'web/assets/js/src/register.js',
                              'web/assets/js/src/login.js'],
