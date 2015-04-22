@@ -20,7 +20,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.cookie.js': 'jquery-cookie/jquery.cookie.js',
                     'js/src/vendor/bower_components/jquery.nicescroll.js': 'jquery.nicescroll/jquery.nicescroll.js',
                     'js/src/vendor/bower_components/jquery.scrollUp.js': 'scrollup/js/jquery.scrollUp.js',
-                    'js/src/vendor/bower_components/jstree.js': 'jstree/dist/jstree.js'
+                    'js/src/vendor/bower_components/jstree.js': 'jstree/dist/jstree.js',
+                    'js/src/vendor/bower_components/jquery.raty.js': 'raty/lib/jquery.raty.js'
                 }
             },
             stylesheets: {
@@ -339,7 +340,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.ui.touch-punch.min.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
-                             'web/assets/js/src/vendor/jquery.raty.min.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.raty.js',
                              'web/assets/js/src/vendor/image.js',
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery.idTabs.dashboard.home.js',
