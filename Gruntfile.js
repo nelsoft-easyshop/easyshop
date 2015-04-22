@@ -273,8 +273,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/product-page-image-gallery.js'],
 
                     'web/assets/js/min/easyshop.product_promo_category.js':
-                            ['web/assets/js/src/vendor/jquery.plugin.min.js',
-                             'web/assets/js/src/vendor/jquery.countdown.min.js'],
+                            ['web/assets/js/src/vendor/jquery.plugin.min.js'],
 
                     'web/assets/js/min/easyshop.product_search_by_category_final_responsive.js':
                             ['web/assets/js/src/vendor/bootstrap.js',

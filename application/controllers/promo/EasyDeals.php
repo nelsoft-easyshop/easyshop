@@ -34,7 +34,7 @@ class EasyDeals extends MY_Controller
         $parameters['page'] = 0;
         $parameters['limit'] = PHP_INT_MAX;
         $viewData['products'] = $this->serviceContainer['search_product']
-                                  ->getProductBySearch($parameters)['collection'];        
+                                     ->getProductBySearch($parameters)['collection'];        
         $this->load->spark('decorator');    
         $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
         $this->load->view('pages/product/product_promo_category', $viewData);
