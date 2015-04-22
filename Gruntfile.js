@@ -8,7 +8,6 @@ module.exports = function (grunt) {
             },
             scripts: {
                 files: {
-                    'js/src/vendor/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
                     // migrating files
                     'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js',
