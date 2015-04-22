@@ -109,7 +109,12 @@ jQuery(function ($) {
             dataType : "json",
             type: "post",
             url : "/SocialMediaController/sendMergeNotification",
-            data : {csrfname : csrftoken, oauthId:id, oauthProvider:provider, email:txtEmail, error:'username'},
+            data : {
+                csrfname : csrftoken, 
+                oauthId:id, 
+                oauthProvider:provider, 
+                email:txtEmail
+            },
             beforeSend : function () {
                 $("#img-send-request").show();
                 $(".send-request").hide();
