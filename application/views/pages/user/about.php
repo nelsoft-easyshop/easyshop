@@ -185,7 +185,7 @@
 </section>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.easing.min.js"></script>
+<script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.easing.js"></script>
 <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
 <script type="text/javascript" src="/assets/js/src/userabout.js?ver=<?php echo ES_FILE_VERSION?>"></script>
 <?php else: ?>
