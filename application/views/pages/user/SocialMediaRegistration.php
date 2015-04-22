@@ -130,14 +130,6 @@
                                                     
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td class="td-merge-label">
-                                                    Location:
-                                                </td>
-                                                <td class="td-merge-detail" id="available-location">
-                                                    
-                                                </td>
-                                            </tr>
                                         </table>
                                     </div>
                                 </div>
