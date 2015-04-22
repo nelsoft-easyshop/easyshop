@@ -54,13 +54,19 @@ class CheckItemLock
 
         $uniqueOrderId = array_unique($orderIdArray);
         foreach ($uniqueOrderId as $orderId) {
-            self::getPaymentService()->revertTransactionPoint($orderId);
+            $this->paymentService->revertTransactionPoint($orderId);
             echo "Order ID: $orderId POINTS REVERTED \n";
         }
 
         echo "\nSCAN COMPLETED\n\n";
     }
 
+    /**
+     * Check if time expired
+     * @param  string  $date
+     * @param  integer $maxMinute
+     * @return boolean
+     */
     private function isTimeExpired($date, $maxMinute)
     {
         $elapsedMinutes = round((time() - strtotime(date($date))) / 60);
@@ -71,30 +77,30 @@ class CheckItemLock
         return false;
     }
 
-    private function getConnection()
-    {
-        return $this->connection;
-    }
-
-    private function getPaymentService()
-    {
-        return $this->paymentService;
-    }
-
+    /**
+     * Get all data in es_product_item_lock table
+     * @return array
+     */
     private function getAllLock()
     {
         $selectLockQuery = "
-            SELECT a.*,b.payment_method_id 
-            FROM es_product_item_lock a, es_order b 
-            WHERE a.order_id = b.id_order;
+            SELECT es_product_item_lock.*,es_order.payment_method_id
+            FROM es_product_item_lock
+            INNER JOIN es_order
+            ON es_product_item_lock.order_id = es_order.id_order;
         ";
-        $selectLock = self::getConnection()->prepare($selectLockQuery);
+        $selectLock = $this->connection->prepare($selectLockQuery);
         $selectLock->execute();
         $allLock = $selectLock->fetchAll(PDO::FETCH_ASSOC);
 
         return $allLock;
     }
 
+    /**
+     * Delete lock data from es_product_item_lock table
+     * @param  integer $lockId
+     * @return boolean
+     */
     private function deleteLock($lockId)
     {
         $lockId = (int) $lockId;
@@ -103,7 +109,7 @@ class CheckItemLock
             $deleteLockQuery = "
                 DELETE FROM `es_product_item_lock` WHERE `id_item_lock` = :lock_id
             ";
-            $deleteLock = self::getConnection()->prepare($deleteLockQuery);
+            $deleteLock = $this->connection->prepare($deleteLockQuery);
             $deleteLock->bindValue("lock_id", $lockId);
             $deleteLock->execute();
 
@@ -112,13 +118,18 @@ class CheckItemLock
         return false;
     }
 
+    /**
+     * Get lock data from given lock id
+     * @param  integer $lockId
+     * @return array
+     */
     private function getLockData($lockId)
     {
         $lockId = (int) $lockId;
         $selectLockQuery = "
             SELECT * FROM `es_product_item_lock` WHERE `id_item_lock` = :lock_id
         ";
-        $selectLock = self::getConnection()->prepare($selectLockQuery);
+        $selectLock = $this->connection->prepare($selectLockQuery);
         $selectLock->bindValue("lock_id", $lockId);
         $selectLock->execute();
         $lockData = $selectLock->fetch(PDO::FETCH_ASSOC);
