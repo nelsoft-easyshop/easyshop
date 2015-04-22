@@ -28,7 +28,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.validate.js': 'jquery-validation/jquery.validate.js',
                     'js/src/vendor/bower_components/jquery.cropper.js': 'cropper/dist/cropper.js',
                     'js/src/vendor/bower_components/pwstrength.bootstrap.js': 'pwstrength-bootstrap/dist/pwstrength-bootstrap-1.2.2.js',
-                    'js/src/vendor/bower_components/jquery-ui.js': 'jquery-ui/ui/jquery-ui.js'
+                    'js/src/vendor/bower_components/jquery-ui.js': 'jquery-ui/ui/jquery-ui.js',
+                    'js/src/vendor/bower_components/jquery.js': 'jquery/jquery.js'
                 }
             },
             stylesheets: {
@@ -314,7 +315,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/social_media_share.js'],
 
                     'web/assets/js/min/easyshop.christmas-promo.js':
-                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                            ['web/assets/js/src/vendor/bower_components/jquery.js',
                              'web/assets/js/src/plugins.js',
                              'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                              'web/assets/js/src/vendor/jquery.plugin.min.js',
@@ -350,7 +351,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/dashboard-express-edit.js'],
 
                     'web/assets/js/min/easyshop.MemberPageAccountActivate.js':
-                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                            ['web/assets/js/src/vendor/bower_components/jquery.js',
                              'web/assets/js/src/vendor/bower_components/jquery.validate.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/accountactivation.js'],
@@ -384,7 +385,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/forgotpassword.js'],
 
                     'web/assets/js/min/easyshop.user_register.js':
-                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                            ['web/assets/js/src/vendor/bower_components/jquery.js',
                              'web/assets/js/src/vendor/bower_components/jquery.cookie.js',
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/bower_components/jquery-ui.js',
@@ -396,7 +397,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/login.js'],
 
                     'web/assets/js/min/easyshop.user_register_subscribe_success.js':
-                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                            ['web/assets/js/src/vendor/bower_components/jquery.js',
                              'web/assets/js/src/vendor/bower_components/jquery-ui.js',
                              'web/assets/js/src/landingpage-bootstrap.min.js'],
 
@@ -425,7 +426,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/product-search.js'],
 
                     'web/assets/js/min/easyshop.includes.js':
-                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                            ['web/assets/js/src/vendor/bower_components/jquery.js',
                              'web/assets/js/src/landingpage-responsive-nav.js',
                              'web/assets/js/src/vendor/bower_components/jquery-ui.js',
                              'web/assets/js/src/vendor/bower_components/jquery.cookie.js',
@@ -436,7 +437,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/universal.js'],
 
                     'web/assets/js/min/easyshop.estudyantrepreneur-promo.js':
-                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                        ['web/assets/js/src/vendor/bower_components/jquery.js',
                         'web/assets/js/src/promo/estudyantrepreneur.js',
                         'web/assets/js/src/plugins.js',
                         'web/assets/js/src/vendor/promo/christmas-promo.js'],
@@ -456,18 +457,18 @@ module.exports = function (grunt) {
                          'web/assets/js/src/message-box.js'],
                      
                     'web/assets/js/min/easyshop.how-to.js':
-                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                        ['web/assets/js/src/vendor/bower_components/jquery.js',
                          'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                          'web/assets/js/src/how-to-page-plugins.js',
                          'web/assets/js/src/universal.js',
                          'web/assets/js/src/how-to-page.js'],
                      
                     'web/assets/js/min/easyshop.widget-page.js':
-                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                        ['web/assets/js/src/vendor/bower_components/jquery.js',
                          'web/assets/js/src/widget.js'],
                      
                     'web/assets/js/min/easyshop.widget-selector.js':
-                        ['web/assets/js/src/vendor/jquery-1.9.1.js',
+                        ['web/assets/js/src/vendor/bower_components/jquery.js',
                          'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                          'web/assets/js/src/how-to-page-plugins.js',
                          'web/assets/js/src/how-to-page.js',
