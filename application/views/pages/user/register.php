@@ -496,7 +496,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery.cookie.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.cookie.js"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
