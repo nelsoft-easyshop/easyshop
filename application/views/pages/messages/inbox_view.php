@@ -1,4 +1,3 @@
-<script type="text/javascript" src="/assets/js/src/vendor/jquery.dataTables.min.js"></script>
 
 <section class="bg-cl-fff">
     <div class="container inbox-view-content">
@@ -92,6 +91,8 @@
 
     <textarea id="userDataContainer" style="display:none"></textarea>
 </section>
+
+<script src="/assets/js/src/vendor/bower_components/jquery.dataTables.js"></script>
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/messaging.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
