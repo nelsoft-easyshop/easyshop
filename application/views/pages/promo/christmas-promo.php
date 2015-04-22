@@ -201,7 +201,7 @@
             <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-            <script src="/assets/js/src/vendor/jquery.hilios.countdown.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/bower_components/jquery.countdown.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/promo/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <?php else: ?>
             <script src="/assets/js/min/easyshop.christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
