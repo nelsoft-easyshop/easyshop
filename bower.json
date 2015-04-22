@@ -16,6 +16,7 @@
     "raty": "2.5.2",
     "jcarousel": "0.3.0",
     "jquery.countdown": "2.0.4",
-    "jqueryui-touch-punch": "*"
+    "jqueryui-touch-punch": "*",
+    "DataTables": "1.9.4"
   }
 }

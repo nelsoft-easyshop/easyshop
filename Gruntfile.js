@@ -25,6 +25,7 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.countdown.js': 'jquery.countdown/dist/jquery.countdown.js',
                     'js/src/vendor/bower_components/jquery.ui.touch-punch.js': 'jqueryui-touch-punch/jquery.ui.touch-punch.js',
                     'js/src/vendor/bower_components/socket.io.js': 'socket.io-client/socket.io.js',
+                    'js/src/vendor/bower_components/jquery.dataTables.js': 'DataTables/media/js/jquery.dataTables.js'
                 }
             },
             stylesheets: {
