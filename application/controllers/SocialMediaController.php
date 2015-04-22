@@ -373,15 +373,21 @@ class SocialMediaController extends MY_Controller
      */
     public function checkEmailAvailability()
     {
-        $result = false;
-        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
-                                      ->findOneBy(['email' => $this->input->post('email')]);
-        if ($member) {
-            $result = [
-                'email' => $member->getEmail(),
-                'location' => '',
-                'image' =>  $this->userManager->getUserImage($member->getIdMember())
-            ];
+        if($this->input->post('email')){
+            $result = false;
+            $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+                                          ->findOneBy([
+                                                'email' => $this->input->post('email')
+                                           ]);
+            if ($member) { 
+                $isMerge = $this->entityManager->getRepository('EasyShop\Entities\EsMemberMerge')
+                                               ->isMemberMerged($member->getIdMember());
+                $result = [
+                    'email' => $member->getEmail(),
+                    'image' =>  $this->userManager->getUserImage($member->getIdMember()),
+                    'isMerged' => $isMerge,
+                ];
+            }
         }
         echo json_encode($result);
     }

@@ -94,6 +94,10 @@ jQuery(function ($) {
     });
 
     $('.send-request').on('click', function (e) {
+        var $this = $(this); 
+        if($this.hasClass('disabled')){
+            return false;
+        }
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var txtEmail = $("#txt-email").val().trim();
         if (txtEmail == "") {
@@ -145,26 +149,37 @@ jQuery(function ($) {
             dataType : "json",
             type: "post",
             url : "/SocialMediaController/checkEmailAvailability",
-            data : {csrfname : csrftoken, email:txtEmail},
+            data : {
+                csrfname : csrftoken, 
+                email:txtEmail
+            },
             beforeSend : function () {
                 $("#img-check-availability").show();
                 $("#check-availability").hide();
+                $(".email-already-merged").hide();
+                $(".email-accepted").hide();
+                $(".email-denied").hide();
+                $('.send-request').addClass('disabled');
             },
-            success : function (data) {
+            success : function (jsonData) {
                 $("#available-result").hide();
                 $("#img-check-availability").hide();
                 $("#check-availability").show();
-                if (data == false) {
+                if (jsonData == false) {
                     $(".email-denied").show();
-                    $(".email-accepted").hide();
                 }
-                else {
-                    $(".email-denied").hide();
-                    $(".email-accepted").show();
-                    $("#available-result").show();
-                    $("#available-image").attr('src',data.image);
-                    $("#available-email").html(data.email);
-                    $("#available-location").html(data.location);
+                else { 
+                    if(jsonData.isMerged){
+                        $(".email-already-merged").show();
+                    }
+                    else{
+                        $('.send-request').removeClass('disabled');
+                        $(".email-accepted").show();
+                        $("#available-result").show();
+                        $("#available-image").attr('src',jsonData.image);
+                        $("#available-email").html(jsonData.email);
+                        $("#available-location").html(jsonData.location);
+                    }
                 }
             }
         });
