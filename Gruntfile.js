@@ -40,6 +40,8 @@ module.exports = function (grunt) {
                     'css/vendor/bower_components/ion.rangeSlider.skinFlat.css': 'ionrangeslider/css/ion.rangeSlider.skinFlat.css',
                     'css/vendor/bower_components/jquery.Jcrop.css': 'Jcrop/css/jquery.Jcrop.css',
                     'css/vendor/bower_components/jquery.cropper.css': 'cropper/dist/cropper.css',
+                    'css/vendor/bower_components/jquery-ui.css': 'jquery-ui/themes/base/jquery-ui.css',
+                    'css/vendor/bower_components/jquery.ui.theme.css': 'jquery-ui/themes/base/jquery.ui.theme.css'
                 }
             },
         },
@@ -166,7 +168,7 @@ module.exports = function (grunt) {
                         ['web/assets/css/landingpage/bootstrap.css',
                          'web/assets/css/landingpage/bootstrap-responsive.css',
                          'web/assets/css/landingpage/mystyle.css',
-                         'web/assets/css/jquery-ui.css'],
+                         'web/assets/css/vendor/bower_components/jquery-ui.css'],
                     'web/assets/css/min-easyshop.social-media-merge.css':
                         ['web/assets/css/main-style.css',
                          'web/assets/css/new-login.css'],
@@ -175,8 +177,8 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.how-to.css':
                         ['web/assets/css/how-to-page.css'],
                     'web/assets/css/min-easyshop.dashboard-personal-info.css':
-                        ['web/assets/css/jquery-ui.css',
-                         'web/assets/css/jquery-ui.theme.min.css'],
+                        ['web/assets/css/vendor/bower_components/jquery-ui.css',
+                         'web/assets/css/vendor/bower_components/jquery.ui.theme.css'],
                     'web/assets/css/min-easyshop.dashboard-primary.css':
                         ['web/assets/css/contact.css',
                          'web/assets/css/vendor/bower_components/chosen.min.css', 
