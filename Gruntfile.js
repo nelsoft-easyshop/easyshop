@@ -27,7 +27,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.dataTables.js': 'DataTables/media/js/jquery.dataTables.js',
                     'js/src/vendor/bower_components/jquery.validate.js': 'jquery-validation/jquery.validate.js',
                     'js/src/vendor/bower_components/jquery.cropper.js': 'cropper/dist/cropper.js',
-                    'js/src/vendor/bower_components/pwstrength.bootstrap.js': 'pwstrength-bootstrap/dist/pwstrength-bootstrap-1.2.2.js'
+                    'js/src/vendor/bower_components/pwstrength.bootstrap.js': 'pwstrength-bootstrap/dist/pwstrength-bootstrap-1.2.2.js',
+                    'js/src/vendor/bower_components/jquery-ui.js': 'jquery-ui/ui/jquery-ui.js'
                 }
             },
             stylesheets: {
@@ -297,7 +298,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/productUpload_step3.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
-                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/bower_components/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/bower_components/chosen.jquery.min.js'],
 
@@ -330,9 +331,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/advsearch.js'],
 
                     'web/assets/js/min/easyshop.dashboard-primary.js':
-                            ['web/assets/js/src/vendor/jquery-1.9.1.js',
-                             'web/assets/js/src/vendor/jquery-ui.js',
-                             'web/assets/js/src/vendor/bower_components/jquery.ui.touch-punch.js',
+                            ['web/assets/js/src/vendor/bower_components/jquery.ui.touch-punch.js',
                              'web/assets/js/src/vendor/bower_components/jquery.validate.js',
                              'web/assets/js/src/vendor/bower_components/jquery.raty.js',
                              'web/assets/js/src/vendor/image.js',
@@ -386,16 +385,17 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/vendor/bower_components/jquery.cookie.js',
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
-                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/bower_components/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/bower_components/jquery.validate.js',
                              'web/assets/js/src/vendor/bower_components/pwstrength.bootstrap.js',
                              'web/assets/js/src/universal.js',
                              'web/assets/js/src/register.js',
                              'web/assets/js/src/login.js'],
+
                     'web/assets/js/min/easyshop.user_register_subscribe_success.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
-                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/bower_components/jquery-ui.js',
                              'web/assets/js/src/landingpage-bootstrap.min.js'],
 
                     'web/assets/js/min/easyshop.user_vendor_view.js':
@@ -425,7 +425,7 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.includes.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/landingpage-responsive-nav.js',
-                             'web/assets/js/src/vendor/jquery-ui.js',
+                             'web/assets/js/src/vendor/bower_components/jquery-ui.js',
                              'web/assets/js/src/vendor/bower_components/jquery.cookie.js',
                              'web/assets/js/src/lib/websocket/client.js',
                              'web/assets/js/src/lib/eventdispatcher.js',
