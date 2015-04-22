@@ -23,7 +23,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jstree.js': 'jstree/dist/jstree.js',
                     'js/src/vendor/bower_components/jquery.raty.js': 'raty/lib/jquery.raty.js',
                     'js/src/vendor/bower_components/jquery.jcarousel.js': 'jcarousel/dist/jquery.jcarousel.js',
-                    'js/src/vendor/bower_components/jquery.countdown.js': 'jquery.countdown/dist/jquery.countdown.js'
+                    'js/src/vendor/bower_components/jquery.countdown.js': 'jquery.countdown/dist/jquery.countdown.js',
+                    'js/src/vendor/bower_components/jquery.ui.touch-punch.js': 'jqueryui-touch-punch/jquery.ui.touch-punch.js'
                 }
             },
             stylesheets: {
@@ -329,7 +330,7 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.dashboard-primary.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
-                             'web/assets/js/src/vendor/jquery.ui.touch-punch.min.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.ui.touch-punch.js',
                              'web/assets/js/src/vendor/jquery.validate.js',
                              'web/assets/js/src/vendor/bower_components/jquery.raty.js',
                              'web/assets/js/src/vendor/image.js',
