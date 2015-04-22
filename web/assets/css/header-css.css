@@ -269,7 +269,10 @@ header {
 #main-nav-container #main-nav .menu li a {
     display: block;
     color: #494940;
-/*    font: 400 16px/18px "Conv_HelveticaLTStd-Light",Helvetica,Arial;*/
+    -webkit-transition: all 0.24s ease-in-out;
+    -moz-transition:    all 0.24s ease-in-out;
+    -o-transition:      all 0.24s ease-in-out;
+     transition:        all 0.24s ease-in-out;
 }
 
 #main-nav-container #main-nav > .menu > li > a {
@@ -282,9 +285,14 @@ header {
     min-height: 347px;
 }
 
+#main-nav-container #main-nav .menu li:hover .nav-2nd-level {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
 .nav-2nd-level,
 .nav-3rd-level {
-    display:none;
     position:absolute;
     min-width:210px;
     z-index:999;
@@ -292,6 +300,10 @@ header {
     background:#fafafa;
     box-shadow:0 3px 4px rgba(0,0,0, 0.25);
     -webkit-box-shadow:0 3px 4px rgba(0,0,0, 0.25);
+    -webkit-transition: all 0.24s ease-in-out;
+    -moz-transition:    all 0.24s ease-in-out;
+    -o-transition:      all 0.24s ease-in-out;
+     transition:        all 0.24s ease-in-out;
 }
 
 .nav-2nd-level {
@@ -487,8 +499,13 @@ header {
     font-size: 11px;
 }
 
+#main-nav-container #main-nav .menu li:hover .mega-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
 #main-nav-container #main-nav .menu li .mega-menu {
-    display:none;
     position: absolute;
     top:100%;
     left:0;
@@ -498,11 +515,15 @@ header {
     background:#fafafa;
     box-shadow:0 3px 4px rgba(0,0,0, 0.25);
     -webkit-box-shadow:0 3px 4px rgba(0,0,0, 0.25);
+    -webkit-transition: all 0.24s ease-in-out;
+    -moz-transition:    all 0.24s ease-in-out;
+    -o-transition:      all 0.24s ease-in-out;
+     transition:        all 0.24s ease-in-out;
 } 
 
 #main-nav-container #main-nav .menu li.drop-category .mega-menu-title {
-    text-align: left;
     padding-left: 18%;
+    text-align: left;
 }
 
 #main-nav-container #main-nav .menu li .cat-sub-list li {
@@ -1044,6 +1065,13 @@ header {
 }
 
 @media (min-width: 991px) {
+    .nav-2nd-level,
+    .nav-3rd-level,
+    #main-nav-container #main-nav .menu li .mega-menu {
+        opacity: 0;
+        visibility: hidden;
+    }
+
     .search-container {
         width: 50%;
     }
