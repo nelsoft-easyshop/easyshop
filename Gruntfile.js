@@ -17,7 +17,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/ion.rangeSlider.js': 'ionrangeslider/js/ion.rangeSlider.js',
                     'js/src/vendor/bower_components/jquery.Jcrop.js': 'Jcrop/js/jquery.Jcrop.js',
                     'js/src/vendor/bower_components/jquery.auto-complete.js': 'jquery-auto-complete/jquery.auto-complete.js',
-                    'js/src/vendor/bower_components/jquery.cookie.js': 'jquery-cookie/jquery.cookie.js'
+                    'js/src/vendor/bower_components/jquery.cookie.js': 'jquery-cookie/jquery.cookie.js',
+                    'js/src/vendor/bower_components/jquery.nicescroll.js': 'jquery.nicescroll/jquery.nicescroll.js'
                 }
             },
             stylesheets: {
@@ -367,7 +368,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/jstree.js',
                              'web/assets/js/src/vendor/pwstrength.js',
-                             'web/assets/js/src/vendor/jquery.nicescroll.min.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.nicescroll.js',
                              'web/assets/js/src/dashboard.js',
                              'web/assets/js/src/dashboard-myaccount.js',
                              'web/assets/js/src/dashboard-express-edit.js'],
