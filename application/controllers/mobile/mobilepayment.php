@@ -124,9 +124,7 @@ class mobilePayment extends MY_Controller
         ];
 
         if(empty($cartData) === false && $canContinue){
-            $validatedCart = $paymentService->validateCartData(['choosen_items' => $validCart],
-                                                               "0.00", 
-                                                               $memberId); 
+            $validatedCart = $paymentService->validateCartData(['choosen_items' => $validCart]); 
             $response = $paymentService->pay($gateWayMethod, $validatedCart, $memberId);
             $isSuccess = strtolower($response['status']) === PaymentService::STATUS_SUCCESS;
             $returnArray = [
@@ -189,9 +187,7 @@ class mobilePayment extends MY_Controller
             $paymentType = $checkoutService->getPaymentTypeByString($postPaymentType);
             $canContinue = $checkoutService->checkoutCanContinue($validatedCart, $paymentType);
             if($canContinue){ 
-                $validatedCart = $paymentService->validateCartData(['choosen_items' => $validatedCart],
-                                                                   "0.00", 
-                                                                   $memberId); 
+                $validatedCart = $paymentService->validateCartData(['choosen_items' => $validatedCart]); 
                 if($postPaymentType === "paypal"){
                     $returnUrl = base_url().'mobile/mobilepayment/paypalReturn'; 
                     $cancelUrl = base_url().'mobile/mobilepayment/paypalCancel';  
@@ -290,9 +286,7 @@ class mobilePayment extends MY_Controller
             $payerId = trim($this->input->post('PayerID'));
             $token = trim($this->input->post('token'));
 
-            $validatedCart = $paymentService->validateCartData(['choosen_items' => $cartData],
-                                                               "0.00", 
-                                                               $memberId);
+            $validatedCart = $paymentService->validateCartData(['choosen_items' => $cartData]);
             $gateWayMethod =  [
                 "PaypalGateway" => [
                     "method" => "PayPal", 

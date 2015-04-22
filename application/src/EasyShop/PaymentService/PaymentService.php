@@ -357,12 +357,10 @@ class PaymentService
      * Validate Cart Data (resetPriceAndQty)
      * 
      * @param mixed  $carts User Session data
-     * @param string $pointsAllocated point allocated
-     * @param bool   $excludeMemberId
      *
      * @return mixed
      */
-    public function validateCartData($carts, $pointsAllocated = "0.00", $excludeMemberId = 0)
+    public function validateCartData($carts)
     {
         $condition = true;
         $itemArray = $carts['choosen_items'];
@@ -380,7 +378,7 @@ class PaymentService
             $this->promoManager->hydratePromoData($productArray);
 
             /** NEW QUANTITY **/
-            $productInventoryDetail = $this->productManager->getProductInventory($productArray, false, $condition, $excludeMemberId);
+            $productInventoryDetail = $this->productManager->getProductInventory($productArray);
             $maxQty = $productInventoryDetail[$itemId]['quantity'];
             $qty = $value['qty'];
             $itemArray[$value['rowid']]['maxqty'] = $maxQty;
