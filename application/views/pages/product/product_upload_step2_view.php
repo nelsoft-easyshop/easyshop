@@ -1,4 +1,3 @@
-''
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <link rel="stylesheet" href="/assets/css/vendor/bower_components/ion.rangeSlider.css" />
     <link rel="stylesheet" href="/assets/css/vendor/bower_components/ion.rangeSlider.skinFlat.css" />
