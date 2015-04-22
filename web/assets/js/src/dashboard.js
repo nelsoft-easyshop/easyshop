@@ -1746,9 +1746,25 @@
 
         feedbackModal.modal({
             onShow: function() {
-                $('.rating1').raty('destroy').raty({scoreName: 'rating1'});
-                $('.rating2').raty('destroy').raty({scoreName: 'rating2'});
-                $('.rating3').raty('destroy').raty({scoreName: 'rating3'});
+                $('.rating1').raty('destroy').raty({
+                    scoreName: 'rating1',
+                    starHalf:"assets/images/star-half.png",
+                    starOff:"assets/images/star-off.png",
+                    starOn:"assets/images/star-on.png"
+
+                });
+                $('.rating2').raty('destroy').raty({
+                    scoreName: 'rating2',
+                    starHalf:"assets/images/star-half.png",
+                    starOff:"assets/images/star-off.png",
+                    starOn:"assets/images/star-on.png"
+                });
+                $('.rating3').raty('destroy').raty({
+                    scoreName: 'rating3',
+                    starHalf:"assets/images/star-half.png",
+                    starOff:"assets/images/star-off.png",
+                    starOn:"assets/images/star-on.png"
+                });
 
                 this.setPosition();
                 var submitbtn = form.find('.feedback-submit');
