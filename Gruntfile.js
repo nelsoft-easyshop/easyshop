@@ -318,11 +318,10 @@ module.exports = function (grunt) {
                     'web/assets/js/min/easyshop.christmas-promo.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/plugins.js',
-                             'web/assets/js/src/promo/christmas-promo.js',
                              'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                              'web/assets/js/src/vendor/jquery.plugin.min.js',
-                             'web/assets/js/src/vendor/jquery.countdown.min.js',
-                             'web/assets/js/src/promo/countdown-sale.js'],
+                             'web/assets/js/src/vendor/jquery.hilios.countdown.js',
+                             'web/assets/js/src/promo/christmas-promo.js'],
 
                     'web/assets/js/min/easyshop.scratch_to_win.js':
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
