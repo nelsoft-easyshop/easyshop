@@ -88,7 +88,7 @@
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
-        <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+        <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery-ui.js"></script>
         <script type='text/javascript' src='/assets/js/src/landingpage-bootstrap.min.js'></script>
     <?php else: ?>
         <script src="/assets/js/min/easyshop.user_register_subscribe_success.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
