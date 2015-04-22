@@ -10,6 +10,7 @@
     "Jcrop": "0.9.12",
     "jquery-auto-complete": "1.0.5",
     "jquery-cookie": "1.4.0",
-    "jquery.nicescroll": "3.6.0"
+    "jquery.nicescroll": "3.6.0",
+    "jquery.easing": "~1.3.1"
   }
 }
