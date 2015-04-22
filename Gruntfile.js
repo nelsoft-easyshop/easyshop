@@ -22,7 +22,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.scrollUp.js': 'scrollup/js/jquery.scrollUp.js',
                     'js/src/vendor/bower_components/jstree.js': 'jstree/dist/jstree.js',
                     'js/src/vendor/bower_components/jquery.raty.js': 'raty/lib/jquery.raty.js',
-                    'js/src/vendor/bower_components/jquery.jcarousel.js': 'jcarousel/dist/jquery.jcarousel.js'
+                    'js/src/vendor/bower_components/jquery.jcarousel.js': 'jcarousel/dist/jquery.jcarousel.js',
+                    'js/src/vendor/bower_components/jquery.countdown.js': 'jquery.countdown/dist/jquery.countdown.js'
                 }
             },
             stylesheets: {
@@ -234,17 +235,17 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.countdown.js':
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
-                             'web/assets/js/src/vendor/jquery.hilios.countdown.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.countdown.js',
                              'web/assets/js/src/promo/countdown-sale.js'],
 
                     'web/assets/js/min/easyshop.fixeddiscount.js':
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
-                             'web/assets/js/src/vendor/jquery.hilios.countdown.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.countdown.js',
                              'web/assets/js/src/promo/fixed-discount.js'],
 
                     'web/assets/js/min/easyshop.genericWithCountdown.js':
                             ['web/assets/js/src/vendor/jquery.plugin.min.js',
-                             'web/assets/js/src/vendor/jquery.hilios.countdown.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.countdown.js',
                              'web/assets/js/src/promo/generic-with-countdown.js'],
 
                     'web/assets/js/min/easyshop.partial_sliderpreview.js':
@@ -311,7 +312,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/plugins.js',
                              'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                              'web/assets/js/src/vendor/jquery.plugin.min.js',
-                             'web/assets/js/src/vendor/jquery.hilios.countdown.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.countdown.js',
                              'web/assets/js/src/promo/christmas-promo.js'],
 
                     'web/assets/js/min/easyshop.scratch_to_win.js':
