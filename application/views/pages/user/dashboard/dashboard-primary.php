@@ -1,5 +1,4 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?> 
-    <link type="text/css" href='/assets/css/vendor/bower_components/jstree.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href='/assets/css/contact.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <link type="text/css" href="/assets/css/vendor/bower_components/chosen.min.css" rel="stylesheet"  media="screen"/> 
     <link type="text/css" href='/assets/css/new-dashboard.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
@@ -7,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-primary.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>
 
-
+<link type="text/css" href='/assets/css/jstree/style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <section class="section-dashboard ">
     <div class="container container-dashboard">
         <div class="row-fluid">

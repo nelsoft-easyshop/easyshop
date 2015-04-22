@@ -31,8 +31,7 @@ module.exports = function (grunt) {
                     'css/vendor/bower_components/chosen.min.css': 'chosen/chosen.min.css',
                     'css/vendor/bower_components/ion.rangeSlider.css': 'ionrangeslider/css/ion.rangeSlider.css',
                     'css/vendor/bower_components/ion.rangeSlider.skinFlat.css': 'ionrangeslider/css/ion.rangeSlider.skinFlat.css',
-                    'css/vendor/bower_components/jquery.Jcrop.css': 'Jcrop/css/jquery.Jcrop.css',
-                    'css/vendor/bower_components/jstree.css': 'jstree/dist/themes/default/style.css'
+                    'css/vendor/bower_components/jquery.Jcrop.css': 'Jcrop/css/jquery.Jcrop.css'
                 }
             },
         },
@@ -180,8 +179,7 @@ module.exports = function (grunt) {
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
                     'web/assets/css/min-easyshop.dashboard-primary.css':
-                        ['web/assets/css/vendor/bower_components/jstree.css',
-                         'web/assets/css/contact.css',
+                        ['web/assets/css/contact.css',
                          'web/assets/css/vendor/bower_components/chosen.min.css', 
                          'web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
