@@ -14,18 +14,36 @@
             <div class=" idTabs">
             <div class="col-sm-3 col-sidebar">
                 <ul class="sidebar-dashboard" >
-                    <a href="#dashboard" class="dash-me selected"><li id="dash"  class="mf-li">Dashboard</li></a>
-                    <a><li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li></a>
-                    <div id="my-store-menu">
+                    <a href="#dashboard" class="dash-me selected">
+                        <li id="dash" class="mf-li">Dashboard</li>
+                    </a>
+
+                    <a>
+                        <li id="my-store-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-store">My Store <i class="icon-control-down toggle-down pull-right"></i></li>
+                    </a>
+                    <div id="my-store-menu" class="dashboard-menu">
                         <ul class="sidebar-submenu">
-                            <a href="#transactions"  class="aaa id-transactions-trigger"><li id="transactions-trigger-li"class="f-li ms-f">Transactions</li></a>
+                            <a href="#transactions"  class="id-transactions-trigger" ><li id="transactions-trigger-li" class="f-li ms-f">Transactions</li></a>
                             <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
                             <a href="#customize-category" id="customize-category-tab"><li class="f-li ms-f">Customize Category</li></a>
                             <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
                         </ul>
                     </div>
-                    <a><li id="my-account-menu-trigger" class="ml-li">My Account <i class="a icon-control-down toggle-down pull-right"></i></li></a>
-                    <div id="my-account-menu">
+   
+                    <a>
+                        <li id="transaction-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-transaction">Transactions<i class="m icon-control-down toggle-down pull-right"></i></li>
+                    </a>
+                    <div id="transaction-menu" class="dashboard-menu">
+                        <ul class="sidebar-submenu">
+                            <a href="#on-going-transaction" class="on-going-transcation-trigger"><li class="f-li">On-going Transaction</li></a>
+                            <a href="#completed-transaction" class="completed-transaction-trigger"><li class="m-li">Completed Transaction</li></a>
+                        </ul>
+                    </div>
+
+                    <a>
+                        <li id="my-account-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-account">My Account <i class="icon-control-down toggle-down pull-right"></i></li>
+                    </a>
+                    <div id="my-account-menu" class="dashboard-menu">
                         <ul class="sidebar-submenu submenu-my-account">
                             <a href="#personal-information" class="personal-info-trigger"><li class="f-li">Personal Information</li></a>
                             <a href="#delivery-address" class="delivery-address-trigger"><li class="m-li">Delivery Address</li></a>
@@ -34,6 +52,7 @@
                             <a href="#account-settings" class="settings-trigger"><li class="f-li f-a">Account Settings</li></a>
                         </ul>
                     </div>
+                   
                 </ul>
                 
                 <div class="easy-point-container">

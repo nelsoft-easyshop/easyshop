@@ -16,10 +16,12 @@
         if(username !== "" || password !== "") {
             $.ajax({
                 type: "post",
-                data: {username:username.val().trim(), 
-                       password:password.val().trim(), 
-                       action:action, 
-                       csrfname : csrftoken},
+                data: {
+                    username:username.val().trim(), 
+                    password:password.val().trim(), 
+                    action:action, 
+                    csrfname : csrftoken 
+                },
                 url: '/memberpage/manageUserProduct',
                 beforeSend: function() {
                     activateButtons.hide()
@@ -247,6 +249,8 @@
     });
     
 
+    $(".easy-point-content").getNiceScroll().hide();
+    
     $( ".payment-account-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
         $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
@@ -273,75 +277,49 @@
     });
     
     $( ".dashboard-home-mobile" ).click(function() {
-         $( ".dash-me" ).trigger( "click" );
-         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".dash-me" ).trigger( "click" );
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".dashboard-home-mobile" ).addClass( "selectedM" );
     });
     
     $( "#dash" ).click(function() {
-        $( "#my-account-menu" ).slideUp();
-        var attr = $("i.m").attr("class");
-        if(attr == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-        }
-        
-        $( "#my-store-menu" ).slideUp();
-        var attr2 = $("i.a").attr("class");
-        if(attr2 == "a icon-control-up toggle-down pull-right"){
-            $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-            $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-            $( ".submenu-my-account" ).css("border-radius", "0px");
-            $( ".f-a" ).css("border-radius", "0px");
-        }
+        $('.dashboard-menu').slideUp();
+        $('.dashboard-menu-trigger i').removeClass('icon-control-up')
+                                     .addClass('icon-control-down');                        
     });
-
-    $( "#my-store-menu-trigger" ).click(function() {
-    $(".easy-point-content").getNiceScroll().hide();
-    $( "#my-account-menu" ).slideUp();
-     var attr4 = $("i.a").attr("class");
-    if(attr4 == "a icon-control-up toggle-down pull-right"){
-            $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-            $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-            $( ".submenu-my-account" ).css("border-radius", "0px");
-            $( ".f-a" ).css("border-radius", "0px");
-        }
-        $( "#my-store-menu" ).slideToggle( "slow", function() {
-            $(".easy-point-content").getNiceScroll().show().resize();
-            var attr = $("i.m").attr("class");
-            if(attr == "m icon-control-down toggle-down pull-right"){
-                $('i.m').removeClass("m icon-control-down toggle-down pull-right").addClass("m icon-control-up toggle-down pull-right");
+    
+    $(".dashboard-menu-trigger").click(function(){
+        var $selectedmenutrigger = $(this);
+        var $selectedmenu = $selectedmenutrigger.closest('a').next('.dashboard-menu');
+        var section = $selectedmenutrigger.data('section');
+        var $easypointcontainer = $(".easy-point-content");
+        $easypointcontainer.getNiceScroll()
+                           .hide();
+        $('.dashboard-menu-trigger[data-section!="'+section+'"]').each(function(){
+            $(this).find('i')
+                   .removeClass('icon-control-up')
+                   .addClass('icon-control-down');
+            $(this).closest('a')
+                   .next('.dashboard-menu')
+                   .slideUp();   
+        });
+        $selectedmenu.slideToggle( "slow", function() {
+            $easypointcontainer.getNiceScroll()
+                               .show()
+                               .resize();
+            var $icon = $selectedmenutrigger.find('i'); 
+            if($icon.hasClass('icon-control-down')){
+                $icon.removeClass('icon-control-down')
+                     .addClass('icon-control-up');
             }
-            else if(attr == "m icon-control-up toggle-down pull-right"){
-                $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
+            else if($icon.hasClass('icon-control-up')){
+                $icon.removeClass('icon-control-up')
+                     .addClass('icon-control-down');
             }
         });
     });
-
-    $( "#my-account-menu-trigger" ).click(function() {
-        $(".easy-point-content").getNiceScroll().hide();
-        $( "#my-store-menu" ).slideUp();
-        var attr3 = $("i.m").attr("class");
-        if(attr3 == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-        }
-            $( "#my-account-menu" ).slideToggle( "slow", function() {
-            $(".easy-point-content").getNiceScroll().show().resize();
-            var attr = $("i.a").attr("class");
-            if(attr == "a icon-control-down toggle-down pull-right"){
-                $('i.a').removeClass("a icon-control-down toggle-down pull-right").addClass("a icon-control-up toggle-down pull-right");
-                $( ".ml-li" ).css("border-radius", "0px");
-                $( ".submenu-my-account" ).css("border-radius", "0px 0px 7px 7px");
-                $( ".f-a" ).css("border-radius", "0px 0px 7px 7px");
-            }
-            else if(attr == "a icon-control-up toggle-down pull-right"){
-                $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-                $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-                $( ".submenu-my-account" ).css("border-radius", "0px");
-                $( ".f-a" ).css("border-radius", "0px");
-            } 
-        });
-    });
+    
 
     $( "#info-item-1" ).click(function() {
         $( "#info-attributes-1" ).slideToggle( "slow", function() {
