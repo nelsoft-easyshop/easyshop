@@ -17,8 +17,6 @@
     <script src="/assets/js/min/easyshop.includes.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
 
-<script type='text/javascript' src="/assets/js/src/vendor/jquery.jcarousel.min.js"></script>
-
 <script type='text/javascript'>
     <?php if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT'])): ?>
         var badIE = true;
