@@ -13,6 +13,7 @@
     "jquery.nicescroll": "3.6.0",
     "scrollup": "2.1.1",
     "jstree": "3.0.9",
-    "raty": "2.5.2"
+    "raty": "2.5.2",
+    "jcarousel": "0.3.0"
   }
 }
