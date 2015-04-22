@@ -15,6 +15,7 @@
     "jstree": "3.0.9",
     "raty": "2.5.2",
     "jcarousel": "0.3.0",
-    "jquery.countdown": "2.0.4"
+    "jquery.countdown": "2.0.4",
+    "jqueryui-touch-punch": "*"
   }
 }
