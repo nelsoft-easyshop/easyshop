@@ -8,7 +8,6 @@ module.exports = function (grunt) {
             },
             scripts: {
                 files: {
-                    'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
                     // migrating files
                     'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js',
                     'js/src/vendor/bower_components/ion.rangeSlider.js': 'ionrangeslider/js/ion.rangeSlider.js',
@@ -28,7 +27,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.cropper.js': 'cropper/dist/cropper.js',
                     'js/src/vendor/bower_components/pwstrength.bootstrap.js': 'pwstrength-bootstrap/dist/pwstrength-bootstrap-1.2.2.js',
                     'js/src/vendor/bower_components/jquery-ui.js': 'jquery-ui/ui/jquery-ui.js',
-                    'js/src/vendor/bower_components/jquery.js': 'jquery/jquery.js'
+                    'js/src/vendor/bower_components/jquery.js': 'jquery/jquery.js',
+                    'js/src/vendor/bower_components/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
                 }
             },
             stylesheets: {
@@ -224,7 +224,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/header.js'],
 
                     'web/assets/js/min/easyshop.header_alt.js': 
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/bower_components/jquery.auto-complete.js',
                              'web/assets/js/src/header_alt.js'],
 
@@ -309,7 +309,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.bxslider1.min.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/owl.carousel.min.js',
-                             'web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/product-page.js',
                              'web/assets/js/src/social_media_share.js'],
 
@@ -328,7 +328,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/promo/scratchwinpromo.js'],
 
                     'web/assets/js/min/easyshop.advance_search_main.js':
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/bower_components/jquery.scrollUp.js',
                              'web/assets/js/src/advsearch.js'],
 
@@ -401,14 +401,14 @@ module.exports = function (grunt) {
                              'web/assets/js/src/landingpage-bootstrap.min.js'],
 
                     'web/assets/js/min/easyshop.user_vendor_view.js':
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.scrollTo.js',
                              'web/assets/js/src/easyshop.simplePagination.js',
                              'web/assets/js/src/vendorpage_new.js'],
 
                     'web/assets/js/min/easyshop.product-search-by-category-new.js':
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js',
                              'web/assets/js/src/vendor/owl.carousel.min.js',
@@ -418,7 +418,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/product-search.js'],
 
                     'web/assets/js/min/easyshop.product-search-new.js':
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js', 
                              'web/assets/js/src/easyshop.simplePagination.js', 
