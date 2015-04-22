@@ -16,7 +16,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js',
                     'js/src/vendor/bower_components/ion.rangeSlider.js': 'ionrangeslider/js/ion.rangeSlider.js',
                     'js/src/vendor/bower_components/jquery.Jcrop.js': 'Jcrop/js/jquery.Jcrop.js',
-                    'js/src/vendor/bower_components/jquery.auto-complete.js': 'jquery-auto-complete/jquery.auto-complete.js'
+                    'js/src/vendor/bower_components/jquery.auto-complete.js': 'jquery-auto-complete/jquery.auto-complete.js',
+                    'js/src/vendor/bower_components/jquery.cookie.js': 'jquery-cookie/jquery.cookie.js'
                 }
             },
             stylesheets: {
@@ -418,7 +419,7 @@ module.exports = function (grunt) {
 
                     'web/assets/js/min/easyshop.user_register.js':
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
-                             'web/assets/js/src/vendor/jquery.cookie.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.cookie.js',
                              'web/assets/js/src/vendor/jquery.idTabs.min.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
@@ -460,7 +461,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/vendor/jquery-1.9.1.js',
                              'web/assets/js/src/landingpage-responsive-nav.js',
                              'web/assets/js/src/vendor/jquery-ui.js',
-                             'web/assets/js/src/vendor/jquery.cookie.js',
+                             'web/assets/js/src/vendor/bower_components/jquery.cookie.js',
                              'web/assets/js/src/lib/websocket/client.js',
                              'web/assets/js/src/lib/eventdispatcher.js',
                              'web/assets/js/src/vendor/socket.io.js',
