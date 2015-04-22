@@ -1134,59 +1134,43 @@
         $('.feedback-from-buyer').removeClass("active-bar");
         $('.feedback-for-seller').removeClass("active-bar");
     });
+    
+    
     //FOR MOBILE
-    $('.my-store-menu-mobile').click(function() {
-        $('.my-account-menu-mobile-cont').slideUp();
-        $('.my-store-menu-mobile-cont').slideToggle("fast", function(){
-            
-            var attr_ms = $("i.ms").attr("class");
-            if(attr_ms == "ms fa fa-angle-down"){
-                $('i.ms').removeClass("ms fa fa-angle-down").addClass("ms fa fa-angle-up");
+    $('.col-dash-mobile').click(function() {
+
+        var $selectedMobileMenuTriggger = $(this);
+        var section = $selectedMobileMenuTriggger.data('section');
+        var $selectedMobileMenu = $('.mobile-menu-container[data-section="'+section+'"]');
+        
+        $('.col-dash-mobile[data-section!="'+section+'"] i').each(function(){
+            $(this).removeClass("fa-angle-up")
+                   .addClass("fa-angle-down");
+        });
+        
+        $selectedMobileMenu.slideToggle( "slow", function() {
+            var $icon = $selectedMobileMenuTriggger.find('i'); 
+            if($icon.hasClass('fa-angle-down')){
+                $icon.removeClass('fa-angle-down')
+                     .addClass('fa-angle-up');
             }
-            else if(attr_ms == "ms fa fa-angle-up"){
-                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
-            }
-            
-            var attr_ma2 = $("i.ma").attr("class");
-            if(attr_ma2 == "ma fa fa-angle-up"){
-                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
+            else if($icon.hasClass('fa-angle-up')){
+                $icon.removeClass('fa-angle-up')
+                     .addClass('fa-angle-down');
             }
         });
+
     });
-    
-    $('.my-account-menu-mobile').click(function() {
-        $('#my-account-menu-trigger').trigger("click");
-        $('.my-store-menu-mobile-cont').slideUp();
-        $('.my-account-menu-mobile-cont').slideToggle("fast", function(){
-            var attr_ma = $("i.ma").attr("class");
-            if(attr_ma == "ma fa fa-angle-down"){
-                $('i.ma').removeClass("ma fa fa-angle-down").addClass("ma fa fa-angle-up");
-            }
-            else if(attr_ma == "ma fa fa-angle-up"){
-                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
-            }
-            
-            var attr_ms2 = $("i.ms").attr("class");
-            if(attr_ms2 == "ms fa fa-angle-up"){
-                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
-            }
-        });
-    });
-    
+  
     $('.dash-mobile-trigger').click(function() {
-        $('.my-store-menu-mobile-cont').slideUp("fast");
-        $('.my-account-menu-mobile-cont').slideUp("fast");
+        $('.mobile-menu-container').slideUp("fast");
         
-        var attr_ms3 = $("i.ms").attr("class");
-        if(attr_ms3 == "ms fa fa-angle-up"){
-            $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
-        }
-        
-        
-        var attr_ma3 = $("i.ma").attr("class");
-        if(attr_ma3 == "ma fa fa-angle-up"){
-            $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
-        }
+        $('.col-dash-mobile i').each(function(){
+            if($(this).hasClass('fa-angle-up')){
+                $(this).removeClass('fa-angle-up')
+                       .addClass('fa-angle-down');
+            }
+        });
     });
     
    

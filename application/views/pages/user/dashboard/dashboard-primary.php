@@ -79,29 +79,29 @@
                     </div>
                 </div>
 
-                <div class="mobile-dashboard-menu">
+                <div class="mobile-dashboard-menu">        
                     <div class="row-fluid row-menu-mobile-res">
-                        <a  class="dash-mobile-trigger dashboard-home-mobile selectedM">
-                            <div class="col-xs-4 col-dash-mobile">
-                                Dashboard
+                        <a class="dash-mobile-trigger my-transactions-mobile">
+                            <div class="col-xs-4 col-dash-mobile" data-section="my-transactions">
+                                Transactions
                             </div>
                         </a>
-                        <div class="col-xs-4 col-dash-mobile my-store-menu-mobile">
+                        <div class="col-xs-4 col-dash-mobile my-store-menu-mobile" data-section="my-store">
                             My Store <i class="ms fa fa-angle-down"></i>
                         </div>
-                        <div class="col-xs-4 col-dash-mobile my-account-menu-mobile">
+                        <div class="col-xs-4 col-dash-mobile my-account-menu-mobile" data-section="my-account">
                             My Account <i class="ma fa fa-angle-down"></i>
                         </div>
                     </div>
-                    <div class="my-store-menu-mobile-cont">
+                    
+                    <div class="my-store-menu-mobile-cont mobile-menu-container" data-section="my-store">
                         <ul class="my-store-menu-mobile-ul">
-                            <a class="ms-trans dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
                             <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
                             <a class="ms-customize dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-customize">Customize Category</li></a>
                             <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
                         </ul>
                     </div>
-                    <div class="my-account-menu-mobile-cont">
+                    <div class="my-account-menu-mobile-cont mobile-menu-container" data-section="my-account">
                         <ul class="my-account-menu-mobile-ul">
                             <a class="ma-info dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
                             <a class="ma-delivery dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
