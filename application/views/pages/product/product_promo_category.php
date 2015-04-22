@@ -83,7 +83,6 @@
 </section>
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-    <script src="/assets/js/src/vendor/jquery.countdown.min.js" type="text/javascript"></script>
 <?php else: ?> 
     <script src="/assets/js/min/easyshop.product_promo_category.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>

@@ -1,8 +1,8 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <link type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet" /> 
-    <link rel="stylesheet" href="/assets/css/ion.rangeSlider.css" />
-    <link rel="stylesheet" href="/assets/css/ion.rangeSlider.skinFlat.css" />
+    <link rel="stylesheet" href="/assets/css/vendor/bower_components/ion.rangeSlider.css" />
+    <link rel="stylesheet" href="/assets/css/vendor/bower_components/ion.rangeSlider.skinFlat.css" />
+    <link rel="stylesheet" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" /> 
     <link rel="stylesheet" href="/assets/css/bootstrap.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>  
     <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
@@ -557,7 +557,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?> 
     <script src="/assets/js/src/vendor/jquery.cropper.js"></script> 
-    <script src="/assets/js/src/vendor/ion.rangeSlider.min.js"></script>
+    <script src="/assets/js/src/vendor/bower_components/ion.rangeSlider.js"></script>
     <script src="/assets/js/src/vendor/chosenwithcreate.jquery.min.js" type="text/javascript"></script> 
     <script src="/assets/js/src/vendor/jquery.simplemodal.js" type='text/javascript' ></script>
     <script src="/assets/js/src/productUpload_step2.js?ver=<?=ES_FILE_VERSION?>" type="text/javascript" ></script> 
