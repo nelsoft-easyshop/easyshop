@@ -11,7 +11,7 @@
             <link href="/assets/css/landingpage/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
             <link href="/assets/css/landingpage/bootstrap-responsive.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
             <link href="/assets/css/landingpage/mystyle.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-            <link href="/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+            <link href="/assets/css/vendor/bower_components/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
             
         <?php else: ?>
             <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.register-success.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
