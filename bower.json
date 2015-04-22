@@ -8,6 +8,7 @@
     "chosen": "1.4.2",
     "ionrangeslider": "1.9.1",
     "Jcrop": "0.9.12",
-    "jquery-auto-complete": "1.0.5"
+    "jquery-auto-complete": "1.0.5",
+    "jquery-cookie": "~1.4.1"
   }
 }
