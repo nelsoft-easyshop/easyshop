@@ -626,7 +626,6 @@ class ProductManager
         $product = $this->getProductDetails($productId);
         $productInventoryDetail = $this->getProductInventory($product);
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $productInventory = $esProductRepo->getProductInventoryDetail($productId);
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
@@ -664,9 +663,8 @@ class ProductManager
         }
 
         $noMoreSelection = "";
-
         if(count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes)){
-            $noMoreSelection = $productInventory[0]['id_product_item'];
+            $noMoreSelection = key($productCombinationAvailable);
         }
 
         $needToSelect = false;
