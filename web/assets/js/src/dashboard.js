@@ -286,7 +286,7 @@
     $( "#dash" ).click(function() {
         $('.dashboard-menu').slideUp();
         $('.dashboard-menu-trigger i').removeClass('icon-control-up')
-                                     .addClass('icon-control-down');                        
+                                      .addClass('icon-control-down');                        
     });
     
     $(".dashboard-menu-trigger").click(function(){
@@ -319,8 +319,23 @@
             }
         });
     });
-    
 
+    $('.transaction-trigger').on('click', function(){
+        var $this = $(this);
+        var type = $this.data('type');
+        $this.addClass('selected');
+        if(type === 'on-going'){
+            $('.transaction-trigger[data-type="completed"]').removeClass('selected');
+            $('.on-going-transaction-header').click();
+        }
+        else if(type === 'completed'){
+            $('.transaction-trigger[data-type="on-going"]').removeClass('selected');
+            $('.completed-transaction-header').click();
+        }
+        $('#transaction-menu-trigger').closest('a')
+                                      .removeClass('selected');
+    });
+        
     $( "#info-item-1" ).click(function() {
         $( "#info-attributes-1" ).slideToggle( "slow", function() {
             var i_icon = $("i.info-item-icon-1").attr("class");
@@ -410,7 +425,7 @@
         $(this).toggleClass("active-bar",0);
         $(this).next('.payout-breakdown-container').slideToggle();
         $('.sales-breakdown-container').slideUp();
-       $('.sales-title-total').removeClass("active-bar");
+        $('.sales-title-total').removeClass("active-bar");
     });
 
     $('#transactions').on('click', '.trans-item-info', function() {
@@ -2558,12 +2573,11 @@
     function handleUrlTabs(tab)
     {
         if (tab === "ongoing") {
-            $('#my-store-menu-trigger').trigger('click');
-             setTimeout(function() {
-                 $('.id-transactions-trigger').trigger('click');
+            setTimeout(function() {
+                $('#transaction-menu-trigger').trigger('click');
             }, 500);
             setTimeout(function() {
-                 $('.transaction-title-bought').trigger('click');
+                $('.transaction-trigger[data-type="on-going"]').trigger('click');
             }, 1000);
         }
         else if(tab === "settings"){

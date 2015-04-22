@@ -3,16 +3,16 @@
     <div class="div-tab-inner">
         <div class="transaction-tabs">
             <ul class="idTabs">
-                <li><a href="#on-going-transaction">On going</a></li>
-                <li><a href="#completed-transaction">Completed</a></li>
+                <li><a href="#on-going-transaction" class="on-going-transaction-header">On going</a></li>
+                <li><a href="#completed-transaction" class="completed-transaction-header">Completed</a></li>
             </ul>
         </div>
-    <!---------------------------------------------------------------ongoing bought starts here---------------------------------------------------------------->
+        <!---------------------------------------------------------------ongoing bought starts here---------------------------------------------------------------->
         <div class="col-md-12" id="on-going-transaction">
             <div class="row">
                 <div class="transaction-title-bought transaction-button-head" data-method="ongoing-bought">
                     <span class="trans-title">Bought</span>
-                    <span class="count"><?=$ongoingBoughtTransactionsCount?></span>
+                    <span class="count"><?php echo $ongoingBoughtTransactionsCount?></span>
                 </div>
                 <div class="on-going-transaction-list-bought list-container">
                     <?PHP if ( (int) $ongoingBoughtTransactionsCount >= 1) : ?>
