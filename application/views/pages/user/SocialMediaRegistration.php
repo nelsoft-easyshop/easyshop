@@ -48,7 +48,7 @@
                             <div class="form-group">
                                 <label class="control-label">Type in your email address</label>
                                 <input type="text" name="email" class="form-control register-new-email" placeholder="email@sample.com" aria-describedby="basic-addon2">
-                                <span class="merge-email-note">Your social media account does have an associated email address</span>
+                                <span class="merge-email-note">Your social media account does not have an associated email address</span>
                                 <div class="div-validation-container auto-height">
                                     <p class="span-validation-ok register-new-email-accepted" style="display:none;">
                                         Email is available
@@ -98,9 +98,12 @@
                                 <p class="span-validation-ok email-accepted" style="display: none">
                                     E-mail address found
                                 </p>
-                                 <p class="span-validation-error email-denied" style="display: none">
+                                <p class="span-validation-error email-denied" style="display: none">
                                      E-mail address not found
-                                 </p>
+                                </p>
+                                <p class="span-validation-error email-already-merged" style="display: none">
+                                    Account has already been merged
+                                </p> 
                             </div>
                             <div class="div-search-merge-account div-result" id="available-result" style="display: none">
                                 <div class="row">
@@ -139,7 +142,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-block btn-orange-lg send-request">
+                            <button class="btn btn-block btn-orange-lg send-request disabled">
                                 SEND REQUEST
                             </button>
                             <center>

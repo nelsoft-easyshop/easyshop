@@ -1140,7 +1140,7 @@ class Payment extends MY_Controller
             $productId = $value['id']; 
             $itemId = $value['product_itemID']; 
             $product = $productManager->getProductDetails($productId);
-            $productInventory = $productManager->getProductInventory($product, false, true, $memberId);
+            $productInventory = $productManager->getProductInventory($product);
 
             if(isset($productInventory[$itemId])){
                 $maxqty = $productInventory[$itemId]['quantity'];
@@ -1255,19 +1255,13 @@ class Payment extends MY_Controller
         $memberId = $this->session->userdata('member_id');
         $paymentMethods = json_decode($this->input->post('paymentMethods'),true);
         $paymentMethodString = (string)reset($paymentMethods)['method'];
-        $pointsAllocated = "0.00";
 
         $isPaymentAcceptPoints = $paymentService->isPaymentMethodAcceptPoints($paymentMethodString);
-        if($isPaymentAcceptPoints 
-            && array_key_exists("PointGateway", $paymentMethods)
-            && isset($paymentMethods["PointGateway"]["amount"])){
-            $pointsAllocated = $paymentMethods["PointGateway"]["amount"];
-        }
-        elseif(!$isPaymentAcceptPoints && array_key_exists("PointGateway", $paymentMethods)){
+        if(!$isPaymentAcceptPoints && array_key_exists("PointGateway", $paymentMethods)){
             unset($paymentMethods["PointGateway"]);
         }
 
-        $validatedCart = $paymentService->validateCartData($carts, $pointsAllocated, $memberId);
+        $validatedCart = $paymentService->validateCartData($carts);
         $this->session->set_userdata('choosen_items', $validatedCart['itemArray']); 
 
         $response = $paymentService->pay($paymentMethods, $validatedCart, $this->session->userdata('member_id'));
@@ -1345,12 +1339,9 @@ class Payment extends MY_Controller
             }
 
             // Validate Cart Data
-            $cartData = json_decode($order->getDataResponse(), true);
-            $validatedCart = [
-                'itemArray' => $cartData,
-                'itemCount' => count($cartData),
-            ];
-            $this->session->set_userdata('choosen_items', $cartData);
+            $userCart = json_decode($order->getDataResponse(), true);
+            $validatedCart = $paymentService->validateCartData(['choosen_items' => $userCart]);
+            $this->session->set_userdata('choosen_items', $validatedCart['itemArray']);
             $response = $paymentService->postBack($paymentMethods, $validatedCart, $memberId, null);
             $message = $response['message'];
             $status = $response['status'];
@@ -1543,7 +1534,7 @@ class Payment extends MY_Controller
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
  
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "0.00" , $memberId);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 
@@ -1658,7 +1649,7 @@ class Payment extends MY_Controller
         $memberId = $this->member->getIdMember();
         $itemArray = $cartManager->getValidatedCartContents($memberId); 
 
-        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray], "0.00" , $memberId);
+        $validated = $paymentService->validateCartData(['choosen_items'=>$itemArray]);
         $itemArray = $validated['itemArray'];
         $qtySuccess = $validated['itemCount'];
 

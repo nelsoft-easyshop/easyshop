@@ -224,34 +224,44 @@ class SocialMediaController extends MY_Controller
      */
     public function sendMergeNotification()
     {
-        $result = false;
+        $result = [
+            'isSuccessful' => false,
+            'isMerged' => false,
+        ];
         $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
-                                      ->findOneBy(['email' => $this->input->post('email')]);
-        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                 ->getSocialMediaLinks();
+                                      ->findOneBy(['email' => $this->input->post('email')]);                    
         if ($member) {
-            $result = true;
-            $this->load->library('parser');
-            $data = serialize([
-                'memberId' => $member->getIdMember(),
-                'socialMediaId' => $this->input->post('oauthId'),
-                'socialMediaProvider' => $this->input->post('oauthProvider')
-            ]);
-            $parseData = [
-                'username' => $member->getUsername(),
-                'facebook' => $socialMediaLinks["facebook"],
-                'twitter' => $socialMediaLinks["twitter"],
-                'baseUrl' => base_url(),
-                'mergeLink' => site_url('SocialMediaController/mergeAccount').'?h='.$this->encrypt->encode($data)
-            ];
-
-            $this->config->load('email', true);
-            $imageArray = $this->config->config['images'];
-            $message = $this->parser->parse('emails/merge-account', $parseData, true);
-            $this->emailNotification->setRecipient($member->getEmail());
-            $this->emailNotification->setSubject($this->lang->line('merge_subject'));
-            $this->emailNotification->setMessage($message, $imageArray);
-            $this->emailNotification->queueMail();
+            $isMemberMerged = $this->entityManager
+                                   ->getRepository('EasyShop\Entities\EsMemberMerge')
+                                   ->isMemberMerged($member->getIdMember());
+            if($isMemberMerged){
+                $result['isMerged'] = true;
+            }
+            else{
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                    ->getSocialMediaLinks();
+                $result['isSuccessful'] = true;
+                $this->load->library('parser');
+                $data = serialize([
+                    'memberId' => $member->getIdMember(),
+                    'socialMediaId' => $this->input->post('oauthId'),
+                    'socialMediaProvider' => $this->input->post('oauthProvider')
+                ]);
+                $parseData = [
+                    'username' => $member->getUsername(),
+                    'facebook' => $socialMediaLinks["facebook"],
+                    'twitter' => $socialMediaLinks["twitter"],
+                    'baseUrl' => base_url(),
+                    'mergeLink' => site_url('SocialMediaController/mergeAccount').'?h='.$this->encrypt->encode($data)
+                ];
+                $this->config->load('email', true);
+                $imageArray = $this->config->config['images'];
+                $message = $this->parser->parse('emails/merge-account', $parseData, true);
+                $this->emailNotification->setRecipient($member->getEmail());
+                $this->emailNotification->setSubject($this->lang->line('merge_subject'));
+                $this->emailNotification->setMessage($message, $imageArray);
+                $this->emailNotification->queueMail();
+            }
         }
 
         echo json_encode($result);
@@ -373,15 +383,21 @@ class SocialMediaController extends MY_Controller
      */
     public function checkEmailAvailability()
     {
-        $result = false;
-        $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
-                                      ->findOneBy(['email' => $this->input->post('email')]);
-        if ($member) {
-            $result = [
-                'email' => $member->getEmail(),
-                'location' => '',
-                'image' =>  $this->userManager->getUserImage($member->getIdMember())
-            ];
+        if($this->input->post('email')){
+            $result = false;
+            $member = $this->entityManager->getRepository('EasyShop\Entities\EsMember')
+                                          ->findOneBy([
+                                                'email' => $this->input->post('email')
+                                           ]);
+            if ($member) { 
+                $isMerge = $this->entityManager->getRepository('EasyShop\Entities\EsMemberMerge')
+                                               ->isMemberMerged($member->getIdMember());
+                $result = [
+                    'email' => $member->getEmail(),
+                    'image' =>  $this->userManager->getUserImage($member->getIdMember()),
+                    'isMerged' => $isMerge,
+                ];
+            }
         }
         echo json_encode($result);
     }

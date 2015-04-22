@@ -21,7 +21,6 @@ use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
  */
 class PayPalGateway extends AbstractGateway
 {
-
     private $type_creditcard = 2;
     private $PayPalMode; 
     private $PayPalApiUsername; 
@@ -146,8 +145,6 @@ class PayPalGateway extends AbstractGateway
         $PayPalMode = $this->getMode(); 
         $paypalReturnURL = $this->returnUrl; 
         $paypalCancelURL = $this->cancelUrl; 
-        $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->releaseAllLock($memberId);
-
         $productCount = count($validatedCart['itemArray']);
         $cnt = 0;
         $paypalType = $this->getParameter('type');
@@ -285,7 +282,6 @@ class PayPalGateway extends AbstractGateway
 
             if($return['o_success'] > 0){
                 $orderId = $return['v_order_id'];
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($orderId, $toBeLocked); 
                 $paypalurl ='https://www'.$PayPalMode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($orderId);
@@ -376,78 +372,70 @@ class PayPalGateway extends AbstractGateway
             $grandTotal = $prepareData['totalPrice'];
             $productstring = $prepareData['productstring']; 
             $toBeLocked = $prepareData['toBeLocked'];
-            $lockCountExist = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->getLockCount($orderId);
 
             if($pointGateway){
                 $grandTotal = bcsub($grandTotal, $pointGateway->getParameter('amount'), 2);
             }
 
-            if($lockCountExist >= 1){
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($orderId, $toBeLocked); 
-                if($validatedCart['itemCount'] === $productCount){
-                    $padata = '&TOKEN='.urlencode($token).
-                    '&PAYERID='.urlencode($payerid).
-                    '&PAYMENTACTION='.urlencode("SALE").
-                    '&AMT='.urlencode($grandTotal).
-                    '&CURRENCYCODE='.urlencode('PHP');
+            if($validatedCart['itemCount'] === $productCount){
+                $padata = '&TOKEN='.urlencode($token).
+                '&PAYERID='.urlencode($payerid).
+                '&PAYMENTACTION='.urlencode("SALE").
+                '&AMT='.urlencode($grandTotal).
+                '&CURRENCYCODE='.urlencode('PHP');
 
-                    $httpParsedResponseArGECD = $this->PPHttpPost('GetExpressCheckoutDetails', $padata); 
-                    $httpParsedResponseArDECP = $this->PPHttpPost('DoExpressCheckoutPayment', $padata); 
+                $httpParsedResponseArGECD = $this->PPHttpPost('GetExpressCheckoutDetails', $padata); 
+                $httpParsedResponseArDECP = $this->PPHttpPost('DoExpressCheckoutPayment', $padata); 
 
-                    if(("SUCCESS" == strtoupper($httpParsedResponseArDECP["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseArDECP["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"]))){
-                        $response['txnid'] = $txnid = urldecode($httpParsedResponseArDECP["TRANSACTIONID"]);
-                        $nvpStr = "&TRANSACTIONID=".$txnid;
-                        $httpParsedResponseAr = $this->PPHttpPost('GetTransactionDetails', $nvpStr);
+                if(("SUCCESS" == strtoupper($httpParsedResponseArDECP["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseArDECP["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"]))){
+                    $response['txnid'] = $txnid = urldecode($httpParsedResponseArDECP["TRANSACTIONID"]);
+                    $nvpStr = "&TRANSACTIONID=".$txnid;
+                    $httpParsedResponseAr = $this->PPHttpPost('GetTransactionDetails', $nvpStr);
 
-                        if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])){
+                    if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])){
 
-                            $pointArray = [];
-                            foreach ($itemList as $key => $value) {
-                                $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                                $this->paymentService->productManager->updateSoldoutStatus($value['id']);
-                                if($pointGateway){
-                                    $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
-                                                               ->findOneBy([
-                                                                    'productItemId' => $value['product_itemID'],
-                                                                    'order' => $order
-                                                               ]);
-                                    $data["order_product_id"] = $esOrderProduct->getIdOrderProduct();
-                                    $data["item_total_price"] = $esOrderProduct->getTotal();
-                                    $data["quantity"] = $esOrderProduct->getOrderQuantity();
-                                    $pointArray[] = $data;
-                                }
-                            }
-
-                            $flag = (string) $httpParsedResponseAr['PAYMENTSTATUS'] === 'Pending';
-                            $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                                 ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,EsOrderStatus::STATUS_PAID,$flag);
-
-                            if($complete){
-                                $orderHistory = [
-                                    'order_id' => $orderId,
-                                    'order_status' => EsOrderStatus::STATUS_PAID,
-                                    'comment' => 'Paypal transaction confirmed'
-                                ];
-                                $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
-                                         ->addOrderHistory($orderHistory);
-                                $response['message'] = 'Your payment has been completed through Paypal';
-                                $response['status'] = PaymentService::STATUS_SUCCESS;
-
-                                // get points per item product in order.
-                                if($pointGateway){ 
-                                    $pointGateway->setParameter('memberId', $memberId);
-                                    $pointGateway->setParameter('itemArray', $pointArray);
-                                    $pointGateway->usePoints();
-                                }
-                                $this->paymentService->sendPaymentNotification($orderId);
-                            }
-                            else{
-                                $response['message'] = 'Someting went wrong. Please contact us immediately. Your EASYSHOP INVOICE NUMBER: '.$invoice.'</div>'; 
+                        $pointArray = [];
+                        foreach ($itemList as $key => $value) {
+                            $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                            $this->paymentService->productManager->updateSoldoutStatus($value['id']);
+                            if($pointGateway){
+                                $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                                           ->findOneBy([
+                                                                'productItemId' => $value['product_itemID'],
+                                                                'order' => $order
+                                                           ]);
+                                $data["order_product_id"] = $esOrderProduct->getIdOrderProduct();
+                                $data["item_total_price"] = $esOrderProduct->getTotal();
+                                $data["quantity"] = $esOrderProduct->getOrderQuantity();
+                                $pointArray[] = $data;
                             }
                         }
+
+                        $flag = (string) $httpParsedResponseAr['PAYMENTSTATUS'] === 'Pending';
+                        $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                             ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,EsOrderStatus::STATUS_PAID,$flag);
+
+                        if($complete){
+                            $orderHistory = [
+                                'order_id' => $orderId,
+                                'order_status' => EsOrderStatus::STATUS_PAID,
+                                'comment' => 'Paypal transaction confirmed'
+                            ];
+                            $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
+                                     ->addOrderHistory($orderHistory);
+                            $response['message'] = 'Your payment has been completed through Paypal';
+                            $response['status'] = PaymentService::STATUS_SUCCESS;
+
+                            // get points per item product in order.
+                            if($pointGateway){ 
+                                $pointGateway->setParameter('memberId', $memberId);
+                                $pointGateway->setParameter('itemArray', $pointArray);
+                                $pointGateway->usePoints();
+                            }
+                            $this->paymentService->sendPaymentNotification($orderId);
+                        }
                         else{
-                            $response['message'] = urldecode($httpParsedResponseArDECP["L_LONGMESSAGE0"]);
+                            $response['message'] = 'Someting went wrong. Please contact us immediately. Your EASYSHOP INVOICE NUMBER: '.$invoice.'</div>'; 
                         }
                     }
                     else{
@@ -455,11 +443,11 @@ class PayPalGateway extends AbstractGateway
                     }
                 }
                 else{
-                    $response['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
+                    $response['message'] = urldecode($httpParsedResponseArDECP["L_LONGMESSAGE0"]);
                 }
             }
             else{
-                $response['message'] = 'Your session is already expired for this payment.';
+                $response['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
             }
         }
         else{

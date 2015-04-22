@@ -179,7 +179,7 @@ class ProductManager
      * @param bool $doLockDeduction : If true, locked items will also be deducted from the total availability
      *
      */
-    public function getProductInventory($product, $isVerbose = false, $doLockDeduction = false, $excludeMemberId = 0)
+    public function getProductInventory($product, $isVerbose = false)
     {
         $promoQuantityLimit = $this->promoManager->getPromoQuantityLimit($product);
         $inventoryDetails = $this->em->getRepository('EasyShop\Entities\EsProduct')
@@ -211,46 +211,22 @@ class ProductManager
                 array_push($data[$inventoryDetail['id_product_item']]['attr_lookuplist_item_id'], $inventoryDetail['attr_lookuplist_item_id']);
                 array_push($data[$inventoryDetail['id_product_item']]['attr_name'], $inventoryDetail['attr_value']);
             }
-
         }
-        
-        $locks = $this->validateProductItemLock($product->getIdProduct(), $excludeMemberId); 
-        if($doLockDeduction){
-            foreach($locks as $lock){
-                if(isset($data[$lock['idProductItem']])){
-                    $data[$lock['idProductItem']]['quantity'] -=  $lock['lock_qty'];
-                    $data[$lock['idProductItem']]['quantity'] = ($data[$lock['idProductItem']]['quantity'] >= 0) ? $data[$lock['idProductItem']]['quantity'] : 0;
-                }
+
+        /**
+         * Reduce lock quantity on original quantity
+         */
+        $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
+                                     ->getProductItemLockByProductId($product->getIdProduct());
+
+        foreach($productItemLocks as $lock){
+            if(isset($data[$lock['idProductItem']])){
+                $data[$lock['idProductItem']]['quantity'] -=  $lock['lock_qty'];
+                $data[$lock['idProductItem']]['quantity'] = ($data[$lock['idProductItem']]['quantity'] >= 0) ? $data[$lock['idProductItem']]['quantity'] : 0;
             }
         }
 
         return $data;
-    }
-    
-    
-    /**
-     * Checks the productItemLocks that exists for a given product
-     * If lock exceeds its life time, delete it.
-     *
-     * @param integer $productId
-     * @return mixed
-     */
-    public function validateProductItemLock($productId, $excludeMemberId = 0)
-    {
-        $productItemLocks = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                                        ->getProductItemLockByProductId($productId, $excludeMemberId);
-        foreach($productItemLocks as $idx => $lock){
-            $elapsedMinutes = round((time() - $lock['timestamp']->getTimestamp())/60);
-            if($elapsedMinutes > $this->lockLifeSpan){
-                $lockEntity =  $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                                        ->find($lock['idItemLock']);
-                $this->em->remove($lockEntity);
-                $this->em->flush();
-                unset($lock[$idx]);
-            }
-        }
-        
-        return $productItemLocks;
     }
 
     /**
@@ -647,35 +623,33 @@ class ProductManager
      */
     public function getProductCombinationAvailable($productId)
     {
-
+        $product = $this->getProductDetails($productId);
+        $productInventoryDetail = $this->getProductInventory($product);
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
-        $productInventory = $esProductRepo->getProductInventoryDetail($productId);
         $shippingDetails = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail')
                                     ->getShippingDetailsByProductId($productId);
 
         $productCombinationAvailable = [];
-        foreach ($productInventory as $value) {
-            if(!array_key_exists($value['id_product_item'],$productCombinationAvailable)){
-
-                $locationArray = [];
-                foreach ($shippingDetails as $shipKey => $shipValue) {
-                    if((int)$shipValue['product_item_id'] === (int)$value['id_product_item']){
-                        $locationArray[] = [
-                                'location_id' => $shipValue['location_id'],
-                                'price' => $shipValue['price'],
-                            ];
-                    }
+        foreach ($productInventoryDetail as $itemId => $detail) {
+            unset($detail['attr_lookuplist_item_id']);
+            unset($detail['attr_name']);
+            unset($detail['is_default']);
+            $productAttributesId = [];
+            foreach ($detail['product_attribute_ids'] as $attributes) {
+                $productAttributesId[] = $attributes['id'];
+            }
+            $locationArray = [];
+            foreach ($shippingDetails as $shipKey => $shipValue) {
+                if((int)$shipValue['product_item_id'] === (int)$itemId){
+                    $locationArray[] = [
+                            'location_id' => $shipValue['location_id'],
+                            'price' => $shipValue['price'],
+                        ];
                 }
-
-                $productCombinationAvailable[$value['id_product_item']] = [
-                    'quantity' => $value['quantity'],
-                    'product_attribute_ids' => [$value['product_attr_id']],
-                    'location' => $locationArray,
-                ];
             }
-            else{
-                $productCombinationAvailable[$value['id_product_item']]['product_attribute_ids'][] = $value['product_attr_id'];
-            }
+            $detail['product_attribute_ids'] = $productAttributesId;
+            $detail['location'] = $locationArray;
+            $productCombinationAvailable[$itemId] = $detail;
         }
 
         $productAttributeDetails = $esProductRepo->getProductAttributeDetailByName($productId);
@@ -689,10 +663,8 @@ class ProductManager
         }
 
         $noMoreSelection = "";
-
-        if((count($productInventory) === 1 && (int)$productInventory[0]['product_attr_id'] === 0) 
-            || (count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes))){
-            $noMoreSelection = $productInventory[0]['id_product_item'];
+        if(count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes)){
+            $noMoreSelection = key($productCombinationAvailable);
         }
 
         $needToSelect = false;
