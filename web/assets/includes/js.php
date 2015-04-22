@@ -9,15 +9,13 @@
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
     <script type='text/javascript' src="/assets/js/src/landingpage-responsive-nav.js" ></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery.cookie.js"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/socket.io.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.cookie.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/socket.io.js"></script>
     <script type='text/javascript' src="/assets/js/src/nodeClient.js"></script>
     <script type='text/javascript' src="/assets/js/src/universal.js"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.includes.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
-
-<script type='text/javascript' src="/assets/js/src/vendor/jquery.jcarousel.min.js"></script>
 
 <script type='text/javascript'>
     <?php if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT'])): ?>

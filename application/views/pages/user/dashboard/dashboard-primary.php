@@ -7,7 +7,6 @@
 <?php endif; ?>
 
 <link type="text/css" href='/assets/css/jstree/style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-
 <section class="section-dashboard ">
     <div class="container container-dashboard">
         <div class="row-fluid">
@@ -157,18 +156,18 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery.ui.touch-punch.min.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.ui.touch-punch.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js?ver=<?=ES_FILE_VERSION?>'></script>
-    <script type="text/javascript" src="/assets/js/src/vendor/jquery.raty.min.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.raty.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.dashboard.home.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type="text/javascript" src='/assets/js/src/vendor/bower_components/chosen.jquery.min.js' ></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-    <script type='text/javascript' src='/assets/js/src/vendor/jstree.js'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bower_components/jstree.js'></script>
     <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery.nicescroll.min.js?ver=<?=ES_FILE_VERSION?>"></script> 
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.nicescroll.js?ver=<?=ES_FILE_VERSION?>"></script> 
     <script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script> 
     <script type='text/javascript' src="/assets/js/src/dashboard-express-edit.js?ver=<?=ES_FILE_VERSION?>"></script>
