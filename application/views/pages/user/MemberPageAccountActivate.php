@@ -114,7 +114,7 @@
     </div>
 </div>
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/bower_components/jquery.validate.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type='text/javascript' src="/assets/js/src/accountactivation.js?ver=<?=ES_FILE_VERSION?>"></script>
