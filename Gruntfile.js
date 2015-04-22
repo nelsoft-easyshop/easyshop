@@ -21,7 +21,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.nicescroll.js': 'jquery.nicescroll/jquery.nicescroll.js',
                     'js/src/vendor/bower_components/jquery.scrollUp.js': 'scrollup/js/jquery.scrollUp.js',
                     'js/src/vendor/bower_components/jstree.js': 'jstree/dist/jstree.js',
-                    'js/src/vendor/bower_components/jquery.raty.js': 'raty/lib/jquery.raty.js'
+                    'js/src/vendor/bower_components/jquery.raty.js': 'raty/lib/jquery.raty.js',
+                    'js/src/vendor/bower_components/jquery.jcarousel.js': 'jcarousel/dist/jquery.jcarousel.js'
                 }
             },
             stylesheets: {
@@ -85,15 +86,6 @@ module.exports = function (grunt) {
                         ['web/assets/css/product_search_category.css',
                         'web/assets/css/style_new.css', 
                         'web/assets/css/jquery.bxslider.css.css'],
-                    'web/assets/css/min-easyshop.product-search-by-category-final-responsive.css':
-                        ['web/assets/css/bootstrap.css',
-                        'web/assets/css/bootstrap-mods.css', 
-                        'web/assets/css/product_search_category.css',
-                        'web/assets/css/product_search_category_responsive.css', 
-                        'web/assets/css/product_search_category.css',   
-                        'web/assets/css/style_new.css',
-                        'web/assets/css/jquery.bxslider.css',
-                        'web/assets/css/jcarousel.css'],
                     'web/assets/css/min-easyshop.upload-step1.css':
                         ['web/assets/css/sell_item.css',
                         'web/assets/css/bootstrap.css', 
@@ -277,7 +269,7 @@ module.exports = function (grunt) {
                             ['web/assets/js/src/messaging.js'],
 
                     'web/assets/js/min/easyshop.product_image_gallery.js':
-                            ['web/assets/js/src/vendor/jquery.jcarousel.min.js',
+                            ['web/assets/js/src/vendor/bower_components/jquery.jcarousel.js',
                              'web/assets/js/src/product-page-image-gallery.js'],
 
                     'web/assets/js/min/easyshop.product_promo_category.js':
