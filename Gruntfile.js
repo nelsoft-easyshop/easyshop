@@ -19,7 +19,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.auto-complete.js': 'jquery-auto-complete/jquery.auto-complete.js',
                     'js/src/vendor/bower_components/jquery.cookie.js': 'jquery-cookie/jquery.cookie.js',
                     'js/src/vendor/bower_components/jquery.nicescroll.js': 'jquery.nicescroll/jquery.nicescroll.js',
-                    'js/src/vendor/bower_components/jquery.scrollUp.js': 'scrollup/js/jquery.scrollUp.js'
+                    'js/src/vendor/bower_components/jquery.scrollUp.js': 'scrollup/js/jquery.scrollUp.js',
+                    'js/src/vendor/bower_components/jstree.js': 'jstree/dist/jstree.js'
                 }
             },
             stylesheets: {
@@ -30,7 +31,8 @@ module.exports = function (grunt) {
                     'css/vendor/bower_components/chosen.min.css': 'chosen/chosen.min.css',
                     'css/vendor/bower_components/ion.rangeSlider.css': 'ionrangeslider/css/ion.rangeSlider.css',
                     'css/vendor/bower_components/ion.rangeSlider.skinFlat.css': 'ionrangeslider/css/ion.rangeSlider.skinFlat.css',
-                    'css/vendor/bower_components/jquery.Jcrop.css': 'Jcrop/css/jquery.Jcrop.css'
+                    'css/vendor/bower_components/jquery.Jcrop.css': 'Jcrop/css/jquery.Jcrop.css',
+                    'css/vendor/bower_components/jstree.css': 'jstree/dist/themes/default/style.css'
                 }
             },
         },
@@ -178,7 +180,7 @@ module.exports = function (grunt) {
                         ['web/assets/css/jquery-ui.css',
                          'web/assets/css/jquery-ui.theme.min.css'],
                     'web/assets/css/min-easyshop.dashboard-primary.css':
-                        ['web/assets/css/jstree/style.css',
+                        ['web/assets/css/vendor/bower_components/jstree.css',
                          'web/assets/css/contact.css',
                          'web/assets/css/vendor/bower_components/chosen.min.css', 
                          'web/assets/css/new-dashboard.css'],
@@ -346,7 +348,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/bower_components/chosen.jquery.min.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
-                             'web/assets/js/src/vendor/jstree.js',
+                             'web/assets/js/src/vendor/bower_components/jstree.js',
                              'web/assets/js/src/vendor/pwstrength.js',
                              'web/assets/js/src/vendor/bower_components/jquery.nicescroll.js',
                              'web/assets/js/src/dashboard.js',
