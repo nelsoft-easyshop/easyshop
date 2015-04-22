@@ -10,7 +10,6 @@ module.exports = function (grunt) {
                 files: {
                     'js/src/vendor/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
-                    'js/src/vendor/socket.io.js': 'socket.io-client/socket.io.js',
                     'js/src/vendor/jquery.cropper.js': 'cropper/dist/cropper.js',
                     // migrating files
                     'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js',
@@ -24,7 +23,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.raty.js': 'raty/lib/jquery.raty.js',
                     'js/src/vendor/bower_components/jquery.jcarousel.js': 'jcarousel/dist/jquery.jcarousel.js',
                     'js/src/vendor/bower_components/jquery.countdown.js': 'jquery.countdown/dist/jquery.countdown.js',
-                    'js/src/vendor/bower_components/jquery.ui.touch-punch.js': 'jqueryui-touch-punch/jquery.ui.touch-punch.js'
+                    'js/src/vendor/bower_components/jquery.ui.touch-punch.js': 'jqueryui-touch-punch/jquery.ui.touch-punch.js',
+                    'js/src/vendor/bower_components/socket.io.js': 'socket.io-client/socket.io.js',
                 }
             },
             stylesheets: {
@@ -431,7 +431,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/bower_components/jquery.cookie.js',
                              'web/assets/js/src/lib/websocket/client.js',
                              'web/assets/js/src/lib/eventdispatcher.js',
-                             'web/assets/js/src/vendor/socket.io.js',
+                             'web/assets/js/src/vendor/bower_components/socket.io.js',
                              'web/assets/js/src/nodeClient.js',
                              'web/assets/js/src/universal.js'],
 
