@@ -205,7 +205,7 @@
 
 <!-- Load Js Files -->
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.scrollUp.js"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/bower_components/chosen.jquery.min.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/bower_components/jquery.Jcrop.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js'></script>

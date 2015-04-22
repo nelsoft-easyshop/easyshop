@@ -444,7 +444,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <input type="hidden" id="listOfFeatureWithRestriction" data-real-time-chat="<?=$listOfFeatureWithRestriction && $listOfFeatureWithRestriction[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.scrollUp.js"></script>
     <script src="/assets/js/src/vendor/bower_components/jquery.auto-complete.js" type="text/javascript"></script>
     <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
