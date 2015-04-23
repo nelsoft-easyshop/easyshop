@@ -96,39 +96,69 @@ class EsMessagesRepository extends EntityRepository
         return $query->getResult();
     }
 
-    /**
+     /**
      * Soft deletes message/conversation
-     * @param $messageId
-     * @param $memberId array
-     * @return int
+     * @param integer[] $messageId
+     * @param integer $memberId
+     * @return integer
      */
-    public function delete($messageId, $memberId)
+    public function delete($messageIds, $memberId)
     {
+        $statusMessageNotDeleted = (int) EsMessages::MESSAGE_NOT_DELETED;
+        $statusMessageDeletedByReceiver = (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER;
+        $statusMessageDeletedBySender = (int) EsMessages::MESSAGE_DELETED_BY_SENDER;
+        $statusMessageDeletedByBoth = (int) EsMessages::MESSAGE_DELETED_BY_BOTH;
+    
         $em = $this->_em;
-        $query = "UPDATE `es_messages`
-            SET `is_delete` = CASE
-                    WHEN `is_delete` = ? THEN `is_delete` + (CASE WHEN `from_id` = ? THEN 2 ELSE 1 END)
-                    WHEN `is_delete` = ? THEN `is_delete` + 2
-                    WHEN `is_delete` = ? THEN `is_delete` + 1
-                    ELSE 3
-                   END
-            WHERE `id_msg` IN(?)";
-        $count = $em->getConnection()->executeUpdate(
-                                        $query,
-                                        [
-                                            EsMessages::MESSAGE_NOT_DELETED,
-                                            $memberId,
-                                            EsMessages::MESSAGE_DELETED_BY_RECEIVER,
-                                            EsMessages::MESSAGE_DELETED_BY_SENDER,
-                                            $messageId
-                                        ],
-                                        [
-                                            \PDO::PARAM_INT,
-                                            \PDO::PARAM_INT,
-                                            \PDO::PARAM_INT,
-                                            \PDO::PARAM_INT,
-                                            \Doctrine\DBAL\Connection::PARAM_INT_ARRAY
-                                        ]);
+        $query = 
+           "UPDATE 
+                `es_messages`
+            SET `is_delete` = 
+                CASE
+                    WHEN `is_delete` = ? AND `from_id` = ? THEN ?
+                    WHEN `is_delete` = ? AND `to_id` = ? THEN ?
+                    WHEN `is_delete` = ? AND `from_id` = ? THEN ?
+                    WHEN `is_delete` = ? AND `to_id` = ? THEN ?
+                    ELSE `is_delete`
+                END
+            WHERE 
+                (`from_id` = ? or `to_id` = ?) AND `id_msg` IN(?)";
+
+        $count = $em->getConnection()
+                    ->executeUpdate(
+                        $query,[
+                            $statusMessageNotDeleted,
+                            $memberId,
+                            $statusMessageDeletedBySender,
+                            $statusMessageNotDeleted,
+                            $memberId,
+                            $statusMessageDeletedByReceiver,
+                            $statusMessageDeletedByReceiver,
+                            $memberId,
+                            $statusMessageDeletedByBoth,
+                            $statusMessageDeletedBySender,
+                            $memberId,
+                            $statusMessageDeletedByBoth,
+                            $memberId,
+                            $memberId,
+                            $messageIds,
+                        ],[
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \PDO::PARAM_INT,
+                            \Doctrine\DBAL\Connection::PARAM_INT_ARRAY,
+                        ]);
 
         return $count;
     }
