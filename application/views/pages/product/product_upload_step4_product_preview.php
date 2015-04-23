@@ -224,7 +224,7 @@
             <div class="div-detail-container ">
                 <div class="p-html-description external-links-container">
                     <p>
-                        <?=$productDescription;?> 
+                        <?php echo nl2br($productDescription) ;?> 
                         <br>
                         <?php if($product->getCondition() !== ""): ?>
                             Condition: <?=html_escape($product->getCondition()); ?>
