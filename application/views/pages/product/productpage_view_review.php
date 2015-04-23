@@ -31,7 +31,7 @@
                         <p class="p-detail-title">Product Detail</p>
                         <div class="p-html-description">
                             <div class="external-links-container">
-                                <?=nl2br($productDetails); ?>
+                                <?php echo nl2br($productDetails); ?>
                                 <?php if($product->getCondition() !== ""): ?>
                                     Condition: <?=html_escape($product->getCondition()); ?>
                                     <br>
