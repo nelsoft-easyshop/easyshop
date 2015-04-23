@@ -192,6 +192,7 @@ class product extends MY_Controller
         $reviewProductService = $this->serviceContainer['review_product_service'];
         $stringUtility = $this->serviceContainer['string_utility'];
         $categoryManager = $this->serviceContainer['category_manager']; 
+        $urlUtility = $this->serviceContainer['url_utility'];
 
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
@@ -269,6 +270,7 @@ class product extends MY_Controller
                 }
                 $canPurchase = $cartManager->canBuyerPurchaseProduct($product,$viewerId);
                 $productDescription = $stringUtility->purifyHTML($product->getDescription());
+                $productDescription = $urlUtility->addRelNofollow($productDescription);
                 $productReviews = $reviewProductService->getProductReview($productId);
                 $canReview = $reviewProductService->checkIfCanReview($viewerId,$productId); 
                 $reviewDetailsData = [
