@@ -3336,6 +3336,6 @@
 
     $(window).on("load resize", function(){
         var metaInfoTdWidth = $(".td-meta-info").width();
-        $(".item-list-name a").css("overflow","hidden").css("text-overflow","ellipsis").css("white-space", "nowrap").css("max-width", metaInfoTdWidth+"px");
+        $(".item-list-name").css("overflow","hidden").css("text-overflow","ellipsis").css("white-space", "nowrap").css("max-width", metaInfoTdWidth+"px");
     });
 }(jQuery));
