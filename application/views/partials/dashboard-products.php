@@ -23,7 +23,7 @@
                                     <?php endif; ?>
                                 </div>
                             </td>
-                            <td class="td-meta-info" width="80%">
+                            <td class="td-meta-info">
                                 <p class="item-list-name">
                                     <?php if((int)$product->getIsDelete() === EasyShop\Entities\EsProduct::DELETE || (int)$product->getIsDraft() === EasyShop\Entities\EsProduct::DRAFT): ?>
                                             <?php if(strlen($product->getName()) > 100): ?>
