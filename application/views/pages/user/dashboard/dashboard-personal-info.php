@@ -1,7 +1,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <link type="text/css" href='/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-    <link type="text/css" href='/assets/css/jquery-ui.theme.min.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/vendor/bower_components/jquery-ui.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+    <link type="text/css" href='/assets/css/vendor/bower_components/jquery.ui.theme.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php else: ?>
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-personal-info.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
 <?php endif; ?>

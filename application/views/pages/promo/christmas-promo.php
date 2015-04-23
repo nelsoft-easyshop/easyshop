@@ -197,7 +197,7 @@
         </div>
 
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-            <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/bower_components/jquery.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

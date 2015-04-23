@@ -173,10 +173,8 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&sensor=false"></script>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?=ES_FILE_VERSION?>"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.ui.touch-punch.js?ver=<?=ES_FILE_VERSION?>"></script>
-    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bower_components/jquery.validate.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.raty.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/image.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
@@ -185,7 +183,7 @@
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
     <script type='text/javascript' src='/assets/js/src/vendor/bower_components/jstree.js'></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/pwstrength.bootstrap.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.nicescroll.js?ver=<?=ES_FILE_VERSION?>"></script> 
     <script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script> 

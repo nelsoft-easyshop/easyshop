@@ -1,5 +1,5 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>" />
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-mods.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
     <link rel="stylesheet" type="text/css" href="/assets/css/jquery.bxslider.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
@@ -426,8 +426,7 @@
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.idTabs.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/assets/js/src/productUpload_step3.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.numeric.js"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
-    <script type='text/javascript' src='/assets/js/src/vendor/jquery.jqpagination.min.js'></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery-ui.js"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/jquery.simplemodal.js"></script>
     <script type="text/javascript" src="/assets/js/src/vendor/bower_components/chosen.jquery.min.js" ></script>
 <?php else: ?>
