@@ -23,8 +23,9 @@ class EsMemberMergeRepository extends EntityRepository
 
         $query = $em->createQuery($dql)
                     ->setParameter("memberId", $memberId);
-
-        $isMemberMerged = empty($query->getResult()) === false;
+        $result = $query->getResult();
+                    
+        $isMemberMerged = empty($result) === false;
                       
         return $isMemberMerged;
     }
