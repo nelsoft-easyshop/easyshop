@@ -125,19 +125,19 @@ a{
 
 .mf-li{
     border-radius: 7px 7px 0px 0px;
-    border: none !important;
+    border-top: none !important;
 }
 
 .ml-li{
     border-radius: 0px 0px 7px 7px;
-    border: none !important;
+    border-top: 0px !important;
 }
 
 .m-li2{
     border-top: none !important;
 }
 
-#my-store-menu, #my-account-menu{
+.dashboard-menu{
     display: none;
 }
 
@@ -3721,8 +3721,7 @@ label.css-label {
     }
     
     #dash,
-    #my-store-menu-trigger,
-    #my-account-menu-trigger{
+    .dashboard-menu-trigger{
         display: inline;
     }
     
