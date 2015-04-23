@@ -91,3 +91,10 @@
     }
 
 }
+
+@media screen and (max-width: 350px) {
+    .message-text{
+        font-size: 10px;
+        line-height: 18px;
+    }
+}

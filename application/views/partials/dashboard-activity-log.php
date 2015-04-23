@@ -22,7 +22,7 @@
                             <div class="col-xs-9 col-log-meta-cont">
                                 <div class="row">
                                     <div class="col-md-9">
-                                        <p class="log-title">
+                                        <p class="log-meta">
                                             Updated Personal Information
                                             <br>
                                             <?php foreach ($activity['data']['contents'] as $content): ?>
@@ -423,7 +423,7 @@
                                                                 </span>
                                                             </div>
                                                             <b>
-                                                                <i>" <?=html_escape($activity['data']['message']); ?> "</i>
+                                                                <i>" <?=html_escape(es_string_limit($activity['data']['message'], 150)); ?> "</i>
                                                             </b>
                                                         </div>
                                                     </td>
@@ -449,7 +449,7 @@
                                                     <td class="v-align-top">
                                                         <div class="log-meta">
                                                             <b>
-                                                                <i>" <?=html_escape($activity['data']['message']); ?> "</i>
+                                                                <i>" <?=html_escape(es_string_limit($activity['data']['message'], 150)); ?> "</i>
                                                             </b>
                                                         </div>
                                                     </td>

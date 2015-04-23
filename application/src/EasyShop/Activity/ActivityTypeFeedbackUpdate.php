@@ -2,6 +2,8 @@
 
 namespace EasyShop\Activity;
 
+use EasyShop\Entities\EsProductImage as EsProductImage;
+
 class ActivityTypeFeedbackUpdate extends AbstractActivityType
 {    
     /**
@@ -87,12 +89,16 @@ class ActivityTypeFeedbackUpdate extends AbstractActivityType
         else if($activityData->action === self::ACTION_FEEDBACK_PRODUCT || $activityData->action === self::ACTION_FEEDBACK_PRODUCT_REPLY ){
             
             $product = $this->productManager->getProductDetails($activityData->productId);
-            $formattedData['name'] = $product->getName();
+            $formattedData['name'] = trim($product->getName()) === "" ? "No name" : $product->getName();
             $formattedData['slug'] = $product->getSlug();
             $formattedData['productId'] = $activityData->productId;
             $productImage = $product->getDefaultImage();
-            $formattedData['imageDirectory'] = $productImage->getDirectory();
-            $formattedData['imageFile'] = $productImage->getFilename();
+            $formattedData['imageDirectory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $formattedData['imageFile'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            if ($productImage !== null) {
+                $formattedData['imageDirectory'] = $productImage->getDirectory();
+                $formattedData['imageFile'] = $productImage->getFilename();
+            }
             $formattedData['message'] = $activityData->message;
             $formattedData['rating'] = $activityData->rating;
         }
