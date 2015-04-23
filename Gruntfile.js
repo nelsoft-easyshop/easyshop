@@ -46,20 +46,11 @@ module.exports = function (grunt) {
             },
         },
         cssmin : {
-            bootstrap:{
-                src: 'web/assets/css/bootstrap.css',
-                dest: 'web/assets/css/bootstrap.min.css'
-            },
             combine_css:{
                 files:{
                     'web/assets/css/min-easyshop.sliderpreview.css':
                         ['web/assets/css/jquery.bxslider2.css',
                          'web/assets/css/new-homepage.css'],
-                    'web/assets/css/min-easyshop.feeds.css':
-                        ['web/assets/css/bootstrap.css', 
-                        'web/assets/css/bootstrap-mods.css',
-                        'web/assets/css/style.css',
-                        'web/assets/css/responsive_css.css'],
                     'web/assets/css/min-easyshop.header-alt.css':
                         ['web/assets/css/main-style.css', 
                         'web/assets/css/bootstrap.css',
@@ -69,8 +60,7 @@ module.exports = function (grunt) {
                         'web/assets/css/main-style.css',
                         'web/assets/css/simple-header-css.css',
                         'web/assets/css/footer-css.css',
-                        'web/assets/css/bootstrap.css'
-                        ],
+                        'web/assets/css/bootstrap.css'],
                     'web/assets/css/min-easyshop.header-primary.css':
                         ['web/assets/css/main-style.css',
                          'web/assets/css/normalize.min.css',
@@ -153,9 +143,6 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.user-followers.css':
                         ['web/assets/css/contact.css',
                          'web/assets/css/followers.css'],
-                    'web/assets/css/min-easyshop.login.css':
-                        ['web/assets/css/bootstrap.css',
-                        'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.member-account-activate.css':
                         ['web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.register.css':
