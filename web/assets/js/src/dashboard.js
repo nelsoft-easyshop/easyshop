@@ -16,10 +16,12 @@
         if(username !== "" || password !== "") {
             $.ajax({
                 type: "post",
-                data: {username:username.val().trim(), 
-                       password:password.val().trim(), 
-                       action:action, 
-                       csrfname : csrftoken},
+                data: {
+                    username:username.val().trim(), 
+                    password:password.val().trim(), 
+                    action:action, 
+                    csrfname : csrftoken 
+                },
                 url: '/memberpage/manageUserProduct',
                 beforeSend: function() {
                     activateButtons.hide()
@@ -247,6 +249,8 @@
     });
     
 
+    $(".easy-point-content").getNiceScroll().hide();
+    
     $( ".payment-account-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
         $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
@@ -273,76 +277,65 @@
     });
     
     $( ".dashboard-home-mobile" ).click(function() {
-         $( ".dash-me" ).trigger( "click" );
-         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".dash-me" ).trigger( "click" );
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".dashboard-home-mobile" ).addClass( "selectedM" );
     });
     
     $( "#dash" ).click(function() {
-        $( "#my-account-menu" ).slideUp();
-        var attr = $("i.m").attr("class");
-        if(attr == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
+        $('.dashboard-menu').slideUp();
+        $('.dashboard-menu-trigger i').removeClass('icon-control-up')
+                                      .addClass('icon-control-down');                        
+    });
+    
+    $(".dashboard-menu-trigger").click(function(){
+        var $selectedmenutrigger = $(this);
+        var $selectedmenu = $selectedmenutrigger.closest('a').next('.dashboard-menu');
+        var section = $selectedmenutrigger.data('section');
+        var $easypointcontainer = $(".easy-point-content");
+        $easypointcontainer.getNiceScroll()
+                           .hide();
+        $('.dashboard-menu-trigger[data-section!="'+section+'"]').each(function(){
+            $(this).find('i')
+                   .removeClass('icon-control-up')
+                   .addClass('icon-control-down');
+            $(this).closest('a')
+                   .next('.dashboard-menu')
+                   .slideUp();   
+        });
+        $selectedmenu.slideToggle( "slow", function() {
+            $easypointcontainer.getNiceScroll()
+                               .show()
+                               .resize();
+            var $icon = $selectedmenutrigger.find('i'); 
+            if($icon.hasClass('icon-control-down')){
+                $icon.removeClass('icon-control-down')
+                     .addClass('icon-control-up');
+            }
+            else if($icon.hasClass('icon-control-up')){
+                $icon.removeClass('icon-control-up')
+                     .addClass('icon-control-down');
+            }
+        });
+    });
+
+    $('.transaction-trigger').on('click', function(){
+        var $this = $(this);
+        var type = $this.data('type');
+        $this.addClass('selected');
+        if(type === 'on-going'){
+            $('.transaction-trigger[data-type="completed"]').removeClass('selected');
+            $('.on-going-transaction-header').click();
         }
+        else if(type === 'completed'){
+            $('.transaction-trigger[data-type="on-going"]').removeClass('selected');
+            $('.completed-transaction-header').click();
+        }
+        $('#transaction-menu-trigger').closest('a')
+                                      .removeClass('selected');
+    });
         
-        $( "#my-store-menu" ).slideUp();
-        var attr2 = $("i.a").attr("class");
-        if(attr2 == "a icon-control-up toggle-down pull-right"){
-            $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-            $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-            $( ".submenu-my-account" ).css("border-radius", "0px");
-            $( ".f-a" ).css("border-radius", "0px");
-        }
-    });
-
-    $( "#my-store-menu-trigger" ).click(function() {
-    $(".easy-point-content").getNiceScroll().hide();
-    $( "#my-account-menu" ).slideUp();
-     var attr4 = $("i.a").attr("class");
-    if(attr4 == "a icon-control-up toggle-down pull-right"){
-            $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-            $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-            $( ".submenu-my-account" ).css("border-radius", "0px");
-            $( ".f-a" ).css("border-radius", "0px");
-        }
-        $( "#my-store-menu" ).slideToggle( "slow", function() {
-            $(".easy-point-content").getNiceScroll().show().resize();
-            var attr = $("i.m").attr("class");
-            if(attr == "m icon-control-down toggle-down pull-right"){
-                $('i.m').removeClass("m icon-control-down toggle-down pull-right").addClass("m icon-control-up toggle-down pull-right");
-            }
-            else if(attr == "m icon-control-up toggle-down pull-right"){
-                $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-            }
-        });
-    });
-
-    $( "#my-account-menu-trigger" ).click(function() {
-        $(".easy-point-content").getNiceScroll().hide();
-        $( "#my-store-menu" ).slideUp();
-        var attr3 = $("i.m").attr("class");
-        if(attr3 == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-        }
-            $( "#my-account-menu" ).slideToggle( "slow", function() {
-            $(".easy-point-content").getNiceScroll().show().resize();
-            var attr = $("i.a").attr("class");
-            if(attr == "a icon-control-down toggle-down pull-right"){
-                $('i.a').removeClass("a icon-control-down toggle-down pull-right").addClass("a icon-control-up toggle-down pull-right");
-                $( ".ml-li" ).css("border-radius", "0px");
-                $( ".submenu-my-account" ).css("border-radius", "0px 0px 7px 7px");
-                $( ".f-a" ).css("border-radius", "0px 0px 7px 7px");
-            }
-            else if(attr == "a icon-control-up toggle-down pull-right"){
-                $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-                $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-                $( ".submenu-my-account" ).css("border-radius", "0px");
-                $( ".f-a" ).css("border-radius", "0px");
-            } 
-        });
-    });
-
     $( "#info-item-1" ).click(function() {
         $( "#info-attributes-1" ).slideToggle( "slow", function() {
             var i_icon = $("i.info-item-icon-1").attr("class");
@@ -432,7 +425,7 @@
         $(this).toggleClass("active-bar",0);
         $(this).next('.payout-breakdown-container').slideToggle();
         $('.sales-breakdown-container').slideUp();
-       $('.sales-title-total').removeClass("active-bar");
+        $('.sales-title-total').removeClass("active-bar");
     });
 
     $('#transactions').on('click', '.trans-item-info', function() {
@@ -1141,59 +1134,50 @@
         $('.feedback-from-buyer').removeClass("active-bar");
         $('.feedback-for-seller').removeClass("active-bar");
     });
+    
+    
     //FOR MOBILE
-    $('.my-store-menu-mobile').click(function() {
-        $('.my-account-menu-mobile-cont').slideUp();
-        $('.my-store-menu-mobile-cont').slideToggle("fast", function(){
-            
-            var attr_ms = $("i.ms").attr("class");
-            if(attr_ms == "ms fa fa-angle-down"){
-                $('i.ms').removeClass("ms fa fa-angle-down").addClass("ms fa fa-angle-up");
+    $('.col-dash-mobile').click(function() {
+
+        var $selectedMobileMenuTriggger = $(this);
+        var section = $selectedMobileMenuTriggger.data('section');
+        
+        if(section === 'my-transactions'){
+            $('#transaction-menu-trigger').trigger("click");
+            $('.dash-mobile-trigger ').removeClass("selectedM");
+            $('.col-dash-mobile').removeClass( "selectedCol" );
+            $selectedMobileMenuTriggger.closest('a.dash-mobile-trigger')
+                                       .addClass("selectedM"); 
+        }
+        else{
+            var $selectedMobileMenu = $('.mobile-menu-container[data-section="'+section+'"]');
+            $('.col-dash-mobile[data-section!="'+section+'"] i').each(function(){
+                $(this).removeClass("fa-angle-up")
+                    .addClass("fa-angle-down");
+            });
+            $selectedMobileMenu.slideToggle( "slow");
+            var $icon = $selectedMobileMenuTriggger.find('i'); 
+            if($icon.hasClass('fa-angle-down')){
+                $icon.removeClass('fa-angle-down')
+                        .addClass('fa-angle-up');
             }
-            else if(attr_ms == "ms fa fa-angle-up"){
-                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
+            else if($icon.hasClass('fa-angle-up')){
+                $icon.removeClass('fa-angle-up')
+                    .addClass('fa-angle-down');
             }
-            
-            var attr_ma2 = $("i.ma").attr("class");
-            if(attr_ma2 == "ma fa fa-angle-up"){
-                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
-            }
-        });
+        }
+
     });
-    
-    $('.my-account-menu-mobile').click(function() {
-        $('#my-account-menu-trigger').trigger("click");
-        $('.my-store-menu-mobile-cont').slideUp();
-        $('.my-account-menu-mobile-cont').slideToggle("fast", function(){
-            var attr_ma = $("i.ma").attr("class");
-            if(attr_ma == "ma fa fa-angle-down"){
-                $('i.ma').removeClass("ma fa fa-angle-down").addClass("ma fa fa-angle-up");
-            }
-            else if(attr_ma == "ma fa fa-angle-up"){
-                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
-            }
-            
-            var attr_ms2 = $("i.ms").attr("class");
-            if(attr_ms2 == "ms fa fa-angle-up"){
-                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
-            }
-        });
-    });
-    
+  
     $('.dash-mobile-trigger').click(function() {
-        $('.my-store-menu-mobile-cont').slideUp("fast");
-        $('.my-account-menu-mobile-cont').slideUp("fast");
+        $('.mobile-menu-container').slideUp("fast");
         
-        var attr_ms3 = $("i.ms").attr("class");
-        if(attr_ms3 == "ms fa fa-angle-up"){
-            $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
-        }
-        
-        
-        var attr_ma3 = $("i.ma").attr("class");
-        if(attr_ma3 == "ma fa fa-angle-up"){
-            $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
-        }
+        $('.col-dash-mobile i').each(function(){
+            if($(this).hasClass('fa-angle-up')){
+                $(this).removeClass('fa-angle-up')
+                       .addClass('fa-angle-down');
+            }
+        });
     });
     
    
@@ -1205,16 +1189,7 @@
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
-    
-    $('.ms-trans').click(function() {
-        $('.id-transactions-trigger').trigger("click");
-        $('.dash-mobile-trigger ').removeClass("selectedM");
-        $(".dash-me").removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $(this).addClass("selectedM");
-    });
-    
+
     
     $('.ms-setup').click(function() {
         $('#store-setup-tab').trigger("click");
@@ -2580,12 +2555,11 @@
     function handleUrlTabs(tab)
     {
         if (tab === "ongoing") {
-            $('#my-store-menu-trigger').trigger('click');
-             setTimeout(function() {
-                 $('.id-transactions-trigger').trigger('click');
+            setTimeout(function() {
+                $('#transaction-menu-trigger').trigger('click');
             }, 500);
             setTimeout(function() {
-                 $('.transaction-title-bought').trigger('click');
+                $('.transaction-trigger[data-type="on-going"]').trigger('click');
             }, 1000);
         }
         else if(tab === "settings"){

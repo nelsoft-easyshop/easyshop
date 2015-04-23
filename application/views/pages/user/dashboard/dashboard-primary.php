@@ -11,93 +11,112 @@
 <section class="section-dashboard ">
     <div class="container container-dashboard">
         <div class="row-fluid">
-            <div class=" idTabs">
-            <div class="col-sm-3 col-sidebar">
-                <ul class="sidebar-dashboard" >
-                    <a href="#dashboard" class="dash-me selected"><li id="dash"  class="mf-li">Dashboard</li></a>
-                    <a><li id="my-store-menu-trigger">My Store <i class="m icon-control-down toggle-down pull-right" id="control-menu-1"></i></li></a>
-                    <div id="my-store-menu">
-                        <ul class="sidebar-submenu">
-                            <a href="#transactions"  class="aaa id-transactions-trigger"><li id="transactions-trigger-li"class="f-li ms-f">Transactions</li></a>
-                            <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
-                            <a href="#customize-category" id="customize-category-tab"><li class="f-li ms-f">Customize Category</li></a>
-                            <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
-                        </ul>
-                    </div>
-                    <a><li id="my-account-menu-trigger" class="ml-li">My Account <i class="a icon-control-down toggle-down pull-right"></i></li></a>
-                    <div id="my-account-menu">
-                        <ul class="sidebar-submenu submenu-my-account">
-                            <a href="#personal-information" class="personal-info-trigger"><li class="f-li">Personal Information</li></a>
-                            <a href="#delivery-address" class="delivery-address-trigger"><li class="m-li">Delivery Address</li></a>
-                            <a href="#payment-account" class="payment-account-trigger" id="payment-account-tab"><li class="m-li m-li2">Payment Account</li></a>
-                            <a href="#activity-logs" class="activity-logs-trigger" ><li class="m-li m-li2">Activity Logs</li></a>
-                            <a href="#account-settings" class="settings-trigger"><li class="f-li f-a">Account Settings</li></a>
-                        </ul>
-                    </div>
-                </ul>
-                
-                <div class="easy-point-container">
-                    <div class="easy-point-title">
-                        easy points
-                        <a href="/easypoints" target="_blank">
-                            <span class="easy-point-question">?</span>
+            <div class="idTabs">
+                <div class="col-sm-3 col-sidebar">
+                    <ul class="sidebar-dashboard" >
+                        <a href="#dashboard" class="dash-me selected">
+                            <li id="dash" class="mf-li">Dashboard</li>
                         </a>
-                        <p class="easy-point-tooltip">
-                            Whats this?
-                        </p>
-                    </div>
-                    <div class="current-point-container">
-                        <div class="border-bttm">
-                            <span class="current-point-title">Current points</span>
-                            <span class="current-points"><?php echo number_format($totalUserPoint, 2, '.', ',') ?></span>
-                            <div class="clear"></div>
+
+                        <a>
+                            <li id="my-store-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-store">My Store <i class="icon-control-down toggle-down pull-right"></i></li>
+                        </a>
+                        <div id="my-store-menu" class="dashboard-menu">
+                            <ul class="sidebar-submenu">
+                                <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
+                                <a href="#customize-category" id="customize-category-tab"><li class="f-li ms-f">Customize Category</li></a>
+                                <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
+                            </ul>
+                        </div>
+    
+                        <a href="#transactions">
+                            <li id="transaction-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-transaction">Transactions<i class="m icon-control-down toggle-down pull-right"></i></li>
+                        </a>
+                        <div id="transaction-menu" class="dashboard-menu">
+                            <ul class="sidebar-submenu">
+                                <a href="javascript:void(0);" class="transaction-trigger" data-type="on-going"><li class="f-li">On-going Transaction</li></a>
+                                <a href="javascript:void(0);" class="transaction-trigger" data-type="completed"><li class="m-li">Completed Transaction</li></a>
+                            </ul>
+                        </div>
+                        
+                        <a>
+                            <li id="my-account-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-account">My Account <i class="icon-control-down toggle-down pull-right"></i></li>
+                        </a>
+                        <div id="my-account-menu" class="dashboard-menu">
+                            <ul class="sidebar-submenu submenu-my-account">
+                                <a href="#personal-information" class="personal-info-trigger"><li class="f-li">Personal Information</li></a>
+                                <a href="#delivery-address" class="delivery-address-trigger"><li class="m-li">Delivery Address</li></a>
+                                <a href="#payment-account" class="payment-account-trigger" id="payment-account-tab"><li class="m-li m-li2">Payment Account</li></a>
+                                <a href="#activity-logs" class="activity-logs-trigger" ><li class="m-li m-li2">Activity Logs</li></a>
+                                <a href="#account-settings" class="settings-trigger"><li class="f-li f-a">Account Settings</li></a>
+                            </ul>
+                        </div>
+                    
+                    </ul>
+                    
+                    <div class="easy-point-container">
+                        <div class="easy-point-title">
+                            easy points
+                            <a href="/easypoints" target="_blank">
+                                <span class="easy-point-question">?</span>
+                            </a>
+                            <p class="easy-point-tooltip">
+                                Whats this?
+                            </p>
+                        </div>
+                        <div class="current-point-container">
+                            <div class="border-bttm">
+                                <span class="current-point-title">Current points</span>
+                                <span class="current-points"><?php echo number_format($totalUserPoint, 2, '.', ',') ?></span>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        <ul class="easy-point-content">
+                        </ul>
+                        <div class="text-center point-loader">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
                         </div>
                     </div>
-                    <ul class="easy-point-content">
-                    </ul>
-                    <div class="text-center point-loader">
-                        <img src="<?php getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
-                    </div>
                 </div>
-            </div>
-            <div class="mobile-dashboard-menu">
-                <div class="row-fluid row-menu-mobile-res">
-                    <a  class="dash-mobile-trigger dashboard-home-mobile selectedM">
-                        <div class="col-xs-4 col-dash-mobile">
-                            Dashboard
+
+                <div class="mobile-dashboard-menu">        
+                    <div class="row-fluid row-menu-mobile-res">
+                        <a class="dash-mobile-trigger my-transactions-mobile">
+                            <div class="col-xs-4 col-dash-mobile" data-section="my-transactions">
+                                Transactions
+                            </div>
+                        </a>
+                        <div class="col-xs-4 col-dash-mobile my-store-menu-mobile" data-section="my-store">
+                            My Store <i class="ms fa fa-angle-down"></i>
                         </div>
-                    </a>
-                    <div class="col-xs-4 col-dash-mobile my-store-menu-mobile">
-                        My Store <i class="ms fa fa-angle-down"></i>
+                        <div class="col-xs-4 col-dash-mobile my-account-menu-mobile" data-section="my-account">
+                            My Account <i class="ma fa fa-angle-down"></i>
+                        </div>
+                    </div> 
+                    
+                    <div class="my-store-menu-mobile-cont mobile-menu-container" data-section="my-store">
+                        <ul class="my-store-menu-mobile-ul">
+                            <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
+                            <a class="ms-customize dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-customize">Customize Category</li></a>
+                            <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
+                        </ul>
                     </div>
-                    <div class="col-xs-4 col-dash-mobile my-account-menu-mobile">
-                        My Account <i class="ma fa fa-angle-down"></i>
+                    <div class="my-account-menu-mobile-cont mobile-menu-container" data-section="my-account">
+                        <ul class="my-account-menu-mobile-ul">
+                            <a class="ma-info dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
+                            <a class="ma-delivery dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
+                            <a class="ma-payment dash-mobile-trigger"><li class="m-menu-payment">Payment Account</li></a>
+                            <a class="ma-activity dash-mobile-trigger"><li class="m-menu-activity">Activity Logs</li></a>
+                            <a class="ma-settings dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
+                        </ul>
                     </div>
                 </div>
-                <div class="my-store-menu-mobile-cont">
-                    <ul class="my-store-menu-mobile-ul">
-                        <a class="ms-trans dash-mobile-trigger"><li class="m-menu-transactions">Transactions</li></a>
-                        <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
-                        <a class="ms-customize dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-customize">Customize Category</li></a>
-                        <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
-                    </ul>
-                </div>
-                <div class="my-account-menu-mobile-cont">
-                    <ul class="my-account-menu-mobile-ul">
-                        <a class="ma-info dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
-                        <a class="ma-delivery dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
-                        <a class="ma-payment dash-mobile-trigger"><li class="m-menu-payment">Payment Account</li></a>
-                        <a class="ma-activity dash-mobile-trigger"><li class="m-menu-activity">Activity Logs</li></a>
-                        <a class="ma-settings dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
-                    </ul>
-                </div>
-            </div>
             
             </div>
             <div class="col-md-9 col-content">
                 <div class="div-dashboard-content">
                     <div class="" id="dashboard">
-                        <?=$dashboardHomeView; ?>
+                        <?php echo $dashboardHomeView; ?>
                     </div>
                     <div id="transactions">
                         <?php include("dashboard-transactions.php");?>
