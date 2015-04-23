@@ -573,6 +573,7 @@ a{
     font-weight: bold;
     font-size: 17px;
     margin:2px;
+    min-width: 100%;
 }
 
 .item-list-name a{
@@ -3816,6 +3817,10 @@ label.css-label {
         display: none;
     }
     
+    .td-meta-info{
+        width: 80%;
+    }
+
     .td-item-actions{
         display: none;
     }
