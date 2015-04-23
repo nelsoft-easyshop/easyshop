@@ -104,11 +104,11 @@ class EsMessagesRepository extends EntityRepository
      */
     public function delete($messageIds, $memberId)
     {
-        $statusMessageNotDeleted = (int) EsMessages::MESSAGE_NOT_DELETED;
-        $statusMessageDeletedByReceiver = (int) EsMessages::MESSAGE_DELETED_BY_RECEIVER;
-        $statusMessageDeletedBySender = (int) EsMessages::MESSAGE_DELETED_BY_SENDER;
-        $statusMessageDeletedByBoth = (int) EsMessages::MESSAGE_DELETED_BY_BOTH;
-    
+        $statusMessageNotDeleted = EsMessages::MESSAGE_NOT_DELETED;
+        $statusMessageDeletedByReceiver = EsMessages::MESSAGE_DELETED_BY_RECEIVER;
+        $statusMessageDeletedBySender = EsMessages::MESSAGE_DELETED_BY_SENDER;
+        $statusMessageDeletedByBoth = EsMessages::MESSAGE_DELETED_BY_BOTH;
+
         $em = $this->_em;
         $query = 
            "UPDATE 
@@ -143,23 +143,23 @@ class EsMessagesRepository extends EntityRepository
                             $memberId,
                             $messageIds,
                         ],[
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
-                            \PDO::PARAM_INT,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
+                            \PDO::PARAM_STR,
                             \PDO::PARAM_INT,
                             \PDO::PARAM_INT,
                             \Doctrine\DBAL\Connection::PARAM_INT_ARRAY,
                         ]);
-
+              
         return $count;
     }
 
