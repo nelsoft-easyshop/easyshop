@@ -89,7 +89,9 @@
                     <td class="td-contact-detail">
                         <p class="text-contact">
                             <div class="external-links-container">
-                                <a href=" <?php echo preg_match("~^(?:f|ht)tps?://~i", $validatedWebsite) ? html_escape($validatedWebsite) : 'http://' . html_escape($validatedWebsite)?>/" id="validatedWebsite"><?php echo html_escape($validatedWebsite); ?></a>
+                                <a href=" <?php echo preg_match("~^(?:f|ht)tps?://~i", $validatedWebsite) ? html_escape($validatedWebsite) : 'http://' . html_escape($validatedWebsite)?>/" id="validatedWebsite" rel="nofollow">
+                                    <?php echo html_escape($validatedWebsite); ?>
+                                </a>
                             </div>
                         </p>
                         <input type="hidden" id="postWebsite" value="<?php echo html_escape($website)?>"/>
