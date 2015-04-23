@@ -68,7 +68,7 @@
         </div>
     </body>
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <script src="/assets/js/src/vendor/jquery-1.9.1.js" type="text/javascript" ></script>
+        <script src="/assets/js/src/vendor/bower_components/jquery.js" type="text/javascript" ></script>
         <script src="/assets/js/src/widget.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
     <?php else: ?>
         <script src="/assets/js/min/easyshop.widget-page.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
