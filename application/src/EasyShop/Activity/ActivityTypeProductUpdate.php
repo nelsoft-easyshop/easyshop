@@ -2,6 +2,8 @@
 
 namespace EasyShop\Activity;
 
+use EasyShop\Entities\EsProductImage as EsProductImage;
+
 class ActivityTypeProductUpdate extends AbstractActivityType
 {
     /**
@@ -64,12 +66,16 @@ class ActivityTypeProductUpdate extends AbstractActivityType
 
         if(isset($activityData->productId)){
             $product = $this->productManager->getProductDetails($activityData->productId);
-            $formattedData['name'] = $product->getName();
+            $formattedData['name'] = trim($product->getName()) === "" ? "No name" : $product->getName();
             $formattedData['slug'] = $product->getSlug();
             $formattedData['productId'] = $activityData->productId;
             $productImage = $product->getDefaultImage();
-            $formattedData['imageDirectory'] = $productImage->getDirectory();
-            $formattedData['imageFile'] = $productImage->getFilename();
+            $formattedData['imageDirectory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $formattedData['imageFile'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            if ($productImage !== null) {
+                $formattedData['imageDirectory'] = $productImage->getDirectory();
+                $formattedData['imageFile'] = $productImage->getFilename();
+            }
             $formattedData['action'] = $activityData->action;
             $formattedData['final_price'] = $product->getFinalPrice();
             $formattedData['original_price'] = $product->getOriginalPrice();

@@ -2,6 +2,8 @@
 
 namespace EasyShop\Activity;
 
+use EasyShop\Entities\EsProductImage as EsProductImage;
+
 class ActivityTypeTransactionUpdate extends AbstractActivityType
 {    
 
@@ -105,14 +107,17 @@ class ActivityTypeTransactionUpdate extends AbstractActivityType
             $order = $orderProduct->getOrder();
             $product = $this->productManager->getProductDetails($orderProduct->getProduct());
             $formattedData['invoiceNumber'] = $order->getInvoiceNo();            
-            $formattedData['name'] = $product->getName();
+            $formattedData['name'] = trim($product->getName()) === "" ? "No name" : $product->getName();
             $formattedData['slug'] = $product->getSlug();
             $formattedData['productId'] = $product->getIdProduct();
             $productImage = $product->getDefaultImage();
-            $formattedData['imageDirectory'] = $productImage->getDirectory();
-            $formattedData['imageFile'] = $productImage->getFilename();
+            $formattedData['imageDirectory'] = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+            $formattedData['imageFile'] = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+            if ($productImage !== null) {
+                $formattedData['imageDirectory'] = $productImage->getDirectory();
+                $formattedData['imageFile'] = $productImage->getFilename();
+            }
             $formattedData['final_price'] = $orderProduct->getTotal();
-            $formattedData['imageFile'] = $productImage->getFilename();
             $formattedData['action'] = $activityData->action;
         }
         elseif(isset($activityData->orderId)){
