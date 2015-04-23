@@ -3448,6 +3448,7 @@ label.css-label {
     display: inline-block;
     display: block;
     margin-left: 10px;
+    word-break: break-all;
 }
 
 .log-meta-table{
