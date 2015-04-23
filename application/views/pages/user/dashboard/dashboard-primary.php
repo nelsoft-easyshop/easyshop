@@ -74,7 +74,7 @@
                         <ul class="easy-point-content">
                         </ul>
                         <div class="text-center point-loader">
-                            <img src="<?php getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
+                            <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                         <div class="col-xs-4 col-dash-mobile my-account-menu-mobile" data-section="my-account">
                             My Account <i class="ma fa fa-angle-down"></i>
                         </div>
-                    </div>
+                    </div> 
                     
                     <div class="my-store-menu-mobile-cont mobile-menu-container" data-section="my-store">
                         <ul class="my-store-menu-mobile-ul">
