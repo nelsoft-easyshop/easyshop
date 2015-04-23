@@ -207,37 +207,36 @@
                 <div class="col-md-12 prod-border-bttm pad-top-23"></div>
 
                 <div class="clear"></div>
+                <?php if((count($shippingInfo) === 0 && (bool)$product->getIsMeetup()) === false): ?>
+                    <div class="row pad-top-23">
+                        <div class="col-md-12 prod-payment-img-container">
+                            <p class="attr-title">Payment:</p>
+                            <?php if(isset($paymentMethod['cdb'])): ?> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard-black.png" alt="Mastercard">
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa-black.png" alt="Visa">
+                            <?php endif; ?>
 
-                <div class="row pad-top-23">
-                    <div class="col-md-12 prod-payment-img-container">
-                        <p class="attr-title">Payment:</p>
-                        <?php if(isset($paymentMethod['cdb'])): ?> 
-                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-mastercard-black.png" alt="Mastercard">
-                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-visa-black.png" alt="Visa">
-                        <?php endif; ?>
+                            <?php if(isset($paymentMethod['dragonpay'])) : ?> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-dragonpay-black.png" alt="Dragon Pay">
+                            <?php endif; ?> 
 
-                        <?php if(isset($paymentMethod['dragonpay'])) : ?> 
-                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-dragonpay-black.png" alt="Dragon Pay">
-                        <?php endif; ?> 
+                            <?php if(isset($paymentMethod['paypal'])) : ?> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-paypal-black.png" alt="Paypal">
+                            <?php endif; ?>
 
-                        <?php if(isset($paymentMethod['paypal'])) : ?> 
-                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-paypal-black.png" alt="Paypal">
-                        <?php endif; ?>
+                            <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod-black.png" alt="Cash on Delivery">
+                            <?php endif; ?>
 
-                        <?php if(isset($paymentMethod['cod']) && intval($product->getIsCod(),10) === 1): ?> 
-                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-cod-black.png" alt="Cash on Delivery">
-                        <?php endif; ?>
-
-                        <?php if(isset($paymentMethod['pesopaycdb'])): ?> 
-                            <img src="<?php echo getAssetsDomain(); ?>assets/images/img-pesopay-black.png" alt="Peso Pay">
-                        <?php endif; ?>
+                            <?php if(isset($paymentMethod['pesopaycdb'])): ?> 
+                                <img src="<?php echo getAssetsDomain(); ?>assets/images/img-pesopay-black.png" alt="Peso Pay">
+                            <?php endif; ?>
+                        </div>
                     </div>
-                </div>
-                <div class="clear"></div>
-
-                <div class="col-md-12 prod-border-bttm pad-top-23"></div>
-
-                <div class="clear"></div>
+                    <div class="clear"></div>
+                    <div class="col-md-12 prod-border-bttm pad-top-23"></div>
+                    <div class="clear"></div>
+                <?php endif; ?>
 
                 <div class="row pad-top-23">
                     <div class="col-md-12 prod-share-container">
