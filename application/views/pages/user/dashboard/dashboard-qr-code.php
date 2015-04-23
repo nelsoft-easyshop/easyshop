@@ -14,7 +14,7 @@
     <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='all'/>
+        <link type="text/css" href='/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='all'/>
         <link rel="stylesheet" href="/assets/css/qr-code-css.css?ver=<?=ES_FILE_VERSION?>" type="text/css" media="all">
     <?php else: ?>
         <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.dashboard-qr-code.css?ver=<?=ES_FILE_VERSION?>' media='all'/>

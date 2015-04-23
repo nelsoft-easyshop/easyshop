@@ -20,7 +20,7 @@
     
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-        <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href='/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
         <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php else: ?>
         <link type="text/css" href='/assets/css/min-easyshop.header-alt.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
