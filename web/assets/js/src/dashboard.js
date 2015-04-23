@@ -1141,24 +1141,31 @@
 
         var $selectedMobileMenuTriggger = $(this);
         var section = $selectedMobileMenuTriggger.data('section');
-        var $selectedMobileMenu = $('.mobile-menu-container[data-section="'+section+'"]');
         
-        $('.col-dash-mobile[data-section!="'+section+'"] i').each(function(){
-            $(this).removeClass("fa-angle-up")
-                   .addClass("fa-angle-down");
-        });
-        
-        $selectedMobileMenu.slideToggle( "slow", function() {
+        if(section === 'my-transactions'){
+            $('#transaction-menu-trigger').trigger("click");
+            $('.dash-mobile-trigger ').removeClass("selectedM");
+            $('.col-dash-mobile').removeClass( "selectedCol" );
+            $selectedMobileMenuTriggger.closest('a.dash-mobile-trigger')
+                                       .addClass("selectedM"); 
+        }
+        else{
+            var $selectedMobileMenu = $('.mobile-menu-container[data-section="'+section+'"]');
+            $('.col-dash-mobile[data-section!="'+section+'"] i').each(function(){
+                $(this).removeClass("fa-angle-up")
+                    .addClass("fa-angle-down");
+            });
+            $selectedMobileMenu.slideToggle( "slow");
             var $icon = $selectedMobileMenuTriggger.find('i'); 
             if($icon.hasClass('fa-angle-down')){
                 $icon.removeClass('fa-angle-down')
-                     .addClass('fa-angle-up');
+                        .addClass('fa-angle-up');
             }
             else if($icon.hasClass('fa-angle-up')){
                 $icon.removeClass('fa-angle-up')
-                     .addClass('fa-angle-down');
+                    .addClass('fa-angle-down');
             }
-        });
+        }
 
     });
   
@@ -1182,16 +1189,7 @@
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
-    
-    $('.ms-trans').click(function() {
-        $('.id-transactions-trigger').trigger("click");
-        $('.dash-mobile-trigger ').removeClass("selectedM");
-        $(".dash-me").removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $(this).addClass("selectedM");
-    });
-    
+
     
     $('.ms-setup').click(function() {
         $('#store-setup-tab').trigger("click");
