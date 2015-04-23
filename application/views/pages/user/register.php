@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width">
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link type='text/css' href='/assets/css/new-login-register.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
         <link type='text/css' href='/assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
         <link type='text/css' href='/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />

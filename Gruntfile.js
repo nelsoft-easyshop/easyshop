@@ -8,7 +8,6 @@ module.exports = function (grunt) {
             },
             scripts: {
                 files: {
-                    'js/src/vendor/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
                     // migrating files
                     'js/src/vendor/bower_components/chosen.jquery.min.js': 'chosen/chosen.jquery.min.js',
                     'js/src/vendor/bower_components/ion.rangeSlider.js': 'ionrangeslider/js/ion.rangeSlider.js',
@@ -28,12 +27,12 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.cropper.js': 'cropper/dist/cropper.js',
                     'js/src/vendor/bower_components/pwstrength.bootstrap.js': 'pwstrength-bootstrap/dist/pwstrength-bootstrap-1.2.2.js',
                     'js/src/vendor/bower_components/jquery-ui.js': 'jquery-ui/ui/jquery-ui.js',
-                    'js/src/vendor/bower_components/jquery.js': 'jquery/jquery.js'
+                    'js/src/vendor/bower_components/jquery.js': 'jquery/jquery.js',
+                    'js/src/vendor/bower_components/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
                 }
             },
             stylesheets: {
                 files: {
-                    'css/bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
                     // migrating files
                     'css/vendor/bower_components/chosen.min.css': 'chosen/chosen.min.css',
                     'css/vendor/bower_components/ion.rangeSlider.css': 'ionrangeslider/css/ion.rangeSlider.css',
@@ -41,41 +40,32 @@ module.exports = function (grunt) {
                     'css/vendor/bower_components/jquery.Jcrop.css': 'Jcrop/css/jquery.Jcrop.css',
                     'css/vendor/bower_components/jquery.cropper.css': 'cropper/dist/cropper.css',
                     'css/vendor/bower_components/jquery-ui.css': 'jquery-ui/themes/base/jquery-ui.css',
-                    'css/vendor/bower_components/jquery.ui.theme.css': 'jquery-ui/themes/base/jquery.ui.theme.css'
+                    'css/vendor/bower_components/jquery.ui.theme.css': 'jquery-ui/themes/base/jquery.ui.theme.css',
+                    'css/vendor/bower_components/bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
                 }
             },
         },
         cssmin : {
-            bootstrap:{
-                src: 'web/assets/css/bootstrap.css',
-                dest: 'web/assets/css/bootstrap.min.css'
-            },
             combine_css:{
                 files:{
                     'web/assets/css/min-easyshop.sliderpreview.css':
                         ['web/assets/css/jquery.bxslider2.css',
                          'web/assets/css/new-homepage.css'],
-                    'web/assets/css/min-easyshop.feeds.css':
-                        ['web/assets/css/bootstrap.css', 
-                        'web/assets/css/bootstrap-mods.css',
-                        'web/assets/css/style.css',
-                        'web/assets/css/responsive_css.css'],
                     'web/assets/css/min-easyshop.header-alt.css':
                         ['web/assets/css/main-style.css', 
-                        'web/assets/css/bootstrap.css',
+                        'web/assets/css/vendor/bower_components/bootstrap.css',
                         'web/assets/css/bootstrap-mods.css'],
                      'web/assets/css/min-easyshop.header-alt2.css':
                         ['web/assets/css/normalize.min.css',
                         'web/assets/css/main-style.css',
                         'web/assets/css/simple-header-css.css',
                         'web/assets/css/footer-css.css',
-                        'web/assets/css/bootstrap.css'
-                        ],
+                        'web/assets/css/vendor/bower_components/bootstrap.css'],
                     'web/assets/css/min-easyshop.header-primary.css':
                         ['web/assets/css/main-style.css',
                          'web/assets/css/normalize.min.css',
                          'web/assets/css/header-css.css',
-                         'web/assets/css/bootstrap.css',
+                         'web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/responsive_css.css',
                          'web/assets/css/new-homepage.css',
                          'web/assets/css/footer-css.css'],
@@ -96,19 +86,19 @@ module.exports = function (grunt) {
                         'web/assets/css/jquery.bxslider.css.css'],
                     'web/assets/css/min-easyshop.upload-step1.css':
                         ['web/assets/css/sell_item.css',
-                        'web/assets/css/bootstrap.css', 
+                        'web/assets/css/vendor/bower_components/bootstrap.css', 
                         'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.upload-step2.css':
                         ['web/assets/css/vendor/bower_components/ion.rangeSlider.css', 
                          'web/assets/css/vendor/bower_components/ion.rangeSlider.skinFlat.css',
                          'web/assets/css/sell_item.css',
-                         'web/assets/css/bootstrap.css',
+                         'web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/bootstrap-mods.css', 
                          'web/assets/css/vendor/bower_components/jquery.cropper.css',
                          'web/assets/css/chosenwtihcreate.min.css'], 
                      
                     'web/assets/css/min-easyshop.upload-step3.css':
-                        ['web/assets/css/bootstrap.css',
+                        ['web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/bootstrap-mods.css',
                          'web/assets/css/product_preview.css',
                          'web/assets/css/jquery.bxslider.css',
@@ -118,7 +108,7 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.upload-step4.css':
                         ['web/assets/css/sell_item.css',
                          'web/assets/css/product_preview.css',
-                         'web/assets/css/bootstrap.css',
+                         'web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.upload-step4-preview.css':
                         ['web/assets/css/product-page-css.css',
@@ -140,7 +130,7 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.scratch-to-win.css':
                         ['web/assets/css/jquery.bxslider.css',
                          'web/assets/css/promo.css',   
-                         'web/assets/css/bootstrap.css'],
+                         'web/assets/css/vendor/bower_components/bootstrap.css'],
                     'web/assets/css/min-easyshop.advance-search-main.css':
                         ['web/assets/css/product_search_category.css', 
                          'web/assets/css/product_search_category_responsive.css', 
@@ -153,13 +143,10 @@ module.exports = function (grunt) {
                     'web/assets/css/min-easyshop.user-followers.css':
                         ['web/assets/css/contact.css',
                          'web/assets/css/followers.css'],
-                    'web/assets/css/min-easyshop.login.css':
-                        ['web/assets/css/bootstrap.css',
-                        'web/assets/css/bootstrap-mods.css'],
                     'web/assets/css/min-easyshop.member-account-activate.css':
                         ['web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.register.css':
-                        ['web/assets/css/bootstrap.css',
+                        ['web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/new-login-register.css',
                          'web/assets/css/basic.css',
                          'web/assets/css/responsive_css.css',
@@ -184,11 +171,9 @@ module.exports = function (grunt) {
                          'web/assets/css/vendor/bower_components/chosen.min.css', 
                          'web/assets/css/new-dashboard.css'],
                     'web/assets/css/min-easyshop.dashboard-qr-code.css':
-                        ['web/assets/css/bootstrap.css',
+                        ['web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/qr-code-css.css',
                          'web/assets/css/qr-code-print.css'],
-                    'web/assets/css/min-easyshop.bug-report.css':
-                        ['web/assets/css/bootstrap.css'],
                     'web/assets/css/min-easyshop.cart.css':
                         ['web/assets/css/boostrap-modal.css',
                          'web/assets/css/base.css',
@@ -197,7 +182,7 @@ module.exports = function (grunt) {
                         ['web/assets/css/base.css',
                          'web/assets/css/new-cart.css'],
                     'web/assets/css/min-easyshop.payment-receipt.css':
-                        ['web/assets/css/bootstrap.css',
+                        ['web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/new-cart.css',
                          'web/assets/css/payment-receipt.css'],
                     'web/assets/css/min-easyshop.home-reminder.css':
@@ -207,7 +192,7 @@ module.exports = function (grunt) {
                         ['web/assets/css/how-to-page.css',
                          'web/assets/css/widget-selector.css'],
                     'web/assets/css/min-easyshop.widget-page.css':
-                        ['web/assets/css/bootstrap.css',
+                        ['web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/widget.css'],
                     'web/assets/css/min-easyshop.faq-page.css':
                         ['web/assets/css/base.css',
@@ -224,7 +209,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/header.js'],
 
                     'web/assets/js/min/easyshop.header_alt.js': 
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/bower_components/jquery.auto-complete.js',
                              'web/assets/js/src/header_alt.js'],
 
@@ -309,7 +294,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/jquery.bxslider1.min.js',
                              'web/assets/js/src/vendor/jquery.numeric.js',
                              'web/assets/js/src/vendor/owl.carousel.min.js',
-                             'web/assets/js/src/vendor/bootstrap.js',
+                             'web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/product-page.js',
                              'web/assets/js/src/social_media_share.js'],
 
@@ -328,7 +313,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/promo/scratchwinpromo.js'],
 
                     'web/assets/js/min/easyshop.advance_search_main.js':
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/bower_components/jquery.scrollUp.js',
                              'web/assets/js/src/advsearch.js'],
 
@@ -401,14 +386,14 @@ module.exports = function (grunt) {
                              'web/assets/js/src/landingpage-bootstrap.min.js'],
 
                     'web/assets/js/min/easyshop.user_vendor_view.js':
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.scrollTo.js',
                              'web/assets/js/src/easyshop.simplePagination.js',
                              'web/assets/js/src/vendorpage_new.js'],
 
                     'web/assets/js/min/easyshop.product-search-by-category-new.js':
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js',
                              'web/assets/js/src/vendor/owl.carousel.min.js',
@@ -418,7 +403,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/product-search.js'],
 
                     'web/assets/js/min/easyshop.product-search-new.js':
-                            ['web/assets/js/src/vendor/bootstrap.js',
+                            ['web/assets/js/src/vendor/bower_components/bootstrap.js',
                              'web/assets/js/src/vendor/jquery.simplemodal.js',
                              'web/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js', 
                              'web/assets/js/src/easyshop.simplePagination.js', 

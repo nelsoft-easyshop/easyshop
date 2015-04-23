@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="/assets/css/vendor/bower_components/ion.rangeSlider.css" />
     <link rel="stylesheet" href="/assets/css/vendor/bower_components/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" /> 
-    <link rel="stylesheet" href="/assets/css/bootstrap.css" />
+    <link rel="stylesheet" href="/assets/css/vendor/bower_components/bootstrap.css" />
     <link rel="stylesheet" href="/assets/css/bootstrap-mods.css" type="text/css" media="screen"/>  
     <link rel="stylesheet" href="/assets/css/chosenwtihcreate.min.css" type="text/css" media="screen"/>
     <link rel="stylesheet" href="/assets/css/vendor/bower_components/jquery.cropper.css">
