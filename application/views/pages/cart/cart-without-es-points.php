@@ -204,12 +204,6 @@
                                         </small>
                                     </td>
                                 </tr>
-                                <?php //if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
-                                <!--<tr class="border-bottom-1">
-                                    <td>Points to Deduct</td>
-                                    <td>&mdash; &#8369; <span id="summary-points">0</span></td>
-                                </tr>-->
-                                <?php //endif; ?>
                                 <tr>
                                     <td>Total Price</td>
                                     <td>
