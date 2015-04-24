@@ -23,7 +23,7 @@ class PointGateway extends AbstractGateway
 
     const MIN_AMOUNT_ALLOWED = 1000;
 
-    const POINT_ENABLED = true;
+    const POINT_ENABLED = false;
 
     /**
      * Constructor
