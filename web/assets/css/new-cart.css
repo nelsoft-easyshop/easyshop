@@ -43,6 +43,10 @@
     min-height: 459px;
 }
 
+.cart-container{
+    min-height: 425px;
+}
+
 .transaction-container .form-group{
     margin: 13px 0px;
 }
@@ -342,8 +346,8 @@ ol.how-to-list li{
 }
 
 .img-payment-method{
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     border-radius: 5px;
     display: inline-block;
     margin-right: 4px;
@@ -639,6 +643,14 @@ ol.how-to-list li{
 .shipping-calculator-modal .my-modal-content p{
     padding: 5px 20px;
 }
+
+
+@media screen and (max-width: 991px) {
+    .cart-container{
+        min-height: 0px;
+    }
+}
+
 @media screen and (max-width: 750px) {
     .cart-item-thumbnail{
         width: 60px;
