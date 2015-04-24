@@ -214,9 +214,13 @@ class PointTracker
      */
     public function getUserPoint($userId)
     {
-        $user = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                            ->findOneBy(['member' => $userId]);
+        if (PointGateway::POINT_ENABLED) {
+            $user = $this->em->getRepository('EasyShop\Entities\EsPoint')
+                                ->findOneBy(['member' => $userId]);
 
-        return $user === null? false : $user->getPoint();
+            return $user === null? false : $user->getPoint();
+        }
+
+        return 0;
     }
 }
