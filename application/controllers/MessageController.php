@@ -6,6 +6,8 @@ if (!defined('BASEPATH'))
 class MessageController extends MY_Controller
 {
 
+    const CONVERSATIONS_PER_PAGE = 10;
+
     /**
      * The message manager
      *
@@ -43,21 +45,22 @@ class MessageController extends MY_Controller
      */
     public function messages()
     {
+        $conversationHeaderData = $this->messageManager->getConversationHeaders($this->userId, 0, self::CONVERSATIONS_PER_PAGE);
+        $member = $this->em->find('EasyShop\Entities\EsMember', $this->userId);
+
         $data = [
-            'result' => $this->messageManager->getAllMessage($this->userId),
-            'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId),
+            'conversationHeaders' => $conversationHeaderData['conversationHeaders'],
+            'userEntity' => $member,
             'chatServerHost' => $this->messageManager->getChatHost(true),
             'chatServerPort' => $this->messageManager->getChatPort()
         ];
-        $title = !isset($messages['unread_msgs']) || (int) $messages['unread_msgs'] === 0
-            ? 'Messages | Easyshop.ph'
-            : 'Messages (' . $messages['unread_msgs'] . ') | Easyshop.ph';
+
+        $title = $conversationHeaderData['totalUnreadMessages'] > 0
+                ? 'Messages (' . $conversationHeaderData['totalUnreadMessages'] . ') | Easyshop.ph'
+                : 'Messages | Easyshop.ph';
         $headerData = [
             "memberId" => $this->session->userdata('member_id'),
             'title' => $title,
-            'metadescription' => '',
-            'relCanonical' => '',
-            'renderSearchbar' => false,
         ];
 
         $this->load->spark('decorator');
@@ -130,13 +133,11 @@ class MessageController extends MY_Controller
         foreach($temporaryIdArray as $messageId){
             $messageIdArray[] = (int) $messageId;
         }
-
-        $isDeleteSuccesful = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                                      ->delete($messageIdArray, $this->userId);
-        $message = '';
-
-        if ( (bool) $isDeleteSuccesful) {
-            $message = $this->messageManager->getAllMessage($this->userId);
+        $isDeleteSuccesful = false;
+        if(empty($messageIdArray) === false){
+            $numberOfDeletedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
+                                            ->delete($messageIdArray, $this->userId);
+            $isDeleteSuccesful = $numberOfDeletedMessages === count($messageIdArray);
         }
 
         echo json_encode($message);

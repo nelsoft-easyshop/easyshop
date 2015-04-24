@@ -77,9 +77,25 @@ class MessageManager {
      * @var mixed
      */
     private $jsServerConfig;
+ 
+    /**
+     * User manager
+     *
+     * @var EasyShop\User\UserManager
+     */
+    private $userManager;
     
 
-    function __construct($em, $configLoader, $languageLoader, $socialManager, $emailService, $parser, $redisClient, $localConfig)
+    function __construct(
+        $em, 
+        $configLoader, 
+        $languageLoader, 
+        $socialManager, 
+        $emailService, 
+        $userManager,
+        $parser, 
+        $redisClient, 
+        $localConfig)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
@@ -90,6 +106,7 @@ class MessageManager {
         $this->redisClient = $redisClient;
         $this->localConfig = $localConfig;
         $this->jsServerConfig = $this->configLoader->getItem('nodejs');
+        $this->userManager = $userManager;
     }
 
     /**
@@ -319,4 +336,30 @@ class MessageManager {
     }
     
     
+    /**
+     * Retrieve conversation headers
+     *
+     * @param integer $memberId
+     * @return mixed
+     */
+    public function getConversationHeaders($memberId, $offset = 0, $limit = NULL)
+    {
+        $memberId = (int) $memberId;
+        $conversationHeaders = $this->em->getRepository('EasyShop\Entities\EsMessages')
+                                    ->getConversationHeaders($memberId, $offset, $limit);
+
+        $numberOfUnreadConversation = 0;
+        foreach($conversationHeaders as $key => $conversationHeader){
+            $conversationHeaders[$key]['partner_image'] = $this->userManager->getUserImage($conversationHeader['partner_member_id'], 'small');
+            if((int) $conversationHeader['unread_message_count'] > 0 ){
+                $numberOfUnreadConversation++;
+            }   
+        }
+              
+        return [
+            'conversationHeaders' => $conversationHeaders,
+            'totalUnreadMessages' => $numberOfUnreadConversation,
+        ];
+    }
+
 }

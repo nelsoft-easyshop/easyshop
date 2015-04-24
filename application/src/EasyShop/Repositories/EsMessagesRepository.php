@@ -191,4 +191,77 @@ class EsMessagesRepository extends EntityRepository
         return (bool) $count;
     }
 
+    /**
+     * Retrieves the conversation headers
+     * 
+     * @param integer $memberId
+     * @return mixed
+     */
+    public function getConversationHeaders($memberId, $offset = 0, $limit = PHP_INT_MAX)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('id_msg', 'id_msg');
+        $rsm->addScalarResult('to_id', 'to_id');
+        $rsm->addScalarResult('from_id', 'from_id');
+        $rsm->addScalarResult('unread_message_count', 'unread_message_count'); 
+        $rsm->addScalarResult('is_sender', 'is_sender');
+        $rsm->addScalarResult('last_message', 'last_message');
+        $rsm->addScalarResult('last_date', 'last_date');
+        $rsm->addScalarResult('partner_storename', 'partner_storename');
+        $rsm->addScalarResult('partner_member_id', 'partner_member_id');
+        
+        $sql = "SELECT
+                   messages.id_msg,
+                   messages.to_id,
+                   messages.from_id,
+                   SUM(IF(messages.opened = :messageOpened, 0, 1)) as unread_message_count,
+                   IF(to_id = :memberId, 0, 1) as is_sender,
+                   partner.id_member as partner_member_id,
+                   IF(partner.store_name != '', COALESCE(partner.store_name, partner.username), partner.username) as partner_storename,
+                   messages.message as last_message,
+                   messages.time_sent as last_date
+               FROM 
+                   (SELECT
+                        * 
+                    FROM
+                        es_messages 
+                    WHERE 
+                        (es_messages.to_id = :memberId or es_messages.from_id = :memberId ) AND
+                        (es_messages.is_delete = :notDeleted OR
+                         es_messages.is_delete = 
+                            CASE
+                                WHEN to_id = :memberId THEN :deletedBySender
+                                ELSE :deletedByReceiver
+                            END
+                        )
+                    ORDER BY 
+                        es_messages.time_sent DESC
+                    ) as messages
+               INNER JOIN
+                   es_member partner ON 
+                     CASE
+                         WHEN to_id = :memberId THEN messages.from_id = partner.id_member
+                         ELSE messages.to_id = partner.id_member   
+                     END
+               GROUP BY
+                   partner.id_member
+               ORDER BY
+                   messages.time_sent DESC
+               LIMIT
+                  :offset, :limit
+               ";
+
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter('memberId', $memberId);
+        $query->setParameter('messageOpened', EsMessages::MESSAGE_READ );
+        $query->setParameter('offset', $offset);
+        $query->setParameter('limit', $limit);
+        $query->setParameter('notDeleted', EsMessages::MESSAGE_NOT_DELETED);
+        $query->setParameter('deletedBySender', EsMessages::MESSAGE_DELETED_BY_SENDER);
+        $query->setParameter('deletedByReceiver', EsMessages::MESSAGE_DELETED_BY_RECEIVER);
+
+        return $query->getResult();
+    }
+
 }

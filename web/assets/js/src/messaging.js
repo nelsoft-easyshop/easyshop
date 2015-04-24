@@ -67,8 +67,7 @@
         };
     });
 
-    $("#modal_send_btn").on("click",function()
-    {
+    $("#modal_send_btn").on("click",function(){
         var recipient = $("#msg_name").val().trim();
         var msg = $("#msg-message").val().trim();
         if(recipient === ""){
@@ -118,10 +117,10 @@
         $.each(sortedObjectByKey,function(key, val) {
             if (typeof val !== "undefined") {
                 if (val.status == "receiver") {
-                    html += '<span class="float_left">';
+                    html += '<span class="float_left message-item-container">';
                 }
                 else {
-                    html += '<span class="float_right">';
+                    html += '<span class="float_right message-item-container">';
                 }
                 html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain +val.sender_img+'/60x60.png"></span></span>';
                 html += '<div class="chat-container"><div></div>';
@@ -270,12 +269,12 @@
             url : "/MessageController/delete",
             data : {id_msg:ids,csrfname:csrftoken},
             success : function(result) {
-                if(result.messages != ""){
-                    $("#table_id tbody").empty();
-                    onFocusReload(result);
-                    $("#msg_field").empty();
-                    $("#msg_textarea").hide();
-                    $("#chsn_delete_btn,#delete_all_btn,#chsn_username").hide();
+                if(result === true){
+                    $.each(messagedIds, function(index, messageId){
+                        $('.d_all[value="'+messageId+'"]').closest('.message-item-container')
+                                                          .remove();
+                    });
+                    $("#chsn_delete_btn, #delete_all_btn, #chsn_username").hide();
                 }
                 else {
                     location.reload();
@@ -298,10 +297,10 @@
         $.each(sortedObjectByKey,function(key, val) {
             if (typeof val !== "undefined") {
                 if (val.status == "receiver") {
-                    html += '<span class="float_left">';
+                    html += '<span class="float_left message-item-container">';
                 }
                 else {
-                    html += '<span class="float_right">';
+                    html += '<span class="float_right message-item-container">';
                 }
                 html += '<span class="chat-img-con"><span class="chat-img-con2"><img src="'+ config.assetsDomain + val.sender_img + '/60x60.png"></span></span>';
                 html += '<div class="chat-container"><div></div>';

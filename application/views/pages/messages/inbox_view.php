@@ -23,37 +23,35 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?PHP foreach($result['messages'] as $key => $row) { ?>
-                        <tr class="<?=(reset($row)['opened'] == 0 && reset($row)['status'] == "receiver" ? "NS" : "")?>">
+                    <?php foreach($conversationHeaders as $key => $conversation): ?>
+                        <tr class="<?php echo $conversation['unread_message_count'] ? 'NS' : '' ?>">
                             <td width="10%">
                                 <div class="img-wrapper-div">
-                                    <span class="img-wrapper-span">
-                                    <?php if(reset($row)['status'] == "sender"): ?>
-                                        <img data="<?php echo getAssetsDomain().'.'.reset($row)['sender_img']?>" src="/<?php echo reset($row)['recipient_img']?>/60x60.png">
-                                    <?php else: ?>
-                                        <img data="<?php echo getAssetsDomain().'.'.reset($row)['recipient_img']?>" src="/<?php echo reset($row)['sender_img']?>/60x60.png">
-                                    <?php endif; ?>
-                                    <?php $span = (reset($row)['unreadConversationCount'] != 0 ? '('.reset($row)['unreadConversationCount'].')' : ""); ?>
+                                    <span class="img-wrapper-span">    
+                                    <img src="<?php echo getAssetsDomain() . '.' . $conversation['partner_image']; ?>"/>
+                                    <?php $span = $conversation['unread_message_count'] > 0 ? '('.$conversation['unread_message_count'].')' : ''; ?>
                                     </span>
                                 </div>
                                 
                             </td>
                             <td class="msg-sender-details">
-                                <a class="btn_each_msg" id="ID_<?=html_escape(reset($row)['name'])?>" href="javascript:void(0)" data='<?=html_escape(json_encode($row))?>'>
-                                <span class="msg_sender">
-                                    <?=html_escape(reset($row)['name'])."</span><span class=\"unreadConve\">".$span."</span>"; ?>
-                                    <?php
-                                    $keys = array_keys($row);
-                                    $row[reset($keys)]['message'] = html_escape(reset($row)['message']);
-                                    ?>
-                                    <span class="msg_message"><?PHP echo reset($row)['message']; ?></span>
-                                <span class="msg_date"><?PHP echo reset($row)['time_sent']; ?></span>
+                                <a class="btn_each_msg" href="javascript:void(0)">
+                                <span class="conversation-partner-name">
+                                    <?php echo html_escape($conversation['partner_storename']); ?>
+                                </span>
+                                <span class='unread-conversation'> 
+                                    <?php echo $span; ?> 
+                                </span>
+                                  
+                                <span class="msg_message">
+                                    <?php echo html_escape($conversation['last_message']); ?>
+                                </span>
+
+                                <span class="msg_date"><?PHP echo $conversation['last_date']; ?></span>
                                 </a>
                             </td>
                         </tr>
-                    <?PHP
-                    }
-                    ?>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
