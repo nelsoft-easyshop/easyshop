@@ -93,7 +93,7 @@ class Cart extends MY_Controller
 
             $this->load->spark('decorator');
             $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/cart/cart', $bodyData);
+            $this->load->view('pages/cart/cart-without-es-points', $bodyData);
             $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view', $headerData));
         }
         else {
