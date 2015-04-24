@@ -9,11 +9,11 @@
                 <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
             <?PHP else : ?>
                 <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
-                    <div><span class="strong-label">ON HOLD - PENDING DRAGONPAY PAYMENT FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
+                    <div><strong> ON HOLD -</strong> PENDING DRAGONPAY PAYMENT FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
                 <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT):?>
-                    <div><span class="strong-label">ON HOLD - PENDING BANK DEPOSIT DETAILS FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
+                    <div><strong>ON HOLD -</strong> PENDING BANK DEPOSIT DETAILS FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
                 <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
-                    <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></span></div>
+                    <div><strong>ON HOLD -</strong> PAYPAL PAYMENT UNDER REVIEW FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
                 <?php endif;?>
             <?PHP endif; ?>
         </div>
