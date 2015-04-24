@@ -453,7 +453,7 @@
         height: auto;
         margin-top: 1.3%;
         min-width: auto;
-        width: 30%;
+        width: 210px !important;
     }
 
     .promo-gallery-data p,.promo-gallery-data span {
