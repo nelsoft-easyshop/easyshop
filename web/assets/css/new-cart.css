@@ -203,7 +203,7 @@ ol.how-to-list li{
 }
 
 .item-quantity{
-    width: 50%;
+    width: 75%;
 }
 
 .mobile-price-quantity{
@@ -659,7 +659,11 @@ ol.how-to-list li{
 
     .cart-item-name{
         font-size: 11px;
-    } 
+    }
+
+    .item-quantity{
+        width: 95%;
+    }
 }
 
 @media screen and (max-width: 500px) {
