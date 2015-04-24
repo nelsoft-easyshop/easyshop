@@ -4,7 +4,7 @@
     <div class="item-list-panel <?='invoiceno-' . $boughtTransactionDetails['invoiceNo'] ?>">
         <div class="transac-title">
         <?php if ( (int) $boughtTransactionDetails['idPaymentMethod'] === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && (int) $boughtTransactionDetails['isFlag'] === 1) : ?>
-            <div><span class="strong-label">ON HOLD - PAYPAL PAYMENT UNDER REVIEW</span></div>
+            <div><strong>ON HOLD -</strong> PAYPAL PAYMENT UNDER REVIEW</span></div>
         <?php else:?>
             <div><span class="strong-label">Transaction No. : </span> <?=$boughtTransactionDetails['invoiceNo'] ?></div>
             <div><span class="strong-label">Date : </span> <?=date_format($boughtTransactionDetails['dateadded'], 'jS \of F Y')?></div>
