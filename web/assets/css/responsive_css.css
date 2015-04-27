@@ -1553,12 +1553,13 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 .select-image-pencil {
     border-radius: 90px;
     color: #fff;
-    width: 20px;
-    height: 20px;
     display: inline-block;
+    font-size: 10px;
+    height: 20px;
     text-align: center;
-    font-size: 0.825em;
+    width: 20px;
 }
+
 .edit-attr,
 .select-image-pencil {
     background-color: #34d37f;
@@ -1567,7 +1568,7 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 .edit-attr span,
 .remove-attr span,
 .select-image-pencil span {
-    line-height: 18px;
+    line-height: 19px;
 }
 
 .qty-item-title {
@@ -1617,10 +1618,27 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     text-decoration: none;
 }
 
+.select-control-panel-option span[class*="span"],
+.div-combination span[class*="span"] {
+    display: inline-block;
+    width: 100%;
+}
+
+.seller_product_content .select-control-panel-option select,
+.seller_product_content .div-combination select {
+    width: 65%;
+}
+
+.div-combination,
+.select-control-panel-option {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
 .selection {
     margin-bottom: 10px;
     margin-right: 10px;
-    width: 30%;
+    width: 63%;
 }
 
 .remove-attr {
@@ -1694,12 +1712,6 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
 
 .select-combination + input[type="checkbox"] {
     margin-left: 10px;
-}
-
-.selection {
-    width: 30%;
-    margin-right: 10px;
-    margin-bottom: 10px;
 }
 
 .div3 {
@@ -2538,12 +2550,27 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     #search-container > .typeahead {
         width: 65.5% !important;
     }
+
+    .select-control-panel-option span[class*="span"],
+    .div-combination span[class*="span"] {
+        width: 50%;
+    }
+
+    .seller_product_content .select-control-panel-option select, 
+    .seller_product_content .div-combination select {
+        width: 70%
+    }
 }
 
 @media (min-width: 1200px) {
     .steps_txt_active,
     .steps_txt {
         width: 90%;
+    }
+
+    .select-control-panel-option span[class*="span"],
+    .div-combination span[class*="span"] {
+        width: 33%;
     }
 }
 
