@@ -340,13 +340,16 @@ class MessageManager {
      * Retrieve conversation headers
      *
      * @param integer $memberId
+     * @param integer $offset
+     * @param integer $limit
+     * @param string $searchString
      * @return mixed
      */
-    public function getConversationHeaders($memberId, $offset = 0, $limit = NULL)
+    public function getConversationHeaders($memberId, $offset = 0, $limit = PHP_INT_MAX, $searchString = NULL)
     {
         $memberId = (int) $memberId;
         $conversationHeaders = $this->em->getRepository('EasyShop\Entities\EsMessages')
-                                    ->getConversationHeaders($memberId, $offset, $limit);
+                             ->getConversationHeaders($memberId, $offset, $limit, $searchString);
 
         $numberOfUnreadConversation = 0;
         foreach($conversationHeaders as $key => $conversationHeader){
@@ -361,5 +364,47 @@ class MessageManager {
             'totalUnreadMessages' => $numberOfUnreadConversation,
         ];
     }
+
+    /**
+     * Get messages between two users
+     *
+     * @param integer $memberId
+     * @param integer $partnerId
+     * @param integer $offset
+     * @param integer $limit
+     * @return mixed
+     */
+    public function getConversationMessages($memberId, $partnerId, $offset = 0, $limit = PHP_INT_MAX)
+    {
+        $memberId = (int) $memberId;
+        $partnerId = (int) $partnerId;
+        $messages =  $this->em->getRepository('EasyShop\Entities\EsMessages')
+                          ->getConversationMessages($memberId, $partnerId, $offset, $limit);
+        $memberImage = $this->userManager->getUserImage($memberId, 'small');
+        $partnerImage = $this->userManager->getUserImage($partnerId, 'small');
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                       ->find($memberId);
+        $partner = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->find($partnerId);
+        $memberStorename = $member->getStorename();
+        $partnerStorename = $partner->getStorename();
+       
+        foreach($messages as $key => $message){
+            if( (int) $message['sender_member_id'] === $memberId){
+                $message['senderImage'] = $memberImage;
+                $message['senderStorename'] = $memberStorename;
+            }
+            else{
+                $message['senderImage'] = $partnerImage;
+                $message['senderStorename'] = $partnerStorename;
+            }
+            $message['isSender'] = (int) $message['is_sender'] === 1;
+            unset($message['is_sender']);
+            $messages[$key] = $message;
+        }
+
+        return $messages;
+    }
+
 
 }

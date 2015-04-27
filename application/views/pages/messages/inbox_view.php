@@ -36,7 +36,7 @@
                             </td>
                             <td class="msg-sender-details">
                                 <a class="btn_each_msg" href="javascript:void(0)">
-                                <span class="conversation-partner-name">
+                                <span class="conversation-partner-name" data-userid="<?php echo $conversation['partner_member_id'] ?>">
                                     <?php echo html_escape($conversation['partner_storename']); ?>
                                 </span>
                                 <span class='unread-conversation'> 

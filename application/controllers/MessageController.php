@@ -8,6 +8,8 @@ class MessageController extends MY_Controller
 
     const CONVERSATIONS_PER_PAGE = 10;
 
+    const MESSAGES_PER_CONVERSATION_PAGE = 20;
+
     /**
      * The message manager
      *
@@ -47,7 +49,6 @@ class MessageController extends MY_Controller
     {
         $conversationHeaderData = $this->messageManager->getConversationHeaders($this->userId, 0, self::CONVERSATIONS_PER_PAGE);
         $member = $this->em->find('EasyShop\Entities\EsMember', $this->userId);
-
         $data = [
             'conversationHeaders' => $conversationHeaderData['conversationHeaders'],
             'userEntity' => $member,
@@ -59,7 +60,7 @@ class MessageController extends MY_Controller
                 ? 'Messages (' . $conversationHeaderData['totalUnreadMessages'] . ') | Easyshop.ph'
                 : 'Messages | Easyshop.ph';
         $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
+            "memberId" => $this->userId,
             'title' => $title,
         ];
 
@@ -68,6 +69,51 @@ class MessageController extends MY_Controller
         $this->load->view('pages/messages/inbox_view', $data );
         $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
     }
+
+    /**
+     * Get conversation messages between loggin user and posted partnerId
+     *
+     * @return JSON
+     */
+    public function getConversationMessages()
+    {
+        $partnerId = (int) $this->input->get('partnerId');
+        $page = $this->input->get('page') ? (int) $this->input->get('page') : 1;
+        $page--;
+        $offset = $page * self::MESSAGES_PER_CONVERSATION_PAGE;
+        $messages = $this->messageManager->getConversationMessages(
+                                             $this->userId, 
+                                             $partnerId, 
+                                             $offset, 
+                                             self::MESSAGES_PER_CONVERSATION_PAGE
+                                         );
+       
+        echo json_encode($messages);
+    }
+    
+    /**
+     * Retrieve more conversation headers
+     *
+     * @return JSON
+     */
+    public function getConversationHeaders()
+    {
+        $searchString = $this->input->get('searchString') ? $this->input->get('searchString') : NULL;
+        $page = $this->input->get('page') ? (int) $this->input->get('page') : 1;
+        $page--;
+        $offset = $page * self::CONVERSATIONS_PER_PAGE;
+        $conversationHeaderData = $this->messageManager->getConversationHeaders(
+                                                             $this->userId, 
+                                                             $offset, 
+                                                             self::CONVERSATIONS_PER_PAGE,
+                                                             $searchString
+                                                         );
+
+        echo json_encode($conversationHeaderData);        
+    }
+    
+
+        
 
     /**
      * Sends a message
