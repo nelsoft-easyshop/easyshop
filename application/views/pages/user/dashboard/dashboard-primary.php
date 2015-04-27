@@ -79,7 +79,8 @@
                     </div>
                     <?php endif; ?>
                 </div>
-
+                
+                                 
                 <div class="mobile-dashboard-menu">        
                     <div class="row-fluid row-menu-mobile-res">
                         <a class="dash-mobile-trigger my-transactions-mobile">

@@ -47,8 +47,6 @@ class Cart extends MY_Controller
 
     /**
      * Renders the cart page
-     *
-     *
      */
     public function index()
     {
@@ -85,15 +83,20 @@ class Cart extends MY_Controller
                 'locations' => $locations,
                 'totalShippingFee' => $totalShippingFee,
                 'cartTotalAmount' => $cartTotalAmount,
-                'canUsePoints' => $cartTotalAmount >= PointGateway::MIN_AMOUNT_ALLOWED,
+                'canUsePoints' => $cartTotalAmount >= PointGateway::MIN_AMOUNT_ALLOWED
+                                    && EasyShop\PaymentGateways\PointGateway::POINT_ENABLED,
                 'usedPoints' => $usedPoints > $userPoints || $usedPoints > $cartTotalAmount
-                                ? 0 
+                                ? 0
                                 : $usedPoints,
             ];
-
             $this->load->spark('decorator');
             $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/cart/cart', $bodyData);
+            if (EasyShop\PaymentGateways\PointGateway::POINT_ENABLED) {
+                $this->load->view('pages/cart/cart', $bodyData);
+            }
+            else {
+                $this->load->view('pages/cart/cart-without-es-points', $bodyData);
+            }
             $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view', $headerData));
         }
         else {
