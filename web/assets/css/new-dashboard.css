@@ -2333,6 +2333,7 @@ i.jstree-icon.jstree-checkbox{
 .transac-title div {
     display: inline-block;
     margin-right: 20px;
+    word-wrap:break-word;
 }
 
 .transaction-item .item-list-panel {
