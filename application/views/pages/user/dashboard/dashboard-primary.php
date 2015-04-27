@@ -53,6 +53,7 @@
                     
                     </ul>
                     
+                    <?php if(\EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                     <div class="easy-point-container">
                         <div class="easy-point-title">
                             easy points
@@ -76,6 +77,7 @@
                             <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="mobile-dashboard-menu">        
