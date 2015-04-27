@@ -2145,13 +2145,17 @@ class Memberpage extends MY_Controller
                                                          'member' => $memberId,
                                                          'isDelete' => false,
                                             ]);
-                if($newAccount){
+                $bankDetail = $entityManager->find('EasyShop\Entities\EsBankInfo', $formData['account-bank-id']);
+                if ($newAccount && $bankDetail) {
                     $newAccount->setDatemodified(date_create(date("Y-m-d H:i:s")));
                     $newAccount->setBankAccountName($formData['account-name']);
                     $newAccount->setBankAccountNumber($formData['account-number']);
                     $newAccount->setBankId($formData['account-bank-id']);
                     $entityManager->flush();
                     $jsonResponse['isSuccessful'] = true;
+                }
+                else {
+                    $jsonResponse['errors'] = "Something went wrong. Please try again later.";
                 }
             }else{
                 $jsonResponse['errors'] = reset($formErrorHelper->getFormErrors($form));
