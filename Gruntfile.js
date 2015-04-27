@@ -29,6 +29,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery-ui.js': 'jquery-ui/ui/jquery-ui.js',
                     'js/src/vendor/bower_components/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bower_components/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
+                    'js/src/vendor/bower_components/angular.js': 'angular/angular.js',
+                    'js/src/vendor/bower_components/angular-route.js': 'angular-route/angular-route.js'
                 }
             },
             stylesheets: {
