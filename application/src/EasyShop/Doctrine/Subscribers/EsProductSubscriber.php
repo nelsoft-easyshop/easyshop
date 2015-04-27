@@ -14,14 +14,14 @@ class EsProductSubscriber implements EventSubscriber
 
     /**
      * The preUpdate event occurs before the database update operations to entity data.
-     * 
+     *
      * @param  LifecycleEventArgs $event
      */
     public function preUpdate(LifecycleEventArgs $event)
     {
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
-        if ( !$entity instanceOf EsProduct) {
+        if (!$entity instanceof EsProduct) {
             return;
         }
 
@@ -37,7 +37,7 @@ class EsProductSubscriber implements EventSubscriber
 
     /**
      * The postUpdate event occurs after the database update operations to entity data.
-     * 
+     *
      * @param  LifecycleEventArgs $event
      */
     public function postUpdate(LifecycleEventArgs $event)
@@ -54,8 +54,8 @@ class EsProductSubscriber implements EventSubscriber
         $em = $event->getEntityManager();
         $entity = $event->getEntity();
         $phrase = "";
-        if ( $entity instanceOf EsProduct) {
-            if(count($this->changeSet) > 0){
+        if ($entity instanceof EsProduct) {
+            if (count($this->changeSet) > 0) {
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::PRODUCT_UPDATE);
                 $jsonString = "";
@@ -67,15 +67,18 @@ class EsProductSubscriber implements EventSubscriber
                     $actionType = \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_SOFT_DELETE;
                 }
                 else if ((int)$entity->getIsDelete() === (int)EsProduct::ACTIVE &&
-                        (int)$entity->getIsDraft() === (int)EsProduct::ACTIVE) { 
+                        (int)$entity->getIsDraft() === (int)EsProduct::ACTIVE) {
                     $actionType = \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_UPDATE;
                     if (isset($this->changeSet['isDelete'])) {
                         $actionType = \EasyShop\Activity\ActivityTypeProductUpdate::ACTION_PRODUCT_RESTORE;
                     }
                 }
-                if($actionType !== null){
+                if ($actionType !== null) {
                     $data = [
                         'productId' => $entity->getIdProduct(),
+                        'name' => $entity->getName(),
+                        'price' => $entity->getPrice(),
+                        'discount' => $entity->getDiscount(),
                     ];
                     $jsonString = \EasyShop\Activity\ActivityTypeProductUpdate::constructJSON($data, $actionType);
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
