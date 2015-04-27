@@ -195,7 +195,10 @@ module.exports = function (grunt) {
                          'web/assets/css/widget-selector.css'],
                     'web/assets/css/min-easyshop.widget-page.css':
                         ['web/assets/css/bootstrap.css',
-                         'web/assets/css/widget.css']
+                         'web/assets/css/widget.css'],
+                    'web/assets/css/min-easyshop.faq-page.css':
+                        ['web/assets/css/base.css',
+                         'web/assets/css/static.css']
                 }
             },
         },
@@ -484,7 +487,10 @@ module.exports = function (grunt) {
                          'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                          'web/assets/js/src/how-to-page-plugins.js',
                          'web/assets/js/src/how-to-page.js',
-                         'web/assets/js/src/widget.js']
+                         'web/assets/js/src/widget.js'],
+
+                   'web/assets/js/min/easyshop.faq-page.js':
+                        ['web/assets/js/src/static.js'],
                 }
             }
         }

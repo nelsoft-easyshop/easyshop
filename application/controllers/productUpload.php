@@ -1561,6 +1561,7 @@ class productUpload extends MY_Controller
         $productImageRepository = $this->em->getRepository('EasyShop\Entities\EsProductImage');
 
         $stringUtility = $this->serviceContainer['string_utility'];
+        $urlUtility = $this->serviceContainer['url_utility'];
         $userManager = $this->serviceContainer['user_manager'];
         $productManager = $this->serviceContainer['product_manager'];
         $collectionHelper = $this->serviceContainer['collection_helper'];
@@ -1589,9 +1590,12 @@ class productUpload extends MY_Controller
                 $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method']; 
             }
 
+            $productDescription = $stringUtility->purifyHTML($product->getDescription());
+            $productDescription = $urlUtility->addRelNofollow($productDescription);
+            
             $productPreviewData = [
                 'product' => $product,
-                'productDescription' => $stringUtility->purifyHTML($product->getDescription()),
+                'productDescription' => $productDescription,
                 'productImages' => $productImages,
                 'avatarImage' => $avatarImage,
                 'isFreeShippingNationwide' => $isFreeShippingNationwide,
