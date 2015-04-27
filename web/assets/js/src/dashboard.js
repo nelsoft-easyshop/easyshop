@@ -2485,10 +2485,10 @@
                     var accountNameDisplay = container.find('.account-name-container');
                     var accountNumberDisplay = container.find('.account-number-container');
                     var bankNameDisplay = container.find('.bank-name-container');
-                    container.find('.bank-id').val(bankId); 
-                    accountNameDisplay.html(accountName);
-                    accountNumberDisplay.html(accountNumber);
-                    bankNameDisplay.html(selectedBank.html());
+                    container.find('.bank-id').val(bankId);
+                    accountNameDisplay.html(escapeHtml(accountName));
+                    accountNumberDisplay.html(escapeHtml(accountNumber));
+                    bankNameDisplay.html(escapeHtml(selectedBank.html()));
                     cancelButton.trigger('click');
                 }
                 else{
