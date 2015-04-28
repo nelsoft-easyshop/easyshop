@@ -68,12 +68,19 @@
 
             if($rating1.val() == 0 || $rating2.val() == 0 || $rating3.val() == 0){
                 $('#feedback-star-error').removeClass('hide');
-                console.log('angular');
                 hasError = true;
             }
             
             if(hasError){
-                event.preventDefault();
+                /**
+                 * Work around for IE9
+                 */
+                if (event.preventDefault) { 
+                    event.preventDefault(); 
+                } 
+                else { 
+                    event.returnValue = false;
+                }
             }
  
         });
