@@ -74,8 +74,8 @@ $(document).ready(function(){
          $('#student-container').html(html);
     });
 
-    $('.school-participant label').on('click', function() {
-        $(this).next().slideToggle();
+    $('.checkbox-student').on('click', function() {
+        $(this).parent().find('.school-description').slideToggle();
         $(this).parent().siblings().find('.school-description').hide();
         $(this).parent().parent().siblings().find('.school-description').hide();
     });
