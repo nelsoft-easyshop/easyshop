@@ -76,6 +76,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-3 trans-right-panel">
                                 <div class="transaction-right-content">
+                                    <?PHP if ( (int) $productKey === (int) array_shift(array_keys($soldTransactionDetails['product']))) : ?>
                                     <div class="transaction-profile-wrapper">
                                         <h4>Sold To:</h4>
                                         <div>
@@ -161,6 +162,7 @@
                                             </div>
                                         <?PHP endif; ?>
                                     </div>
+                                    <?PHP endif; ?>
                                 </div>
                             </div>
                             <div class="clear"></div>
