@@ -102,7 +102,7 @@ class EsMessagesRepository extends EntityRepository
      * @param integer $memberId
      * @return integer
      */
-    public function delete($messageIds, $memberId)
+    public function deleteMessages($messageIds, $memberId)
     {
         $statusMessageNotDeleted = EsMessages::MESSAGE_NOT_DELETED;
         $statusMessageDeletedByReceiver = EsMessages::MESSAGE_DELETED_BY_RECEIVER;
@@ -164,29 +164,89 @@ class EsMessagesRepository extends EntityRepository
     }
 
     /**
-     * Update message/s to seen
-     * @param $memberId
-     * @param $messageId array
+     * Delete conversation between two members in reference to the first member
+     *
+     * @param integer $memberId
+     * @param integer $partnerMemberId
+     * @return integer Number of deleted messages
+     */
+    public function deleteConversation($memberId, $partnerMemberId)
+    {
+        $query = "
+            UPDATE 
+                `es_messages`
+            SET `is_delete` = 
+                CASE
+                    WHEN `is_delete` = :notDeleted AND `from_id` = :memberId THEN :deletedBySender
+                    WHEN `is_delete` = :notDeleted AND `to_id` = :memberId THEN :deletedByReceiver
+                    WHEN `is_delete` = :deletedByReceiver AND `from_id` = :memberId THEN :deletedByBoth
+                    WHEN `is_delete` = :deletedBySender AND `to_id` = :memberId THEN :deletedByBoth
+                    ELSE `is_delete`
+                END
+            WHERE 
+                (`from_id` = :memberId AND `to_id` = :partnerMemberId) OR
+                (`from_id` = :partnerMemberId AND `to_id` = :memberId)
+            ";
+         $em = $this->_em;         
+         $count = $em->getConnection()
+                     ->executeUpdate(
+                        $query,[
+                            'notDeleted' => EsMessages::MESSAGE_NOT_DELETED,
+                            'deletedBySender' => EsMessages::MESSAGE_DELETED_BY_SENDER,
+                            'deletedByReceiver' => EsMessages::MESSAGE_DELETED_BY_RECEIVER,
+                            'deletedByBoth' => EsMEssages::MESSAGE_DELETED_BY_BOTH,
+                            'memberId' => $memberId,
+                            'partnerMemberId' => $partnerMemberId,
+                        ]);
+
+         return (int) $count;
+    }
+
+    /**
+     * Update message(s) to seen
+     *
+     * @param integer $memberId
+     * @param integer $partnerMemberId
+     * @param integer[] $messageIds
      * @return integer Number of updated message
      */
-    public function updateToSeen($memberId, $messageId)
+    public function updateToSeen($memberId, $partnerMemberId, $messageIds = [])
     {
         $em = $this->_em;
         $query = "
-                UPDATE `es_messages`
-                SET `opened` = ?
-                WHERE `to_id` = ? AND `id_msg` IN(?)";
-        $count = $em->getConnection()->executeUpdate($query,
-            [
+                UPDATE 
+                    `es_messages`
+                SET 
+                    `opened` = ?
+                WHERE 
+                    `to_id` = ? AND `from_id` = ?
+                ";
+                   
+        $dataBindings = [
+            'data' => [
                 EsMessages::MESSAGE_READ,
                 $memberId,
-                $messageId,
+                $partnerMemberId,
             ],
-            [
+            'type' => [
                 \PDO::PARAM_INT,
                 \PDO::PARAM_INT,
-                \Doctrine\DBAL\Connection::PARAM_INT_ARRAY
-            ]);
+                \PDO::PARAM_INT,
+            ],                   
+        ];
+      
+        if(empty($messageIds) === false){
+            $query .= " AND id_msg IN (?) ";
+            $dataBindings['data'][] = $messageIds;
+            $dataBindings['data'][] = \Doctrine\DBAL\Connection::PARAM_INT_ARRAY;
+        }
+
+        $count = $em->getConnection()
+                    ->executeUpdate(
+                        $query,
+                        $dataBindings['data'],
+                        $dataBindings['type']
+                    );
 
         return (int) $count;
     }

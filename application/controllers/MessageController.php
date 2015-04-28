@@ -128,11 +128,13 @@ class MessageController extends MY_Controller
         $result = [
             'success' => false,
             'errorMessage' => '',
+            'messageDetails' => [],
         ];
         
         $messageSendingResult = $this->messageManager->sendMessage($senderEntity, $receiverEntity, $message);
         if($messageSendingResult['isSuccessful']){
             $result['success'] = true;
+            $result['messageDetails'] = $this->messageManager->getMessageDetailsById($messageSendingResult['messageId']);
         }
         else{
             switch($messageSendingResult['error']){
@@ -159,7 +161,7 @@ class MessageController extends MY_Controller
      *
      * @return json
      */
-    public function delete()
+    public function deleteMessage()
     {
         $rawMessageIds = $this->input->post("message_ids") ? json_decode($this->input->post("message_ids")) : [];
         $messageIds = [];
@@ -169,7 +171,7 @@ class MessageController extends MY_Controller
         $numberOfDeletedMessages = 0;
         if(empty($messageIds) === false){
             $numberOfDeletedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                                            ->delete($messageIds, $this->userId);
+                                            ->deleteMessages($messageIds, $this->userId);
         }
 
         echo json_encode([
@@ -178,20 +180,31 @@ class MessageController extends MY_Controller
     }
 
     /**
+     * Delete conversation between authenticated user and partner
+     *
+     * @return JSON
+     */
+    public function deleteConversation()
+    {
+        $partnerId = (int) $this->input->post('partnerId');
+        $numberOfDeletedMessages = $this->em->getRepository('EasyShop\Entities\EsMessages')
+                                 ->deleteConversation($this->userId, $partnerId);
+        echo json_encode([
+            'numberOfDeletedMessages' => $numberOfDeletedMessages,
+        ]); 
+    }
+    
+
+    /**
      * Mark message as read
      *
      * @return json
      */
     public function markMessageAsRead()
     {
-        $rawMessageIds = $this->input->post("message_ids") ? json_decode($this->input->post("message_ids")) : [];
-        $messageIds = [];
-        foreach($rawMessageIds as $rawMessageId){
-            $messageIds[] = (int) $rawMessageId;
-        }
-
+        $partnerId = (int) $this->input->post('partnerId');
         $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                           ->updateToSeen($this->userId, $messageIds);
+                                        ->updateToSeen($this->userId, $partnerId);
         if($numberOfUpdatedMessages > 0){
             $member = $this->serviceContainer['entity_manager']
                            ->find('EasyShop\Entities\EsMember', $this->userId);
