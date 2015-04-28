@@ -56,15 +56,35 @@
             <div class="container load-animate">
                 <div class="text-center dropdown-school-list">
                     <select id="ddown-school">
-                        <option value="" disabled selected >Select your university...</option>
+                        <option value="" disabled selected>Select your university...</option>
                         <?PHP foreach($schools_and_students as $school => $students) : ?>
                         <option value="<?=html_escape(str_replace(' ', '-', $school))?>" data-students='<?=json_encode(html_escape($students['students']))?>'><?=html_escape($school)?></option>
                         <?PHP endforeach; ?>
                     </select>
                 </div>
+
                 <div>
-                    <div id="student-container" class="select-school mrgn-top-35">
+                <?PHP foreach($schools_and_students as $school => $students) : ?>
+                    <div id="student-container" class="<?=html_escape(str_replace(' ', '-', $school))?> select-school mrgn-top-35">
+                        <div class="row-fluid">
+                            <?php foreach (array_chunk($students['students'], 3, true) as $studentGroup): ?>
+                                <div class="span6">
+                                    <?php foreach($studentGroup as $student): ?>
+                                        <div class="school-participant">
+                                            <input id="impack" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
+                                            <label for="impack"> <?=html_escape($student['student'])?></label>
+                                            <div class="school-description row-fluid">
+                                                <div class="span12">
+                                                    <?=html_escape($student['description'])?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
+                <?PHP endforeach; ?>
                 </div>
                 <div class="vote-btn mrgn-top-35">
                     <input type="hidden" name="studentId" id="stud-id" value="">
@@ -80,12 +100,17 @@
                 <div class="box">
                     <div class="padding-top-70 padding-bottom-70 padding-left-30 padding-right-30 ss">
                         <p>
-                            The 2014 EStudyantrepreneur Awards will give recognition to the most preferred student-owned business establishment around the Metro through online voting hosted by EasyShop.ph.
+                            The 2014 EStudyantrepreneur Awards will give recognition to the most preferred student-owned 
+                            business establishment around the Metro through online voting hosted by EasyShop.ph.
                         </p>
                         <h3><b>MECHANICS</b></h3>
                         <ul>
                             <li>
-                                Nominations will be done per school. The Entrepreneurship Department or the department in charge of the Entrepreneurship program will provide at least three (3) student-owned business nominees together with their advisers. To be eligible to receive the EStudyantrepreneur Award, the nominee must be the owner of a small business. There are no category limitations for each business.
+                                Nominations will be done per school. The Entrepreneurship Department or the department in 
+                                charge of the Entrepreneurship program will provide at least three (3) student-owned business 
+                                nominees together with their advisers. To be eligible to receive the EStudyantrepreneur Award, 
+                                the nominee must be the owner of a small business. There are no category limitations for each 
+                                business.
                             </li>
                             <li>
                                 A completed nomination form with the adviser’s endorsement letter must be submitted on or before <b>April 5, 2015</b>.
@@ -127,36 +152,46 @@
                         <br>
                         <h3><b>What’s in it for participating businesses?</b></h3>
                         <p>
-                            EasyShop Online, Inc. will be giving this award as recognition to their businesses that will give them the advantage of having a free advertisement on the company’s website and will potentially increase their market’s awareness and eventually generate additional profit.
+                            EasyShop Online, Inc. will be giving this award as recognition to their businesses that will 
+                            give them the advantage of having a free advertisement on the company’s website and will 
+                            potentially increase their market’s awareness and eventually generate additional profit.
                         </p>
                         <br>
                         <h3><b>Prizes:</b></h3>
                         <p>
-                            School Poll Winner: Php 20,000 for the Student, Php 10,000 for the school, & Php 5,000 for the Adviser
+                            School Poll Winner: Php 20,000 for the Student, Php 10,000 for the school, & Php 5,000 for 
+                            the Adviser
                         </p>
                         <p>
-                            Overall Winner: Php 50,000 for the Student, Php 25,000 for the school, & Php 10,000 for the Adviser
+                            Overall Winner: Php 50,000 for the Student, Php 25,000 for the school, & Php 10,000 for the 
+                            Adviser
                         </p>
                         <br>
                         <h3><b>Terms and Conditions:</b></h3>
                         <ul>
                             <li>
-                                The contest is open to all Students who are endorsed by their business advisers with an existing business established on the year 2013 up to the present which is a requirement to complete their course.
+                                The contest is open to all Students who are endorsed by their business advisers with an 
+                                existing business established on the year 2013 up to the present which is a requirement 
+                                to complete their course.
                             </li>
                             <li>
-                                By registering to EasyShop.ph, individuals agree, warrant, and represent that all personal information provided is true, correct, and complete.
+                                By registering to EasyShop.ph, individuals agree, warrant, and represent that all personal 
+                                information provided is true, correct, and complete.
                             </li>
                             <li>
-                                By participating in this promo, the participant voluntarily provides information that may be used for market research.
+                                By participating in this promo, the participant voluntarily provides information that may 
+                                be used for market research.
                             </li>
                             <li>
                                 A participant can win in the school online poll and inter-school poll.
                             </li>
                             <li>
-                                Employees of EasyShop Online Inc. including their relatives up to second degree of consanguinity or affinity is disqualified from joining the promotion.
+                                Employees of EasyShop Online Inc. including their relatives up to second degree of 
+                                consanguinity or affinity is disqualified from joining the promotion.
                             </li>
                             <li>
-                                Only residents of the Republic of the Philippines are eligible to participate in this promotion.
+                                Only residents of the Republic of the Philippines are eligible to participate in this 
+                                promotion.
                             </li>
                         </ul>
                     </div>
