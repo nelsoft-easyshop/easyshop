@@ -1,9 +1,11 @@
 <?php
 
 namespace EasyShop\Transaction;
-use EasyShop\Entities\EsOrderProductStatus;
-use EasyShop\Entities\EsOrderStatus;
-use EasyShop\Entities\EsPaymentMethod;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
+use EasyShop\Entities\EsPointType as EsPointType;
+
 class TransactionManager
 {
     /**
@@ -25,18 +27,25 @@ class TransactionManager
     private $productManager;
 
     /**
+     * Product manager instance
+     * @var \EasyShop\PointTracker\PointTracker
+     */
+    private $pointTracker;
+
+    /**
      * Load Dependencies
      * @param $em
      * @param $userManager
      * @param $productManager
      */
-    public function __construct ($em, $userManager, $productManager)
+    public function __construct ($em, $userManager, $productManager, $pointTracker)
     {
         $this->em = $em;
         $this->userManager = $userManager;
         $this->productManager = $productManager;
         $this->esOrderProductRepo = $this->em->getRepository('EasyShop\Entities\EsOrderProduct');
         $this->esOrderRepo = $this->em->getRepository('EasyShop\Entities\EsOrder');
+        $this->pointTracker = $pointTracker;
     }
 
     /**
@@ -133,14 +142,27 @@ class TransactionManager
             'o_message' => 'Product Order entry not found!'
         ];
         $getOrderProduct = $this->getOrderProductByStatus($status, $orderProductId, $orderId, $invoiceNumber, $memberId);
-
-        if ( isset($getOrderProduct['orderProductId']) ) {
+        if ( isset($getOrderProduct['orderProductId']) && $getOrderProduct['orderProductId'] ) {
             $esOrderProduct = $this->esOrderProductRepo
                                    ->findOneBy([
                                        'idOrderProduct' => $orderProductId,
                                        'order' => $orderId
                                    ]);
             $esOrderProductStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')->find($status);
+
+            /**
+             * Add user point if a transaction is completed (temporarily disable this function)
+             */
+            // if($status === EsOrderProductStatus::FORWARD_SELLER){
+            //     $pointsDeduct = "0";
+            //     $orderPoints = $this->em->getRepository('EasyShop\Entities\EsOrderPoints')
+            //                             ->findOneBy([ 'orderProduct' => $orderProductId ]);
+            //     if($orderPoints){
+            //         $pointsDeduct = $orderPoints->getPoints();
+            //     }
+            //     $this->pointTracker->addUserPoint($memberId, EsPointType::TYPE_PURCHASE, bcsub($esOrderProduct->getTotal(), $pointsDeduct, 4));
+            // }
+
             $this->esOrderProductRepo->updateOrderProductStatus($esOrderProductStatus, $esOrderProduct);
             $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($esOrderProduct, $esOrderProductStatus, $getOrderProduct['historyLog']);
 
@@ -165,16 +187,26 @@ class TransactionManager
                 $this->em->getRepository('EasyShop\Entities\EsOrderHistory')->addOrderHistory($orderHistoryData);
             }
 
+            if($this->isTransactionCompletePerSeller($orderId, $esOrderProduct->getSeller()->getIdMember())){
+                if($esOrderProduct->getOrder()->getPaymentMethod()->getIdPaymentMethod() !== EsPaymentMethod::PAYMENT_CASHONDELIVERY){
+                    $existingFeedbacks = $this->em->getRepository('EasyShop\Entities\EsMemberFeedback')
+                                                  ->findOneBy([
+                                                    'order' => $orderId,
+                                                    'forMemberid' => $esOrderProduct->getSeller()->getIdMember()
+                                                  ]);
+                    if($existingFeedbacks){
+                        $this->pointTracker
+                             ->addUserPoint($memberId, EsPointType::TYPE_TRANSACTION_FEEDBACK);
+                    }
+                }
+            }
+
             $result = [
                 'o_success' => true,
                 'o_message' => 'Product Order entry updated!'
             ];
         }
 
-        $result = [
-            'o_success' => true,
-            'o_message' => 'Product Order entry updated!'
-        ];
         return $result;
     }
 
@@ -307,6 +339,9 @@ class TransactionManager
             case EsPaymentMethod::PAYMENT_PESOPAYCC:
                 $parseData['payment_method_name'] = "Pesopay Credit Card/ Debit Card";
                 break;
+            case EsPaymentMethod::PAYMENT_POINTS:
+                $parseData['payment_method_name'] = "Easypoints";
+                break;
         }
 
         foreach( $row as $r){
@@ -413,7 +448,7 @@ class TransactionManager
                 $soldTransactionDetails[$transaction['idOrder']]['userImage'] = $this->userManager->getUserImage($transaction['buyerId']);
                 $orderProducts = $this->esOrderProductRepo->getOrderProductTransactionDetails($transaction['idOrder']);
                 foreach ($orderProducts as $productKey => $product) {
-                    if ( (int) $memberId !== (int) $product['seller_id']) {
+                    if ((int) $memberId !== (int) $product['seller_id']) {
                         continue;
                     }
                     if (!isset($soldTransactionDetails[$transaction['idOrder']]['product'][$orderProducts[$productKey]['idOrderProduct']])) {
@@ -428,8 +463,79 @@ class TransactionManager
         }
 
         return [
-                "transactionsCount" => count($soldTransactionDetails),
-                "productCount" => $orderProductCount
-            ];
+            "transactionsCount" => count($soldTransactionDetails),
+            "productCount" => $orderProductCount
+        ];
+    }
+
+    /**
+     * Void Transaction
+     * @param  integer $orderId
+     * @return boolean
+     */
+    public function voidTransaction($orderId)
+    {
+        $order = $this->esOrderRepo->find($orderId);
+        $voidStatus = EsOrderStatus::STATUS_VOID;
+        $orderProductStatus = EsOrderProductStatus::RETURNED_BUYER; 
+        if ($order && $order->getOrderStatus()->getOrderStatus() !== $voidStatus) {
+            $orderStatus = $this->em->getRepository('EasyShop\Entities\EsOrderStatus')
+                                    ->find($voidStatus);
+            $order->setOrderStatus($orderStatus);
+
+            $orderProducts = $this->esOrderProductRepo->findBy(['order'=> $orderId]);
+
+            foreach ($orderProducts as $orderProduct) {
+                $esOrderProductStatus = $this->em->getRepository('EasyShop\Entities\EsOrderProductStatus')
+                                                 ->find($orderProductStatus);
+                $this->esOrderProductRepo
+                     ->updateOrderProductStatus($esOrderProductStatus, $orderProduct);
+            }
+
+            $this->em->flush();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get total transaction shipping fee
+     * @param  EasyShop\Entites\EsOrder $order
+     * @return string
+     */
+    public function getTransactionShippingFee($order)
+    {
+        $totalShippingFee = 0;
+        $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                  ->findBy(['order' => $order]);
+        foreach ($orderProducts as $product) {
+            $totalShippingFee = bcadd($totalShippingFee, $product->getHandlingFee(), 4);
+        }
+
+        return $totalShippingFee;
+    }
+
+    /**
+     * Check if transaction is complete per seller
+     * @param  integer  $orderId
+     * @param  integer  $memberId
+     * @return boolean
+     */
+    public function isTransactionCompletePerSeller($orderId, $memberId)
+    { 
+        $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                  ->findBy([
+                                    'order' => $orderId,
+                                    'seller' => $memberId,
+                                  ]);
+
+        foreach ($orderProducts as $product) {
+            if($product->getStatus()->getIdOrderProductStatus() !== EsOrderProductStatus::FORWARD_SELLER){
+                return false;
+            }
+        }
+
+        return true;
     }
 }

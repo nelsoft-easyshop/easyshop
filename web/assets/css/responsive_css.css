@@ -2535,6 +2535,15 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     font-size: 24px;
 }
 
+/** ================================================== **/
+/** =========== EASY POINTS INFOGRAPHICS ============ **/
+/** ================================================ **/
+.easy-point-infographic-container img {
+    max-width: 1350px;
+    width: 100%;
+}
+
+
 @media (min-width: 991px) {
     .old-page-container {
         padding: 0 !important;

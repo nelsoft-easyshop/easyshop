@@ -352,11 +352,10 @@ abstract class AbstractGateway implements GatewayInterface
                 $this->em->persist($orderProduct);
                 $this->em->flush();
 
-                for($x = 0; $x < (int)$details[2]; $x++){
-                    $data["order_id"] = $orderProduct->getIdOrderProduct();
-                    $data["point"] = $prod->getMaxAllowablePoint();
-                    $itemArr[] = $data;
-                }
+                $data["order_product_id"] = $orderProduct->getIdOrderProduct();
+                $data["item_total_price"] = $details[5];
+                $data["quantity"] = (int)$details[2];
+                $itemArr[] = $data; 
 
                 if((int)$details[7] > 0){
                     $response['o_message'] = $this->error['EsOrderProductAttr-failed-insert']['code'];
@@ -373,7 +372,6 @@ abstract class AbstractGateway implements GatewayInterface
                     }
                 }
 
-                
                 $response['o_message'] = $this->error['EsOrderProductHistory-failed-insert']['code'];
                 $orderProductHistory = new EsOrderProductHistory();
                 $orderProductHistory->setOrderProduct($orderProduct);

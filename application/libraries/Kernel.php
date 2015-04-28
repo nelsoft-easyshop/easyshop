@@ -63,57 +63,38 @@ class Kernel
         $config->setProxyNamespace('EasyShop\Doctrine\Proxies');
         $config->addCustomStringFunction('BINARY', 'EasyShop\Doctrine\Query\MySql\Binary');
         $config->addCustomStringFunction('FIELD', 'EasyShop\Doctrine\Query\MySql\Field');
+        $config->addCustomStringFunction('DATE', 'EasyShop\Doctrine\Query\MySql\Date');
         
         $container['entity_manager'] = function ($c) use ($dbConfig, $config, $container){
             $em = Doctrine\ORM\EntityManager::create($dbConfig, $config);
             $em->getConnection()->getConfiguration()->setSQLLogger(null);
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsProductSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsProductSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsMemberSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsMemberSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsAddressSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsAddressSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsProductReviewSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsProductReviewSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsMemberFeedbackSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsMemberFeedbackSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsOrderSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsOrderSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsProductShippingCommentSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsProductShippingCommentSubscriber()
             );
             $em->getEventManager()->addEventSubscriber(
-                new \EasyShop\Doctrine\Subscribers\EsOrderProductSubscriber(
-                    $container['activity_manager'],
-                    $container['language_loader']
-                )
+                new \EasyShop\Doctrine\Subscribers\EsOrderProductSubscriber()
+            );
+
+            $em->getEventManager()->addEventSubscriber(
+                new \EasyShop\Doctrine\Subscribers\EsVendorSubscribeHistorySubscriber()
             );
 
             $em->getEventManager()->addEventListener(
@@ -177,22 +158,27 @@ class Kernel
             $encrypter = new \CI_Encrypt();
             $configLoader = $container['config_loader'];
             $languageLoader = $container['language_loader'];
-            $hashUtitility = $container['hash_utility'];
+            $hashUtitility = $container['hash_utility']; 
+            $pointTracker = $container['point_tracker'];
             $socialMediaManager = $container['social_media_manager'];
-            return new \EasyShop\Account\AccountManager($em, $brcyptEncoder, 
-                                                        $userManager, 
-                                                        $formFactory, 
-                                                        $formValidation, 
-                                                        $formErrorHelper,
-                                                        $stringHelper,
-                                                        $httpRequest,
-                                                        $emailNotification,
-                                                        $parser,$encrypter,
-                                                        $configLoader,
-                                                        $languageLoader,
-                                                        $hashUtitility,
-                                                        $socialMediaManager
-                                                        );        
+
+            return new \EasyShop\Account\AccountManager(
+                $em,
+                $brcyptEncoder, 
+                $userManager, 
+                $formFactory, 
+                $formValidation, 
+                $formErrorHelper,
+                $stringHelper,
+                $httpRequest,
+                $emailNotification,
+                $parser,$encrypter,
+                $configLoader,
+                $languageLoader,
+                $hashUtitility,
+                $pointTracker,
+                $socialMediaManager
+            ); 
         };
 
         $container['message_manager'] = function ($c) use ($container) {
@@ -295,7 +281,13 @@ class Kernel
             $productManager = $container['product_manager'];
             $promoManager = $container['promo_manager'];
             $cart = new \EasyShop\Cart\CodeigniterCart($container['entity_manager']);
-            return new \EasyShop\Cart\CartManager($container['entity_manager'], $cart, $productManager, $promoManager);
+            return new \EasyShop\Cart\CartManager(
+                $container['entity_manager'], 
+                $cart, 
+                $productManager, 
+                $promoManager,
+                $container['product_shipping_location_manager']
+            );
         };
 
         // Search product
@@ -327,6 +319,16 @@ class Kernel
         $container['promo_manager'] = function ($c) use ($container){
             return new \EasyShop\Promo\PromoManager($container['config_loader'], $container['entity_manager']);
         };
+        
+        //Activity Manager
+        $container['activity_manager'] = function ($c) use ($container){
+            return new \EasyShop\Activity\ActivityManager(
+                $container['product_manager'],
+                $container['user_manager'],
+                $container['entity_manager']
+            );
+        };
+
 
         // Product Manager
         $container['product_manager'] = function ($c) use ($container) {
@@ -350,8 +352,9 @@ class Kernel
             $em = $container['entity_manager'];
             $userManager = $container['user_manager'];
             $productManager = $container['product_manager'];
+            $pointTracker = $container['point_tracker'];
 
-            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager);
+            return new \EasyShop\Transaction\TransactionManager($em, $userManager, $productManager, $pointTracker);
         };
         
         $container['image_utility'] = function ($c) use ($container){
@@ -412,6 +415,8 @@ class Kernel
             $stringUtility = $container['string_utility'];
             $formValidation = $container['form_validation'];
             $formFactory = $container['form_factory'];
+            $formErrorHelper = $container['form_error_helper'];
+            $pointTracker = $container['point_tracker'];
             return new \EasyShop\SocialMedia\SocialMediaManager(
                 $fbRedirectLoginHelper,
                 $googleClient,
@@ -420,7 +425,9 @@ class Kernel
                 $configLoader,
                 $stringUtility,
                 $formValidation,
-                $formFactory
+                $formFactory,
+                $formErrorHelper,
+                $pointTracker
             );
         };
         // Category Manager
@@ -469,8 +476,11 @@ class Kernel
                 $container['social_media_manager'],
                 $container['language_loader'],
                 $container['message_manager'],
-                $container['dragonpay_soap_client'],
-                $container['product_shipping_location_manager']
+                $container['dragonpay_soap_client'], 
+                $container['transaction_manager'], 
+                $container['product_shipping_location_manager'],
+                new \Curl\Curl(),
+                $container['checkout_service']
             );
         };
 
@@ -587,6 +597,18 @@ class Kernel
                             );
         };
 
+        // Feedback Transaction
+        $container['feedback_transaction_service'] = function ($c) use ($container) {
+            return new \EasyShop\Review\FeedbackTransactionService(
+                $container['entity_manager'],
+                $container['point_tracker'],
+                $container['form_validation'],
+                $container['form_factory'],
+                $container['form_error_helper'],
+                $container['transaction_manager']
+            );
+        };
+
         // Product Shipping Manager
         $container['product_shipping_location_manager'] = function ($c) use ($container) {
             return new \EasyShop\Product\ProductShippingLocationManager(
@@ -605,22 +627,16 @@ class Kernel
             $languageImplementation = new \EasyShop\LanguageLoader\CodeigniterLanguage();
             return new \EasyShop\LanguageLoader\LanguageLoader($languageImplementation);
         };
-
-        $container['activity_manager'] = function ($c) use ($container) { 
-            return new \EasyShop\Activity\ActivityManager(
-                            $container['language_loader']
-                        );
-        };
-
+    
         // Checkout Service
         $container['checkout_service'] = function ($c) use ($container) {
             return new \EasyShop\Checkout\CheckoutService(
                             $container['entity_manager'],
                             $container['product_manager'],
                             $container['promo_manager'],
-                            $container['cart_manager'],
-                            $container['payment_service'],
-                            $container['product_shipping_location_manager']
+                            $container['cart_manager'], 
+                            $container['product_shipping_location_manager'],
+                            $container['config_loader']
                         );
         };
         

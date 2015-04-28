@@ -1114,6 +1114,7 @@ font-size: 15px;
     margin-right: 10px;
     text-transform: uppercase;
     margin-bottom: 5px;
+    font-size: 11px;
     transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -1132,10 +1133,10 @@ font-size: 15px;
 
 .category-title-container > p{
     margin: 0;
-    font-size: 20px;
+    font-size: 15px;
     margin-bottom: 5px;
     color: #444645;
-    font-weight: normal;
+    font-weight: 600;
 }
 
 .sn-container{
@@ -1195,7 +1196,7 @@ font-size: 15px;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: normal;
 }
 
@@ -1298,6 +1299,7 @@ font-size: 15px;
 .title-bg > h3{
     background: none !important;
     background-color: none !important;
+    font-size: 15px;
 }
 
 .row-brand{
@@ -1309,7 +1311,7 @@ font-size: 15px;
 }
 
 #brand-items {
-    margin-top: -25px;
+    margin-top: -16px;
 }
 
 #brand-items .item{
@@ -1553,6 +1555,8 @@ h3 > b{
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     text-align:center;
+    z-index: 999;
+
 }
 
 .tooltip-home:after 

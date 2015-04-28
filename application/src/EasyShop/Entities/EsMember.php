@@ -291,6 +291,21 @@ class EsMember
      * @ORM\Column(name="temp_id", type="string", length=45, nullable=false)
      */
     private $tempId = '';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_banner_changed", type="datetime", nullable=false)
+     */
+    private $lastBannerChanged = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_avatar_changed", type="datetime", nullable=false)
+     */
+    private $lastAvatarChanged = 'CURRENT_TIMESTAMP';
+
     
     /**
      *
@@ -1267,5 +1282,51 @@ class EsMember
     public function setTempId($tempId)
     {
         $this->tempId = $tempId; 
+    }
+
+    /**
+     * Set lastBannerChanged
+     *
+     * @param \DateTime $lastBannerChanged
+     * @return EsMember
+     */
+    public function setLastBannerChanged($lastBannerChanged)
+    {
+        $this->lastBannerChanged = $lastBannerChanged;
+
+        return $this;
+    }
+
+    /**
+     * Get lastBannerChanged
+     *
+     * @return \DateTime 
+     */
+    public function getLastBannerChanged()
+    {
+        return $this->lastBannerChanged;
+    }
+
+    /**
+     * Set lastAvatarChanged
+     *
+     * @param \DateTime $lastAvatarChanged
+     * @return EsMember
+     */
+    public function setLastAvatarChanged($lastAvatarChanged)
+    {
+        $this->lastAvatarChanged = $lastAvatarChanged;
+
+        return $this;
+    }
+
+    /**
+     * Get lastAvatarChanged
+     *
+     * @return \DateTime 
+     */
+    public function getLastAvatarChanged()
+    {
+        return $this->lastAvatarChanged;
     }
 }

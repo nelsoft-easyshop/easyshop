@@ -255,7 +255,7 @@ function ReplaceNumberWithCommas(thisnumber){
                     paginationContainer.html(obj.pagination);
                     initializePagination(paginationContainer, obj.pageCount);
                 }
-                
+
                 paginationContainer.show();
                 CatDiv.find('[rel=tooltiplist]').tooltip({
                     placement : 'top'
@@ -440,8 +440,7 @@ function ReplaceNumberWithCommas(thisnumber){
                 }
                 $('html,body').scrollTo(450); 
             }
-        });
-        
+        }); 
     }
     
     

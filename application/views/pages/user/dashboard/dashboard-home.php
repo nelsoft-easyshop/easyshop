@@ -87,6 +87,20 @@
                             </div>
                         </div>
                     </div>
+                    <?php if(\EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
+                    <div class="col-md-12 easy-point-mobile">
+                        <div class="ep-border-top">
+                            <p>
+                                Easy Points:
+                            </p>
+                            <a href="/easypoints" target="_blank" class="easy-point-link-mobile">
+                                <span class="current-point-txt">Current Points:</span>
+                                <span class="easy-points-mobile"><?php echo number_format($totalUserPoint, 2, '.', ',') ?></span>
+                                <div class="clear"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <?php endif; ?>
                     <div class="col-md-5">
                         <div class="div-feedback-stat">
                             <p class="p-stat-title">

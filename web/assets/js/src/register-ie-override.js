@@ -1,6 +1,6 @@
 (function( $ ) {
 
-    $(document).ready(function(){https://docs.google.com/a/easyshop.ph/document/d/1kmp0qLQ4y_MS6zA8Ck4zajJklWmIACF92Grpg47-hdA/edit
+    $(document).ready(function(){
 
         $("#username").off('input');
         $("#username").on('keyup', function(){
@@ -17,6 +17,24 @@
                 $(this).removeClass('forSearch');
                 hidecheckx($('#username'));
                 $('.username_availability').html('');
+            }
+        });
+        
+        $("#email").off('input');
+        $("#email").on('keyup', function(){
+            var fieldlength = jQuery.trim(jQuery('#email').val()).length;
+            hidecheckx(jQuery(this));
+            jQuery('.email_availability').html('');
+            
+            jQuery(this).removeClass('pass');
+            
+            if(!jQuery(this).hasClass('forSearch') && fieldlength >= 6){
+                jQuery(this).addClass('forSearch');
+            }
+            else if(fieldlength < 6){
+                jQuery(this).removeClass('forSearch');
+                hidecheckx(jQuery('#email'));
+                jQuery('.email_availability').html('');
             }
         });
 

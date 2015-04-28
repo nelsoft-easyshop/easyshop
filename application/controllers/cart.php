@@ -1,7 +1,11 @@
 <?php
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
+
+use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\PaymentGateways\PointGateway as PointGateway;
 
 class Cart extends MY_Controller
 {
@@ -15,10 +19,14 @@ class Cart extends MY_Controller
     
     /**
      * The cart object
-     * 
+     *
      * @var EasyShop\Cart\CartInterface
      */
     private $cartImplementation;
+
+    private $pointTracker;
+
+    private $em;
     
     /**
      * Product Manager instance
@@ -32,42 +40,65 @@ class Cart extends MY_Controller
         parent::__construct();
         $this->cartManager = $this->serviceContainer['cart_manager'];
         $this->productManager = $this->serviceContainer['product_manager'];
+        $this->pointTracker = $this->serviceContainer['point_tracker'];
+        $this->em = $this->serviceContainer['entity_manager'];
         $this->cartImplementation = $this->cartManager->getCartObject();
     }
 
     /**
      * Renders the cart page
-     *
-     *
      */
     public function index()
     {
+        $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         if ($this->session->userdata('member_id')) {
-            $memberId = $this->session->userdata('member_id');
+            $memberId = (int) $this->session->userdata('member_id');
+            $usedPoints = (float) $this->input->get('points');
+            $userPoints = $this->pointTracker->getUserPoint($memberId);
             $cartContents = $this->cartManager->getValidatedCartContents($memberId);
-            $totalAmount = $this->cartImplementation->getTotalPrice();
+            $subTotalAmount = str_replace(',', '', $this->cartImplementation->getTotalPrice());
+            $locations = $this->em->getRepository('EasyShop\Entities\EsLocationLookup')
+                                  ->getLocationLookup();
+            $userAddress = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
+            $totalShippingFee = $this->cartManager->getCartShippingFee($userAddress['stateRegion'], $memberId);
+            $cartTotalAmount = bcadd($subTotalAmount, $totalShippingFee, 4);
             $headerData = [
                 "memberId" => $this->session->userdata('member_id'),
                 "title" => "Cart | Easyshop.ph",
             ];
-            
+
             $referer =  $this->serviceContainer['http_request']
                              ->headers->get('referer');
             $continueUrl = $referer;
-            if(strpos($referer, '/item/') === false){
+            if (strpos($referer, '/item/') === false) {
                 $continueUrl = '/product/categories_all';
             }
             $bodyData = [
+                'userAddress' => $userAddress,
                 'continue_url' => $continueUrl,
                 'cart_items' => $cartContents,
-                'total' => $totalAmount,
+                'subTotalAmount' => $subTotalAmount,
+                'userPoints' => $userPoints,
+                'isCartEmpty' => $this->cartImplementation->getSize() === 0,
+                'locations' => $locations,
+                'totalShippingFee' => $totalShippingFee,
+                'cartTotalAmount' => $cartTotalAmount,
+                'canUsePoints' => $cartTotalAmount >= PointGateway::MIN_AMOUNT_ALLOWED
+                                    && EasyShop\PaymentGateways\PointGateway::POINT_ENABLED,
+                'usedPoints' => $usedPoints > $userPoints || $usedPoints > $cartTotalAmount
+                                ? 0
+                                : $usedPoints,
             ];
-
-            $this->load->spark('decorator');  
+            $this->load->spark('decorator');
             $this->load->view('templates/header_alt2', $this->decorator->decorate('header', 'view', $headerData));
-            $this->load->view('pages/cart/cart-responsive', $bodyData);
-            $this->load->view('templates/footer_primary',  $this->decorator->decorate('footer', 'view', $headerData));
-        } 
+            if (EasyShop\PaymentGateways\PointGateway::POINT_ENABLED) {
+                $this->load->view('pages/cart/cart', $bodyData);
+            }
+            else {
+                $this->load->view('pages/cart/cart-without-es-points', $bodyData);
+            }
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view', $headerData));
+        }
         else {
             redirect('/login', 'refresh');
         }
@@ -86,9 +117,9 @@ class Cart extends MY_Controller
         
         $isLoggedIn = $this->session->userdata('usersession') ? true : false;
         
-        $product = $this->serviceContainer['entity_manager']
-                        ->find('EasyShop\Entities\EsProduct', $productId);
+        $product = $this->em->find('EasyShop\Entities\EsProduct', $productId);
         
+
         if($this->input->post('express')){
             $defaultAttributeData = $this->productManager->getProductDefaultAttributes($productId);
             $hasStock = $defaultAttributeData['hasStock'];
@@ -108,11 +139,9 @@ class Cart extends MY_Controller
             $quantity = $this->input->post('quantity');
         }
         $isSuccesful = false;
-        if($product){
+        if ($product) {
             $seller = $product->getMember();
-  
-            $member = $this->serviceContainer['entity_manager']
-                           ->find('EasyShop\Entities\EsMember', $memberId);
+            $member = $this->em->find('EasyShop\Entities\EsMember', $memberId);
             if($member && $seller->getIdMember() !== (int)$memberId && $member->getIsEmailVerify()){
                 $isSuccesful = $this->cartManager->addItem($productId, $quantity, $options);
             }
@@ -128,35 +157,46 @@ class Cart extends MY_Controller
      */
     public function doRemoveItem()
     {
+        $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         $memberId =  $this->session->userdata('member_id');
         $rowId = $this->input->post('id');
         $isRemoveSuccesful = $this->cartManager->removeItem($memberId, $rowId);
+        $userAddress = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
         
         $response = [
-            'isSuccess' => $isRemoveSuccesful,
+            'isSuccessful' => $isRemoveSuccesful,
             'totalPrice' => $this->cartImplementation->getTotalPrice(),
             'numberOfItems' => $this->cartImplementation->getSize(true),
+            'totalShippingFee' => $this->cartManager->getCartShippingFee($userAddress['stateRegion'] ,$memberId)
         ];
 
         echo json_encode($response);
     }
 
+    /**
+     * Change quantityof cart item.
+     * @return json
+     */
     public function doChangeQuantity()
     {
+        $esAddressRepository = $this->em->getRepository('EasyShop\Entities\EsAddress');
         $cartId = $this->input->post("id");
         $quantity = $this->input->post("qty");
         $memberId = $this->session->userdata('member_id');
         $isSuccessful = $this->cartManager->changeItemQuantity($cartId, $quantity);
+        $userAddress = $esAddressRepository->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);
 
         if ($isSuccessful) {
             $cartItem = $this->cartManager->getValidatedCartContents($memberId)[$cartId];
             $itemSubtotal = ($cartItem['price']) * $cartItem['qty'];
 
-            $result = array(
+            $result = [
                 'itemSubtotal' => number_format($itemSubtotal, 2, '.', ','),
                 'cartTotal' => $this->cartImplementation->getTotalPrice(),
                 'qty' =>  $cartItem['qty'],
-                'maxqty' => $cartItem['maxqty']);
+                'maxqty' => $cartItem['maxqty'],
+                'totalShippingFee' => $this->cartManager->getCartShippingFee($userAddress['stateRegion'] ,$memberId)
+            ];
         }
         $result['isSuccessful'] = $isSuccessful;
 
@@ -170,7 +210,7 @@ class Cart extends MY_Controller
      */
     public function doRemoveSelected()
     {
-        if( $this->session->userdata('member_id') ) {
+        if ($this->session->userdata('member_id')) {
             $itemList = $this->session->userdata['choosen_items'];
             $removeRowId = $this->input->post('rowid');
 
@@ -183,6 +223,24 @@ class Cart extends MY_Controller
             $this->session->set_userdata('choosen_items', $itemList);
 
             print json_encode(['isSuccessful' => true]);
+        }
+    }
+
+    /**
+     * Get cart total shipping fee 
+     * @return float
+     */
+    public function getCartTotalShippingFee()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $cityLocation = (int)$this->input->post('city_id'); 
+        $shippingFee = $this->cartManager->getCartShippingFee($cityLocation, $memberId, true);
+
+        if($shippingFee){
+            echo number_format($shippingFee, 2, '.', '');
+        }
+        else{
+            echo "Some product not available in location";
         }
     }
 }

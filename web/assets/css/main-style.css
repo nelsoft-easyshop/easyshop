@@ -63,6 +63,11 @@ textarea {
     outline:none;
 }
 
+.form-control:focus{
+    box-shadow: none !important;
+    border-color: #565656!important;
+}
+
 .loader-upload{
     position: fixed;
     background: #fff;
@@ -1245,6 +1250,10 @@ td.td-view.p-view2.color-default{
     min-height: 580px;
  }
  
+.panel-category{
+    font-size: 12px;
+}
+
  .panel-category-heading,  .panel-category-heading > .panel-title > a{
     background: #ff893b;
     color: #ffffff;
@@ -1252,6 +1261,7 @@ td.td-view.p-view2.color-default{
  }
  
 .panel-category-heading, .panel-title{
+    font-size: 12px !important;
     position:relative;
     z-index:2;
 }
@@ -1278,7 +1288,6 @@ td.td-view.p-view2.color-default{
 
 .list-category > li > a{
     padding: 12px 15px;
-    font-weight: 600;
     display: block;
 }
 
@@ -1589,7 +1598,7 @@ td.td-view.p-view2.color-default{
     font-weight: bold;
     margin: 0px;
     margin-top: 10px;
-    font-size:15px;
+    font-size:12px;
 }
 
 .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-category{
@@ -1616,7 +1625,7 @@ td.td-view.p-view2.color-default{
     text-align: center;
     color: #ff3d1f;
     font-weight: bold;
-    font-size:15px;
+    font-size:12px;
     line-height: 17px;
 }
 
@@ -1624,6 +1633,7 @@ td.td-view.p-view2.color-default{
     color: #989898;
     font-weight: normal;
     margin-right: 5px;
+    font-size: 12px;
 }
 
 .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .div-amount > .p-discount{

@@ -11,31 +11,7 @@ use EasyShop\Entities\EsActivityType as EsActivityType;
 class EsMemberSubscriber implements EventSubscriber
 {
     protected $changeSet = [];
-
-    /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
+    
     /**
      * The preUpdate event occurs before the database update operations to entity data.
      * 
@@ -66,7 +42,7 @@ class EsMemberSubscriber implements EventSubscriber
         }
 
         if ($event->hasChangedField('gender')) {
-            $this->changeSet['gender'] = $entity->getGender() ? "Female" : "Male";
+            $this->changeSet['gender'] = $entity->getGender() === "M" ? "Male" : "Female";
         }
 
         if ($event->hasChangedField('email')) {
@@ -89,8 +65,16 @@ class EsMemberSubscriber implements EventSubscriber
             $this->changeSet['slug'] = $entity->getSlug();
         }
 
-        if ($event->hasChangedField('website')) {
+        if ($event->hasChangedField('website') && $entity->getWebsite() !== null) {
             $this->changeSet['website'] = $entity->getWebsite();
+        }
+
+        if ($event->hasChangedField('lastBannerChanged')) {
+            $this->changeSet['lastBannerChanged'] = $entity->getLastBannerChanged();
+        }
+
+        if ($event->hasChangedField('lastAvatarChanged')) {
+            $this->changeSet['lastAvatarChanged'] = $entity->getLastAvatarChanged();
         }
     }
 
@@ -117,15 +101,21 @@ class EsMemberSubscriber implements EventSubscriber
             if(count($this->changeSet) > 0){
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
-                $unparsedPhrase = $this->languageLoader
-                                       ->getLine($activityType->getActivityPhrase());
-                $phrase = $this->activityManager
-                               ->constructActivityPhrase($this->changeSet,
-                                                         $unparsedPhrase,
-                                                         'EsMember');
-                if($phrase !== ""){
+                if(isset($this->changeSet['lastAvatarChanged'])){
+                    $this->changeSet['memberId'] = $entity->getIdMember();
+                    $action = \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_AVATAR_UPDATE;
+                }
+                elseif(isset($this->changeSet['lastBannerChanged'])){
+                    $this->changeSet['memberId'] = $entity->getIdMember();
+                    $action = \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_BANNER_UPDATE;
+                }
+                else{
+                    $action = \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE;
+                }
+                $jsonString = \EasyShop\Activity\ActivityTypeInformationUpdate::constructJSON($this->changeSet, $action);
+                if($jsonString !== ""){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $entity);
+                       ->createAcitivityLog($activityType, $jsonString, $entity);
                 }
            }
         }

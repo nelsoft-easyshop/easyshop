@@ -13,30 +13,6 @@ class EsProductReviewSubscriber implements EventSubscriber
     protected $changeSet = [];
 
     /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
-    /**
     * The postPersist event occurs for an entity after the entity has been made persistent.
     *
     * @param LifecycleEventArgs $event
@@ -66,23 +42,24 @@ class EsProductReviewSubscriber implements EventSubscriber
             $member = $entity->getMember();
             $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                ->find(EsActivityType::FEEDBACK_UPDATE);
-            $phraseArray = $this->languageLoader
-                                ->getLine($activityType->getActivityPhrase());
+            $actionType = null;
             if((int)$entity->getPReviewid() !== EsProductReview::PRODUCT_REVIEW_DEFAULT){
-                $unparsedPhrase = $phraseArray['product']['reply'];
+                $actionType = \EasyShop\Activity\ActivityTypeFeedbackUpdate::ACTION_FEEDBACK_PRODUCT_REPLY;
             }
             else{
-                $unparsedPhrase = $phraseArray['product']['review'];
+                $actionType = \EasyShop\Activity\ActivityTypeFeedbackUpdate::ACTION_FEEDBACK_PRODUCT;
             }
 
-            $phrase = $this->activityManager
-                           ->constructActivityPhrase(['name' => $product->getName()],
-                                                     $unparsedPhrase,
-                                                     'EsProduct');
-            if($phrase !== ""){
+            if($actionType !== null){
+                $data = [
+                    'productId' => $product->getIdProduct(),
+                    'message' => $entity->getReview(),
+                    'rating' => $entity->getRating(),
+                ];
+                $jsonData = \EasyShop\Activity\ActivityTypeFeedbackUpdate::constructJSON($data, $actionType);
                 $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                   ->createAcitivityLog($activityType, $phrase, $member);
-            } 
+                   ->createAcitivityLog($activityType, $jsonData, $member);
+            }
         }
     }
 

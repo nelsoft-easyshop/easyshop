@@ -7,6 +7,7 @@ use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsPaymentGateway as EsPaymentGateway;
 use EasyShop\Entities\EsAddress as EsAddress;
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 
 
 /**
@@ -20,7 +21,6 @@ use EasyShop\PaymentService\PaymentService as PaymentService;
  */
 class PayPalGateway extends AbstractGateway
 {
-
     private $type_creditcard = 2;
     private $PayPalMode; 
     private $PayPalApiUsername; 
@@ -28,7 +28,7 @@ class PayPalGateway extends AbstractGateway
     private $PayPalApiSignature;
     private $returnUrl;
     private $cancelUrl;
-
+    private $lowestAmount;
 
     /**
      * Constructor
@@ -50,6 +50,7 @@ class PayPalGateway extends AbstractGateway
         $this->PayPalApiUsername      = $config['api_username']; 
         $this->PayPalApiPassword      = $config['api_password']; 
         $this->PayPalApiSignature     = $config['api_signature'];
+        $this->lowestAmount = $config['lowest_amount'];
         $this->returnUrl = isset($params['returnUrl']) ? $params['returnUrl'] : base_url().'pay/postBackPayPal';
         $this->cancelUrl = isset($params['cancelUrl']) ? $params['cancelUrl'] : base_url().'payment/review';
     }
@@ -144,8 +145,6 @@ class PayPalGateway extends AbstractGateway
         $PayPalMode = $this->getMode(); 
         $paypalReturnURL = $this->returnUrl; 
         $paypalCancelURL = $this->cancelUrl; 
-        $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->releaseAllLock($memberId);
-
         $productCount = count($validatedCart['itemArray']);
         $cnt = 0;
         $paypalType = $this->getParameter('type');
@@ -157,27 +156,37 @@ class PayPalGateway extends AbstractGateway
 
         if($productCount <= 0){
             return [
-                'e' => false,
-                'd' => 'There are not items in your cart.'
+                'error' => true,
+                'message' => 'There are not items in your cart.'
             ];
         }
 
         if($validatedCart['itemCount'] !== $productCount){
             return [
-                'e' => false,
-                'd' => 'One of the items in your cart is unavailable.'
+                'error' => true,
+                'message' => 'Item quantity not available.'
             ];
-        } 
+        }
+
+        if($this->paymentService->checkOutService->checkoutCanContinue($validatedCart['itemArray'], $paymentType) === false){
+            return [
+                'error' => true,
+                'message' => "Payment is not available using Paypal.",
+            ];
+        }
 
         $shippingAddress = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                                ->findOneBy(['idMember'=>$memberId, 'type'=>EsAddress::TYPE_DELIVERY]);
+                                ->findOneBy([
+                                    'idMember'=>$memberId, 
+                                    'type'=>EsAddress::TYPE_DELIVERY
+                                ]);
 
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                ->find(intval($memberId));
+                           ->find(intval($memberId));
 
         // get address Id
-        $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                    ->getShippingAddress(intval($memberId));
+        $stateRegionId = $this->em->getRepository('EasyShop\Entities\EsAddress')
+                            ->getAddressStateRegionId((int)$memberId);
 
         $name = $shippingAddress->getConsignee();
         $street = $shippingAddress->getAddress();
@@ -187,54 +196,62 @@ class PayPalGateway extends AbstractGateway
         $regionDesc = $shippingAddress->getStateregion()->getLocation();
 
         // Compute shipping fee
-        $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
-        
-        // Persist point credit for postback method
-        $userPoints = $this->em->getRepository('EasyShop\Entities\EsPoint')
-                                ->findOneBy(["member" => intval($memberId)]);
+        $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], (int)$stateRegionId);
 
-        if($userPoints){
-            $pointSpent = $pointGateway ? $pointGateway->getParameter('amount') : "0";
-            $userPoints->setCreditPoint(intval($pointSpent));
-            $this->em->flush();
-        }
-
-        $shipping_amt = round(floatval($prepareData['othersumfee']),2);
-        $itemTotalPrice = round(floatval($prepareData['totalPrice']),2) - $shipping_amt;
+        $shipping_amt = round((float)$prepareData['othersumfee'], 2);
+        $itemOriginalPrice = bcsub(round((float)$prepareData['totalPrice'], 2), $shipping_amt, 2); 
         $productstring = $prepareData['productstring'];
         $itemList = $prepareData['newItemList'];
         $toBeLocked = $prepareData['toBeLocked'];
-        $grandTotal= $itemTotalPrice+$shipping_amt; 
+        $grandTotal = bcadd($itemOriginalPrice, $shipping_amt, 2); 
         $thereIsPromote = $prepareData['thereIsPromote'];
         $this->setParameter('amount', $grandTotal);
 
-        if($thereIsPromote <= 0 && $grandTotal < 50.00){
-            return [
-                'e' => false,
-                'd' => 'We only accept payments of at least PHP 50.00 in total value.'
-            ];
+        if($pointGateway){
+            $checkPointValid = $pointGateway->isPointValid($memberId, $grandTotal);
+            if(!$checkPointValid['valid']){ 
+                return [
+                    'error' => true,
+                    'message' => $checkPointValid['message']
+                ];
+            }
         }
 
-        foreach ($itemList as $key => $value) {
-            $value['price'] = round(floatval($value['price']),2);
+        $itemTotalPrice = "0"; 
+        foreach ($itemList as $value) {
+            $value['price'] = round($value['price'], 2);
+            $deductPrice = $pointGateway 
+                           ? $pointGateway->getProductDeductPoint($value['price'], $itemOriginalPrice)
+                           : 0;
+            $itemPrice = bcsub($value['price'], $deductPrice, 2);
             $dataitem .= '&L_PAYMENTREQUEST_0_QTY'.$cnt.'='. urlencode($value['qty']).
-            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($value['price']).
+            '&L_PAYMENTREQUEST_0_AMT'.$cnt.'='.urlencode($itemPrice).
             '&L_PAYMENTREQUEST_0_NAME'.$cnt.'='.urlencode($value['name']).
             '&L_PAYMENTREQUEST_0_NUMBER'.$cnt.'='.urlencode($value['id']).
             '&L_PAYMENTREQUEST_0_DESC'.$cnt.'=' .urlencode($value['brief']);
             $cnt++;
+
+            $itemTotalPrice = bcadd(bcmul($itemPrice, $value['qty'], 2), $itemTotalPrice, 2);
         }
 
-        $padata =   
+        $paypalGrandTotal = bcadd($itemTotalPrice, $shipping_amt, 2);
+        if($thereIsPromote <= 0 && $paypalGrandTotal < $this->lowestAmount){
+            return [
+                'error' => true,
+                'message' => 'We only accept payments of at least PHP '.$this->lowestAmount.' in total value.'
+            ];
+        }
+
+        $padata =
         '&RETURNURL='.urlencode($paypalReturnURL).
         '&CANCELURL='.urlencode($paypalCancelURL).
         '&PAYMENTACTION=Sale'. 
         '&PAYMENTREQUEST_0_CURRENCYCODE='.urlencode('PHP').
         '&CURRENCYCODE='.urlencode('PHP').
         $dataitem. 
-        '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($itemTotalPrice).   
+        '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($itemTotalPrice).
         '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode($shipping_amt).
-        '&PAYMENTREQUEST_0_AMT='.urlencode($grandTotal).
+        '&PAYMENTREQUEST_0_AMT='.urlencode($paypalGrandTotal).
         '&SOLUTIONTYPE='.urlencode('Sole').
         '&ALLOWNOTE=0'.
         '&NOSHIPPING=1'.
@@ -261,55 +278,55 @@ class PayPalGateway extends AbstractGateway
                 json_encode($itemList),
                 $transactionID,
                 $this
-                );
+            );
 
             if($return['o_success'] > 0){
                 $orderId = $return['v_order_id'];
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->insertLockItem($orderId, $toBeLocked); 
                 $paypalurl ='https://www'.$PayPalMode.'.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token='.$transactionID.'';
 
                 $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($orderId);
-                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')->find($this->getParameter('paymentType'));
-
-                $paymentRecord = new EsPaymentGateway();
-                $paymentRecord->setAmount($this->getParameter('amount'));
-                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
-                $paymentRecord->setOrder($order);
-                $paymentRecord->setPaymentMethod($paymentMethod);
-                $this->em->persist($paymentRecord);
-
+                $deductAmount = "0.00";
                 if($pointGateway){
-                    $pointGateway->setParameter('memberId', $memberId);
-                    $pointGateway->setParameter('itemArray', $return['item_array']);
-
                     $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
-                                                ->find($pointGateway->getParameter('paymentType'));
+                                              ->find($pointGateway->getParameter('paymentType'));
 
-                    $trueAmount = $pointGateway->pay();
+                    $deductAmount = $pointGateway->getParameter('amount');
                     $paymentRecord = new EsPaymentGateway();
-                    $paymentRecord->setAmount($trueAmount);
+                    $paymentRecord->setAmount($deductAmount);
                     $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
                     $paymentRecord->setOrder($order);
                     $paymentRecord->setPaymentMethod($paymentMethod);
                     $this->em->persist($paymentRecord);
+                    $this->em->flush();
                 }
+
+                $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethod')
+                                          ->find($this->getParameter('paymentType'));
+
+                $paymentRecord = new EsPaymentGateway();
+                $paymentRecord->setAmount(bcsub($this->getParameter('amount'), $deductAmount));
+                $paymentRecord->setDateAdded(date_create(date("Y-m-d H:i:s")));
+                $paymentRecord->setOrder($order);
+                $paymentRecord->setPaymentMethod($paymentMethod);
+                $this->em->persist($paymentRecord);
                 $this->em->flush();
                 return [
-                    'e' => true,
-                    'd' => $paypalurl
+                    'error' => false,
+                    'message' => "",
+                    'url' => $paypalurl,
                 ]; 
             }
             else{ 
                 return [
-                    'e' => false,
-                    'd' => $return['o_message']
+                    'error' => true,
+                    'message' => $return['o_message']
                 ]; 
             } 
         }
         else{
             return [
-                'e' => false,
-                'd' => urldecode($httpParsedResponseAr["L_LONGMESSAGE0"])
+                'error' => true,
+                'message' => urldecode($httpParsedResponseAr["L_LONGMESSAGE0"])
             ];
         }
     }
@@ -333,72 +350,92 @@ class PayPalGateway extends AbstractGateway
 
         // get address Id
         $address = $this->em->getRepository('EasyShop\Entities\EsAddress')
-                            ->getShippingAddress((int)$memberId);
+                            ->getAddressStateRegionId((int)$memberId);
 
         if(array_key_exists('token',$getItems) && array_key_exists('PayerID',$getItems)){
             $payerid = $getItems['PayerID'];
-            $token = $getItems['token'];
-            $return = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                ->findOneBy(['transactionId' => $token, 'paymentMethod' => $paymentType]);
+            $token = $response['txnid'] = $getItems['token']; ;
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                               ->findOneBy([
+                                    'transactionId' => $token,
+                                    'paymentMethod' => $paymentType
+                                ]);
 
-            $response['invoice'] = $invoice = $return->getInvoiceNo();
-            $response['orderId'] = $orderId = $return->getIdOrder();
+            $response['invoice'] = $invoice = $order->getInvoiceNo();
+            $response['orderId'] = $orderId = $order->getIdOrder();
 
             // Compute shipping fee
             $prepareData = $this->paymentService->computeFeeAndParseData($validatedCart['itemArray'], intval($address));
 
+            $shippingAmt = round((float)$prepareData['othersumfee'], 2);
             $itemList = $prepareData['newItemList'];
             $grandTotal = $prepareData['totalPrice'];
             $productstring = $prepareData['productstring']; 
             $toBeLocked = $prepareData['toBeLocked'];
-            $lockCountExist = $this->em->getRepository('EasyShop\Entities\EsProductItemLock')->getLockCount($orderId);
 
-            if($lockCountExist >= 1){
-                $this->em->getRepository('EasyShop\Entities\EsProductItemLock')
-                         ->deleteLockItem($orderId, $toBeLocked); 
-                if($validatedCart['itemCount'] === $productCount){
-                    $padata = '&TOKEN='.urlencode($token).
-                    '&PAYERID='.urlencode($payerid).
-                    '&PAYMENTACTION='.urlencode("SALE").
-                    '&AMT='.urlencode($grandTotal).
-                    '&CURRENCYCODE='.urlencode('PHP');
+            if($pointGateway){
+                $grandTotal = bcsub($grandTotal, $pointGateway->getParameter('amount'), 2);
+            }
 
-                    $httpParsedResponseArGECD = $this->PPHttpPost('GetExpressCheckoutDetails', $padata); 
-                    $httpParsedResponseArDECP = $this->PPHttpPost('DoExpressCheckoutPayment', $padata); 
+            if($validatedCart['itemCount'] === $productCount){
+                $padata = '&TOKEN='.urlencode($token).
+                '&PAYERID='.urlencode($payerid).
+                '&PAYMENTACTION='.urlencode("SALE").
+                '&AMT='.urlencode($grandTotal).
+                '&CURRENCYCODE='.urlencode('PHP');
 
-                    if(("SUCCESS" == strtoupper($httpParsedResponseArDECP["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseArDECP["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"]))){
-                        $response['txnid'] = $txnid = urldecode($httpParsedResponseArDECP["TRANSACTIONID"]);
-                        $nvpStr = "&TRANSACTIONID=".$txnid;
-                        $httpParsedResponseAr = $this->PPHttpPost('GetTransactionDetails', $nvpStr);
+                $httpParsedResponseArGECD = $this->PPHttpPost('GetExpressCheckoutDetails', $padata); 
+                $httpParsedResponseArDECP = $this->PPHttpPost('DoExpressCheckoutPayment', $padata); 
 
-                        if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])){
+                if(("SUCCESS" == strtoupper($httpParsedResponseArDECP["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseArDECP["ACK"])) && ("SUCCESS" == strtoupper($httpParsedResponseArGECD["ACK"]))){
+                    $response['txnid'] = $txnid = urldecode($httpParsedResponseArDECP["TRANSACTIONID"]);
+                    $nvpStr = "&TRANSACTIONID=".$txnid;
+                    $httpParsedResponseAr = $this->PPHttpPost('GetTransactionDetails', $nvpStr);
 
-                            foreach ($itemList as $key => $value) {     
-                                $itemComplete = $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
-                                $this->paymentService->productManager->updateSoldoutStatus($value['id']);
-                            }
+                    if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])){
 
-                            $flag = (string) $httpParsedResponseAr['PAYMENTSTATUS'] === 'Pending';
-                            $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                                 ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,EsOrderStatus::STATUS_PAID,$flag);
-
-                            if($complete){
-                                $orderHistory = [
-                                    'order_id' => $orderId,
-                                    'order_status' => EsOrderStatus::STATUS_PAID,
-                                    'comment' => 'Paypal transaction confirmed'
-                                ];
-                                $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
-                                         ->addOrderHistory($orderHistory);
-                                $response['message'] = 'Your payment has been completed through Paypal';
-                                $response['status'] = PaymentService::STATUS_SUCCESS;
-                            }
-                            else{
-                                $response['message'] = 'Someting went wrong. Please contact us immediately. Your EASYSHOP INVOICE NUMBER: '.$invoice.'</div>'; 
+                        $pointArray = [];
+                        foreach ($itemList as $key => $value) {
+                            $this->paymentService->productManager->deductProductQuantity($value['id'],$value['product_itemID'],$value['qty']);
+                            $this->paymentService->productManager->updateSoldoutStatus($value['id']);
+                            if($pointGateway){
+                                $esOrderProduct = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                                           ->findOneBy([
+                                                                'productItemId' => $value['product_itemID'],
+                                                                'order' => $order
+                                                           ]);
+                                $data["order_product_id"] = $esOrderProduct->getIdOrderProduct();
+                                $data["item_total_price"] = $esOrderProduct->getTotal();
+                                $data["quantity"] = $esOrderProduct->getOrderQuantity();
+                                $pointArray[] = $data;
                             }
                         }
+
+                        $flag = (string) $httpParsedResponseAr['PAYMENTSTATUS'] === 'Pending';
+                        $complete = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                             ->updatePaymentIfComplete($orderId,json_encode($itemList),$txnid,$paymentType,EsOrderStatus::STATUS_PAID,$flag);
+
+                        if($complete){
+                            $orderHistory = [
+                                'order_id' => $orderId,
+                                'order_status' => EsOrderStatus::STATUS_PAID,
+                                'comment' => 'Paypal transaction confirmed'
+                            ];
+                            $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
+                                     ->addOrderHistory($orderHistory);
+                            $response['message'] = 'Your payment has been completed through Paypal';
+                            $response['status'] = PaymentService::STATUS_SUCCESS;
+
+                            // get points per item product in order.
+                            if($pointGateway){ 
+                                $pointGateway->setParameter('memberId', $memberId);
+                                $pointGateway->setParameter('itemArray', $pointArray);
+                                $pointGateway->usePoints();
+                            }
+                            $this->paymentService->sendPaymentNotification($orderId);
+                        }
                         else{
-                            $response['message'] = urldecode($httpParsedResponseArDECP["L_LONGMESSAGE0"]);
+                            $response['message'] = 'Someting went wrong. Please contact us immediately. Your EASYSHOP INVOICE NUMBER: '.$invoice.'</div>'; 
                         }
                     }
                     else{
@@ -406,34 +443,47 @@ class PayPalGateway extends AbstractGateway
                     }
                 }
                 else{
-                    $response['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
+                    $response['message'] = urldecode($httpParsedResponseArDECP["L_LONGMESSAGE0"]);
                 }
             }
             else{
-                $response['message'] = 'Your session is already expired for this payment.';
+                $response['message'] = 'The availability of one of your items is below your desired quantity. Someone may have purchased the item before you completed your payment.';
             }
         }
         else{
             $response['message'] = 'Some parameters are missing.';
         }
+
         return $response;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getExternalCharge()
     {
         return ($this->getParameter('amount') * 0.044) + 15; 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function generateReferenceNumber($memberId){}
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderStatus()
     {
         return EsOrderStatus::STATUS_DRAFT;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrderProductStatus()
     {
-        return EsOrderStatus::STATUS_PAID;
+        return EsOrderProductStatus::ON_GOING;
     }
 }
 

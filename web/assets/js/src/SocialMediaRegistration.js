@@ -1,42 +1,64 @@
 
 jQuery(function ($) {
+    
     var csrftoken = $("meta[name='csrf-token']").attr('content');
     var provider = $("#data-container").attr('data-provider');
     var id = $("#data-container").attr('data-id');
     var fname = $("#data-container").attr('data-fname');
     var gender = $("#data-container").attr('data-gender');
     var email = $("#data-container").attr('data-email');
+    var hasNoEmail = email === '';
+    
+    $('.register-new-email').on('keyup', function(){
+        $(".register-new-email-denied").hide();
+    });
+    
+    $('#txt-username').on('keyup', function(){
+        $(".username-denied").hide();
+    });
+    
     $('.proceed').on('click', function (e) {
+    
+        var emailForPost = email;
+        if(hasNoEmail){
+            emailForPost = $('.register-new-email').val();
+        }
+        
         var username = $("#txt-username").val().trim();
+        var hasClientSideError = false;
         if (username === "") {
             $(".username-denied").show();
             $(".username-accepted").hide();
+            hasClientSideError = true;
+        }
+        if(hasNoEmail){
+            if(isValidEmail(emailForPost) === false || emailForPost === ""){
+                $(".register-new-email-denied").show();
+                $(".register-new-email-accepted").hide();
+                hasClientSideError = true;
+            }
+        }
+        if(hasClientSideError){
             return false;
         }
+        
         $.ajax({
             dataType : "json",
             type: "post",
             url : "/SocialMediaController/registerSocialMediaAccount",
-            data : {csrfname : csrftoken, username:username, provider:provider, id:id, fname:fname, gender:gender, email:email},
+            data : {csrfname : csrftoken, username:username, provider:provider, id:id, fname:fname, gender:gender, email:emailForPost},
             beforeSend : function () {
                 $(".form-merge-2 img").show();
                 $(".proceed").hide();
             },
-            success : function (data) {
+            success : function (jsonData) {
                 $(".form-merge-2 img").hide();
                 $(".proceed").show();
-                if (data == false) {
-                    $(".username-denied").show();
-                    $(".username-accepted").hide();
-                    $(".username-restrictions").hide();
-                }
-                else if (data == 'Invalid Username') {
-                    $(".username-restrictions").show();
-                    $(".username-denied").hide();
-                    $(".username-accepted").hide();
-                } else {
+                if(jsonData.isSuccessful){
                     $(".username-accepted").show();
+                    $(".register-new-email-accepted").show();
                     $(".username-denied").hide();
+                    $(".register-new-email-denied").hide();
                     $(".username-restrictions").hide();
                     $('.modal-message').modal({
                         onShow : function () {
@@ -49,12 +71,33 @@ jQuery(function ($) {
                         }
                     });
                 }
-                return false;
+                else{
+                    if(typeof jsonData.errors.username !== 'undefined'){
+                        $(".username-denied").show()
+                        $(".username-accepted").hide();
+                    }
+                    else{
+                        $(".username-denied").hide()
+                        $(".username-accepted").show();
+                    }
+                    if(typeof jsonData.errors.email !== 'undefined'){
+                        $(".register-new-email-denied").show();
+                        $(".register-new-email-accepted").hide();
+                    }
+                    else{
+                        $(".register-new-email-denied").hide();
+                        $(".register-new-email-accepted").show(); 
+                    }
+                }
             }
         });
     });
 
     $('.send-request').on('click', function (e) {
+        var $this = $(this); 
+        if($this.hasClass('disabled')){
+            return false;
+        }
         var csrftoken = $("meta[name='csrf-token']").attr('content');
         var txtEmail = $("#txt-email").val().trim();
         if (txtEmail == "") {
@@ -66,17 +109,30 @@ jQuery(function ($) {
             dataType : "json",
             type: "post",
             url : "/SocialMediaController/sendMergeNotification",
-            data : {csrfname : csrftoken, oauthId:id, oauthProvider:provider, email:txtEmail, error:'username'},
+            data : {
+                csrfname : csrftoken, 
+                oauthId:id, 
+                oauthProvider:provider, 
+                email:txtEmail
+            },
             beforeSend : function () {
                 $("#img-send-request").show();
                 $(".send-request").hide();
+                $(".email-already-merged").hide();
+                $(".email-accepted").hide();
+                $(".email-denied").hide();
             },
-            success : function (data) {
+            success : function (jsonData) {
                 $("#img-send-request").hide();
                 $(".send-request").show();
-                if (data == false) {
-                    $(".email-denied").show();
-                    $(".email-accepted").hide();
+                if (jsonData.isSuccessful === false) {
+                    if(jsonData.isMerged){
+                        $(".email-already-merged").show();
+                    }
+                    else{
+                        $(".email-denied").show();
+                    }
+                    $('.send-request').addClass('disabled');
                 }
                 else {
                     $(".email-sent").html("We've just sent a verification message to " + txtEmail + " account's inbox.<br/> Please login to your email account and follow the instructions provided to complete this process.");
@@ -106,28 +162,46 @@ jQuery(function ($) {
             dataType : "json",
             type: "post",
             url : "/SocialMediaController/checkEmailAvailability",
-            data : {csrfname : csrftoken, email:txtEmail},
+            data : {
+                csrfname : csrftoken, 
+                email:txtEmail
+            },
             beforeSend : function () {
                 $("#img-check-availability").show();
                 $("#check-availability").hide();
+                $(".email-already-merged").hide();
+                $(".email-accepted").hide();
+                $(".email-denied").hide();
+                $('.send-request').addClass('disabled');
             },
-            success : function (data) {
+            success : function (jsonData) {
                 $("#available-result").hide();
                 $("#img-check-availability").hide();
                 $("#check-availability").show();
-                if (data == false) {
+                if (jsonData == false) {
                     $(".email-denied").show();
-                    $(".email-accepted").hide();
                 }
-                else {
-                    $(".email-denied").hide();
-                    $(".email-accepted").show();
-                    $("#available-result").show();
-                    $("#available-image").attr('src',data.image);
-                    $("#available-email").html(data.email);
-                    $("#available-location").html(data.location);
+                else { 
+                    if(jsonData.isMerged){
+                        $(".email-already-merged").show();
+                    }
+                    else{
+                        $('.send-request').removeClass('disabled');
+                        $(".email-accepted").show();
+                        $("#available-result").show();
+                        $("#available-image").attr('src',jsonData.image);
+                        $("#available-email").html(jsonData.email);
+                        $("#available-location").html(jsonData.location);
+                    }
                 }
             }
         });
     });
+    
+    function isValidEmail(email){
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+    
 });
+

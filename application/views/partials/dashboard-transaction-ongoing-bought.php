@@ -37,6 +37,13 @@
                                 <div class="col-xs-12 col-sm-6">
                                     <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
                                 </div>
+                                
+                                <?php if(bccomp($product['easyPoint'], "0") === 1): ?>
+                                <div class="col-xs-12 col-sm-6">
+                                    <span class="strong-label">Easypoint : </span> <?php echo number_format($product['easyPoint'], 2, '.', ','); ?>
+                                </div>
+                                <?php endif; ?>
+
                                 <div class="col-xs-12 col-sm-6">
                                     <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                 </div>

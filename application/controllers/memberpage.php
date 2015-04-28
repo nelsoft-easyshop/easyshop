@@ -19,7 +19,8 @@ use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\Entities\EsMemberFeedback as EsMemberFeedback;
 use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\Entities\EsAddress as EsAddress;
-use EasyShop\Entities\EsOrderStatus;
+use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
+use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use Easyshop\Upload\AssetsUploader as AssetsUploader;
 use EasyShop\Product\ProductManager as ProductManager;
 
@@ -61,6 +62,20 @@ class Memberpage extends MY_Controller
      * @var integer
      */
     public $productsPerCategoryPage = 16;
+    
+    /**
+     * Number of Point History Items per page
+     *
+     * @var integer
+     */
+    public $pointHistoryItemsPerPage = 10;
+    
+    /**
+     * Number of Point History Items per page
+     *
+     * @var integer
+     */
+    public $activityLogPerPage = 10;
 
     /**
      *  Class Constructor
@@ -76,7 +91,7 @@ class Memberpage extends MY_Controller
         $this->qrManager = $this->serviceContainer['qr_code_manager'];
         $xmlResourceService = $this->serviceContainer['xml_resource'];
         $this->contentXmlFile =  $xmlResourceService->getContentXMLfile();
-        $this->accountManager = $this->serviceContainer['account_manager'];        
+        $this->accountManager = $this->serviceContainer['account_manager'];
         $this->em = $this->serviceContainer['entity_manager'];
         $this->categoryManager = $this->serviceContainer['category_manager'];
         $this->transactionManager = $this->serviceContainer['transaction_manager'];
@@ -92,7 +107,7 @@ class Memberpage extends MY_Controller
      */
     public function index()
     {
-       $userManager = $this->serviceContainer['user_manager'];
+        $userManager = $this->serviceContainer['user_manager'];
         $productManager = $this->serviceContainer['product_manager'];
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
         $esVendorSubscribeRepo = $this->em->getRepository('EasyShop\Entities\EsVendorSubscribe');
@@ -138,6 +153,8 @@ class Memberpage extends MY_Controller
             $completeBoughtTransactionsCount = $this->transactionManager->getBoughtTransactionCount($memberId, false);
             $completeSoldTransactionsCount = $this->transactionManager->getSoldTransactionCount($memberId, false);
             $member->validatedStoreName = $member->getStoreName();
+            $totalUserPoint = $this->serviceContainer['point_tracker']
+                                   ->getUserPoint($memberId);
             $dashboardHomeData = [
                 'member' => $member,
                 'avatarImage' => $userAvatarImage,
@@ -159,7 +176,8 @@ class Memberpage extends MY_Controller
                 'ongoingBoughtTransactionsCount' => $ongoingBoughtTransactionsCount,
                 'ongoingSoldTransactionsCount' => $ongoingSoldTransactionsCount["transactionsCount"],
                 'completeBoughtTransactionsCount' => $completeBoughtTransactionsCount,
-                'completeSoldTransactionsCount' => $completeSoldTransactionsCount["transactionsCount"]
+                'completeSoldTransactionsCount' => $completeSoldTransactionsCount["transactionsCount"],
+                'totalUserPoint' => $totalUserPoint ? $totalUserPoint : 0,
             ];
 
             $dashboardHomeView = $this->load->view('pages/user/dashboard/dashboard-home', $dashboardHomeData, true);
@@ -295,12 +313,18 @@ class Memberpage extends MY_Controller
             $validGender = strlen($formData['gender']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_GENDER : strtoupper($formData['gender']);
             $validDateOfBirth = strlen($formData['dateofbirth']) === 0 ? EasyShop\Entities\EsMember::DEFAULT_DATE : $formData['dateofbirth'];
             $validMobile = (string)$formData['mobile'];
+            
+            $newDateOfBirth = new DateTime($validDateOfBirth);
+            if($memberEntity->getBirthday()->format('Y-m-d') === $validDateOfBirth){
+                $newDateOfBirth = $memberEntity->getBirthday();
+            }
+
             $um->setUser($memberId)
                ->setMobile($validMobile)
                ->setMemberMisc([
                      'setFullname' => $validFullname
                     , 'setGender' => $validGender
-                    , 'setBirthday' => new DateTime($validDateOfBirth)
+                    , 'setBirthday' => $newDateOfBirth
                     , 'setLastmodifieddate' => new DateTime('now')
                 ]);
 
@@ -635,82 +659,29 @@ class Memberpage extends MY_Controller
             'isSuccess' => false,
             'error' => '',
         ];
-        if($this->input->post('order_id') && $this->input->post('feedback-field') && $this->form_validation->run('add_feedback_transaction')){
-            $data = [
-                'uid' => $this->session->userdata('member_id'),
-                'for_memberid' => $this->input->post('for_memberid'),
-                'feedb_msg' => $this->input->post('feedback-field'),
-                'feedb_kind' => $this->input->post('feedb_kind'),
-                'order_id' => $this->input->post('order_id'),
-                'rating1' => $this->input->post('rating1'),
-                'rating2' => $this->input->post('rating2'),
-                'rating3' => $this->input->post('rating3')
-            ];
-
-            if ( !(bool) $data['feedb_kind']) {
-                $transacData = [
-                    'buyer' => $data['uid'],
-                    'seller' => $data['for_memberid'],
-                    'order_id' => $data['order_id']
-                ];
-            }
-            else if ( (bool) $data['feedb_kind']) {
-                $transacData = [
-                    'buyer' => $data['for_memberid'],
-                    'seller' => $data['uid'],
-                    'order_id' => $data['order_id']
-                ];
-            }
-            
-            $formValidation = $this->serviceContainer['form_validation'];
-            $formFactory = $this->serviceContainer['form_factory'];
-            $formErrorHelper = $this->serviceContainer['form_error_helper'];
-            $rules = $formValidation->getRules('user_feedback');
-            $formBuild = $formFactory->createBuilder('form', null, ['csrf_protection' => false])
-                                     ->setMethod('POST');                    
-           
-            $formBuild->add('message', 'text', ['constraints' => $rules['message']]);
-            $formBuild->add('rating1', 'text', ['constraints' => $rules['rating']]);
-            $formBuild->add('rating2', 'text', ['constraints' => $rules['rating']]);
-            $formBuild->add('rating3', 'text', ['constraints' => $rules['rating']]);
-            $formData["message"] =  $data['feedb_msg'];
-            $formData["rating1"] =  $data['rating1'];
-            $formData["rating2"] =  $data['rating2'];
-            $formData["rating3"] =  $data['rating3'];
-            $form = $formBuild->getForm();
-            $form->submit($formData); 
-
-            if($form->isValid()){
-                $doesTransactionExists = $this->transactionManager->doesTransactionExist($transacData['order_id'], $transacData['buyer'], $transacData['seller']);
-                if ($doesTransactionExists) {
-                    $member = $this->esMemberRepo->find($data['uid']);
-                    $forMember = $this->esMemberRepo->find($data['for_memberid']);
-                    $order = $this->em->getRepository('EasyShop\Entities\EsOrder')->find($data['order_id']);
-                    $doesFeedbackExists = $this->esMemberFeedbackRepo
-                                            ->findOneBy([
-                                                'member' => $member,
-                                                'forMemberid' => $forMember,
-                                                'feedbKind' => $data['feedb_kind'],
-                                                'order' => $order
-                                            ]);
-                    if (! (bool) $doesFeedbackExists) {
-                        $result = $this->esMemberFeedbackRepo
-                                    ->addFeedback(
-                                        $member,
-                                        $forMember,
-                                        $data['feedb_msg'],
-                                        $data['feedb_kind'],
-                                        $order,
-                                        $data['rating1'],
-                                        $data['rating2'],
-                                        $data['rating3']
-                                    );
-                        $response['isSuccess'] = (bool)$result;
-                    }
-                }
+        if($this->input->post('order_id') 
+            && $this->input->post('feedback-field') 
+            && $this->form_validation->run('add_feedback_transaction')){
+            $member = $this->esMemberRepo->find($this->session->userdata('member_id'));
+            $forMember = $this->esMemberRepo->find($this->input->post('for_memberid'));
+            $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                              ->find($this->input->post('order_id'));
+                
+            if($member && $forMember && $order){
+                $response = $this->serviceContainer['feedback_transaction_service']
+                                 ->createTransactionFeedback(
+                                    $member,
+                                    $forMember,
+                                    $this->input->post('feedback-field'),
+                                    $this->input->post('feedb_kind'),
+                                    $order,
+                                    $this->input->post('rating1'),
+                                    $this->input->post('rating2'),
+                                    $this->input->post('rating3')
+                                );
             }
             else{
-                $response['error'] = reset($formErrorHelper->getFormErrors($form))[0];
+                $response['error'] = 'Writing feedback not available.';
             }
         }
         else{
@@ -736,6 +707,7 @@ class Memberpage extends MY_Controller
             'error' => 'Failed to validate form'
         ];
 
+        $hasNotif = false;
         $data['transaction_num'] = $this->input->post('transaction_num');
         $data['invoice_num'] = $this->input->post('invoice_num');
         $data['member_id'] = $this->session->userdata('member_id');
@@ -745,6 +717,13 @@ class Memberpage extends MY_Controller
 
         $this->config->load('email', true);
         $imageArray = $this->config->config['images'];
+
+        $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                                     ->findOneBy([
+                                        'idOrder' => $data['transaction_num'],
+                                        'invoiceNo' => $data['invoice_num'],
+                                        'buyer' => $data['member_id']
+                                     ]);
 
         /**
          *  DEFAULT RESPONSE HANDLER
@@ -769,34 +748,37 @@ class Memberpage extends MY_Controller
                 $productIds = explode('-', $data['order_product_id'][0]);
                 $data['order_product_id'] = $productIds;
             }
-
+            
             if (is_array($data['order_product_id'])) {
-                foreach ($data['order_product_id'] as $orderProductId) {
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                            ->getSocialMediaLinks();
+                $parseData['facebook'] = $socialMediaLinks["facebook"];
+                $parseData['twitter'] = $socialMediaLinks["twitter"];
+                $parseData['baseUrl'] = base_url();
+                $orderProductStatus = $data['status'];
+                $emailRecipient = null;
+                $mobileRecipient = null;
+                foreach ($data['order_product_id'] as $key => $orderProductId) {
                     $result = $this->transactionManager->updateTransactionStatus($data['status'], $orderProductId, $data['transaction_num'], $data['invoice_num'], $data['member_id']);
                     if( $result['o_success'] >= 1 ) {
-                        $parseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
-                        $parseData['itemLink'] = base_url().'item/'.$parseData['productSlug'];
-                        $parseData['store_link'] = base_url() . $parseData['user_slug'];
-                        $parseData['msg_link'] = base_url() . "messages/#" . $parseData['user'];
-                        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                                 ->getSocialMediaLinks();
-                        $parseData['facebook'] = $socialMediaLinks["facebook"];
-                        $parseData['twitter'] = $socialMediaLinks["twitter"];
-                        $parseData['baseUrl'] = base_url();
-                        
+
+                        $orderProductParseData = $this->transactionManager->getOrderProductTransactionDetails($data['transaction_num'], $orderProductId, $data['member_id'], $data['invoice_num'], $data['status']);
+                        $orderProductParseData['itemLink'] = base_url().'item/'.$orderProductParseData['productSlug'];                        
                         $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                             ->getDefaultImage($parseData['productId']);
+                                             ->getDefaultImage($orderProductParseData['productId']);
                         $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
                         $imagePath = ltrim($imagePath, '.');
                         if(strtolower(ENVIRONMENT) === 'development'){
+                            $imagePath = $imagePath[0] !== '/' ? '/'.$imagePath : $imagePath;
                             $imageArray[] = $imagePath;
-                            $parseData['primaryImage'] = $primaryImage->getFilename();
+                            $orderProductParseData['primaryImage'] = $primaryImage->getFilename();
                         }
                         else{
-                            $parseData['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
+                            $orderProductParseData['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
                         }
-                        
-                        $hasNotif = false;
+                        $emailRecipient = $orderProductParseData['email'];
+                        $mobileRecipient = $orderProductParseData['mobile'];
+
                         if (
                             (int) $data['status'] === (int) EsOrderProductStatus::FORWARD_SELLER ||
                             (int) $data['status'] === (int) EsOrderProductStatus::RETURNED_BUYER ||
@@ -804,52 +786,56 @@ class Memberpage extends MY_Controller
                         ) {
                             $hasNotif = true;
                         }
-                        switch ($data['status']) {
-                            case EsOrderProductStatus::FORWARD_SELLER :
-                                $emailSubject = $this->lang->line('notification_forwardtoseller');
-                                $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
-                                $smsMsg = $parseData['user'] . ' has just confirmed receipt of your product from Invoice # : ' . $parseData['invoice_no'];
-                                break;
-                            case EsOrderProductStatus::RETURNED_BUYER :
-                                $emailSubject = $this->lang->line('notification_returntobuyer');
-                                $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
-                                $smsMsg = $parseData['user'] . ' has just confirmed to return your payment for a product in Invoice # : ' . $parseData['invoice_no'];
-                                break;
-                            case EsOrderProductStatus::CASH_ON_DELIVERY :
-                                $emailSubject = $this->lang->line('notification_forwardtoseller');
-                                $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
-                                $smsMsg = $parseData['user'] . ' has just completed your CoD transaction with Invoice # : ' . $parseData['invoice_no'];
-                                break;
-                        }
+   
+                        $parseData['products'][$key] = $orderProductParseData;
+                        $parseData['user'] = $orderProductParseData['user'];
+                        $parseData['recipient'] = $orderProductParseData['recipient'];
                     }
                 }
-
                 if($hasNotif){
-                    $emailService->setRecipient($parseData['email'])
-                                 ->setSubject($emailSubject)
-                                 ->setMessage($emailMsg, $imageArray)
-                                 ->queueMail();       
-                    $smsService->setMobile($parseData['mobile'])
-                               ->setMessage($smsMsg)
-                               ->queueSMS();
+                    $triggerMember = $this->serviceContainer['entity_manager']
+                                          ->getRepository('EasyShop\Entities\EsMember')
+                                          ->find($data['member_id']);
+                    
+                    switch ($orderProductStatus) {
+                        case EsOrderProductStatus::FORWARD_SELLER :
+                            $emailSubject = $this->lang->line('notification_forwardtoseller');
+                            $emailMsg = $this->parser->parse('emails/email_itemreceived',$parseData,true);
+                            $smsMsg = $triggerMember->getStoreName() . ' has just confirmed receipt of your product from Invoice # : ' . $data['invoice_num'];
+                            break;
+                        case EsOrderProductStatus::RETURNED_BUYER :
+                            $emailSubject = $this->lang->line('notification_returntobuyer');
+                            $emailMsg = $this->parser->parse('emails/return_payment', $parseData, true);
+                            $smsMsg = $triggerMember->getStoreName() . ' has just confirmed to return your payment for a product in Invoice # : ' . $data['invoice_num'];
+                            break;
+                        case EsOrderProductStatus::CASH_ON_DELIVERY :
+                            $emailSubject = $this->lang->line('notification_forwardtoseller');
+                            $emailMsg = $this->parser->parse('emails/email_cod_complete', $parseData, true);
+                            $smsMsg = $triggerMember->getStoreName() . ' has just completed your CoD transaction with Invoice # : ' . $data['invoice_num'];
+                            break;
+                    }    
+                    
+                    if($emailRecipient !== null){
+                        $emailService->setRecipient($emailRecipient)
+                                     ->setSubject($emailSubject)
+                                     ->setMessage($emailMsg, $imageArray)
+                                     ->queueMail();   
+                    }
+                    if($mobileRecipient !== null){
+                        $smsService->setMobile($mobileRecipient)
+                                   ->setMessage($smsMsg)
+                                   ->queueSMS();
+                    }
                 }
             }
             $serverResponse['error'] = $result['o_success'] >= 1 ? '' : 'Server unable to update database.';
             $serverResponse['result'] = $result['o_success'] >= 1 ? 'success':'fail';
-
-        /**
-         *  DRAGONPAY HANDLER
-         */
         }
         else if ( $this->input->post('dragonpay') ) {
+            /**
+             *  DRAGONPAY HANDLER
+             */
             $this->load->library('dragonpay');
-
-            $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                                  ->findOneBy([
-                                                      'idOrder' => $data['transaction_num'],
-                                                      'invoiceNo' => $data['invoice_num'],
-                                                      'buyer' => $data['member_id']
-                                                  ]);
 
             if ( (int) count($getTransaction) === 1) {
                 $dragonpayResult = $this->dragonpay->getStatus($getTransaction->getTransactionId());
@@ -865,36 +851,7 @@ class Memberpage extends MY_Controller
             else{
                 $serverResponse['error'] = 'Transaction does not exist.';
             }
-            /**
-             *  BANK DEPOSIT HANDLER
-             */
         }
-        else if( $this->input->post('bank_deposit') && $this->form_validation->run('bankdeposit') ) {
-            $getTransaction = $this->em->getRepository('EasyShop\Entities\EsOrder')
-                                       ->findOneBy([
-                                           'idOrder' => $data['transaction_num'],
-                                            'invoiceNo' => $data['invoice_num'],
-                                            'buyer' => $data['member_id']
-                                       ]);
-
-            if ( (int) count($getTransaction) === 1 ) {
-                $postData = [
-                    'order_id' => $data['transaction_num'],
-                    'bank' => $this->input->post('bank'),
-                    'ref_num' => $this->input->post('ref_num'),
-                    'amount' => preg_replace('/,/', '', $this->input->post('amount')),
-                    'date_deposit' => date("Y-m-d H:i:s", strtotime($this->input->post('date'))),
-                    'comment' => $this->input->post('comment')
-                ];
-                $result = $this->payment_model->addBankDepositDetails($postData);
-                $serverResponse['result'] = $result ? 'success' : 'fail';
-                $serverResponse['error'] = $result ? '' : 'Failed to insert details into database.';
-            }
-            else{
-                $serverRespone['error'] = 'Transaction does not exist.';
-            }
-        }
-
         echo json_encode($serverResponse);
     }
 
@@ -916,85 +873,101 @@ class Memberpage extends MY_Controller
             $productIds = explode('-', $orderProductIds[0]);
             $orderProductIds = $productIds;
         }
-        foreach ($orderProductIds as $orderProductId) {
-            if( $this->form_validation->run('addShippingComment') ){
-                $postData = [
-                    'comment' => $this->input->post('comment'),
-                    'order_product' => $orderProductId,
-                    'member_id' => $this->session->userdata('member_id'),
-                    'transact_num' => $this->input->post('transact_num'),
-                    'courier' => $this->input->post('courier'),
-                    'tracking_num' => $this->input->post('tracking_num'),
-                    'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "",
-                    'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
-                ];
+        
+        $commentData = [
+            'comment' => $this->input->post('comment'),
+            'member_id' => $this->session->userdata('member_id'),
+            'transact_num' => $this->input->post('transact_num'),
+            'courier' => $this->input->post('courier'),
+            'tracking_num' => $this->input->post('tracking_num'),
+            'expected_date' => $this->input->post('expected_date') ? date("Y-m-d H:i:s", strtotime($this->input->post('expected_date'))) : "",
+            'delivery_date' => date("Y-m-d H:i:s", strtotime($this->input->post('delivery_date')))
+        ];
+        $memberEntity = $em->find("EasyShop\Entities\EsMember", $commentData['member_id']);
+        $orderEntity = $em->find("EasyShop\Entities\EsOrder", $commentData['transact_num']);
+        $this->config->load('email', true);
+        $imageArray = $this->config->config['images'];
+        $productData = [];
 
-                $memberEntity = $em->find("EasyShop\Entities\EsMember", $postData['member_id']);
-                $orderEntity = $em->find("EasyShop\Entities\EsOrder", $postData['transact_num']);
+        if( $this->form_validation->run('addShippingComment') ){
+        
+            foreach ($orderProductIds as $orderProductId) {
+                $commentData['order_product'] = $orderProductId;
                 $orderProductEntity  = $this->esOrderProductRepo
                                             ->findOneBy([
-                                                "idOrderProduct" => $postData['order_product'],
+                                                "idOrderProduct" => $commentData['order_product'],
                                                 "seller" => $memberEntity,
                                                 "order" => $orderEntity
                                             ]);
-                $shippingCommentEntity = $em->getRepository("EasyShop\Entities\EsProductShippingComment")
-                                            ->findOneBy(["orderProduct" => $orderProductEntity,
-                                                "member" => $memberEntity
-                                            ]);
-                $shippingCommentEntitySize = count($shippingCommentEntity);
 
-                if ( $shippingCommentEntitySize === 1 ) {
-                    $exactShippingComment = $productShippingCommentRepo->getExactShippingComment($postData);
-                }
-
-                if( count($orderProductEntity) === 1 ) {
-                    $esShippingComment = $productShippingCommentRepo->findOneBy(['orderProduct' => $orderProductEntity, 'member' => $memberEntity]);
-                    if ($esShippingComment) {
-                        $newEsShippingComment = $productShippingCommentRepo->updateShippingComment($esShippingComment, $orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
+                if( $orderProductEntity !== null ) {
+                    $oldShippingComment = $productShippingCommentRepo->findOneBy([
+                                                                            "orderProduct" => $orderProductEntity,
+                                                                            "member" => $memberEntity,
+                                                                        ]);
+                    $isUpdated = false;
+                    if ($oldShippingComment) {
+                        $exactShippingComment = $productShippingCommentRepo->getExactShippingComment($commentData);
+                        $isUpdated = empty($exactShippingComment) === true;
+                        $newShippingComment = $productShippingCommentRepo->updateShippingComment($oldShippingComment, $orderProductEntity, $commentData['comment'], $memberEntity, $commentData['courier'], $commentData['tracking_num'], $commentData['expected_date'], $commentData['delivery_date']);
                     }
                     else {
-                        $newEsShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $postData['comment'], $memberEntity, $postData['courier'], $postData['tracking_num'], $postData['expected_date'], $postData['delivery_date']);
+                        $newShippingComment = $productShippingCommentRepo->addShippingComment($orderProductEntity, $commentData['comment'], $memberEntity, $commentData['courier'], $commentData['tracking_num'], $commentData['expected_date'], $commentData['delivery_date']);
+                        $isUpdated = true;
                     }
-                    $isShippingCommentModified = (bool) $newEsShippingComment;
-                    $serverResponse['result'] = $isShippingCommentModified ? 'success' : 'fail';
-                    $serverResponse['error'] = $isShippingCommentModified ? '' : 'Failed to insert in database.';
-
-                    if( $isShippingCommentModified && ( $shippingCommentEntitySize === 0 || count($exactShippingComment) === 0 ) ){
-                        $buyerEntity = $orderEntity->getBuyer();
-                        $buyerEmail = $buyerEntity->getEmail();
-                        $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
-                        $this->config->load('email', true);
-                        $imageArray = $this->config->config['images'];
-
-                        $parseData = $postData;
-                        $socialMediaLinks = $this->serviceContainer['social_media_manager']
-                                                 ->getSocialMediaLinks();
-                        $parseData = array_merge($parseData, [
-                            "seller" => $memberEntity->getUsername(),
-                            "store_link" => base_url() . $memberEntity->getSlug(),
-                            "msg_link" => base_url() . "messages/#" . $memberEntity->getUsername(),
-                            "buyer" => $buyerEntity->getUsername(),
-                            "invoice" => $orderEntity->getInvoiceNo(),
-                            "product_name" => $orderProductEntity->getProduct()->getName(),
-                            "expected_date" => $postData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($postData['expected_date'])),
-                            "delivery_date" => date("Y-M-d", strtotime($postData['delivery_date'])),
-                            "facebook" => $socialMediaLinks["facebook"],
-                            "twitter" => $socialMediaLinks["twitter"],
-                            'baseUrl' => base_url(),
-                        ]);
-                        $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
-
-                        $emailService->setRecipient($buyerEmail)
-                                     ->setSubject($buyerEmailSubject)
-                                     ->setMessage($buyerEmailMsg, $imageArray)
-                                     ->queueMail();  
+                    $isSuccessful = (bool) $newShippingComment;
+                    $serverResponse['result'] = $isSuccessful ? 'success' : 'fail';
+                    $serverResponse['error'] = $isSuccessful ? '' : 'Failed to insert in database.';
+                    
+                    if( $isSuccessful &&  $isUpdated){
+                        $product = $orderProductEntity->getProduct();
+                        $productId = $product->getIdProduct();
+                        $productData[$productId]['productName'] = $product->getName();
+                        $productData[$productId]['productLink'] = base_url().'item/'.$product->getSlug();
+                        $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                             ->getDefaultImage($productId);
+                        $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+                        $imagePath = ltrim($imagePath, '.');
+                        if(strtolower(ENVIRONMENT) === 'development'){
+                            $imagePath = $imagePath[0] !== '/' ? '/'.$imagePath : $imagePath;
+                            $imageArray[] = $imagePath;
+                            $productData[$productId]['primaryImage'] = $primaryImage->getFilename();
+                        }
+                        else{
+                            $productData[$productId]['primaryImage'] = getAssetsDomain().ltrim($imagePath, '/');
+                        }
                     }
-
-                }
-                else{
-                    $serverResponse['error'] = 'The information you provided may be invalid. Please refresh the page and try again.';
                 }
             }
+            
+            if(empty($productData) === false){
+                $buyerEntity = $orderEntity->getBuyer();
+                $buyerEmail = $buyerEntity->getEmail();
+                $buyerEmailSubject = $this->lang->line('notification_shipping_comment');
+                $parseData = $commentData;
+                $socialMediaLinks = $this->serviceContainer['social_media_manager']
+                                         ->getSocialMediaLinks();
+                $parseData = array_merge($parseData, [
+                                "seller" => $memberEntity->getUsername(),
+                                "buyer" => $buyerEntity->getUsername(),
+                                "invoice" => $orderEntity->getInvoiceNo(),
+                                "expected_date" => $commentData['expected_date'] === "0000-00-00 00:00:00" ?: date("Y-M-d", strtotime($commentData['expected_date'])),
+                                "delivery_date" => date("Y-M-d", strtotime($commentData['delivery_date'])),
+                                "facebook" => $socialMediaLinks["facebook"],
+                                "twitter" => $socialMediaLinks["twitter"],
+                                'baseUrl' => base_url(),
+                                'products' => $productData,
+                            ]);
+                
+                $buyerEmailMsg = $this->parser->parse("emails/email_shipping_comment", $parseData, true);
+                $emailService->setRecipient($buyerEmail)
+                             ->setSubject($buyerEmailSubject)
+                             ->setMessage($buyerEmailMsg, $imageArray)
+                             ->queueMail();  
+            }
+        }
+        else{
+            $serverResponse['error'] = 'The information you provided may be invalid. Please refresh the page and try again.';
         }
         echo json_encode($serverResponse);
     }
@@ -2451,6 +2424,77 @@ class Memberpage extends MY_Controller
                                 );
         }
         echo json_encode($response);
+    }
+    
+    /**
+     * GET resource for user point history
+     *
+     * @return json
+     */
+    public function getUserPointHistory()
+    {
+        $memberId = $this->session->userdata('member_id');
+        $page = $this->input->get('page') ? (int)$this->input->get('page') : 1;
+        $page--;
+        $offset = $page * $this->pointHistoryItemsPerPage;
+        $jsonResponse = [
+            'list' => [],
+            'totalPoint' => 0,
+        ];
+        if($memberId){
+            $userPoints = $this->serviceContainer['entity_manager']
+                               ->getRepository('EasyShop\Entities\EsPointHistory')
+                               ->getUserPointHistory($memberId, $offset, $this->pointHistoryItemsPerPage);
+            foreach($userPoints as $userPoint){
+                $jsonResponse['list'][] = [
+                    'dateAdded' => $userPoint->getDateAdded()->format('jS F Y g:ia'),
+                    'point' => $userPoint->getPoint(),
+                    'typeId' => $userPoint->getType()->getId(),
+                    'typeName' => $userPoint->getType()->getName(),
+                ];
+            }
+            
+            $jsonResponse['totalUserPoint'] = $this->serviceContainer['point_tracker']
+                                                   ->getUserPoint($memberId);
+        }
+        echo json_encode($jsonResponse);
+    }
+    
+    /**
+     * Get activity logs for user
+     *
+     * @return json
+     */
+    public function getActivityLog()
+    {   
+        $memberId = $this->session->userdata('member_id');
+        $perPage = $this->activityLogPerPage;
+        $page = $this->input->get('page') ? $this->input->get('page') : 1;
+        $fromDate = $this->input->get('date_from') ? date('Y-m-d 00:00:00', strtotime($this->input->get('date_from'))) : null;
+        $toDate = $this->input->get('date_to') ? date('Y-m-d 23:59:59', strtotime($this->input->get('date_to'))) : null;
+        $sortAscending = $this->input->get('sort') && strtolower($this->input->get('sort')) === "oldest";
+        $activityCount = $this->serviceContainer['activity_manager']
+                              ->getTotalActivityCount($memberId, $fromDate, $toDate);
+        $paginationData = [
+            'isHyperLink' => false,
+            'lastPage' => ceil($activityCount / $perPage),
+            'currentPage' => $page
+        ];
+        $page--;
+        $offset = $page * $perPage;
+        $activities = $this->serviceContainer['activity_manager']
+                           ->getUserActivities($memberId, $perPage, $offset, $fromDate, $toDate, $sortAscending);
+
+        $activitiesData = [
+            'activities' => $activities,
+            'pagination' => $this->load->view('pagination/default', $paginationData, true),
+        ];
+        $activeProductView = $this->load->view('partials/dashboard-activity-log', $activitiesData, true);
+          
+        $jsonResponse = [
+            'html' => $activeProductView,
+        ];
+        echo json_encode($jsonResponse);
     }
 
 }

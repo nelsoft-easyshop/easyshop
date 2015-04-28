@@ -13,30 +13,6 @@ class EsAddressSubscriber implements EventSubscriber
     protected $changeSet = [];
 
     /**
-     * Activity Manager Instance
-     *
-     * @var Easyshop\Activity\ActivityManager
-     */
-    private $activityManager;
-
-    /**
-     * Language Loader Instance
-     *
-     * @var Easyshop\LanguageLoader\LanguageLoader
-     */
-    private $languageLoader;
-
-    /**
-     * Constructor.
-     * 
-     */
-    public function __construct($activityManager, $languageLoader)
-    {
-        $this->activityManager = $activityManager;
-        $this->languageLoader = $languageLoader;
-    }
-
-    /**
     * The postPersist event occurs for an entity after the entity has been made persistent.
     *
     * @param LifecycleEventArgs $event
@@ -51,39 +27,76 @@ class EsAddressSubscriber implements EventSubscriber
         }
 
         if ((int)$entity->getStateregion()->getIdLocation() !== 0) {
-            $this->changeSet['stateregion'] = $entity->getStateregion()->getLocation();
+            $addressKey = "stateregion";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_stateregion";
+            }
+            $this->changeSet[$addressKey] = $entity->getStateregion()->getLocation();
         }
 
         if ((int)$entity->getCity()->getIdLocation() !== 0) {
-            $this->changeSet['city'] = $entity->getCity()->getLocation();
+            $addressKey = "city";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_city";
+            }
+            $this->changeSet[$addressKey] = $entity->getCity()->getLocation();
         }
 
         if ((int)$entity->getCountry()->getIdLocation() !== 0) {
-            $this->changeSet['country'] = $entity->getCountry()->getLocation();
+            $addressKey = "country";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_country";
+            }
+
+            $this->changeSet[$addressKey] = $entity->getCountry()->getLocation();
         }
 
         if ((string)$entity->getAddress() !== "") {
-            $this->changeSet['address'] = $entity->getAddress();
+            $addressKey = "address";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_address";
+            }
+            $this->changeSet[$addressKey] = $entity->getAddress();
         }
 
         if ((string)$entity->getTelephone() !== "") {
-            $this->changeSet['telephone'] = $entity->getTelephone();
+            $addressKey = "telephone";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_telephone";
+            }
+            $this->changeSet[$addressKey] = $entity->getTelephone();
         }
 
         if ((string)$entity->getMobile() !== "") {
-            $this->changeSet['mobile'] = $entity->getMobile();
+            $addressKey = "mobile";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_mobile";
+            }
+            $this->changeSet[$addressKey] = $entity->getMobile();
         }
 
         if ((string)$entity->getConsignee() !== "") {
-            $this->changeSet['consignee'] = $entity->getConsignee();
+            $addressKey = "consignee";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_consignee";
+            }
+            $this->changeSet[$addressKey] = $entity->getConsignee();
         }
 
         if ((int)$entity->getLat() !== 0) {
-            $this->changeSet['lat'] = $entity->getLat();
+            $addressKey = "lat";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_lat";
+            }
+            $this->changeSet[$addressKey] = $entity->getLat();
         }
 
         if ((int)$entity->getLat() !== 0) {
-            $this->changeSet['lng'] = $entity->getLng();
+            $addressKey = "lng";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_lng";
+            }
+            $this->changeSet[$addressKey] = $entity->getLng();
         }
 
         $this->saveActivity($event);
@@ -103,39 +116,76 @@ class EsAddressSubscriber implements EventSubscriber
         }
 
         if ($event->hasChangedField('stateregion')) {
-            $this->changeSet['stateregion'] = $entity->getStateregion()->getLocation();
+            $addressKey = "stateregion";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_stateregion";
+            }
+            $this->changeSet[$addressKey] = $entity->getStateregion()->getLocation();
         }
 
         if ($event->hasChangedField('city')) {
-            $this->changeSet['city'] = $entity->getCity()->getLocation();
+            $addressKey = "city";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_city";
+            }
+            $this->changeSet[$addressKey] = $entity->getCity()->getLocation();
         }
 
         if ($event->hasChangedField('country')) {
-            $this->changeSet['country'] = $entity->getCountry()->getLocation();
+            $addressKey = "country";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_country";
+            }
+
+            $this->changeSet[$addressKey] = $entity->getCountry()->getLocation();
         }
 
         if ($event->hasChangedField('address')) {
-            $this->changeSet['address'] = $entity->getAddress();
+            $addressKey = "address";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_address";
+            }
+            $this->changeSet[$addressKey] = $entity->getAddress();
         }
 
         if ($event->hasChangedField('telephone')) {
-            $this->changeSet['telephone'] = $entity->getTelephone();
+            $addressKey = "telephone";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_telephone";
+            }
+            $this->changeSet[$addressKey] = $entity->getTelephone();
         }
 
         if ($event->hasChangedField('mobile')) {
-            $this->changeSet['mobile'] = $entity->getMobile();
+            $addressKey = "mobile";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_mobile";
+            }
+            $this->changeSet[$addressKey] = $entity->getMobile();
         }
 
         if ($event->hasChangedField('consignee')) {
-            $this->changeSet['consignee'] = $entity->getConsignee();
+            $addressKey = "consignee";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_consignee";
+            }
+            $this->changeSet[$addressKey] = $entity->getConsignee();
         }
 
         if ($event->hasChangedField('lat') && (int)$entity->getLat() !== 0) {
-            $this->changeSet['lat'] = $entity->getLat();
+            $addressKey = "lat";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_lat";
+            }
+            $this->changeSet[$addressKey] = $entity->getLat();
         }
 
         if ($event->hasChangedField('lng') && (int)$entity->getLat() !== 0) {
-            $this->changeSet['lng'] = $entity->getLng();
+            $addressKey = "lng";
+            if((int)$entity->getType() === EsAddress::TYPE_DELIVERY){
+                $addressKey = "delivery_lng";
+            }
+            $this->changeSet[$addressKey] = $entity->getLng();
         }
     }
 
@@ -159,19 +209,15 @@ class EsAddressSubscriber implements EventSubscriber
         $entity = $event->getEntity();
         if ( $entity instanceOf EsAddress) {
             if(count($this->changeSet) > 0){
+                $action = \EasyShop\Activity\ActivityTypeInformationUpdate::ACTION_INFORMATION_UPDATE;
                 $member = $em->getRepository('EasyShop\Entities\EsMember')
-                             ->find($entity->getIdMember()->getIdMember());
+                             ->find($entity->getIdMember()->getIdMember());   
                 $activityType = $em->getRepository('EasyShop\Entities\EsActivityType')
                                    ->find(EsActivityType::INFORMATION_UPDATE);
-                $unparsedPhrase = $this->languageLoader
-                                       ->getLine($activityType->getActivityPhrase());
-                $phrase = $this->activityManager
-                               ->constructActivityPhrase($this->changeSet,
-                                                         $unparsedPhrase,
-                                                         'EsAddress');
-                if($phrase !== ""){
+                $jsonString = \EasyShop\Activity\ActivityTypeInformationUpdate::constructJSON($this->changeSet, $action);      
+                if($jsonString){
                     $em->getRepository('EasyShop\Entities\EsActivityHistory')
-                       ->createAcitivityLog($activityType, $phrase, $member);
+                       ->createAcitivityLog($activityType, $jsonString, $member);
                 }
            }
         }

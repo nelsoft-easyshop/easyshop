@@ -34,9 +34,11 @@ class PromoManager
      */
     private $em;
 
-        
-    
-        
+    /**
+     * Pimple Container
+     *
+     * @var \Pimple\Container
+     */
     private $container;
     
 

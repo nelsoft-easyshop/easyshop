@@ -604,19 +604,5 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
 
 function proceedPayment(obj)
 {
-    var csrftoken = $("meta[name='csrf-token']").attr('content');
-    $.ajax({
-        async: true,
-        url: "/payment/cart_items",
-        type: "POST",
-        dataType: "json",
-        data: {csrfname: csrftoken},
-        success: function (data) {
-            if (data == true) {
-                window.location.replace("/payment/review");
-            } else {
-                alert(data, 'Remove these items from your cart to proceed with your checkout.');
-            }
-        }
-    });
+    window.location.replace("/payment/review");
 }

@@ -6,20 +6,13 @@
         <p class="loading-text">Loading your delivery address info...</p>
     </div>
     <div id="deliverAddressDiv" style="display:none;">
-        <div class="dashboard-breadcrumb">
-            <ul>
-                <li>Dashboard</li>
-                <li class="bc-arrow"><i class="fa fa-angle-right"></i>My Account</li>
-                <li class="bc-arrow"><i class="fa fa-angle-right"></i>Delivery Address</li>
-            </ul>
-        </div>
         <div class="div-tab-inner">
             <div class="div-personal-info">
                 <p class="panel-dashboard-title">Delivery Address</p>
                 <input type="hidden" name="c_country" value="">
                 <?php echo form_open('',array('id'=>'deliverAddressForm','class' => 'form-horizontal', 'role' => 'form'));?>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-11 col-alert">
                             <div class="alert alert-es-danger alert-dismissible" style="display:none" role="alert" id="delivery-address-error">
                                 Please fix the errors in the delivery address you have provided.
                             </div>

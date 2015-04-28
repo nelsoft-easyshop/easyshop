@@ -20,6 +20,8 @@ class EsActivityType
 
     const FEEDBACK_UPDATE = 4;
 
+    const VENDOR_SUBSCRIPTION = 5;
+
     /**
      * @var integer
      *

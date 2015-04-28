@@ -51,7 +51,7 @@ body{
 .ul-detail-nav > li{
     display: inline;
     margin-right: 20px;
-    font-size: 20px;
+    font-size: 12px;
     padding-bottom: 4px;
     padding-left: 4px;
     padding-right: 4px;
@@ -97,7 +97,7 @@ body{
 .p-detail-title{
     font-weight: 900;
     color: #565656;
-    font-size: 17px;
+    font-size: 12px;
 }
 
 .p-detail-description{
@@ -557,7 +557,7 @@ body{
 
 .p-rec-product-name{
     text-align: left;
-    font-size: 16px;
+    font-size: 14px;
     color: #565656;
     font-weight: bold;
     transition: all 0.3s ease;
@@ -631,7 +631,7 @@ body{
 
 .p-rec-product-price{
     text-align: left;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 900;
 }
 
@@ -648,13 +648,18 @@ body{
     border: 3px solid #565656;
     background-color: #fff;
     color: #565656;
-    padding: 8px 15px;
+    padding: 8px 10px;
     font-weight: 900;
     border-radius: 4px;
+    font-size:12px;
 }
 
 .btn-add-cart{
     width: 100%;
+}
+
+.btn-add-cart > .icon-cart{
+    font-size: 13px;
 }
 
 .td-logo-store{
@@ -724,7 +729,7 @@ body{
 
 .p-rec-title{
     margin: 0;
-    font-size: 26px;
+    font-size: 15px;
     margin-top: 25px;
     margin-bottom: 5px;
     color: #747474;
@@ -746,7 +751,7 @@ body{
 .span-see-all{
     padding: 5px 10px;
     border-right: solid #747474 1px;
-    font-size: 17px;
+    font-size: 15px;
     margin-right: 10px;
 }
 

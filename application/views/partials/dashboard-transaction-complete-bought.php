@@ -33,6 +33,11 @@
                                                 <div class="col-xs-12 col-sm-6">
                                                     <span class="strong-label">Shipping fee : </span> Php <?=number_format($product['handling_fee'], 2, '.', ',') ?>
                                                 </div>
+                                                <?php if(bccomp($product['easyPoint'], "0") === 1): ?>
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <span class="strong-label">Easypoint : </span> <?php echo number_format($product['easyPoint'], 2, '.', ','); ?>
+                                                </div>
+                                                <?php endif; ?>
                                                 <div class="col-xs-12 col-sm-6">
                                                     <span class="strong-label">Total : </span> Php <?=number_format($product['price'], 2, '.', ',') ?>
                                                 </div>
@@ -80,12 +85,12 @@
                                         <div class="transaction-profile-wrapper">
                                             <h4>Bought From:</h4>
                                             <div>
-                            <span class="transac-item-profile-con">
-                                <img src="<?php echo getAssetsDomain().'.'.$boughtTransactionDetails['userImage']?>">
-                            </span>
-                            <span class="transac-item-consignee-name">
-                                    <?=html_escape($product['sellerStoreName'])?>
-                            </span>
+                                                 <span class="transac-item-profile-con">
+                                                     <img src="<?php echo getAssetsDomain().'.'.$boughtTransactionDetails['userImage']?>">
+                                                 </span>
+                                                 <span class="transac-item-consignee-name">
+                                                     <?php echo html_escape($product['sellerStoreName'])?>
+                                                 </span>
                                             </div>
                                         </div>
                                         <div class="trans-btn-wrapper trans-1btn">

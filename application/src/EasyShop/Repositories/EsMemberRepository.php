@@ -346,9 +346,11 @@ class EsMemberRepository extends EntityRepository
         $em = $this->_em;        
         $member->setImgurl(rtrim($imagePath,"/"));
         if($isForAvatar) {
+            $member->setLastAvatarChanged(new \DateTime('now'));
             $member->setIsHideAvatar(EsMember::DEFAULT_AVATAR_VISIBILITY);
         }
-        else {
+        else{
+            $member->setLastBannerChanged(new \DateTime('now'));
             $member->setIsHideBanner(EsMember::DEFAULT_AVATAR_VISIBILITY);
         }
         $member->setLastmodifieddate(new \DateTime('now'));

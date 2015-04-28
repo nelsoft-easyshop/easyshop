@@ -1,11 +1,4 @@
 <div class="div-tab">
-    <div class="dashboard-breadcrumb">
-        <ul>
-            <li>Dashboard</li>
-            <li class="bc-arrow"><i class="fa fa-angle-right"></i>My Store</li>
-            <li class="bc-arrow"><i class="fa fa-angle-right"></i>Store Setup</li>
-        </ul>
-    </div>
     <div class="div-tab-inner">
         <div class="div-store-setup">
             <p class="panel-setup-title">Store Name</p>

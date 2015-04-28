@@ -1,6 +1,6 @@
 (function ($) {
     
-    $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {
+    $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {        
         var btn = $(this);
         var submitBtn = btn.closest("form");
         var csrftoken = $("meta[name='csrf-token']").attr('content');
@@ -16,10 +16,12 @@
         if(username !== "" || password !== "") {
             $.ajax({
                 type: "post",
-                data: {username:username.val().trim(), 
-                       password:password.val().trim(), 
-                       action:action, 
-                       csrfname : csrftoken},
+                data: {
+                    username:username.val().trim(), 
+                    password:password.val().trim(), 
+                    action:action, 
+                    csrfname : csrftoken 
+                },
                 url: '/memberpage/manageUserProduct',
                 beforeSend: function() {
                     activateButtons.hide()
@@ -100,6 +102,8 @@
         }
 
     });
+
+   
 
     $( ".dash-me" ).click(function() {
         $( ".active-me" ).trigger( "click" );
@@ -244,13 +248,24 @@
         isDeliveryAddressLoaded = true;
     });
     
+
+    $(".easy-point-content").getNiceScroll().hide();
     
-    $( ".payment-address-trigger" ).click(function() {
+    $( ".payment-account-trigger" ).click(function() {
         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
         $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
         $( ".ma-payment" ).addClass( "selectedM" );
+    });
+
+    $( ".activity-logs-trigger" ).click(function() {
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $( ".ma-activity" ).addClass( "selectedM" );
+
     });
     
     $( ".settings-trigger" ).click(function() {
@@ -262,73 +277,65 @@
     });
     
     $( ".dashboard-home-mobile" ).click(function() {
-         $( ".dash-me" ).trigger( "click" );
-         $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-         $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".dash-me" ).trigger( "click" );
+        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
         $( ".dashboard-home-mobile" ).addClass( "selectedM" );
     });
     
     $( "#dash" ).click(function() {
-        $( "#my-account-menu" ).slideUp();
-        var attr = $("i.m").attr("class");
-        if(attr == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-        }
-        
-        $( "#my-store-menu" ).slideUp();
-        var attr2 = $("i.a").attr("class");
-        if(attr2 == "a icon-control-up toggle-down pull-right"){
-            $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-            $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-            $( ".submenu-my-account" ).css("border-radius", "0px");
-            $( ".f-a" ).css("border-radius", "0px");
-        }
+        $('.dashboard-menu').slideUp();
+        $('.dashboard-menu-trigger i').removeClass('icon-control-up')
+                                      .addClass('icon-control-down');                        
     });
-
-    $( "#my-store-menu-trigger" ).click(function() {
-    $( "#my-account-menu" ).slideUp();
-     var attr4 = $("i.a").attr("class");
-    if(attr4 == "a icon-control-up toggle-down pull-right"){
-            $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-            $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-            $( ".submenu-my-account" ).css("border-radius", "0px");
-            $( ".f-a" ).css("border-radius", "0px");
-        }
-        $( "#my-store-menu" ).slideToggle( "slow", function() {
-           
-            var attr = $("i.m").attr("class");
-        if(attr == "m icon-control-down toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-down toggle-down pull-right").addClass("m icon-control-up toggle-down pull-right");
-        }
-        else if(attr == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-        }
+    
+    $(".dashboard-menu-trigger").click(function(){
+        var $selectedmenutrigger = $(this);
+        var $selectedmenu = $selectedmenutrigger.closest('a').next('.dashboard-menu');
+        var section = $selectedmenutrigger.data('section');
+        var $easypointcontainer = $(".easy-point-content");
+        $easypointcontainer.getNiceScroll()
+                           .hide();
+        $('.dashboard-menu-trigger[data-section!="'+section+'"]').each(function(){
+            $(this).find('i')
+                   .removeClass('icon-control-up')
+                   .addClass('icon-control-down');
+            $(this).closest('a')
+                   .next('.dashboard-menu')
+                   .slideUp();   
         });
-    });
-
-    $( "#my-account-menu-trigger" ).click(function() {
-        $( "#my-store-menu" ).slideUp();
-        var attr3 = $("i.m").attr("class");
-        if(attr3 == "m icon-control-up toggle-down pull-right"){
-            $('i.m').removeClass("m icon-control-up toggle-down pull-right").addClass("m icon-control-down toggle-down pull-right");
-        }
-            $( "#my-account-menu" ).slideToggle( "slow", function() {
-            var attr = $("i.a").attr("class");
-            if(attr == "a icon-control-down toggle-down pull-right"){
-                $('i.a').removeClass("a icon-control-down toggle-down pull-right").addClass("a icon-control-up toggle-down pull-right");
-                $( ".ml-li" ).css("border-radius", "0px");
-                $( ".submenu-my-account" ).css("border-radius", "0px 0px 7px 7px");
-                $( ".f-a" ).css("border-radius", "0px 0px 7px 7px");
+        $selectedmenu.slideToggle( "slow", function() {
+            $easypointcontainer.getNiceScroll()
+                               .show()
+                               .resize();
+            var $icon = $selectedmenutrigger.find('i'); 
+            if($icon.hasClass('icon-control-down')){
+                $icon.removeClass('icon-control-down')
+                     .addClass('icon-control-up');
             }
-            else if(attr == "a icon-control-up toggle-down pull-right"){
-                $('i.a').removeClass("a icon-control-up toggle-down pull-right").addClass("a icon-control-down toggle-down pull-right");
-                $( ".ml-li" ).css("border-radius", "0px 0px 7px 7px");
-                $( ".submenu-my-account" ).css("border-radius", "0px");
-                $( ".f-a" ).css("border-radius", "0px");
-            } 
+            else if($icon.hasClass('icon-control-up')){
+                $icon.removeClass('icon-control-up')
+                     .addClass('icon-control-down');
+            }
         });
     });
 
+    $('.transaction-trigger').on('click', function(){
+        var $this = $(this);
+        var type = $this.data('type');
+        $this.addClass('selected');
+        if(type === 'on-going'){
+            $('.transaction-trigger[data-type="completed"]').removeClass('selected');
+            $('.on-going-transaction-header').click();
+        }
+        else if(type === 'completed'){
+            $('.transaction-trigger[data-type="on-going"]').removeClass('selected');
+            $('.completed-transaction-header').click();
+        }
+        $('#transaction-menu-trigger').closest('a')
+                                      .removeClass('selected');
+    });
+        
     $( "#info-item-1" ).click(function() {
         $( "#info-attributes-1" ).slideToggle( "slow", function() {
             var i_icon = $("i.info-item-icon-1").attr("class");
@@ -418,7 +425,7 @@
         $(this).toggleClass("active-bar",0);
         $(this).next('.payout-breakdown-container').slideToggle();
         $('.sales-breakdown-container').slideUp();
-       $('.sales-title-total').removeClass("active-bar");
+        $('.sales-title-total').removeClass("active-bar");
     });
 
     $('#transactions').on('click', '.trans-item-info', function() {
@@ -1127,59 +1134,50 @@
         $('.feedback-from-buyer').removeClass("active-bar");
         $('.feedback-for-seller').removeClass("active-bar");
     });
+    
+    
     //FOR MOBILE
-    $('.my-store-menu-mobile').click(function() {
-        $('.my-account-menu-mobile-cont').slideUp();
-        $('.my-store-menu-mobile-cont').slideToggle("fast", function(){
-            
-            var attr_ms = $("i.ms").attr("class");
-            if(attr_ms == "ms fa fa-angle-down"){
-                $('i.ms').removeClass("ms fa fa-angle-down").addClass("ms fa fa-angle-up");
+    $('.col-dash-mobile').click(function() {
+
+        var $selectedMobileMenuTriggger = $(this);
+        var section = $selectedMobileMenuTriggger.data('section');
+        
+        if(section === 'my-transactions'){
+            $('#transaction-menu-trigger').trigger("click");
+            $('.dash-mobile-trigger ').removeClass("selectedM");
+            $('.col-dash-mobile').removeClass( "selectedCol" );
+            $selectedMobileMenuTriggger.closest('a.dash-mobile-trigger')
+                                       .addClass("selectedM"); 
+        }
+        else{
+            var $selectedMobileMenu = $('.mobile-menu-container[data-section="'+section+'"]');
+            $('.col-dash-mobile[data-section!="'+section+'"] i').each(function(){
+                $(this).removeClass("fa-angle-up")
+                    .addClass("fa-angle-down");
+            });
+            $selectedMobileMenu.slideToggle( "slow");
+            var $icon = $selectedMobileMenuTriggger.find('i'); 
+            if($icon.hasClass('fa-angle-down')){
+                $icon.removeClass('fa-angle-down')
+                        .addClass('fa-angle-up');
             }
-            else if(attr_ms == "ms fa fa-angle-up"){
-                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
+            else if($icon.hasClass('fa-angle-up')){
+                $icon.removeClass('fa-angle-up')
+                    .addClass('fa-angle-down');
             }
-            
-            var attr_ma2 = $("i.ma").attr("class");
-            if(attr_ma2 == "ma fa fa-angle-up"){
-                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
-            }
-        });
+        }
+
     });
-    
-    $('.my-account-menu-mobile').click(function() {
-        $('#my-account-menu-trigger').trigger("click");
-        $('.my-store-menu-mobile-cont').slideUp();
-        $('.my-account-menu-mobile-cont').slideToggle("fast", function(){
-            var attr_ma = $("i.ma").attr("class");
-            if(attr_ma == "ma fa fa-angle-down"){
-                $('i.ma').removeClass("ma fa fa-angle-down").addClass("ma fa fa-angle-up");
-            }
-            else if(attr_ma == "ma fa fa-angle-up"){
-                $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
-            }
-            
-            var attr_ms2 = $("i.ms").attr("class");
-            if(attr_ms2 == "ms fa fa-angle-up"){
-                $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
-            }
-        });
-    });
-    
+  
     $('.dash-mobile-trigger').click(function() {
-        $('.my-store-menu-mobile-cont').slideUp("fast");
-        $('.my-account-menu-mobile-cont').slideUp("fast");
+        $('.mobile-menu-container').slideUp("fast");
         
-        var attr_ms3 = $("i.ms").attr("class");
-        if(attr_ms3 == "ms fa fa-angle-up"){
-            $('i.ms').removeClass("ms fa fa-angle-up").addClass("ms fa fa-angle-down");
-        }
-        
-        
-        var attr_ma3 = $("i.ma").attr("class");
-        if(attr_ma3 == "ma fa fa-angle-up"){
-            $('i.ma').removeClass("ma fa fa-angle-up").addClass("ma fa fa-angle-down");
-        }
+        $('.col-dash-mobile i').each(function(){
+            if($(this).hasClass('fa-angle-up')){
+                $(this).removeClass('fa-angle-up')
+                       .addClass('fa-angle-down');
+            }
+        });
     });
     
    
@@ -1191,16 +1189,7 @@
         $('.my-store-menu-mobile-cont').slideUp("fast");
         $('.my-account-menu-mobile-cont').slideUp("fast");
     });
-    
-    $('.ms-trans').click(function() {
-        $('.id-transactions-trigger').trigger("click");
-        $('.dash-mobile-trigger ').removeClass("selectedM");
-        $(".dash-me").removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $(this).addClass("selectedM");
-    });
-    
+
     
     $('.ms-setup').click(function() {
         $('#store-setup-tab').trigger("click");
@@ -1256,6 +1245,15 @@
         $(".ma-payment").addClass("selectedM");
     });
     
+    $('.ma-activity').click(function() {
+        $('.activity-logs-trigger').trigger("click");
+        $('.dash-mobile-trigger').removeClass("selectedM");
+        $('.dashboard-home-mobile').removeClass("selectedM");
+        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
+        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
+        $(".ma-activity").addClass("selectedM");
+    });
+
     $('.ma-settings').click(function() {
         $('.settings-trigger').trigger("click");
         $('.dash-mobile-trigger').removeClass("selectedM");
@@ -1392,6 +1390,16 @@
         });
 
         $( "#payout-start-date" ).datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+
+        $( "#log-start-date" ).datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+
+        $( "#log-end-date" ).datepicker({
             changeMonth: true,
             changeYear: true
         });
@@ -1594,6 +1602,7 @@
                     if (txResponseBtn.hasClass('tx_forward')) {
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Item Received</span>');
                         msg = "<h3>ITEM RECEIVED</h3> <br> Transaction has been moved to completed tab.";
+                        refreshEasypoints();
                     }
                     else if (txResponseBtn.hasClass('tx_return')) {
                         alltxStatus.replaceWith('<span class="trans-status-pending status-class">Order Canceled</span>');
@@ -1604,7 +1613,7 @@
                         alltxStatus.replaceWith('<span class="trans-status-cod status-class">Completed</span>');
                         msg = "<h3>COMPLETED</h3> <br> Transaction has been moved to completed tab.";
                     }
-                    $('.invoiceno-'+invoiceNum.val()).replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
+                    txResponseBtn.closest('.item-list-panel').replaceWith('<div class="alert alert-success wipeOut" role="alert">' + msg + '</div>');
                     $('.wipeOut').fadeOut(5000);
                 }
                 txResponseBtn.addClass('enabled');
@@ -1740,6 +1749,9 @@
                                 if (jsonResponse.isSuccess) {
                                     alert('Your feedback has been submitted.');
                                     btn.remove();
+                                    if(jsonResponse.isPointAdded){
+                                        refreshEasypoints();
+                                    }
                                 }
                                 else {
                                     var errorMessage = "An error was encountered. Please try again later";
@@ -2543,12 +2555,11 @@
     function handleUrlTabs(tab)
     {
         if (tab === "ongoing") {
-            $('#my-store-menu-trigger').trigger('click');
-             setTimeout(function() {
-                 $('.id-transactions-trigger').trigger('click');
+            setTimeout(function() {
+                $('#transaction-menu-trigger').trigger('click');
             }, 500);
             setTimeout(function() {
-                 $('.transaction-title-bought').trigger('click');
+                $('.transaction-trigger[data-type="on-going"]').trigger('click');
             }, 1000);
         }
         else if(tab === "settings"){
@@ -3162,6 +3173,153 @@
         }  
     }
 
+    
+    $(document).ready(function(){
+        
+        getUserPoints();
+        
+        $('.easy-point-content').on('scroll', function(){
+            var div = $(this)[0];
+            if(div.scrollTop + div.clientHeight >= div.scrollHeight){
+                getUserPoints();
+            }
+        });
+    });
+    
+    
+    var userPointPage = 1;
+    var isUserPointComplete = false;
+    var isUserPointQueryOnGoing = false;
+    function getUserPoints()
+    {
+        if(isUserPointComplete || isUserPointQueryOnGoing){
+            return false;
+        }
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getUserPointHistory',
+            data: {page:userPointPage},
+            beforeSend: function (xhr){
+                isUserPointQueryOnGoing = true;
+                $('.point-loader').show();
+            },
+            complete: function (xhr) {
+                isUserPointQueryOnGoing = false;
+                $('.point-loader').fadeOut();
+            },
+            success: function(data){ 
+                if(data){
+                    var $jsonResponse = $.parseJSON(data);
+                    var userPointList = $jsonResponse.list;
+                    if($.isEmptyObject(userPointList)){
+                        isUserPointComplete = true;
+                        return false;
+                    }
+                    $('.current-points').html(replaceNumberWithCommas(parseFloat($jsonResponse.totalUserPoint).toFixed(2)));
+                    var html = "";
+                    userPointPage++;
+                    $.each(userPointList, function(index, value){
+                        html += '<li>' +
+                                    '<div class="small-bullet-container">' +
+                                        '<span class="small-bullet"></span>' +
+                                    '</div>' +
+                                    '<div class="easy-content-container">' +
+                                        '<span class="easy-content">'+'<span class="easy-content-date">'+ value.dateAdded + '</span>'+' ' + value.typeName + '</span>' + 
+                                        '<span class="easy-point">'+ parseFloat(value.point).toFixed(2) +'</span>' +
+                                    '</div>' +
+                                    '<div class="clear"></div>' +
+                                '</li>';
+                    });
+                    var $pointHistoryContainer =  $('.easy-point-content');
+                    $pointHistoryContainer.hide()
+                                        .append(html)
+                                        .fadeIn();
+                    $pointHistoryContainer.niceScroll({
+                        cursorborder: "3px solid #e2e2e2",
+                        touchbehavior: true,
+                        cursordragontouch: true,
+                        autohidemode: false,
+                        enablekeyboard: true,
+                        smoothscroll: true,
+                    });
+                }
+            }
+        });
+    }
+
+    function refreshEasypoints()
+    {
+        userPointPage = 1;
+        isUserPointComplete = false;
+        $('.easy-point-content').html('');
+        getUserPoints();
+    } 
+
+    // Activity log filter
+    var $logDateFrom = "";
+    var $logDateTo = "";
+    var $defaultLogSort = "new";
+
+    $("#main-log-container").on('click',".individual, .extremes",function () {
+        var $this = $(this);
+        var $page = $this.data('page');
+        $('html,body').animate({
+            scrollTop: $('.log-sort-select').offset().top
+        }, 700);
+        getActivityLog($page, $logDateFrom, $logDateTo, $defaultLogSort);
+    });
+
+    $( ".activity-logs-trigger" ).click(function() {
+        getActivityLog(1, "", "", $defaultLogSort);
+    });
+
+  
+
+    $("#activityLogTab").on("click", ".filter-logs", function() {
+        $logDateFrom = $("#activityLogTab").find("#log-start-date").val();
+        $logDateTo = $("#activityLogTab").find("#log-end-date").val(); 
+        getActivityLog(1, $logDateFrom, $logDateTo, $defaultLogSort);
+    });
+
+    $("#activityLogTab").on("change", ".log-sort-select", function() {
+        var $this = $(this);
+        $defaultLogSort = $this.val();
+        getActivityLog(1, $logDateFrom, $logDateTo, $defaultLogSort);
+    });
+
+    function getActivityLog($page, $dateFrom, $dateTo, $sort)
+    {
+        $.ajax({
+            type: "GET",
+            url: '/memberpage/getActivityLog',
+            dataType: "json",
+            data: {
+                page: $page,
+                date_from: $dateFrom,
+                date_to: $dateTo,
+                sort: $sort
+            },
+            success: function(jsonResponse){
+                $("#main-log-container").html(jsonResponse.html);
+                var tabHeight = $("#activityLogTab").outerHeight();
+                var lastLogContainerHeight = $(".log-container").last().outerHeight();
+                var firstLogContainerHeight = $(".log-container").first().outerHeight();
+                var deductActivityLineHeight = lastLogContainerHeight/2;
+                
+                var totalActivityMarginTop = firstLogContainerHeight/2;
+                var totalActivityLineHeight = tabHeight - deductActivityLineHeight - totalActivityMarginTop - 30;
+                 $(".log-line").css("height", totalActivityLineHeight+"px").css("margin-top", totalActivityMarginTop+"px");
+
+                $("#activityLogTab").find(".log-outer").each(function(){
+                    var logContainerHeight = $(this).find(".log-container").outerHeight();
+                    $(this).find(".log-icon-container").css("height", logContainerHeight+"px");
+                });
+            }
+        });
+    }
+
+    $(window).on("load resize", function(){
+        var metaInfoTdWidth = $(".td-meta-info").width();
+        $(".item-list-name").css("overflow","hidden").css("text-overflow","ellipsis").css("white-space", "nowrap").css("max-width", metaInfoTdWidth+"px");
+    });
 }(jQuery));
-
-

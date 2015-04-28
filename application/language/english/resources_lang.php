@@ -104,6 +104,7 @@ $lang['notification_forwardtoseller'] = "Easyshop.ph - Item Receipt Confirmation
 #Landing Page
 $lang['subscription_subject'] = "Easyshop.ph - Thank you for subscribing!";
 $lang['registration_subject'] = "Easyshop.ph - Thank you for registering!";
+$lang['reverify_subject'] = "Easyshop.ph - Verify your email address";
 
 #Notification to Seller and Buyer
 $lang['message_to_seller'] = "This is to notify you that you have sold an item(s) through Easyshop.ph. Transaction details can be seen in your transactions page.  This is a system generated message, please do not reply to this message. Should you need any assistance contact us at info@easyshop.ph";
@@ -120,74 +121,3 @@ $lang['deactivate_subject'] = 'Easyshop.ph - Account Activation';
 
 #Notification shipping comment provided
 $lang['notification_shipping_comment'] = "Easyshop.ph - Shipping details for your purchased item";
-
-$lang['EsMember'] = [
-        'storeName' => 'Store Name',
-        'password' => 'Password',
-        'contactno' => 'Contact Number',
-        'isEmailVerify' => 'Email Verification',
-        'gender' => 'Gender',
-        'email' => 'Email Address',
-        'birthday' => 'Birthday',
-        'fullname' => 'Full name',
-        'storeDesc' => 'Store Description',
-        'slug' => 'Store URL',
-        'website' => 'Website',
-    ];
-
-$lang['EsAddress'] = [
-        'stateregion' => 'State Region',
-        'city' => 'City',
-        'country' => 'country',
-        'address' => 'Address',
-        'telephone' => 'Telephone Number',
-        'mobile' => 'Mobile Number',
-        'consignee' => 'Consignee Full name',
-        'lat' => 'Latitude Location',
-        'lng' => 'Longitude Location',
-    ];
-
-$lang['EsProductShippingComment'] = [
-        'courier' => 'Courier',
-        'trackingNum' => 'Tracking Number',
-        'comment' => 'Comment',
-        'expectedDate' => 'Expected Date',
-        'deliveryDate' => 'Delivery Date',
-        'invoiceNo' => 'Invoice Number', 
-    ];
-
-$lang['EsProduct'] = [
-        'name' => 'Product Name',
-    ];
-
-$lang['EsOrder'] = [
-        'invoiceNo' => 'Invoice Number',
-    ];
-
-$lang['update_information'] = "You have updated your :phrase.";
-$lang['update_product'] = [
-        'update' => 'You have successfully added one product to your active listing :phrase.',
-        'trash' => 'You have deleted permanently your item :phrase.',
-        'delete' => 'You have moved your product to deleted items :phrase.',
-    ];
-
-$lang['update_feedback'] = [
-        'product' => [
-            'review' => 'You have written a review on :phrase',
-            'reply' => 'You have given a reply on review of :phrase',
-        ],
-        'user' => 'You have given a feedback on :phrase', 
-    ];
-
-$lang['update_transaction'] = [
-        'buy' => 'You have purchased an item with :phrase',
-        'add_ship_detail' => 'You have added shipment details on order :phrase ',
-        'edit_ship_detail' => 'You have modified shipment details on order :phrase',
-        'item_received' => 'You received an item with :phrase',
-        'item_reject' => 'You rejected item with :phrase',
-        'item_unreject' => 'You rejected item with :phrase',
-        'item_cancel' => 'You cancelled an item with :phrase',
-        'completed' => 'You marked a transaction as completed with :phrase',
-    ];
-?>
-

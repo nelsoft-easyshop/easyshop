@@ -1,25 +1,18 @@
 
 <div class="div-tab">
-    <div class="dashboard-breadcrumb">
-        <ul>
-            <li>Dashboard</li>
-            <li class="bc-arrow"><i class="fa fa-angle-right"></i>My Store</li>
-            <li class="bc-arrow"><i class="fa fa-angle-right"></i>Transactions</li>
-        </ul>
-    </div>
     <div class="div-tab-inner">
         <div class="transaction-tabs">
             <ul class="idTabs">
-                <li><a href="#on-going-transaction">On going</a></li>
-                <li><a href="#completed-transaction">Completed</a></li>
+                <li><a href="#on-going-transaction" class="on-going-transaction-header">On going</a></li>
+                <li><a href="#completed-transaction" class="completed-transaction-header">Completed</a></li>
             </ul>
         </div>
-    <!---------------------------------------------------------------ongoing bought starts here---------------------------------------------------------------->
+        <!---------------------------------------------------------------ongoing bought starts here---------------------------------------------------------------->
         <div class="col-md-12" id="on-going-transaction">
             <div class="row">
                 <div class="transaction-title-bought transaction-button-head" data-method="ongoing-bought">
                     <span class="trans-title">Bought</span>
-                    <span class="count"><?=$ongoingBoughtTransactionsCount?></span>
+                    <span class="count"><?php echo $ongoingBoughtTransactionsCount?></span>
                 </div>
                 <div class="on-going-transaction-list-bought list-container">
                     <?PHP if ( (int) $ongoingBoughtTransactionsCount >= 1) : ?>
@@ -41,6 +34,9 @@
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
+                                    <?php if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
+                                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_POINTS?>">Easypoint</option>
+                                    <?php endif; ?>
                                 </select>
                             </div>
                             <div class="clear"></div>
@@ -79,6 +75,9 @@
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
                                     <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
+                                    <?php if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
+                                        <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_POINTS?>">Easypoint</option>
+                                    <?php endif; ?>
                                 </select>
                             </div>
                             <div class="clear"></div>
@@ -121,6 +120,9 @@
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
+                                <?php if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
+                                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_POINTS?>">Easypoint</option>
+                                <?php endif; ?>
                             </select>
                         </div>
                         <div class="clear"></div>
@@ -159,6 +161,9 @@
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY?>">DragonPay</option>
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY?>">Cash On Delivery</option>
                                 <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC?>">PesoPay</option>
+                                <?php if(EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
+                                    <option value="<?=\EasyShop\Entities\EsPaymentMethod::PAYMENT_POINTS?>">Easypoint</option>
+                                <?php endif; ?>
                             </select>
                         </div>
                         <div class="clear"></div>
