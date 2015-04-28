@@ -25,6 +25,8 @@
         $selectedMethod = $this.val();
     });
 
+    $(".payment-label:first").trigger("click");
+
     $('.privacy-check').click(function(){
         if($(this).is(':checked')){
             validateWhiteTextBox('.privacy-check');
