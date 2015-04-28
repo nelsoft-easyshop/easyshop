@@ -160,14 +160,14 @@ class EsMessagesRepository extends EntityRepository
                             \Doctrine\DBAL\Connection::PARAM_INT_ARRAY,
                         ]);
               
-        return $count;
+        return (int) $count;
     }
 
     /**
      * Update message/s to seen
      * @param $memberId
      * @param $messageId array
-     * @return boolean
+     * @return integer Number of updated message
      */
     public function updateToSeen($memberId, $messageId)
     {
@@ -188,7 +188,7 @@ class EsMessagesRepository extends EntityRepository
                 \Doctrine\DBAL\Connection::PARAM_INT_ARRAY
             ]);
 
-        return (bool) $count;
+        return (int) $count;
     }
 
     /**

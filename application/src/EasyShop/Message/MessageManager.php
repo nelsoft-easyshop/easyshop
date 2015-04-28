@@ -162,28 +162,34 @@ class MessageManager {
 
             $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, true);
 
-            /*
-             uncomment to queue mail
+            /**
+             * uncomment to queue mail
+             *
             $this->emailService->setRecipient($emailRecipient)
                                ->setSubject($emailSubject)
                                ->setMessage($emailMsg, $imageArray)
                                ->queueMail();
             */
             
-            $updatedMessageListForSender = $this->getAllMessage($sender->getIdMember());
-            $updatedMessageListForReciver = $this->getAllMessage($recipient->getIdMember());
-
+            $updatedMessageListForReciever = $this->getAllMessage($recipient->getIdMember());
             $redisChatChannel = $this->getRedisChannelName();
-            try{
+            try{   
                 $this->redisClient->publish($redisChatChannel, json_encode([
                     'event' => 'message-sent',
                     'recipient' => $recipient->getStorename(),
-                    'message' => $updatedMessageListForReciver,
+                    'message' => $updatedMessageListForReciever,
                 ]));
             }
-            catch(\Exception $e){}
+            catch(\Exception $e){
+               
+                /**
+                 * Catch any exception but do nothing just so that the functionality
+                 * does not break if the redis channel is not available
+                 */
+
+            }
+           
             $response['isSuccessful'] = true;
-            $response['allMessages'] = $updatedMessageListForSender;
         }
         
         return $response;
