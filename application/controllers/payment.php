@@ -7,6 +7,7 @@ use \Curl\Curl as Curl;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\PaymentService\PaymentService as PaymentService;
 use EasyShop\PaymentGateways\PointGateway as PointGateway;
 
@@ -230,6 +231,12 @@ class Payment extends MY_Controller
             foreach ($itemLocations as $location) {
                 $bodyData['locationAvailable'][] = $location->getShipping()->getLocation()->getIdLocation();
             }
+
+            if (count($bodyData['locationAvailable']) === 1 
+                && reset($bodyData['locationAvailable']) === EsLocationLookup::PHILIPPINES_LOCATION_ID) {
+                $bodyData['locationAvailable'] = $bodyData['selectLocation']['islandkey'];
+            }
+
             $markup = $this->load->view('partials/payment-item-location', $bodyData, true);
             $isSuccess = true;
         }
