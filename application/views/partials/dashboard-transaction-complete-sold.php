@@ -79,12 +79,12 @@
                                     <div class="transaction-profile-wrapper">
                                         <h4>Sold To:</h4>
                                         <div>
-                                <span class="transac-item-profile-con">
-                                    <img src="<?php echo getAssetsDomain().'.'.$soldTransactionDetails['userImage']?>">
-                                </span>
-                                <span class="transac-item-consignee-name">
-                                    <?=html_escape($soldTransactionDetails['buyerStoreName'])?>
-                                </span>
+                                             <span class="transac-item-profile-con">
+                                                 <img src="<?php echo getAssetsDomain().'.'.$soldTransactionDetails['userImage']?>">
+                                             </span>
+                                             <span class="transac-item-consignee-name">
+                                                 <?php echo html_escape($soldTransactionDetails['buyerStoreName'])?>
+                                             </span>
                                         </div>
                                         <div class="pos-rel">
                                             <span class="view-delivery-lnk">view delivery details</span>
