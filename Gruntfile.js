@@ -30,7 +30,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/jquery.js': 'jquery/jquery.js',
                     'js/src/vendor/bower_components/bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
                     'js/src/vendor/bower_components/angular.js': 'angular/angular.js',
-                    'js/src/vendor/bower_components/angular-route.js': 'angular-route/angular-route.js'
+                    'js/src/vendor/bower_components/angular-ui-router.js': 'angular-ui-router/release/angular-ui-router.js',
+                    'js/src/vendor/bower_components/ng-infinite-scroll.js': 'ngInfiniteScroll/build/ng-infinite-scroll.js'
                 }
             },
             stylesheets: {
