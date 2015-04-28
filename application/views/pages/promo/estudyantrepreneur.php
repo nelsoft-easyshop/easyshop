@@ -10,8 +10,11 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
-        <link rel="stylesheet" href="/assets/css/promo-css.css">
-        <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <link rel="stylesheet" href="/assets/css/promo-css.css?ver=<?php echo ES_FILE_VERSION ?>">
+        <?php else: ?>
+            <link rel="stylesheet" href="/assets/css/min-easyshop.promo-css.css?ver=<?php echo ES_FILE_VERSION ?>">
+        <?php endif; ?>
         <script type="text/javascript">
 
           var _gaq = _gaq || [];
@@ -71,8 +74,8 @@
                                 <div class="span6">
                                     <?php foreach($studentGroup as $student): ?>
                                         <div class="school-participant">
-                                            <input id="impack" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
-                                            <label for="impack"> <?=html_escape($student['student'])?></label>
+                                            <input class="checkbox-student" id="lbl-<?=html_escape($student['idStudent'])?>" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
+                                            <label for="lbl-<?=html_escape($student['idStudent'])?>"> <?=html_escape($student['student'])?></label>
                                             <div class="school-description row-fluid">
                                                 <div class="span12">
                                                     <?=html_escape($student['description'])?>
@@ -246,6 +249,7 @@
         <script type="text/javascript" src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
         <script type="text/javascript" src="/assets/js/src/promo/estudyantrepreneur.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
         <script type="text/javascript" src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+        <script type="text/javascript" src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
         <script type="text/javascript" src="/assets/js/src/promo/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
     <?php else: ?>
         <script src="/assets/js/min/easyshop.estudyantrepreneur-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
