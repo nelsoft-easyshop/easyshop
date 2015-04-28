@@ -172,6 +172,7 @@ class MessageManager {
             */
             
             $updatedMessageListForReciever = $this->getAllMessage($recipient->getIdMember());
+            $redisChatChannel = $this->getRedisChannelName();
             try{   
                 $this->redisClient->publish($redisChatChannel, json_encode([
                     'event' => 'message-sent',
