@@ -121,6 +121,7 @@ class MessageManager {
         $response = [
             'error' => '',
             'isSuccessful' => false,
+            'messageId' => 0,
         ];
     
         if(!$sender){
@@ -144,7 +145,8 @@ class MessageManager {
 
             $this->em->persist($message);
             $this->em->flush();
-            
+           
+            $response['messageId'] = $message->getIdMsg();
             $emailRecipient = $recipient->getEmail();
             $emailSubject = $this->languageLoader->getLine('new_message_notif');
             $imageArray = $this->configLoader->getItem('email', 'images');
@@ -410,6 +412,36 @@ class MessageManager {
         }
 
         return $messages;
+    }
+
+    /**
+     * Message details by ID
+     *
+     * @param integer $messageId
+     * @return mixed
+     */
+    public function getMessageDetailsById($messageId)
+    {
+        $message = $this->em->find('EasyShop\Entities\EsMessages', $messageId);
+        $sender = $this->em->getRepository('EasyShop\Entities\EsMember')
+                       ->find($message->getFrom());
+        $recipient = $this->em->getRepository('EasyShop\Entities\EsMember')
+                          ->find($message->getTo());
+        $senderImage = $this->userManager->getUserImage($message->getFrom(), 'small');
+        $recipientImage = $this->userManager->getUserImage($message->getTo(), 'small');
+        $messageData = [
+            'id_msg' => $message->getIdMsg(),
+            'message' => $message->getMessage(),
+            'time_sent' => $message->getTimeSent(),
+            'senderImage' => $senderImage,
+            'senderStorename' => $sender->getStorename(),
+            'senderMemberId' => $sender->getIdMember(),
+            'recipientImage' => $recipientImage,
+            'recipientStorename' => $recipient->getStorename(),
+            'recipientMemberId' => $recipient->getIdMember(),
+        ];
+        
+        return $messageData;
     }
 
 
