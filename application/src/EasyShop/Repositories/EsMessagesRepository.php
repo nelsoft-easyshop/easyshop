@@ -195,9 +195,12 @@ class EsMessagesRepository extends EntityRepository
      * Retrieves the conversation headers
      * 
      * @param integer $memberId
+     * @param integer $offset
+     * @param integer $limit
+     * @param string $searchString
      * @return mixed
      */
-    public function getConversationHeaders($memberId, $offset = 0, $limit = PHP_INT_MAX)
+    public function getConversationHeaders($memberId, $offset = 0, $limit = PHP_INT_MAX, $searchString = NULL)
     {
         $em = $this->_em;
         $rsm = new ResultSetMapping();
@@ -210,6 +213,15 @@ class EsMessagesRepository extends EntityRepository
         $rsm->addScalarResult('last_date', 'last_date');
         $rsm->addScalarResult('partner_storename', 'partner_storename');
         $rsm->addScalarResult('partner_member_id', 'partner_member_id');
+
+        $searchCondition = "";
+        if($searchString !== NULL){
+            $searchCondition = " WHERE  
+                CASE
+                    WHEN partner.store_name != '' THEN COALESCE(partner.store_name, partner.username)
+                    ELSE partner.username
+                END LIKE :searchString";
+        }
         
         $sql = "SELECT
                    messages.id_msg,
@@ -243,7 +255,7 @@ class EsMessagesRepository extends EntityRepository
                      CASE
                          WHEN to_id = :memberId THEN messages.from_id = partner.id_member
                          ELSE messages.to_id = partner.id_member   
-                     END
+                     END ".$searchCondition."
                GROUP BY
                    partner.id_member
                ORDER BY
@@ -255,6 +267,69 @@ class EsMessagesRepository extends EntityRepository
         $query = $em->createNativeQuery($sql, $rsm);
         $query->setParameter('memberId', $memberId);
         $query->setParameter('messageOpened', EsMessages::MESSAGE_READ );
+        $query->setParameter('offset', $offset);
+        $query->setParameter('limit', $limit);
+        $query->setParameter('notDeleted', EsMessages::MESSAGE_NOT_DELETED);
+        $query->setParameter('deletedBySender', EsMessages::MESSAGE_DELETED_BY_SENDER);
+        $query->setParameter('deletedByReceiver', EsMessages::MESSAGE_DELETED_BY_RECEIVER);
+        if($searchString !== NULL){
+             $query->setParameter('searchString', '%'.$searchString.'%');
+        }
+
+        return $query->getResult();
+    }
+
+    /**
+     * Get messages between two users
+     *
+     * @param integer $memberId
+     * @param integer $partnerId
+     * @param integer $offset
+     * @param integer $limit
+     * @return mixed
+     */
+    public function getConversationMessages($memberId, $partnerId, $offset = 0, $limit = PHP_INT_MAX)
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('id_msg', 'id_msg');
+        $rsm->addScalarResult('message', 'message');
+        $rsm->addScalarResult('time_sent', 'time_sent');
+        $rsm->addScalarResult('sender_member_id', 'sender_member_id');
+        $rsm->addScalarResult('is_sender', 'is_sender');
+
+        $sql = "    
+            SELECT
+                id_msg,
+                message,
+                time_sent,
+                sender.id_member as sender_member_id,
+                IF(to_id = :memberId, 0, 1) as is_sender
+            FROM
+                es_messages 
+            LEFT JOIN
+                es_member as sender ON sender.id_member = es_messages.from_id
+            WHERE 
+                (
+                     (es_messages.to_id = :memberId AND es_messages.from_id = :partnerId ) OR
+                     (es_messages.to_id = :partnerId AND es_messages.from_id = :memberId)
+                ) AND (
+                     es_messages.is_delete = :notDeleted OR
+                     es_messages.is_delete = 
+                          CASE
+                              WHEN to_id = :memberId THEN :deletedBySender
+                              ELSE :deletedByReceiver
+                          END
+               )
+            ORDER BY 
+                es_messages.time_sent DESC
+            LIMIT
+                :offset, :limit
+        ";
+        
+        $query = $em->createNativeQuery($sql, $rsm);
+        $query->setParameter('memberId', $memberId);
+        $query->setParameter('partnerId', $partnerId );
         $query->setParameter('offset', $offset);
         $query->setParameter('limit', $limit);
         $query->setParameter('notDeleted', EsMessages::MESSAGE_NOT_DELETED);
