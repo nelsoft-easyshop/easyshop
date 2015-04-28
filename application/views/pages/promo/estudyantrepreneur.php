@@ -54,323 +54,44 @@
         <section>
             <?php echo form_open('/EstudyantrepreneurSuccess', ['id' => 'frm-vote']); ?>
             <div class="container load-animate">
-                <!-- <div class="text-center dropdown-school-list">
+                <div class="text-center dropdown-school-list">
                     <select id="ddown-school">
-                        <option value="" disabled selected >Select your university...</option>
+                        <option value="" disabled selected>Select your university...</option>
                         <?PHP foreach($schools_and_students as $school => $students) : ?>
                         <option value="<?=html_escape(str_replace(' ', '-', $school))?>" data-students='<?=json_encode(html_escape($students['students']))?>'><?=html_escape($school)?></option>
                         <?PHP endforeach; ?>
                     </select>
-                </div> -->
-                <div class="text-center dropdown-school-list">
-                    <select id="ddown-school">
-                        <option value="" disabled selected >Select your university...</option>
-                        <option value="ateneo-demanila">ATENEO DE MANILA UNIVERSITY</option>
-                        <option value="mirian-college">MIRIAM COLLEGE</option>
-                        <option value="sanbeda-college">SAN BEDA COLLEGE</option>
-                        <option value="university-ofthe-philippines">UNIVERSITY OF THE PHILIPPINES CIRCLE OF ENTREPRENEURS</option>
-                        <option value="university-of-santo-tomas">UNIVERSITY OF SANTO TOMAS</option>
-                    </select>
                 </div>
+
                 <div>
-                    <div id="student-container" class="mirian-college select-school mrgn-top-35">
+                <?PHP foreach($schools_and_students as $school => $students) : ?>
+                    <div id="student-container" class="<?=html_escape(str_replace(' ', '-', $school))?> select-school mrgn-top-35">
                         <div class="row-fluid">
                             <div class="span6">
-                                <div class="school-participant">
-                                    <input id="impack" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="impack"> IMPACK</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            IMPACK is an innovative compactmultipurpose life vest bag with 
-                                            detachable bag and sleeping mat. IMPACK also features compartments 
-                                            to store essentials for emergency or outdoor activities wherein 
-                                            it uses light-weight materials, floatation device for safety and 
-                                            most importantly, it is easy to carry and store.
+                                <?PHP
+                                $ctr = 0;
+                                foreach ($students['students'] as $student) : ?>
+                                    <?PHP if ($ctr === 3) : ?>
+                                        </div>
+                                        <div class="span6">
+                                    <?PHP
+                                    $ctr = 0;
+                                    endif; ?>
+                                    <div class="school-participant">
+                                        <input id="impack" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
+                                        <label for="impack"> <?=html_escape($student['student'])?></label>
+                                        <div class="school-description row-fluid">
+                                            <div class="span12">
+                                                <?=html_escape($student['description'])?>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="Botanika" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Botanika">Botanika</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Botanika features the old method of natural dyeing 
-                                            transfer, and creating clothing and other ensembles 
-                                            that are environmental friendly, modern, high quality, 
-                                            trendy and in style. Botanika produces clothing made with 
-                                            a wide variety of quality fabrics and materials that are 
-                                            carefully chosen by the company. Plant dye extracts are 
-                                            artistically transferred to each fabric. Presenting their 
-                                            product with authenticity, from the packaging that are 
-                                            personally handcrafted with art and uniqueness. 
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="EmmysPolvoron" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="EmmysPolvoron"> Emmy’s Polvoron</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Emmy's is a manufacturing and retail company that offers 
-                                            Polvoron or Powdered Milk Candies, infused with real fruit 
-                                            bits and vitamin-riched vegetables. Emmy's Polvoron has 6 
-                                            flavors; Mango, Strawberry, Pineapple, Squash, Carrots and 
-                                            Cinnamon, and, Malunggay. The company aims to provide 
-                                            healthy alternative to desserts and snacks and also to 
-                                            make Filipino local delicacies be recognized in both the 
-                                            local and foreign markets.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="Lorenza" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Lorenza">Lorenza</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Lorenza is a fashion brand that carries Filipino-inspired 
-                                            clothing brand for women. The brand name Lorenza is derived 
-                                            from LorenzaAgoncillo, who was one of the seamstresses of 
-                                            the first official Philippine Flag.<br /><br />
-                                            The brand uses locally made textiles such as organza, habi, 
-                                            and batik. However, the brand goes beyond the use Filipino 
-                                            textiles because it also takes inspiration from the silhouette 
-                                            of the traditional and indigenous Filipina attire such as 
-                                            costumes from the Ibaloi tribe, Muslim Mindanao Region, and 
-                                            Spanish colonial period.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="Resack" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Resack">Re-sack</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Re-sack is an eco-friendly online shop that sells products 
-                                            that are made out of recycled jute sacks. The company's 
-                                            advocacy is to utilize recycled materials to contribute to 
-                                            our nation's preservation of natural resources. Furthermore 
-                                            with this advocacy we are promoting to other business owners 
-                                            to use recycled materials and be eco- friendly too.
-                                        </div>
-                                    </div>
-                                </div>
+                                    <?PHP ++$ctr;?>
+                                <?PHP endforeach; ?>
                             </div>
                         </div>
                     </div>
-
-                    <div id="student-container" class="ateneo-demanila select-school mrgn-top-35">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="Cryoplus" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Cryoplus">Cryo+</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            CRYO+ Instant Cold Wraps is an instant and reusable instant cold 
-                                            pack that comes with a neoprene sleeve. It is specially designed 
-                                            to provide instant cooling with added compression to relieve 
-                                            muscle pain and inflammation. Each cold pack effectively aids 
-                                            in muscle recovery for at least 30 minutes after activation, 
-                                            giving more than enough time for inflamed muscles to return back 
-                                            to its normal condition after induced stress. 
-
-
-                                            Not only is CRYO+ Instant Cold Wraps good for muscle recovery, 
-                                            but also for emergency situations in need of immediate cold 
-                                            treatment.
-
-                                            You may visit our Facebook page: http://www.facebook.com/CryoPlusInstantColdWraps 
-                                            for more information
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="BahayKeso" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="BahayKeso">BahayKeso</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            BahayKeso Artisanal Cheese Spreads is dedicated to making 
-                                            delicious spreads inspired by the vast flavors of the Philippines. 
-                                            Our spreads are made with a blend of premium sharp cheddar and 
-                                            creamy cow’s milk cheese, giving a seriously cheesy experience!
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="student-container" class="sanbeda-college select-school mrgn-top-35">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="makipinoy" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="makipinoy">Maki-Pinoy</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Maki-Pinoy is a service type business that serves different 
-                                            cuisines particularly Spanish, American and Japanese. 
-                                            The concept of the products represents how the Filipino’s 
-                                            were able to adapt to the culture of its colonizers. The 
-                                            Filipinos were able to carry on to the concept that has been 
-                                            inherited; and now, we have integrated all famous Spanish, 
-                                            American, and Japanese cuisines to fit the Filipino’s taste.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="Shakeoway" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Shakeoway">Shake O’ Way</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Shake O’ Way is an innovated beverage and at the same time a 
-                                            dessert. Our products are basically composed of pure vanilla 
-                                            ice cream, mix with branded chocolates, topped with whip cream 
-                                            and chocolate syrup. The branded chocolates that we use are 
-                                            Kitkat, Oreo, Hersheys, Butterfinger and Whooper, but in the 
-                                            future of the business we will offer more variety of flavors. 
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="Polloxrice" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Polloxrice">Pollo x Rice</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            It is a food service type of business that caters different 
-                                            flavors of rice topped with 4 BBQ-buffalo glazed chicken poppers 
-                                            drizzled with mourney sauce. The purpose of the product is to 
-                                            satisfy the ever-changing taste and preferences of people by 
-                                            offering a variety of rice flavors that most of the competitors 
-                                            fail to provide. The innovation here is that the group plans to 
-                                            give life to the rice instead of the usual: flavorful viands and 
-                                            the never-ending plain rice. The group thinks that it is not 
-                                            necessary to create and invent new viands in this day and age, 
-                                            so why not create and offer flavored rice. They will first offer 
-                                            3 common flavors of rice, namely Riso (Plain Rice), Aglio 
-                                            (Garlic Rice) and Burro (Buttered Rice) so that their market, 
-                                            which by the way are students, will first be familiar with the 
-                                            flavors and when they fully accepted the idea, then the group 
-                                            will offer exciting new flavors.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="Travelhomeph" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Travelhomeph">Travel Home PH</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Travel Home PH is a travel management company that caters social 
-                                            travelers mainly the overseas filipino workers by being their 
-                                            travel partner as to arranging their travel needs. The travel 
-                                            management company is equipping its market on their preferred 
-                                            destinations.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="Resack" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Resack">Reverti</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Reverti is a latin word meaning Reverse and has envision to enter the 
-                                            fashion industry with reversible bag. The pioneer product of Reverti is 
-                                            a reversible backpack. The backpack is made of Ripstop fabric that is 
-                                            tear-resistant and water-resistant.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="student-container" class="university-ofthe-philippines select-school mrgn-top-35">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="onlymnl" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="onlymnl">ONLY MNL</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            ONLY MNL is a fashion brand that aims to empower the local fashion industry through its two products: clothing line and fashion magazine. Its clothing products are designed by aspiring designers and made by skillful Filipina dressmakers. On the other hand, the fashion magazine features local talents, brands, and fashion organizations to give them the opportunity to showcase what they have. ONLY MNL encourages the young Filipina to embrace her own identity through style and to patronize our own fashion.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="mangoplusred" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="mangoplusred">Mango+Red</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Mango+Red Manila started off as a humble shirt store of pocket t-shirts with the aim of providing a fresh, more customized option for pocket tee lovers. Mango+Red attracted the market and differentiated itself by offering printed pockets instead of the variety in fabrics which was done by the general competitors. Today, Mango+Red improved and expanded its product line by adding others shirts services like: silkscreen and digital printing and gave out a helping hand to other Filipinos who wanted to generate extra income by being open to resellers nationwide.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="Serigrafiamnl" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Serigrafiamnl">Serigrafia MNL</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Serigrafia MNL is a home-based printing shop which not only prints ready-made designs but also offers artistically designed, unique, and comfortable apparel and textile products. It offers band and pop culture merchandise to teens and young adults. It also looks forward to collaborating with financially-challenged visual artists from the Art Capital of the Philippines, Angono, Rizal, to produce hand-painted apparel.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="Silverscreenphotobooth" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Silverscreenphotobooth">Silver Screen Photobooth</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Silver Screen Photobooth is known for its outstanding professional creative images and design. All they care about is capturing all of your worth remembering memories with gorgeous photos and design.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="student-container" class="university-of-santo-tomas select-school mrgn-top-35">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="Picazza" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="Picazza">Picazza</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Picazza Pizza House is a restaurant that gives a unique experience by providing customer involvement. The main product of Picazza, the DIY Pizza, allows their customers to choose what kind of dough, flavor of sauce, and the toppings they prefer on their pizza. They also have the option to assemble their pizza on their own. Picazza also serves appetizers, pastas, and milkshakes.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="school-participant">
-                                    <input id="billystapatogo" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="billystapatogo">Billy’s Tapa-To-Go</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            Billy's Tapa to go sells all-time favorite flavourful recipe tapsilog meal which is served with three flavors to choose from mainly Original, Sweet, and Spicy tapa along with other "silog" meals at high quality and at low price in high accessible near school (UST) and dormitory area perfect for students who are busy and always on-the-go.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span6">
-                                <div class="school-participant">
-                                    <input id="cafferaphotocafe" type="radio" data-school="my school" value="1" name="school">
-                                    <label for="cafferaphotocafe">CafferaPhoto+Cafe</label>
-                                    <div class="school-description row-fluid">
-                                        <div class="span12">
-                                            CafferaPhoto+Cafeis Manila's 1st Photography themed Cafe. It serves coffee and experiece to photography enthusiasts and spreads the love of photography to everyone.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <?PHP endforeach; ?>
                 </div>
                 <div class="vote-btn mrgn-top-35">
                     <input type="hidden" name="studentId" id="stud-id" value="">
