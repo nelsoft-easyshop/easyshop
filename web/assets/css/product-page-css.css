@@ -1554,8 +1554,8 @@ body{
     border: none;
     cursor: pointer;
     height: 32px;
-    line-height: 30px;
-    padding: 7px 0;
+    line-height: 32px;
+    padding: 6px 0;
     width: 100%;
     text-indent: 0.01px;
     text-overflow: '';
