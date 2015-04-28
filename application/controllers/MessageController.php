@@ -161,46 +161,38 @@ class MessageController extends MY_Controller
      */
     public function delete()
     {
-        $messageId = trim($this->input->post("id_msg"));
-        $temporaryIdArray = [
-            $messageId
-        ];
-        if ( (bool) stripos($messageId, ',')) {
-            $temporaryIdArray = explode(',', $messageId);
+        $rawMessageIds = $this->input->post("message_ids") ? json_decode($this->input->post("message_ids")) : [];
+        $messageIds = [];
+        foreach($rawMessageIds as $rawMessageId){
+            $messageIds[] = (int) $rawMessageId;
         }
-        
-        $messageIdArray = [];
-        foreach($temporaryIdArray as $messageId){
-            $messageIdArray[] = (int) $messageId;
-        }
-        $isDeleteSuccesful = false;
-        if(empty($messageIdArray) === false){
+        $numberOfDeletedMessages = 0;
+        if(empty($messageIds) === false){
             $numberOfDeletedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                                            ->delete($messageIdArray, $this->userId);
-            $isDeleteSuccesful = $numberOfDeletedMessages === count($messageIdArray);
+                                            ->delete($messageIds, $this->userId);
         }
 
-        echo json_encode($message);
+        echo json_encode([
+            'numberOfDeletedMessages' => $numberOfDeletedMessages,
+        ]);
     }
 
     /**
-     * Update message status to seen
+     * Mark message as read
      *
      * @return json
      */
-    public function updateMessageToSeen()
+    public function markMessageAsRead()
     {
-        $messageId = $this->input->post('checked');
-        $messageIdArray = [
-            $messageId
-        ];
-        if ( (bool) stripos($messageId, '-')) {
-            $messageIdArray = explode('-', $messageId);
+        $rawMessageIds = $this->input->post("message_ids") ? json_decode($this->input->post("message_ids")) : [];
+        $messageIds = [];
+        foreach($rawMessageIds as $rawMessageId){
+            $messageIds[] = (int) $rawMessageId;
         }
 
-        $result = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                           ->updateToSeen($this->userId, $messageIdArray);
-        if($result){
+        $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
+                           ->updateToSeen($this->userId, $messageIds);
+        if($numberOfUpdatedMessages > 0){
             $member = $this->serviceContainer['entity_manager']
                            ->find('EasyShop\Entities\EsMember', $this->userId);
             $redisChatChannel = $this->messageManager->getRedisChannelName();
@@ -210,10 +202,17 @@ class MessageController extends MY_Controller
                     'reader' => $member->getStorename(),
                 ]));
             }
-            catch(\Exception $e){}
+            catch(\Exception $e){
+                /**
+                 * Catch any exception but do nothing just so that the functionality
+                 * does not break if the redis channel is not available
+                 */
+            }
         }
         
-        echo json_encode($result);
+        echo json_encode([
+            'numberOfUpdatedMessages' => $numberOfUpdatedMessages,
+        ]);
     }
 
     /**
