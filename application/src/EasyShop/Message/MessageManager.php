@@ -432,7 +432,7 @@ class MessageManager {
         $messageData = [
             'id_msg' => $message->getIdMsg(),
             'message' => $message->getMessage(),
-            'time_sent' => $message->getTimeSent(),
+            'time_sent' => $message->getTimeSent()->format('Y-m-d H:i:s'),
             'senderImage' => $senderImage,
             'senderStorename' => $sender->getStorename(),
             'senderMemberId' => $sender->getIdMember(),

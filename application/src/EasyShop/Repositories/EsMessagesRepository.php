@@ -238,7 +238,7 @@ class EsMessagesRepository extends EntityRepository
         if(empty($messageIds) === false){
             $query .= " AND id_msg IN (?) ";
             $dataBindings['data'][] = $messageIds;
-            $dataBindings['data'][] = \Doctrine\DBAL\Connection::PARAM_INT_ARRAY;
+            $dataBindings['type'][] = \Doctrine\DBAL\Connection::PARAM_INT_ARRAY;
         }
 
         $count = $em->getConnection()
