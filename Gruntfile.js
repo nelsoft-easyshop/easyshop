@@ -466,6 +466,7 @@ module.exports = function (grunt) {
                         ['web/assets/js/src/vendor/jquery-1.9.1.js',
                         'web/assets/js/src/promo/estudyantrepreneur.js',
                         'web/assets/js/src/plugins.js',
+                        'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                         'web/assets/js/src/vendor/promo/christmas-promo.js'],
                      
                     'web/assets/js/min/easyshop.bug_report.js':
