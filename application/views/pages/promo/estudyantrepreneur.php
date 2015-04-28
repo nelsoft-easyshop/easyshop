@@ -71,8 +71,8 @@
                                 <div class="span6">
                                     <?php foreach($studentGroup as $student): ?>
                                         <div class="school-participant">
-                                            <input id="impack" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
-                                            <label for="impack"> <?=html_escape($student['student'])?></label>
+                                            <input class="checkbox-student" id="lbl-<?=html_escape($student['idStudent'])?>" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
+                                            <label for="lbl-<?=html_escape($student['idStudent'])?>"> <?=html_escape($student['student'])?></label>
                                             <div class="school-description row-fluid">
                                                 <div class="span12">
                                                     <?=html_escape($student['description'])?>
