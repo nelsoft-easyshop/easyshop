@@ -10,7 +10,11 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
-        <link rel="stylesheet" href="/assets/css/promo-css.css">
+        <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
+            <link rel="stylesheet" href="/assets/css/promo-css.css?ver=<?php echo ES_FILE_VERSION ?>">
+        <?php else: ?>
+            <link rel="stylesheet" href="/assets/css/min-easyshop.promo-css.css?ver=<?php echo ES_FILE_VERSION ?>">
+        <?php endif; ?>
         <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js"></script>
         <script type="text/javascript">
 

@@ -198,7 +198,9 @@ module.exports = function (grunt) {
                          'web/assets/css/widget.css'],
                     'web/assets/css/min-easyshop.faq-page.css':
                         ['web/assets/css/base.css',
-                         'web/assets/css/static.css']
+                         'web/assets/css/static.css'],
+                    'web/assets/css/min-easyshop.promo-css.css':
+                        ['web/assets/css/promo-css.css']
                 }
             },
         },
