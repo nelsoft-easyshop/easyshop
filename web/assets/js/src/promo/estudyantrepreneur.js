@@ -42,12 +42,24 @@ $(document).ready(function(){
         }
     });
 
-    $('#ddown-school').on('change', function() {
-        $('[name="school"]:checked').prop('checked', false);
-        var $Select = $(this).val();
-        $('.select-school').hide();
-        $('.'+$Select).slideToggle();
-        $('.school-description').hide();
+    $('#ddown-school-with-votes').on('change', function() {
+         var $this = $(this);
+         var $selectedOpt = $this.find(':selected');
+         var students = $selectedOpt.data('students');
+         var html = '';
+
+         if ($this.val() !== '') {
+
+             for (var index = 0; students.length > index; index++) {
+                 html += '<li><span class="school-name">' + students[index].student  +
+                         '</span>'+
+                         '<span class="school-percentage">' + parseFloat(students[index].currentPercentage).toFixed(2) + '% (' + parseInt(students[index].vote) + ')</span>' +
+                         '</li>';
+             }
+
+         }
+
+         $('#student-container').html(html);
     });
 
     $('.school-participant label').on('click', function() {

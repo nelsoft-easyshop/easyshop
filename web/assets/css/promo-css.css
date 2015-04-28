@@ -1699,7 +1699,6 @@ section.slideshow { margin-bottom: 30px;}
 }
 
 .school-percentage {
-    display: inline-block;
     text-align: center;
     vertical-align: bottom;
     width: 5%;
@@ -1772,7 +1771,7 @@ section.slideshow { margin-bottom: 30px;}
 
 @media (min-width: 991px) {
     .school-name {
-        width: 93%;
+        width: 85%;
     }
 }
 
