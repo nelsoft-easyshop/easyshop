@@ -112,9 +112,6 @@ class MessageController extends MY_Controller
         echo json_encode($conversationHeaderData);        
     }
     
-
-        
-
     /**
      * Sends a message
      *
@@ -124,21 +121,18 @@ class MessageController extends MY_Controller
     {
         $storeName = trim($this->input->post("recipient"));
         $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
-                                   ->getUserWithStoreName($storeName);
-        $receiverEntity = $receiverEntity ? $receiverEntity : null;        
+                                   ->getUserWithStoreName($storeName);        
         $senderEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
-        $msg = trim($this->input->post("msg"));
+        $message = trim($this->input->post("message"));
 
         $result = [
             'success' => false,
             'errorMessage' => '',
-            'updatedMessageList' => '',
         ];
         
-        $messageSendingResult = $this->messageManager->sendMessage($senderEntity, $receiverEntity, $msg);
+        $messageSendingResult = $this->messageManager->sendMessage($senderEntity, $receiverEntity, $message);
         if($messageSendingResult['isSuccessful']){
             $result['success'] = true;
-            $result['updatedMessageList'] = $messageSendingResult['allMessages'];
         }
         else{
             switch($messageSendingResult['error']){
@@ -146,7 +140,7 @@ class MessageController extends MY_Controller
                     $result['errorMessage'] = "The user " . html_escape($storeName) . ' does not exist';
                     break;
                 case EasyShop\Message\MessageManager::SELF_SENDING_ERROR:
-                    $result['errorMessage'] = "Sorry, it seems that you are trying to send a message to yourself";
+                    $result['errorMessage'] = "Oops, it seems that you are trying to send a message to yourself";
                     break;
                 case EasyShop\Message\MessageManager::MESSAGE_IS_EMPTY_ERROR:
                     $result['errorMessage'] = "Please write a message.";
