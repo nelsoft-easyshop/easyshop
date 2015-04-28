@@ -62,17 +62,17 @@ class UrlUtility
      */
     public function addRelNofollow($html)
     {
+        /*
         $asciiHtml = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
         $doc = new \DOMDocument();
-        /**
-         * @ = suppresses error messages
-         */
         @$doc->loadHTML($asciiHtml);
         $tags = $doc->getElementsByTagName('a');
         foreach($tags as $a){
             $a->setAttribute('rel', 'nofollow');
         }
         return @$doc->saveHTML($doc); 
+        */
+        return $html;
     }
 
 }
