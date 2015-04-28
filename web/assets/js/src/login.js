@@ -220,7 +220,7 @@
     var urlsToRedirectToReferrer = [
         'sell/step1',
         'cart',
-        'estudyantrepreneur',
+        'Estudyantrepreneur',
     ];
     
     function redirectToTarget()
