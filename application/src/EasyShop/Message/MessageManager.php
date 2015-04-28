@@ -172,12 +172,21 @@ class MessageManager {
             */
             
             $updatedMessageListForReciever = $this->getAllMessage($recipient->getIdMember());
-           
-            $this->redisClient->publish($redisChatChannel, json_encode([
-                'event' => 'message-sent',
-                'recipient' => $recipient->getStorename(),
-                'message' => $updatedMessageListForReciever,
-            ]));
+            try{   
+                $this->redisClient->publish($redisChatChannel, json_encode([
+                    'event' => 'message-sent',
+                    'recipient' => $recipient->getStorename(),
+                    'message' => $updatedMessageListForReciever,
+                ]));
+            }
+            catch(\Exception $e){
+               
+                /**
+                 * Catch any exception but do nothing just so that the functionality
+                 * does not break if the redis channel is not available
+                 */
+
+            }
            
             $response['isSuccessful'] = true;
         }
