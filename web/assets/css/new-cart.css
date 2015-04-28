@@ -639,6 +639,14 @@ ol.how-to-list li{
 .shipping-calculator-modal .my-modal-content p{
     padding: 5px 20px;
 }
+
+
+@media screen and (max-width: 1000px) {
+    .item-quantity{
+        width: 100%;
+    }
+}
+
 @media screen and (max-width: 750px) {
     .cart-item-thumbnail{
         width: 60px;
@@ -647,10 +655,14 @@ ol.how-to-list li{
 
     .cart-item-name{
         font-size: 11px;
-    } 
+    }
+
+    .item-quantity{
+        width: 100%;
+    }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 680px) {
 
 
     .transaction-container{
@@ -683,6 +695,10 @@ ol.how-to-list li{
 
     .breadcrumb-title{
         font-size: 11px;
+    }
+
+    .item-quantity{
+        width: auto;
     }
 
     /*----------------------------------*/
