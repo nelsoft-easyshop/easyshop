@@ -14,7 +14,7 @@ class EsStudentRepository extends EntityRepository
     public function getAllStudents()
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('tblStudent.idStudent, tblSchool.idSchool, tblStudent.name AS student, tblSchool.name AS school')
+        $query = $qb->select("tblStudent.idStudent, tblSchool.idSchool, tblStudent.name AS student, COALESCE(tblStudent.description, '') as description, tblSchool.name AS school")
                     ->from('EasyShop\Entities\EsStudent', 'tblStudent')
                     ->leftJoin('EasyShop\Entities\EsSchool', 'tblSchool', 'WITH', 'tblSchool.idSchool = tblStudent.school')
                     ->groupBy('tblStudent.idStudent')

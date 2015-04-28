@@ -56,7 +56,7 @@
             <?php echo form_open('/EstudyantrepreneurSuccess', ['id' => 'frm-vote']); ?>
             <div class="container load-animate">
                 <div class="text-center dropdown-school-list">
-                    <select id="ddown-school" class="success">
+                    <select id="ddown-school-with-votes" class="success">
                         <option value="" disabled selected >Select your university...</option>
                         <?PHP foreach($schools_and_students as $school => $students) : ?>
                             <option value="<?=html_escape(str_replace(' ', '-', $school))?>" data-students='<?=json_encode(html_escape($students['students']))?>'><?=html_escape($school)?></option>
