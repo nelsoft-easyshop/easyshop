@@ -89,7 +89,7 @@
 <script src="/assets/js/src/vendor/bower_components/ng-infinite-scroll.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <script src="/assets/js/angular/app.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <script src="/assets/js/angular/controllers/messageController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<script src="/assets/js/angular/factory/messageFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<script src="/assets/js/angular/factories/messageFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 
 
 <!-- <script src="/assets/js/src/vendor/bower_components/jquery.dataTables.js"></script>
