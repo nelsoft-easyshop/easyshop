@@ -823,8 +823,8 @@ var previous,editSelectedValue,editSelectedId;
 
             if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
 
-                var rowString = '<div class="col-xs-2 col-sm-2 col-md-2 div1"><input class="qty ui-form-control" onkeypress="return isNumberKey(event)" name="allQuantity" maxlength="4" type="text" size=3 value="1" /></div>\
-                <div class="col-xs-8 col-sm-8 col-md-8  div2">'+selectString+'</div>\
+                var rowString = '<div class="col-xs-2 col-sm-1 col-md-1 div1"><input class="qty ui-form-control" onkeypress="return isNumberKey(event)" name="allQuantity" maxlength="4" type="text" size=3 value="1" /></div>\
+                <div class="col-xs-8 col-sm-9 col-md-9  div2">'+selectString+'</div>\
                 <div class="col-xs-2 col-sm-2 col-md-2 div3"><input type="button" class="select-combination  orange_btn3 width-70p" value="Add" /></div>';
 
                 $('.select-control-panel-option').empty().append(rowString);
@@ -896,10 +896,10 @@ var previous,editSelectedValue,editSelectedId;
                 if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
                     $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                     $('.select-control-panel-option').append('\
-                        <div class="col-xs-2 col-sm-2 col-md-2 div1">\
+                        <div class="col-xs-2 col-sm-1 col-md-1 div1">\
                         <input type="text" value="1" name="allQuantity" size="3" class="qty" onkeypress="return isNumberKey(event)">\
                         </div>\
-                        <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
+                        <div class="col-xs-8 col-sm-9 col-md-9 div2"></div>\
                         <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
                     resetControlPanel(true);
                 }
@@ -1000,10 +1000,10 @@ var previous,editSelectedValue,editSelectedId;
             if( !$.trim( $('.select-control-panel-option > .div2').html() ).length ) {
                 $('.list-choosen-combination-div,.select-control-panel-option ').empty();
                 $('.select-control-panel-option').append('\
-                    <div class="col-xs-2 col-sm-2 col-md-2 div1">\
+                    <div class="col-xs-2 col-sm-1 col-md-1 div1">\
                     <input type="text" name="allQuantity" value="1" size="3" class="qty ui-form-control" maxlength="4" onkeypress="return isNumberKey(event)">\
                     </div>\
-                    <div class="col-xs-8 col-sm-8 col-md-8 div2"></div>\
+                    <div class="col-xs-8 col-sm-9 col-md-9 div2"></div>\
                     <div class="col-xs-2 col-sm-2 col-md-2 div3"></div>');
             }
             resetControlPanel(true);
