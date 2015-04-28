@@ -42,6 +42,14 @@ $(document).ready(function(){
         }
     });
 
+    $('#ddown-school').on('change', function() {
+        $('[name="school"]:checked').prop('checked', false);
+        var $Select = $(this).val();
+        $('.select-school').hide();
+        $('.'+$Select).slideToggle();
+        $('.school-description').hide();
+    });
+
     $('#ddown-school-with-votes').on('change', function() {
          var $this = $(this);
          var $selectedOpt = $this.find(':selected');
