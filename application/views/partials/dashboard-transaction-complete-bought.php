@@ -85,12 +85,12 @@
                                         <div class="transaction-profile-wrapper">
                                             <h4>Bought From:</h4>
                                             <div>
-                            <span class="transac-item-profile-con">
-                                <img src="<?php echo getAssetsDomain().'.'.$boughtTransactionDetails['userImage']?>">
-                            </span>
-                            <span class="transac-item-consignee-name">
-                                    <?=html_escape($product['sellerStoreName'])?>
-                            </span>
+                                                 <span class="transac-item-profile-con">
+                                                     <img src="<?php echo getAssetsDomain().'.'.$boughtTransactionDetails['userImage']?>">
+                                                 </span>
+                                                 <span class="transac-item-consignee-name">
+                                                     <?php echo html_escape($product['sellerStoreName'])?>
+                                                 </span>
                                             </div>
                                         </div>
                                         <div class="trans-btn-wrapper trans-1btn">
