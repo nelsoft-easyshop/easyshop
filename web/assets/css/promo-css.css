@@ -1601,6 +1601,7 @@ section.slideshow { margin-bottom: 30px;}
 }
 
 .vote-btn {
+    margin-top: 50px;
     text-align: center;
 }
 
@@ -1622,11 +1623,12 @@ section.slideshow { margin-bottom: 30px;}
 }
 
 .select-school {
+    display: none;
     margin: 35px auto;
 }
-.select-school > span {
-    display: block;
+.school-participant {
     margin-bottom: 8px;
+    width: 100%;
 }
 
 .select-school input[type="radio"] {
@@ -1636,8 +1638,25 @@ section.slideshow { margin-bottom: 30px;}
 .select-school label {
     display: inline-block;
     margin: 0;
+    text-align: left;
     vertical-align: middle;
     width: 90%;
+}
+
+.school-description {
+    background-color: #fff;
+    border-radius: 4px;
+    display: none;
+    font-size: 12px;
+    margin-top: 8px;
+    max-width: 500px;
+    padding: 15px;
+    text-align: justify !important;
+    width: 90%
+}
+
+.school-description img {
+    width: 100%;
 }
 
 .mechanics-section,
@@ -1722,16 +1741,6 @@ section.slideshow { margin-bottom: 30px;}
         width: 40%;
     }
 
-    .select-school {
-        -webkit-column-count: 2; /* Chrome, Safari, Opera */
-        -moz-column-count: 2; /* Firefox */
-        column-count: 2;
-
-        -webkit-column-gap: 40px; /* Chrome, Safari, Opera */
-        -moz-column-gap: 40px; /* Firefox */
-        column-gap: 40px;
-    }
-
     .school-name {
         width: 89%;
     }
@@ -1760,7 +1769,6 @@ section.slideshow { margin-bottom: 30px;}
         width: 92%;
     }
 }
-
 
 @media (min-width: 991px) {
     .school-name {

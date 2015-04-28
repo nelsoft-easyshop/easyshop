@@ -42,34 +42,47 @@ $(document).ready(function(){
         }
     });
 
-    $('#ddown-school').on('change', function() {
-        var $this = $(this);
-        var $selectedOpt = $this.find(':selected');
-        var students = $selectedOpt.data('students');
-        var html = '';
-        var isSuccessPage = $this.hasClass('success');
+    // $('#ddown-school').on('change', function() {
+    //     var $this = $(this);
+    //     var $selectedOpt = $this.find(':selected');
+    //     var students = $selectedOpt.data('students');
+    //     var html = '';
+    //     var isSuccessPage = $this.hasClass('success');
 
-        if ($this.val() !== '') {
+    //     if ($this.val() !== '') {
 
-            for (var index = 0; students.length > index; index++) {
-                if (isSuccessPage) {
-                    html += '<li><span class="school-name">' + students[index].student  +
-                            '</span>'+
-                            '<span class="school-percentage">' + parseFloat(students[index].currentPercentage).toFixed(2) + '%</span>' +
-                            '</li>';
-                }
-                else {
-                    html += '<span>' +
-                        '<input type="radio" name="school" value="'+ students[index].idStudent +'" data-school="'+ students[index].school +'">' +
-                        '<label > '+ students[index].student +'</label>' +
-                        '</span>';
-                }
-            }
+    //         for (var index = 0; students.length > index; index++) {
+    //             if (isSuccessPage) {
+    //                 html += '<li><span class="school-name">' + students[index].student  +
+    //                         '</span>'+
+    //                         '<span class="school-percentage">' + parseFloat(students[index].currentPercentage).toFixed(2) + '%</span>' +
+    //                         '</li>';
+    //             }
+    //             else {
+    //                 html += '<span>' +
+    //                     '<input type="radio" name="school" value="'+ students[index].idStudent +'" data-school="'+ students[index].school +'">' +
+    //                     '<label > '+ students[index].student +'</label>' +
+    //                     '</span>';
+    //             }
+    //         }
 
-        }
+    //     }
 
-        $('#student-container').html(html);
+    //     $('#student-container').html(html);
 
+    // });
+
+    $('#ddown-school').change(function(){
+        var $Select = $(this).val();
+        $('.select-school').hide();
+        $('.'+$Select).slideToggle();
+        $('.school-description').hide();
+    });
+
+    $('.school-participant label').on('click', function() {
+        $(this).next().slideToggle();
+        $(this).parent().siblings().find('.school-description').hide();
+        $(this).parent().parent().siblings().find('.school-description').hide();
     });
 
     $('#btn-vote').on('click', function() {
