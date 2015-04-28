@@ -44,9 +44,9 @@ $(document).ready(function(){
 
     $('#ddown-school').on('change', function() {
         $('[name="school"]:checked').prop('checked', false);
-        var $Select = $(this).val();
+        var $select = $(this).val();
         $('.select-school').hide();
-        $('.'+$Select).slideToggle();
+        $('.' + $select).slideToggle();
         $('.school-description').hide();
     });
 
@@ -59,9 +59,13 @@ $(document).ready(function(){
          if ($this.val() !== '') {
 
              for (var index = 0; students.length > index; index++) {
-                 html += '<li><span class="school-name">' + students[index].student  +
-                         '</span>'+
-                         '<span class="school-percentage">' + parseFloat(students[index].currentPercentage).toFixed(2) + '% (' + parseInt(students[index].vote) + ')</span>' +
+                 html += '<li>' +
+                              '<span class="school-name">' +
+                                   students[index].student  +
+                              '</span>'+
+                              '<span class="school-percentage">' +
+                                   parseFloat(students[index].currentPercentage).toFixed(2) + '% (' + parseInt(students[index].vote) + ')' +
+                              '</span>' +
                          '</li>';
              }
 

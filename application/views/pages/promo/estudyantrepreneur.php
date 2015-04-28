@@ -67,28 +67,21 @@
                 <?PHP foreach($schools_and_students as $school => $students) : ?>
                     <div id="student-container" class="<?=html_escape(str_replace(' ', '-', $school))?> select-school mrgn-top-35">
                         <div class="row-fluid">
-                            <div class="span6">
-                                <?PHP
-                                $ctr = 0;
-                                foreach ($students['students'] as $student) : ?>
-                                    <?PHP if ($ctr === 3) : ?>
-                                        </div>
-                                        <div class="span6">
-                                    <?PHP
-                                    $ctr = 0;
-                                    endif; ?>
-                                    <div class="school-participant">
-                                        <input id="impack" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
-                                        <label for="impack"> <?=html_escape($student['student'])?></label>
-                                        <div class="school-description row-fluid">
-                                            <div class="span12">
-                                                <?=html_escape($student['description'])?>
+                            <?php foreach (array_chunk($students['students'], 3, true) as $studentGroup): ?>
+                                <div class="span6">
+                                    <?php foreach($studentGroup as $student): ?>
+                                        <div class="school-participant">
+                                            <input id="impack" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
+                                            <label for="impack"> <?=html_escape($student['student'])?></label>
+                                            <div class="school-description row-fluid">
+                                                <div class="span12">
+                                                    <?=html_escape($student['description'])?>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <?PHP ++$ctr;?>
-                                <?PHP endforeach; ?>
-                            </div>
+                                    <?php endforeach ?>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 <?PHP endforeach; ?>
