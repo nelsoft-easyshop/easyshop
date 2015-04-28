@@ -663,8 +663,11 @@ class ProductManager
         }
 
         $noMoreSelection = "";
-        if(count($productCombinationAvailable) === 1 && $attrCount === count($productAttributes)){
-            $noMoreSelection = key($productCombinationAvailable);
+        if (count($productCombinationAvailable) === 1) {
+            $arrayCombination = reset($productCombinationAvailable);
+            if ((int)$arrayCombination['product_attribute_ids'][0] === 0) {
+                $noMoreSelection = key($productCombinationAvailable);
+            }
         }
 
         $needToSelect = false;
