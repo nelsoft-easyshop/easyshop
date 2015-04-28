@@ -1,15 +1,15 @@
-<section class="bg-cl-fff" ng-app="messageApp">
-    <div ng-controller="MessageController">
+<section class="bg-cl-fff" data-ng-app="messageApp">
+    <div data-ng-controller="MessageController">
         <div class="container inbox-view-content">
-            <div id="head_container" class="row">
+            <div id="head_container" class="row" ui-view="conversationHead">
                 <div class="col-xs-12 col-sm-4">
                     <input type="button" id="modal-launcher" class="btn btn-default-4" value="Compose">
                 </div>
                 <div class="col-xs-12 col-sm-8 msg-chsn-username">
-                    <h3 id="chsn_username"></h3>
+                    <h3 id="chsn_username">{{storeName}}</h3>
                     <span>
-                        <button id="chsn_delete_btn" class="btn btn-default-1"> Delete selected </button>
-                        <button id="delete_all_btn" class="btn btn-default-1"> Delete this conversation </button>
+                        <button class="btn btn-default-1"> Delete selected </button>
+                        <button data-ng-show="userId != null" data-ng-click="deleteConversation(userId)" class="btn btn-default-1"> Delete this conversation </button>
                     </span>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <?php foreach($conversationHeaders as $key => $conversation): ?>
+                        <?php foreach($conversationHeaders as $conversation): ?>
                             <tr class="<?php echo $conversation['unread_message_count'] ? 'NS' : '' ?>">
                                 <td width="10%">
                                     <div class="img-wrapper-div">
@@ -53,7 +53,7 @@
                     </table>
                 </div>
                 <!-- Load angular view -->
-                <div ui-view="conversation">Select message</div>
+                <div ui-view="conversationDetail">Select message</div>
             </div>
         </div>
         <div id="modal-background">
