@@ -32,22 +32,19 @@
                                         <?php $span = $conversation['unread_message_count'] > 0 ? '('.$conversation['unread_message_count'].')' : ''; ?>
                                         </span>
                                     </div>
-                                    
                                 </td>
                                 <td class="msg-sender-details">
-                                    <a class="btn_each_msg" href="#/read/<?php echo $conversation['partner_member_id'] ?>">
-                                    <span class="conversation-partner-name" data-userid="<?php echo $conversation['partner_member_id'] ?>">
-                                        <?php echo html_escape($conversation['partner_storename']); ?>
-                                    </span>
-                                    <span class='unread-conversation'> 
-                                        <?php echo $span; ?> 
-                                    </span>
-                                      
-                                    <span class="msg_message">
-                                        <?php echo html_escape($conversation['last_message']); ?>
-                                    </span>
-
-                                    <span class="msg_date"><?PHP echo $conversation['last_date']; ?></span>
+                                    <a class="btn_each_msg" href="#/read/<?php echo $conversation['partner_member_id'] ?>/<?php echo html_escape($conversation['partner_storename']); ?>">
+                                        <span class="conversation-partner-name" data-userid="<?php echo $conversation['partner_member_id'] ?>">
+                                            <?php echo html_escape($conversation['partner_storename']); ?>
+                                        </span>
+                                        <span class='unread-conversation'> 
+                                            <?php echo $span; ?> 
+                                        </span>
+                                        <span class="msg_message">
+                                            <?php echo html_escape($conversation['last_message']); ?>
+                                        </span>
+                                        <span class="msg_date"><?PHP echo $conversation['last_date']; ?></span>
                                     </a>
                                 </td>
                             </tr>
@@ -79,7 +76,6 @@
             <button id="modal_send_btn" class="btn btn-default-3">Send</button>
             <input type="hidden" id="userInfo" data-store-name="<?=html_escape($userEntity->getStoreName())?>">
         </div>
-
         <textarea id="userDataContainer" style="display:none"></textarea>
     </div>
 </section>
