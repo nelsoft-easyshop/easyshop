@@ -11,6 +11,7 @@ use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsOrderProductStatus as EsOrderProductStatus;
 use EasyShop\PaymentService\PaymentService as PaymentService;
+use EasyShop\PaymentGateways\PointGateway as PointGateway;
 
 class CheckDragonPayTransaction
 {
@@ -212,7 +213,10 @@ class CheckDragonPayTransaction
                 $this->revertProductQuantity($itemId, $revertQuantity);
                 $this->updateOrderProductStatus($orderProductId, EsOrderProductStatus::CANCEL);
             }
-            $this->paymentService->revertTransactionPoint($order['id_order']);
+
+            if(PointGateway::POINT_ENABLED){
+                $this->paymentService->revertTransactionPoint($order['id_order']);
+            }
         }
     }
 
