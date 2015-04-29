@@ -422,7 +422,7 @@
                                         </label>
                                     </div>
                                     <div class="payment-method-desc" style="display:none">
-                                        Pay using Credit or Debit Card. You will be redirected to the PayPal system to complete the payment.
+                                        Pay using Credit or Debit Card. You will be redirected to the PesoPay system to complete the payment.
                                     
                                         <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC, $checkoutError['paymentTypeError'])):?>
                                             <br/>

@@ -70,14 +70,15 @@
                 <?PHP foreach($schools_and_students as $school => $students) : ?>
                     <div id="student-container" class="<?=html_escape(str_replace(' ', '-', $school))?> select-school mrgn-top-35">
                         <div class="row-fluid">
-                            <?php foreach (array_chunk($students['students'], 3, true) as $studentGroup): ?>
-                                <div class="span6">
+                            <?php foreach (array_chunk($students['students'], 10, true) as $studentGroup): ?>
+                                <div class="span12">
                                     <?php foreach($studentGroup as $student): ?>
                                         <div class="school-participant">
                                             <input class="checkbox-student" id="lbl-<?=html_escape($student['idStudent'])?>" type="radio" data-school="<?=html_escape($school)?>" value="<?=html_escape($student['idStudent'])?>" name="school">
                                             <label for="lbl-<?=html_escape($student['idStudent'])?>"> <?=html_escape($student['student'])?></label>
                                             <div class="school-description row-fluid">
                                                 <div class="span12">
+                                                    <strong><?=html_escape($student['student'])?></strong>
                                                     <?=html_escape($student['description'])?>
                                                 </div>
                                             </div>
