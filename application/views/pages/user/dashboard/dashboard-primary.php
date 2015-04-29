@@ -19,7 +19,7 @@
                         </a>
 
                         <a>
-                            <li id="my-store-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-store">My Store <i class="icon-control-down toggle-down pull-right"></i></li>
+                            <li id="my-store-menu-trigger" class=" dashboard-menu-trigger" data-section="my-store">My Store <i class="icon-control-down toggle-down pull-right"></i></li>
                         </a>
                         <div id="my-store-menu" class="dashboard-menu">
                             <ul class="sidebar-submenu">
@@ -30,7 +30,7 @@
                         </div>
     
                         <a href="#transactions">
-                            <li id="transaction-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-transaction">Transactions<i class="m icon-control-down toggle-down pull-right"></i></li>
+                            <li id="transaction-menu-trigger" class=" dashboard-menu-trigger" data-section="my-transaction">Transactions<i class="m icon-control-down toggle-down pull-right"></i></li>
                         </a>
                         <div id="transaction-menu" class="dashboard-menu">
                             <ul class="sidebar-submenu">
