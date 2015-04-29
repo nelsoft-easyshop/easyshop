@@ -111,7 +111,7 @@ class ValidationRules
                                 new Assert\NotBlank(),
                                 new Assert\Length(['min' => '5',
                                                    'max' => '60']),
-                                new CustomAssert\IsAlphanumericSpace(),
+                                new CustomAssert\IsAlphanumericSpaceUnderscore(),
                     ),
                     'contact_number' => array(
                                 new CustomAssert\IsValidMobileOptional(),
@@ -185,7 +185,7 @@ class ValidationRules
                                 new Assert\NotBlank(),
                                 new Assert\Length(['min' => '5',
                                                    'max' => '60']),
-                                new CustomAssert\IsAlphanumericSpace(),
+                                new CustomAssert\IsAlphanumericSpaceUnderscore(),
                     ),                 
             ),
             'store_setup' => [
@@ -193,7 +193,7 @@ class ValidationRules
                         new Assert\NotBlank(),
                         new Assert\Length(['min' => '5',
                                            'max' => '60']),
-                        new CustomAssert\IsAlphanumericSpace(),
+                        new CustomAssert\IsAlphanumericSpaceUnderscore(),
                     ],
                     'shop_slug' => [
                         new Assert\NotBlank(),

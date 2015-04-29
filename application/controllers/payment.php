@@ -274,9 +274,6 @@ class Payment extends MY_Controller
                     $cart['choosen_items'] = $checkoutService->includeCartItemValidation($member);
                     $postPoints = $this->input->post('used_points') ? (float) $this->input->post('used_points') : 0;
                     $userMaxPoints = $pointTracker->getUserPoint($memberId);
-                    $paymentService->initializeGateways(["PesoPayGateway" => ["method" => "PesoPay"]]);
-                    $pesopayGateway = $paymentService->getPrimaryGateway();
-                    $pesopayGateway->checkReservedPoints($memberId);
                     $headerData = [
                         "memberId" => $memberId,
                         'title' => 'Payment Review | Easyshop.ph',
