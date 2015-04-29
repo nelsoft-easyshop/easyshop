@@ -13,6 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
 class EsOrder
 {
     /**
+     * Default postback count
+     *
+     * @var integer
+     */
+    const NO_POSTBACK = 0;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="id_order", type="integer", nullable=false)
