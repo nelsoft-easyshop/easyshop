@@ -50,7 +50,7 @@ class MessageController extends MY_Controller
         $conversationHeaderData = $this->messageManager->getConversationHeaders($this->userId, 0, self::CONVERSATIONS_PER_PAGE);
         $member = $this->em->find('EasyShop\Entities\EsMember', $this->userId);
         $data = [
-            'conversationHeaders' => $conversationHeaderData['conversationHeaders'],
+            'conversationHeaders' => json_encode($conversationHeaderData['conversationHeaders'], true),
             'userEntity' => $member,
             'chatServerHost' => $this->messageManager->getChatHost(true),
             'chatServerPort' => $this->messageManager->getChatPort()
