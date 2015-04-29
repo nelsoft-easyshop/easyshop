@@ -48,6 +48,7 @@ $(document).ready(function(){
         $('.select-school').hide();
         $('.' + $select).slideToggle();
         $('.school-description').hide();
+        $(".school-participant label").removeClass("view-school-details");
     });
 
     $('#ddown-school-with-votes').on('change', function() {
@@ -76,8 +77,9 @@ $(document).ready(function(){
 
     $('.checkbox-student').on('click', function() {
         $(this).parent().find('.school-description').slideToggle();
-        $(this).parent().siblings().find('.school-description').hide();
-        $(this).parent().parent().siblings().find('.school-description').hide();
+        $(this).parent().siblings().find('.school-description').slideUp();
+        $(this).next().toggleClass("view-school-details");
+        $(this).parent().siblings().find("label").removeClass("view-school-details");
     });
 
     $('#btn-vote').on('click', function() {
