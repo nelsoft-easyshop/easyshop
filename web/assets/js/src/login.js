@@ -174,7 +174,21 @@
     });
     
     var $window = $(window);
+    var isInitialLoad = true;
+    var previousWidth = $window.width();
+    var previousHeight = $window.height();
     $window.on('load resize', function() {
+
+        var currentWidth = $window.width();
+        var currentHeight = $window.height();
+
+        if((currentWidth === previousWidth && currentHeight === previousHeight) && !isInitialLoad ){
+            return false;
+        }
+
+        isInitialLoad = false;
+        previousWidth = currentWidth;
+        previousHeigh = currentHeight;
 
         setTimeout(function(){
             $(".login-loading-content").hide();
