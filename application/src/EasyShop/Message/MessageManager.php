@@ -357,7 +357,7 @@ class MessageManager {
     {
         $memberId = (int) $memberId;
         $conversationHeaders = $this->em->getRepository('EasyShop\Entities\EsMessages')
-                             ->getConversationHeaders($memberId, $offset, $limit, $searchString);
+                                    ->getConversationHeaders($memberId, $offset, $limit, $searchString);
 
         $numberOfUnreadConversation = 0;
         foreach($conversationHeaders as $key => $conversationHeader){
