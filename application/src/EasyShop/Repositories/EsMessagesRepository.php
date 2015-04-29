@@ -287,7 +287,7 @@ class EsMessagesRepository extends EntityRepository
                    messages.id_msg,
                    messages.to_id,
                    messages.from_id,
-                   SUM(IF(messages.opened = :messageOpened, 0, 1)) as unread_message_count,
+                   SUM(IF(messages.to_id = :memberId, IF(messages.opened = :messageOpened, 0, 1), 0)) as unread_message_count,
                    IF(to_id = :memberId, 0, 1) as is_sender,
                    partner.id_member as partner_member_id,
                    IF(partner.store_name != '', COALESCE(partner.store_name, partner.username), partner.username) as partner_storename,
