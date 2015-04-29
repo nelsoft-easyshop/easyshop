@@ -229,7 +229,7 @@ class Login extends MY_Controller
             redirect('/'.$referrer);
         }
         else{
-            redirect('/login');
+            redirect('/');
         }
     }
 
