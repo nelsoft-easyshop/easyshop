@@ -1,5 +1,4 @@
 ServerSignature Off
-
 RewriteEngine On
 
 RewriteCond %{HTTP_HOST} !^\.localhost$ [NC]
@@ -9,7 +8,6 @@ RewriteRule ^index\.php$ / [NC,R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L]
-
 
 <Files "index.php">
 AcceptPathInfo On
@@ -28,9 +26,11 @@ Require all denied
 
 # `FileETag None` doesn't work in all cases.
 <IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
     Header unset Last-Modified
     FileETag none
 </IfModule>
+
 <IfModule mod_expires.c>
 
     ExpiresActive on
