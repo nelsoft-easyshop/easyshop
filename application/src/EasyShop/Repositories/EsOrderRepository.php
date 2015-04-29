@@ -102,6 +102,7 @@ class EsOrderRepository extends EntityRepository
                 ->andWhere('o.orderStatus != :statusVoid')
                 ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
                 ->andWhere('o.invoiceNo LIKE :transNum ')
+                ->andWhere('o.postbackcount != :nopostbackCount')
                 ->orderBy('o.idOrder', "desc")
                 ->setParameter('sellerId', $userId)
                 ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
@@ -110,6 +111,7 @@ class EsOrderRepository extends EntityRepository
                 ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
                 ->setParameter('transNum', '%' . $transactionNumber . '%')
                 ->setParameter('paymentMethodLists', $paymentMethod)
+                ->setParameter('nopostbackCount', EsOrder::NO_POSTBACK)
                 ->setFirstResult($offset)
                 ->setMaxResults($perPage)
                 ->getQuery();
@@ -179,6 +181,7 @@ class EsOrderRepository extends EntityRepository
                         ->andWhere('o.buyer = :buyer_id')
                         ->andWhere('o.paymentMethod IN(:paymentMethodLists)')
                         ->andWhere('o.invoiceNo LIKE :transNum ')
+                        ->andWhere('o.postbackcount != :nopostbackCount')
                         ->orderBy('o.idOrder', "desc")
                         ->setParameter('buyer_id', $uid)
                         ->setParameter('STATUS_DRAFT', orderStatus::STATUS_DRAFT)
@@ -186,6 +189,7 @@ class EsOrderRepository extends EntityRepository
                         ->setParameter('pesopayPayMentMethod', EsPaymentMethod::PAYMENT_PESOPAYCC)
                         ->setParameter('paymentMethodLists', $paymentMethod)
                         ->setParameter('transNum', '%' . $transactionNumber . '%')
+                        ->setParameter('nopostbackCount', EsOrder::NO_POSTBACK)
                         ->setFirstResult($offset)
                         ->setMaxResults($perPage)
                         ->getQuery();
