@@ -6,6 +6,7 @@ $CI =& get_instance();
 $paymentService = $CI->kernel->serviceContainer['payment_service'];
 
 use EasyShop\PaymentGateways\PesoPayGateway as PesoPayGateway;
+use EasyShop\PaymentGateways\PointGateway as PointGateway;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 
 class CheckItemLock
@@ -50,13 +51,15 @@ class CheckItemLock
             }
         }
 
-        echo "\nREVERTING POINTS SECTION\n\n";
-
-        $uniqueOrderId = array_unique($orderIdArray);
-        foreach ($uniqueOrderId as $orderId) {
-            $this->paymentService->revertTransactionPoint($orderId);
-            echo "Order ID: $orderId POINTS REVERTED \n";
+        if(PointGateway::POINT_ENABLED){
+            echo "\nREVERTING POINTS SECTION\n\n";
+            $uniqueOrderId = array_unique($orderIdArray);
+            foreach ($uniqueOrderId as $orderId) {
+                $this->paymentService->revertTransactionPoint($orderId);
+                echo "Order ID: $orderId POINTS REVERTED \n";
+            }
         }
+            
 
         echo "\nSCAN COMPLETED\n\n";
     }
