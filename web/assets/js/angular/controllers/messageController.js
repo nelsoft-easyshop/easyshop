@@ -83,7 +83,7 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                         if ($recipient) {
                             if (MessageFactory.data.currentSelectedPartner == null || $recipientId != MessageFactory.data.currentSelectedPartner.partner_member_id) {
                                 MessageFactory.setPartner($recipient);
-                                $state.go("readMessage", {userId: $recipientId, storeName: $storeName});
+                                $state.go("readMessage", {userId: $recipientId});
                             }
                             else {
                                 MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
@@ -106,7 +106,7 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                             }];
                             MessageFactory.setConversationList($newConversation.concat(MessageFactory.data.conversationList));
                             MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
-                            $state.go("readMessage", {userId: $recipientId, storeName: $storeName});
+                            $state.go("readMessage", {userId: $recipientId});
                         }
                     }, function(errorMessage) {
                         alert(errorMessage);
