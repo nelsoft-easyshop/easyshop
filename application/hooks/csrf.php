@@ -124,7 +124,7 @@ class CSRF_Protection
         
         // Inject into form
         $output = preg_replace('/(<(form|FORM)[^>]*(method|METHOD)="(post|POST)"[^>]*>)/',
-                                '$0<input type="hidden" name="' . self::$token_name . '" value="' . self::$token . '">', 
+                                '$0<input type="hidden" name="' . self::$token_name . '" csrf-directive="' . self::$token . '" value="' . self::$token . '">', 
                                 $output);
         
         // Inject into <head>
