@@ -26,7 +26,6 @@ Require all denied
 
 # `FileETag None` doesn't work in all cases.
 <IfModule mod_headers.c>
-    Header set X-Frame-Options "SAMEORIGIN"
     Header unset Last-Modified
     FileETag none
 </IfModule>
