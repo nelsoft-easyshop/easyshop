@@ -6730,7 +6730,7 @@ div.sold_prod_container {
 .unreadConve{
     display:inline !important;
 }
-.msg_sender {
+.conversation-partner-name {
     display: block;
     font-size: 12px;
     font-weight: bold;

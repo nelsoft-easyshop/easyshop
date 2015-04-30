@@ -1,0 +1,55 @@
+
+<div class="row">
+    <div class="compose-btn-container">
+        <input type="button" id="modal-launcher" data-ng-click="composeMessage()" class="btn btn-default-4" value="Compose">
+    </div>
+</div>
+<div class="row" >
+    <div class="row mrgn-bttm-45">
+        <div id="conversation-header-container" class="col-xs-12 col-sm-12 mrgn-bttm-25">
+            <div infinite-scroll-container="'#conversation-header-container'"
+                    infinite-scroll="getConversationList(conversationListCurrentPage, '')"
+                    infinite-scroll-distance="0"
+                    infinite-scroll-parent="true"
+                    infinite-scroll-disabled="listBusy">
+                <table id="table_id">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="convHead in messageData.conversationList | orderBy:'last_date': true" id="partner{{convHead.partner_member_id}}"
+                            data-ng-class="{'not-seen' : convHead.unread_message_count > 0, 'thread-selected' :convHead.partner_member_id == userId}">
+                            <td width="10%">
+                                <div class="img-wrapper-div">
+                                    <span class="img-wrapper-span">
+                                        <img data-ng-src="{{convHead.partner_image}}" alt="{{convHead.partner_storename}}" />
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="msg-sender-details">
+                                <a class="btn_each_msg" data-ng-click="markAsRead(convHead)" href="#/read/{{convHead.partner_member_id}}/{{convHead.partner_storename}}">
+                                    <span class="conversation-partner-name">
+                                        {{convHead.partner_storename}}
+                                    </span>
+                                    <span class='unread-conversation'> 
+                                        <span data-ng-show="convHead.unread_message_count > 0">
+                                        ({{convHead.unread_message_count}})
+                                        </span>
+                                    </span>
+                                    <span class="msg_message" >
+                                        {{convHead.last_message}}
+                                    </span>
+                                    <span class="msg_date">{{convHead.last_date | date:'medium'}}</span>
+                                </a>
+                                <i data-ng-show="convHead.partner_member_id == userId" class="fa fa-caret-right"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

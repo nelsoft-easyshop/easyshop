@@ -77,9 +77,25 @@ class MessageManager {
      * @var mixed
      */
     private $jsServerConfig;
+ 
+    /**
+     * User manager
+     *
+     * @var EasyShop\User\UserManager
+     */
+    private $userManager;
     
 
-    function __construct($em, $configLoader, $languageLoader, $socialManager, $emailService, $parser, $redisClient, $localConfig)
+    function __construct(
+        $em, 
+        $configLoader, 
+        $languageLoader, 
+        $socialManager, 
+        $emailService, 
+        $userManager,
+        $parser, 
+        $redisClient, 
+        $localConfig)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
@@ -90,6 +106,7 @@ class MessageManager {
         $this->redisClient = $redisClient;
         $this->localConfig = $localConfig;
         $this->jsServerConfig = $this->configLoader->getItem('nodejs');
+        $this->userManager = $userManager;
     }
 
     /**
@@ -104,6 +121,7 @@ class MessageManager {
         $response = [
             'error' => '',
             'isSuccessful' => false,
+            'messageId' => 0,
         ];
     
         if(!$sender){
@@ -127,7 +145,8 @@ class MessageManager {
 
             $this->em->persist($message);
             $this->em->flush();
-            
+           
+            $response['messageId'] = $message->getIdMsg();
             $emailRecipient = $recipient->getEmail();
             $emailSubject = $this->languageLoader->getLine('new_message_notif');
             $imageArray = $this->configLoader->getItem('email', 'images');
@@ -145,28 +164,34 @@ class MessageManager {
 
             $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, true);
 
-            /*
-             uncomment to queue mail
+            /**
+             * uncomment to queue mail
+             *
             $this->emailService->setRecipient($emailRecipient)
                                ->setSubject($emailSubject)
                                ->setMessage($emailMsg, $imageArray)
                                ->queueMail();
             */
             
-            $updatedMessageListForSender = $this->getAllMessage($sender->getIdMember());
-            $updatedMessageListForReciver = $this->getAllMessage($recipient->getIdMember());
-
+            $updatedMessageListForReciever = $this->getAllMessage($recipient->getIdMember());
             $redisChatChannel = $this->getRedisChannelName();
-            try{
+            try{   
                 $this->redisClient->publish($redisChatChannel, json_encode([
                     'event' => 'message-sent',
                     'recipient' => $recipient->getStorename(),
-                    'message' => $updatedMessageListForReciver,
+                    'message' => $updatedMessageListForReciever,
                 ]));
             }
-            catch(\Exception $e){}
+            catch(\Exception $e){
+               
+                /**
+                 * Catch any exception but do nothing just so that the functionality
+                 * does not break if the redis channel is not available
+                 */
+
+            }
+           
             $response['isSuccessful'] = true;
-            $response['allMessages'] = $updatedMessageListForSender;
         }
         
         return $response;
@@ -319,4 +344,105 @@ class MessageManager {
     }
     
     
+    /**
+     * Retrieve conversation headers
+     *
+     * @param integer $memberId
+     * @param integer $offset
+     * @param integer $limit
+     * @param string $searchString
+     * @return mixed
+     */
+    public function getConversationHeaders($memberId, $offset = 0, $limit = PHP_INT_MAX, $searchString = NULL)
+    {
+        $memberId = (int) $memberId;
+        $conversationHeaders = $this->em->getRepository('EasyShop\Entities\EsMessages')
+                                    ->getConversationHeaders($memberId, $offset, $limit, $searchString);
+
+        $numberOfUnreadConversation = 0;
+        foreach($conversationHeaders as $key => $conversationHeader){
+            $conversationHeaders[$key]['partner_image'] = $this->userManager->getUserImage($conversationHeader['partner_member_id'], 'small');
+            if((int) $conversationHeader['unread_message_count'] > 0 ){
+                $numberOfUnreadConversation++;
+            }   
+        }
+              
+        return [
+            'conversationHeaders' => $conversationHeaders,
+            'totalUnreadMessages' => $numberOfUnreadConversation,
+        ];
+    }
+
+    /**
+     * Get messages between two users
+     *
+     * @param integer $memberId
+     * @param integer $partnerId
+     * @param integer $offset
+     * @param integer $limit
+     * @return mixed
+     */
+    public function getConversationMessages($memberId, $partnerId, $offset = 0, $limit = PHP_INT_MAX)
+    {
+        $memberId = (int) $memberId;
+        $partnerId = (int) $partnerId;
+        $messages =  $this->em->getRepository('EasyShop\Entities\EsMessages')
+                          ->getConversationMessages($memberId, $partnerId, $offset, $limit);
+        $memberImage = $this->userManager->getUserImage($memberId, 'small');
+        $partnerImage = $this->userManager->getUserImage($partnerId, 'small');
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                       ->find($memberId);
+        $partner = $this->em->getRepository('EasyShop\Entities\EsMember')
+                        ->find($partnerId);
+        $memberStorename = $member->getStorename();
+        $partnerStorename = $partner->getStorename();
+       
+        foreach($messages as $key => $message){
+            if( (int) $message['sender_member_id'] === $memberId){
+                $message['senderImage'] = $memberImage;
+                $message['senderStorename'] = $memberStorename;
+            }
+            else{
+                $message['senderImage'] = $partnerImage;
+                $message['senderStorename'] = $partnerStorename;
+            }
+            $message['isSender'] = (int) $message['is_sender'] === 1;
+            unset($message['is_sender']);
+            $messages[$key] = $message;
+        }
+
+        return $messages;
+    }
+
+    /**
+     * Message details by ID
+     *
+     * @param integer $messageId
+     * @return mixed
+     */
+    public function getMessageDetailsById($messageId)
+    {
+        $message = $this->em->find('EasyShop\Entities\EsMessages', $messageId);
+        $sender = $this->em->getRepository('EasyShop\Entities\EsMember')
+                       ->find($message->getFrom());
+        $recipient = $this->em->getRepository('EasyShop\Entities\EsMember')
+                          ->find($message->getTo());
+        $senderImage = $this->userManager->getUserImage($message->getFrom(), 'small');
+        $recipientImage = $this->userManager->getUserImage($message->getTo(), 'small');
+        $messageData = [
+            'id_msg' => $message->getIdMsg(),
+            'message' => $message->getMessage(),
+            'time_sent' => $message->getTimeSent()->format('Y-m-d H:i:s'),
+            'senderImage' => $senderImage,
+            'senderStorename' => $sender->getStorename(),
+            'senderMemberId' => $sender->getIdMember(),
+            'recipientImage' => $recipientImage,
+            'recipientStorename' => $recipient->getStorename(),
+            'recipientMemberId' => $recipient->getIdMember(),
+        ];
+        
+        return $messageData;
+    }
+
+
 }

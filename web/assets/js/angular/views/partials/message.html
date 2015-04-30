@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-12 msg-chsn-username">
+        <h3 id="chsn_username">{{storeName}}</h3>
+        <span>
+            <a data-ng-show="selectedMessage.length > 0" data-ng-click="deleteMessage()" class="btn btn-default-1"> Delete selected </a>
+            <a data-ng-show="userId != null" data-ng-click="deleteConversation(userId)" href="#/" class="btn btn-default-1">
+                Delete this conversation
+            </a>
+        </span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div id="msg_inbox_container" class="msg_container mrgn-bttm-45" >
+            <div id="msg_field">
+                <div infinite-scroll-container="'#msg_field'"
+                    infinite-scroll="getConversation(userId, messageCurrentPage)"
+                    infinite-scroll-distance="0"
+                    infinite-scroll-parent="true"
+                    infinite-scroll-disabled="messageBusy">
+                    <span data-ng-repeat="conv in messageData.conversation" data-ng-class="{'float_right': conv.isSender, 'float_left': !conv.isSender}" >
+                        <span class="chat-img-con">
+                            <span class="chat-img-con2">
+                                <img data-ng-src="{{conv.senderImage}}" alt="{{conv.senderStorename}}" />
+                            </span>
+                        </span>
+                        <div class="chat-container">
+                            <div></div>
+                            <input type="checkbox" checklist-model="selectedMessage" checklist-value="conv" class="d_all">
+                            <p>
+                                {{conv.message}}
+                                <br/>
+                                <span class="msg-date">{{conv.timeSent | date:'short'}}</span>
+                            </p>
+                        </div>
+                    </span>
+                    <div style='clear: both;'></div>
+                </div>
+            </div>
+            <div id="msg_textarea" style="display: block;">
+                <textarea class="ui-form-control" data-ng-init="message=''" data-ng-model="message" placeholder="Write a message" id="out_txtarea"></textarea>
+                <button data-ng-click="sendMessage(storeName, message); message=''" class="btn btn-default-3" id="send_btn">Reply</button><img src="/assets/images/horizontal_bar_loader.gif">
+            </div>
+        </div>
+    </div>
+</div>

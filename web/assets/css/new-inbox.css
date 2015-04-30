@@ -1,0 +1,136 @@
+.msg-sender-details{
+    position: relative;
+}
+
+.msg-sender-details span{
+    display: block;
+    clear:both;
+    float: left !important;
+}
+
+.thread-selected .fa-caret-right{
+    bottom: 0;
+    color: #e2e2e2;
+    font-size: 16px;
+    position: absolute;
+    right: 11px;
+    top: 33px;
+}
+
+.not-seen .unread-conversation{
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 4px;
+    margin-top: 0;
+    clear: none;
+}
+
+.thread-selected{
+    background: #f7f7f7;
+}
+
+#modal-launcher.btn{
+    max-width: 100%;
+}
+
+#msg_inbox_container{
+    margin-top: 20px;
+}
+
+.not-seen{
+    background: #f7f7f7;
+}
+
+.compose-btn-container{
+    margin-bottom: 20px;
+}
+
+.panel_container{
+    position: relative;
+}
+
+#chsn_username{
+    margin-top: 6px;
+}
+
+.float_left p
+{
+    position: relative;
+    min-width: 10px;
+    max-width: 90%;
+    min-height: 40px;
+    padding: 10px;
+    background: #e2e2e2;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.float_left p:after
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 9px 10px 9px 0;
+    border-color: transparent #e2e2e2;
+    display: block;
+    width: 0;
+    z-index: 1;
+    left: -10px;
+    top: 13px;
+}
+
+.float_left .chat-img-con{
+    float: left !important;
+    margin-left: 10px;
+}
+
+.float_left .msg-date{
+    float: left !important;
+    font-size: 10px;
+}
+
+.float_right p
+{
+    position: relative;
+    min-width: 10px;
+    max-width: 90%;
+    min-height: 40px;
+    padding: 10px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.float_right p:after
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 9px 0 9px 10px;
+    border-color: transparent #868686;
+    display: block;
+    width: 0;
+    z-index: 1;
+    right: -10px;
+    top: 13px;
+}
+
+.float_right .msg-date{
+    color:#ffffff;
+}
+
+.msg-date{
+    padding-top: 0px !important;
+}
+
+.new-message-textarea {
+    height: 136px;
+    width: 540px;
+    resize: none;
+}
+
+#conversation-header-container {
+    height: 427px;
+    overflow-y: scroll;
+}

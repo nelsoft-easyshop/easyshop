@@ -190,11 +190,13 @@ class Kernel
             $parser = new \CI_Parser();
             $redisClient = $container['redis_client'];
             $localConfiguration = $container['local_configuration'];
+            $userManager = $container['user_manager'];
             return new \EasyShop\Message\MessageManager($em, 
                                                         $configLoader,
                                                         $languageLoader,
                                                         $socialMediaManager,
-                                                        $emailService, 
+                                                        $emailService,
+                                                        $userManager,
                                                         $parser,
                                                         $redisClient,
                                                         $localConfiguration);

@@ -6,6 +6,10 @@ if (!defined('BASEPATH'))
 class MessageController extends MY_Controller
 {
 
+    const CONVERSATIONS_PER_PAGE = 10;
+
+    const MESSAGES_PER_CONVERSATION_PAGE = 20;
+
     /**
      * The message manager
      *
@@ -43,21 +47,21 @@ class MessageController extends MY_Controller
      */
     public function messages()
     {
+        $conversationHeaderData = $this->messageManager->getConversationHeaders($this->userId, 0, self::CONVERSATIONS_PER_PAGE);
+        $member = $this->em->find('EasyShop\Entities\EsMember', $this->userId);
         $data = [
-            'result' => $this->messageManager->getAllMessage($this->userId),
-            'userEntity' => $this->em->find("EasyShop\Entities\EsMember", $this->userId),
+            'conversationHeaders' => json_encode($conversationHeaderData['conversationHeaders'], true),
+            'userEntity' => $member,
             'chatServerHost' => $this->messageManager->getChatHost(true),
             'chatServerPort' => $this->messageManager->getChatPort()
         ];
-        $title = !isset($messages['unread_msgs']) || (int) $messages['unread_msgs'] === 0
-            ? 'Messages | Easyshop.ph'
-            : 'Messages (' . $messages['unread_msgs'] . ') | Easyshop.ph';
+
+        $title = $conversationHeaderData['totalUnreadMessages'] > 0
+                ? 'Messages (' . $conversationHeaderData['totalUnreadMessages'] . ') | Easyshop.ph'
+                : 'Messages | Easyshop.ph';
         $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
+            "memberId" => $this->userId,
             'title' => $title,
-            'metadescription' => '',
-            'relCanonical' => '',
-            'renderSearchbar' => false,
         ];
 
         $this->load->spark('decorator');
@@ -67,6 +71,48 @@ class MessageController extends MY_Controller
     }
 
     /**
+     * Get conversation messages between loggin user and posted partnerId
+     *
+     * @return JSON
+     */
+    public function getConversationMessages()
+    {
+        $partnerId = (int) $this->input->get('partnerId');
+        $page = $this->input->get('page') ? (int) $this->input->get('page') : 1;
+        $page--;
+        $offset = $page * self::MESSAGES_PER_CONVERSATION_PAGE;
+        $messages = $this->messageManager->getConversationMessages(
+                                             $this->userId, 
+                                             $partnerId, 
+                                             $offset, 
+                                             self::MESSAGES_PER_CONVERSATION_PAGE
+                                         );
+       
+        echo json_encode($messages);
+    }
+    
+    /**
+     * Retrieve more conversation headers
+     *
+     * @return JSON
+     */
+    public function getConversationHeaders()
+    {
+        $searchString = $this->input->get('searchString') ? $this->input->get('searchString') : NULL;
+        $page = $this->input->get('page') ? (int) $this->input->get('page') : 1;
+        $page--;
+        $offset = $page * self::CONVERSATIONS_PER_PAGE;
+        $conversationHeaderData = $this->messageManager->getConversationHeaders(
+                                                             $this->userId, 
+                                                             $offset, 
+                                                             self::CONVERSATIONS_PER_PAGE,
+                                                             $searchString
+                                                         );
+
+        echo json_encode($conversationHeaderData);        
+    }
+    
+    /**
      * Sends a message
      *
      * @return json
@@ -75,21 +121,20 @@ class MessageController extends MY_Controller
     {
         $storeName = trim($this->input->post("recipient"));
         $receiverEntity = $this->em->getRepository("EasyShop\Entities\EsMember")
-                                   ->getUserWithStoreName($storeName);
-        $receiverEntity = $receiverEntity ? $receiverEntity : null;        
+                                   ->getUserWithStoreName($storeName);        
         $senderEntity = $this->em->find("EasyShop\Entities\EsMember", $this->userId);
-        $msg = trim($this->input->post("msg"));
+        $message = trim($this->input->post("message"));
 
         $result = [
             'success' => false,
             'errorMessage' => '',
-            'updatedMessageList' => '',
+            'messageDetails' => [],
         ];
         
-        $messageSendingResult = $this->messageManager->sendMessage($senderEntity, $receiverEntity, $msg);
+        $messageSendingResult = $this->messageManager->sendMessage($senderEntity, $receiverEntity, $message);
         if($messageSendingResult['isSuccessful']){
             $result['success'] = true;
-            $result['updatedMessageList'] = $messageSendingResult['allMessages'];
+            $result['messageDetails'] = $this->messageManager->getMessageDetailsById($messageSendingResult['messageId']);
         }
         else{
             switch($messageSendingResult['error']){
@@ -97,7 +142,7 @@ class MessageController extends MY_Controller
                     $result['errorMessage'] = "The user " . html_escape($storeName) . ' does not exist';
                     break;
                 case EasyShop\Message\MessageManager::SELF_SENDING_ERROR:
-                    $result['errorMessage'] = "Sorry, it seems that you are trying to send a message to yourself";
+                    $result['errorMessage'] = "Oops, it seems that you are trying to send a message to yourself";
                     break;
                 case EasyShop\Message\MessageManager::MESSAGE_IS_EMPTY_ERROR:
                     $result['errorMessage'] = "Please write a message.";
@@ -116,50 +161,51 @@ class MessageController extends MY_Controller
      *
      * @return json
      */
-    public function delete()
+    public function deleteMessage()
     {
-        $messageId = trim($this->input->post("id_msg"));
-        $temporaryIdArray = [
-            $messageId
-        ];
-        if ( (bool) stripos($messageId, ',')) {
-            $temporaryIdArray = explode(',', $messageId);
+        $rawMessageIds = $this->input->post("message_ids") ? json_decode($this->input->post("message_ids")) : [];
+        $messageIds = [];
+        foreach($rawMessageIds as $rawMessageId){
+            $messageIds[] = (int) $rawMessageId;
         }
-        
-        $messageIdArray = [];
-        foreach($temporaryIdArray as $messageId){
-            $messageIdArray[] = (int) $messageId;
+        $numberOfDeletedMessages = 0;
+        if(empty($messageIds) === false){
+            $numberOfDeletedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
+                                            ->deleteMessages($messageIds, $this->userId);
         }
 
-        $isDeleteSuccesful = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                                      ->delete($messageIdArray, $this->userId);
-        $message = '';
-
-        if ( (bool) $isDeleteSuccesful) {
-            $message = $this->messageManager->getAllMessage($this->userId);
-        }
-
-        echo json_encode($message);
+        echo json_encode([
+            'numberOfDeletedMessages' => $numberOfDeletedMessages,
+        ]);
     }
 
     /**
-     * Update message status to seen
+     * Delete conversation between authenticated user and partner
+     *
+     * @return JSON
+     */
+    public function deleteConversation()
+    {
+        $partnerId = (int) $this->input->post('partnerId');
+        $numberOfDeletedMessages = $this->em->getRepository('EasyShop\Entities\EsMessages')
+                                 ->deleteConversation($this->userId, $partnerId);
+        echo json_encode([
+            'numberOfDeletedMessages' => $numberOfDeletedMessages,
+        ]); 
+    }
+    
+
+    /**
+     * Mark message as read
      *
      * @return json
      */
-    public function updateMessageToSeen()
+    public function markMessageAsRead()
     {
-        $messageId = $this->input->post('checked');
-        $messageIdArray = [
-            $messageId
-        ];
-        if ( (bool) stripos($messageId, '-')) {
-            $messageIdArray = explode('-', $messageId);
-        }
-
-        $result = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                           ->updateToSeen($this->userId, $messageIdArray);
-        if($result){
+        $partnerId = (int) $this->input->post('partnerId');
+        $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
+                                        ->updateToSeen($this->userId, $partnerId);
+        if($numberOfUpdatedMessages > 0){
             $member = $this->serviceContainer['entity_manager']
                            ->find('EasyShop\Entities\EsMember', $this->userId);
             $redisChatChannel = $this->messageManager->getRedisChannelName();
@@ -169,10 +215,17 @@ class MessageController extends MY_Controller
                     'reader' => $member->getStorename(),
                 ]));
             }
-            catch(\Exception $e){}
+            catch(\Exception $e){
+                /**
+                 * Catch any exception but do nothing just so that the functionality
+                 * does not break if the redis channel is not available
+                 */
+            }
         }
         
-        echo json_encode($result);
+        echo json_encode([
+            'numberOfUpdatedMessages' => $numberOfUpdatedMessages,
+        ]);
     }
 
     /**
