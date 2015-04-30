@@ -26,10 +26,11 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                 if($partner.unread_message_count > 0){
                     $partner.unread_message_count = 0;
                     MessageFactory.markAsRead($partner.partner_member_id)
-                        .then(function(count) {},
-                        function(errorMessage) {
-                            alert(errorMessage);
-                        });
+                                  .then(function(count) {},
+                                        function(errorMessage) {
+                                            alert(errorMessage);
+                                        }
+                                  );
                 }
             }
         };
@@ -119,10 +120,11 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                 var $indexToRemove = MessageFactory.data.conversationList.indexOf(MessageFactory.data.partner);
                 MessageFactory.data.conversationList.splice($indexToRemove, 1);
                 MessageFactory.deleteConversation($userId)
-                    .then(function(count) {},
-                    function(errorMessage) {
-                        alert(errorMessage);
-                    });
+                              .then(function(count) {},
+                                    function(errorMessage) {
+                                        alert(errorMessage);
+                                    }
+                              );
             }
         };
 
@@ -138,10 +140,11 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
 
             if (MessageFactory.data.conversation.length > 0) {
                 MessageFactory.deleteMessage($messageIds)
-                    .then(function(count) {},
-                    function(errorMessage) {
-                        alert(errorMessage);
-                    });
+                              .then(function(count) {},
+                                    function(errorMessage) {
+                                        alert(errorMessage);
+                                    }
+                              );
             }
             else {
                 $scope.deleteConversation($scope.userId);
