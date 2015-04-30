@@ -5,10 +5,14 @@
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.inbox-view.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
 
-<section class="bg-cl-fff" data-ng-app="messageApp">
+<section class="bg-cl-fff">
     <?php echo form_open('/');?>
     <?php echo form_close();?> 
-    <div data-ng-controller="MessageController" data-ng-init='setConversationList(<?=html_escape($conversationHeaders);?>)'></div>
+    <div data-ng-controller="MessageController">
+        <div on-init-directive callback-fn="setConversationList(<?=html_escape($conversationHeaders);?>)"></div>
+        <div on-init-directive callback-fn="setUnreadMessageCount(<?=html_escape($unreadConversationCount);?>)"></div>
+    </div>
+    
     <div class="container inbox-view-content">
         <div id="head_container" class="row">
             <div class="row">
@@ -42,3 +46,4 @@
 <script src="/assets/js/angular/controllers/messageController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <script src="/assets/js/angular/factories/messageFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <script src="/assets/js/angular/directives/csrfDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+<script src="/assets/js/angular/directives/onInitDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

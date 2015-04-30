@@ -51,6 +51,7 @@ class MessageController extends MY_Controller
         $member = $this->em->find('EasyShop\Entities\EsMember', $this->userId);
         $data = [
             'conversationHeaders' => json_encode($conversationHeaderData['conversationHeaders'], true),
+            'unreadConversationCount' => $conversationHeaderData['totalUnreadMessages'],
             'userEntity' => $member,
             'chatServerHost' => $this->messageManager->getChatHost(true),
             'chatServerPort' => $this->messageManager->getChatPort()
