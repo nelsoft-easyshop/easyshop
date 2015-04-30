@@ -6,7 +6,7 @@
 <?php endif; ?>
 
 <section class="bg-cl-fff" data-ng-app="messageApp">
-    <div data-ng-controller="MessageController" data-ng-init='MessageData.setConversationList(<?=html_escape($conversationHeaders);?>)'></div>
+    <div data-ng-controller="MessageController" data-ng-init='setConversationList(<?=html_escape($conversationHeaders);?>)'></div>
     <div class="container inbox-view-content">
         <div id="head_container" class="row">
             <div class="row">

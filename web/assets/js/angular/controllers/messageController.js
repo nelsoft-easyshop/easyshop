@@ -29,6 +29,10 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             }
         };
 
+        $scope.setConversationList = function($conversationList) {
+            MessageFactory.setConversationList($conversationList);
+        }
+
         $scope.getConversation = function($userId, $page) {
             if ($scope.busy) {
                 return;
