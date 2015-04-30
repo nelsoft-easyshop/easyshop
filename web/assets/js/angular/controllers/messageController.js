@@ -6,12 +6,12 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
 
         $scope.userId = $stateParams.userId;
         $scope.storeName = $stateParams.storeName;
-        $scope.currentPage = 1;
-        $scope.busy = false;
+        $scope.messageCurrentPage = 1;
+        $scope.messageBusy = false;
         $scope.selectedMessage = [];
         $scope.conversation = MessageFactory.conversation;
         $scope.conversationList = MessageFactory.conversationList;
-        $scope.listCurrentPage = 2;
+        $scope.conversationListCurrentPage = 2;
         $scope.listBusy = false;
 
         var updatePartnerHeader = function($partnerId) {
@@ -41,15 +41,15 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
         }
 
         $scope.getConversation = function($userId, $page) {
-            if ($scope.busy) {
+            if ($scope.messageBusy) {
                 return;
             };
-            $scope.busy = true;
+            $scope.messageBusy = true;
             MessageFactory.getMessages($userId, $page)
                 .then(function(messages) {
                     if (Object.keys(messages).length > 0) {
-                        $scope.busy = false;
-                        $scope.currentPage++;
+                        $scope.messageBusy = false;
+                        $scope.messageCurrentPage++;
                     }
                 }, function(errorMessage) {
                     alert(errorMessage);
@@ -159,7 +159,7 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                 .then(function(conversations) {
                     if (Object.keys(conversations).length > 0) {
                         $scope.listBusy = false;
-                        $scope.listCurrentPage++;
+                        $scope.conversationListCurrentPage++;
                     }
                 }, function(errorMessage) {
                     alert(errorMessage);

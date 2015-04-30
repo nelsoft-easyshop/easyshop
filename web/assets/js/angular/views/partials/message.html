@@ -14,10 +14,10 @@
         <div id="msg_inbox_container" class="msg_container mrgn-bttm-45" >
             <div id="msg_field">
                 <div infinite-scroll-container="'#msg_field'"
-                    infinite-scroll="getConversation(userId, currentPage)"
+                    infinite-scroll="getConversation(userId, messageCurrentPage)"
                     infinite-scroll-distance="0"
                     infinite-scroll-parent="true"
-                    infinite-scroll-disabled="busy">
+                    infinite-scroll-disabled="messageBusy">
                     <span data-ng-repeat="conv in conversation" data-ng-class="{'float_right': conv.isSender, 'float_left': !conv.isSender}" >
                         <span class="chat-img-con">
                             <span class="chat-img-con2">
