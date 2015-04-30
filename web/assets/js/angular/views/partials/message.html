@@ -18,7 +18,7 @@
                     infinite-scroll-distance="0"
                     infinite-scroll-parent="true"
                     infinite-scroll-disabled="messageBusy">
-                    <span data-ng-repeat="conv in conversation" data-ng-class="{'float_right': conv.isSender, 'float_left': !conv.isSender}" >
+                    <span data-ng-repeat="conv in messageData.conversation" data-ng-class="{'float_right': conv.isSender, 'float_left': !conv.isSender}" >
                         <span class="chat-img-con">
                             <span class="chat-img-con2">
                                 <img data-ng-src="{{conv.senderImage}}" alt="{{conv.senderStorename}}" />

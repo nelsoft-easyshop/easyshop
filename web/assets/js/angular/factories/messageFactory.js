@@ -1,15 +1,17 @@
 app.factory('MessageFactory', function($http, $q) {
 
     var MessageFactory = {
-        partner: null,
-        conversation: [],
-        conversationList: [],
+        data: {
+            partner: null,
+            conversation: [],
+            conversationList: [],
+        }
     };
     var $csrftoken = $("meta[name='csrf-token']").attr('content');
 
     MessageFactory.getPartner = function($parterId) { 
         var $partner = null;
-        angular.forEach(MessageFactory.conversationList, function(value, key) {
+        angular.forEach(MessageFactory.data.conversationList, function(value, key) {
             if (value.partner_member_id == $parterId) {
                 $partner = value;
             }
@@ -19,15 +21,15 @@ app.factory('MessageFactory', function($http, $q) {
     }
 
     MessageFactory.setPartner = function($partnerObject) {
-        MessageFactory.partner = $partnerObject;
+        MessageFactory.data.partner = $partnerObject;
     }
 
     MessageFactory.setConversationList = function($conversationList) {
-        MessageFactory.conversationList = $conversationList;
+        MessageFactory.data.conversationList = $conversationList;
     }
 
     MessageFactory.setConversation = function($conversationObject) {
-        MessageFactory.conversation = $conversationObject;
+        MessageFactory.data.conversation = $conversationObject;
     }
 
     MessageFactory.getMessages = function($userId, $page) {
@@ -40,7 +42,7 @@ app.factory('MessageFactory', function($http, $q) {
                     angular.forEach(data, function(value, key) {
                         this.push(constructMessage(value)); 
                     }, $conversation);
-                    MessageFactory.setConversation(MessageFactory.conversation.concat($conversation));
+                    MessageFactory.setConversation(MessageFactory.data.conversation.concat($conversation));
                 }
                 $deferred.resolve($conversation);
             })
@@ -163,7 +165,7 @@ app.factory('MessageFactory', function($http, $q) {
                         }
                     }, $conversationList);
                 }
-                MessageFactory.setConversationList(MessageFactory.conversationList.concat($conversationList));
+                MessageFactory.setConversationList(MessageFactory.data.conversationList.concat($conversationList));
                 $deferred.resolve(data.conversationHeaders);
             })
             .error(function() {

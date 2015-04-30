@@ -9,10 +9,10 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
         $scope.messageCurrentPage = 1;
         $scope.messageBusy = false;
         $scope.selectedMessage = [];
-        $scope.conversation = MessageFactory.conversation;
-        $scope.conversationList = MessageFactory.conversationList;
         $scope.conversationListCurrentPage = 2;
         $scope.listBusy = false;
+
+        $scope.messageData = MessageFactory.data;
 
         var updatePartnerHeader = function($partnerId) {
             var $partner = MessageFactory.getPartner($partnerId);
@@ -27,17 +27,10 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                         });
                 }
             }
-            $scope.conversationList = MessageFactory.conversationList;
         };
 
         $scope.setConversationList = function($conversationList) {
             MessageFactory.setConversationList($conversationList);
-            $scope.conversationList = MessageFactory.conversationList;
-        }
-
-        $scope.setConversation = function($conversation) {
-            MessageFactory.setConversation($conversation);
-            $scope.conversation = MessageFactory.conversation;
         }
 
         $scope.getConversation = function($userId, $page) {
@@ -56,7 +49,6 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                 });
 
             updatePartnerHeader($scope.userId);
-            $scope.conversation = MessageFactory.conversation;
         };
 
         $scope.sendMessage = function($storeName, $messageInput) { 
@@ -66,15 +58,15 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                         var $partnerId = messageData[0].recipientId;
                         var $partner = MessageFactory.getPartner($partnerId);
                         if ($partner) {
-                            if (MessageFactory.partner == null || $partnerId != MessageFactory.partner.partner_member_id) {
+                            if (MessageFactory.data.partner == null || $partnerId != MessageFactory.data.partner.partner_member_id) {
                                 MessageFactory.setPartner($partner);
                                 $state.go("readMessage", {userId: $partnerId, storeName: $storeName});
                             }
                             else {
-                                $scope.setConversation(messageData.concat(MessageFactory.conversation));
+                                MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
                             }
-                            MessageFactory.partner.last_message = $messageInput;
-                            MessageFactory.partner.last_date = messageData[0].timeSent;
+                            MessageFactory.data.partner.last_message = $messageInput;
+                            MessageFactory.data.partner.last_date = messageData[0].timeSent;
                         }
                         else{
                             var $newConversation = [{
@@ -89,8 +81,8 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                                 'to_id': $partnerId,
                                 'unread_message_count': 0,
                             }];
-                            $scope.setConversationList($newConversation.concat(MessageFactory.conversationList));
-                            $scope.setConversation(messageData.concat(MessageFactory.conversation));
+                            MessageFactory.setConversationList($newConversation.concat(MessageFactory.data.conversationList));
+                            MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
                             $state.go("readMessage", {userId: $partnerId, storeName: $storeName});
                         }
                     }, function(errorMessage) {
@@ -100,15 +92,14 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
         };
 
         $scope.deleteConversation = function($userId) {
-            if ($userId && MessageFactory.partner) {
-                var $indexToRemove = MessageFactory.conversationList.indexOf(MessageFactory.partner);
-                MessageFactory.conversationList.splice($indexToRemove, 1);
+            if ($userId && MessageFactory.data.partner) {
+                var $indexToRemove = MessageFactory.data.conversationList.indexOf(MessageFactory.data.partner);
+                MessageFactory.data.conversationList.splice($indexToRemove, 1);
                 MessageFactory.deleteConversation($userId)
                     .then(function(count) {},
                     function(errorMessage) {
                         alert(errorMessage);
                     });
-                $scope.conversationList = MessageFactory.conversationList;
             }
         };
 
@@ -117,9 +108,9 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             angular.forEach($scope.selectedMessage, function(selectedValue, key) {
                 this.splice(this.indexOf(selectedValue), 1);
                 $messageIds.push(selectedValue.messageId);
-            }, MessageFactory.conversation);
+            }, MessageFactory.data.conversation);
 
-            if (MessageFactory.conversation.length > 0) {
+            if (MessageFactory.data.conversation.length > 0) {
                 MessageFactory.deleteMessage($messageIds)
                     .then(function(count) {},
                     function(errorMessage) {
@@ -131,7 +122,6 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                 $state.go('index');
             }
             $scope.selectedMessage = [];
-            $scope.conversation = MessageFactory.conversation;
         };
 
         $scope.composeMessage = function() {
@@ -164,7 +154,6 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                 }, function(errorMessage) {
                     alert(errorMessage);
                 });
-            $scope.conversationList = MessageFactory.conversationList;
         }
     }
 ]); 
