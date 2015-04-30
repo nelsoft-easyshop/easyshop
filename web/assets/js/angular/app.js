@@ -19,7 +19,7 @@ var app = angular
                 }
             })
             .state('readMessage',{
-                url: '/read/:userId/:storeName',
+                url: '/read/:userId',
                 views: {
                     'conversationDetail': {
                         templateUrl: $baseUrl+ '/views/partials/message.html',
