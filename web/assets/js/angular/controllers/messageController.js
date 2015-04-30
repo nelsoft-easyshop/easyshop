@@ -1,17 +1,15 @@
-app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalService', 'MessageFactory',
-    function($scope, $stateParams, $state, ModalService, MessageFactory) {
+app.controller('MessageController', ['$scope', '$rootScope', '$stateParams', '$state', 'ModalService', 'MessageFactory',
+    function($scope, $rootScope, $stateParams, $state, ModalService, MessageFactory) {
 
         MessageFactory.setConversation([]);
         MessageFactory.setPartner(null);
 
         $scope.userId = $stateParams.userId;
-        $scope.storeName = $stateParams.storeName;
         $scope.messageCurrentPage = 1;
         $scope.messageBusy = false;
         $scope.selectedMessage = [];
         $scope.conversationListCurrentPage = 2;
         $scope.listBusy = false;
-
         $scope.messageData = MessageFactory.data;
 
         /**
@@ -25,6 +23,7 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                 MessageFactory.setPartner($partner);
                 if($partner.unread_message_count > 0){
                     $partner.unread_message_count = 0;
+                    $scope.setUnreadMessageCount(MessageFactory.data.unreadConversationCount - 1);
                     MessageFactory.markAsRead($partner.partner_member_id)
                                   .then(function(count) {},
                                         function(errorMessage) {
@@ -33,6 +32,14 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                                   );
                 }
             }
+        };
+
+        $scope.setUnreadMessageCount = function($integer) {
+            var $pageTitle = $integer <= 0 
+                             ? 'Messages | Easyshop.ph'
+                             : 'Messages (' + $integer + ') | Easyshop.ph';
+            $rootScope.pageTitle = $pageTitle;
+            MessageFactory.setUnreadConversationCount($integer);
         };
 
         /**
