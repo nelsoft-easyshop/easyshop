@@ -574,8 +574,7 @@ section {
     font-size: 12px;
     margin:0px;
     margin-top:4px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    word-wrap:break-word;
 }
 
 .p-date-feedback{
