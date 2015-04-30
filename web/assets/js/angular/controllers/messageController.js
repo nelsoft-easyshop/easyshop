@@ -170,9 +170,10 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                 templateUrl: '/assets/js/angular/views/modals/composeMessageModal.html'
             };
 
-            ModalService.showModal(modalDefaults, modalOptions).then(function ($parameters) {
-                $scope.sendMessage($parameters.param1, $parameters.param2);
-            });
+            ModalService.showModal(modalDefaults, modalOptions)
+                        .then(function ($parameters) {
+                            $scope.sendMessage($parameters.param1, $parameters.param2);
+                        });
         }
 
         /**
