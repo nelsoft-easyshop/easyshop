@@ -9,6 +9,7 @@ $config = [
     ],
     'bypassFirstSegment' => [
         'easywidget',
+        'webservice',
     ],
 ];
         
