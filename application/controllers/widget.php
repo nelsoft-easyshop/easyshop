@@ -49,7 +49,6 @@ class Widget extends MY_Controller
      */
     public function widget1()
     {
-        header('X-Frame-Options: GOFORIT');
         $this->generateWidget(self::WIDGET_FIRST_TYPE);
     }
 
@@ -59,7 +58,6 @@ class Widget extends MY_Controller
      */
     public function widget2()
     {
-        header('X-Frame-Options: GOFORIT');
         $this->generateWidget(self::WIDGET_SECOND_TYPE);
     }
 

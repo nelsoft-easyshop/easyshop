@@ -1036,6 +1036,7 @@ a{
     padding-top: 8px;
     padding-bottom: 8px;
     margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 .btn-setting-save-btn:hover{
@@ -1451,7 +1452,7 @@ a{
     border: solid #ff893a 1px;
     cursor: url(/assets/images/grabbing.png), move;
     background: #fff;
-    width: 100%;
+    width: 90%;
     height: 30px;
     padding-top: 2px;
     padding-left: 10px;
@@ -1461,7 +1462,7 @@ a{
 #delete-category-tree .jstree-anchor{
     border: solid #ff893a 1px;
     background: #fff;
-    width: 100%;
+    width: 90%;
     height: 30px;
     padding-top: 2px;
     padding-left: 10px;
@@ -1986,6 +1987,7 @@ i.jstree-icon.jstree-checkbox{
 .feedback-content-dashboard{
     padding: 0 0px;
     text-align: left;
+    word-break: break-all;
 }
 
 #wrapper {
@@ -2583,6 +2585,7 @@ label.css-label {
     border-bottom: 1px solid #cecece;
     padding: 0 20px;
     text-align: center;
+    word-wrap:break-word;
 }
 
 .feedback-content h1,
@@ -2682,6 +2685,10 @@ label.css-label {
 
 .shipping-border {
     border-bottom: 1px solid #cecece;
+}
+
+.feedback-whom {
+    word-wrap: break-word;
 }
 
 /***** payment account css ******/
@@ -3540,10 +3547,6 @@ label.css-label {
         padding-left: 2px;
     }
 
-    .log-feed-rate{
-        display: block;
-    }
-
     .log-sort-filter{
         display: none;
     }
@@ -3603,6 +3606,10 @@ label.css-label {
     .col-date{
         padding: 0px;
         font-size: 11px;
+    }
+
+    .log-feed-rate{
+        display: block;
     }
 }
 
@@ -3963,9 +3970,8 @@ label.css-label {
     }
     
     .btn-setting-edit-btn{
-        display: block;
+        display: inline-block;
         margin-top: 10px;
-        width: 100%;
     }
     
     .div-account-setting, .div-store-setup{
@@ -4079,7 +4085,9 @@ label.css-label {
     }
     
     .feedback-cat-title{
-        margin-top: -21px;
+        margin-top: 4px;
+        font-size: 12px;
+        padding: 5px 5px;
     }
     
     .orange-tip,
