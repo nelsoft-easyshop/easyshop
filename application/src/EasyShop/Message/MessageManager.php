@@ -359,17 +359,16 @@ class MessageManager {
         $conversationHeaders = $this->em->getRepository('EasyShop\Entities\EsMessages')
                                     ->getConversationHeaders($memberId, $offset, $limit, $searchString);
 
-        $numberOfUnreadConversation = 0;
+        $numberOfUnreadConversations = $this->em->getRepository('EasyShop\Entities\EsMessages')
+                                            ->getUnreadMessageCount($memberId);
+
         foreach($conversationHeaders as $key => $conversationHeader){
             $conversationHeaders[$key]['partner_image'] = $this->userManager->getUserImage($conversationHeader['partner_member_id'], 'small');
-            if((int) $conversationHeader['unread_message_count'] > 0 ){
-                $numberOfUnreadConversation++;
-            }   
         }
               
         return [
             'conversationHeaders' => $conversationHeaders,
-            'totalUnreadMessages' => $numberOfUnreadConversation,
+            'totalUnreadMessages' => $numberOfUnreadConversations,
         ];
     }
 
