@@ -39,7 +39,7 @@
             </div>
             <div id="msg_textarea" style="display: block;">
                 <textarea class="ui-form-control" data-ng-init="message=''" data-ng-model="message" placeholder="Write a message" id="out_txtarea"></textarea>
-                <button data-ng-click="sendMessage(storeName, message); message=''" class="btn btn-default-3" id="send_btn">Reply</button><img src="/assets/images/horizontal_bar_loader.gif">
+                <button data-ng-click="sendMessage(messageData.currentSelectedPartner.partner_storename, message); message=''" class="btn btn-default-3" id="send_btn">Reply</button><img src="/assets/images/horizontal_bar_loader.gif">
             </div>
         </div>
     </div>
