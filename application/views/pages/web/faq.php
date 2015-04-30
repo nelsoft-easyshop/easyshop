@@ -138,7 +138,8 @@
             <div class="faq-mobile section-title">Buying items on easyshop.ph</div>
             <div class="tab-container" id="buying-items">
                 <p class="section-title-desc">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis.
+                 <!--   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis.
+                 -->
                 </p>
 
                 <div class="accordion-item-container">
@@ -246,7 +247,7 @@
             <div class="faq-mobile section-title">Selling items on easyshop.ph</div>
             <div class="tab-container" id="selling-items">
                 <p class="section-title-desc">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis.
+                  <!--  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis. -->
                 </p>
 
                 <div class="accordion-item-container">
@@ -325,7 +326,7 @@
             <div class="faq-mobile section-title">Fraud inquiries</div>
             <div class="tab-container" id="fraud-inquiries">
                 <p class="section-title-desc">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis.
+                   <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto. Mundi agatur arbitraretur, accusator scribentur consuetudinum si ruant disseretur dictas amori ante, sis. Asperiores meque pertineant posteri scribere sedatio, tueri sentire progrediens. Cohaerescent detractio ocurreret homo operam nescio fere sollicitare didicisse ero, oritur aliter involuta optimi inmortalibus voluptatem bella eligendi essent accedis, cognitio verterunt notae terentianus physico, protervi amotio permanentes frui studiose stoicis inflammat philosophis concursionibus sequamur, terroribus videmus lectorem amentur amicorum claudicare principio eaque consilio. Puto rationibus, eligendi, invidiae parabilis. -->
                 </p>
 
                 <div class="accordion-item-container">

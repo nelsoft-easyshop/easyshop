@@ -1,4 +1,41 @@
 /*! Style */
+@font-face {
+  font-family: "untitled-font-6";
+  src:url("easy-icons/fonts/untitled-font-6.eot");
+  src:url("easy-icons/fonts/untitled-font-6.eot?#iefix") format("embedded-opentype"),
+    url("easy-icons/fonts/untitled-font-6.woff") format("woff"),
+    url("easy-icons/fonts/untitled-font-6.ttf") format("truetype"),
+    url("easy-icons/fonts/untitled-font-6.svg#untitled-font-6") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+[data-icon]:before {
+  font-family: "untitled-font-6" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  font-family: "untitled-font-6" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
  .clearfix{*zoom:1}.clearfix:before,.clearfix:after{
  	display:table;
@@ -1601,6 +1638,7 @@ section.slideshow { margin-bottom: 30px;}
 }
 
 .vote-btn {
+    margin-top: 50px;
     text-align: center;
 }
 
@@ -1611,22 +1649,32 @@ section.slideshow { margin-bottom: 30px;}
 }
 
 .dropdown-school-list select {
-    width: 80%;
+    width: 100%;
 }
 
-.dropdown-school-list,
-.select-school {
+.dropdown-school-list {
     margin: 0 auto;
     padding: 0 15px;
-    width: 75%;
+    width: 89%;
 }
 
 .select-school {
+    display: none;
     margin: 35px auto;
+    width: 100%;
 }
-.select-school > span {
-    display: block;
+
+.school-participant {
+    border-bottom: 1px solid #d9d9d9;
     margin-bottom: 8px;
+    padding-bottom: 12px;
+    position: relative;
+    text-align: left;
+    width: 100%;
+}
+
+.school-participant:last-child {
+    border-bottom: 0;
 }
 
 .select-school input[type="radio"] {
@@ -1635,9 +1683,55 @@ section.slideshow { margin-bottom: 30px;}
 
 .select-school label {
     display: inline-block;
+    font-size: 15px;
     margin: 0;
+    padding-left: 5px;
     vertical-align: middle;
     width: 90%;
+    -webkit-text-stroke: 0.01px;
+}
+
+.school-participant label:after {
+    content:"u";
+    font-family: "untitled-font-6";
+    font-size: 8px;
+    position: absolute;
+    top:5px;
+    right: 0;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.school-participant .view-school-details:after {
+    content:"v";
+    font-size: 8px;
+    font-family: "untitled-font-6";
+}
+
+.school-participant label:hover:after {
+    color: #ff893b;
+}
+
+#student-container .row-fluid .span12 {
+    margin-left: 0;
+}
+
+.school-description {
+    background-color: #fff;
+    border-radius: 4px;
+    display: none;
+    font-size: 12px;
+    margin-top: 8px;
+    max-width: 850px;
+    padding: 15px;
+    text-align: justify !important;
+    width: auto;
+}
+
+.school-description img {
+    width: 100%;
 }
 
 .mechanics-section,
@@ -1680,7 +1774,6 @@ section.slideshow { margin-bottom: 30px;}
 }
 
 .school-percentage {
-    display: inline-block;
     text-align: center;
     vertical-align: bottom;
     width: 5%;
@@ -1705,6 +1798,11 @@ section.slideshow { margin-bottom: 30px;}
     margin-bottom: 0;
 }
 
+#register .btn-primary {
+    color: #fff;
+    width: 130px;
+}
+
 @media (min-width: 320px) {
     .school-name {
         width: 85%;
@@ -1722,16 +1820,6 @@ section.slideshow { margin-bottom: 30px;}
         width: 40%;
     }
 
-    .select-school {
-        -webkit-column-count: 2; /* Chrome, Safari, Opera */
-        -moz-column-count: 2; /* Firefox */
-        column-count: 2;
-
-        -webkit-column-gap: 40px; /* Chrome, Safari, Opera */
-        -moz-column-gap: 40px; /* Firefox */
-        column-gap: 40px;
-    }
-
     .school-name {
         width: 89%;
     }
@@ -1744,8 +1832,36 @@ section.slideshow { margin-bottom: 30px;}
 }
 
 @media (min-width: 767px) {
+    .dropdown-school-list {
+        width: 75%;
+    }
+
+    .dropdown-school-list select {
+        width: 80%;
+    }
+
+    .select-school {
+        width: 60%;
+    }
+
+    .school-description {
+        width: 95.5%;
+    }
+
     .school-name {
         width: 92%;
+    }
+
+    .school-participant label:after {
+        content:"view details";
+        font-size: 12px;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    }
+
+    .school-participant .view-school-details:after {
+        content:"hide details";
+        font-size: 12px;
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     }
 }
 
@@ -1760,11 +1876,10 @@ section.slideshow { margin-bottom: 30px;}
         width: 92%;
     }
 }
-
 
 @media (min-width: 991px) {
     .school-name {
-        width: 93%;
+        width: 85%;
     }
 }
 

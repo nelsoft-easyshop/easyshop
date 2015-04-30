@@ -174,7 +174,7 @@
     height: auto;
     margin-left: 5px;
     margin-top: 1.3%;
-    min-width: 270px;
+    min-width: 210px;
     width: 32%;
 }
 
@@ -445,6 +445,7 @@
 
     .promo-gallery-row {
         text-align: center;
+        width: 650px;
     }
 
     .promo-gallery-data {
@@ -453,7 +454,7 @@
         height: auto;
         margin-top: 1.3%;
         min-width: auto;
-        width: 30%;
+        width: 180px !important;
     }
 
     .promo-gallery-data p,.promo-gallery-data span {

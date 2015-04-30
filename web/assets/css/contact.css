@@ -545,6 +545,12 @@ section {
     border-left: solid #e2e2e2 1px;
     margin-left: -20px;
     font-style: italic;
+    word-break: break-all;
+
+-webkit-hyphens: auto;
+   -moz-hyphens: auto;
+    -ms-hyphens: auto;
+        hyphens: auto;
 }
 
 .div-user-image{
@@ -568,6 +574,7 @@ section {
     font-size: 12px;
     margin:0px;
     margin-top:4px;
+    word-wrap:break-word;
 }
 
 .p-date-feedback{

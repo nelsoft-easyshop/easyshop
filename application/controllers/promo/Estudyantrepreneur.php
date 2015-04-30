@@ -43,18 +43,6 @@ class Estudyantrepreneur extends MY_Controller
      */
     public function EstudyantrepreneurPromoStandings()
     {
-        $this->config->load('ipwhitelist');
-        $ipwhitelist = $this->config->item('ip');
-        $clientIp = $this->serviceContainer['http_request']
-                         ->getClientIp();
-        /**
-         * Grant access to page only for office ips
-         */
-        if(in_array($clientIp, $ipwhitelist) === false){
-            show_404(); 
-            exit();
-        }
-    
         $data = $this->promoManager
                      ->callSubclassMethod(
                          \EasyShop\Entities\EsPromoType::ESTUDYANTREPRENEUR,

@@ -204,7 +204,9 @@ module.exports = function (grunt) {
                          'web/assets/css/static.css'],
                     'web/assets/css/min-easyshop.inbox-view.css':
                         ['web/assets/css/new-inbox.css',
-                         'web/assets/css/vendor/bower_components/bootstrap.css']
+                         'web/assets/css/vendor/bower_components/bootstrap.css'],
+                    'web/assets/css/min-easyshop.promo-css.css':
+                        ['web/assets/css/promo-css.css']
                 }
             },
         },
@@ -436,6 +438,7 @@ module.exports = function (grunt) {
                         ['web/assets/js/src/vendor/bower_components/jquery.js',
                         'web/assets/js/src/promo/estudyantrepreneur.js',
                         'web/assets/js/src/plugins.js',
+                        'web/assets/js/src/vendor/modernizr-2.6.2.min.js',
                         'web/assets/js/src/vendor/promo/christmas-promo.js'],
                      
                     'web/assets/js/min/easyshop.bug_report.js':

@@ -87,6 +87,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php if(\EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                     <div class="col-md-12 easy-point-mobile">
                         <div class="ep-border-top">
                             <p>
@@ -99,6 +100,7 @@
                             </a>
                         </div>
                     </div>
+                    <?php endif; ?>
                     <div class="col-md-5">
                         <div class="div-feedback-stat">
                             <p class="p-stat-title">

@@ -7,6 +7,7 @@ use \Curl\Curl as Curl;
 use EasyShop\Entities\EsPaymentMethod as EsPaymentMethod;
 use EasyShop\Entities\EsOrderStatus as EsOrderStatus;
 use EasyShop\Entities\EsAddress as EsAddress;
+use EasyShop\Entities\EsLocationLookup as EsLocationLookup;
 use EasyShop\PaymentService\PaymentService as PaymentService;
 use EasyShop\PaymentGateways\PointGateway as PointGateway;
 
@@ -230,6 +231,12 @@ class Payment extends MY_Controller
             foreach ($itemLocations as $location) {
                 $bodyData['locationAvailable'][] = $location->getShipping()->getLocation()->getIdLocation();
             }
+
+            if (count($bodyData['locationAvailable']) === 1 
+                && reset($bodyData['locationAvailable']) === EsLocationLookup::PHILIPPINES_LOCATION_ID) {
+                $bodyData['locationAvailable'] = $bodyData['selectLocation']['islandkey'];
+            }
+
             $markup = $this->load->view('partials/payment-item-location', $bodyData, true);
             $isSuccess = true;
         }
@@ -267,9 +274,6 @@ class Payment extends MY_Controller
                     $cart['choosen_items'] = $checkoutService->includeCartItemValidation($member);
                     $postPoints = $this->input->post('used_points') ? (float) $this->input->post('used_points') : 0;
                     $userMaxPoints = $pointTracker->getUserPoint($memberId);
-                    $paymentService->initializeGateways(["PesoPayGateway" => ["method" => "PesoPay"]]);
-                    $pesopayGateway = $paymentService->getPrimaryGateway();
-                    $pesopayGateway->checkReservedPoints($memberId);
                     $headerData = [
                         "memberId" => $memberId,
                         'title' => 'Payment Review | Easyshop.ph',

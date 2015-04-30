@@ -174,7 +174,17 @@
     });
     
     var $window = $(window);
+    var isInitialLoad = true;
+    var previousWidth = $window.width();
     $window.on('load resize', function() {
+
+        var currentWidth = $window.width();
+        if(currentWidth === previousWidth && !isInitialLoad ){
+            return false;
+        }
+
+        isInitialLoad = false;
+        previousWidth = currentWidth;
 
         setTimeout(function(){
             $(".login-loading-content").hide();
@@ -220,7 +230,7 @@
     var urlsToRedirectToReferrer = [
         'sell/step1',
         'cart',
-        'estudyantrepreneur',
+        'Estudyantrepreneur',
     ];
     
     function redirectToTarget()

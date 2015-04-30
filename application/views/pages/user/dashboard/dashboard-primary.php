@@ -18,7 +18,7 @@
                         </a>
 
                         <a>
-                            <li id="my-store-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-store">My Store <i class="icon-control-down toggle-down pull-right"></i></li>
+                            <li id="my-store-menu-trigger" class=" dashboard-menu-trigger" data-section="my-store">My Store <i class="icon-control-down toggle-down pull-right"></i></li>
                         </a>
                         <div id="my-store-menu" class="dashboard-menu">
                             <ul class="sidebar-submenu">
@@ -29,7 +29,7 @@
                         </div>
     
                         <a href="#transactions">
-                            <li id="transaction-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-transaction">Transactions<i class="m icon-control-down toggle-down pull-right"></i></li>
+                            <li id="transaction-menu-trigger" class=" dashboard-menu-trigger" data-section="my-transaction">Transactions<i class="m icon-control-down toggle-down pull-right"></i></li>
                         </a>
                         <div id="transaction-menu" class="dashboard-menu">
                             <ul class="sidebar-submenu">
@@ -53,6 +53,7 @@
                     
                     </ul>
                     
+                    <?php if(\EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                     <div class="easy-point-container">
                         <div class="easy-point-title">
                             easy points
@@ -76,8 +77,10 @@
                             <img src="<?php echo getAssetsDomain(); ?>assets/images/es-loader-3-md.gif">
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
-
+                
+                                 
                 <div class="mobile-dashboard-menu">        
                     <div class="row-fluid row-menu-mobile-res">
                         <a class="dash-mobile-trigger my-transactions-mobile">
