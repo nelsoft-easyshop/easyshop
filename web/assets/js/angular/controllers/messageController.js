@@ -77,6 +77,9 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                     .then(function(messageData) {
                         var $recipientId = messageData[0].recipientId;
                         var $recipient = MessageFactory.getPartner($recipientId);
+                        /**
+                         * If recipient already exists in the conversation header list
+                         */
                         if ($recipient) {
                             if (MessageFactory.data.currentSelectedPartner == null || $recipientId != MessageFactory.data.currentSelectedPartner.partner_member_id) {
                                 MessageFactory.setPartner($recipient);
