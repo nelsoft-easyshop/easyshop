@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{modalOptions.headerText}}</h3>
+</div>
+<div class="modal-body">
+    <div>
+        <label>To : </label>
+        <input type="text" size="60" placeholder="Store name" 
+            data-ng-init="composeStoreName=''" 
+            data-ng-model="composeStoreName" 
+            class="ui-form-control">
+    </div>
+    <div class="mrgn-top-20">
+        <label>Message : </label><br>
+        <textarea class="ui-form-control new-message-textarea" 
+            data-ng-init="composeMessage=''" 
+            data-ng-model="composeMessage" 
+            placeholder="Your message here.."></textarea>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-warning" 
+        data-ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}</button>
+    <button class="btn btn-primary" 
+        data-ng-click="modalOptions.callback(composeStoreName, composeMessage);">{{modalOptions.actionButtonText}}</button>
+</div>
