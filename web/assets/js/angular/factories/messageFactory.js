@@ -2,7 +2,7 @@ app.factory('MessageFactory', function($http, $q) {
 
     var MessageFactory = {
         data: {
-            partner: null,
+            currentSelectedPartner: null,
             conversation: [],
             conversationList: [],
         }
@@ -21,7 +21,7 @@ app.factory('MessageFactory', function($http, $q) {
     }
 
     MessageFactory.setPartner = function($partnerObject) {
-        MessageFactory.data.partner = $partnerObject;
+        MessageFactory.data.currentSelectedPartner = $partnerObject;
     }
 
     MessageFactory.setConversationList = function($conversationList) {

@@ -78,15 +78,15 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                         var $partnerId = messageData[0].recipientId;
                         var $partner = MessageFactory.getPartner($partnerId);
                         if ($partner) {
-                            if (MessageFactory.data.partner == null || $partnerId != MessageFactory.data.partner.partner_member_id) {
+                            if (MessageFactory.data.currentSelectedPartner == null || $partnerId != MessageFactory.data.currentSelectedPartner.partner_member_id) {
                                 MessageFactory.setPartner($partner);
                                 $state.go("readMessage", {userId: $partnerId, storeName: $storeName});
                             }
                             else {
                                 MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
                             }
-                            MessageFactory.data.partner.last_message = $messageInput;
-                            MessageFactory.data.partner.last_date = messageData[0].timeSent;
+                            MessageFactory.data.currentSelectedPartner.last_message = $messageInput;
+                            MessageFactory.data.currentSelectedPartner.last_date = messageData[0].timeSent;
                         }
                         else{
                             var $newConversation = [{
@@ -116,8 +116,8 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
          * @param  {integer} $userId
          */
         $scope.deleteConversation = function($userId) {
-            if ($userId && MessageFactory.data.partner) {
-                var $indexToRemove = MessageFactory.data.conversationList.indexOf(MessageFactory.data.partner);
+            if ($userId && MessageFactory.data.currentSelectedPartner) {
+                var $indexToRemove = MessageFactory.data.conversationList.indexOf(MessageFactory.data.currentSelectedPartner);
                 MessageFactory.data.conversationList.splice($indexToRemove, 1);
                 MessageFactory.deleteConversation($userId)
                               .then(function(count) {},
