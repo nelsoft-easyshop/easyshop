@@ -7,7 +7,7 @@ app.factory('MessageFactory', function($http, $q) {
             conversationList: [],
         }
     };
-    var $csrftoken = $("meta[name='csrf-token']").attr('content');
+    var $csrftoken = $http.defaults.headers.common['X-CSRF-TOKEN'];
 
     /**
      * check if partner is already in your conversation
