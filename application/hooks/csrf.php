@@ -25,21 +25,6 @@ class CSRF_Protection
      */
     private static $token;
     
-    /**
-     * list of URLs to bypass
-     *
-     * @var string[]
-     */
-    private $bypassUrls = array("/payment/dragonPayPostBack", "/payment/ipn2", "/payment/pesoPayDataFeed");
-    
-    /**
-     * List of first segment URLs to bypass
-     *
-     * @var string[]
-     */
-    private $bypassFirstSegments = array("webservice", "mobile");
-
-    
     public function __construct()
     {
         $this->CI =& get_instance();
