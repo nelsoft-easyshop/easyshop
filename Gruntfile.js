@@ -201,7 +201,10 @@ module.exports = function (grunt) {
                          'web/assets/css/widget.css'],
                     'web/assets/css/min-easyshop.faq-page.css':
                         ['web/assets/css/base.css',
-                         'web/assets/css/static.css']
+                         'web/assets/css/static.css'],
+                    'web/assets/css/min-easyshop.inbox-view.css':
+                        ['web/assets/css/new-inbox.css',
+                         'web/assets/css/vendor/bower_components/bootstrap.css']
                 }
             },
         },
@@ -263,8 +266,12 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/owl.carousel.min.js',
                              'web/assets/js/src/newhome.js'],
 
-                    'web/assets/js/min/easyshop.inbox_view.js':
-                            ['web/assets/js/src/messaging.js'],
+                    'web/assets/js/min/easyshop.inbox-view.js':
+                            ['web/assets/js/src/vendor/bower_components/angular.js',
+                             'web/assets/js/src/vendor/bower_components/angular-ui-router.js',
+                             'web/assets/js/src/vendor/bower_components/ng-infinite-scroll.js',
+                             'web/assets/js/src/vendor/bower_components/checklist-model.js',
+                             'web/assets/js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js'],
 
                     'web/assets/js/min/easyshop.product_image_gallery.js':
                             ['web/assets/js/src/vendor/bower_components/jquery.jcarousel.js',
@@ -462,6 +469,7 @@ module.exports = function (grunt) {
                          'web/assets/js/src/how-to-page-plugins.js',
                          'web/assets/js/src/how-to-page.js',
                          'web/assets/js/src/widget.js'],
+
                    'web/assets/js/min/easyshop.faq-page.js':
                         ['web/assets/js/src/static.js'],
                 }
