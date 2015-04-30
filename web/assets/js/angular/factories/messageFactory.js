@@ -9,10 +9,16 @@ app.factory('MessageFactory', function($http, $q) {
     };
     var $csrftoken = $("meta[name='csrf-token']").attr('content');
 
-    MessageFactory.getPartner = function($parterId) { 
+    /**
+     * check if partner is already in your conversation
+     * if exist return partner object
+     * @param  {integer} $partnerId
+     * @return {object}
+     */
+    MessageFactory.getPartner = function($partnerId) { 
         var $partner = null;
         angular.forEach(MessageFactory.data.conversationList, function(value, key) {
-            if (value.partner_member_id == $parterId) {
+            if (value.partner_member_id == $partnerId) {
                 $partner = value;
             }
         });
@@ -20,18 +26,36 @@ app.factory('MessageFactory', function($http, $q) {
         return $partner;
     }
 
+    /**
+     * Set partner currentSelectedPartner object
+     * @param {object} $partnerObject
+     */
     MessageFactory.setPartner = function($partnerObject) {
         MessageFactory.data.currentSelectedPartner = $partnerObject;
     }
 
+    /**
+     * Set conversationList object
+     * @param {object} $conversationList
+     */
     MessageFactory.setConversationList = function($conversationList) {
         MessageFactory.data.conversationList = $conversationList;
     }
 
+    /**
+     * Set conversation object
+     * @param {object} $conversationObject [description]
+     */
     MessageFactory.setConversation = function($conversationObject) {
         MessageFactory.data.conversation = $conversationObject;
     }
 
+    /**
+     * request messages in server
+     * @param  {integer} $userId
+     * @param  {integer} $page
+     * @return {object}
+     */
     MessageFactory.getMessages = function($userId, $page) {
         var $conversation = [];
         var $deferred = $q.defer();
@@ -53,6 +77,12 @@ app.factory('MessageFactory', function($http, $q) {
         return $deferred.promise;
     };
 
+    /**
+     * Request to server to send message in a specific user
+     * @param  {string} $storeName
+     * @param  {string} $messageInput
+     * @return {object}
+     */
     MessageFactory.sendMessage = function($storeName, $messageInput) {
         var $deferred = $q.defer();
         var $sendData = {
@@ -85,6 +115,11 @@ app.factory('MessageFactory', function($http, $q) {
         return $deferred.promise;
     };
 
+    /**
+     * Mark as read/opened selected message
+     * @param  {integer} $userId
+     * @return {integer}
+     */
     MessageFactory.markAsRead = function($userId) {
         var $deferred = $q.defer();
         var $sendData = {
@@ -107,7 +142,11 @@ app.factory('MessageFactory', function($http, $q) {
         return $deferred.promise;
     };
 
-
+    /**
+     * Request to server to delete specific conversation to user
+     * @param  {integer} $userId
+     * @return {integer} 
+     */
     MessageFactory.deleteConversation = function($userId) {
         var $deferred = $q.defer();
         var $sendData = {
@@ -130,6 +169,11 @@ app.factory('MessageFactory', function($http, $q) {
         return $deferred.promise;
     };
 
+    /**
+     * Delete selected messages by giving message id
+     * @param  {array} $messageIds
+     * @return {integer}
+     */
     MessageFactory.deleteMessage = function($messageIds) {
         var $deferred = $q.defer();
         var $sendData = {
@@ -152,6 +196,12 @@ app.factory('MessageFactory', function($http, $q) {
         return $deferred.promise;
     };
 
+    /**
+     * Request to server to get conversation list in your inbox
+     * @param  {integer} $page
+     * @param  {string}  $searchString
+     * @return {object}
+     */
     MessageFactory.getConversationList = function($page, $searchString) {
         var $conversationList = [];
         var $deferred = $q.defer();
@@ -175,6 +225,11 @@ app.factory('MessageFactory', function($http, $q) {
         return $deferred.promise;
     };
 
+    /**
+     * Construct message object to display in view and controller
+     * @param  {object} $object
+     * @return {object}
+     */
     var constructMessage = function ($object) {
         return {
             'messageId': $object.id_msg,
