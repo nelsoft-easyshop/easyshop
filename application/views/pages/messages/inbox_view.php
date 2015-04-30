@@ -2,20 +2,18 @@
 <link type="text/css" href='/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 
 <section class="bg-cl-fff" data-ng-app="messageApp">
-    <div data-ng-controller="MessageController" data-ng-init='MessageData.setConversationList(<?=$conversationHeaders;?>)'>
-        
-    </div>
+    <div data-ng-controller="MessageController" data-ng-init='MessageData.setConversationList(<?=$conversationHeaders;?>)'></div>
     <div class="container inbox-view-content">
         <div id="head_container" class="row">
             <div class="row">
-            <!--LEFT SIDE-->
-            <div class="col-md-4">
-                <div ui-view="conversationHead"></div>
-            </div>
-            <!--END OF LEFT SIDE-->
-            <!--RIGHT SIDE-->
-            <div class="col-md-8" ui-view="conversationDetail"></div>
-            <!--END OF RIGHT SIDE-->
+                <!--LEFT SIDE-->
+                <div class="col-md-4">
+                    <div ui-view="conversationHead"></div>
+                </div>
+                <!--END OF LEFT SIDE-->
+                <!--RIGHT SIDE-->
+                <div class="col-md-8" ui-view="conversationDetail"></div>
+                <!--END OF RIGHT SIDE-->
             </div>
         </div>
     </div>
