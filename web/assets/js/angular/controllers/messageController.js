@@ -75,12 +75,12 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             if ($messageInput && $storeName) {
                 MessageFactory.sendMessage($storeName, $messageInput)
                     .then(function(messageData) {
-                        var $partnerId = messageData[0].recipientId;
-                        var $partner = MessageFactory.getPartner($partnerId);
-                        if ($partner) {
-                            if (MessageFactory.data.currentSelectedPartner == null || $partnerId != MessageFactory.data.currentSelectedPartner.partner_member_id) {
-                                MessageFactory.setPartner($partner);
-                                $state.go("readMessage", {userId: $partnerId, storeName: $storeName});
+                        var $recipientId = messageData[0].recipientId;
+                        var $recipient = MessageFactory.getPartner($recipientId);
+                        if ($recipient) {
+                            if (MessageFactory.data.currentSelectedPartner == null || $recipientId != MessageFactory.data.currentSelectedPartner.partner_member_id) {
+                                MessageFactory.setPartner($recipient);
+                                $state.go("readMessage", {userId: $recipientId, storeName: $storeName});
                             }
                             else {
                                 MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
@@ -96,14 +96,14 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                                 'last_date': messageData[0].timeSent,
                                 'last_message': $messageInput,
                                 'partner_image': messageData[0].recipientImage,
-                                'partner_member_id': $partnerId,
+                                'partner_member_id': $recipientId,
                                 'partner_storename': $storeName,
-                                'to_id': $partnerId,
+                                'to_id': $recipientId,
                                 'unread_message_count': 0,
                             }];
                             MessageFactory.setConversationList($newConversation.concat(MessageFactory.data.conversationList));
                             MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
-                            $state.go("readMessage", {userId: $partnerId, storeName: $storeName});
+                            $state.go("readMessage", {userId: $recipientId, storeName: $storeName});
                         }
                     }, function(errorMessage) {
                         alert(errorMessage);
