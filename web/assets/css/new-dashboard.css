@@ -2583,6 +2583,7 @@ label.css-label {
     border-bottom: 1px solid #cecece;
     padding: 0 20px;
     text-align: center;
+    word-wrap:break-word;
 }
 
 .feedback-content h1,
@@ -2682,6 +2683,10 @@ label.css-label {
 
 .shipping-border {
     border-bottom: 1px solid #cecece;
+}
+
+.feedback-whom {
+    word-wrap: break-word;
 }
 
 /***** payment account css ******/
