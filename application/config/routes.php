@@ -134,7 +134,7 @@
     $route['(?i)EstudyantrepreneurSuccess'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoSuccess';
     $route['(?i)EstudyantrepreneurStandings'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoStandings';
     #MESSAGES
-    $route['(?i)messages/(:any)'] = '/MessageController/messages';
+    $route['(?i)messages'] = '/MessageController/messages';
 
     $route['(?i)register'] = '/login';
     $route['(?i)redirect'] = '/home/redirect';
