@@ -14,7 +14,7 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
 
         $scope.messageData = MessageFactory.data;
 
-        var updatePartnerHeader = function($partnerId) {
+        var updateConversationList = function($partnerId) {
             var $partner = MessageFactory.getPartner($partnerId);
             if ($partner) {
                 MessageFactory.setPartner($partner);
@@ -48,7 +48,7 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
                     alert(errorMessage);
                 });
 
-            updatePartnerHeader($scope.userId);
+            updateConversationList($scope.userId);
         };
 
         $scope.sendMessage = function($storeName, $messageInput) { 
