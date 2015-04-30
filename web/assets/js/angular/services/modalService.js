@@ -16,8 +16,10 @@ app.service('ModalService', ['$modal',
         };
 
         this.showModal = function (customModalDefaults, customModalOptions) {
-            if (!customModalDefaults) customModalDefaults = {};
-            customModalDefaults.backdrop = 'static';
+            if (!customModalDefaults) {
+                customModalDefaults = {};
+                customModalDefaults.backdrop = 'static';
+            }
             return this.show(customModalDefaults, customModalOptions);
         };
 
