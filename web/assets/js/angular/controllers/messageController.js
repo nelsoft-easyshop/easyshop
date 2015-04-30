@@ -14,6 +14,11 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
 
         $scope.messageData = MessageFactory.data;
 
+        /**
+         * Update conversation list data 
+         * eg: date, showed message
+         * @param  {integer} $partnerId
+         */
         var updateConversationList = function($partnerId) {
             var $partner = MessageFactory.getPartner($partnerId);
             if ($partner) {
@@ -29,10 +34,19 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             }
         };
 
+        /**
+         * Set conversation list data in message factory
+         * @param {Object} $conversationList
+         */
         $scope.setConversationList = function($conversationList) {
             MessageFactory.setConversationList($conversationList);
         }
 
+        /**
+         * Get conversation in specific user
+         * @param  {integer} $userId
+         * @param  {integer} $page
+         */
         $scope.getConversation = function($userId, $page) {
             if ($scope.messageBusy) {
                 return;
@@ -51,6 +65,11 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             updateConversationList($scope.userId);
         };
 
+        /**
+         * Send message to a user
+         * @param  {string} $storeName
+         * @param  {string} $messageInput
+         */
         $scope.sendMessage = function($storeName, $messageInput) { 
             if ($messageInput && $storeName) {
                 MessageFactory.sendMessage($storeName, $messageInput)
@@ -91,6 +110,10 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             }
         };
 
+        /**
+         * Delete conversation of a user
+         * @param  {integer} $userId
+         */
         $scope.deleteConversation = function($userId) {
             if ($userId && MessageFactory.data.partner) {
                 var $indexToRemove = MessageFactory.data.conversationList.indexOf(MessageFactory.data.partner);
@@ -103,6 +126,9 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             }
         };
 
+        /**
+         * Delete selected messages
+         */
         $scope.deleteMessage = function() {
             var $messageIds = [];
             angular.forEach($scope.selectedMessage, function(selectedValue, key) {
@@ -124,6 +150,9 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             $scope.selectedMessage = [];
         };
 
+        /**
+         * Compose new message
+         */
         $scope.composeMessage = function() {
             var modalOptions = {
                 closeButtonText: 'Cancel',
@@ -140,6 +169,11 @@ app.controller('MessageController', ['$scope','$stateParams', '$state', 'ModalSe
             });
         }
 
+        /**
+         * Get all list of conversation in your inbox
+         * @param  {integer} $page
+         * @param  {string} $searchString
+         */
         $scope.getConversationList = function($page, $searchString) {
             if ($scope.listBusy) {
                 return;
