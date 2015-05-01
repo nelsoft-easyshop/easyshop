@@ -11,7 +11,6 @@ app.controller('HeaderController', ['$scope', 'HeaderFactory',
                 }               
             }
         )
-                     
         
     }
 ]);
