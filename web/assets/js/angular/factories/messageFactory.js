@@ -48,7 +48,7 @@ app.factory('MessageFactory', function($http, $q) {
      * @param {integer} $count
      */
     MessageFactory.setUnreadConversationCount = function($count) {
-        MessageFactory.data.unreadConversationCount = $conversationList;
+        MessageFactory.data.unreadConversationCount = $count;
     };
 
     /**
