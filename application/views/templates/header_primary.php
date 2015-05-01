@@ -7,7 +7,7 @@
 
 <!--[if (gt IE 9)|!(IE)]><!--><!--<![endif]-->
 
-<head>
+<head data-ng-controller="HeaderController">
     <?php require_once("assets/includes/css.php"); ?>
     <?php require_once("assets/includes/js.php"); ?>
     <meta charset="utf-8" />
@@ -32,7 +32,6 @@
     <title data-ng-bind="pageTitle">
         <?php echo $title?>
     </title>
-
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

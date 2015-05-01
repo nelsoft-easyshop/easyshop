@@ -1,5 +1,5 @@
-app.controller('MessageController', ['$scope', '$rootScope', '$stateParams', '$state', 'ModalService', 'MessageFactory',
-    function($scope, $rootScope, $stateParams, $state, ModalService, MessageFactory) {
+app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalService', 'MessageFactory', 'HeaderFactory',
+    function($scope, $stateParams, $state, ModalService, MessageFactory, HeaderFactory) {
 
         MessageFactory.setConversation([]);
         MessageFactory.setPartner(null);
@@ -38,7 +38,7 @@ app.controller('MessageController', ['$scope', '$rootScope', '$stateParams', '$s
             var $pageTitle = $integer <= 0 
                              ? 'Messages | Easyshop.ph'
                              : 'Messages (' + $integer + ') | Easyshop.ph';
-            $rootScope.pageTitle = $pageTitle;
+            HeaderFactory.setTitle($pageTitle);
             MessageFactory.setUnreadConversationCount($integer);
         };
 
