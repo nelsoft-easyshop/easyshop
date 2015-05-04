@@ -1,9 +1,9 @@
 <?php
+
 namespace Easyshop\MemberFeatureRestrict;
 
 class MemberFeatureRestrictManager
 {
-
     /**
      * Entity Manager instance
      *
@@ -22,11 +22,11 @@ class MemberFeatureRestrictManager
 
     /**
      * Get all the list of feature with restriction
-     * where key is the EsFeatureRestrict ID and value is bool
-     * @param $memberId
-     * @return array
+     * 
+     * @param integer $memberId
+     * @return mixed
      */
-    public function getListOfFeatureWithRestrictionByMemberId($memberId)
+    public function getAllowedFeaturesForMember($memberId)
     {
         $featuresObj = $this->em->getRepository('EasyShop\Entities\EsFeatureRestrict')
                                 ->getFeatures();
