@@ -1,6 +1,6 @@
 var $baseUrl = "/assets/js/angular";
 var app = angular
-    .module('messageApp',['ui.router', 'infinite-scroll', 'checklist-model', 'ui.bootstrap'])
+    .module('easyshopApp',['ui.router', 'infinite-scroll', 'checklist-model', 'ui.bootstrap'])
     .config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
 

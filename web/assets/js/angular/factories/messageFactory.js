@@ -5,6 +5,7 @@ app.factory('MessageFactory', function($http, $q) {
             currentSelectedPartner: null,
             conversation: [],
             conversationList: [],
+            unreadConversationCount: 0,
         }
     };
     var $csrftoken = $http.defaults.headers.common['X-CSRF-TOKEN'];
@@ -41,6 +42,14 @@ app.factory('MessageFactory', function($http, $q) {
     MessageFactory.setConversationList = function($conversationList) {
         MessageFactory.data.conversationList = $conversationList;
     }
+
+    /**
+     * Set number of unread conversation count
+     * @param {integer} $count
+     */
+    MessageFactory.setUnreadConversationCount = function($count) {
+        MessageFactory.data.unreadConversationCount = $count;
+    };
 
     /**
      * Set conversation object

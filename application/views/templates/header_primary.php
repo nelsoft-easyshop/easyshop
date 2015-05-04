@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" data-ng-app="easyshopApp">
 <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
@@ -7,7 +7,7 @@
 
 <!--[if (gt IE 9)|!(IE)]><!--><!--<![endif]-->
 
-<head>
+<head data-ng-controller="HeaderController">
     <?php require_once("assets/includes/css.php"); ?>
     <?php require_once("assets/includes/js.php"); ?>
     <meta charset="utf-8" />
@@ -29,10 +29,9 @@
     </script>
     <![endif]-->
 
-    <title>
+    <title data-ng-bind="pageTitle">
         <?php echo $title?>
     </title>
-
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
