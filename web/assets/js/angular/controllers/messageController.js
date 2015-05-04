@@ -1,8 +1,12 @@
-app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalService', 'MessageFactory', 'HeaderFactory',
-    function($scope, $stateParams, $state, ModalService, MessageFactory, HeaderFactory) {
+app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalService', 'MessageFactory', 'HeaderFactory', 'socketFactory', 
+    function($scope, $stateParams, $state, ModalService, MessageFactory, HeaderFactory, socketFactory) {
 
         MessageFactory.setConversation([]);
         MessageFactory.setPartner(null);
+
+
+
+
 
         $scope.userId = $stateParams.userId;
         $scope.messageCurrentPage = 1;

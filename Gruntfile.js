@@ -33,7 +33,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/angular-ui-router.js': 'angular-ui-router/release/angular-ui-router.js',
                     'js/src/vendor/bower_components/ng-infinite-scroll.js': 'ngInfiniteScroll/build/ng-infinite-scroll.js',
                     'js/src/vendor/bower_components/checklist-model.js': 'checklist-model/checklist-model.js',
-                    'js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js': 'angular-bootstrap/ui-bootstrap-tpls.js'
+                    'js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js': 'angular-bootstrap/ui-bootstrap-tpls.js',
+                    'js/src/vendor/bower_components/angular-socket.js' : 'angular-socket-io/socket.js'
                 }
             },
             stylesheets: {
