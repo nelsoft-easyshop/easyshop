@@ -131,7 +131,7 @@
                     <div class="search-header">
                         <h5>
                         <strong><?=$productCount; ?></strong>
-                        results for
+                        product results for
                         <strong><?=html_escape($string); ?></strong>
                         </h5>
                     </div>
