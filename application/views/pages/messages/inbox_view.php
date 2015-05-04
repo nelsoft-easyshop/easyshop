@@ -38,15 +38,15 @@
     <script src="/assets/js/src/vendor/bower_components/ng-infinite-scroll.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bower_components/checklist-model.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+
+    <script src="/assets/js/angular/app.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/services/modalService.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/controllers/messageController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/controllers/headerController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/factories/messageFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/factories/headerFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/directives/csrfDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/directives/onInitDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.inbox-view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
-<script src="/assets/js/angular/app.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<script src="/assets/js/angular/services/modalService.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<script src="/assets/js/angular/controllers/messageController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<script src="/assets/js/angular/controllers/headerController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<script src="/assets/js/angular/factories/messageFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<script src="/assets/js/angular/factories/headerFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<script src="/assets/js/angular/directives/csrfDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-<script src="/assets/js/angular/directives/onInitDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-
