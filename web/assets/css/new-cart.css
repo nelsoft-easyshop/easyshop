@@ -501,9 +501,44 @@ ol.how-to-list li{
     text-align: right;
 }
 
+.checkout-item-attribute-container{
+    color: #a6a6a6;
+    font-weight: normal;
+}
+
+.checkout-item-attribute-container-header{
+    margin-top: 5px;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.checkout-item-attribute-container-header .fa{
+    display: inline-block;
+    margin-right: 3px;
+}
+
+.checkout-item-attribute-container-header.toggled .fa-caret-down:before {
+  content: "\f0d8";
+}
+
+.checkout-item-attribute-container-body{
+    margin-top: 5px;
+    padding-left: 10px;
+    display: none;
+}
+
 .checkout-order-total{
     font-size: 15px;
     font-weight: bold;
+}
+
+.checkout-item-attribute-name {
+  margin-bottom: 5px;
 }
 
 .payment-method-container{
