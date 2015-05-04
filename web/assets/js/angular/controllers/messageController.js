@@ -4,10 +4,6 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
         MessageFactory.setConversation([]);
         MessageFactory.setPartner(null);
 
-
-
-
-
         $scope.userId = $stateParams.userId;
         $scope.messageCurrentPage = 1;
         $scope.messageBusy = false;
@@ -207,5 +203,18 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                     alert(errorMessage);
                 });
         }
+
+        $scope.setRealTimeChatSettings = function($chatConfig) {
+            var iosocketConnection = io.connect(
+                'https://' + $chatConfig.chatServerHost + ':' + $chatConfig.chatServerPort, 
+                { query: 'token=' + $chatConfig.jwtToken }
+            );
+            var socket = socketFactory({
+                ioSocket: iosocketConnection 
+            });
+        }
+
+
+        
     }
 ]); 
