@@ -113,52 +113,221 @@
             </div>
             
             <div class="col-md-9">
-                <div class="search-header">
-                    <h5>
-                    <strong><?=$productCount; ?></strong>
-                    results for
-                    <strong><?=html_escape($string); ?></strong>
-                    </h5>
+                <div class="tab-head-wrapper">
+                    <ul class=" list-inline list-unstyled section-title-tab tab-head-container">
+                        <li>
+                            <a src="search-product-list" class="active">
+                                <span class="tab-title">Products</span> <span class="tab-title-count"><?=$productCount; ?></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a src="search-seller-list">
+                                <span class="tab-title">Sellers</span> <span class="tab-title-count">6</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="div-product-view-option">
-                    <table class="p-view color-default pull-left">
-                        <tbody>
-                            <tr>
-                                <td class="td-view p-view2 color-default">VIEW STYLE:</td>
-                                <td class="td-view" style="padding-top: 3px;">
-                                    <span class="gv fa fa-icon-view-grid fa-2x icon-view icon-grid <?=$isListView ? '' : 'active-view'?>"></span>
-                                    <span class="lv fa fa-icon-view-list fa-2x icon-view icon-list <?=$isListView ? 'active-view' : ''?>"></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="tab-container" id="search-product-list">
+                    <div class="search-header">
+                        <h5>
+                        <strong><?=$productCount; ?></strong>
+                        results for
+                        <strong><?=html_escape($string); ?></strong>
+                        </h5>
+                    </div>
+                    <div class="div-product-view-option">
+                        <table class="p-view color-default pull-left">
+                            <tbody>
+                                <tr>
+                                    <td class="td-view p-view2 color-default">VIEW STYLE:</td>
+                                    <td class="td-view" style="padding-top: 3px;">
+                                        <span class="gv fa fa-icon-view-grid fa-2x icon-view icon-grid <?=$isListView ? '' : 'active-view'?>"></span>
+                                        <span class="lv fa fa-icon-view-list fa-2x icon-view icon-list <?=$isListView ? 'active-view' : ''?>"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="vendor-select-con">
+                        <select id="filter-sort" name="sort" class="sort_select form-select-default color-default pull-right">
+                            <option value="">Default Sorting</option>
+                            <option value="<?=strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_POPULAR); ?>" <?=(isset($getParameter['sortby']) && strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_POPULAR) === strtolower($getParameter['sortby'])) ? 'selected="true"' : '';?> >Popularity</option>
+                            <option value="<?=strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_HOT); ?>" <?=(isset($getParameter['sortby']) && strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_HOT) === strtolower($getParameter['sortby'])) ? 'selected="true"' : '';?> >Hot</option>
+                        </select>
+                        <div class="clear"></div>
+                    </div>
+     
+                    <div class="search-results-container <?=$isListView ? 'list-search' : ''?>">
+                        <?=$productView; ?> 
+                        <div class="group-container row loading-row" data-id="2" id="page-2"></div>
+                    </div> 
+     
+                    <div id="sticky-pagination">
+                        <center>
+                            <div class="row">
+                                <div class="col-md-12" class="scrollSpyPage" id="myScrollspy" style="padding: 0px; background: #fff; display: none; "> 
+                                    <?=$pagination; ?> 
+                                </div> 
+                            </div>
+                            <div id="simplePagination" class="scrollSpyPage">
+                                <?=$pagination; ?>
+                            </div>
+                        </center>
+                    </div>
                 </div>
-                <div class="vendor-select-con">
-                    <select id="filter-sort" name="sort" class="sort_select form-select-default color-default pull-right">
-                        <option value="">Default Sorting</option>
-                        <option value="<?=strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_POPULAR); ?>" <?=(isset($getParameter['sortby']) && strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_POPULAR) === strtolower($getParameter['sortby'])) ? 'selected="true"' : '';?> >Popularity</option>
-                        <option value="<?=strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_HOT); ?>" <?=(isset($getParameter['sortby']) && strtolower(\EasyShop\Entities\EsProduct::SEARCH_SORT_HOT) === strtolower($getParameter['sortby'])) ? 'selected="true"' : '';?> >Hot</option>
-                    </select>
-                    <div class="clear"></div>
-                </div>
- 
-                <div class="search-results-container <?=$isListView ? 'list-search' : ''?>">
-                    <?=$productView; ?> 
-                    <div class="group-container row loading-row" data-id="2" id="page-2"></div>
-                </div> 
- 
-                <div id="sticky-pagination">
-                    <center>
-                        <div class="row">
-                            <div class="col-md-12" class="scrollSpyPage" id="myScrollspy" style="padding: 0px; background: #fff; display: none; "> 
-                                <?=$pagination; ?> 
-                            </div> 
+                <!--DISPLAY FOR SELER RESULTS-->
+                <div class="tab-container" id="search-seller-list">
+                    <div class="search-header">
+                        <h5>
+                        <strong>6</strong>
+                        seller results for
+                        <strong>easyshop</strong>
+                        </h5>
+                    </div>
+                    <div class="search-seller-list-container">
+                        <div class="group-container group-seller row">
+                            <div class="seller-panel-column col-md-4 col-sm-6 col-xs-12">
+                                <div class="seller-item-container">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="80">
+                                                <div class="search-seller-img-container">
+                                                    <img src="/assets/images/img_profile_pic_5.png" />
+                                                </div>
+                                            </td>
+                                            <td valign="bottom">
+                                                <div class="search-seller-info">
+                                                    <a href="#" class="link">Gadgets Galore</a>
+                                                    <div class="search-seller-products-container">
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/apple-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/lg-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/htc-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/sony-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/samsung-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="seller-panel-column col-md-4 col-sm-6 col-xs-12">
+                                <div class="seller-item-container">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="80">
+                                                <div class="search-seller-img-container">
+                                                    <img src="/assets/images/img_profile_pic_3.jpg" />
+                                                </div>
+                                            </td>
+                                            <td valign="bottom">
+                                                <div class="search-seller-info">
+                                                    <a href="#" class="link">Gadgets Shop</a>
+                                                    <div class="search-seller-products-container">
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/apple-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/lg-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/htc-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/sony-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/samsung-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="seller-panel-column col-md-4 col-sm-6 col-xs-12">
+                                <div class="seller-item-container">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="80">
+                                                <div class="search-seller-img-container">
+                                                    <img src="/assets/images/img_profile_pic_2.jpg" />
+                                                </div>
+                                            </td>
+                                            <td valign="bottom">
+                                                <div class="search-seller-info">
+                                                    <a href="#" class="link">Gadgets Store</a>
+                                                    <div class="search-seller-products-container">
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/apple-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/lg-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/htc-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/sony-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                        <a href="#">
+                                                            <div class="search-seller-item-img-container">
+                                                                <img src="/assets/images/products/samsung-p.jpg" />
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
                         </div>
-                        <div id="simplePagination" class="scrollSpyPage">
-                            <?=$pagination; ?>
-                        </div>
-                    </center>
+                    </div>
                 </div>
+                <!--END OF DISPLAY FOR SELER RESULTS-->
             </div> 
         </div>
         <?php else: ?> 
