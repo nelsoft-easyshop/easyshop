@@ -273,7 +273,15 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/bower_components/angular-ui-router.js',
                              'web/assets/js/src/vendor/bower_components/ng-infinite-scroll.js',
                              'web/assets/js/src/vendor/bower_components/checklist-model.js',
-                             'web/assets/js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js'],
+                             'web/assets/js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js',
+                             'web/assets/js/angular/app.js',
+                             'web/assets/js/angular/services/modalService.js',
+                             'web/assets/js/angular/controllers/messageController.js',
+                             'web/assets/js/angular/controllers/headerController.js',
+                             'web/assets/js/angular/factories/messageFactory.js',
+                             'web/assets/js/angular/factories/headerFactory.js',
+                             'web/assets/js/angular/directives/csrfDirective.js',
+                             'web/assets/js/angular/directives/onInitDirective.js'],
 
                     'web/assets/js/min/easyshop.product_image_gallery.js':
                             ['web/assets/js/src/vendor/bower_components/jquery.jcarousel.js',
@@ -474,7 +482,7 @@ module.exports = function (grunt) {
                          'web/assets/js/src/widget.js'],
 
                    'web/assets/js/min/easyshop.faq-page.js':
-                        ['web/assets/js/src/static.js'],
+                        ['web/assets/js/src/static.js'], 
                 }
             }
         }
