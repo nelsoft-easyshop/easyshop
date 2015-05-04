@@ -143,6 +143,13 @@
                 $('.nav-suggestion').hide();
                 $('.sticky-header-nav').removeClass('sticky-nav-fixed').removeAttr('style');
             }
+
+            if (docScroll >= 160){
+                $(".call-to-action-sell-container").slideDown().show();
+            }
+            else{
+                $(".call-to-action-sell-container").hide();
+            }
         });
 
         var hideSuggestion = function(){ 
