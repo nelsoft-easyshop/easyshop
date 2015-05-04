@@ -18,7 +18,7 @@
 <?php endif; ?>
 
 <script type='text/javascript'>
-    <?php if(preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT'])): ?>
+    <?php if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/(?i)msie [4-9]/',$_SERVER['HTTP_USER_AGENT'])): ?>
         var badIE = true;
     <?php else: ?>
         if(window.FileReader){
