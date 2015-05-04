@@ -1588,6 +1588,106 @@ h3 > b{
     -o-transition: all 0.3s ease;
 }
 
+.call-to-action-sell-container{
+    display: inline-block;
+    position: fixed;
+    z-index: 99999999;
+    bottom: 0;
+    left: 0;
+}
+
+.call-to-action-sell-container .call-to-action-sell-wrapper{
+    position: relative;
+    display: inline-block;
+}
+
+.call-to-action-sell-container .base{
+    background: #5b5159;
+    width: 300px;
+    height: 50px;
+    border-bottom: solid #4d414b 2px;
+    -webkit-transform: skew(20deg);
+    -moz-transform: skew(20deg);
+    -ms-transform: skew(20deg);
+    -o-transform: skew(20deg);
+    margin-left: -25px;
+    position: relative;
+    -webkit-box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
+    -moz-box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
+    box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
+    z-index:1;
+}
+
+.call-to-action-sell-container .icon-base{
+    background: #ff893b;
+    width: 78px;
+    height: 50px;
+    position: relative;
+    border-bottom: solid #ff4c1d 2px;
+    -webkit-transform: skew(20deg);
+    -moz-transform: skew(20deg);
+    -ms-transform: skew(20deg);
+    -o-transform: skew(20deg);
+    margin-left: 3px;
+    margin-top: -50px;
+    z-index:3;
+}
+
+.call-to-action-sell-container .icon-base .icon-item{
+    -webkit-transform: skew(-20deg);
+    -moz-transform: skew(-20deg);
+    -ms-transform: skew(-20deg);
+    -o-transform: skew(-20deg);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    font-size: 2.5em;
+    color: #fff;
+    margin-top: 7px;
+    text-shadow: 2px 1px 0px rgba(255, 78, 8, 1);
+}
+
+.call-to-action-sell-container .top-filler{
+    display: inline-block;
+    position: relative;
+    width: 178px;
+    height: 10px;
+    background: #ff893b;
+    -webkit-transform: skew(47deg);
+    -moz-transform: skew(47deg);
+    -ms-transform: skew(47deg);
+    -o-transform: skew(47deg);
+    margin-left: -30px;
+    -webkit-box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
+    -moz-box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
+    box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
+    z-index:2;
+}
+
+.call-to-action-sell-container .call-to-action-sell-text{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 99999;
+    width: 185px;
+    height: 50px;
+    text-align: center;
+    margin: 0px;
+    margin-left: 85px;
+    margin-top: 10px;
+    padding-top: 12px;
+    font-size: 20px;
+    font-family: Open Sans;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #e8bc97;
+    text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
+}
+
 @media (min-width: 1380px) {
     .sticky-nav-fixed .sticky-nav-logo-con {    
         background-color: #4370cc;
@@ -1785,6 +1885,37 @@ h3 > b{
     .form-container-404 .form-404-input .row {
         margin-left: 0;
         margin-right: 0;
+    }
+
+    /*** sell an item floating button responsive ***/
+    .call-to-action-sell-container .call-to-action-sell-text{
+        width: 117px;
+        height: 33px;
+        margin-left: 53px;
+        margin-top: 10px;
+        padding-top: 4px;
+        font-size: 13px;
+    }
+
+    .call-to-action-sell-container .top-filler{
+        width: 141px;
+        height: 5px;
+    }
+
+    .call-to-action-sell-container .base{
+        width: 200px;
+        height: 33px;
+    }
+
+    .call-to-action-sell-container .icon-base{
+        width: 43px;
+        height: 34px;
+        margin-left: 3px;
+        margin-top: -34px;
+    }
+
+    .call-to-action-sell-container .icon-base .icon-item{
+        font-size: 1.5em;
     }
 }
 
