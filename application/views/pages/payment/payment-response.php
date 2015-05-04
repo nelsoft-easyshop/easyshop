@@ -136,7 +136,7 @@
                                     </td>
                                     <td><?=$product->getOrderQuantity();?></td>
                                     <td>&#8369; <?=number_format($product->getHandlingFee(), 2, '.', ',')?></td>
-                                    <td>&#8369; <?=number_format(bcsub($product->getTotal(), $product->getHandlingFee(), 4), 2, '.', ',')?></td>
+                                    <td>&#8369; <?=number_format($product->getPrice(), 2, '.', ',')?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

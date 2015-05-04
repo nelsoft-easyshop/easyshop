@@ -69,6 +69,23 @@
     margin-right: 10px;
 }
 
+.social-media-wrapper a {
+    background-color: #828282;
+    border-radius: 18px;
+    display: inline-block;
+    height: 55px;
+    max-width: 55px;
+    width: 100%;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
+}
+
+.social-media-wrapper a:hover {
+    background-color: #656565;
+}
+
 .social-media-wrapper img {
     max-width: 56px;
     width: 100%;
@@ -104,6 +121,10 @@
     display: inline-block;
     max-width: 105px;
     width: 100%;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition:    all 0.3s ease-in-out;
+    -o-transition:      all 0.3s ease-in-out;
+     transition:        all 0.3s ease-in-out;
 }
 
 .app-img-apple {
