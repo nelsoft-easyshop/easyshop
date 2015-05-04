@@ -34,24 +34,27 @@ app.service('ModalService', ['$modal',
             //Map modal.html $scope custom properties to defaults defined in service
             angular.extend(tempModalOptions, modalOptions, customModalOptions);
 
+            tempModalDefaultsCtrl.$inject = ['$scope', '$modalInstance'];
+            function tempModalDefaultsCtrl($scope, $modalInstance) {
+                $scope.modalOptions = tempModalOptions;
+                $scope.modalOptions.ok = function (result) {
+                    $modalInstance.close(result);
+                };
+                $scope.modalOptions.close = function (result) {
+                    $modalInstance.dismiss('cancel');
+                };
+                $scope.modalOptions.callback = function (param1, param2, param3) {
+                    var parameterCollection = {
+                        param1: param1,
+                        param2: param2,
+                        param3: param3,
+                    } 
+                    $modalInstance.close(parameterCollection);
+                };
+            };
+
             if (!tempModalDefaults.controller) {
-                tempModalDefaults.controller = function ($scope, $modalInstance) {
-                    $scope.modalOptions = tempModalOptions;
-                    $scope.modalOptions.ok = function (result) {
-                        $modalInstance.close(result);
-                    };
-                    $scope.modalOptions.close = function (result) {
-                        $modalInstance.dismiss('cancel');
-                    };
-                    $scope.modalOptions.callback = function (param1, param2, param3) {
-                        var parameterCollection = {
-                            param1: param1,
-                            param2: param2,
-                            param3: param3,
-                        } 
-                        $modalInstance.close(parameterCollection);
-                    };
-                }
+                tempModalDefaults.controller = tempModalDefaultsCtrl;
             }
 
             return $modal.open(tempModalDefaults).result;
