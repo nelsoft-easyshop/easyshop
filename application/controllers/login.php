@@ -134,7 +134,13 @@ class Login extends MY_Controller
             $authenticationResult = $this->accountManager->authenticateMember($uname, $pass);
 
             if (empty($authenticationResult["member"]) === false) {
-            
+
+                /**
+                 * Force codeigniter to reissue new session to prevent session fixation attacks
+                 */
+                $this->session->sess_destroy();
+                $this->session->sess_create();
+                
                 $memberId =  $authenticationResult["member"]->getIdMember();
                 
                 $authenticationResult['o_success'] = 1;
