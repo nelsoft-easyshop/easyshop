@@ -6,8 +6,10 @@
 <?php endif; ?>
 
 <section class="bg-cl-fff">
+
     <?php echo form_open('/');?>
     <?php echo form_close();?> 
+
     <div data-ng-controller="MessageController">
         <div on-init-directive callback-fn="setConversationList(<?php echo html_escape($conversationHeaders);?>)"></div>
         <div on-init-directive callback-fn="setUnreadMessageCount(<?php echo html_escape($unreadConversationCount);?>)"></div>
