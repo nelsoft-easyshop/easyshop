@@ -171,11 +171,24 @@
                             </tr>
                         </thead>
                         
-                        <tbody> 
+                        <tbody>
                             <?php foreach ($cartData as $item): ?>
                                 <tr class="checkout-item <?php if($item['isAvailableInLocation'] === false): ?>border-bottom-0<?php endif;?>">
                                     <td>
                                         <?=html_escape($item['name']);?>
+                                        <div class="checkout-item-attribute-container">
+                                            <div class="checkout-item-attribute-container-header">
+                                                <i class="fa fa-caret-down"></i> <span class="checkout-item-attribute-container-action">show</span> product attributes
+                                            </div>
+                                            <div class="checkout-item-attribute-container-body">
+                                                <div class="checkout-item-attribute-name">
+                                                    <b>Size : </b> Small
+                                                </div>
+                                                 <div class="checkout-item-attribute-name">
+                                                    <b>Color : </b> Blue
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td><?=$item['qty'];?></td>
                                     <td><?=$item['isAvailableInLocation'] === false ? "N/A" : "&#8369; ".$item['shippingFee'] ;  ?></td>
