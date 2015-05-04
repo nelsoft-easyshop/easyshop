@@ -303,7 +303,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 <input type="hidden" id="chatServerConfig" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-jwttoken="<?php echo html_escape($jwtToken); ?>" >
-<input type="hidden" id="listOfFeatureWithRestriction" data-real-time-chat="<?=$listOfFeatureWithRestriction && $listOfFeatureWithRestriction[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
+<input type="hidden" id="isRealTimeChatAllowed" data-real-time-chat="<?=$listOfFeatureWithRestriction && $listOfFeatureWithRestriction[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type="text/javascript" src="/assets/js/src/vendor/bower_components/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>

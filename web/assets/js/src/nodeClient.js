@@ -4,11 +4,11 @@
  
             var $chatConfig = $('#chatServerConfig');
             var $isLoggedIn = $('[name="is-logged-in"]');
-            var isChatAllowed = $.parseJSON($('#listOfFeatureWithRestriction').data('real-time-chat'));
+            var isRealTimeChatAllowed = $.parseJSON($('#isRealTimeChatAllowed').data('real-time-chat'));
 
             if ($.parseJSON($isLoggedIn.val())) {
 
-                if(config.isSocketioEnabled && isChatAllowed){
+                if(config.isSocketioEnabled && isRealTimeChatAllowed === true){
 
                     var socket = io.connect( 'https://' + $chatConfig.data('host') + ':' + $chatConfig.data('port'), {query: 'token=' + $chatConfig.data('jwttoken') });
                 
