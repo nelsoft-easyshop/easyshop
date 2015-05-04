@@ -47,14 +47,27 @@ class MessageController extends MY_Controller
      */
     public function messages()
     {
-        $conversationHeaderData = $this->messageManager->getConversationHeaders($this->userId, 0, self::CONVERSATIONS_PER_PAGE);
+        $conversationHeaderData = $this->messageManager->getConversationHeaders(
+                                      $this->userId, 
+                                      0, 
+                                      self::CONVERSATIONS_PER_PAGE
+                                  );
         $member = $this->em->find('EasyShop\Entities\EsMember', $this->userId);
+        $allowedUserFeatures = $this->serviceContainer['member_feature_restrict_manager']
+                                    ->getAllowedFeaturesForMember($this->userId);
+        $realtimeChatServerSettings = [
+            'chatServerHost' => $this->messageManager->getChatHost(true),
+            'chatServerPort' => $this->messageManager->getChatPort(),
+            'jwtToken' => $this->session->userdata('jwtToken'),
+            'isRealtimechatAllowed' => isset($allowedUserFeatures[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT]) &&
+                                       $allowedUserFeatures[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT],
+        ];
+
         $data = [
             'conversationHeaders' => json_encode($conversationHeaderData['conversationHeaders'], true),
             'unreadConversationCount' => $conversationHeaderData['totalUnreadMessages'],
+            'realtimeChatConfig' => json_encode($realtimeChatServerSettings),
             'userEntity' => $member,
-            'chatServerHost' => $this->messageManager->getChatHost(true),
-            'chatServerPort' => $this->messageManager->getChatPort()
         ];
 
         $title = $conversationHeaderData['totalUnreadMessages'] > 0

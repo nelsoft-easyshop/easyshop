@@ -9,8 +9,9 @@
     <?php echo form_open('/');?>
     <?php echo form_close();?> 
     <div data-ng-controller="MessageController">
-        <div on-init-directive callback-fn="setConversationList(<?=html_escape($conversationHeaders);?>)"></div>
-        <div on-init-directive callback-fn="setUnreadMessageCount(<?=html_escape($unreadConversationCount);?>)"></div>
+        <div on-init-directive callback-fn="setConversationList(<?php echo html_escape($conversationHeaders);?>)"></div>
+        <div on-init-directive callback-fn="setUnreadMessageCount(<?php echo html_escape($unreadConversationCount);?>)"></div>
+        <div on-init-directive callback-fn="setRealTimeChatSettings(<?php echo html_escape($realtimeChatConfig); ?>)"></div> 
     </div>
     
     <div class="container inbox-view-content">
