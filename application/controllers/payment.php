@@ -790,8 +790,7 @@ class Payment extends MY_Controller
 
                 $shippingAddress = $entityManager->getRepository('EasyShop\Entities\EsOrderShippingAddress')
                                                  ->find($order->getShippingAddressId());
-                $orderProducts = $entityManager->getRepository('EasyShop\Entities\EsOrderProduct')
-                                               ->findBy(['order' => $order]);
+                $orderProducts = $transactionManager->getTransactionItems($order);
                 $transactionShippingFee = $transactionManager->getTransactionShippingFee($order);
 
                 $bodyData = [
@@ -841,8 +840,7 @@ class Payment extends MY_Controller
         if($order){
             $shippingAddress = $entityManager->getRepository('EasyShop\Entities\EsOrderShippingAddress')
                                              ->find($order->getShippingAddressId());
-            $orderProducts = $entityManager->getRepository('EasyShop\Entities\EsOrderProduct')
-                                           ->findBy(['order' => $order]);
+            $orderProducts = $transactionManager->getTransactionItems($order);
             $transactionShippingFee = $transactionManager->getTransactionShippingFee($order);
 
             $orderData = [

@@ -72,3 +72,8 @@ p.lead,
 .transaction-container-title{
     font-size: 12px;
 }
+
+.checkout-item-attribute-container-body-receipt{
+    margin-top: 5px;
+    padding-left: 13px;
+}
