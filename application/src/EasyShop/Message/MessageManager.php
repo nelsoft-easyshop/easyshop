@@ -145,8 +145,14 @@ class MessageManager {
 
             $this->em->persist($message);
             $this->em->flush();
-           
-            $response['messageId'] = $message->getIdMsg();
+        
+            $messageId = $message->getIdMsg();
+            $response['messageId'] = $messageId;
+            $response['messageDetails'] = $this->getMessageDetailsById($messageId);
+
+            /**
+             * uncomment to queue mail
+             *
             $emailRecipient = $recipient->getEmail();
             $emailSubject = $this->languageLoader->getLine('new_message_notif');
             $imageArray = $this->configLoader->getItem('email', 'images');
@@ -164,9 +170,8 @@ class MessageManager {
 
             $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, true);
 
-            /**
-             * uncomment to queue mail
-             *
+
+
             $this->emailService->setRecipient($emailRecipient)
                                ->setSubject($emailSubject)
                                ->setMessage($emailMsg, $imageArray)
@@ -179,7 +184,9 @@ class MessageManager {
                 $this->redisClient->publish($redisChatChannel, json_encode([
                     'event' => 'message-sent',
                     'recipient' => $recipient->getStorename(),
-                    'message' => $updatedMessageListForReciever,
+                    'messageData' => [
+                        'message' => $response['messageDetails'],
+                    ],
                 ]));
             }
             catch(\Exception $e){
@@ -452,7 +459,7 @@ class MessageManager {
      */
     public function setConversationAsRead($userId, $partnerId)
     {
-        $numberOfUpdateMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
+        $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
                                        ->updateToSeen($userId, $partnerId);
         if($numberOfUpdatedMessages > 0){
             $member = $this->serviceContainer['entity_manager']

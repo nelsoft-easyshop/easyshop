@@ -21,7 +21,7 @@
                     </thead>
                     <tbody>
                         <tr data-ng-repeat="convHead in messageData.conversationList | orderBy:'last_date': true" id="partner{{convHead.partner_member_id}}"
-                            data-ng-class="{'not-seen' : convHead.unread_message_count > 0, 'thread-selected' :convHead.partner_member_id == userId}">
+                            data-ng-class="{'not-seen' : convHead.unread_message_count > 0, 'thread-selected' : convHead.partner_member_id == userId}">
                             <td width="10%">
                                 <div class="img-wrapper-div">
                                     <span class="img-wrapper-span">

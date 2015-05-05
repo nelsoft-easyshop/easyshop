@@ -143,7 +143,7 @@
 
                 $messageNotificationIcon.html(numberOfUnreadMessages);
                 if(numberOfUnreadMessages > 0){
-                    $document.prop('title', '(' + numberOfUnreadMessages + ') ' + title);
+                    $document.prop('title', '(' + numberOfUnreadMessages + ') ' + title  );
                     $messageNotificationIcon.css('display','inline-block');
                 }
                 else{

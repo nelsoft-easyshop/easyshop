@@ -71,7 +71,7 @@ class MessageController extends MY_Controller
         ];
 
         $title = $conversationHeaderData['totalUnreadMessages'] > 0
-                ? 'Messages (' . $conversationHeaderData['totalUnreadMessages'] . ') | Easyshop.ph'
+                ? '(' . $conversationHeaderData['totalUnreadMessages'] . ') Messages | Easyshop.ph'
                 : 'Messages | Easyshop.ph';
         $headerData = [
             "memberId" => $this->userId,
@@ -148,7 +148,7 @@ class MessageController extends MY_Controller
         $messageSendingResult = $this->messageManager->sendMessage($senderEntity, $receiverEntity, $message);
         if($messageSendingResult['isSuccessful']){
             $result['success'] = true;
-            $result['messageDetails'] = $this->messageManager->getMessageDetailsById($messageSendingResult['messageId']);
+            $result['messageDetails'] = $messageSendingResult['messageDetails']; 
         }
         else{
             switch($messageSendingResult['error']){

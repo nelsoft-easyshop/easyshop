@@ -37,7 +37,7 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
         $scope.setUnreadMessageCount = function($integer) {
             var $pageTitle = $integer <= 0 
                              ? 'Messages | Easyshop.ph'
-                             : 'Messages (' + $integer + ') | Easyshop.ph';
+                             : '(' + $integer + ')' + ' Messages | Easyshop.ph';
             HeaderFactory.setTitle($pageTitle);
             MessageFactory.setUnreadConversationCount($integer);
         };
@@ -112,7 +112,6 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                                 'unread_message_count': 0,
                             }];
                             MessageFactory.setConversationList($newConversation.concat(MessageFactory.data.conversationList));
-                            MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
                             $state.go("readMessage", {userId: $recipientId});
                         }
                     }, function(errorMessage) {
@@ -204,6 +203,11 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                 });
         }
 
+        /**
+         * Set real time chat configuration
+         *
+         * @param {mixed} $chatConfig
+         */
         $scope.setRealTimeChatSettings = function($chatConfig) {
             var iosocketConnection = io.connect(
                 'https://' + $chatConfig.chatServerHost + ':' + $chatConfig.chatServerPort, 
@@ -212,9 +216,47 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
             var socket = socketFactory({
                 ioSocket: iosocketConnection 
             });
+
+            /**
+             * Handler if a send message action is broadcasted to current user's room
+             * i.e. a message was sent to the current user
+             */
+            socket.on('send message', function( data ) {
+                var newMessage = data.message.message;
+                var newMessageSenderId = parseInt(newMessage.senderMemberId, 10);
+                var sender = MessageFactory.getPartner(newMessageSenderId);
+                if(sender){
+
+                    var currentPartnerId = 0;
+                    if(MessageFactory.data.currentSelectedPartner !== null){
+                        currentPartnerId = parseInt(MessageFactory.data.currentSelectedPartner.from_id, 10);
+                    }
+
+                    if(currentPartnerId === newMessageSenderId){
+                        MessageFactory.setConversation([MessageFactory.constructMessage(newMessage)].concat(MessageFactory.data.conversation));
+                    }
+                    else{
+                        sender.unread_message_count = parseInt(sender.unread_message_count,10) + 1; 
+                    }
+                    sender.last_message = newMessage.message;
+                    sender.last_date = newMessage.time_sent;
+                }
+                else{
+                    var newConversationHeader = [{
+                        'from_id': newMessageSenderId,
+                        'id_msg': newMessage.id_msg,
+                        'is_sender': false,
+                        'last_date': newMessage.time_sent,
+                        'last_message': newMessage.message,
+                        'partner_image': newMessage.senderImage,
+                        'partner_member_id': newMessage.senderMemberId,
+                        'partner_storename': newMessage.senderStorename,
+                        'to_id': newMessage.recipientMemberId,
+                        'unread_message_count': 1,
+                    }];
+                    MessageFactory.setConversationList(newConversationHeader.concat(MessageFactory.data.conversationList));        
+                }
+            });
         }
-
-
-        
     }
 ]); 
