@@ -217,26 +217,7 @@ class MessageController extends MY_Controller
     public function markMessageAsRead()
     {
         $partnerId = (int) $this->input->post('partnerId');
-        $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                                        ->updateToSeen($this->userId, $partnerId);
-        if($numberOfUpdatedMessages > 0){
-            $member = $this->serviceContainer['entity_manager']
-                           ->find('EasyShop\Entities\EsMember', $this->userId);
-            $redisChatChannel = $this->messageManager->getRedisChannelName();
-            try{
-                $this->serviceContainer['redis_client']->publish($redisChatChannel, json_encode([
-                    'event' => 'message-opened',
-                    'reader' => $member->getStorename(),
-                ]));
-            }
-            catch(\Exception $e){
-                /**
-                 * Catch any exception but do nothing just so that the functionality
-                 * does not break if the redis channel is not available
-                 */
-            }
-        }
-        
+        $numberOfUpdatedMessages = $this->messageManager->setConversationAsRead($this->userId, $partnerId);
         echo json_encode([
             'numberOfUpdatedMessages' => $numberOfUpdatedMessages,
         ]);

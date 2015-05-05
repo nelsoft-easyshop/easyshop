@@ -414,7 +414,7 @@ class MessageManager {
     }
 
     /**
-     * Message details by ID
+     * Retrieve message details by ID
      *
      * @param integer $messageId
      * @return mixed
@@ -443,5 +443,36 @@ class MessageManager {
         return $messageData;
     }
 
+    /**
+     * Set messages between a user and his converstaion partner as read
+     *
+     * @param integer $userId
+     * @param integer $partnerId
+     * @return integer Number of marked messages
+     */
+    public function setConversationAsRead($userId, $partnerId)
+    {
+        $numberOfUpdateMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
+                                       ->updateToSeen($userId, $partnerId);
+        if($numberOfUpdatedMessages > 0){
+            $member = $this->serviceContainer['entity_manager']
+                           ->find('EasyShop\Entities\EsMember', $this->userId);
+            $redisChatChannel = $this->getRedisChannelName();
+            try{
+                $this->redisClient->publish($redisChatChannel, json_encode([
+                    'event' => 'message-opened',
+                    'reader' => $member->getStorename(),
+                ]));
+            }
+            catch(\Exception $e){
+                /**
+                 * Catch any exception but do nothing just so that the functionality
+                 * does not break if the redis channel is not available
+                 */
+            }
+        }
+        return $numberOfUpdateMessages;
+    }
+    
 
 }
