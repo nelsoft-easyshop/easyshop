@@ -195,7 +195,7 @@
                                                     <img src="/assets/images/img_profile_pic_5.png" />
                                                 </div>
                                             </td>
-                                            <td valign="bottom">
+                                            <td valign="middle">
                                                 <div class="search-seller-info">
                                                     <a href="#" class="link">Gadgets Galore</a>
                                                     <div class="search-seller-products-container">
@@ -241,7 +241,7 @@
                                                     <img src="/assets/images/img_profile_pic_3.jpg" />
                                                 </div>
                                             </td>
-                                            <td valign="bottom">
+                                            <td valign="middle">
                                                 <div class="search-seller-info">
                                                     <a href="#" class="link">Gadgets Shop</a>
                                                     <div class="search-seller-products-container">
@@ -287,7 +287,7 @@
                                                     <img src="/assets/images/img_profile_pic_2.jpg" />
                                                 </div>
                                             </td>
-                                            <td valign="bottom">
+                                            <td valign="middle">
                                                 <div class="search-seller-info">
                                                     <a href="#" class="link">Gadgets Store</a>
                                                     <div class="search-seller-products-container">
