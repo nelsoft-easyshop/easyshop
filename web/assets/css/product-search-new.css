@@ -162,7 +162,9 @@ html, body{
     color: #fff;
     border-radius: 4px;
     margin-left: 7px;
+    transition: all 0.3s ease;
 }
+
 .tab-head-container a:hover .tab-title-count{
     background: #ff893b;
 }
