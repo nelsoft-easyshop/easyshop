@@ -13,6 +13,7 @@
             <div class="icon-base">
                 <i class="icon-item"></i>
             </div>
+            <span class="button-action fa fa-angle-left"></span>
         </div>
     </a>
 </div>
