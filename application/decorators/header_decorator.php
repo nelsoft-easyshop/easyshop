@@ -22,7 +22,7 @@ class Header_decorator extends Viewdecorator
         $cartSize = 0;
         $chatServerHost = 0;
         $chatServerPort = 0;
-        $listOfFeatureWithRestriction = '';
+        $allowedFeatures = [];
 
         if($memberId){
             $isLoggedIn = true;
