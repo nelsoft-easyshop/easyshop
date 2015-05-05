@@ -171,11 +171,25 @@
                             </tr>
                         </thead>
                         
-                        <tbody> 
+                        <tbody>
                             <?php foreach ($cartData as $item): ?>
                                 <tr class="checkout-item <?php if($item['isAvailableInLocation'] === false): ?>border-bottom-0<?php endif;?>">
                                     <td>
                                         <?=html_escape($item['name']);?>
+                                        <?php if(empty($item['options']) === false): ?>
+                                            <div class="checkout-item-attribute-container">
+                                                <div class="checkout-item-attribute-container-header">
+                                                    <i class="fa fa-caret-down"></i> <span class="checkout-item-attribute-container-action">show</span> product attributes
+                                                </div>
+                                                <div class="checkout-item-attribute-container-body">
+                                                    <?php foreach ($item['options'] as $optionName => $optionValue): ?>
+                                                        <div class="checkout-item-attribute-name">
+                                                            <b><?=html_escape(strtoupper($optionName));?> : </b> <?=html_escape(strtoupper(explode('~', $optionValue)[0])); ?>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
                                     </td>
                                     <td><?=$item['qty'];?></td>
                                     <td><?=$item['isAvailableInLocation'] === false ? "N/A" : "&#8369; ".$item['shippingFee'] ;  ?></td>
