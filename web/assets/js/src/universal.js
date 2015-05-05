@@ -120,29 +120,35 @@
             url : "/MessageController/getNumberOfUnreadMessages",
             success : function(count)
             {   
-                var numberOfUnreadMessages = $.parseJSON(count);
+                var $document = $(document);
+                var $messageNotificationIcon = $('.msg_countr'); 
+                var numberOfUnreadMessages = parseInt($.parseJSON(count), 10);
                 var title = '';
                 
                 if($('#original-title').length === 0){
+                    /**
+                     * Keep a record of the original title to use for
+                     * succeeding notification update.
+                     */
                     var originalTitleTag = document.createElement('meta');
                     originalTitleTag.id = "original-title";
                     originalTitleTag.name = "original-title";
-                    title = $(document).prop('title');
+                    title = $document.prop('title');
                     originalTitleTag.content = title;
                     document.getElementsByTagName('head')[0].appendChild(originalTitleTag);
                 }
                 else{
-                    title = $('#original-title').attr('content')
+                    title = $('#original-title').attr('content');
                 }
 
-                $('.msg_countr').html(numberOfUnreadMessages);
-                if(parseInt(numberOfUnreadMessages) > 0){
-                    $(document).prop('title', '(' + numberOfUnreadMessages + ') ' + title);
-                    $('.msg_countr').css('display','inline-block');
+                $messageNotificationIcon.html(numberOfUnreadMessages);
+                if(numberOfUnreadMessages > 0){
+                    $document.prop('title', '(' + numberOfUnreadMessages + ') ' + title);
+                    $messageNotificationIcon.css('display','inline-block');
                 }
                 else{
-                    $(document).prop('title', title);
-                    $('.msg_countr').css('display','none'); 
+                    $document.prop('title', title);
+                    $messageNotificationIcon.css('display','none'); 
                 }
             }
         }); 
