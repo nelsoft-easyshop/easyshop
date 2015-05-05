@@ -1589,7 +1589,7 @@ h3 > b{
 }
 
 .call-to-action-sell-container{
-    display: inline-block;
+    display: none;
     position: fixed;
     z-index: 99999999;
     bottom: 0;
@@ -1672,9 +1672,9 @@ h3 > b{
     position: absolute;
     top: 0;
     bottom: 0;
-    z-index: 99999;
-      width: 135px;
-  height: 50px;
+    z-index: 9;
+    width: 135px;
+    height: 50px;
     text-align: center;
     margin: 0px;
     margin-left: 51px;
@@ -1688,6 +1688,10 @@ h3 > b{
     text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
 }
 
+.call-to-action-sell-container .call-to-action-sell-text a{
+    color: #e8bc97;
+}
+
 .button-action{
       position: absolute;
   right: 9px;
@@ -1697,6 +1701,11 @@ h3 > b{
   color: #fff;
   font-size: 17px;
   text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
+  cursor: pointer;
+}
+
+.action-show{
+    display: none;
 }
 
 @media (min-width: 1380px) {
@@ -1896,37 +1905,6 @@ h3 > b{
     .form-container-404 .form-404-input .row {
         margin-left: 0;
         margin-right: 0;
-    }
-
-    /*** sell an item floating button responsive ***/
-    .call-to-action-sell-container .call-to-action-sell-text{
-        width: 117px;
-        height: 33px;
-        margin-left: 53px;
-        margin-top: 10px;
-        padding-top: 4px;
-        font-size: 13px;
-    }
-
-    .call-to-action-sell-container .top-filler{
-        width: 141px;
-        height: 5px;
-    }
-
-    .call-to-action-sell-container .base{
-        width: 200px;
-        height: 33px;
-    }
-
-    .call-to-action-sell-container .icon-base{
-        width: 43px;
-        height: 34px;
-        margin-left: 3px;
-        margin-top: -34px;
-    }
-
-    .call-to-action-sell-container .icon-base .icon-item{
-        font-size: 1.5em;
     }
 }
 
