@@ -133,6 +133,19 @@
                                 <tr class="checkout-item">
                                     <td>
                                         <?=html_escape($product->getProduct()->getName());?>
+                                        <div class="checkout-item-attribute-container">
+                                            <div class="checkout-item-attribute-container-header">
+                                                <i class="fa fa-caret-down"></i> <span class="checkout-item-attribute-container-action">show</span> product attributes
+                                            </div>
+                                            <div class="checkout-item-attribute-container-body">
+                                                <div class="checkout-item-attribute-name">
+                                                    <b>Size : </b> Small
+                                                </div>
+                                                 <div class="checkout-item-attribute-name">
+                                                    <b>Color : </b> Blue
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td><?=$product->getOrderQuantity();?></td>
                                     <td>&#8369; <?=number_format($product->getHandlingFee(), 2, '.', ',')?></td>
