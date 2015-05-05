@@ -51,15 +51,15 @@ class MemberFeatureRestrictManager
     {
         $featureRestrictEntity = $this->em->find('EasyShop\Entities\EsFeatureRestrict', $featureId);
         $memberEntity = $this->em->find('EasyShop\Entities\EsMember', $memberId);
-        $memberFeatureRestrictEntity = '';
+        $memberFeatureRestrictEntity = null;
 
         if ($featureRestrictEntity) {
-            $isMemberAllowedInFeature = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
+            $isMemberAlreadyAllowed = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
                                                  ->checkIfMemberIsAllowedInFeature($featureRestrictEntity, $memberId);
             $isFeatureFull = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
                                       ->checkIfFeatureIsFull($featureRestrictEntity);
 
-            if (!$isMemberAllowedInFeature && !$isFeatureFull) {
+            if (!$isMemberAlreadyAllowed && !$isFeatureFull) {
                 $memberFeatureRestrictEntity = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
                                                         ->addMemberToFeature($memberEntity, $featureRestrictEntity, 0);
             }
