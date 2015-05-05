@@ -1603,8 +1603,8 @@ h3 > b{
 
 .call-to-action-sell-container .base{
     background: #5b5159;
-    width: 300px;
-    height: 50px;
+    width: 215px;
+    height: 35px;
     border-bottom: solid #4d414b 2px;
     -webkit-transform: skew(20deg);
     -moz-transform: skew(20deg);
@@ -1612,16 +1612,16 @@ h3 > b{
     -o-transform: skew(20deg);
     margin-left: -25px;
     position: relative;
-    -webkit-box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
-    -moz-box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
-    box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
+    -webkit-box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    -moz-box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
     z-index:1;
 }
 
 .call-to-action-sell-container .icon-base{
     background: #ff893b;
-    width: 78px;
-    height: 50px;
+    width: 52px;
+    height: 35px;
     position: relative;
     border-bottom: solid #ff4c1d 2px;
     -webkit-transform: skew(20deg);
@@ -1629,7 +1629,7 @@ h3 > b{
     -ms-transform: skew(20deg);
     -o-transform: skew(20deg);
     margin-left: 3px;
-    margin-top: -50px;
+    margin-top: -35px;
     z-index:3;
 }
 
@@ -1645,7 +1645,7 @@ h3 > b{
     right: 0;
     margin: auto;
     text-align: center;
-    font-size: 2.5em;
+    font-size: 1.5em;
     color: #fff;
     margin-top: 7px;
     text-shadow: 2px 1px 0px rgba(255, 78, 8, 1);
@@ -1654,17 +1654,17 @@ h3 > b{
 .call-to-action-sell-container .top-filler{
     display: inline-block;
     position: relative;
-    width: 178px;
-    height: 10px;
+    width: 134px;
+    height: 6px;
     background: #ff893b;
     -webkit-transform: skew(47deg);
     -moz-transform: skew(47deg);
     -ms-transform: skew(47deg);
     -o-transform: skew(47deg);
     margin-left: -30px;
-    -webkit-box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
-    -moz-box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
-    box-shadow: 2px -2px 11px 0px rgba(138,138,138,1);
+    -webkit-box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    -moz-box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
     z-index:2;
 }
 
@@ -1673,19 +1673,30 @@ h3 > b{
     top: 0;
     bottom: 0;
     z-index: 99999;
-    width: 185px;
-    height: 50px;
+      width: 135px;
+  height: 50px;
     text-align: center;
     margin: 0px;
-    margin-left: 85px;
+    margin-left: 51px;
     margin-top: 10px;
-    padding-top: 12px;
-    font-size: 20px;
+    padding-top: 7px;
+    font-size: 12px;
     font-family: Open Sans;
     font-weight: 600;
     text-transform: uppercase;
     color: #e8bc97;
     text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
+}
+
+.button-action{
+      position: absolute;
+  right: 9px;
+  bottom: 7px;
+  z-index: 999;
+  display: inline-block;
+  color: #fff;
+  font-size: 17px;
+  text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
 }
 
 @media (min-width: 1380px) {
