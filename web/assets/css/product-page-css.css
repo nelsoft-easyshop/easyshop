@@ -862,6 +862,7 @@ body{
 
 .p-html-description h1, .p-html-description h2, 
 .p-html-description h3, .p-html-description h4, .p-html-description h5 {
+    font-size: 18px !important;
     height: auto !important;
     margin: 0 !important;
     padding: 30px 0 !important;
@@ -891,6 +892,17 @@ body{
     height: auto;
     max-width: 100%;
     margin-bottom: 10px;
+}
+
+.p-html-description td {
+    display: inline-block !important;
+    font-size: 12px !important;
+    width: auto !important;
+}
+
+.p-html-description table span,
+.p-html-description table p {
+    font-size: 12px !important;
 }
 
 .step4_section .p-html-description img {
@@ -1536,34 +1548,13 @@ body{
 }
 
 .prod-select-con {
-    overflow: hidden;
-    padding: 0 !important;
     width: 100%;
     margin-bottom: 7px;
 }
 
-.prod-select-con:focus {
-    border-color: #66afe9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
-}
-
 .prod-select-con select {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    height: 32px;
-    line-height: 32px;
-    padding: 6px 0;
+    line-height: 28px;
     width: 100%;
-    text-indent: 0.01px;
-    text-overflow: '';
-}
-
-.ie9 .prod-select-con {
-    background: #fff none;
-    position: relative;
 }
 
 .prod-availability-container {
