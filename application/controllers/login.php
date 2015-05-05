@@ -134,7 +134,13 @@ class Login extends MY_Controller
             $authenticationResult = $this->accountManager->authenticateMember($uname, $pass);
 
             if (empty($authenticationResult["member"]) === false) {
-            
+
+                /**
+                 * Force codeigniter to reissue new session to prevent session fixation attacks
+                 */
+                $this->session->sess_destroy();
+                $this->session->sess_create();
+                
                 $memberId =  $authenticationResult["member"]->getIdMember();
                 
                 $authenticationResult['o_success'] = 1;
@@ -174,7 +180,9 @@ class Login extends MY_Controller
                                      ->setSession($session);
                 $em->persist($authenticatedSession);
                 $em->flush();
-                
+                /**
+                 * Save JWT token to the session
+                 */
                 $jwtData = [
                     "iss" => base_url(),
                     "aud" => base_url(),
@@ -187,6 +195,12 @@ class Login extends MY_Controller
                 $jwtToken = $this->serviceContainer['json_web_token']
                                  ->encode($jwtData, $jwtSecret);
                 $this->session->set_userdata('jwtToken', $jwtToken);
+                /**
+                 * Clean data for outputting
+                 */
+                unset($authenticationResult['member']);
+                unset($authenticationResult['o_memberid']);
+                unset($authenticationResult['o_session']);
             }
             else{ 
                 $this->throttleService->logFailedAttempt($uname);
@@ -196,6 +210,7 @@ class Login extends MY_Controller
                 $authenticationResult['o_success'] = 0;
             }
         }
+
         return $authenticationResult;
     }
     

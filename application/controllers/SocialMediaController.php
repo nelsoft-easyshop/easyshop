@@ -174,6 +174,12 @@ class SocialMediaController extends MY_Controller
      */
     private function login($userData)
     {
+        /**
+         * Force session reissue to prevent session fixation attacks
+         */
+        $this->session->sess_destroy();
+        $this->session->sess_create();
+
         $session = $this->socialMediaManager->createSession($userData->getIdMember());
         $user = $this->entityManager->find('\EasyShop\Entities\EsMember', ['idMember' => $userData->getIdMember()]);
         $cartData = $this->serviceContainer['cart_manager']->synchCart($user->getIdMember());;

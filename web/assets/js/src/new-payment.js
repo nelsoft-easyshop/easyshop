@@ -46,6 +46,24 @@
         $(".available-location-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
     });
 
+    $(".checkout-item-attribute-container-header").click(function(){
+        var triggeredAttributeBody = $(this).parent().find(".checkout-item-attribute-container-body");
+        var triggeredAttributeActionText = $(this).parent().find(".checkout-item-attribute-container-action");
+        
+        $(".checkout-item-attribute-container-header").not($(this)).removeClass("toggled");
+        $(".checkout-item-attribute-container-body").not(triggeredAttributeBody).slideUp("fast");
+        $(".checkout-item-attribute-container-action").not(triggeredAttributeActionText).text("show");
+        
+        $(this).toggleClass("toggled");
+        triggeredAttributeBody.slideToggle("fast");
+
+        if ($('.checkout-item-attribute-container-header').hasClass('toggled')) {
+            triggeredAttributeActionText.text("hide");
+        }else{
+            triggeredAttributeActionText.text("show");  
+        }
+    });
+
     function disableTextBox()
     {
         $("#fname, #telephone, #mobile, #fullAddress").attr("readonly", "true");
