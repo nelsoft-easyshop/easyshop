@@ -1,8 +1,11 @@
 <div class="call-to-action-sell-container">
-    <a href="/sell/step1" title="Sell an item">
+    
         <div class="call-to-action-sell-wrapper">
+
             <div class="call-to-action-sell-text">
-                Sell An Item
+                <a href="/sell/step1">
+                    Sell An Item
+                </a>
             </div>
             <div class="top-filler">
 
@@ -11,9 +14,12 @@
 
             </div>
             <div class="icon-base">
-                <i class="icon-item"></i>
+                <a href="/sell/step1" title="Sell an item">
+                    <i class="icon-item"></i>
+                </a>
             </div>
-            <span class="button-action fa fa-angle-left"></span>
+            <span class="button-action action-hide fa fa-angle-left"></span>
+            <span class="button-action action-show fa fa-angle-right"></span>
         </div>
-    </a>
+    
 </div>
