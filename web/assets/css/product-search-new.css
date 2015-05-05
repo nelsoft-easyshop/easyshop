@@ -130,8 +130,12 @@ html, body{
     display: inline-block;
     font-weight: bold;
     font-size: 13px;
-
 }
+
+.tab-head-container a:hover{
+    color: #ff893b;
+}
+
 
 .tab-head-container a.active{
     color: #ff893b;
@@ -158,6 +162,9 @@ html, body{
     color: #fff;
     border-radius: 4px;
     margin-left: 7px;
+}
+.tab-head-container a:hover .tab-title-count{
+    background: #ff893b;
 }
 
 .tab-head-container a.active .tab-title-count{
@@ -493,10 +500,10 @@ html, body{
     border: solid #e2e2e2 1px;
     position: relative;
     overflow: hidden;
-    height: 27px;
-    width: 27px;
+    height: 31px;
+    width: 31px;
     display: inline-block;
-    margin-right: 2px;
+    margin-right: 0px;
 }
 
 .search-seller-item-img-container img{
@@ -511,7 +518,7 @@ html, body{
 }
 
 .search-seller-products-container{
-    margin-bottom: -4px;
+    margin-bottom: 0px;
 }
 /* =============================================
 -----------------  List View -----------------
