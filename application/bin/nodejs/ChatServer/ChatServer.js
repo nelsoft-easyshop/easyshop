@@ -36,10 +36,10 @@ var messageHandler = function(channel, jsonString){
     if(data.event === 'message-opened' && data.reader){
         io.to(data.reader).emit('message opened');
     }
-    else if(data.event === 'message-sent' && data.recipient && data.message){
+    else if(data.event === 'message-sent' && data.recipient && data.messageData){
         io.to(data.recipient).emit('send message', {
             recipient: data.recipient,
-            message: data.message
+            message: data.messageData
         });
     }
 };
@@ -60,6 +60,7 @@ io.sockets.on( 'connection', function(socket) {
     socket.on('set account online', function() {
         var storename = socket.client.request.decoded_token.storename; 
         socket.join(storename);
+        console.log(storename + ' is now connected');
     });
 
     /**
