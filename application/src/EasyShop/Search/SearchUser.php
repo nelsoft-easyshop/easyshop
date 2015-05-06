@@ -85,15 +85,18 @@ class SearchUser
         $sphinxResult = $this->sphinxClient->RunQueries();
 
         if ($sphinxResult === false) {
+            // remove all double spaces
             $clearString = str_replace('"', '', preg_replace('!\s+!', ' ', $queryString));
             if (trim($clearString) !== "") {
+                // make string alpha numeric
                 $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString)));
                 $wildCardString = !implode('* +', $explodedStringWithRegEx)
                                   ? ""
                                   : '+'.implode('* +', $explodedStringWithRegEx) .'*';
-                $searchString = str_replace("+*", "", $wildCardString);
+                // remove excess '+' character
+                $searchString = rtrim($wildCardString, "+");
                 $users = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                         ->searchUser($searchString);
+                                         ->searchUser($searchString, $clearString);
                 foreach ($users as $user) {
                     $ids[] = $user['idMember'];
                 }
