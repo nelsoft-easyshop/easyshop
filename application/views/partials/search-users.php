@@ -20,6 +20,9 @@
                                             </div>
                                         </a>
                                     <?php endforeach; ?>
+                                    <!-- DISPLAY IF THERE ARE NO ITEMS POSTED
+                                        <div height="31"><i>No products posted</i></div>
+                                    -->
                                 </div>
                             </div>
                         </td>
