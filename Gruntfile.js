@@ -278,9 +278,7 @@ module.exports = function (grunt) {
                              'web/assets/js/angular/app.js',
                              'web/assets/js/angular/services/modalService.js',
                              'web/assets/js/angular/controllers/messageController.js',
-                             'web/assets/js/angular/controllers/headerController.js',
                              'web/assets/js/angular/factories/messageFactory.js',
-                             'web/assets/js/angular/factories/headerFactory.js',
                              'web/assets/js/angular/directives/csrfDirective.js',
                              'web/assets/js/angular/directives/onInitDirective.js'],
 
