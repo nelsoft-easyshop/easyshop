@@ -328,11 +328,12 @@ class SearchProduct
 
     /**
      * Return all product processed by all filters
-     * @param  mixed $parameters
+     * @param  mixed   $parameters
      * @param  integer $memberId
+     * @param  integer $isHydrate
      * @return mixed
      */
-    public function getProductBySearch($parameters, $hydrate = true)
+    public function getProductBySearch($parameters, $isHydrate = true)
     {
         $searchProductService = $this;
         $productManager = $this->productManager;
@@ -371,7 +372,7 @@ class SearchProduct
         $totalCount = count($finalizedProductIds);
         $products = [];
         
-        if ($hydrate) {
+        if ($isHydrate) {
             $offset = (int) bcmul($pageNumber, $perPage);
             $paginatedProductIds = array_slice($finalizedProductIds, $offset, $perPage);
             foreach ($paginatedProductIds as $productId) {
