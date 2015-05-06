@@ -1693,15 +1693,15 @@ h3 > b{
 }
 
 .button-action{
-      position: absolute;
-  right: 9px;
-  bottom: 7px;
-  z-index: 999;
-  display: inline-block;
-  color: #fff;
-  font-size: 17px;
-  text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
-  cursor: pointer;
+    position: absolute;
+    right: 9px;
+    bottom: 7px;
+    z-index: 999;
+    display: inline-block;
+    color: #fff;
+    font-size: 17px;
+    text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
+    cursor: pointer;
 }
 
 .action-show{
