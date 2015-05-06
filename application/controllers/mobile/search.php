@@ -42,7 +42,7 @@ class search extends MY_Controller
                                        ->formatDisplayItem($value->getIdProduct());
             }
 
-            $attributes = $searchProductService->getProductAttributesByProductIds($response['products']);
+            $attributes = $searchProductService->getProductAttributesByProductIds($search['productIds']);
             $sortType = ['name','price'];
 
             $specialFilter = ['filterprice' => 
