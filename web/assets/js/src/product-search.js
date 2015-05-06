@@ -603,13 +603,8 @@
         $("#"+tabSrc).show();
         $(".tab-head-container a").click(function(){
             var $this = $(this);
-            var tabLink = $this.attr('src');
-            var tabName = $(document).find("#"+tabLink);
-
-            $(".tab-head-container a").not($this).removeClass("active");
-            $this.addClass("active");
-            $(".tab-container").not(tabName).hide();
-            tabName.show();
+            var $segment = $this.data('segment');
+            document.location.href = '/search/'+$segment+'?'+allQueryString;
         });
     });
 
