@@ -2,8 +2,6 @@
 
 namespace EasyShop\Notifications;
 
-require(getcwd() . '/../vendor/swiftmailer/swiftmailer/lib/swift_required.php');
-
 use EasyShop\Entities\EsQueue;
 use EasyShop\Entities\EsQueueType;
 use EasyShop\Entities\EsQueueStatus as EsQueueStatus;
