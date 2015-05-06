@@ -2,12 +2,19 @@
 
 namespace EasyShop\Search;
 
+use EasyShop\Entities\EsProduct as EsProduct;
+
 class SearchUser
 {
     /**
      * Number of user to display per request
      */
     const PER_PAGE = 30;
+
+    /**
+     * Number of product to display per user
+     */
+    const PRODUCT_PER_USER = 5;
 
     /**
      * Entity Manager instance
@@ -37,6 +44,12 @@ class SearchUser
     private $configLoader;
 
     /**
+     * Product Manager Instance
+     * @var EasyShop\Product\ProductManager
+     */
+    private $productManager;
+
+    /**
      * Constructor. Retrieves Entity Manager instance
      *
      */
@@ -44,12 +57,14 @@ class SearchUser
         $em,
         $sphinxClient,
         $userManager,
-        $configLoader
+        $configLoader,
+        $productManager
     ) {
         $this->em = $em;
         $this->sphinxClient = $sphinxClient;
         $this->userManager = $userManager;
         $this->configLoader = $configLoader;
+        $this->productManager = $productManager;
     }
 
     /**
@@ -60,7 +75,7 @@ class SearchUser
     private function filterBySearchString($queryString)
     {
         $ids = [];
-        $sphinxMatchMatches = $this->configLoader->getItem('search','sphinx_match_matches');
+        $sphinxMatchMatches = $this->configLoader->getItem('search', 'sphinx_match_matches');
         $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
         $this->sphinxClient->SetFieldWeights([
             'store_name' => 100,
@@ -72,19 +87,19 @@ class SearchUser
         if ($sphinxResult === false) {
             $clearString = str_replace('"', '', preg_replace('!\s+!', ' ', $queryString));
             if (trim($clearString) !== "") {
-                $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+                $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString)));
                 $wildCardString = !implode('* +', $explodedStringWithRegEx)
-                                  ? "" 
+                                  ? ""
                                   : '+'.implode('* +', $explodedStringWithRegEx) .'*';
                 $searchString = str_replace("+*", "", $wildCardString);
                 $users = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                         ->searchUser($searchString); 
+                                         ->searchUser($searchString);
                 foreach ($users as $user) {
-                    $ids[] = $user['idMember']; 
+                    $ids[] = $user['idMember'];
                 }
             }
         }
-        elseif (isset($sphinxResult[0]['matches'])) { 
+        elseif (isset($sphinxResult[0]['matches'])) {
             foreach ($sphinxResult[0]['matches'] as $memberId => $member) {
                 $ids[] = $memberId;
             }
@@ -110,7 +125,20 @@ class SearchUser
                             ->findBy(['idMember' => $paginatedMemberIds]);
         foreach ($members as $keyMember => $member) {
             $members[$keyMember]->userImage = $this->userManager->getUserImage($member->getIdMember(), 'small');
-            // TO DO get product
+            $members[$keyMember]->userProducts = [];
+            $userProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                     ->getUserProducts(
+                                         $member->getIdMember(),
+                                         EsProduct::ACTIVE,
+                                         EsProduct::ACTIVE,
+                                         0,
+                                         self::PRODUCT_PER_USER,
+                                         "",
+                                         "p.clickcount"
+                                     );
+            foreach ($userProducts as $product) {
+                $members[$keyMember]->userProducts[] = $this->productManager->getProductDetails($product);
+            }
         }
 
         return [

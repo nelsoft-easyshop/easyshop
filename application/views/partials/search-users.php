@@ -13,31 +13,13 @@
                             <div class="search-seller-info">
                                 <a href="/<?=$seller->getSlug();?>" class="link"><?=html_escape($seller->getStoreName());?></a>
                                 <div class="search-seller-products-container">
-                                    <a href="#">
-                                        <div class="search-seller-item-img-container">
-                                            <img src="/assets/images/products/apple-p.jpg" />
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="search-seller-item-img-container">
-                                            <img src="/assets/images/products/lg-p.jpg" />
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="search-seller-item-img-container">
-                                            <img src="/assets/images/products/htc-p.jpg" />
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="search-seller-item-img-container">
-                                            <img src="/assets/images/products/sony-p.jpg" />
-                                        </div>
-                                    </a>
-                                    <a href="#">
-                                        <div class="search-seller-item-img-container">
-                                            <img src="/assets/images/products/samsung-p.jpg" />
-                                        </div>
-                                    </a>
+                                    <?php foreach ($seller->userProducts as $product): ?>
+                                        <a href="<?=html_escape($product->getSlug());?>">
+                                            <div class="search-seller-item-img-container">
+                                                <img src="<?=getAssetsDomain().$product->getDefaultImage()->getDirectory() .'thumbnail/'. $product->getDefaultImage()->getFilename();?>" />
+                                            </div>
+                                        </a>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </td>
