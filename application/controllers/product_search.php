@@ -164,15 +164,15 @@ class product_search extends MY_Controller {
         $parameter = $response['getParameter'] = $this->input->get();
         $response['segment'] = strtolower($type);
         $response['productTab'] = true;
-        $hydrateSeller = false;
-        $hydrateProduct = true;
+        $isHydrateSeller = false;
+        $isHydrateProduct = true;
         if ($response['segment'] === "seller") {
             $response['productTab'] = false;
-            $hydrateSeller = true;
-            $hydrateProduct = false;
+            $isHydrateSeller = true;
+            $isHydrateProduct = false;
         }
-        $searchUser = $searchUserService->searchUser($parameter, $hydrateSeller);
-        $searchProduct = $searchProductService->getProductBySearch($parameter, $hydrateProduct);
+        $searchUser = $searchUserService->searchUser($parameter, $isHydrateSeller);
+        $searchProduct = $searchProductService->getProductBySearch($parameter, $isHydrateProduct);
         $response['attributes'] = $searchProductService->getProductAttributesByProductIds($searchProduct['productIds']);
         $response['availableCondition'] = [];
         if (isset($response['attributes']['Condition'])) {
