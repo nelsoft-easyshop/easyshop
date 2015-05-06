@@ -20,10 +20,17 @@
                         socket.emit('set account offline');
                     };
 
+                    /**
+                     * Handler for when a message was sent to the current user
+                     */
                     socket.on('send message', function( data ) {
                         updateMessageCountIcons();
                     });
 
+                    /**
+                     * Handler for when the user has opened a message to update
+                     * the other opened tabs
+                     */
                     socket.on('message opened', function( data ) {
                         updateMessageCountIcons();
                     });
