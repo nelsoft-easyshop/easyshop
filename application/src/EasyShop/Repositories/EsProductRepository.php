@@ -231,8 +231,8 @@ class EsProductRepository extends EntityRepository
         $qbResult = $qb->select('DISTINCT(p.condition) as condition')
                                 ->from('EasyShop\Entities\EsProduct','p')
                                 ->where(
-                                        $qb->expr()->in('p.idProduct', $productIds)
-                                    )
+                                    $qb->expr()->in('p.idProduct', $productIds)
+                                )
                                 ->getQuery();
         $result = $qbResult->getResult();
         $conditions = array_map(function($value) { return $value['condition']; }, $result);
