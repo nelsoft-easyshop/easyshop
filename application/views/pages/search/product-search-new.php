@@ -126,14 +126,17 @@
                         </ul>
                     </div>
                     <div class="tab-container" id="<?=$productTab ? 'search-product-list' : 'search-seller-list' ?>">
-                        <div class="search-header">
-                            <h5>
-                            <strong><?=$productTab ? $productCount : $userCount; ?></strong>
-                            <?=$productTab ? 'product' : 'seller' ?> results for
-                            <strong><?=html_escape($string); ?></strong>
-                            </h5>
-                        </div>
-                        <?php if($productTab): ?>
+                        <?php if(($productTab && $productCount > 0) 
+                                || ($productTab === false && $userCount > 0)): ?>
+                            <div class="search-header">
+                                <h5>
+                                <strong><?=$productTab ? $productCount : $userCount; ?></strong>
+                                <?=$productTab ? 'product' : 'seller' ?> results for
+                                <strong><?=html_escape($string); ?></strong>
+                                </h5>
+                            </div>
+                        <?php endif; ?>
+                        <?php if($productTab && $productCount > 0): ?>
                             <div class="div-product-view-option">
                                 <table class="p-view color-default pull-left">
                                     <tbody>
@@ -214,7 +217,7 @@
                                             <br>
                                             <br>
                                             <h4>Search again</h4>
-                                            <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/product" id="nav-searchbar">
+                                            <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/seller" id="nav-searchbar">
                                                 <div class="row">
                                                     <div class="col-xs-12 col-sm-9 col-md-9 form-404-input">
                                                         <div class="row">
