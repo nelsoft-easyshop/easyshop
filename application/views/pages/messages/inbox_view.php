@@ -43,7 +43,6 @@
     <script src="/assets/js/src/vendor/bower_components/checklist-model.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bower_components/angular-socket.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-
     <script src="/assets/js/angular/app.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/services/modalService.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/controllers/messageController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
