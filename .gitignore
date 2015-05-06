@@ -37,7 +37,7 @@
 
 
 /config.php
-/application/bin/js/config.js
+/application/bin/nodejs/ChatServer/config.js
 /application/config/param/controllers.php
 .DS_Store
 
