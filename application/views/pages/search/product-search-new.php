@@ -158,9 +158,8 @@
                         <?php endif; ?>
                         <div class="search-results-container <?=isset($isListView) && $isListView ? 'list-search' : ''?>">
                             <?php if($productTab): ?>
-                                <?=$productView; ?> 
                                 <?php if($productCount > 0): ?>
-                                    <?=$sellerView;?>
+                                    <?=$productView;?>
                                 <?php else: ?>
                                     content here
                                 <?php endif; ?>
