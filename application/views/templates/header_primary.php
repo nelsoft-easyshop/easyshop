@@ -7,7 +7,7 @@
 
 <!--[if (gt IE 9)|!(IE)]><!--><!--<![endif]-->
 
-<head data-ng-controller="HeaderController">
+<head>
     <?php require_once("assets/includes/css.php"); ?>
     <?php require_once("assets/includes/js.php"); ?>
     <meta charset="utf-8" />
@@ -29,7 +29,7 @@
     </script>
     <![endif]-->
 
-    <title data-ng-bind="pageTitle">
+    <title>
         <?php echo $title?>
     </title>
 
@@ -90,7 +90,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="header-link">
                             <?php if(isset($logged_in) && $logged_in): ?>
                                 <div class="new-user-nav-dropdown">
-                                    <div id="unread-messages-count2" class="msg_countr top-msg-con message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                    <div id="unread-messages-count2" class="msg_countr top-msg-con message-count-con <?php echo (int) $unreadMessageCount > 0 ? '' : 'hide'; ?>">
                                         <?php echo $unreadMessageCount; ?>
                                     </div>
                                     <div class="login-profile-con" style="background: url(<?php echo getAssetsDomain(); ?><?=$user->profileImage;?>) no-repeat center center; background-size:cover;">
@@ -114,7 +114,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         </li>
                                         <li class="nav-dropdown-border pos-rel">
                                             <a href="/messages">Messages</a>
-                                            <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                            <div id="unread-messages-count" class="msg_countr message-count-con <?php echo (int) $unreadMessageCount > 0 ? '' : 'hide'; ?>">
                                                 <?php echo $unreadMessageCount; ?>
                                             </div>
                                         </li>
@@ -440,7 +440,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 <input type="hidden" id="chatServerConfig" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-jwttoken="<?php echo html_escape($jwtToken); ?>">
-<input type="hidden" id="listOfFeatureWithRestriction" data-real-time-chat="<?=$listOfFeatureWithRestriction && $listOfFeatureWithRestriction[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
+<input type="hidden" id="isRealTimeChatAllowed" data-real-time-chat="<?php echo $allowedFeatures && $allowedFeatures[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.scrollUp.js"></script>

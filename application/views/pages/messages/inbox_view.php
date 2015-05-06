@@ -6,11 +6,14 @@
 <?php endif; ?>
 
 <section class="bg-cl-fff">
+
     <?php echo form_open('/');?>
     <?php echo form_close();?> 
+
     <div data-ng-controller="MessageController">
-        <div on-init-directive callback-fn="setConversationList(<?=html_escape($conversationHeaders);?>)"></div>
-        <div on-init-directive callback-fn="setUnreadMessageCount(<?=html_escape($unreadConversationCount);?>)"></div>
+        <div on-init-directive callback-fn="setConversationList(<?php echo html_escape($conversationHeaders);?>)"></div>
+        <div on-init-directive callback-fn="setUnreadMessageCount(<?php echo html_escape($unreadConversationCount);?>)"></div>
+        <div on-init-directive callback-fn="setRealTimeChatSettings(<?php echo html_escape($realtimeChatConfig); ?>)"></div> 
     </div>
     
     <div class="container inbox-view-content">
@@ -30,6 +33,7 @@
     <div id="modal-background">
         <img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_loading.gif">
     </div>
+
 </section>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
@@ -38,15 +42,13 @@
     <script src="/assets/js/src/vendor/bower_components/ng-infinite-scroll.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bower_components/checklist-model.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-
+    <script src="/assets/js/src/vendor/bower_components/angular-socket.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/app.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/services/modalService.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/controllers/messageController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-    <script src="/assets/js/angular/controllers/headerController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/factories/messageFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-    <script src="/assets/js/angular/factories/headerFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/directives/csrfDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-    <script src="/assets/js/angular/directives/onInitDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/directives/onInitDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>                         
 <?php else: ?>
     <script src="/assets/js/min/easyshop.inbox-view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>

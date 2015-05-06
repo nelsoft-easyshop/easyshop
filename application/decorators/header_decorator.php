@@ -22,7 +22,7 @@ class Header_decorator extends Viewdecorator
         $cartSize = 0;
         $chatServerHost = 0;
         $chatServerPort = 0;
-        $listOfFeatureWithRestriction = '';
+        $allowedFeatures = [];
 
         if($memberId){
             $isLoggedIn = true;
@@ -39,8 +39,8 @@ class Header_decorator extends Viewdecorator
             $cartSize = $cartImplementation->getSize(true);
             $chatServerHost = $messageManager->getChatHost(true);
             $chatServerPort = $messageManager->getChatPort();
-            $listOfFeatureWithRestriction = $this->serviceContainer['member_feature_restrict_manager']
-                                                 ->getListOfFeatureWithRestrictionByMemberId($memberId);
+            $allowedFeatures = $this->serviceContainer['member_feature_restrict_manager']
+                                    ->getAllowedFeaturesForMember($memberId);
         }
 
         $cartTotalAmount = $cartSize > 0 ? $cartImplementation->getTotalPrice() : 0;
@@ -68,7 +68,7 @@ class Header_decorator extends Viewdecorator
         $this->view_data['chatServerHost'] = $chatServerHost;
         $this->view_data['chatServerPort'] = $chatServerPort;
         $this->view_data['jwtToken'] = $this->jwtToken;
-        $this->view_data['listOfFeatureWithRestriction'] = $listOfFeatureWithRestriction;
+        $this->view_data['allowedFeatures'] = $allowedFeatures;
     }
 }
 

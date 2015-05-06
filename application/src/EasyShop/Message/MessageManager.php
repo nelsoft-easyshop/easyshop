@@ -145,8 +145,14 @@ class MessageManager {
 
             $this->em->persist($message);
             $this->em->flush();
-           
-            $response['messageId'] = $message->getIdMsg();
+        
+            $messageId = $message->getIdMsg();
+            $response['messageId'] = $messageId;
+            $response['messageDetails'] = $this->getMessageDetailsById($messageId);
+
+            /**
+             * uncomment to queue mail
+             *
             $emailRecipient = $recipient->getEmail();
             $emailSubject = $this->languageLoader->getLine('new_message_notif');
             $imageArray = $this->configLoader->getItem('email', 'images');
@@ -164,9 +170,8 @@ class MessageManager {
 
             $emailMsg = $this->parser->parse("emails/email_newmessage", $parseData, true);
 
-            /**
-             * uncomment to queue mail
-             *
+
+
             $this->emailService->setRecipient($emailRecipient)
                                ->setSubject($emailSubject)
                                ->setMessage($emailMsg, $imageArray)
@@ -179,7 +184,9 @@ class MessageManager {
                 $this->redisClient->publish($redisChatChannel, json_encode([
                     'event' => 'message-sent',
                     'recipient' => $recipient->getStorename(),
-                    'message' => $updatedMessageListForReciever,
+                    'messageData' => [
+                        'message' => $response['messageDetails'],
+                    ],
                 ]));
             }
             catch(\Exception $e){
@@ -414,7 +421,7 @@ class MessageManager {
     }
 
     /**
-     * Message details by ID
+     * Retrieve message details by ID
      *
      * @param integer $messageId
      * @return mixed
@@ -443,5 +450,37 @@ class MessageManager {
         return $messageData;
     }
 
+    /**
+     * Set messages between a user and his converstaion partner as read
+     *
+     * @param integer $userId
+     * @param integer $partnerId
+     * @return integer Number of marked messages
+     */
+    public function setConversationAsRead($userId, $partnerId)
+    {
+        $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
+                                        ->updateToSeen($userId, $partnerId);
+        if($numberOfUpdatedMessages > 0){
+            $member = $this->em->find('EasyShop\Entities\EsMember', $userId);
+            if($member){
+                $redisChatChannel = $this->getRedisChannelName();
+                try{
+                    $this->redisClient->publish($redisChatChannel, json_encode([
+                        'event' => 'message-opened',
+                        'reader' => $member->getStorename(),
+                    ]));
+                }
+                catch(\Exception $e){
+                    /**
+                     * Catch any exception but do nothing just so that the functionality
+                     * does not break if the redis channel is not available
+                     */
+                }
+            }
+        }
+        return $numberOfUpdatedMessages;
+    }
+    
 
 }

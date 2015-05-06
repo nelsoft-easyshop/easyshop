@@ -33,7 +33,8 @@ module.exports = function (grunt) {
                     'js/src/vendor/bower_components/angular-ui-router.js': 'angular-ui-router/release/angular-ui-router.js',
                     'js/src/vendor/bower_components/ng-infinite-scroll.js': 'ngInfiniteScroll/build/ng-infinite-scroll.js',
                     'js/src/vendor/bower_components/checklist-model.js': 'checklist-model/checklist-model.js',
-                    'js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js': 'angular-bootstrap/ui-bootstrap-tpls.js'
+                    'js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js': 'angular-bootstrap/ui-bootstrap-tpls.js',
+                    'js/src/vendor/bower_components/angular-socket.js' : 'angular-socket-io/socket.js'
                 }
             },
             stylesheets: {
@@ -277,9 +278,7 @@ module.exports = function (grunt) {
                              'web/assets/js/angular/app.js',
                              'web/assets/js/angular/services/modalService.js',
                              'web/assets/js/angular/controllers/messageController.js',
-                             'web/assets/js/angular/controllers/headerController.js',
                              'web/assets/js/angular/factories/messageFactory.js',
-                             'web/assets/js/angular/factories/headerFactory.js',
                              'web/assets/js/angular/directives/csrfDirective.js',
                              'web/assets/js/angular/directives/onInitDirective.js'],
 

@@ -35,15 +35,16 @@ class GenerateJsConfig extends ScriptBaseClass
 
     public function execute()
     {
-        $file =  __DIR__.'/../bin/js/config.js';
+        $directory =  __DIR__.'/../bin/nodejs/ChatServer'; 
+        $filepath = $directory.'/config.js';
         $configString = "
             var fs = require('fs');
             exports.configureExpress = function(app) {
                 app.set('NODE_PORT', " . $this->messageManager->getChatPort() . ");
                 app.set('NODE_HOST', '" . $this->messageManager->getChatHost() . "');
                 app.set('PROTOCOL', 'https');
-                app.set('KEY', fs.readFileSync('" . __DIR__ . "/../bin/js/key/easyshop.key'));
-                app.set('CERT', fs.readFileSync('" . __DIR__ . "/../bin/js/key/easyshop.crt'));
+                app.set('KEY', fs.readFileSync('" . $directory."/key/easyshop.key'));
+                app.set('CERT', fs.readFileSync('" . $directory."/key/easyshop.crt'));
                 app.set('JWT_SECRET', '".$this->messageManager->getWebTokenSecret()."');
                 app.set('REDIS_PORT', ".$this->messageManager->getRedisPort().");
                 app.set('REDIS_HOST', '".$this->messageManager->getRedisHost()."');
@@ -51,8 +52,8 @@ class GenerateJsConfig extends ScriptBaseClass
             };
         ";
 
-        file_put_contents($file, $configString);
-        echo "Config file is created in application/bin/js";
+        file_put_contents($filepath, $configString);
+        echo "Config file is created in ".$directory;
     }
 }
 

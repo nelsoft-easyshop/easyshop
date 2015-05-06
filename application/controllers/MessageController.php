@@ -47,18 +47,31 @@ class MessageController extends MY_Controller
      */
     public function messages()
     {
-        $conversationHeaderData = $this->messageManager->getConversationHeaders($this->userId, 0, self::CONVERSATIONS_PER_PAGE);
+        $conversationHeaderData = $this->messageManager->getConversationHeaders(
+                                      $this->userId, 
+                                      0, 
+                                      self::CONVERSATIONS_PER_PAGE
+                                  );
         $member = $this->em->find('EasyShop\Entities\EsMember', $this->userId);
+        $allowedUserFeatures = $this->serviceContainer['member_feature_restrict_manager']
+                                    ->getAllowedFeaturesForMember($this->userId);
+        $realtimeChatServerSettings = [
+            'chatServerHost' => $this->messageManager->getChatHost(true),
+            'chatServerPort' => $this->messageManager->getChatPort(),
+            'jwtToken' => $this->session->userdata('jwtToken'),
+            'isRealtimechatAllowed' => isset($allowedUserFeatures[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT]) &&
+                                       $allowedUserFeatures[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT],
+        ];
+
         $data = [
             'conversationHeaders' => json_encode($conversationHeaderData['conversationHeaders'], true),
             'unreadConversationCount' => $conversationHeaderData['totalUnreadMessages'],
+            'realtimeChatConfig' => json_encode($realtimeChatServerSettings),
             'userEntity' => $member,
-            'chatServerHost' => $this->messageManager->getChatHost(true),
-            'chatServerPort' => $this->messageManager->getChatPort()
         ];
 
         $title = $conversationHeaderData['totalUnreadMessages'] > 0
-                ? 'Messages (' . $conversationHeaderData['totalUnreadMessages'] . ') | Easyshop.ph'
+                ? '(' . $conversationHeaderData['totalUnreadMessages'] . ') Messages | Easyshop.ph'
                 : 'Messages | Easyshop.ph';
         $headerData = [
             "memberId" => $this->userId,
@@ -135,7 +148,7 @@ class MessageController extends MY_Controller
         $messageSendingResult = $this->messageManager->sendMessage($senderEntity, $receiverEntity, $message);
         if($messageSendingResult['isSuccessful']){
             $result['success'] = true;
-            $result['messageDetails'] = $this->messageManager->getMessageDetailsById($messageSendingResult['messageId']);
+            $result['messageDetails'] = $messageSendingResult['messageDetails']; 
         }
         else{
             switch($messageSendingResult['error']){
@@ -204,26 +217,7 @@ class MessageController extends MY_Controller
     public function markMessageAsRead()
     {
         $partnerId = (int) $this->input->post('partnerId');
-        $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                                        ->updateToSeen($this->userId, $partnerId);
-        if($numberOfUpdatedMessages > 0){
-            $member = $this->serviceContainer['entity_manager']
-                           ->find('EasyShop\Entities\EsMember', $this->userId);
-            $redisChatChannel = $this->messageManager->getRedisChannelName();
-            try{
-                $this->serviceContainer['redis_client']->publish($redisChatChannel, json_encode([
-                    'event' => 'message-opened',
-                    'reader' => $member->getStorename(),
-                ]));
-            }
-            catch(\Exception $e){
-                /**
-                 * Catch any exception but do nothing just so that the functionality
-                 * does not break if the redis channel is not available
-                 */
-            }
-        }
-        
+        $numberOfUpdatedMessages = $this->messageManager->setConversationAsRead($this->userId, $partnerId);
         echo json_encode([
             'numberOfUpdatedMessages' => $numberOfUpdatedMessages,
         ]);

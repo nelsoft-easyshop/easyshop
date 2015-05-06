@@ -44,14 +44,6 @@ app.factory('MessageFactory', ['$http', '$q',
         }
 
         /**
-         * Set number of unread conversation count
-         * @param {integer} $count
-         */
-        MessageFactory.setUnreadConversationCount = function($count) {
-            MessageFactory.data.unreadConversationCount = $count;
-        };
-
-        /**
          * Set conversation object
          * @param {object} $conversationObject [description]
          */
@@ -73,7 +65,7 @@ app.factory('MessageFactory', ['$http', '$q',
                 .success(function(data, status, headers, config) {
                     if (data.length > 0) {
                         angular.forEach(data, function(value, key) {
-                            this.push(constructMessage(value)); 
+                            this.push(MessageFactory.constructMessage(value)); 
                         }, $conversation);
                         MessageFactory.setConversation(MessageFactory.data.conversation.concat($conversation));
                     }
@@ -109,7 +101,7 @@ app.factory('MessageFactory', ['$http', '$q',
             .success(function(data, status) {
                 if (data.success) {
                     data.messageDetails.isSender = true;
-                    var $message = [constructMessage(data.messageDetails)];
+                    var $message = [MessageFactory.constructMessage(data.messageDetails)];
 
                     $deferred.resolve($message);
                 }
@@ -239,7 +231,7 @@ app.factory('MessageFactory', ['$http', '$q',
          * @param  {object} $object
          * @return {object}
          */
-        var constructMessage = function ($object) {
+        MessageFactory.constructMessage = function ($object) {
             return {
                 'messageId': $object.id_msg,
                 'message': $object.message,

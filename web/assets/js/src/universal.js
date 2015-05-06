@@ -120,29 +120,33 @@
             url : "/MessageController/getNumberOfUnreadMessages",
             success : function(count)
             {   
-                var numberOfUnreadMessages = $.parseJSON(count);
-                var title = '';
+                var $document = $(document);
+                var $messageNotificationIcon = $('.msg_countr'); 
+                var numberOfUnreadMessages = parseInt($.parseJSON(count), 10);
                 
-                if($('#original-title').length === 0){
-                    var originalTitleTag = document.createElement('meta');
-                    originalTitleTag.id = "original-title";
-                    originalTitleTag.name = "original-title";
-                    title = $(document).prop('title');
-                    originalTitleTag.content = title;
-                    document.getElementsByTagName('head')[0].appendChild(originalTitleTag);
-                }
-                else{
-                    title = $('#original-title').attr('content')
+                /**
+                 * Use regex to parse page title. Removes first occurence of 
+                 * words within parenthesis from the title.
+                 */
+                var rawTitle = $document.prop('title')
+                var stringsWithinParentheses = rawTitle.match(/\(([^()]+)\)/g);
+                var cleanTitle = rawTitle;
+
+                if(typeof stringsWithinParentheses !== 'undefined' && stringsWithinParentheses !== null ){
+                    var notificationIndicator = stringsWithinParentheses[0]; 
+                    if( $.trim(rawTitle).indexOf(notificationIndicator) === 0 ){
+                        cleanTitle = rawTitle.replace(notificationIndicator, '');
+                    }
                 }
 
-                $('.msg_countr').html(numberOfUnreadMessages);
-                if(parseInt(numberOfUnreadMessages) > 0){
-                    $(document).prop('title', '(' + numberOfUnreadMessages + ') ' + title);
-                    $('.msg_countr').css('display','inline-block');
+                $messageNotificationIcon.html(numberOfUnreadMessages);
+                if(numberOfUnreadMessages > 0){
+                    $document.prop('title', '(' + numberOfUnreadMessages + ') ' + cleanTitle  );
+                    $messageNotificationIcon.removeClass('hide');
                 }
                 else{
-                    $(document).prop('title', title);
-                    $('.msg_countr').css('display','none'); 
+                    $document.prop('title', cleanTitle);
+                    $messageNotificationIcon.addClass('hide'); 
                 }
             }
         }); 
