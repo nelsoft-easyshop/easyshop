@@ -21,6 +21,11 @@ class SearchProduct
     const PER_PAGE = 12;
 
     /**
+     * Number of match matches for sphinx conf
+     */
+    const SPHINX_MATCH_MATCHES = 100000;
+
+    /**
      * Entity Manager instance
      *
      * @var Doctrine\ORM\EntityManager
@@ -130,7 +135,7 @@ class SearchProduct
         if(empty($productIds) === false){
             $this->sphinxClient->SetFilter('productid', $productIds);
         }
-        $this->sphinxClient->setLimits(0, PHP_INT_MAX, PHP_INT_MAX); 
+        $this->sphinxClient->setLimits(0, self::SPHINX_MATCH_MATCHES, self::SPHINX_MATCH_MATCHES); 
         $this->sphinxClient->AddQuery($queryString, 'products products_delta'); 
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
