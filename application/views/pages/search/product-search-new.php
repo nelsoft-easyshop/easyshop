@@ -159,8 +159,17 @@
                         <div class="search-results-container <?=isset($isListView) && $isListView ? 'list-search' : ''?>">
                             <?php if($productTab): ?>
                                 <?=$productView; ?> 
+                                <?php if($productCount > 0): ?>
+                                    <?=$sellerView;?>
+                                <?php else: ?>
+                                    content here
+                                <?php endif; ?>
                             <?php else: ?>
-                                <?=$sellerView;?>
+                                <?php if($userCount > 0): ?>
+                                    <?=$sellerView;?>
+                                <?php else: ?>
+                                    content here
+                                <?php endif; ?>
                             <?php endif; ?>
                             <div class="group-container row loading-row" data-id="2" id="page-2"></div>
                         </div>
