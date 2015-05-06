@@ -90,15 +90,15 @@ class SearchUser
             if (trim($clearString) !== "") {
                 // make string alpha numeric
                 $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString)));
-                $wildCardString = !implode('* +', $explodedStringWithRegEx)
-                                  ? ""
-                                  : '+'.implode('* +', $explodedStringWithRegEx) .'*';
-                // remove excess '+' character
-                $searchString = rtrim($wildCardString, "+");
-                $users = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                         ->searchUser($searchString, $clearString);
-                foreach ($users as $user) {
-                    $ids[] = $user['idMember'];
+                $wildCardString = trim(implode('* +', $explodedStringWithRegEx));
+                if ($wildCardString !== "") {
+                    // remove excess '+' character
+                    $searchString = rtrim('+'.$wildCardString .'*', "+");
+                    $users = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                      ->searchUser($searchString, $clearString);
+                    foreach ($users as $user) {
+                        $ids[] = $user['idMember'];
+                    }
                 }
             }
         }
