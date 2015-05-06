@@ -397,4 +397,38 @@ class EsMemberRepository extends EntityRepository
         return $member;
     }
 
+    /**
+     * Find user by searching usig fulltext index
+     * @param  string $string
+     * @return array
+     */
+    public function searchUser($string)
+    {
+        $this->em =  $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult( 'idMember', 'idMember');
+        $query = $this->em->createNativeQuery("
+            SELECT DISTINCT
+                (`id_member`) AS idMember,
+                weight
+            FROM
+                (SELECT 
+                    (MATCH (`username`) AGAINST (:string IN BOOLEAN MODE) * 30) +
+                    (MATCH (`store_name`) AGAINST (:string IN BOOLEAN MODE) * 100) AS weight,
+                    id_member
+                FROM
+                    es_member
+                WHERE
+                    is_active = 1 AND is_banned = 0
+                        AND (MATCH (`username`) AGAINST (:string IN BOOLEAN MODE)
+                        OR MATCH (`store_name`) AGAINST (:string IN BOOLEAN MODE))) AS score_table
+            HAVING weight > 0
+            ORDER BY weight DESC
+        ", $rsm);
+
+        $query->setParameter('string', $string);
+        $results = $query->execute();
+
+        return $results;
+    }
 }
