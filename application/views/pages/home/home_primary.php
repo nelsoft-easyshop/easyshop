@@ -13,7 +13,7 @@
   "url": "<?=base_url();?>",
   "potentialAction": {
     "@type": "SearchAction",
-    "target": "<?=base_url();?>search/search.html?q_str={search_term}",
+    "target": "<?=base_url();?>search/product?q_str={search_term}",
     "query-input": "required name=search_term"
   }
 }

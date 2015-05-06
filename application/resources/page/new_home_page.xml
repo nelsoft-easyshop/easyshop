@@ -5,12 +5,12 @@
          <newArrivals>
             <arrival>
                 <text>Gadgets</text>
-                <target>/search/search.html?category=1&amp;q_str=gadgets</target>
+                <target>/search/product?category=1&amp;q_str=gadgets</target>
             </arrival>
 
              <arrival>
                 <text>Bags</text>
-                <target>/search/search.html?category=1&amp;q_str=bags</target>
+                <target>/search/product?category=1&amp;q_str=bags</target>
             </arrival>
         </newArrivals>
 

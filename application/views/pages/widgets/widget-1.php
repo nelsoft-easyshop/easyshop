@@ -37,7 +37,7 @@
                 <div class="col-xs-9 col-right-wing">
                     <div class="right-wing">
                         <div class="search-form">
-                            <form method="get" action="/search/search.html" target="_blank">
+                            <form method="get" action="/search/product" target="_blank">
                                 <input type="text" class="search-textfield" name="q_str" placeholder="Search item here"/>
                                 <i class="icon-search"></i>
                             </form>

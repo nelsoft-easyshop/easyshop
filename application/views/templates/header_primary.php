@@ -207,7 +207,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </div><!-- End .dropdown-cart-menu-container -->
 
                         <div class="header-top-dropdowns">
-                            <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar1">
+                            <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/product" id="nav-searchbar1">
 
                                 <div class="nav-submit-button nav-sprite">
                                     <input type="submit" value="" class="span_bg">
@@ -324,7 +324,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     
                                     <div class="sticky-search-cart-wrapper">
                                         <div class="sticky-search-wrapper">
-                                            <form class="nav-searchbar-inner nav-search2" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar2">
+                                            <form class="nav-searchbar-inner nav-search2" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/product" id="nav-searchbar2">
                                                 <input type="text" name="q_str" autocomplete="off" id="primary-search2" placeholder="Find what you're looking for." class="ui-form-control main-search-input search-box">
                                                 <input type="submit" value="" class="span_bg">
                                             </form>
