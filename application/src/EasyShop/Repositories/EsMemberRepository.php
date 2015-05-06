@@ -419,7 +419,7 @@ class EsMemberRepository extends EntityRepository
                 FROM
                     es_member
                 WHERE
-                    is_active = 1 AND is_banned = 0
+                    is_active = :active AND is_banned = :banned
                         AND (MATCH (`username`) AGAINST (:string IN BOOLEAN MODE)
                         OR MATCH (`store_name`) AGAINST (:string IN BOOLEAN MODE))) AS score_table
             HAVING weight > 0
@@ -427,6 +427,8 @@ class EsMemberRepository extends EntityRepository
         ", $rsm);
 
         $query->setParameter('string', $string);
+        $query->setParameter('active', EsMember::DEFAULT_ACTIVE);
+        $query->setParameter('banned', EsMember::NOT_BANNED);
         $results = $query->execute();
 
         return $results;
