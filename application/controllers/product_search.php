@@ -167,6 +167,7 @@ class product_search extends MY_Controller {
         $hydrateSeller = false;
         $hydrateProduct = true;
         if ($response['segment'] === "seller") {
+            $response['productTab'] = false;
             $hydrateSeller = true;
             $hydrateProduct = false;
         }
@@ -189,7 +190,6 @@ class product_search extends MY_Controller {
             /**
              * Get User Search
              */
-            $response['productTab'] = false;
             $response['totalPage'] = ceil($searchUser['count'] / $searchUserService::PER_PAGE);
             $paginationData = [
                 'totalPage' => $response['totalPage'],
@@ -204,7 +204,6 @@ class product_search extends MY_Controller {
             /**
              * Get Product Search
              */
-            $response['products'] = $searchProduct['collection'];
             $response['totalPage'] = ceil($searchProduct['count'] / $searchProductService::PER_PAGE);
             $paginationData = [
                 'totalPage' => $response['totalPage'],

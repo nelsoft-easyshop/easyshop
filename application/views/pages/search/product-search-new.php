@@ -277,9 +277,8 @@
 </div>
 <div id="hidden-elements">
     <input type="hidden" id="hidden-queryString" value="<?=$_SERVER['QUERY_STRING'];?>" />
-    <input type="hidden" id="hidden-currentUrl" value="<?=site_url(uri_string() . '?' . $_SERVER['QUERY_STRING']); ?>" />
+    <input type="hidden" id="hidden-currentUrl" value="<?='/search/product?' . $_SERVER['QUERY_STRING']; ?>" />
     <input type="hidden" id="hidden-typeView" value="<?=isset($isListView) && $isListView ? 'list' : 'grid'; ?>" />
-    <input type="hidden" id="hidden-emptySearch" value="<?=(isset($products))?"false":"";?>" />
     <?php if($productTab): ?>
         <input type="hidden" id="hidden-loadUrl" value="/search/product/more?<?=$_SERVER['QUERY_STRING']; ?>" />
     <?php else: ?>
