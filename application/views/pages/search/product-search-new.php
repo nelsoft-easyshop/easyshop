@@ -161,13 +161,73 @@
                                 <?php if($productCount > 0): ?>
                                     <?=$productView;?>
                                 <?php else: ?>
-                                    content here
+                                    <!--Removed search header if there are no results found-->
+                                    <div class="search-item-no-results-container">
+                                        No product results were found for "<b><?=html_escape($string); ?></b>".
+                                    </div>
+                                    <div class="search-tips-container">
+                                        <div id="search-tips-container">
+                                            <h4>Suggestions:</h4>
+                                            <ul class="list-search-tips">
+                                                <li>Make sure all keywords are spelled correctly.</li>
+                                                <li>Try using different keywords or more general terms.</li>
+                                                <li>Use shorter or simpler keywords.</li>
+                                            </ul>
+                                            <br>
+                                            <h5>If you need more help, please contact our Customer Service at <b>(02) 354-5973</b></h5>
+                                            <br>
+                                            <br>
+                                            <h4>Search again</h4>
+                                            <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/product" id="nav-searchbar">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-9 col-md-9 form-404-input">
+                                                        <div class="row">
+                                                            <input type="text" name="q_str" class="ui-form-control input-404" placeholder="Enter keyword here">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3 col-md-3">
+                                                        <input type="submit" value="search" class="btn btn-default-4 btn-no-br submit-404">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <?php if($userCount > 0): ?>
                                     <?=$sellerView;?>
                                 <?php else: ?>
-                                    content here
+                                    <!--Removed search header if there are no results found-->
+                                    <div class="search-item-no-results-container">
+                                        No seller results were found for "<b><?=html_escape($string); ?></b>".
+                                    </div>
+                                    <div class="search-tips-container">
+                                        <div id="search-tips-container">
+                                            <h4>Suggestions:</h4>
+                                            <ul class="list-search-tips">
+                                                <li>Make sure all keywords are spelled correctly.</li>
+                                                <li>Try using different keywords or more general terms.</li>
+                                                <li>Use shorter or simpler keywords.</li>
+                                            </ul>
+                                            <br>
+                                            <h5>If you need more help, please contact our Customer Service at <b>(02) 354-5973</b></h5>
+                                            <br>
+                                            <br>
+                                            <h4>Search again</h4>
+                                            <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/product" id="nav-searchbar">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-9 col-md-9 form-404-input">
+                                                        <div class="row">
+                                                            <input type="text" name="q_str" class="ui-form-control input-404" placeholder="Enter keyword here">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3 col-md-3">
+                                                        <input type="submit" value="search" class="btn btn-default-4 btn-no-br submit-404">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 <?php endif; ?>
                             <?php endif; ?>
                             <div class="group-container row loading-row" data-id="2" id="page-2"></div>
