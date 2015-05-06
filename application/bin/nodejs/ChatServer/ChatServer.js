@@ -60,7 +60,6 @@ io.sockets.on( 'connection', function(socket) {
     socket.on('set account online', function() {
         var storename = socket.client.request.decoded_token.storename; 
         socket.join(storename);
-        console.log(storename + ' is now connected');
     });
 
     /**
