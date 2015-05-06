@@ -126,63 +126,101 @@ class product_search extends MY_Controller {
         echo json_encode($data);
     }
 
-    /*   
+    /**
+     * load more users when scroll
+     * @return json
+     */
+    public function loadMoreUsers()
+    {
+        $searchUserService = $this->serviceContainer['search_user'];
+        $search = $searchUserService->searchUser($this->input->get());
+        $currentPage = (int) $this->input->get('page');
+        $sellerViewData = [
+            'sellers' => $search['collection'],
+            'currentPage' => $currentPage + 1,
+        ];
+        $data['view'] = $this->load->view('partials/search-users', $sellerViewData, true); 
+        $data['count'] = count($search['collection']);
+        echo json_encode($data);
+    }
+
+    /*
      *   Returns results of searching products through the search bar
      *   Route: search/(:any)
      */
-    public function search()
+    public function search($type)
     {
-        if(trim($this->input->get('q_str')) === ""
+        if (trim($this->input->get('q_str')) === ""
            && (int) trim($this->input->get('category')) === EsCat::ROOT_CATEGORY_ID
            || trim($this->input->get('q_str')) === ""
-              && !$this->input->get('category')){
+              && !$this->input->get('category')) {
             redirect('cat/all');
-        } 
+        }
 
         $searchProductService = $this->serviceContainer['search_product'];
-        $categoryManager = $this->serviceContainer['category_manager']; 
-
+        $searchUserService = $this->serviceContainer['search_user'];
+        $categoryManager = $this->serviceContainer['category_manager'];
         $response['string'] = $this->input->get('q_str') ? trim(utf8_decode($this->input->get('q_str'))) : "";
         $parameter = $response['getParameter'] = $this->input->get();
-        $search = $searchProductService->getProductBySearch($parameter);
-
-        $response['products'] = $search['collection']; 
-        $response['productCount'] = $search['count']; 
-        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($search['collection']);
+        $searchUser = $searchUserService->searchUser($parameter);
+        $searchProduct = $searchProductService->getProductBySearch($parameter);
+        $response['segment'] = strtolower($type);
+        $response['productTab'] = true;
+        $response['userCount'] = $searchUser['count'];
+        $response['products'] = $searchProduct['collection'];
+        $response['productCount'] = $searchProduct['count'];
+        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($searchProduct['collection']);
         $response['availableCondition'] = [];
-        if(isset($response['attributes']['Condition'])){
+        if (isset($response['attributes']['Condition'])) {
             $response['availableCondition'] = $response['attributes']['Condition'];
             unset($response['attributes']['Condition']);
         }
-        $response['totalPage'] = ceil($search['count'] / $searchProductService::PER_PAGE);
-        $paginationData = [
-            'totalPage' => $response['totalPage'],
-        ];
-        $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
-
-        $category = EsCat::ROOT_CATEGORY_ID; 
+        $category = EsCat::ROOT_CATEGORY_ID;
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                    ->findBy(['parent' => $category]);
-        $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false); 
-        
+        $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false);
         $response['categorySelected'] = $this->input->get('category') ? (int) $this->input->get('category') : $category;
-        $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
 
-        $headerData = [ 
+        if ($response['segment'] === "seller") {
+            /**
+             * Get User Search
+             */
+            $response['productTab'] = false;
+            $response['totalPage'] = ceil($searchUser['count'] / $searchUserService::PER_PAGE);
+            $paginationData = [
+                'totalPage' => $response['totalPage'],
+            ];
+            $sellerViewData = [
+                'sellers' => $searchUser['collection'],
+                'currentPage' => 1,
+            ];
+            $response['sellerView']  = $this->load->view('partials/search-users', $sellerViewData, true);
+        }
+        else {
+            /**
+             * Get Product Search
+             */
+            $response['totalPage'] = ceil($searchProduct['count'] / $searchProductService::PER_PAGE);
+            $paginationData = [
+                'totalPage' => $response['totalPage'],
+            ];
+            $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
+            $productViewData = [
+                'products' => $searchProduct['collection'],
+                'currentPage' => 1,
+                'isListView' => $response['isListView'],
+            ];
+            $response['productView']  = $this->load->view('partials/search-products', $productViewData, true);
+        }
+        $response['pagination'] = $this->load->view('pagination/search-pagination', $paginationData, true);
+        $headerData = [
             "memberId" => $this->session->userdata('member_id'),
-            'title' => (($response['string']==='')?"Search":html_escape($response['string'])).' | Easyshop.ph' 
+            'title' => ($response['string'] === "" ? "Search" : html_escape($response['string'])).' | Easyshop.ph'
         ];
-
-        $productViewData = [
-            'products' => $search['collection'],
-            'currentPage' => 1,
-            'isListView' => $response['isListView'],
-        ];
-        $response['productView']  = $this->load->view('partials/search-products', $productViewData, true);
 
         $this->load->spark('decorator');
-        $this->load->view('templates/header_primary',  $this->decorator->decorate('header', 'view', $headerData));
-        $this->load->view('pages/search/product-search-new',$response);
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/search/product-search-new', $response);
     }
     
     /**
@@ -191,7 +229,8 @@ class product_search extends MY_Controller {
      *   Route: searchCategory
      *   @return JSON
      */
-    public function searchCategory(){  
+    public function searchCategory()
+    {
         
         $userId = $this->session->userdata('member_id');
         $isAdmin = false;
