@@ -61,7 +61,7 @@ class product_search extends MY_Controller {
             $parameter = $this->input->get();
             $search = $searchProductService->getProductBySearch($parameter);
             $response['products'] = $search['collection']; 
-            $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
+            $response['attributes'] = $searchProductService->getProductAttributesByProductIds($search['productIds']);
             $response['productCount'] = $search['count']; 
         }
 
@@ -172,6 +172,12 @@ class product_search extends MY_Controller {
         }
         $searchUser = $searchUserService->searchUser($parameter, $hydrateSeller);
         $searchProduct = $searchProductService->getProductBySearch($parameter, $hydrateProduct);
+        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($searchProduct['productIds']);
+        $response['availableCondition'] = [];
+        if (isset($response['attributes']['Condition'])) {
+            $response['availableCondition'] = $response['attributes']['Condition'];
+            unset($response['attributes']['Condition']);
+        }
         $response['userCount'] = $searchUser['count'];
         $response['productCount'] = $searchProduct['count'];
         $category = EsCat::ROOT_CATEGORY_ID;
@@ -184,7 +190,6 @@ class product_search extends MY_Controller {
              * Get User Search
              */
             $response['productTab'] = false;
-            $response['attributes'] = [];
             $response['totalPage'] = ceil($searchUser['count'] / $searchUserService::PER_PAGE);
             $paginationData = [
                 'totalPage' => $response['totalPage'],
@@ -200,12 +205,6 @@ class product_search extends MY_Controller {
              * Get Product Search
              */
             $response['products'] = $searchProduct['collection'];
-            $response['attributes'] = $searchProductService->getProductAttributesByProductIds($searchProduct['collection']);
-            $response['availableCondition'] = [];
-            if (isset($response['attributes']['Condition'])) {
-                $response['availableCondition'] = $response['attributes']['Condition'];
-                unset($response['attributes']['Condition']);
-            }
             $response['totalPage'] = ceil($searchProduct['count'] / $searchProductService::PER_PAGE);
             $paginationData = [
                 'totalPage' => $response['totalPage'],

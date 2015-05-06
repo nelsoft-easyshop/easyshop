@@ -310,30 +310,18 @@ class SearchProduct
      * @param  integer[] $productIds
      * @return mixed
      */
-    public function getProductAttributesByProductIds($products = [])
-    {   
-        $finalizedProductIds = [];
-        $availableCondition = [];
-        $organizedAttribute = [];
-        if(!empty($products)){
-            $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
-            foreach ($products as $value) { 
-                $finalizedProductIds[] = $value->getIdProduct();
-                $availableCondition[] = $value->getCondition();
-            }
+    public function getProductAttributesByProductIds($productIds = [])
+    {
+        $organizedAttribute = []; 
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
-            if(!empty($finalizedProductIds)){
-                $attributes = $EsProductRepository->getAttributesByProductIds($finalizedProductIds); 
-                $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
-                $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($finalizedProductIds); 
-                $condition =  array_unique($availableCondition);
-
-                foreach ($condition as $key => $value) {
-                    $organizedAttribute['Condition'][] = $value;
-                }
-                ksort($organizedAttribute);
-            }
-        }
+        if(!empty($productIds)){
+            $attributes = $EsProductRepository->getAttributesByProductIds($productIds); 
+            $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
+            $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($productIds);
+            $organizedAttribute['Condition'] = $EsProductRepository->getProductConditionByProductIds($productIds);
+            ksort($organizedAttribute);
+        } 
     
         return $organizedAttribute;
     }
@@ -438,6 +426,7 @@ class SearchProduct
         $returnArray = [
             'collection' => $products,
             'count' => $totalCount,
+            'productIds' => $finalizedProductIds
         ];
 
         return $returnArray;
