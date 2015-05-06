@@ -538,4 +538,33 @@ class TransactionManager
 
         return true;
     }
+
+    /**
+     * Get all item in transaction with attributes
+     * @param  integer $orderId
+     * @return mixed
+     */
+    public function getTransactionItems($orderId)
+    {
+        $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                  ->findBy(['order' => $orderId]);
+
+        foreach ($orderProducts as $key => $product) {
+            $productOptions = [];
+            $productAttr = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr')
+                                    ->findBy(['orderProduct' => $product]);
+            if ($productAttr) {
+                foreach ($productAttr as $option) {
+                    $productOptions[] = [
+                        'name' => $option->getAttrName(),
+                        'value' => $option->getAttrValue(),
+                        'price' => $option->getAttrPrice(),
+                    ];
+                }
+            }
+            $orderProducts[$key]->productOptions = $productOptions;
+        }
+
+        return $orderProducts;
+    }
 }

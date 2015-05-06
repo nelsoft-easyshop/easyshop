@@ -60,6 +60,13 @@ if (defined('ENVIRONMENT')){
         case 'production':
             error_reporting(0);
             break;
+        /**
+         * Use this environment for unit_testing only
+         */
+        case 'testing':
+            ini_set('display_errors', 1);
+            error_reporting(E_ALL);
+            break;
         default:
             exit('The application environment is not set correctly.');
     }
@@ -218,7 +225,14 @@ include APPPATH.'core/MY_Common.php';
  * And away we go...
  *
  */
-require_once BASEPATH.'core/CodeIgniter.php';
+
+if (strtolower(ENVIRONMENT) === "testing") {
+    require_once APPPATH.'tests/bootstrap/CodeIgniter.php';
+}
+else {
+    require_once BASEPATH.'core/CodeIgniter.php';
+}
+
 
 /* End of file index.php */
 /* Location: ./index.php */

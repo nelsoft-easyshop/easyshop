@@ -117,7 +117,9 @@ class CSRF_Protection
                                 '<meta name="csrf-name" content="' . self::$token_name . '">' . "\n" . '<meta name="csrf-token" content="' . self::$token . '">' . "\n" . '$0', 
                                 $output);
         
-        $this->CI->output->_display($output);
+        if (!defined('PHPUNIT_TEST')) {
+            $this->CI->output->_display($output);
+        }
     }
     
 }

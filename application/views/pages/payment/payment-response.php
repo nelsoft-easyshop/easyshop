@@ -133,6 +133,20 @@
                                 <tr class="checkout-item">
                                     <td>
                                         <?=html_escape($product->getProduct()->getName());?>
+                                        <?php if(empty($product->productOptions) === false): ?>
+                                            <div class="checkout-item-attribute-container">
+                                                <div class="checkout-item-attribute-container-header">
+                                                    <i class="fa fa-caret-down"></i> <span class="checkout-item-attribute-container-action">show</span> product attributes
+                                                </div>
+                                                <div class="checkout-item-attribute-container-body">
+                                                    <?php foreach ($product->productOptions as $option): ?>
+                                                        <div class="checkout-item-attribute-name">
+                                                            <b><?=html_escape(strtoupper($option['name']));?> : </b> <?=html_escape(strtoupper($option['value']));?>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
                                     </td>
                                     <td><?=$product->getOrderQuantity();?></td>
                                     <td>&#8369; <?=number_format($product->getHandlingFee(), 2, '.', ',')?></td>
