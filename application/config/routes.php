@@ -64,7 +64,6 @@
     $route['(?i)product/submit-reply'] = 'product/submitReply';
     $route['(?i)product/submit-review'] = 'product/submitReview';
 
-
     #SELL ITEM
     $route['(?i)sell/step1'] = 'productUpload/step1'; # ryan vasquez
     $route['(?i)sell/step2'] = 'productUpload/step2'; # ryan vasquez
