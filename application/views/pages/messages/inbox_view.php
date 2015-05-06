@@ -34,9 +34,6 @@
         <img src="<?php echo getAssetsDomain(); ?>assets/images/horizontal_loading.gif">
     </div>
 
- 
-                                 
-
 </section>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
