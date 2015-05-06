@@ -122,11 +122,12 @@
     });
 
     $(document).on('scroll', function() {
-        var docScroll2 = $(document).scrollTop();
-        if (docScroll2 >= 160){
+        var documentTop = $(document).scrollTop();
+        if (documentTop >= 160){
             $(".call-to-action-sell-container").slideDown().show();
-
+           
             $(".action-hide").click(function(){
+                var $this = $(this);
                 $(".call-to-action-sell-container .base").stop().animate({
                     marginLeft: "-133px"
                 }, 600);
@@ -137,15 +138,17 @@
 
                 $(".call-to-action-sell-container .call-to-action-sell-text").fadeOut("fast");
 
-                $(this).animate({
+                $this.animate({
                     rotate: "180deg"
                 }, 600);
-
-                $(this).css("display","none");
+               
+                $this.css("display","none");
                 $(".action-show").show();
             });
 
             $(".action-show").click(function(){
+                var $this = $(this);
+                
                 $(".call-to-action-sell-container .base").stop().animate({
                     marginLeft: "-25px"
                 }, 600);
@@ -156,11 +159,11 @@
 
                 $(".call-to-action-sell-container .call-to-action-sell-text").fadeIn(800);
 
-                $(this).animate({
+                $this.animate({
                     rotate: "180deg"
                 }, 600);
 
-                $(this).css("display","none");
+                $this.css("display","none");
                 $(".action-hide").show();
             });
         }
