@@ -147,8 +147,11 @@ class SearchProduct
                 // make string alpha numeric
                 $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
                 $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
-                // add characters in need of fulltext
-                $wildCardString = '+'.trim(implode('* +', $explodedStringWithRegEx)).'*';
+                $wildCardString = trim(implode('* +', $explodedStringWithRegEx));
+                if ($wildCardString !== "") {
+                    // add characters in need of fulltext
+                    $wildCardString = '+'.$wildCardString.'*';
+                }
                 // remove excess '+' character
                 $stringCollection[] = rtrim($wildCardString , "+");
                 $stringCollection[] = '"'.trim($clearString).'"';
