@@ -460,21 +460,23 @@ class MessageManager {
     public function setConversationAsRead($userId, $partnerId)
     {
         $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
-                                       ->updateToSeen($userId, $partnerId);
+                                        ->updateToSeen($userId, $partnerId);
         if($numberOfUpdatedMessages > 0){
             $member = $this->em->find('EasyShop\Entities\EsMember', $userId);
-            $redisChatChannel = $this->getRedisChannelName();
-            try{
-                $this->redisClient->publish($redisChatChannel, json_encode([
-                    'event' => 'message-opened',
-                    'reader' => $member->getStorename(),
-                ]));
-            }
-            catch(\Exception $e){
-                /**
-                 * Catch any exception but do nothing just so that the functionality
-                 * does not break if the redis channel is not available
-                 */
+            if($member){
+                $redisChatChannel = $this->getRedisChannelName();
+                try{
+                    $this->redisClient->publish($redisChatChannel, json_encode([
+                        'event' => 'message-opened',
+                        'reader' => $member->getStorename(),
+                    ]));
+                }
+                catch(\Exception $e){
+                    /**
+                     * Catch any exception but do nothing just so that the functionality
+                     * does not break if the redis channel is not available
+                     */
+                }
             }
         }
         return $numberOfUpdatedMessages;
