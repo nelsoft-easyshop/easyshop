@@ -97,7 +97,7 @@ class SearchUser
                     // remove excess '+' character
                     $searchString = rtrim($searchString, "+");
                     $users = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                      ->searchUser($searchString, $clearString);
+                                      ->searchUser($searchString, $wildCardString);
                     foreach ($users as $user) {
                         $ids[] = $user['idMember'];
                     }
