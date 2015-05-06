@@ -323,11 +323,13 @@ class Kernel
             $sphinxClient = new \SphinxClient();
             $sphinxClient->SetMaxQueryTime(5000);
             $userManager = $container['user_manager'];
+            $configLoader = $container['config_loader'];
 
             return new \EasyShop\Search\SearchUser(
                     $em,
                     $sphinxClient,
-                    $userManager
+                    $userManager,
+                    $configLoader
                 );
         };
 
