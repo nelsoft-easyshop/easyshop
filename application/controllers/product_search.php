@@ -162,30 +162,29 @@ class product_search extends MY_Controller {
         $categoryManager = $this->serviceContainer['category_manager'];
         $response['string'] = $this->input->get('q_str') ? trim(utf8_decode($this->input->get('q_str'))) : "";
         $parameter = $response['getParameter'] = $this->input->get();
-        $searchUser = $searchUserService->searchUser($parameter);
-        $searchProduct = $searchProductService->getProductBySearch($parameter);
         $response['segment'] = strtolower($type);
         $response['productTab'] = true;
-        $response['userCount'] = $searchUser['count'];
-        $response['products'] = $searchProduct['collection'];
-        $response['productCount'] = $searchProduct['count'];
-        $response['attributes'] = $searchProductService->getProductAttributesByProductIds($searchProduct['collection']);
-        $response['availableCondition'] = [];
-        if (isset($response['attributes']['Condition'])) {
-            $response['availableCondition'] = $response['attributes']['Condition'];
-            unset($response['attributes']['Condition']);
+        $hydrateSeller = false;
+        $hydrateProduct = true;
+        if ($response['segment'] === "seller") {
+            $hydrateSeller = true;
+            $hydrateProduct = false;
         }
+        $searchUser = $searchUserService->searchUser($parameter, $hydrateSeller);
+        $searchProduct = $searchProductService->getProductBySearch($parameter, $hydrateProduct);
+        $response['userCount'] = $searchUser['count'];
+        $response['productCount'] = $searchProduct['count'];
         $category = EsCat::ROOT_CATEGORY_ID;
         $parentCategory = $this->em->getRepository('EasyShop\Entities\EsCat')
                                    ->findBy(['parent' => $category]);
         $response['categories'] = $categoryManager->applyProtectedCategory($parentCategory, false);
         $response['categorySelected'] = $this->input->get('category') ? (int) $this->input->get('category') : $category;
-
         if ($response['segment'] === "seller") {
             /**
              * Get User Search
              */
             $response['productTab'] = false;
+            $response['attributes'] = [];
             $response['totalPage'] = ceil($searchUser['count'] / $searchUserService::PER_PAGE);
             $paginationData = [
                 'totalPage' => $response['totalPage'],
@@ -200,6 +199,13 @@ class product_search extends MY_Controller {
             /**
              * Get Product Search
              */
+            $response['products'] = $searchProduct['collection'];
+            $response['attributes'] = $searchProductService->getProductAttributesByProductIds($searchProduct['collection']);
+            $response['availableCondition'] = [];
+            if (isset($response['attributes']['Condition'])) {
+                $response['availableCondition'] = $response['attributes']['Condition'];
+                unset($response['attributes']['Condition']);
+            }
             $response['totalPage'] = ceil($searchProduct['count'] / $searchProductService::PER_PAGE);
             $paginationData = [
                 'totalPage' => $response['totalPage'],
