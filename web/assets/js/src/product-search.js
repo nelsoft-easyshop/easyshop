@@ -198,8 +198,7 @@
     });
  
     var currentUrl = $('#hidden-currentUrl').val();
-    var typeView = $('#hidden-typeView').val(); 
-    var emptySearch = $('#hidden-emptySearch').val();
+    var typeView = $('#hidden-typeView').val();
     var loadUrl = $('#hidden-loadUrl').val();
     var allQueryString = $('#hidden-queryString').val();
     var currentSegment = $("#hidden-segment").val();
