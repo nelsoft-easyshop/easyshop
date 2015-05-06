@@ -113,32 +113,38 @@ class SearchUser
      * @param  array $parameters
      * @return array
      */
-    public function searchUser($parameters)
+    public function searchUser($parameters, $hydrate = true)
     {
         $queryString = $parameters['q_str'];
         $pageNumber = isset($parameters['page']) && $parameters['page']?trim($parameters['page']):false;
         $perPage = isset($parameters['limit']) ? $parameters['limit'] : self::PER_PAGE;
         $offset = bcmul($pageNumber, $perPage);
         $memberIds = $this->filterBySearchString($queryString);
-        $paginatedMemberIds = array_slice($memberIds, $offset, $perPage);
-        $members = $this->em->getRepository('EasyShop\Entities\EsMember')
-                            ->findBy(['idMember' => $paginatedMemberIds]);
-        foreach ($members as $keyMember => $member) {
-            $members[$keyMember]->userImage = $this->userManager->getUserImage($member->getIdMember(), 'small');
-            $members[$keyMember]->userProducts = [];
-            $userProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                     ->getUserProducts(
-                                         $member->getIdMember(),
-                                         EsProduct::ACTIVE,
-                                         EsProduct::ACTIVE,
-                                         0,
-                                         self::PRODUCT_PER_USER,
-                                         "",
-                                         "p.clickcount"
-                                     );
-            foreach ($userProducts as $product) {
-                $members[$keyMember]->userProducts[] = $this->productManager->getProductDetails($product);
+
+        if ($hydrate) {
+            $paginatedMemberIds = array_slice($memberIds, $offset, $perPage);
+            $members = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findBy(['idMember' => $paginatedMemberIds]);
+            foreach ($members as $keyMember => $member) {
+                $members[$keyMember]->userImage = $this->userManager->getUserImage($member->getIdMember(), 'small');
+                $members[$keyMember]->userProducts = [];
+                $userProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                         ->getUserProducts(
+                                             $member->getIdMember(),
+                                             EsProduct::ACTIVE,
+                                             EsProduct::ACTIVE,
+                                             0,
+                                             self::PRODUCT_PER_USER,
+                                             "",
+                                             "p.clickcount"
+                                         );
+                foreach ($userProducts as $product) {
+                    $members[$keyMember]->userProducts[] = $this->productManager->getProductDetails($product);
+                }
             }
+        }
+        else {
+            $members = [];
         }
 
         return [

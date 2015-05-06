@@ -344,7 +344,7 @@ class SearchProduct
      * @param  integer $memberId
      * @return mixed
      */
-    public function getProductBySearch($parameters)
+    public function getProductBySearch($parameters, $hydrate = true)
     {
         $searchProductService = $this;
         $productManager = $this->productManager;
@@ -381,59 +381,59 @@ class SearchProduct
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
         $finalizedProductIds = $this->sortResultByTopic($finalizedProductIds,$queryString);
         $totalCount = count($finalizedProductIds);
-
-        $offset = (int) $pageNumber * (int) $perPage;
-
-        $paginatedProductIds = array_slice($finalizedProductIds, $offset, $perPage);
-
         $products = [];
-        foreach ($paginatedProductIds as $productId) {
-            $product = $productManager->getProductDetails($productId);
-            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                     ->getDefaultImage($productId);
-            $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                              ->getSecondaryImage($productId);
+        
+        if ($hydrate) {
+            $offset = (int) bcmul($pageNumber, $perPage);
+            $paginatedProductIds = array_slice($finalizedProductIds, $offset, $perPage);
+            foreach ($paginatedProductIds as $productId) {
+                $product = $productManager->getProductDetails($productId);
+                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                         ->getDefaultImage($productId);
+                $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                  ->getSecondaryImage($productId);
 
-            $product->ownerAvatar = $userManager->getUserImage($product->getMember()->getIdMember());
-            $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-            $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-            $product->secondaryImageDirectory = null;
-            $product->secondaryImageFileName = null;
-            $product->hasSecondaryImage = false;
+                $product->ownerAvatar = $userManager->getUserImage($product->getMember()->getIdMember());
+                $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+                $product->secondaryImageDirectory = null;
+                $product->secondaryImageFileName = null;
+                $product->hasSecondaryImage = false;
 
-            if($productImage !== null){
-                $product->directory = $productImage->getDirectory();
-                $product->imageFileName = $productImage->getFilename();
-            }
-
-            if($secondaryProductImage !== null){
-                $product->hasSecondaryImage = true;
-                $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
-                $product->secondaryImageFileName = $secondaryProductImage->getFilename();
-            }
-
-            $products[] = $product;
-        }
-
-        if($sortBy && strtolower($sortBy) == "price"){
-            $data = new ArrayCollection($products);
-            $iterator = $data->getIterator();
-            $sortString = "ASC";
-            if(isset($parameters['sorttype']) && strtoupper(trim($parameters['sorttype'])) == "DESC"){ 
-                $sortString = "DESC"; 
-            }
-            $iterator->uasort(function ($a, $b) use($sortString) {
-                if($a->getFinalPrice() === $b->getFinalPrice()) {
-                    return 0;
-                } 
-                if($sortString === "DESC"){
-                    return ($a->getFinalPrice() > $b->getFinalPrice()) ? -1 : 1; 
+                if($productImage !== null){
+                    $product->directory = $productImage->getDirectory();
+                    $product->imageFileName = $productImage->getFilename();
                 }
 
-                return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1;
-            });
-            $products = new ArrayCollection(iterator_to_array($iterator));
-        } 
+                if($secondaryProductImage !== null){
+                    $product->hasSecondaryImage = true;
+                    $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
+                    $product->secondaryImageFileName = $secondaryProductImage->getFilename();
+                }
+
+                $products[] = $product;
+            }
+
+            if($sortBy && strtolower($sortBy) == "price"){
+                $data = new ArrayCollection($products);
+                $iterator = $data->getIterator();
+                $sortString = "ASC";
+                if(isset($parameters['sorttype']) && strtoupper(trim($parameters['sorttype'])) == "DESC"){ 
+                    $sortString = "DESC"; 
+                }
+                $iterator->uasort(function ($a, $b) use($sortString) {
+                    if($a->getFinalPrice() === $b->getFinalPrice()) {
+                        return 0;
+                    } 
+                    if($sortString === "DESC"){
+                        return ($a->getFinalPrice() > $b->getFinalPrice()) ? -1 : 1; 
+                    }
+
+                    return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1;
+                });
+                $products = new ArrayCollection(iterator_to_array($iterator));
+            }
+        }
 
         $returnArray = [
             'collection' => $products,
