@@ -135,7 +135,7 @@ class GenerateSphinxConfiguration extends ScriptBaseClass
                 sql_query = SELECT \
                                 es_member.id_member, \
                                 es_member.id_member as memberId,\
-                                coalesce(`store_name`, `username`) as store_name \
+                                COALESCE(NULLIF(es_member.store_name, ""), es_member.username) as store_name\
                             FROM es_member \
                             WHERE es_member.id_member >= $start AND es_member.id_member <= $end \
                                 AND es_member.is_banned = 0 AND es_member.is_active = 1
