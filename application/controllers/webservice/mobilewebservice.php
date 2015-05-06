@@ -138,10 +138,13 @@ class MobileWebService extends MY_Controller
         ]); 
         
         if ( ! $this->upload->do_upload("myfile")) {
-            $error = ['error' => $this->upload->display_errors()];
-                     return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output(json_encode($error));
+          
+            $error = [
+                'error' => $this->upload->display_errors()
+            ];
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output(json_encode($error));
         } 
         else {
             $value = $path_directory.$filename.'.'.$file_ext;
@@ -149,8 +152,8 @@ class MobileWebService extends MY_Controller
             $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/mainSlide[last()]',"\t","\n\n");
             if($addXml === true) {
                 return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json); 
+                            ->set_content_type('application/json')
+                            ->set_output($this->json); 
             }   
         }
 
