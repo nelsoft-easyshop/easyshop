@@ -21,7 +21,7 @@ class MemberFeatureRestrictManager
     }
 
     /**
-     * Get all the list of feature with restriction
+     * Get restricted features that are allowed to a user
      * 
      * @param integer $memberId
      * @return mixed
