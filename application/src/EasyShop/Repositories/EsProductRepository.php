@@ -214,9 +214,9 @@ class EsProductRepository extends EntityRepository
                                     )
                                 ->getQuery();
         $result = $qbResult->getResult();
-        $resultNeeded = array_map(function($value) { return $value['brand']; }, $result);
+        $brands = array_map(function($value) { return $value['brand']; }, $result);
 
-        return $resultNeeded;
+        return $brands;
     }
 
     /**
@@ -235,9 +235,9 @@ class EsProductRepository extends EntityRepository
                                     )
                                 ->getQuery();
         $result = $qbResult->getResult();
-        $resultNeeded = array_map(function($value) { return $value['condition']; }, $result);
+        $conditions = array_map(function($value) { return $value['condition']; }, $result);
 
-        return $resultNeeded;
+        return $conditions;
     }
 
     /**
