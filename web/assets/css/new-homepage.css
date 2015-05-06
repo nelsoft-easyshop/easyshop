@@ -1588,6 +1588,126 @@ h3 > b{
     -o-transition: all 0.3s ease;
 }
 
+.call-to-action-sell-container{
+    display: none;
+    position: fixed;
+    z-index: 99999999;
+    bottom: 0;
+    left: 0;
+}
+
+.call-to-action-sell-container .call-to-action-sell-wrapper{
+    position: relative;
+    display: inline-block;
+}
+
+.call-to-action-sell-container .base{
+    background: #5b5159;
+    width: 215px;
+    height: 35px;
+    border-bottom: solid #4d414b 2px;
+    -webkit-transform: skew(20deg);
+    -moz-transform: skew(20deg);
+    -ms-transform: skew(20deg);
+    -o-transform: skew(20deg);
+    margin-left: -25px;
+    position: relative;
+    -webkit-box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    -moz-box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    z-index:1;
+}
+
+.call-to-action-sell-container .icon-base{
+    background: #ff893b;
+    width: 52px;
+    height: 35px;
+    position: relative;
+    border-bottom: solid #ff4c1d 2px;
+    -webkit-transform: skew(20deg);
+    -moz-transform: skew(20deg);
+    -ms-transform: skew(20deg);
+    -o-transform: skew(20deg);
+    margin-left: 3px;
+    margin-top: -35px;
+    z-index:3;
+}
+
+.call-to-action-sell-container .icon-base .icon-item{
+    -webkit-transform: skew(-20deg);
+    -moz-transform: skew(-20deg);
+    -ms-transform: skew(-20deg);
+    -o-transform: skew(-20deg);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    font-size: 1.5em;
+    color: #fff;
+    margin-top: 7px;
+    text-shadow: 2px 1px 0px rgba(255, 78, 8, 1);
+}
+
+.call-to-action-sell-container .top-filler{
+    display: inline-block;
+    position: relative;
+    width: 134px;
+    height: 6px;
+    background: #ff893b;
+    -webkit-transform: skew(47deg);
+    -moz-transform: skew(47deg);
+    -ms-transform: skew(47deg);
+    -o-transform: skew(47deg);
+    margin-left: -30px;
+    -webkit-box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    -moz-box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    box-shadow: 2px -2px 11px 0px rgba(138,138,138,0.5);
+    z-index:2;
+}
+
+.call-to-action-sell-container .call-to-action-sell-text{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 9;
+    width: 135px;
+    height: 50px;
+    text-align: center;
+    margin: 0px;
+    margin-left: 51px;
+    margin-top: 10px;
+    padding-top: 7px;
+    font-size: 12px;
+    font-family: Open Sans;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #e8bc97;
+    text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
+}
+
+.call-to-action-sell-container .call-to-action-sell-text a{
+    color: #e8bc97;
+}
+
+.button-action{
+      position: absolute;
+  right: 9px;
+  bottom: 7px;
+  z-index: 999;
+  display: inline-block;
+  color: #fff;
+  font-size: 17px;
+  text-shadow: 2px 1px 0px rgba(52, 49, 56, 1);
+  cursor: pointer;
+}
+
+.action-show{
+    display: none;
+}
+
 @media (min-width: 1380px) {
     .sticky-nav-fixed .sticky-nav-logo-con {    
         background-color: #4370cc;
