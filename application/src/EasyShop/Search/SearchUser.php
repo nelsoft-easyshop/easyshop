@@ -92,8 +92,10 @@ class SearchUser
                 $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString)));
                 $wildCardString = trim(implode('* +', $explodedStringWithRegEx));
                 if ($wildCardString !== "") {
+                    // add characters in need of fulltext
+                    $searchString = '+'.$wildCardString .'*';
                     // remove excess '+' character
-                    $searchString = rtrim('+'.$wildCardString .'*', "+");
+                    $searchString = rtrim($searchString, "+");
                     $users = $this->em->getRepository('EasyShop\Entities\EsMember')
                                       ->searchUser($searchString, $clearString);
                     foreach ($users as $user) {
@@ -113,10 +115,11 @@ class SearchUser
 
     /**
      * Return all users processed by all filters
-     * @param  array $parameters
+     * @param  array   $parameters
+     * @param  boolean $isHydrate
      * @return array
      */
-    public function searchUser($parameters, $hydrate = true)
+    public function searchUser($parameters, $isHydrate = true)
     {
         $queryString = $parameters['q_str'];
         $pageNumber = isset($parameters['page']) && $parameters['page']?trim($parameters['page']):false;
@@ -124,7 +127,7 @@ class SearchUser
         $offset = bcmul($pageNumber, $perPage);
         $memberIds = $this->filterBySearchString($queryString);
 
-        if ($hydrate) {
+        if ($isHydrate) {
             $paginatedMemberIds = array_slice($memberIds, $offset, $perPage);
             $members = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->findBy(['idMember' => $paginatedMemberIds]);
