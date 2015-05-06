@@ -1,5 +1,5 @@
-app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalService', 'MessageFactory', 'HeaderFactory', 'socketFactory', 
-    function($scope, $stateParams, $state, ModalService, MessageFactory, HeaderFactory, socketFactory) {
+app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalService', 'MessageFactory', 'socketFactory', 
+    function($scope, $stateParams, $state, ModalService, MessageFactory, socketFactory) {
 
         MessageFactory.setConversation([]);
         MessageFactory.setPartner(null);
@@ -19,11 +19,11 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
          */
         var updateConversationList = function($partnerId) {
             var $partner = MessageFactory.getPartner($partnerId);
+           
             if ($partner) {
                 MessageFactory.setPartner($partner);
                 if($partner.unread_message_count > 0){
                     $partner.unread_message_count = 0;
-                    $scope.setUnreadMessageCount(MessageFactory.data.unreadConversationCount - 1);
                     MessageFactory.markAsRead($partner.partner_member_id)
                                   .then(function(count) {},
                                         function(errorMessage) {
@@ -32,14 +32,6 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                                   );
                 }
             }
-        };
-
-        $scope.setUnreadMessageCount = function($integer) {
-            var $pageTitle = $integer <= 0 
-                             ? 'Messages | Easyshop.ph'
-                             : '(' + $integer + ')' + ' Messages | Easyshop.ph';
-            HeaderFactory.setTitle($pageTitle);
-            MessageFactory.setUnreadConversationCount($integer);
         };
 
         /**
@@ -213,6 +205,7 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                 'https://' + $chatConfig.chatServerHost + ':' + $chatConfig.chatServerPort, 
                 { query: 'token=' + $chatConfig.jwtToken }
             );
+            
             var socket = socketFactory({
                 ioSocket: iosocketConnection 
             });
@@ -226,17 +219,14 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                 var newMessageSenderId = parseInt(newMessage.senderMemberId, 10);
                 var sender = MessageFactory.getPartner(newMessageSenderId);
                 if(sender){
-
                     var currentPartnerId = 0;
                     if(MessageFactory.data.currentSelectedPartner !== null){
                         currentPartnerId = parseInt(MessageFactory.data.currentSelectedPartner.from_id, 10);
                     }
-
+                    sender.unread_message_count = parseInt(sender.unread_message_count,10) + 1; 
                     if(currentPartnerId === newMessageSenderId){
                         MessageFactory.setConversation([MessageFactory.constructMessage(newMessage)].concat(MessageFactory.data.conversation));
-                    }
-                    else{
-                        sender.unread_message_count = parseInt(sender.unread_message_count,10) + 1; 
+                        updateConversationList(newMessageSenderId);
                     }
                     sender.last_message = newMessage.message;
                     sender.last_date = newMessage.time_sent;
