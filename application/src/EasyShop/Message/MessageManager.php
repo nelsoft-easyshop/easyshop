@@ -462,8 +462,7 @@ class MessageManager {
         $numberOfUpdatedMessages = $this->em->getRepository("EasyShop\Entities\EsMessages")
                                        ->updateToSeen($userId, $partnerId);
         if($numberOfUpdatedMessages > 0){
-            $member = $this->serviceContainer['entity_manager']
-                           ->find('EasyShop\Entities\EsMember', $this->userId);
+            $member = $this->em->find('EasyShop\Entities\EsMember', $userId);
             $redisChatChannel = $this->getRedisChannelName();
             try{
                 $this->redisClient->publish($redisChatChannel, json_encode([
@@ -478,7 +477,7 @@ class MessageManager {
                  */
             }
         }
-        return $numberOfUpdateMessages;
+        return $numberOfUpdatedMessages;
     }
     
 
