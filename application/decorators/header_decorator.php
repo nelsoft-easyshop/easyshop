@@ -40,7 +40,7 @@ class Header_decorator extends Viewdecorator
             $chatServerHost = $messageManager->getChatHost(true);
             $chatServerPort = $messageManager->getChatPort();
             $allowedFeatures = $this->serviceContainer['member_feature_restrict_manager']
-                                                 ->getAllowedFeaturesForMember($memberId);
+                                    ->getAllowedFeaturesForMember($memberId);
         }
 
         $cartTotalAmount = $cartSize > 0 ? $cartImplementation->getTotalPrice() : 0;
