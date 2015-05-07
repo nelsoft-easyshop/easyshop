@@ -26,7 +26,7 @@ class MobileWebService extends MY_Controller
     private $em;
 
     /**
-     * The JSONP callback function
+     * The JSONP data
      */    
     private $json;
 
@@ -138,19 +138,29 @@ class MobileWebService extends MY_Controller
         ]); 
         
         if ( ! $this->upload->do_upload("myfile")) {
-            $error = ['error' => $this->upload->display_errors()];
-                     return $this->output
-                            ->set_content_type('application/json')
-                            ->set_output(json_encode($error));
+          
+            $error = [
+                'error' => $this->upload->display_errors()
+            ];
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output(json_encode($error));
         } 
         else {
+            $uploadData = $this->upload->data();  
             $value = $path_directory.$filename.'.'.$file_ext;
             $string = $this->xmlCmsService->getString("mainSlide", $value, $coordinate, $target, $action);
-            $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/mainSlide[last()]',"\t","\n\n");
+            $isXmlInsertSuccessful = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/mainSlide[last()]',"\t","\n\n");
+
+            if(strtolower(ENVIRONMENT) !== 'development' && $isXmlInsertSuccessful){
+                $this->serviceContainer['aws_uploader']
+                     ->uploadFile($uploadData['full_path'],  $value);
+            } 
+
             if($addXml === true) {
                 return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output($this->json); 
+                            ->set_content_type('application/json')
+                            ->set_output($this->json); 
             }   
         }
 
@@ -193,18 +203,30 @@ class MobileWebService extends MY_Controller
             ]);
 
             if ( ! $this->upload->do_upload("myfile")) {
-                $error = ['error' => $this->upload->display_errors()];
-                         return $this->output
-                                     ->set_content_type('application/json')
-                                     ->set_output(json_encode($error));
+                $error = [
+                    'error' => $this->upload->display_errors()
+                ];
+                return $this->output
+                            ->set_content_type('application/json')
+                            ->set_output(json_encode($error));
             }  
             else {
+                $uploadData = $this->upload->data();  
                 $map->mainSlide[$index]->value = $value;
                 $map->mainSlide[$index]->type = self::DEFAULT_MAINSLIDE_TYPE;
                 $map->mainSlide[$index]->imagemap->target = $target;
                 $map->mainSlide[$index]->actionType = $actionType;
                 
                 if($map->asXML($this->file)) {
+                   
+                    if(strtolower(ENVIRONMENT) !== 'development'){
+                        $this->serviceContainer['aws_uploader']
+                             ->uploadFile(
+                                 $uploadData['full_path'],  
+                                 $value
+                             );
+                    } 
+
                     return $this->output
                                 ->set_content_type('application/json')
                                 ->set_output($this->json);
