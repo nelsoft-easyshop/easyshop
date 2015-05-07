@@ -275,6 +275,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/bower_components/ng-infinite-scroll.js',
                              'web/assets/js/src/vendor/bower_components/checklist-model.js',
                              'web/assets/js/src/vendor/bower_components/angular-ui-bootstrap-tpls.js',
+                             'web/assets/js/src/vendor/bower_components/angular-socket.js',
                              'web/assets/js/angular/app.js',
                              'web/assets/js/angular/services/modalService.js',
                              'web/assets/js/angular/controllers/messageController.js',
