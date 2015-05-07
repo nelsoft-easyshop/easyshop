@@ -13,6 +13,8 @@
         $(".active-left-wing-cart-2").delay(1500).animate({width: "50%"}, 1000);
         $(".active-breadcrumb-icon").delay(2500).animate({backgroundColor: "#00a388"}, 1000);
         $(".active-breadcrumb-title").delay(2500).animate({color: "#00a388"}, 1000).css("font-weight", "bold");
+    
+        
     });
 
     $(".payment-label").click(function(){
@@ -469,6 +471,10 @@
             success: function(jsonResponse) {
                 if(jsonResponse.isSuccessful){
                     $(".location-container").replaceWith(jsonResponse.view);
+                    $('.form-es-control-block').bind('change',function () {
+                        $('body').animate({ scrollTop: 150 }, 1000);
+                        $('body').animate({scrollTop: 0 }, 1000);
+                    });
                 }
                 else{
                     alert(escapeHtml(jsonResponse.errorMessage));
