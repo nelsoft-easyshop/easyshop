@@ -142,7 +142,28 @@ class GenerateSphinxConfiguration extends ScriptBaseClass
 
                 sql_attr_uint = memberid
             }
-             
+
+            source users_delta : users
+            {
+                sql_query_range = SELECT MIN(id_member), MAX(id_member) FROM es_member \
+                                    WHERE datecreated >= CONCAT(CURDATE() , " 00:00:00" ) \
+                                              OR lastmodifieddate >= CONCAT(CURDATE() , " 00:00:00" )
+
+                sql_range_step = 1000
+
+                sql_query = SELECT \
+                                es_member.id_member, \
+                                es_member.id_member as memberId,\
+                                COALESCE(NULLIF(es_member.store_name, ""), es_member.username) as store_name\
+                            FROM es_member \
+                            WHERE es_member.id_member >= $start AND es_member.id_member <= $end \
+                                AND es_member.is_banned = 0 AND es_member.is_active = 1 \
+                                AND ( \
+                                    es_member.datecreated >= CONCAT(CURDATE(), " 00:00:00" ) \
+                                    OR es_member.lastmodifieddate >= CONCAT(CURDATE(), " 00:00:00") \
+                                )
+            }
+
             index products {
 
                 source = products
@@ -186,14 +207,27 @@ class GenerateSphinxConfiguration extends ScriptBaseClass
 
                 source = users
 
-                path = '.$this->sphinxDirectory.'/data/users
+                path = '.$this->sphinxDirectory.'/data/users/main
 
                 morphology = metaphone
                 
                 min_word_len = 3
 
                 min_infix_len = 2
-            } 
+            }
+
+            index users_delta
+            {
+                source = users_delta
+
+                path = '.$this->sphinxDirectory.'/data/users/delta
+
+                wordforms = '.$this->sphinxDirectory.'/etc/wordforms.txt 
+
+                min_word_len = 3
+
+                min_infix_len = 3
+            }
 
             searchd {
             
