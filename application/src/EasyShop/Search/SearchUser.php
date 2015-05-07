@@ -81,7 +81,7 @@ class SearchUser
             'store_name' => 100,
         ]);
         $this->sphinxClient->setLimits(0, $sphinxMatchMatches, $sphinxMatchMatches);
-        $this->sphinxClient->AddQuery($queryString.'*', 'users');
+        $this->sphinxClient->AddQuery($queryString.'*', 'users users_delta');
         $sphinxResult = $this->sphinxClient->RunQueries();
 
         if ($sphinxResult === false) {
