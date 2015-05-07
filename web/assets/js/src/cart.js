@@ -20,8 +20,12 @@
             });
             $(".shipping-calculator-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
         }); 
-    });
 
+        $('#shipping-state, #shipping-city').bind('change click',function () {
+            $('body').animate({scrollTop: 1 }, 1000);
+            $('body').animate({scrollTop: 0 }, 1000);
+        });
+    });
     var generateQuantitySelect = function ()
     {
         $(".item-quantity").each(function() {
