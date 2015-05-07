@@ -5,5 +5,6 @@ $config = [
                         '5'
                     ],
         'hide_product_slug' => [],
+        'sphinx_match_matches' => 100000
     ];
 

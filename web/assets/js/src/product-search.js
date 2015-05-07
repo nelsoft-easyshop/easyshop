@@ -198,8 +198,7 @@
     });
  
     var currentUrl = $('#hidden-currentUrl').val();
-    var typeView = $('#hidden-typeView').val(); 
-    var emptySearch = $('#hidden-emptySearch').val();
+    var typeView = $('#hidden-typeView').val();
     var loadUrl = $('#hidden-loadUrl').val();
     var allQueryString = $('#hidden-queryString').val();
     var currentSegment = $("#hidden-segment").val();
@@ -599,8 +598,13 @@
             $.stickysidebarscroll(".container-filter",{offset: {top: offsetTopData, bottom: 100}});
         }
 
-
-        
+        var tabSrc= $( document ).find(".tab-head-container a.active").attr('src');
+        $("#"+tabSrc).show();
+        $(".tab-head-container a").click(function(){
+            var $this = $(this);
+            var $segment = $this.data('segment');
+            document.location.href = '/search/'+$segment+'?'+allQueryString;
+        });
     });
 
     $(document).find('[rel=tooltiplist]').tooltip({

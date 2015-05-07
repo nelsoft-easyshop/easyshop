@@ -122,6 +122,26 @@ class GenerateSphinxConfiguration extends ScriptBaseClass
                     AND ( es_product.createddate >= CONCAT(CURDATE() , " 00:00:00" ) \
                                               OR es_product.lastmodifieddate >= CONCAT(CURDATE() , " 00:00:00" ) )
             }
+
+            source users {
+                type = mysql
+                sql_host = '.$this->hostname.'
+                sql_user = '.$this->dbUsername.'
+                sql_pass = '.$this->dbPassword.'
+                sql_db = '.$this->dbName.'
+                sql_query_range = SELECT MIN(id_member), MAX(id_member) FROM es_member
+                sql_range_step = 1000
+
+                sql_query = SELECT \
+                                es_member.id_member, \
+                                es_member.id_member as memberId,\
+                                COALESCE(NULLIF(es_member.store_name, ""), es_member.username) as store_name\
+                            FROM es_member \
+                            WHERE es_member.id_member >= $start AND es_member.id_member <= $end \
+                                AND es_member.is_banned = 0 AND es_member.is_active = 1
+
+                sql_attr_uint = memberid
+            }
              
             index products {
 
@@ -154,6 +174,19 @@ class GenerateSphinxConfiguration extends ScriptBaseClass
                 source = suggestions
 
                 path = '.$this->sphinxDirectory.'/data/suggestions
+
+                morphology = metaphone
+                
+                min_word_len = 3
+
+                min_infix_len = 2
+            } 
+
+            index users {
+
+                source = users
+
+                path = '.$this->sphinxDirectory.'/data/users
 
                 morphology = metaphone
                 

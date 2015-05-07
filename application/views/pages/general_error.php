@@ -12,7 +12,7 @@
                 The page that you were looking for has been abducted... but have no fear, the search bar is here!
             </h2>
             <div class="row form-container-404">
-                <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar">
+                <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/product" id="nav-searchbar">
                     <div class="col-xs-12 col-sm-9 col-md-9 form-404-input">
                         <div class="row">
                             <input type="text" name="q_str" placeholder="" class="ui-form-control input-404">

@@ -120,6 +120,7 @@ class SearchProduct
         }
 
         $ids = [];
+        $sphinxMatchMatches = $this->configLoader->getItem('search','sphinx_match_matches');
         $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
         $this->sphinxClient->SetFieldWeights([
             'name' => 50, 
@@ -130,32 +131,37 @@ class SearchProduct
         if(empty($productIds) === false){
             $this->sphinxClient->SetFilter('productid', $productIds);
         }
-        $this->sphinxClient->setLimits(0, PHP_INT_MAX, PHP_INT_MAX); 
+        $this->sphinxClient->setLimits(0, $sphinxMatchMatches, $sphinxMatchMatches);
         $this->sphinxClient->AddQuery($queryString, 'products products_delta'); 
         
         $sphinxResult =  $this->sphinxClient->RunQueries();
         
         $products = [];
         if($sphinxResult === false){
+            // remove all double spaces
             $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
             $stringCollection = [];
             $ids = $productIds;
             if(trim($clearString)){
                 $explodedString = explode(' ', trim($clearString));
+                // make string alpha numeric
                 $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
                 $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
-                $wildCardString = !implode('* +', $explodedStringWithRegEx)
-                                ? "" 
-                                : '+'.implode('* +', $explodedStringWithRegEx) .'*';
-                $stringCollection[] = str_replace("+*", "", $wildCardString);
-                $stringCollection[] = '"'.trim($clearString).'"'; 
+                $wildCardString = trim(implode('* +', $explodedStringWithRegEx));
+                if ($wildCardString !== "") {
+                    // add characters in need of fulltext
+                    $wildCardString = '+'.$wildCardString.'*';
+                }
+                // remove excess '+' character
+                $stringCollection[] = rtrim($wildCardString , "+");
+                $stringCollection[] = '"'.trim($clearString).'"';
                 $isLimit = strlen($clearString) > 1;
                 $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
                                      ->findByKeyword($stringCollection,$productIds,$isLimit);
                 $ids = [];
                 foreach ($products as $product) {
                     $ids[] = $product['idProduct']; 
-                }
+                } 
             }
         }
         else if(isset($sphinxResult[0]['matches'])){
@@ -309,41 +315,30 @@ class SearchProduct
      * @param  integer[] $productIds
      * @return mixed
      */
-    public function getProductAttributesByProductIds($products = [])
-    {   
-        $finalizedProductIds = [];
-        $availableCondition = [];
-        $organizedAttribute = [];
-        if(!empty($products)){
-            $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
-            foreach ($products as $value) { 
-                $finalizedProductIds[] = $value->getIdProduct();
-                $availableCondition[] = $value->getCondition();
-            }
+    public function getProductAttributesByProductIds($productIds = [])
+    {
+        $organizedAttribute = []; 
+        $EsProductRepository = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
-            if(!empty($finalizedProductIds)){
-                $attributes = $EsProductRepository->getAttributesByProductIds($finalizedProductIds); 
-                $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
-                $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($finalizedProductIds); 
-                $condition =  array_unique($availableCondition);
-
-                foreach ($condition as $key => $value) {
-                    $organizedAttribute['Condition'][] = $value;
-                }
-                ksort($organizedAttribute);
-            }
-        }
+        if(!empty($productIds)){
+            $attributes = $EsProductRepository->getAttributesByProductIds($productIds); 
+            $organizedAttribute = $this->collectionHelper->organizeArray($attributes);
+            $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($productIds);
+            $organizedAttribute['Condition'] = $EsProductRepository->getProductConditionByProductIds($productIds);
+            ksort($organizedAttribute);
+        } 
     
         return $organizedAttribute;
     }
 
     /**
      * Return all product processed by all filters
-     * @param  mixed $parameters
+     * @param  mixed   $parameters
      * @param  integer $memberId
+     * @param  integer $isHydrate
      * @return mixed
      */
-    public function getProductBySearch($parameters)
+    public function getProductBySearch($parameters, $isHydrate = true)
     {
         $searchProductService = $this;
         $productManager = $this->productManager;
@@ -380,63 +375,64 @@ class SearchProduct
         $finalizedProductIds = !empty($originalOrder) ? array_intersect($originalOrder, $finalizedProductIds) : $finalizedProductIds;
         $finalizedProductIds = $this->sortResultByTopic($finalizedProductIds,$queryString);
         $totalCount = count($finalizedProductIds);
-
-        $offset = (int) $pageNumber * (int) $perPage;
-
-        $paginatedProductIds = array_slice($finalizedProductIds, $offset, $perPage);
-
         $products = [];
-        foreach ($paginatedProductIds as $productId) {
-            $product = $productManager->getProductDetails($productId);
-            $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                     ->getDefaultImage($productId);
-            $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
-                                              ->getSecondaryImage($productId);
+        
+        if ($isHydrate) {
+            $offset = (int) bcmul($pageNumber, $perPage);
+            $paginatedProductIds = array_slice($finalizedProductIds, $offset, $perPage);
+            foreach ($paginatedProductIds as $productId) {
+                $product = $productManager->getProductDetails($productId);
+                $productImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                         ->getDefaultImage($productId);
+                $secondaryProductImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                                  ->getSecondaryImage($productId);
 
-            $product->ownerAvatar = $userManager->getUserImage($product->getMember()->getIdMember());
-            $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
-            $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
-            $product->secondaryImageDirectory = null;
-            $product->secondaryImageFileName = null;
-            $product->hasSecondaryImage = false;
+                $product->ownerAvatar = $userManager->getUserImage($product->getMember()->getIdMember());
+                $product->directory = EsProductImage::IMAGE_UNAVAILABLE_DIRECTORY;
+                $product->imageFileName = EsProductImage::IMAGE_UNAVAILABLE_FILE;
+                $product->secondaryImageDirectory = null;
+                $product->secondaryImageFileName = null;
+                $product->hasSecondaryImage = false;
 
-            if($productImage !== null){
-                $product->directory = $productImage->getDirectory();
-                $product->imageFileName = $productImage->getFilename();
-            }
-
-            if($secondaryProductImage !== null){
-                $product->hasSecondaryImage = true;
-                $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
-                $product->secondaryImageFileName = $secondaryProductImage->getFilename();
-            }
-
-            $products[] = $product;
-        }
-
-        if($sortBy && strtolower($sortBy) == "price"){
-            $data = new ArrayCollection($products);
-            $iterator = $data->getIterator();
-            $sortString = "ASC";
-            if(isset($parameters['sorttype']) && strtoupper(trim($parameters['sorttype'])) == "DESC"){ 
-                $sortString = "DESC"; 
-            }
-            $iterator->uasort(function ($a, $b) use($sortString) {
-                if($a->getFinalPrice() === $b->getFinalPrice()) {
-                    return 0;
-                } 
-                if($sortString === "DESC"){
-                    return ($a->getFinalPrice() > $b->getFinalPrice()) ? -1 : 1; 
+                if($productImage !== null){
+                    $product->directory = $productImage->getDirectory();
+                    $product->imageFileName = $productImage->getFilename();
                 }
 
-                return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1;
-            });
-            $products = new ArrayCollection(iterator_to_array($iterator));
-        } 
+                if($secondaryProductImage !== null){
+                    $product->hasSecondaryImage = true;
+                    $product->secondaryImageDirectory = $secondaryProductImage->getDirectory();
+                    $product->secondaryImageFileName = $secondaryProductImage->getFilename();
+                }
+
+                $products[] = $product;
+            }
+
+            if($sortBy && strtolower($sortBy) == "price"){
+                $data = new ArrayCollection($products);
+                $iterator = $data->getIterator();
+                $sortString = "ASC";
+                if(isset($parameters['sorttype']) && strtoupper(trim($parameters['sorttype'])) == "DESC"){ 
+                    $sortString = "DESC"; 
+                }
+                $iterator->uasort(function ($a, $b) use($sortString) {
+                    if($a->getFinalPrice() === $b->getFinalPrice()) {
+                        return 0;
+                    } 
+                    if($sortString === "DESC"){
+                        return ($a->getFinalPrice() > $b->getFinalPrice()) ? -1 : 1; 
+                    }
+
+                    return ($a->getFinalPrice() < $b->getFinalPrice()) ? -1 : 1;
+                });
+                $products = new ArrayCollection(iterator_to_array($iterator));
+            }
+        }
 
         $returnArray = [
             'collection' => $products,
             'count' => $totalCount,
+            'productIds' => $finalizedProductIds
         ];
 
         return $returnArray;

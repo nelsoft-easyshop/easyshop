@@ -41,7 +41,7 @@
         <top>
             <image>
                 <path>/assets/images/categories/slider-large/electronics-gadgets.jpg</path>
-                <target>/search/search.html?q_str=mobile+phone</target>
+                <target>/search/product?q_str=mobile+phone</target>
             </image>
         </top>
         <bottom>
