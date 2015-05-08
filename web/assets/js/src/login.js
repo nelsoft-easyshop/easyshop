@@ -246,13 +246,11 @@
             window.location = '/' + vendorSubscriptionUri;
         }
         else if (typeof cartCookie !== 'undefined'){
-            $.removeCookie("cartAddData", { path: '/'});
-            var cartAddData = $.parseJSON(cartCookie);
-            var quantity = typeof  cartAddData.quantity === 'undefined' ? null : cartAddData.quantity;
-            var optionsObject = typeof cartAddData.options === 'undefined' ? null : cartAddData.options;
-            var isExpress = typeof cartAddData.express === 'undefined' ? null : cartAddData.express;
-            var slug = typeof cartAddData.slug === 'undefined' ? null : cartAddData.slug;
-            addToCart(cartAddData.productId, quantity, optionsObject, isExpress, slug)
+            /**
+             * Move cart insert to home page due to CSRF difference
+             * because of session reissue after login
+             */
+            window.location = "/home";
         }
         else if (firstUriSegment === 'promo') {
             /**
