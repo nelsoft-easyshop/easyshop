@@ -250,7 +250,7 @@
              * Move cart insert to home page due to CSRF difference
              * because of session reissue after login
              */
-            window.location = "/home";
+            window.location = "/";
         }
         else if (firstUriSegment === 'promo') {
             /**
