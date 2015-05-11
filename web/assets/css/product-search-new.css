@@ -387,7 +387,7 @@ html, body{
 .search-item-price{
     font-weight: bold;
     font-size: 15px;
-    min-height: 37px;
+    min-height: 40px;
 }
 
 .search-item-price.with-discount{
@@ -718,6 +718,10 @@ html, body{
 
 .btn-filter{
     margin-left: 5px;
+}
+
+.checkbox{
+    word-break: break-all;
 }
 
 .checkbox input[type="checkbox"]{
