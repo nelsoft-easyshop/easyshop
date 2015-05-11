@@ -100,8 +100,7 @@ module.exports = function (grunt) {
                          'web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/bootstrap-mods.css', 
                          'web/assets/css/vendor/bower_components/jquery.cropper.css',
-                         'web/assets/css/chosenwtihcreate.min.css'], 
-                     
+                         'web/assets/css/chosenwtihcreate.min.css'],                      
                     'web/assets/css/min-easyshop.upload-step3.css':
                         ['web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/bootstrap-mods.css',
@@ -206,8 +205,7 @@ module.exports = function (grunt) {
                         ['web/assets/css/new-inbox.css',
                          'web/assets/css/vendor/bower_components/bootstrap.css'],
                     'web/assets/css/min-easyshop.promo-css.css':
-                        ['web/assets/css/promo-css.css'],
-                        
+                        ['web/assets/css/promo-css.css'],                         
                     'web/assets/css/min-easyshop.chat-view.css':
                         ['web/assets/css/chat-css.css']
                 }

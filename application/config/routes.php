@@ -133,9 +133,10 @@
     $route['(?i)Estudyantrepreneur'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromo';
     $route['(?i)EstudyantrepreneurSuccess'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoSuccess';
     $route['(?i)EstudyantrepreneurStandings'] = 'promo/Estudyantrepreneur/EstudyantrepreneurPromoStandings';
+  
     #MESSAGES
     $route['(?i)messages'] = '/MessageController/messages';
-    $route['(?i)chat'] = '/home/chatview';
+    $route['(?i)chat'] = '/MessageController/chat';
 
     $route['(?i)register'] = '/login';
     $route['(?i)redirect'] = '/home/redirect';
