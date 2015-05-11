@@ -165,10 +165,6 @@ textarea {
     border-bottom: 2px solid #007c67;
     background-color: #00a388;
     color: #fff;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
 }
 
 .btn.btn-default-3:hover {
@@ -181,15 +177,22 @@ textarea {
     border-bottom: 2px solid #e07934;
     background-color: #fe893a;
     color: #fff;
-    transition: all 0.3s ease;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
 }
 
 .btn.btn-default-4:hover {
     border-bottom: 2px solid #C93B21;
     background-color: #FF4E2D;
+    color: #fff;
+}
+
+.btn.btn-default-5 {
+    border: none;
+    background-color: #ff893a;
+    color: #fff;
+}
+
+.btn.btn-default-5:hover {
+    background-color: #ff6237;
     color: #fff;
 }
 
