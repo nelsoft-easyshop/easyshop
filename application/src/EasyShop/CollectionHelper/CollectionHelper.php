@@ -28,7 +28,7 @@ class CollectionHelper
                 if(!array_key_exists($head,$organizeArray)){
                     $organizeArray[$head] = array();
                 }
-                $organizeArray[$head][] = $value[$arrayKey[1]]; 
+                $organizeArray[$head][] = strtoupper($value[$arrayKey[1]]);
                 $organizeArray[$head] = array_unique($organizeArray[$head]);
             }
         }
