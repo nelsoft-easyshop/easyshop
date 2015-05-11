@@ -168,7 +168,7 @@
             });
         }
         else{
-            $(".call-to-action-sell-container").hide();
+            $(".call-to-action-sell-container").hide('slide', {direction: 'down'}, 300);
         }
     });
 
