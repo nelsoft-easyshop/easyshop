@@ -227,7 +227,7 @@
     $(document).ready(function() {
         var original_position_offset = ($('#sticky-pagination').length <=0 ) ? 0 : $('#sticky-pagination').offset() ;
         sticky_offset = original_position_offset.top;
-        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-400px');
+        $('#sticky-pagination').css('position', 'fixed').css('width', '66%').css('bottom', '-400px');
     });
 
     $(window).scroll(function(event) {

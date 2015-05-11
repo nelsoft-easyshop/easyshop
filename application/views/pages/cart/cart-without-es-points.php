@@ -138,9 +138,12 @@
                                             </div>
                                         </td>
                                         <td>
-                                            &#8369; 
-                                            <span class="cart-item-price">
-                                                <?=number_format($item['price'], 2, '.', ',');?>
+                                            <?php
+                                                $unitPrice = $item['price'];
+                                                $priceFontSize = strlen((string)$unitPrice) > 9 ? "font-size:11px !important;" : ""; 
+                                            ?>
+                                            <span class="cart-item-price" style="<?php echo $priceFontSize;?>">
+                                                <span style="padding-right: 5px;">&#8369;</span><?=number_format($item['price'], 2, '.', ',');?>
                                             </span>
                                         </td>
                                         <td>
@@ -151,9 +154,12 @@
                                             </select>
                                         </td>
                                         <td>
-                                            &#8369; 
-                                            <span class="cart-item-subtotal">
-                                                <?=number_format($item['subtotal'], 2, '.', ',');?>
+                                            <?php
+                                                $unitSubtotalPrice = $item['subtotal'];
+                                                $subTotalpriceFontSize = strlen((string)$unitSubtotalPrice) > 9 ? "font-size:11px !important;" : ""; 
+                                            ?>
+                                            <span class="cart-item-subtotal" style="<?php echo $subTotalpriceFontSize;?>">
+                                                <span style="padding-right: 5px;">&#8369;</span><?=number_format($item['subtotal'], 2, '.', ',');?>
                                             </span>
                                         </td>
                                     </tr>
