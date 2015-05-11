@@ -3,7 +3,7 @@
     <div class="express-edit-confirm"></div>
     <div class="row">
         <div class="col-xs-12 col-md-3">
-            <div class="express-edit-product-image" style="background: url(<?=getAssetsDomain().$product->directory.'categoryview/'.$product->imageFileName; ?>) center no-repeat; background-cover: cover; background-size: 100%;">
+            <div class="express-edit-product-image" style="background: url(<?=getAssetsDomain().$product->directory.'categoryview/'.$product->imageFileName; ?>) center no-repeat; background-size: 62%;">
             </div>
         </div>
         <div class="col-xs-12 col-md-6 padding-reset">
