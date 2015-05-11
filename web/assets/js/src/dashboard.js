@@ -684,6 +684,10 @@
                                 $parentContainer.find('.with-items').hide();
                             }
                         }
+
+                        var itemTotalCounterContainer = $("#stats-container").find("#dashboard-total-item-count");
+                        var numberOfItems = parseInt(itemTotalCounterContainer.html(), 10);
+                        itemTotalCounterContainer.html(numberOfItems--);
                     }
                     else{
                         alert($response.message);

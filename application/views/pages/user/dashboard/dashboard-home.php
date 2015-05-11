@@ -50,7 +50,7 @@
                                 <span class="icon-web"></span>
                             </div>
                         </a>
-                        <div class="div-stat-summary">
+                        <div id="stats-container" class="div-stat-summary">
                             <div class="row">
                                 <div class="col-xs-3" align="center">
                                     <p class="p-label-stat">
@@ -72,7 +72,7 @@
                                     <p class="p-label-stat">
                                         Item(s)
                                     </p>
-                                    <p class="p-stat-total">
+                                    <p id="dashboard-total-item-count" class="p-stat-total">
                                         <?=$productCount; ?>
                                     </p>
                                 </div>
