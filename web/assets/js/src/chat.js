@@ -13,13 +13,7 @@
     }
 
     $('.chat-compose').click(function() {
-        $('.chat-compose-dialog').dialog({
-            autoOpen: true,
-            width: "auto",
-            modal: true,
-            fluid: true,
-            draggable: false,
-        });
+        $('.chat-compose-dialog').dialog('open');
     });
 
     $(".chat-compose-dialog").dialog({
@@ -128,17 +122,19 @@
        });
 
        $(".contact-list li").unbind('click').click(function() {
-            $(this).addClass("contact-selected");
-            $(this).siblings().removeClass("contact-selected");
-
-            if ($(window).width() <= 991) {
-                $(".contact-list-container").slideUp('fast',function(){
-                    $(".contact-list").getNiceScroll().resize();
-                    $(".chat-box-messages").getNiceScroll().resize();
-                });
-                $(".contacts-container").removeClass("show-contact-list");
-             }
-        });
+          
+           var $this = $(this);
+           $this.addClass("contact-selected");
+           $this.siblings().removeClass("contact-selected");
+           
+           if ($(window).width() <= 991) {
+               $(".contact-list-container").slideUp('fast',function(){
+                   $(".contact-list").getNiceScroll().resize();
+                   $(".chat-box-messages").getNiceScroll().resize();
+               });
+               $(".contacts-container").removeClass("show-contact-list");
+           }
+       });
     }).resize();
 
 })(jQuery);
