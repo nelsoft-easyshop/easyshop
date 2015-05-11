@@ -34,7 +34,7 @@
             'from_name' => 'Easyshop.ph',
             'recipients' => [
                     'samgavinio@easyshop.ph',
-                    'henriel.co@easyshop.ph',
+                    'trixia.chua@easyshop.ph',
             ]
     );
 
