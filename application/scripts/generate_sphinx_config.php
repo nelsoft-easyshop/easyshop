@@ -211,7 +211,7 @@ class GenerateSphinxConfiguration extends ScriptBaseClass
 
                 morphology = metaphone
                 
-                min_word_len = 3
+                min_word_len = 2
 
                 min_infix_len = 2
             }
@@ -222,11 +222,9 @@ class GenerateSphinxConfiguration extends ScriptBaseClass
 
                 path = '.$this->sphinxDirectory.'/data/users/delta
 
-                wordforms = '.$this->sphinxDirectory.'/etc/wordforms.txt 
+                min_word_len = 2
 
-                min_word_len = 3
-
-                min_infix_len = 3
+                min_infix_len = 2
             }
 
             searchd {
