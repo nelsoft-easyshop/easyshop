@@ -165,7 +165,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <?php echo $unreadMessageCount; ?>
                     </span>
                     <?php endif;?>
-                    <img src="<?php echo getAssetsDomain(); ?>assets/images/img-default-icon-user.jpg"> 
+                    <img src="<?php echo getAssetsDomain() . $user->profileImage; ?>"> 
                     <a href="/<?php echo html_escape($user->getSlug())?>" class="vendor-login-name">
                         <span>
                             <strong><?php echo html_escape($user->getUsername()); ?></strong>

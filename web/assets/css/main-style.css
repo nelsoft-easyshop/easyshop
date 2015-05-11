@@ -312,10 +312,12 @@ textarea {
 }
 
 .user-login img {
+    border-radius: 90px;
     display: inline-block;
+    height: 20px;
     margin-right: 5px;
-/*    padding-top: 5px;*/
     vertical-align: middle;
+    width: 20px;
 }
 
 .vendor-login-name span {
