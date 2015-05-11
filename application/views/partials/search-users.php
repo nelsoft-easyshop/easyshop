@@ -15,7 +15,7 @@
                                 <?php if(empty($seller->userProducts) === false): ?>
                                     <div class="search-seller-products-container">
                                         <?php foreach ($seller->userProducts as $product): ?>
-                                            <a href="<?=html_escape($product->getSlug());?>">
+                                            <a href="/item/<?=html_escape($product->getSlug());?>">
                                                 <div class="search-seller-item-img-container">
                                                     <img src="<?=getAssetsDomain().$product->getDefaultImage()->getDirectory() .'thumbnail/'. $product->getDefaultImage()->getFilename();?>" />
                                                 </div>
