@@ -58,6 +58,8 @@ application/logs/*
 
 /sphinx/data/products/*
 !/sphinx/data/products/*.md
+/sphinx/data/users/*
+!/sphinx/data/users/*.md
 /sphinx/data/*.*
 
 
