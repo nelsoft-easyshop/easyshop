@@ -138,6 +138,7 @@ body{
 
 .p-review-content{
     color: #555555;
+    word-break: break-all;
 }
 
 .text-cancel{
@@ -1019,6 +1020,10 @@ body{
     background: #e36044;
     color: #fff;
     transition: all 0.3s ease;
+}
+
+.twitter-share-button{
+    margin-top: -38px;
 }
 
 @media only screen and (max-width: 1200px) {
