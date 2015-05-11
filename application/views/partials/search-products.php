@@ -145,7 +145,7 @@
                                 </div>
                             </div>
                         </td>
-                        <?php $priceFontStyle = strlen((string)$originalPrice) > 11 ? "font-size:15px !important;" : ""; ?>
+                        <?php $priceFontStyle = strlen((string)$originalPrice) > 11 ? "font-size:12px !important;" : ""; ?>
                         <?php $pricePaddingTop = strlen((string)$originalPrice) > 11 ? "margin-top:37px;" : ""; ?>
                         <td class="search-item-td-price">
                             <div class="search-item-price">
