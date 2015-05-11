@@ -547,6 +547,9 @@ class productUpload extends MY_Controller
         $this->config->load('image_dimensions', true);
         $imageDimensions = $this->config->config['image_dimensions']; 
         $assetsUploader = $this->serviceContainer["assets_uploader"]; 
+
+        log_message('error', 'UPLOAD:: => '.json_encode($_FILES['files']));
+        log_message('error', 'UPLOAD:: => '.$this->maxFileSizeInMb);
         foreach($_FILES['files']['name'] as $key => $value ) { 
             $filenames_ar[$key] = $afstartArray[$key];
             if($_FILES['files']['size'][$key] >= $this->maxFileSizeInMb
