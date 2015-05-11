@@ -283,30 +283,34 @@
         var $this = $(this);
         $slug = $this.data('slug');
         $productId = $this.data('pid');
-
-        $(".loading-image").show();
-        $(".ui-dialog > #express-edit-section .express-edit-section-content").html("");
-        $('#express-edit-section').dialog({
-            autoOpen: true,
-            dialogClass: 'express-edit-wrapper',
-            width: '90%',
-            modal: true,
-            fluid: true,
-            draggable: false,
-            open: function() { 
-                var $ajaxRequest = $.ajax({
-                    type: "POST",
-                    data:{slug:$slug,csrfname:$csrftoken},
-                    url: '/me/product/expressedit-request',
-                    success: function(requestResponse){ 
-                        var $response = $.parseJSON(requestResponse);
-                        $(".loading-image").hide();
-                        $(".ui-dialog > #express-edit-section .express-edit-section-content").html($response); 
-                        $(".error-message").hide(); 
-                        $(".base-price").trigger("change");
-                        fluidDialog();
-                    }
-                });
+        var $ajaxRequest = $.ajax({
+            type: "POST",
+            data:{slug:$slug,csrfname:$csrftoken},
+            url: '/me/product/expressedit-request',
+            success: function(requestResponse){ 
+                var $response = $.parseJSON(requestResponse);
+                if ($response.error == false) {
+                    $(".loading-image").show();
+                    $(".ui-dialog > #express-edit-section .express-edit-section-content").html("");
+                    $('#express-edit-section').dialog({
+                        autoOpen: true,
+                        dialogClass: 'express-edit-wrapper',
+                        width: '90%',
+                        modal: true,
+                        fluid: true,
+                        draggable: false,
+                        open: function() { 
+                            $(".loading-image").hide();
+                            $(".ui-dialog > #express-edit-section .express-edit-section-content").html($response.view);
+                            $(".error-message").hide(); 
+                            $(".base-price").trigger("change");
+                            fluidDialog();
+                        }
+                    });
+                }
+                else {
+                    alert($response.message);
+                }
             }
         });
     });
