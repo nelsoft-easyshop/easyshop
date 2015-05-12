@@ -587,12 +587,12 @@
         var totalTopMargin = heightHead + heightBanners + heightCategory + 40 -800;
 
         if(widthOff <= 720){
-            $window.scrollTop(10);
-            $(".panel-filter-search-cont").removeClass("container-filter").removeAttr("style");
+            $window.scrollTop(100);
+            $(".panel-filter-search-cont").removeClass("container-filter");
         }
 
         if(widthOff > 720){
-            $window.scrollTop(10);
+            $window.scrollTop(100);
             $("#scrollUp").trigger("click");
             $(".panel-filter-search-cont").addClass("container-filter").removeAttr("style");
             $.stickysidebarscroll(".container-filter",{offset: {top: offsetTopData, bottom: 100}});
