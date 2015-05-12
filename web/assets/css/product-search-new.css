@@ -1277,6 +1277,27 @@ ul.list-category-search li:last-child > .search-category-link{
     .search-slider .slider1 .slide {
         margin-right: 0 !important;
     }
+
+    /* =============================================
+    -----------------  Tabs Search -----------------
+    ==============================================*/
+
+    .tab-head-container li{
+        margin-right: 17px;
+    }
+
+    .tab-head-container a{
+        font-size: 11px;
+    }
+
+    .tab-head-container a.active{
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+
+    .tab-title-count{
+        padding: 3px 7px;
+    }
 } 
 
 @media (max-width: 768px) {
@@ -1323,7 +1344,59 @@ ul.list-category-search li:last-child > .search-category-link{
     #sticky-pagination{
         width: 71%;
     }
+
+    .search-left-wing{
+        display: none;
+    }
+
+    .mobile-left-wing{
+        width: 100%;
+        display: block;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        background: #4370cc;
+        z-index: 999999;
+        z-index:1000;
+    }
+
+    .row-left-wing{
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+
+    .col-filter{
+        border-left: solid #fff 1px;
+        color: #fff;
+        text-align: center;
+        padding: 8px 0px !important;
+        font-weight: bold;
+    }
+
+    .col-categories{
+        border-right: solid #fff 1px;
+        color: #fff;
+        text-align: center;
+        padding: 8px 0px !important;
+        font-weight: bold;
+    }
+
+    .col-categories:hover,
+    .col-filter:hover{
+        background: #355ba9;
+    }
 }
+
+@media (max-width: 1199px) {
+    .search-item-seller-cont {
+        display: none;
+    }
+
+    .search-item-actions .btn-search-add-cart{
+        width: 100%;
+    }
+}
+
 @media (max-width: 768px) {
     .search-item-name{
         font-size: 13px;
