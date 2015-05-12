@@ -359,38 +359,32 @@ class EsMessagesRepository extends EntityRepository
         $rsm->addScalarResult('is_sender', 'is_sender');
 
         $sql = "
-
-            SELECT * FROM (
-                SELECT
-                    id_msg,
-                    message,
-                    time_sent,
-                    sender.id_member as sender_member_id,
-                    IF(to_id = :memberId, 0, 1) as is_sender
-                FROM
-                    es_messages 
-                LEFT JOIN
-                    es_member as sender ON sender.id_member = es_messages.from_id
-                WHERE 
-                    (
-                         (es_messages.to_id = :memberId AND es_messages.from_id = :partnerId ) OR
-                         (es_messages.to_id = :partnerId AND es_messages.from_id = :memberId)
-                    ) AND (
-                         es_messages.is_delete = :notDeleted OR
-                         es_messages.is_delete = 
-                              CASE
-                                  WHEN to_id = :memberId THEN :deletedBySender
-                                  ELSE :deletedByReceiver
-                              END
-                   )
-                ORDER BY 
-                    es_messages.time_sent DESC
-                LIMIT
-                    :offset, :limit
-            ) as messageResult
-
+            SELECT
+                id_msg,
+                message,
+                time_sent,
+                sender.id_member as sender_member_id,
+                IF(to_id = :memberId, 0, 1) as is_sender
+            FROM
+                es_messages 
+            LEFT JOIN
+                es_member as sender ON sender.id_member = es_messages.from_id
+            WHERE 
+                (
+                     (es_messages.to_id = :memberId AND es_messages.from_id = :partnerId ) OR
+                     (es_messages.to_id = :partnerId AND es_messages.from_id = :memberId)
+                ) AND (
+                     es_messages.is_delete = :notDeleted OR
+                     es_messages.is_delete = 
+                          CASE
+                              WHEN to_id = :memberId THEN :deletedBySender
+                              ELSE :deletedByReceiver
+                          END
+               )
             ORDER BY 
-                time_sent ASC
+                es_messages.time_sent DESC
+            LIMIT
+                :offset, :limit
         ";
         
         $query = $em->createNativeQuery($sql, $rsm);

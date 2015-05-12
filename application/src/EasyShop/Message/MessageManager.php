@@ -401,10 +401,12 @@ class MessageManager {
         if ($member && $partner) {
             $messages =  $this->em->getRepository('EasyShop\Entities\EsMessages')
                               ->getConversationMessages($memberId, $partnerId, $offset, $limit);
+            $messages = array_reverse($messages);
             $memberImage = $this->userManager->getUserImage($memberId, 'small');
             $partnerImage = $this->userManager->getUserImage($partnerId, 'small');
             $memberStorename = $member->getStorename();
             $partnerStorename = $partner->getStorename();
+
             foreach($messages as $key => $message){
                 if( (int) $message['sender_member_id'] === $memberId){
                     $message['senderImage'] = $memberImage;
