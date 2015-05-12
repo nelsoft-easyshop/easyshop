@@ -146,13 +146,17 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                 $messageIds.push(selectedValue.messageId);
             }, MessageFactory.data.conversation);
 
-            if (MessageFactory.data.conversation.length > 0) {
+            var $conversationCount = MessageFactory.data.conversation.length;
+            if ($conversationCount > 0) {
                 MessageFactory.deleteMessage($messageIds)
                               .then(function(count) {},
                                     function(errorMessage) {
                                         alert(errorMessage);
                                     }
                               );
+                var $lastElement = MessageFactory.data.conversation[$conversationCount - 1];
+                MessageFactory.data.currentSelectedPartner.last_message = $lastElement.message;
+                MessageFactory.data.currentSelectedPartner.last_date = $lastElement.timeSent;
             }
             else {
                 $scope.deleteConversation($scope.userId);
