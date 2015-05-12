@@ -251,7 +251,7 @@ class product extends MY_Controller
                 $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
                 $isBuyButtonViewable = true;
 
-                if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
+                if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON){
                     $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
                     $externalLink = $this->em->getRepository('EasyShop\Entities\EsProductExternalLink')
                                              ->getExternalLinksByProductId($productEntity->getIdProduct());

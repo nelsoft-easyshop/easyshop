@@ -5,14 +5,21 @@
     var $selectedMethod = "paypalcdb";
     var $cityselect = $('.cityselect');
 
-    $(window).on("load resize",function(){ 
-        heightOfModal = $(".simplemodal-wrap").outerHeight();
+    //Variables to identify if browser is IOS Safari
+    var standalone = window.navigator.standalone;
+    var userAgent = window.navigator.userAgent.toLowerCase();
+    var safari = /safari/.test( userAgent );
+    var ios = /iphone|ipod|ipad/.test( userAgent );
+    var heightOfModal = $(".simplemodal-wrap").outerHeight();
+
+    $(window).on("load resize",function(){
+        var heightOfModal = $(".simplemodal-wrap").outerHeight();
         $(".done-icon").slideUp(250);
         $(".new-icon").slideDown(250);
         $(".active-right-wing-cart-1").delay(500).animate({width: "50%"}, 1000);
         $(".active-left-wing-cart-2").delay(1500).animate({width: "50%"}, 1000);
         $(".active-breadcrumb-icon").delay(2500).animate({backgroundColor: "#00a388"}, 1000);
-        $(".active-breadcrumb-title").delay(2500).animate({color: "#00a388"}, 1000).css("font-weight", "bold");
+        $(".active-breadcrumb-title").delay(2500).animate({color: "#00a388"}, 1000).css("font-weight", "bold");  
     });
 
     $(".payment-label").click(function(){
@@ -24,6 +31,7 @@
         $(".btn-payment-button").text("Pay Via "+paymentName);
         $selectedMethod = $this.val();
     });
+
 
     $(".payment-label:first").trigger("click");
 
@@ -469,6 +477,15 @@
             success: function(jsonResponse) {
                 if(jsonResponse.isSuccessful){
                     $(".location-container").replaceWith(jsonResponse.view);
+                    //The condition below will be valid on iOS Safari browser
+                    //Brief scroll will take effect only if one of the options in the shipping state or shipping city were selected
+                    if( ios ) {
+                        if ( !standalone && safari ) {
+                            $('.my-modal-content .form-es-control-block').on('change',function () {
+                                $('body').animate({scrollTop: 0 }, 1000);
+                            });
+                        }
+                    };
                 }
                 else{
                     alert(escapeHtml(jsonResponse.errorMessage));

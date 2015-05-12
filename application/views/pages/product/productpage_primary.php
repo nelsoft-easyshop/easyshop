@@ -181,23 +181,32 @@
                     </div>
 
                     <div class="col-sm-12 col-md-7" align="center">
-                        <?php if($isLoggedIn && (int)$viewer->getIsEmailVerify() !== 1): ?>
+                        <?php if($isLoggedIn && (bool)$viewer->getIsEmailVerify() === false): ?>
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> Verify your email </p>
                         <?php elseif($isLoggedIn && $viewerId == $product->getMember()->getIdMember()): ?>
                             <p class="btn-text"> <i class="fa fa-info-circle"></i> This is your own listing </p>
                         <?php else: ?>
-                            <?php if(count($shippingInfo) === 0 && intval($product->getIsMeetup()) === 1): ?>
+                            <?php if(count($shippingInfo) === 0 && (bool)$product->getIsMeetup()): ?>
                                 <a href="/<?=$product->getMember()->getSlug();?>/contact" class="btn-meet-up modal_msg_launcher" title="Send <?=html_escape($product->getMember()->getUsername())?> a message" ><div class="btn-contact-seller"><i class="icon-message"></i> Contact Seller</div></a>
                                 <span class="span-after-btn" width="100%">Item is listed as an ad only. *</span>
                             <?php elseif($product->getPromoType() == \EasyShop\Entities\EsPromoType::BUY_AT_ZERO && (bool) $product->getStartPromo() ): ?>
                                 <!--Changed button tag-->
                                 <input type="button" id='send_registration' data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="" class="prod-add-to-cart-btn btn-buy-now disabled" >
                                 <span class="span-after-btn" width="100%">Click add to cart to qualify for the promo*</span>
-                            <?php elseif(!$isBuyButtonViewable && intval($product->getStartPromo()) === 1) : ?>
-                                <p class="buy_btn_sub"> This product is for promo use only. </p>
+                            <?php elseif(!$isBuyButtonViewable && (bool) $product->getStartPromo()) : ?>
+                                <h4>
+                                    <b><p class="buy_btn_sub"> This product is for promo use only. </p></b>
+                                </h4>
                             <?php else: ?>
-                                <input type="button" id="send" data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="" class="prod-add-to-cart-btn disabled" >
-                                <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
+                                <?php if($canPurchase): ?>
+                                    <input type="button" id="send" data-canpurchase="<?php echo $canPurchase ? 'true':'false'; ?>" value="" class="prod-add-to-cart-btn disabled" >
+                                    <span class="span-after-btn" width="100%">Delivers upon seller confirmation*</span>
+                                <?php else: ?>
+                                    <br />
+                                    <h3>
+                                        <b><p class="buy_btn_sub"> Not available for purchase. </p></b>
+                                    </h3>
+                                <?php endif; ?>
                             <?php endif; ?>
                         <?php endif;?>
                     </div>
@@ -207,7 +216,7 @@
                 <div class="col-md-12 prod-border-bttm pad-top-23"></div>
 
                 <div class="clear"></div>
-                <?php if((count($shippingInfo) === 0 && (bool)$product->getIsMeetup()) === false): ?>
+                <?php if((count($shippingInfo) === 0 && (bool)$product->getIsMeetup()) === false && empty($paymentMethod) === false): ?>
                     <div class="row pad-top-23">
                         <div class="col-md-12 prod-payment-img-container">
                             <p class="attr-title">Payment:</p>
