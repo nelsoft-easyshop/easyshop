@@ -533,17 +533,23 @@
                                     </div>
                                 </div> 
                             <?php endif; ?>
-                            <br/>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" class="privacy-check" checked="">
-                                    I acknowledge I have read and understood <a href="/policy" target="_blank">Easyshop.ph's  Privacy Policy</a>.
-                                </label>
-                            </div>
-                            <br/>
-                            <button class="btn btn-es-green btn-lg btn-block btn-payment-button" type="button" data-points="<?=$usedPoints?>">
-                                Pay Via Credit Card or Debit Card
-                            </button>
+                            <?php if(count($paymentType) > 0): ?>
+                                <br/>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="privacy-check" checked="">
+                                        I acknowledge I have read and understood <a href="/policy" target="_blank">Easyshop.ph's  Privacy Policy</a>.
+                                    </label>
+                                </div>
+                                <br/>
+                                <button class="btn btn-es-green btn-lg btn-block btn-payment-button" type="button" data-points="<?=$usedPoints?>">
+                                    Pay Via Credit Card or Debit Card
+                                </button>
+                            <?php else: ?>
+                                <center>
+                                    <h3>No payment method available.</h3>
+                                </center>
+                            <?php endif; ?>
                         <?php else: ?>
                             <button class="btn btn-es-green btn-lg btn-block pay-via-easypoints" type="button" data-points="<?=$usedPoints?>">
                                 Pay Via Easy Points
