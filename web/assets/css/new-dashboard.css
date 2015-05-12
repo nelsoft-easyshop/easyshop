@@ -1291,6 +1291,10 @@ a{
     margin-right: 10px;
 }
 
+label[for="hide-es-charge"]{
+    font-size: 11px;
+}
+
 .hide-selection-box i{
     font-size: 9px;
     margin-top: 3px;
