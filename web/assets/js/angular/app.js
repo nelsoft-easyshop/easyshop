@@ -41,4 +41,3 @@ var app = angular
     .run(['$state', function ($state) {
         $state.go('index');
     }]);
-

@@ -281,7 +281,9 @@ module.exports = function (grunt) {
                              'web/assets/js/angular/controllers/messageController.js',
                              'web/assets/js/angular/factories/messageFactory.js',
                              'web/assets/js/angular/directives/csrfDirective.js',
-                             'web/assets/js/angular/directives/onInitDirective.js'],
+                             'web/assets/js/angular/directives/onInitDirective.js',
+                             'web/assets/js/angular/directives/scrollBottomOnDirective.js',
+                             'web/assets/js/angular/directives/whenScrolledDirective.js'],
 
                     'web/assets/js/min/easyshop.product_image_gallery.js':
                             ['web/assets/js/src/vendor/bower_components/jquery.jcarousel.js',

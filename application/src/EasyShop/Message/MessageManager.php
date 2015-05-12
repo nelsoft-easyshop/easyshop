@@ -392,29 +392,34 @@ class MessageManager {
     {
         $memberId = (int) $memberId;
         $partnerId = (int) $partnerId;
-        $messages =  $this->em->getRepository('EasyShop\Entities\EsMessages')
-                          ->getConversationMessages($memberId, $partnerId, $offset, $limit);
-        $memberImage = $this->userManager->getUserImage($memberId, 'small');
-        $partnerImage = $this->userManager->getUserImage($partnerId, 'small');
+        $messages = [];
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                        ->find($memberId);
         $partner = $this->em->getRepository('EasyShop\Entities\EsMember')
                         ->find($partnerId);
-        $memberStorename = $member->getStorename();
-        $partnerStorename = $partner->getStorename();
-       
-        foreach($messages as $key => $message){
-            if( (int) $message['sender_member_id'] === $memberId){
-                $message['senderImage'] = $memberImage;
-                $message['senderStorename'] = $memberStorename;
+
+        if ($member && $partner) {
+            $messages =  $this->em->getRepository('EasyShop\Entities\EsMessages')
+                              ->getConversationMessages($memberId, $partnerId, $offset, $limit);
+            $messages = array_reverse($messages);
+            $memberImage = $this->userManager->getUserImage($memberId, 'small');
+            $partnerImage = $this->userManager->getUserImage($partnerId, 'small');
+            $memberStorename = $member->getStorename();
+            $partnerStorename = $partner->getStorename();
+
+            foreach($messages as $key => $message){
+                if( (int) $message['sender_member_id'] === $memberId){
+                    $message['senderImage'] = $memberImage;
+                    $message['senderStorename'] = $memberStorename;
+                }
+                else{
+                    $message['senderImage'] = $partnerImage;
+                    $message['senderStorename'] = $partnerStorename;
+                }
+                $message['isSender'] = (int) $message['is_sender'] === 1;
+                unset($message['is_sender']);
+                $messages[$key] = $message;
             }
-            else{
-                $message['senderImage'] = $partnerImage;
-                $message['senderStorename'] = $partnerStorename;
-            }
-            $message['isSender'] = (int) $message['is_sender'] === 1;
-            unset($message['is_sender']);
-            $messages[$key] = $message;
         }
 
         return $messages;

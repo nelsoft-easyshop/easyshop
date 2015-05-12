@@ -10,6 +10,7 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
         $scope.selectedMessage = [];
         $scope.conversationListCurrentPage = 2;
         $scope.listBusy = false;
+        $scope.scrollCounter = 0;
         $scope.messageData = MessageFactory.data;
 
         /**
@@ -52,17 +53,22 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                 return;
             };
             $scope.messageBusy = true;
-            MessageFactory.getMessages($userId, $page)
-                .then(function(messages) {
-                    if (Object.keys(messages).length > 0) {
-                        $scope.messageBusy = false;
-                        $scope.messageCurrentPage++;
-                    }
-                }, function(errorMessage) {
-                    alert(errorMessage);
-                });
+            var $messages = MessageFactory.getMessages($userId, $page);
+            $messages.then(function(messages) {
+                if (Object.keys(messages).length > 0) {
+                    $scope.messageBusy = false;
+                    $scope.messageCurrentPage++;
+                }
+                if ($page === 1) {
+                    $scope.scrollCounter++;
+                }
+            }, function(errorMessage) {
+                alert(errorMessage);
+            });
 
             updateConversationList($scope.userId);
+
+            return $messages;
         };
 
         /**
@@ -85,8 +91,9 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                                 $state.go("readMessage", {userId: $recipientId});
                             }
                             else {
-                                MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
+                                MessageFactory.setConversation(MessageFactory.data.conversation.concat(messageData));
                             }
+                            $scope.scrollCounter++;
                             MessageFactory.data.currentSelectedPartner.last_message = $messageInput;
                             MessageFactory.data.currentSelectedPartner.last_date = messageData[0].timeSent;
                         }
@@ -139,13 +146,17 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                 $messageIds.push(selectedValue.messageId);
             }, MessageFactory.data.conversation);
 
-            if (MessageFactory.data.conversation.length > 0) {
+            var $conversationCount = MessageFactory.data.conversation.length;
+            if ($conversationCount > 0) {
                 MessageFactory.deleteMessage($messageIds)
                               .then(function(count) {},
                                     function(errorMessage) {
                                         alert(errorMessage);
                                     }
                               );
+                var $lastElement = MessageFactory.data.conversation[$conversationCount - 1];
+                MessageFactory.data.currentSelectedPartner.last_message = $lastElement.message;
+                MessageFactory.data.currentSelectedPartner.last_date = $lastElement.timeSent;
             }
             else {
                 $scope.deleteConversation($scope.userId);

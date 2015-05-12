@@ -358,7 +358,7 @@ class EsMessagesRepository extends EntityRepository
         $rsm->addScalarResult('sender_member_id', 'sender_member_id');
         $rsm->addScalarResult('is_sender', 'is_sender');
 
-        $sql = "    
+        $sql = "
             SELECT
                 id_msg,
                 message,
