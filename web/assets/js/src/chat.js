@@ -18,6 +18,18 @@
 
     $(".chat-compose-dialog").dialog({
         autoOpen: false,
+        modal: true,
+        fluid: true,
+        width: "auto",
+        draggable: false,
+        show: {
+                effect: 'fade',
+                duration: 300
+            },
+        hide: {
+                effect: 'fade',
+                duration: 300
+            },
         open: function(){
             $('.ui-widget-overlay').bind('click',function(){
                 $('.chat-compose-dialog').dialog('close');
@@ -31,7 +43,10 @@
         enablekeyboard: true,
         smoothscroll: true,
         zindex: 999999,
-        railoffset: {top:0,left:9},
+        railoffset: {
+            top: 0,
+            left: 9
+        },
     });
 
     $(".chat-compose-search-container .ui-form-control").focusin(function() {
@@ -67,7 +82,10 @@
         enablekeyboard: true,
         smoothscroll: true,
         zindex: 8,
-        railoffset: {top:0,left:-5},
+        railoffset: {
+            top: 0,
+            left: -5
+        },
     });
 
     $(".contact-list-container .form-control").focusin(function() {
@@ -94,24 +112,31 @@
         enablekeyboard: true,
         smoothscroll: true,
         zindex: 8,
-        railoffset: {top:0,left:-4},
+        railoffset: {
+            top: 0,
+            left: -4
+        },
     });
 
     $(window).on("resize", function () {
         setTimeout(function(){
             chatcomposesearchresultwidth();
             contactsearchresultwidth();
+            var SearchLocImgWidthAndPadding = 85;
+            var ContactListImgWidthAndPadding = 77;
+            var ContactListImgAndStatusWidth = 135;
             var ContainerWidth = $(".contact-list-container").width();
-            var SearchLocWidth = (ContainerWidth - 85);
-            var ContactListWidth = (ContainerWidth - 77);
-            var ContactListLocWidth = (ContainerWidth - 135);
+            var SearchLocWidth = (ContainerWidth - SearchLocImgWidthAndPadding);
+            var ContactListWidth = (ContainerWidth - ContactListImgWidthAndPadding);
+            var ContactListLocWidth = (ContainerWidth - ContactListImgAndStatusWidth);
             $(".search-contact-info-others span,.search-contact-info-name").css("max-width",SearchLocWidth);
             $(".contact-info-name").css("max-width",ContactListWidth);
             $(".contact-info-others span:nth-child(2)").css("max-width",ContactListLocWidth);
         }, 300);
 
         $(".contacts-container h4").unbind('click').click(function() {
-            if ($(window).width() <= 991) {
+            var MediumDevicesWidth = 991;
+            if ($(window).width() <= MediumDevicesWidth) {
                 $(this).parent().toggleClass("show-contact-list");
                 $(".contact-list-container").slideToggle('fast',function() {
                     $(".contact-list").getNiceScroll().resize();
@@ -122,12 +147,12 @@
        });
 
        $(".contact-list li").unbind('click').click(function() {
-          
+           var MediumDevicesWidth = 991;
            var $this = $(this);
            $this.addClass("contact-selected");
            $this.siblings().removeClass("contact-selected");
            
-           if ($(window).width() <= 991) {
+           if ($(window).width() <= MediumDevicesWidth) {
                $(".contact-list-container").slideUp('fast',function(){
                    $(".contact-list").getNiceScroll().resize();
                    $(".chat-box-messages").getNiceScroll().resize();
