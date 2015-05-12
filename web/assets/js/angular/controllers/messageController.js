@@ -10,6 +10,7 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
         $scope.selectedMessage = [];
         $scope.conversationListCurrentPage = 2;
         $scope.listBusy = false;
+        $scope.messageLoaded = 0;
         $scope.messageData = MessageFactory.data;
 
         /**
@@ -52,17 +53,22 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                 return;
             };
             $scope.messageBusy = true;
-            MessageFactory.getMessages($userId, $page)
-                .then(function(messages) {
+            var $returnResult = MessageFactory.getMessages($userId, $page);
+            $returnResult.then(function(messages) {
                     if (Object.keys(messages).length > 0) {
                         $scope.messageBusy = false;
                         $scope.messageCurrentPage++;
+                    }
+                    if ($page === 1) {
+                        $scope.messageLoaded++;
                     }
                 }, function(errorMessage) {
                     alert(errorMessage);
                 });
 
             updateConversationList($scope.userId);
+
+            return $returnResult;
         };
 
         /**
@@ -85,8 +91,9 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                                 $state.go("readMessage", {userId: $recipientId});
                             }
                             else {
-                                MessageFactory.setConversation(messageData.concat(MessageFactory.data.conversation));
+                                MessageFactory.setConversation(MessageFactory.data.conversation.concat(messageData));
                             }
+                            $scope.messageLoaded++;
                             MessageFactory.data.currentSelectedPartner.last_message = $messageInput;
                             MessageFactory.data.currentSelectedPartner.last_date = messageData[0].timeSent;
                         }

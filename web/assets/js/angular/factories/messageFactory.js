@@ -67,7 +67,7 @@ app.factory('MessageFactory', ['$http', '$q',
                         angular.forEach(data, function(value, key) {
                             this.push(MessageFactory.constructMessage(value)); 
                         }, $conversation);
-                        MessageFactory.setConversation(MessageFactory.data.conversation.concat($conversation));
+                        MessageFactory.setConversation($conversation.concat(MessageFactory.data.conversation));
                     }
                     $deferred.resolve($conversation);
                 })
