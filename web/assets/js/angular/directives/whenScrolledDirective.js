@@ -4,13 +4,13 @@ app.directive('whenScrolled', ['$timeout', function($timeout) {
 
         elm.bind('scroll', function() {
             if (raw.scrollTop <= 100) {
-                var sh = raw.scrollHeight
+                var scrollHeight = raw.scrollHeight
                 var loadItem = scope.$apply(attr.whenScrolled);
 
                 if (loadItem) {
                     loadItem.then(function() {
                         $timeout(function() {
-                            raw.scrollTop = raw.scrollHeight - sh;
+                            raw.scrollTop = raw.scrollHeight - scrollHeight;
                         })
                     });
                 }

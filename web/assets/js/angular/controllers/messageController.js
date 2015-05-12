@@ -10,7 +10,7 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
         $scope.selectedMessage = [];
         $scope.conversationListCurrentPage = 2;
         $scope.listBusy = false;
-        $scope.messageLoaded = 0;
+        $scope.scrollCounter = 0;
         $scope.messageData = MessageFactory.data;
 
         /**
@@ -53,22 +53,22 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                 return;
             };
             $scope.messageBusy = true;
-            var $returnResult = MessageFactory.getMessages($userId, $page);
-            $returnResult.then(function(messages) {
-                    if (Object.keys(messages).length > 0) {
-                        $scope.messageBusy = false;
-                        $scope.messageCurrentPage++;
-                    }
-                    if ($page === 1) {
-                        $scope.messageLoaded++;
-                    }
-                }, function(errorMessage) {
-                    alert(errorMessage);
-                });
+            var $messages = MessageFactory.getMessages($userId, $page);
+            $messages.then(function(messages) {
+                if (Object.keys(messages).length > 0) {
+                    $scope.messageBusy = false;
+                    $scope.messageCurrentPage++;
+                }
+                if ($page === 1) {
+                    $scope.scrollCounter++;
+                }
+            }, function(errorMessage) {
+                alert(errorMessage);
+            });
 
             updateConversationList($scope.userId);
 
-            return $returnResult;
+            return $messages;
         };
 
         /**
@@ -93,7 +93,7 @@ app.controller('MessageController', ['$scope', '$stateParams', '$state', 'ModalS
                             else {
                                 MessageFactory.setConversation(MessageFactory.data.conversation.concat(messageData));
                             }
-                            $scope.messageLoaded++;
+                            $scope.scrollCounter++;
                             MessageFactory.data.currentSelectedPartner.last_message = $messageInput;
                             MessageFactory.data.currentSelectedPartner.last_date = messageData[0].timeSent;
                         }

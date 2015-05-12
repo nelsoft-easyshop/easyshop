@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-xs-12 col-sm-12">
         <div id="msg_inbox_container" class="msg_container mrgn-bttm-45" >
-            <div id="msg_field" when-scrolled="getConversation(userId, messageCurrentPage)" scroll-bottom-on="messageLoaded">
+            <div id="msg_field" when-scrolled="getConversation(userId, messageCurrentPage)" scroll-bottom-on="scrollCounter">
                 <div>
                     <span data-ng-repeat="conv in messageData.conversation" data-ng-class="{'float_right': conv.isSender, 'float_left': !conv.isSender}" >
                         <span class="chat-img-con">
