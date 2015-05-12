@@ -1502,7 +1502,7 @@ body .mce-abs-layout-item.mce-formitem {
 }
 
 .irs-slider {
-    background-position: 0px -90px;
+    background-position: 0px -90px !important;
 }
 
 .irs-slider:hover {
