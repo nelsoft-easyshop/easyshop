@@ -101,8 +101,7 @@ module.exports = function (grunt) {
                          'web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/bootstrap-mods.css', 
                          'web/assets/css/vendor/bower_components/jquery.cropper.css',
-                         'web/assets/css/chosenwtihcreate.min.css'], 
-                     
+                         'web/assets/css/chosenwtihcreate.min.css'],                      
                     'web/assets/css/min-easyshop.upload-step3.css':
                         ['web/assets/css/vendor/bower_components/bootstrap.css',
                          'web/assets/css/bootstrap-mods.css',
@@ -207,7 +206,9 @@ module.exports = function (grunt) {
                         ['web/assets/css/new-inbox.css',
                          'web/assets/css/vendor/bower_components/bootstrap.css'],
                     'web/assets/css/min-easyshop.promo-css.css':
-                        ['web/assets/css/promo-css.css']
+                        ['web/assets/css/promo-css.css'],                         
+                    'web/assets/css/min-easyshop.chat-view.css':
+                        ['web/assets/css/chat-css.css']
                 }
             },
         },
@@ -483,6 +484,11 @@ module.exports = function (grunt) {
 
                    'web/assets/js/min/easyshop.faq-page.js':
                         ['web/assets/js/src/static.js'], 
+
+                    'web/assets/js/min/easyshop.chat-view.js':
+                        ['web/assets/js/src/vendor/bower_components/jquery.nicescroll.js',
+                        'web/assets/js/src/chat.js'], 
+
                 }
             }
         }
