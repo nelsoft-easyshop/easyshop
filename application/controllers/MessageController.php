@@ -256,4 +256,24 @@ class MessageController extends MY_Controller
         echo json_encode($count);
     }
 
+    /**
+     * Renders new message page
+     *
+     * @return View
+     */
+    public function chat()
+    {
+        $headerData = [
+            "memberId" => $this->session->userdata('member_id'),
+            'title' => 'Chat | Easyshop.ph',
+            'metadescription' => "Read Easyshop.ph's Chat",
+        ];
+
+        $this->load->spark('decorator');
+        $this->load->view('templates/header_primary', $this->decorator->decorate('header', 'view', $headerData));
+        $this->load->view('pages/messages/chat_view');
+        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view'));
+    }
+
+
 }
