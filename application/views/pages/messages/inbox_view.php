@@ -48,7 +48,9 @@
     <script src="/assets/js/angular/controllers/messageController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/factories/messageFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/directives/csrfDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-    <script src="/assets/js/angular/directives/onInitDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>                         
+    <script src="/assets/js/angular/directives/onInitDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/directives/scrollBottomOnDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/directives/whenScrolledDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.inbox-view.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php endif; ?>
