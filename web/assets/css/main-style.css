@@ -548,7 +548,7 @@ textarea {
     height: 108px;
     position: absolute;
     top: 0px;
-    width: 111px;
+    width: 109px;
     z-index: 1;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -1969,6 +1969,10 @@ td.td-view.p-view2.color-default{
 .edit-profile-modal
 {
     display: none;
+}
+
+.row-left-wing a:hover {
+    text-decoration: none;
 }
 
 .filter-modal h1,

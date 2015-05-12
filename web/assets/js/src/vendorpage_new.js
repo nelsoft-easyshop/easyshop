@@ -128,6 +128,11 @@ function ReplaceNumberWithCommas(thisnumber){
         if(pagingDiv.length === 0 && productCount !== 0){
             ItemListAjax($div, 1);
         }
+        
+        if ($(this).next("ul").length === 0) {
+            $.modal.close();
+        }
+
         $('html,body').scrollTo(450); 
     });
 
