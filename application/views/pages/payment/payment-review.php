@@ -571,9 +571,9 @@
 </div>
 
 <div class="my-modal-content available-location-modal" style="display: none;">
-    <h3 class="my-modal-title">
+    <h1 class="my-modal-title">
         Available Location
-    </h3>
+    </h1>
     <p>
         The following items are currently unavailable for your location. Please select a new shipping address to proceed with your checkout.
     </p>
