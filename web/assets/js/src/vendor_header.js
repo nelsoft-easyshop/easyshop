@@ -379,7 +379,9 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     }
                     else if(formAction === 'upload_img'){
                         var avatarImage = $('img.avatar-image');
+                        var smallAvatar = $('img#vendor-profile-avatar');
                         avatarImage.attr('src',xhrResponse.image);
+                        smallAvatar.attr('src',xhrResponse.smallImage);
                     }
                     $.modal.close();
                     $('#banner-cancel-changes').trigger('click');
