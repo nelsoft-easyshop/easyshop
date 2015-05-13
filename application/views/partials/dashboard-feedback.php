@@ -1,5 +1,5 @@
 <?php foreach ($feedbacks as $feedback): ?>
-    <div class="row">
+    <div class="row row-feedback-item">
         <div class="col-md-2 col-feedback-user">
             <div class="user-feeder">
                 <div class="user-image-container">
@@ -63,6 +63,7 @@
                             <p class="feedback-cat-title for-buyer">Feedback for seller<div class="red-tip"></div></p>
                             <?php endif; ?>
                         </div>
+                        <br/>
                         <div class="row">
                             <div class="col-md-4">
                                 <table>
