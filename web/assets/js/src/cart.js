@@ -3,7 +3,6 @@
 
     var ERROR_MESSAGE = "Something went wrong. Please try again later.";
     var MIN_AMOUNT_ALLOWED = $("#min-amount-allowed").val();
-    var heightOfModal = 0;
     var $csrftoken = $("meta[name='csrf-token']").attr('content');
 
     $(window).on("load resize",function(){
