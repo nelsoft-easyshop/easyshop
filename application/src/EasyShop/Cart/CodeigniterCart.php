@@ -151,8 +151,11 @@ class CodeigniterCart implements CartInterface
         else{
             $cartData = array_merge($cartData, [$this->indexName => $cartId]);
         }
-        
-        return $this->cart->update($cartData);
+        $removeData = $cartData;
+        $removeData['qty'] = 0;
+        $this->cart->update($removeData);
+
+        return $this->cart->insert($cartData);
     }
     
     
