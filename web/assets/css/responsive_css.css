@@ -871,7 +871,9 @@ div.sell_steps4 ul li:nth-child(4) a {
     color: #494949;
 }
 
-.sell_steps ul li a:hover {
+.sell_steps ul li a:hover,
+.sell_steps ul li a:focus {
+    outline: none;
     text-decoration: none;
 }
 
@@ -1364,8 +1366,9 @@ div.sell_steps4 ul li:nth-child(4) a {
 .form_input input[type='text'],
 .form_input input[type='select'],
 .form_input textarea {
+    border-radius: 4px;
     color: #494949;
-    padding:10px 2px;
+    padding:8px 6px;
 }
 
 .mce-container.mce-panel.mce-floatpanel.mce-window.mce-in {
@@ -1498,20 +1501,23 @@ body .mce-abs-layout-item.mce-formitem {
     color: #f00;
 }
 
+.irs-slider {
+    background-position: 0px -90px !important;
+}
+
+.irs-slider:hover {
+    background-position: 0 -120px !important;
+}
+
 #dsc_frm{
     background-color: #FFFFFF;
     border: 1px solid #cecece;
-    margin-left: 190px;
-    margin-top: -120px;
-    padding: 8px;
+    border-radius: 4px;
+    left: 160px;
+    padding: 15px;
     position: absolute;
-    max-width: 275px;
+    top: -35px;
     z-index: 2;
-
-    -webkit-box-shadow: 0px 1px 5px 0px rgba(50, 50, 50, 0.75);
--moz-box-shadow:    0px 1px 5px 0px rgba(50, 50, 50, 0.75);
-box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
-    /*display: none;*/
 }
 
 #dsc_frm:before {
@@ -1519,9 +1525,21 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
     width: 0; 
     height: 0;
     border-style: solid;
-    border-width: 7.5px 10px 7.5px 0;
-    border-color: transparent #616161 transparent transparent;
-    left: -10px;
+    border-width: 7.5px 5px 7.5px 0;
+    border-color: transparent #ccc transparent transparent;
+    left: -6px;
+    position: absolute;
+    top: 80px;
+}
+
+#dsc_frm:after {
+    content:" ";
+    width: 0; 
+    height: 0;
+    border-style: solid;
+    border-width: 7.5px 6px 7.5px 0;
+    border-color: transparent #fff transparent transparent;
+    left: -5px;
     position: absolute;
     top: 80px;
 }
@@ -3213,9 +3231,9 @@ box-shadow:         0px 1px 5px 0px rgba(50, 50, 50, 0.75);
         width: 100%;
     }
     #dsc_frm {
+        left: 0;
         position: relative;
-        margin-left: 0;
-        margin-top: 0;
+        top: 0;
     }
     #dsc_frm:before {
         border-style: none;
