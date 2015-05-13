@@ -69,10 +69,10 @@
                                     <th width="15%">
                                         Price
                                     </th>
-                                    <th width="15%" align="center">
+                                    <th width="50" align="center">
                                         Quantity
                                     </th>
-                                    <th width="20%">
+                                    <th width="30%">
                                         Total
                                     </th>
                                 </tr>
@@ -158,8 +158,9 @@
                                                 $unitSubtotalPrice = $item['subtotal'];
                                                 $subTotalpriceFontSize = strlen((string)$unitSubtotalPrice) > 9 ? "font-size:11px !important;" : ""; 
                                             ?>
+                                            <span style="<?php echo $subTotalpriceFontSize;?>">&#8369;</span>
                                             <span class="cart-item-subtotal" style="<?php echo $subTotalpriceFontSize;?>">
-                                                <span style="padding-right: 5px;">&#8369;</span><?=number_format($item['subtotal'], 2, '.', ',');?>
+                                                <?=number_format($item['subtotal'], 2, '.', ',');?>
                                             </span>
                                         </td>
                                     </tr>
@@ -267,9 +268,9 @@
 </div> 
 
 <div class="my-modal-content shipping-calculator-modal" style="display: none;">
-    <h3 class="my-modal-title">
+    <h1 class="my-modal-title">
         Shipping calculator
-    </h3>
+    </h1>
     <p>
         Calculate total shipping cost based on selected location.
     </p>
