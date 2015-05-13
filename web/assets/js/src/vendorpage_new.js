@@ -129,7 +129,7 @@ function ReplaceNumberWithCommas(thisnumber){
             ItemListAjax($div, 1);
         }
         
-        if ($(this).next("ul").length === 0) {
+        if ($this.next("ul").length === 0) {
             $.modal.close();
         }
 
