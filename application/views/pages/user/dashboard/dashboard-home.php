@@ -1,8 +1,8 @@
 <link type="text/css" href='/assets/css/font-awesome/css/font-awesome.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <div class="div-tab">
     <div class="div-member-stats">
-         <div class="div-img-cover" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage;?>) no-repeat center; background-size:cover;">
-           <img src="<?php echo getAssetsDomain().'.'.$bannerImage;?>" class="img-follower-cover " />
+        <div class="div-img-cover" style="background: url(<?php echo getAssetsDomain().'.'.$bannerImage;?>) no-repeat center; background-size:cover;">
+            <img src="<?php echo getAssetsDomain().'.'.$bannerImage;?>" class="img-follower-cover " />
             <a href="<?=base_url();?><?= html_escape($member->getSlug()) ;?>">
                 <img src="<?php echo getAssetsDomain().'.'.$avatarImage; ?>" class="vendor-follower-img"/>
             </a>
