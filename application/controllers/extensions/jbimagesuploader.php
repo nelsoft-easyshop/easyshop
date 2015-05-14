@@ -141,6 +141,7 @@ class JbimagesUploader extends MY_Controller
                 if($useAws){
                     if($awsUploader->uploadFile($result['full_path'],  $result['file_name'])){
                         $result['base_url'] =   rtrim($this->config->item('assetsBaseUrl', 'assets'), '/');
+                         unlink($result['full_path']);
                     }
                     else{
                         $result['result']       = "S3 upload unsuccessful";
