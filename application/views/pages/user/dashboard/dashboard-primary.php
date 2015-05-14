@@ -12,6 +12,8 @@
         <div class="row-fluid">
             <div class="idTabs">
                 <div class="col-sm-3 col-sidebar">
+
+                    
                     <ul class="sidebar-dashboard" >
                         <a href="#dashboard" class="dash-me selected">
                             <li id="dash" class="mf-li">Dashboard</li>
@@ -53,6 +55,94 @@
                     
                     </ul>
                     
+
+                    <ul class="dashboard-sidebar-container">
+                        <li>
+                            <a>Dashboard</a>
+                        </li>
+
+                        <li>
+                            <a>
+                                My Store
+                                <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
+                            </a>
+                            <div class="dashboard-sidebar-submenu-wrapper">
+                                <ul class="dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a href="#setup">
+                                            Store Setup
+                                        </a>
+                                    </li> 
+                                    <li>
+                                        <a href="#customize-category">
+                                            Customize Category
+                                        </a>
+                                    </li> 
+                                    <li>
+                                        <a href="#product-management">
+                                            Product Management
+                                        </a>
+                                    </li> 
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a>
+                                Transactions
+                                <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
+                            </a>
+                            <div class="dashboard-sidebar-submenu-wrapper">
+                                <ul class="dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a href="#">
+                                            On-Going Transaction
+                                        </a>
+                                    </li> 
+                                    <li>
+                                        <a href="#">
+                                            Completed Transaction
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a>
+                                My Account
+                                <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
+                            </a>
+                            <div class="dashboard-sidebar-submenu-wrapper">
+                                <ul class="dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a href="#">
+                                            Personal Information
+                                        </a>
+                                    </li> 
+                                    <li>
+                                        <a href="#">
+                                            Delivery Address
+                                        </a>
+                                    </li> 
+                                    <li>
+                                        <a href="#">
+                                            Payment Account
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            Activity Log
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            Account Settings
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+
                     <?php if(\EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                     <div class="easy-point-container">
                         <div class="easy-point-title">

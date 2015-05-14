@@ -3342,4 +3342,17 @@
         var metaInfoTdWidth = $(".td-meta-info").width();
         $(".item-list-name").css("overflow","hidden").css("text-overflow","ellipsis").css("white-space", "nowrap").css("max-width", metaInfoTdWidth+"px");
     });
+
+
+    $(".dashboard-sidebar-container > li").click(function(){
+
+        var thisSubmenu = $(this).find(".dashboard-sidebar-submenu-wrapper");
+        var thisMenuIconControl = $(this).find(".sidebar-menu-icon");
+
+        $(".dashboard-sidebar-submenu-wrapper").not(thisSubmenu).slideUp("fast");
+        $(".sidebar-menu-icon").not(thisMenuIconControl).removeClass("toggled-sidebar-menu-icon");
+        thisMenuIconControl.toggleClass("toggled-sidebar-menu-icon");
+        thisSubmenu.slideToggle("fast");
+ 
+    });
 }(jQuery));
