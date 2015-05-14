@@ -151,6 +151,12 @@ class CodeigniterCart implements CartInterface
         else{
             $cartData = array_merge($cartData, [$this->indexName => $cartId]);
         }
+
+        /**
+         * Remove the item and add readd the item
+         * for some reason Codeigniter doesnt allow to change
+         * the other options except for quantity
+         */
         $removeData = $cartData;
         $removeData['qty'] = 0;
         $this->cart->update($removeData);
