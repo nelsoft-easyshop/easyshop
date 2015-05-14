@@ -153,9 +153,8 @@ class CodeigniterCart implements CartInterface
         }
 
         /**
-         * Remove the item and add readd the item
-         * for some reason Codeigniter doesnt allow to change
-         * the other options except for quantity
+         * Remove the item and readd the item
+         * For some reason Codeigniter doesn't allow updating the quantity field
          */
         $removeData = $cartData;
         $removeData['qty'] = 0;
