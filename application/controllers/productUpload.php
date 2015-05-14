@@ -264,188 +264,190 @@ class productUpload extends MY_Controller
     public function step2edit()
     {
         $stringUtility = $this->serviceContainer['string_utility'];
-        if($this->input->post('p_id')){
-            $product_id = $response['p_id'] = $this->input->post('p_id');
-        }
-        else{
-            redirect('me', 'refresh');
-        }
-
         $response['tempId'] = $tempId = strtolower(substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,1 ) .substr( md5( time() ), 1));
         $response['memid'] = $member_id = $this->session->userdata('member_id');
-        $dir    = './assets/product/';
+        $dir = './assets/product/';
 
-        if(!glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)){
-            $date = date("Ymd");
-            $tempDirectory = './assets/product/'. $product_id.'_'.$member_id.'_'.$date.'/';
-            mkdir($tempDirectory, 0777, true);
-        }
+        $member = $this->em->getRepository('EasyShop\Entities\EsMember')
+                           ->find($member_id);
 
-        $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/'; 
-        $product = $this->product_model->getProductEdit($product_id, $member_id);
-        $response['id'] = $cat_id = ($this->input->post('hidden_attribute')) ? $this->input->post('hidden_attribute') : $product['cat_id'];  
-
-        if($product['brand_other_name'] === '' 
-            && $product['brand_id'] == 1){
-            $product['brandname'] = '';
-        }
-        elseif($product['brand_other_name'] === '' 
-            && $product['brand_id'] != 1){
-            $product['brandname'] = $this->product_model->getBrandById($product['brand_id'])[0]['name'];
-        }
-        else{
-            $product['brandname'] = $product['brand_other_name'];
-        }
-
-        // Loading Categories breadcrumbs
-        $otherCategory  = $response['otherCategory'] = html_escape($this->input->post('othernamecategory'));
-        $breadcrumbs = '';
-        $parents = $this->product_model->getParentId($cat_id); 
-
-        if($cat_id == 1){
-            $breadcrumbs = $otherCategory;
-        }
-        else{
-            $lastElement = end($parents);
-            foreach($parents as $k => $v) {
-                $breadcrumbs .= ($v != $lastElement) ? $v['name'].' &#10140; ' : $v['name'];
+        if($this->input->post('p_id') && $member && $member->getIsEmailVerify()){
+            $product_id = $response['p_id'] = $this->input->post('p_id');
+            if(!glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)){
+                $date = date("Ymd");
+                $tempDirectory = './assets/product/'. $product_id.'_'.$member_id.'_'.$date.'/';
+                mkdir($tempDirectory, 0777, true);
             }
 
-            if(!$otherCategory == ""){
-                $breadcrumbs = $breadcrumbs.' &#10140; ' . $otherCategory;
+            $path = glob($dir."{$product_id}_{$member_id}*", GLOB_BRACE)[0].'/'; 
+            $product = $this->product_model->getProductEdit($product_id, $member_id);
+            $response['id'] = $cat_id = ($this->input->post('hidden_attribute')) ? $this->input->post('hidden_attribute') : $product['cat_id'];  
+
+            if($product['brand_other_name'] === '' 
+                && $product['brand_id'] == 1){
+                $product['brandname'] = '';
             }
-        }  
-        // Loading images
-        $images = $this->product_model->getProductImages($product_id);
-        $mainImages = $arrayNameOnly = array();  
-        foreach($images as $imagekey => $imagevalue){
-            if(strpos(($imagevalue['path']),'other') === FALSE){
-                $file = explode('_',$imagevalue['file']);
-                unset($file[0]);
-                $tempFile =  $tempId.'_'.implode('_', $file);  
-                $imagevalue['temp'] = $tempFile;
-                $imagevalue['type'] = end(explode('.', end($file)));
-                array_push($mainImages, $imagevalue);
+            elseif($product['brand_other_name'] === '' 
+                && $product['brand_id'] != 1){
+                $product['brandname'] = $this->product_model->getBrandById($product['brand_id'])[0]['name'];
             }
-            array_push($arrayNameOnly, $imagevalue['file']);
-        }
-
-        $response['main_images'] = $mainImages;
-
-        // Loading attributes
-        $attribute = $this->product_model->getAttributesByParent($parents); 
-        $attributeArray = $eachAttribute = $soloAttribute = array();
-
-        foreach ($attribute as $key => $value) { 
-            $attrName = ucfirst(strtolower($value['cat_name']));
-            $attributeArray[$attrName] = array(); 
-            $data = $this->product_model->getLookItemListById($value['attr_lookuplist_id']) ;
-            foreach ($data as $key2 => $value2) {
-                array_push($attributeArray[$attrName], $value2['name']);
-            }
-        } 
-
-        foreach ($this->product_model->getProductAttributes($product_id, 'NAME') as $key => $value) {
-            $key =  ucfirst(strtolower(str_replace("'", "", $key)));
-            if (!array_key_exists($key, $attributeArray)) {
-                $attributeArray[$key] = array();
+            else{
+                $product['brandname'] = $product['brand_other_name'];
             }
 
-            foreach ($value as $key1 => $value1) {
-                if($value1['datatype'] == 0 || $value1['datatype'] == 5){
-                    if (!array_key_exists($value1['value'], $attributeArray[$key])) {
-                        array_push($attributeArray[$key], $value1['value']);
-                    }
-                    $eachAttribute[$key] = $this->product_model->getProductAttributesByHead($product_id,$key);
+            // Loading Categories breadcrumbs
+            $otherCategory  = $response['otherCategory'] = html_escape($this->input->post('othernamecategory'));
+            $breadcrumbs = '';
+            $parents = $this->product_model->getParentId($cat_id); 
 
-                    foreach ($eachAttribute[$key] as $key2 => $value2) {
-                        $eachAttribute[$key][$key2]['file_path'] = "";
-                        if(!$eachAttribute[$key][$key2]['img_path'] == ''){
-                            $explodePath = explode('/', $eachAttribute[$key][$key2]['img_path']);
-                            $fileName = end($explodePath);
-                            $file = explode('_', $fileName);
-                            array_shift($file); 
-                            array_pop($explodePath);
-                            $categoryPath = implode('/', $explodePath) . '/categoryview/'.$fileName; 
-                            $eachAttribute[$key][$key2]['file_path'] = getAssetsDomain().$categoryPath;
-                            $eachAttribute[$key][$key2]['img_path'] = $tempId.'_'.implode('_', $file); 
+            if($cat_id == 1){
+                $breadcrumbs = $otherCategory;
+            }
+            else{
+                $lastElement = end($parents);
+                foreach($parents as $k => $v) {
+                    $breadcrumbs .= ($v != $lastElement) ? $v['name'].' &#10140; ' : $v['name'];
+                }
+
+                if(!$otherCategory == ""){
+                    $breadcrumbs = $breadcrumbs.' &#10140; ' . $otherCategory;
+                }
+            }  
+            // Loading images
+            $images = $this->product_model->getProductImages($product_id);
+            $mainImages = $arrayNameOnly = array();  
+            foreach($images as $imagekey => $imagevalue){
+                if(strpos(($imagevalue['path']),'other') === FALSE){
+                    $file = explode('_',$imagevalue['file']);
+                    unset($file[0]);
+                    $tempFile =  $tempId.'_'.implode('_', $file);  
+                    $imagevalue['temp'] = $tempFile;
+                    $imagevalue['type'] = end(explode('.', end($file)));
+                    array_push($mainImages, $imagevalue);
+                }
+                array_push($arrayNameOnly, $imagevalue['file']);
+            }
+
+            $response['main_images'] = $mainImages;
+
+            // Loading attributes
+            $attribute = $this->product_model->getAttributesByParent($parents); 
+            $attributeArray = $eachAttribute = $soloAttribute = array();
+
+            foreach ($attribute as $key => $value) { 
+                $attrName = ucfirst(strtolower($value['cat_name']));
+                $attributeArray[$attrName] = array(); 
+                $data = $this->product_model->getLookItemListById($value['attr_lookuplist_id']) ;
+                foreach ($data as $key2 => $value2) {
+                    array_push($attributeArray[$attrName], $value2['name']);
+                }
+            } 
+
+            foreach ($this->product_model->getProductAttributes($product_id, 'NAME') as $key => $value) {
+                $key =  ucfirst(strtolower(str_replace("'", "", $key)));
+                if (!array_key_exists($key, $attributeArray)) {
+                    $attributeArray[$key] = array();
+                }
+
+                foreach ($value as $key1 => $value1) {
+                    if($value1['datatype'] == 0 || $value1['datatype'] == 5){
+                        if (!array_key_exists($value1['value'], $attributeArray[$key])) {
+                            array_push($attributeArray[$key], $value1['value']);
+                        }
+                        $eachAttribute[$key] = $this->product_model->getProductAttributesByHead($product_id,$key);
+
+                        foreach ($eachAttribute[$key] as $key2 => $value2) {
+                            $eachAttribute[$key][$key2]['file_path'] = "";
+                            if(!$eachAttribute[$key][$key2]['img_path'] == ''){
+                                $explodePath = explode('/', $eachAttribute[$key][$key2]['img_path']);
+                                $fileName = end($explodePath);
+                                $file = explode('_', $fileName);
+                                array_shift($file); 
+                                array_pop($explodePath);
+                                $categoryPath = implode('/', $explodePath) . '/categoryview/'.$fileName; 
+                                $eachAttribute[$key][$key2]['file_path'] = getAssetsDomain().$categoryPath;
+                                $eachAttribute[$key][$key2]['img_path'] = $tempId.'_'.implode('_', $file); 
+                            }
                         }
                     }
+                    else{
+                        $soloAttribute[$key] = $value1['value'];
+                    }
                 }
-                else{
-                    $soloAttribute[$key] = $value1['value'];
-                }
-            }
-        } 
- 
-        $response['soloAttribute'] =  $soloAttribute;
-        $response['eachAttribute'] =  $eachAttribute;
+            } 
+     
+            $response['soloAttribute'] =  $soloAttribute;
+            $response['eachAttribute'] =  $eachAttribute;
+            
+            // Loading Combinations
+            $newItemQuantityArray = array();
+            $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);
         
-        // Loading Combinations
-        $newItemQuantityArray = array();
-        $itemQuantity =  $this->product_model->getProductQuantity($product_id, true);
-    
-        foreach($itemQuantity as $keyid => $value){
-            if(count($value['product_attribute_ids'])===1){
-                if(($value['product_attribute_ids'][0]['id'] == 0)&&($value['product_attribute_ids'][0]['is_other'] == 0)){
-                    $response['noCombination'] = true;
-                    $response['noCombinationQuantity'] = $value['quantity'];
+            foreach($itemQuantity as $keyid => $value){
+                if(count($value['product_attribute_ids'])===1){
+                    if(($value['product_attribute_ids'][0]['id'] == 0)&&($value['product_attribute_ids'][0]['is_other'] == 0)){
+                        $response['noCombination'] = true;
+                        $response['noCombinationQuantity'] = $value['quantity'];
+                    }
                 }
+                $itemAttrData = $this->product_model->getItemAttributes($keyid);
+                $newData = array();
+                foreach ($itemAttrData as $keyy => $valuee) {
+                    $head = ucfirst(strtolower(str_replace("'", "", $valuee['head'])));
+                    $newData[$head] = $valuee['value'];
+                }
+                $newItemQuantityArray[$keyid] = array("quantity" => $value['quantity'],"data" => $newData);
             }
-            $itemAttrData = $this->product_model->getItemAttributes($keyid);
-            $newData = array();
-            foreach ($itemAttrData as $keyy => $valuee) {
-                $head = ucfirst(strtolower(str_replace("'", "", $valuee['head'])));
-                $newData[$head] = $valuee['value'];
+
+            $response['itemQuantity'] = $newItemQuantityArray;
+            $response['attributeArray'] = $attributeArray;
+            $response['parent_to_last'] = $breadcrumbs;
+            $response['product_details'] = $product;
+            $response['cleanDescription'] = isset($product['description']) 
+                                            ? $stringUtility->purifyHTML($product['description'])
+                                            : "";
+            $response['is_edit'] = 'is_edit';
+            $response['img_max_dimension'] = $this->img_dimension['usersize'];
+            $response['maxImageSize'] = $this->maxFileSizeInMb;
+            $date = end(explode('_', explode('/', $path)[3]));
+     
+            $tempdirectory = $tempId.'_'.$member_id.'_'.$date;
+            $tempdirectory = $response['tempdirectory'] = './assets/temp_product/'.$tempdirectory.'/';
+
+            $this->session->set_userdata('tempId', $response['tempId']); 
+            $this->session->set_userdata('tempDirectory',  $tempdirectory);
+            $this->session->set_userdata('originalPath',  $path);
+
+            mkdir($tempdirectory, 0777, true);
+            mkdir($tempdirectory.'categoryview/', 0777, true);
+            mkdir($tempdirectory.'small/', 0777, true);
+            mkdir($tempdirectory.'thumbnail/', 0777, true);
+            mkdir($tempdirectory.'other/', 0777, true);
+            if (!file_exists ($tempdirectory.'other/categoryview')){
+                mkdir($tempdirectory.'other/categoryview/', 0777, true);
             }
-            $newItemQuantityArray[$keyid] = array("quantity" => $value['quantity'],"data" => $newData);
-        }
+            if (!file_exists ($tempdirectory.'other/small')){
+                mkdir($tempdirectory.'other/small/', 0777, true);
+            }
+            if (!file_exists ($tempdirectory.'other/thumbnail')){
+                mkdir($tempdirectory.'other/thumbnail/', 0777, true);
+            }
 
-        $response['itemQuantity'] = $newItemQuantityArray;
-        $response['attributeArray'] = $attributeArray;
-        $response['parent_to_last'] = $breadcrumbs;
-        $response['product_details'] = $product;
-        $response['cleanDescription'] = isset($product['description']) 
-                                        ? $stringUtility->purifyHTML($product['description'])
-                                        : "";
-        $response['is_edit'] = 'is_edit';
-        $response['img_max_dimension'] = $this->img_dimension['usersize'];
-        $response['maxImageSize'] = $this->maxFileSizeInMb;
-        $date = end(explode('_', explode('/', $path)[3]));
- 
-        $tempdirectory = $tempId.'_'.$member_id.'_'.$date;
-        $tempdirectory = $response['tempdirectory'] = './assets/temp_product/'.$tempdirectory.'/';
-
-        $this->session->set_userdata('tempId', $response['tempId']); 
-        $this->session->set_userdata('tempDirectory',  $tempdirectory);
-        $this->session->set_userdata('originalPath',  $path);
-
-        mkdir($tempdirectory, 0777, true);
-        mkdir($tempdirectory.'categoryview/', 0777, true);
-        mkdir($tempdirectory.'small/', 0777, true);
-        mkdir($tempdirectory.'thumbnail/', 0777, true);
-        mkdir($tempdirectory.'other/', 0777, true);
-        if (!file_exists ($tempdirectory.'other/categoryview')){
-            mkdir($tempdirectory.'other/categoryview/', 0777, true);
+            $headerData = [
+                "memberId" => $this->session->userdata('member_id'),
+                'title' => 'Edit Product | Easyshop.ph',
+                'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
+                'relCanonical' => '',
+                'renderSearchbar' => false, 
+            ]; 
+            $this->load->spark('decorator');    
+            $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));  
+            $this->load->view('pages/product/product_upload_step2_view',$response);
+            $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
         }
-        if (!file_exists ($tempdirectory.'other/small')){
-            mkdir($tempdirectory.'other/small/', 0777, true);
+        else{
+            redirect('/sell/step1', 'refresh');
         }
-        if (!file_exists ($tempdirectory.'other/thumbnail')){
-            mkdir($tempdirectory.'other/thumbnail/', 0777, true);
-        }
-
-        $headerData = [
-            "memberId" => $this->session->userdata('member_id'),
-            'title' => 'Edit Product | Easyshop.ph',
-            'metadescription' => 'Take your business online by selling your items at Easyshop.ph',
-            'relCanonical' => '',
-            'renderSearchbar' => false, 
-        ]; 
-        $this->load->spark('decorator');    
-        $this->load->view('templates/header_alt2',  $this->decorator->decorate('header', 'view', $headerData));  
-        $this->load->view('pages/product/product_upload_step2_view',$response);
-        $this->load->view('templates/footer_primary', $this->decorator->decorate('footer', 'view')); 
     }
 
     /**
