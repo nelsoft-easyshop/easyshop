@@ -477,6 +477,7 @@ class NewHomeWebService extends MY_Controller
 
             if(strtolower(ENVIRONMENT) !== 'development' && $result){
                 $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+                unlink($uploadData['full_path']);
             } 
 
             if($result) {
@@ -941,6 +942,7 @@ class NewHomeWebService extends MY_Controller
                 "allowed_types" => "jpg|jpeg|png|gif", 
                 "xss_clean" => false
             ]); 
+
             if ( ! $this->upload->do_upload("myfile")) {
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
@@ -960,6 +962,7 @@ class NewHomeWebService extends MY_Controller
                 $result = $map->asXML($this->file);
                 if(strtolower(ENVIRONMENT) !== 'development' && $result){
                     $result = $awsUploader->uploadFile($uploadData['full_path'],  ltrim($value,"/"));
+                    unlink($uploadData['full_path']);
                 }                 
                 if($result) {
                     return $this->output
@@ -1030,6 +1033,7 @@ class NewHomeWebService extends MY_Controller
                 "allowed_types" => "jpg|jpeg|png|gif", 
                 "xss_clean" => false
             ]); 
+
             if ( ! $this->upload->do_upload("myfile")) {
                 $error = ['error' => $this->upload->display_errors()];
                          return $this->output
@@ -1073,6 +1077,7 @@ class NewHomeWebService extends MY_Controller
         $result = $map->asXML($this->tempHomefile);
         if(strtolower(ENVIRONMENT) !== 'development' && $result){
             $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
+            unlink($uploadData['full_path']);
         }         
         if($result) {
             return $this->output

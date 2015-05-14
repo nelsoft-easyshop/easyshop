@@ -152,8 +152,13 @@ class AssetsUploader
                     if(strtolower($this->environment) !== 'development'){
                         $this->awsUploader->uploadFile(getcwd()."/".$sourceDirectory."/".$file, $destinationDirectory."/".$newFileName);
                     }
-                    copy($sourceDirectory.'/'.$file,$destinationDirectory.'/'.$file);
-                    rename($destinationDirectory.'/'.$file, $destinationDirectory.'/'.$newFileName);
+                    else{
+                        /**
+                         * Only move the image to the actual directory when in dev environement. Otherwise, the S3 images are used.
+                         */
+                        copy($sourceDirectory.'/'.$file,$destinationDirectory.'/'.$file);
+                        rename($destinationDirectory.'/'.$file, $destinationDirectory.'/'.$newFileName);
+                    }
                 }
             }
             else{
@@ -269,6 +274,9 @@ class AssetsUploader
                     $this->awsUploader->uploadFile($imagePath.'/'.$filenames[0].'.png', $imagePath."/".$filenames[0].".png");
                     $this->awsUploader->uploadFile($imagePath.'/'.$filenames[1].'.png', $imagePath."/".$filenames[1].".png");
                     $this->awsUploader->uploadFile($imagePath.'/'.$filenames[2].'.png', $imagePath."/".$filenames[2].".png");
+                    unlink($imagePath.'/'.$filenames[0].'.png');
+                    unlink($imagePath.'/'.$filenames[1].'.png');
+                    unlink($imagePath.'/'.$filenames[2].'.png');
                 } catch(\Exception $e){
                     $result['error'][] = $e->getMessage();
                 }
@@ -359,7 +367,9 @@ class AssetsUploader
                 if(strtolower($this->environment) !== 'development'){
                     try{
                         $this->awsUploader->uploadFile($imagePath.'/banner.png', $imagePath.'/banner.png');
-                    } catch(\Exception $e){
+                        unlink($imagePath.'/banner.png');
+                    } 
+                    catch(\Exception $e){
                         $result['error'][] = $e->getMessage();
                     }
                 }
