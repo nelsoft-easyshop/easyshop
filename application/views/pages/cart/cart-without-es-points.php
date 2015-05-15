@@ -328,6 +328,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>' type='text/javascript' ></script>
+    <script src="/assets/js/src/custom-simplemodal.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
     <script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.cart.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
