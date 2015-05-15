@@ -597,6 +597,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src="/assets/js/src/custom-simplemodal.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
     <script type='text/javascript' src="/assets/js/src/new-payment.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.payment-review.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
