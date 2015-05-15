@@ -40,17 +40,9 @@
         $(".available-location-modal").modal({
             onShow : function() {  
                 getProductLocation($itemId);
-            },
-            containerCss:{
-                height: heightOfModal
             }
         });
-
-        getMarginTop();
-        $(window).on("resize",function(){
-            getMarginTop();
-        }); 
-        //$(".available-location-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
+        getMarginTop(); //Function from custom-simplemodal.js
     });
 
     $(".checkout-item-attribute-container-header").click(function(){
@@ -485,15 +477,5 @@
                 alert('Something went wrong. Please try again later'); 
             } 
         });
-    }
-
-    function getMarginTop()
-    {
-        var windowHeight = $(window).outerHeight(); //Height of window
-        var modalContentHeight = $("#simplemodal-data").outerHeight(); //Height modal content
-        var remainingVerticalSpace = windowHeight - modalContentHeight; //Remaining vertical space of the window when modal is present
-        var halfOfVerticalSpace = remainingVerticalSpace/2; //Half of the vertical space that will represent as the margin-top of the modal to center its vertical alignment
-
-        $(".simplemodal-container").css("top", halfOfVerticalSpace+"px");
     }
 })(jQuery);
