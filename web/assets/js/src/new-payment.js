@@ -4,12 +4,6 @@
     var heightOfModal = 0;
     var $selectedMethod = "paypalcdb";
     var $cityselect = $('.cityselect');
-
-    //Variables to identify if browser is IOS Safari
-    var standalone = window.navigator.standalone;
-    var userAgent = window.navigator.userAgent.toLowerCase();
-    var safari = /safari/.test( userAgent );
-    var ios = /iphone|ipod|ipad/.test( userAgent );
     var heightOfModal = $(".simplemodal-wrap").outerHeight();
 
     $(window).on("load resize",function(){
@@ -46,12 +40,9 @@
         $(".available-location-modal").modal({
             onShow : function() {  
                 getProductLocation($itemId);
-            },
-            containerCss:{
-                height: heightOfModal
             }
         });
-        $(".available-location-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
+        getMarginTop(); //Function from custom-simplemodal.js
     });
 
     $(".checkout-item-attribute-container-header").click(function(){
@@ -477,15 +468,6 @@
             success: function(jsonResponse) {
                 if(jsonResponse.isSuccessful){
                     $(".location-container").replaceWith(jsonResponse.view);
-                    //The condition below will be valid on iOS Safari browser
-                    //Brief scroll will take effect only if one of the options in the shipping state or shipping city were selected
-                    if( ios ) {
-                        if ( !standalone && safari ) {
-                            $('.my-modal-content .form-es-control-block').on('change',function () {
-                                $('body').animate({scrollTop: 0 }, 1000);
-                            });
-                        }
-                    };
                 }
                 else{
                     alert(escapeHtml(jsonResponse.errorMessage));
@@ -496,5 +478,4 @@
             } 
         });
     }
-
 })(jQuery);

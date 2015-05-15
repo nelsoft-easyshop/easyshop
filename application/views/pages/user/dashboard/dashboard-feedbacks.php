@@ -11,6 +11,7 @@
                 <option value="<?=EasyShop\Entities\EsMemberFeedback::TYPE_FOR_OTHERS_AS_BUYER;?>" >Feedback for seller</option>
             </select>
         </div>
+        <br/>
     </div>
 </div>
 <br/> 
