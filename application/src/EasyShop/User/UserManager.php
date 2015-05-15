@@ -476,11 +476,16 @@ class UserManager
                 break;
         }
                 
-        if(! (strtolower($this->environment) === 'development' && file_exists($imageURL.$imgFile)) || $isHide){
+        if($isHide){
             $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
         }
         else{
             $user_image = '/'.$imageURL.$imgFile.'?'.time();
+            if(strtolower($this->environment) === 'development'){
+                if( file_exists($imageURL.$imgFile) === false){
+                    $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
+                }
+            }
         }
         
         return $user_image;
