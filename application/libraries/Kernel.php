@@ -134,13 +134,16 @@ class Kernel
             if(file_exists($controllerConfigPath)){
                 $controllerList = require($controllerConfigPath);
             }
-            return new \EasyShop\User\UserManager($container['entity_manager']
-                                                ,$container['config_loader']
-                                                ,$container['form_validation']
-                                                ,$container['form_factory']
-                                                ,$container['form_error_helper']
-                                                ,$container['string_utility']
-                                                ,$controllerList);
+            return new \EasyShop\User\UserManager(
+                $container['entity_manager'],
+                $container['config_loader'],
+                $container['form_validation'],
+                $container['form_factory'],
+                $container['form_error_helper'],
+                $container['string_utility'],
+                $controllerList,
+                ENVIRONMENT
+            );
         };
         
         //Account Manager
