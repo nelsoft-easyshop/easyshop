@@ -94,6 +94,13 @@ class UserManager
     private $reservedSlugs;
 
     /**
+     * Environment Variable
+     *
+     * @var string
+     */
+    private $environment;
+
+    /**
      *  Constructor. Retrieves Entity Manager instance
      *
      * @param Doctrine\Orm\EntityManager $em
@@ -106,7 +113,8 @@ class UserManager
                                 $formFactory,
                                 $formErrorHelper, 
                                 $stringUtility,
-                                $reservedSlugs = array())
+                                $reservedSlugs = [],
+                                $environment)
     {
         $this->em = $em;
         $this->configLoader = $configLoader;
@@ -117,6 +125,7 @@ class UserManager
         $this->formErrorHelper = $formErrorHelper;
         $this->stringUtility = $stringUtility;
         $this->reservedSlugs = $reservedSlugs;
+        $this->environment = $environment;
     }
 
     /**
@@ -455,23 +464,28 @@ class UserManager
         switch($selector){
             case "banner":
                 $imgFile = '/'.EsMember::DEFAULT_IMG_BANNER;
-                $isHide = (boolean)$member->getIsHideBanner();
+                $isHide = (boolean) $member->getIsHideBanner();
                 break;
             case "small":
                 $imgFile = '/'.EsMember::DEFAULT_IMG_SMALL_SIZE;
-                $isHide = (boolean)$member->getIsHideAvatar();
+                $isHide = (boolean) $member->getIsHideAvatar();
                 break;
             default:
                 $imgFile = '/'.EsMember::DEFAULT_IMG_NORMAL_SIZE;
-                $isHide = (boolean)$member->getIsHideAvatar();
+                $isHide = (boolean) $member->getIsHideAvatar();
                 break;
         }
                 
-        if(!file_exists($imageURL.$imgFile) || $isHide){
+        if($isHide){
             $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
         }
         else{
             $user_image = '/'.$imageURL.$imgFile.'?'.time();
+            if(strtolower($this->environment) === 'development'){
+                if( file_exists($imageURL.$imgFile) === false){
+                    $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
+                }
+            }
         }
         
         return $user_image;

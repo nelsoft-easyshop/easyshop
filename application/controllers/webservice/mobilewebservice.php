@@ -155,6 +155,7 @@ class MobileWebService extends MY_Controller
             if(strtolower(ENVIRONMENT) !== 'development' && $isXmlInsertSuccessful){
                 $this->serviceContainer['aws_uploader']
                      ->uploadFile($uploadData['full_path'],  $value);
+                unlink($uploadData['full_path']);
             } 
 
             if($addXml === true) {
@@ -225,6 +226,7 @@ class MobileWebService extends MY_Controller
                                  $uploadData['full_path'],  
                                  $value
                              );
+                        unlink($uploadData['full_path']);
                     } 
 
                     return $this->output
