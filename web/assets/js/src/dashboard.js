@@ -323,19 +323,26 @@
     $('.transaction-trigger').on('click', function(){
         var $this = $(this);
         var type = $this.data('type');
-        $this.addClass('selected');
         if(type === 'on-going'){
-            $('.transaction-trigger[data-type="completed"]').removeClass('selected');
             $('.on-going-transaction-header').click();
         }
         else if(type === 'completed'){
-            $('.transaction-trigger[data-type="on-going"]').removeClass('selected');
             $('.completed-transaction-header').click();
         }
         $('#transaction-menu-trigger').closest('a')
                                       .removeClass('selected');
     });
-        
+    
+    $('.on-going-transaction-header').on('click', function(){
+        $('.transaction-trigger[data-type="completed"]').removeClass('selected'); 
+        $('.transaction-trigger[data-type="on-going"]').addClass('selected');  
+    });
+
+    $('.completed-transaction-header').on('click', function(){
+        $('.transaction-trigger[data-type="on-going"]').removeClass('selected'); 
+        $('.transaction-trigger[data-type="completed"]').addClass('selected');  
+    });
+     
     $( "#info-item-1" ).click(function() {
         $( "#info-attributes-1" ).slideToggle( "slow", function() {
             var i_icon = $("i.info-item-icon-1").attr("class");
