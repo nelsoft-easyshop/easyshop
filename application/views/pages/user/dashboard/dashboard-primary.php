@@ -13,8 +13,9 @@
             <div class="idTabs">
                 <div class="col-sm-3 col-sidebar">
 
-                    
-                    <ul class="sidebar-dashboard" >
+                    <!--Start of OLD sidebar tab for desktop-->
+                    <!--
+                    <ul class="sidebar-dashboard" style="display: none;" >
                         <a href="#dashboard" class="dash-me selected">
                             <li id="dash" class="mf-li">Dashboard</li>
                         </a>
@@ -53,15 +54,18 @@
                             </ul>
                         </div>
                     
-                    </ul>
-                    
+                    </ul
+                    -->
+                    <!--End of OLD sidebar tab for desktop-->
 
+
+                    <!--Start of new sidebar tab for desktop-->
                     <ul class="dashboard-sidebar-container">
                         <li>
-                            <a>Dashboard</a>
+                            <a href="#dashboard" class="selected">Dashboard</a>
                         </li>
 
-                        <li>
+                        <li src="mystore">
                             <a>
                                 My Store
                                 <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
@@ -69,44 +73,34 @@
                             <div class="dashboard-sidebar-submenu-wrapper">
                                 <ul class="dashboard-sidebar-submenu-container">
                                     <li>
-                                        <a href="#setup">
-                                            Store Setup
-                                        </a>
+                                        <a href="#setup">Store Setup</a>
                                     </li> 
                                     <li>
-                                        <a href="#customize-category">
-                                            Customize Category
-                                        </a>
+                                        <a href="#customize-category">Customize Category</a>
                                     </li> 
                                     <li>
-                                        <a href="#product-management">
-                                            Product Management
-                                        </a>
+                                        <a href="#product-management">Product Management</a>
                                     </li> 
                                 </ul>
                             </div>
                         </li>
-                        <li>
-                            <a>
+                        <li src="transactions">
+                            <a >
                                 Transactions
                                 <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
                             </a>
                             <div class="dashboard-sidebar-submenu-wrapper">
                                 <ul class="dashboard-sidebar-submenu-container">
                                     <li>
-                                        <a href="#">
-                                            On-Going Transaction
-                                        </a>
+                                        <a href="#on-going-transaction">On-Going Transaction</a>
                                     </li> 
                                     <li>
-                                        <a href="#">
-                                            Completed Transaction
-                                        </a>
+                                        <a href="#completed-transaction">Completed Transaction</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
-                        <li>
+                        <li src="myaccount">
                             <a>
                                 My Account
                                 <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
@@ -114,35 +108,94 @@
                             <div class="dashboard-sidebar-submenu-wrapper">
                                 <ul class="dashboard-sidebar-submenu-container">
                                     <li>
-                                        <a href="#">
-                                            Personal Information
-                                        </a>
+                                        <a href="#personal-information">Personal Information</a>
                                     </li> 
                                     <li>
-                                        <a href="#">
-                                            Delivery Address
-                                        </a>
+                                        <a href="#delivery-address">Delivery Address</a>
                                     </li> 
                                     <li>
-                                        <a href="#">
-                                            Payment Account
-                                        </a>
+                                        <a href="#payment-account">Payment Account</a>
                                     </li>
                                     <li>
-                                        <a href="#">
-                                            Activity Log
-                                        </a>
+                                        <a href="#activity-logs">Activity Log</a>
                                     </li>
                                     <li>
-                                        <a href="#">
-                                            Account Settings
-                                        </a>
+                                        <a href="#account-settings">Account Settings</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
                     </ul>
+                    <!--End of new sidebar tab for desktop-->
 
+                    <!--Start of new sidebar tab for mobile-->
+                    <ul class="mobile-dashboard-sidebar-container">
+                        <li>
+                            <a href="#dashboard">Dashboard</a>
+                        </li>
+
+                        <li class="col-xs-4">
+                            <a src="mystore">
+                                My Store
+                                <i class="fa fa-angle-down sidebar-menu-icon"></i>
+                            </a>
+                            <div class="mobile-dashboard-sidebar-submenu-wrapper">
+                                <ul class="mobile-dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a src="setup" href="#setup">Store Setup</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#customize-category">Customize Category</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#product-management">Product Management</a>
+                                    </li> 
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="col-xs-4">
+                            <a src="transaction">
+                                Transactions
+                                <i class="fa fa-angle-down sidebar-menu-icon"></i>
+                            </a>
+                            <div class="mobile-dashboard-sidebar-submenu-wrapper">
+                                <ul class="mobile-dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a href="#on-going-transaction">On-Going Transaction</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#completed-transaction">Completed Transaction</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="col-xs-4">
+                            <a src="myaccount">
+                                My Account
+                                <i class="fa fa-angle-down sidebar-menu-icon"></i>
+                            </a>
+                            <div class="mobile-dashboard-sidebar-submenu-wrapper">
+                                <ul class="mobile-dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a href="#personal-information">Personal Information</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#delivery-address">Delivery Address</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#payment-account">Payment Account</a>
+                                    </li>
+                                    <li>
+                                        <a href="#activity-logs">Activity Log</a>
+                                    </li>
+                                    <li>
+                                        <a href="#account-settings">Account Settings</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <!--End of new sidebar tab for mobile-->
                     <?php if(\EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                     <div class="easy-point-container">
                         <div class="easy-point-title">
@@ -170,9 +223,10 @@
                     <?php endif; ?>
                 </div>
                 
-                                 
-                <div class="mobile-dashboard-menu">        
-                    <div class="row-fluid row-menu-mobile-res">
+                <!--Start of OLD sidebar tab for mobile-->
+                <!--
+                <div class="mobile-dashboard-menu" style="display: none !important;">        
+                    <div class="row-fluid row-menu-mobile-res" >
                         <a class="dash-mobile-trigger my-transactions-mobile">
                             <div class="col-xs-4 col-dash-mobile" data-section="my-transactions">
                                 Transactions
@@ -203,7 +257,8 @@
                         </ul>
                     </div>
                 </div>
-            
+                -->
+                <!--END of OLD sidebar tab for mobile-->
             </div>
             <div class="col-md-9 col-content">
                 <div class="div-dashboard-content">
