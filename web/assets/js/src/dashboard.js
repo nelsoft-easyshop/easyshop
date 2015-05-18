@@ -3343,9 +3343,8 @@
         $(".item-list-name").css("overflow","hidden").css("text-overflow","ellipsis").css("white-space", "nowrap").css("max-width", metaInfoTdWidth+"px");
     });
 
-
-    $(".dashboard-sidebar-container > li").click(function(){
-
+    //Start of JS for new dashboard sidebar menu
+    $(".dashboard-sidebar-container > li, a[href='#dashboard']").click(function(){
         var thisSubmenu = $(this).find(".dashboard-sidebar-submenu-wrapper");
         var thisMenuIconControl = $(this).find(".sidebar-menu-icon");
 
@@ -3353,6 +3352,37 @@
         $(".sidebar-menu-icon").not(thisMenuIconControl).removeClass("toggled-sidebar-menu-icon");
         thisMenuIconControl.toggleClass("toggled-sidebar-menu-icon");
         thisSubmenu.slideToggle("fast");
- 
     });
+
+    $(".dashboard-sidebar-submenu-container > li > a").click(function(){
+        var thisDesktopLinkTab = $(this).attr("href");
+        $(".dashboard-sidebar-submenu-container > li > a").removeClass("selected-desktop");
+        $(".mobile-dashboard-sidebar-submenu-container > li > a").removeClass("selected-mobile");
+        $(".mobile-dashboard-sidebar-submenu-container > li > a[href='"+thisDesktopLinkTab+"']").addClass("selected-mobile");
+    });
+
+    $(".mobile-dashboard-sidebar-container > li").click(function(){
+
+        var thisMobileSubmenu = $(this).find(".mobile-dashboard-sidebar-submenu-wrapper");
+        $(".mobile-dashboard-sidebar-submenu-wrapper").not(thisMobileSubmenu).slideUp("fast");
+         thisMobileSubmenu.slideToggle("fast");
+        //var thisMenuIconControl = $(this).find(".sidebar-menu-icon");
+    });
+
+    $(".mobile-dashboard-sidebar-container > li > a").click(function(){
+        var linkToDesktopMenuName = $(this).attr("src");
+        $("li[src='"+linkToDesktopMenuName+"']").trigger("click");
+    });
+
+    $(".mobile-dashboard-sidebar-submenu-container > li a").click(function(){
+        var thisMobileLinkDashboardTab = $(this).attr("href");
+        $(".mobile-dashboard-sidebar-submenu-wrapper").slideUp("fast");
+        $(".mobile-dashboard-sidebar-submenu-container > li a").not($(this)).removeClass("selected-mobile");
+        //$(".dashboard-sidebar-submenu-container > li > a").removeClass("selected");
+         $(".dashboard-sidebar-submenu-container > li > a").removeClass("selected-desktop");
+        $(".dashboard-sidebar-submenu-container > li > a[href='"+thisMobileLinkDashboardTab+"']").addClass("selected-desktop");
+        $(this).addClass("selected-mobile");
+    });
+    //End of JS for new dashboard sidebar menu
+
 }(jQuery));
