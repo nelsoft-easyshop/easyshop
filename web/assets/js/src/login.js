@@ -106,6 +106,7 @@
                             $('#login-timeout').html(data.timeoutLeft);
                         }
                         else{
+                            $('#passw_error').show();
                             var $loginErrorContainer = $("#login_error");
                             if(data.o_success <= 0){
                                 $loginErrorContainer.empty();
