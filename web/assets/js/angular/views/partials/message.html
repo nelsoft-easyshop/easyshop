@@ -18,7 +18,7 @@
                     <span data-ng-repeat="conv in messageData.conversation" data-ng-class="{'float_right': conv.isSender, 'float_left': !conv.isSender}" >
                         <span class="chat-img-con">
                             <span class="chat-img-con2">
-                                <img data-ng-src="{{conv.senderImage}}" alt="{{conv.senderStorename}}" />
+                                <img data-ng-src="{{preloadResource.assetsDomain + '.' + conv.senderImage}}" alt="{{conv.senderStorename}}" />
                             </span>
                         </span>
                         <div class="chat-container">

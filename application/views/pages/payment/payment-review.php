@@ -192,7 +192,7 @@
                                         <?php endif; ?>
                                     </td>
                                     <td><?=$item['qty'];?></td>
-                                    <td><?=$item['isAvailableInLocation'] === false ? "N/A" : "&#8369; ".$item['shippingFee'] ;  ?></td>
+                                    <td><?=$item['isAvailableInLocation'] === false ? "N/A" : "&#8369; ".number_format($item['shippingFee'], 2, '.', ','); ?></td>
                                     <td>&#8369; <?=number_format($item['price'], 2, '.', ',');?></td>
                                 </tr>
                                 <?php if($item['isAvailableInLocation'] === false): ?>
