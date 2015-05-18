@@ -375,7 +375,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 $(".loader-upload").css("display","none");
                 if(xhrResponse.isSuccessful){
                     if(formAction === 'banner_upload'){
-                        $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});
+                        $(".vendor-main-bg").css({ "background-image" : "url('" + config.assetsDomain + '.' + xhrResponse.banner + "')"});
                     }
                     else if(formAction === 'upload_img'){
                         var avatarImage = $('img.avatar-image');
