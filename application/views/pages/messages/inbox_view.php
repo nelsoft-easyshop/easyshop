@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.inbox-view.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
 <?php endif; ?>
 
+<div ng-cloak preload-resource='{"assetsDomain":"<?=getAssetsDomain();?>"}'></div>
 <section class="bg-cl-fff">
 
     <?php echo form_open('/');?>
@@ -13,9 +14,10 @@
     <div data-ng-controller="MessageController">
         <div on-init-directive callback-fn="setConversationList(<?php echo html_escape($conversationHeaders);?>)"></div>
         <div on-init-directive callback-fn="setUnreadMessageCount(<?php echo html_escape($unreadConversationCount);?>)"></div>
-        <div on-init-directive callback-fn="setRealTimeChatSettings(<?php echo html_escape($realtimeChatConfig); ?>)"></div> 
+        <div on-init-directive callback-fn="setRealTimeChatSettings(<?php echo html_escape($realtimeChatConfig); ?>)"></div>
+        <div on-init-directive callback-fn="setUnreadMessageCount(<?php echo html_escape($unreadConversationCount);?>)"></div>
     </div>
-    
+
     <div class="container inbox-view-content">
         <div id="head_container" class="row">
             <div class="row">
@@ -48,6 +50,7 @@
     <script src="/assets/js/angular/controllers/messageController.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/factories/messageFactory.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/directives/csrfDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+    <script src="/assets/js/angular/directives/preloadResource.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/directives/onInitDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/directives/scrollBottomOnDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
     <script src="/assets/js/angular/directives/whenScrolledDirective.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
