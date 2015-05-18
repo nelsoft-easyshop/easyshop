@@ -1,14 +1,14 @@
 
-<div class="div-tab">
-    <div class="div-tab-inner">
-        <div class="transaction-tabs">
-            <ul class="idTabs">
-                <li><a href="#on-going-transaction" class="on-going-transaction-header">On going</a></li>
-                <li><a href="#completed-transaction" class="completed-transaction-header">Completed</a></li>
-            </ul>
-        </div>
-        <!---------------------------------------------------------------ongoing bought starts here---------------------------------------------------------------->
-        <div class="col-md-12" id="on-going-transaction">
+<!---------------------------------------------------------------ongoing bought starts here---------------------------------------------------------------->
+<div class="col-md-12" id="on-going-transaction">
+    <div class="div-tab">
+        <div class="div-tab-inner">
+            <div class="transaction-tabs">
+                <ul class="idTabs">
+                    <li><a href="#on-going-transaction" class="on-going-transaction-header">On going</a></li>
+                    <li><a href="#completed-transaction" class="completed-transaction-header">Completed</a></li>
+                </ul>
+            </div>
             <div class="row">
                 <div class="transaction-title-bought transaction-button-head" data-method="ongoing-bought">
                     <span class="trans-title">Bought</span>
@@ -93,8 +93,19 @@
                 </div>
             </div>
         </div>
-    <!---------------------------------------------------------------completed bought starts here---------------------------------------------------------------->
-        <div class="col-md-12" id="completed-transaction">
+    </div>
+    <div class="clear"></div>
+</div>
+<!---------------------------------------------------------------completed bought starts here---------------------------------------------------------------->
+<div class="col-md-12" id="completed-transaction">
+    <div class="div-tab">
+        <div class="div-tab-inner">
+            <div class="transaction-tabs">
+                <ul class="idTabs">
+                    <li><a href="#on-going-transaction" class="on-going-transaction-header">On going</a></li>
+                    <li><a href="#completed-transaction" class="completed-transaction-header">Completed</a></li>
+                </ul>
+            </div>
             <div class="row">
                 <div class="transaction-title-bought-completed transaction-button-head" data-method="complete-bought">
                     <span class="trans-title">Bought</span>
