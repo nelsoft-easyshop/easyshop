@@ -265,9 +265,7 @@
                     <div class="" id="dashboard">
                         <?php echo $dashboardHomeView; ?>
                     </div>
-                    <div id="transactions">
-                        <?php include("dashboard-transactions.php");?>
-                    </div>
+                    <?php include("dashboard-transactions.php");?>
                     <div id="setup">
                         <?php include("dashboard-store-setup.php");?>
                     </div>
