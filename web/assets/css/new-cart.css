@@ -647,9 +647,27 @@ ol.how-to-list li{
     cursor:pointer;
 }
 
+.simplemodal-wrap{
+    position: absolute
+}
+
+#simplemodal-container{
+    background: none;
+}
+
 .my-modal-content{
     overflow: hidden;
     margin-bottom: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    margin: auto;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    border-radius: 4px;
 }
 
 .my-modal-content p{
@@ -657,7 +675,7 @@ ol.how-to-list li{
     margin-top: 20px;
 }
 
-.my-modal .remove-item-name{
+.remove-item-name{
     color: #ff893a;
     font-weight: normal;
 }
@@ -666,7 +684,6 @@ ol.how-to-list li{
     border-top: solid #e2e2e2 1px;
     margin-top: 10px;
     padding: 20px;
-    margin-bottom: 30px;
 }
 
 @-moz-document url-prefix() {

@@ -906,7 +906,6 @@ class EsProductRepository extends EntityRepository
      * @param integer $perPage
      * @param string $searchString
      * @param string $orderByField
-     * @param integer[] $excludeProductsIds
      * @return EasyShop\Entities\EsProduct[]
      */
     public function getUserProducts($memberId,
@@ -915,29 +914,24 @@ class EsProductRepository extends EntityRepository
                                     $offset = 0,
                                     $perPage = 10,
                                     $searchString = "",
-                                    $orderByField = "p.idProduct",
-                                    $excludeProductsIds = [])
+                                    $orderByField = "p.idProduct")
     {
         $this->em =  $this->_em;
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder->select('p')
                      ->from('EasyShop\Entities\EsProduct','p')
                      ->where(
-                            $queryBuilder->expr()->in('p.isDelete', $isDelete)
-                        )
+                         $queryBuilder->expr()->in('p.isDelete', $isDelete)
+                     )
                      ->andWhere(
-                            $queryBuilder->expr()->in('p.isDraft', $isDraft)
-                        )
+                         $queryBuilder->expr()->in('p.isDraft', $isDraft)
+                     )
                      ->andWhere('p.member = :member_id')
                      ->setParameter('member_id', $memberId);
 
         if($searchString !== ""){
             $queryBuilder->andWhere('p.name LIKE :word')
                          ->setParameter('word', '%'.$searchString.'%');
-        }
-        
-        if(empty($excludeProductsIds) === false){
-            $queryBuilder->andWhere($queryBuilder->expr()->notIn('p.idProduct', $excludeProductsIds));
         }
         $queryBuilder->orderBy($orderByField,"DESC");
         $qbStatement = $queryBuilder->setFirstResult($offset)

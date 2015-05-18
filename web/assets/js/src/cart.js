@@ -3,45 +3,24 @@
 
     var ERROR_MESSAGE = "Something went wrong. Please try again later.";
     var MIN_AMOUNT_ALLOWED = $("#min-amount-allowed").val();
-    var heightOfModal = 0;
     var $csrftoken = $("meta[name='csrf-token']").attr('content');
 
     $(window).on("load resize",function(){
 
-        //Variables to identify if browser is IOS Safari
-        var standalone = window.navigator.standalone;
-        var userAgent = window.navigator.userAgent.toLowerCase();
-        var safari = /safari/.test( userAgent );
-        var ios = /iphone|ipod|ipad/.test( userAgent );
         var heightOfModal = $(".simplemodal-wrap").outerHeight();
 
         $(".active-left-wing-cart-1").animate({width: "50%"}, 1000);
         $(".active-breadcrumb-icon").delay(1000).animate({backgroundColor: "#00a388"}, 1000);
         $(".active-breadcrumb-title").delay(1000).animate({color: "#00a388"}, 1000).css("font-weight", "bold");;
 
-        $(".calculate-shipping-label").click(function(){
-            $(".shipping-calculator-modal").modal({
-                containerCss:{
-                    height: heightOfModal
-                }
-            });
-            $(".shipping-calculator-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
-        }); 
 
-        //The condition below will be valid on iOS Safari browser
-        //Brief scroll will take effect only if one of the options in the shipping state or shipping city were selected
-        if( ios ) {
-            if ( !standalone && safari ) {
-                $('#shipping-state').on('change click',function () {
-                    $('body').animate({scrollTop: 1 }, 1000);
-                });
-
-                $('#shipping-city').on('change click',function () {
-                    $('body').animate({scrollTop: 4 }, 1000);
-                });
-            }
-        };
     });
+
+    $(".calculate-shipping-label").click(function(){
+        $(".shipping-calculator-modal").modal();
+        getMarginTop(); //Function from custom-simplemodal.js
+    });
+
     var generateQuantitySelect = function ()
     {
         $(".item-quantity").each(function() {
@@ -205,9 +184,8 @@
                 $cartRowId = null;
                 $currentModal.close();
             }
-         });
-        $(".remove-item-modal").parents(".simplemodal-container").addClass("my-modal").removeAttr("id").removeClass("feedback-modal-container");
-        $(".my-modal").css("height", heightOfModal+"px");
+        });
+        getMarginTop();
     });
 
     $('.remove-item').on('click', function(){
