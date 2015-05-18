@@ -1,3 +1,38 @@
+.modal-backdrop {
+    z-index: 99999 !important;
+}
+
+.modal {
+    z-index: 999999 !important;
+}
+
+#head_container {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#head_container .col-md-4 .row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.modal .modal-dialog {
+    margin: 100px auto 30px;
+}
+
+#conversation-header-container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.modal-title {
+    font-size: 16px;
+}
+
+.chat-container p {
+    font-size: 12px;
+}
+
 .msg-sender-details{
     position: relative;
 }
@@ -124,10 +159,15 @@
     padding-top: 0px !important;
 }
 
+.modal-body input[data-ng-model="composeStoreName"] {
+    max-width: 400px;
+    width: 100%;
+}
+
 .new-message-textarea {
     height: 136px;
-    width: 540px;
     resize: none;
+    width: 100%;
 }
 
 #conversation-header-container {
