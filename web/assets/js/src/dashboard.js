@@ -2018,7 +2018,7 @@
                 data: {csrfname: csrftoken},
                 success: function(data){ 
                     var jsonResponse = $.parseJSON(data);
-                    createCategoryList(jsonResponse.storeCategories);
+                    buildReferenceTree(jsonResponse.storeCategories);
                     isCategorySetupInitialized = true;
                     $('.category-setup-loading').hide();
                     $('.category-setup-ajax').fadeIn();
@@ -2032,7 +2032,30 @@
         var errorContainer = $('#store-category-error');
         errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-
+        var categoryOrderData = getEditCategoryTreeData();
+    
+        $.ajax({
+            type: "post",
+            url: '/memberpage/updateStoreCategoryOrder',
+            data: {csrfname: csrftoken, categoryData: JSON.stringify(categoryOrderData)},
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response.isSuccessful){
+                    buildReferenceTree(response.categoryData);
+                    $('#cancel-edit-store-cat').trigger('click');
+                }
+                else{
+                    errorContainer.fadeIn();
+                }
+            },
+        });
+    });
+    
+    /**
+     * Return the edit category tree data
+     */
+    function getEditCategoryTreeData()
+    {
         var categoryOrderData = [];
         var treedata = $('#edit-category-tree').jstree(true).get_json('#');
         var topLevelOrder = 0;
@@ -2047,25 +2070,14 @@
             return {order: topLevelOrder++, categoryid: categoryId, children: childrenData }
         });
 
-        $.ajax({
-            type: "post",
-            url: '/memberpage/updateStoreCategoryOrder',
-            data: {csrfname: csrftoken, categoryData: JSON.stringify(categoryOrderData)},
-            success: function(data){ 
-                var response = $.parseJSON(data);
-                if(response.isSuccessful){
-                    createCategoryList(response.categoryData);
-                    $('#cancel-edit-store-cat').trigger('click');
-                }
-                else{
-                    errorContainer.fadeIn();
-                }
-            },
-        });
-    });
+        return categoryOrderData;
+    }
     
-    
-    function createCategoryList(categoryData)
+    /**
+     * Build the hidden reference tree on which the other functional trees
+     * depend on
+     */
+    function buildReferenceTree(categoryData)
     {       
         if(categoryData.length === 0){
             $('.div-store-content.concealable').hide();
@@ -2097,10 +2109,13 @@
 
         $referenceTreeList.html();
         $referenceTreeList.append(referenceTreeList.join(''));
-        populateCategoryTrees($referenceTreeList);
+        populateCategoryTrees();
     }
     
-    function populateCategoryTrees($referenceTreeList)
+    /**
+     * Copy data from reference tree to the different trees
+     */
+    function populateCategoryTrees()
     {
         var $parentSelect = $('.parent-category-dropdown');
         var $categoryView = $('.store-category-view');
@@ -2826,6 +2841,23 @@
         var $modalDiv = $btn.closest('.edit-category-modal');
         var categoryId = $modalDiv.find('.hidden-category-id').val();
         var categoryName = $modalDiv.find('.category-name').val();
+
+        /**
+         * Update the category tree in the server to avoid losing changes made to 
+         * the tree before editing a single category
+         */
+        var categoryOrderData = getEditCategoryTreeData();
+        $.ajax({
+            type: "post",
+            url: '/memberpage/updateStoreCategoryOrder',
+            data: {csrfname: csrftoken, categoryData: JSON.stringify(categoryOrderData)},
+            success: function(data){ 
+                var response = $.parseJSON(data);
+                if(response.isSuccessful){
+                    buildReferenceTree(response.categoryData);
+                }
+            },
+        });
 
         var $currentCategoryProductList = $modalDiv.find('.category-product-list .category-item-name');
         var newParentCategory = parseInt($modalDiv.find('.parent-category-dropdown option:selected').val(), 10);
