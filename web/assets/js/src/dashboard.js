@@ -3344,6 +3344,10 @@
     });
 
     //Start of JS for new dashboard sidebar menu
+    $(window).on("load", function(){
+        $("#on-going-transaction, #completed-transaction").css("display", "none");
+    });
+
     $(".dashboard-sidebar-container > li, a[href='#dashboard']").click(function(){
         var thisSubmenu = $(this).find(".dashboard-sidebar-submenu-wrapper");
         var thisMenuIconControl = $(this).find(".sidebar-menu-icon");
