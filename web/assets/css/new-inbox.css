@@ -174,3 +174,8 @@
     height: 427px;
     overflow-y: scroll;
 }
+
+.error {
+    border-color: #b94a48 !important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px #d59392 !important;
+}
