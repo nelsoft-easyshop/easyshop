@@ -267,18 +267,18 @@ class AssetsUploader
                 $this->imageLibrary->initialize($config);  
                 $this->imageLibrary->resize();
                 $this->imageLibrary->clear();
-            }
-      
-            if(strtolower($this->environment) !== 'development'){
-                try{
-                    $this->awsUploader->uploadFile($imagePath.'/'.$filenames[0].'.png', $imagePath."/".$filenames[0].".png");
-                    $this->awsUploader->uploadFile($imagePath.'/'.$filenames[1].'.png', $imagePath."/".$filenames[1].".png");
-                    $this->awsUploader->uploadFile($imagePath.'/'.$filenames[2].'.png', $imagePath."/".$filenames[2].".png");
-                    unlink($imagePath.'/'.$filenames[0].'.png');
-                    unlink($imagePath.'/'.$filenames[1].'.png');
-                    unlink($imagePath.'/'.$filenames[2].'.png');
-                } catch(\Exception $e){
-                    $result['error'][] = $e->getMessage();
+
+                if(strtolower($this->environment) !== 'development'){
+                    try{
+                        $this->awsUploader->uploadFile($imagePath.'/'.$filenames[0].'.png', $imagePath."/".$filenames[0].".png");
+                        $this->awsUploader->uploadFile($imagePath.'/'.$filenames[1].'.png', $imagePath."/".$filenames[1].".png");
+                        $this->awsUploader->uploadFile($imagePath.'/'.$filenames[2].'.png', $imagePath."/".$filenames[2].".png");
+                        unlink($imagePath.'/'.$filenames[0].'.png');
+                        unlink($imagePath.'/'.$filenames[1].'.png');
+                        unlink($imagePath.'/'.$filenames[2].'.png');
+                    } catch(\Exception $e){
+                        $result['error'][] = $e->getMessage();
+                    }
                 }
             }
 
@@ -290,10 +290,7 @@ class AssetsUploader
         $result['member'] = $member;
         return $result;
     }
-    
-    
-    
-        
+
     /**
      * Uploads the user banner. This method uploads the file in the $_FILES super global method
      *
