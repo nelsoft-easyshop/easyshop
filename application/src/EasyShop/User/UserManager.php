@@ -479,7 +479,7 @@ class UserManager
         }
         else{
             $imageURL = $member->getImgurl();
-            if($imageURL === null){
+            if($imageURL === null || $imageURL === ""){
                 $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
             }
             else{
