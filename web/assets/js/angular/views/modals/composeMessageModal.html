@@ -1,25 +1,33 @@
-<div class="modal-header">
-    <h3 class="modal-title">{{modalOptions.headerText}}</h3>
-</div>
-<div class="modal-body">
-    <div>
-        <label>To : </label>
-        <input type="text" size="60" placeholder="Store name" 
-            data-ng-init="composeStoreName=''" 
-            data-ng-model="composeStoreName" 
-            class="ui-form-control">
+<form name="messageForm">
+    <div class="modal-header">
+        <h3 class="modal-title">{{modalOptions.headerText}}</h3>
     </div>
-    <div class="mrgn-top-20">
-        <label>Message : </label><br>
-        <textarea class="ui-form-control new-message-textarea" 
-            data-ng-init="composeMessage=''" 
-            data-ng-model="composeMessage" 
-            placeholder="Your message here.."></textarea>
+    <div class="modal-body">
+        <div>
+            <label>To : </label>
+            <input type="text" size="60" placeholder="Store name"
+                data-ng-class="{ error: formError && messageForm.storeNameField.$error.required }"
+                data-ng-init="composeStoreName=''" 
+                data-ng-model="composeStoreName" 
+                class="ui-form-control" 
+                name="storeNameField" 
+                required="string">
+        </div>
+        <div class="mrgn-top-20 control-group">
+            <label>Message : </label><br>
+            <textarea class="ui-form-control new-message-textarea"
+                data-ng-class="{ error: formError && messageForm.messageField.$error.required }"
+                data-ng-init="composeMessage=''" 
+                data-ng-model="composeMessage" 
+                placeholder="Your message here.."
+                name="messageField"
+                required="string"></textarea>
+        </div>
     </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-warning" 
-        data-ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}</button>
-    <button class="btn btn-primary" 
-        data-ng-click="modalOptions.callback(composeStoreName, composeMessage);">{{modalOptions.actionButtonText}}</button>
-</div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" 
+            data-ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}</button>
+        <button class="btn btn-primary"
+            data-ng-click="composeStoreName && composeMessage ? modalOptions.callback(composeStoreName, composeMessage) : formError=true;">{{modalOptions.actionButtonText}}</button>
+    </div>
+</form>
