@@ -7,7 +7,6 @@
             <label>To : </label>
             <input type="text" size="60" placeholder="Store name"
                 data-ng-class="{ error: formError && messageForm.storeNameField.$error.required }"
-                data-ng-init="composeStoreName=''" 
                 data-ng-model="composeStoreName" 
                 class="ui-form-control" 
                 name="storeNameField" 
@@ -17,7 +16,6 @@
             <label>Message : </label><br>
             <textarea class="ui-form-control new-message-textarea"
                 data-ng-class="{ error: formError && messageForm.messageField.$error.required }"
-                data-ng-init="composeMessage=''" 
                 data-ng-model="composeMessage" 
                 placeholder="Your message here.."
                 name="messageField"
