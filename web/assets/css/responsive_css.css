@@ -1502,11 +1502,12 @@ body .mce-abs-layout-item.mce-formitem {
 }
 
 .irs-slider {
-    background-position: 0px -90px !important;
+    background-position: -7px -90px !important;
+    width: 3px !important;
 }
 
 .irs-slider:hover {
-    background-position: 0 -120px !important;
+    background-position: -7px -120px !important;
 }
 
 #dsc_frm{
