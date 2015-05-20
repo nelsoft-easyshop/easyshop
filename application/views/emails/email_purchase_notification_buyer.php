@@ -475,7 +475,7 @@
                                                                 <td align="center" valign="top" width="100%">
                                                                     <a href="{baseUrl}" style="text-decoration: none; display: inline-block" target="_blank">
                                                                         <center>
-                                                                        <img mc:edit="Top logo TB10" mc:allowdesigner mc:allowtex src="es-logo-login.png" width="120" style="max-width:120px;" alt="Logo" border="0" hspace="0" vspace="0">
+                                                                        <img mc:edit="Top logo TB10" mc:allowdesigner mc:allowtex src="es-logo-login.png" width="120" style="max-width:120px;" alt="Easyshop.ph" border="0" hspace="0" vspace="0">
                                                                         </center>
                                                                     </a>
                                                                 </td>
@@ -781,7 +781,7 @@
                     <table width="600" height="11" align="center" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff;" class="full-width">
                         <tr>
                             <td valign="top" height="11" class="image-100-percent">  
-                                <img mc:edit="shadow 1 TB18" src="shadow.png" width="600" alt="space" style="display:block; max-height:11px; max-width:600px;">
+                                <img mc:edit="shadow 1 TB18" src="shadow.png" width="600" alt="Connect to Easyshop.ph" style="display:block; max-height:11px; max-width:600px;">
                             </td>
                         </tr>
                         <!--start space height --> 
@@ -1046,16 +1046,16 @@
                                                 <tr>
                                                     <td valign="top" align="left">
 
-                                                        <table border="0" align="left" cellpadding="0" cellspacing="0" class="container">
+                                                         <table border="0" align="left" cellpadding="0" cellspacing="0" class="container">
                                                             <tr>
                                                                 <td height="30" align="center" valign="middle" class="clear-padding">
                                                                   <a href="{facebook}" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-facebook-color TB113" src="icon-facebook.png" width="30" alt="icon-facebook" style="max-width:30px;" border="0" hspace="0" vspace="0">  
+                                                                    <img mc:edit="icon-facebook-color TB113" src="icon-facebook.png" width="30" alt="Connect to Facebook" style="max-width:30px;" border="0" hspace="0" vspace="0">  
                                                                   </a>
                                                                 </td>
                                                                 <td style="padding-left:5px; " height="30" align="center" valign="middle" class="clear-padding">
                                                                   <a href="{twitter}" target="_blank" style="text-decoration: none;">
-                                                                    <img mc:edit="icon-twitter-color TB114" src="icon-twitter.png" width="30" alt="icon-twitter" style="max-width:30px;" border="0" hspace="0" vspace="0">  
+                                                                    <img mc:edit="icon-twitter-color TB114" src="icon-twitter.png" width="30" alt="Connect to Twitter" style="max-width:30px;" border="0" hspace="0" vspace="0">  
                                                                   </a>
                                                                 </td>
                                                             </tr>
