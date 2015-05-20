@@ -143,6 +143,10 @@ ol.how-to-list li{
     padding: 20px 10px;
 }
 
+.cart-table > tbody > tr > td.cart-td-quantity{
+    padding: 20px 0px;
+}
+
 .cart-table > tbody > tr:last-child > td{
     padding-bottom: 10px;
 }

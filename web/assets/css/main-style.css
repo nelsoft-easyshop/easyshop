@@ -1333,6 +1333,7 @@ td.td-view.p-view2.color-default{
 
 .list-sub-category{
     display: none;
+    margin-top: -11px;
 }
 
 .list-sub-category > li{
@@ -1605,6 +1606,9 @@ td.td-view.p-view2.color-default{
     margin: 0px;
     margin-top: 10px;
     font-size:12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .grid > .product-paging > .product-inner-container > .thumb > .panel-item > .div-item-info > .p-category{
