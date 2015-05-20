@@ -146,7 +146,7 @@
                                                 <span style="padding-right: 5px;">&#8369;</span><?=number_format($item['price'], 2, '.', ',');?>
                                             </span>
                                         </td>
-                                        <td>
+                                        <td class="cart-td-quantity">
                                             <select class="form-es-control input-sm item-quantity"
                                                 data-value="<?=$item['qty']; ?>"
                                                 data-max="<?=$item['maxqty']; ?>" 
