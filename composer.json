@@ -1,6 +1,6 @@
 {
     "require": {
-        "pimple/pimple": "~2.1@dev",
+        "pimple/pimple": "~3.0@dev",
         "swiftmailer/swiftmailer" : "@stable",
         "aferrandini/phpqrcode": "1.0.1",
         "doctrine/orm": "2.4.*",
@@ -25,7 +25,8 @@
         "predis/predis": "1.1.*@dev", 
         "gregwar/captcha-bundle": "dev-master",
         "ryanannatuvasquez/android-php-encrypt-decrypt": "dev-master",
-        "phpunit/phpunit": "4.6"
+        "phpunit/phpunit": "4.6",
+        "elasticsearch/elasticsearch": "1.3.4"
     },
     "repositories": [
         {
