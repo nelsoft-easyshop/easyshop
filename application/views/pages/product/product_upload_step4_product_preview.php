@@ -97,8 +97,8 @@
             <!-- Product attributes here -->
             <?php foreach ($productAttributes as $head => $headValue): ?>
                 <div class="col-sm-12 col-md-6 attr-select">
-                    <div class="prod-select-con ui-form-control">
-                        <select class="attribute-control" disabled="">
+                    <div class="prod-select-con">
+                        <select class="ui-form-control attribute-control" disabled="">
                             <option value="0" data-addprice="0" selected=selected>--<?=ucfirst(html_escape($head));?>--</option>
                             <?php foreach ($headValue as $key => $value):?>
                                 <option value="<?=$value['attr_id']; ?>" data-headvalue="<?=strtolower(html_escape($head))?>" data-textvalue="<?=strtolower(html_escape($value['attr_value'])); ?>" data-imageid=<?=$value['image_id']; ?> data-addprice="<?=$value['attr_price']?>"><?=html_escape($value['attr_value']); ?></option>
@@ -125,8 +125,8 @@
                         <span class="default">NOT AVAILABLE</span>
                     <?php else: ?>
                         <?php if(!$isFreeShippingNationwide): ?>
-                        <div class="prod-select-con ui-form-control shipment-select">
-                            <select class="shiploc" id="shipment_locations" disabled="">
+                        <div class="prod-select-con shipment-select">
+                            <select class="ui-form-control shiploc" id="shipment_locations" disabled="">
                                 <option>Select Location</option>
                             </select>
                         </div>
@@ -142,8 +142,8 @@
         <div class="row pad-top-23">
             <div class="col-sm-12 col-md-5 prod-quantity-container">
                 <p class="attr-title">Quantity:</p>
-                <div class="prod-select-con ui-form-control quantity-select">
-                    <select id="control-quantity" disabled="">
+                <div class="prod-select-con quantity-select">
+                    <select id="control-quantity" class="ui-form-control" disabled="">
                         <option value="0">0</option>
                     </select>
                 </div>
