@@ -399,6 +399,7 @@ input[type="file"] {
 
 .form_input select {
     border:1px solid #B3B3B3;
+    line-height: 28px;
     padding:8px 2px; 
 }
 
@@ -1927,8 +1928,8 @@ body .mce-abs-layout-item.mce-formitem {
 }
 
 .attr_cont_css label.active {
-    border:1px solid #000000;
-    background-color: #9b9bab;
+    border:1px solid #868686;
+    background-color: #868686;
     color: #FFFFFF;
 }
 
@@ -1960,17 +1961,19 @@ body .mce-abs-layout-item.mce-formitem {
 }
 
 .prefsel_css span.del_pref_css{
-    display:none;
-    margin-right: 5px;
-    cursor:pointer;
-    color:#5897fb;
-    padding:0px;
-    font-size: 13px;
+    color: #5897fb;
+    cursor: pointer;
+    display: none;
     float: right;
+    font-size: 13px;
+    line-height: 34px;
+    margin-right: 5px;
+    padding: 0px;
 }
 
 .shipping_preference {
     display: inline-block;
+    line-height: 28px !important;
 }
 
 .del_shipping_input {
