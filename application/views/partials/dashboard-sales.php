@@ -5,7 +5,7 @@
 <?php endif; ?>
 <?php if(count($sales) > 0): ?>
 <div style="overflow-y:no-scroll;overflow-x:scroll; height:auto; height: auto;">
-    <table class="table table-total-sales table-striped"> 
+    <table class="table table-total-sales"> 
         <thead>
             <tr class="tr-orange">
                 <th width="250px">Product Name</th>
