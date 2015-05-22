@@ -94,11 +94,13 @@
     min-width: 10px;
     max-width: 90%;
     min-height: 40px;
-    padding: 10px;
+    padding: 5px 10px;
+    min-height: 0 !important;
     background: #e2e2e2;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    color: #565656;
 }
 
 .float_left p:after
@@ -112,7 +114,7 @@
     width: 0;
     z-index: 1;
     left: -10px;
-    top: 13px;
+    top: 9px;
 }
 
 .float_left .chat-img-con{
@@ -121,8 +123,11 @@
 }
 
 .float_left .msg-date{
-    float: left !important;
     font-size: 10px;
+    display: block;
+    clear: both;
+    float: none !important;
+    margin-top: 6px;
 }
 
 .float_right p
@@ -131,10 +136,13 @@
     min-width: 10px;
     max-width: 90%;
     min-height: 40px;
-    padding: 10px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    padding: 5px 10px;
+    min-height: 0 !important;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    text-align: left;
+    background-color: #4370CC !important;
 }
 
 .float_right p:after
@@ -143,16 +151,20 @@
     position: absolute;
     border-style: solid;
     border-width: 9px 0 9px 10px;
-    border-color: transparent #868686;
+    border-color: transparent #4370CC;
     display: block;
     width: 0;
     z-index: 1;
     right: -10px;
-    top: 13px;
+    top: 9px;
 }
 
 .float_right .msg-date{
-    color:#ffffff;
+    font-size: 10px;
+    display: block;
+    clear: both;
+    float: none !important;
+    margin-top: 6px;
 }
 
 .msg-date{
@@ -160,7 +172,7 @@
 }
 
 .modal-body input[data-ng-model="composeStoreName"] {
-    max-width: 400px;
+    max-width: 536px;
     width: 100%;
 }
 
@@ -179,3 +191,37 @@
     border-color: #b94a48 !important;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px #d59392 !important;
 }
+
+#msg_field::-webkit-scrollbar,
+#conversation-header-container::-webkit-scrollbar,
+#msg_field::-ms-scrollbar,
+#conversation-header-container::-ms-scrollbar {
+    width: 8px;
+}
+ 
+/* Modal Overwrites*/
+.compose-message-modal .modal-title{
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 15px;
+}
+
+.compose-message-modal .modal-header{
+    border-bottom: none;
+}
+
+.compose-message-modal .modal-footer{
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.compose-message-modal .btn-default-1,
+.compose-message-modal .btn-default-3{
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 8px 11px;
+}
+
