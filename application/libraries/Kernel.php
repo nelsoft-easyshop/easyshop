@@ -330,14 +330,16 @@ class Kernel
             $userManager = $container['user_manager'];
             $configLoader = $container['config_loader'];
             $productManager = $container['product_manager'];
+            $elasticsearchClient = $container['elasticsearch_client'];
 
             return new \EasyShop\Search\SearchUser(
-                    $em,
-                    $sphinxClient,
-                    $userManager,
-                    $configLoader,
-                    $productManager
-                );
+                $em,
+                $sphinxClient,
+                $userManager,
+                $configLoader,
+                $productManager,
+                $elasticsearchClient
+            );
         };
 
         //Promo Manager
