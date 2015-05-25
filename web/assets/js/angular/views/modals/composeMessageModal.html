@@ -1,4 +1,4 @@
-<form name="messageForm">
+<form name="messageForm" class="compose-message-modal">
     <div class="modal-header">
         <h3 class="modal-title">{{modalOptions.headerText}}</h3>
     </div>
@@ -23,9 +23,11 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-warning" 
-            data-ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}</button>
-        <button class="btn btn-primary"
-            data-ng-click="composeStoreName && composeMessage ? modalOptions.callback(composeStoreName, composeMessage) : formError=true;">{{modalOptions.actionButtonText}}</button>
+        <button class="btn btn-default-3"
+            data-ng-click="composeStoreName && composeMessage ? modalOptions.callback(composeStoreName, composeMessage) : formError=true;">{{modalOptions.actionButtonText}}
+        </button>
+        <button type="button" class="btn btn-default-1" 
+            data-ng-click="modalOptions.close()">{{modalOptions.closeButtonText}}
+        </button>
     </div>
 </form>
