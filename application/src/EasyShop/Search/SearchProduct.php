@@ -20,6 +20,8 @@ class SearchProduct
      */
     const PER_PAGE = 12;
 
+    const ELASTICSEARCH_ENABLED = TRUE;
+
     /**
      * Entity Manager instance
      *
@@ -77,6 +79,11 @@ class SearchProduct
      */
     private $sphinxClient;
 
+    /**
+     * Elastic Search Client
+     * @var \Elasticsearch
+     */
+    private $elasticSearchClient;
 
     /**
      * Constructor. Retrieves Entity Manager instance
@@ -90,7 +97,8 @@ class SearchProduct
                                 $promoManager,
                                 $configLoader,
                                 $sphinxClient,
-                                $userManager)
+                                $userManager,
+                                $elasticSearchClient)
     {
         $this->em = $em;
         $this->collectionHelper = $collectionHelper;
@@ -101,6 +109,7 @@ class SearchProduct
         $this->configLoader = $configLoader;
         $this->sphinxClient = $sphinxClient;
         $this->userManager = $userManager;
+        $this->elasticSearchClient = $elasticSearchClient;
     }
 
     /**
@@ -137,40 +146,138 @@ class SearchProduct
         $sphinxResult =  $this->sphinxClient->RunQueries();
         
         $products = [];
-        if($sphinxResult === false){
-            // remove all double spaces
-            $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
-            $stringCollection = [];
-            $ids = $productIds;
-            if(trim($clearString)){
-                $explodedString = explode(' ', trim($clearString));
-                // make string alpha numeric
-                $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
-                $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
-                $wildCardString = trim(implode('* +', $explodedStringWithRegEx));
-                if ($wildCardString !== "") {
-                    // add characters in need of fulltext
-                    $wildCardString = '+'.$wildCardString.'*';
+        if (self::ELASTICSEARCH_ENABLED === false) {
+            if($sphinxResult === false){
+                // remove all double spaces
+                $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
+                $stringCollection = [];
+                $ids = $productIds;
+                if(trim($clearString)){
+                    $explodedString = explode(' ', trim($clearString));
+                    // make string alpha numeric
+                    $explodedStringWithRegEx = explode(' ', trim(preg_replace('/[^A-Za-z0-9\ ]/', '', $clearString))); 
+                    $stringCollection[] = '+"'.implode('" +"', $explodedString) .'"';
+                    $wildCardString = trim(implode('* +', $explodedStringWithRegEx));
+                    if ($wildCardString !== "") {
+                        // add characters in need of fulltext
+                        $wildCardString = '+'.$wildCardString.'*';
+                    }
+                    // remove excess '+' character
+                    $stringCollection[] = rtrim($wildCardString , "+");
+                    $stringCollection[] = '"'.trim($clearString).'"';
+                    $isLimit = strlen($clearString) > 1;
+                    $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
+                                         ->findByKeyword($stringCollection,$productIds,$isLimit);
+                    $ids = [];
+                    foreach ($products as $product) {
+                        $ids[] = $product['idProduct']; 
+                    } 
                 }
-                // remove excess '+' character
-                $stringCollection[] = rtrim($wildCardString , "+");
-                $stringCollection[] = '"'.trim($clearString).'"';
-                $isLimit = strlen($clearString) > 1;
-                $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                     ->findByKeyword($stringCollection,$productIds,$isLimit);
-                $ids = [];
-                foreach ($products as $product) {
-                    $ids[] = $product['idProduct']; 
-                } 
+            }
+            else if(isset($sphinxResult[0]['matches'])){
+                foreach ($sphinxResult[0]['matches'] as $productId => $product) {
+                    $ids[] = $productId; 
+                }
             }
         }
-        else if(isset($sphinxResult[0]['matches'])){
-            foreach ($sphinxResult[0]['matches'] as $productId => $product) {
-                $ids[] = $productId; 
+        else {
+            $elasticSearchResult = $this->searchElastic($queryString);
+            foreach ($elasticSearchResult as $response) {
+                $ids[] = $response['fields']['product_id'][0];
             }
         }
 
         return $ids;
+    }
+
+    /**
+     * Search items using elasticsearch
+     * @param  string  $queryString
+     * @param  integer $limit
+     * @return array
+     */
+    public function searchElastic($queryString, $limit = 1000)
+    {
+        $searchParams['index'] = 'easyshop';
+        $searchParams['size'] = $limit;
+        $searchParams['fields'] = ['product_id', 'name'];
+        $searchParams['body'] = [
+            'query' => [
+                'bool' => [
+                    'minimum_number_should_match' => 1,
+                    'should' => [
+                        [
+                            'match' => [
+                                'name' => [
+                                    'query' => $queryString,
+                                    'boost' => 10.0,
+                                ]
+                            ]
+                        ],
+                        [
+                            'match' => [
+                                'keywords' => [
+                                    'query' => $queryString,
+                                ]
+                            ]
+                        ],
+                        [
+                            'wildcard' => [
+                                'keywords' => $queryString.'*',
+                            ]
+                        ],
+                        [
+                            'fuzzy' => [
+                                'keywords' => [
+                                    'value' => $queryString,
+                                    'prefix_length' => 2,
+                                    'max_expansions' => 100
+                                ]
+                            ]
+                        ],
+                        [
+                            'match' => [
+                                'name' => [
+                                    'query' => $queryString,
+                                    'type' => 'phrase',
+                                    'boost' => 15.0
+                                ]
+                            ]
+                        ],
+                        [
+                            'match' => [
+                                'keywords' => [
+                                    'query' => $queryString,
+                                    'type' => 'phrase',
+                                ]
+                            ]
+                        ],
+                        [
+                            'multi_match' => [
+                                'query' => $queryString,
+                                'type' => 'best_fields',
+                                'fields' => [
+                                    'keywords', 'name^5'
+                                ],
+                                'tie_breaker' => 0.3,
+                            ]
+                        ],
+                    ],
+                ]
+            ],
+            'sort' => [
+                '_score' => [
+                    'order' => 'desc'
+                ],
+                'clickcount' => [
+                    'order' => 'desc',
+                    'mode' => 'avg'
+                ]
+            ],
+        ];
+        $queryResponse = $this->elasticSearchClient->search($searchParams);
+
+        return $queryResponse['hits']['hits'];
     }
 
     /**
@@ -326,7 +433,7 @@ class SearchProduct
             $organizedAttribute['Brand'] = $EsProductRepository->getProductBrandsByProductIds($productIds);
             $organizedAttribute['Condition'] = $EsProductRepository->getProductConditionByProductIds($productIds);
             ksort($organizedAttribute);
-        } 
+        }
     
         return $organizedAttribute;
     }
@@ -526,26 +633,34 @@ class SearchProduct
         $suggestionLimit = EsKeywords::SUGGESTION_LIMIT;
         $suggestions = [];
 
-        $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
-        $this->sphinxClient->SetFieldWeights([
-            'keywords' => 50,
-        ]);
-    
-        $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
-        $this->sphinxClient->setLimits(0, $suggestionLimit, $suggestionLimit); 
-        $this->sphinxClient->AddQuery($queryString.'*', 'suggestions');
+        if (self::ELASTICSEARCH_ENABLED === false) {
+            $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
+            $this->sphinxClient->SetFieldWeights([
+                'keywords' => 50,
+            ]);
         
-        $sphinxResult =  $this->sphinxClient->RunQueries();
-        if($sphinxResult === false){
-            $keywords = $this->em->getRepository('EasyShop\Entities\EsKeywords')
-                                 ->getSimilarKeywords($queryString, $suggestionLimit);
-            foreach($keywords as $word){
-                 $suggestions[] = $word['keyword'];
+            $this->sphinxClient->SetSortMode(SPH_SORT_RELEVANCE);
+            $this->sphinxClient->setLimits(0, $suggestionLimit, $suggestionLimit); 
+            $this->sphinxClient->AddQuery($queryString.'*', 'suggestions');
+            
+            $sphinxResult =  $this->sphinxClient->RunQueries();
+            if($sphinxResult === false){
+                $keywords = $this->em->getRepository('EasyShop\Entities\EsKeywords')
+                                     ->getSimilarKeywords($queryString, $suggestionLimit);
+                foreach($keywords as $word){
+                     $suggestions[] = $word['keyword'];
+                }
+            }
+            else if(isset($sphinxResult[0]['matches'])){
+                foreach($sphinxResult[0]['matches'] as $match){
+                    $suggestions[] = $match['attrs']['keywordattr'];
+                }
             }
         }
-        else if(isset($sphinxResult[0]['matches'])){
-            foreach($sphinxResult[0]['matches'] as $match){
-                $suggestions[] = $match['attrs']['keywordattr'];
+        else{
+            $elasticSearchResult = $this->searchElastic($queryString, $suggestionLimit);
+            foreach ($elasticSearchResult as $response) {
+                $suggestions[] = $response['fields']['name'][0];
             }
         }
 
