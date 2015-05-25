@@ -199,6 +199,7 @@ class SearchProduct
     public function searchElastic($queryString, $limit = 1000)
     {
         $searchParams['index'] = 'easyshop';
+        $searchParams['type']  = 'es_product';
         $searchParams['size'] = $limit;
         $searchParams['fields'] = ['product_id', 'name'];
         $searchParams['body'] = [
