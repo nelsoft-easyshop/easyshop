@@ -265,6 +265,7 @@
             validateWhiteTextBox(".item-quantity");
             changeItemQuantity($quantity);
         }
+        $(".row-" + $cartRowId).find('.item-quantity').val($quantity);
     });
 
     function changeItemQuantity($quantity)
