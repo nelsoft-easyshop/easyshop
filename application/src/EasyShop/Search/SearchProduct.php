@@ -20,8 +20,6 @@ class SearchProduct
      */
     const PER_PAGE = 12;
 
-    const ELASTICSEARCH_ENABLED = TRUE;
-
     /**
      * Entity Manager instance
      *
@@ -70,8 +68,7 @@ class SearchProduct
      * @var EasyShop\ConfigLoader\ConfigLoader
      */
     private $configLoader;
-    
-    
+
     /**
      * Sphinx Search Client
      *
@@ -119,6 +116,9 @@ class SearchProduct
      */
     public function filterBySearchString($productIds,$queryString = "",$storeKeyword = true)
     {
+        $sphinxMatchMatches = $this->configLoader->getItem('search','sphinx_match_matches');
+        $isElasticSearchEnabled = $this->configLoader->getItem('search','enable_elasticsearch');
+
         if($storeKeyword){
             $keywordTemp = new EsKeywordsTemp();
             $keywordTemp->setKeywords($queryString);
@@ -129,24 +129,20 @@ class SearchProduct
         }
 
         $ids = [];
-        $sphinxMatchMatches = $this->configLoader->getItem('search','sphinx_match_matches');
-        $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
-        $this->sphinxClient->SetFieldWeights([
-            'name' => 50, 
-            'store_name' => 30,
-            'search_keyword' => 10,
-        ]);
-    
-        if(empty($productIds) === false){
-            $this->sphinxClient->SetFilter('productid', $productIds);
-        }
-        $this->sphinxClient->setLimits(0, $sphinxMatchMatches, $sphinxMatchMatches);
-        $this->sphinxClient->AddQuery($queryString, 'products products_delta'); 
-        
-        $sphinxResult =  $this->sphinxClient->RunQueries();
-        
         $products = [];
-        if (self::ELASTICSEARCH_ENABLED === false) {
+        if ($isElasticSearchEnabled === false) {
+            $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
+            $this->sphinxClient->SetFieldWeights([
+                'name' => 50, 
+                'store_name' => 30,
+                'search_keyword' => 10,
+            ]);
+            if(empty($productIds) === false){
+                $this->sphinxClient->SetFilter('productid', $productIds);
+            }
+            $this->sphinxClient->setLimits(0, $sphinxMatchMatches, $sphinxMatchMatches);
+            $this->sphinxClient->AddQuery($queryString, 'products products_delta'); 
+            $sphinxResult =  $this->sphinxClient->RunQueries();
             if($sphinxResult === false){
                 // remove all double spaces
                 $clearString = str_replace('"', '', preg_replace('!\s+!', ' ',$queryString));
@@ -211,28 +207,8 @@ class SearchProduct
                             'match' => [
                                 'name' => [
                                     'query' => $queryString,
+                                    'operator' => 'and',
                                     'boost' => 10.0,
-                                ]
-                            ]
-                        ],
-                        [
-                            'match' => [
-                                'keywords' => [
-                                    'query' => $queryString,
-                                ]
-                            ]
-                        ],
-                        [
-                            'wildcard' => [
-                                'keywords' => $queryString.'*',
-                            ]
-                        ],
-                        [
-                            'fuzzy' => [
-                                'keywords' => [
-                                    'value' => $queryString,
-                                    'prefix_length' => 2,
-                                    'max_expansions' => 100
                                 ]
                             ]
                         ],
@@ -246,24 +222,29 @@ class SearchProduct
                             ]
                         ],
                         [
-                            'match' => [
-                                'keywords' => [
-                                    'query' => $queryString,
-                                    'type' => 'phrase',
-                                ]
+                            'multi_match' => [
+                                'query' => $queryString,
+                                'type' => 'phrase_prefix',
+                                'fields' => ['name^5', 'keywords']
+                            ]
+                        ],
+                        [
+                            'wildcard' => [
+                                'keywords' => $queryString.'*',
                             ]
                         ],
                         [
                             'multi_match' => [
                                 'query' => $queryString,
                                 'type' => 'best_fields',
+                                'operator' => 'and',
                                 'fields' => [
                                     'keywords', 'name^5'
                                 ],
                                 'tie_breaker' => 0.3,
                             ]
-                        ],
-                    ],
+                        ]
+                    ]
                 ]
             ],
             'sort' => [
@@ -276,7 +257,27 @@ class SearchProduct
                 ]
             ],
         ];
+
         $queryResponse = $this->elasticSearchClient->search($searchParams);
+        if ((int)$queryResponse['hits']['total'] <= 0) {
+            $searchParams['body']['query']['bool']['should'][] = [
+                'fuzzy' => [
+                    'keywords' => [
+                        'value' => $queryString,
+                        'prefix_length' => 2,
+                        'max_expansions' => 100
+                    ]
+                ]
+            ];
+            $searchParams['body']['query']['bool']['should'][] = [
+                'match' => [
+                    'keywords' => [
+                        'query' => $queryString,
+                    ]
+                ]
+            ];
+            $queryResponse = $this->elasticSearchClient->search($searchParams);
+        }
 
         return $queryResponse['hits']['hits'];
     }
@@ -631,10 +632,11 @@ class SearchProduct
      */
     public function getKeywordSuggestions($queryString)
     {
+        $isElasticSearchEnabled = $this->configLoader->getItem('search','enable_elasticsearch');
         $suggestionLimit = EsKeywords::SUGGESTION_LIMIT;
         $suggestions = [];
 
-        if (self::ELASTICSEARCH_ENABLED === false) {
+        if ($isElasticSearchEnabled === false) {
             $this->sphinxClient->SetMatchMode('SPH_MATCH_ANY');
             $this->sphinxClient->SetFieldWeights([
                 'keywords' => 50,
