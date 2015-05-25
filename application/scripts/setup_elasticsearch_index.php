@@ -43,16 +43,11 @@ class SetupElasticSearch extends ScriptBaseClass
      */
     public function execute()
     {
-        try {
-            $this->createIndex($this->indexName);
-            $this->createProductMapping();
-            $this->indexProducts();
-            $this->createMemberMapping();
-            $this->indexUsers();
-        }
-        catch (Exception $e) {
-            echo $e->getMessage();
-        }
+        $this->createIndex($this->indexName);
+        $this->createProductMapping();
+        $this->indexProducts();
+        $this->createMemberMapping();
+        $this->indexUsers();
     }
 
     /**
