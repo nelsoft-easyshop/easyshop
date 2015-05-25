@@ -12,7 +12,7 @@ use EasyShop\Entities\EsMember as EsMember;
 use EasyShop\Entities\EsProduct as EsProduct;
 use EasyShop\Script\ScriptBaseClass as ScriptBaseClass;
 
-class SetupElasticSearch
+class SetupElasticSearch extends ScriptBaseClass
 {
     private $em;
     private $elasticSearchClient;
@@ -35,7 +35,7 @@ class SetupElasticSearch
         $this->em = $entityManager;
         $this->elasticSearchClient = $elasticSearchClient;
         $this->indexName = 'easyshop';
-        // parent::__construct($emailService, $configLoader, $viewParser);
+        parent::__construct($emailService, $configLoader, $viewParser);
     }
 
     /**
@@ -47,6 +47,8 @@ class SetupElasticSearch
             $this->createIndex($this->indexName);
             $this->createProductMapping();
             $this->indexProducts();
+            $this->createMemberMapping();
+            $this->indexUsers();
         }
         catch (Exception $e) {
             echo $e->getMessage();
@@ -107,6 +109,88 @@ class SetupElasticSearch
     }
 
     /**
+     * Create es_member mapping
+     */
+    private function createMemberMapping()
+    {
+        $typeName = 'es_member';
+        $params['index'] = $this->indexName;
+        $params['type'] = $typeName;
+        $params['body'][$typeName] = [
+            'dynamic' => 'strict',
+            'properties' => [
+                'member_id' => [
+                    'type' => 'integer',
+                ],
+                'store_name' => [
+                    'type' => 'string',
+                    'null_value' => 'na',
+                    'boost' => 50,
+                ],
+                'date_created' => [
+                    'type' => 'date',
+                    'format' => 'yyyy-MM-dd HH:mm:ss'
+                ],
+                'date_modified' => [
+                    'type' => 'date',
+                    'format' => 'yyyy-MM-dd HH:mm:ss'
+                ],
+            ]
+        ];
+
+        $this->elasticSearchClient->indices()->putMapping($params);
+    }
+
+    /**
+     * Index all users in database
+     */
+    private function indexUsers()
+    {
+        $activeUsers = $this->em->getRepository('EasyShop\Entities\EsMember')
+                                ->findBy([
+                                    'isBanned' => false,
+                                    'isActive' => true
+                                ]);
+
+        $jsonUsers = [];
+        $jsonUsers['index'] = $this->indexName;
+        $jsonUsers['type'] = 'es_member';
+        foreach ($activeUsers as $user) {
+            $jsonUsers['body'][] = [
+                'index' => [
+                    '_id' => $user->getIdMember()
+                ]
+            ];
+
+            $jsonUsers['body'][] = [
+                'member_id' => $user->getIdMember(),
+                'store_name' => trim($user->getStoreName()),
+                'date_created' => $user->getDatecreated()->format('Y-m-d h:m:s'),
+                'date_modified' => $user->getLastmodifieddate()->format('Y-m-d h:m:s'),
+            ];
+        }
+
+        $this->bulkIndex($jsonUsers);
+    }
+
+    /**
+     * Bulk index data into elasticsearch index
+     * @param  array $jsonData
+     */
+    public function bulkIndex($jsonData)
+    {
+        $params['index'] = $this->indexName;
+        $params['body']['index']['refresh_interval'] = -1;
+        $this->elasticSearchClient->indices()->putSettings($params);
+
+        $this->elasticSearchClient->bulk($jsonData);
+
+        $params['index'] = $this->indexName;
+        $params['body']['index']['refresh_interval'] = '1s';
+        $this->elasticSearchClient->indices()->putSettings($params);
+    }
+
+    /**
      * Index all products in database
      */
     private function indexProducts()
@@ -136,15 +220,7 @@ class SetupElasticSearch
             ];
         }
 
-        $params['index'] = $this->indexName;
-        $params['body']['index']['refresh_interval'] = -1;
-        $this->elasticSearchClient->indices()->putSettings($params);
-
-        $this->elasticSearchClient->bulk($jsonProducts);
-
-        $params['index'] = $this->indexName;
-        $params['body']['index']['refresh_interval'] = '1s';
-        $this->elasticSearchClient->indices()->putSettings($params);
+        $this->bulkIndex($jsonProducts);
     }
 }
 
