@@ -40,8 +40,10 @@ abstract class ScriptBaseClass
     private function registerErrorHandler()
     {
         error_reporting(E_ALL);
-        set_error_handler([$this, 'errorHandler']);
-        register_shutdown_function([$this, 'fatalErrorShutdownHandler']);
+        if (strtolower(ENVIRONMENT) !== 'development') {
+            set_error_handler([$this, 'errorHandler']);
+            register_shutdown_function([$this, 'fatalErrorShutdownHandler']);
+        }
     }
 
     /**

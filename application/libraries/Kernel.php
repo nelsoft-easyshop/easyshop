@@ -306,18 +306,20 @@ class Kernel
             $configLoader = $container['config_loader'];
             $sphinxClient = $container['sphinx_client'];
             $userManager = $container['user_manager'];
+            $elasticsearchClient = $container['elasticsearch_client'];
 
             return new \EasyShop\Search\SearchProduct(
-                                                        $em,
-                                                        $collectionHelper,
-                                                        $productManager,
-                                                        $categoryManager,
-                                                        $httpRequest,
-                                                        $promoManager,
-                                                        $configLoader,
-                                                        $sphinxClient,
-                                                        $userManager
-                                                    );
+                $em,
+                $collectionHelper,
+                $productManager,
+                $categoryManager,
+                $httpRequest,
+                $promoManager,
+                $configLoader,
+                $sphinxClient,
+                $userManager,
+                $elasticsearchClient
+            );
         };
 
         // Search user
@@ -328,14 +330,16 @@ class Kernel
             $userManager = $container['user_manager'];
             $configLoader = $container['config_loader'];
             $productManager = $container['product_manager'];
+            $elasticsearchClient = $container['elasticsearch_client'];
 
             return new \EasyShop\Search\SearchUser(
-                    $em,
-                    $sphinxClient,
-                    $userManager,
-                    $configLoader,
-                    $productManager
-                );
+                $em,
+                $sphinxClient,
+                $userManager,
+                $configLoader,
+                $productManager,
+                $elasticsearchClient
+            );
         };
 
         //Promo Manager
@@ -698,6 +702,10 @@ class Kernel
        
         $container['captcha_builder'] = function ($c) {
             return new \Gregwar\Captcha\CaptchaBuilder();
+        };
+
+        $container['elasticsearch_client'] = function ($c) {
+            return new \Elasticsearch\Client();
         }; 
 
         /* Register services END */
