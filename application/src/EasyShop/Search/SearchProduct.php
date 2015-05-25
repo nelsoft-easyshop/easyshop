@@ -192,7 +192,7 @@ class SearchProduct
      * @param  integer $limit
      * @return array
      */
-    public function searchElastic($queryString, $limit = 1000)
+    public function searchElastic($queryString, $limit = 10000)
     {
         $searchParams['index'] = 'easyshop';
         $searchParams['type']  = 'es_product';
@@ -213,19 +213,10 @@ class SearchProduct
                             ]
                         ],
                         [
-                            'match' => [
-                                'name' => [
-                                    'query' => $queryString,
-                                    'type' => 'phrase',
-                                    'boost' => 15.0
-                                ]
-                            ]
-                        ],
-                        [
                             'multi_match' => [
                                 'query' => $queryString,
-                                'type' => 'phrase_prefix',
-                                'fields' => ['name^5', 'keywords']
+                                'type' => 'phrase',
+                                'fields' => ['name^15', 'keywords']
                             ]
                         ],
                         [
@@ -265,7 +256,7 @@ class SearchProduct
                     'keywords' => [
                         'value' => $queryString,
                         'prefix_length' => 2,
-                        'max_expansions' => 100
+                        'max_expansions' => 50
                     ]
                 ]
             ];
