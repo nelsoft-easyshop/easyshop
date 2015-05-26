@@ -705,8 +705,11 @@ class Kernel
         };
 
         $container['elasticsearch_client'] = function ($c) {
-            return new \Elasticsearch\Client();
-        }; 
+            $params['hosts'] = [
+                'http://localhost:9200',
+            ];
+            return new \Elasticsearch\Client($params);
+        };
 
         /* Register services END */
         $this->serviceContainer = $container;
