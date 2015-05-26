@@ -12,57 +12,10 @@
         <div class="row-fluid">
             <div class="idTabs">
                 <div class="col-sm-3 col-sidebar">
-
-                    <!--Start of OLD sidebar tab for desktop-->
-                    <!--
-                    <ul class="sidebar-dashboard" style="display: none;" >
-                        <a href="#dashboard" class="dash-me selected">
-                            <li id="dash" class="mf-li">Dashboard</li>
-                        </a>
-
-                        <a>
-                            <li id="my-store-menu-trigger" class=" dashboard-menu-trigger" data-section="my-store">My Store <i class="icon-control-down toggle-down pull-right"></i></li>
-                        </a>
-                        <div id="my-store-menu" class="dashboard-menu">
-                            <ul class="sidebar-submenu">
-                                <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
-                                <a href="#customize-category" id="customize-category-tab"><li class="f-li ms-f">Customize Category</li></a>
-                                <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
-                            </ul>
-                        </div>
-    
-                        <a href="#transactions">
-                            <li id="transaction-menu-trigger" class=" dashboard-menu-trigger" data-section="my-transaction">Transactions<i class="m icon-control-down toggle-down pull-right"></i></li>
-                        </a>
-                        <div id="transaction-menu" class="dashboard-menu">
-                            <ul class="sidebar-submenu">
-                                <a href="javascript:void(0);" class="transaction-trigger" data-type="on-going"><li class="f-li">On-going Transaction</li></a>
-                                <a href="javascript:void(0);" class="transaction-trigger" data-type="completed"><li class="m-li">Completed Transaction</li></a>
-                            </ul>
-                        </div>
-                        
-                        <a>
-                            <li id="my-account-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-account">My Account <i class="icon-control-down toggle-down pull-right"></i></li>
-                        </a>
-                        <div id="my-account-menu" class="dashboard-menu">
-                            <ul class="sidebar-submenu submenu-my-account">
-                                <a href="#personal-information" class="personal-info-trigger"><li class="f-li">Personal Information</li></a>
-                                <a href="#delivery-address" class="delivery-address-trigger"><li class="m-li">Delivery Address</li></a>
-                                <a href="#payment-account" class="payment-account-trigger" id="payment-account-tab"><li class="m-li m-li2">Payment Account</li></a>
-                                <a href="#activity-logs" class="activity-logs-trigger" ><li class="m-li m-li2">Activity Logs</li></a>
-                                <a href="#account-settings" class="settings-trigger"><li class="f-li f-a">Account Settings</li></a>
-                            </ul>
-                        </div>
-                    
-                    </ul
-                    -->
-                    <!--End of OLD sidebar tab for desktop-->
-
-
                     <!--Start of new sidebar tab for desktop-->
                     <ul class="dashboard-sidebar-container">
                         <li>
-                            <a href="#dashboard" class="selected">Dashboard</a>
+                            <a href="#dashboard" class="dashboard-tab-button selected">Dashboard</a>
                         </li>
 
                         <li src="mystore">
@@ -73,10 +26,10 @@
                             <div class="dashboard-sidebar-submenu-wrapper">
                                 <ul class="dashboard-sidebar-submenu-container">
                                     <li>
-                                        <a href="#setup">Store Setup</a>
+                                        <a class="store-setup-tab" href="#setup">Store Setup</a>
                                     </li> 
                                     <li>
-                                        <a href="#customize-category">Customize Category</a>
+                                        <a class="customize-category-tab" href="#customize-category">Customize Category</a>
                                     </li> 
                                     <li>
                                         <a href="#product-management">Product Management</a>
@@ -92,10 +45,10 @@
                             <div class="dashboard-sidebar-submenu-wrapper">
                                 <ul class="dashboard-sidebar-submenu-container">
                                     <li>
-                                        <a href="#on-going-transaction">On-Going Transaction</a>
+                                        <a class="on-going-tab" href="#on-going-transaction">On-Going Transaction</a>
                                     </li> 
                                     <li>
-                                        <a href="#completed-transaction">Completed Transaction</a>
+                                        <a class="completed-tab" href="#completed-transaction">Completed Transaction</a>
                                     </li>
                                 </ul>
                             </div>
@@ -111,13 +64,13 @@
                                         <a href="#personal-information">Personal Information</a>
                                     </li> 
                                     <li>
-                                        <a href="#delivery-address">Delivery Address</a>
+                                        <a href="#delivery-address" class="delivery-address-trigger">Delivery Address</a>
                                     </li> 
                                     <li>
-                                        <a href="#payment-account">Payment Account</a>
+                                        <a href="#payment-account" class="payment-account-trigger">Payment Account</a>
                                     </li>
                                     <li>
-                                        <a href="#activity-logs">Activity Log</a>
+                                        <a href="#activity-logs" class="activity-logs-trigger">Activity Log</a>
                                     </li>
                                     <li>
                                         <a href="#account-settings">Account Settings</a>
@@ -131,7 +84,7 @@
                     <!--Start of new sidebar tab for mobile-->
                     <ul class="mobile-dashboard-sidebar-container">
                         <li>
-                            <a href="#dashboard">Dashboard</a>
+                            <a class="dashboard-tab-button" href="#dashboard">Dashboard</a>
                         </li>
 
                         <li class="col-xs-4">
@@ -142,10 +95,10 @@
                             <div class="mobile-dashboard-sidebar-submenu-wrapper">
                                 <ul class="mobile-dashboard-sidebar-submenu-container">
                                     <li>
-                                        <a src="setup" href="#setup">Store Setup</a>
+                                        <a class="store-setup-tab" src="setup" href="#setup">Store Setup</a>
                                     </li> 
                                     <li>
-                                        <a href="#customize-category">Customize Category</a>
+                                        <a class="customize-category-tab" href="#customize-category">Customize Category</a>
                                     </li> 
                                     <li>
                                         <a href="#product-management">Product Management</a>
@@ -161,10 +114,10 @@
                             <div class="mobile-dashboard-sidebar-submenu-wrapper">
                                 <ul class="mobile-dashboard-sidebar-submenu-container">
                                     <li>
-                                        <a href="#on-going-transaction">On-Going Transaction</a>
+                                        <a class="on-going-tab" href="#on-going-transaction">On-Going Transaction</a>
                                     </li> 
                                     <li>
-                                        <a href="#completed-transaction">Completed Transaction</a>
+                                        <a class="completed-tab" href="#completed-transaction">Completed Transaction</a>
                                     </li>
                                 </ul>
                             </div>
@@ -180,13 +133,13 @@
                                         <a href="#personal-information">Personal Information</a>
                                     </li> 
                                     <li>
-                                        <a href="#delivery-address">Delivery Address</a>
+                                        <a href="#delivery-address" class="delivery-address-trigger">Delivery Address</a>
                                     </li> 
                                     <li>
-                                        <a href="#payment-account">Payment Account</a>
+                                        <a href="#payment-account" class="payment-account-trigger">Payment Account</a>
                                     </li>
                                     <li>
-                                        <a href="#activity-logs">Activity Log</a>
+                                        <a href="#activity-logs" class="activity-logs-trigger">Activity Log</a>
                                     </li>
                                     <li>
                                         <a href="#account-settings">Account Settings</a>
@@ -222,43 +175,6 @@
                     </div>
                     <?php endif; ?>
                 </div>
-                
-                <!--Start of OLD sidebar tab for mobile-->
-                <!--
-                <div class="mobile-dashboard-menu" style="display: none !important;">        
-                    <div class="row-fluid row-menu-mobile-res" >
-                        <a class="dash-mobile-trigger my-transactions-mobile">
-                            <div class="col-xs-4 col-dash-mobile" data-section="my-transactions">
-                                Transactions
-                            </div>
-                        </a>
-                        <div class="col-xs-4 col-dash-mobile my-store-menu-mobile" data-section="my-store">
-                            My Store <i class="ms fa fa-angle-down"></i>
-                        </div>
-                        <div class="col-xs-4 col-dash-mobile my-account-menu-mobile" data-section="my-account">
-                            My Account <i class="ma fa fa-angle-down"></i>
-                        </div>
-                    </div> 
-                    
-                    <div class="my-store-menu-mobile-cont mobile-menu-container" data-section="my-store">
-                        <ul class="my-store-menu-mobile-ul">
-                            <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
-                            <a class="ms-customize dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-customize">Customize Category</li></a>
-                            <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
-                        </ul>
-                    </div>
-                    <div class="my-account-menu-mobile-cont mobile-menu-container" data-section="my-account">
-                        <ul class="my-account-menu-mobile-ul">
-                            <a class="ma-info dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
-                            <a class="ma-delivery dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
-                            <a class="ma-payment dash-mobile-trigger"><li class="m-menu-payment">Payment Account</li></a>
-                            <a class="ma-activity dash-mobile-trigger"><li class="m-menu-activity">Activity Logs</li></a>
-                            <a class="ma-settings dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
-                        </ul>
-                    </div>
-                </div>
-                -->
-                <!--END of OLD sidebar tab for mobile-->
             </div>
             <div class="col-md-9 col-content">
                 <div class="div-dashboard-content">
