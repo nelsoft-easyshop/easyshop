@@ -345,18 +345,34 @@ class CheckoutService
      */
     public function getUserPaymentMethod($memberId)
     {
+        $configPromo = $this->configLoader->getItem('promo','Promo');
         $paymentMethod = $this->em->getRepository('EasyShop\Entities\EsPaymentMethodUser')
                                   ->findBy(['member'=>$memberId]);
         
         $paymentArray = [];
+        $paymentArray['payment_display'] = [];
         $paymentArray['all'] = false;
         if($paymentMethod){
             foreach ($paymentMethod as $key => $value) {
                 $paymentArray['payment_method'][] = $value->getPaymentMethod()->getIdPaymentMethod();
+                if ((int)$value->getPaymentMethod()->getIdPaymentMethod() === EsPaymentMethod::PAYMENT_PAYPAL) {
+                    $paymentArray['payment_display']['cdb'] = 'Credit or Debit Card';
+                    $paymentArray['payment_display']['paypal'] = 'Paypal';
+                }
+                elseif ((int)$value->getPaymentMethod()->getIdPaymentMethod() === EsPaymentMethod::PAYMENT_CASHONDELIVERY) {
+                    $paymentArray['payment_display']['cod'] = 'Cash on Delivery';
+                }
+                elseif ((int)$value->getPaymentMethod()->getIdPaymentMethod() === EsPaymentMethod::PAYMENT_DRAGONPAY) {
+                    $paymentArray['payment_display']['dragonpay'] = 'Dragon Pay';
+                }
+                elseif ((int)$value->getPaymentMethod()->getIdPaymentMethod() === EsPaymentMethod::PAYMENT_PESOPAYCC) {
+                    $paymentArray['payment_display']['pesopaycdb'] = 'Peso Pay';
+                }
             }
         }
         else{
             $paymentArray['all'] = true;
+            $paymentArray['payment_display'] = $configPromo[0]['payment_method'];
         }
 
         return $paymentArray;
