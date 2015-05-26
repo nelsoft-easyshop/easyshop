@@ -1,5 +1,4 @@
 (function ($) {
-    
     $( "#activateProducts, #deleteProducts, #disableProducts" ).click(function() {        
         var btn = $(this);
         var submitBtn = btn.closest("form");
@@ -103,63 +102,8 @@
 
     });
 
-   
-
-    $( ".dash-me" ).click(function() {
-        $( ".active-me" ).trigger( "click" );
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".dashboard-home-mobile" ).addClass( "selectedM" );
-    });
-    
-    $( ".id-transactions-trigger" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ms-trans" ).addClass( "selectedM" );
-        
-    });
-    
-    $( "#store-setup-tab" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ms-setup" ).addClass( "selectedM" );
-    });
-
-    $( "#customize-category-tab" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ms-customize" ).addClass( "selectedM" );
-    });
-
-    $( "#product-management-tab" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ms-prod" ).addClass( "selectedM" );
-    });
-    
-    $( ".personal-info-trigger" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ma-info" ).addClass( "selectedM" );
-    });
-    
     var isDeliveryAddressLoaded = false;
     $( ".delivery-address-trigger" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ma-delivery" ).addClass( "selectedM" );
         $('#delivery-address-error').hide();
         $('#delivery-address-success').hide();
         if(!isDeliveryAddressLoaded) {
@@ -247,114 +191,40 @@
         }
         isDeliveryAddressLoaded = true;
     });
-    
 
     $(".easy-point-content").getNiceScroll().hide();
-    
-    $( ".payment-account-trigger" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ma-payment" ).addClass( "selectedM" );
-    });
-
-    $( ".activity-logs-trigger" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ma-activity" ).addClass( "selectedM" );
-
-    });
-    
-    $( ".settings-trigger" ).click(function() {
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".dashboard-home-mobile" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $( ".ma-settings" ).addClass( "selectedM" );
-    });
-    
-    $( ".dashboard-home-mobile" ).click(function() {
-        $( ".dash-me" ).trigger( "click" );
-        $( ".dash-mobile-trigger" ).removeClass( "selectedM" );
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".dashboard-home-mobile" ).addClass( "selectedM" );
-    });
-    
-    $( "#dash" ).click(function() {
-        $('.dashboard-menu').slideUp();
-        $('.dashboard-menu-trigger i').removeClass('icon-control-up')
-                                      .addClass('icon-control-down');                        
-    });
-    
-    $(".dashboard-menu-trigger").click(function(){
-        var $selectedmenutrigger = $(this);
-        var $selectedmenu = $selectedmenutrigger.closest('a').next('.dashboard-menu');
-        var section = $selectedmenutrigger.data('section');
-        var $easypointcontainer = $(".easy-point-content");
-        $easypointcontainer.getNiceScroll()
-                           .hide();
-        $('.dashboard-menu-trigger[data-section!="'+section+'"]').each(function(){
-            $(this).find('i')
-                   .removeClass('icon-control-up')
-                   .addClass('icon-control-down');
-            $(this).closest('a')
-                   .next('.dashboard-menu')
-                   .slideUp();   
+    $(document).ready(function() {
+        $('.on-going-transaction-header').on('click', function(){
+            showOnGoingTab();
         });
-        $selectedmenu.slideToggle( "slow", function() {
-            $easypointcontainer.getNiceScroll()
-                               .show()
-                               .resize();
-            var $icon = $selectedmenutrigger.find('i'); 
-            if($icon.hasClass('icon-control-down')){
-                $icon.removeClass('icon-control-down')
-                     .addClass('icon-control-up');
-            }
-            else if($icon.hasClass('icon-control-up')){
-                $icon.removeClass('icon-control-up')
-                     .addClass('icon-control-down');
-            }
-        });
-    });
 
-    $('.transaction-trigger').on('click', function(){
-        var $this = $(this);
-        var type = $this.data('type');
-        if(type === 'on-going'){
-            $('.on-going-transaction-header').click();
+        $('.completed-transaction-header').on('click', function(){
+            showCompletedTab();
+        });
+
+        $('.on-going-tab').on('click', function(){
+            showOnGoingTab();
+        });
+
+        $('.completed-tab').on('click', function(){
+            showCompletedTab();
+        });
+
+        function showCompletedTab()
+        {
+            $('.completed-transaction-header, .completed-tab').addClass('selected');
+            $('.on-going-transaction-header, .on-going-tab').removeClass('selected');
+            $('#on-going-transaction').hide();
+            $('#completed-transaction').show();
         }
-        else if(type === 'completed'){
-            $('.completed-transaction-header').click();
-        }
-        $('#transaction-menu-trigger').closest('a')
-                                      .removeClass('selected');
-    });
-    
-    $('.on-going-transaction-header').on('click', function(){
-        $('.transaction-trigger[data-type="completed"]').removeClass('selected'); 
-        $('.transaction-trigger[data-type="on-going"]').addClass('selected');  
-    });
 
-    $('.completed-transaction-header').on('click', function(){
-        $('.transaction-trigger[data-type="on-going"]').removeClass('selected'); 
-        $('.transaction-trigger[data-type="completed"]').addClass('selected');  
-    });
-     
-    $( "#info-item-1" ).click(function() {
-        $( "#info-attributes-1" ).slideToggle( "slow", function() {
-            var i_icon = $("i.info-item-icon-1").attr("class");
-             if(i_icon == "info-item-icon-1 fa fa-plus-circle"){
-                $('i.info-item-icon-1').removeClass("info-item-icon-1 fa fa-plus-circle").addClass("info-item-icon-1 fa fa-minus-circle");
-                $(".text-info-icon-1").text("less info");
-            }
-            else if(i_icon == "info-item-icon-1 fa fa-minus-circle"){
-                $('i.info-item-icon-1').removeClass("info-item-icon-1 fa fa-minus-circle").addClass("info-item-icon-1 fa fa-plus-circle");
-                $(".text-info-icon-1").text("more info");
-            }
-        });
+        function showOnGoingTab()
+        {
+            $('.on-going-transaction-header, .on-going-tab').addClass('selected');
+            $('.completed-transaction-header, .completed-tab').removeClass('selected');
+            $('#on-going-transaction').show();
+            $('#completed-transaction').hide();
+        }
     });
 
     $(document.body).on('click',".more-info-attribute",function () {
@@ -372,10 +242,6 @@
                 $spanElement.text("more info");
             }
         });
-    });
-
-    $( "#dash" ).click(function() { 
-        $("#active-items").css("display", "block");
     });
 
     $('.transaction-title-bought').click(function() {          
@@ -1100,8 +966,6 @@
         $( "#btn-edit-store-cat-new" ).trigger( "click" );
     });
 
-
-    
     $('.feedback-from-seller').click(function() {
         $(this).toggleClass("active-bar",0);
         $('.feedback-from-seller-container').slideToggle();
@@ -1145,135 +1009,7 @@
         $('.feedback-from-buyer').removeClass("active-bar");
         $('.feedback-for-seller').removeClass("active-bar");
     });
-    
-    
-    //FOR MOBILE
-    $('.col-dash-mobile').click(function() {
 
-        var $selectedMobileMenuTriggger = $(this);
-        var section = $selectedMobileMenuTriggger.data('section');
-        
-        if(section === 'my-transactions'){
-            $('#transaction-menu-trigger').trigger("click");
-            $('.dash-mobile-trigger ').removeClass("selectedM");
-            $('.col-dash-mobile').removeClass( "selectedCol" );
-            $selectedMobileMenuTriggger.closest('a.dash-mobile-trigger')
-                                       .addClass("selectedM"); 
-        }
-        else{
-            var $selectedMobileMenu = $('.mobile-menu-container[data-section="'+section+'"]');
-            $('.col-dash-mobile[data-section!="'+section+'"] i').each(function(){
-                $(this).removeClass("fa-angle-up")
-                    .addClass("fa-angle-down");
-            });
-            $selectedMobileMenu.slideToggle( "slow");
-            var $icon = $selectedMobileMenuTriggger.find('i'); 
-            if($icon.hasClass('fa-angle-down')){
-                $icon.removeClass('fa-angle-down')
-                        .addClass('fa-angle-up');
-            }
-            else if($icon.hasClass('fa-angle-up')){
-                $icon.removeClass('fa-angle-up')
-                    .addClass('fa-angle-down');
-            }
-        }
-
-    });
-  
-    $('.dash-mobile-trigger').click(function() {
-        $('.mobile-menu-container').slideUp("fast");
-        
-        $('.col-dash-mobile i').each(function(){
-            if($(this).hasClass('fa-angle-up')){
-                $(this).removeClass('fa-angle-up')
-                       .addClass('fa-angle-down');
-            }
-        });
-    });
-    
-   
-    $('.dashboard-home-mobile').click(function() {
-        $('.dash-me').trigger("click");
-        $(".dash-me").addClass("selectedM");
-        $(this).addClass("selectedM");
-        $('.ms-trans').removeClass("selectedM");
-        $('.my-store-menu-mobile-cont').slideUp("fast");
-        $('.my-account-menu-mobile-cont').slideUp("fast");
-    });
-
-    
-    $('.ms-setup').click(function() {
-        $('#store-setup-tab').trigger("click");
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dashboard-home-mobile').removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $(this).addClass("selectedM");
-    });
-
-    $('.ms-customize').click(function() {
-        $('#customize-category-tab').trigger("click");
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dashboard-home-mobile').removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $(this).addClass("selectedM");
-    });
-
-    $('.ms-prod').click(function() {
-        $('#product-management-tab').trigger("click");
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dashboard-home-mobile').removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-store-menu-mobile" ).addClass( "selectedCol" );
-        $(this).addClass("selectedM");
-    });
-    
-    $('.ma-info').click(function() {
-        $('.personal-info-trigger').trigger("click");
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dashboard-home-mobile').removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $(".ma-info").addClass("selectedM");
-    });
-    
-    $('.ma-delivery').click(function() {
-        $('.delivery-address-trigger').trigger("click");
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dashboard-home-mobile').removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $(".ma-delivery").addClass("selectedM");
-    });
-    
-    $('.ma-payment').click(function() {
-        $('.payment-account-trigger').trigger("click");
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dashboard-home-mobile').removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $(".ma-payment").addClass("selectedM");
-    });
-    
-    $('.ma-activity').click(function() {
-        $('.activity-logs-trigger').trigger("click");
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dashboard-home-mobile').removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $(".ma-activity").addClass("selectedM");
-    });
-
-    $('.ma-settings').click(function() {
-        $('.settings-trigger').trigger("click");
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dashboard-home-mobile').removeClass("selectedM");
-        $( ".col-dash-mobile" ).removeClass( "selectedCol" );
-        $( ".my-account-menu-mobile" ).addClass( "selectedCol" );
-        $(".ma-settings").addClass("selectedM");
-    });
-    
     $(document).on("click", "#sc-selection-trigger",function () {
         $('.hide-selection-cont').slideToggle("fast");
     });
@@ -1978,11 +1714,7 @@
     });
 
     var isStoreSetupInitialized = false;
-    $('#store-setup-tab').on('click', function(){
-        $('.dash-mobile-trigger').removeClass("selectedM");
-        $('.dash-me').removeClass("selectedM");
-        $('.ms-setup').addClass("selectedM");
-        $(".ms-trans").removeClass("selectedM");
+    $('.store-setup-tab').on('click', function(){
         if(!isStoreSetupInitialized){
             $.ajax({
                 type: "get",
@@ -1991,10 +1723,8 @@
                     var jsonResponse = $.parseJSON(data);
                     var unorderedList = $("#store-color-dropdown");
                     var colorList = [];
-           
                     var currentColorId = $('#current-store-color-id').val();
                     var isCurrentColorSet = false;
-
                     $.each(jsonResponse.colors, function(index, color) {
                         var icon = '';
                         var currentColorClass = '';
@@ -2021,11 +1751,9 @@
             });
         }
     });
-    
-    
-    
+
     var isCategorySetupInitialized = false;
-    $('#customize-category-tab').on('click', function(){
+    $('.customize-category-tab').on('click', function(){
         if(!isCategorySetupInitialized){
             var csrftoken = $("meta[name='csrf-token']").attr('content');
             $.ajax({
@@ -2042,13 +1770,11 @@
             });
         }
     });
-   
-    
+
     $('#category-order-save').on('click', function(){
         var errorContainer = $('#store-category-error');
         errorContainer.hide();
         var csrftoken = $("meta[name='csrf-token']").attr('content');
-
         var categoryOrderData = [];
         var treedata = $('#edit-category-tree').jstree(true).get_json('#');
         var topLevelOrder = 0;
@@ -2079,8 +1805,7 @@
             },
         });
     });
-    
-    
+
     function createCategoryList(categoryData)
     {       
         if(categoryData.length === 0){
@@ -2269,7 +1994,7 @@
     $(".trans-btn-con1").parents(".trans-right-panel").siblings(".trans-left-panel").addClass("trans-btn-con1-1");
 
     var isPaymentAccountInitialized = false;
-    $('#payment-account-tab').on('click', function(){
+    $('.payment-account-trigger').on('click', function(){
          if(!isPaymentAccountInitialized){
             $.ajax({
                 type: "get",
@@ -2591,7 +2316,7 @@
         }
         else if(tab === "settings"){
             $('#my-account-menu-trigger').trigger('click');
-             setTimeout(function() {
+            setTimeout(function() {
                  $('.settings-trigger').trigger('click');
             }, 500);
         }
@@ -3171,7 +2896,6 @@
         var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
         if(browserWidth <= mobileViewPortWidthLimit){
             $(".my-category-modal").css("height","auto");
-            //$(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
         }
         else{
             $(".my-category-modal").css("height","auto");
@@ -3207,7 +2931,6 @@
         }  
     }
 
-    
     $(document).ready(function(){
         
         getUserPoints();
@@ -3219,8 +2942,7 @@
             }
         });
     });
-    
-    
+
     var userPointPage = 1;
     var isUserPointComplete = false;
     var isUserPointQueryOnGoing = false;
@@ -3307,8 +3029,6 @@
         getActivityLog(1, "", "", $defaultLogSort);
     });
 
-  
-
     $("#activityLogTab").on("click", ".filter-logs", function() {
         $logDateFrom = $("#activityLogTab").find("#log-start-date").val();
         $logDateTo = $("#activityLogTab").find("#log-end-date").val(); 
@@ -3362,7 +3082,6 @@
         $(".simplemodal-container").css("top", halfOfVerticalSpace+"px");
     }
 
-
     $(window).on("load resize", function(){
         var metaInfoTdWidth = $(".td-meta-info").width();
         $(".item-list-name").css("overflow","hidden").css("text-overflow","ellipsis").css("white-space", "nowrap").css("max-width", metaInfoTdWidth+"px");
@@ -3395,7 +3114,6 @@
         var thisMobileSubmenu = $(this).find(".mobile-dashboard-sidebar-submenu-wrapper");
         $(".mobile-dashboard-sidebar-submenu-wrapper").not(thisMobileSubmenu).slideUp("fast");
          thisMobileSubmenu.slideToggle("fast");
-        //var thisMenuIconControl = $(this).find(".sidebar-menu-icon");
     });
 
     $(".mobile-dashboard-sidebar-container > li > a").click(function(){
@@ -3407,8 +3125,7 @@
         var thisMobileLinkDashboardTab = $(this).attr("href");
         $(".mobile-dashboard-sidebar-submenu-wrapper").slideUp("fast");
         $(".mobile-dashboard-sidebar-submenu-container > li a").not($(this)).removeClass("selected-mobile");
-        //$(".dashboard-sidebar-submenu-container > li > a").removeClass("selected");
-         $(".dashboard-sidebar-submenu-container > li > a").removeClass("selected-desktop");
+        $(".dashboard-sidebar-submenu-container > li > a").removeClass("selected-desktop");
         $(".dashboard-sidebar-submenu-container > li > a[href='"+thisMobileLinkDashboardTab+"']").addClass("selected-desktop");
         $(this).addClass("selected-mobile");
     });
