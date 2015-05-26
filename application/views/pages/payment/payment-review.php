@@ -279,7 +279,7 @@
                                         <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL, $checkoutError['paymentTypeError'])):?>
                                             <br/>
                                             <br/> 
-                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <b>NOTE:</b> one or more of your chosen items are not available for Paypal.
                                             <table  class="transaction-summary-table transaction-checkout-order" width="100%">
                                                 <thead>
                                                     <tr>
@@ -333,7 +333,7 @@
                                         <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL, $checkoutError['paymentTypeError'])):?>
                                             <br/>
                                             <br/> 
-                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <b>NOTE:</b> one or more of your chosen items are not available for Paypal.
                                             <table  class="transaction-summary-table transaction-checkout-order" width="100%">
                                                 <thead>
                                                     <tr>
@@ -387,7 +387,7 @@
                                         <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY, $checkoutError['paymentTypeError'])):?>
                                             <br/>
                                             <br/> 
-                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <b>NOTE:</b> one or more of your chosen items are not available for Dragonpay.
                                             <table  class="transaction-summary-table transaction-checkout-order" width="100%">
                                                 <thead>
                                                     <tr>
@@ -441,7 +441,7 @@
                                         <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC, $checkoutError['paymentTypeError'])):?>
                                             <br/>
                                             <br/> 
-                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <b>NOTE:</b> one or more of your chosen items are not available for PesoPay.
                                             <table  class="transaction-summary-table transaction-checkout-order" width="100%">
                                                 <thead>
                                                     <tr>
@@ -494,7 +494,7 @@
                                         <?php if(in_array(EasyShop\Entities\EsPaymentMethod::PAYMENT_CASHONDELIVERY, $checkoutError['paymentTypeError'])):?>
                                             <br/>
                                             <br/> 
-                                            <b>NOTE:</b> one or more of your chosen items are not available for cash on delivery.
+                                            <b>NOTE:</b> one or more of your chosen items are not available for Cash On Delivery.
                                             <table  class="transaction-summary-table transaction-checkout-order" width="100%">
                                                 <thead>
                                                     <tr>
