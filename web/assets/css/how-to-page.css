@@ -1372,6 +1372,17 @@ blockquote { font-size: 13px; line-height: 16px; color: #707070; margin: 0; bord
 /* Newsletter */
 .newsletter { text-align: center; }
 .newsletter-form input { display: block; margin: 0 auto 10px; font-size: 16px; text-align: center; background-color: #e6e6e6; color: #676767; height: 38px; box-shadow: none; border:none;}
+
+.newsletter-form input[name="email"] {
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.newsletter-form input[type="submit"] {
+    color: #fff;
+    display: inline-block;
+}
+
 .newsletter-info-blank, .newsletter-info, .newsletter-validate { display: none;}
 
 /* Footer */
