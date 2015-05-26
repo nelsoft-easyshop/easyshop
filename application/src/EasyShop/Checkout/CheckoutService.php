@@ -356,17 +356,17 @@ class CheckoutService
             foreach ($paymentMethod as $key => $value) {
                 $paymentArray['payment_method'][] = $value->getPaymentMethod()->getIdPaymentMethod();
                 if ((int)$value->getPaymentMethod()->getIdPaymentMethod() === EsPaymentMethod::PAYMENT_PAYPAL) {
-                    $paymentArray['payment_display'] = ['cdb' => 'Credit or Debit Card'];
-                    $paymentArray['payment_display'] = ['paypal' => 'Paypal'];
+                    $paymentArray['payment_display']['cdb'] = 'Credit or Debit Card';
+                    $paymentArray['payment_display']['paypal'] = 'Paypal';
                 }
                 elseif ((int)$value->getPaymentMethod()->getIdPaymentMethod() === EsPaymentMethod::PAYMENT_CASHONDELIVERY) {
-                    $paymentArray['payment_display'] = ['cod' => 'Cash on Delivery'];
+                    $paymentArray['payment_display']['cod'] = 'Cash on Delivery';
                 }
                 elseif ((int)$value->getPaymentMethod()->getIdPaymentMethod() === EsPaymentMethod::PAYMENT_DRAGONPAY) {
-                    $paymentArray['payment_display'] = ['dragonpay' => 'Dragon Pay'];
+                    $paymentArray['payment_display']['dragonpay'] = 'Dragon Pay';
                 }
                 elseif ((int)$value->getPaymentMethod()->getIdPaymentMethod() === EsPaymentMethod::PAYMENT_PESOPAYCC) {
-                    $paymentArray['payment_display'] = ['pesopaycdb' => 'Peso Pay'];
+                    $paymentArray['payment_display']['pesopaycdb'] = 'Peso Pay';
                 }
             }
         }
