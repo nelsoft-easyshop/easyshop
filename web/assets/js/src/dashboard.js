@@ -1795,6 +1795,7 @@
                 });
             }
         });
+        getMarginTop();
         feedbackModal.parents("#simplemodal-container").addClass("feedback-container");
 
         return false;
@@ -3176,9 +3177,6 @@
 
         getMarginTop();
 
-        $(window).on("resize",function(){
-            getMarginTop();
-        });
 
         var $allProductList = div.find('.all-product-list');              
         var $categoryProductList = div.find('.category-product-list');
@@ -3383,17 +3381,6 @@
             }
         });
     }
-
-    function getMarginTop()
-    {
-        var windowHeight = $(window).outerHeight(); //Height of window
-        var modalContentHeight = $("#simplemodal-data").outerHeight();
-        var remainingVerticalSpace = windowHeight - modalContentHeight;
-        var halfOfVerticalSpace = remainingVerticalSpace/2;
-
-        $(".simplemodal-container").css("top", halfOfVerticalSpace+"px");
-    }
-
 
     $(window).on("load resize", function(){
         var metaInfoTdWidth = $(".td-meta-info").width();
