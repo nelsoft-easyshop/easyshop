@@ -357,6 +357,7 @@ module.exports = function (grunt) {
                              'web/assets/js/src/vendor/bower_components/jstree.js',
                              'web/assets/js/src/vendor/bower_components/pwstrength.bootstrap.js',
                              'web/assets/js/src/vendor/bower_components/jquery.nicescroll.js',
+                             'web/assets/js/src/custom-simplemodal.js',
                              'web/assets/js/src/dashboard.js',
                              'web/assets/js/src/dashboard-myaccount.js',
                              'web/assets/js/src/dashboard-express-edit.js'],

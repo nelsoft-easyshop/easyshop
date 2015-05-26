@@ -48,11 +48,11 @@
                 <div class="search-item-price with-discount">
                     <?php if($percentage > 0):?>
                     <span class="original-price">
-                        <s>P<?=$originalPrice; ?></s>
+                        <s>&#8369; <?=$originalPrice; ?></s>
                     </span>
                     <?php endif; ?>
                     <span class="new-price">
-                        P<?=$productPrice; ?>
+                        &#8369; <?=$productPrice; ?>
                     </span>
                 </div>
             </div>
@@ -124,12 +124,12 @@
                                             <div class="col-xs-6 search-item-price">
                                                 <?php if($percentage > 0):?>
                                                 <span class="original-price">
-                                                    <s>P<?=$originalPrice; ?></s>
+                                                    <s>&#8369; <?=$originalPrice; ?></s>
                                                 </span>
                                                 <?php endif; ?> 
                                                  
                                                 <span class="new-price with-discount-list">
-                                                    P<?=$productPrice; ?>
+                                                    &#8369; <?=$productPrice; ?>
                                                 </span>
                                             </div>
                                             <div class="col-xs-6 search-list-cart-button">
@@ -153,13 +153,13 @@
                                 <?php if($percentage > 0):?>
                                 
                                     <span class="original-price" style="<?php echo $priceFontStyle; ?>">
-                                        <s>P<?=$originalPrice; ?></s>
+                                        <s>&#8369; <?=$originalPrice; ?></s>
                                     </span>
                               
                                 <?php endif; ?> 
                                 
                                 <span class="new-price with-discount-list" style="<?php echo $priceFontStyle; ?>">
-                                    P <?=$productPrice?>
+                                    &#8369; <?=$productPrice?>
                                  </span>
                                   
                                  

@@ -32,6 +32,7 @@
 .link-blue:hover{
     color: #ff893a;
     border-bottom: dotted #ff893a 1px;
+    text-decoration: none;
 }
 
 .transaction-container{
@@ -554,6 +555,7 @@ ol.how-to-list li{
 .payment-method-desc{
     color: #8f8f8f;
     padding-bottom: 7px;
+    font-size: 12px;
 }
 
 .payment-method-container input[type="radio"]{
@@ -753,6 +755,7 @@ ol.how-to-list li{
 
     .breadcrumb-left-wing,
     .breadcrumb-right-wing,
+    .active-right-wing-cart-1,
     .active-left-wing-cart-1,
     .active-left-wing-cart-2{
         top: 14px;

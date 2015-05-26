@@ -575,7 +575,7 @@ textarea {
 .edit-profile-photo span {
     display: block;
     font-size: 12px;
-    font-weight: 900;
+    font-weight: bold;
     margin-top: 5px;
 }
 
@@ -1001,7 +1001,7 @@ textarea {
 
 .header-cart-item {
     color: #4271cb;
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .header-cart-icon-con {
@@ -2308,7 +2308,7 @@ td.td-view.p-view2.color-default{
         float: right !important;
         margin-top: 4px !important;
         font-size: 10px !important;
-        font-weight: 900 !important;
+        font-weight: bold !important;
     }
     
     .span-discount-pin-list{
