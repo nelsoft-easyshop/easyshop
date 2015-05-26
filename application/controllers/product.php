@@ -262,7 +262,7 @@ class product extends MY_Controller
                         ];
                         $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, $bannedData, true);
                     }
-                    $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method'];
+                    $paymentMethod = array_intersect($paymentMethod, $this->config->item('Promo')[$product->getPromoType()]['payment_method']);
                     $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
                     if( $product->getIsDelete() ) {
                         show_404();
