@@ -193,6 +193,7 @@ class product extends MY_Controller
         $stringUtility = $this->serviceContainer['string_utility'];
         $categoryManager = $this->serviceContainer['category_manager']; 
         $urlUtility = $this->serviceContainer['url_utility'];
+        $checkoutService = $this->serviceContainer['checkout_service'];
 
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
 
@@ -248,9 +249,9 @@ class product extends MY_Controller
                 $noMoreSelection = $productCombinationAvailable['noMoreSelection'];
                 $needToSelect = $productCombinationAvailable['needToSelect'];
                 $bannerView = "";
-                $paymentMethod = $this->config->item('Promo')[0]['payment_method'];
                 $isBuyButtonViewable = true;
 
+                $paymentMethod = $checkoutService->getUserPaymentMethod($member->getIdMember())['payment_display'];
                 if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
                     $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
                     $externalLink = $this->em->getRepository('EasyShop\Entities\EsProductExternalLink')
@@ -262,7 +263,7 @@ class product extends MY_Controller
                         ];
                         $bannerView = $this->load->view('templates/promo_banners/'.$bannerfile, $bannedData, true);
                     }
-                    $paymentMethod = $this->config->item('Promo')[$product->getPromoType()]['payment_method'];
+                    $paymentMethod = array_intersect($paymentMethod, $this->config->item('Promo')[$product->getPromoType()]['payment_method']);
                     $isBuyButtonViewable = $this->config->item('Promo')[$product->getPromoType()]['viewable_button_product_page'];
                     if( $product->getIsDelete() ) {
                         show_404();
