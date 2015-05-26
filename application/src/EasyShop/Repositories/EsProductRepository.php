@@ -1501,7 +1501,7 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get all active product modified within the day
-     * @return array
+     * @return EasyShop\Entities\EsProduct[]
      */
     public function getLatestModifiedActiveProducts()
     {
@@ -1523,7 +1523,7 @@ class EsProductRepository extends EntityRepository
 
     /**
      * Get all non active product modified within the day
-     * @return array
+     * @return EasyShop\Entities\EsProduct[]
      */
     public function getLatestModifiedDeletedProducts()
     {

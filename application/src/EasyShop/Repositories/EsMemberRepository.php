@@ -441,7 +441,7 @@ class EsMemberRepository extends EntityRepository
 
     /**
      * Get all active users modified within the day
-     * @return array
+     * @return EasyShop\Entities\EsMember[]
      */
     public function getLatestModifiedActiveUsers()
     {
@@ -464,7 +464,7 @@ class EsMemberRepository extends EntityRepository
 
     /**
      * Get all non active users modified within the day
-     * @return array
+     * @return EasyShop\Entities\EsMember[]
      */
     public function getLatestModifiedNonActiveUsers()
     {
