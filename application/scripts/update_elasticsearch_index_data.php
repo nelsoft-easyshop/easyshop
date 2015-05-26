@@ -85,14 +85,14 @@ class UpdateElasticSearchIndexes extends ScriptBaseClass
      */
     private function removeUserFromIndex()
     {
-        $activeUsers = $this->em->getRepository('EasyShop\Entities\EsMember')
+        $nonActiveUsers = $this->em->getRepository('EasyShop\Entities\EsMember')
                                 ->getLatestModifiedNonActiveUsers();
 
-        if ($activeUsers) {
+        if ($nonActiveUsers) {
             $jsonUsers = [];
             $jsonUsers['index'] = $this->indexName;
             $jsonUsers['type'] = 'es_member';
-            foreach ($activeUsers as $user) {
+            foreach ($nonActiveUsers as $user) {
                 $jsonUsers['body'][] = [
                     'delete' => [
                         '_id' => $user->getIdMember()
