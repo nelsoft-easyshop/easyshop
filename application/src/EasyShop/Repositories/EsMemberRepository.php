@@ -438,4 +438,54 @@ class EsMemberRepository extends EntityRepository
 
         return $results;
     }
+
+    /**
+     * Get all active users modified within the day
+     * @return array
+     */
+    public function getLatestModifiedActiveUsers()
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryResult = $queryBuilder->select('m')
+                                    ->from('EasyShop\Entities\EsMember', 'm')
+                                    ->andWhere('m.isBanned = :notBanned')
+                                    ->andWhere('m.isActive = :active')
+                                    ->andWhere('m.lastmodifieddate BETWEEN :dateFrom AND :dateTo')
+                                    ->setParameter('notBanned', EsMember::NOT_BANNED)
+                                    ->setParameter('active', EsMember::DEFAULT_ACTIVE)
+                                    ->setParameter('dateFrom', date('Y-m-d 00:00:00', strtotime('now')))
+                                    ->setParameter('dateTo', date('Y-m-d 23:59:59', strtotime('now')))
+                                    ->getQuery();
+        $resultSet = $queryResult->getResult();
+
+        return $resultSet;
+    }
+
+    /**
+     * Get all non active users modified within the day
+     * @return array
+     */
+    public function getLatestModifiedNonActiveUsers()
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryResult = $queryBuilder->select('m')
+                                    ->from('EasyShop\Entities\EsMember', 'm')
+                                    ->andWhere(
+                                        $queryBuilder->expr()->orX(
+                                            $queryBuilder->expr()->neq('m.isBanned',':notBanned'),
+                                            $queryBuilder->expr()->neq('m.isActive',':active')
+                                        )
+                                    )
+                                    ->andWhere('m.lastmodifieddate BETWEEN :dateFrom AND :dateTo')
+                                    ->setParameter('notBanned', EsMember::NOT_BANNED)
+                                    ->setParameter('active', EsMember::DEFAULT_ACTIVE)
+                                    ->setParameter('dateFrom', date('Y-m-d 00:00:00', strtotime('now')))
+                                    ->setParameter('dateTo', date('Y-m-d 23:59:59', strtotime('now')))
+                                    ->getQuery();
+        $resultSet = $queryResult->getResult();
+
+        return $resultSet;
+    }
 }

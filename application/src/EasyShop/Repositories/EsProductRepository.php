@@ -1498,8 +1498,52 @@ class EsProductRepository extends EntityRepository
 
         return 0;
     }
-    
+
+    /**
+     * Get all active product modified within the day
+     * @return array
+     */
+    public function getLatestModifiedActiveProducts()
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryResult = $queryBuilder->select('p')
+                                    ->from('EasyShop\Entities\EsProduct', 'p')
+                                    ->andWhere('p.isDelete = :active')
+                                    ->andWhere('p.isDraft = :active')
+                                    ->andWhere('p.lastmodifieddate BETWEEN :dateFrom AND :dateTo')
+                                    ->setParameter('active', \EasyShop\Entities\EsProduct::ACTIVE)
+                                    ->setParameter('dateFrom', date('Y-m-d 00:00:00', strtotime('now')))
+                                    ->setParameter('dateTo', date('Y-m-d 23:59:59', strtotime('now')))
+                                    ->getQuery();
+        $resultSet = $queryResult->getResult();
+
+        return $resultSet;
+    }
+
+    /**
+     * Get all non active product modified within the day
+     * @return array
+     */
+    public function getLatestModifiedDeletedProducts()
+    {
+        $this->em =  $this->_em;
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryResult = $queryBuilder->select('p')
+                                    ->from('EasyShop\Entities\EsProduct', 'p')
+                                    ->andWhere(
+                                        $queryBuilder->expr()->orX(
+                                            $queryBuilder->expr()->neq('p.isDelete',':active'),
+                                            $queryBuilder->expr()->neq('p.isDraft',':active')
+                                        )
+                                    )
+                                    ->andWhere('p.lastmodifieddate BETWEEN :dateFrom AND :dateTo')
+                                    ->setParameter('active', \EasyShop\Entities\EsProduct::ACTIVE)
+                                    ->setParameter('dateFrom', date('Y-m-d 00:00:00', strtotime('now')))
+                                    ->setParameter('dateTo', date('Y-m-d 23:59:59', strtotime('now')))
+                                    ->getQuery();
+        $resultSet = $queryResult->getResult();
+
+        return $resultSet;
+    }
 }
-
-
-
