@@ -157,7 +157,7 @@ blockquote:before{
 
 .content-404 .col-md-6 h1 {
     font-size: 3.8em;
-    font-weight: 900;
+    font-weight: bold;
     margin-top: 40px;
     text-transform: uppercase;
 }
@@ -193,7 +193,7 @@ blockquote:before{
 }
 
 .link-404 a strong {
-    font-weight: 900;
+    font-weight: bold;
 }
 
 .link-404 a img {
@@ -761,7 +761,7 @@ blockquote:before{
 }
 
 .item-name, .item-price, .old-price{
-    font-weight: 900 !important;
+    font-weight: bold !important;
 }
 
 .item-action {
@@ -957,7 +957,7 @@ width: 100% !important;
     background-color: #fff;
     color: #565656;
     padding: 8px 7px;
-    font-weight: 900;
+    font-weight: bold;
     border-radius: 4px;
     font-size: 13px;
 }
@@ -2302,7 +2302,7 @@ h3 > b{
     }
 
     .mega-menu h2 {
-        font-weight: 900;
+        font-weight: bold;
         padding: 19px 0;
         text-transform: uppercase;
     }
@@ -2559,7 +2559,7 @@ h3 > b{
     }
 
     .sticky-search-wrapper {
-        width: 82.5%;
+        width: 81.5%;
     }
 
     .sticky-search-wrapper input[type="text"] {

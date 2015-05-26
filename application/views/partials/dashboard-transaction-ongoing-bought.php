@@ -213,6 +213,7 @@
                                     <input type="hidden" name="for_memberid" value="<?=$boughtTransactionDetails['sellerId']?>">
                                     <div class="feedback-content">
                                         <h1>LEAVE A FEEDBACK</h1>
+                                        <span class="raty-error"></span>
                                         <div class="star-rating-wrapper">
                                             <span class="star-label"><?=$this->lang->line('rating')[0].':'?></span>
                                             <div class="feedb-star rating1"></div>
@@ -225,8 +226,7 @@
                                             <span class="star-label"><?=$this->lang->line('rating')[2].':'?></span>
                                             <div class="feedb-star rating3"></div>
                                         </div>
-                                        <span class="raty-error"></span>
-                                        <div>
+                                        <div class="feedback-field-container">
                                             <textarea rows="4" cols="50" maxlength="1024" name="feedback-field" placeholder="Write your message..."></textarea>
                                             <span class="red ci_form_validation_error"><?php echo form_error('feedback-field'); ?></span>
                                         </div>

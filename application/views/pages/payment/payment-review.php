@@ -164,10 +164,10 @@
                     <table class="transaction-summary-table transaction-checkout-order" width="100%">
                         <thead>
                             <tr>
-                                <th width="40%">Product</th>
+                                <th width="30%">Product</th>
                                 <th width="20%">Quantity</th>
                                 <th width="20%">Shipping Fee</th>
-                                <th width="20%">Price</th>
+                                <th width="30%">Price</th>
                             </tr>
                         </thead>
                         
@@ -192,7 +192,7 @@
                                         <?php endif; ?>
                                     </td>
                                     <td><?=$item['qty'];?></td>
-                                    <td><?=$item['isAvailableInLocation'] === false ? "N/A" : "&#8369; ".$item['shippingFee'] ;  ?></td>
+                                    <td><?=$item['isAvailableInLocation'] === false ? "N/A" : "&#8369; ".number_format($item['shippingFee'], 2, '.', ','); ?></td>
                                     <td>&#8369; <?=number_format($item['price'], 2, '.', ',');?></td>
                                 </tr>
                                 <?php if($item['isAvailableInLocation'] === false): ?>

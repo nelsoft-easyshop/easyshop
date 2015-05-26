@@ -517,7 +517,10 @@ class product_model extends CI_Model
         $sth->bindParam(':createdate',$now);
         $sth->bindParam(':lastmodifieddate',$now);
         $bool = $sth->execute();
-        log_message('error', 'Text PDO::SELL:ADsD => '.json_encode($sth->errorInfo()));
+
+        if ((bool)$bool === false) {
+            log_message('error', 'Text PDO::SELL:Add => '.json_encode($sth->errorInfo()));
+        }
         return $this->db->conn_id->lastInsertId('id_product');
     }
 

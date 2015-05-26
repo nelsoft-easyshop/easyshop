@@ -634,6 +634,9 @@ body{
     text-align: left;
     font-size: 14px;
     font-weight: 900;
+    min-height: 36px;
+    margin-bottom: 0px;
+    line-height: 18px;
 }
 
 .p-rec-product-price > s{
@@ -676,11 +679,12 @@ body{
 
 .span-store-logo{
     width: inherit !important;
-    max-width: 45px !important;
-    height: 45px;
-    max-height: 45px;
+    max-width: 38px !important;
+    height: 38px;
+    max-height: 36px;
     display: table-cell;
     vertical-align: middle;
+    overflow: hidden;
 }
 
 .store-logo{
@@ -1057,10 +1061,6 @@ body{
         padding-bottom: 10px !important;
     }
 
-    .product-name-seller h1{
-        font-size: 20px !important;
-    }
-
     #recommended .item{
         padding: 10px 7px;
     }
@@ -1256,6 +1256,10 @@ body{
     .div-write-review-container .col-md-5{
         padding-left: 0px !important;
         padding-right: 0px;
+    }
+  
+    .product-name-seller h1{
+        font-size: 20px !important;
     }
 }
 

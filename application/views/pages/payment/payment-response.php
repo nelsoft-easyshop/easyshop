@@ -122,10 +122,10 @@
                     <table class="transaction-summary-table transaction-checkout-order" width="100%">
                         <thead>
                             <tr>
-                                <th width="40%">Product</th>
+                                <th width="30%">Product</th>
                                 <th width="20%">Quantity</th>
                                 <th width="20%">Shipping Fee</th>
-                                <th width="20%">Price</th>
+                                <th width="30%">Price</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -149,7 +149,7 @@
                                         <?php endif; ?>
                                     </td>
                                     <td><?=$product->getOrderQuantity();?></td>
-                                    <td>&#8369; <?=number_format($product->getHandlingFee(), 2, '.', ',')?></td>
+                                    <td>&#8369; <?=number_format(bcdiv($product->getHandlingFee(), $product->getOrderQuantity(), 4), 2, '.', ',')?></td>
                                     <td>&#8369; <?=number_format($product->getPrice(), 2, '.', ',')?></td>
                                 </tr>
                             <?php endforeach; ?>

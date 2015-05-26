@@ -459,8 +459,6 @@ class UserManager
     {
         $member = $this->em->getRepository('EasyShop\Entities\EsMember')
                             ->find($memberId);
-
-        $imageURL = $member->getImgurl();
         switch($selector){
             case "banner":
                 $imgFile = '/'.EsMember::DEFAULT_IMG_BANNER;
@@ -480,10 +478,16 @@ class UserManager
             $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
         }
         else{
-            $user_image = '/'.$imageURL.$imgFile.'?'.time();
-            if(strtolower($this->environment) === 'development'){
-                if( file_exists($imageURL.$imgFile) === false){
-                    $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
+            $imageURL = $member->getImgurl();
+            if($imageURL === null || $imageURL === ""){
+                $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
+            }
+            else{
+                $user_image = '/'.$imageURL.$imgFile.'?'.time();                
+                if(strtolower($this->environment) === 'development'){
+                    if( file_exists($imageURL.$imgFile) === false){
+                        $user_image = '/'.EsMember::DEFAULT_IMG_PATH.$imgFile.'?ver='.time();
+                    }
                 }
             }
         }

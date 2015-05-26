@@ -247,6 +247,7 @@
     <script type='text/javascript' src='/assets/js/src/vendor/bower_components/jstree.js'></script>
     <script type='text/javascript' src="/assets/js/src/vendor/bower_components/pwstrength.bootstrap.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.nicescroll.js?ver=<?=ES_FILE_VERSION?>"></script> 
+    <script type='text/javascript' src="/assets/js/src/custom-simplemodal.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/dashboard.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/dashboard-myaccount.js?ver=<?=ES_FILE_VERSION?>"></script> 
     <script type='text/javascript' src="/assets/js/src/dashboard-express-edit.js?ver=<?=ES_FILE_VERSION?>"></script>
