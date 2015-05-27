@@ -389,10 +389,15 @@ class NewHomeWebService extends MY_Controller
     {
         $map = simplexml_load_file($this->file);
 
-        $value = $this->input->get("value");
+        $productSlug = $this->input->post("value");
+        $sellerId = $this->input->post("sellerId");
+
         $string = $this->xmlCmsService->getString("productPanel",$value, "", "", ""); 
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy(['slug' => $value]);
+                        ->findBy([
+                            'slug' => $productSlug,
+                            'member' => $sellerId,                            
+                        ]);
                         
         if(!$product){
             return $this->output
