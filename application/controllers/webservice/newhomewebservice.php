@@ -59,7 +59,7 @@ class NewHomeWebService extends MY_Controller
      *
      * @var string
      */    
-    private $temporaryHomeFile;    
+    private $temporaryHomefile;    
    
     /**
      * The home XML file
@@ -85,12 +85,12 @@ class NewHomeWebService extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $this->authenticateRequest = $this->serviceContainer['webservice_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
-        $this->temporaryHomeFile  = APPPATH . "resources/". $this->xmlFileService->getTempHomeXMLfile().".xml"; 
+        $this->temporaryHomefile  = APPPATH . "resources/". $this->xmlFileService->getTempHomeXMLfile().".xml"; 
         
         $this->jsonSuccess = file_get_contents(APPPATH . "resources/json/jsonp.json");    
         $this->jsonUserError = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
         $this->jsonProductError = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
-        $this->jsonProductUserError = file_get_contents(APPPATH . "resources/json/productusererrorjson.json");
+        $this->jsonProductUserError = file_get_contents(APPPATH . "resources/json/productusererror.json");
 
         if($this->input->get()) {        
             $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
@@ -430,9 +430,9 @@ class NewHomeWebService extends MY_Controller
         $productSlug = $this->input->get("value");
         $sellerId = $this->input->get("sellerId");
 
-        $string = $this->xmlCmsService->getString("productPanel",$value, "", "", ""); 
+        $string = $this->xmlCmsService->getString("productPanel",$productSlug, "", "", ""); 
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                        ->findBy([
+                        ->findOneBy([
                             'slug' => $productSlug,
                         ]);
                         
@@ -442,7 +442,7 @@ class NewHomeWebService extends MY_Controller
                         ->set_output( $this->jsonProductError);
         }
         else {
-            if( (int)$product->getMember()->getIdMember() === (int) $sellerId){
+            if( (int)$product->getMember()->getIdMember() !== (int) $sellerId){
                 return $this->output                
                             ->set_content_type('application/json')
                             ->set_output( $this->jsonProductUserError);
