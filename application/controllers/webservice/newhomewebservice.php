@@ -6,39 +6,75 @@ class NewHomeWebService extends MY_Controller
 {
     /**
      * The XML file service
+     * 
+     * @var \EasyShop\Services\XML\CMS
      */
     private $xmlCmsService;
 
     /**
-     * The XML resource servie
+     * The XML resource service
+     *
+     * @var \EasyShop\Serbices\XML\Resource
      */
     private $xmlFileService;
 
     /**
      * The entity manager
+     *
+     * @var \Doctrine\ORM\EntityManager
      */    
     private $em;
 
     /**
-     * The JSONP callback function
+     * The JSONP success value
+     *
+     * @var string
      */    
-    private $json;
+    private $jsonSuccess;
 
     /**
-     * The Mobile XML resource
+     * The JSONP for invalid user slug
+     *
+     * @var string
+     */    
+    private $jsonUserError;
+
+    /**
+     * The JSONP for invalid product slug
+     *
+     * @var string
+     */    
+    private $jsonProductError;
+
+    
+    /**
+     * The JSONP for non-associated product-user slugs
+     *
+     * @var string
+     */    
+    private $jsonProductUserError;
+
+    /**
+     * Temporary home XML file
+     *
+     * @var string
+     */    
+    private $temporaryHomeFile;    
+   
+    /**
+     * The home XML file
+     *
+     * @var string
      */    
     private $file;    
 
     /**
-     * The Mobile XML resource
-     */    
-    private $defaultIndex = 0;    
-
-    /**
      * Handles if the request is authenticated
+     *
      * @var bool
      */    
     private $isAuthenticated = false; 
+
 
     public function __construct() 
     {
@@ -49,10 +85,12 @@ class NewHomeWebService extends MY_Controller
         $this->em = $this->serviceContainer['entity_manager'];
         $this->authenticateRequest = $this->serviceContainer['webservice_manager'];
         $this->file  = APPPATH . "resources/". $this->xmlFileService->getHomeXmlFile().".xml"; 
-        $this->tempHomefile  = APPPATH . "resources/". $this->xmlFileService->getTempHomeXMLfile().".xml"; 
-        $this->slugerrorjson = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
-        $this->json = file_get_contents(APPPATH . "resources/json/jsonp.json");    
-        $this->usererror = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
+        $this->temporaryHomeFile  = APPPATH . "resources/". $this->xmlFileService->getTempHomeXMLfile().".xml"; 
+        
+        $this->jsonSuccess = file_get_contents(APPPATH . "resources/json/jsonp.json");    
+        $this->jsonUserError = file_get_contents(APPPATH . "resources/json/usererrorjson.json");        
+        $this->jsonProductError = file_get_contents(APPPATH . "resources/json/slugerrorjson.json");        
+        $this->jsonProductUserError = file_get_contents(APPPATH . "resources/json/productusererrorjson.json");
 
         if($this->input->get()) {        
             $this->isAuthenticated = $this->authenticateRequest->authenticate($this->input->get(), 
