@@ -848,7 +848,7 @@ class NewHomeWebService extends MY_Controller
         $map = simplexml_load_file($this->file);
 
         $index = (int)$this->input->get("index");
-        $value = html_escape($this->input->get("subCategoryText"));
+        $value = html_escape(trim($this->input->get("subCategoryText")));
         $string = $this->xmlCmsService->getString("subCategorySection",$value, "", "", ""); 
         if(count($map->categorySection[$index]->sub) > 0 ) {
             $index = $index == 0 ? 1 : $index + 1;  
