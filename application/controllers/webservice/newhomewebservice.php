@@ -133,7 +133,7 @@ class NewHomeWebService extends MY_Controller
         if($remove) {
             return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
         }            
     }
 
@@ -153,7 +153,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }    
     }
 
@@ -173,7 +173,7 @@ class NewHomeWebService extends MY_Controller
         if($addXml === true) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }   
     } 
 
@@ -196,7 +196,7 @@ class NewHomeWebService extends MY_Controller
             if($map->asXML($this->file)) {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
             }             
         }
         else {
@@ -226,7 +226,7 @@ class NewHomeWebService extends MY_Controller
             if($addXml === true) {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
             }            
         }
         else {
@@ -263,7 +263,7 @@ class NewHomeWebService extends MY_Controller
             if($addXml === true) {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
             }               
         }
 
@@ -293,7 +293,7 @@ class NewHomeWebService extends MY_Controller
             if($map->asXML($this->file)) {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
             }   
         }
 
@@ -318,7 +318,7 @@ class NewHomeWebService extends MY_Controller
         if($addXml === true) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }    
         
 
@@ -343,7 +343,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }  
     }     
 
@@ -375,7 +375,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }          
     }
 
@@ -395,7 +395,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }    
     } 
 
@@ -415,7 +415,7 @@ class NewHomeWebService extends MY_Controller
         if($addXml === true) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }   
     } 
 
@@ -447,7 +447,7 @@ class NewHomeWebService extends MY_Controller
             if($addXml === true) {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
             }   
         }
 
@@ -527,7 +527,7 @@ class NewHomeWebService extends MY_Controller
 
                 return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($this->json); 
+                            ->set_output($this->jsonSuccess); 
             }   
         } 
     }    
@@ -605,7 +605,7 @@ class NewHomeWebService extends MY_Controller
         if($result) {
             return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
         }          
         
     }
@@ -632,7 +632,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }                     
     }
 
@@ -655,7 +655,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }                     
     }
 
@@ -684,7 +684,7 @@ class NewHomeWebService extends MY_Controller
             if($map->asXML($this->file)) {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
             }  
         }
     }    
@@ -704,7 +704,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }    
     }
 
@@ -724,7 +724,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }    
     }   
 
@@ -744,7 +744,7 @@ class NewHomeWebService extends MY_Controller
         if($addXml === true) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }
     }   
 
@@ -765,7 +765,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
         }  
     } 
 
@@ -781,7 +781,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }        
     }       
 
@@ -811,7 +811,7 @@ class NewHomeWebService extends MY_Controller
             if($map->asXML($this->file)) {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
             }             
         }
 
@@ -832,7 +832,7 @@ class NewHomeWebService extends MY_Controller
         if($addXml === true) {
             return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
         }        
               
     }    
@@ -875,7 +875,7 @@ class NewHomeWebService extends MY_Controller
             if($addXml === true) {
                 return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($this->json);
+                            ->set_output($this->jsonSuccess);
             }
         }
 
@@ -905,7 +905,7 @@ class NewHomeWebService extends MY_Controller
         if($addXml) {
             return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
         }
     }        
 
@@ -930,7 +930,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->file)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }   
     }
 
@@ -952,7 +952,7 @@ class NewHomeWebService extends MY_Controller
                 if($map->asXML($this->file)) {
                     return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($this->json);
+                            ->set_output($this->jsonSuccess);
                 } 
             }
             else {
@@ -966,7 +966,7 @@ class NewHomeWebService extends MY_Controller
             if($map->asXML($this->file)) {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);
+                        ->set_output($this->jsonSuccess);
             } 
         }
         else {
@@ -1010,7 +1010,7 @@ class NewHomeWebService extends MY_Controller
                 if($result) {
                     return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($this->json);
+                            ->set_output($this->jsonSuccess);
                 } 
             }
         }
@@ -1039,7 +1039,7 @@ class NewHomeWebService extends MY_Controller
 
         return $this->output
                 ->set_content_type('application/json')
-                ->set_output($this->json);
+                ->set_output($this->jsonSuccess);
     }    
 
     /**
@@ -1125,7 +1125,7 @@ class NewHomeWebService extends MY_Controller
         if($result) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }           
 
 
@@ -1148,7 +1148,7 @@ class NewHomeWebService extends MY_Controller
         if($map->asXML($this->tempHomefile)) {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->json);
+                    ->set_output($this->jsonSuccess);
         }    
     }    
 
@@ -1180,11 +1180,11 @@ class NewHomeWebService extends MY_Controller
         }
         $this->xmlCmsService->removeXmlNode($this->tempHomefile,$nodename,$sliderOrder + 1); 
         $string = $this->xmlCmsService->getString("sliderSection", $template, "", "", "");      
-        $this->xmlCmsService->addXmlFormatted($this->tempHomefile,$string,'/map/sliderSection/slide['.($sliderOrder + 1).']',"\t\t","\n\n");
-        $this->xmlCmsService->syncSliderValues($this->tempHomefile,$image,$template,$sliderIndex,$sliderOrder);
+        $this->xmlCmsService->addXmlFormatted($this->temporaryHomefile,$string,'/map/sliderSection/slide['.($sliderOrder + 1).']',"\t\t","\n\n");
+        $this->xmlCmsService->syncSliderValues($this->temporaryHomefile,$image,$template,$sliderIndex,$sliderOrder);
         return $this->output
                 ->set_content_type('application/json')
-                ->set_output($this->json);            
+                ->set_output($this->jsonSuccess);            
     }
 
     /**
@@ -1193,7 +1193,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function setSliderPosition()
     {
-        $map = simplexml_load_file($this->tempHomefile);
+        $map = simplexml_load_file($this->temporaryHomefile);
         $order = (int) $this->input->get("order");  
         $index = (int)  $this->input->get("index");  
         $subIndex = (int) $this->input->get("subIndex"); 
@@ -1207,7 +1207,7 @@ class NewHomeWebService extends MY_Controller
         $map->sliderSection->slide[$index]->image[$subIndex]->path =  $tempPath;
         $map->sliderSection->slide[$index]->image[$subIndex]->target =  $tempTarget;
     
-        if($map->asXML($this->tempHomefile)) {
+        if($map->asXML($this->temporaryHomefile)) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->json);
@@ -1221,13 +1221,13 @@ class NewHomeWebService extends MY_Controller
     public function commitSliderChanges()
     {
         if($this->isAuthenticated) {
-            $map = simplexml_load_file($this->tempHomefile);
+            $map = simplexml_load_file($this->temporaryHomefile);
 
             foreach ($map->sliderSection->slide as $key => $slider) {
                 $sliders[] = $slider;
             }        
             $this->xmlCmsService->removeXmlNode($this->file,"tempHomeSlider");
-            $this->xmlCmsService->syncTempSliderValues($this->file, $this->tempHomefile,$sliders);
+            $this->xmlCmsService->syncTempSliderValues($this->file, $this->temporaryHomefile,$sliders);
             $this->fetchPreviewSlider();
         }
         else {
@@ -1275,7 +1275,7 @@ class NewHomeWebService extends MY_Controller
         $file_ext = strtolower(end($file_ext));  
         $this->config->load("image_path");            
         $path_directory = $this->config->item('homeslider_img_directory');
-        $map = simplexml_load_file($this->tempHomefile);
+        $map = simplexml_load_file($this->temporaryHomefile);
 
         $this->load->library('image_lib');    
         $this->upload->initialize([ 
@@ -1304,11 +1304,11 @@ class NewHomeWebService extends MY_Controller
             if(trim($map->sliderSection->slide[$index]->image->path) === "") {
                 $map->sliderSection->slide[$index]->image->path = $value;
                 $map->sliderSection->slide[$index]->image->target = $target;
-                $result = $map->asXML($this->tempHomefile); 
+                $result = $map->asXML($this->temporaryHomefile); 
             }
             else {
                 $index = $index === 0 ? 1 : $index + 1;
-                $result = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
+                $result = $this->xmlCmsService->addXmlFormatted($this->temporaryHomefile,
                                                                 $string,
                                                                 '/map/sliderSection/slide['.$index.']/image[last()]',
                                                                 "\t\t\t","\n");
@@ -1340,7 +1340,7 @@ class NewHomeWebService extends MY_Controller
             if($result) {
                 return $this->output
                             ->set_content_type('application/json')
-                            ->set_output($this->json);             
+                            ->set_output($this->jsonSuccess);             
             }             
         }
     }
@@ -1377,13 +1377,13 @@ class NewHomeWebService extends MY_Controller
      */
     public function getTempContents() 
     {         
-        if(!file_exists($this->tempHomefile)) {
-            copy($this->file, $this->tempHomefile);
-            chmod($this->tempHomefile, 0766);
+        if(!file_exists($this->temporaryHomefile)) {
+            copy($this->file, $this->temporaryHomefile);
+            chmod($this->temporaryHomefile, 0766);
         }  
         $this->output
              ->set_content_type('text/plain') 
-             ->set_output(file_get_contents($this->tempHomefile));
+             ->set_output(file_get_contents($this->temporaryHomefile));
     }     
 
     /**
@@ -1399,12 +1399,12 @@ class NewHomeWebService extends MY_Controller
                 $sliders[] = $slider;
             }
 
-            $this->xmlCmsService->removeXmlNode($this->tempHomefile, "tempHomeSlider");
-            $this->xmlCmsService->syncTempSliderValues($this->tempHomefile, $this->file, $sliders);  
+            $this->xmlCmsService->removeXmlNode($this->temporaryHomefile, "tempHomeSlider");
+            $this->xmlCmsService->syncTempSliderValues($this->temporaryHomefile, $this->file, $sliders);  
              
             return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->json);                        
+                        ->set_output($this->jsonSuccess);                        
         }
         else {
             return json_encode("error");
