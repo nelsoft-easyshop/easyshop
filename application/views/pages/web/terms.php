@@ -153,6 +153,30 @@
                     <p>
                     Sellers must take full responsibility for the buyers to receive their purchased items.
                     </p>
+                    
+
+                    <h3 class="htitle2">
+                        Payout
+                    </h3>
+                    <p>
+                        Payout is the process wherein a seller receives payments from successful transactions made on the website. Usually issued in the form of cheque deposits.
+                    </p>
+                    <p>
+                        Before EasyShop.ph can start on a Seller’s Payout, the Buyer has to confirm their receipt of the item, this can be accomplished from the Buyer’s Dashboard by clicking on the “Item received” button. This serves as an explicit confirmation that the Buyer has received the item. 
+                    </p>
+                    <p>
+                        EasyShop.ph is then notified of the Buyer’s confirmation and the Seller is tagged as ready for Payout. This normally takes around 1-3 business days, wherein EasyShop.ph deposits the cheque at the Seller’s bank of choice.
+                    </p>
+                    <p>
+                        The Seller has to provide an Official Receipt as proof of the exchange of the merchandise, failure to do so may cause some delays in the processing of the Payout.
+                    </p>
+                    <p>
+                        Cash-on-Delivery transactions are excluded from this Payout policy. 
+                    </p>
+
+
+
+
                     <h3 class="htitle2">Returns, Refunds and Cancellation</h3>
                     <p>
                         FREE shipping is available to all our clients anywhere in the Philippines for selected items on the EasyShop.ph website. Our partner couriers will deliver your items directly at your doorstep. 
