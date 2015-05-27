@@ -202,7 +202,7 @@ class NewHomeWebService extends MY_Controller
         else {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->usererror);         
+                    ->set_output($this->jsonUserError);         
         }
    
     } 
@@ -232,7 +232,7 @@ class NewHomeWebService extends MY_Controller
         else {
             return $this->output
                     ->set_content_type('application/json')
-                    ->set_output($this->usererror);            
+                    ->set_output($this->jsonUserError);            
         }
 
     } 
@@ -253,7 +253,7 @@ class NewHomeWebService extends MY_Controller
         if(!$product){
             return $this->output
                 ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);
+                ->set_output( $this->jsonProductError);
         }
         else {
             $string = $this->xmlCmsService->getString("addTopProducts",$value, "", "", ""); 
@@ -285,7 +285,7 @@ class NewHomeWebService extends MY_Controller
         if(!$product){
             return $this->output
                 ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);
+                ->set_output( $this->jsonProductError);
         }
         else {
             $map->menu->topProducts->product[$index] = $value;
@@ -427,22 +427,26 @@ class NewHomeWebService extends MY_Controller
     {
         $map = simplexml_load_file($this->file);
 
-        $productSlug = $this->input->post("value");
-        $sellerId = $this->input->post("sellerId");
+        $productSlug = $this->input->get("value");
+        $sellerId = $this->input->get("sellerId");
 
         $string = $this->xmlCmsService->getString("productPanel",$value, "", "", ""); 
         $product = $this->em->getRepository('EasyShop\Entities\EsProduct')
                         ->findBy([
                             'slug' => $productSlug,
-                            'member' => $sellerId,                            
                         ]);
                         
         if(!$product){
             return $this->output
-                ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);
+                        ->set_content_type('application/json')
+                        ->set_output( $this->jsonProductError);
         }
         else {
+            if( (int)$product->getMember()->getIdMember() === (int) $sellerId){
+                return $this->output                
+                            ->set_content_type('application/json')
+                            ->set_output( $this->jsonProductUserError);
+            } 
             $addXml = $this->xmlCmsService->addXmlFormatted($this->file,$string,'/map/sellerSection/productPanel[last()]',"\t\t","\n");    
             if($addXml === true) {
                 return $this->output
@@ -676,7 +680,7 @@ class NewHomeWebService extends MY_Controller
         if(!$product){
             return $this->output
                         ->set_content_type('application/json')
-                        ->set_output( $this->slugerrorjson);
+                        ->set_output( $this->jsonProductError);
         }
         else {
             $map->sellerSection->productPanel[$index]->slug = $slug;
@@ -804,7 +808,7 @@ class NewHomeWebService extends MY_Controller
         if(!$product){
             return $this->output
                 ->set_content_type('application/json')
-                ->set_output( $this->slugerrorjson);            
+                ->set_output( $this->jsonProductError);            
         }
         else {
             $map->categorySection[$index]->sub[$subIndex]->productSlugs[$panelindex] = $value;
@@ -857,7 +861,7 @@ class NewHomeWebService extends MY_Controller
         if(!$product){
             return $this->output
                         ->set_content_type('application/json')
-                        ->set_output( $this->slugerrorjson);
+                        ->set_output( $this->jsonProductError);
         }
         else {
             if(count($map->categorySection[$index-1]->sub[$subindex-1]->productSlugs) <= 1 &&
@@ -958,7 +962,7 @@ class NewHomeWebService extends MY_Controller
             else {
                 return $this->output
                         ->set_content_type('application/json')
-                        ->set_output($this->usererror);
+                        ->set_output($this->jsonUserError);
             }
         }
         else if ($action === "deleteLogo"){
