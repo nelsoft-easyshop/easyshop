@@ -198,8 +198,7 @@
     });
  
     var currentUrl = $('#hidden-currentUrl').val();
-    var typeView = $('#hidden-typeView').val(); 
-    var emptySearch = $('#hidden-emptySearch').val();
+    var typeView = $('#hidden-typeView').val();
     var loadUrl = $('#hidden-loadUrl').val();
     var allQueryString = $('#hidden-queryString').val();
     var currentSegment = $("#hidden-segment").val();
@@ -228,7 +227,7 @@
     $(document).ready(function() {
         var original_position_offset = ($('#sticky-pagination').length <=0 ) ? 0 : $('#sticky-pagination').offset() ;
         sticky_offset = original_position_offset.top;
-        $('#sticky-pagination').css('position', 'fixed').css('width', '64%').css('bottom', '-400px');
+        $('#sticky-pagination').css('position', 'fixed').css('width', '66%').css('bottom', '-400px');
     });
 
     $(window).scroll(function(event) {
@@ -588,19 +587,24 @@
         var totalTopMargin = heightHead + heightBanners + heightCategory + 40 -800;
 
         if(widthOff <= 720){
-            $window.scrollTop(10);
-            $(".panel-filter-search-cont").removeClass("container-filter").removeAttr("style");
+            $window.scrollTop(100);
+            $(".panel-filter-search-cont").removeClass("container-filter");
         }
 
         if(widthOff > 720){
-            $window.scrollTop(10);
+            $window.scrollTop(100);
             $("#scrollUp").trigger("click");
             $(".panel-filter-search-cont").addClass("container-filter").removeAttr("style");
             $.stickysidebarscroll(".container-filter",{offset: {top: offsetTopData, bottom: 100}});
         }
 
-
-        
+        var tabSrc= $( document ).find(".tab-head-container a.active").attr('src');
+        $("#"+tabSrc).show();
+        $(".tab-head-container a").click(function(){
+            var $this = $(this);
+            var $segment = $this.data('segment');
+            document.location.href = '/search/'+$segment+'?'+allQueryString;
+        });
     });
 
     $(document).find('[rel=tooltiplist]').tooltip({

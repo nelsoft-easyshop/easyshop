@@ -21,10 +21,11 @@
         "aws/aws-sdk-php": "2.6.*",
         "php-curl-class/php-curl-class": "~2.1",
         "neutron/sphinxsearch-api": "dev-master",
-        "firebase/php-jwt": "dev-master",
+        "firebase/php-jwt": "2.0.*",
         "predis/predis": "1.1.*@dev", 
         "gregwar/captcha-bundle": "dev-master",
-        "ryanannatuvasquez/android-php-encrypt-decrypt": "dev-master"
+        "ryanannatuvasquez/android-php-encrypt-decrypt": "dev-master",
+        "phpunit/phpunit": "4.6"
     },
     "repositories": [
         {

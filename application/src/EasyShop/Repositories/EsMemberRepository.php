@@ -397,4 +397,45 @@ class EsMemberRepository extends EntityRepository
         return $member;
     }
 
+    /**
+     * Find user by searching usig fulltext index
+     * @param  string $fulltextString
+     * @param  string $originalString
+     * @return array
+     */
+    public function searchUser($fulltextString, $originalString)
+    {
+        $this->em =  $this->_em;
+        $rsm = new ResultSetMapping(); 
+        $rsm->addScalarResult( 'idMember', 'idMember');
+        $query = $this->em->createNativeQuery("
+            SELECT DISTINCT
+                `id_member` AS idMember,
+                weight,
+                storeName as storeName
+            FROM
+                (SELECT 
+                    (MATCH (`username`) AGAINST (:fulltextString IN BOOLEAN MODE) * 30) +
+                    (MATCH (`store_name`) AGAINST (:fulltextString IN BOOLEAN MODE) * 100) AS weight,
+                    id_member,
+                    COALESCE(NULLIF(`store_name`, ''), `username`) as storeName
+                FROM
+                    es_member
+                WHERE
+                    is_active = :active AND is_banned = :banned
+                        AND (MATCH (`username`) AGAINST (:fulltextString IN BOOLEAN MODE)
+                        OR MATCH (`store_name`) AGAINST (:fulltextString IN BOOLEAN MODE))) AS score_table
+            WHERE storeName LIKE :likeString
+            HAVING weight > 0
+            ORDER BY weight DESC
+        ", $rsm);
+
+        $query->setParameter('fulltextString', $fulltextString);
+        $query->setParameter('likeString', '%'.$originalString.'%');
+        $query->setParameter('active', EsMember::DEFAULT_ACTIVE);
+        $query->setParameter('banned', EsMember::NOT_BANNED);
+        $results = $query->execute();
+
+        return $results;
+    }
 }

@@ -87,7 +87,7 @@ class product extends MY_Controller
             $response['isListView'] = isset($_COOKIE['view']) && (string)$_COOKIE['view'] === "list";
             $response['productView'] = '';
             if($search['count'] > 0){
-                $response['attributes'] = $searchProductService->getProductAttributesByProductIds($response['products']);
+                $response['attributes'] = $searchProductService->getProductAttributesByProductIds($search['productIds']);
                 $response['availableCondition'] = [];
                 if(isset($response['attributes']['Condition'])){
                     $response['availableCondition'] = $response['attributes']['Condition'];

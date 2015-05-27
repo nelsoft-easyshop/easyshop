@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width">
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link type='text/css' href='/assets/css/new-login-register.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
         <link type='text/css' href='/assets/css/basic.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
         <link type='text/css' href='/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>' rel='stylesheet' media='screen' />
@@ -495,13 +495,13 @@
 </script>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery.cookie.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.cookie.js"></script>
     <script type='text/javascript' src="/assets/js/src/vendor/jquery.idTabs.min.js?ver=<?=ES_FILE_VERSION?>"></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery-ui.js"></script>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.numeric.js'></script>
-    <script type='text/javascript' src='/assets/js/src/vendor/jquery.validate.js'></script>
-    <script type='text/javascript' src="/assets/js/src/vendor/pwstrength.js?ver=<?=ES_FILE_VERSION?>"></script>
+    <script type='text/javascript' src='/assets/js/src/vendor/bower_components/jquery.validate.js'></script>
+    <script type='text/javascript' src="/assets/js/src/vendor/bower_components/pwstrength.bootstrap.js?ver=<?=ES_FILE_VERSION?>"></script>
     <script type='text/javascript' src="/assets/js/src/universal.js"></script>
     <script type='text/javascript' src='/assets/js/src/register.js?ver=<?=ES_FILE_VERSION?>'></script>
     <script type="text/javascript" src="/assets/js/src/login.js?ver=<?=ES_FILE_VERSION?>"></script>

@@ -1,7 +1,7 @@
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <link rel="stylesheet" type="text/css" href="/assets/css/sell_item.css?ver=<?=ES_FILE_VERSION?>" />
     <link rel="stylesheet" type="text/css" href="/assets/css/product_preview.css?ver=<?=ES_FILE_VERSION?>" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>"/>
+    <link rel="stylesheet" type="text/css" href="/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>"/>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-mods.css"  media="screen"/>
 <?php else: ?>
     <link  rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.upload-step4.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>

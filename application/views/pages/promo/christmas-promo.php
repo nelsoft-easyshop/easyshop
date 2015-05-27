@@ -10,18 +10,14 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon"/>
-        <link href='https://fonts.googleapis.com/css_family=Montserrat:400,700|Open+Sans:400,700,700italic,400italic,300,300italic,600,600italic,800,800italic.html' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css_family=Abril+Fatface.html' rel='stylesheet' type='text/css'>
-        
+
         
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
             <link rel='stylesheet' type='text/css' href='/assets/css/promo-css.css?ver=<?=ES_FILE_VERSION?>'  media='screen'/>
         <?php else: ?>
             <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.christmas-promo.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
         <?php endif; ?>
-       
-        
-        
+
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-33801742-8']);
@@ -77,7 +73,7 @@
                                 <div class="dc-tag"><?=number_format( $product->getDiscountPercentage(), 0, '.', ',')?>%</div>
                             <?PHP endif; ?>
                             <a href="/item/<?=html_escape($product->getSlug())?>" target="_blank">
-                                <img alt ="<?=html_escape($product->getName())?> Image" src="/assets/images/promo-images/<?= isset($featuredVendor['productImageUrl']) ? $featuredVendor['productImageUrl'] . '?1.0' : ''?>">
+                                <img alt ="<?=html_escape($product->getName())?> Image" src="<?php echo isset($featuredVendor['productImageUrl']) ? '/assets/images/promo-images/'. $featuredVendor['productImageUrl'] :  ''?>">
                             </a>
                             <div>
                                 <?PHP if ($product->getIsDelete() || $product->getIsSoldOut()) : ?>
@@ -190,18 +186,23 @@
                 <p>Copyright &copy; 2014 Easyshop.ph<br>All rights reserved.</p>
             </section>
         </footer>
-        <?PHP $timeFormat = strtotime($product->getStartPromo() ? $product->getEnddate()->format("Y-m-d H:i:s"): $product->getStartdate()->format("Y-m-d H:i:s")) ?>
-        <input id="endDate" type="hidden" value='<?=date('M d,Y H:i:s', $timeFormat)?>' >
+     
         <div id="fb-root"></div>
+        
+        <div>
+            <?php $targetDate = $product->getStartPromo() ? $product->getEnddate() : $product->getStartdate(); ?>
+            <?php $remainingTime = $targetDate->getTimestamp() - time(); ?>
+            <input id="remainingTime" type="hidden" value='<?php echo $remainingTime?>'/>s
+            <input type="hidden" id="dateOfAnnouncement" data-date="<?php echo isset($externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]) ? $externalLink[\EasyShop\Entities\EsSocialMediaProvider::FACEBOOK]->getDateOfAnnouncement()->format("F d, Y") : ''?>">
+        </div>
 
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-            <script src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/bower_components/jquery.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-            <script src="/assets/js/src/promo/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
             <script src="/assets/js/src/vendor/jquery.plugin.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-            <script src="/assets/js/src/vendor/jquery.countdown.min.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
-            <script src="/assets/js/src/promo/countdown-sale.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/vendor/bower_components/jquery.countdown.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
+            <script src="/assets/js/src/promo/christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <?php else: ?>
             <script src="/assets/js/min/easyshop.christmas-promo.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
         <?php endif; ?>

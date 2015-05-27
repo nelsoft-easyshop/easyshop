@@ -32,6 +32,7 @@
 .link-blue:hover{
     color: #ff893a;
     border-bottom: dotted #ff893a 1px;
+    text-decoration: none;
 }
 
 .transaction-container{
@@ -141,6 +142,10 @@ ol.how-to-list li{
 
 .cart-table > tbody > tr > td{
     padding: 20px 10px;
+}
+
+.cart-table > tbody > tr > td.cart-td-quantity{
+    padding: 20px 0px;
 }
 
 .cart-table > tbody > tr:last-child > td{
@@ -550,6 +555,7 @@ ol.how-to-list li{
 .payment-method-desc{
     color: #8f8f8f;
     padding-bottom: 7px;
+    font-size: 12px;
 }
 
 .payment-method-container input[type="radio"]{
@@ -647,9 +653,27 @@ ol.how-to-list li{
     cursor:pointer;
 }
 
+.simplemodal-wrap{
+    position: absolute
+}
+
+#simplemodal-container{
+    background: none;
+}
+
 .my-modal-content{
     overflow: hidden;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    margin: auto;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    border-radius: 4px;
 }
 
 .my-modal-content p{
@@ -657,7 +681,7 @@ ol.how-to-list li{
     margin-top: 20px;
 }
 
-.my-modal .remove-item-name{
+.remove-item-name{
     color: #ff893a;
     font-weight: normal;
 }
@@ -666,7 +690,6 @@ ol.how-to-list li{
     border-top: solid #e2e2e2 1px;
     margin-top: 10px;
     padding: 20px;
-    margin-bottom: 10px;
 }
 
 @-moz-document url-prefix() {
@@ -732,6 +755,7 @@ ol.how-to-list li{
 
     .breadcrumb-left-wing,
     .breadcrumb-right-wing,
+    .active-right-wing-cart-1,
     .active-left-wing-cart-1,
     .active-left-wing-cart-2{
         top: 14px;

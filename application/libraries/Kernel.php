@@ -193,11 +193,13 @@ class Kernel
             $parser = new \CI_Parser();
             $redisClient = $container['redis_client'];
             $localConfiguration = $container['local_configuration'];
+            $userManager = $container['user_manager'];
             return new \EasyShop\Message\MessageManager($em, 
                                                         $configLoader,
                                                         $languageLoader,
                                                         $socialMediaManager,
-                                                        $emailService, 
+                                                        $emailService,
+                                                        $userManager,
                                                         $parser,
                                                         $redisClient,
                                                         $localConfiguration);
@@ -316,6 +318,24 @@ class Kernel
                                                         $sphinxClient,
                                                         $userManager
                                                     );
+        };
+
+        // Search user
+        $container['search_user'] = function ($c) use($container) {
+            $em = $container['entity_manager'];
+            $sphinxClient = new \SphinxClient();
+            $sphinxClient->SetMaxQueryTime(5000);
+            $userManager = $container['user_manager'];
+            $configLoader = $container['config_loader'];
+            $productManager = $container['product_manager'];
+
+            return new \EasyShop\Search\SearchUser(
+                    $em,
+                    $sphinxClient,
+                    $userManager,
+                    $configLoader,
+                    $productManager
+                );
         };
 
         //Promo Manager

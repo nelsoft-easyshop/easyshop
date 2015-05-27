@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" data-ng-app="easyshopApp">
 <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html class="ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html class="ie8"> <![endif]-->
@@ -33,7 +33,6 @@
         <?php echo $title?>
     </title>
 
-
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -51,7 +50,7 @@
         <link rel="stylesheet" type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
         <link rel="stylesheet" type="text/css" href='/assets/css/normalize.min.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
         <link rel="stylesheet" type="text/css" href="/assets/css/header-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
-        <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
+        <link rel="stylesheet" type="text/css" href="/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/responsive_css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/new-homepage.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
         <link rel="stylesheet" type="text/css" href="/assets/css/footer-css.css?ver=<?=ES_FILE_VERSION?>" media='screen'>
@@ -91,7 +90,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <div class="header-link">
                             <?php if(isset($logged_in) && $logged_in): ?>
                                 <div class="new-user-nav-dropdown">
-                                    <div id="unread-messages-count2" class="msg_countr top-msg-con message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                    <div id="unread-messages-count2" class="msg_countr top-msg-con message-count-con <?php echo (int) $unreadMessageCount > 0 ? '' : 'hide'; ?>">
                                         <?php echo $unreadMessageCount; ?>
                                     </div>
                                     <div class="login-profile-con" style="background: url(<?php echo getAssetsDomain(); ?><?=$user->profileImage;?>) no-repeat center center; background-size:cover;">
@@ -115,7 +114,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         </li>
                                         <li class="nav-dropdown-border pos-rel">
                                             <a href="/messages">Messages</a>
-                                            <div id="unread-messages-count" class="msg_countr message-count-con" style="display: <?php echo (int)$unreadMessageCount !== 0 ? 'inline-block' : 'none'; ?>">
+                                            <div id="unread-messages-count" class="msg_countr message-count-con <?php echo (int) $unreadMessageCount > 0 ? '' : 'hide'; ?>">
                                                 <?php echo $unreadMessageCount; ?>
                                             </div>
                                         </li>
@@ -208,7 +207,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </div><!-- End .dropdown-cart-menu-container -->
 
                         <div class="header-top-dropdowns">
-                            <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar1">
+                            <form class="nav-searchbar-inner" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/product" id="nav-searchbar1">
 
                                 <div class="nav-submit-button nav-sprite">
                                     <input type="submit" value="" class="span_bg">
@@ -325,7 +324,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     
                                     <div class="sticky-search-cart-wrapper">
                                         <div class="sticky-search-wrapper">
-                                            <form class="nav-searchbar-inner nav-search2" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/search.html" id="nav-searchbar2">
+                                            <form class="nav-searchbar-inner nav-search2" accept-charset="utf-8" role="search" name="site-search" method="get" action="/search/product" id="nav-searchbar2">
                                                 <input type="text" name="q_str" autocomplete="off" id="primary-search2" placeholder="Find what you're looking for." class="ui-form-control main-search-input search-box">
                                                 <input type="submit" value="" class="span_bg">
                                             </form>
@@ -441,11 +440,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 <input type="hidden" id="chatServerConfig" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-jwttoken="<?php echo html_escape($jwtToken); ?>">
-<input type="hidden" id="listOfFeatureWithRestriction" data-real-time-chat="<?=$listOfFeatureWithRestriction && $listOfFeatureWithRestriction[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
+<input type="hidden" id="isRealTimeChatAllowed" data-real-time-chat="<?php echo $allowedFeatures && $allowedFeatures[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script type="text/javascript" src="/assets/js/src/vendor/jquery.scrollUp.min.js"></script>
-    <script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.scrollUp.js"></script>
+    <script src="/assets/js/src/vendor/bower_components/jquery.auto-complete.js" type="text/javascript"></script>
     <script src="/assets/js/src/header.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.header_primary.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

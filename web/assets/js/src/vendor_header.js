@@ -90,7 +90,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
 
     $(document).on('submit','form.search-form',function(){
         var searchType = $(this).find('.search-type').val();
-        var action =  (searchType == 1) ? "/" + $('#vendor-slug').val() : "/search/search.html";
+        var action =  (searchType == 1) ? "/" + $('#vendor-slug').val() : "/search/product";
         $(this).attr("action",action);
     });
    

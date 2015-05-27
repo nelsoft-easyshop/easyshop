@@ -247,7 +247,7 @@
         <input type="hidden" id="is-logged-in" value="<?= (bool) html_escape($isLoggedIn) ? 'true' : 'false'?>">
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <script type="text/javascript" src="/assets/js/src/vendor/jquery-1.9.1.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
+        <script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
         <script type="text/javascript" src="/assets/js/src/promo/estudyantrepreneur.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
         <script type="text/javascript" src="/assets/js/src/plugins.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
         <script type="text/javascript" src="/assets/js/src/vendor/modernizr-2.6.2.min.js?ver=<?php echo ES_FILE_VERSION ?>"></script>

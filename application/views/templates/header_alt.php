@@ -20,7 +20,7 @@
     
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <link type="text/css" href='/assets/css/main-style.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
-        <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+        <link type="text/css" href='/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
         <link type="text/css" href='/assets/css/bootstrap-mods.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
     <?php else: ?>
         <link type="text/css" href='/assets/css/min-easyshop.header-alt.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
@@ -303,11 +303,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <input type='hidden' class='es-data' name='is-logged-in' value="<?php echo (isset($logged_in)&&$logged_in) ? 'true' : 'false'?>"/>
 <input type="hidden" id="chatServerConfig" data-host="<?=$chatServerHost?>" data-port="<?=$chatServerPort?>" data-jwttoken="<?php echo html_escape($jwtToken); ?>" >
-<input type="hidden" id="listOfFeatureWithRestriction" data-real-time-chat="<?=$listOfFeatureWithRestriction && $listOfFeatureWithRestriction[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
+<input type="hidden" id="isRealTimeChatAllowed" data-real-time-chat="<?php echo $allowedFeatures && $allowedFeatures[\EasyShop\Entities\EsFeatureRestrict::REAL_TIME_CHAT] ? 'true' : 'false' ?>">
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script type="text/javascript" src="/assets/js/src/vendor/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
-    <script src="/assets/js/src/vendor/jquery.auto-complete.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/bower_components/bootstrap.js?ver=<?=ES_FILE_VERSION?>" ></script>
+    <script src="/assets/js/src/vendor/bower_components/jquery.auto-complete.js" type="text/javascript"></script>
     <script src="/assets/js/src/header_alt.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.header_alt.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

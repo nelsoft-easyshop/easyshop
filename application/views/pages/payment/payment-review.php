@@ -164,10 +164,10 @@
                     <table class="transaction-summary-table transaction-checkout-order" width="100%">
                         <thead>
                             <tr>
-                                <th width="40%">Product</th>
+                                <th width="30%">Product</th>
                                 <th width="20%">Quantity</th>
                                 <th width="20%">Shipping Fee</th>
-                                <th width="20%">Price</th>
+                                <th width="30%">Price</th>
                             </tr>
                         </thead>
                         
@@ -571,9 +571,9 @@
 </div>
 
 <div class="my-modal-content available-location-modal" style="display: none;">
-    <h3 class="my-modal-title">
+    <h1 class="my-modal-title">
         Available Location
-    </h3>
+    </h1>
     <p>
         The following items are currently unavailable for your location. Please select a new shipping address to proceed with your checkout.
     </p>
@@ -597,6 +597,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script type='text/javascript' src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>'></script>
+    <script type='text/javascript' src="/assets/js/src/custom-simplemodal.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
     <script type='text/javascript' src="/assets/js/src/new-payment.js?ver=<?php echo ES_FILE_VERSION ?>"></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.payment-review.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

@@ -1465,5 +1465,7 @@ li.brand_result:hover{
     margin: 0 auto;
     border: 1px dashed;
 }
- 
 
+.irs-line-mid, .irs-line-left, .irs-line-right, .irs-diapason, .irs-slider {
+    background: url("../images/sprite-skin-flat.png") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+}

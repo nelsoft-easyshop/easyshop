@@ -214,9 +214,30 @@ class EsProductRepository extends EntityRepository
                                     )
                                 ->getQuery();
         $result = $qbResult->getResult();
-        $resultNeeded = array_map(function($value) { return $value['brand']; }, $result);
+        $brands = array_map(function($value) { return $value['brand']; }, $result);
 
-        return $resultNeeded;
+        return $brands;
+    }
+
+    /**
+     * Get All available condition in given product ids
+     * @param  array  $productIds
+     * @return mixed
+     */
+    public function getProductConditionByProductIds($productIds = [])
+    {
+        $this->em =  $this->_em;
+        $qb = $this->em->createQueryBuilder();
+        $qbResult = $qb->select('DISTINCT(p.condition) as condition')
+                                ->from('EasyShop\Entities\EsProduct','p')
+                                ->where(
+                                    $qb->expr()->in('p.idProduct', $productIds)
+                                )
+                                ->getQuery();
+        $result = $qbResult->getResult();
+        $conditions = array_map(function($value) { return $value['condition']; }, $result);
+
+        return $conditions;
     }
 
     /**

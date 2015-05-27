@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <head>
         <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-            <link type="text/css" href='/assets/css/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
+            <link type="text/css" href='/assets/css/vendor/bower_components/bootstrap.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
             <link type="text/css" href='/assets/css/widget.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
         <?php else: ?>
             <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.widget-page.css?ver=<?=ES_FILE_VERSION?>' rel="stylesheet" media='screen'/>
@@ -37,7 +37,7 @@
                 <div class="col-xs-9 col-right-wing">
                     <div class="right-wing">
                         <div class="search-form">
-                            <form method="get" action="/search/search.html" target="_blank">
+                            <form method="get" action="/search/product" target="_blank">
                                 <input type="text" class="search-textfield" name="q_str" placeholder="Search item here"/>
                                 <i class="icon-search"></i>
                             </form>
@@ -68,7 +68,7 @@
         </div>
     </body>
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <script src="/assets/js/src/vendor/jquery-1.9.1.js" type="text/javascript" ></script>
+        <script src="/assets/js/src/vendor/bower_components/jquery.js" type="text/javascript" ></script>
         <script src="/assets/js/src/widget.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
     <?php else: ?>
         <script src="/assets/js/min/easyshop.widget-page.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

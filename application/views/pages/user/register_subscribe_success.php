@@ -11,7 +11,7 @@
             <link href="/assets/css/landingpage/bootstrap.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
             <link href="/assets/css/landingpage/bootstrap-responsive.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
             <link href="/assets/css/landingpage/mystyle.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
-            <link href="/assets/css/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
+            <link href="/assets/css/vendor/bower_components/jquery-ui.css?ver=<?=ES_FILE_VERSION?>" rel="stylesheet">
             
         <?php else: ?>
             <link rel="stylesheet" type="text/css" href='/assets/css/min-easyshop.register-success.css?ver=<?=ES_FILE_VERSION?>' media='screen'/>
@@ -87,8 +87,8 @@
     </body>
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-        <script type='text/javascript' src="/assets/js/src/vendor/jquery-1.9.1.js" ></script>
-        <script type='text/javascript' src="/assets/js/src/vendor/jquery-ui.js"></script>
+        <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery.js" ></script>
+        <script type='text/javascript' src="/assets/js/src/vendor/bower_components/jquery-ui.js"></script>
         <script type='text/javascript' src='/assets/js/src/landingpage-bootstrap.min.js'></script>
     <?php else: ?>
         <script src="/assets/js/min/easyshop.user_register_subscribe_success.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

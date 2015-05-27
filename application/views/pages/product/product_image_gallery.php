@@ -54,7 +54,7 @@
 
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script type="text/javascript" src="/assets/js/src/vendor/jquery.jcarousel.min.js "></script>
+    <script type="text/javascript" src="/assets/js/src/vendor/bower_components/jquery.jcarousel.js"></script>
     <script type="text/javascript" src="/assets/js/src/product-page-image-gallery.js "></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.product_image_gallery.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>

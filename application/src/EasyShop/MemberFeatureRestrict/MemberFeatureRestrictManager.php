@@ -1,9 +1,9 @@
 <?php
+
 namespace Easyshop\MemberFeatureRestrict;
 
 class MemberFeatureRestrictManager
 {
-
     /**
      * Entity Manager instance
      *
@@ -21,12 +21,12 @@ class MemberFeatureRestrictManager
     }
 
     /**
-     * Get all the list of feature with restriction
-     * where key is the EsFeatureRestrict ID and value is bool
-     * @param $memberId
-     * @return array
+     * Get restricted features that are allowed to a user
+     * 
+     * @param integer $memberId
+     * @return mixed
      */
-    public function getListOfFeatureWithRestrictionByMemberId($memberId)
+    public function getAllowedFeaturesForMember($memberId)
     {
         $featuresObj = $this->em->getRepository('EasyShop\Entities\EsFeatureRestrict')
                                 ->getFeatures();
@@ -51,15 +51,15 @@ class MemberFeatureRestrictManager
     {
         $featureRestrictEntity = $this->em->find('EasyShop\Entities\EsFeatureRestrict', $featureId);
         $memberEntity = $this->em->find('EasyShop\Entities\EsMember', $memberId);
-        $memberFeatureRestrictEntity = '';
+        $memberFeatureRestrictEntity = null;
 
         if ($featureRestrictEntity) {
-            $isMemberAllowedInFeature = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
+            $isMemberAlreadyAllowed = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
                                                  ->checkIfMemberIsAllowedInFeature($featureRestrictEntity, $memberId);
             $isFeatureFull = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
                                       ->checkIfFeatureIsFull($featureRestrictEntity);
 
-            if (!$isMemberAllowedInFeature && !$isFeatureFull) {
+            if (!$isMemberAlreadyAllowed && !$isFeatureFull) {
                 $memberFeatureRestrictEntity = $this->em->getRepository('EasyShop\Entities\EsMemberFeatureRestrict')
                                                         ->addMemberToFeature($memberEntity, $featureRestrictEntity, 0);
             }

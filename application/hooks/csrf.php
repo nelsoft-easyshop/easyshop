@@ -109,7 +109,7 @@ class CSRF_Protection
         
         // Inject into form
         $output = preg_replace('/(<(form|FORM)[^>]*(method|METHOD)="(post|POST)"[^>]*>)/',
-                                '$0<input type="hidden" name="' . self::$token_name . '" value="' . self::$token . '">', 
+                                '$0<input type="hidden" name="' . self::$token_name . '" csrf-directive="' . self::$token . '" value="' . self::$token . '">', 
                                 $output);
         
         // Inject into <head>
@@ -117,7 +117,9 @@ class CSRF_Protection
                                 '<meta name="csrf-name" content="' . self::$token_name . '">' . "\n" . '<meta name="csrf-token" content="' . self::$token . '">' . "\n" . '$0', 
                                 $output);
         
-        $this->CI->output->_display($output);
+        if (!defined('PHPUNIT_TEST')) {
+            $this->CI->output->_display($output);
+        }
     }
     
 }

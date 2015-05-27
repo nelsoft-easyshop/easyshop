@@ -1,116 +1,157 @@
 <?php
 
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
+include_once  __DIR__.'/bootstrap.php';
 
-    echo "Loading swiftmailer...\n";
-    require_once(__DIR__ . '/../../vendor/swiftmailer/swiftmailer/lib/swift_required.php');
-    
-    /*
-     * Database params
+$CI =& get_instance();
+$configLoader = $CI->kernel->serviceContainer['config_loader'];
+$emailService = $CI->kernel->serviceContainer['email_notification'];
+$viewParser = new \CI_Parser();
+
+use EasyShop\Script\ScriptBaseClass as ScriptBaseClass;
+
+class EmailQueueSender extends ScriptBaseClass
+{
+    private $connection;
+    private $emailConfig;
+    private $emailService;
+
+    /**
+     * Constructor
+     * @param string                                   $hostName
+     * @param string                                   $dbUsername
+     * @param string                                   $dbPassword
+     * @param EasyShop\Notifications\EmailNotification $emailService
+     * @param EasyShop\ConfigLoader\ConfigLoader       $configLoader
+     * @param \CI_Parser                               $viewParser
      */
-    $configDatabase = require dirname(__FILE__). '/../config/param/database.php';
+    public function __construct(
+        $hostName,
+        $dbUsername,
+        $dbPassword,
+        $emailService,
+        $configLoader,
+        $viewParser
+    ) {
+        parent::__construct($emailService, $configLoader, $viewParser);
 
-    /*
-     * Email params
-     */
-    $configEmail = require(__DIR__ . "/../config/email_swiftmailer.php");
-    
-    echo "\nFetching queued emails...\n"; 
+        $this->connection = new PDO(
+            $hostName,
+            $dbUsername,
+            $dbPassword
+        );
 
-    $dbh = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
+        $this->emailConfig = $configLoader->getItem('email_swiftmailer');
+        $this->emailService = $emailService;
+    }
 
-    $sql = "SELECT id_queue, data, type, date_created, date_executed, status
-            FROM es_queue
-            WHERE type = :queue 
-                AND status = :status";
+    public function execute()
+    {
+        $queuedMails = $this->getQueuedMail(
+            $this->emailConfig['queue_type'], 
+            $this->emailConfig['status']['queued']
+        );
 
-    $queueDbh = $dbh->prepare($sql);
-    $queueDbh->bindParam("queue", $configEmail['queue_type'], PDO::PARAM_INT);
-    $queueDbh->bindParam("status", $configEmail['status']['queued'], PDO::PARAM_INT);
-    $queueDbh->execute();
-    $rawData = $queueDbh->fetchAll(PDO::FETCH_ASSOC);
-
-    $numSent = 0;
-    $emailCounter = 0;
-    $emailCount = count($rawData);
-    $failedRecipients = array();
-
-    echo "Fetched " . $emailCount . " queued emails!\n\n";
-
-    foreach($rawData as $userData){
-
-        $emailCounter++;
-
-        $emailData = json_decode($userData['data'], true);
-
-        if( count($emailData['recipient']) === 0 ){
-            echo "Queue id: " . $userData['id_queue'] . " has no email address indicated! \n";
-            continue;
-        }
-    
-        echo "Sending email - queue id: " . $userData['id_queue'] . " ...\n";
-        try {
-            # SEND EMAIL
-            $transport = Swift_SmtpTransport::newInstance($configEmail['smtp_host'], $configEmail['smtp_port'], $configEmail['smtp_crypto'])
-                                            ->setUsername($configEmail['smtp_user'])
-                                            ->setPassword($configEmail['smtp_pass']);
-
-            $mailer = Swift_Mailer::newInstance($transport);
-            
-            $message = Swift_Message::newInstance($emailData['subject'])
-                                    ->setFrom([$configEmail['from_email'] => $configEmail['from_name']])
-                                    ->setTo($emailData['recipient']);
-            
-            // Embed Image
-            foreach($emailData["img"] as $imagePath){
-                $image = substr($imagePath,strrpos($imagePath,'/')+1,strlen($imagePath));
-                if( strpos($emailData['msg'], $image) !== false ){
-                    $embeddedImg = $message->embed(\Swift_Image::fromPath(__DIR__ . "/../../web/" . $imagePath));
-                    $emailData['msg'] = str_replace($image, $embeddedImg, $emailData['msg']);
-                }
+        echo "\nScanning of data started (".date('M-d-Y h:i:s A').") \n \n";
+        $numSent = 0;
+        foreach ($queuedMails as $mail) {
+            $mailData = json_decode($mail['data'], true);
+            if(isset($mailData['recipient']) === false 
+                || count($mailData['recipient']) === 0 ){
+                echo "Queue id: " . $mail['id_queue'] . " has no email address indicated!\n";
+                continue;
             }
-
-            $message->setBody($emailData['msg'], 'text/html');
-        
-            $result = $mailer->send($message, $failedRecipients);
-        
-            if($result){
-                echo "Email sent! \n";
-                $numSent += $result;
-                $status = $configEmail['status']['sent'];
+            $queueId = $mail['id_queue'];
+            echo "Sending email - Queue ID: " . $queueId . " ... ";
+            $emailResult = $this->constructSendMail($mailData);
+            if($emailResult){
+                echo "\033[0;32m[SENT]\033[0m\n";
+                $numSent++;
+                $status = $this->emailConfig['status']['sent'];
             }
             else{
-                echo "Email sending FAILED! \n";
-                $status = $configEmail['status']['failed'];
+                echo "\033[0;31m[FAILED]\033[0m\n";
+                $status = $this->emailConfig['status']['failed'];
             }
-        } 
-        catch (Exception $e) {
-            echo "Email sending FAILED! \n";
-            $status = $configEmail['status']['failed'];
+            $this->updateMailStatus($queueId, $status);
         }
-        $exec_date = date("Y-m-d H:i:s");
+        echo "\nFetched " . count($queuedMails) . " emails!\n";
+        echo "\nSuccessfully sent " . $numSent . " emails!\n";
+        echo "\nScanning of data ended (".date('M-d-Y h:i:s A').") \n \n";
+    }
 
-        $updateSql = "UPDATE es_queue SET `status` = :status, `date_executed` = :exec_date WHERE `id_queue` = :queue_id";
-        $dbhUpdate = new PDO("mysql:host=".$configDatabase['host'].";dbname=".$configDatabase['dbname'], $configDatabase['user'], $configDatabase['password']);
-        $queueUpdate = $dbhUpdate->prepare($updateSql);
-        $queueUpdate->bindParam("status", $status, PDO::PARAM_INT);
-        $queueUpdate->bindParam("exec_date", $exec_date);
-        $queueUpdate->bindParam("queue_id", $userData['id_queue'], PDO::PARAM_INT);
+    /**
+     * Get all queued email in database
+     * @param  integer $type
+     * @param  integer $status
+     * @return array
+     */
+    private function getQueuedMail($type, $status)
+    {
+        $selectQueuedMailQuery = "
+        SELECT 
+            id_queue, data, type, date_created, date_executed, status
+        FROM
+            es_queue
+        WHERE
+            type = :type AND status = :status
+        ";
+
+        $selectQueuedMail = $this->connection->prepare($selectQueuedMailQuery);
+        $selectQueuedMail->bindValue(":type", $type);
+        $selectQueuedMail->bindValue(":status", $status);
+        $selectQueuedMail->execute();
+        $queuedMail = $selectQueuedMail->fetchAll(PDO::FETCH_ASSOC);
+
+        return count($queuedMail) > 0 ? $queuedMail : [];
+    }
+
+    /**
+     * construct message and send emal
+     * @param  mixed $emailData
+     * @return boolean
+     */
+    private function constructSendMail($emailData)
+    {
+        $emailResult = $this->emailService
+                            ->setRecipient($emailData['recipient'])
+                            ->setSubject($emailData['subject'])
+                            ->setMessage($emailData['msg'], $emailData['img'])
+                            ->sendMail();
+
+        return $emailResult;
+    }
+
+    /**
+     * function update queued mail status
+     * @param  integer $queueId
+     * @param  integer $status
+     */
+    private function updateMailStatus($queueId, $status)
+    {
+        $executeDate = date("Y-m-d H:i:s");
+
+        $updateQuery = "
+            UPDATE es_queue 
+            SET 
+                `status` = :status,
+                `date_executed` = :exec_date 
+            WHERE 
+                `id_queue` = :queue_id";
+        $queueUpdate = $this->connection->prepare($updateQuery);
+        $queueUpdate->bindValue("status", $status, PDO::PARAM_INT);
+        $queueUpdate->bindValue("exec_date", $executeDate);
+        $queueUpdate->bindValue("queue_id", $queueId, PDO::PARAM_INT);
         $queueUpdate->execute();
-
     }
+}
 
-    echo "\nFetched " . $emailCounter . " emails!\n";
-    echo "\nSuccessfully sent " . $numSent . " emails!\n";
-        
-    if( count($failedRecipients) > 0 ){
-        echo "\n\nFailed to send emails to the following users:\n";
-        foreach( $failedRecipients as $fr ){
-            echo "    " . $fr . "\n";
-        }
-    }
-    
-    
-    
-    
+$emailQueueSender = new EmailQueueSender(
+    $CI->db->hostname,
+    $CI->db->username,
+    $CI->db->password,
+    $emailService,
+    $configLoader,
+    $viewParser
+);
+
+$emailQueueSender->execute();

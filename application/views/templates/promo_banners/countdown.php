@@ -60,13 +60,13 @@
         <?php $targetDate = $product->getStartPromo() ? $product->getEnddate() : $product->getStartdate(); ?>
         <?php $remainingTime = $targetDate->getTimestamp() - time(); ?>
         
-        <input id="remainingTime" type="hidden" value='<?php echo $remainingTime?>'/>s
+        <input id="remainingTime" type="hidden" value='<?php echo $remainingTime?>'/>
 
     </div>
 
     <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
         <script src="/assets/js/src/vendor/jquery.plugin.min.js" type="text/javascript"></script>
-        <script src="/assets/js/src/vendor/jquery.hilios.countdown.js" type="text/javascript"></script> 
+        <script src="/assets/js/src/vendor/bower_components/jquery.countdown.js" type="text/javascript"></script> 
         <script src="/assets/js/src/promo/countdown-sale.js" type="text/javascript"></script>
     <?php else:?>
         <script src="/assets/js/min/easyshop.countdown.js" type="text/javascript"></script>

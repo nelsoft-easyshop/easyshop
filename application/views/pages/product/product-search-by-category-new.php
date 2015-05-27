@@ -362,7 +362,7 @@
 </div>
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
-    <script src="/assets/js/src/vendor/bootstrap.js"></script>
+    <script src="/assets/js/src/vendor/bower_components/bootstrap.js"></script>
     <script src='/assets/js/src/vendor/jquery.simplemodal.js' type='text/javascript'></script>
     <script src="/assets/js/src/vendor/jquery.sticky-sidebar-scroll.js"></script>
     <script src="/assets/js/src/vendor/owl.carousel.min.js"></script>

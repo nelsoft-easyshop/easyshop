@@ -48,7 +48,8 @@
 
     #SEARCHING
     $route['(?i)search/(:any)'] = 'product_search/search/$1'; # ryan vasquez
-    $route['search/more'] = 'product_search/loadMoreProduct'; # ryan vasquez
+    $route['search/product/more'] = 'product_search/loadMoreProduct'; # ryan vasquez
+    $route['search/seller/more'] = 'product_search/loadMoreUsers'; # ryan vasquez
     $route['search/suggest'] = 'product_search/suggest';
 
     #ADVANCE SEARCH
@@ -62,7 +63,6 @@
     $route['(?i)item/(:any)'] = 'product/item/$1';
     $route['(?i)product/submit-reply'] = 'product/submitReply';
     $route['(?i)product/submit-review'] = 'product/submitReview';
-
 
     #SELL ITEM
     $route['(?i)sell/step1'] = 'productUpload/step1'; # ryan vasquez

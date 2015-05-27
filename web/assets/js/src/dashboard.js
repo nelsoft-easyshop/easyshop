@@ -1732,9 +1732,25 @@
 
         feedbackModal.modal({
             onShow: function() {
-                $('.rating1').raty('destroy').raty({scoreName: 'rating1'});
-                $('.rating2').raty('destroy').raty({scoreName: 'rating2'});
-                $('.rating3').raty('destroy').raty({scoreName: 'rating3'});
+                $('.rating1').raty('destroy').raty({
+                    scoreName: 'rating1',
+                    starHalf:"assets/images/star-half.png",
+                    starOff:"assets/images/star-off.png",
+                    starOn:"assets/images/star-on.png"
+
+                });
+                $('.rating2').raty('destroy').raty({
+                    scoreName: 'rating2',
+                    starHalf:"assets/images/star-half.png",
+                    starOff:"assets/images/star-off.png",
+                    starOn:"assets/images/star-on.png"
+                });
+                $('.rating3').raty('destroy').raty({
+                    scoreName: 'rating3',
+                    starHalf:"assets/images/star-half.png",
+                    starOff:"assets/images/star-off.png",
+                    starOn:"assets/images/star-on.png"
+                });
 
                 this.setPosition();
                 var submitbtn = form.find('.feedback-submit');
@@ -1779,6 +1795,7 @@
                 });
             }
         });
+        getMarginTop();
         feedbackModal.parents("#simplemodal-container").addClass("feedback-container");
 
         return false;
@@ -3157,7 +3174,10 @@
         div.modal({
             persist:true
         });
-        
+
+        getMarginTop();
+
+
         var $allProductList = div.find('.all-product-list');              
         var $categoryProductList = div.find('.category-product-list');
         $categoryProductList.sortable({
@@ -3174,16 +3194,17 @@
                 checkContainerScrollable($listContainer);
             }
         });
-        div.parents(".simplemodal-container").addClass("my-category-modal").removeAttr("id");
+        div.parents(".simplemodal-container").addClass("my-category-modal");
+
         var addContentHeight = div.outerHeight();
         var countAllItems = $allProductList.find('li').size();
         var totalWidthOfMobileDroppable = countAllItems * widthOfDragabbleItem;
         if(browserWidth <= mobileViewPortWidthLimit){
-            $(".my-category-modal").css("width", modalCategoryModalWidthMobile+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".my-category-modal").css("height","auto");
             //$(".category-items-holder .ui-sortable").css("width", totalWidthOfMobileDroppable+"px");
         }
         else{
-            $(".my-category-modal").css("width", modalCategoryModalWidth+"px").css("height","auto").css("bottom","auto").css("top","15px");
+            $(".my-category-modal").css("height","auto");
             $(".category-items-holder .ui-sortable").css("width", "100%");
         }
 

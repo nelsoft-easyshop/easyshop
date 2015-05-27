@@ -69,10 +69,10 @@
                                     <th width="15%">
                                         Price
                                     </th>
-                                    <th width="15%" align="center">
+                                    <th width="50" align="center">
                                         Quantity
                                     </th>
-                                    <th width="20%">
+                                    <th width="30%">
                                         Total
                                     </th>
                                 </tr>
@@ -138,12 +138,15 @@
                                             </div>
                                         </td>
                                         <td>
-                                            &#8369; 
-                                            <span class="cart-item-price">
-                                                <?=number_format($item['price'], 2, '.', ',');?>
+                                            <?php
+                                                $unitPrice = $item['price'];
+                                                $priceFontSize = strlen((string)$unitPrice) > 9 ? "font-size:11px !important;" : ""; 
+                                            ?>
+                                            <span class="cart-item-price" style="<?php echo $priceFontSize;?>">
+                                                <span style="padding-right: 5px;">&#8369;</span><?=number_format($item['price'], 2, '.', ',');?>
                                             </span>
                                         </td>
-                                        <td>
+                                        <td class="cart-td-quantity">
                                             <select class="form-es-control input-sm item-quantity"
                                                 data-value="<?=$item['qty']; ?>"
                                                 data-max="<?=$item['maxqty']; ?>" 
@@ -151,8 +154,12 @@
                                             </select>
                                         </td>
                                         <td>
-                                            &#8369; 
-                                            <span class="cart-item-subtotal">
+                                            <?php
+                                                $unitSubtotalPrice = $item['subtotal'];
+                                                $subTotalpriceFontSize = strlen((string)$unitSubtotalPrice) > 9 ? "font-size:11px !important;" : ""; 
+                                            ?>
+                                            <span style="<?php echo $subTotalpriceFontSize;?>">&#8369;</span>
+                                            <span class="cart-item-subtotal" style="<?php echo $subTotalpriceFontSize;?>">
                                                 <?=number_format($item['subtotal'], 2, '.', ',');?>
                                             </span>
                                         </td>
@@ -261,9 +268,9 @@
 </div> 
 
 <div class="my-modal-content shipping-calculator-modal" style="display: none;">
-    <h3 class="my-modal-title">
+    <h1 class="my-modal-title">
         Shipping calculator
-    </h3>
+    </h1>
     <p>
         Calculate total shipping cost based on selected location.
     </p>
@@ -321,6 +328,7 @@
 
 <?php if(strtolower(ENVIRONMENT) === 'development'): ?>
     <script src='/assets/js/src/vendor/jquery.simplemodal.js?ver=<?=ES_FILE_VERSION?>' type='text/javascript' ></script>
+    <script src="/assets/js/src/custom-simplemodal.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
     <script src="/assets/js/src/cart.js?ver=<?php echo ES_FILE_VERSION ?>" type='text/javascript' ></script>
 <?php else: ?>
     <script src="/assets/js/min/easyshop.cart.js?ver=<?php echo ES_FILE_VERSION ?>" type="text/javascript"></script>
