@@ -881,8 +881,14 @@ $string = '<typeNode>
         }
         
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
-            $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
-                                                                                ->findOneBy(['slug' => $category['categorySlug']]);
+
+            $categoryEntity = $this->em->getRepository('Easyshop\Entities\EsCat')
+                             ->findOneBy(['slug' => $category['categorySlug']]);
+            if($categoryEntity === null){
+                continue;
+            }
+                
+            $featuredCategory['popularCategory'][$key]['category'] = $categoryEntity;
             $featuredCategory['popularCategory'][$key]['subCategory'] = [];
             $category['sub']['categorySubSlug'] = isset($category['sub']['categorySubSlug']) ? $category['sub']['categorySubSlug']  : [];
             if(!is_array($category['sub']['categorySubSlug'])){
@@ -892,8 +898,11 @@ $string = '<typeNode>
             }
 
             foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
-                $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
-                                                                                              ->findOneBy(['slug' => $subCategory]);
+                $subcategoryEntity =  $this->em->getRepository('Easyshop\Entities\EsCat')
+                                           ->findOneBy(['slug' => $subCategory]);
+                if($subcategoryEntity !== null){
+                    $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $subcategoryEntity;
+                }
             }
         }
 
