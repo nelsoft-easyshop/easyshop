@@ -1104,7 +1104,7 @@ $string = '<typeNode>
                 'target' => !isset($value['imagemap']['target']) || empty($value['imagemap']['target'])
                             ? "" : $value['imagemap']['target'],
                 'actionType' => !isset($value['actionType']) || empty($value['actionType'])
-                                ? "" : $value['actionType'],
+                                ? "" : trim($value['actionType']),
             ];
         }
 
@@ -1168,7 +1168,7 @@ $string = '<typeNode>
                         $productBasePrice = floatval($product->getPrice());
                         $productFinalPrice = floatval($product->getFinalPrice());
                         $productImagePath = $directory.$imageFileName;
-                        if((string) $valueLevel2['actionType'] === self::AT_SHOW_PRODUCT_DETAILS){
+                        if((string) trim($valueLevel2['actionType']) === self::AT_SHOW_PRODUCT_DETAILS){
                             $target = $baseUrl.'mobile/product/item/'.$productSlug;
                         }
                         else{
@@ -1185,7 +1185,7 @@ $string = '<typeNode>
                         'final_price' => $productFinalPrice,
                         'image' => $productImagePath, 
                         'actionType' => !isset($valueLevel2['actionType']) || empty($valueLevel2['actionType'])
-                                        ? "" : $valueLevel2['actionType'],
+                                        ? "" : trim($valueLevel2['actionType']),
                         'target' => $target,
                     ];
                 }
