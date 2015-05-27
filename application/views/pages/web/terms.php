@@ -154,7 +154,6 @@
                     Sellers must take full responsibility for the buyers to receive their purchased items.
                     </p>
 
-
                     <h3 class="htitle2">
                         Payout
                     </h3>
@@ -173,8 +172,6 @@
                     <p>
                        * Cash-on-Delivery transactions are excluded from this Payout policy. 
                     </p>
-
-
 
                     <h3 class="htitle2">Returns, Refunds and Cancellation</h3>
                     <p>
