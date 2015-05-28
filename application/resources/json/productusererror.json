@@ -1,0 +1,11 @@
+jsonCallback(
+    {
+        "sites":
+        [
+            {
+                "productusererror": "This product does not belong to the current user",   
+            },
+        ]
+    }
+);
+
