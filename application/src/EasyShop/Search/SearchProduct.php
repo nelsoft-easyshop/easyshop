@@ -114,7 +114,7 @@ class SearchProduct
      * @param  string $string
      * @return array
      */
-    public function filterBySearchString($productIds,$queryString = "",$storeKeyword = true)
+    public function filterBySearchString($productIds, $queryString = "", $storeKeyword = true)
     {
         $sphinxMatchMatches = $this->configLoader->getItem('search','sphinx_match_matches');
         $isElasticSearchEnabled = $this->configLoader->getItem('search','enable_elasticsearch');
@@ -459,9 +459,9 @@ class SearchProduct
         $storeKeyword = $pageNumber ? false : true;
 
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
-        $productIds = $sortOrder = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
+        $productIds = $sortOrder = $searchProductService->filterProductByAttributesParameter($parameters, $productIds);
         $productIds = $originalOrder = $queryString 
-                                       ? $searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword)
+                                       ? $searchProductService->filterBySearchString($productIds, $queryString, $storeKeyword)
                                        : $productIds;
         $productIds = $queryString && empty($productIds) ? [] : $productIds;
         $originalOrder = $sortBy ? $sortOrder : $originalOrder;
