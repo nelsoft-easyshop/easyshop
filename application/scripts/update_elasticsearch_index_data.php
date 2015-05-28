@@ -6,6 +6,7 @@ $entityManager = $CI->kernel->serviceContainer['entity_manager'];
 $elasticSearchClient = $CI->kernel->serviceContainer['elasticsearch_client'];
 $configLoader = $CI->kernel->serviceContainer['config_loader'];
 $emailService = $CI->kernel->serviceContainer['email_notification'];
+$stringUtility = $CI->kernel->serviceContainer['string_utility'];
 $viewParser = new \CI_Parser();
 
 use EasyShop\Entities\EsMember as EsMember;
@@ -17,6 +18,7 @@ class UpdateElasticSearchIndexes extends ScriptBaseClass
     private $em;
     private $elasticSearchClient;
     private $indexName;
+    private $stringUtility;
 
     /**
      * Constructor
@@ -24,17 +26,20 @@ class UpdateElasticSearchIndexes extends ScriptBaseClass
      * @param EasyShop\Notifications\EmailNotification $emailService
      * @param EasyShop\ConfigLoader\ConfigLoader       $configLoader
      * @param \CI_Parser                               $viewParser
+     * @param EasyShop\Utility\StringUtility           $stringUtility
      */
     public function __construct(
         $entityManager,
         $elasticSearchClient,
         $emailService,
         $configLoader,
-        $viewParser
+        $viewParser,
+        $stringUtility
     ) {
         $this->em = $entityManager;
         $this->elasticSearchClient = $elasticSearchClient;
         $this->indexName = 'easyshop';
+        $this->stringUtility = $stringUtility;
         parent::__construct($emailService, $configLoader, $viewParser);
     }
 
@@ -70,7 +75,7 @@ class UpdateElasticSearchIndexes extends ScriptBaseClass
 
                 $jsonUsers['body'][] = [
                     'member_id' => $user->getIdMember(),
-                    'store_name' => trim($user->getStoreName()),
+                    'store_name' => $this->stringUtility->removeNonUTF(trim($user->getStoreName())),
                     'date_created' => $user->getDatecreated()->format('Y-m-d h:m:s'),
                     'date_modified' => $user->getLastmodifieddate()->format('Y-m-d h:m:s'),
                 ];
@@ -125,8 +130,8 @@ class UpdateElasticSearchIndexes extends ScriptBaseClass
 
                 $jsonProducts['body'][] = [
                     'product_id' => $product->getIdProduct(),
-                    'name' => trim($product->getName()),
-                    'keywords' => trim($product->getSearchKeyword()),
+                    'name' => $this->stringUtility->removeNonUTF(trim($product->getName())),
+                    'keywords' => $this->stringUtility->removeNonUTF(trim($product->getSearchKeyword())),
                     'clickcount' => (int) $product->getClickcount(),
                     'date_created' => $product->getCreateddate()->format('Y-m-d h:m:s'),
                     'date_modified' => $product->getLastmodifieddate()->format('Y-m-d h:m:s'),
@@ -183,7 +188,8 @@ $updateElasticSearchIndexes  = new UpdateElasticSearchIndexes(
     $elasticSearchClient,
     $emailService,
     $configLoader,
-    $viewParser
+    $viewParser,
+    $stringUtility
 );
 
 $updateElasticSearchIndexes->execute();
