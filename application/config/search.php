@@ -6,5 +6,5 @@ $config = [
     ],
     'hide_product_slug' => [],
     'sphinx_match_matches' => 100000,
-    'enable_elasticsearch' => true,
+    'enable_elasticsearch' => false,
 ];
