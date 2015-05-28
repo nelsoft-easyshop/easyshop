@@ -142,10 +142,7 @@ class SetupElasticSearch extends ScriptBaseClass
     private function indexUsers()
     {
         $activeUsers = $this->em->getRepository('EasyShop\Entities\EsMember')
-                                ->findBy([
-                                    'isBanned' => false,
-                                    'isActive' => true
-                                ]);
+                                ->getAllActiveUsersRaw();
 
         $jsonUsers = [];
         $jsonUsers['index'] = $this->indexName;
@@ -153,15 +150,15 @@ class SetupElasticSearch extends ScriptBaseClass
         foreach ($activeUsers as $user) {
             $jsonUsers['body'][] = [
                 'index' => [
-                    '_id' => $user->getIdMember()
+                    '_id' => $user['idMember']
                 ]
             ];
 
             $jsonUsers['body'][] = [
-                'member_id' => $user->getIdMember(),
-                'store_name' => trim($user->getStoreName()),
-                'date_created' => $user->getDatecreated()->format('Y-m-d h:m:s'),
-                'date_modified' => $user->getLastmodifieddate()->format('Y-m-d h:m:s'),
+                'member_id' => $user['idMember'],
+                'store_name' => trim($user['storeName']),
+                'date_created' => date('Y-m-d h:m:s', strtotime($user['datecreated'])),
+                'date_modified' => date('Y-m-d h:m:s', strtotime($user['lastmodifieddate'])),
             ];
         }
 
@@ -191,27 +188,24 @@ class SetupElasticSearch extends ScriptBaseClass
     private function indexProducts()
     {
         $activeProducts = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                   ->findBy([
-                                        'isDelete' => EsProduct::ACTIVE,
-                                        'isDraft' => EsProduct::ACTIVE
-                                   ]);
+                                   ->getAllActiveProductsRaw();
         $jsonProducts = [];
         $jsonProducts['index'] = $this->indexName;
         $jsonProducts['type'] = 'es_product';
         foreach ($activeProducts as $product) {
             $jsonProducts['body'][] = [
                 'index' => [
-                    '_id' => $product->getIdProduct()
+                    '_id' => $product['idProduct']
                 ]
             ];
 
             $jsonProducts['body'][] = [
-                'product_id' => $product->getIdProduct(),
-                'name' => trim($product->getName()),
-                'keywords' => trim($product->getSearchKeyword()),
-                'clickcount' => (int) $product->getClickcount(),
-                'date_created' => $product->getCreateddate()->format('Y-m-d h:m:s'),
-                'date_modified' => $product->getLastmodifieddate()->format('Y-m-d h:m:s'),
+                'product_id' => $product['idProduct'],
+                'name' => trim($product['name']),
+                'keywords' => trim($product['searchKeyword']),
+                'clickcount' => (int) $product['clickcount'],
+                'date_created' => date('Y-m-d h:m:s', strtotime($product['createddate'])),
+                'date_modified' => date('Y-m-d h:m:s', strtotime($product['lastmodifieddate'])),
             ];
         }
 

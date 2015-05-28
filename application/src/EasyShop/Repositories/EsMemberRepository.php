@@ -488,4 +488,36 @@ class EsMemberRepository extends EntityRepository
 
         return $resultSet;
     }
+
+    /**
+     * Get all users using raw query
+     * @return array
+     */
+    public function getAllActiveUsersRaw()
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('idMember', 'idMember');
+        $rsm->addScalarResult('storeName', 'storeName');
+        $rsm->addScalarResult('datecreated', 'datecreated');
+        $rsm->addScalarResult('lastmodifieddate', 'lastmodifieddate');
+        $query = $em->createNativeQuery("
+            SELECT
+                id_member as idMember,
+                COALESCE(NULLIF(`store_name`, ''), `username`) as storeName,
+                datecreated as datecreated,
+                lastmodifieddate as lastmodifieddate
+            FROM
+                es_member
+            WHERE
+                is_banned = :notBanned
+                AND is_active = :active
+        ", $rsm);
+        $query->setParameter('notBanned', EsMember::NOT_BANNED)
+              ->setParameter('active', EsMember::DEFAULT_ACTIVE);
+                                    
+        $activeUsers = $query->execute();
+
+        return $activeUsers;
+    }
 }
