@@ -6,6 +6,7 @@ $entityManager = $CI->kernel->serviceContainer['entity_manager'];
 $elasticSearchClient = $CI->kernel->serviceContainer['elasticsearch_client'];
 $configLoader = $CI->kernel->serviceContainer['config_loader'];
 $emailService = $CI->kernel->serviceContainer['email_notification'];
+$stringUtility = $CI->kernel->serviceContainer['string_utility'];
 $viewParser = new \CI_Parser();
 
 use EasyShop\Entities\EsMember as EsMember;
@@ -17,6 +18,7 @@ class SetupElasticSearch extends ScriptBaseClass
     private $em;
     private $elasticSearchClient;
     private $indexName;
+    private $stringUtility;
 
     /**
      * Constructor
@@ -24,17 +26,20 @@ class SetupElasticSearch extends ScriptBaseClass
      * @param EasyShop\Notifications\EmailNotification $emailService
      * @param EasyShop\ConfigLoader\ConfigLoader       $configLoader
      * @param \CI_Parser                               $viewParser
+     * @param EasyShop\Utility\StringUtility           $stringUtility
      */
     public function __construct(
         $entityManager,
         $elasticSearchClient,
         $emailService,
         $configLoader,
-        $viewParser
+        $viewParser,
+        $stringUtility
     ) {
         $this->em = $entityManager;
         $this->elasticSearchClient = $elasticSearchClient;
         $this->indexName = 'easyshop';
+        $this->stringUtility = $stringUtility;
         parent::__construct($emailService, $configLoader, $viewParser);
     }
 
@@ -156,7 +161,7 @@ class SetupElasticSearch extends ScriptBaseClass
 
             $jsonUsers['body'][] = [
                 'member_id' => $user['idMember'],
-                'store_name' => trim($user['storeName']),
+                'store_name' => $this->stringUtility->removeNonUTF(trim($user['storeName'])),
                 'date_created' => date('Y-m-d h:m:s', strtotime($user['datecreated'])),
                 'date_modified' => date('Y-m-d h:m:s', strtotime($user['lastmodifieddate'])),
             ];
@@ -201,8 +206,8 @@ class SetupElasticSearch extends ScriptBaseClass
 
             $jsonProducts['body'][] = [
                 'product_id' => $product['idProduct'],
-                'name' => trim($product['name']),
-                'keywords' => trim($product['searchKeyword']),
+                'name' => utf8_encode(trim($product['name'])),
+                'keywords' => $this->stringUtility->removeNonUTF(trim($product['searchKeyword'])),
                 'clickcount' => (int) $product['clickcount'],
                 'date_created' => date('Y-m-d h:m:s', strtotime($product['createddate'])),
                 'date_modified' => date('Y-m-d h:m:s', strtotime($product['lastmodifieddate'])),
@@ -218,7 +223,8 @@ $setupElasticSearch  = new SetupElasticSearch(
     $elasticSearchClient,
     $emailService,
     $configLoader,
-    $viewParser
+    $viewParser,
+    $stringUtility
 );
 
 $setupElasticSearch->execute();
