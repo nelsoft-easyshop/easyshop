@@ -177,7 +177,7 @@ class SearchProduct
             }
         }
         else {
-            $elasticSearchResult = $this->searchElastic($queryString);
+            $elasticSearchResult = $this->searchElastic($queryString, $productIds);
             foreach ($elasticSearchResult as $response) {
                 $ids[] = $response['fields']['product_id'][0];
             }
@@ -189,10 +189,11 @@ class SearchProduct
     /**
      * Search items using elasticsearch
      * @param  string  $queryString
+     * @param  array   $productIds
      * @param  integer $limit
      * @return array
      */
-    public function searchElastic($queryString, $limit = 10000)
+    public function searchElastic($queryString, $productIds = [], $limit = 10000)
     {
         $searchParams['index'] = 'easyshop';
         $searchParams['type']  = 'es_product';
@@ -248,6 +249,10 @@ class SearchProduct
                 ]
             ],
         ];
+
+        if(empty($productIds) === false) {
+            $searchParams['body']['filter']['ids']['values'] = $productIds;
+        }
 
         $queryResponse = $this->elasticSearchClient->search($searchParams);
         if ((int)$queryResponse['hits']['total'] <= 0) {
@@ -396,7 +401,6 @@ class SearchProduct
             ,'sortby'
             ,'sorttype'
         ];
-
         $excludePromo = $this->configLoader->getItem('search','hide_promo_type');
         $excludeProducts = $this->configLoader->getItem('search','hide_product_slug');
         $filteredArray = $this->collectionHelper->removeArrayToArray($filterParameter,$acceptableFilter,false);
@@ -452,11 +456,13 @@ class SearchProduct
         $pageNumber = isset($parameters['page']) && $parameters['page']?trim($parameters['page']):false;
         $sortBy = isset($parameters['sortby']) && $parameters['sortby'] ?trim($parameters['sortby']):false;
         $perPage = isset($parameters['limit']) ? $parameters['limit'] : self::PER_PAGE;
-        $storeKeyword = $pageNumber ? false:true;
+        $storeKeyword = $pageNumber ? false : true;
 
         $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
         $productIds = $sortOrder = $searchProductService->filterProductByAttributesParameter($parameters,$productIds);
-        $productIds = $originalOrder = $queryString?$searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword):$productIds;
+        $productIds = $originalOrder = $queryString 
+                                       ? $searchProductService->filterBySearchString($productIds,$queryString,$storeKeyword)
+                                       : $productIds;
         $productIds = $queryString && empty($productIds) ? [] : $productIds;
         $originalOrder = $sortBy ? $sortOrder : $originalOrder;
         $finalizedProductIds = $productIds;
@@ -652,7 +658,7 @@ class SearchProduct
             }
         }
         else{
-            $elasticSearchResult = $this->searchElastic($queryString, $suggestionLimit);
+            $elasticSearchResult = $this->searchElastic($queryString, [], $suggestionLimit);
             foreach ($elasticSearchResult as $response) {
                 $suggestions[] = $response['fields']['name'][0];
             }
