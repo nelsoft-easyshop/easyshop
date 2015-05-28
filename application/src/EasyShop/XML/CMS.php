@@ -881,8 +881,14 @@ $string = '<typeNode>
         }
         
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
-            $featuredCategory['popularCategory'][$key]['category'] = $this->em->getRepository('Easyshop\Entities\EsCat')
-                                                                                ->findOneBy(['slug' => $category['categorySlug']]);
+
+            $categoryEntity = $this->em->getRepository('Easyshop\Entities\EsCat')
+                             ->findOneBy(['slug' => $category['categorySlug']]);
+            if($categoryEntity === null){
+                continue;
+            }
+                
+            $featuredCategory['popularCategory'][$key]['category'] = $categoryEntity;
             $featuredCategory['popularCategory'][$key]['subCategory'] = [];
             $category['sub']['categorySubSlug'] = isset($category['sub']['categorySubSlug']) ? $category['sub']['categorySubSlug']  : [];
             if(!is_array($category['sub']['categorySubSlug'])){
@@ -892,8 +898,11 @@ $string = '<typeNode>
             }
 
             foreach ($category['sub']['categorySubSlug'] as $subKey => $subCategory) {
-                $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $this->em->getRepository('Easyshop\Entities\EsCat')
-                                                                                              ->findOneBy(['slug' => $subCategory]);
+                $subcategoryEntity =  $this->em->getRepository('Easyshop\Entities\EsCat')
+                                           ->findOneBy(['slug' => $subCategory]);
+                if($subcategoryEntity !== null){
+                    $featuredCategory['popularCategory'][$key]['subCategory'][$subKey] = $subcategoryEntity;
+                }
             }
         }
 
@@ -1104,7 +1113,7 @@ $string = '<typeNode>
                 'target' => !isset($value['imagemap']['target']) || empty($value['imagemap']['target'])
                             ? "" : $value['imagemap']['target'],
                 'actionType' => !isset($value['actionType']) || empty($value['actionType'])
-                                ? "" : $value['actionType'],
+                                ? "" : trim($value['actionType']),
             ];
         }
 
@@ -1168,7 +1177,7 @@ $string = '<typeNode>
                         $productBasePrice = floatval($product->getPrice());
                         $productFinalPrice = floatval($product->getFinalPrice());
                         $productImagePath = $directory.$imageFileName;
-                        if((string) $valueLevel2['actionType'] === self::AT_SHOW_PRODUCT_DETAILS){
+                        if((string) trim($valueLevel2['actionType']) === self::AT_SHOW_PRODUCT_DETAILS){
                             $target = $baseUrl.'mobile/product/item/'.$productSlug;
                         }
                         else{
@@ -1185,7 +1194,7 @@ $string = '<typeNode>
                         'final_price' => $productFinalPrice,
                         'image' => $productImagePath, 
                         'actionType' => !isset($valueLevel2['actionType']) || empty($valueLevel2['actionType'])
-                                        ? "" : $valueLevel2['actionType'],
+                                        ? "" : trim($valueLevel2['actionType']),
                         'target' => $target,
                     ];
                 }

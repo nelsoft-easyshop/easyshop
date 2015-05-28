@@ -1546,4 +1546,38 @@ class EsProductRepository extends EntityRepository
 
         return $resultSet;
     }
+
+    /**
+     * Get all active product using raw sql
+     * @return array
+     */
+    public function getAllActiveProductsRaw()
+    {
+        $em = $this->_em;
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('idProduct', 'idProduct');
+        $rsm->addScalarResult('name', 'name');
+        $rsm->addScalarResult('searchKeyword', 'searchKeyword');
+        $rsm->addScalarResult('clickcount', 'clickcount');
+        $rsm->addScalarResult('createddate', 'createddate');
+        $rsm->addScalarResult('lastmodifieddate', 'lastmodifieddate');
+        $query = $em->createNativeQuery("
+            SELECT
+                id_product as idProduct,
+                name as name,
+                search_keyword as searchKeyword,
+                clickcount as clickcount,
+                createddate as createddate,
+                lastmodifieddate as lastmodifieddate
+            FROM
+                es_product
+            WHERE
+                is_delete = :active
+                AND is_draft = :active
+        ", $rsm);
+        $query->setParameter('active', \EasyShop\Entities\EsProduct::ACTIVE);
+        $activeProducts = $query->execute();
+
+        return $activeProducts;
+    }
 }

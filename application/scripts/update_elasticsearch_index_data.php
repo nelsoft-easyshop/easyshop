@@ -124,6 +124,7 @@ class UpdateElasticSearchIndexes extends ScriptBaseClass
                 ];
 
                 $jsonProducts['body'][] = [
+                    'product_id' => $product->getIdProduct(),
                     'name' => trim($product->getName()),
                     'keywords' => trim($product->getSearchKeyword()),
                     'clickcount' => (int) $product->getClickcount(),
