@@ -2328,7 +2328,7 @@
                 $('#transaction-menu-trigger').trigger('click');
             }, 500);
             setTimeout(function() {
-                $('.transaction-trigger[data-type="on-going"]').trigger('click');
+                $('.transaction-trigger.on-going-tab').trigger('click');
             }, 1000);
         }
         else if(tab === "settings"){
