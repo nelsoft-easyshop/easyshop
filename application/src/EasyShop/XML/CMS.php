@@ -12,7 +12,6 @@ class CMS
 
     const NODE_TYPE_PRODUCT = "product";
 
-
     /**
      * The xml resource getter
      *
@@ -883,7 +882,7 @@ $string = '<typeNode>
         foreach ($xmlContent['categoryNavigation']['category'] as $key => $category) {
 
             $categoryEntity = $this->em->getRepository('Easyshop\Entities\EsCat')
-                             ->findOneBy(['slug' => $category['categorySlug']]);
+                                   ->findOneBy(['slug' => $category['categorySlug']]);
             if($categoryEntity === null){
                 continue;
             }
