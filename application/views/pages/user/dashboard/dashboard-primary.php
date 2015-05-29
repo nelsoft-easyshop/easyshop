@@ -12,47 +12,143 @@
         <div class="row-fluid">
             <div class="idTabs">
                 <div class="col-sm-3 col-sidebar">
-                    <ul class="sidebar-dashboard" >
-                        <a href="#dashboard" class="dash-me selected">
-                            <li id="dash" class="mf-li">Dashboard</li>
-                        </a>
+                    <!--Start of new sidebar tab for desktop-->
+                    <ul class="dashboard-sidebar-container">
+                        <li>
+                            <a href="#dashboard" class="dashboard-tab-button selected">Dashboard</a>
+                        </li>
 
-                        <a>
-                            <li id="my-store-menu-trigger" class=" dashboard-menu-trigger" data-section="my-store">My Store <i class="icon-control-down toggle-down pull-right"></i></li>
-                        </a>
-                        <div id="my-store-menu" class="dashboard-menu">
-                            <ul class="sidebar-submenu">
-                                <a href="#setup" id="store-setup-tab"><li class="f-li ms-f">Store Setup</li></a>
-                                <a href="#customize-category" id="customize-category-tab"><li class="f-li ms-f">Customize Category</li></a>
-                                <a href="#product-management" id="product-management-tab"><li class="f-li">Product Management</li></a>
-                            </ul>
-                        </div>
-    
-                        <a href="#transactions">
-                            <li id="transaction-menu-trigger" class=" dashboard-menu-trigger" data-section="my-transaction">Transactions<i class="m icon-control-down toggle-down pull-right"></i></li>
-                        </a>
-                        <div id="transaction-menu" class="dashboard-menu">
-                            <ul class="sidebar-submenu">
-                                <a href="javascript:void(0);" class="transaction-trigger" data-type="on-going"><li class="f-li">On-going Transaction</li></a>
-                                <a href="javascript:void(0);" class="transaction-trigger" data-type="completed"><li class="m-li">Completed Transaction</li></a>
-                            </ul>
-                        </div>
-                        
-                        <a>
-                            <li id="my-account-menu-trigger" class="ml-li dashboard-menu-trigger" data-section="my-account">My Account <i class="icon-control-down toggle-down pull-right"></i></li>
-                        </a>
-                        <div id="my-account-menu" class="dashboard-menu">
-                            <ul class="sidebar-submenu submenu-my-account">
-                                <a href="#personal-information" class="personal-info-trigger"><li class="f-li">Personal Information</li></a>
-                                <a href="#delivery-address" class="delivery-address-trigger"><li class="m-li">Delivery Address</li></a>
-                                <a href="#payment-account" class="payment-account-trigger" id="payment-account-tab"><li class="m-li m-li2">Payment Account</li></a>
-                                <a href="#activity-logs" class="activity-logs-trigger" ><li class="m-li m-li2">Activity Logs</li></a>
-                                <a href="#account-settings" class="settings-trigger"><li class="f-li f-a">Account Settings</li></a>
-                            </ul>
-                        </div>
-                    
+                        <li src="mystore">
+                            <a>
+                                My Store
+                                <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
+                            </a>
+                            <div class="dashboard-sidebar-submenu-wrapper">
+                                <ul class="dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a class="store-setup-tab" href="#setup">Store Setup</a>
+                                    </li> 
+                                    <li>
+                                        <a class="customize-category-tab" href="#customize-category">Customize Category</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#product-management">Product Management</a>
+                                    </li> 
+                                </ul>
+                            </div>
+                        </li>
+                        <li src="transactions">
+                            <a >
+                                Transactions
+                                <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
+                            </a>
+                            <div class="dashboard-sidebar-submenu-wrapper">
+                                <ul class="dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a class="on-going-tab" href="#on-going-transaction">On-Going Transaction</a>
+                                    </li> 
+                                    <li>
+                                        <a class="completed-tab" href="#completed-transaction">Completed Transaction</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li src="myaccount">
+                            <a>
+                                My Account
+                                <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
+                            </a>
+                            <div class="dashboard-sidebar-submenu-wrapper">
+                                <ul class="dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a href="#personal-information">Personal Information</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#delivery-address" class="delivery-address-trigger">Delivery Address</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#payment-account" class="payment-account-trigger">Payment Account</a>
+                                    </li>
+                                    <li>
+                                        <a href="#activity-logs" class="activity-logs-trigger">Activity Log</a>
+                                    </li>
+                                    <li>
+                                        <a href="#account-settings">Account Settings</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
-                    
+                    <!--End of new sidebar tab for desktop-->
+
+                    <!--Start of new sidebar tab for mobile-->
+                    <ul class="mobile-dashboard-sidebar-container">
+                        <li>
+                            <a class="dashboard-tab-button" href="#dashboard">Dashboard</a>
+                        </li>
+
+                        <li class="col-xs-4">
+                            <a src="mystore">
+                                My Store
+                                <i class="fa fa-angle-down sidebar-menu-icon"></i>
+                            </a>
+                            <div class="mobile-dashboard-sidebar-submenu-wrapper">
+                                <ul class="mobile-dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a class="store-setup-tab" src="setup" href="#setup">Store Setup</a>
+                                    </li> 
+                                    <li>
+                                        <a class="customize-category-tab" href="#customize-category">Customize Category</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#product-management">Product Management</a>
+                                    </li> 
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="col-xs-4">
+                            <a src="transaction">
+                                Transactions
+                                <i class="fa fa-angle-down sidebar-menu-icon"></i>
+                            </a>
+                            <div class="mobile-dashboard-sidebar-submenu-wrapper">
+                                <ul class="mobile-dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a class="on-going-tab" href="#on-going-transaction">On-Going Transaction</a>
+                                    </li> 
+                                    <li>
+                                        <a class="completed-tab" href="#completed-transaction">Completed Transaction</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="col-xs-4">
+                            <a src="myaccount">
+                                My Account
+                                <i class="fa fa-angle-down sidebar-menu-icon"></i>
+                            </a>
+                            <div class="mobile-dashboard-sidebar-submenu-wrapper">
+                                <ul class="mobile-dashboard-sidebar-submenu-container">
+                                    <li>
+                                        <a href="#personal-information">Personal Information</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#delivery-address" class="delivery-address-trigger">Delivery Address</a>
+                                    </li> 
+                                    <li>
+                                        <a href="#payment-account" class="payment-account-trigger">Payment Account</a>
+                                    </li>
+                                    <li>
+                                        <a href="#activity-logs" class="activity-logs-trigger">Activity Log</a>
+                                    </li>
+                                    <li>
+                                        <a href="#account-settings">Account Settings</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <!--End of new sidebar tab for mobile-->
                     <?php if(\EasyShop\PaymentGateways\PointGateway::POINT_ENABLED): ?>
                     <div class="easy-point-container">
                         <div class="easy-point-title">
@@ -79,50 +175,13 @@
                     </div>
                     <?php endif; ?>
                 </div>
-                
-                                 
-                <div class="mobile-dashboard-menu">        
-                    <div class="row-fluid row-menu-mobile-res">
-                        <a class="dash-mobile-trigger my-transactions-mobile">
-                            <div class="col-xs-4 col-dash-mobile" data-section="my-transactions">
-                                Transactions
-                            </div>
-                        </a>
-                        <div class="col-xs-4 col-dash-mobile my-store-menu-mobile" data-section="my-store">
-                            My Store <i class="ms fa fa-angle-down"></i>
-                        </div>
-                        <div class="col-xs-4 col-dash-mobile my-account-menu-mobile" data-section="my-account">
-                            My Account <i class="ma fa fa-angle-down"></i>
-                        </div>
-                    </div> 
-                    
-                    <div class="my-store-menu-mobile-cont mobile-menu-container" data-section="my-store">
-                        <ul class="my-store-menu-mobile-ul">
-                            <a class="ms-setup dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-setup">Store Setup</li></a>
-                            <a class="ms-customize dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-customize">Customize Category</li></a>
-                            <a class="ms-prod dash-mobile-trigger" class="dash-mobile-trigger"><li class="m-menu-prod">Product Management</li></a>
-                        </ul>
-                    </div>
-                    <div class="my-account-menu-mobile-cont mobile-menu-container" data-section="my-account">
-                        <ul class="my-account-menu-mobile-ul">
-                            <a class="ma-info dash-mobile-trigger"><li class="m-menu-personal">Personal Information</li></a>
-                            <a class="ma-delivery dash-mobile-trigger"><li class="m-menu-delivery">Delivery Address</li></a>
-                            <a class="ma-payment dash-mobile-trigger"><li class="m-menu-payment">Payment Account</li></a>
-                            <a class="ma-activity dash-mobile-trigger"><li class="m-menu-activity">Activity Logs</li></a>
-                            <a class="ma-settings dash-mobile-trigger"><li class="m-menu-setting">Account Settings</li></a>
-                        </ul>
-                    </div>
-                </div>
-            
             </div>
             <div class="col-md-9 col-content">
                 <div class="div-dashboard-content">
                     <div class="" id="dashboard">
                         <?php echo $dashboardHomeView; ?>
                     </div>
-                    <div id="transactions">
-                        <?php include("dashboard-transactions.php");?>
-                    </div>
+                    <?php include("dashboard-transactions.php");?>
                     <div id="setup">
                         <?php include("dashboard-store-setup.php");?>
                     </div>
