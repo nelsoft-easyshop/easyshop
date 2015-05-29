@@ -186,7 +186,7 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                     // Display error
                     var errString = "";
                     $.each(data.error, function(key,errorMessage){
-                        errString = errorMessage;
+                        errString = errorMessage[0];
                         return false;
                     });
                     alert(escapeHtml(errString));
@@ -375,11 +375,13 @@ var jsonCity = jQuery.parseJSON($('#json_city').val());
                 $(".loader-upload").css("display","none");
                 if(xhrResponse.isSuccessful){
                     if(formAction === 'banner_upload'){
-                        $(".vendor-main-bg").css({ "background-image" : "url('"+xhrResponse.banner+"')"});
+                        $(".vendor-main-bg").css({ "background-image" : "url('" + config.assetsDomain + '.' + xhrResponse.banner + "')"});
                     }
                     else if(formAction === 'upload_img'){
                         var avatarImage = $('img.avatar-image');
-                        avatarImage.attr('src',xhrResponse.image);
+                        var smallAvatar = $('img#vendor-profile-avatar');
+                        avatarImage.attr('src',config.assetsDomain + '.' + xhrResponse.image);
+                        smallAvatar.attr('src',config.assetsDomain + '.' + xhrResponse.smallImage);
                     }
                     $.modal.close();
                     $('#banner-cancel-changes').trigger('click');

@@ -55,7 +55,7 @@
                                                 <ul class="list-sub-category">
                                                 <?php foreach($children as $child): ?>
                                                     <li>
-                                                        <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-<?php echo $child->getId(); ?>" >
+                                                        <a href="javascript:void(0)" class="color-default tab_categories" data-link="#def-<?php echo $child->getId(); ?>" >
                                                             <?php echo html_escape($child->getCategoryName()); ?> 
                                                         </a>
                                                     </li>
@@ -200,7 +200,7 @@
                     <?php endif; ?>
                     <li>
                         <?php $children = $categoryWrapper->getChildren(); ?>
-                        <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php if($categoryWrapper->getIsCustom() === false  ||  ($categoryWrapper->getIsCustom() && empty($children)) ): ?>simplemodal-close<?php endif;?>">
+                        <a href="javascript: void(0)" data-link="#def-<?php echo $isSearch ? 'search' : $categoryWrapper->getId(); ?>" class="color-default tab_categories <?php if($categoryWrapper->getIsCustom() === false  ||  ($categoryWrapper->getIsCustom() && empty($children)) ): ?><?php endif;?>">
                             <span class='catText'>
                                 <?php echo html_escape($categoryWrapper->getCategoryName());?>
                             </span> 
@@ -220,7 +220,7 @@
                             <ul class="list-sub-category">
                             <?php foreach($children as $child): ?>
                                 <li>
-                                    <a href="javascript:void(0)" class="color-default tab_categories simplemodal-close" data-link="#def-<?php echo $child->getId(); ?>" >
+                                    <a href="javascript:void(0)" class="color-default tab_categories" data-link="#def-<?php echo $child->getId(); ?>" >
                                         <?php echo html_escape($child->getCategoryName()); ?> 
                                     </a>
                                 </li>

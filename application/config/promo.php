@@ -150,7 +150,7 @@ $config = [
             'purchase_limit' => 1,
             'payment_method' => [],
             'banner' => 'generic',
-            'is_buyable_outside_promo' => true,
+            'is_buyable_outside_promo' => false,
             'cart_solo_restriction' => false,
             'option' => [
                 0 => [
@@ -159,7 +159,7 @@ $config = [
                     'purchase_limit' => PHP_INT_MAX
                 ],
             ],
-            'viewable_button_product_page' =>false,
+            'viewable_button_product_page' => false,
         ],
         /* Buy at zero promo */
         '6' => [

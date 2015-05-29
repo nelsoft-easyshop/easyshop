@@ -252,7 +252,7 @@ class product extends MY_Controller
                 $isBuyButtonViewable = true;
 
                 $paymentMethod = $checkoutService->getUserPaymentMethod($member->getIdMember())['payment_display'];
-                if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON && (!$product->getEndPromo())){
+                if((int) $product->getIsPromote() === EsProduct::PRODUCT_IS_PROMOTE_ON){
                     $bannerfile = $this->config->item('Promo')[$product->getPromoType()]['banner'];
                     $externalLink = $this->em->getRepository('EasyShop\Entities\EsProductExternalLink')
                                              ->getExternalLinksByProductId($productEntity->getIdProduct());
@@ -471,6 +471,7 @@ class product extends MY_Controller
         $productManager = $this->serviceContainer['product_manager'];
         $collectionHelper = $this->serviceContainer['collection_helper'];
         $esProductRepo = $this->em->getRepository('EasyShop\Entities\EsProduct');
+        $esMemberRepo = $this->em->getRepository('EasyShop\Entities\EsMember');
 
         $memberId = $this->session->userdata('member_id');
         $slug = trim($this->input->post('slug')); 
@@ -478,14 +479,15 @@ class product extends MY_Controller
         $hasCombination = true;
         $soloQuantity = 0;
 
+        $member = $esMemberRepo->find($memberId);
         $product = $esProductRepo->findOneBy([
             'slug' => $slug,
-            'member' => $memberId,
+            'member' => $member,
             'isDraft' => EsProduct::ACTIVE,
             'isDelete' => EsProduct::ACTIVE,
         ]);
 
-        if($product){
+        if($product && $member && $member->getIsEmailVerify()){
             $product = $productManager->getProductDetails($product);
             $productAttributes = $esProductRepo->getAttributesByProductIds($product->getIdProduct());
             $productAttributes = $collectionHelper->organizeArray($productAttributes, true); 
@@ -514,10 +516,21 @@ class product extends MY_Controller
                 'hasCombination' => $hasCombination,
                 'soloQuantity' => $soloQuantity,
                 'availableStock' => $esProductRepo->getProductAvailableStocks($product->getIdProduct()),
-            ]; 
+            ];
 
-            echo json_encode($this->load->view('partials/dashboard-express-edit', $viewData, true)); 
-        } 
+            $responseArray = [
+                'error' => false,
+                'view' => $this->load->view('partials/dashboard-express-edit', $viewData, true)
+            ];
+        }
+        else {
+            $responseArray = [
+                'error' => true,
+                'message' => "Please verify your email address.",
+            ];
+        }
+
+        echo json_encode($responseArray);
     }
 
     /**
@@ -533,6 +546,7 @@ class product extends MY_Controller
         $esProductItemAttrRepo = $this->em->getRepository('EasyShop\Entities\EsProductItemAttr');
         $esShippingHeadRepo = $this->em->getRepository('EasyShop\Entities\EsProductShippingHead');
         $esShippingDetailRepo = $this->em->getRepository('EasyShop\Entities\EsProductShippingDetail');
+        $esMemberRepo = $this->em->getRepository('EasyShop\Entities\EsMember');
 
         $memberId = $this->session->userdata('member_id');
         $slug = trim($this->input->post('slug'));
@@ -545,9 +559,11 @@ class product extends MY_Controller
         $serverResponse = [
             'result' => false,
         ];
+
+        $member = $esMemberRepo->find($memberId);
         $product = $esProductRepo->findOneBy([
             'slug' => $slug,
-            'member' => $memberId,
+            'member' => $member,
             'isDraft' => EsProduct::ACTIVE,
             'isDelete' => EsProduct::ACTIVE,
         ]);
@@ -557,6 +573,7 @@ class product extends MY_Controller
             "NAME_INVALID" => "Product name must be atleast ".EsProduct::MINIMUM_PRODUCT_NAME_LEN." characters!",
             "DISCOUNT_INVALID" => "Invalid discount. Range must be 0 - 99 only.",
             "REQUEST_INVALID" => "Invalid request.",
+            "UNVERIFIED_EMAIL_INVALID" => "Please verify your account email address.",
         ];
 
         try {
@@ -573,8 +590,12 @@ class product extends MY_Controller
                 throw new Exception($arrayErrorMessages['DISCOUNT_INVALID']); 
             }
 
-            if(!$product || strlen($slug) <= 0){
+            if(!$product || strlen($slug) <= 0 || !$member){
                 throw new Exception($arrayErrorMessages['REQUEST_INVALID']); 
+            }
+
+            if((bool) $member->getIsEmailVerify() === false){
+                throw new Exception($arrayErrorMessages['UNVERIFIED_EMAIL_INVALID']); 
             }
 
             $product->setName($productName);

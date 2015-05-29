@@ -120,7 +120,7 @@ class MobileWebService extends MY_Controller
         $coordinate = trim($this->input->get("coordinate"));
         $target = trim($this->input->get("target")); 
         $target = $target !== "" ? $target : "/";
-        $action = $this->input->get("actionType");
+        $action = trim($this->input->get("actionType"));
         $this->config->load("image_path");
         $filename = date('yhmdhs');
         $file_ext = explode('.', $_FILES['myfile']['name']);
@@ -155,6 +155,7 @@ class MobileWebService extends MY_Controller
             if(strtolower(ENVIRONMENT) !== 'development' && $isXmlInsertSuccessful){
                 $this->serviceContainer['aws_uploader']
                      ->uploadFile($uploadData['full_path'],  $value);
+                unlink($uploadData['full_path']);
             } 
 
             if($addXml === true) {
@@ -179,7 +180,7 @@ class MobileWebService extends MY_Controller
         $type = self::DEFAULT_MAINSLIDE_TYPE;
         $order = $this->input->get("order");
         $coordinate = $this->input->get("coordinate");
-        $actionType = $this->input->get("actionType");
+        $actionType = trim($this->input->get("actionType"));
         $target = trim($this->input->get("target")); 
         $target = $target !== "" ? $target : "/";
         $this->config->load("image_path");
@@ -225,6 +226,7 @@ class MobileWebService extends MY_Controller
                                  $uploadData['full_path'],  
                                  $value
                              );
+                        unlink($uploadData['full_path']);
                     } 
 
                     return $this->output
@@ -302,7 +304,7 @@ class MobileWebService extends MY_Controller
         $value = $this->input->get("value");
         $type = $this->input->get("type");
         $target = trim($this->input->get("target"));
-        $actionType = $this->input->get("actionType");
+        $actionType = trim($this->input->get("actionType"));
         $target = $target === "" ? "/" : $target;
         $string = $this->xmlCmsService->getString("boxContent",$value, $type, $target, $actionType); 
         $map = simplexml_load_file($this->file);

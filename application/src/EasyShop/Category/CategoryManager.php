@@ -816,6 +816,7 @@ class CategoryManager
         $categoryNestedSetCount = $this->em->getRepository('EasyShop\Entities\EsCategoryNestedSet')
                                        ->getNestedSetCategoryCount();
         $parentCategoryId = 0;
+        $topLevelParent = false;
         if((int)$categoryNestedSetCount === 0){
             $ancestor =  $this->em->getRepository('EasyShop\Entities\EsCat')
                                     ->getParentCategoryRecursive($categoryId);
@@ -825,10 +826,13 @@ class CategoryManager
             $ancestorIds = $this->em->getRepository('EasyShop\Entities\EsCat')
                                     ->getAncestorsWithNestedSet($categoryId);
             $parentCategoryId = reset($ancestorIds);
-        }    
-        $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $parentCategoryId);
-        if($topLevelParent === null){
-            $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $categoryId);
+        }
+
+        if ($parentCategoryId !== null) {
+            $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $parentCategoryId);
+            if($topLevelParent === null){
+                $topLevelParent = $this->em->find('EasyShop\Entities\EsCat', $categoryId);
+            }
         }
 
         return $topLevelParent;
@@ -900,66 +904,73 @@ class CategoryManager
             $member = $product->getMember();
             $memberProducts = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
                                         ->findBy(['product' => $productId]);
+
             if(empty($memberProducts)){
                 $stringUtility = $this->stringUtility;
                 $categoryId = $product->getCat()->getIdCat();
-                $topParentCategory = $this->getTopParentCategory($categoryId); 
-                $topParentCategoryName = $topParentCategory->getName();
-                if((int)$categoryId === \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID){
-                    $topParentCategoryName = $product->getCatOtherName();
-                }
-                $cleanedCategoryName = $stringUtility->cleanString($topParentCategoryName);
-                $cleanedCategoryName = strtolower($cleanedCategoryName);
-                $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
-                                             ->getCustomCategoriesObject($member->getIdMember());     
-                $isCustomCategoryFound = false;
-                $datetimeToday = date_create(date("Y-m-d H:i:s"));
-                $highestSortOrder = 0;
-                foreach($memberCategories as $memberCategory){
-                    $cleanedName = $this->stringUtility->removeSpecialCharsExceptSpace($memberCategory->getCatName());
-                    $cleanedName = strtolower($stringUtility->cleanString($cleanedName));
-                    if($memberCategory->getSortOrder() > $highestSortOrder){
-                        $highestSortOrder = $memberCategory->getSortOrder();
+                $topParentCategory = $this->getTopParentCategory($categoryId);
+
+                if ($topParentCategory) {
+                    $topParentCategoryName = $topParentCategory->getName();
+                    if((int)$categoryId === \EasyShop\Entities\EsCat::ROOT_CATEGORY_ID){
+                        $topParentCategoryName = $product->getCatOtherName();
                     }
-                    if($cleanedName === $cleanedCategoryName){
-                        $memberCategoryId = $memberCategory->getIdMemcat();
-                        $highestProductSortOrder = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
-                                                        ->getHighestProductSortOrderWithinCategory($memberCategoryId);
+
+                    $cleanedCategoryName = $stringUtility->cleanString($topParentCategoryName);
+                    $cleanedCategoryName = strtolower($cleanedCategoryName);
+                    $memberCategories = $this->em->getRepository('EasyShop\Entities\EsMemberCat')
+                                                 ->getCustomCategoriesObject($member->getIdMember());     
+                    $isCustomCategoryFound = false;
+                    $datetimeToday = date_create(date("Y-m-d H:i:s"));
+                    $highestSortOrder = 0;
+
+                    foreach($memberCategories as $memberCategory){
+                        $cleanedName = $this->stringUtility->removeSpecialCharsExceptSpace($memberCategory->getCatName());
+                        $cleanedName = strtolower($stringUtility->cleanString($cleanedName));
+                        if($memberCategory->getSortOrder() > $highestSortOrder){
+                            $highestSortOrder = $memberCategory->getSortOrder();
+                        }
+                        if($cleanedName === $cleanedCategoryName){
+                            $memberCategoryId = $memberCategory->getIdMemcat();
+                            $highestProductSortOrder = $this->em->getRepository('EasyShop\Entities\EsMemberProdcat')
+                                                            ->getHighestProductSortOrderWithinCategory($memberCategoryId);
+                            $newMemberProduct = new \EasyShop\Entities\EsMemberProdcat();
+                            $newMemberProduct->setMemcat($memberCategory);
+                            $newMemberProduct->setCreatedDate($datetimeToday);
+                            $newMemberProduct->setLastmodifieddate($datetimeToday);
+                            $newMemberProduct->setProduct($product);
+                            $newMemberProduct->setSortOrder($highestProductSortOrder);
+                            $this->em->persist($newMemberProduct);
+                            $isCustomCategoryFound = true;
+                            break;
+                        }
+                    }
+
+                    if(!$isCustomCategoryFound){
+                        $highestSortOrder++;
+                        $validCategoryName = $this->stringUtility->removeSpecialCharsExceptSpace($topParentCategoryName);
+                        $newMemberCategory = new \EasyShop\Entities\EsMemberCat();
+                        $newMemberCategory->setMember($member);
+                        $newMemberCategory->setCatName($validCategoryName);
+                        $newMemberCategory->setSortOrder($highestSortOrder);
+                        $newMemberCategory->setCreatedDate($datetimeToday);
+                        $newMemberCategory->setlastModifiedDate($datetimeToday);
+                        $this->em->persist($newMemberCategory);
                         $newMemberProduct = new \EasyShop\Entities\EsMemberProdcat();
-                        $newMemberProduct->setMemcat($memberCategory);
+                        $newMemberProduct->setMemcat($newMemberCategory);
                         $newMemberProduct->setCreatedDate($datetimeToday);
                         $newMemberProduct->setLastmodifieddate($datetimeToday);
                         $newMemberProduct->setProduct($product);
-                        $newMemberProduct->setSortOrder($highestProductSortOrder);
+                        $newMemberProduct->setSortOrder(0);
                         $this->em->persist($newMemberProduct);
-                        $isCustomCategoryFound = true;
-                        break;
                     }
-                }
-                if(!$isCustomCategoryFound){
-                    $highestSortOrder++;
-                    $validCategoryName = $this->stringUtility->removeSpecialCharsExceptSpace($topParentCategoryName);
-                    $newMemberCategory = new \EasyShop\Entities\EsMemberCat();
-                    $newMemberCategory->setMember($member);
-                    $newMemberCategory->setCatName($validCategoryName);
-                    $newMemberCategory->setSortOrder($highestSortOrder);
-                    $newMemberCategory->setCreatedDate($datetimeToday);
-                    $newMemberCategory->setlastModifiedDate($datetimeToday);
-                    $this->em->persist($newMemberCategory);
-                    $newMemberProduct = new \EasyShop\Entities\EsMemberProdcat();
-                    $newMemberProduct->setMemcat($newMemberCategory);
-                    $newMemberProduct->setCreatedDate($datetimeToday);
-                    $newMemberProduct->setLastmodifieddate($datetimeToday);
-                    $newMemberProduct->setProduct($product);
-                    $newMemberProduct->setSortOrder(0);
-                    $this->em->persist($newMemberProduct);
-                }
-                try{
-                    $isSuccessful = true;
-                    $this->em->flush();
-                }
-                catch(\Exception $e){
-                    $isSuccessful = false;
+                    try{
+                        $isSuccessful = true;
+                        $this->em->flush();
+                    }
+                    catch(\Exception $e){
+                        $isSuccessful = false;
+                    }
                 }
             }
         }

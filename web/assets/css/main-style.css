@@ -312,10 +312,12 @@ textarea {
 }
 
 .user-login img {
+    border-radius: 90px;
     display: inline-block;
+    height: 20px;
     margin-right: 5px;
-/*    padding-top: 5px;*/
     vertical-align: middle;
+    width: 20px;
 }
 
 .vendor-login-name span {
@@ -463,8 +465,9 @@ textarea {
 .vendor-profile-content h4 {
     font-size: 1.5em;
     font-weight: bold;
-    margin-bottom: 2px;
-    margin-top: 31px;
+    line-height: 34px;
+    margin-bottom: 0;
+    margin-top: 24px;
     overflow: hidden;
     padding: 0 20px;
     text-overflow: ellipsis;
@@ -546,7 +549,7 @@ textarea {
     height: 108px;
     position: absolute;
     top: 0px;
-    width: 111px;
+    width: 109px;
     z-index: 1;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -1969,6 +1972,10 @@ td.td-view.p-view2.color-default{
     display: none;
 }
 
+.row-left-wing a:hover {
+    text-decoration: none;
+}
+
 .filter-modal h1,
 .categories-modal h1
 {
@@ -2442,7 +2449,7 @@ td.td-view.p-view2.color-default{
     }
     
     .vendor-profile-content h4{
-        margin-top: 8px;
+        margin-top: 6px;
         font-size: 1.3em;
     }
     

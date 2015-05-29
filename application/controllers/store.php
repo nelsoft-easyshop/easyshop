@@ -171,7 +171,9 @@ class Store extends MY_Controller
 
         $memberObj = $uploadResult['member'];
         $userImage = $this->serviceContainer['user_manager']
-                          ->getUserImage($memberId);                                                             
+                          ->getUserImage($memberId);
+        $smallImage = $this->serviceContainer['user_manager']
+                          ->getUserImage($memberId, 'small');
 
         if(!(bool)$this->input->post('isAjax')) {
             redirect($memberObj->getSlug().'/'.html_escape($this->input->post('vendorLink')));
@@ -180,6 +182,7 @@ class Store extends MY_Controller
         $response = [
             'isSuccessful' => empty($uploadResult['error']) ? true : false,
             'image' => $userImage,
+            'smallImage' => $smallImage,
             'message' => empty($uploadResult['error']) ? "" : "Please select valid image type.\nAllowed type: ".AssetsUploader::ALLOWABLE_IMAGE_MIME_TYPES." \nAllowed max size: ".AssetsUploader::MAX_ALLOWABLE_SIZE_KB." kb",
         ];
 

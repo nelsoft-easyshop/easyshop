@@ -3,7 +3,7 @@
     <div class="express-edit-confirm"></div>
     <div class="row">
         <div class="col-xs-12 col-md-3">
-            <div class="express-edit-product-image" style="background: url(<?=getAssetsDomain().$product->directory.'categoryview/'.$product->imageFileName; ?>) center no-repeat; background-cover: cover; background-size: 100%;">
+            <div class="express-edit-product-image" style="background: url(<?=getAssetsDomain().$product->directory.'categoryview/'.$product->imageFileName; ?>) center no-repeat; background-size: 62%;">
             </div>
         </div>
         <div class="col-xs-12 col-md-6 padding-reset">
@@ -15,16 +15,16 @@
                 <div class="edit-sub-content-column1">
                     <p><strong>Base Price</strong></p>
                     <span><strong>P</strong></span>
-                    <input type="text" value="<?=html_escape(number_format($product->getPrice(), 2, '.', ','));?>" class="ui-form-control base-price" onkeypress="return isNumberKey(event);">
+                    <input type="text" maxlength="10" value="<?=html_escape(number_format($product->getPrice(), 2, '.', ','));?>" class="ui-form-control base-price" onkeypress="return isNumberKey(event);">
                 </div>
                 <div class="edit-sub-content-column2">
                     <p><strong>Discounted Price</strong></p>
                     <span><strong>P</strong></span>
-                    <input type="text" class="ui-form-control discount-price" value="" onkeypress="return isNumberKey(event);">
+                    <input type="text" maxlength="10" class="ui-form-control discount-price" value="" onkeypress="return isNumberKey(event);">
                 </div>
                 <div class="edit-sub-content-column3">
                     <p><strong>Discount Rate</strong></p>
-                    <input type="text" value="<?=html_escape(number_format($product->getDiscount(), 4));?>" class="ui-form-control discount-rate" onkeypress="return isNumberKey(event);">
+                    <input type="text" maxlength="10" value="<?=html_escape(number_format($product->getDiscount(), 4));?>" class="ui-form-control discount-rate" onkeypress="return isNumberKey(event);">
                     <span><strong>%</strong></span>
                 </div>
                 <div class="clear"></div>

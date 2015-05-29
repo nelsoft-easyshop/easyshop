@@ -600,7 +600,7 @@
                                                 <tr>
                                                     <td valign="top" align="left">
 
-                                                        <table border="0" align="left" cellpadding="0" cellspacing="0" class="container">
+                                                         <table border="0" align="left" cellpadding="0" cellspacing="0" class="container">
                                                             <tr>
                                                                 <td height="30" align="center" valign="middle" class="clear-padding">
                                                                   <a href="{facebook}" target="_blank" style="text-decoration: none;">
