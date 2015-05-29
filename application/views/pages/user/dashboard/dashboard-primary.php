@@ -38,23 +38,23 @@
                             </div>
                         </li>
                         <li src="transactions">
-                            <a >
+                            <a id="transaction-menu-trigger">
                                 Transactions
                                 <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
                             </a>
                             <div class="dashboard-sidebar-submenu-wrapper">
                                 <ul class="dashboard-sidebar-submenu-container">
                                     <li>
-                                        <a class="on-going-tab" href="#on-going-transaction">On-Going Transaction</a>
+                                        <a class="transaction-trigger on-going-tab" href="#on-going-transaction">On-Going Transaction</a>
                                     </li> 
                                     <li>
-                                        <a class="completed-tab" href="#completed-transaction">Completed Transaction</a>
+                                        <a class="transaction-trigger completed-tab" href="#completed-transaction">Completed Transaction</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
                         <li src="myaccount">
-                            <a>
+                            <a id="my-account-menu-trigger">
                                 My Account
                                 <i class="pull-right icon-control-down fa-lg sidebar-menu-icon"></i>
                             </a>
@@ -73,7 +73,7 @@
                                         <a href="#activity-logs" class="activity-logs-trigger">Activity Log</a>
                                     </li>
                                     <li>
-                                        <a href="#account-settings">Account Settings</a>
+                                        <a class="settings-trigger" href="#account-settings">Account Settings</a>
                                     </li>
                                 </ul>
                             </div>
