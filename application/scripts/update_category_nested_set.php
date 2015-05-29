@@ -108,6 +108,7 @@ class UpdateCategoryNestedSet extends ScriptBaseClass
             $index = $count + 1;
             $preparedStatement->bindValue($index, $parameter, PDO::PARAM_INT);
         }
+        $preparedStatement->execute();
 
         $temporaryNestedSet = $this->selectAllTempTableData();
         $this->emptyCategoryNestedSet();
@@ -129,6 +130,7 @@ class UpdateCategoryNestedSet extends ScriptBaseClass
             $index = $count + 1;
             $finalInsertstatement->bindValue($index, $parameter, PDO::PARAM_INT);
         }
+        $finalInsertstatement->execute();
 
         $this->dropTempTable();
         echo "\nNested set table successfully generated.\n\n";
