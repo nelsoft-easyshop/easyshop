@@ -21,13 +21,13 @@ class StringUtilityTest extends PHPUnit_Framework_TestCase
      * Test for cleanString from string utility
      * @dataProvider cleanStringProvider
      */
-    public function testCleanStringSuccessful($inputString, $expectedString)
+    public function testCleanString($inputString, $expectedString)
     {
         $this->assertEquals($this->stringUtility->cleanString($inputString), $expectedString);
     }
 
     /**
-     * String collection dataProvider for testCleanStringSuccessful
+     * String collection dataProvider for testCleanString
      * @return array
      */
     public function cleanStringProvider()
@@ -42,13 +42,13 @@ class StringUtilityTest extends PHPUnit_Framework_TestCase
      * Test for purifyHTML from string utility
      * @dataProvider purifyHTMLProvider
      */
-    public function testPurifyHTMLSuccessful($inputString, $expectedString)
+    public function testPurifyHTML($inputString, $expectedString)
     {
         $this->assertEquals($this->stringUtility->purifyHTML($inputString), $expectedString);
     }
 
     /**
-     * String collection dataProvider for testPurifyHTMLSuccessful
+     * String collection dataProvider for testPurifyHTML
      * @return array
      */
     public function purifyHTMLProvider()
