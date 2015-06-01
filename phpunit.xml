@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<phpunit bootstrap="application/tests/bootstrap.php">
+<phpunit colors="true" bootstrap="application/tests/bootstrap.php">
     <testsuites>
-        <testsuite name="ServiceTestSuite">
-            <directory>application/tests/services</directory>
-        </testsuite>
         <testsuite name="HelperTestSuite">
             <directory>application/tests/helpers</directory>
+        </testsuite>
+        <testsuite name="ServiceUtilityTestSuite">
+            <directory>application/tests/services/utility</directory>
         </testsuite>
     </testsuites>
     <php>
