@@ -18,6 +18,35 @@ class StringUtilityTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for paramsToArray from string utility
+     * @dataProvider paramsToArrayProvider
+     */
+    public function testParamsToArray($inputString, $expectedArray)
+    {
+        $this->assertEquals($this->stringUtility->paramsToArray($inputString), $expectedArray);
+    }
+
+    /**
+     * dataProvider testParamsToArray
+     * @return array
+     */
+    public function paramsToArrayProvider()
+    {
+        return [
+            [
+                "first=value&arr[]=foo+bar&arr[]=baz",
+                [
+                    'first' => 'value',
+                    'arr' => [
+                        'foo bar',
+                        'baz'
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Test for cleanString from string utility
      * @dataProvider cleanStringProvider
      */
