@@ -26,7 +26,7 @@ class StringUtility
 
     /**
      * Constructor.
-     * 
+     *
      */
     public function __construct($htmlPurifier, $configLoader)
     {
@@ -37,9 +37,9 @@ class StringUtility
     /**
      * Transforms serialized request parameters into an associative
      * array
-     * 
+     *
      * @param string $params
-     * 
+     *
      * @return array
      */
     public function paramsToArray($params)
@@ -54,21 +54,26 @@ class StringUtility
     *
     * @access public
     * @param mixed $string
+    * @link http://stackoverflow.com/questions/11330480/strip-php-variable-replace-white-spaces-with-dashes
+    * answer from stackoverflow for SEO friendly url
     * @return mixed
     */
     public function cleanString($string)
     {
-        $string = preg_replace("/\s+/", " ", $string);
-        $string = str_replace('-', ' ', trim($string));
-        $string = preg_replace("/\s+/", " ", $string);
-        $string = str_replace(' ', '-', trim($string));
-        $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+        //Lower case everything
+        $string = strtolower($string);
+        //Make alphanumeric (removes all other characters)
+        $string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
+        //Clean up multiple dashes or whitespace
+        $string = preg_replace("/[\s-]+/", " ", $string);
+        //Convert whitespace and underscore to dash
+        $string = preg_replace("/[\s_]/", "-", $string);
+        //Remove excess dash from beginning of the string
+        $string = rtrim($string, '-');
+        //Remove excess dash from end of the string
+        $string = ltrim($string, '-');
 
-        $string = str_replace('-', ' ', $string);
-        $string = str_replace(' ', '-', $string);
-        $string = str_replace('--', '-', $string);
-
-        return preg_replace('/\s+/','-', $string);
+        return $string;
     }
 
     /**
@@ -82,7 +87,7 @@ class StringUtility
     }
 
     /**
-     * Remove non utf character in string  
+     * Remove non utf character in string
      * @param  string $string
      * @return string
      */
@@ -91,22 +96,28 @@ class StringUtility
         $foreignChars = $this->configLoader->getItem('foreign_chars');
         $string = preg_replace(array_keys($foreignChars), array_values($foreignChars), $string);
         $string = mb_convert_encoding($string, 'UTF-8', 'UTF-8');
-        $string = preg_replace('/[^(\x20-\x7F)]*/','', $string);
+        // remove non UTF-8 character convert into none
+        $string = preg_replace('/[^(\x20-\x7F)]*/', '', $string);
+        // remove all multiple spaces convert into 1 space
+        $string = preg_replace('/\s+/', ' ', $string);
 
-        return $string;
+        return trim($string);
     }
     
     
     /**
      * Remove all special characters except white space
-     * 
+     *
      * @param string $string
      * @return string
      */
     public function removeSpecialCharsExceptSpace($string)
     {
+        //Make alphanumeric (removes all other characters)
         $string = preg_replace('/[^A-Za-z0-9\s]/', '', $string);
+        // remove all multiple spaces convert into 1 space
         $string = preg_replace('/\s+/', ' ', $string);
-        return $string;
+
+        return trim($string);
     }
 }
