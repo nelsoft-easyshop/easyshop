@@ -103,7 +103,7 @@
                                 <?php echo form_close();?>
                                 <div id="div_user_image_prev">
                                     <div class="avatar-modal-loading">
-                                        <img src="<?php getAssetsDomain() ?>assets/images/loading/preloader-whiteBG.gif"/>
+                                        <img src="<?php echo getAssetsDomain() ?>assets/images/loading/preloader-whiteBG.gif"/>
                                     </div>
                                     
                                     <div class="avatar-modal-content">
@@ -119,7 +119,7 @@
 
                             <div class="edit-profile-photo">
                                 <div>
-                                    <img src="<?php getAssetsDomain() ?>assets/images/img-default-cover-photo.png" class="img-icon-edit-photo" alt="Edit Profile Photo">
+                                    <img src="<?php echo getAssetsDomain() ?>assets/images/img-default-cover-photo.png" class="img-icon-edit-photo" alt="Edit Profile Photo">
                                     <span>Change Profile Photo</span>
                                 </div>
                             </div>
