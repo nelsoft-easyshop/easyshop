@@ -292,7 +292,6 @@ class PesoPayGateway extends AbstractGateway
                                                 $paymentType,
                                                 EsOrderStatus::STATUS_PAID
                                             );
-                    $this->paymentService->sendPaymentNotification($orderId);
                     $orderHistory = [
                         'order_id' => $orderId,
                         'order_status' => EsOrderStatus::STATUS_PAID,
@@ -300,6 +299,15 @@ class PesoPayGateway extends AbstractGateway
                     ];
                     $this->em->getRepository('EasyShop\Entities\EsOrderHistory')
                              ->addOrderHistory($orderHistory);
+                    
+                    /**
+                     * Special case: PESOPAY transactions are by default flagged
+                     * All pesopay transaction must be verified through a separate web API
+                     * Email sending is also not done here and is done in the aforementioned API
+                     */
+                    $order->setIsFlag(true);
+                    $this->em->flush();
+                    //$this->paymentService->sendPaymentNotification($orderId);
                 }
                 else{
                     $this->paymentService->revertTransactionPoint($orderId);
