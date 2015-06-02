@@ -7,13 +7,15 @@
                 <div><span class="strong-label">Transaction No. : </span> <?=$soldTransactionDetails['invoiceNo'] ?></div>
                 <div><span class="strong-label">Date : </span> <?=date_format($soldTransactionDetails['dateadded'], 'jS \of F Y')?></div>
                 <div><span class="strong-label">Total : Php </span> <?=number_format($soldTransactionDetails['transactionTotal'], 2, '.', ',') ?></div>
-            <?PHP else : ?>
+            <?PHP else : ?>               
                 <?php if(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DRAGONPAY):?>
                     <div><strong>ON HOLD -</strong> PENDING DRAGONPAY PAYMENT FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
                 <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_DIRECTBANKDEPOSIT):?>
                     <div><strong>ON HOLD -</strong> PENDING BANK DEPOSIT DETAILS FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
                 <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
                     <div><strong>ON HOLD -</strong> PAYPAL PAYMENT UNDER REVIEW FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
+                <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC) : ?>
+                    <div><strong>ON HOLD -</strong> PESOPAY PAYMENT UNDER REVIEW FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
                 <?php endif;?>
             <?PHP endif; ?>
         </div>
