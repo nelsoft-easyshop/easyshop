@@ -1571,6 +1571,16 @@ ul.list-category-search li:last-child > .search-category-link{
     }
 }
 
+@media (max-width: 1199px) {
+    .search-item-seller-cont {
+        display: none;
+    }
+
+    .search-item-actions .btn-search-add-cart{
+        width: 100%;
+    }
+}
+
 @media (min-width: 1400px) {
     .top-slider-img{
         display: none !important;
