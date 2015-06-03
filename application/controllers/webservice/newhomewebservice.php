@@ -127,7 +127,7 @@ class NewHomeWebService extends MY_Controller
         $subIndex = $subIndex == 0 ? 1 : $subIndex + 1;
         $subPanelIndex = ($this->input->get("subpanelindex")) ? $this->input->get("subpanelindex") : null;          
         if($nodename == "subSliderSection" || $nodename == "mainSliderSection") {
-            $this->file = $this->tempHomefile;
+            $this->file = $this->temporaryHomefile;
         }
         $remove = $this->xmlCmsService->removeXmlNode($this->file, $nodename,$index, $subIndex, $subPanelIndex);
         if($remove) {
@@ -1026,7 +1026,7 @@ class NewHomeWebService extends MY_Controller
      */
     public function addSliderSection()  
     {
-        $map = simplexml_load_file($this->tempHomefile);
+        $map = simplexml_load_file($this->temporaryHomefile);
 
         $index = (int)$this->input->get("index");
         $template = $this->input->get("template");
@@ -1036,7 +1036,7 @@ class NewHomeWebService extends MY_Controller
         $this->config->load('image_dimensions', true);        
         $imageDimensionsConfig = $this->config->config['image_dimensions'];        
         $defaultTemplateSliderCount = count($imageDimensionsConfig["cmsImagesSizes"]["mainSlider"]["$template"]);   
-        $addXml = $this->xmlCmsService->addXmlFormatted($this->tempHomefile,
+        $addXml = $this->xmlCmsService->addXmlFormatted($this->temporaryHomefile,
                                                         $string,'/map/sliderSection/slide[last()]', 
                                                         "\t\t",
                                                         "\n");  
@@ -1063,7 +1063,7 @@ class NewHomeWebService extends MY_Controller
         $subIndex = (int)$this->input->get("subIndex");
         $target = $this->input->get("target");
         $value = $this->input->get("value");
-        $map = simplexml_load_file($this->tempHomefile);        
+        $map = simplexml_load_file($this->temporaryHomefile);        
         if(!empty($_FILES['myfile']['name'])) {
             $this->config->load("image_path"); 
             $filename = date('yhmdhs');
@@ -1121,7 +1121,7 @@ class NewHomeWebService extends MY_Controller
             $map->sliderSection->slide[$index]->image[$subIndex]->path = $map->sliderSection->slide[$index]->image[$subIndex]->path;
             $map->sliderSection->slide[$index]->image[$subIndex]->target = $target;
         }
-        $result = $map->asXML($this->tempHomefile);
+        $result = $map->asXML($this->temporaryHomefile);
         if(strtolower(ENVIRONMENT) !== 'development' && $result){
             $result = $awsUploader->uploadFile($uploadData['full_path'],  $value);
             unlink($uploadData['full_path']);
@@ -1142,14 +1142,14 @@ class NewHomeWebService extends MY_Controller
      */
     public function setSliderDesignTemplate()
     {
-        $map = simplexml_load_file($this->tempHomefile);
+        $map = simplexml_load_file($this->temporaryHomefile);
 
         $index = (int)$this->input->get("index");
         $value = $this->input->get("value");        
 
         $map->sliderSection->slide[$index]->template = $value;
 
-        if($map->asXML($this->tempHomefile)) {
+        if($map->asXML($this->temporaryHomefile)) {
             return $this->output
                     ->set_content_type('application/json')
                     ->set_output($this->jsonSuccess);
@@ -1164,7 +1164,7 @@ class NewHomeWebService extends MY_Controller
     {
         $template = [];
         $image = [];
-        $map = simplexml_load_file($this->tempHomefile);        
+        $map = simplexml_load_file($this->temporaryHomefile);        
         $order = (int) $this->input->get("order");  
         $index = (int)  $this->input->get("index");  
         $nodename =  $this->input->get("nodename");  
@@ -1182,7 +1182,7 @@ class NewHomeWebService extends MY_Controller
         foreach($map->sliderSection->slide[$sliderOrder]->image as $images) {
                 $image[] = $images;
         }
-        $this->xmlCmsService->removeXmlNode($this->tempHomefile,$nodename,$sliderOrder + 1); 
+        $this->xmlCmsService->removeXmlNode($this->temporaryHomefile,$nodename,$sliderOrder + 1); 
         $string = $this->xmlCmsService->getString("sliderSection", $template, "", "", "");      
         $this->xmlCmsService->addXmlFormatted($this->temporaryHomefile,$string,'/map/sliderSection/slide['.($sliderOrder + 1).']',"\t\t","\n\n");
         $this->xmlCmsService->syncSliderValues($this->temporaryHomefile,$image,$template,$sliderIndex,$sliderOrder);
