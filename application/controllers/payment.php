@@ -1725,9 +1725,8 @@ class Payment extends MY_Controller
         }
     }
 
-
     /**
-     * Unflag an order
+     * JSONP service to unflag an order (JSONP use GET at all times)
      *
      * @return JSON
      */
@@ -1745,12 +1744,21 @@ class Payment extends MY_Controller
         ];
 
         if($isAuthenticated){
-            $orderId = $this->input->post('orderId');
+            $orderId = $this->input->get('orderId');
             $response = $this->serviceContainer['payment_service']
                              ->unFlagOrder($orderId);
         }
-        
-        echo json_encode($response);
+
+        if($this->input->get('callback')){
+       
+            $jsonpResponse = $this->input->get('callback')."(".json_encode($response).")";
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonpResponse);
+        }
+        else{
+            echo json_encode($response);
+        }
     }
 
 
