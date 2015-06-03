@@ -1724,6 +1724,35 @@ class Payment extends MY_Controller
             return $persistData;
         }
     }
+
+
+    /**
+     * Unflag an order
+     *
+     * @return JSON
+     */
+    public function unFlagOrder()
+    {
+        $isAuthenticated = $this->serviceContainer['webservice_manager']
+                                ->authenticate(
+                                      $this->input->get(), 
+                                      $this->input->get('hash'),
+                                      true
+                                );
+        $response = [
+            'isSuccessful' => false,
+        ];
+
+        if($isAuthenticated){
+            $orderId = $this->input->post('orderId');
+            $response['isSuccessful'] = $this->serviceContainer['payment_Service']
+                                             ->unFlagOrder($orderId);
+        }
+        
+        echo json_encode($response);
+    }
+
+
 }
 
 

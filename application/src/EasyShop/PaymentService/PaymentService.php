@@ -928,5 +928,27 @@ class PaymentService
              ->queueMail();     
     }
 
+    /**
+     * Unflags order by setting is_flag = false
+     * Triggers email to seller
+     *
+     * @param integer $orderId
+     * @return bool
+     */
+    public function unFlagOrder($orderId)
+    {
+        $isSuccessful = false;
+        $order = $this->em->getRepository('EasyShop\Entities\EsOrder');
+                      ->findOneBy($orderId);
+        if($order !== null){            
+            $order->setIsFlag(false);
+            $this->em->flush();            
+            $this->sendPaymentNotification($orderId, false, true);
+            $isSuccessful = true;                
+        }
+        
+        return $isSuccessful;        
+    }
+
 }
 
