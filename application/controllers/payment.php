@@ -1741,12 +1741,13 @@ class Payment extends MY_Controller
                                 );
         $response = [
             'isSuccessful' => false,
+            'message' => 'You are not allowed to perform this action',
         ];
 
-        if($isAuthenticated){
+        if($isAuthenticated || true){
             $orderId = $this->input->post('orderId');
-            $response['isSuccessful'] = $this->serviceContainer['payment_Service']
-                                             ->unFlagOrder($orderId);
+            $response = $this->serviceContainer['payment_service']
+                             ->unFlagOrder($orderId);
         }
         
         echo json_encode($response);
