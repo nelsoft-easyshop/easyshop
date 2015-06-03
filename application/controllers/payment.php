@@ -1744,7 +1744,7 @@ class Payment extends MY_Controller
             'message' => 'You are not allowed to perform this action',
         ];
 
-        if($isAuthenticated || true){
+        if($isAuthenticated){
             $orderId = $this->input->post('orderId');
             $response = $this->serviceContainer['payment_service']
                              ->unFlagOrder($orderId);
