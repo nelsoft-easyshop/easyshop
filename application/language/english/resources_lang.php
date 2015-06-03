@@ -121,3 +121,7 @@ $lang['deactivate_subject'] = 'Easyshop.ph - Account Activation';
 
 #Notification shipping comment provided
 $lang['notification_shipping_comment'] = "Easyshop.ph - Shipping details for your purchased item";
+
+#Customer Service Pesopay Subject
+$lang['new_transaction_title'] = "Easyshop.ph - A purchase has been made on Easyshop.ph";
+$lang['new_transaction_message'] = "This is to notify you that a purchase has been on Easyshop.ph. Transaction details can be seen below. This is a sytem generated message, please do not reply to this message. Should you need any assistance, please feel free to contact us at info@easyshop.ph";

@@ -34,7 +34,7 @@ class PesoPayGateway extends AbstractGateway
      * Constructor
      * 
      */
-    public function __construct($em, $request, $pointTracker, $paymentService, $params=[])
+    public function __construct($em, $request, $pointTracker, $paymentService, $params = [])
     {
         parent::__construct($em, $request, $pointTracker, $paymentService, $params);
 
@@ -304,9 +304,14 @@ class PesoPayGateway extends AbstractGateway
                      * Special case: PESOPAY transactions are by default flagged
                      * All pesopay transaction must be verified through a separate web API
                      * Email sending is also not done here and is done in the aforementioned API
+                     * Instead an email is sent to a certain CSR email address to notify them of the
+                     * purchase  
                      */
                     $order->setIsFlag(true);
                     $this->em->flush();
+
+                    $customerServiceEmails = $this->config['notification_email'];
+                    $this->paymentService->sendCustomOrderEmailNotification($orderId, $customerServiceEmails);
                     //$this->paymentService->sendPaymentNotification($orderId);
                 }
                 else{
