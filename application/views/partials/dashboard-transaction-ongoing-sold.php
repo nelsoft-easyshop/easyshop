@@ -14,6 +14,8 @@
                     <div><strong>ON HOLD -</strong> PENDING BANK DEPOSIT DETAILS FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
                 <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PAYPAL && intval($soldTransactionDetails['isFlag']) === 1) : ?>
                     <div><strong>ON HOLD -</strong> PAYPAL PAYMENT UNDER REVIEW FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
+                <?php elseif(intval($soldTransactionDetails['idPaymentMethod']) === (int) \EasyShop\Entities\EsPaymentMethod::PAYMENT_PESOPAYCC) : ?>
+                    <div><strong>ON HOLD -</strong> PESOPAY PAYMENT UNDER REVIEW FROM <?=html_escape($soldTransactionDetails['buyerStoreName'])?></div>
                 <?php endif;?>
             <?PHP endif; ?>
         </div>
