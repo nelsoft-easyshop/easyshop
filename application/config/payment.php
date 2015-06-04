@@ -56,7 +56,7 @@ $config = [
                         ],
                         'lowest_amount' => 50.00,
                         'notification_email' => [
-                            'samgavinio@easyshop.ph',
+                            'support@easyshop.ph',
                         ],
                     ],
                     'Easydeal' => [
@@ -126,7 +126,7 @@ $config = [
                         ],
                         'lowest_amount' => 50.00,
                         'notification_email' => [
-                            'samgavinio@easyshop.ph',
+                            'support@easyshop.ph',
                         ],
                     ],
                     'Easydeal' => [
