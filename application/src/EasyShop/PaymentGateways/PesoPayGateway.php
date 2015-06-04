@@ -315,7 +315,7 @@ class PesoPayGateway extends AbstractGateway
                     /**
                      * Send email to buyer
                      */
-                    $this->paymentService->sendPaymentNotification($orderId, true, false)
+                    $this->paymentService->sendPaymentNotification($orderId, true, false);
                 }
                 else{
                     $this->paymentService->revertTransactionPoint($orderId);
