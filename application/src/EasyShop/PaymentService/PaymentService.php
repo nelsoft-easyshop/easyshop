@@ -820,5 +820,151 @@ class PaymentService
 
         return false;
     }
+
+    /**
+     * Sends a custom email notification to any email address
+     *
+     * @param integer $orderId
+     * @param string[] $emailRecipients
+     */
+    public function sendCustomOrderEmailNotification($orderId, $emailRecipients)
+    {
+        $imageArray = $this->configLoader->getItem('email', 'images'); 
+        $subject = $this->languageLoader->getLine('new_transaction_title');
+        $message = $this->languageLoader->getLine('new_transaction_message');
+        $orderProducts = $this->em->getRepository('EasyShop\Entities\EsOrderProduct')
+                                  ->findBy(['order' => $orderId ]);
+
+        $order = $orderProducts[0]->getOrder();
+        $buyer = $order->getBuyer();
+        $paymentMethodName = ucfirst(strtolower($order->getPaymentMethod()->getName()));
+        $socialMediaLinks = $this->socialMediaManager->getSocialMediaLinks(); 
+
+        $emailData = [
+            'id_order' => $order->getIdOrder(),
+            'dateadded' => $order->getDateadded()->format('Y-m-d'),
+            'buyer_name' => $buyer->getUserName(),
+            'buyer_slug' => $buyer->getSlug(),  
+            'totalprice' => number_format($order->getTotal(), 2, '.', ','),
+            'invoice_no' => $order->getInvoiceNo(), 
+            'buyer_store' => $buyer->getStoreName(),
+            'facebook' => $socialMediaLinks["facebook"],
+            'twitter' => $socialMediaLinks["twitter"],
+            'message' => $message,
+            'products' => [],
+            'baseUrl' => base_url(),
+            'payment_method_name' => $paymentMethodName,
+        ];
+
+        /**
+         * Work around for Codeigniter's templating engine lack of support
+         * for conditionals: use arrays
+         */
+        $pointsSpent = $this->getTransactionPoints($orderId);       
+        $emailData['pointSpent'] = [];
+        $emailData['totalLessPoint'] = [];
+        if($pointsSpent > 0){
+            $emailData['pointSpent'][] = [ 'value' => number_format($pointsSpent, 2, '.', ',') ];
+            $emailData['totalLessPoint'][] = [ 'value' => number_format(bcsub($order->getTotal(), $pointsSpent, 4),2,'.',',') ]; 
+        }
+
+
+        foreach ($orderProducts as $orderProduct) {
+            $seller = $orderProduct->getSeller();
+            $sellerId = $seller->getIdMember();
+            $orderProductId = $orderProduct->getIdOrderProduct();
+            $product = $orderProduct->getProduct();
+            $productAttr = $this->em->getRepository('EasyShop\Entities\EsOrderProductAttr')
+                                    ->findBy(['orderProduct' => $orderProductId]);
+
+            $attrArray = [];
+            foreach ($productAttr as $attr) {
+                $attrArray[] = [
+                    'attr_name' => $attr->getAttrName(),
+                    'attr_value' => $attr->getAttrValue(),
+                ];
+            }
+            
+            /**
+             * Retrieve product image
+             */
+            $primaryImage = $this->em->getRepository('EasyShop\Entities\EsProductImage')
+                                 ->getDefaultImage($product->getIdProduct());
+            $imagePath = $primaryImage->getDirectory().'categoryview/'.$primaryImage->getFilename();
+            $imagePath = ltrim($imagePath, '.');
+            if(strtolower(ENVIRONMENT) === 'development'){
+                $imagePath = $imagePath[0] !== '/' ? '/'.$imagePath : $imagePath;
+                $imageArray[] = $imagePath;
+                $parsedImage = $primaryImage->getFilename();
+            }
+            else{
+                $parsedImage = getAssetsDomain().ltrim($imagePath, '/');
+            }
+            if(!isset($emailData['products'][$orderProductId])){ 
+                $arrayCollection = [
+                    'order_product_id' => $orderProductId,
+                    'seller_slug' => $seller->getSlug(),
+                    'seller_store' => $seller->getStoreName(),
+                    'buyer_store' => $buyer->getStoreName(), 
+                    'name' => $product->getName(),
+                    'baseprice' => number_format($orderProduct->getPrice(), 2, '.', ','),
+                    'order_quantity' => $orderProduct->getOrderQuantity(),
+                    'handling_fee' => number_format($orderProduct->getHandlingFee(), 2, '.', ','),
+                    'finalprice' => number_format($orderProduct->getTotal(), 2, '.', ','),
+                    'attr' => $attrArray,
+                    'primaryImage' => $parsedImage,
+                    'productLink' => 'item/'.$product->getSlug(),
+                ];
+                $emailData['products'][$orderProductId] = $arrayCollection; 
+            }
+        }
+        
+        $emailMessage = $this->parserLibrary->parse('emails/email_purchase_notification_custom', $emailData, true);
+
+        $this->emailService
+             ->setRecipient($emailRecipients)
+             ->setSubject($subject)
+             ->setMessage($emailMessage, $imageArray)
+             ->queueMail();     
+    }
+
+    /**
+     * Unflags order by setting is_flag = false
+     * Triggers email to seller
+     *
+     * @param integer $orderId
+     * @return mixed
+     */
+    public function unFlagOrder($orderId)
+    {
+        $result = [
+            'isSuccessful' => false,           
+            'message' => '',
+        ];
+        
+        $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                      ->findOneBy(['idOrder' => $orderId]);
+
+        if($order !== null){
+            /**
+             * Only take action if the flag is set to TRUE
+             */
+            if($order->getIsFlag()){
+                $result['isSuccessful'] = true;
+                $order->setIsFlag(false);
+                $this->em->flush();            
+                $this->sendPaymentNotification($orderId, false, true);
+           }
+           else{
+               $result['message'] = 'Transaction has not been flagged';
+           }
+        }
+        else{
+            $result['message'] = "Order id does not exist";
+        }
+        
+        return $result;        
+    }
+
 }
 

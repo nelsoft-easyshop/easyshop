@@ -58,21 +58,24 @@ class AuthenticateRequest
      * @return bool
      */
     public function authenticate($postedData, $postedHash, $isAdminRequest = false)
-    {
-
-        foreach ($postedData as $data => $value) {
-            if(!in_array($data, $this->exceptionalData)) {
-                $this->hash .= $value;            
+    {     
+        if($postedData){
+            foreach ($postedData as $data => $value) {
+                if(!in_array($data, $this->exceptionalData)) {
+                    $this->hash .= $value;            
+                }
             }
-        }
 
-        if($isAdminRequest) {
-            $adminUser = $this->em->getRepository("EasyShop\Entities\EsAdminMember")
+            if($isAdminRequest) {
+                $adminUser = $this->em->getRepository("EasyShop\Entities\EsAdminMember")
                                   ->find($postedData["userid"]);
-            $this->hash .= $adminUser->getPassword();            
+                $this->hash .= $adminUser->getPassword();            
+            }
+
+            return (sha1($this->hash) === $postedHash);
         }
 
-        return (sha1($this->hash) === $postedHash);
+        return false;
     }
 
 }
