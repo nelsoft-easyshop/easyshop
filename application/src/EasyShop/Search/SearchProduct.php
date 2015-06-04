@@ -163,7 +163,7 @@ class SearchProduct
                     $stringCollection[] = '"'.trim($clearString).'"';
                     $isLimit = strlen($clearString) > 1;
                     $products = $this->em->getRepository('EasyShop\Entities\EsProduct')
-                                         ->findByKeyword($stringCollection,$productIds,$isLimit);
+                                         ->findByKeyword($stringCollection, $productIds, $isLimit);
                     $ids = [];
                     foreach ($products as $product) {
                         $ids[] = $product['idProduct']; 
@@ -458,11 +458,18 @@ class SearchProduct
         $perPage = isset($parameters['limit']) ? $parameters['limit'] : self::PER_PAGE;
         $storeKeyword = $pageNumber ? false : true;
 
-        $productIds = $searchProductService->filterProductByDefaultParameter($parameters);
-        $productIds = $sortOrder = $searchProductService->filterProductByAttributesParameter($parameters, $productIds);
-        $productIds = $originalOrder = $queryString 
-                                       ? $searchProductService->filterBySearchString($productIds, $queryString, $storeKeyword)
-                                       : $productIds;
+        $productIds = [];
+        if (count($parameters) === 1 && $queryString) {
+            $productIds =  $searchProductService->filterBySearchString($productIds, $queryString, $storeKeyword);
+        }
+        else {
+            $productIds = $searchProductService->filterProductByDefaultParameter($parameters, $productIds);
+            $productIds = $sortOrder = $searchProductService->filterProductByAttributesParameter($parameters, $productIds);
+            if (empty($productIds) === false && $queryString) {
+                $productIds = $searchProductService->filterBySearchString($productIds, $queryString, $storeKeyword);
+            }
+        }
+        $originalOrder = $productIds;
         $productIds = $queryString && empty($productIds) ? [] : $productIds;
         $originalOrder = $sortBy ? $sortOrder : $originalOrder;
         $finalizedProductIds = $productIds;
