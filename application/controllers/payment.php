@@ -1724,6 +1724,44 @@ class Payment extends MY_Controller
             return $persistData;
         }
     }
+
+    /**
+     * JSONP service to unflag an order (JSONP use GET at all times)
+     *
+     * @return JSON
+     */
+    public function unFlagOrder()
+    {
+        $isAuthenticated = $this->serviceContainer['webservice_manager']
+                                ->authenticate(
+                                      $this->input->get(), 
+                                      $this->input->get('hash'),
+                                      true
+                                );
+        $response = [
+            'isSuccessful' => false,
+            'message' => 'You are not allowed to perform this action',
+        ];
+
+        if($isAuthenticated){
+            $orderId = $this->input->get('orderId');
+            $response = $this->serviceContainer['payment_service']
+                             ->unFlagOrder($orderId);
+        }
+
+        if($this->input->get('callback')){
+       
+            $jsonpResponse = $this->input->get('callback')."(".json_encode($response).")";
+            return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output($jsonpResponse);
+        }
+        else{
+            echo json_encode($response);
+        }
+    }
+
+
 }
 
 
