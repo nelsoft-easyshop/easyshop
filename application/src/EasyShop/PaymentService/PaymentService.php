@@ -928,5 +928,43 @@ class PaymentService
              ->queueMail();     
     }
 
+    /**
+     * Unflags order by setting is_flag = false
+     * Triggers email to seller
+     *
+     * @param integer $orderId
+     * @return mixed
+     */
+    public function unFlagOrder($orderId)
+    {
+        $result = [
+            'isSuccessful' => false,           
+            'message' => '',
+        ];
+        
+        $order = $this->em->getRepository('EasyShop\Entities\EsOrder')
+                      ->findOneBy(['idOrder' => $orderId]);
+
+        if($order !== null){
+            /**
+             * Only take action if the flag is set to TRUE
+             */
+            if($order->getIsFlag()){
+                $result['isSuccessful'] = true;
+                $order->setIsFlag(false);
+                $this->em->flush();            
+                $this->sendPaymentNotification($orderId, false, true);
+           }
+           else{
+               $result['message'] = 'Transaction has not been flagged';
+           }
+        }
+        else{
+            $result['message'] = "Order id does not exist";
+        }
+        
+        return $result;        
+    }
+
 }
 
