@@ -6,6 +6,7 @@ $config = array(
                             '/payment/dragonPayPostBack',
                             '/payment/ipn2',
                             '/payment/pesoPayDataFeed',
+                            '/payment/unFlagOrder',
             ),
             'bypassFirstSegment' => array(
                             'webservice',
