@@ -303,7 +303,7 @@ class PesoPayGateway extends AbstractGateway
                     /**
                      * Special case: PESOPAY transactions are by default flagged
                      * All pesopay transaction must be verified through a separate web API
-                     * Email sending is also not done here and is done in the aforementioned API
+                     * Email sending is also not done here for the seller and is done in the aforementioned API
                      * Instead an email is sent to a certain CSR email address to notify them of the
                      * purchase  
                      */
@@ -312,7 +312,10 @@ class PesoPayGateway extends AbstractGateway
 
                     $customerServiceEmails = $this->config['notification_email'];
                     $this->paymentService->sendCustomOrderEmailNotification($orderId, $customerServiceEmails);
-                    //$this->paymentService->sendPaymentNotification($orderId);
+                    /**
+                     * Send email to buyer
+                     */
+                    $this->paymentService->sendPaymentNotification($orderId, true, false)
                 }
                 else{
                     $this->paymentService->revertTransactionPoint($orderId);
