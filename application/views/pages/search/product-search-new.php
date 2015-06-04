@@ -21,6 +21,13 @@
                             <div id="category-list" class="panel-collapse collapse in">
                                 <div class="panel-body no-padding">
                                     <ul class="list-unstyled list-category">
+                                        <?php if($categorySelected !== EasyShop\Entities\EsCat::ROOT_CATEGORY_ID): ?>
+                                            <a href="javascript:void(0)" data-head='category' data-value="<?php echo EasyShop\Entities\EsCat::ROOT_CATEGORY_ID; ?>" class="color-default tab_categories cbx">
+                                                <li>
+                                                    All Categories
+                                                </li>
+                                            </a>
+                                        <?php endif; ?>
                                         <?php foreach ($categories as $category): ?>
                                             <a href="javascript:void(0)" data-head='category' data-value='<?=$category->getIdCat();?>' class="color-default tab_categories cbx">
                                                 <li>
