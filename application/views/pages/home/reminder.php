@@ -11,7 +11,9 @@
         <div class="col-md-7 col-sm-7 col-xs-10">
             <div class="message-container">
                 <p class="message-title">
-                    We've just updated our <a href="https://www.easyshop.ph/terms">Terms &amp; Conditions </a>
+                    We've just updated our 
+                    <br />
+                    <a href="https://www.easyshop.ph/terms">Terms &amp; Conditions </a>
                 </p>
                 <span class="divider"></span>
                 <p class="message-text">
@@ -19,6 +21,7 @@
                     <br/><br/>
                     Continuing to use EasyShop means an explicit agreement to the new terms that we've updated.
                 </p>
+                <br />
                 <span class="link-text simplemodal-close">
                     Continue Shopping <i class="fa fa-angle-right fa-lg"></i>
                 </span>

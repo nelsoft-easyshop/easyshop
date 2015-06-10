@@ -141,16 +141,24 @@
                     </p>
                     <ul>
                         <li>
-                            We will not be responsible for any issues involving lost and damaged goods or delays in delivery. Such disputes shall be resolved between the buyer seller as well as the logistics provider.
+                            <p>
+                                We will not be responsible for any issues involving lost and damaged goods or delays in delivery. Such disputes shall be resolved between the buyer seller as well as the logistics provider.
+                            </p>
                         </li>
                         <li>
-                            Prices are subject to change as per seller’s price inputs.
+                            <p>
+                                Prices are subject to change as per seller’s price inputs.
+                            </p>
                         </li>
                         <li>
-                            EasyShop.ph accepts several payment methods to accommodate your needs. Currently, available payment options are Credit/Debit Card, PesoPay, DragonPay, and Cash on Delivery. However, PesoPay will only accept Philippine-issued credit cards.
+                            <p>
+                                EasyShop.ph accepts several payment methods to accommodate your needs. Currently, available payment options are Credit/Debit Card, PesoPay, DragonPay, and Cash on Delivery. However, PesoPay will only accept Philippine-issued credit cards.
+                            </p>
                         </li>
                         <li>
-                            <strong>A 50% deposit will be required for Cash On Delivery transactions for total purchases amounting to Php 100,000 and above. </strong>
+                            <p>
+                                <strong>A 50% deposit will be required for Cash On Delivery transactions for total purchases amounting to Php 100,000 and above. </strong>
+                            </p>
                         </li>
                     </ul>
                     <p>
