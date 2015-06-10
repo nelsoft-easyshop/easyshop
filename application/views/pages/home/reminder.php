@@ -11,13 +11,13 @@
         <div class="col-md-7 col-sm-7 col-xs-10">
             <div class="message-container">
                 <p class="message-title">
-                    A Friendly Reminder
+                    We've just updated our <a href="https://www.easyshop.ph/terms">Terms &amp; Conditions </a>
                 </p>
                 <span class="divider"></span>
                 <p class="message-text">
-                    We encourage everyone to be vigilant in transacting online. For your protection, <b>use only the payment method offered by EasyShop.ph (PesoPay, DragonPay, and Cash on Delivery)</b>. We do not encourage bank to bank transfers or deposits as payment for items bought on the EasyShop.ph website.
+                    To better protect our Users and Sellers alike, we've just updated our Payment conditions. Starting today, PesoPay will only accept Philippine-issued credit cards.
                     <br/><br/>
-                    Should you decide to still go with the payment method not specified in the EasyShop.ph website, you can do so at your own risk. Just remember that EasyShop.ph will not be liable for damages incurred by transactions made outside of our system.
+                    Continuing to use EasyShop means an explicit agreement to the new terms that we've updated.
                 </p>
                 <span class="link-text simplemodal-close">
                     Continue Shopping <i class="fa fa-angle-right fa-lg"></i>
