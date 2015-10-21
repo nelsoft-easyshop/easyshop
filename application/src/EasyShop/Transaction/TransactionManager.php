@@ -164,7 +164,15 @@ class TransactionManager
             // }
 
             $this->esOrderProductRepo->updateOrderProductStatus($esOrderProductStatus, $esOrderProduct);
-            $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')->createHistoryLog($esOrderProduct, $esOrderProductStatus, $getOrderProduct['historyLog']);
+            $currentDate = new \DateTime('now');
+            $historyRemark = array(
+                'action'    => $getOrderProduct['historyLog'],
+                'memberId'  => $memberId,
+                'date'      => $currentDate->format('Y-m-d H:i:s'),
+            );
+
+            $this->em->getRepository('EasyShop\Entities\EsOrderProductHistory')
+                 ->createHistoryLog($esOrderProduct, $esOrderProductStatus, json_encode($historyRemark));
 
             $doesAllOrderProductResponded = $this->esOrderProductRepo
                                                  ->findOneBy([
