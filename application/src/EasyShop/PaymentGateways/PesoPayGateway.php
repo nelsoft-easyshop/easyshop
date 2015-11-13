@@ -194,6 +194,7 @@ class PesoPayGateway extends AbstractGateway
                 'secureHash' => $secureHash,
                 'currCode' => $this->currencyCode,
                 'payType' => $this->payType,
+                'remark' => "Easyshop",
             ];
         }
     }
