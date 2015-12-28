@@ -1411,34 +1411,29 @@ class Payment extends MY_Controller
         $isValidIp = $paymentService->checkIpIsValidForPostback($ipAddress, $paymentType);
         $client = trim($this->input->post('param1'));
 
-        if($isValidIp){
-            if($client === "Easyshop"){
-                $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
-                $params['txnId'] = $this->input->post('txnid');
-                $params['refNo'] = $this->input->post('refno');
-                $params['status'] =  $this->input->post('status');
-                $params['message'] = $this->input->post('message');
-                $params['digest'] = $this->input->post('digest');
-                $response = $paymentService->postBack($paymentMethods, null, null, $params);
-                if($response === false){
-                    show_404();
-                }
-                else{
-                    header("Content-Type:text/plain");
-                    echo 'result=OK'; // acknowledgement
-                }
+        if($client === "Easyshop"){
+            $paymentMethods = ["DragonPayGateway" => ["method" => "DragonPay"]];
+            $params['txnId'] = $this->input->post('txnid');
+            $params['refNo'] = $this->input->post('refno');
+            $params['status'] =  $this->input->post('status');
+            $params['message'] = $this->input->post('message');
+            $params['digest'] = $this->input->post('digest');
+            $response = $paymentService->postBack($paymentMethods, null, null, $params);
+            if($response === false){
+                show_404();
             }
-            elseif($client === "Easydeal"){
-                $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
-                $curl = new Curl();
-                $curl->setOpt(CURLOPT_SSL_VERIFYPEER, strtolower(ENVIRONMENT) === 'production');
-                $curl->post($curlUrl, $this->input->post());
+            else{
                 header("Content-Type:text/plain");
                 echo 'result=OK'; // acknowledgement
             }
-            else{
-                show_404();
-            }
+        }
+        elseif($client === "Easydeal"){
+            $curlUrl = $paymentConfig['payment_type']['dragonpay']['Easydeal']['postback_url'];
+            $curl = new Curl();
+            $curl->setOpt(CURLOPT_SSL_VERIFYPEER, strtolower(ENVIRONMENT) === 'production');
+            $curl->post($curlUrl, $this->input->post());
+            header("Content-Type:text/plain");
+            echo 'result=OK'; // acknowledgement
         }
         else{
             show_404();
@@ -1485,26 +1480,21 @@ class Payment extends MY_Controller
         $paymentConfig = $this->paymentConfig; 
         $isValidIp = $paymentService->checkIpIsValidForPostback($ipAddress, EsPaymentMethod::PAYMENT_PESOPAYCC);
         $params = $this->input->post();
-        if($isValidIp){
-            log_message('error', 'DATA FEED --> '. json_encode($this->input->post()));
-            header("Content-Type:text/plain");
-            echo 'OK'; // acknowledgemenet
-            if(strtolower($this->input->post('remark')) === "easydeal"){
-                $curlUrl = $paymentConfig['payment_type']['pesopay']['Easydeal']['postback_url'];
-                $curl = new Curl();
-                $curl->setOpt(CURLOPT_SSL_VERIFYPEER, strtolower(ENVIRONMENT) === 'production');
-                $curl->post($curlUrl, $params);
-            }
-            else{
-                $paymentService = $this->serviceContainer['payment_service'];
-                $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
-                $params['txnId'] = $this->input->post('Ref'); 
-                $paymentService->postBack($paymentMethods, null, null, $params);
-            }
+        
+        log_message('error', 'DATA FEED --> '. json_encode($this->input->post()));
+        header("Content-Type:text/plain");
+        echo 'OK'; // acknowledgemenet
+        if(strtolower($this->input->post('remark')) === "easydeal"){
+            $curlUrl = $paymentConfig['payment_type']['pesopay']['Easydeal']['postback_url'];
+            $curl = new Curl();
+            $curl->setOpt(CURLOPT_SSL_VERIFYPEER, strtolower(ENVIRONMENT) === 'production');
+            $curl->post($curlUrl, $params);
         }
         else{
-            log_message('error', '404 Page Not Found --> PESOPAY DATAFEED');
-            show_404();
+            $paymentService = $this->serviceContainer['payment_service'];
+            $paymentMethods = ["PesoPayGateway" => ["method" => "PesoPay"]]; 
+            $params['txnId'] = $this->input->post('Ref'); 
+            $paymentService->postBack($paymentMethods, null, null, $params);
         }
     }
 
