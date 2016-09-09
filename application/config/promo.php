@@ -120,8 +120,8 @@ $config = [
                     'purchase_limit' => 2
                 ],
                 1 => [
-                    'start' => '07:00:00',
-                    'end' => '23:59:59',
+                    'start' => '12:00:00',
+                    'end' => '16:59:59',
                     'purchase_limit' => 15
                 ]
             ],

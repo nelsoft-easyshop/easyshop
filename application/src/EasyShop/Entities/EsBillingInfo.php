@@ -94,7 +94,10 @@ class EsBillingInfo
      */
     private $member;
 
-
+    /**
+     * Default billing id.
+     */
+    const DEFAULT_BILLING_ID = 0;
 
     /**
      * Get idBillingInfo

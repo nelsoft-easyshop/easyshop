@@ -32,6 +32,7 @@
                         <div class="p-html-description">
                             <div class="external-links-container">
                                 <?=nl2br($productDetails); ?>
+                                <br>
                                 <?php foreach ($additionalInformation as $value): ?>
                                     <?=html_escape($value); ?>
                                     <br>

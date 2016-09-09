@@ -158,7 +158,10 @@ class ProductManager
                                             ->getShippingTotalPrice($productId);
 
         $product->setSoldPrice($soldPrice);
-        $product->setIsFreeShipping(0 === bccomp(floatval($totalShippingFee),0));
+        $product->setIsFreeShipping(
+            0 === bccomp(floatval($totalShippingFee),0) 
+            && $this->isListingOnly($product) === false
+        );
         $product->setIsNew($this->isProductNew($product));
         $product->setDefaultImage($this->em->getRepository('EasyShop\Entities\EsProductImage')
                                            ->getDefaultImage($product->getIdProduct()));

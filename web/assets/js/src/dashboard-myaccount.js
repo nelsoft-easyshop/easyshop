@@ -471,9 +471,9 @@
         optionclone.removeClass('optionclone').addClass('echo').attr('disabled', false);
         cityselect.find('option.echo').remove();
         if(stateregionID in jsonCity){
-            jQuery.each(jsonCity[stateregionID], function(k,v){
+            jQuery.each(jsonCity[stateregionID], function(key,city){
                 //optionclone.attr('value', k).html(v).show();
-                optionclone.attr('value', k).html(v).css('display', 'block');
+                optionclone.attr('value', city.id).html(city.name).css('display', 'block');
                 cityselect.append(optionclone.clone());
             });
         }

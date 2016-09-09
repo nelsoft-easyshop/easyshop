@@ -19,23 +19,6 @@ class Category extends MY_Controller {
     }
 
     /**
-     * Get All categories and arrange it recursively by its parent
-     * @return JSON
-     */
-    public function getCategories()
-    { 
-        $categorySlug = urldecode($this->input->get('slug'));
-        $param = urldecode($this->input->get('detail'));  
-
-        $categories = $this->em->getRepository('EasyShop\Entities\EsCat')
-                               ->selectAllCategory(); 
-
-        $jsonCategory = $this->__buildTree($categories);  
-
-        print(json_encode($jsonCategory,JSON_PRETTY_PRINT));
-    }
-
-    /**
      * Get all product under the given categories
      * @return JSON
      */
@@ -61,29 +44,6 @@ class Category extends MY_Controller {
         }
 
         print(json_encode($formattedRelatedItems,JSON_PRETTY_PRINT));
-    }
-
-    /**
-     * Arrange array recursively based on its parent
-     * @param  array   $elements
-     * @param  integer $parentId
-     * @return mixed
-     */
-    private function __buildTree(array $elements, $parentId = 1)
-    {   
-        $branch = [];
-
-        foreach ($elements as $element) {
-            if ($element['parent_id'] == $parentId) { 
-                $children = $this->__buildTree($elements, $element['id_cat']);
-                if ($children) {
-                    $element['children'] = $children;
-                }
-                $branch[] = $element;
-            }
-        }
-
-        return $branch;
     }
 }
 

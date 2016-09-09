@@ -270,7 +270,7 @@
                                     <div class="discounted_price_container">
                                         <strong>Discounted Price:</strong> &#8369;
                                         <span id="discounted_price_con">
-                                            <?php echo (isset($product_details['price']))?number_format($product_details['price'],2,'.',''):'0.00';?>
+                                            <?php echo (isset($product_details['price']))?number_format($product_details['price'], 2, '.', ','):'0.00';?>
                                         </span>
                                     </div>
 

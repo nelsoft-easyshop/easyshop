@@ -895,15 +895,6 @@ class Memberpage extends MY_Controller
             }
         }
 
-        $orderEntity = $this->em->find("EasyShop\Entities\EsOrder", $data['transaction_num']);
-        $orderProductStatusEntity = $this->em->find("EasyShop\Entities\EsOrderProductStatus", EsOrderProductStatus::ON_GOING);
-        $orderProductEntity = $this->esOrderProductRepo
-                                   ->findOneBy([
-                                       "order" => $orderEntity,
-                                       "status" => $orderProductStatusEntity
-                                   ]);
-        $serverResponse['isTransactionComplete'] = $orderProductEntity ? false : true;
-
         echo json_encode($serverResponse);
     }
 
@@ -1964,12 +1955,9 @@ class Memberpage extends MY_Controller
             $address = $esAddressRepo->getConsigneeAddress($memberId, EsAddress::TYPE_DELIVERY, true);       
             $stateregionID =  ($address["address"] !== null && (int) $address["stateRegion"] !== 0 ) ? $address["stateRegion"] : 0;
             $locationLookup =  $esLocationLookupRepo->getLocationLookup(true);
-
-            $consigneeCityLookup = ($stateregionID !== 0) ? $locationLookup["cityLookup"][$stateregionID] : null;
             $response = [
                 "address" => $address["address"],
                 "cities" =>  $locationLookup["json_city"],
-                "consigneeCityLookup" =>  $consigneeCityLookup,
                 "cityLookup" =>  $locationLookup["cityLookup"],
                 "stateRegionLists" => $locationLookup["stateRegionLookup"],
                 "countryId" =>  EsLocationLookup::PHILIPPINES_LOCATION_ID,
@@ -2415,16 +2403,24 @@ class Memberpage extends MY_Controller
             $memberCategoryId = $this->input->post("categoryId");
             $categoryName = $this->input->post("categoryName") ? 
                             trim($this->input->post("categoryName")) : '';
-            $productIds =    $this->input->post("productIds") ? 
-                            json_decode($this->input->post("productIds")) 
-                            : [];
+            $deletedProductIds = [];
+            $addedProductIds = [];
+
+            if($this->input->post("deletedProductIds") ){
+                $deletedProductIds = json_decode($this->input->post("deletedProductIds"));
+            }
+            if($this->input->post("addedProductIds") ){
+                $addedProductIds = json_decode($this->input->post("addedProductIds"));
+            }
+            
             $parentCategoryId = (int)$this->input->post("parentCategory");
             $result = $this->categoryManager->editUserCustomCategoryProducts(
                         $memberCategoryId,
                         $categoryName,
-                        $productIds,
                         $memberId,
-                        $parentCategoryId
+                        $parentCategoryId,
+                        $addedProductIds,
+                        $deletedProductIds
                     );
         }
         echo json_encode($result);
