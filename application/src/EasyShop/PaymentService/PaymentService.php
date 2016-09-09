@@ -605,14 +605,14 @@ class PaymentService
         return $returnValue;
     }
 
-    public function postBack($paymentMethods, $validatedCart, $memberId, $params=[])
+    public function postBack($paymentMethods, $validatedCart, $memberId, $paymentController, $params=[])
     {
         // Initialize gateways
         $this->initializeGateways($paymentMethods);
 
         // Execute payment gateway postback method
         if($validatedCart === null && $memberId === null){
-            $returnValue = $this->primaryGateway->postBackMethod($this, $params);
+            $returnValue = $this->primaryGateway->postBackMethod($this, $paymentController, $params);
         }
         else{
             $returnValue = $this->primaryGateway->postBackMethod($validatedCart, $memberId, $this, $params);

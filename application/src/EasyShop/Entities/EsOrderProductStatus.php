@@ -28,6 +28,40 @@ class EsOrderProductStatus
      */
     private $name;
 
+    /**
+     * @var integer
+     */
+    const STATUS_ONGOING = 0;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_FORWARD_SELLER = 1;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_RETURNED_BUYER = 2;
+    
+    /**
+     * @var integer
+     */
+    const STATUS_COD = 3;
+
+    /**
+     * @var integer
+     */
+    const STATUS_PAID_FORWARDED = 4;
+
+    /**
+     * @var integer
+     */
+    const STATUS_PAID_RETURNED = 5;
+
+    /**
+     * @var integer
+     */
+    const STATUS_CANCEL = 6;
 
 
     /**

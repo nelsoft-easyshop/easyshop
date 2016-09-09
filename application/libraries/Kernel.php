@@ -369,8 +369,8 @@ class Kernel
             return $server;
         };
 
-        // NUSoap Client
-        $container['nusoap_client'] = function ($c) {
+        // Dragonpay SOAP Client
+        $container['dragonpay_client'] = function ($c) {
             $url = '';
             if(!defined('ENVIRONMENT') || strtolower(ENVIRONMENT) == 'production'){
             // LIVE
@@ -400,6 +400,13 @@ class Kernel
         };
         $container['mobile_notification'] = function($c) use ($smsConfig){
             return new \EasyShop\Notifications\MobileNotification($smsConfig);
+        };
+
+        // Transaction Service
+        $container['transaction_service'] = function ($c) use($container) {
+            $em = $container['entity_manager']; 
+            $productManager = $container['product_manager'];
+            return new \EasyShop\Transaction\TransactionService($em, $productManager);
         };
 
         /* Register services END */
